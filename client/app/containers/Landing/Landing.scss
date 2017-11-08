@@ -1,0 +1,34 @@
+.service_box {
+  height: 250px;
+  width: 100%;
+}
+.service_label{
+  background-color: #F8F6F6;
+  margin: 1rem 0;
+}
+.service_label h2{
+
+}
+.service_row {
+  height:max-content;
+}
+.service_row .service {
+  height: 150px;
+  width: 150px;
+  background-color: transparent;
+  margin: 75px;
+}
+.service i {
+   background: -webkit-linear-gradient(#00E503, #00ACE5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 40px;
+}
+.mc {
+  height: max-content;
+}
+.btm_promo_img {
+  background-image: url('https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/performance.jpg');
+  background-size: cover;
+  background-position: center;
+}

@@ -1,0 +1,75 @@
+import React, {Component} from 'react';
+import {LandingTop} from '../../components/LandingTop/LandingTop';
+// import {Button} from '../../components/Button/Button';
+import {ActiveRoutes} from '../../components/ActiveRoutes/ActiveRoutes';
+import {BlogPostHighlights} from '../../components/BlogPostHighlights/BlogPostHighlights';
+
+import './Landing.scss';
+export class Landing extends Component {
+    render() {
+        return (
+        <div className="layout-row flex-100 layout-wrap" >
+          <LandingTop className="flex-100"/>
+          <div className="service_box layout-row flex-100 layout-wrap">
+            <div className="service_label layout-row layout-align-center-center flex-100">
+              <h2 className="flex-none"> Introducing Online LCL Services
+              </h2>
+            </div>
+            <div className="services_row flex-100 layout-row layout-align-center">
+              <div className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center">
+                <div className="flex-none layout-column layout-align-center-center service">
+                  <i className="fa fa-bolt" aria-hidden="true"></i>
+                  <h3> Instant Booking </h3>
+                </div>
+                <div className="flex-none layout-column layout-align-center-center service">
+                  <i className="fa fa-edit" aria-hidden="true"></i>
+                  <h3> Real time quotes </h3>
+                </div>
+                <div className="flex-none layout-column layout-align-center-center service">
+                  <i className="fa fa-binoculars" aria-hidden="true"></i>
+                  <h3>Transparent </h3>
+                </div>
+                <div className="flex-none layout-column layout-align-center-center service">
+                  <i className="fa fa-clock-o" aria-hidden="true"></i>
+                  <h3>Updates in Real Time </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ActiveRoutes className="mc"/>
+          <BlogPostHighlights/>
+          <div className="btm_promo flex-100 layout-row">
+            <div className="flex-50 btm_promo_img">
+            </div>
+            <div className="flex-50 btm_promo_text layout-row layout-align-start-center">
+              <div className="flex-50 layout-column">
+                <div className="flex-20 layout-column layout-align-center-start">
+                  <h2> Enjoy the most advanced and easy to use booking system on the planet </h2>
+                </div>
+                <div className="flex-40 layout-column layout-align-center-start">
+                  <div className="flex layout-row layout-align-start-center">
+                    <i className="fa fa-check"> </i>
+                    <p> instant booking </p>
+                  </div>
+                  <div className="flex layout-row layout-align-start-center">
+                    <i className="fa fa-check"> </i>
+                    <p> price comparison </p>
+                  </div>
+                   <div className="flex layout-row layout-align-start-center">
+                    <i className="fa fa-check"> </i>
+                    <p> fastest routes </p>
+                  </div>
+                   <div className="flex layout-row layout-align-start-center">
+                    <i className="fa fa-check"> </i>
+                    <p> real time updates </p>
+                  </div>
+                </div>
+                <div className="flex-20 layout-column layout-align-center-start">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+}

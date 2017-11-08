@@ -1,0 +1,12 @@
+LandingTop {
+  height: 350px;
+}
+.landing_top {
+  // background-image: url('./assets/images/welcome/country/header.jpg');
+  background-image: url('../assets/images/welcome/country/header.jpg');
+  // background-image: url('../../assets/images/welcome/country/header.jpg');
+  // background-image: url('../../../assets/images/welcome/country/header.jpg');
+
+  background-size: cover;
+  background-position: center;
+}
