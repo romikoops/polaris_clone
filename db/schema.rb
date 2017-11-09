@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109093443) do
+ActiveRecord::Schema.define(version: 20171109105026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20171109093443) do
     t.jsonb "fcl_40f_hq", default: {"rate"=>nil, "currency"=>nil, "kg_per_cbm"=>1000, "heavy_kg_min"=>nil, "heavy_weight"=>nil}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "dedicated"
   end
 
   create_table "roles", force: :cascade do |t|

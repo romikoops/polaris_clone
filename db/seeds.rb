@@ -66,11 +66,11 @@ overwrite_hubs(req)
 
 open_pricings = File.open("./db/dummydata/orates.xlsx")
 req = {"xlsx" => open_pricings}
-overwrite_main_carriage_rates(req)
+overwrite_main_carriage_rates(req, false)
 
 ded_prices = File.open("./db/dummydata/drates.xlsx")
 req = {"xlsx" => ded_prices}
-overwrite_main_carriage_rates(req)
+overwrite_main_carriage_rates(req, true)
 
 schedules = File.open("./db/dummydata/vs.xlsx")
 req = {"xlsx" => schedules}

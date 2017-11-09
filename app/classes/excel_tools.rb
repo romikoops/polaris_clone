@@ -1,7 +1,7 @@
 module ExcelTools
-  def overwrite_main_carriage_rates(params)
+  def overwrite_main_carriage_rates(params, dedicated)
     old_route_ids = Route.pluck(:id)
-    old_pricing_ids = Pricing.pluck(:id)
+    old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
     new_route_ids = []
     new_pricing_ids = []
 
@@ -40,8 +40,10 @@ module ExcelTools
 
       if !row[:customer_id]
         cust_id = nil
+        ded_bool = false
       else
         cust_id = row[:customer_id].to_i
+        ded_bool = true
       end
       lcl_obj = {
         currency: row[:lcl_currency],
@@ -72,7 +74,7 @@ module ExcelTools
         heavy_kg_min: row[:fcl_40_hq_heavy_weight_surcharge_min]
       }
 
-      pricing = route.pricings.find_or_create_by(tenant_id: current_user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
+      pricing = route.pricings.find_or_create_by(dedicated: ded_bool, tenant_id: current_user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
 
       new_pricing_ids << pricing.id
     end
