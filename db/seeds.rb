@@ -1,8 +1,30 @@
+include SeedTools
+
+Tenant.destroy_all
+User.destroy_all
+TruckingPricing.destroy_all
+Hub.destroy_all
+Schedule.destroy_all
+Pricing.destroy_all
+ServiceCharge.destroy_all
+Route.destroy_all
+Location.destroy_all
+UserLocation.destroy_all
+
 ['admin', 'shipper'].each do |role|
   Role.find_or_create_by({name: role})
 end
 
-admin = User.new(
+tenant = Tenant.create(
+  theme: {},
+  address: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda",
+  phone: "+46 31-85 32 00",
+  emails: {
+  },
+  subdomain: "greencarrier"
+  )
+
+admin = tenant.users.new(
         role: Role.find_by_name('admin'),
 
         company_name: "Greencarrier",
@@ -14,12 +36,12 @@ admin = User.new(
         password: "demo123456789",
         password_confirmation: "demo123456789",
         
-        confirmed_at: DateTime.new(2015, 1, 20)
+        confirmed_at: DateTime.new(2017, 1, 20)
     )
 admin.skip_confirmation!
 admin.save!
 
-shipper = User.new(
+shipper = tenant.users.new(
         role: Role.find_by_name('shipper'),
 
         company_name: "Example Shipper Company",
@@ -31,12 +53,36 @@ shipper = User.new(
         password: "demo123456789",
         password_confirmation: "demo123456789",
         
-        confirmed_at: DateTime.new(2015, 1, 20)
+        confirmed_at: DateTime.new(2017, 1, 20)
     )
 shipper.skip_confirmation!
 shipper.save!
 
-TruckingPricing.create!(price_per_km: 1.20)
+# TruckingPricing.create!(price_per_km: 1.20)
+
+hubs = File.open("./db/dummydata/hubs.xlsx")
+req = {"xlsx" => hubs}
+overwrite_hubs(req)
+
+open_pricings = File.open("./db/dummydata/orates.xlsx")
+req = {"xlsx" => open_pricings}
+overwrite_main_carriage_rates(req)
+
+ded_prices = File.open("./db/dummydata/drates.xlsx")
+req = {"xlsx" => ded_prices}
+overwrite_main_carriage_rates(req)
+
+schedules = File.open("./db/dummydata/vs.xlsx")
+req = {"xlsx" => schedules}
+overwrite_vessel_schedules(req)
+
+service_charges = File.open("./db/dummydata/local_charges.xlsx")
+req = {"xlsx" => service_charges}
+overwrite_service_charges(req)
+
+trucking = File.open("./db/dummydata/trucking.xlsx")
+req = {"xlsx" => trucking}
+overwrite_trucking_rates(req)
 
 # Location.create!([{
 #     location_type: "hub_ocean",

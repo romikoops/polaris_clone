@@ -1,30 +1,40 @@
-class User < ActiveRecord::Base
-	before_create :set_default_role
-
-  # Basic associations
-  belongs_to :role
-  belongs_to :location
-
-  has_many :shipments, foreign_key: "shipper_id"
-  has_many :receivable_shipments, foreign_key: "consignee_id"
-
-  belongs_to :notifying_shipment, class_name: "Shipment"
-
-  has_many :user_route_discounts
-
-  has_many :pricings, foreign_key: :customer_id
-
-  has_many :contacts, foreign_key: :shipper_id
-  has_many :consignees, through: :contacts
-  has_many :notifyees, through: :contacts
+class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :trackable, :validatable,
           :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
+  before_create :set_default_role
+  validates :tenant_id, presence: true
 
+  # Basic associations
+  belongs_to :tenant
+  belongs_to :role
 
-filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
+  has_many :user_locations, dependent: :destroy
+  has_many :locations, through: :user_locations
+
+  has_many :shipments, foreign_key: "shipper_id"
+  has_many :receivable_shipments, foreign_key: "consignee_id"
+
+  # belongs_to :notifying_shipment, class_name: "Shipment"
+
+  has_many :user_route_discounts
+  has_many :routes, foreign_key: :customer_id
+  has_many :pricings, foreign_key: :customer_id
+
+  has_many :contacts, foreign_key: :shipper_id
+  has_many :consignees, through: :contacts
+  has_many :notifyees, through: :contacts
+
+  # Devise
+  # Include default devise modules. Others available are:
+  # :lockable, :timeoutable and :omniauthable
+  # devise :database_authenticatable, :registerable,
+  #        :recoverable, :rememberable, :validatable, :trackable, :confirmable
+
+  # Filterrific
+  filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
               :available_filters => %w(
                 sorted_by
                 search_query
@@ -46,15 +56,15 @@ filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
     # of interpolation arguments. Adjust this if you
     # change the number of OR conditions.
     num_or_conditions = 3
+
+    or_clauses = [
+      "users.first_name ILIKE ?",
+      "users.last_name ILIKE ?",
+      "users.email ILIKE ?"
+    ].join(' OR ')
+    
     where(
-      terms.map {
-        or_clauses = [
-          "LOWER(users.first_name) LIKE ?",
-          "LOWER(users.last_name) LIKE ?",
-          "LOWER(users.email) LIKE ?"
-        ].join(' OR ')
-        "(#{or_clauses})"
-      }.join(' AND '),
+      terms.map { "(#{or_clauses})" }.join(' AND '),
       *terms.map { |e| [e] * num_or_conditions }.flatten
     )
   }
@@ -93,6 +103,23 @@ filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
 
   def decorated_created_at
     created_at.to_date.to_s(:long)
+  end
+
+  def main_location
+    u_loc = user_locations.where(primary: true).first
+    if !u_loc 
+      return Location.new(street: "",
+          zip_code: "",
+          city: "",
+          country: "")
+    else
+      return u_loc.location
+    end
+    
+  end
+
+  def secondary_locations
+    user_locations.where(primary: false).map(&:location)
   end
   
   private

@@ -1,43 +1,40 @@
-class Pricing < ActiveRecord::Base
-  belongs_to :customer, class_name: "User"
-  belongs_to :origin, class_name: "Location"
-  belongs_to :destination, class_name: "Location"
+class Pricing < ApplicationRecord
+  validates :tenant_id, presence: true
 
-  def self.all_open
-    where(customer_id: nil)
+  belongs_to :route
+
+  def self.get_open
+    find_by(customer_id: nil)
   end
 
-  def self.all_dedicated
-    where.not(customer_id: nil)
-  end
-
-  def self.all_this_user(user)
-    where(customer_id: user.id)    
-  end
-
-  def self.for_locations(origin, destination)
-    starthub, starthub_dist = origin.closest_hub_with_distance
-    endhub, endhub_dist = destination.closest_hub_with_distance
-    if starthub_dist > 300 || endhub_dist > 300
-      starthub = endhub = nil
-    end
-    where(origin: starthub, destination: endhub)
+  def self.get_dedicated(user)
+    find_by(customer_id: user.id)
   end
 
   def lcl_price(cargo)
-    cargo.weight_or_volume * lcl_m3_ton_price    
+    
+    # cargo.weight_or_volume * lcl_m3_ton_price    
+    min = self.lcl["wm_min"] * self.lcl["wm_rate"]
+    tmp_val = cargo.weight_or_volume * self.lcl["wm_rate"]
+    if tmp_val > min
+      return {value: tmp_val, currency: self.lcl["currency"]}
+    else
+      return {value: min, currency: self.lcl["currency"]}
+    end
   end
 
   def fcl_price(container)
+    
     case container.size_class    
     when "20_dc"
-      fcl_20f_price
+      container_rate = self.fcl_20f
     when "40_dc"
-      fcl_40f_price
+      container_rate = self.fcl_40f
     when "40_hq"
-      fcl_40f_hq_price
+      container_rate = self.fcl_40f_hq
     else
       raise "Unknown container size class!"
     end
+    return {value: container_rate["rate"], currency: container_rate["currency"]}
   end
 end

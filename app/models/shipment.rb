@@ -1,4 +1,4 @@
-class Shipment < ActiveRecord::Base
+class Shipment < ApplicationRecord
   # ActiveRecord Callbacks
   before_create :assign_uuid
   before_create :generate_imc_reference
@@ -7,9 +7,9 @@ class Shipment < ActiveRecord::Base
   belongs_to :shipper, class_name: "User"
 
   belongs_to :consignee
-	has_many :documents
-  has_many :shipments_notifyees
-  has_many :notifyees, through: :shipments_notifyees
+  has_many :documents
+  has_many :shipments_contacts
+  has_many :contacts, through: :shipment_contacts
 
   belongs_to :origin, class_name: "Location"
   belongs_to :destination, class_name: "Location"
@@ -17,12 +17,14 @@ class Shipment < ActiveRecord::Base
   belongs_to :route
 
   has_many :containers
-  has_many :lcl_cargos
-  
+  has_many :cargo_items
+
+  belongs_to :shipper_location, class_name: "Location"
+
   accepts_nested_attributes_for :containers, allow_destroy: true
-  accepts_nested_attributes_for :lcl_cargos, allow_destroy: true
-  accepts_nested_attributes_for :notifyees, allow_destroy: true
-	accepts_nested_attributes_for :documents, allow_destroy: true
+  accepts_nested_attributes_for :cargo_items, allow_destroy: true
+  accepts_nested_attributes_for :contacts, allow_destroy: true
+  accepts_nested_attributes_for :documents, allow_destroy: true
 
   # Class methods
   def self.determine_haulage_from_ids(item_ids)
@@ -160,7 +162,7 @@ class Shipment < ActiveRecord::Base
   end
 
   def is_lcl?
-    !self.lcl_cargos.empty?
+    raise "Not implemented"
   end
 
   private

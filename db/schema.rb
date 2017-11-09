@@ -10,12 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026090314) do
+ActiveRecord::Schema.define(version: 20171109093443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "consignees", force: :cascade do |t|
+  create_table "cargo_items", force: :cascade do |t|
+    t.integer "shipment_id"
+    t.decimal "payload_in_kg"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
+    t.decimal "dimension_z"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.integer "shipper_id"
     t.integer "location_id"
     t.string "company_name"
     t.string "first_name"
@@ -37,32 +48,45 @@ ActiveRecord::Schema.define(version: 20171026090314) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "documents", force: :cascade do |t|
-    t.string "url"
-    t.integer "shipment_id"
-    t.string "text"
-    t.string "doc_type"
-    t.integer "user_id"
+  create_table "currencies", force: :cascade do |t|
+    t.jsonb "today"
+    t.jsonb "yesterday"
+    t.string "base"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "lcl_cargos", force: :cascade do |t|
+  create_table "documents", force: :cascade do |t|
+    t.integer "user_id"
     t.integer "shipment_id"
-    t.decimal "payload_in_kg"
-    t.decimal "dimension_x"
-    t.decimal "dimension_y"
-    t.decimal "dimension_z"
+    t.string "doc_type"
+    t.string "url"
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hubs", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.integer "location_id"
+    t.string "name"
+    t.string "hub_type"
+    t.float "latitude"
+    t.float "longitude"
+    t.string "hub_status", default: "active"
+    t.string "hub_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "itineraries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "locations", force: :cascade do |t|
+    t.string "name"
     t.string "location_type"
-    t.string "hub_name"
-    t.string "hub_operator"
-    t.string "hub_address_details"
-    t.string "hub_status"
     t.float "latitude"
     t.float "longitude"
     t.string "geocoded_address"
@@ -71,43 +95,20 @@ ActiveRecord::Schema.define(version: 20171026090314) do
     t.string "zip_code"
     t.string "city"
     t.string "country"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "notifyees", force: :cascade do |t|
-    t.integer "location_id"
-    t.string "company_name"
-    t.string "first_name"
-    t.string "last_name"
-    t.string "phone"
-    t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "ocean_pricings", force: :cascade do |t|
-    t.string "starthub_name"
-    t.string "endhub_name"
-    t.string "size"
-    t.string "weight_class"
-    t.decimal "price"
+    t.string "street_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "pricings", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.integer "route_id"
     t.integer "customer_id"
-    t.string "origin_id"
-    t.string "destination_id"
-    t.string "currency"
-    t.decimal "air_m3_ton_price"
-    t.decimal "lcl_m3_ton_price"
-    t.decimal "fcl_20f_price"
-    t.decimal "fcl_40f_price"
-    t.decimal "fcl_40f_hq_price"
-    t.datetime "exp_date"
-    t.string "mode_of_transport"
+    t.jsonb "air", default: {"wm_min"=>1, "wm_rate"=>nil, "currency"=>nil, "kg_per_cbm"=>167, "heavy_weight"=>nil, "heavy_wm_min"=>1}
+    t.jsonb "lcl", default: {"wm_min"=>1, "wm_rate"=>nil, "currency"=>nil, "kg_per_cbm"=>1000, "heavy_weight"=>nil, "heavy_wm_min"=>1}
+    t.jsonb "fcl_20f", default: {"rate"=>nil, "currency"=>nil, "kg_per_cbm"=>1000, "heavy_kg_min"=>nil, "heavy_weight"=>nil}
+    t.jsonb "fcl_40f", default: {"rate"=>nil, "currency"=>nil, "kg_per_cbm"=>1000, "heavy_kg_min"=>nil, "heavy_weight"=>nil}
+    t.jsonb "fcl_40f_hq", default: {"rate"=>nil, "currency"=>nil, "kg_per_cbm"=>1000, "heavy_kg_min"=>nil, "heavy_weight"=>nil}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -118,110 +119,115 @@ ActiveRecord::Schema.define(version: 20171026090314) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "route_locations", force: :cascade do |t|
-    t.integer "route_id"
-    t.integer "location_id"
-    t.integer "position_in_hub_chain"
+  create_table "routes", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.integer "origin_nexus_id"
+    t.integer "destination_nexus_id"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "routes", force: :cascade do |t|
+  create_table "schedules", force: :cascade do |t|
+    t.integer "route_id"
     t.integer "starthub_id"
     t.integer "endhub_id"
-    t.string "name"
-    t.string "trade_direction"
+    t.string "mode_of_transport"
+    t.datetime "etd"
+    t.datetime "eta"
+    t.string "vessel"
+    t.string "call_sign"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "service_charges", force: :cascade do |t|
-    t.string "trade_direction"
-    t.string "container_size_class"
-    t.decimal "handling_documentation"
-    t.decimal "equipment_management_charges"
-    t.decimal "carrier_security_fee"
-    t.decimal "verified_gross_mass"
-    t.decimal "hazardous_cargo"
-    t.decimal "add_imo_position"
-    t.decimal "export_pickup_charge"
-    t.decimal "import_drop_off_charge"
+    t.integer "hub_id"
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.string "location"
+    t.jsonb "terminal_handling_cbm"
+    t.jsonb "terminal_handling_ton"
+    t.jsonb "terminal_handling_min"
+    t.jsonb "lcl_service_cbm"
+    t.jsonb "lcl_service_ton"
+    t.jsonb "lcl_service_min"
+    t.jsonb "isps"
+    t.jsonb "exp_declaration"
+    t.jsonb "extra_hs_code"
+    t.jsonb "doc_fee"
+    t.jsonb "liner_service_fee"
+    t.jsonb "vgm_fee"
+    t.jsonb "security_fee"
+    t.jsonb "documentation_fee"
+    t.jsonb "handling_fee"
+    t.jsonb "customs_clearance"
+    t.jsonb "cfs_terminal_charges"
+    t.jsonb "misc_fees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "shipment_notifyees", force: :cascade do |t|
+  create_table "shipment_contacts", force: :cascade do |t|
     t.integer "shipment_id"
-    t.integer "notifyee_id"
+    t.integer "contact_id"
+    t.string "contact_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "shipments", force: :cascade do |t|
     t.integer "shipper_id"
-    t.integer "consignee_id"
-    t.integer "tenant_id"
-    t.string "load_type"
-    t.string "hs_code"
-    t.string "cargo_notes"
-    t.string "total_goods_value"
-    t.datetime "planned_pickup_date"
+    t.integer "shipper_location_id"
     t.integer "origin_id"
     t.integer "destination_id"
     t.integer "route_id"
-    t.boolean "has_pre_carriage"
-    t.boolean "has_on_carriage"
-    t.decimal "pre_carriage_distance_km"
-    t.decimal "on_carriage_distance_km"
-    t.string "haulage"
-    t.decimal "total_price"
-    t.string "status"
-    t.string "imc_reference"
     t.string "uuid"
+    t.string "imc_reference"
+    t.string "status"
+    t.string "load_type"
+    t.datetime "planned_pickup_date"
+    t.boolean "has_pre_carriage"
+    t.decimal "pre_carriage_distance_km"
+    t.boolean "has_on_carriage"
+    t.decimal "on_carriage_distance_km"
+    t.decimal "total_price"
+    t.string "total_goods_value"
+    t.string "cargo_notes"
+    t.string "haulage"
+    t.string "hs_code", default: [], array: true
+    t.integer "schedule_set", default: [], array: true
+    t.jsonb "generated_fees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["load_type"], name: "index_shipments_on_load_type"
   end
 
-  create_table "train_pricings", force: :cascade do |t|
-    t.string "starthub_name"
-    t.string "endhub_name"
-    t.string "size"
-    t.string "weight_class"
-    t.decimal "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "train_schedules", force: :cascade do |t|
-    t.string "from"
-    t.string "to"
-    t.datetime "etd"
-    t.datetime "eta"
+  create_table "tenants", force: :cascade do |t|
+    t.jsonb "theme"
+    t.string "address"
+    t.string "phone"
+    t.jsonb "emails"
+    t.string "subdomain"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "trucker_id"
-    t.decimal "price_fix"
-    t.decimal "price_per_km"
-    t.decimal "price_per_ton"
-    t.decimal "price_per_m3"
-    t.float "fcl_limit_m3_40_foot", default: 70.0
-    t.float "fcl_limit_tons_40_foot", default: 24.0
-    t.decimal "fcl_price", default: "3095.0"
-    t.decimal "steptable_min_price", default: "217.0"
-    t.jsonb "steptable"
-    t.string "currency", default: "USD"
+    t.integer "tenant_id"
+    t.integer "nexus_id"
+    t.integer "upper_zip"
+    t.integer "lower_zip"
+    t.jsonb "rate_table", default: [], array: true
+    t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_route_discounts", force: :cascade do |t|
+  create_table "user_locations", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "route_id"
-    t.decimal "discount_by"
+    t.integer "location_id"
+    t.string "category"
+    t.boolean "primary", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -242,30 +248,24 @@ ActiveRecord::Schema.define(version: 20171026090314) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
-    t.integer "location_id"
+    t.string "nickname"
+    t.string "image"
     t.string "email"
+    t.integer "tenant_id"
     t.string "company_name"
     t.string "first_name"
     t.string "last_name"
     t.string "phone"
-    t.text "tokens"
+    t.json "tokens"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "role_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  create_table "vessel_schedules", force: :cascade do |t|
-    t.string "vessel"
-    t.string "voyage_code"
-    t.string "from"
-    t.string "to"
-    t.datetime "ets"
-    t.datetime "eta"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+  add_foreign_key "users", "roles"
 end

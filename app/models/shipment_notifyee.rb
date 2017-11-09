@@ -1,2 +1,0 @@
-class ShipmentNotifyee < ApplicationRecord
-end

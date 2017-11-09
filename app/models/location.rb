@@ -1,15 +1,11 @@
-class Location < ActiveRecord::Base
-  # Basic associations
-  has_many :users
+class Location < ApplicationRecord
+  has_many :user_locations
+  has_many :users, through: :user_locations
   has_many :shipments
-  has_many :consignees
-  has_many :notifyees
-  
-  has_many :routes
-  has_many :route_locations
-  has_many :routes, through: :route_locations
+  has_many :contacts
 
-  has_many :pricings
+  has_many :routes
+  has_many :hubs
 
   # Geocoding
   geocoded_by :geocoded_address
@@ -17,6 +13,9 @@ class Location < ActiveRecord::Base
   # reverse_geocoded_by :latitude, :longitude, :address => :geocoded_address
   reverse_geocoded_by :latitude, :longitude do |obj, results|
     if geo = results.first
+      obj.street_number = geo.street_number
+      obj.street = geo.route
+      obj.street_address = geo.street_number.to_s + " " + geo.route.to_s
       obj.geocoded_address = geo.address
       obj.country = geo.country
       obj.city = geo.city
@@ -27,12 +26,47 @@ class Location < ActiveRecord::Base
   # Class methods
   def self.get_geocoded_location(user_input, hub_id, truck_carriage)
     if truck_carriage
-      location = Location.new(geocoded_address: user_input)
-      location.geocode
-      location.reverse_geocode
-      return location
+      geocoded_location(user_input)
     else
       return Location.find(hub_id)
+    end
+  end
+
+  def self.create_and_geocode(location_params)
+    if !location_params[:geocoded_address]
+      str = location_params[:street_address].to_s + " " + location_params[:city].to_s + " " + location_params[:zip_code].to_s + " " + location_params[:country].to_s
+      location_params[:geocoded_address] = str
+    end
+    loc = Location.find_or_create_by(
+    latitude: location_params[:latitude],
+    longitude: location_params[:longitude],
+    geocoded_address: location_params[:geocoded_address],
+    street: location_params[:street],
+    street_address: location_params[:street_address],
+    street_number: location_params[:street_number],
+    zip_code: location_params[:zip_code],
+    city: location_params[:city],
+    country: location_params[:country])
+    loc.geocode
+    loc.reverse_geocode
+    
+    return loc
+  end
+  def self.geocoded_location(user_input)
+
+    location = Location.new(geocoded_address: user_input)
+    location.geocode
+    location.reverse_geocode
+    return location
+  end
+
+  def get_zip_code
+    if self.zip_code
+      return self.zip_code
+    else
+      self.geocoded_address
+      self.reverse_geocode
+      return self.zip_code
     end
   end
 
@@ -107,6 +141,10 @@ class Location < ActiveRecord::Base
   end
 
   # Instance methods
+  def hubs_by_type(hub_type)
+    hubs.where(hub_type: hub_type)
+  end
+
   def pretty_hub_type
     case self.location_type
     when 'hub_train'
@@ -133,7 +171,7 @@ class Location < ActiveRecord::Base
   end
 
   def closest_hub
-    hubs = Location.where("location_type LIKE ?", "hub_%")
+    hubs = Location.where(location_type: "nexus")
     distances = []
     hubs.each do |hub|
       distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [hub.latitude, hub.longitude])
@@ -143,19 +181,22 @@ class Location < ActiveRecord::Base
     hubs[distances.find_index(lowest_distance)]
   end
 
-  def closest_hub_with_distance
-    hubs = Location.where("location_type LIKE ?", "hub_%")
+  def closest_location_with_distance
+    locations = Location.where(location_type: "nexus")
     distances = []
-    hubs.each do |hub|
-      distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [hub.latitude, hub.longitude])
+
+    locations.each do |location|
+      
+      distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [location.latitude, location.longitude])
     end
 
     lowest_distance = distances.min
-    return hubs[distances.find_index(lowest_distance)], lowest_distance
+    
+    return locations[distances.find_index(lowest_distance)], lowest_distance
   end
 
   def closest_hubs
-    hubs = Location.where("location_type LIKE ?", "hub_%")
+    hubs = Location.where(location_type: "nexus")
     distances = {}
     hubs.each_with_index do |hub, i|
       distances[i] = Geocoder::Calculations.distance_between([self.latitude, self.longitude], [hub.latitude, hub.longitude])
@@ -168,16 +209,5 @@ class Location < ActiveRecord::Base
     end
 
     hubs_array
-  end
-
-  def toggle_hub_status!
-    case self.hub_status
-    when "active"
-      self.update_attribute(:hub_status, "inactive")
-    when "inactive"
-      self.update_attribute(:hub_status, "active")
-    else
-      raise "Location contains invalid hub status!"
-    end
   end
 end

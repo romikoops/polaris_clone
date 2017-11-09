@@ -4,7 +4,7 @@ class Admin::RoutesController < ApplicationController
   layout 'dashboard'
 
   def index
-    @routes = Route.all
+    @routes = Route.where(tenant_id: current_user.tenant_id)
     @number_of_columns = @routes.map { |r| r.stops.length }.max || 1
   end
 

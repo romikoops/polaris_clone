@@ -1,5 +1,73 @@
-class Contact < ActiveRecord::Base
+class Contact < ApplicationRecord
   belongs_to :shipper, class_name: "User"
-  belongs_to :consignee
-  belongs_to :notifyee
+  has_many :shipment_contacts
+  belongs_to :location
+
+
+  filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
+              :available_filters => %w(
+                sorted_by
+                search_query
+              )
+
+  self.per_page = 12 # default for will_paginate
+
+  scope :search_query, lambda { |query|
+    return nil if query.blank?
+    # condition query, parse into individual keywords
+    terms = query.to_s.gsub(',', '').downcase.split(/\s+/)
+    # replace "*" with "%" for wildcard searches,
+    # prepend and append '%', remove duplicate '%'s
+    terms = terms.map { |e|
+      ('%' + e.gsub('*', '%') + '%').gsub(/%+/, '%')
+    }
+
+    # configure number of OR conditions for provision
+    # of interpolation arguments. Adjust this if you
+    # change the number of OR conditions.
+    num_or_conditions = 3
+
+    or_clauses = [
+      "consignees.first_name ILIKE ?",
+      "consignees.last_name ILIKE ?",
+      "consignees.company_name ILIKE ?"
+    ].join(' OR ')
+    
+    where(
+      terms.map { "(#{or_clauses})" }.join(' AND '),
+      *terms.map { |e| [e] * num_or_conditions }.flatten
+    )
+  }
+
+  scope :sorted_by, lambda { |sort_option|
+    # extract the sort direction from the param value.
+    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
+    case sort_option.to_s
+    when /^created_at_/
+      order("consignees.created_at #{direction}")
+    else
+      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
+    end
+  }
+
+  # Class methods
+  def self.options_for_sorted_by
+    [
+      ['Registration date (newest first)', 'created_at_desc'],
+      ['Registration date (oldest first)', 'created_at_asc']
+    ]
+  end
+
+  # Instance methods
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def full_name_and_company
+    "#{first_name} #{last_name}, #{company_name}"
+  end
+
+  def full_name_and_company_and_address
+    "#{first_name} #{last_name}\n#{company_name}\n#{location.geocoded_address}"
+  end
 end

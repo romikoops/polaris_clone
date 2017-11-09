@@ -4,26 +4,12 @@ class Admin::VesselSchedulesController < ApplicationController
   layout 'dashboard'
 
   def index
-    @schedules = VesselSchedule.all.paginate(:page => params[:page], :per_page => 15)
+    @schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)
   end
 
   def overwrite
-    old_ids = VesselSchedule.pluck(:id)
-    new_ids = []
-
-    xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    first_sheet = xlsx.sheet(xlsx.sheets.first)
-    schedules = first_sheet.parse(vessel: 'VESSEL', voyage_code: 'VOYAGE_CODE', from: 'FROM', to: 'TO', eta: 'ETA', ets: 'ETS')
-
-    schedules.each do |vessel_schedule|
-      vs = VesselSchedule.find_or_create_by(vessel_schedule)
-      new_ids << vs.id
-    end
-
-    kicked_vs_ids = old_ids - new_ids
-    VesselSchedule.where(id: kicked_vs_ids).destroy_all
-
-    redirect_to :back    
+    overwrite_vessel_schedules(params)
+    redirect_to :back
   end
 
   private

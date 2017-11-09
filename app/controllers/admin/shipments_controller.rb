@@ -4,14 +4,13 @@ class Admin::ShipmentsController < ApplicationController
   layout 'dashboard'
 
   def index
-		@documents = {}
+    @documents = {}
     @requested_shipments = Shipment.where(status: "requested")
-		@documents['requested_shipments'] = Document.get_documents_for_array(@requested_shipments)
+    @documents['requested_shipments'] = Document.get_documents_for_array(@requested_shipments)
     @open_shipments = Shipment.where(status: ["accepted", "in_progress"])
-		@documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
+    @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
     @finished_shipments = Shipment.where(status: ["declined", "finished"])
-		@documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
-		p @documents
+    @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
   end
 
   def email_action
@@ -33,14 +32,13 @@ class Admin::ShipmentsController < ApplicationController
 
   def edit
     @shipment = Shipment.find(params[:id])
-     @containers = Container.where(shipment_id: @shipment.id)
-      @container_descriptions = CONTAINER_DESCRIPTIONS.invert
-      @all_hubs = Location.all_hubs_prepared
+    @containers = Container.where(shipment_id: @shipment.id)
+    @container_descriptions = CONTAINER_DESCRIPTIONS.invert
+    @all_hubs = Location.all_hubs_prepared
   end
 
   def update
     @shipment = Shipment.find(params[:id])
-    
 
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
@@ -72,7 +70,6 @@ class Admin::ShipmentsController < ApplicationController
   end
 
   def shipment_params
-      params.require(:shipment).permit(:total_price, :planned_pickup_date,:origin_id, :destination_id)
-  end 
-
+    params.require(:shipment).permit(:total_price, :planned_pickup_date,:origin_id, :destination_id)
+  end
 end
