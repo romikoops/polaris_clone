@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 // import {EmailSignInForm} from 'redux-auth/bootstrap-theme';
 import './ActiveRoutes.scss';
+import PropTypes from 'prop-types';
 // import SignIn from '../SignIn/SignIn';
 export class ActiveRoutes extends Component {
     render() {
@@ -36,15 +37,19 @@ export class ActiveRoutes extends Component {
                 image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/Shenzhen.jpg'
             }
         ];
+        const theme = this.props.tenant.theme;
         const activeRouteBoxes = [];
         activeRoutesData.map((route, index) => {
             let divStyle = {
                 backgroundImage: 'url(' + route.image + ')',
             };
+            let textStyle = {
+                background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+            };
 
             const arb = (<div key={index} className="active_route flex-33 layout-row layout-align-center-center" style={divStyle}>
                 <div className="flex-none layout-column layout-align-center-center">
-                  <h2 className="city flex-none"> {route.name} </h2>
+                  <h2 className="city flex-none" style={textStyle} > {route.name} </h2>
                   <h5 className="country flex-none"> {route.name} </h5>
                 </div>
             </div>);
@@ -60,3 +65,7 @@ export class ActiveRoutes extends Component {
     );
     }
 }
+
+ActiveRoutes.propTypes = {
+    tenant: PropTypes.object
+};

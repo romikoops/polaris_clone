@@ -18,6 +18,9 @@ module.exports = {
         filename: '[name].js',
         publicPath: '/'
     },
+    devServer: {
+        historyApiFallback: true
+    },
     plugins: [
         new HtmlWebpackPlugin({
           template: 'app/index.tpl.html',

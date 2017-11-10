@@ -8,9 +8,8 @@
   background-repeat: no-repeat;
 }
 .city {
-  background: -webkit-linear-gradient(#00E503, #00ACE5);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   font-size: 2rem;
   text-shadow: 1px 1px 1px rgba(12,11,13,0.65);
 }

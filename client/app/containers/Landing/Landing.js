@@ -3,40 +3,52 @@ import {LandingTop} from '../../components/LandingTop/LandingTop';
 // import {Button} from '../../components/Button/Button';
 import {ActiveRoutes} from '../../components/ActiveRoutes/ActiveRoutes';
 import {BlogPostHighlights} from '../../components/BlogPostHighlights/BlogPostHighlights';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import './Landing.scss';
-export class Landing extends Component {
+class Landing extends Component {
+    constructor(props) {
+        super(props);
+        this.tenant = this.props.tenant;
+        console.log(this.props);
+    }
+
     render() {
+        const theme = this.props.tenant.theme;
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         return (
         <div className="layout-row flex-100 layout-wrap" >
-          <LandingTop className="flex-100"/>
+          <LandingTop className="flex-100" tenant={this.props.tenant} />
           <div className="service_box layout-row flex-100 layout-wrap">
             <div className="service_label layout-row layout-align-center-center flex-100">
-              <h2 className="flex-none"> Introducing Online LCL Services
+              <h2 className="flex-none"> Introducing Online LCL Services {this.props.tenant.id}
               </h2>
             </div>
             <div className="services_row flex-100 layout-row layout-align-center">
               <div className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center">
                 <div className="flex-none layout-column layout-align-center-center service">
-                  <i className="fa fa-bolt" aria-hidden="true"></i>
+                  <i className="fa fa-bolt" aria-hidden="true" style={textStyle}></i>
                   <h3> Instant Booking </h3>
                 </div>
                 <div className="flex-none layout-column layout-align-center-center service">
-                  <i className="fa fa-edit" aria-hidden="true"></i>
+                  <i className="fa fa-edit" aria-hidden="true" style={textStyle}></i>
                   <h3> Real time quotes </h3>
                 </div>
                 <div className="flex-none layout-column layout-align-center-center service">
-                  <i className="fa fa-binoculars" aria-hidden="true"></i>
+                  <i className="fa fa-binoculars" aria-hidden="true" style={textStyle}></i>
                   <h3>Transparent </h3>
                 </div>
                 <div className="flex-none layout-column layout-align-center-center service">
-                  <i className="fa fa-clock-o" aria-hidden="true"></i>
+                  <i className="fa fa-clock-o" aria-hidden="true" style={textStyle}></i>
                   <h3>Updates in Real Time </h3>
                 </div>
               </div>
             </div>
           </div>
-          <ActiveRoutes className="mc"/>
+          <ActiveRoutes className="mc" tenant={this.props.tenant} />
           <BlogPostHighlights/>
           <div className="btm_promo flex-100 layout-row">
             <div className="flex-50 btm_promo_img">
@@ -73,3 +85,10 @@ export class Landing extends Component {
       );
     }
 }
+
+Landing.propTypes = {
+    tenant: PropTypes.object
+};
+
+
+export default connect()(Landing);

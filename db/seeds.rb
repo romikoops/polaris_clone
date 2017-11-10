@@ -16,13 +16,19 @@ UserLocation.destroy_all
 end
 
 tenant = Tenant.create(
-  theme: {},
-  address: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda",
-  phone: "+46 31-85 32 00",
-  emails: {
-  },
-  subdomain: "greencarrier"
-  )
+  theme: {
+    colors: {
+        primary: "#00E503",
+        secondary: "#00ACE5"
+    },
+    logo: "https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/logos/logo_black_small.png"
+    },
+    address: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda",
+    phone: "+46 31-85 32 00",
+    emails: {
+    },
+    subdomain: "greencarrier"
+)
 
 admin = tenant.users.new(
         role: Role.find_by_name('admin'),

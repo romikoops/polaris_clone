@@ -1,4 +1,6 @@
 import * as types from './types';
+export * from './alert.actions';
+export * from './user.actions';
 
 export function filterTable(filter) {
     return {
@@ -6,3 +8,11 @@ export function filterTable(filter) {
         filter
     };
 }
+
+export function setTenant(tenant) {
+    return {
+        type: types.SET_TENANT,
+        tenant
+    };
+}
+

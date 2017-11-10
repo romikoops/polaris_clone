@@ -19,10 +19,10 @@
   margin: 75px;
 }
 .service i {
-   background: -webkit-linear-gradient(#00E503, #00ACE5);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 40px;
+   // background: -webkit-linear-gradient(#00E503, #00ACE5);
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-size: 40px !important;
 }
 .mc {
   height: max-content;

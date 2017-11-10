@@ -17,6 +17,7 @@
   "author": "Jean-Pierre Sierens",
   "license": "MIT",
   "dependencies": {
+    "babel-preset-stage-2": "^6.24.1",
     "prop-types": "^15.6.0",
     "react": "^15.0.2",
     "react-bootstrap": "^0.31.5",
@@ -28,6 +29,8 @@
     "react-router-redux": "next",
     "redux": "^3.5.2",
     "redux-auth": "0.0.5-beta5",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.1.1"
   },
   "devDependencies": {
