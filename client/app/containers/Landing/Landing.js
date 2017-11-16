@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {LandingTop} from '../../components/LandingTop/LandingTop';
+import {LandingTopAuthed} from '../../components/LandingTopAuthed/LandingTopAuthed';
 // import {Button} from '../../components/Button/Button';
 import {ActiveRoutes} from '../../components/ActiveRoutes/ActiveRoutes';
 import {BlogPostHighlights} from '../../components/BlogPostHighlights/BlogPostHighlights';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-
+// { loggedIn ? <LandingTopAuthed className="flex-100" theme={this.props.theme} /> : <LandingTop className="flex-100" theme={this.props.theme} /> }
 import './Landing.scss';
 class Landing extends Component {
     constructor(props) {
@@ -15,16 +16,17 @@ class Landing extends Component {
     }
 
     render() {
-        const theme = this.props.tenant.theme;
+        const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
+        const theme = this.props.theme;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         return (
         <div className="layout-row flex-100 layout-wrap" >
-          <LandingTop className="flex-100" tenant={this.props.tenant} />
+          { loggedIn ? <LandingTopAuthed className="flex-100" theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
           <div className="service_box layout-row flex-100 layout-wrap">
             <div className="service_label layout-row layout-align-center-center flex-100">
-              <h2 className="flex-none"> Introducing Online LCL Services {this.props.tenant.id}
+              <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
               </h2>
             </div>
             <div className="services_row flex-100 layout-row layout-align-center">
@@ -48,7 +50,7 @@ class Landing extends Component {
               </div>
             </div>
           </div>
-          <ActiveRoutes className="mc" tenant={this.props.tenant} />
+          <ActiveRoutes className="mc" theme={theme} />
           <BlogPostHighlights/>
           <div className="btm_promo flex-100 layout-row">
             <div className="flex-50 btm_promo_img">
@@ -87,8 +89,20 @@ class Landing extends Component {
 }
 
 Landing.propTypes = {
-    tenant: PropTypes.object
+    tenant: PropTypes.object,
+    theme: PropTypes.object,
+    user: PropTypes.object,
+    loggedIn: PropTypes.bool
 };
 
+function mapStateToProps(state) {
+    const { users, authentication } = state;
+    const { user, loggedIn } = authentication;
+    return {
+        user,
+        users,
+        loggedIn
+    };
+}
 
-export default connect()(Landing);
+export default connect(mapStateToProps)(Landing);

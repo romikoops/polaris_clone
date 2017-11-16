@@ -21,7 +21,8 @@ class Button extends Component {
 }
 
 Button.propTypes = {
-    text: PropTypes.string
+    text: PropTypes.string,
+    history: PropTypes.func
 };
 
 export default Button;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-// import {EmailSignInForm} from 'redux-auth/bootstrap-theme';
+import PropTypes from 'prop-types';
 import './BlogPostHighlights.scss';
 import Button from '../Button/Button';
 export class BlogPostHighlights extends Component {
@@ -10,6 +10,7 @@ export class BlogPostHighlights extends Component {
             image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/shipping-containers.jpg'
         };
         const dummyPosts = [];
+        const theme = this.props.theme;
         for (let i = 2; i >= 0; i--) {
             let divStyle = {
                 backgroundImage: 'url(' + dummyPost.image + ')',
@@ -24,7 +25,7 @@ export class BlogPostHighlights extends Component {
                     <p className="flex-none"> {dummyPost.text} </p>
                   </div>
                   <div className="flex-33 layout-row layout-wrap layout-align-center-center bp_action">
-                    <Button text="Read More"/>
+                    <Button theme={theme} text="Read More"/>
                   </div>
                 </div>
             </div>);
@@ -43,3 +44,7 @@ export class BlogPostHighlights extends Component {
       );
     }
 }
+
+BlogPostHighlights.propTypes = {
+    theme: PropTypes.object
+};

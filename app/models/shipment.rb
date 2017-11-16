@@ -4,22 +4,22 @@ class Shipment < ApplicationRecord
   before_create :generate_imc_reference
 
   # Basic associations
-  belongs_to :shipper, class_name: "User"
+  belongs_to :shipper, class_name: "User", optional: true
 
-  belongs_to :consignee
+  belongs_to :consignee, optional: true
   has_many :documents
   has_many :shipments_contacts
   has_many :contacts, through: :shipment_contacts
 
-  belongs_to :origin, class_name: "Location"
-  belongs_to :destination, class_name: "Location"
+  belongs_to :origin, class_name: "Location", optional: true
+  belongs_to :destination, class_name: "Location", optional: true
 
-  belongs_to :route
+  belongs_to :route, optional: true
 
   has_many :containers
   has_many :cargo_items
 
-  belongs_to :shipper_location, class_name: "Location"
+  belongs_to :shipper_location, class_name: "Location", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

@@ -1,16 +1,16 @@
 class Shipments::Open::LclController < ApplicationController
 	include ShippingTools
+  include Response
   before_action :require_login_and_correct_id, except: [:test_email]
-
-  layout 'dashboard'
 
   def reuse_booking_data
 
 		reuse_shipment_data(params, session, 'openlcl')   
   end
 
-  def new
-		new_shipment(session, 'openlcl')
+  def create
+		resp = new_shipment(session, 'openlcl')
+    json_response(resp, 200)
   end
 
   def get_offer
@@ -34,8 +34,7 @@ class Shipments::Open::LclController < ApplicationController
 
   def require_login_and_correct_id
     unless user_signed_in? && current_user.id.to_s == params[:user_id]
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
+       json_response({error: "You are not signed in"}, 500)
     end
   end
 end

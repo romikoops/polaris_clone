@@ -7,14 +7,14 @@ export class LandingTop extends Component {
     render() {
         console.log(this.props);
         let logo;
-        if (this.props.tenant && this.props.tenant.theme) {
-            logo = this.props.tenant.theme.logo;
+        if (this.props.theme) {
+            logo = this.props.theme.logo;
         } else {
             logo = '';
         }
         return (
             <div className="landing_top layout-row flex-100 layout-align-center">
-              <div className="landing_top layout-row flex-75 layout-wrap">
+              <div className="layout-row flex-75 layout-wrap">
                 <div className="top_row flex-100 layout-row">
                   <div className="logo_row flex-50 layout-row layout-align-start-center">
                     <img className="tenant_logo" src={logo} />
@@ -35,7 +35,7 @@ export class LandingTop extends Component {
 }
 
 LandingTop.propTypes = {
-    tenant: PropTypes.object
+    theme: PropTypes.object
 };
 
 

@@ -15,7 +15,7 @@ const receiveTenant = (subdomain, json) => {
     return {
         type: RECEIVE_TENANT,
         subdomain,
-        tenant: json,
+        data: json,
         receivedAt: Date.now()
     };
 };

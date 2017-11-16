@@ -9,8 +9,9 @@ class Shipments::FclController < ApplicationController
 		reuse_shipment_data(params, session, 'fcl')
   end
 
-  def new
-		new_shipment(session, "fcl")
+  def create
+		resp = new_shipment(session, "fcl")
+    json_response(resp, 200)
   end
 
   def get_offer

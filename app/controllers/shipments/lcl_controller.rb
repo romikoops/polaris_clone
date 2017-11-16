@@ -13,8 +13,9 @@ class Shipments::LclController < ApplicationController
 		reuse_shipment_data(params, session, 'lcl')
   end
 
-  def new
-		new_shipment(session, "lcl")
+  def create
+		resp = new_shipment(session, "lcl")
+    json_response(resp, 200)
   end
 
   def get_offer
@@ -55,8 +56,7 @@ class Shipments::LclController < ApplicationController
 
   def require_login_and_correct_id
     unless user_signed_in? && current_user.id.to_s == params[:user_id]
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
+      json_response({error: "You are not signed in"}, 500)
     end
   end
 end

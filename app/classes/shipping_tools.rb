@@ -1,5 +1,6 @@
 module ShippingTools
   def new_shipment(session, load_type)
+
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
       session[:shipment_uuid] = @shipment.uuid
@@ -46,7 +47,22 @@ module ShippingTools
       @all_hubs = Location.all_hubs_prepared_dedicated(current_user)
     end
 
-    render 'new_first_details'
+    resp = {
+        shipment: @shipment,
+        has_pre_carriage: @has_pre_carriage,
+        has_on_carriage: @has_on_carriage,
+        all_hubs: @all_hubs
+    }
+    case load_type
+    when 'fcl'
+        resp[:tare_weights] = @tare_weights
+        resp[:container_descriptions] = @container_descriptions
+    when 'lcl'
+      resp[:cargo_items] = @shipment.cargo_items
+    when 'openlcl'
+      resp[:cargo_items] = @shipment.cargo_items
+    end
+    return resp
   end
 
   def reuse_booking_data(params, session, load_type)
@@ -116,7 +132,7 @@ module ShippingTools
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
     contacts_data = shipment_data[:contacts_attributes]
-    byebug
+
     @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hs_code], total_goods_value: shipment_data[:total_goods_value], cargo_notes: shipment_data[:cargo_notes])
 
     contact_location = Location.create_and_geocode(street_address: consignee_data[:street_address], zip_code: consignee_data[:zip_code], city: consignee_data[:city], country: consignee_data[:country])

@@ -1,22 +1,22 @@
 import React, {Component} from 'react';
-// import { Link } from 'react-router-dom';
 import { Footer } from '../Footer/Footer';
-// import Routes from '../../routes';
 import './App.scss';
-import { Switch } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Landing from '../../containers/Landing/Landing';
+import OpenShop from '../../containers/OpenShop/OpenShop';
 // import PropsRoute from '../../routes/PropsRoute'; // <PropsRoute path="/landing" component={Landing} />
-import { Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
 import { connect } from 'react-redux';
+// import { tenantDefaults } from '../../constants';
 // debugger;
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            tenant: {}
-        };
+        // this.state = {
+        //     tenant: {}
+        // };
+        console.log(this.props);
     }
 
     componentDidMount() {
@@ -50,7 +50,8 @@ class App extends Component {
           <div className="layout-fill layout-column scroll">
             {isFetching && <h2>Loading...</h2>}
              <Switch className="flex">
-                <Route  render={props => (<Landing tenant={tenant} {...props} />)}/>
+                <Route exact path="/" render={props => (<Landing theme={tenant.data.theme} {...props} />)}/>
+                <Route path="/open" render={props => (<OpenShop theme={tenant.data.theme} {...props} />)}/>
               </Switch>
             <Footer/>
           </div>
@@ -60,34 +61,27 @@ class App extends Component {
 
 App.propTypes = {
     selectedSubdomain: PropTypes.string.isRequired,
-    tenants: PropTypes.object.isRequired,
     isFetching: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired,
-    tenant: PropTypes.object
-};
-
-App.defaultProps = {
-    tenant: {
-        theme: {}
-    }
+    tenant: PropTypes.object,
+    user: PropTypes.object,
+    loggedIn: PropTypes.bool
 };
 
 function mapStateToProps(state) {
-    const { selectedSubdomain, tenantBySubdomain } = state;
+    const { selectedSubdomain, tenant, authentication } = state;
+    const { user, loggedIn } = authentication;
     const {
-    isFetching,
-    lastUpdated,
-    data: tenant
-  } = tenantBySubdomain[selectedSubdomain] || {
-      isFetching: true,
-      data: {}
-  };
-
+        isFetching
+      } = tenant || {
+          isFetching: true
+      };
     return {
         selectedSubdomain,
         tenant,
-        isFetching,
-        lastUpdated
+        user,
+        loggedIn,
+        isFetching
     };
 }
 

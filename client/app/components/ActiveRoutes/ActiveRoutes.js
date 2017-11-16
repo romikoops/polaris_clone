@@ -37,7 +37,7 @@ export class ActiveRoutes extends Component {
                 image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/Shenzhen.jpg'
             }
         ];
-        const theme = this.props.tenant.theme;
+        const theme = this.props.theme;
         const activeRouteBoxes = [];
         activeRoutesData.map((route, index) => {
             let divStyle = {
@@ -67,5 +67,5 @@ export class ActiveRoutes extends Component {
 }
 
 ActiveRoutes.propTypes = {
-    tenant: PropTypes.object
+    theme: PropTypes.object
 };

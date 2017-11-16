@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_login_and_correct_id
+  # before_action :require_login_and_correct_id
 
   layout 'dashboard'
 

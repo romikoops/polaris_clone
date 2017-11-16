@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   # devise_for :users, controllers: { sessions: "users_devise/sessions", registrations: "users_devise/registrations" }
-  mount_devise_token_auth_for 'User', at: 'auth'
+  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+    sessions:  'overrides/sessions'
+  }
   root 'welcome#index'
 
   get "cookies" => "application#cookies_info", as: :cookies  
