@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171109105026) do
+ActiveRecord::Schema.define(version: 20171120113058) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20171109105026) do
     t.string "hub_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "trucking_type"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -98,6 +99,7 @@ ActiveRecord::Schema.define(version: 20171109105026) do
     t.string "street_address"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "province"
   end
 
   create_table "pricings", force: :cascade do |t|
@@ -222,6 +224,10 @@ ActiveRecord::Schema.define(version: 20171109105026) do
     t.string "currency"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "province"
+    t.string "city"
+    t.string "rate_type"
+    t.string "dist_hub", default: [], array: true
   end
 
   create_table "user_locations", force: :cascade do |t|

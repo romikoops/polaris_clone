@@ -1,5 +1,5 @@
 module ExcelTools
-  def overwrite_main_carriage_rates(params, dedicated)
+  def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
     old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
     new_route_ids = []
@@ -32,10 +32,11 @@ module ExcelTools
       fcl_40_hq_heavy_weight_surcharge_min: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_MIN'
     )
 
+
     pricing_rows.each do |row|
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
-      route = Route.find_or_create_by(name: "#{origin.name} - #{destination.name}", tenant_id: current_user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       new_route_ids << route.id
 
       if !row[:customer_id]
@@ -74,7 +75,7 @@ module ExcelTools
         heavy_kg_min: row[:fcl_40_hq_heavy_weight_surcharge_min]
       }
 
-      pricing = route.pricings.find_or_create_by(dedicated: ded_bool, tenant_id: current_user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
+      pricing = route.pricings.find_or_create_by(dedicated: ded_bool, tenant_id: user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
 
       new_pricing_ids << pricing.id
     end
@@ -86,8 +87,8 @@ module ExcelTools
     Pricing.where(id: kicked_pricing_ids).destroy_all
   end
 
-  def overwrite_trucking_rates(params)
-    old_trucking_ids = TruckingPricing.pluck(:id)
+  def overwrite_trucking_rates(params, user = current_user)
+    old_trucking_ids = nil
     new_trucking_ids = []
 
     defaults = []
@@ -95,24 +96,34 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
+      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
+
       currency_row = first_sheet.row(1)
 
       header_row = first_sheet.row(2)
       header_row.shift
       header_row.shift
+      weight_min_row = first_sheet.row(3)
+      weight_min_row.shift
+      weight_min_row.shift
       num_rows = first_sheet.last_row
       header_row.each do |cell|
         min_max_arr = cell.split(" - ")
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
-      (3..num_rows).each do |line|
+      (4..num_rows).each do |line|
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
-        min_value = row_data.shift
-        ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: current_user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        row_min_value = row_data.shift
+        ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
         row_data.each_with_index do |val, index|
           tmp = defaults[index]
+          if row_min_value < weight_min_row[index]
+            min_value = weight_min_row[index]
+          else
+            min_value = row_min_value
+          end
           tmp[:min_value] = min_value
           tmp[:value] = val
           ntp.rate_table.push(tmp)
@@ -128,7 +139,60 @@ module ExcelTools
     TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
-  def overwrite_service_charges(params)
+  def overwrite_shanghai_trucking_rates(params, user = current_user)
+    old_trucking_ids = nil
+    new_trucking_ids = []
+
+    defaults = []
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      nexus = Location.find_by(name: sheet_name, location_type: "nexus")
+      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
+
+      weight_cat_row = first_sheet.row(2)
+      num_rows = first_sheet.last_row
+      [3,4,5,6].each do |i|
+        min_max_arr = weight_cat_row[i].split(" - ")
+        defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
+      end
+      (3..num_rows).each do |line|
+        row_data = first_sheet.row(line)
+        new_pricing = {}
+
+        new_pricing[:province] = row_data[0].downcase
+        new_pricing[:city] = row_data[1].downcase
+        new_pricing[:dist_hub] = row_data[2].split(' , ')
+        new_pricing[:currency] = "CNY"
+        new_pricing[:tenant_id] = user.tenant_id
+        new_pricing[:nexus_id] = nexus.id
+        new_pricing[:rate_type] = "city"
+        new_pricing[:rate_table] = []
+        ntp = TruckingPricing.new(new_pricing)
+
+        [3,4,5,6].each do |i|
+          tmp = defaults[i - 3]
+          tmp[:value] = row_data[i]
+          tmp[:pickup_fee] = row_data[8]
+          tmp[:delivery_fee] = row_data[9]
+          tmp[:delivery_eta_in_days] = row_data[10]
+          tmp[:per_cbm_rate] = row_data[7]
+
+          ntp.rate_table.push(tmp)
+        end
+        ntp.save!
+
+        new_trucking_ids << ntp.id
+
+      end
+    end
+
+    kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+  end
+
+  def overwrite_service_charges(params, user = current_user)
+
     old_ids = ServiceCharge.pluck(:id)
     new_ids = []
 
@@ -140,7 +204,7 @@ module ExcelTools
       new_charge = {
         effective_date: r[0],
         expiration_date: r[1],
-        location: r[2],
+        hub_code: r[2],
         terminal_handling_cbm: {currency: r[3], value: r[4], trade_direction: "export"},
         terminal_handling_ton: {currency: r[3], value: r[5], trade_direction: "export"},
         terminal_handling_min: {currency: r[3], value: r[6], trade_direction: "export"},
@@ -159,8 +223,9 @@ module ExcelTools
         cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
       }
 
-      og = Location.find_by_name(r[2])
-      hub = Hub.find_by("location_id = ? AND tenant_id = ?", og.id, current_user.tenant_id)
+      hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
+      new_charge.delete(:hub_code)
+      new_charge[:hub_id] = hub.id
 
       if hub.service_charge
         hub.service_charge.destroy
@@ -182,7 +247,8 @@ module ExcelTools
     # ServiceCharge.where(id: kicked_sc_ids).destroy_all
   end
 
-  def overwrite_air_schedules(params)
+  def overwrite_air_schedules(params, user = current_user)
+
     old_ids = Schedule.pluck(:id)
     new_ids = []
     locations = {}
@@ -222,7 +288,8 @@ module ExcelTools
     Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
-  def overwrite_vessel_schedules(params)
+  def overwrite_vessel_schedules(params, user = current_user)
+
     old_ids = Schedule.pluck(:id)
     new_ids = []
     locations = {}
@@ -262,7 +329,7 @@ module ExcelTools
     Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
-  def overwrite_train_schedules(params)
+  def overwrite_train_schedules(params, user = current_user)
     old_ids = Schedule.pluck(:id)
     new_ids = []
     data_box = {}
@@ -285,14 +352,11 @@ module ExcelTools
         ts = robj.schedules.find_or_create_by(train_schedule)
         new_ids << ts.id
       else
-        nrt = Route.create_from_schedule(train_schedule, current_user.tenant_id)
+        nrt = Route.create_from_schedule(train_schedule, user.tenant_id)
         ts = nrt.schedules.find_or_create_by(train_schedule)
         new_ids << ts.id
 
       end
-      # rescue => ex
-      #   byebug
-      # end
     end
 
     kicked_ts_ids = old_ids - new_ids
@@ -300,13 +364,14 @@ module ExcelTools
 
   end
 
-  def overwrite_hubs(params)
-    old_ids = Location.all_hubs.pluck(:id)
+  def overwrite_hubs(params, user = current_user)
+    old_ids = Hub.pluck(:id)
     new_ids = []
 
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
-    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', hub_address_details: 'ADDRESS_DETAILS')
+
+    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', trucking_type: 'TRUCKING_METHOD', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', hub_address_details: 'ADDRESS_DETAILS')
 
     hub_type_name = {
       "ocean" => "Port",
@@ -323,8 +388,8 @@ module ExcelTools
       else
         hub_code = hub_row[:hub_code]
       end
-      
-      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: current_user.tenant_id, hub_type: hub_row[:hub_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}")
+
+      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}")
       new_ids << hub.id
     end
 

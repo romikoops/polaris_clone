@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {ChooseShipment} from '../../components/ChooseShipment/ChooseShipment';
 import {ShopStageView} from '../../components/ShopStageView/ShopStageView';
 import {ShipmentDetails} from '../../components/ShipmentDetails/ShipmentDetails';
+import {ChooseRoute} from '../../components/ChooseRoute/ChooseRoute';
 import { connect } from 'react-redux';
 import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
@@ -60,12 +61,14 @@ class OpenShop extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
-        const route1 = this.props.match.url + '/:shipmentId/shipment_details';
+        const route1 = this.props.match.url + '/shipment_details';
+        const route2 = this.props.match.url + '/choose_route';
         return (
         <div className="layout-row flex-100 layout-wrap" >
             <ShopStageView shopType={this.state.shopType} theme={this.props.theme} stages={this.state.shipmentStages} currentStage={this.state.stageTracker.stage} setStage={this.selectShipmentStage} />
             <Route exact path={this.props.match.url} render={props => <ChooseShipment {...props}  theme={this.props.theme} shipmentTypes={this.state.shipmentOptions} selectShipment={this.selectShipmentType}/>}/>
             <Route exact path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.props.shipment} setShipmentDetails={this.setShipmentData} />}/>
+            <Route exact path={route2} render={props => <ChooseRoute {...props}  theme={this.props.theme} />}/>
         </div>
       );
     }

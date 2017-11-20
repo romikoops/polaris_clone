@@ -7,11 +7,11 @@ export class ShipmentCargoItems extends Component {
         super(props);
         this.state = {
             newCargoItem: {
-                    weight: 0,
-                    dimension_x: 0,
-                    dimension_y: 0,
-                    dimension_z: 0,
-                    dangerousGoods: false
+                weight: 0,
+                dimension_x: 0,
+                dimension_y: 0,
+                dimension_z: 0,
+                dangerousGoods: false
             }
         };
         this.handleCargoChange = this.handleCargoChange.bind(this);
@@ -29,11 +29,11 @@ export class ShipmentCargoItems extends Component {
         this.setState({
             newCargoItem: {
 
-                    weight: 0,
-                    dimension_x: 0,
-                    dimension_y: 0,
-                    dimension_z: 0,
-                    dangerousGoods: false
+                weight: 0,
+                dimension_x: 0,
+                dimension_y: 0,
+                dimension_z: 0,
+                dangerousGoods: false
             }
         });
     }
