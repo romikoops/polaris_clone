@@ -7,7 +7,7 @@ export class ShipmentCargoItems extends Component {
         super(props);
         this.state = {
             newCargoItem: {
-                weight: 0,
+                payload_in_kg: 0,
                 dimension_x: 0,
                 dimension_y: 0,
                 dimension_z: 0,
@@ -29,7 +29,7 @@ export class ShipmentCargoItems extends Component {
         this.setState({
             newCargoItem: {
 
-                weight: 0,
+                payload_in_kg: 0,
                 dimension_x: 0,
                 dimension_y: 0,
                 dimension_z: 0,
@@ -47,7 +47,7 @@ export class ShipmentCargoItems extends Component {
                 const tmpCont = (
             <div key={i} className="flex-100 layout-row">
               <div className="flex-20 layout-row layout-align-center-center">
-                {cont.weight} kg
+                {cont.payload_in_kg} kg
               </div>
               <div className="flex-20 layout-row layout-align-center-center">
                 {cont.dimension_y} cm
@@ -69,7 +69,7 @@ export class ShipmentCargoItems extends Component {
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Gross Weight </p>
-                  <input name="weight" value={this.state.newCargoItem.weight} type="number" onChange={this.handleCargoChange}/>
+                  <input name="payload_in_kg" value={this.state.newCargoItem.payload_in_kg} type="number" onChange={this.handleCargoChange}/>
                 </div>
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Length </p>

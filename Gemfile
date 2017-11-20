@@ -39,7 +39,8 @@ gem 'wicked_pdf'
 
 # Use roo for handling CSV and Excel files
 gem 'roo'
-
+gem 'http'
+gem 'chronic'
 # Use table_print for nice SQL output
 gem 'table_print'
 

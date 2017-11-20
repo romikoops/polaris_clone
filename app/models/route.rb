@@ -143,7 +143,7 @@ class Route < ApplicationRecord
       start_city = end_city = nil
     end
     
-    find_by(origin_id: start_city.id, destination_id: end_city.id)
+    find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length)

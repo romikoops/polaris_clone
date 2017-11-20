@@ -37,6 +37,7 @@ export class ShipmentLocationBox extends Component {
                 destination: false
             }
         };
+
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.selectLocation = this.selectLocation.bind(this);
         this.handleTrucking = this.handleTrucking.bind(this);
@@ -44,9 +45,31 @@ export class ShipmentLocationBox extends Component {
         this.setDestHub = this.setDestHub.bind(this);
         this.postToggleAutocomplete = this.postToggleAutocomplete.bind(this);
         this.initAutocomplete = this.initAutocomplete.bind(this);
+        this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
     }
     componentDidMount() {
         this.initMap();
+        if (this.props.selectedRoute) {
+            this.setHubsFromRoute(this.props.selectedRoute);
+        }
+    }
+    setHubsFromRoute(route) {
+        let tmpOrigin = {};
+        let tmpDest = {};
+        Object.keys(this.props.allNexuses).forEach(key => {
+            if (this.props.allNexuses[key] === route.origin_nexus_id) {
+                tmpOrigin = {id: this.props.allNexuses[key], name: key};
+            }
+            if (this.props.allNexuses[key] === route.destination_nexus_id) {
+                tmpDest = {id: this.props.allNexuses[key], name: key};
+            }
+        });
+        this.setState({
+            origin: {...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name},
+            destination: {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name}
+        });
+        this.props.setTargetAddress('origin', {...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name});
+        this.props.setTargetAddress('destination', {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name});
     }
     initMap() {
         const mapsOptions = {
@@ -71,10 +94,10 @@ export class ShipmentLocationBox extends Component {
         const map2 = new this.props.gMaps.Map(document.getElementById('destination-map'), mapsOptions);
         this.setState({map1, map2});
         if (this.state.shipment.has_pre_carriage) {
-           this.initAutocomplete(map1, 'origin');
+            this.initAutocomplete(map1, 'origin');
         }
         if (this.state.shipment.has_on_carriage) {
-           this.initAutocomplete(map2, 'destination');
+            this.initAutocomplete(map2, 'destination');
         }
     }
     initAutocomplete(map, target) {
@@ -138,11 +161,14 @@ export class ShipmentLocationBox extends Component {
         this.setState({shipment: {...this.state.shipment, [name]: checked}} );
         if (name === 'has_pre_carriage' && checked) {
             this.postToggleAutocomplete('origin');
+            this.props.setCarriage('has_pre_carriage', checked);
         }
         if (name === 'has_on_carriage' && checked) {
             this.postToggleAutocomplete('destination');
+            this.props.setCarriage('has_on_carriage', checked);
         }
     }
+
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
@@ -288,5 +314,6 @@ ShipmentLocationBox.PropTypes = {
     gMaps: PropTypes.object,
     theme: PropTypes.object,
     setTargetAddress: PropTypes.func,
-    allNexuses: PropTypes.object
+    allNexuses: PropTypes.object,
+    selectedRoute: PropTypes.object
 };

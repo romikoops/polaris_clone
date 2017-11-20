@@ -37,31 +37,20 @@ function newShipment(user, type) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        body: JSON.stringify({type: type})
     };
-    let url = '';
-    if (type.includes('open')) {
-        const _type = type.replace('open', '');
-        url = BASE_URL + '/shipments/open/' + _type;
-    } else {
-        url = BASE_URL + '/shipments/' + type;
-    }
+
+    const url = BASE_URL + '/shipments';
     return fetch(url, requestOptions).then(handleResponse);
 }
 
-function setShipmentDetails(user, data, type) {
+function setShipmentDetails(data) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
-    let url = '';
-    if (type.includes('open')) {
-        const _type = type.replace('open', '');
-        url = BASE_URL + '/shipments/open/' + _type + '/get_offer';
-    } else {
-        url = BASE_URL + '/shipments/' + type + '/get_offer';
-    }
+    const url = BASE_URL + '/shipments/' + data.shipment.id + '/get_offer';
     return fetch(url, requestOptions).then(handleResponse);
 }
 

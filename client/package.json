@@ -21,6 +21,7 @@
     "moment": "^2.19.2",
     "moment-range": "^3.0.3",
     "prop-types": "^15.6.0",
+    "rc-slider": "^8.4.0",
     "react": "^15.0.2",
     "react-bootstrap": "^0.31.5",
     "react-day-picker": "^6.2.1",

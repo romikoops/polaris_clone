@@ -1,4 +1,4 @@
-class Shipments::GenericController < ApplicationController
+class ShipmentsController < ApplicationController
     include ShippingTools
     include Response
     before_action :require_login_and_correct_id, except: [:test_email]
@@ -32,15 +32,18 @@ class Shipments::GenericController < ApplicationController
 
     reuse_shipment_data(params, session, 'openlcl')   
   end
-
+  def show
+    resp = Shipment.find(params[:shipment_id])
+    json_response(resp, 200)
+  end
   def create
-    resp = new_shipment(session, 'openlcl')
+    resp = new_shipment(session, params[:type])
     json_response(resp, 200)
   end
 
   def get_offer
-    get_shipment_offer(session, params, 'openlcl')
-    render 'new_get_offer'
+    resp = get_shipment_offer(session, params, 'openlcl')
+    json_response(resp, 200)
   end 
 
   def finish_booking
@@ -66,5 +69,4 @@ class Shipments::GenericController < ApplicationController
   def forwarder_notification_email(user, shipment)
     ShipmentMailer.forwarder_notification(user, shipment).deliver_now
   end
-
 end

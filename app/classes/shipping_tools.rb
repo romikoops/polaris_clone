@@ -4,6 +4,7 @@ module ShippingTools
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
       session[:shipment_uuid] = @shipment.uuid
+      # byebug
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
@@ -46,10 +47,22 @@ module ShippingTools
     else
       @all_nexuses = Location.nexuses_prepared_client(current_user)
     end
+    private_prices = Pricing.where(customer_id: current_user.id)
+    public_prices = Pricing.where(customer_id: nil)
+    public_routes = []
+    private_routes = []
+    private_prices.each do |pr|
+      private_routes << pr.route
+    end
+    public_prices.each do |pr|
+      public_routes << pr.route
+    end
 
     resp = {
         data: @shipment,
-        all_nexuses: @all_nexuses
+        all_nexuses: @all_nexuses,
+        public_routes: public_routes,
+        private_routes: private_routes
     }
     return resp
   end
@@ -71,7 +84,9 @@ module ShippingTools
   end
 
   def get_shipment_offer(session, params, load_type)
-    @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
+    # @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
+    @shipment = Shipment.find(params[:shipment_id])
+    # byebug
     case load_type
     when 'fcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
@@ -80,12 +95,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      @no_transport_available = true
+    # rescue
+    #   @no_transport_available = true
       # render 'new_get_offer' and return
-    end
+    # end
 
     @shipment = offer_calculation.shipment
     @shipment.save!
@@ -94,6 +109,16 @@ module ShippingTools
     @has_on_carriage = @shipment.has_on_carriage
     @schedules = offer_calculation.schedules
     @truck_seconds_pre_carriage = offer_calculation.truck_seconds_pre_carriage
+
+    resp = {
+      shipment: @shipment,
+      total_price: @total_price,
+      has_pre_carriage: @has_pre_carriage,
+      has_on_carriage: @has_on_carriage,
+      schedules: @schedules,
+      truck_seconds_pre_carriage: @truck_seconds_pre_carriage
+    }
+    return resp
   end
 
   def create_documents(form, shipment)
