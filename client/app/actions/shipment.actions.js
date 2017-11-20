@@ -24,6 +24,28 @@ function newShipment(user, type) {
     };
 }
 
+function setShipmentDetails(data, type) {
+    function request(shipmentData) { return { type: shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST, shipmentData }; }
+    function success(shipmentData) { return { type: shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS, shipmentData }; }
+    function failure(error) { return { type: shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE, error }; }
+    return dispatch => {
+        dispatch(request(data));
+
+        shipmentService.setShipmentDetails(data, type)
+            .then(
+                shipmentData => {
+                    dispatch(success(shipmentData));
+                    // history.push('/login');
+                    dispatch(alertActions.success('Fetching New Shipment successful'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+}
+
 function getAll() {
     function request() { return { type: shipmentConstants.GETALL_REQUEST }; }
     function success(shipments) { return { type: shipmentConstants.GETALL_SUCCESS, shipments }; }
@@ -59,6 +81,7 @@ function _delete(id) {
 }
 export const shipmentActions = {
     newShipment,
+    setShipmentDetails,
     getAll,
     delete: _delete
 };

@@ -86,58 +86,20 @@ class Location < ApplicationRecord
     country: location_params[:country])
   end
 
-  def self.all_hubs
-    Location.where("location_type LIKE ?", "%hub_%")
+  def self.nexuses
+    where(location_type: 'nexus')
   end
 
-  def self.all_hubs_dedicated(customer)
-    locs = Location.where("location_type LIKE ?", "%hub_%")
-    prcs = customer.pricings
-    dedicated_locs = []
-    locs.each do |loc|
-      prcs.each do |p|
-        if p.origin == loc || p.destination == loc
-          dedicated_locs << loc
-        end
-      end
-    end
-    dedicated_locs
+  def self.nexuses_client(client)
+    client.pricings.map{|p| p.route}.map { |r| r.get_nexuses }.flatten.uniq
   end
 
-  def self.ocean_hubs(collection)
-    Location.where(id: collection.map(&:id)).where("location_type LIKE ?", "%hub_ocean%")
+  def self.nexuses_prepared
+    nexuses.pluck(:id, :name).to_h.invert
   end
 
-  def self.train_hubs(collection)
-    Location.where(id: collection.map(&:id)).where("location_type LIKE ?", "%hub_train%")
-  end
-
-  def self.all_hubs_prepared
-    o = self.ocean_hubs(self.all_hubs)
-    t = self.train_hubs(self.all_hubs)
-
-    prepared_hubs = {}
-    o.each do |hub|
-      prepared_hubs.merge!({ hub.id => "#{hub.hub_name} | #{hub.pretty_hub_type}"})
-    end
-    t.each do |hub|
-      prepared_hubs.merge!({ hub.id => "#{hub.hub_name} | #{hub.pretty_hub_type}"})
-    end
-    prepared_hubs.invert
-  end
-
-  def self.all_hubs_prepared_dedicated(customer)
-    o = self.ocean_hubs(self.all_hubs_dedicated(customer))
-    t = self.train_hubs(self.all_hubs_dedicated(customer))
-
-    prepared_hubs = {}
-    o.each do |hub|
-      prepared_hubs.merge!({ hub.id => "#{hub.hub_name} | #{hub.pretty_hub_type}"})
-    end
-    t.each do |hub|
-      prepared_hubs.merge!({ hub.id => "#{hub.hub_name} | #{hub.pretty_hub_type}"})
-    end
-    prepared_hubs.invert
+  def self.nexuses_prepared_client(client)
+    nexuses_client(client).pluck(:id, :name).to_h.invert
   end
 
   # Instance methods

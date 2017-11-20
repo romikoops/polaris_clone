@@ -62,14 +62,14 @@ Rails.application.routes.draw do
     
     resources :locations, only: [:index, :show]
     
-    namespace :shipments do
+    resources :shipments do
       resources :generic, only: [:index, :new] do
         get "reuse_booking_data", as: :reuse_booking
       end
       
       resources :fcl do
         get "reuse_booking_data", as: :reuse_booking
-        get "get_offer", as: :get_offer
+        post "get_offer", as: :get_offer
         post "set_haulage", as: :set_haulage
         get "choose_offer", as: :choose_offer
         get "finish_booking", as: :finish_booking
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
       resources :lcl do
         get "reuse_booking_data", as: :reuse_booking
-        get "get_offer", as: :get_offer
+        post "get_offer", as: :get_offer
         post "set_haulage", as: :set_haulage
         get "choose_offer", as: :choose_offer
         get "finish_booking", as: :finish_booking
@@ -86,7 +86,7 @@ Rails.application.routes.draw do
       namespace :open do
         resources :lcl do
           get "reuse_booking_data", as: :reuse_booking
-          get "get_offer", as: :get_offer
+          post "get_offer", as: :get_offer
           post "set_haulage", as: :set_haulage
           get "choose_offer", as: :choose_offer
           get "finish_booking", as: :finish_booking
@@ -95,6 +95,37 @@ Rails.application.routes.draw do
     end
   
   end
+  namespace :shipments do
+      resources :generic, only: [:index, :new] do
+        get "reuse_booking_data", as: :reuse_booking
+      end
+      
+      resources :fcl do
+        get "reuse_booking_data", as: :reuse_booking
+        post "get_offer", as: :get_offer
+        post "set_haulage", as: :set_haulage
+        get "choose_offer", as: :choose_offer
+        get "finish_booking", as: :finish_booking
+      end
+
+      resources :lcl do
+        get "reuse_booking_data", as: :reuse_booking
+        post "get_offer", as: :get_offer
+        post "set_haulage", as: :set_haulage
+        get "choose_offer", as: :choose_offer
+        get "finish_booking", as: :finish_booking
+      end
+
+      namespace :open do
+        resources :lcl do
+          get "reuse_booking_data", as: :reuse_booking
+          post "get_offer", as: :get_offer
+          post "set_haulage", as: :set_haulage
+          get "choose_offer", as: :choose_offer
+          get "finish_booking", as: :finish_booking
+        end
+      end
+    end
   get "/documents/download/:document_id", to: "documents#download_redirect", as: :document_download
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
 

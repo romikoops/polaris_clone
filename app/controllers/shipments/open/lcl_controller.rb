@@ -33,7 +33,7 @@ class Shipments::Open::LclController < ApplicationController
   private
 
   def require_login_and_correct_id
-    unless user_signed_in? && current_user.id.to_s == params[:user_id]
+    unless user_signed_in?
        json_response({error: "You are not signed in"}, 500)
     end
   end

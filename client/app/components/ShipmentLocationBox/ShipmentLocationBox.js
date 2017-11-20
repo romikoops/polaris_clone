@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
 import 'react-toggle/style.css';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 const mapStyle = {
     width: '400px',
@@ -27,8 +29,8 @@ export class ShipmentLocationBox extends Component {
                 fullAddress: ''
             },
             shipment: {
-                has_pre_carriage: true,
-                has_on_carriage: true
+                has_pre_carriage: false,
+                has_on_carriage: false
             },
             autocomplete: {
                 origin: false,
@@ -37,6 +39,11 @@ export class ShipmentLocationBox extends Component {
         };
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.selectLocation = this.selectLocation.bind(this);
+        this.handleTrucking = this.handleTrucking.bind(this);
+        this.setOriginHub = this.setOriginHub.bind(this);
+        this.setDestHub = this.setDestHub.bind(this);
+        this.postToggleAutocomplete = this.postToggleAutocomplete.bind(this);
+        this.initAutocomplete = this.initAutocomplete.bind(this);
     }
     componentDidMount() {
         this.initMap();
@@ -62,22 +69,31 @@ export class ShipmentLocationBox extends Component {
         };
         const map1 = new this.props.gMaps.Map(document.getElementById('origin-map'), mapsOptions);
         const map2 = new this.props.gMaps.Map(document.getElementById('destination-map'), mapsOptions);
-        this.initAutocomplete(map1, map2);
+        this.setState({map1, map2});
+        if (this.state.shipment.has_pre_carriage) {
+           this.initAutocomplete(map1, 'origin');
+        }
+        if (this.state.shipment.has_on_carriage) {
+           this.initAutocomplete(map2, 'destination');
+        }
     }
-    initAutocomplete(map1, map2) {
-        const oInput = document.getElementById('origin');
-        const dInput = document.getElementById('destination');
+    initAutocomplete(map, target) {
+        const input = document.getElementById(target);
         // map1.controls[this.props.gMaps.ControlPosition.TOP_RIGHT].push(oInput);
         // map2.controls[this.props.gMaps.ControlPosition.TOP_RIGHT].push(dInput);
-        const autocomplete1 = new this.props.gMaps.places.Autocomplete(oInput);
-        const autocomplete2 = new this.props.gMaps.places.Autocomplete(dInput);
-        autocomplete1.bindTo('bounds', map1);
-        autocomplete2.bindTo('bounds', map2);
-
-        this.autocompleteListener(map1, autocomplete1, 'origin');
-        this.autocompleteListener(map2, autocomplete2, 'destination');
+        const autocomplete = new this.props.gMaps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        this.autocompleteListener(map, autocomplete, target);
     }
-
+    postToggleAutocomplete(target) {
+        const { map1, map2 } = this.state;
+        if (target === 'origin') {
+            setTimeout(function() { this.initAutocomplete(map1, target);}.bind(this), 1000);
+        }
+        if (target === 'destination') {
+            setTimeout(function() { this.initAutocomplete(map2, target);}.bind(this), 1000);
+        }
+    }
     autocompleteListener(aMap, autocomplete, target) {
         const infowindow = new this.props.gMaps.InfoWindow();
         const infowindowContent = document.getElementById('infowindow-content');
@@ -117,6 +133,16 @@ export class ShipmentLocationBox extends Component {
             this.selectLocation(place, target);
         });
     }
+    handleTrucking(event) {
+        const { name, checked } = event.target;
+        this.setState({shipment: {...this.state.shipment, [name]: checked}} );
+        if (name === 'has_pre_carriage' && checked) {
+            this.postToggleAutocomplete('origin');
+        }
+        if (name === 'has_on_carriage' && checked) {
+            this.postToggleAutocomplete('destination');
+        }
+    }
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
@@ -128,6 +154,15 @@ export class ShipmentLocationBox extends Component {
             }
         });
     }
+    setOriginHub(event) {
+        console.log(event);
+        this.setState({origin: {...this.state.origin, hub_id: event.value, hub_name: event.label}});
+    }
+    setDestHub(event) {
+        console.log(event);
+        this.setState({destination: {...this.state.destination, hub_id: event.value, hub_name: event.label}});
+    }
+
     selectLocation(place, target) {
         const tmpAddress = {
             number: '',
@@ -157,11 +192,22 @@ export class ShipmentLocationBox extends Component {
         tmpAddress.fullAddress = place.formatted_address;
 
         this.setState({[target]: tmpAddress});
-        this.setState({autocomplete: {
-            [target]: true}}
-        );
+        this.props.setTargetAddress(target, tmpAddress);
+        this.setState({autocomplete: { ...this.state.autocomplete, [target]: true } });
     }
     render() {
+        const nexuses = [];
+        if (this.props.allNexuses) {
+            Object.keys(this.props.allNexuses).forEach(key => {
+                nexuses.push({value: this.props.allNexuses[key], label: key});
+            });
+        }
+        const originHubSelect = (
+            <Select name="origin-hub" value={this.state.origin.hub_name} options={nexuses} onChange={this.setOriginHub}/>
+        );
+        const destinationHubSelect = (
+            <Select name="destination-hub" value={this.state.destination.hub_name} options={nexuses} onChange={this.setDestHub}/>
+        );
         const originFields = (<div className="flex-100 layout-row layout-wrap">
                     <input  name="origin-number" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.number} placeholder="Number"/>
                     <input  name="origin-street" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.street} placeholder="Street"/>
@@ -170,7 +216,7 @@ export class ShipmentLocationBox extends Component {
                     <input name="origin-country" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.country} placeholder="Country"/>
                   </div>);
         const originAuto = (<div className="flex-100 layout-row layout-wrap">
-                    <input id="origin" name="origin-street" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.fullAddress} placeholder="Search for address"/>
+                    <input id="origin" name="origin-fullAddress" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.fullAddress} placeholder="Search for address"/>
                   </div>);
         const destFields = (
                 <div className="flex-100 layout-row layout-wrap">
@@ -182,22 +228,36 @@ export class ShipmentLocationBox extends Component {
                   </div>
         );
         const destAuto = (<div className="flex-100 layout-row layout-wrap">
-                    <input id="destination" name="origin-street" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.fullAddress} placeholder="Search for address"/>
+                    <input id="destination" name="destination-fullAddress" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.fullAddress} placeholder="Search for address"/>
                   </div>);
+        const displayLocationOptions = (target) => {
+            if (target === 'origin' && !this.state.shipment.has_pre_carriage) {
+                return originHubSelect;
+            } else if (target === 'origin' && this.state.shipment.has_pre_carriage) {
+                return this.state.autocomplete.origin ? originFields : originAuto;
+            }
+            if (target === 'destination' && !this.state.shipment.has_on_carriage) {
+                return destinationHubSelect;
+            } else if (target === 'destination' && this.state.shipment.has_on_carriage) {
+                return this.state.autocomplete.destination ? destFields : destAuto;
+            }
+            return '';
+        };
         return (
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
             <div className="layout-row flex-75 layout-align-start-center" >
               <div className="flex-40 layout-row layout-wrap">
                 <div className="flex-100 layout-row">
                   <Toggle
-                    id="pre-carriage"
+                    id="has_pre_carriage"
+                    name="has_pre_carriage"
                     defaultChecked={this.state.shipment.has_pre_carriage}
-                    onChange={this.handlePreCarriage} />
+                    onChange={this.handleTrucking} />
                   <label htmlFor="pre-carriage">Pre-Carriage</label>
                 </div>
                  <div className="flex-100 layout-row layout-wrap">
                   <p className="flex-100"> Origin Address </p>
-                  { this.state.autocomplete.origin ? originFields : originAuto }
+                  { displayLocationOptions('origin') }
                  </div>
               </div>
               <div ref="map" id="origin-map" style={mapStyle} />
@@ -206,14 +266,15 @@ export class ShipmentLocationBox extends Component {
               <div className="flex-40 layout-row layout-wrap">
                 <div className="flex-100 layout-row">
                   <Toggle
-                    id="on-carriage"
+                    id="has_on_carriage"
+                    name="has_on_carriage"
                     defaultChecked={this.state.shipment.has_on_carriage}
-                    onChange={this.handleOnCarriage} />
+                    onChange={this.handleTrucking} />
                   <label htmlFor="on-carriage">On-Carriage</label>
                 </div>
                  <div className="flex-100 layout-row layout-wrap">
                   <p className="flex-100"> Destination Address </p>
-                  { this.state.autocomplete.destination ? destFields : destAuto }
+                  { displayLocationOptions('destination') }
                  </div>
               </div>
               <div ref="map" id="destination-map" style={mapStyle} />
@@ -224,6 +285,8 @@ export class ShipmentLocationBox extends Component {
 }
 
 ShipmentLocationBox.PropTypes = {
-    gMaps: PropTypes.func,
-    theme: PropTypes.object
+    gMaps: PropTypes.object,
+    theme: PropTypes.object,
+    setTargetAddress: PropTypes.func,
+    allNexuses: PropTypes.object
 };

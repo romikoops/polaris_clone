@@ -1,25 +1,20 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
 import GmapsLoader from '../../hocs/GmapsLoader';
-import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../../constants';
-// import { moment } from '../../constants';
-// import { connect } from 'react-redux';
-// import { MapContainer } from '../Map/Map';
 import './ShipmentDetails.scss';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
-const containerDescriptions = CONTAINER_DESCRIPTIONS;
-const containerTareWeights = CONTAINER_TARE_WEIGHTS;
+import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
+import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
+
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
+        // const { shipment } = this.props;
         console.log(this.props);
         this.state = {
-            selectedDay: undefined,
             origin: {
                 street: '',
                 zipCode: '',
@@ -30,22 +25,22 @@ export class ShipmentDetails extends Component {
                 zipCode: '',
                 city: ''
             },
-            containers: {
-                new: {
-                    weight: 0,
-                    type: '',
-                    tare_weight: 0
-                },
-                added: []
-            }
+            containers: [],
+            cargoItems: [],
+            shipment: this.props.shipment.data,
+            allNexuses: this.props.shipment.all_nexuses
         };
+        if (this.props.shipment.data) {
+          this.state.selectedDay = this.props.shipment.data.planned_pickup_date;
+          this.state.has_on_carriage = this.props.shipment.data.has_on_carriage;
+          this.state.has_pre_carriage = this.props.shipment.data.has_pre_carriage;
+        }
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
-        this.handleWeightChange = this.handleWeightChange.bind(this);
         this.handleNextStage = this.handleNextStage.bind(this);
-        this.handleContainerSelect = this.handleContainerSelect.bind(this);
+        this.addNewCargoItem = this.addNewCargoItem.bind(this);
         this.addNewContainer = this.addNewContainer.bind(this);
-        this.newContainerGrossWeight = this.newContainerGrossWeight.bind(this);
+        this.setTargetLocation = this.setTargetLocation.bind(this);
     }
     newContainerGrossWeight() {
         const container = this.state.containers.new;
@@ -83,59 +78,54 @@ export class ShipmentDetails extends Component {
             }
         });
     }
-    addNewContainer() {
-        const newCont = this.state.containers.new;
-        this.setState({
-            containers: {
-                new: {
-                    weight: 0,
-                    type: '',
-                    tare_weight: 0
-                },
-                added: [
-                    newCont
-                ]
-            }
-        });
+    addNewCargoItem(ci) {
+      const currArray = this.state.cargoItems;
+      currArray.push(ci);
+      this.setState({cargoItems: currArray});
+    }
+    addNewContainer(cont) {
+        const currArray = this.state.containers;
+        currArray.push(cont);
+        this.setState({containers: currArray});
+    }
+    setTargetLocation(target, address) {
+      this.setState({[target]: address});
     }
     handleNextStage() {
         console.log('NEXT STAGE PLZ');
-        this.props.history.push(this.props.match.url + '/choose_route');
+        const data = {
+          shipment: this.state.shipment
+        };
+        data.shipment.origin_user_input = this.state.origin.fullAddress;
+        data.shipment.destination_user_input = this.state.destination.fullAddress;
+        data.shipment.origin_id = this.state.origin.hub_id;
+        data.shipment.destination_id = this.state.destination.hub_id;
+        data.shipment.cargo_item_attributes = this.state.cargoItems;
+        data.shipment.containers_attributes = this.state.containers;
+        this.props.setShipmentDetails(this.state);
     }
     returnToDashboard() {
         this.props.history.push('/dashboard');
     }
 
     render() {
-        const theme = this.props.theme;
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
-        const containerOptions = [];
-        Object.keys(containerDescriptions).forEach(key => {
-            containerOptions.push({value: key, label: containerDescriptions[key], tare_weight: containerTareWeights[key]});
-        });
-        const grossWeight = parseInt(this.state.containers.new.weight, 10) + parseInt(this.state.containers.new.tare_weight, 10);
-        const containersAdded = [];
-        if (this.state.containers.added) {
-            this.state.containers.added.forEach(cont => {
-                const tmpCont = (
-            <div className="flex-100 layout-row">
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.type}
-              </div>
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.weight}
-              </div>
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.weight + cont.tare_weight}
-              </div>
-            </div>
-            );
-                containersAdded.push(tmpCont);
-            });
+        // }
+        if (this.props.shipment) {
+          // debugger;
         }
-
+        const { theme } = this.props;
+        let cargoDetails;
+        if (this.props.shipment.data) {
+          if (this.props.shipment.data.load_type.includes('fcl')) {
+            cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/>;
+          }
+          if (this.props.shipment.data.load_type.includes('lcl')) {
+            cargoDetails = <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
+          }
+          // cargoDetails =  this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
+        }
         const value = this.state.selectedDay ? this.state.selectedDay.format('DD/MM/YYYY') : '';
         return (
         <div className="layout-row flex-100 layout-wrap" >
@@ -152,49 +142,19 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap" >
-            <GmapsLoader theme={theme} selectLocation={this.selectOrigin} component={ShipmentLocationBox} />
+            <GmapsLoader theme={theme} selectLocation={this.setTargetLocation} allNexuses={this.props.shipment.all_nexuses} component={ShipmentLocationBox} />
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-75 layout-wrap layout-align-start-center" >
-              <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                <p className="flex-100"> Container Size </p>
-                <Select name="container-size" value={this.state.containers.new.type} options={containerOptions} onChange={this.handleContainerSelect} />
-              </div>
-              <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                <p className="flex-100"> Net Weight </p>
-                <input value={this.state.containers.new.weight} type="number" onChange={this.handleWeightChange}/>
-              </div>
-              <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                <p className="flex-100"> Gross Weight </p>
-                <input value={grossWeight} type="number" />
-              </div>
-              <div className="layout-row flex-100 layout-wrap" >
-                { containersAdded }
-              </div>
-            </div>
-          </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-75 layout-wrap layout-align-start-center" >
-              <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                <p className="flex-100"> Dangerous Goods </p>
-                <Select name="dangerous-goods" value="" options={containerOptions} onChange={this.logChange} />
-              </div>
-              <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                <p className="flex-100"> Insurance </p>
-                <Select name="insurance" value="" options={containerOptions} onChange={this.logChange} />
-              </div>
-            </div>
+          <div className="layout-row flex-100 layout-wrap" >
+            {cargoDetails}
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
             <div className="layout-row flex-75 layout-wrap layout-align-start-center" >
               <RoundButton text="Choose from haulage options" handleNext={this.handleNextStage} theme={theme} active />
-              <p> Choose from haulage options </p>
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
             <div className="layout-row flex-75 layout-wrap layout-align-start-center" >
               <RoundButton text="Back to Dashboard" handleNext={this.returnToDashboard} theme={theme} active={false}/>
-              <p> Back to Dashboard </p>
             </div>
           </div>
         </div>
@@ -206,5 +166,6 @@ ShipmentDetails.propTypes = {
     theme: PropTypes.object,
     shipment: PropTypes.object,
     history: PropTypes.object,
-    match: PropTypes.object
+    match: PropTypes.object,
+    setShipmentDetails: PropTypes.func
 };

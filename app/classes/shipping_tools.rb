@@ -41,27 +41,16 @@ module ShippingTools
     @has_pre_carriage = @shipment.has_pre_carriage || true
     @has_on_carriage = @shipment.has_on_carriage || true
 
-    if  load_type == 'openlcl'
-      @all_hubs = Location.all_hubs_prepared
+    if load_type.starts_with?('open')
+      @all_nexuses = Location.nexuses_prepared
     else
-      @all_hubs = Location.all_hubs_prepared_dedicated(current_user)
+      @all_nexuses = Location.nexuses_prepared_client(current_user)
     end
 
     resp = {
-        shipment: @shipment,
-        has_pre_carriage: @has_pre_carriage,
-        has_on_carriage: @has_on_carriage,
-        all_hubs: @all_hubs
+        data: @shipment,
+        all_nexuses: @all_nexuses
     }
-    case load_type
-    when 'fcl'
-        resp[:tare_weights] = @tare_weights
-        resp[:container_descriptions] = @container_descriptions
-    when 'lcl'
-      resp[:cargo_items] = @shipment.cargo_items
-    when 'openlcl'
-      resp[:cargo_items] = @shipment.cargo_items
-    end
     return resp
   end
 

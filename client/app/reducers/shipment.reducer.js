@@ -7,13 +7,23 @@ export function shipment(state = {}, action) {
                 loading: true
             };
         case shipmentConstants.NEW_SHIPMENT_SUCCESS:
-            return {
-                shipment: action.shipmentData
-            };
+            return action.shipmentData;
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             return {
                 error: action.error
             };
+
+        case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
+            return {
+                loading: true
+            };
+        case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
+            return action.shipmentData;
+        case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
+            return {
+                error: action.error
+            };
+
         case shipmentConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
             return {

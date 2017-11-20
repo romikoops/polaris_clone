@@ -25,6 +25,12 @@ class OpenShop extends Component {
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
     }
+    // componentDidUpdate(prevProps) {
+    //     if (!this.props.shipment && this.state.stageTracker.stage > 0) {
+    //         const { dispatch } = this.props;
+    //         dispatch(fetchTenantIfNeeded(selectedSubdomain));
+    //     }
+    // }
 
     getShipment() {
         const { dispatch, user } = this.props;
@@ -32,13 +38,20 @@ class OpenShop extends Component {
     }
 
     selectShipmentType(type) {
+        const { history } = this.props;
         this.getShipment();
         this.setState({stageTracker: {shipmentType: type, stage: 1}});
-        const { history } = this.props;
         history.push('/open/shipment_details');
     }
     selectShipmentStage(stage) {
         this.setState({stageTracker: {stage: stage}});
+    }
+    setShipmentData(data) {
+        const type = 'openlcl';
+        const { dispatch, history, user } = this.props;
+        dispatch(shipmentActions.setShipmentDetails(user.data, data, type));
+        this.setState({stageTracker: {shipmentType: type, stage: 1}});
+        history.push('/open/choose_route');
     }
 
     render() {
@@ -47,12 +60,12 @@ class OpenShop extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
-        const route1 = this.props.match.url + '/shipment_details';
+        const route1 = this.props.match.url + '/:shipmentId/shipment_details';
         return (
         <div className="layout-row flex-100 layout-wrap" >
             <ShopStageView shopType={this.state.shopType} theme={this.props.theme} stages={this.state.shipmentStages} currentStage={this.state.stageTracker.stage} setStage={this.selectShipmentStage} />
             <Route exact path={this.props.match.url} render={props => <ChooseShipment {...props}  theme={this.props.theme} shipmentTypes={this.state.shipmentOptions} selectShipment={this.selectShipmentType}/>}/>
-            <Route exact path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.state.shipment} />}/>
+            <Route exact path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.props.shipment} setShipmentDetails={this.setShipmentData} />}/>
         </div>
       );
     }
