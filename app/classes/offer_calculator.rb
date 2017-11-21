@@ -2,7 +2,7 @@ class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage
   include CurrencyTools
   def initialize(shipment, params, load_type)
-    byebug
+    
     @load_type = load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage].to_i == 1 ? true : false
@@ -41,23 +41,23 @@ class OfferCalculator
 
   def calc_offer!
     determine_route!
-    byebug
+    
     determine_pricing!
-    byebug
+    
     determine_hubs!
-    byebug
+    
     determine_longest_trucking_time!
-    byebug
+    
     determine_schedules!
-    byebug
+    
     # add_pre_carriage!
     
     # add_on_carriage!
     
     add_carriage!
-    byebug
+    
     add_service_charges!
-    byebug
+    
     convert_currencies!
     # @shipment.total_price = @total_price
   end
@@ -108,8 +108,8 @@ class OfferCalculator
   end
 
   def determine_schedules!
-    byebug
-    @schedules = @hub_schedules.where("etd > ?", @current_eta_in_search).order(etd: :asc)
+    
+    @schedules = @hub_schedules.where("etd > ? AND etd < ?", @current_eta_in_search, @current_eta_in_search + 10.days).order(etd: :asc)
   end
 
   def determine_longest_trucking_time!

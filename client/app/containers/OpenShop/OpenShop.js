@@ -74,7 +74,7 @@ class OpenShop extends Component {
             <ShopStageView shopType={this.state.shopType} theme={this.props.theme} stages={this.state.shipmentStages} currentStage={this.state.stageTracker.stage} setStage={this.selectShipmentStage} />
             <Route exact path={this.props.match.url} render={props => <ChooseShipment {...props}  theme={this.props.theme} shipmentTypes={this.state.shipmentOptions} selectShipment={this.selectShipmentType}/>}/>
             <Route  path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.props.shipment} setShipmentDetails={this.setShipmentData} />}/>
-            <Route  path={route2} render={props => <ChooseRoute {...props}  theme={this.props.theme} />}/>
+            <Route  path={route2} render={props => <ChooseRoute {...props}  theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
         </div>
       );
     }

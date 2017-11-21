@@ -15,13 +15,13 @@ export class RouteSelector extends Component {
         const pubRoutes = [];
         if (this.props.publicRoutes) {
             this.props.publicRoutes.forEach(route => {
-                pubRoutes.push(<RouteOption route={route} selectOption={this.selectRoute}/>);
+                pubRoutes.push(<RouteOption key={route.id} route={route} selectOption={this.selectRoute}/>);
             });
         }
         const privRoutes = [];
         if (this.props.privateRoutes) {
             this.props.privateRoutes.forEach(route => {
-                privRoutes.push(<RouteOption route={route} selectOption={this.selectRoute}/>);
+                privRoutes.push(<RouteOption key={route.id} route={route} selectOption={this.selectRoute}/>);
             });
         }
         return (
