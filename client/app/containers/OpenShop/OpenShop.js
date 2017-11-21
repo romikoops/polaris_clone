@@ -56,9 +56,10 @@ class OpenShop extends Component {
         this.setState({stageTracker: {stage: stage}});
     }
     setShipmentData(data) {
-        const { dispatch } = this.props;
+        const { dispatch, history } = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
         this.setState({stageTracker: {shipmentType: data.load_type, stage: 2}});
+        history.push('/open/' + data.shipment.id + '/choose_route');
     }
 
     render() {

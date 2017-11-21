@@ -116,7 +116,9 @@ module ShippingTools
       has_pre_carriage: @has_pre_carriage,
       has_on_carriage: @has_on_carriage,
       schedules: @schedules,
-      truck_seconds_pre_carriage: @truck_seconds_pre_carriage
+      truck_seconds_pre_carriage: @truck_seconds_pre_carriage,
+      originHubs: offer_calculation.origin_hubs,
+      destinationHubs: offer_calculation.destination_hubs
     }
     return resp
   end

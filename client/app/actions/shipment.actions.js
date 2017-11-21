@@ -38,7 +38,7 @@ function setShipmentDetails(data) {
             .then(
                 shipmentData => {
                     dispatch(success(shipmentData));
-                    dispatch(push('open/' + shipmentData.shipment.id + '/choose_route'));
+                    // dispatch(push('open/' + shipmentData.shipment.id + '/choose_route'));
                     dispatch(alertActions.success('Fetching New Shipment successful'));
                 },
                 error => {
