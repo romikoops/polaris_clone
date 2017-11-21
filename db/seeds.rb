@@ -88,6 +88,6 @@ trucking = File.open("./db/dummydata/shanghai_trucking.xlsx")
 req = {"xlsx" => trucking}
 overwrite_shanghai_trucking_rates(req, shipper)
 
-schedules = File.open("./db/dummydata/6_vessel_schedules.xlsx")
-req = {"xlsx" => schedules}
-overwrite_vessel_schedules(req, shipper)
+# schedules = File.open("./db/dummydata/6_vessel_schedules.xlsx")
+# req = {"xlsx" => schedules}
+# overwrite_vessel_schedules(req, shipper)

@@ -1,7 +1,8 @@
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs
   include CurrencyTools
   def initialize(shipment, params, load_type)
+    
     @load_type = load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage].to_i == 1 ? true : false
@@ -9,7 +10,7 @@ class OfferCalculator
     @shipment.has_pre_carriage = @has_pre_carriage
     @shipment.has_on_carriage = @has_on_carriage
     
-    case load_type
+    case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
@@ -107,7 +108,8 @@ class OfferCalculator
   end
 
   def determine_schedules!
-    @schedules = @hub_schedules.where("etd > ?", @current_eta_in_search).order(etd: :asc)
+    
+    @schedules = @hub_schedules.where("etd > ? AND etd < ?", @current_eta_in_search, @current_eta_in_search + 10.days).order(etd: :asc)
   end
 
   def determine_longest_trucking_time!

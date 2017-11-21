@@ -143,18 +143,18 @@ class Route < ApplicationRecord
       start_city = end_city = nil
     end
     
-    find_by(origin_id: start_city.id, destination_id: end_city.id)
+    find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length)
     tmp_date = start_date
-    hub1 = self.origin.hubs_by_type(mot).first
-    hub2 = self.destination.hubs_by_type(mot).first
+    hub1 = self.origin_nexus.hubs_by_type(mot).first
+    hub2 = self.destination_nexus.hubs_by_type(mot).first
     while tmp_date < end_date
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         etd = tmp_date.midday
         eta = etd + journey_length.days
-        new_sched = {starthub_id: hub1.id, endhub_id: hub2.id, eta: eta, etd: etd}
+        new_sched = {mode_of_transport: mot, starthub_id: hub1.id, endhub_id: hub2.id, eta: eta, etd: etd}
          # byebug
         self.schedules.find_or_create_by(new_sched)
         

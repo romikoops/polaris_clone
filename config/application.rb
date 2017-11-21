@@ -29,6 +29,8 @@ module Imcr
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_imc_platform_session'
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins 'localhost:8080'

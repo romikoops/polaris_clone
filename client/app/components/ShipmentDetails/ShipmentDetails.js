@@ -8,6 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
+import { RouteSelector } from '../RouteSelector/RouteSelector';
 
 export class ShipmentDetails extends Component {
     constructor(props) {
@@ -18,22 +19,25 @@ export class ShipmentDetails extends Component {
             origin: {
                 street: '',
                 zipCode: '',
-                city: ''
+                city: '',
+                fullAddress: ''
             },
             destination: {
                 street: '',
                 zipCode: '',
-                city: ''
+                city: '',
+                fullAddress: ''
             },
             containers: [],
             cargoItems: [],
             shipment: this.props.shipment.data,
-            allNexuses: this.props.shipment.all_nexuses
+            allNexuses: this.props.shipment.all_nexuses,
+            routeSet: false
         };
         if (this.props.shipment.data) {
-          this.state.selectedDay = this.props.shipment.data.planned_pickup_date;
-          this.state.has_on_carriage = this.props.shipment.data.has_on_carriage;
-          this.state.has_pre_carriage = this.props.shipment.data.has_pre_carriage;
+            this.state.selectedDay = this.props.shipment.data.planned_pickup_date;
+            this.state.has_on_carriage = this.props.shipment.data.has_on_carriage;
+            this.state.has_pre_carriage = this.props.shipment.data.has_pre_carriage;
         }
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
@@ -41,7 +45,10 @@ export class ShipmentDetails extends Component {
         this.addNewCargoItem = this.addNewCargoItem.bind(this);
         this.addNewContainer = this.addNewContainer.bind(this);
         this.setTargetLocation = this.setTargetLocation.bind(this);
+        this.selectRoute = this.selectRoute.bind(this);
+        this.toggleCarriage = this.toggleCarriage.bind(this);
     }
+
     newContainerGrossWeight() {
         const container = this.state.containers.new;
         container.type ? container.tare_weight + container.weight : 0;
@@ -79,9 +86,9 @@ export class ShipmentDetails extends Component {
         });
     }
     addNewCargoItem(ci) {
-      const currArray = this.state.cargoItems;
-      currArray.push(ci);
-      this.setState({cargoItems: currArray});
+        const currArray = this.state.cargoItems;
+        currArray.push(ci);
+        this.setState({cargoItems: currArray});
     }
     addNewContainer(cont) {
         const currArray = this.state.containers;
@@ -89,43 +96,51 @@ export class ShipmentDetails extends Component {
         this.setState({containers: currArray});
     }
     setTargetLocation(target, address) {
-      this.setState({[target]: address});
+        this.setState({[target]: address});
     }
     handleNextStage() {
         console.log('NEXT STAGE PLZ');
         const data = {
-          shipment: this.state.shipment
+            shipment: this.state.shipment ? this.state.shipment : this.props.shipment.data
         };
-        data.shipment.origin_user_input = this.state.origin.fullAddress;
-        data.shipment.destination_user_input = this.state.destination.fullAddress;
+        data.shipment.origin_user_input = this.state.origin.fullAddress ? this.state.origin.fullAddress : '';
+        data.shipment.destination_user_input = this.state.destination.fullAddress ? this.state.destination.fullAddress : '';
         data.shipment.origin_id = this.state.origin.hub_id;
         data.shipment.destination_id = this.state.destination.hub_id;
-        data.shipment.cargo_item_attributes = this.state.cargoItems;
+        data.shipment.cargo_items_attributes = this.state.cargoItems;
         data.shipment.containers_attributes = this.state.containers;
-        this.props.setShipmentDetails(this.state);
+        data.shipment.has_on_carriage = this.state.has_on_carriage;
+        data.shipment.has_pre_carriage = this.state.has_pre_carriage;
+        data.shipment.planned_pickup_date = this.state.selectedDay;
+        this.props.setShipmentDetails(data);
     }
     returnToDashboard() {
         this.props.history.push('/dashboard');
+    }
+    selectRoute(route) {
+        this.setState({selectedRoute: route, routeSet: true});
+    }
+    toggleCarriage(target, value) {
+        this.setState({[target]: value});
     }
 
     render() {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // }
-        if (this.props.shipment) {
-          // debugger;
-        }
         const { theme } = this.props;
         let cargoDetails;
         if (this.props.shipment.data) {
-          if (this.props.shipment.data.load_type.includes('fcl')) {
-            cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/>;
-          }
-          if (this.props.shipment.data.load_type.includes('lcl')) {
-            cargoDetails = <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
-          }
+            if (this.props.shipment.data.load_type.includes('fcl')) {
+                cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/>;
+            }
+            if (this.props.shipment.data.load_type.includes('lcl')) {
+                cargoDetails = <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
+            }
           // cargoDetails =  this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
+        const rSelect = <RouteSelector theme={theme} setRoute={this.selectRoute} publicRoutes={this.props.shipment.public_routes} privateRoutes={this.props.shipment.private_routes}/>;
+        const mapBox = <GmapsLoader theme={theme} selectLocation={this.setTargetLocation} allNexuses={this.props.shipment.all_nexuses} component={ShipmentLocationBox} selectedRoute={this.state.selectedRoute} toggleCarriage={this.toggleCarriage}/>;
         const value = this.state.selectedDay ? this.state.selectedDay.format('DD/MM/YYYY') : '';
         return (
         <div className="layout-row flex-100 layout-wrap" >
@@ -142,7 +157,7 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap" >
-            <GmapsLoader theme={theme} selectLocation={this.setTargetLocation} allNexuses={this.props.shipment.all_nexuses} component={ShipmentLocationBox} />
+            { this.state.routeSet ? mapBox : rSelect }
           </div>
           <div className="layout-row flex-100 layout-wrap" >
             {cargoDetails}

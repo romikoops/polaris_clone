@@ -2,8 +2,8 @@ class CargoItem < ApplicationRecord
   belongs_to :shipment
   def self.extract_cargos(params)
     cargos = []
-    params.each_key do |key|
-      value = params["#{key}"]
+    params.each do |value|
+      
       payload_in_kg = value["payload_in_kg"].to_d
       dimension_x = value["dimension_x"].to_d
       dimension_y = value["dimension_y"].to_d

@@ -13,6 +13,17 @@ export function shipment(state = {}, action) {
                 error: action.error
             };
 
+        case shipmentConstants.GET_SHIPMENT_REQUEST:
+            return {
+                loading: true
+            };
+        case shipmentConstants.GET_SHIPMENT_SUCCESS:
+            return action.shipmentData;
+        case shipmentConstants.GET_SHIPMENT_FAILURE:
+            return {
+                error: action.error
+            };
+
         case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
             return {
                 loading: true

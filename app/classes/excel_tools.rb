@@ -38,7 +38,7 @@ module ExcelTools
       destination = Location.find_by(name: row[:destination])
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       new_route_ids << route.id
-
+      route.generate_weekly_schedules('ocean', row[:effective_date], row[:expiration_date], [1,5], 30)
       if !row[:customer_id]
         cust_id = nil
         ded_bool = false

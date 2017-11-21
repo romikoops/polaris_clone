@@ -8,6 +8,7 @@ import OpenShop from '../../containers/OpenShop/OpenShop';
 import PropTypes from 'prop-types';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 // import { tenantDefaults } from '../../constants';
 // debugger;
 class App extends Component {
@@ -85,5 +86,5 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));
 

@@ -18,18 +18,6 @@ const filter = (state = '', action) => {
     }
 };
 
-// const tenantBySubdomain = (state = {}, action) => {
-//     switch (action.type) {
-//         case tenantActions.INVALIDATE_SUBDOMAIN:
-//         case tenantActions.RECEIVE_TENANT:
-//         case tenantActions.REQUEST_TENANT:
-//             return Object.assign({}, state, {
-//                 [action.subdomain]: tenant(state[action.subdomain], action)
-//             });
-//         default:
-//             return state;
-//     }
-// };
 
 const rootReducer = combineReducers({
     authentication,
