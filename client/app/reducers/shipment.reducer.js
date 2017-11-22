@@ -29,8 +29,22 @@ export function shipment(state = {}, action) {
                 loading: true
             };
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
-            return action.shipmentData;
+            // return action.shipmentData;
+            return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
+            return {
+                error: action.error
+            };
+
+
+        case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
+            return {
+                loading: true
+            };
+        case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
+            // return action.shipmentData;
+            return  Object.assign({}, state.shipment, action.shipmentData);
+        case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             return {
                 error: action.error
             };

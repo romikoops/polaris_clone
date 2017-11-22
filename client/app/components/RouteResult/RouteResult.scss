@@ -2,3 +2,9 @@
   border-bottom: 4px dashed black;
   padding: 4px;
 }
+.result {
+  height: max-content;
+}
+.result h4, .result p {
+  margin: 0;
+}

@@ -80,7 +80,8 @@ ShopStageView.propTypes = {
     stages: PropTypes.array,
     setStage: PropTypes.func,
     currentStage: PropTypes.number,
-    shopType: PropTypes.string
+    shopType: PropTypes.string,
+    match: PropTypes.object
 };
 
 ShopStageView.defaultProps = {
