@@ -47,7 +47,8 @@ class ShipmentsController < ApplicationController
   end 
 
   def finish_booking
-    finish_shipment_booking(session)
+    resp = finish_shipment_booking(params)
+    json_response(resp, 200)
   end
 
   def update

@@ -6,14 +6,17 @@ import { RouteResult } from '../RouteResult/RouteResult';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
+        this.chooseResult = this.chooseResult.bind(this);
     }
-
+    chooseResult(obj) {
+      this.props.chooseRoute(obj);
+    }
     render() {
         const routes = [];
         const { shipment, originHubs, destinationHubs } = this.props.shipmentData;
         if (this.props.shipmentData.schedules) {
            this.props.shipmentData.schedules.forEach(sched => {
-              routes.push(<RouteResult theme={this.props.theme} originHubs={originHubs} destinationHubs={destinationHubs} fees={shipment.generated_fees} schedule={sched} pickupDate={shipment.planned_pickup_date}/>);
+              routes.push(<RouteResult key={sched.id} selectResult={this.chooseResult} theme={this.props.theme} originHubs={originHubs} destinationHubs={destinationHubs} fees={shipment.generated_fees} schedule={sched} pickupDate={shipment.planned_pickup_date}/>);
           });
         }
         return (
@@ -37,7 +40,8 @@ export class ChooseRoute extends Component {
 }
 ChooseRoute.PropTypes = {
     theme: PropTypes.object,
-    shipmentData: PropTypes.object
+    shipmentData: PropTypes.object,
+    chooseRoute: PropTypes.func
     // shipment: PropTypes.object,
     // schedules: PropTypes.array
 };

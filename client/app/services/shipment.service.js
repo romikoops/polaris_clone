@@ -54,6 +54,16 @@ function setShipmentDetails(data) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
+function setShipmentRoute(data) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+    const url = BASE_URL + '/shipments/' + data.shipment.id + '/finish_booking';
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 // const fetchShipment = (subdomain) => {
 //     return dispatch => {
 //         dispatch(requestShipment(subdomain));
@@ -96,6 +106,7 @@ export const shipmentService = {
     newShipment,
     getAll,
     getShipment,
+    setShipmentRoute,
     setShipmentDetails,
     getStoredShipment
 };

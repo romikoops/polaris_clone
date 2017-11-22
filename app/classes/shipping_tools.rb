@@ -189,11 +189,17 @@ module ShippingTools
     render 'new_booking_confirmation'
   end
 
-  def finish_shipment_booking(session)
-    @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
-    @total_price = @shipment.total_price
-
-    render 'new_finish_booking'
+  def finish_shipment_booking(params)
+    @shipment = Shipment.find(params[:shipment_id])
+    @shipment.total_price = params[:total]
+    @shipment.schedule_set = [params[:schedule]]
+    @shipment.origin_id = params[:schedule][:starthub_id]
+    @shipment.destination_id = params[:schedule][:endhub_id] 
+    @shipment.save!
+    @origin = @shipment.origin
+    @destination = @shipment.destination
+    hubs = {startHub: @origin, endHub: @destination}
+    return {shipment: @shipment, hubs: hubs}
   end
 
   def get_shipment_pdf(params)

@@ -27,6 +27,7 @@ class OpenShop extends Component {
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
+        this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
     }
     componentDidUpdate() {
         // const { match } = this.props;
@@ -61,6 +62,18 @@ class OpenShop extends Component {
         this.setState({stageTracker: {shipmentType: data.load_type, stage: 2}});
         history.push('/open/' + data.shipment.id + '/choose_route');
     }
+    selectShipmentRoute(obj) {
+        const { dispatch, history } = this.props;
+        const { schedule, total } = obj;
+        const req = {
+            schedule,
+            total,
+            shipment: this.props.shipment.shipment
+        };
+        debugger;
+        dispatch(shipmentActions.setShipmentRoute(req));
+        history.push('/open/' + this.props.shipment.shipment.id + '/booking_details');
+    }
 
     render() {
         // const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
@@ -72,10 +85,10 @@ class OpenShop extends Component {
         const route2 = this.props.match.url + '/:shipmentId/choose_route';
         return (
         <div className="layout-row flex-100 layout-wrap" >
-            <ShopStageView shopType={this.state.shopType} theme={this.props.theme} stages={this.state.shipmentStages} currentStage={this.state.stageTracker.stage} setStage={this.selectShipmentStage} />
+            <ShopStageView shopType={this.state.shopType} match={this.props.match} theme={this.props.theme} stages={this.state.shipmentStages} currentStage={this.state.stageTracker.stage} setStage={this.selectShipmentStage} />
             <Route exact path={this.props.match.url} render={props => <ChooseShipment {...props}  theme={this.props.theme} shipmentTypes={this.state.shipmentOptions} selectShipment={this.selectShipmentType}/>}/>
             <Route  path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.props.shipment} setShipmentDetails={this.setShipmentData} />}/>
-            <Route  path={route2} render={props => <ChooseRoute {...props}  theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
+            <Route  path={route2} render={props => <ChooseRoute {...props}  chooseRoute={this.selectShipmentRoute} theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
         </div>
       );
     }

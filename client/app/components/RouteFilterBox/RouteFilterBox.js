@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-
+import { moment } from '../../constants';
 export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          selectedDay: new Date()
+          selectedDay: moment().format()
         };
         this.editFilterDay = this.editFilterDay.bind(this);
         this.handleOptionChange = this.handleOptionChange.bind(this);
