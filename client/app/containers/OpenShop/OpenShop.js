@@ -4,6 +4,8 @@ import { ChooseShipment } from "../../components/ChooseShipment/ChooseShipment";
 import { ShopStageView } from "../../components/ShopStageView/ShopStageView";
 import { ShipmentDetails } from "../../components/ShipmentDetails/ShipmentDetails";
 import { ChooseRoute } from "../../components/ChooseRoute/ChooseRoute";
+import { BookingDetails } from "../../components/BookingDetails/BookingDetails";
+
 import { connect } from "react-redux";
 import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from "../../constants";
 import { shipmentActions } from "../../actions/shipment.actions";
@@ -66,11 +68,10 @@ class OpenShop extends Component {
         const { dispatch, history } = this.props;
         const { schedule, total } = obj;
         const req = {
-            schedule,
+            schedules: [schedule],
             total,
             shipment: this.props.shipment.shipment
         };
-        debugger;
         dispatch(shipmentActions.setShipmentRoute(req));
         history.push(
             "/open/" + this.props.shipment.shipment.id + "/booking_details"
@@ -83,8 +84,10 @@ class OpenShop extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
+
         const route1 = this.props.match.url + "/:shipmentId/shipment_details";
         const route2 = this.props.match.url + "/:shipmentId/choose_route";
+        const route3 = this.props.match.url + "/:shipmentId/booking_details";
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <ShopStageView
@@ -124,6 +127,16 @@ class OpenShop extends Component {
                         <ChooseRoute
                             {...props}
                             chooseRoute={this.selectShipmentRoute}
+                            theme={this.props.theme}
+                            shipmentData={this.props.shipment}
+                        />
+                    )}
+                />
+                <Route
+                    path={route3}
+                    render={props => (
+                        <BookingDetails
+                            {...props}
                             theme={this.props.theme}
                             shipmentData={this.props.shipment}
                         />
