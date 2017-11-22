@@ -59,10 +59,10 @@ module ShippingTools
     end
 
     resp = {
-        data: @shipment,
-        all_nexuses: @all_nexuses,
-        public_routes: public_routes,
-        private_routes: private_routes
+      data: @shipment,
+      all_nexuses: @all_nexuses,
+      public_routes: public_routes,
+      private_routes: private_routes
     }
     return resp
   end
@@ -96,10 +96,10 @@ module ShippingTools
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
     # begin
-      offer_calculation.calc_offer!
+    offer_calculation.calc_offer!
     # rescue
     #   @no_transport_available = true
-      # render 'new_get_offer' and return
+    # render 'new_get_offer' and return
     # end
 
     @shipment = offer_calculation.shipment
@@ -154,7 +154,7 @@ module ShippingTools
     contact_location = Location.create_and_geocode(street_address: consignee_data[:street_address], zip_code: consignee_data[:zip_code], city: consignee_data[:city], country: consignee_data[:country])
     contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:first_name], last_name: consignee_data[:last_name], email: consignee_data[:email], phone: consignee_data[:phone])
 
-    
+
     @consignee = @shipment.shipment_contacts.create(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
     # @shipment.consignee = consignee
@@ -169,9 +169,13 @@ module ShippingTools
         @notifyees << @shipment.shipment_contacts.create(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
-
-    # user = User.new(first_name: shipment_data[:shipper][:first_name], last_name: shipment_data[:shipper][:last_name], email: shipment_data[:shipper][:email], phone: shipment_data[:shipper][:phone], company_name: current_user.company_name)
-    new_loc = Location.create_and_geocode(street_address: shipment_data[:shipper][:street_address], zip_code: shipment_data[:shipper][:zip_code], city: shipment_data[:shipper][:city], country: shipment_data[:shipper][:country])
+    new_loc
+    if !shipment_data[:shipper][:location_id]
+      new_loc = Location.create_and_geocode(street_address: shipment_data[:shipper][:street_address], zip_code: shipment_data[:shipper][:zip_code], city: shipment_data[:shipper][:city], country: shipment_data[:shipper][:country])
+    else 
+      new_loc = Location.find(shipment_data[:shipper][:location_id])
+    end
+    
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
 
     if new_user_loc.id == 1
@@ -180,7 +184,7 @@ module ShippingTools
 
     @shipment.shipper_location = new_loc
     @shipment.save!
-    
+
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
 
@@ -190,16 +194,32 @@ module ShippingTools
   end
 
   def finish_shipment_booking(params)
+    @user_locations = []
+    current_user.user_locations.each do |uloc|
+      @user_locations.push({location: uloc.location, contact: current_user})
+    end
+
+    @contacts = []
+    current_user.contacts.each do |c|
+      @contacts.push({location: c.location, contact: c})
+    end
+
     @shipment = Shipment.find(params[:shipment_id])
     @shipment.total_price = params[:total]
-    @shipment.schedule_set = [params[:schedule]]
-    @shipment.origin_id = params[:schedule][:starthub_id]
-    @shipment.destination_id = params[:schedule][:endhub_id] 
+    
+    params[:schedules].each do |sched|
+      @schedule = Schedule.find(sched[:id])
+      @shipment.schedule_set << @schedule.id
+    end
+    
+    @shipment.origin_id = params[:schedules].first[:starthub_id]
+    @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
     @origin = @shipment.origin
     @destination = @shipment.destination
+    @schedules = params[:schedules]
     hubs = {startHub: @origin, endHub: @destination}
-    return {shipment: @shipment, hubs: hubs}
+    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules}
   end
 
   def get_shipment_pdf(params)

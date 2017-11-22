@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { moment } from '../../constants';
+
 import './RouteHubBox.scss';
 export class RouteHubBox extends Component {
     constructor(props) {
@@ -25,14 +25,14 @@ export class RouteHubBox extends Component {
         return icon;
     }
     render() {
-      const { theme, hubs, route } = this.props;
-      const {startHub, endHub} = hubs;
-      const themeColour = { color: theme.colors ? theme.colors.primary : 'white'};
-      const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
-      const borderStyle = {
-          borderImage: borderColour
-      };
-      return (
+        const { theme, hubs, route } = this.props;
+        const {startHub, endHub} = hubs;
+        const themeColour = { color: theme.colors ? theme.colors.primary : 'white'};
+        const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
+        const borderStyle = {
+            borderImage: borderColour
+        };
+        return (
         <div className="flex-100 layout-row layout-align-center-center">
           <div className="flex-75 layout-row layout-align-start-center">
             <div className="flex-none hub_card layout-row">
@@ -63,7 +63,7 @@ export class RouteHubBox extends Component {
 
           </div>
         </div>
-      )
+      );
     }
 }
 RouteHubBox.PropTypes = {
