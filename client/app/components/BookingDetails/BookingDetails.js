@@ -63,8 +63,8 @@ export class BookingDetails extends Component {
                 bool: false
             },
             hsCode: '',
-            totalGoodValue: 0,
-            goodsDescription: ''
+            totalGoodsValue: 0,
+            cargoNotes: ''
 
         };
         this.addNotifyee = this.addNotifyee.bind(this);
@@ -102,20 +102,26 @@ export class BookingDetails extends Component {
         });
     }
     pushUpData() {
-        const { consignee, shipper, notifyees } = this.state;
+        const { consignee, shipper, notifyees, hsCode, totalGoodsValue, cargoNotes} = this.state;
         const data = {
             shipment: {
                 id: this.props.shipmentData.shipment.id,
                 consignee,
                 shipper,
-                notifyees
+                notifyees,
+                hsCode,
+                totalGoodsValue,
+                cargoNotes
             }
         };
-        this.props.setData(data);
+        debugger;
+        this.props.nextStage(data);
     }
+
     toNextStage() {
         this.pushUpData();
     }
+
     render() {
         const { theme, shipmentData } = this.props;
         const { shipment, hubs, contacts, userLocations, schedules } = shipmentData;
@@ -139,5 +145,5 @@ export class BookingDetails extends Component {
 BookingDetails.PropTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
-    setData: PropTypes.func
+    nextStage: PropTypes.func
 };

@@ -35,7 +35,6 @@ class OpenShop extends Component {
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
         this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
-        this.setContacts = this.setContacts.bind(this);
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
     }
     componentDidUpdate() {
@@ -77,13 +76,7 @@ class OpenShop extends Component {
         this.setState({stageTracker: {shipmentType: data.load_type, stage: 2}});
         history.push('/open/' + data.shipment.id + '/finish_booking');
     }
-    setContacts(data) {
-        this.setState({contacts: {
-            consignee: data.consignee,
-            shipper: data.shipper,
-            notifyees: data.notifyees
-        }});
-    }
+
     selectShipmentRoute(obj) {
         const { dispatch, history } = this.props;
         const { schedule, total } = obj;
@@ -111,7 +104,7 @@ class OpenShop extends Component {
             <Route exact path={this.props.match.url} render={props => <ChooseShipment {...props}  theme={this.props.theme} shipmentTypes={this.state.shipmentOptions} selectShipment={this.selectShipmentType}/>}/>
             <Route  path={route1} render={props => <ShipmentDetails {...props}  theme={this.props.theme} shipment={this.props.shipment} setShipmentDetails={this.setShipmentData} />}/>
             <Route  path={route2} render={props => <ChooseRoute {...props}  chooseRoute={this.selectShipmentRoute} theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
-            <Route  path={route3} render={props => <BookingDetails {...props} nextStage={this.setShipmentContacts} setData={this.setContacts} theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
+            <Route  path={route3} render={props => <BookingDetails {...props} nextStage={this.setShipmentContacts}  theme={this.props.theme} shipmentData={this.props.shipment}/>}/>
         </div>
       );
     }

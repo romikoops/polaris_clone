@@ -1,12 +1,12 @@
 export const SHIPMENT_TYPES = [
     {
         name: 'LCL Shipment',
-        img: 'https://assets.itsmycargo.com/imcdev/assets/images/MoT/parcel.png',
+        img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
         code: 'lcl',
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/containers.jpg',
         code: 'fcl',
     }
 ];
@@ -14,12 +14,12 @@ export const SHIPMENT_TYPES = [
 export const OPEN_SHIPMENT_TYPES = [
     {
         name: 'LCL Shipment',
-        img: 'https://assets.itsmycargo.com/imcdev/assets/images/MoT/parcel.png',
+        img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
         code: 'openlcl',
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/containers.jpg',
         code: 'openfcl',
     }
 ];
