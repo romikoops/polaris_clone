@@ -10,18 +10,44 @@
   // background-image: url('../assets/images/welcome/country/header.jpg');
   // background-image: url('../../assets/images/welcome/country/header.jpg');
   // background-image: url('../../../assets/images/welcome/country/header.jpg');
-  height: 400px; 
+  height: 65vh; 
 
   background-size: cover;
   background-position: center;
+	padding-bottom: 50px;
 }
 
 .sign_up {
 	color: white;
+	width: 451px;
 	h2 {
+		font-size: 24px;
 		font-weight: normal;
 	}
 	h3 {
+		font-size: 18px;
 		font-weight: normal;
 	}
+}
+
+.layout_elem {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.top_row {
+	.layout_elem {
+		align-items: flex-start;
+		margin-top: 20px;
+	}
+}
+
+
+.wrapper_tenant_logo {
+	width: 317px;
+}
+
+.tenant_logo {
+	margin-left: -4px; // correction of the padding within the png
 }
