@@ -7,8 +7,9 @@ export class LandingTop extends Component {
     render() {
         console.log(this.props);
         let logo;
-        if (this.props.theme) {
-            logo = this.props.theme.logo;
+        const theme = this.props.theme;
+        if (theme) {
+            logo = theme.logo;
         } else {
             logo = '';
         }
@@ -23,7 +24,7 @@ export class LandingTop extends Component {
                   </div>
                 </div>
                 <div className="flex-100 flex-gt-sm-50">
-                  <LoginPage />
+                  <LoginPage theme={theme} />
                 </div>
                 <div className="flex-100 flex-gt-sm-50">
                   <h1> {'Signup'} </h1>

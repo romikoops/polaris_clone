@@ -7,7 +7,7 @@ export class RoundButton extends Component {
     render() {
         const { text, theme } =  this.props;
         const activeBtnStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black',
+            background: theme && theme.colors ? '-webkit-linear-gradient(95.41deg, ' + theme.colors.primary + ' 0%,' + theme.colors.secondary + ' 100%)' : 'black',
             color: 'floralwhite'
         };
         const btnStyle = this.props.active ? activeBtnStyle : {};
