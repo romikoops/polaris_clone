@@ -101,6 +101,7 @@ Rails.application.routes.draw do
       post "set_haulage", as: :set_haulage
       get "choose_offer", as: :choose_offer
       post "finish_booking", as: :finish_booking
+      post "update", as: :update_booking
     end
   get "/documents/download/:document_id", to: "documents#download_redirect", as: :document_download
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading

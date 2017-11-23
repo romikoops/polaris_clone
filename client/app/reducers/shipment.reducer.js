@@ -49,6 +49,18 @@ export function shipment(state = {}, action) {
                 error: action.error
             };
 
+        case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
+            return {
+                loading: true
+            };
+        case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
+            // return action.shipmentData;
+            return  Object.assign({}, state.shipment, action.shipmentData);
+        case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
+            return {
+                error: action.error
+            };
+
         case shipmentConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
             return {

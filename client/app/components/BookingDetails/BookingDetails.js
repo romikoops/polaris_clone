@@ -6,6 +6,7 @@ import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../Roundbutton/Roundbutton';
+import { history } from '../../helpers';
 
 export class BookingDetails extends Component {
     constructor(props) {
@@ -72,6 +73,8 @@ export class BookingDetails extends Component {
         this.handleInput = this.handleInput.bind(this);
         this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
         this.toggleAddressBook = this.toggleAddressBook.bind(this);
+        this.toNextStage = this.toNextStage.bind(this);
+        this.handleCargoInput = this.handleCargoInput.bind(this);
     }
 
     setFromBook(target, value) {
@@ -94,6 +97,10 @@ export class BookingDetails extends Component {
             [targetKeys[0]]: {...this.state[targetKeys[0]], [targetKeys[1]]: value}
         });
     }
+    handleCargoInput(event) {
+        const { name, value } = event.target;
+        this.setState({[name]: value});
+    }
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
@@ -102,6 +109,14 @@ export class BookingDetails extends Component {
         });
     }
     pushUpData() {
+    }
+    saveDraft() {
+    }
+    toDashboard() {
+        history.push('/dashboard');
+    }
+
+    toNextStage() {
         const { consignee, shipper, notifyees, hsCode, totalGoodsValue, cargoNotes} = this.state;
         const data = {
             shipment: {
@@ -118,10 +133,6 @@ export class BookingDetails extends Component {
         this.props.nextStage(data);
     }
 
-    toNextStage() {
-        this.pushUpData();
-    }
-
     render() {
         const { theme, shipmentData } = this.props;
         const { shipment, hubs, contacts, userLocations, schedules } = shipmentData;
@@ -136,7 +147,14 @@ export class BookingDetails extends Component {
             </div>
           { shipment ? <RouteHubBox hubs={hubs} route={schedules[0]} theme={theme}/> : ''}
           {addrView}
-          <CargoDetails />
+          <CargoDetails handleChange={this.handleCargoInput}/>
+          <div className="flex-100 layout-row layout-align-start-center">
+            <RoundButton active handleNext={this.toNextStage} text="Finish Booking" />
+            <RoundButton  handleNext={this.saveDraft} text="Save as Draft" />
+          </div>
+          <div className="flex-100 layout-row layout-align-start-center">
+            <RoundButton active handleNext={this.toDashboard} text="Back to Dashboard" />
+          </div>
         </div>
 
       );

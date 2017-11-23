@@ -12,7 +12,7 @@ export class RoundButton extends Component {
         };
         const btnStyle = this.props.active ? activeBtnStyle : {};
         return (
-          <button className={`${styles.round_btn} flex-100`}   onClick={this.props.handleNext} style={btnStyle} > {text} </button>
+          <button className={styles.round_btn}   onClick={this.props.handleNext} style={btnStyle} > {text} </button>
         );
     }
 }

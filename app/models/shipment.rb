@@ -8,7 +8,7 @@ class Shipment < ApplicationRecord
 
   belongs_to :consignee, optional: true
   has_many :documents
-  has_many :shipments_contacts
+  has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
 
   belongs_to :origin, class_name: "Location", optional: true

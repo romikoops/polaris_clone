@@ -72,7 +72,7 @@ class OpenShop extends Component {
     }
     setShipmentContacts(data) {
         const { dispatch, history } = this.props;
-        dispatch(shipmentActions.setShipmentDetails(data));
+        dispatch(shipmentActions.setShipmentContacts(data));
         this.setState({
             stageTracker: { shipmentType: data.load_type, stage: 2 }
         });
