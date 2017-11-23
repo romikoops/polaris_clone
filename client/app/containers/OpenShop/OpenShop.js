@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment';
+import { Header } from '../../components/Header/Header';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
@@ -106,6 +107,8 @@ class OpenShop extends Component {
         return (
 
             <div className="layout-row flex-100 layout-wrap">
+                <Header />
+
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={this.props.match}
