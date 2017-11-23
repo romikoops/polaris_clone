@@ -1,18 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { ChooseShipment } from "../../components/ChooseShipment/ChooseShipment";
-import { ShopStageView } from "../../components/ShopStageView/ShopStageView";
-import { ShipmentDetails } from "../../components/ShipmentDetails/ShipmentDetails";
-import { ChooseRoute } from "../../components/ChooseRoute/ChooseRoute";
-import { BookingDetails } from "../../components/BookingDetails/BookingDetails";
+import React, { Component } from 'react';
+import { Header } from '../../components/Header/Header';
+import PropTypes from 'prop-types';
+import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment';
+import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
+import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
+import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
+import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 
-import { connect } from "react-redux";
-import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from "../../constants";
-import { shipmentActions } from "../../actions/shipment.actions";
-import { Route } from "react-router";
-import { withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
+import { shipmentActions } from '../../actions/shipment.actions';
+import { Route } from 'react-router';
+import { withRouter } from 'react-router-dom';
 
-import "./OpenShop.scss";
+import './OpenShop.scss';
 
 class OpenShop extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ class OpenShop extends Component {
             shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
-            shopType: "Open Shop"
+            shopType: 'Open Shop'
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
@@ -44,7 +45,7 @@ class OpenShop extends Component {
 
     getShipment() {
         const { dispatch, user } = this.props;
-        dispatch(shipmentActions.newShipment(user.data, "openlcl"));
+        dispatch(shipmentActions.newShipment(user.data, 'openlcl'));
     }
 
     selectShipmentType(type) {
@@ -62,7 +63,7 @@ class OpenShop extends Component {
         this.setState({
             stageTracker: { shipmentType: data.load_type, stage: 2 }
         });
-        history.push("/open/" + data.shipment.id + "/choose_route");
+        history.push('/open/' + data.shipment.id + '/choose_route');
     }
     selectShipmentRoute(obj) {
         const { dispatch, history } = this.props;
@@ -74,7 +75,7 @@ class OpenShop extends Component {
         };
         dispatch(shipmentActions.setShipmentRoute(req));
         history.push(
-            "/open/" + this.props.shipment.shipment.id + "/booking_details"
+            '/open/' + this.props.shipment.shipment.id + '/booking_details'
         );
     }
 
@@ -85,11 +86,12 @@ class OpenShop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const route1 = this.props.match.url + "/:shipmentId/shipment_details";
-        const route2 = this.props.match.url + "/:shipmentId/choose_route";
-        const route3 = this.props.match.url + "/:shipmentId/booking_details";
+        const route1 = this.props.match.url + '/:shipmentId/shipment_details';
+        const route2 = this.props.match.url + '/:shipmentId/choose_route';
+        const route3 = this.props.match.url + '/:shipmentId/booking_details';
         return (
             <div className="layout-row flex-100 layout-wrap">
+                <Header />
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={this.props.match}
@@ -161,7 +163,7 @@ OpenShop.propTypes = {
 OpenShop.defaultProps = {
     stageTracker: {
         stage: 0,
-        shipmentType: ""
+        shipmentType: ''
     }
 };
 
