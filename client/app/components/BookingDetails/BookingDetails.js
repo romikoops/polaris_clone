@@ -5,7 +5,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
-import { RoundButton } from '../Roundbutton/Roundbutton';
+import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 
 export class BookingDetails extends Component {
@@ -129,7 +129,6 @@ export class BookingDetails extends Component {
                 cargoNotes
             }
         };
-        debugger;
         this.props.nextStage(data);
     }
 
@@ -145,15 +144,15 @@ export class BookingDetails extends Component {
             <div className="flex-100 layout-row layout-align-end-center">
               <RoundButton active text="Address Book" handleNext={this.toggleAddressBook}/>
             </div>
-          { shipment ? <RouteHubBox hubs={hubs} route={schedules[0]} theme={theme}/> : ''}
+          { shipment ? <RouteHubBox hubs={hubs} route={schedules} theme={theme}/> : ''}
           {addrView}
           <CargoDetails handleChange={this.handleCargoInput}/>
           <div className="flex-100 layout-row layout-align-start-center">
             <RoundButton active handleNext={this.toNextStage} text="Finish Booking" />
-            <RoundButton  handleNext={this.saveDraft} text="Save as Draft" />
+            <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
           </div>
           <div className="flex-100 layout-row layout-align-start-center">
-            <RoundButton active handleNext={this.toDashboard} text="Back to Dashboard" />
+            <RoundButton back handleNext={this.toDashboard} text="Back to Dashboard" iconClass="fa-angle-left"/>
           </div>
         </div>
 

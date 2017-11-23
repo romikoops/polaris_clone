@@ -147,6 +147,7 @@ module ShippingTools
     create_documents(params, @shipment)
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
+    shipper_data = shipment_data[:shipper]
     contacts_data = shipment_data[:contacts_attributes]
 
     @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hsCode], total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
@@ -157,6 +158,7 @@ module ShippingTools
 
     @consignee = @shipment.shipment_contacts.create(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
+    notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
       contacts_data.values.each do |value|
@@ -165,7 +167,7 @@ module ShippingTools
                                                            last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
-        # @shipment.notifyees << notifyee
+        notifyee_contacts << notifyee
         @notifyees << @shipment.shipment_contacts.create(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
@@ -175,7 +177,8 @@ module ShippingTools
     else 
       new_loc = Location.find(shipment_data[:shipper][:location_id])
     end
-    
+    shipper_contact = current_user.contacts.find_or_create_by(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
+    @shipper = @shipment.shipment_contacts.create(contact_id: shipper_contact.id, contact_type: 'shipper')
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
 
     if new_user_loc.id == 1
@@ -184,13 +187,34 @@ module ShippingTools
 
     @shipment.shipper_location = new_loc
     @shipment.save!
-
+    @schedules = []
+    @shipment.schedule_set.each do |id|
+      @schedules.push(Schedule.find(id))
+    end
+    if @shipment.cargo_items
+      @cargos = @shipment.cargo_items
+    end
+    if @shipment.containers
+      @containers = @shipment.containers
+    end
+    @origin = @shipment.origin
+    @destination = @shipment.destination
+    hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
 
     # session.delete(:shipment_uuid)
 
-    return @shipment
+    return {
+      shipment: @shipment,
+      schedules: @schedules,
+      hubs: hubs,
+      consignee: {data:contact, location: contact_location},
+      notifyees: notifyee_contacts,
+      shipper:{data:shipper_contact, location: new_loc},
+      cargoItems: @cargos,
+      containers: @containers
+    }
   end
 
   def finish_shipment_booking(params)
