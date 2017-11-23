@@ -1,8 +1,10 @@
 // LandingTop {
 //   height: 350px;
 // }
+@import "../../styles/defaults";
+
 .landing_top {
-  color: red;
+  color: $grey;
   background-image: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, .7)), url('https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg');
 
   // background-image: url('../assets/images/welcome/country/header.jpg');
@@ -12,4 +14,14 @@
 
   background-size: cover;
   background-position: center;
+}
+
+.sign_up {
+	color: white;
+	h2 {
+		font-weight: normal;
+	}
+	h3 {
+		font-weight: normal;
+	}
 }

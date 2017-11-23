@@ -18,8 +18,8 @@ end
 tenant = Tenant.create(
   theme: {
     colors: {
-        primary: "#00E503",
-        secondary: "#00ACE5"
+        primary: "#0CB14C",
+        secondary: "#0089D0"
     },
     logo: "https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/logos/logo_black_small.png"
     },

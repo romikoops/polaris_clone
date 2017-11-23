@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {LoginPage} from '../../containers/LoginPage';
 import './LandingTop.scss';
 import PropTypes from 'prop-types';
+import { RoundButton } from '../RoundButton/RoundButton';
+
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
 export class LandingTop extends Component {
     render() {
@@ -26,8 +28,10 @@ export class LandingTop extends Component {
                 <div className="flex-100 flex-gt-sm-50">
                   <LoginPage theme={theme} />
                 </div>
-                <div className="flex-100 flex-gt-sm-50">
-                  <h1> {'Signup'} </h1>
+                <div className="flex-100 flex-gt-sm-50 sign_up">
+                  <h2>Never spend precious time on trasportation again LCL shipping made simple</h2>
+                  <h3>Enjoy the most advanced and easy to use booking system in the market</h3>
+                  <RoundButton text="sign up" theme={theme} active/>
                 </div>
               </div>
             </div>
