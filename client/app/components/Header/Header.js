@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
 import logo from '../../assets/images/logos/logo_black.png';
-import accountIcon from '../../assets/images/icons/person-dark.svg';
 
-export class Header extends Component {
-    state = {
-        selectedOption: ''
-    };
-    handleChange = selectedOption => {
-        this.setState({ selectedOption });
-        console.log(`Selected: ${selectedOption.label}`);
-    };
+class Header extends Component {
+    constructor(props) {
+        super(props);
+        console.log(props);
+    }
 
     render() {
+        const { user } = this.props;
         return (
             <div
                 className={`${
@@ -22,23 +21,37 @@ export class Header extends Component {
             >
                 <div className="content-width layout-row flex-none">
                     <div className="layout-row flex-50 layout-align-start-center">
-                        <img src={logo} alt="" />
+                        <img src={logo} className={styles.logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <div className={`${styles.dropdown}`}>
-                            <div className={`${styles.dropbtn}`}>
-                                <img src={accountIcon} className={styles.accountIcon} alt=""/>
-                                Firstname Lastname <i className="fa fa-caret-down spacing-sm-left" aria-hidden="true"></i>
-                            </div>
-                            <div className={`${styles.dropdowncontent}`}>
-                                <a href="#">Link 1</a>
-                                <a href="#">Link 2</a>
-                                <a href="#">Link 3</a>
-                            </div>
-                        </div>
+                        <NavDropdown user={user} />
                     </div>
                 </div>
             </div>
         );
     }
 }
+
+Header.propTypes = {
+    tenant: PropTypes.object,
+    theme: PropTypes.object,
+    user: PropTypes.object,
+    loggedIn: PropTypes.bool,
+    shipment: PropTypes.object,
+    dispatch: PropTypes.func,
+    history: PropTypes.object,
+    match: PropTypes.object
+};
+
+function mapStateToProps(state) {
+    const { authentication, tenant, shipment } = state;
+    const { user, loggedIn } = authentication;
+    return {
+        user,
+        tenant,
+        loggedIn,
+        shipment
+    };
+}
+
+export default connect(mapStateToProps)(Header);
