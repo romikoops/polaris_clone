@@ -52,7 +52,8 @@ class ShipmentsController < ApplicationController
   end
 
   def update
-    update_shipment(session, params)
+    resp = update_shipment(session, params)
+    json_response(resp, 200)
   end
 
   def get_shipper_pdf

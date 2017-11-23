@@ -169,7 +169,7 @@ export class ShipmentDetails extends Component {
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
             <div className="layout-row flex-75 layout-wrap layout-align-start-center" >
-              <RoundButton text="Back to Dashboard" handleNext={this.returnToDashboard} theme={theme} active={false}/>
+              <RoundButton text="Back to Dashboard" handleNext={this.returnToDashboard} iconClass="fa-angle-left" theme={theme} back/>
             </div>
           </div>
         </div>

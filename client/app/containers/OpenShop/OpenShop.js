@@ -6,6 +6,7 @@ import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
+import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 
 import { connect } from 'react-redux';
 import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
@@ -73,7 +74,7 @@ class OpenShop extends Component {
     }
     setShipmentContacts(data) {
         const { dispatch, history } = this.props;
-        dispatch(shipmentActions.setShipmentDetails(data));
+        dispatch(shipmentActions.setShipmentContacts(data));
         this.setState({
             stageTracker: { shipmentType: data.load_type, stage: 2 }
         });
@@ -104,10 +105,14 @@ class OpenShop extends Component {
         const route1 = this.props.match.url + '/:shipmentId/shipment_details';
         const route2 = this.props.match.url + '/:shipmentId/choose_route';
         const route3 = this.props.match.url + '/:shipmentId/booking_details';
+        const route4 = this.props.match.url + '/:shipmentId/finish_booking';
         return (
             <div className="layout-row flex-100 layout-wrap">
+<<<<<<< HEAD
                 <Header theme={this.props.theme} />
 
+=======
+>>>>>>> master
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={this.props.match}
@@ -156,6 +161,16 @@ class OpenShop extends Component {
                         <BookingDetails
                             {...props}
                             nextStage={this.setShipmentContacts}
+                            theme={this.props.theme}
+                            shipmentData={this.props.shipment}
+                        />
+                    )}
+                />
+                <Route
+                    path={route4}
+                    render={props => (
+                        <BookingConfirmation
+                            {...props}
                             theme={this.props.theme}
                             shipmentData={this.props.shipment}
                         />

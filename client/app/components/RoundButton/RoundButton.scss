@@ -1,5 +1,21 @@
-.round_btn {
-    height: 40px;
-    width: 200px;
-    border-radius: 20px;
+:local {
+  .round_btn {
+    height: 41px;
+    width: 317px;
+    border-radius: 39px;
+    // font-family: "Open Sans";  
+    font-size: 18px;  
+    line-height: 21px;  
+    text-align: center;
+    color: #FFFFFF;
+    margin: 5px 20px;
   }
+  .neutral {
+    background-color: #D8D8D8;
+    color: #2C2C2C !important;
+  }
+  .back {
+    background-color: #787878;
+    color: #FFFFFF !important; 
+  }
+}

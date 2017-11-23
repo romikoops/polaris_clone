@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import './RouteHubBox.scss';
+import styles from './RouteHubBox.scss';
 export class RouteHubBox extends Component {
     constructor(props) {
         super(props);
@@ -35,19 +35,19 @@ export class RouteHubBox extends Component {
         return (
         <div className="flex-100 layout-row layout-align-center-center">
           <div className="flex-75 layout-row layout-align-start-center">
-            <div className="flex-none hub_card layout-row">
+            <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
-                <i className="fa fa-location" style={themeColour}/>
+                <i className="fa fa-map-marker" style={themeColour}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                <h6 className="flex-100"> {startHub.name} </h6>
-                <p className="flex-100">{ startHub.geocoded_address }</p>
+                <h6 className="flex-100"> {startHub.data.name} </h6>
+                <p className="flex-100">{ startHub.location.geocoded_address }</p>
               </div>
             </div>
 
             <div className="flex-15 layout-row layout-wrap layout-align-center-start" >
-                <div className="flex-100 layout-row layout-align-center-center dash_border" style={borderStyle}>
-                  { this.switchIcon(route)}
+                <div className={`flex-100 layout-row layout-align-center-center ${styles.dash_border}`} style={borderStyle}>
+                  { this.switchIcon(route[0])}
                 </div>
             </div>
 
@@ -56,8 +56,8 @@ export class RouteHubBox extends Component {
                 <i className="fa fa-flag" style={themeColour}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                <h6 className="flex-100"> {endHub.name} </h6>
-                <p className="flex-100">{ endHub.geocoded_address }</p>
+                <h6 className="flex-100"> {endHub.data.name} </h6>
+                <p className="flex-100">{ endHub.location.geocoded_address }</p>
               </div>
             </div>
 

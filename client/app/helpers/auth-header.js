@@ -4,9 +4,9 @@ export function authHeader() {
     // if (user && user.token) {
     //     return { 'Authorization': 'Bearer ' + user.token };
     // }
-    const authHeader = JSON.parse(localStorage.getItem('authHeader'));
-    if (authHeader) {
-        return authHeader;
+    const aHeader = JSON.parse(localStorage.getItem('authHeader'));
+    if (aHeader) {
+        return aHeader;
     }
     return {};
 }

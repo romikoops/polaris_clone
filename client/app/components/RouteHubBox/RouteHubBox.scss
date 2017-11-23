@@ -1,9 +1,12 @@
-.hub_card {
-  width: 300px;
-  height: 200px;
-  background: rgba(10,1,12,0.75);
-}
-:local .dash_border {
-  border-bottom: 4px dashed black;
-  padding: 4px;
+
+:local {
+  .dash_border {
+    border-bottom: 4px dashed black;
+    padding: 4px;
+  }
+  .hub_card {
+    width: 300px;
+    height: 200px;
+    background: rgba(10,1,12,0.75);
+  }
 }
