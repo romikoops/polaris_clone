@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-import Dropdown from 'react-dropdown';
 
 import styles from './Header.scss';
 import logo from '../../assets/images/logos/logo_black.png';
-
-const options = ['one', 'two', 'three'];
-const defaultOption = options[0];
+import accountIcon from '../../assets/images/icons/person-dark.svg';
 
 export class Header extends Component {
+    state = {
+        selectedOption: ''
+    };
+    handleChange = selectedOption => {
+        this.setState({ selectedOption });
+        console.log(`Selected: ${selectedOption.label}`);
+    };
+
     render() {
         return (
             <div
@@ -20,12 +25,17 @@ export class Header extends Component {
                         <img src={logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <Dropdown
-                            options={options}
-                            onChange={this._onSelect}
-                            value={defaultOption}
-                            placeholder="Select an option"
-                        />
+                        <div className={`${styles.dropdown}`}>
+                            <div className={`${styles.dropbtn}`}>
+                                <img src={accountIcon} className={styles.accountIcon} alt=""/>
+                                Firstname Lastname <i className="fa fa-caret-down spacing-sm-left" aria-hidden="true"></i>
+                            </div>
+                            <div className={`${styles.dropdowncontent}`}>
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
