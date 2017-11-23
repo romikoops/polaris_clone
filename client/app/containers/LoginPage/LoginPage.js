@@ -51,16 +51,16 @@ class LoginPage extends React.Component {
                         {submitted && !username &&
                             <div className="help-block">Username is required</div>
                         }
+                        <hr/>
                     </div>
-                    <hr/>
                     <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
                         <label htmlFor="password">Password</label>
                         <input type="password" className="form-control" name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
                         {submitted && !password &&
                             <div className="help-block">Password is required</div>
                         }
+                        <hr/>
                     </div>
-                    <hr/>
                     <div className="form-group">
                         <RoundButton text="login" theme={theme} active/>
 

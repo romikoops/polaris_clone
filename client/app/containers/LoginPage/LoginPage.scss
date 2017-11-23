@@ -1,28 +1,30 @@
+@import "../../styles/defaults";
+
 form {
-	color: rgb(33, 33, 33);
+	color: $grey;
 	width: 317px;
 
 	::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-		color: rgb(33, 33, 33);
+		color: $grey;
 	}
 	::-moz-placeholder { /* Firefox 19+ */
-		color: rgb(33, 33, 33);
+		color: $grey;
 	}
 	:-ms-input-placeholder { /* IE 10+ */
-		color: rgb(33, 33, 33);
+		color: $grey;
 	}
 	:-moz-placeholder { /* Firefox 18- */
-		color: rgb(33, 33, 33);
+		color: $grey;
 	}
 	input, label {
 		display: block;
 	}
+	hr {
+		border: .5px solid rgb(10, 10, 10);
+		margin: 3px 0 24px 0;
+	}
 }
 
-hr {
-	border: .5px solid rgb(10, 10, 10);
-	margin: 3px 0 24px 0;
-}
 
 .form-control {
 	background: transparent;
@@ -33,7 +35,11 @@ hr {
 
 	&:focus {
 		outline: none;
-		background: rgba(250, 250, 250, .04);
+		background: rgba(black, .016);
+	}
+	&:focus + hr {
+		border: 1px solid $primary;
+		margin-bottom: 23px;
 	}
 }
 
