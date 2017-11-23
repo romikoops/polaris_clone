@@ -1,3 +1,13 @@
+@import './defaults';
+
 .content-width {
   width: 1000px;
+}
+
+.spacing-sm-left {
+  margin-left: $spacing-sm-side;
+}
+
+.spacing-sm-right {
+  margin-right: $spacing-sm-side;
 }
