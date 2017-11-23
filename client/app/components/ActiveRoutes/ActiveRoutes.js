@@ -9,32 +9,32 @@ export class ActiveRoutes extends Component {
             {
                 name: 'New York',
                 country: 'USA',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/NY.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/NY.jpg'
             },
             {
                 name: 'Shanghai',
                 country: 'China',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/shanghai.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/shanghai.jpg'
             },
             {
                 name: 'Singapore',
                 country: 'Singapore',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/Singapore.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/Singapore.jpg'
             },
             {
                 name: 'Seoul',
                 country: 'South Korea',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/seoul.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/seoul.jpg'
             },
             {
                 name: 'Hanoi',
                 country: 'Vietnam',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/Hanoi.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/Hanoi.jpg'
             },
             {
                 name: 'Shenzhen',
                 country: 'China',
-                image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/Shenzhen.jpg'
+                image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/Shenzhen.jpg'
             }
         ];
         const theme = this.props.theme;

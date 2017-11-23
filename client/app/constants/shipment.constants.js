@@ -1,12 +1,12 @@
 export const SHIPMENT_TYPES = [
     {
         name: 'LCL Shipment',
-        img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/MoT/parcel.png',
+        img: 'https://assets.itsmycargo.com/imcdev/assets/images/MoT/parcel.png',
         code: 'lcl',
     },
     {
         name: 'FCL Shipment',
-        img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/containers.jpg',
         code: 'fcl',
     }
 ];
@@ -14,12 +14,12 @@ export const SHIPMENT_TYPES = [
 export const OPEN_SHIPMENT_TYPES = [
     {
         name: 'LCL Shipment',
-        img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/MoT/parcel.png',
+        img: 'https://assets.itsmycargo.com/imcdev/assets/images/MoT/parcel.png',
         code: 'openlcl',
     },
     {
         name: 'FCL Shipment',
-        img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/containers.jpg',
         code: 'openfcl',
     }
 ];
@@ -55,6 +55,10 @@ export const shipmentConstants = {
     SET_SHIPMENT_DETAILS_REQUEST: 'SET_SHIPMENT_DETAILS_REQUEST',
     SET_SHIPMENT_DETAILS_SUCCESS: 'SET_SHIPMENT_DETAILS_SUCCESS',
     SET_SHIPMENT_DETAILS_FAILURE: 'SET_SHIPMENT_DETAILS_FAILURE',
+
+    SET_SHIPMENT_CONTACTS_REQUEST: 'SET_SHIPMENT_CONTACTS_REQUEST',
+    SET_SHIPMENT_CONTACTS_SUCCESS: 'SET_SHIPMENT_CONTACTS_SUCCESS',
+    SET_SHIPMENT_CONTACTS_FAILURE: 'SET_SHIPMENT_CONTACTS_FAILURE',
 
     SET_SHIPMENT_ROUTE_REQUEST: 'SET_SHIPMENT_ROUTE_REQUEST',
     SET_SHIPMENT_ROUTE_SUCCESS: 'SET_SHIPMENT_ROUTE_SUCCESS',

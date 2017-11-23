@@ -11,12 +11,12 @@ export class LandingTopAuthed extends Component {
                 {
                     name: 'Open Shop',
                     url: '/open',
-                    img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/performance.jpg'
+                    img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/performance.jpg'
                 },
                 {
                     name: 'Dedicated Shop',
                     url: '/dedicated',
-                    img: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/shipping-containers.jpg'
+                    img: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/shipping-containers.jpg'
                 }
             ]
         };

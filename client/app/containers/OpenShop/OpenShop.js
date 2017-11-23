@@ -25,11 +25,18 @@ class OpenShop extends Component {
             shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
-            shopType: 'Open Shop'
+            shopType: 'Open Shop',
+            contacts: {
+                shipper: {},
+                consignee: {},
+                notifyees: []
+            }
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
         this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
+        this.setContacts = this.setContacts.bind(this);
+        this.setShipmentContacts = this.setShipmentContacts.bind(this);
     }
     componentDidUpdate() {
         // const { match } = this.props;
@@ -65,6 +72,23 @@ class OpenShop extends Component {
         });
         history.push('/open/' + data.shipment.id + '/choose_route');
     }
+    setShipmentContacts(data) {
+        const { dispatch, history } = this.props;
+        dispatch(shipmentActions.setShipmentDetails(data));
+        this.setState({
+            stageTracker: { shipmentType: data.load_type, stage: 2 }
+        });
+        history.push('/open/' + data.shipment.id + '/finish_booking');
+    }
+    setContacts(data) {
+        this.setState({
+            contacts: {
+                consignee: data.consignee,
+                shipper: data.shipper,
+                notifyees: data.notifyees
+            }
+        });
+    }
     selectShipmentRoute(obj) {
         const { dispatch, history } = this.props;
         const { schedule, total } = obj;
@@ -91,7 +115,6 @@ class OpenShop extends Component {
         const route3 = this.props.match.url + '/:shipmentId/booking_details';
         return (
             <div className="layout-row flex-100 layout-wrap">
-                <Header />
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={this.props.match}
@@ -139,6 +162,8 @@ class OpenShop extends Component {
                     render={props => (
                         <BookingDetails
                             {...props}
+                            nextStage={this.setShipmentContacts}
+                            setData={this.setContacts}
                             theme={this.props.theme}
                             shipmentData={this.props.shipment}
                         />

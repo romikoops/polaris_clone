@@ -7,7 +7,7 @@ export class BlogPostHighlights extends Component {
         const dummyPost = {
             title: 'How Digitalisation is changing shipping',
             text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel leo dapibus, aliquam metus nec, pulvinar.',
-            image: 'https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/welcome/country/shipping-containers.jpg'
+            image: 'https://assets.itsmycargo.com/imcdev/assets/images/welcome/country/shipping-containers.jpg'
         };
         const dummyPosts = [];
         const theme = this.props.theme;

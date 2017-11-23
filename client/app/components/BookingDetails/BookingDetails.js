@@ -4,6 +4,7 @@ import './BookingDetails.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
+import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../Roundbutton/Roundbutton';
 
 export class BookingDetails extends Component {
@@ -54,7 +55,17 @@ export class BookingDetails extends Component {
                     email: '',
                     phone: ''
                 }
-            }
+            },
+            insurance: {
+                bool: false
+            },
+            customs: {
+                bool: false
+            },
+            hsCode: '',
+            totalGoodValue: 0,
+            goodsDescription: ''
+
         };
         this.addNotifyee = this.addNotifyee.bind(this);
         this.setFromBook = this.setFromBook.bind(this);
@@ -62,6 +73,7 @@ export class BookingDetails extends Component {
         this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
         this.toggleAddressBook = this.toggleAddressBook.bind(this);
     }
+
     setFromBook(target, value) {
         this.setState({[target]: value});
     }
@@ -77,6 +89,7 @@ export class BookingDetails extends Component {
     handleInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
+        console.log(name, value);
         this.setState({
             [targetKeys[0]]: {...this.state[targetKeys[0]], [targetKeys[1]]: value}
         });
@@ -87,6 +100,21 @@ export class BookingDetails extends Component {
         this.setState({
             [targetKeys[0]]: {...this.state[targetKeys[0]], [targetKeys[1]]: value}
         });
+    }
+    pushUpData() {
+        const { consignee, shipper, notifyees } = this.state;
+        const data = {
+            shipment: {
+                id: this.props.shipmentData.shipment.id,
+                consignee,
+                shipper,
+                notifyees
+            }
+        };
+        this.props.setData(data);
+    }
+    toNextStage() {
+        this.pushUpData();
     }
     render() {
         const { theme, shipmentData } = this.props;
@@ -102,11 +130,14 @@ export class BookingDetails extends Component {
             </div>
           { shipment ? <RouteHubBox hubs={hubs} route={schedules[0]} theme={theme}/> : ''}
           {addrView}
+          <CargoDetails />
         </div>
+
       );
     }
 }
 BookingDetails.PropTypes = {
     theme: PropTypes.object,
-    shipmentData: PropTypes.object
+    shipmentData: PropTypes.object,
+    setData: PropTypes.func
 };
