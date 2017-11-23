@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './RoundButton.scss';
+import styles from './RoundButton.scss';
 
 export class RoundButton extends Component {
 
@@ -12,7 +12,7 @@ export class RoundButton extends Component {
         };
         const btnStyle = this.props.active ? activeBtnStyle : {};
         return (
-          <button className="round_btn" onClick={this.props.handleNext} style={btnStyle} > {text} </button>
+          <button className={`${styles.round_btn} flex-100`}   onClick={this.props.handleNext} style={btnStyle} > {text} </button>
         );
     }
 }
