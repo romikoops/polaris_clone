@@ -22,11 +22,17 @@ function login(username, password) {
             }
             if (response.headers.get('access-token')) {
                 const accessToken = response.headers.get('access-token');
-                const client      = response.headers.get('client');
-                const expiry      = response.headers.get('expiry');
-                const tokenType   = response.headers.get('token-type');
-                const uid         = response.headers.get('uid');
-                const authHeader  = {'client': client, expiry: expiry, uid: uid, 'access-token': accessToken, 'token-type': tokenType};
+                const client = response.headers.get('client');
+                const expiry = response.headers.get('expiry');
+                const tokenType = response.headers.get('token-type');
+                const uid = response.headers.get('uid');
+                const authHeader = {
+                    client: client,
+                    expiry: expiry,
+                    uid: uid,
+                    'access-token': accessToken,
+                    'token-type': tokenType
+                };
                 localStorage.setItem('authHeader', JSON.stringify(authHeader));
             }
             return response.json();
@@ -68,7 +74,9 @@ function getById(id) {
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/users/' + id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/users/' + id, requestOptions).then(
+        handleResponse
+    );
 }
 
 function register(user) {
@@ -78,7 +86,9 @@ function register(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch(BASE_URL + '/auth/sign_up', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/auth/sign_up', requestOptions).then(
+        handleResponse
+    );
 }
 
 function update(user) {
@@ -88,7 +98,9 @@ function update(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch(BASE_URL + '/users/' + user.id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/users/' + user.id, requestOptions).then(
+        handleResponse
+    );
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
@@ -100,7 +112,6 @@ function _delete(id) {
 
     return fetch('/users/' + id, requestOptions).then(handleResponse);
 }
-
 
 export const userService = {
     login,
