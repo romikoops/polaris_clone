@@ -13,11 +13,13 @@ export class ChooseRoute extends Component {
     }
     render() {
         const routes = [];
-        const { shipment, originHubs, destinationHubs } = this.props.shipmentData;
-        if (this.props.shipmentData.schedules) {
-           this.props.shipmentData.schedules.forEach(sched => {
-              routes.push(<RouteResult key={sched.id} selectResult={this.chooseResult} theme={this.props.theme} originHubs={originHubs} destinationHubs={destinationHubs} fees={shipment.generated_fees} schedule={sched} pickupDate={shipment.planned_pickup_date}/>);
-          });
+        if (this.props.shipmentData) {
+          const { shipment, originHubs, destinationHubs, schedules } = this.props.shipmentData;
+          if (schedules) {
+             schedules.forEach(sched => {
+                routes.push(<RouteResult key={sched.id} selectResult={this.chooseResult} theme={this.props.theme} originHubs={originHubs} destinationHubs={destinationHubs} fees={shipment.generated_fees} schedule={sched} pickupDate={shipment.planned_pickup_date}/>);
+            });
+          }
         }
         return (
         <div className="flex-100 layout-row layout-align-center-start">

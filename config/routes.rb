@@ -105,6 +105,6 @@ Rails.application.routes.draw do
     end
   get "/documents/download/:document_id", to: "documents#download_redirect", as: :document_download
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
-
+  post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
   get "tenants/:name" => "tenants#get_tenant"
 end

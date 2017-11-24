@@ -22,13 +22,14 @@ export class Checkbox extends Component {
         this.setState({
             checked: !this.state.checked,
         });
+        this.props.onChange();
     };
 
     render() {
         const { disabled } = this.props;
         const { checked } = this.state;
         return (
-      <div className="React__checkbox">
+      <div className="React__checkbox flex-none">
         <label>
           <input
             type="checkbox"

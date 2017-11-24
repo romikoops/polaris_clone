@@ -5,7 +5,6 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
-import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 
 export class BookingDetails extends Component {
@@ -83,8 +82,8 @@ export class BookingDetails extends Component {
     }
     addNotifyee() {
         const prevArr = this.state.notifyees;
-        prevArr.push(this.state.default.notifyee);
-        this.setState({ notifyees: prevArr });
+        prevArr.unshift(this.state.default.notifyee);
+        this.setState({notifyees: prevArr});
     }
     handleInput(event) {
         const { name, value } = event.target;
@@ -104,11 +103,18 @@ export class BookingDetails extends Component {
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
+        const ind = parseInt(targetKeys[1], 10);
+        const notifyees = this.state.notifyees;
+        notifyees[ind][targetKeys[2]] = value;
         this.setState({
+<<<<<<< HEAD
             [targetKeys[0]]: {
                 ...this.state[targetKeys[0]],
                 [targetKeys[1]]: value
             }
+=======
+            notifyees: notifyees
+>>>>>>> master
         });
     }
     pushUpData() {}
@@ -139,6 +145,9 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
+    closeBook() {
+        this.setState({addressBook: false});
+    }
 
     render() {
         const { theme, shipmentData } = this.props;
@@ -150,6 +159,7 @@ export class BookingDetails extends Component {
             schedules
         } = shipmentData;
         const { consignee, shipper, notifyees } = this.state;
+<<<<<<< HEAD
         const addrView = this.state.addressBook ? (
             <AddressBook
                 contacts={contacts}
@@ -168,6 +178,11 @@ export class BookingDetails extends Component {
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );
+=======
+        const aBook = <AddressBook contacts={contacts} userLocations={userLocations} theme={theme} setDetails={this.setFromBook} closeAddressBook={this.closeBook}/>;
+        const cForm = <ShipmentContactsBox consignee={consignee} shipper={shipper} addNotifyee={this.addNotifyee} notifyees={notifyees} theme={theme} handleChange={this.handleInput} handleNotifyeeChange={this.handleNotifyeeInput}/>;
+        const addrView = this.state.addressBook ? aBook : cForm;
+>>>>>>> master
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-align-end-center">
@@ -205,7 +220,26 @@ export class BookingDetails extends Component {
                     />
                 </div>
             </div>
+<<<<<<< HEAD
         );
+=======
+          { shipment && theme && hubs ? <RouteHubBox hubs={hubs} route={schedules} theme={theme}/> : ''}
+          {addrView}
+          <CargoDetails handleChange={this.handleCargoInput} shipmentData={shipmentData}/>
+          <div className="flex-100 layout-row layout-align-center-center">
+            <div className="content-width layout-row layout-align-start-center button_padding">
+                <RoundButton active handleNext={this.toNextStage} theme={theme} text="Finish Booking" />
+                <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-center-center">
+            <div className="content-width layout-row layout-align-start-center button_padding">
+                <RoundButton back handleNext={this.toDashboard} text="Back to Dashboard" iconClass="fa-angle-left"/>
+            </div>
+          </div>
+        </div>
+      );
+>>>>>>> master
     }
 }
 BookingDetails.PropTypes = {

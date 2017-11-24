@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
     users,
     alert,
     filter,
-    shipment,
+    bookingData: shipment,
     selectedSubdomain,
     tenant,
     routing

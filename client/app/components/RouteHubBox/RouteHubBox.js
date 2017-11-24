@@ -51,7 +51,7 @@ export class RouteHubBox extends Component {
                 </div>
             </div>
 
-            <div className="flex-none hub_card layout-row">
+            <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
                 <i className="fa fa-flag" style={themeColour}/>
               </div>

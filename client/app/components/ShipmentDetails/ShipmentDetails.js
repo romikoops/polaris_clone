@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import GmapsLoader from '../../hocs/GmapsLoader';
 import './ShipmentDetails.scss';
+import {moment} from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { RoundButton } from '../RoundButton/RoundButton';
@@ -30,14 +31,14 @@ export class ShipmentDetails extends Component {
             },
             containers: [],
             cargoItems: [],
-            shipment: this.props.shipment.data,
-            allNexuses: this.props.shipment.all_nexuses,
+            shipment: this.props.shipmentData.data,
+            allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
         };
-        if (this.props.shipment.data) {
-            this.state.selectedDay = this.props.shipment.data.planned_pickup_date;
-            this.state.has_on_carriage = this.props.shipment.data.has_on_carriage;
-            this.state.has_pre_carriage = this.props.shipment.data.has_pre_carriage;
+        if (this.props.shipmentData.data) {
+            this.state.selectedDay = this.props.shipmentData.data.planned_pickup_date;
+            this.state.has_on_carriage = this.props.shipmentData.data.has_on_carriage;
+            this.state.has_pre_carriage = this.props.shipmentData.data.has_pre_carriage;
         }
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleDayChange = this.handleDayChange.bind(this);
@@ -101,7 +102,7 @@ export class ShipmentDetails extends Component {
     handleNextStage() {
         console.log('NEXT STAGE PLZ');
         const data = {
-            shipment: this.state.shipment ? this.state.shipment : this.props.shipment.data
+            shipment: this.state.shipment ? this.state.shipment : this.props.shipmentData.data
         };
         data.shipment.origin_user_input = this.state.origin.fullAddress ? this.state.origin.fullAddress : '';
         data.shipment.destination_user_input = this.state.destination.fullAddress ? this.state.destination.fullAddress : '';
@@ -130,18 +131,18 @@ export class ShipmentDetails extends Component {
         // }
         const { theme } = this.props;
         let cargoDetails;
-        if (this.props.shipment.data) {
-            if (this.props.shipment.data.load_type.includes('fcl')) {
+        if (this.props.shipmentData.data) {
+            if (this.props.shipmentData.data.load_type.includes('fcl')) {
                 cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/>;
             }
-            if (this.props.shipment.data.load_type.includes('lcl')) {
+            if (this.props.shipmentData.data.load_type.includes('lcl')) {
                 cargoDetails = <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
             }
           // cargoDetails =  this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
-        const rSelect = <RouteSelector theme={theme} setRoute={this.selectRoute} publicRoutes={this.props.shipment.public_routes} privateRoutes={this.props.shipment.private_routes}/>;
-        const mapBox = <GmapsLoader theme={theme} selectLocation={this.setTargetLocation} allNexuses={this.props.shipment.all_nexuses} component={ShipmentLocationBox} selectedRoute={this.state.selectedRoute} toggleCarriage={this.toggleCarriage}/>;
-        const value = this.state.selectedDay ? this.state.selectedDay.format('DD/MM/YYYY') : '';
+        const rSelect = <RouteSelector theme={theme} setRoute={this.selectRoute} publicRoutes={this.props.shipmentData.public_routes} privateRoutes={this.props.shipmentData.private_routes}/>;
+        const mapBox = <GmapsLoader theme={theme} selectLocation={this.setTargetLocation} allNexuses={this.props.shipmentData.all_nexuses} component={ShipmentLocationBox} selectedRoute={this.state.selectedRoute} toggleCarriage={this.toggleCarriage}/>;
+        const value = this.state.selectedDay ? moment(this.state.selectedDay).format('DD/MM/YYYY') : '';
         return (
         <div className="layout-row flex-100 layout-wrap" >
           <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
@@ -179,7 +180,7 @@ export class ShipmentDetails extends Component {
 
 ShipmentDetails.propTypes = {
     theme: PropTypes.object,
-    shipment: PropTypes.object,
+    shipmentData: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
     setShipmentDetails: PropTypes.func
