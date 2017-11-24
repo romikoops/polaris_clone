@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './NavSidebar.scss';
 import Style from 'style-it';
 
 export class NavSidebar extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
 
         this.state = {
             activeLink: 'profile'
@@ -61,3 +60,8 @@ export class NavSidebar extends Component {
         );
     }
 }
+
+NavSidebar.propTypes = {
+    theme: PropTypes.object,
+    navLinkInfo: PropTypes.array
+};
