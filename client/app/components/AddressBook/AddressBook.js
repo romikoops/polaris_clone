@@ -1,22 +1,23 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import './AddressBook.scss';
+import { v4 } from 'node-uuid';
 import { Checkbox } from '../Checkbox/Checkbox';
+import { RoundButton } from '../RoundButton/RoundButton';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
-        const ntfy = {};
-        if (this.props.contacts) {
-            this.props.contacts.forEach(c=>{
-                ntfy[c.contact.id] = false;
-            });
-        }
-        debugger;
+        // const ntfy = {};
+        // if (this.props.contacts) {
+        //     this.props.contacts.forEach(c=>{
+        //         ntfy[c.contact.id] = false;
+        //     });
+        // }
         this.state = {
             setShipper: true,
             setConsignee: false,
             setNotifyees: false,
-            selectedNotifyees: ntfy
+            selectedNotifyees: {}
         };
     }
     toggleNotifyees(id) {
@@ -24,7 +25,7 @@ export class AddressBook extends Component {
     }
 
     render() {
-        const { contacts, userLocations, setDetails } = this.props;
+        const { contacts, userLocations, setDetails, theme } = this.props;
         const shipperOptions = [...userLocations, ...contacts];
         const contactsArray = [];
         const shipperArray = [];
@@ -32,7 +33,7 @@ export class AddressBook extends Component {
         if (contacts) {
             contacts.forEach(c => {
                 contactsArray.push(
-                    <div className="flex-100 layout-row" onClick={setDetails('consignee', c)} >
+                    <div key={v4()} className="flex-100 layout-row" onClick={() => setDetails('consignee', c)} >
                         <div className="flex-20 layout-row layout-align-center-center">
                             <i className="fa fa-user-circle-o flex-none"></i>
                         </div>
@@ -57,7 +58,7 @@ export class AddressBook extends Component {
                     </div>
                 );
                 notifyeeArray.push(
-                    <div className="flex-100 layout-row">
+                    <div key={v4()} className="flex-100 layout-row">
                         <div className="flex-15 layout-row layout-align-center-center">
                             <i className="fa fa-user-circle-o flex-none"></i>
                         </div>
@@ -90,7 +91,7 @@ export class AddressBook extends Component {
         if (shipperOptions) {
             shipperOptions.forEach(c => {
                 shipperArray.push(
-                    <div className="flex-100 layout-row" onClick={setDetails('shipper', c)}>
+                    <div key={v4()} className="flex-100 layout-row" onClick={() => setDetails('shipper', c)}>
                         <div className="flex-20 layout-row layout-align-center-center">
                             <i className="fa fa-user-circle-o flex-none"></i>
                         </div>
@@ -116,6 +117,7 @@ export class AddressBook extends Component {
                 );
             });
         }
+        debugger;
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
           <div className="flex-75 layout-row layout-wrap">
@@ -125,10 +127,16 @@ export class AddressBook extends Component {
                 {this.state.setNotifyees ? <h1> Set Notifyees Details</h1> : ''}
             </div>
             <div className="flex-50 layout-row layout-wrap">
-                {this.state.setShipper ? {shipperArray} : ''}
-                {this.state.setConsignee ? {contactsArray} : ''}
-                {this.state.setNotifyees ? {notifyeeArray} : ''}
+                {this.state.setShipper ? shipperArray : ''}
+                {this.state.setConsignee ? contactsArray : ''}
+                {this.state.setNotifyees ? notifyeeArray : ''}
             </div>
+            <div className="flex-100 layout-row layout-align-center-center">
+                <div className="content-width layout-row layout-align-start-center button_padding">
+                    <RoundButton active handleNext={this.toNextStage} theme={theme} text="Done" />
+                    <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
+                </div>
+          </div>
           </div>
         </div>
       );
@@ -139,6 +147,7 @@ AddressBook.PropTypes = {
     userLocations: PropTypes.array,
     theme: PropTypes.object,
     setDetails: PropTypes.func,
+    closeAddressBook: PropTypes.func
 };
 
 

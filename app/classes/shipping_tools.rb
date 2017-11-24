@@ -142,6 +142,11 @@ module ShippingTools
 
   end
 
+  def create_document(file, shipment, type) 
+    byebug
+    Document.new_upload(file, shipment, type)
+  end
+
   def update_shipment(session, params)
     @shipment = Shipment.find(params[:shipment_id])
     create_documents(params, @shipment)
@@ -197,8 +202,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
     end
-    @origin = @shipment.origin
-    @destination = @shipment.destination
+    @origin = @schedules.first.starthub
+    @destination =  @schedules.last.endhub
     hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
@@ -230,19 +235,20 @@ module ShippingTools
 
     @shipment = Shipment.find(params[:shipment_id])
     @shipment.total_price = params[:total]
-    
+    @schedules = []
     params[:schedules].each do |sched|
-      @schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << @schedule.id
+      schedule = Schedule.find(sched[:id])
+      @shipment.schedule_set << schedule.id
+      @schedules << schedule
     end
     
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
-    @origin = @shipment.origin
-    @destination = @shipment.destination
+    @origin = @schedules.first.starthub
+    @destination =  @schedules.last.endhub
     @schedules = params[:schedules]
-    hubs = {startHub: @origin, endHub: @destination}
+    hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules}
   end
 

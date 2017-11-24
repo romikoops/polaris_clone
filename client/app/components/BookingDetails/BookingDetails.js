@@ -86,7 +86,7 @@ export class BookingDetails extends Component {
     }
     addNotifyee() {
         const prevArr = this.state.notifyees;
-        prevArr.push(this.state.default.notifyee);
+        prevArr.unshift(this.state.default.notifyee);
         this.setState({notifyees: prevArr});
     }
     handleInput(event) {
@@ -104,8 +104,11 @@ export class BookingDetails extends Component {
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
+        const ind = parseInt(targetKeys[1], 10);
+        const notifyees = this.state.notifyees;
+        notifyees[ind][targetKeys[2]] = value;
         this.setState({
-            [targetKeys[0]]: {...this.state[targetKeys[0]], [targetKeys[1]]: value}
+            notifyees: notifyees
         });
     }
     pushUpData() {
@@ -131,31 +134,37 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
+    closeBook() {
+        this.setState({addressBook: false});
+    }
 
     render() {
         const { theme, shipmentData } = this.props;
         const { shipment, hubs, contacts, userLocations, schedules } = shipmentData;
         const { consignee, shipper, notifyees } = this.state;
-        const addrView = this.state.addressBook ?
-        <AddressBook contacts={contacts} userLocations={userLocations} theme={theme} setDetails={this.setFromBook}/> :
-        <ShipmentContactsBox consignee={consignee} shipper={shipper} addNotifyee={this.addNotifyee} notifyees={notifyees} theme={theme} handleChange={this.handleInput} handleNotifyeeChange={this.handleNotifyeeInput}/>;
+        const aBook = <AddressBook contacts={contacts} userLocations={userLocations} theme={theme} setDetails={this.setFromBook} closeAddressBook={this.closeBook}/>;
+        const cForm = <ShipmentContactsBox consignee={consignee} shipper={shipper} addNotifyee={this.addNotifyee} notifyees={notifyees} theme={theme} handleChange={this.handleInput} handleNotifyeeChange={this.handleNotifyeeInput}/>;
+        const addrView = this.state.addressBook ? aBook : cForm;
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
             <div className="flex-100 layout-row layout-align-end-center">
               <RoundButton active text="Address Book" handleNext={this.toggleAddressBook}/>
             </div>
-          { shipment ? <RouteHubBox hubs={hubs} route={schedules} theme={theme}/> : ''}
+          { shipment && theme && hubs ? <RouteHubBox hubs={hubs} route={schedules} theme={theme}/> : ''}
           {addrView}
-          <CargoDetails handleChange={this.handleCargoInput}/>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <RoundButton active handleNext={this.toNextStage} text="Finish Booking" />
-            <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
+          <CargoDetails handleChange={this.handleCargoInput} shipmentData={shipmentData}/>
+          <div className="flex-100 layout-row layout-align-center-center">
+            <div className="content-width layout-row layout-align-start-center button_padding">
+                <RoundButton active handleNext={this.toNextStage} theme={theme} text="Finish Booking" />
+                <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
+            </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
-            <RoundButton back handleNext={this.toDashboard} text="Back to Dashboard" iconClass="fa-angle-left"/>
+          <div className="flex-100 layout-row layout-align-center-center">
+            <div className="content-width layout-row layout-align-start-center button_padding">
+                <RoundButton back handleNext={this.toDashboard} text="Back to Dashboard" iconClass="fa-angle-left"/>
+            </div>
           </div>
         </div>
-
       );
     }
 }
