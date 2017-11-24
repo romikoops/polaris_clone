@@ -21,6 +21,7 @@ class UserLocations extends Component {
     return <h1>UserLocations</h1>;
   }
 }
+
 class UserEmails extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +31,7 @@ class UserEmails extends Component {
     return <h1>UserEmails</h1>;
   }
 }
+
 class UserPassword extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +41,7 @@ class UserPassword extends Component {
     return <h1>UserPassword</h1>;
   }
 }
+
 class UserBilling extends Component {
   constructor(props) {
     super(props);
@@ -49,13 +52,7 @@ class UserBilling extends Component {
   }
 }
 
-export {
-  UserProfile,
-  UserLocations,
-  UserEmails,
-  UserPassword,
-  UserBilling
-};
+export { UserProfile, UserLocations, UserEmails, UserPassword, UserBilling };
 
 UserProfile.propTypes = {
   user: PropTypes.object
