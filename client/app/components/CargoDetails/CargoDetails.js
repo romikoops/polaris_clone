@@ -9,10 +9,12 @@ export class CargoDetails extends Component {
             insuranceView: true,
             customsView: true,
             hsCode: '',
-
+            cargoNotes: '',
+            totalGoodsValue: 0
         };
         this.toggleInsurance = this.toggleInsurance.bind(this);
         this.toggleCustoms = this.toggleCustoms.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
     toggleInsurance() {
         debugger;
@@ -25,6 +27,7 @@ export class CargoDetails extends Component {
     handleChange(event) {
       const { name, value } = event.target;
       this.setState({[name]: value});
+      this.props.handleChange(event);
     }
     render() {
         const insuranceBox = (
@@ -52,7 +55,7 @@ export class CargoDetails extends Component {
                   </strong>
                 </p>
                 <p className="flex-90">
-                  The customs clearance is typically given to a shipping agent to ve that all applicable customs duties have been paid and the shipment has been appoved.
+                  The customs clearance is typically given to a shipping agent to prove that all applicable customs duties have been paid and the shipment has been appoved.
                 </p>
             </div>
             <div className="flex-20 layout-row layout-wrap">
@@ -82,7 +85,7 @@ export class CargoDetails extends Component {
                     <h6 className="flex-none"> Total Value of Goods</h6>
                   </div>
                   <div className="flex-100">
-                    <input type="number" name="totalValue" value={this.state.totalValue} onChange={this.handleChange}/>
+                    <input type="number" name="totalGoodsValue" value={this.state.totalGoodsValue} onChange={this.handleChange}/>
                   </div>
                 </div>
 
@@ -100,7 +103,7 @@ export class CargoDetails extends Component {
                     <h6 className="flex-none"> Number and kind of packages, description of goods</h6>
                   </div>
                   <div className="flex-100">
-                    <textarea rows="6" name="descriptionOfGoods" value={this.state.descriptionOfGoods} onChange={this.handleChange}/>
+                    <textarea rows="6" name="cargoNotes" value={this.state.cargoNotes} onChange={this.handleChange}/>
                   </div>
                 </div>
 

@@ -143,39 +143,42 @@ module ShippingTools
   end
 
   def update_shipment(session, params)
-    @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
+    @shipment = Shipment.find(params[:shipment_id])
     create_documents(params, @shipment)
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
+    shipper_data = shipment_data[:shipper]
     contacts_data = shipment_data[:contacts_attributes]
 
-    @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hs_code], total_goods_value: shipment_data[:total_goods_value], cargo_notes: shipment_data[:cargo_notes])
+    @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hsCode], total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
 
-    contact_location = Location.create_and_geocode(street_address: consignee_data[:street_address], zip_code: consignee_data[:zip_code], city: consignee_data[:city], country: consignee_data[:country])
-    contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:first_name], last_name: consignee_data[:last_name], email: consignee_data[:email], phone: consignee_data[:phone])
+    contact_location = Location.create_and_geocode(street_number: consignee_data[:number], street: consignee_data[:street], zip_code: consignee_data[:zipCode], city: consignee_data[:city], country: consignee_data[:country])
+    contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:firstName], last_name: consignee_data[:lastName], email: consignee_data[:email], phone: consignee_data[:phone])
 
 
     @consignee = @shipment.shipment_contacts.create(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
+    notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
       contacts_data.values.each do |value|
 
-        notifyee = current_user.contacts.find_or_create_by(first_name: value[:first_name],
-                                                           last_name: value[:last_name],
+        notifyee = current_user.contacts.find_or_create_by(first_name: value[:firstName],
+                                                           last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
-        # @shipment.notifyees << notifyee
+        notifyee_contacts << notifyee
         @notifyees << @shipment.shipment_contacts.create(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
-    new_loc
+
     if !shipment_data[:shipper][:location_id]
-      new_loc = Location.create_and_geocode(street_address: shipment_data[:shipper][:street_address], zip_code: shipment_data[:shipper][:zip_code], city: shipment_data[:shipper][:city], country: shipment_data[:shipper][:country])
+      new_loc = Location.create_and_geocode(street: shipment_data[:shipper][:street], street_number: shipment_data[:shipper][:number], zip_code: shipment_data[:shipper][:zipCode], city: shipment_data[:shipper][:city], country: shipment_data[:shipper][:country])
     else 
       new_loc = Location.find(shipment_data[:shipper][:location_id])
     end
-    
+    shipper_contact = current_user.contacts.find_or_create_by(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
+    @shipper = @shipment.shipment_contacts.create(contact_id: shipper_contact.id, contact_type: 'shipper')
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
 
     if new_user_loc.id == 1
@@ -184,13 +187,34 @@ module ShippingTools
 
     @shipment.shipper_location = new_loc
     @shipment.save!
-
+    @schedules = []
+    @shipment.schedule_set.each do |id|
+      @schedules.push(Schedule.find(id))
+    end
+    if @shipment.cargo_items
+      @cargos = @shipment.cargo_items
+    end
+    if @shipment.containers
+      @containers = @shipment.containers
+    end
+    @origin = @shipment.origin
+    @destination = @shipment.destination
+    hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
 
     # session.delete(:shipment_uuid)
 
-    render 'new_booking_confirmation'
+    return {
+      shipment: @shipment,
+      schedules: @schedules,
+      hubs: hubs,
+      consignee: {data:contact, location: contact_location},
+      notifyees: notifyee_contacts,
+      shipper:{data:shipper_contact, location: new_loc},
+      cargoItems: @cargos,
+      containers: @containers
+    }
   end
 
   def finish_shipment_booking(params)

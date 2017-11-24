@@ -70,7 +70,7 @@ function setShipmentContacts(data) {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     };
-    const url = BASE_URL + '/shipments/' + data.shipment.id + '/update_booking';
+    const url = BASE_URL + '/shipments/' + data.shipment.id + '/update';
     return fetch(url, requestOptions).then(handleResponse);
 }
 

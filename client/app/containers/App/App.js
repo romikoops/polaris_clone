@@ -1,14 +1,15 @@
-import React, {Component} from 'react';
-import { Footer } from '../../components/Footer/Footer';
-import './App.scss';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import './App.scss';
 import Landing from '../Landing/Landing';
 import OpenShop from '../OpenShop/OpenShop';
+import { Footer } from '../../components/Footer/Footer';
+import UserAccount from '../UserAccount/UserAccount';
 // import PropsRoute from '../../routes/PropsRoute'; // <PropsRoute path="/landing" component={Landing} />
-import PropTypes from 'prop-types';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 // import { tenantDefaults } from '../../constants';
 // debugger;
 class App extends Component {
@@ -45,17 +46,36 @@ class App extends Component {
 
     render() {
         const { tenant, isFetching } = this.props;
+        const theme = tenant.data.theme;
         // const tenant = this.state.tenant;
         console.log(tenant);
         return (
-          <div className="layout-fill layout-column scroll">
-            {isFetching && <h2>Loading...</h2>}
-             <Switch className="flex">
-                <Route exact path="/" render={props => (<Landing theme={tenant.data.theme} {...props} />)}/>
-                <Route path="/open" render={props => (<OpenShop theme={tenant.data.theme} {...props} />)}/>
-              </Switch>
-            <Footer/>
-          </div>
+            <div className="layout-fill layout-column scroll">
+                {isFetching && <h2>Loading...</h2>}
+                <Switch className="flex">
+                    <Route
+                        exact
+                        path="/"
+                        render={props => <Landing theme={theme} {...props} />}
+                    />
+                    <Route
+                        path="/open"
+                        render={props => <OpenShop theme={theme} {...props} />}
+                    />
+
+                    {theme ? (
+                        <Route
+                            path="/account"
+                            render={props => (
+                                <UserAccount theme={theme} {...props} />
+                            )}
+                        />
+                    ) : (
+                        ''
+                    )}
+                </Switch>
+                <Footer />
+            </div>
         );
     }
 }
@@ -72,11 +92,9 @@ App.propTypes = {
 function mapStateToProps(state) {
     const { selectedSubdomain, tenant, authentication } = state;
     const { user, loggedIn } = authentication;
-    const {
-        isFetching
-      } = tenant || {
-          isFetching: true
-      };
+    const { isFetching } = tenant || {
+        isFetching: true
+    };
     return {
         selectedSubdomain,
         tenant,
@@ -87,4 +105,3 @@ function mapStateToProps(state) {
 }
 
 export default withRouter(connect(mapStateToProps)(App));
-

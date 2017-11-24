@@ -1,16 +1,13 @@
 :local {
+  @import '../../styles/defaults';
+
   .header {
     height: 100px;
     background-color: #ffffff;
+  }
 
-    h4 {
-      color: #000000;
-    }
-
-    img {
-      height: 80px;
-    }
-
+  img.logo {
+    height: 80px;
   }
 
 }
