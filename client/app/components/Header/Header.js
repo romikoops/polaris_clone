@@ -13,6 +13,11 @@ class Header extends Component {
 
     render() {
         const { user } = this.props;
+        const accountLinks = [
+            { url: '/account', text: 'Settings', fontAwesomeIcon: 'cog', key: 'settings' },
+            { url: '/signout', text: 'Sign out', fontAwesomeIcon: 'sign-out', key: 'signOut' }
+        ];
+
         return (
             <div
                 className={`${
@@ -24,7 +29,7 @@ class Header extends Component {
                         <img src={logo} className={styles.logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <NavDropdown user={user} />
+                        <NavDropdown user={user} linkOptions={accountLinks} />
                     </div>
                 </div>
             </div>

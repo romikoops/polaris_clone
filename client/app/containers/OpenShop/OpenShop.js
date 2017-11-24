@@ -108,11 +108,8 @@ class OpenShop extends Component {
         const route4 = this.props.match.url + '/:shipmentId/finish_booking';
         return (
             <div className="layout-row flex-100 layout-wrap">
-<<<<<<< HEAD
                 <Header theme={this.props.theme} />
 
-=======
->>>>>>> master
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={this.props.match}
