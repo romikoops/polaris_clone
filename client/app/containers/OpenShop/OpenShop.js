@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment';
+import Header from '../../components/Header/Header';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
@@ -18,8 +19,9 @@ import './OpenShop.scss';
 class OpenShop extends Component {
     constructor(props) {
         super(props);
+
         this.tenant = this.props.tenant;
-        console.log(this.props);
+
         this.state = {
             shipmentOptions: OPEN_SHIPMENT_TYPES,
             shipmentStages: SHIPMENT_STAGES,
@@ -109,8 +111,9 @@ class OpenShop extends Component {
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
         return (
-
             <div className="layout-row flex-100 layout-wrap">
+                <Header theme={this.props.theme} />
+
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}

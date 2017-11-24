@@ -5,7 +5,6 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
-import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 
 export class BookingDetails extends Component {

@@ -40,7 +40,8 @@
     "redux-auth": "0.0.5-beta5",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "resolve-url-loader": "^2.1.1"
+    "resolve-url-loader": "^2.1.1",
+    "style-it": "^1.6.13"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
