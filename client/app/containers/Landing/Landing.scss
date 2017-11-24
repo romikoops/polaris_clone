@@ -1,17 +1,38 @@
-.service_box {
-  height: 250px;
-  width: 100%;
-}
 .service_label{
-  background-color: #F8F6F6;
-  margin: 1rem 0;
+  background-color: #F6F4F6;
+  padding: 70px 0 40px 0;
+  h2 {
+    font-weight: normal;
+  }
 }
-.service_label h2{
+.services_row {
+  position: relative;
+  box-shadow: 0 1.5px 8px rgba(black, .12);
+  background: white;
+  padding: 50px 0;
+  margin-top: -10px;
+  h3 {
+    font-weight: normal;
+  }
+}
+.services_row:before {
+  top: 0;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 12px solid white;
 
+  box-sizing: border-box;
+    
+  transform-origin: 0 0;
+  transform: rotate(135deg);
+  
+  box-shadow: -0.5px 0.5px 0.5px rgba(black, .05);
 }
-.service_row {
-  height:max-content;
-}
+
 .service_row .service {
   height: 150px;
   width: 150px;

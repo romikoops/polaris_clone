@@ -56,13 +56,13 @@ export class ActiveRoutes extends Component {
             activeRouteBoxes.push(arb);
         });
         return (
-      <div className="layout-row flex-100 layout-wrap active_routes">
-        <div className="service_label layout-row layout-align-center-center flex-100">
-            <h2 className="flex-none"> Active LCL Routes </h2>
-        </div>
-        {activeRouteBoxes}
-      </div>
-    );
+          <div className="layout-row flex-100 layout-wrap active_routes">
+            <div className="service_label layout-row layout-align-center-center flex-100">
+                <h2 className="flex-none">Active LCL Routes</h2>
+            </div>
+            {activeRouteBoxes}
+          </div>
+        );
     }
 }
 
