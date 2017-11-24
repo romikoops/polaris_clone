@@ -176,7 +176,7 @@ export class ShipmentLocationBox extends Component {
         const val = event.target.value;
         this.setState({
             [key1]: {
-                [key2]: val
+                ...this.state[key1], [key2]: val
             }
         });
     }
