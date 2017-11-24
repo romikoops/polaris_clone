@@ -8,10 +8,12 @@ import accountIcon from '../../assets/images/icons/person-dark.svg';
 class Header extends Component {
     constructor(props) {
         super(props);
+
+        // console.log(props);
     }
 
     render() {
-        const { user } = this.props;
+        const { user, theme } = this.props;
         const dropDownText = user.data.first_name + ' ' + user.data.last_name;
         const dropDownImage = accountIcon;
 
@@ -38,7 +40,11 @@ class Header extends Component {
             >
                 <div className="content-width layout-row flex-none">
                     <div className="layout-row flex-50 layout-align-start-center">
-                        <img src={this.props.theme.logoLarge} className={styles.logo} alt="" />
+                        <img
+                            src={theme ? theme.logoLarge : ''}
+                            className={styles.logo}
+                            alt=""
+                        />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
                         <NavDropdown

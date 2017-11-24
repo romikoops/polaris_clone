@@ -46,6 +46,7 @@ class App extends Component {
 
     render() {
         const { tenant, isFetching } = this.props;
+        const theme = tenant.data.theme;
         // const tenant = this.state.tenant;
         console.log(tenant);
         return (
@@ -55,22 +56,23 @@ class App extends Component {
                     <Route
                         exact
                         path="/"
-                        render={props => (
-                            <Landing theme={tenant.data.theme} {...props} />
-                        )}
+                        render={props => <Landing theme={theme} {...props} />}
                     />
                     <Route
                         path="/open"
-                        render={props => (
-                            <OpenShop theme={tenant.data.theme} {...props} />
-                        )}
+                        render={props => <OpenShop theme={theme} {...props} />}
                     />
-                    <Route
-                        path="/account"
-                        render={props => (
-                            <UserAccount theme={tenant.data.theme} {...props} />
-                        )}
-                    />
+
+                    {theme ? (
+                        <Route
+                            path="/account"
+                            render={props => (
+                                <UserAccount theme={theme} {...props} />
+                            )}
+                        />
+                    ) : (
+                        ''
+                    )}
                 </Switch>
                 <Footer />
             </div>
