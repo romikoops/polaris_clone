@@ -14,11 +14,22 @@ class Header extends Component {
 
     render() {
         const { user } = this.props;
+        const dropDownText = user.data.first_name + ' ' + user.data.last_name;
         const dropDownImage = accountIcon;
 
         const accountLinks = [
-            { url: '/account', text: 'Settings', fontAwesomeIcon: 'fa-cog', key: 'settings' },
-            { url: '/signout', text: 'Sign out', fontAwesomeIcon: 'fa-sign-out', key: 'signOut' }
+            {
+                url: '/account',
+                text: 'Settings',
+                fontAwesomeIcon: 'fa-cog',
+                key: 'settings'
+            },
+            {
+                url: '/signout',
+                text: 'Sign out',
+                fontAwesomeIcon: 'fa-sign-out',
+                key: 'signOut'
+            }
         ];
 
         return (
@@ -32,7 +43,11 @@ class Header extends Component {
                         <img src={logo} className={styles.logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <NavDropdown user={user} dropDownImage={dropDownImage} linkOptions={accountLinks} />
+                        <NavDropdown
+                            dropDownText={dropDownText}
+                            dropDownImage={dropDownImage}
+                            linkOptions={accountLinks}
+                        />
                     </div>
                 </div>
             </div>

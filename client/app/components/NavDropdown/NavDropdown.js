@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { history } from '../../helpers';
 import styles from './NavDropdown.scss';
 
 export class NavDropdown extends Component {
     constructor(props) {
         super(props);
     }
-
-    handleClick() {}
 
     render() {
         const links = this.props.linkOptions.map(op => {
@@ -34,11 +31,8 @@ export class NavDropdown extends Component {
                         className={styles.dropDownImage}
                         alt=""
                     />
-                    {this.props.user ? (
-                        <span>
-                            {this.props.user.data.first_name}{' '}
-                            {this.props.user.data.last_name}
-                        </span>
+                    {this.props.dropDownText ? (
+                        <span>{this.props.dropDownText}</span>
                     ) : (
                         ''
                     )}

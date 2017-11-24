@@ -19,8 +19,9 @@ import './OpenShop.scss';
 class OpenShop extends Component {
     constructor(props) {
         super(props);
+
         this.tenant = this.props.tenant;
-        console.log(this.props);
+
         this.state = {
             shipmentOptions: OPEN_SHIPMENT_TYPES,
             shipmentStages: SHIPMENT_STAGES,
