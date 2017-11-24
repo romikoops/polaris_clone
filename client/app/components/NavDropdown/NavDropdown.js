@@ -13,8 +13,12 @@ export class NavDropdown extends Component {
 
     render() {
         const links = this.props.linkOptions.map(op => {
+            const icon = (
+                <i className={`fa ${op.fontAwesomeIcon} spacing-sm-right`} aria-hidden="true" />
+            );
             return (
                 <a key={op.key} href={op.url}>
+                    {op.fontAwesomeIcon ? icon : ''}
                     {op.text}
                 </a>
             );

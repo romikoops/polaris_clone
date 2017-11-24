@@ -14,8 +14,8 @@ class Header extends Component {
     render() {
         const { user } = this.props;
         const accountLinks = [
-            { url: '/account', text: 'Settings', fontAwesomeIcon: 'cog', key: 'settings' },
-            { url: '/signout', text: 'Sign out', fontAwesomeIcon: 'sign-out', key: 'signOut' }
+            { url: '/account', text: 'Settings', fontAwesomeIcon: 'fa-cog', key: 'settings' },
+            { url: '/signout', text: 'Sign out', fontAwesomeIcon: 'fa-sign-out', key: 'signOut' }
         ];
 
         return (
