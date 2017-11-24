@@ -1,5 +1,7 @@
+@import "../../styles/defaults";
+
 .service_label{
-  background-color: #F6F4F6;
+  background-color: $light-grey;
   padding: 70px 0 40px 0;
   h2 {
     font-weight: normal;

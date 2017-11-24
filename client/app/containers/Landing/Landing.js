@@ -51,7 +51,7 @@ class Landing extends Component {
             </div>
           </div>
           <ActiveRoutes className="mc" theme={theme} />
-          <BlogPostHighlights/>
+          <BlogPostHighlights theme={theme} />
           <div className="btm_promo flex-100 layout-row">
             <div className="flex-50 btm_promo_img">
             </div>
