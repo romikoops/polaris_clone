@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // { loggedIn ? <LandingTopAuthed className="flex-100" theme={this.props.theme} /> : <LandingTop className="flex-100" theme={this.props.theme} /> }
 import './Landing.scss';
+import { RoundButton } from '../../components/RoundButton/RoundButton';
 class Landing extends Component {
     constructor(props) {
         super(props);
@@ -56,7 +57,7 @@ class Landing extends Component {
             <div className="flex-50 btm_promo_img">
             </div>
             <div className="flex-50 btm_promo_text layout-row layout-align-start-center">
-              <div className="flex-50 layout-column">
+              <div className="flex-80 layout-column">
                 <div className="flex-20 layout-column layout-align-center-start">
                   <h2> Enjoy the most advanced and easy to use booking system on the planet </h2>
                 </div>
@@ -78,7 +79,8 @@ class Landing extends Component {
                     <p> real time updates </p>
                   </div>
                 </div>
-                <div className="flex-20 layout-column layout-align-center-start">
+                <div className="btm_promo_btn_wrapper flex-20 layout-column layout-align-start-left">
+                  <RoundButton text="sign up" theme={theme} active/>
                 </div>
               </div>
             </div>

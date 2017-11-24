@@ -55,3 +55,24 @@
   background-size: cover;
   background-position: center;
 }
+.btm_promo_text {
+  padding: 35px 70px;
+  h2 {
+    font-weight: normal;
+    font-size: 21px;
+  }
+  p {
+    font-size: 18px;
+  }
+}
+
+.btm_promo_btn_wrapper {
+  margin: 20px 0;
+}
+
+.btm_promo {
+  i {
+    color: $green;
+    margin-right: 10px;
+  }
+}
