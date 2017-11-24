@@ -37,20 +37,17 @@ export class ActiveRoutes extends Component {
                 image: 'https://assets.itsmycargo.com/assets/images/welcome/country/Shenzhen.jpg'
             }
         ];
-        const theme = this.props.theme;
+        // const theme = this.props.theme;
         const activeRouteBoxes = [];
         activeRoutesData.map((route, index) => {
             let divStyle = {
                 backgroundImage: 'url(' + route.image + ')',
             };
-            let textStyle = {
-                background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-            };
 
             const arb = (<div key={index} className="active_route flex-33 layout-row layout-align-center-center" style={divStyle}>
                 <div className="flex-none layout-column layout-align-center-center">
-                  <h2 className="city flex-none" style={textStyle} > {route.name} </h2>
-                  <h5 className="country flex-none"> {route.name} </h5>
+                  <h2 className="city flex-none"> {route.name} </h2>
+                  <h5 className="country flex-none"> [TBD - Country] </h5>
                 </div>
             </div>);
             activeRouteBoxes.push(arb);
