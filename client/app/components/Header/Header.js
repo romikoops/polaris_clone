@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
-import logo from '../../assets/images/logos/logo_black.png';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
 
 class Header extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
     }
 
     render() {
@@ -40,7 +38,7 @@ class Header extends Component {
             >
                 <div className="content-width layout-row flex-none">
                     <div className="layout-row flex-50 layout-align-start-center">
-                        <img src={logo} className={styles.logo} alt="" />
+                        <img src={this.props.theme.logoLarge} className={styles.logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
                         <NavDropdown

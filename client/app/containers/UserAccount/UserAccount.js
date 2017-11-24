@@ -10,8 +10,6 @@ import './UserAccount.scss';
 class UserAccount extends Component {
     constructor(props) {
         super(props);
-        // this.tenant = this.props.tenant;
-        // console.log(this.props);
         this.state = {};
     }
 
