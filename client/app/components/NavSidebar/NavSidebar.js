@@ -6,28 +6,20 @@ import Style from 'style-it';
 export class NavSidebar extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            activeLink: 'profile'
-        };
-
-        this.toggleActiveClass = this.toggleActiveClass.bind(this);
-    }
-
-    toggleActiveClass(key) {
-        this.setState({ activeLink: key });
     }
 
     render() {
-        const navLinks = this.props.navLinkInfo.map(op => {
+        const { navLinkInfo, activeLink, toggleActiveClass, theme, navHeadlineInfo } = this.props;
+        // debugger;
+        const navLinks = navLinkInfo.map(op => {
             return (
                 <div
                     key={op.key}
                     className={[
                         styles['menu-item'],
-                        op.key === this.state.activeLink ? 'active' : null
+                        op.key === activeLink ? 'active' : null
                     ].join(' ')}
-                    onClick={() => this.toggleActiveClass(op.key)}
+                    onClick={() => toggleActiveClass(op.key)}
                 >
                     {op.text}
                 </div>
@@ -46,14 +38,14 @@ export class NavSidebar extends Component {
                             width: 2px;
                             content: '';
                             background-color: ${
-                                this.props.theme.colors.primary
+                                theme.colors.primary
                             };
                          }
                     `}
                 </Style>
 
                 <nav className={styles.menu}>
-                    <h3 className={styles['menu-heading']}>{this.props.navHeadlineInfo}</h3>
+                    <h3 className={styles['menu-heading']}>{navHeadlineInfo}</h3>
                     {navLinks}
                 </nav>
             </div>
