@@ -9,8 +9,14 @@ export class NavSidebar extends Component {
     }
 
     render() {
-        const { navLinkInfo, activeLink, toggleActiveClass, theme, navHeadlineInfo } = this.props;
-        // debugger;
+        const {
+            navLinkInfo,
+            activeLink,
+            toggleActiveClass,
+            theme,
+            navHeadlineInfo
+        } = this.props;
+
         const navLinks = navLinkInfo.map(op => {
             return (
                 <div
@@ -37,15 +43,15 @@ export class NavSidebar extends Component {
                             left: 0;
                             width: 2px;
                             content: '';
-                            background-color: ${
-                                theme.colors.primary
-                            };
+                            background-color: ${theme.colors.primary};
                          }
                     `}
                 </Style>
 
                 <nav className={styles.menu}>
-                    <h3 className={styles['menu-heading']}>{navHeadlineInfo}</h3>
+                    <h3 className={styles['menu-heading']}>
+                        {navHeadlineInfo}
+                    </h3>
                     {navLinks}
                 </nav>
             </div>

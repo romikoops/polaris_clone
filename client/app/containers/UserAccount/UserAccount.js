@@ -5,6 +5,13 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
+import {
+    UserProfile,
+    UserLocations,
+    UserEmails,
+    UserPassword,
+    UserBilling
+} from '../../components/UserAccount/UserAccount';
 
 import './UserAccount.scss';
 
@@ -36,19 +43,19 @@ class UserAccount extends Component {
         let viewComponent;
         switch (this.state.activeLink) {
             case 'profile':
-                viewComponent = <h1>pro</h1>;
+                viewComponent = <UserProfile />;
                 break;
             case 'locations':
-                viewComponent = <h1>locations</h1>;
+                viewComponent = <UserLocations />;
                 break;
             case 'emails':
-                viewComponent = <h1>emails</h1>;
+                viewComponent = <UserEmails />;
                 break;
             case 'password':
-                viewComponent = <h1>password</h1>;
+                viewComponent = <UserPassword />;
                 break;
             case 'billing':
-                viewComponent = <h1>billing</h1>;
+                viewComponent = <UserBilling />;
                 break;
             default:
                 viewComponent = <h1>pro</h1>;
