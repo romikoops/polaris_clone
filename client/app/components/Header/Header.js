@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
 import logo from '../../assets/images/logos/logo_black.png';
+import accountIcon from '../../assets/images/icons/person-dark.svg';
 
 class Header extends Component {
     constructor(props) {
@@ -13,6 +14,8 @@ class Header extends Component {
 
     render() {
         const { user } = this.props;
+        const dropDownImage = accountIcon;
+
         const accountLinks = [
             { url: '/account', text: 'Settings', fontAwesomeIcon: 'fa-cog', key: 'settings' },
             { url: '/signout', text: 'Sign out', fontAwesomeIcon: 'fa-sign-out', key: 'signOut' }
@@ -29,7 +32,7 @@ class Header extends Component {
                         <img src={logo} className={styles.logo} alt="" />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <NavDropdown user={user} linkOptions={accountLinks} />
+                        <NavDropdown user={user} dropDownImage={dropDownImage} linkOptions={accountLinks} />
                     </div>
                 </div>
             </div>
