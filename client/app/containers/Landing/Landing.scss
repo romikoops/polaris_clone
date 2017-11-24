@@ -1,5 +1,8 @@
 @import "../../styles/defaults";
 
+.wrapper_landing {
+  background: $light-grey;
+}
 .service_label{
   background-color: $light-grey;
   padding: 70px 0 40px 0;
@@ -71,6 +74,9 @@
 }
 
 .btm_promo {
+  margin-bottom: 120px;
+  background: white;
+  box-shadow: 0 1.5px 8px rgba(black, .12);
   i {
     color: $green;
     margin-right: 10px;

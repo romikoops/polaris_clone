@@ -23,7 +23,7 @@ class Landing extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         return (
-        <div className="layout-row flex-100 layout-wrap" >
+        <div className="wrapper_landing layout-row flex-100 layout-wrap" >
           { loggedIn ? <LandingTopAuthed className="flex-100" theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
           <div className="service_box layout-row flex-100 layout-wrap">
             <div className="service_label layout-row layout-align-center-center flex-100">
