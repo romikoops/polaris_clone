@@ -22,6 +22,10 @@ class Landing extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const primaryColor = {
+          color: theme && theme.colors ? theme.colors.primary : 'black'
+        };
+        const logo = theme ? theme.logo  : '';
         return (
         <div className="wrapper_landing layout-row flex-100 layout-wrap" >
           { loggedIn ? <LandingTopAuthed className="flex-100" theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
@@ -81,6 +85,23 @@ class Landing extends Component {
                 </div>
                 <div className="btm_promo_btn_wrapper flex-20 layout-column layout-align-start-left">
                   <RoundButton text="sign up" theme={theme} active/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="contact_bar flex-100 layout-row layout-align-center-center">
+            <div className="flex-none content-width layout-row">
+              <div className="flex-50 layout-row layout-align-start-center">
+                <img src={logo} />
+              </div>
+              <div className="flex-50 layout-row layout-align-end-end">
+                <div className="flex-none layout-row layout-align-center-center contact_elem">
+                  <i className="fa fa-envelope" aria-hidden="true" style={primaryColor}></i>
+                  [ TBD - support@greencarrier.com ]
+                </div>
+                <div className="flex-none layout-row layout-align-center-end contact_elem">
+                  <i className="fa fa-phone" aria-hidden="true" style={primaryColor}></i>
+                  [ TBD - 0172 304 203 1020 ]
                 </div>
               </div>
             </div>
