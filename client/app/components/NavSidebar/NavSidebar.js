@@ -53,7 +53,7 @@ export class NavSidebar extends Component {
                 </Style>
 
                 <nav className={styles.menu}>
-                    <h3 className={styles['menu-heading']}>Account Settings</h3>
+                    <h3 className={styles['menu-heading']}>{this.props.navHeadlineInfo}</h3>
                     {navLinks}
                 </nav>
             </div>

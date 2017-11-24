@@ -14,6 +14,7 @@ class UserAccount extends Component {
     }
 
     render() {
+        const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
             { key: 'profile', text: 'Profile' },
             { key: 'locations', text: 'Locations' },
@@ -26,13 +27,21 @@ class UserAccount extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-center">
                 <Header theme={this.props.theme} />
 
-                <div className="content-width layout-row flex-none">
-                    <div className="layout-row flex-20 layout-align-start">
-
+                <div className="content-width layout-row flex-none spacing-md-top spacing-md-bottom">
+                    <div className="layout-row flex-20">
                         <NavSidebar
                             theme={this.props.theme}
+                            navHeadlineInfo={navHeadlineInfo}
                             navLinkInfo={navLinkInfo}
                         />
+                    </div>
+
+                    <div className="layout-row flex-80">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit. In ducimus velit quibusdam alias perferendis!
+                        Reprehenderit nisi natus reiciendis ipsam maiores
+                        commodi iure, corrupti! Odio, ratione consequatur.
+                        Adipisci placeat, in dolores?
                     </div>
                 </div>
             </div>
