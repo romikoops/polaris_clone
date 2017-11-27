@@ -15,9 +15,58 @@ class UserProfile extends Component {
 class UserLocations extends Component {
     constructor(props) {
         super(props);
+
+        console.log(this.props);
     }
 
     render() {
+        const locationInfo = [
+            {
+                key: 'addr1',
+                isPrimary: true,
+                content:
+                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, cumque.'
+            },
+            {
+                key: 'addr2',
+                isPrimary: false,
+                content:
+                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+            },
+            {
+                key: 'addr3',
+                isPrimary: false,
+                content:
+                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse!'
+            }
+        ];
+
+        const locations = locationInfo.map(op => {
+            return (
+                <div key={op.key} className={'flex-33'}>
+                    <div className={`${styles['location-box']}`}>
+                        <div className={`${styles.header}`}>
+                            {op.isPrimary ? (
+                                <h3 className={`${styles.standard}`}>
+                                    Standard
+                                </h3>
+                            ) : (
+                                <h3 className={`${styles.other}`}>Other</h3>
+                            )}
+                        </div>
+                        <div className={`${styles.content}`}>{op.content}</div>
+                        <div className={`${styles.footer}`}>
+                            <div className="layout-row layout-align-center-center">
+                                <span>Edit</span>
+                                &nbsp; | &nbsp;
+                                <span>Delete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        });
+
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <div className={'flex-33'}>
@@ -36,101 +85,7 @@ class UserLocations extends Component {
                     </div>
                 </div>
 
-                <div className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            <h3>Standard</h3>
-                        </div>
-                        <div className={`${styles.content}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Dolores sunt dolor eaque iure vitae magnam ad
-                            saepe porro maxime nisi?
-                        </div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            <h3>Standard</h3>
-                        </div>
-                        <div className={`${styles.content}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Dolores sunt dolor eaque iure vitae magnam ad
-                            saepe porro maxime nisi?
-                        </div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            <h3>Standard</h3>
-                        </div>
-                        <div className={`${styles.content}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Dolores sunt dolor eaque iure vitae magnam ad
-                            saepe porro maxime nisi?
-                        </div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            <h3>Standard</h3>
-                        </div>
-                        <div className={`${styles.content}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Dolores sunt dolor eaque iure vitae magnam ad
-                            saepe porro maxime nisi?
-                        </div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            <h3>Standard</h3>
-                        </div>
-                        <div className={`${styles.content}`}>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing
-                            elit. Dolores sunt dolor eaque iure vitae magnam ad
-                            saepe porro maxime nisi?
-                        </div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {locations}
             </div>
         );
     }

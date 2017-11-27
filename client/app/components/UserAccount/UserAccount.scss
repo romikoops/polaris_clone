@@ -10,9 +10,19 @@
     border-radius: 3px;
 
     .header {
+      height: 28px;
+
       h3 {
-        color: #6b6b6b;
         margin: 5px;
+
+        &.standard {
+          color: black;
+        }
+
+        &.other {
+          color: #5e5e5e;
+        }
+
       }
 
       border-bottom: 1px solid #c7c7c7;
@@ -53,8 +63,6 @@
     box-shadow: none;
 
     div {
-      margin: 0;
-
       h3 {
         margin: 5px 0;
         color: #6b6b6b;
