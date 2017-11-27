@@ -6,7 +6,7 @@ export const SHIPMENT_TYPES = [
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.jpg',
         code: 'fcl',
     }
 ];
@@ -19,30 +19,35 @@ export const OPEN_SHIPMENT_TYPES = [
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.jpg',
         code: 'openfcl',
     }
 ];
 
 export const SHIPMENT_STAGES = [
     {
-        step: 1,
+        step: 0,
         text: 'Choose shipment type',
         header: 'Choose shipment'
     },
     {
+        step: 1,
+        text: 'Shipment Details',
+        header: 'Shipment Details'
+    },
+    {
         step: 2,
-        text: '',
+        text: 'Choose Route',
         header: 'Choose Route'
     },
     {
         step: 3,
-        text: '',
+        text: 'Booking overview & details',
         header: 'Booking Details'
     },
     {
         step: 4,
-        text: '',
+        text: 'Booking Confirmation',
         header: 'Booking Confirmation'
     }
 ];

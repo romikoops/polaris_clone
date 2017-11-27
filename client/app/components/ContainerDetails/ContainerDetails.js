@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-// import styles from './CargoItemDetails.scss';
+import { CONTAINER_DESCRIPTIONS } from '../../constants';
+import styles from './ContainerDetails.scss';
 import PropTypes from 'prop-types';
 
 export class ContainerDetails extends Component {
@@ -7,9 +8,10 @@ export class ContainerDetails extends Component {
         super(props);
     }
     render() {
+        const cDesc = CONTAINER_DESCRIPTIONS;
         const { index, item } = this.props;
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center">
+            <div className={` ${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Unit {index + 1 }</h4>
                 </div>
@@ -19,7 +21,7 @@ export class ContainerDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p className="flex-none">Container Class</p>
-                    <p className="flex-none">{item.size_class} cm</p>
+                    <p className="flex-none">{cDesc[item.size_class]} </p>
                 </div>
             </div>
         );

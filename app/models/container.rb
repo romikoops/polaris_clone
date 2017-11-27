@@ -4,9 +4,10 @@ class Container < ApplicationRecord
   # Class methods
   def self.extract_containers(params)
     containers = []
-    params.each_key do |key|
-      value = params["#{key}"]
-      size_class = value["size_class"]
+    
+    params.each do |value|
+      byebug
+      size_class = value["sizeClass"]
       payload_in_kg = value["payload_in_kg"].to_d
       tare_weight = CONTAINER_WEIGHTS[size_class].to_d
       gross_weight = tare_weight + payload_in_kg

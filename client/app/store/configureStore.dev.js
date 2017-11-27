@@ -5,7 +5,8 @@ import { applyMiddleware, createStore, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
 import DevTools from '../containers/DevTools';
-
+import { saveState, loadState } from '../helpers';
+import throttle from 'lodash/throttle';
 export const history = createHistory();
 const middleware = routerMiddleware(history);
 
@@ -21,16 +22,22 @@ const middleware = routerMiddleware(history);
 //     );
 // }
 const loggerMiddleware = createLogger();
+const persistedState = loadState();
 
-export function configureStore(initialState) {
-    const store = createStore(rootReducer, initialState, compose(
+export function configureStore() {
+    const store = createStore(rootReducer, persistedState, compose(
             applyMiddleware(
                 middleware,
                 thunkMiddleware,
                 loggerMiddleware),
             DevTools.instrument()
         ));
-
+    store.subscribe(throttle(() => {
+        saveState({
+            bookingData: store.getState().bookingData,
+            tenant: store.getState().tenant
+        });
+    }), 1000);
     if (module.hot) {
     // Enable Webpack hot module replacement for reducers
         module.hot.accept('../reducers', () => {

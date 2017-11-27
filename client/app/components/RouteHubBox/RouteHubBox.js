@@ -27,17 +27,20 @@ export class RouteHubBox extends Component {
     render() {
         const { theme, hubs, route } = this.props;
         const {startHub, endHub} = hubs;
-        const themeColour = { color: theme.colors ? theme.colors.primary : 'white'};
+        // const themeColour = { color: theme.colors ? theme.colors.primary : 'white'};
         const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
         const borderStyle = {
             borderImage: borderColour
         };
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         return (
-        <div className="flex-100 layout-row layout-align-center-center">
-          <div className="flex-75 layout-row layout-align-start-center">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-none content-width layout-row layout-align-start-center">
             <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
-                <i className="fa fa-map-marker" style={themeColour}/>
+                <i className="fa fa-map-marker" style={textStyle}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <h6 className="flex-100"> {startHub.data.name} </h6>
@@ -51,9 +54,9 @@ export class RouteHubBox extends Component {
                 </div>
             </div>
 
-            <div className="flex-none hub_card layout-row">
+            <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
-                <i className="fa fa-flag" style={themeColour}/>
+                <i className="fa fa-flag" style={textStyle}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <h6 className="flex-100"> {endHub.data.name} </h6>

@@ -1,13 +1,20 @@
 import { shipmentConstants } from '../constants';
-
+import merge from 'lodash/merge';
 export function shipment(state = {}, action) {
     switch (action.type) {
         case shipmentConstants.NEW_SHIPMENT_REQUEST:
             return {
+                request: {
+                    stage1: action.shipmentData
+                },
                 loading: true
             };
         case shipmentConstants.NEW_SHIPMENT_SUCCESS:
-            return action.shipmentData;
+            return {
+               response: {
+                    stage1: action.shipmentData
+               }
+            };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             return {
                 error: action.error
@@ -25,12 +32,15 @@ export function shipment(state = {}, action) {
             };
 
         case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
-            return {
-                loading: true
-            };
+            const req2 = merge({}, state, {request: { stage2: action.shipmentData }, loading: true});
+            return req2;
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
-            // return action.shipmentData;
-            return  Object.assign({}, state.shipment, action.shipmentData);
+            const resp2 = merge({}, state, {response: { stage2: action.shipmentData }});
+            return resp2;
+            // return {
+            //    response: { ...state.response, stage2: action.shipmentData}
+            // };
+            // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
             return {
                 error: action.error
@@ -38,24 +48,22 @@ export function shipment(state = {}, action) {
 
 
         case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
-            return {
-                loading: true
-            };
+            const req3 = merge({}, state, {request: { stage3: action.shipmentData }, loading: true});
+            return req3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
-            // return action.shipmentData;
-            return  Object.assign({}, state.shipment, action.shipmentData);
+            const resp3 = merge({}, state, {response: { stage3: action.shipmentData }});
+            return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             return {
                 error: action.error
             };
 
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
-            return {
-                loading: true
-            };
+            const req4 = merge({}, state, {request: { stage3: action.shipmentData }, loading: true});
+            return req4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
-            // return action.shipmentData;
-            return  Object.assign({}, state.shipment, action.shipmentData);
+            const resp4 = merge({}, state, {response: { stage4: action.shipmentData }});
+            return resp4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
             return {
                 error: action.error

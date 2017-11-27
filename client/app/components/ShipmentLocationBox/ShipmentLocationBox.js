@@ -4,10 +4,11 @@ import Toggle from 'react-toggle';
 import 'react-toggle/style.css';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import styles from './ShipmentLocationBox.scss';
 
 const mapStyle = {
-    width: '400px',
-    height: '200px'
+    width: '100%',
+    height: '400px'
 };
 
 export class ShipmentLocationBox extends Component {
@@ -90,14 +91,13 @@ export class ShipmentLocationBox extends Component {
                 }]
             }]
         };
-        const map1 = new this.props.gMaps.Map(document.getElementById('origin-map'), mapsOptions);
-        const map2 = new this.props.gMaps.Map(document.getElementById('destination-map'), mapsOptions);
-        this.setState({map1, map2});
+        const map = new this.props.gMaps.Map(document.getElementById('map'), mapsOptions);
+        this.setState({map});
         if (this.state.shipment.has_pre_carriage) {
-            this.initAutocomplete(map1, 'origin');
+            this.initAutocomplete(map, 'origin');
         }
         if (this.state.shipment.has_on_carriage) {
-            this.initAutocomplete(map2, 'destination');
+            this.initAutocomplete(map, 'destination');
         }
     }
     initAutocomplete(map, target) {
@@ -109,12 +109,12 @@ export class ShipmentLocationBox extends Component {
         this.autocompleteListener(map, autocomplete, target);
     }
     postToggleAutocomplete(target) {
-        const { map1, map2 } = this.state;
+        const { map } = this.state;
         if (target === 'origin') {
-            setTimeout(function() { this.initAutocomplete(map1, target);}.bind(this), 1000);
+            setTimeout(function() { this.initAutocomplete(map, target);}.bind(this), 1000);
         }
         if (target === 'destination') {
-            setTimeout(function() { this.initAutocomplete(map2, target);}.bind(this), 1000);
+            setTimeout(function() { this.initAutocomplete(map, target);}.bind(this), 1000);
         }
     }
     autocompleteListener(aMap, autocomplete, target) {
@@ -156,6 +156,9 @@ export class ShipmentLocationBox extends Component {
             this.selectLocation(place, target);
         });
     }
+    addMarkerToMap(location) {
+        console.log(location);
+    }
     handleTrucking(event) {
         const { name, checked } = event.target;
         this.setState({shipment: {...this.state.shipment, [name]: checked}} );
@@ -176,7 +179,7 @@ export class ShipmentLocationBox extends Component {
         const val = event.target.value;
         this.setState({
             [key1]: {
-                [key2]: val
+                ...this.state[key1], [key2]: val
             }
         });
     }
@@ -229,32 +232,32 @@ export class ShipmentLocationBox extends Component {
             });
         }
         const originHubSelect = (
-            <Select name="origin-hub" value={this.state.origin.hub_name} options={nexuses} onChange={this.setOriginHub}/>
+            <Select name="origin-hub" className={`${styles.select}`} placeholder={this.state.origin.hub_name} value={this.state.origin.hub_name} options={nexuses} onChange={this.setOriginHub}/>
         );
         const destinationHubSelect = (
-            <Select name="destination-hub" value={this.state.destination.hub_name} options={nexuses} onChange={this.setDestHub}/>
+            <Select name="destination-hub" className={`${styles.select}`} placeholder={this.state.destination.hub_name} value={this.state.destination.hub_name} options={nexuses} onChange={this.setDestHub}/>
         );
         const originFields = (<div className="flex-100 layout-row layout-wrap">
-                    <input  name="origin-number" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.number} placeholder="Number"/>
-                    <input  name="origin-street" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.street} placeholder="Street"/>
-                    <input name="origin-zipCode" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.zipCode} placeholder="Zip Code"/>
-                    <input name="origin-city" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.city} placeholder="City"/>
-                    <input name="origin-country" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.country} placeholder="Country"/>
+                    <input  name="origin-number" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.number} placeholder="Number"/>
+                    <input  name="origin-street" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.street} placeholder="Street"/>
+                    <input name="origin-zipCode" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.zipCode} placeholder="Zip Code"/>
+                    <input name="origin-city" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.city} placeholder="City"/>
+                    <input name="origin-country" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.country} placeholder="Country"/>
                   </div>);
         const originAuto = (<div className="flex-100 layout-row layout-wrap">
-                    <input id="origin" name="origin-fullAddress" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.origin.fullAddress} placeholder="Search for address"/>
+                    <input id="origin" name="origin-fullAddress" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.fullAddress} placeholder="Search for address"/>
                   </div>);
         const destFields = (
                 <div className="flex-100 layout-row layout-wrap">
-                    <input name="destination-number" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.number} placeholder="Number"/>
-                    <input name="destination-street" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.street} placeholder="Street"/>
-                    <input name="destination-zipCode" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.zipCode} placeholder="Zip Code"/>
-                    <input name="destination-city" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.city} placeholder="City"/>
-                    <input name="destination-country" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.country} placeholder="Country"/>
+                    <input name="destination-number" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.number} placeholder="Number"/>
+                    <input name="destination-street" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.street} placeholder="Street"/>
+                    <input name="destination-zipCode" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.zipCode} placeholder="Zip Code"/>
+                    <input name="destination-city" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.city} placeholder="City"/>
+                    <input name="destination-country" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.country} placeholder="Country"/>
                   </div>
         );
         const destAuto = (<div className="flex-100 layout-row layout-wrap">
-                    <input id="destination" name="destination-fullAddress" className="flex-100" type="string" onChange={this.handleAddressChange} value={this.state.destination.fullAddress} placeholder="Search for address"/>
+                    <input id="destination" name="destination-fullAddress"  className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.destination.fullAddress} placeholder="Search for address"/>
                   </div>);
         const displayLocationOptions = (target) => {
             if (target === 'origin' && !this.state.shipment.has_pre_carriage) {
@@ -270,40 +273,44 @@ export class ShipmentLocationBox extends Component {
             return '';
         };
         return (
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-75 layout-align-start-center" >
-              <div className="flex-40 layout-row layout-wrap">
-                <div className="flex-100 layout-row">
-                  <Toggle
-                    id="has_pre_carriage"
-                    name="has_pre_carriage"
-                    defaultChecked={this.state.shipment.has_pre_carriage}
-                    onChange={this.handleTrucking} />
-                  <label htmlFor="pre-carriage">Pre-Carriage</label>
-                </div>
-                 <div className="flex-100 layout-row layout-wrap">
-                  <p className="flex-100"> Origin Address </p>
-                  { displayLocationOptions('origin') }
-                 </div>
-              </div>
-              <div ref="map" id="origin-map" style={mapStyle} />
+          <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+            <div className="layout-row content-width flex-none layout-align-start-start" >
+                <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
+                  <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-100 layout-row mc">
+                      <Toggle
+                        className="flex-none"
+                        id="has_pre_carriage"
+                        name="has_pre_carriage"
+                        defaultChecked={this.state.shipment.has_pre_carriage}
+                        onChange={this.handleTrucking} />
+                      <label htmlFor="pre-carriage">Pre-Carriage</label>
+                    </div>
+                     <div className="flex-100 layout-row layout-wrap">
+                      <p className="flex-100"> Origin Address </p>
+                      { displayLocationOptions('origin') }
+                     </div>
+                  </div>
+                 {/* <div ref="map" id="map" style={mapStyle} />*/}
+                  <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-100 layout-row mc">
+                      <Toggle
+                        className="flex-none"
+                        id="has_on_carriage"
+                        name="has_on_carriage"
+                        defaultChecked={this.state.shipment.has_on_carriage}
+                        onChange={this.handleTrucking} />
+                      <label htmlFor="on-carriage">On-Carriage</label>
+                    </div>
+                     <div className="flex-100 layout-row layout-wrap">
+                      <p className="flex-100"> Destination Address </p>
+                      { displayLocationOptions('destination') }
+                     </div>
+                  </div>
             </div>
-            <div className="layout-row flex-75 layout-align-start-center" >
-              <div className="flex-40 layout-row layout-wrap">
-                <div className="flex-100 layout-row">
-                  <Toggle
-                    id="has_on_carriage"
-                    name="has_on_carriage"
-                    defaultChecked={this.state.shipment.has_on_carriage}
-                    onChange={this.handleTrucking} />
-                  <label htmlFor="on-carriage">On-Carriage</label>
-                </div>
-                 <div className="flex-100 layout-row layout-wrap">
-                  <p className="flex-100"> Destination Address </p>
-                  { displayLocationOptions('destination') }
-                 </div>
-              </div>
-              <div ref="map" id="destination-map" style={mapStyle} />
+              <div className="flex-70 layout-row layout-wrap layout-align-center-start">
+                <div ref="map" id="map" style={mapStyle} />
+            </div>
             </div>
           </div>
         );

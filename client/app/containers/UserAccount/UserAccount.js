@@ -5,12 +5,29 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
+import {
+    UserProfile,
+    UserLocations,
+    UserEmails,
+    UserPassword,
+    UserBilling
+} from '../../components/UserAccount/UserAccount';
 
 import './UserAccount.scss';
 
 class UserAccount extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            activeLink: 'profile'
+        };
+
+        this.toggleActiveClass = this.toggleActiveClass.bind(this);
+    }
+
+    toggleActiveClass(key) {
+        this.setState({ activeLink: key });
     }
 
     render() {
@@ -23,6 +40,28 @@ class UserAccount extends Component {
             { key: 'billing', text: 'Billing' }
         ];
 
+        let viewComponent;
+        switch (this.state.activeLink) {
+            case 'profile':
+                viewComponent = <UserProfile />;
+                break;
+            case 'locations':
+                viewComponent = <UserLocations />;
+                break;
+            case 'emails':
+                viewComponent = <UserEmails />;
+                break;
+            case 'password':
+                viewComponent = <UserPassword />;
+                break;
+            case 'billing':
+                viewComponent = <UserBilling />;
+                break;
+            default:
+                viewComponent = <h1>pro</h1>;
+                break;
+        }
+
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center">
                 <Header theme={this.props.theme} />
@@ -33,16 +72,12 @@ class UserAccount extends Component {
                             theme={this.props.theme}
                             navHeadlineInfo={navHeadlineInfo}
                             navLinkInfo={navLinkInfo}
+                            toggleActiveClass={this.toggleActiveClass}
+                            activeLink={this.state.activeLink}
                         />
                     </div>
 
-                    <div className="layout-row flex-80">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit. In ducimus velit quibusdam alias perferendis!
-                        Reprehenderit nisi natus reiciendis ipsam maiores
-                        commodi iure, corrupti! Odio, ratione consequatur.
-                        Adipisci placeat, in dolores?
-                    </div>
+                    <div className="layout-row flex-80">{viewComponent}</div>
                 </div>
             </div>
         );

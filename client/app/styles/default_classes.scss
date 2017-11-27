@@ -3,6 +3,12 @@
 .content-width {
   width: 1000px;
 }
+.button_padding {
+  padding: 60px 5px;
+}
+.padd_top {
+    padding-top: 35px;
+}
 
 .spacing-lg-top {
   margin-top: $spacing-lg;
@@ -22,4 +28,7 @@
 
 .spacing-sm-right {
   margin-right: $spacing-sm;
+}
+.mc {
+  height: max-content;
 }

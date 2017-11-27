@@ -1,46 +1,61 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { RouteOption } from '../RouteOption/RouteOption';
-
+import styles from './RouteSelector.scss';
+import { Checkbox } from '../CheckBox/CheckBox';
+import {v4} from 'node-uuid';
 export class RouteSelector extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            viewPublic: false
+        };
         this.selectRoute = this.selectRoute.bind(this);
+        this.togglePublic = this.togglePublic.bind(this);
     }
     selectRoute(route) {
         this.props.setRoute(route);
     }
+    togglePublic() {
+        this.setState({viewPublic: !this.state.viewPublic});
+    }
 
     render() {
+        const { theme, publicRoutes, privateRoutes } = this.props;
         const pubRoutes = [];
-        if (this.props.publicRoutes) {
-            this.props.publicRoutes.forEach(route => {
-                pubRoutes.push(<RouteOption key={route.id} route={route} selectOption={this.selectRoute}/>);
+        if (publicRoutes) {
+            publicRoutes.forEach(route => {
+                pubRoutes.push(<RouteOption key={v4()} theme={theme} route={route} selectOption={this.selectRoute} />);
             });
         }
         const privRoutes = [];
-        if (this.props.privateRoutes) {
-            this.props.privateRoutes.forEach(route => {
-                privRoutes.push(<RouteOption key={route.id} route={route} selectOption={this.selectRoute}/>);
+        if (privateRoutes) {
+            privateRoutes.forEach(route => {
+                privRoutes.push(<RouteOption key={v4()} theme={theme} route={route} selectOption={this.selectRoute} isPrivate/>);
             });
         }
+        let routesArr;
+        if (this.state.viewPublic) {
+            routesArr = [...privRoutes, ...pubRoutes];
+        } else {
+            routesArr = privRoutes;
+        }
+
         return (
-        <div className="flex-100 layout-row layout-align-center-start">
-            <div className="flex-75 layout-row layout-wrap">
-              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap">
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <h4 className="flex-none"> Available Private Routes</h4>
+        <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
+            <div className="content-width layout-row layout-wrap">
+              <div className="flex-100 layout-row layout-wrap">
+                <div className="flex-100 layout-row layout-align-space-between-center">
+                    <div className="flex-none ayput-row layout-align-start-center">
+                        <h4 className="flex-none"> Available Routes</h4>
+                    </div>
+                    <div className="flex-none layout-row layout-align-end-center">
+                        <h4 className="flex-none"> Show Public Routes</h4>
+                        <Checkbox onChange={this.togglePublic} checked={this.state.viewPublic} />
+                    </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap">
-                  {privRoutes}
-                </div>
-              </div>
-              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap">
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <h4 className="flex-none"> Available Public Routes</h4>
-                </div>
-                <div className="flex-100 layout-row layout-wrap">
-                  {pubRoutes}
+                  {routesArr}
                 </div>
               </div>
             </div>

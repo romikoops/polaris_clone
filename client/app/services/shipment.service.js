@@ -39,7 +39,6 @@ function newShipment(user, type) {
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({type: type})
     };
-
     const url = BASE_URL + '/shipments';
     return fetch(url, requestOptions).then(handleResponse);
 }

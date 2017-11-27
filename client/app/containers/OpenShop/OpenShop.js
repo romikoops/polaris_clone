@@ -9,7 +9,7 @@ import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 
 import { connect } from 'react-redux';
-import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
+import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -23,7 +23,7 @@ class OpenShop extends Component {
         this.tenant = this.props.tenant;
 
         this.state = {
-            shipmentOptions: OPEN_SHIPMENT_TYPES,
+            shipmentOptions: SHIPMENT_TYPES,
             shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
@@ -51,14 +51,14 @@ class OpenShop extends Component {
         // }
     }
 
-    getShipment() {
+    getShipment(type) {
         const { dispatch, user } = this.props;
-        dispatch(shipmentActions.newShipment(user.data, 'openlcl'));
+        dispatch(shipmentActions.newShipment(user.data, type));
     }
 
     selectShipmentType(type) {
         // const { history } = this.props;
-        this.getShipment();
+        this.getShipment(type);
         this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
         // history.push('/open/shipment_details');
     }
@@ -69,7 +69,7 @@ class OpenShop extends Component {
         const { dispatch, history } = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
         this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 2 }
+            stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
         });
         history.push('/open/' + data.shipment.id + '/choose_route');
     }
@@ -77,23 +77,27 @@ class OpenShop extends Component {
         const { dispatch, history } = this.props;
         dispatch(shipmentActions.setShipmentContacts(data));
         this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 2 }
+            stageTracker: { shipmentType: data.load_type, stage: 4 }
         });
         history.push('/open/' + data.shipment.id + '/finish_booking');
     }
 
     selectShipmentRoute(obj) {
-        const { dispatch, history } = this.props;
+        const { dispatch, history, bookingData } = this.props;
         const { schedule, total } = obj;
+        const shipmentData = bookingData.response.stage2;
         const req = {
             schedules: [schedule],
             total,
-            shipment: this.props.shipment.shipment
+            shipment: shipmentData.shipment
         };
         dispatch(shipmentActions.setShipmentRoute(req));
         history.push(
-            '/open/' + this.props.shipment.shipment.id + '/booking_details'
+            '/open/' + shipmentData.shipment.id + '/booking_details'
         );
+        this.setState({
+            stageTracker: { shipmentType: shipmentData.shipment.load_type, stage: 3 }
+        });
     }
 
     render() {
@@ -102,30 +106,32 @@ class OpenShop extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
+        const { bookingData, theme, match} = this.props;
 
-        const route1 = this.props.match.url + '/:shipmentId/shipment_details';
-        const route2 = this.props.match.url + '/:shipmentId/choose_route';
-        const route3 = this.props.match.url + '/:shipmentId/booking_details';
-        const route4 = this.props.match.url + '/:shipmentId/finish_booking';
+        const {request, response} = bookingData;
+        const route1 = match.url + '/:shipmentId/shipment_details';
+        const route2 = match.url + '/:shipmentId/choose_route';
+        const route3 = match.url + '/:shipmentId/booking_details';
+        const route4 = match.url + '/:shipmentId/finish_booking';
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <Header theme={this.props.theme} />
 
                 <ShopStageView
                     shopType={this.state.shopType}
-                    match={this.props.match}
-                    theme={this.props.theme}
+                    match={match}
+                    theme={theme}
                     stages={this.state.shipmentStages}
                     currentStage={this.state.stageTracker.stage}
                     setStage={this.selectShipmentStage}
                 />
                 <Route
                     exact
-                    path={this.props.match.url}
+                    path={match.url}
                     render={props => (
                         <ChooseShipment
                             {...props}
-                            theme={this.props.theme}
+                            theme={theme}
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                         />
@@ -136,8 +142,9 @@ class OpenShop extends Component {
                     render={props => (
                         <ShipmentDetails
                             {...props}
-                            theme={this.props.theme}
-                            shipment={this.props.shipment}
+                            theme={theme}
+                            shipmentData={response ? response.stage1 : {}}
+                            prevRequest={request && request.stage2 ? request.stage2 : {} }
                             setShipmentDetails={this.setShipmentData}
                         />
                     )}
@@ -148,29 +155,31 @@ class OpenShop extends Component {
                         <ChooseRoute
                             {...props}
                             chooseRoute={this.selectShipmentRoute}
-                            theme={this.props.theme}
-                            shipmentData={this.props.shipment}
+                            theme={theme}
+                            shipmentData={response && response.stage2 ? response.stage2 : {}}
+                            prevRequest={request && request.stage3 ? request.stage3 : {} }
                         />
                     )}
                 />
-                <Route
-                    path={route3}
-                    render={props => (
-                        <BookingDetails
-                            {...props}
-                            nextStage={this.setShipmentContacts}
-                            theme={this.props.theme}
-                            shipmentData={this.props.shipment}
-                        />
-                    )}
-                />
+                {response && response.stage3 ? <Route
+                                    path={route3}
+                                    render={props => (
+                                        <BookingDetails
+                                            {...props}
+                                            nextStage={this.setShipmentContacts}
+                                            theme={theme}
+                                            shipmentData={response && response.stage3 ? response.stage3 : {}}
+                                            prevRequest={request && request.stage4 ? request.stage4 : {} }
+                                        />
+                                    )}
+                                /> : ''}
                 <Route
                     path={route4}
                     render={props => (
                         <BookingConfirmation
                             {...props}
-                            theme={this.props.theme}
-                            shipmentData={this.props.shipment}
+                            theme={theme}
+                            shipmentData={response ? response.stage4 : {}}
                         />
                     )}
                 />
@@ -184,7 +193,7 @@ OpenShop.propTypes = {
     theme: PropTypes.object,
     user: PropTypes.object,
     loggedIn: PropTypes.bool,
-    shipment: PropTypes.object,
+    bookingData: PropTypes.object,
     dispatch: PropTypes.func,
     history: PropTypes.object,
     match: PropTypes.object
@@ -198,14 +207,14 @@ OpenShop.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    const { users, authentication, tenant, shipment } = state;
+    const { users, authentication, tenant, bookingData } = state;
     const { user, loggedIn } = authentication;
     return {
         user,
         users,
         tenant,
         loggedIn,
-        shipment
+        bookingData
     };
 }
 
