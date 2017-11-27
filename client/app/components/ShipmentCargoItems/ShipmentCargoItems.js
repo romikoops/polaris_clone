@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
-
+import styles from './ShipmentCargoItems.scss';
 export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
@@ -38,64 +38,93 @@ export class ShipmentCargoItems extends Component {
         });
     }
     toggleDangerousGoods() {
-        this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
+      const event = {target: {name: 'dangerousGoods', value: !this.props.cargoItems[0].dangerousGoods}};
+        // this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
+      this.props.handleDelta(event);
     }
     render() {
+      const { cargoItems, handleDelta } = this.props;
         const cargosAdded = [];
-        if (this.props.cargoItems) {
-            this.props.cargoItems.forEach((cont, i) => {
+        const newCargoItem = cargoItems[0];
+        if (cargoItems) {
+            cargoItems.forEach((cont, i) => {
+              if (i !== 0) {
                 const tmpCont = (
-            <div key={i} className="flex-100 layout-row">
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.payload_in_kg} kg
-              </div>
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.dimension_y} cm
-              </div>
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.dimension_x} cm
-              </div>
-              <div className="flex-20 layout-row layout-align-center-center">
-                {cont.dimension_z} cm
-              </div>
-            </div>
-            );
+                  <div key={i} className="flex-100 layout-row">
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      {cont.payload_in_kg} kg
+                    </div>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      {cont.dimension_y} cm
+                    </div>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      {cont.dimension_x} cm
+                    </div>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      {cont.dimension_z} cm
+                    </div>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      Dangerous Goods: {cont.dangerousGoods ? 'Yes' : 'No'}
+                    </div>
+                  </div>
+                  );
                 cargosAdded.push(tmpCont);
+              }
             });
         }
         return (
         <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-75 layout-wrap layout-align-center-center" >
+            <div className="layout-row flex-none content-width layout-wrap layout-align-center-center" >
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Gross Weight </p>
-                  <input name="payload_in_kg" value={this.state.newCargoItem.payload_in_kg} type="number" onChange={this.handleCargoChange}/>
+                  <div className={`flex-95 layout-row ${styles.input_box}`}>
+                    <input className="flex-80" name="payload_in_kg" value={newCargoItem.payload_in_kg} type="number" onChange={handleDelta}/>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      kg
+                    </div>
+                  </div>
                 </div>
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Length </p>
-                  <input name="dimension_y" value={this.state.newCargoItem.dimension_y} type="number" onChange={this.handleCargoChange}/>
+                  <div className={`flex-95 layout-row ${styles.input_box}`}>
+                    <input className="flex-80" name="dimension_y" value={newCargoItem.dimension_y} type="number" onChange={handleDelta}/>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      cm
+                    </div>
+                  </div>
                 </div>
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Width </p>
-                  <input name="dimension_x" value={this.state.newCargoItem.dimension_x} type="number" onChange={this.handleCargoChange}/>
+                  <div className={`flex-95 layout-row ${styles.input_box}`}>
+                    <input className="flex-80" name="dimension_x" value={newCargoItem.dimension_x} type="number" onChange={handleDelta}/>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      cm
+                    </div>
+                  </div>
                 </div>
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Height </p>
-                  <input name="dimension_z" value={this.state.newCargoItem.dimension_z} type="number" onChange={this.handleCargoChange}/>
+                  <div className={`flex-95 layout-row ${styles.input_box}`}>
+                    <input className="flex-80" name="dimension_z" value={newCargoItem.dimension_z} type="number" onChange={handleDelta}/>
+                    <div className="flex-20 layout-row layout-align-center-center">
+                      cm
+                    </div>
+                  </div>
                 </div>
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Dangerous Goods </p>
-                  <Checkbox onChange={this.toggleDangerousGoods} checked={this.state.newCargoItem.dangerousGoods} />
+                  <Checkbox onChange={this.toggleDangerousGoods} checked={newCargoItem.dangerousGoods} />
                 </div>
               </div>
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                <div className="layout-row flex-none layout-align-start-center" onClick={this.addNewCargo}>
+                <div className="layout-row flex-none content-width layout-align-start-center" onClick={this.addNewCargo}>
                   <i className="flex-none fa fa-plus-square-o" />
                   <p className="flex-none flex-offset-5"> Add unit </p>
                 </div>
               </div>
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                <div className="layout-row flex-100 layout-wrap" >
+                <div className="layout-row flex-none content-width layout-wrap" >
                   { cargosAdded }
                 </div>
               </div>
@@ -108,5 +137,6 @@ export class ShipmentCargoItems extends Component {
 ShipmentCargoItems.PropTypes = {
     theme: PropTypes.object,
     cargoItems: PropTypes.array,
-    addCargoItem: PropTypes.func
+    addCargoItem: PropTypes.func,
+    handleDelta: PropTypes.func
 };

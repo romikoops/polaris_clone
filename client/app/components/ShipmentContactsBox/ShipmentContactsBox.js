@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
+import {v4} from 'node-uuid';
 
 export class ShipmentContactsBox extends Component {
     constructor(props) {
@@ -24,7 +25,7 @@ export class ShipmentContactsBox extends Component {
         const notifyeesArray = [];
         if (notifyees) {
             notifyees.forEach((n, i) => {
-                notifyeesArray.push(<div key={n.firstName} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
+                notifyeesArray.push(<div key={v4()} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
                         <input className={styles.input_100} type="text" value={n.companyName} name={'notifyees-' + i + '-companyName'} placeholder="Company Name" onChange={this.handleNotifyeeChange} />
                         <input className={styles.input_50} type="text" value={n.firstName} name={'notifyees-' + i + '-firstName'} placeholder="First Name" onChange={this.handleNotifyeeChange} />
                         <input className={styles.input_50} type="text" value={n.lastName} name={'notifyees-' + i + '-lastName'} placeholder="Last Name" onChange={this.handleNotifyeeChange} />

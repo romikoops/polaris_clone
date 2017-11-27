@@ -1,0 +1,27 @@
+:local {
+  .card_link {
+    width: 400px;
+    height: 320px;
+    margin: 15px;
+  }
+
+  .card_img {
+    width: 100% !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+  .card_action {
+    width: 100%;
+    background: whitesmoke;
+  }
+  .card_action p {
+    height: 24px;
+    width: 119px;
+    color: #2C2C2C;
+    // font-family: ".SF NS Display";
+    font-size: 18px;
+    line-height: 21px;
+    background: transparent;
+  }
+}

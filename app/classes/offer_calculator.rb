@@ -5,8 +5,8 @@ class OfferCalculator
     
     @load_type = load_type
     @shipment = shipment
-    @has_pre_carriage = params[:shipment][:has_pre_carriage].to_i == 1 ? true : false
-    @has_on_carriage = params[:shipment][:has_on_carriage].to_i == 1 ? true : false
+    @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
+    @has_on_carriage = params[:shipment][:has_on_carriage] ? true : false
     @shipment.has_pre_carriage = @has_pre_carriage
     @shipment.has_on_carriage = @has_on_carriage
     
