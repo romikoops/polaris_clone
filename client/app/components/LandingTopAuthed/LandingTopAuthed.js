@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import {CardLinkRow} from '../CardLinkRow/CardLinkRow';
 import './LandingTopAuthed.scss';
-import PropTypes from 'prop-types';
-// import SignIn from '../SignIn/SignIn';  default LandingTop;
+import React, { Component } from 'react';
+import PropTypes            from 'prop-types';
+import { CardLinkRow }      from '../CardLinkRow/CardLinkRow';
+import Header               from '../Header/Header';
+
 export class LandingTopAuthed extends Component {
     constructor(props) {
         super(props);
@@ -22,32 +23,22 @@ export class LandingTopAuthed extends Component {
         };
     }
     render() {
-        console.log(this.props);
-        let logo;
-        if (this.props.theme) {
-            logo = this.props.theme.logo;
-        } else {
-            logo = '';
-        }
+        const {user, theme} = this.props;
         return (
-            <div className="landing_top layout-row flex-100 layout-align-center">
-              <div className="layout-row flex-75 layout-wrap">
-                <div className="top_row flex-100 layout-row">
-                  <div className="logo_row flex-50 layout-row layout-align-start-center">
-                    <img className="tenant_logo" src={logo} />
-                  </div>
-                  <div className="sign_in_row flex-50 layout-row layout-align-end-center">
-                  </div>
-                </div>
+            <div className="landing_top_authed layout-wrap layout-row flex-100 layout-align-center">
+            <Header user={user} theme={theme} />
+            <div className="layout-row flex-none layout-wrap content-width">
                 <div className="flex-100 layout-wrap layout-row">
-                  <CardLinkRow theme={this.props.theme} cardArray={this.state.shops} />
+                    <h3>Choose your shop</h3>
+                    <CardLinkRow theme={theme} cardArray={this.state.shops} />
                 </div>
-              </div>
+            </div>
             </div>
         );
     }
 }
 
 LandingTopAuthed.propTypes = {
-    theme: PropTypes.object
+    theme: PropTypes.object,
+    user: PropTypes.object
 };

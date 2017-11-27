@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // { loggedIn ? <LandingTopAuthed className="flex-100" theme={this.props.theme} /> : <LandingTop className="flex-100" theme={this.props.theme} /> }
 import './Landing.scss';
+import { RoundButton } from '../../components/RoundButton/RoundButton';
 class Landing extends Component {
     constructor(props) {
         super(props);
@@ -16,14 +17,17 @@ class Landing extends Component {
     }
 
     render() {
-        const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
-        const theme = this.props.theme;
+        const {loggedIn, theme, user} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const primaryColor = {
+            color: theme && theme.colors ? theme.colors.primary : 'black'
+        };
+        const logo = theme ? theme.logo  : '';
         return (
-        <div className="layout-row flex-100 layout-wrap" >
-          { loggedIn ? <LandingTopAuthed className="flex-100" theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
+        <div className="wrapper_landing layout-row flex-100 layout-wrap" >
+          { loggedIn ? <LandingTopAuthed className="flex-100" user={user} theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
           <div className="service_box layout-row flex-100 layout-wrap">
             <div className="service_label layout-row layout-align-center-center flex-100">
               <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
@@ -51,12 +55,12 @@ class Landing extends Component {
             </div>
           </div>
           <ActiveRoutes className="mc" theme={theme} />
-          <BlogPostHighlights/>
+          <BlogPostHighlights theme={theme} />
           <div className="btm_promo flex-100 layout-row">
             <div className="flex-50 btm_promo_img">
             </div>
             <div className="flex-50 btm_promo_text layout-row layout-align-start-center">
-              <div className="flex-50 layout-column">
+              <div className="flex-80 layout-column">
                 <div className="flex-20 layout-column layout-align-center-start">
                   <h2> Enjoy the most advanced and easy to use booking system on the planet </h2>
                 </div>
@@ -78,7 +82,25 @@ class Landing extends Component {
                     <p> real time updates </p>
                   </div>
                 </div>
-                <div className="flex-20 layout-column layout-align-center-start">
+                <div className="btm_promo_btn_wrapper flex-20 layout-column layout-align-start-left">
+                  <RoundButton text="sign up" theme={theme} active/>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="contact_bar flex-100 layout-row layout-align-center-center">
+            <div className="flex-none content-width layout-row">
+              <div className="flex-50 layout-row layout-align-start-center">
+                <img src={logo} />
+              </div>
+              <div className="flex-50 layout-row layout-align-end-end">
+                <div className="flex-none layout-row layout-align-center-center contact_elem">
+                  <i className="fa fa-envelope" aria-hidden="true" style={primaryColor}></i>
+                  [ TBD - support@greencarrier.com ]
+                </div>
+                <div className="flex-none layout-row layout-align-center-end contact_elem">
+                  <i className="fa fa-phone" aria-hidden="true" style={primaryColor}></i>
+                  [ TBD - 0172 304 203 1020 ]
                 </div>
               </div>
             </div>
