@@ -9,16 +9,16 @@ export class Footer extends Component {
                 <div className="flex-100 button_row layout-row layout-align-end-center">
                     <div className="flex-50 buttons layout-row layout-align-end-center">
                         <div className="flex-25 layout-row layout-align-center-center">
-                            <h4 className="flex-none"> About Us</h4>
+                            <a href="#">About Us</a>
                         </div>
                         <div className="flex-25 layout-row layout-align-center-center">
-                            <h4 className="flex-none"> Privacy Policy</h4>
+                            <a href="#">Privacy Policy</a>
                         </div>
                         <div className="flex-25 layout-row layout-align-center-center">
-                            <h4 className="flex-none"> Terms and Conditions</h4>
+                            <a href="#">Terms and Conditions</a>
                         </div>
                         <div className="flex-25 layout-row layout-align-center-center">
-                            <h4 className="flex-none"> Imprint </h4>
+                            <a href="#">Imprint</a>
                         </div>
                     </div>
                     <div className="flex-20" />
@@ -26,8 +26,7 @@ export class Footer extends Component {
                 <div className="flex-100 layout-row copyright">
                     <div className="flex-80 layout-row layout-align-end-center">
                         <p className="flex-none">
-                            {' '}
-                            Copyright © 2017 Greencarrier{' '}
+                            [ TBD - Copyright © 2017 Greencarrier ]
                         </p>
                     </div>
                     <div className="flex-20" />
