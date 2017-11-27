@@ -29,7 +29,6 @@ class ShipmentsController < ApplicationController
   end
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
-    byebug
     if params[:file]
       create_document(params[:file], @shipment, params[:type])
     end

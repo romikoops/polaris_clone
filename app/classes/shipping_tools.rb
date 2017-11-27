@@ -42,11 +42,11 @@ module ShippingTools
     @has_pre_carriage = @shipment.has_pre_carriage || true
     @has_on_carriage = @shipment.has_on_carriage || true
 
-    if load_type.starts_with?('open')
+    # if load_type.starts_with?('open')
       @all_nexuses = Location.nexuses_prepared
-    else
-      @all_nexuses = Location.nexuses_prepared_client(current_user)
-    end
+    # else
+    #   @all_nexuses = Location.nexuses_prepared_client(current_user)
+    # end
     private_prices = Pricing.where(customer_id: current_user.id)
     public_prices = Pricing.where(customer_id: nil)
     public_routes = []

@@ -11,4 +11,30 @@
     background: rgba(10,1,12,0.75);
     color: floralwhite;
   }
+  .hub_card h6 {
+    margin: 22px 0 0 0;
+    color: #FFFFFF;
+    // font-family: ".SF NS Display";
+    font-size: 21px;
+    line-height: 24px;
+  }
+  .hub_card p {
+    margin: 15px 0 0 0;
+    height: 78px;
+    width: 171px;
+    color: #FFFFFF;
+    // font-family: ".SF NS Display";
+    font-size: 18px;
+    line-height: 26px;
+  }
+  .hub_card i {
+    height: 30px;
+    width: 30px;
+    font-size: 30px;
+    margin-top: 23px;
+
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 24px !important;
+  }
 }

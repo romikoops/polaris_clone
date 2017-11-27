@@ -6,7 +6,7 @@ export const SHIPMENT_TYPES = [
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/containers.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.jpg',
         code: 'fcl',
     }
 ];

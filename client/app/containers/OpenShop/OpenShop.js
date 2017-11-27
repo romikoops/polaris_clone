@@ -9,7 +9,7 @@ import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 
 import { connect } from 'react-redux';
-import { OPEN_SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
+import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -23,7 +23,7 @@ class OpenShop extends Component {
         this.tenant = this.props.tenant;
 
         this.state = {
-            shipmentOptions: OPEN_SHIPMENT_TYPES,
+            shipmentOptions: SHIPMENT_TYPES,
             shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
@@ -51,14 +51,14 @@ class OpenShop extends Component {
         // }
     }
 
-    getShipment() {
+    getShipment(type) {
         const { dispatch, user } = this.props;
-        dispatch(shipmentActions.newShipment(user.data, 'openlcl'));
+        dispatch(shipmentActions.newShipment(user.data, type));
     }
 
     selectShipmentType(type) {
         // const { history } = this.props;
-        this.getShipment();
+        this.getShipment(type);
         this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
         // history.push('/open/shipment_details');
     }
@@ -69,7 +69,7 @@ class OpenShop extends Component {
         const { dispatch, history } = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
         this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 2 }
+            stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
         });
         history.push('/open/' + data.shipment.id + '/choose_route');
     }
@@ -77,7 +77,7 @@ class OpenShop extends Component {
         const { dispatch, history } = this.props;
         dispatch(shipmentActions.setShipmentContacts(data));
         this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 2 }
+            stageTracker: { shipmentType: data.load_type, stage: 4 }
         });
         history.push('/open/' + data.shipment.id + '/finish_booking');
     }
@@ -95,6 +95,9 @@ class OpenShop extends Component {
         history.push(
             '/open/' + shipmentData.shipment.id + '/booking_details'
         );
+        this.setState({
+            stageTracker: { shipmentType: shipmentData.shipment.load_type, stage: 3 }
+        });
     }
 
     render() {

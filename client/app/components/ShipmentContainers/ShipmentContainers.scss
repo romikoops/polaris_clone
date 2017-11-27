@@ -1,0 +1,22 @@
+:local {
+  .input_box {
+    height: 38px;
+    width: 170px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .input_box input {
+    height: 38px;
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .select{
+    width: 195px;
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+}
