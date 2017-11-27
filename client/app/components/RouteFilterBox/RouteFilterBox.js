@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { moment } from '../../constants';
+import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './RouteFilterBox.scss';
 export class RouteFilterBox extends Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export class RouteFilterBox extends Component {
         });
     }
     render() {
+        const { theme } = this.props;
         return (
           <div className={`${styles.filterbox} flex-100 layout-row layout-wrap`}>
             <div className={styles.pickup_date}>
@@ -59,6 +61,7 @@ export class RouteFilterBox extends Component {
                   <p>100 days</p>
                 </div>
               </div>
+              <RoundButton width="100%" height="21px" fontSize="18px" text="save filter" theme={theme} active/>
             </div>
           </div>
         );
