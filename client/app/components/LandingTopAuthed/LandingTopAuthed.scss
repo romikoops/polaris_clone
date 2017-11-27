@@ -1,14 +1,22 @@
-// LandingTop {
-//   height: 350px;
-// }
-// .landing_top {
-//   color: red;
-//   background-image: url('https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg');
-//   // background-image: url('../assets/images/welcome/country/header.jpg');
-//   // background-image: url('../../assets/images/welcome/country/header.jpg');
-//   // background-image: url('../../../assets/images/welcome/country/header.jpg');
-//   height: 400px; 
+@import '../../styles/defaults';
 
-//   background-size: cover;
-//   background-position: center;
-// }
+.landing_top_authed {
+  color: $grey;
+  background-image: linear-gradient(
+      rgba(white, 0.7),
+      rgba(white, 0.7)
+    ),
+    url('https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg');
+
+  height: 65vh;
+  background-size: cover;
+  background-position: center;
+  padding-bottom: 120px;
+  box-shadow: 0px 1px 15px rgba(black, 0.7);
+  position: relative;
+
+  h3 {
+  	font-weight: normal;
+  	margin: 20px 0 0 0;
+  }
+}

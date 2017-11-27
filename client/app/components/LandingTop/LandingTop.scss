@@ -1,6 +1,3 @@
-// LandingTop {
-//   height: 350px;
-// }
 @import '../../styles/defaults';
 
 .landing_top {
@@ -11,9 +8,6 @@
     ),
     url('https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg');
 
-  // background-image: url('../assets/images/welcome/country/header.jpg');
-  // background-image: url('../../assets/images/welcome/country/header.jpg');
-  // background-image: url('../../../assets/images/welcome/country/header.jpg');
   height: 65vh;
   background-size: cover;
   background-position: center;
