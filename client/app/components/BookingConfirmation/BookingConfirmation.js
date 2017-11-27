@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { moment } from '../../constants';
+import { v4 } from 'node-uuid';
 // import './BookingConfirmation.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails';
@@ -17,14 +18,14 @@ export class BookingConfirmation extends Component {
         const cargo = [];
         if (shipment && shipment.load_type.includes('lcl') && cargoItems) {
             cargoItems.forEach((ci, i) => {
-                cargo.push(<div className="flex-33 layout-row layout-align-center-center">
+                cargo.push(<div key={v4()} className="flex-33 layout-row layout-align-center-center">
                     <CargoItemDetails item={ci} index={i} />
                 </div> );
             });
         }
         if (shipment && shipment.load_type.includes('fcl') && containers) {
             containers.forEach((ci, i) => {
-                cargo.push(<div className="flex-33 layout-row layout-align-center-center">
+                cargo.push(<div key={v4()} className="flex-33 layout-row layout-align-center-center">
                     <ContainerDetails item={ci} index={i} />
                 </div> );
             });
@@ -33,7 +34,7 @@ export class BookingConfirmation extends Component {
         if (notifyees) {
             notifyees.forEach(n => {
                 nArray.push(
-                <div className="flex-33 layout-row">
+                <div key={v4()} className="flex-33 layout-row">
                     <div className="flex-15 layout-column layout-align-start-center">
                       <img src="" alt="" className="flex-none"/>
                     </div>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './RouteOption.scss';
+import styles from './RouteOption.scss';
+import Style from 'style-it';
 export class RouteOption extends Component {
     constructor(props) {
         super(props);
@@ -11,25 +12,31 @@ export class RouteOption extends Component {
     }
 
     render() {
-        // const { theme } = this.props;
-        // const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
-        // const borderStyle = {
-        //   borderImage: borderColour
-        // };
+        const { theme, isPrivate, route } = this.props;
         // debugger;
         return (
-          <div key={this.props.route.id} className="flex-100 layout-row">
-          <div className="flex-75 layout-row layout-wrap">
-            <div className="flex-100 layout-row layout-align-start-center" onClick={this.choose}>
-              {this.props.route.name}
+            <div className={`option flex-none layout-row layout-wrap layout-align-start-center ${styles.option}`} onClick={this.choose}>
+                <div className={`${styles.op_type} b_border flex-none layout-row`}>
+                    {isPrivate ? 'Dedicated Pricing' : 'Public Pricing'}
+                </div>
+              <h4 className="flex-none">{route.name}</h4>
+              {theme ? <Style>
+                                  {`
+                                     .b_border {
+                                          border-bottom: 0.75px solid ${theme.colors.secondary};
+                                      }
+                                      .option::hover {
+                                         box-shadow: 2px 1px 2px 1px ${theme.colors.secondary};
+                                       }
+                                  `}
+                              </Style> : ''}
             </div>
-          </div>
-        </div>
         );
     }
 }
 RouteOption.PropTypes = {
     theme: PropTypes.object,
     route: PropTypes.object,
-    selectOption: PropTypes.func
+    selectOption: PropTypes.func,
+    isPrivate: PropTypes.bool
 };

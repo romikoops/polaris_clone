@@ -1,49 +1,89 @@
-.shop_stage {
-  border-radius: 50% !important;
-  height: 75px !important;
-  width: 75px !important;
-  border: 1px solid darkslategrey;
-}
+:local {
+  .shop_stage {
+    border-radius: 50% !important;
+    height: 75px !important;
+    width: 75px !important;
+    border: 1px solid darkslategrey;
+  }
 
-.stage_box {
-}
+  .stage_box {
+    padding-top: 33px;
+    min-width: 171px;
+  }
 
-.shop_stage_past {
-  @extend .shop_stage;
-  background: darkslategrey;
-  height: 100%;
-  width: 100%;
-}
+  .shop_stage_past {
+    @extend .shop_stage;
+    background: darkslategrey;
+    height: 100%;
+    width: 100%;
+  }
 
-.shop_stage_yet {
-  @extend .shop_stage;
-  background: transparent;
-  height: 100%;
-  width: 100%;
-  border-color: darkslategrey;
-  color: darkslategrey;
-}
+  .shop_stage_yet {
+    @extend .shop_stage;
+    background: transparent;
+    height: 100%;
+    width: 100%;
+    border-color: darkslategrey;
+    color: darkslategrey;
+  }
 
-.shop_stage_current {
-  @extend .shop_stage;
-  background: transparent;
-  height: 100%;
-  width: 100%;
-}
+  .shop_stage_current {
+    @extend .shop_stage;
+    background: transparent;
+    height: 100%;
+    width: 100%;
+  }
+  .stage_text  {
+    height: 22px;
+    color: #212121;
 
-.shop_banner {
-  height: 100px;
-  background-image: url('https://assets.itsmycargo.com/assets/images/welcome/country/shipping-containers.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+    // font-family: ".SF NS Display";
+    font-size: 16px;
+    line-height: 18px;
+  }
 
-.fade {
-  color: lightgrey;
-  margin-left: 5px;
-}
+  .shop_banner {
+    height: 124px;
+    background-image: url('https://assets.itsmycargo.com/assets/images/welcome/country/shipping-containers.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .shop_banner h3 {
 
-.header {
-  color: floralwhite;
+    height: 41px;
+    color: #FFFFFF;
+    // font-family: ".SF NS Display";
+    font-size: 30px;
+    line-height: 35px;
+
+  }
+  .shop_banner p {
+    height: 34px;
+    width: 198px;
+    color: #FFFFFF;
+    // font-family: ".SF NS Display";
+    font-size: 25px;
+    line-height: 29px;
+  }
+  .shop_banner i {
+    height: 20px;
+    width: 20px;
+    color: #FFFFFF;
+    font-size: 20px;
+    margin: 0px 18px;
+  }
+
+  .fade {
+    color: lightgrey;
+    margin-left: 5px;
+  }
+
+  .header {
+    color: floralwhite;
+  }
+  .stage_row {
+    height: 171px;
+
+  }
 }

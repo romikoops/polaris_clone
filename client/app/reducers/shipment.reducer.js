@@ -51,7 +51,7 @@ export function shipment(state = {}, action) {
             const req3 = merge({}, state, {request: { stage3: action.shipmentData }, loading: true});
             return req3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
-           const resp3 = merge({}, state, {response: { stage3: action.shipmentData }});
+            const resp3 = merge({}, state, {response: { stage3: action.shipmentData }});
             return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             return {
