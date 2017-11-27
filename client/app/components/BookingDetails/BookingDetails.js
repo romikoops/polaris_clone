@@ -75,7 +75,35 @@ export class BookingDetails extends Component {
     }
 
     setFromBook(target, value) {
-        this.setState({ [target]: value });
+        this.setState({
+            [target]: {
+                firstName: value.contact.first_name,
+                companyName: value.contact.company_name,
+                lastName: value.contact.last_name,
+                email: value.contact.email,
+                phone: value.contact.phone,
+                street: value.location.street,
+                number: value.location.street_number,
+                zipCode: value.location.zip_code,
+                city: value.location.city,
+                country: value.location.country
+            }
+        });
+    }
+    setNotifyeesFromBook(target, value) {
+        this.setState({
+            [target]: {
+                firstName: value.contact.first_name,
+                lastName: value.contact.last_name,
+                email: value.contact.email,
+                phone: value.contact.phone,
+                street: value.location.street,
+                number: value.location.street_number,
+                zipCode: value.location.zip_code,
+                city: value.location.city,
+                country: value.location.country
+            }
+        });
     }
     toggleAddressBook() {
         const addressBool = this.state.addressBook;
