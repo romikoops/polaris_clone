@@ -1,19 +1,13 @@
-// LandingTop {
-//   height: 350px;
-// }
 @import '../../styles/defaults';
 
 .landing_top {
   color: $grey;
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.7),
-      rgba(255, 255, 255, 0.7)
+      rgba(black, 0.3),
+      rgba(black, 0.3)
     ),
     url('https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg');
 
-  // background-image: url('../assets/images/welcome/country/header.jpg');
-  // background-image: url('../../assets/images/welcome/country/header.jpg');
-  // background-image: url('../../../assets/images/welcome/country/header.jpg');
   height: 65vh;
   background-size: cover;
   background-position: center;
@@ -39,6 +33,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  z-index: 1;
 }
 
 .top_row {
@@ -54,4 +49,17 @@
 
 .tenant_logo {
   margin-left: -4px; // correction of the padding within the png
+}
+
+.top_mask {
+  background-image: url("https://assets.itsmycargo.com/assets/images/topmask_new.png");
+  background-position: center;
+  position: absolute;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.7;
+  z-index: 0;
 }

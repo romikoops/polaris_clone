@@ -29,13 +29,22 @@ export class ShipmentDetails extends Component {
                 city: '',
                 fullAddress: ''
             },
-            containers: [],
+            containers: [
+                {
+                    payload_in_kg: 0,
+                    sizeClass: '',
+                    tareWeight: 0,
+                    dangerousGoods: false
+                }
+            ],
             cargoItems: [
-                {payload_in_kg: 0,
-                dimension_x: 0,
-                dimension_y: 0,
-                dimension_z: 0,
-                dangerousGoods: false}
+                {
+                    payload_in_kg: 0,
+                    dimension_x: 0,
+                    dimension_y: 0,
+                    dimension_z: 0,
+                    dangerousGoods: false
+                }
             ],
             shipment: this.props.shipmentData.data,
             allNexuses: this.props.shipmentData.all_nexuses,
@@ -55,6 +64,7 @@ export class ShipmentDetails extends Component {
         this.selectRoute = this.selectRoute.bind(this);
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
+        this.handleContainerChange = this.handleContainerChange.bind(this);
     }
 
     newContainerGrossWeight() {
@@ -86,28 +96,35 @@ export class ShipmentDetails extends Component {
         console.log(itemArr);
         this.setState({cargoItems: itemArr});
     }
-    handleWeightChange(event) {
-        const target = event.target;
-        this.setState({ containers: {new: { ...this.state.containers.new, weight: target.value } }});
+    handleContainerChange(event) {
+        const { name, value } = event.target;
+        const itemArr = this.state.containers;
+        itemArr[0][name] = value;
+        console.log(itemArr);
+        this.setState({containers: itemArr});
     }
-    handleContainerSelect(val) {
-        this.setState({
-            containers: {
-                new: {
-                    type: val.value,
-                    tare_weight: val.tare_weight
-                }
-            }
-        });
-    }
-    addNewCargoItem(ci) {
+
+    addNewCargoItem() {
+        const newCI = {
+            payload_in_kg: 0,
+            dimension_x: 0,
+            dimension_y: 0,
+            dimension_z: 0,
+            dangerousGoods: false
+        };
         const currArray = this.state.cargoItems;
-        currArray.push(ci);
+        currArray.unshift(newCI);
         this.setState({cargoItems: currArray});
     }
-    addNewContainer(cont) {
+    addNewContainer() {
+        const newCont = {
+            payload_in_kg: 0,
+            sizeClass: '',
+            tareWeight: 0,
+            dangerousGoods: false
+        };
         const currArray = this.state.containers;
-        currArray.push(cont);
+        currArray.unshift(newCont);
         this.setState({containers: currArray});
     }
     setTargetLocation(target, address) {
@@ -147,7 +164,7 @@ export class ShipmentDetails extends Component {
         let cargoDetails;
         if (this.props.shipmentData.data) {
             if (this.props.shipmentData.data.load_type.includes('fcl')) {
-                cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/>;
+                cargoDetails = <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer} handleDelta={this.handleContainerChange}/>;
             }
             if (this.props.shipmentData.data.load_type.includes('lcl')) {
                 cargoDetails = <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem} handleDelta={this.handleCargoItemChange}/>;

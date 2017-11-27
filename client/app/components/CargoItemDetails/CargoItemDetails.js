@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import styles from './CargoItemDetails.scss';
+import styles from './CargoItemDetails.scss';
 import PropTypes from 'prop-types';
 
 export class CargoItemDetails extends Component {
@@ -9,7 +9,7 @@ export class CargoItemDetails extends Component {
     render() {
         const { index, item } = this.props;
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center">
+            <div className={` ${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Unit {index + 1}</h4>
                 </div>

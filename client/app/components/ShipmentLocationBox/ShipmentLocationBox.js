@@ -273,9 +273,9 @@ export class ShipmentLocationBox extends Component {
             return '';
         };
         return (
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row content-width flex-none layout-align-start-center" >
-                <div className={`flex-40 layout-row layout-wrap ${styles.input_box}`}>
+          <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+            <div className="layout-row content-width flex-none layout-align-start-start" >
+                <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
                   <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                     <div className="flex-100 layout-row mc">
                       <Toggle
@@ -308,7 +308,7 @@ export class ShipmentLocationBox extends Component {
                      </div>
                   </div>
             </div>
-              <div className="flex-60 layout-row layout-wrap">
+              <div className="flex-70 layout-row layout-wrap layout-align-center-start">
                 <div ref="map" id="map" style={mapStyle} />
             </div>
             </div>

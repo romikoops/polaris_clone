@@ -3,7 +3,8 @@
     border-radius: 50% !important;
     height: 75px !important;
     width: 75px !important;
-    border: 1px solid darkslategrey;
+    border: 2px solid darkslategrey;
+    position: relative;
   }
 
   .stage_box {
@@ -13,23 +14,29 @@
 
   .shop_stage_past {
     @extend .shop_stage;
-    background: darkslategrey;
+    background-color: #4A4A4A;
     height: 100%;
     width: 100%;
+  }
+  .shop_stage_past i {
+    font-size: 30px;
   }
 
   .shop_stage_yet {
     @extend .shop_stage;
-    background: transparent;
+    background: #FFFFFF;
     height: 100%;
     width: 100%;
     border-color: darkslategrey;
     color: darkslategrey;
   }
+  .shop_stage_yet h3, .shop_stage_current h3 {
+    font-size: 30px;
+  }
 
   .shop_stage_current {
     @extend .shop_stage;
-    background: transparent;
+    background: #FFFFFF;
     height: 100%;
     width: 100%;
   }
@@ -85,5 +92,16 @@
   .stage_row {
     height: 171px;
 
+  }
+  .line_box {
+    position: relative;
+  }
+  .line {
+    position: absolute;
+    height:1px;
+    width: 739px;
+    border-top: 3px solid #4A4A4A;
+    margin-top: 70.5px;
+    // z-index: 20;
   }
 }

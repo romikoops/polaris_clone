@@ -3,7 +3,7 @@ class OfferCalculator
   include CurrencyTools
   def initialize(shipment, params, load_type)
     
-    @load_type = load_type
+    @load_type = shipment.load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @has_on_carriage = params[:shipment][:has_on_carriage] ? true : false
@@ -13,6 +13,7 @@ class OfferCalculator
     case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
+      byebug
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
       @shipment.containers = @containers
     when 'lcl'
@@ -96,7 +97,7 @@ class OfferCalculator
     @origin_hubs = []
     @destination_hubs = []
 
-    @hub_schedules = @route.schedules.where("etd > ?", @shipment.planned_pickup_date)
+    @hub_schedules = @route.schedules.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
 
     @hub_schedules.each do |sched|
       @origin_hubs << sched.starthub
