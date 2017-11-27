@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
-import { Checkbox } from '../CheckBox/CheckBox';
+import { Checkbox } from '../Checkbox/Checkbox';
 import {v4} from 'node-uuid';
 export class RouteSelector extends Component {
     constructor(props) {

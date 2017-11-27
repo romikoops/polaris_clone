@@ -6,41 +6,37 @@ export class RouteHubBox extends Component {
     constructor(props) {
         super(props);
     }
-    switchIcon(sched) {
-        let icon;
-        switch(sched.mode_of_transport) {
-            case 'ocean':
-                icon = <i className="fa fa-ship"/>;
-                break;
-            case 'air':
-                icon = <i className="fa fa-plane"/>;
-                break;
-            case 'train':
-                icon = <i className="fa fa-train"/>;
-                break;
-            default:
-                icon = <i className="fa fa-ship"/>;
-                break;
-        }
-        return icon;
+    faIcon(sched) {
+        const faKeywords = {
+            'ocean': 'ship',
+            'air': 'plane',
+            'train': 'train'
+        };
+        const faClass = `fa fa-${faKeywords[sched.mode_of_transport]}`;
+        return <i className={faClass}/>;
+    }
+    dashedGradient(color1, color2) {
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     render() {
         const { theme, hubs, route } = this.props;
-        const {startHub, endHub} = hubs;
-        // const themeColour = { color: theme.colors ? theme.colors.primary : 'white'};
-        const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
-        const borderStyle = {
-            borderImage: borderColour
+        const { startHub, endHub } = hubs;
+        const gradientStyle = {
+            background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${theme.colors.secondary})` : 'black'
         };
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        const dashedLineStyles = {
+            marginTop: '6px',
+            height: '2px',
+            width: '100%',
+            background: theme && theme.colors ? this.dashedGradient(theme.colors.primary, theme.colors.secondary) : 'black',
+            backgroundSize: '16px 2px, 100% 2px'
         };
         return (
         <div className="flex-100 layout-row layout-align-start-center">
           <div className="flex-none content-width layout-row layout-align-start-center">
             <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
-                <i className="fa fa-map-marker" style={textStyle}/>
+                <i className="fa fa-map-marker" style={gradientStyle}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <h6 className="flex-100"> {startHub.data.name} </h6>
@@ -48,15 +44,20 @@ export class RouteHubBox extends Component {
               </div>
             </div>
 
-            <div className="flex-15 layout-row layout-wrap layout-align-center-start" >
-                <div className={`flex-100 layout-row layout-align-center-center ${styles.dash_border}`} style={borderStyle}>
-                  { this.switchIcon(route[0])}
+            <div className={`${styles.connection_graphics} flex-20 layout-row layout-align-center-start`} >
+                <div className="flex-100 layout-row layout-align-center-start">
+                    <div className="flex-80">
+                        <div className="flex-none layout-row layout-align-center-center">
+                            {this.faIcon(route[0])}
+                        </div>
+                        <div style={dashedLineStyles}></div>
+                    </div>
                 </div>
             </div>
 
             <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
-                <i className="fa fa-flag" style={textStyle}/>
+                <i className="fa fa-flag" style={gradientStyle}/>
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <h6 className="flex-100"> {endHub.data.name} </h6>
