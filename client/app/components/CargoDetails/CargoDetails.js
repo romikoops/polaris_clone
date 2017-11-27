@@ -24,8 +24,8 @@ export class CargoDetails extends Component {
         this.setState({customsView: !this.state.customsView});
     }
     handleChange(event) {
-      const { name, value } = event.target;
-      this.setState({[name]: value});
+      // const { name, value } = event.target;
+      // this.setState({[name]: value});
       this.props.handleChange(event);
     }
     render() {
@@ -85,7 +85,7 @@ export class CargoDetails extends Component {
                     <p className="flex-none"> HS Code</p>
                   </div>
                   <div className="flex-100">
-                    <input className={styles.cargo_input} type="text" name="hsCode" value={this.state.hsCode} onChange={this.handleChange}/>
+                    <input className={styles.cargo_input} type="text" name="hsCode" value={this.props.hsCode} onChange={this.handleChange}/>
                   </div>
                 </div>
                 <div className="flex-25 layout-row layout-wrap">
@@ -93,7 +93,7 @@ export class CargoDetails extends Component {
                     <p className={`flex-none ${styles.f_header}`}> Total Value of Goods</p>
                   </div>
                   <div className="flex-100">
-                    <input className={styles.cargo_input} type="number" name="totalGoodsValue" value={this.state.totalGoodsValue} onChange={this.handleChange}/>
+                    <input className={styles.cargo_input} type="number" name="totalGoodsValue" value={this.props.totalGoodsValue} onChange={this.handleChange}/>
                   </div>
                 </div>
 
@@ -111,7 +111,7 @@ export class CargoDetails extends Component {
                     <p className={`flex-none ${styles.f_header}`}> Number and kind of packages, description of goods</p>
                   </div>
                   <div className="flex-100">
-                    <textarea className={styles.cargo_text_area} rows="6" name="cargoNotes" value={this.state.cargoNotes} onChange={this.handleChange}/>
+                    <textarea className={styles.cargo_text_area} rows="6" name="cargoNotes" value={this.props.cargoNotes} onChange={this.handleChange}/>
                   </div>
                 </div>
 
@@ -143,5 +143,8 @@ export class CargoDetails extends Component {
 CargoDetails.PropTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
-    handleChange: PropTypes.func
+    handleChange: PropTypes.func,
+    hsCode: PropTypes.string,
+    cargoNotes: PropTypes.string,
+    totalGoodsValue: PropTypes.number
 };
