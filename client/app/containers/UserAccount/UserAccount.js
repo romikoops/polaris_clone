@@ -58,7 +58,7 @@ class UserAccount extends Component {
                 viewComponent = <UserBilling />;
                 break;
             default:
-                viewComponent = <h1>pro</h1>;
+                viewComponent = <UserProfile />;
                 break;
         }
 
