@@ -43,7 +43,7 @@ module ShippingTools
     @has_on_carriage = @shipment.has_on_carriage || true
 
     # if load_type.starts_with?('open')
-      @all_nexuses = Location.nexuses_prepared
+    @all_nexuses = Location.nexuses
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
@@ -143,7 +143,6 @@ module ShippingTools
   end
 
   def create_document(file, shipment, type) 
-    byebug
     Document.new_upload(file, shipment, type)
   end
 
@@ -241,7 +240,20 @@ module ShippingTools
       @shipment.schedule_set << schedule.id
       @schedules << schedule
     end
-    
+    case @shipment.load_type
+      when 'lcl'
+        @dangerous = false
+        res = @shipment.cargo_items.where(dangerous_goods: true)
+        if res.length > 0
+          @dangerous = true
+        end
+      when 'fcl'
+        @dangerous = false
+        res = @shipment.containers.where(dangerous_goods: true)
+        if res.length > 0
+          @dangerous = true
+        end
+    end
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
@@ -249,7 +261,7 @@ module ShippingTools
     @destination =  @schedules.last.endhub
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
-    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules}
+    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}
   end
 
   def get_shipment_pdf(params)

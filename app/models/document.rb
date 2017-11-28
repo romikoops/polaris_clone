@@ -9,14 +9,13 @@ class Document < ApplicationRecord
       secret_access_key: ENV['AWS_SECRET'],
       region: ENV['AWS_REGION']
     )
-    byebug
     # tixObj = firebase.get("tix/" + tid)
-    file_name = file.name.gsub(/[^0-9A-Za-z.\-]/, '_')
+    file_name = file.original_filename.gsub(/[^0-9A-Za-z.\-]/, '_')
     obj_key = 'documents/' + shipment['uuid'] +"/" + type + "/" + Time.now.to_i.to_s + '-' + file_name
 
     awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + obj_key
     
-    s3.put_object(bucket: 'imcdev', key: obj_key, body: file.tempfile, content_type: file.type, acl: 'private')
+    s3.put_object(bucket: 'imcdev', key: obj_key, body: file.tempfile, content_type: file.content_type, acl: 'private')
     shipment.documents.create(url: obj_key, shipment_id: shipment['uuid'], text: file_name, doc_type: type)
   end
   def self.get_file_url(id)

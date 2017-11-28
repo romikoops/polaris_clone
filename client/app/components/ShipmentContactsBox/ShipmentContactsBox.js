@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
 import {v4} from 'node-uuid';
+import { RoundButton } from '../RoundButton/RoundButton';
 
 export class ShipmentContactsBox extends Component {
     constructor(props) {
@@ -21,9 +22,11 @@ export class ShipmentContactsBox extends Component {
         this.props.addNotifyee();
     }
     render() {
-      // const { shipment } = this.props.shipmentData;
-        const { consignee, shipper, notifyees } = this.props;
+        const { consignee, shipper, notifyees, theme } = this.props;
         const notifyeesArray = [];
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         if (notifyees) {
             notifyees.forEach((n, i) => {
                 notifyeesArray.push(<div key={v4()} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
@@ -42,11 +45,11 @@ export class ShipmentContactsBox extends Component {
         }
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <div className="flex-75 layout-row layout-wrap">
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
-              <div className="flex-80 layout-row layout-align-start-center">
-                <i className="fa fa-person flex-none"></i>
-                <h6 className="flex-none">Shipper</h6>
+          <div className="flex-none content-width layout-row layout-wrap">
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+              <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                <i className="fa fa-user flex-none" style={textStyle}></i>
+                <p className="flex-none">Shipper</p>
               </div>
               <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
               <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
@@ -60,10 +63,20 @@ export class ShipmentContactsBox extends Component {
               <input className={styles.input_cc} type="text" value={shipper.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
             </div>
 
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
-              <div className="flex-80 layout-row layout-align-start-center">
-                <i className="fa fa-person flex-none"></i>
-                <h6 className="flex-none"> Consignee</h6>
+            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+              <div className={` ${styles.contact_header} flex-100 layout-row layout-align-space-between-center`}>
+                  <div className="flex-none layout-row layout-align-end-center" >
+                    <i className="fa fa-envelope-open-o flex-none" style={textStyle}></i>
+                    <p className="flex-none"> Consignee</p>
+                  </div>
+                 <div className="flex-none layout-row layout-align-end-center" >
+                    <RoundButton
+                        size="small"
+                        theme={theme}
+                        text="Address Book"
+                        handleNext={this.props.toggleAddressBook}
+                    />
+                </div>
               </div>
               <input className={styles.input_100} type="text" value={consignee.companyName} name={'consignee-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
               <input className={styles.input_50} type="text" value={consignee.firstName} name="consignee-firstName" placeholder="First Name" onChange={this.handleFormChange} />
@@ -102,5 +115,6 @@ ShipmentContactsBox.PropTypes = {
     user: PropTypes.object,
     handleChange: PropTypes.func,
     handleNotifyeeChange: PropTypes.func,
-    addNotifyee: PropTypes.func
+    addNotifyee: PropTypes.func,
+    toggleAddressBook: PropTypes.func
 };
