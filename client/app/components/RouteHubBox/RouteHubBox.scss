@@ -1,10 +1,5 @@
 
 :local {
-  .dash_border {
-    border-bottom-style: dashed;
-    border-bottom-width: 4px;
-    padding: 4px;
-  }
   .hub_card {
     width: 300px;
     height: 200px;
@@ -36,5 +31,8 @@
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
+  }
+  .connection_graphics {
+    margin-top: -130px;
   }
 }
