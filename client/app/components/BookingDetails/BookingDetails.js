@@ -129,7 +129,6 @@ export class BookingDetails extends Component {
     }
     toggleAddressBook() {
         const addressBool = this.state.addressBook;
-        console.log(addressBool);
         this.setState({ addressBook: !addressBool });
     }
     addNotifyee() {

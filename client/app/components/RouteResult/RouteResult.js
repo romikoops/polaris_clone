@@ -6,7 +6,6 @@ import { RoundButton } from '../RoundButton/RoundButton';
 export class RouteResult extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.selectRoute = this.selectRoute.bind(this);
     }
     switchIcon(sched) {

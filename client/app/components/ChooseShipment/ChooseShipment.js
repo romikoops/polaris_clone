@@ -5,7 +5,6 @@ export class ChooseShipment extends Component {
     render() {
         const cards = [];
         const color = this.props.theme ? this.props.theme.colors.primary : 'black';
-        console.log(this.props);
         this.props.shipmentTypes.forEach((shop, i) => {
             let display = shop.name;
             let imgClass = { backgroundImage: 'url(' + shop.img + ')'};
@@ -27,7 +26,10 @@ export class ChooseShipment extends Component {
         });
         return (
           <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
-            <div className="flex-none content-width layout-row layout-align-start-center">
+            <div className="flex-none content-width layout-row layout-align-start-center layout-wrap">
+              <div className={` ${styles.header} flex-100 layout-row layout-align-start-center`}>
+                <p className="flex-none"> Choose your shipment type</p>
+              </div>
               { cards }
             </div>
           </div>

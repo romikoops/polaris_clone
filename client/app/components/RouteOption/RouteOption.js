@@ -13,7 +13,6 @@ export class RouteOption extends Component {
 
     render() {
         const { theme, isPrivate, route } = this.props;
-        // debugger;
         return (
             <div className={`option flex-none layout-row layout-wrap layout-align-start-center ${styles.option}`} onClick={this.choose}>
                 <div className={`${styles.op_type} b_border flex-none layout-row`}>

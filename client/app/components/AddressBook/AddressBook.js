@@ -2,18 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddressBook.scss';
 import { v4 } from 'node-uuid';
-// import { Checkbox } from '../Checkbox/Checkbox';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
-        // const ntfy = {};
-        // if (this.props.contacts) {
-        //     this.props.contacts.forEach(c=>{
-        //         ntfy[c.contact.id] = false;
-        //     });
-        // }
         this.state = {
             setShipper: true,
             setConsignee: false,
@@ -147,16 +140,3 @@ AddressBook.PropTypes = {
     closeAddressBook: PropTypes.func
 };
 
-
-// function mapStateToProps(state) {
-//     const { tenant, shipment } = state;
-//     const {contacts, user_locations, shipment} = shipment;
-//     return {
-//         contacts,
-//         user_locations,
-//         tenant,
-//         shipment
-//     };
-// }
-
-// export default withRouter(connect(mapStateToProps)(AddressBook));

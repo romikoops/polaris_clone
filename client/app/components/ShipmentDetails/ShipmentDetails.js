@@ -14,8 +14,6 @@ import { RouteSelector } from '../RouteSelector/RouteSelector';
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
-        // const { shipment } = this.props;
-        console.log(this.props);
         this.state = {
             origin: {
                 street: '',
@@ -99,9 +97,6 @@ export class ShipmentDetails extends Component {
     handleDayChange(selectedDay) {
         this.setState({ selectedDay });
     }
-    logChange(val) {
-        console.log('Selected: ', val);
-    }
 
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
@@ -125,7 +120,6 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const itemArr = this.state.containers;
         itemArr[0][name] = value;
-        console.log(itemArr);
         this.setState({containers: itemArr});
     }
 
