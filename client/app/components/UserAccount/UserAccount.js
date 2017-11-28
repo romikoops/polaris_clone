@@ -25,28 +25,7 @@ class UserLocations extends Component {
 
     render() {
         const locInfo = this.props.locations;
-        // debugger;
-        // const locationInfo = [
-        //     {
-        //         key: 'addr1',
-        //         isPrimary: true,
-        //         content:
-        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, cumque.'
-        //     },
-        //     {
-        //         key: 'addr2',
-        //         isPrimary: false,
-        //         content:
-        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-        //     },
-        //     {
-        //         key: 'addr3',
-        //         isPrimary: false,
-        //         content:
-        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse!'
-        //     }
-        // ];
-        // debugger;
+
         const locations = locInfo
             ? locInfo.map(op => {
                   return (
