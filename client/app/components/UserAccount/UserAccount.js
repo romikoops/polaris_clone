@@ -19,8 +19,12 @@ class UserLocations extends Component {
         console.log(this.props);
     }
 
+    componentDidMount() {
+        this.props.getLocations();
+    }
+
     render() {
-        const locInfo = this.props.getLocations(this.props.user);
+        const locInfo = this.props.locations;
         // debugger;
         // const locationInfo = [
         //     {
@@ -42,11 +46,11 @@ class UserLocations extends Component {
         //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse!'
         //     }
         // ];
-
+        // debugger;
         const locations = locInfo
             ? locInfo.map(op => {
                   return (
-                      <div key={op.key} className={'flex-33'}>
+                      <div key={op.id} className={'flex-33'}>
                           <div className={`${styles['location-box']}`}>
                               <div className={`${styles.header}`}>
                                   {op.isPrimary ? (
@@ -60,7 +64,7 @@ class UserLocations extends Component {
                                   )}
                               </div>
                               <div className={`${styles.content}`}>
-                                  {op.content}
+                                  {op.geocoded_address}
                               </div>
                               <div className={`${styles.footer}`}>
                                   <div className="layout-row layout-align-center-center">

@@ -32,9 +32,9 @@ class UserAccount extends Component {
         this.setState({ activeLink: key });
     }
 
-    getLocations(user) {
-        const { dispatch } = this.props;
-        dispatch(userActions.getLocations(user));
+    getLocations() {
+        const { dispatch, user } = this.props;
+        dispatch(userActions.getLocations(user.data));
     }
 
     render() {
@@ -54,10 +54,7 @@ class UserAccount extends Component {
                     /*                 viewComponent = <UserProfile />; */
                 }
                 viewComponent = (
-                    <UserLocations
-                        user={this.props.user.data}
-                        getLocations={this.getLocations}
-                    />
+                    <UserLocations locations={this.props.users.items} getLocations={this.getLocations} />
                 );
                 break;
             case 'locations':
@@ -118,9 +115,10 @@ UserAccount.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    const { authentication, tenant, shipment } = state;
+    const { authentication, tenant, shipment, users } = state;
     const { user, loggedIn } = authentication;
     return {
+        users,
         user,
         tenant,
         loggedIn,
