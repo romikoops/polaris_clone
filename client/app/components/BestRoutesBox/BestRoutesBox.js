@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { moment } from '../../constants';
-import './BestRoutesBox.scss';
+import styles from './BestRoutesBox.scss';
 export class BestRoutesBox extends Component {
     constructor(props) {
         super(props);
@@ -20,7 +20,7 @@ export class BestRoutesBox extends Component {
             }
         });
         return (
-        <div className="flex-30 layout-row layout-wrap best_card">
+        <div className={`flex-30 layout-row layout-wrap ${styles.best_card}`}>
             <div className="flex-100 layout-row">
               <h4 className="flex-none">Cheapest Route</h4>
             </div>
@@ -82,7 +82,7 @@ export class BestRoutesBox extends Component {
             }
         });
         return (
-          <div className="flex-30 layout-row layout-wrap best_card" style={style}>
+          <div className={`flex-30 layout-row layout-wrap ${styles.best_card}`} style={style}>
             <div className="flex-100 layout-row">
               <h4 className="flex-none">Best Deal</h4>
             </div>
@@ -100,8 +100,10 @@ export class BestRoutesBox extends Component {
         const fees = shipmentData.shipment ? shipmentData.shipment.generated_fees : {};
         const depDate = shipmentData.shipment ? shipmentData.shipment.planned_pickup_date : '';
         const activeBtnStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite',
-            color: theme && theme.colors ? 'floralwhite' : 'black'
+            background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary}, ${theme.colors.brightSecondary})` : 'floralwhite',
+            color: theme && theme.colors ? 'white' : 'black',
+            boxShadow: '0 2px 4px 0 rgba(0,0,0,0.17)',
+            padding: '13px 20px',
         };
         return (
         <div className="flex-100 layout-row layout-align-space-between-center">
