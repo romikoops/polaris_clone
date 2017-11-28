@@ -1,8 +1,13 @@
 class UserLocationsController < ApplicationController
   # before_action :require_login_and_correct_id
 
+  include Response
+
   def index
-    
+    user = User.find(params[:user_id])
+    resp = user.locations
+
+    json_response(resp, 200)
   end
 
   def create

@@ -1,7 +1,8 @@
 class ShipmentsController < ApplicationController
+  before_action :require_login_and_correct_id, except: [:test_email]
+
   include ShippingTools
   include Response
-  before_action :require_login_and_correct_id, except: [:test_email]
 
   def index
     @shipper = current_user
@@ -27,6 +28,7 @@ class ShipmentsController < ApplicationController
   def test_email
     forwarder_notification_email(current_user, Shipment.first)
   end
+
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
     if params[:file]
@@ -35,7 +37,6 @@ class ShipmentsController < ApplicationController
   end
 
   def reuse_booking_data
-
     reuse_shipment_data(params, session, 'openlcl')
   end
 
