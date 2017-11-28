@@ -17,18 +17,17 @@ class Landing extends Component {
     }
 
     render() {
-        const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
-        const theme = this.props.theme;
+        const {loggedIn, theme, user} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         const primaryColor = {
-          color: theme && theme.colors ? theme.colors.primary : 'black'
+            color: theme && theme.colors ? theme.colors.primary : 'black'
         };
         const logo = theme ? theme.logo  : '';
         return (
         <div className="wrapper_landing layout-row flex-100 layout-wrap" >
-          { loggedIn ? <LandingTopAuthed className="flex-100" theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
+          { loggedIn ? <LandingTopAuthed className="flex-100" user={user} theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
           <div className="service_box layout-row flex-100 layout-wrap">
             <div className="service_label layout-row layout-align-center-center flex-100">
               <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}

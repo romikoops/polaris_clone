@@ -17,6 +17,7 @@ export class LandingTop extends Component {
         }
         return (
             <div className="landing_top layout-row flex-100 layout-align-center">
+              <div className="top_mask"> </div>
               <div className="layout-row flex-100 layout-wrap">
                 <div className="top_row flex-100 layout-row">
                   <div className="logo_row flex-50 layout-row layout-align-start-center layout_elem">

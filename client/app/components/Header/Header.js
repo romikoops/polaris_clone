@@ -41,7 +41,7 @@ class Header extends Component {
                 <div className="content-width layout-row flex-none">
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
-                            src={theme ? theme.logoLarge : ''}
+                            src={theme ? theme.logo : ''}
                             className={styles.logo}
                             alt=""
                         />
