@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './RouteResult.scss';
+import styles from './RouteResult.scss';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
 export class RouteResult extends Component {
@@ -54,81 +54,86 @@ export class RouteResult extends Component {
                 }
             });
         }
+        const gradientFontStyle = {
+          background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary}, ${theme.colors.brightSecondary})` : 'black',
+        };
+        const price = this.props.fees[schedKey].total;
+        const priceUnits = Math.floor(price);
+        const priceCents = Math.floor((price * 100) % 100);
+
         return (
-          <div key={schedule.id} className="flex-100 layout-row">
-          <div className="flex-75 layout-row layout-wrap result">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-40 layout-row">
-                <div className="flex-15 layout-column layout-align-start-center">
-                  <i className="fa fa-map-marker"></i>
+          <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
+            <div className="flex-75 layout-row layout-wrap">
+              <div className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
+                <div className="flex-40 layout-row">
+                  <i className={`fa fa-map-marker ${styles.map_marker}`}></i>
+                  <div className="flex-55 layout-row layout-wrap">
+                    <h4 className="flex-100"> {originHub.name} </h4>
+                  </div>
+                  <div className="flex-100">
+                    <p className="flex-100"> {originHub.code} </p>
+                  </div>
                 </div>
-                 <div className="flex-55 layout-row layout-wrap">
-                  <h4 className="flex-100"> {originHub.name} </h4>
+                <div className="flex-15 layout-row layout-wrap layout-align-center-start" >
+                  <div className="flex-100 layout-row layout-align-center-center" style={borderStyle}>
+                    {this.switchIcon(schedule)}
+                  </div>
                 </div>
-                <div className="flex-100">
-                  <p className="flex-100"> {originHub.code} </p>
+                <div className="flex-40 layout-row">
+                  <div className="flex-15 layout-column layout-align-start-center">
+                    <i className="fa fa-flag-o"></i>
+                  </div>
+                  <div className="flex-55 layout-row layout-wrap">
+                    <h4 className="flex-100"> {destHub.name} </h4>
+                  </div>
+                  <div className="flex-100">
+                    <p className="flex-100"> {destHub.code} </p>
+                  </div>
                 </div>
               </div>
-              <div className="flex-15 layout-row layout-wrap layout-align-center-start" >
-                <div className="flex-100 layout-row layout-align-center-center dash_border" style={borderStyle}>
-                  { this.switchIcon(schedule)}
-                </div>
-              </div>
-              <div className="flex-40 layout-row">
-                <div className="flex-15 layout-column layout-align-start-center">
-                  <i className="fa fa-flag-o"></i>
-                </div>
-                <div className="flex-55 layout-row layout-wrap">
-                  <h4 className="flex-100"> {destHub.name} </h4>
-                </div>
-                <div className="flex-100">
-                  <p className="flex-100"> {destHub.code} </p>
-                </div>
+              <div className="flex-100 layout-row layout-align-start-center">
+                  <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+                    <div className="flex-100 layout-row">
+                      <h4 className={styles.date_title} style={gradientFontStyle}>Pickup Date</h4>
+                    </div>
+                    <div className="flex-100 layout-row">
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(this.props.pickupDate).format('YYYY-MM-DD')} </p>
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(this.props.pickupDate).format('HH:mm')} </p>
+                    </div>
+
+                  </div>
+                  <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+                    <div className="flex-100 layout-row">
+                      <h4 className={styles.date_title} style={gradientFontStyle}> Date of Departure</h4>
+                    </div>
+                    <div className="flex-100 layout-row">
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(schedule.eta).format('YYYY-MM-DD')} </p>
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(schedule.eta).format('HH:mm')} </p>
+                    </div>
+
+                  </div>
+                  <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+                    <div className="flex-100 layout-row">
+                      <h4 className={styles.date_title} style={gradientFontStyle}> ETA terminal</h4>
+                    </div>
+                    <div className="flex-100 layout-row">
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(schedule.eta).format('YYYY-MM-DD')} </p>
+                      <p className={`flex-none ${styles.sched_elem}`}> {moment(schedule.eta).format('HH:mm')} </p>
+                    </div>
+
+                  </div>
               </div>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center">
-                <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-                  <div className="flex-100 layout-row">
-                    <h4 className="flex-90">Pickup Date</h4>
-                  </div>
-                  <div className="flex-100 layout-row">
-                    <p className="flex-50"> <strong> {moment(this.props.pickupDate).format('YYYY-MM-DD')} </strong></p>
-                    <p className="flex-50"> {moment(this.props.pickupDate).format('HH:mm')}</p>
-                  </div>
-
-                </div>
-                <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-                  <div className="flex-100 layout-row">
-                    <h4 className="flex-90"> Date of Departure</h4>
-                  </div>
-                  <div className="flex-100 layout-row">
-                    <p className="flex-50"> <strong> {moment(schedule.etd).format('YYYY-MM-DD')}</strong></p>
-                    <p className="flex-50"> {moment(schedule.etd).format('HH:mm')}</p>
-                  </div>
-
-                </div>
-                <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-                  <div className="flex-100 layout-row">
-                    <h4 className="flex-90"> ETA terminal</h4>
-                  </div>
-                  <div className="flex-100 layout-row">
-                    <p className="flex-50"> <strong> {moment(schedule.eta).format('YYYY-MM-DD')}</strong></p>
-                    <p className="flex-50"> {moment(schedule.eta).format('HH:mm')}</p>
-                  </div>
-
-                </div>
+            <div className="flex-25 layout-row layout-wrap">
+              <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+                <p className="flex-none">Total price: </p>
+                <h4 className="flex-none"> {priceUnits} <sub>{priceCents}</sub> </h4>
+              </div>
+              <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+                <RoundButton text={'Choose'} handleNext={this.selectRoute} theme={theme} active/>
+              </div>
             </div>
           </div>
-          <div className="flex-25 layout-row layout-wrap">
-            <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-              <p className="flex-none"> Per unit</p>
-              <h4 className="flex-none"> {this.props.fees[schedKey].total.toFixed(2)} </h4>
-            </div>
-            <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-              <RoundButton text={'Choose'} handleNext={this.selectRoute} theme={theme} active/>
-            </div>
-          </div>
-        </div>
         );
     }
 }
