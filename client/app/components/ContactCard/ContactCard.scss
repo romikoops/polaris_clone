@@ -1,27 +1,28 @@
 :local {
   .contact_header{
-    margin: 0;
+    margin: 3px 0;
     color: #212121; 
     font-size: 16px;  
     line-height: 18px;
   }
-  .contact_details {
-    margin: 0;
+  .contact_details p{
+    margin: 3px 0;
     color: #212121; 
     font-size: 14px;  
     line-height: 16px;
   }
   .contact_card {
     margin: 5px 0;
+    background-color: #FCFCFC;  
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
   }
   .contact_scroll {
     height: 300px;
     overflow-y: scroll;
     overflow-x: none;
   }
-  .prompt {
-    color: #2C2C2C;
-    font-size: 20px;
-    line-height: 45px;
+  .contact_card i {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
   }
 }

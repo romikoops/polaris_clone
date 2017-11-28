@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddressBook.scss';
 import { v4 } from 'node-uuid';
-import { Checkbox } from '../Checkbox/Checkbox';
+// import { Checkbox } from '../Checkbox/Checkbox';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { ContactCard } from '../ContactCard/ContactCard';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
@@ -20,6 +21,7 @@ export class AddressBook extends Component {
             selectedNotifyees: {}
         };
         this.setContact = this.setContact.bind(this);
+        this.toggleNotifyees = this.toggleNotifyees.bind(this);
     }
     toggleNotifyees(id) {
         this.setState({ selectedNotifyees: { ...this.state.selectedNotifyees, [id]: !this.state.selectedNotifyees[id] } });
@@ -30,12 +32,14 @@ export class AddressBook extends Component {
             case 'shipper':
                 this.setState({
                     setShipper: false,
+                    shipper: val,
                     setConsignee: true
                 });
                 break;
             case 'consignee':
                 this.setState({
                     setShipper: false,
+                    consignee: val,
                     setConsignee: false,
                     setNotifyees: true
                 });
@@ -54,57 +58,10 @@ export class AddressBook extends Component {
         if (contacts) {
             contacts.forEach(c => {
                 contactsArray.push(
-                    <div key={v4()} className={`flex-100 layout-row ${styles.contact_card}`} onClick={() => this.setContact('consignee', c)} >
-                        <div className="flex-20 layout-row layout-align-center-start">
-                            <i className="fa fa-user-circle-o flex-none"></i>
-                        </div>
-                        <div className="flex-80 layout-row layout-wrap">
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className={`flex-none ${styles.contact_header}`}> {c.contact.first_name} {c.contact.last_name} </p>
-                            </div>
-                            <div className={`flex-100 layout-row layout-align-start-center ${styles.contact_details}`}>
-                                <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-email flex-none"></i>
-                                    <p className="flex-none"> {c.contact.email} </p>
-                                </div>
-                                 <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-phone flex-none"></i>
-                                    <p className="flex-none"> {c.contact.phone} </p>
-                                </div>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className="flex-100"> {c.location.geocoded_address}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <ContactCard contactData={c} theme={theme} select={this.setContact} key={v4()} target="consignee" />
                 );
                 notifyeeArray.push(
-                    <div key={v4()} className={`flex-100 layout-row ${styles.contact_card}`}>
-                        <div className="flex-15 layout-row layout-align-center-start">
-                            <i className="fa fa-user-circle-o flex-none"></i>
-                        </div>
-                        <div className="flex-75 layout-row layout-wrap">
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className={`flex-none ${styles.contact_header}`}> {c.contact.first_name} {c.contact.last_name} </p>
-                            </div>
-                            <div className={`flex-100 layout-row layout-align-start-center ${styles.contact_details}`}>
-                                <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-email flex-none"></i>
-                                    <p className="flex-none"> {c.contact.email} </p>
-                                </div>
-                                 <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-phone flex-none"></i>
-                                    <p className="flex-none"> {c.contact.phone} </p>
-                                </div>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className="flex-100"> {c.location.geocoded_address}</p>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-center-center">
-                               <Checkbox onChange={this.toggleNotifyees} checked={this.state.selectedNotifyees[c.contact.id]}/>
-                            </div>
-                        </div>
-                    </div>
+                    <ContactCard contactData={c} theme={theme} key={v4()} target="notifyee" toggleSelect={this.toggleNotifyees} list />
                 );
             });
         }
@@ -112,39 +69,27 @@ export class AddressBook extends Component {
         if (shipperOptions) {
             shipperOptions.forEach(c => {
                 shipperArray.push(
-                    <div key={v4()} className={`flex-100 layout-row ${styles.contact_card}`} onClick={() => this.setContact('shipper', c)}>
-                        <div className="flex-20 layout-row layout-align-center-start">
-                            <i className="fa fa-user-circle-o flex-none"></i>
-                        </div>
-                        <div className="flex-80 layout-row layout-wrap">
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className={`flex-none ${styles.contact_header}`}> {c.contact.first_name} {c.contact.last_name} </p>
-                            </div>
-                            <div className={`flex-100 layout-row layout-align-start-center ${styles.contact_details}`}>
-                                <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-email flex-none"></i>
-                                    <p className="flex-none"> {c.contact.email} </p>
-                                </div>
-                                 <div className="flex-50 layout-row layout-align-start-center">
-                                    <i className="fa fa-phone flex-none"></i>
-                                    <p className="flex-none"> {c.contact.phone} </p>
-                                </div>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className="flex-100"> {c.location.geocoded_address}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <ContactCard contactData={c} theme={theme} select={this.setContact} key={v4()} target="shipper" />
                 );
             });
         }
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <div className="flex-75 layout-row layout-wrap">
-            <div className="flex-50 layout-row layout-wrap">
-                {this.state.setShipper ? <h1> Set Shipper Details</h1> : ''}
-                {this.state.setConsignee ? <h1> Set Consignee Details</h1> : ''}
-                {this.state.setNotifyees ? <h1> Set Notifyees Details</h1> : ''}
+          <div className="flex-none content-width layout-row layout-wrap">
+            <div className="flex-50 layout-row layout-wrap layout-align-start-start">
+                <div className={` ${styles.prompt} flex-100 layout-row layout-align-start-center`}>
+                    {this.state.setShipper ? <h1> Set Shipper Details</h1> : ''}
+                    {this.state.setConsignee ? <h1> Set Consignee Details</h1> : ''}
+                    {this.state.setNotifyees ? <h1> Set Notifyees Details</h1> : ''}
+                </div>
+                <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    <div className="flex-80 layout-row">
+                        {this.state.shipper ? <ContactCard contactData={this.state.shipper} theme={theme} key={v4()}  /> : ''}
+                    </div>
+                    <div className="flex-80 layout-row">
+                        {this.state.consignee ? <ContactCard contactData={this.state.consignee} theme={theme} key={v4()}  /> : ''}
+                    </div>
+                </div>
             </div>
             <div className={`${styles.contact_scroll} flex-50 layout-row layout-wrap`}>
                 {this.state.setShipper ? shipperArray : ''}
