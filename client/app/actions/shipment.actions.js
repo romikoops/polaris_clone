@@ -124,7 +124,7 @@ function getShipments() {
 }
 
 function getShipment(id) {
-    function request(id) { return { type: shipmentConstants.GET_SHIPMENT_REQUEST, id }; }
+    function request(reqId) { return { type: shipmentConstants.GET_SHIPMENT_REQUEST, reqId }; }
     function success(shipment) { return { type: shipmentConstants.GET_SHIPMENT_SUCCESS, shipment }; }
     function failure(error) { return { type: shipmentConstants.GET_SHIPMENT_FAILURE, error }; }
     return dispatch => {
@@ -140,8 +140,8 @@ function getShipment(id) {
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
-    function request(id) { return { type: shipmentConstants.DELETE_REQUEST, id }; }
-    function success(id) { return { type: shipmentConstants.DELETE_SUCCESS, id }; }
+    function request(reqId) { return { type: shipmentConstants.DELETE_REQUEST, reqId }; }
+    function success(respId) { return { type: shipmentConstants.DELETE_SUCCESS, respId }; }
     function failure(id, error) { return { type: shipmentConstants.DELETE_FAILURE, id, error }; }
     return dispatch => {
         dispatch(request(id));

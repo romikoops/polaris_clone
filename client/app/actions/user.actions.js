@@ -34,15 +34,16 @@ function logout() {
 }
 
 function register(user) {
-    function request(user) {
-        return { type: userConstants.REGISTER_REQUEST, user };
+    function request(userData) {
+        return { type: userConstants.REGISTER_REQUEST, userData };
     }
-    function success(user) {
-        return { type: userConstants.REGISTER_SUCCESS, user };
+    function success(userResp) {
+        return { type: userConstants.REGISTER_SUCCESS, userResp };
     }
     function failure(error) {
         return { type: userConstants.REGISTER_FAILURE, error };
     }
+
     return dispatch => {
         dispatch(request(user));
 
@@ -106,15 +107,16 @@ function getAll() {
 
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
-    function request(id) {
-        return { type: userConstants.DELETE_REQUEST, id };
+    function request(reqId) {
+        return { type: userConstants.DELETE_REQUEST, reqId };
     }
-    function success(id) {
-        return { type: userConstants.DELETE_SUCCESS, id };
+    function success(respId) {
+        return { type: userConstants.DELETE_SUCCESS, respId };
     }
-    function failure(id, error) {
-        return { type: userConstants.DELETE_FAILURE, id, error };
+    function failure(failId, error) {
+        return { type: userConstants.DELETE_FAILURE, failId, error };
     }
+
     return dispatch => {
         dispatch(request(id));
         userService.delete(id).then(

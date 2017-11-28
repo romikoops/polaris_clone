@@ -92,36 +92,41 @@ export class BookingDetails extends Component {
     }
 
     setFromBook(target, value) {
-        this.setState({
-            [target]: {
-                firstName: value.contact.first_name,
-                companyName: value.contact.company_name,
-                lastName: value.contact.last_name,
-                email: value.contact.email,
-                phone: value.contact.phone,
-                street: value.location.street,
-                number: value.location.street_number,
-                zipCode: value.location.zip_code,
-                city: value.location.city,
-                country: value.location.country
-            }
-        });
+        if (target === 'notifyee') {
+            this.setNotifyeesFromBook(target, value);
+        } else {
+            this.setState({
+                [target]: {
+                    firstName: value.contact.first_name,
+                    companyName: value.contact.company_name,
+                    lastName: value.contact.last_name,
+                    email: value.contact.email,
+                    phone: value.contact.phone,
+                    street: value.location.street,
+                    number: value.location.street_number,
+                    zipCode: value.location.zip_code,
+                    city: value.location.city,
+                    country: value.location.country
+                }
+            });
+        }
     }
 
     setNotifyeesFromBook(target, value) {
-        this.setState({
-            [target]: {
-                firstName: value.contact.first_name,
-                lastName: value.contact.last_name,
-                email: value.contact.email,
-                phone: value.contact.phone,
-                street: value.location.street,
-                number: value.location.street_number,
-                zipCode: value.location.zip_code,
-                city: value.location.city,
-                country: value.location.country
-            }
-        });
+        const tmpAdd = {
+            firstName: value.contact.first_name,
+            lastName: value.contact.last_name,
+            email: value.contact.email,
+            phone: value.contact.phone
+        };
+        const notifyees = this.state.notifyees;
+        if (notifyees.indexOf(tmpAdd) > -1) {
+            notifyees.slice(notifyees.indexOf(tmpAdd), 1);
+            this.setState({notifyees});
+        } else {
+            notifyees.push(tmpAdd);
+            this.setState({notifyees});
+        }
     }
 
     toggleAddressBook() {
@@ -214,7 +219,7 @@ export class BookingDetails extends Component {
                 userLocations={userLocations}
                 theme={theme}
                 setDetails={this.setFromBook}
-                closeAddressBook={this.closeBook}
+                closeAddressBook={this.toggleAddressBook}
             />
         );
         const cForm = (

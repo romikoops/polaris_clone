@@ -106,10 +106,6 @@ export class ShipmentDetails extends Component {
         this.setState({ selectedDay });
     }
 
-    logChange(val) {
-        console.log('Selected: ', val);
-    }
-
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
@@ -134,7 +130,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const itemArr = this.state.containers;
         itemArr[0][name] = value;
-        console.log(itemArr);
+
         this.setState({ containers: itemArr });
     }
 

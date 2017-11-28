@@ -147,7 +147,7 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
+                <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap alyout-align-start-start">
                   <div className="flex-100 layout-row">
                     <p className={`flex-none ${styles.f_header}`}> Required Documents</p>
                   </div>

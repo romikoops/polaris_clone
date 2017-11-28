@@ -29,18 +29,15 @@ export class ShipmentContactsBox extends Component {
         };
         if (notifyees) {
             notifyees.forEach((n, i) => {
-                notifyeesArray.push(<div key={v4()} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-start">
-                        <input className={styles.input_100} type="text" value={n.companyName} name={'notifyees-' + i + '-companyName'} placeholder="Company Name" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_50} type="text" value={n.firstName} name={'notifyees-' + i + '-firstName'} placeholder="First Name" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_50} type="text" value={n.lastName} name={'notifyees-' + i + '-lastName'} placeholder="Last Name" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_50} type="text" value={n.email} name={'notifyees-' + i + '-email'} placeholder="Email" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_50} type="text" value={n.phone} name={'notifyees-' + i + '-phone'} placeholder="Phone" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_street} type="text" value={n.street} name={'notifyees-' + i + '-street'} placeholder="Street" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_no} type="text" value={n.number} name={'notifyees-' + i + '-number'} placeholder="Number" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_zip} type="text" value={n.zipCode} name={'notifyees-' + i + '-zipCode'} placeholder="Postal Code" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_cc} type="text" value={n.city} name={'notifyees-' + i + '-city'} placeholder="City" onChange={this.handleNotifyeeChange} />
-                        <input className={styles.input_cc} type="text" value={n.country} name={'notifyees-' + i + '-country'} placeholder="Country" onChange={this.handleNotifyeeChange} />
-                      </div>);
+                notifyeesArray.push(
+                  <div key={v4()} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                    <p className={` ${styles.contact_header} flex-100`}> Notifyee {i + 1}</p>
+                    <input className={styles.input_100} type="text" value={n.companyName} name={'notifyees-' + i + '-companyName'} placeholder="Company Name" onChange={this.handleNotifyeeChange} />
+                    <input className={styles.input_50} type="text" value={n.firstName} name={'notifyees-' + i + '-firstName'} placeholder="First Name" onChange={this.handleNotifyeeChange} />
+                    <input className={styles.input_50} type="text" value={n.lastName} name={'notifyees-' + i + '-lastName'} placeholder="Last Name" onChange={this.handleNotifyeeChange} />
+                    <input className={styles.input_50} type="text" value={n.email} name={'notifyees-' + i + '-email'} placeholder="Email" onChange={this.handleNotifyeeChange} />
+                  </div>
+                );
             });
         }
         return (
@@ -91,9 +88,9 @@ export class ShipmentContactsBox extends Component {
             </div>
             <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-align-start-center">
-                  <div className="flex-50 layout-row layout-align-start-center">
-                      <i className="fa fa-person flex-none"></i>
-                      <h6 className="flex-none"> Notifyees</h6>
+                  <div className={` ${styles.contact_header} flex-50 layout-row layout-align-start-center`}>
+                      <i className="fa fa-users flex-none" style={textStyle}></i>
+                      <p className="flex-none"> Notifyees</p>
                   </div>
                   <div className="flex-50 layout-row layout-align-start-center">
                     <div className="flex-50 layout-row layout-align-start-center" onClick={this.addNotifyee}>

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AddressBook.scss';
 import { v4 } from 'node-uuid';
-// import { Checkbox } from '../Checkbox/Checkbox';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
 
@@ -14,7 +13,7 @@ export class AddressBook extends Component {
             setShipper: true,
             setConsignee: false,
             setNotifyees: false,
-            selectedNotifyees: {}
+            notifyees: []
         };
         this.setContact = this.setContact.bind(this);
         this.toggleNotifyees = this.toggleNotifyees.bind(this);
@@ -47,6 +46,16 @@ export class AddressBook extends Component {
                     setNotifyees: true
                 });
                 break;
+            case 'notifyee':
+                const notifyees = this.state.notifyees;
+                notifyees.push(val);
+                this.setState({
+                    setShipper: false,
+                    notifyees: notifyees,
+                    setConsignee: false,
+                    setNotifyees: true
+                });
+                break;
             default:
                 break;
         }
@@ -54,10 +63,12 @@ export class AddressBook extends Component {
 
     render() {
         const { contacts, userLocations, theme } = this.props;
+        const { notifyees, shipper, consignee } = this.state;
         const shipperOptions = [...userLocations, ...contacts];
         const contactsArray = [];
         const shipperArray = [];
         const notifyeeArray = [];
+        const noteArr = [];
         if (contacts) {
             contacts.forEach(c => {
                 contactsArray.push(
@@ -75,8 +86,7 @@ export class AddressBook extends Component {
                         theme={theme}
                         key={v4()}
                         target="notifyee"
-                        toggleSelect={this.toggleNotifyees}
-                        list
+                        select={this.setContact}
                     />
                 );
             });
@@ -95,6 +105,18 @@ export class AddressBook extends Component {
                 );
             });
         }
+
+        if (notifyees.length > 0) {
+            notifyees.forEach(nt => {
+                noteArr.push(
+                    <p key={v4()} className="flex-50 layout-row">
+                        {' '}
+                        {nt.contact.first_name} {nt.contact.last_name}
+                    </p>
+                );
+            });
+        }
+
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-none content-width layout-row layout-wrap">
@@ -121,28 +143,69 @@ export class AddressBook extends Component {
                             )}
                         </div>
                         <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                            <div className="flex-80 layout-row">
-                                {this.state.shipper ? (
-                                    <ContactCard
-                                        contactData={this.state.shipper}
-                                        theme={theme}
-                                        key={v4()}
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </div>
-                            <div className="flex-80 layout-row">
-                                {this.state.consignee ? (
-                                    <ContactCard
-                                        contactData={this.state.consignee}
-                                        theme={theme}
-                                        key={v4()}
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </div>
+                            {shipper ? (
+                                <div
+                                    className={` ${
+                                        styles.results
+                                    } flex-90 layout-row`}
+                                >
+                                    <p className="flex-40 title">
+                                        {' '}
+                                        Shipping from:
+                                    </p>
+                                    <p className="flex-60 offset-5">
+                                        {' '}
+                                        {shipper.contact.first_name}{' '}
+                                        {shipper.contact.last_name}{' '}
+                                    </p>
+                                    <p className="flex-100 ">
+                                        {' '}
+                                        {shipper.location.geocoded_address}{' '}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
+                            {consignee ? (
+                                <div
+                                    className={` ${
+                                        styles.results
+                                    } flex-90 layout-row`}
+                                >
+                                    <p className="flex-40 title">
+                                        {' '}
+                                        Shipping from:
+                                    </p>
+                                    <p className="flex-60 offset-5">
+                                        {' '}
+                                        {consignee.contact.first_name}{' '}
+                                        {consignee.contact.last_name}{' '}
+                                    </p>
+                                    <p className="flex-100 ">
+                                        {' '}
+                                        {
+                                            consignee.location.geocoded_address
+                                        }{' '}
+                                    </p>
+                                </div>
+                            ) : (
+                                ''
+                            )}
+                            {notifyees.length > 0 ? (
+                                <div
+                                    className={` ${
+                                        styles.n_results
+                                    } flex-90 layout-row layout-wrap`}
+                                >
+                                    <p className="flex-100 title">
+                                        {' '}
+                                        Notifying:
+                                    </p>
+                                    {noteArr}
+                                </div>
+                            ) : (
+                                ''
+                            )}
                         </div>
                     </div>
                     <div
@@ -158,7 +221,7 @@ export class AddressBook extends Component {
                         <div className="content-width layout-row layout-align-end-center button_padding">
                             <RoundButton
                                 active
-                                handleNext={this.closeAddressBook}
+                                handleNext={this.props.closeAddressBook}
                                 theme={theme}
                                 text="Done"
                             />

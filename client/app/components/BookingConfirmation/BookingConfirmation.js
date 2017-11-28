@@ -117,13 +117,17 @@ export class BookingConfirmation extends Component {
             </div>
             <div className={` ${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
               <div className="flex-none content-width layout-row layout-align-start-center">
-                <RoundButton theme={theme} text="Save as pdf" iconClass="fa-download" />
-                <RoundButton theme={theme} text="Send data to" iconClass="fa-paper-plane-o" />
+                <div className="flex-none layout-row">
+                  <RoundButton theme={theme} text="Save as pdf" iconClass="fa-download" />
+                </div>
+                <div className="flex-none offset-5 layout-row">
+                  <RoundButton theme={theme} text="Send data to" iconClass="fa-paper-plane-o" />
+                </div>
               </div>
             </div>
             <div className={` ${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
               <div className="flex-none content-width layout-row layout-align-start-center">
-                <RoundButton theme={theme} text="Save as pdf" back iconClass="fa-angle-left" />
+                <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
               </div>
             </div>
           </div>

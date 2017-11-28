@@ -21,7 +21,7 @@ export class ShopStageView extends Component {
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
-            <div className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`} onClick={() => this.props.setStage(stage.step)}>
+            <div className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`} >
                 <i className="fa fa-check flex-none" style={textStyle}></i>
             </div>
 

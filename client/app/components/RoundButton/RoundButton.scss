@@ -6,6 +6,7 @@
     line-height: 21px;
     text-align: center;
     color: #FFFFFF;
+    border: none;
   }
 
   .large {
@@ -16,6 +17,12 @@
   .small {
     height: 33.83px;
     width: 167px;
+    border: none;
+  }
+
+  .full {
+    height: 33.83px;
+    width: 100%;
   }
 
   .neutral {

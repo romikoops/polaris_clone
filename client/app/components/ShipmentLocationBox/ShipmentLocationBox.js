@@ -112,8 +112,6 @@ export class ShipmentLocationBox extends Component {
     }
     initAutocomplete(map, target) {
         const input = document.getElementById(target);
-        // map1.controls[this.props.gMaps.ControlPosition.TOP_RIGHT].push(oInput);
-        // map2.controls[this.props.gMaps.ControlPosition.TOP_RIGHT].push(dInput);
         const autocomplete = new this.props.gMaps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
         this.autocompleteListener(map, autocomplete, target);
@@ -157,7 +155,6 @@ export class ShipmentLocationBox extends Component {
               markers[i].setMap(null);
             }
         }
-        // debugger;
         const marker = new this.props.gMaps.Marker({
             position: location,
             map: map,
@@ -196,19 +193,11 @@ export class ShipmentLocationBox extends Component {
         });
     }
     setOriginHub(event) {
-        console.log(event);
-        // let nxo;
-        // this.props.allNexuses.forEach(nx => {
-        //     if (nx.id == event.value) {
-        //         nxo
-        //     }
-        // })
         this.setState({origin: {...this.state.origin, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
         this.props.setTargetAddress('origin', {...this.state.origin, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
         this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);
     }
     setDestHub(event) {
-        console.log(event);
         this.setState({destination: {...this.state.destination, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
         this.props.setTargetAddress('destination', {...this.state.destination, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
         this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);

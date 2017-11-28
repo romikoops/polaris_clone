@@ -8,31 +8,18 @@ import Landing from '../Landing/Landing';
 import OpenShop from '../OpenShop/OpenShop';
 import { Footer } from '../../components/Footer/Footer';
 import UserAccount from '../UserAccount/UserAccount';
-// import PropsRoute from '../../routes/PropsRoute'; // <PropsRoute path="/landing" component={Landing} />
 import { fetchTenantIfNeeded } from '../../actions/tenant';
-// import { tenantDefaults } from '../../constants';
-// debugger;
+
 class App extends Component {
     constructor(props) {
         super(props);
-        // this.state = {
-        //     tenant: {}
-        // };
-        console.log(this.props);
+
     }
 
     componentDidMount() {
         const { dispatch, selectedSubdomain } = this.props;
         dispatch(fetchTenantIfNeeded(selectedSubdomain));
-        // const tenantId = 'greencarrier';
-        // fetch('http://localhost:3000/tenants/' + tenantId)
-        // .then(results => {
-        //     return results.json();
-        // }).then(data => {
-        //     // console.log(data);
-        //     // this.setTenant(data);
-        //     this.setState({tenant: data});
-        // });
+
     }
     componentDidUpdate(prevProps) {
         if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
@@ -40,9 +27,6 @@ class App extends Component {
             dispatch(fetchTenantIfNeeded(selectedSubdomain));
         }
     }
-    // setTenant(tenant) {
-    //     boundSetTenant({tenant: tenant});
-    // }
 
     render() {
         const { tenant, isFetching } = this.props;

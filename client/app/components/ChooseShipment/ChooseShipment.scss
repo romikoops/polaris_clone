@@ -4,6 +4,9 @@
     height: 270px;
     margin: 15px;
   }
+  .card_link_row {
+    margin-bottom: 77px;
+  }
 
   .card_img {
     width: 100% !important;
@@ -23,5 +26,16 @@
     font-size: 18px;
     line-height: 21px;
     background: transparent;
+  }
+  .header {
+    margin-top: 50px;
+    margin-bottom: 40px;
+    p {
+      margin: 0;
+      color: #212121;
+      // font-family: ".SF NS Display";
+      font-size: 21px;
+      line-height: 24px;
+    }
   }
 }

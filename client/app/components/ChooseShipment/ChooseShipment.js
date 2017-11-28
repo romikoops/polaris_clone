@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import styles from './ChooseShipment.scss';
 export class ChooseShipment extends Component {
     render() {
-        const cards = [];
         const color = this.props.theme
             ? this.props.theme.colors.primary
             : 'black';
+        const cards = [];
 
         this.props.shipmentTypes.forEach((shop, i) => {
             let display = shop.name;
@@ -48,7 +48,14 @@ export class ChooseShipment extends Component {
                     styles.card_link_row
                 } layout-row flex-100 layout-align-center`}
             >
-                <div className="flex-none content-width layout-row layout-align-start-center">
+                <div className="flex-none content-width layout-row layout-align-start-center layout-wrap">
+                    <div
+                        className={` ${
+                            styles.header
+                        } flex-100 layout-row layout-align-start-center`}
+                    >
+                        <p className="flex-none"> Choose your shipment type</p>
+                    </div>
                     {cards}
                 </div>
             </div>

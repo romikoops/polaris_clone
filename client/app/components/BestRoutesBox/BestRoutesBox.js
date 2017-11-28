@@ -20,15 +20,15 @@ export class BestRoutesBox extends Component {
             }
         });
         return (
-        <div className={`flex-30 layout-row layout-wrap ${styles.best_card}`}>
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Cheapest Route</h4>
+            <div className={`flex-none layout-row layout-wrap ${styles.best_card}`}>
+                <div className="flex-100 layout-row">
+                  <h4 className="flex-none">Fastest route</h4>
+                </div>
+                <div className="flex-100 layout-row">
+                  <p className="flex-none">{fastestFare.toFixed(2)} EUR</p>
+                </div>
             </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">{fastestFare.toFixed(2)} EUR</p>
-            </div>
-          </div>
-          );
+        );
     }
 
     calcCheapest(schedules, fees) {
@@ -43,14 +43,14 @@ export class BestRoutesBox extends Component {
             }
         });
         return (
-          <div className="flex-30 layout-row layout-wrap best_card">
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Fastest route</h4>
+            <div className={`flex-none layout-row layout-wrap ${styles.best_card}`}>
+                <div className="flex-100 layout-row">
+                    <h4 className="flex-none">Cheapest Route</h4>
+                </div>
+                <div className="flex-100 layout-row">
+                    <p className="flex-none">{cheapestFare.toFixed(2)} EUR</p>
+                </div>
             </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">{cheapestFare.toFixed(2)} EUR</p>
-            </div>
-          </div>
         );
     }
     sortBestOption(schedules, fees, depDate, style) {
@@ -82,14 +82,14 @@ export class BestRoutesBox extends Component {
             }
         });
         return (
-          <div className={`flex-30 layout-row layout-wrap ${styles.best_card}`} style={style}>
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Best Deal</h4>
+            <div className={`flex-none layout-row layout-wrap ${styles.best_card}`} style={style}>
+                <div className="flex-100 layout-row">
+                    <h4 className="flex-none">Best Deal</h4>
+                </div>
+                <div className="flex-100 layout-row">
+                    <p className="flex-none">{bestFare.toFixed(2)} EUR</p>
+                </div>
             </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">{bestFare.toFixed(2)} EUR</p>
-            </div>
-          </div>
         );
     }
 
@@ -101,9 +101,7 @@ export class BestRoutesBox extends Component {
         const depDate = shipmentData.shipment ? shipmentData.shipment.planned_pickup_date : '';
         const activeBtnStyle = {
             background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary}, ${theme.colors.brightSecondary})` : 'floralwhite',
-            color: theme && theme.colors ? 'white' : 'black',
-            boxShadow: '0 2px 4px 0 rgba(0,0,0,0.17)',
-            padding: '13px 20px',
+            color: theme && theme.colors ? 'white' : 'black'
         };
         return (
         <div className="flex-100 layout-row layout-align-space-between-center">
