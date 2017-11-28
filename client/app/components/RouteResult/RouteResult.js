@@ -52,9 +52,6 @@ export class RouteResult extends Component {
                 }
             });
         }
-        console.log('originHub');
-        console.log(originHub);
-        console.log(originHub.hub_code);
         const gradientFontStyle = {
           background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary}, ${theme.colors.brightSecondary})` : 'black',
         };
