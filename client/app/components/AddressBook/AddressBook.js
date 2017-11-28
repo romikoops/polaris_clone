@@ -18,7 +18,7 @@ export class AddressBook extends Component {
             setShipper: true,
             setConsignee: false,
             setNotifyees: false,
-            selectedNotifyees: {}
+            selectedNotifyees: []
         };
         this.setContact = this.setContact.bind(this);
         this.toggleNotifyees = this.toggleNotifyees.bind(this);
@@ -44,6 +44,16 @@ export class AddressBook extends Component {
                     setNotifyees: true
                 });
                 break;
+             case 'notifyee':
+                const notifyees = this.state.selectedNotifyees;
+                notifyees.push(val);
+                this.setState({
+                    setShipper: false,
+                    selectedNotifyees: notifyees,
+                    setConsignee: false,
+                    setNotifyees: true
+                });
+                break;
             default:
                 break;
         }
@@ -61,7 +71,7 @@ export class AddressBook extends Component {
                     <ContactCard contactData={c} theme={theme} select={this.setContact} key={v4()} target="consignee" />
                 );
                 notifyeeArray.push(
-                    <ContactCard contactData={c} theme={theme} key={v4()} target="notifyee" toggleSelect={this.toggleNotifyees} list />
+                    <ContactCard contactData={c} theme={theme} key={v4()} target="notifyee" select={this.setContact}  />
                 );
             });
         }

@@ -9,18 +9,25 @@ export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          selectedDay: moment().format()
+            selectedDay: moment().format('DD-MM-YYYY'),
+            selectedOption: this.props.moT
         };
         this.editFilterDay = this.editFilterDay.bind(this);
         this.handleOptionChange = this.handleOptionChange.bind(this);
+        this.setFilterDuration = this.setFilterDuration.bind(this);
     }
     editFilterDay(event) {
-        this.props.handleDayChange(event.day);
+        this.props.setDepartureDate(event.day);
     }
     handleOptionChange(changeEvent) {
         this.setState({
             selectedOption: changeEvent.target.value
         });
+        this.props.setMoT(changeEvent.target.value);
+    }
+    setFilterDuration(event) {
+        const dur = event.target.value;
+        this.props.setDurationFilter(dur);
     }
     render() {
         const { theme } = this.props;
@@ -55,7 +62,7 @@ export class RouteFilterBox extends Component {
               </div>
               <div className={styles.transit_time}>
                 <p>Transit time</p>
-                <input type="range"/>
+                <input type="range" value={this.props.durationFilter} onChange={this.setFilterDuration}/>
                 <div className={styles.transit_time_labels}>
                   <p>20 days</p>
                   <p>100 days</p>
@@ -69,5 +76,9 @@ export class RouteFilterBox extends Component {
 }
 RouteFilterBox.PropTypes = {
     theme: PropTypes.object,
-    handleDayChange: PropTypes.func
+    setDurationFilter: PropTypes.func,
+    setMoT: PropTypes.func,
+    setDepartureDate: PropTypes.func,
+    durationFilter: PropTypes.number,
+    moT: PropTypes.string
 };
