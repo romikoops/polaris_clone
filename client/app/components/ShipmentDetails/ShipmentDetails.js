@@ -233,6 +233,7 @@ export class ShipmentDetails extends Component {
 
             // cargoDetails = this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
+
         const rSelect = (
             <RouteSelector
                 theme={theme}
@@ -241,6 +242,7 @@ export class ShipmentDetails extends Component {
                 privateRoutes={this.props.shipmentData.private_routes}
             />
         );
+
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -249,11 +251,15 @@ export class ShipmentDetails extends Component {
                 component={ShipmentLocationBox}
                 selectedRoute={this.state.selectedRoute}
                 toggleCarriage={this.toggleCarriage}
+                origin={this.state.origin}
+                destination={this.state.destination}
             />
         );
+
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
+
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">

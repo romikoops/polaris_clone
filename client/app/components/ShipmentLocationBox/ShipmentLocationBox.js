@@ -21,13 +21,15 @@ export class ShipmentLocationBox extends Component {
                 zipCode: '',
                 city: '',
                 country: '',
-                fullAddress: ''
+                fullAddress: '',
+                hub_id: ''
             },
             destination: {
                 street: '',
                 zipCode: '',
                 city: '',
-                fullAddress: ''
+                fullAddress: '',
+                hub_id: ''
             },
             shipment: {
                 has_pre_carriage: false,
@@ -36,7 +38,8 @@ export class ShipmentLocationBox extends Component {
             autocomplete: {
                 origin: false,
                 destination: false
-            }
+            },
+            markers: []
         };
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -57,20 +60,27 @@ export class ShipmentLocationBox extends Component {
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
-        Object.keys(this.props.allNexuses).forEach(key => {
-            if (this.props.allNexuses[key] === route.origin_nexus_id) {
-                tmpOrigin = {id: this.props.allNexuses[key], name: key};
+        this.props.allNexuses.forEach(nx => {
+            if (nx.id === route.origin_nexus_id) {
+                tmpOrigin = nx;
             }
-            if (this.props.allNexuses[key] === route.destination_nexus_id) {
-                tmpDest = {id: this.props.allNexuses[key], name: key};
+            if (nx.id === route.destination_nexus_id) {
+                tmpDest = nx;
             }
         });
         this.setState({
-            origin: {...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name},
-            destination: {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name}
+            origin: { ...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name, lat: tmpOrigin.latitude, lng: tmpOrigin.longitude},
+            destination: {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name, lat: tmpDest.latitude, lng: tmpDest.longitude}
         });
-        this.props.setTargetAddress('origin', {...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name});
-        this.props.setTargetAddress('destination', {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name});
+        this.props.setTargetAddress('origin', {...this.state.origin, hub_id: tmpOrigin.id, hub_name: tmpOrigin.name, lat: tmpOrigin.latitude, lng: tmpOrigin.longitude});
+        this.props.setTargetAddress('destination', {...this.state.destination, hub_id: tmpDest.id, hub_name: tmpDest.name, lat: tmpDest.latitude, lng: tmpDest.longitude});
+        if (this.state.map) {
+            this.setMarker({lat: tmpOrigin.latitude, lng: tmpOrigin.longitude}, tmpOrigin.name);
+            this.setMarker({lat: tmpDest.latitude, lng: tmpDest.longitude}, tmpDest.name);
+        } else {
+            setTimeout(function() { this.setMarker({lat: tmpOrigin.latitude, lng: tmpOrigin.longitude}, tmpOrigin.name); }.bind(this), 750);
+            setTimeout(function() { this.setMarker({lat: tmpDest.latitude, lng: tmpDest.longitude}, tmpDest.name); }.bind(this), 750);
+        }
     }
     initMap() {
         const mapsOptions = {
@@ -130,34 +140,36 @@ export class ShipmentLocationBox extends Component {
             marker.setVisible(false);
             const place = autocomplete.getPlace();
             if (!place.geometry) {
-        // User entered the name of a Place that was not suggested and
-        // pressed the Enter key, or the Place Details request failed.
                 window.alert("No details available for input: '" + place.name + "'");
                 return;
             }
-
-      // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                aMap.fitBounds(place.geometry.viewport);
-            } else {
-                aMap.setCenter(place.geometry.location);
-                aMap.setZoom(17);  // Why 17? Because it looks good.
-            }
-            marker.setPosition(place.geometry.location);
-            marker.setVisible(true);
-          //   let address = '';
-          //   if (place.address_components) {
-          //       address = [
-          // (place.address_components[0] && place.address_components[0].short_name || ''),
-          // (place.address_components[1] && place.address_components[1].short_name || ''),
-          // (place.address_components[2] && place.address_components[2].short_name || '')
-          //       ].join(' ');
-          //   }
+            this.setMarker({lat: place.geometry.location.lat(), lng: place.geometry.location.lng()}, place.name);
             this.selectLocation(place, target);
         });
     }
-    addMarkerToMap(location) {
-        console.log(location);
+    setMarker(location, name) {
+        const {markers, map} = this.state;
+        let newMarkers = [];
+        if (markers.length < 2) {
+            newMarkers = markers;
+        } else {
+            for (let i = 0; i < markers.length; i++) {
+              markers[i].setMap(null);
+            }
+        }
+        // debugger;
+        const marker = new this.props.gMaps.Marker({
+            position: location,
+            map: map,
+            title: name
+        });
+        newMarkers.push(marker);
+        this.setState({markers: newMarkers});
+        const bounds = new this.props.gMaps.LatLngBounds();
+        for (let i = 0; i < newMarkers.length; i++) {
+            bounds.extend(newMarkers[i].getPosition());
+        }
+        map.fitBounds(bounds);
     }
     handleTrucking(event) {
         const { name, checked } = event.target;
@@ -185,11 +197,21 @@ export class ShipmentLocationBox extends Component {
     }
     setOriginHub(event) {
         console.log(event);
-        this.setState({origin: {...this.state.origin, hub_id: event.value, hub_name: event.label}});
+        // let nxo;
+        // this.props.allNexuses.forEach(nx => {
+        //     if (nx.id == event.value) {
+        //         nxo
+        //     }
+        // })
+        this.setState({origin: {...this.state.origin, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
+        this.props.setTargetAddress('origin', {...this.state.origin, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
+        this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);
     }
     setDestHub(event) {
         console.log(event);
-        this.setState({destination: {...this.state.destination, hub_id: event.value, hub_name: event.label}});
+        this.setState({destination: {...this.state.destination, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
+        this.props.setTargetAddress('destination', {...this.state.destination, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
+        this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);
     }
 
     selectLocation(place, target) {
@@ -227,8 +249,8 @@ export class ShipmentLocationBox extends Component {
     render() {
         const nexuses = [];
         if (this.props.allNexuses) {
-            Object.keys(this.props.allNexuses).forEach(key => {
-                nexuses.push({value: this.props.allNexuses[key], label: key});
+            this.props.allNexuses.forEach(nex => {
+                nexuses.push({value: nex, label: nex.name});
             });
         }
         const originHubSelect = (

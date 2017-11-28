@@ -43,7 +43,7 @@ module ShippingTools
     @has_on_carriage = @shipment.has_on_carriage || true
 
     # if load_type.starts_with?('open')
-      @all_nexuses = Location.nexuses_prepared
+    @all_nexuses = Location.nexuses
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
