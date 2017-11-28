@@ -90,6 +90,7 @@ export class BookingDetails extends Component {
             }
         });
     }
+
     setNotifyeesFromBook(target, value) {
         this.setState({
             [target]: {
@@ -105,15 +106,18 @@ export class BookingDetails extends Component {
             }
         });
     }
+
     toggleAddressBook() {
         const addressBool = this.state.addressBook;
         this.setState({ addressBook: !addressBool });
     }
+
     addNotifyee() {
         const prevArr = this.state.notifyees;
         prevArr.unshift(this.state.default.notifyee);
         this.setState({ notifyees: prevArr });
     }
+
     handleInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
@@ -125,10 +129,12 @@ export class BookingDetails extends Component {
             }
         });
     }
+
     handleCargoInput(event) {
         const { name, value } = event.target;
         this.setState({ [name]: value });
     }
+
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
@@ -139,8 +145,11 @@ export class BookingDetails extends Component {
             notifyees: notifyees
         });
     }
+
     pushUpData() {}
+
     saveDraft() {}
+
     toDashboard() {
         history.push('/dashboard');
     }
@@ -167,6 +176,7 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
+
     closeBook() {
         this.setState({ addressBook: false });
     }
@@ -250,6 +260,7 @@ export class BookingDetails extends Component {
         );
     }
 }
+
 BookingDetails.PropTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,

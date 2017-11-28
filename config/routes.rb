@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   }
   root 'welcome#index'
 
-  get "cookies" => "application#cookies_info", as: :cookies  
+  get "cookies" => "application#cookies_info", as: :cookies
   get "beta-prospect" => "application#beta_prospect", as: :beta_prospect
 
   get "dashboard" => "application#dashboard_path_helper"
@@ -48,25 +48,19 @@ Rails.application.routes.draw do
     post "train_schedules/process_csv", to: "schedules#overwrite_trains", as: :schedules_train_overwrite
     post "vessel_schedules/process_csv", to: "schedules#overwrite_vessels", as: :schedules_vessel_overwrite
     post "air_schedules/process_csv", to: "schedules#overwrite_air", as: :schedules_air_overwrite
-
-    # resources :train_schedules, only: [:index]
-    # post "train_schedules/process_csv", to: "train_schedules#overwrite", as: :train_schedules_overwrite
-
-    # resources :vessel_schedules, only: [:index]
-    # post "vessel_schedules/process_csv", to: "vessel_schedules#overwrite", as: :vessel_schedules_overwrite
   end
 
   resources :users do
     get "home", as: :home
     get "account", as: :account
-    
-    resources :locations, only: [:index, :show]
-    
+
+    resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
+
     resources :shipments do
       resources :generic, only: [:index, :new] do
         get "reuse_booking_data", as: :reuse_booking
       end
-      
+
       resources :fcl do
         get "reuse_booking_data", as: :reuse_booking
         post "get_offer", as: :get_offer
@@ -93,16 +87,17 @@ Rails.application.routes.draw do
         end
       end
     end
-  
   end
+
   resources :shipments, only: [:index, :new, :show, :create] do
-      get "reuse_booking_data", as: :reuse_booking
-      post "get_offer", as: :get_offer
-      post "set_haulage", as: :set_haulage
-      get "choose_offer", as: :choose_offer
-      post "finish_booking", as: :finish_booking
-      post "update", as: :update_booking
-    end
+    get "reuse_booking_data", as: :reuse_booking
+    post "get_offer", as: :get_offer
+    post "set_haulage", as: :set_haulage
+    get "choose_offer", as: :choose_offer
+    post "finish_booking", as: :finish_booking
+    post "update", as: :update_booking
+  end
+
   get "/documents/download/:document_id", to: "documents#download_redirect", as: :document_download
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'

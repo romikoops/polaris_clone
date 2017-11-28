@@ -50,6 +50,20 @@ function register(user) {
     };
 }
 
+function getLocations() {
+    function request() { return { type: userConstants. }; }
+    function success(users) { return { type: userConstants., users }; }
+    function failure(error) { return { type: userConstants., error }; }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getLocations()
+            .then(
+                users => dispatch(success(users)),
+                error => dispatch(failure(error))
+           
+}
+
 function getAll() {
     function request() { return { type: userConstants.GETALL_REQUEST }; }
     function success(users) { return { type: userConstants.GETALL_SUCCESS, users }; }

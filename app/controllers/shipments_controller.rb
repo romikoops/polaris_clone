@@ -1,7 +1,7 @@
 class ShipmentsController < ApplicationController
-    include ShippingTools
-    include Response
-    before_action :require_login_and_correct_id, except: [:test_email]
+  include ShippingTools
+  include Response
+  before_action :require_login_and_correct_id, except: [:test_email]
 
   def index
     @shipper = current_user
@@ -12,9 +12,9 @@ class ShipmentsController < ApplicationController
   end
 
   def new
-    
+
   end
-  
+
   def reuse_booking_data
     shipment = Shipment.find(params[:generic_id])
     if shipment.is_lcl?
@@ -36,12 +36,14 @@ class ShipmentsController < ApplicationController
 
   def reuse_booking_data
 
-    reuse_shipment_data(params, session, 'openlcl')   
+    reuse_shipment_data(params, session, 'openlcl')
   end
+
   def show
     resp = Shipment.find(params[:shipment_id])
     json_response(resp, 200)
   end
+
   def create
     resp = new_shipment(session, params[:type])
     json_response(resp, 200)
@@ -50,7 +52,7 @@ class ShipmentsController < ApplicationController
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
     json_response(resp, 200)
-  end 
+  end
 
   def finish_booking
     resp = finish_shipment_booking(params)
@@ -65,12 +67,12 @@ class ShipmentsController < ApplicationController
   def get_shipper_pdf
     get_shipment_pdf(params)
   end
-  
+
   private
 
   def require_login_and_correct_id
     unless user_signed_in?
-       json_response({error: "You are not signed in"}, 500)
+      json_response({error: "You are not signed in"}, 500)
     end
   end
 

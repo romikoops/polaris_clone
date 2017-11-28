@@ -1,12 +1,22 @@
 import { authHeader } from '../helpers';
 import { Promise } from 'babel-polyfill';
 import { BASE_URL } from '../constants';
+
 function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
     }
 
     return response.json();
+}
+
+function getLocations() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users', requestOptions).then(handleResponse);
 }
 
 function login(username, password) {

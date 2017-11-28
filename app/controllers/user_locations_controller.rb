@@ -1,17 +1,20 @@
-class UsersController < ApplicationController
+class UserLocationsController < ApplicationController
   # before_action :require_login_and_correct_id
 
-  layout 'dashboard'
-
-  def home
-    @pricings = current_user.pricings
+  def index
+    
   end
 
-  def account
-    @user = current_user
-    @locations = @user.locations
+  def create
+    
+  end
 
-    return {locations: @locations}
+  def update
+    
+  end
+
+  def destroy
+    
   end
 
   private
