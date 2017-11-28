@@ -13,13 +13,10 @@ import { fetchTenantIfNeeded } from '../../actions/tenant';
 class App extends Component {
     constructor(props) {
         super(props);
-
     }
-
     componentDidMount() {
         const { dispatch, selectedSubdomain } = this.props;
         dispatch(fetchTenantIfNeeded(selectedSubdomain));
-
     }
     componentDidUpdate(prevProps) {
         if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
@@ -27,7 +24,6 @@ class App extends Component {
             dispatch(fetchTenantIfNeeded(selectedSubdomain));
         }
     }
-
     render() {
         const { tenant, isFetching } = this.props;
         const theme = tenant.data.theme;
