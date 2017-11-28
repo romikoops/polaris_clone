@@ -124,13 +124,13 @@ export class RouteResult extends Component {
                   </div>
               </div>
             </div>
-            <div className="flex-25 layout-row layout-wrap">
+            <div className="flex-20 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                 <p className="flex-none">Total price: </p>
                 <h4 className="flex-none"> {priceUnits} <sub>{priceCents}</sub> </h4>
               </div>
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-                <RoundButton text={'Choose'} handleNext={this.selectRoute} theme={theme} active/>
+                <RoundButton text={'Choose'} size="full" handleNext={this.selectRoute} theme={theme} active/>
               </div>
             </div>
           </div>

@@ -39,6 +39,10 @@ export class RoundButton extends Component {
             case 'small':
                 sizeClass = styles.small;
                 break;
+            case 'full':
+                sizeClass = styles.full;
+                break;
+
             default:
                 sizeClass = styles.large;
                 break;
