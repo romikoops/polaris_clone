@@ -33,13 +33,12 @@ export class RouteResult extends Component {
         const totalFees = fees[schedKey].total;
         this.props.selectResult({schedule: schedule, total: totalFees});
     }
+    dashedGradient(color1, color2) {
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
+    }
     render() {
         const { theme, schedule } = this.props;
         const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
-        const borderColour = theme && theme.colors ? '-webkit-linear-gradient(top, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'floralwhite';
-        const borderStyle = {
-            borderImage: borderColour
-        };
         let originHub = {};
         let destHub = {};
         if (this.props.originHubs) {
@@ -54,40 +53,52 @@ export class RouteResult extends Component {
                 }
             });
         }
+        console.log('originHub');
+        console.log(originHub);
+        console.log(originHub.hub_code);
         const gradientFontStyle = {
           background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary}, ${theme.colors.brightSecondary})` : 'black',
         };
         const price = this.props.fees[schedKey].total;
         const priceUnits = Math.floor(price);
         const priceCents = Math.floor((price * 100) % 100);
-
+        const dashedLineStyles = {
+            marginTop: '6px',
+            height: '2px',
+            width: '100%',
+            background: theme && theme.colors ? this.dashedGradient(theme.colors.primary, theme.colors.secondary) : 'black',
+            backgroundSize: '16px 2px, 100% 2px'
+        };
         return (
           <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
             <div className="flex-75 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
-                <div className="flex-40 layout-row">
+                <div className={`flex-20 layout-row layout-wrap ${styles.header_hub}`}>
                   <i className={`fa fa-map-marker ${styles.map_marker}`}></i>
-                  <div className="flex-55 layout-row layout-wrap">
+                  <div className="flex-100 layout-row">
                     <h4 className="flex-100"> {originHub.name} </h4>
                   </div>
                   <div className="flex-100">
-                    <p className="flex-100"> {originHub.code} </p>
+                    <p className="flex-100"> {originHub.hub_code ? originHub.hub_code : 'Code Unavailable'} </p>
                   </div>
                 </div>
-                <div className="flex-15 layout-row layout-wrap layout-align-center-start" >
-                  <div className="flex-100 layout-row layout-align-center-center" style={borderStyle}>
-                    {this.switchIcon(schedule)}
+                <div className={`flex-20 layout-row layout-wrap layout-align-start-start ${styles.connection_graphics}`} >
+                  <div className="flex-100 layout-row layout-align-start-start">
+                    <div className="flex-70">
+                        <div className="flex-none layout-row layout-align-center-center">
+                          {this.switchIcon(schedule)}
+                        </div>
+                        <div style={dashedLineStyles}></div>
+                    </div>
                   </div>
                 </div>
-                <div className="flex-40 layout-row">
-                  <div className="flex-15 layout-column layout-align-start-center">
-                    <i className="fa fa-flag-o"></i>
-                  </div>
-                  <div className="flex-55 layout-row layout-wrap">
+                <div className={`flex-50 layout-row layout-wrap ${styles.header_hub}`}>
+                  <i className={`fa fa-flag-o ${styles.flag}`}></i>
+                  <div className="flex-55 layout-row">
                     <h4 className="flex-100"> {destHub.name} </h4>
                   </div>
                   <div className="flex-100">
-                    <p className="flex-100"> {destHub.code} </p>
+                    <p className="flex-100"> {destHub.hub_code ? destHub.hub_code : 'Code Unavailable'} </p>
                   </div>
                 </div>
               </div>
@@ -124,10 +135,12 @@ export class RouteResult extends Component {
                   </div>
               </div>
             </div>
-            <div className="flex-20 layout-row layout-wrap">
+            <div className="flex-25 layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                 <p className="flex-none">Total price: </p>
-                <h4 className="flex-none"> {priceUnits} <sub>{priceCents}</sub> </h4>
+                <h4 className={`flex-none ${styles.total_price}`}>
+                  {priceUnits}<span>{priceCents}</span>  <span className={styles.total_price_currency}>EUR</span>
+                </h4>
               </div>
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                 <RoundButton text={'Choose'} size="full" handleNext={this.selectRoute} theme={theme} active/>
