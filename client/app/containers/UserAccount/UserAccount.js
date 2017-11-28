@@ -12,6 +12,7 @@ import {
     UserPassword,
     UserBilling
 } from '../../components/UserAccount/UserAccount';
+import { userActions } from '../../actions/user.actions';
 
 import './UserAccount.scss';
 
@@ -24,10 +25,16 @@ class UserAccount extends Component {
         };
 
         this.toggleActiveClass = this.toggleActiveClass.bind(this);
+        this.getLocations = this.getLocations.bind(this);
     }
 
     toggleActiveClass(key) {
         this.setState({ activeLink: key });
+    }
+
+    getLocations(user) {
+        const { dispatch } = this.props;
+        dispatch(userActions.getLocations(user));
     }
 
     render() {
@@ -43,8 +50,15 @@ class UserAccount extends Component {
         let viewComponent;
         switch (this.state.activeLink) {
             case 'profile':
-{/*                 viewComponent = <UserProfile />; */}
-                viewComponent = <UserLocations hey={this.props}/>;
+                {
+                    /*                 viewComponent = <UserProfile />; */
+                }
+                viewComponent = (
+                    <UserLocations
+                        user={this.props.user.data}
+                        getLocations={this.getLocations}
+                    />
+                );
                 break;
             case 'locations':
                 viewComponent = <UserLocations />;

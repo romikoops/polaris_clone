@@ -14,8 +14,7 @@ import { RouteSelector } from '../RouteSelector/RouteSelector';
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
-        // const { shipment } = this.props;
-        console.log(this.props);
+
         this.state = {
             origin: {
                 street: '',
@@ -70,7 +69,7 @@ export class ShipmentDetails extends Component {
     }
 
     componentDidMount() {
-        const {prevRequest, setStage} = this.props;
+        const { prevRequest, setStage } = this.props;
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }

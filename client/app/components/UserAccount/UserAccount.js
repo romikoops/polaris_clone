@@ -20,52 +20,60 @@ class UserLocations extends Component {
     }
 
     render() {
-        const locationInfo = [
-            {
-                key: 'addr1',
-                isPrimary: true,
-                content:
-                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, cumque.'
-            },
-            {
-                key: 'addr2',
-                isPrimary: false,
-                content:
-                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
-            },
-            {
-                key: 'addr3',
-                isPrimary: false,
-                content:
-                    'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse!'
-            }
-        ];
+        const locInfo = this.props.getLocations(this.props.user);
+        // debugger;
+        // const locationInfo = [
+        //     {
+        //         key: 'addr1',
+        //         isPrimary: true,
+        //         content:
+        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur, cumque.'
+        //     },
+        //     {
+        //         key: 'addr2',
+        //         isPrimary: false,
+        //         content:
+        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+        //     },
+        //     {
+        //         key: 'addr3',
+        //         isPrimary: false,
+        //         content:
+        //             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse!'
+        //     }
+        // ];
 
-        const locations = locationInfo.map(op => {
-            return (
-                <div key={op.key} className={'flex-33'}>
-                    <div className={`${styles['location-box']}`}>
-                        <div className={`${styles.header}`}>
-                            {op.isPrimary ? (
-                                <h3 className={`${styles.standard}`}>
-                                    Standard
-                                </h3>
-                            ) : (
-                                <h3 className={`${styles.other}`}>Other</h3>
-                            )}
-                        </div>
-                        <div className={`${styles.content}`}>{op.content}</div>
-                        <div className={`${styles.footer}`}>
-                            <div className="layout-row layout-align-center-center">
-                                <span>Edit</span>
-                                &nbsp; | &nbsp;
-                                <span>Delete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        });
+        const locations = locInfo
+            ? locInfo.map(op => {
+                  return (
+                      <div key={op.key} className={'flex-33'}>
+                          <div className={`${styles['location-box']}`}>
+                              <div className={`${styles.header}`}>
+                                  {op.isPrimary ? (
+                                      <h3 className={`${styles.standard}`}>
+                                          Standard
+                                      </h3>
+                                  ) : (
+                                      <h3 className={`${styles.other}`}>
+                                          Other
+                                      </h3>
+                                  )}
+                              </div>
+                              <div className={`${styles.content}`}>
+                                  {op.content}
+                              </div>
+                              <div className={`${styles.footer}`}>
+                                  <div className="layout-row layout-align-center-center">
+                                      <span>Edit</span>
+                                      &nbsp; | &nbsp;
+                                      <span>Delete</span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  );
+              })
+            : '';
 
         return (
             <div className="layout-row flex-100 layout-wrap">

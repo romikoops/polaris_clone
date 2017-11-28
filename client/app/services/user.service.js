@@ -10,13 +10,16 @@ function handleResponse(response) {
     return response.json();
 }
 
-function getLocations() {
+function getLocations(user) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/users', requestOptions).then(handleResponse);
+    return fetch(
+        BASE_URL + '/users/' + user.id + '/locations',
+        requestOptions
+    ).then(handleResponse);
 }
 
 function login(username, password) {
@@ -48,7 +51,6 @@ function login(username, password) {
             return response.json();
         })
         .then(user => {
-            // debugger;
             // login successful if there's a jwt token in the response
             if (user) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
@@ -124,6 +126,7 @@ function _delete(id) {
 }
 
 export const userService = {
+    getLocations,
     login,
     logout,
     register,

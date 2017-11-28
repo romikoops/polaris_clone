@@ -111,6 +111,7 @@ class OpenShop extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
+
         const { bookingData, theme, match } = this.props;
 
         const { request, response } = bookingData;
