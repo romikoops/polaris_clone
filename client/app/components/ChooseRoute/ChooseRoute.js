@@ -8,6 +8,10 @@ export class ChooseRoute extends Component {
         super(props);
         this.chooseResult = this.chooseResult.bind(this);
     }
+    componentDidMount() {
+        const {setStage} = this.props;
+        setStage(2);
+    }
 
     chooseResult(obj) {
         this.props.chooseRoute(obj);

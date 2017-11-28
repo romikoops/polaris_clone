@@ -1,10 +1,37 @@
 :local {
-  .uploader {
-    height: 37px;
-    width: 193px;
-    border: 1px solid #F7F6F6;
-    border-radius: 3px;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.04);
+  // .uploader input{
+  //   height: 37px;
+  //   width: 193px;
+  //   border: 1px solid #F7F6F6;
+  //   border-radius: 3px;
+  //   background-color: #F9F9F9;
+  //   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.04);
+  // }
+
+  .uploader input {
+    border-radius: 39px;
+    // font-family: "Open Sans";  
+    font-size: 18px;  
+    line-height: 21px;  
+    text-align: center;
+    color: #FFFFFF;
+    // margin: 5px 20px;
   }
+  .large {
+    height: 41px;
+    width: 317px;
+  }
+  .small {
+     height: 33.83px;
+     width: 167px;
+  }
+  .neutral {
+    background-color: #D8D8D8;
+    color: #2C2C2C !important;
+  }
+  .back {
+    background-color: #787878;
+    color: #FFFFFF !important; 
+  }
+
 }

@@ -36,7 +36,7 @@ export class RouteHubBox extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         return (
-        <div className="flex-100 layout-row layout-align-center-center">
+        <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
           <div className="flex-none content-width layout-row layout-align-start-center">
             <div className={`flex-none ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">

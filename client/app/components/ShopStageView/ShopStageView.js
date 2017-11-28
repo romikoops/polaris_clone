@@ -71,10 +71,12 @@ export class ShopStageView extends Component {
                     </div>
                 </div>
                 <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
-                        <div className={` ${styles.line_box} layout-row content-width layout-wrap layout-align-center flex-none`}>
+                    <div className="flex-none content-width layout-row layout-align-start-center">
+                        <div className={` ${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}>
                             <div className={` ${styles.line} flex-none`}></div>
-                            { stageBoxes }
-                        </div>
+                                { stageBoxes }
+                             </div>
+                    </div>
                 </div>
             </div>
         );
