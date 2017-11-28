@@ -73,6 +73,22 @@ export class BookingDetails extends Component {
         this.toNextStage = this.toNextStage.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
     }
+    componentDidMount() {
+        if (this.props.prevRequest && this.props.prevRequest.shipment) {
+            // debugger;
+            this.loadPrevReq(this.props.prevRequest.shipment);
+        }
+    }
+    loadPrevReq(obj) {
+        this.setState({
+            consignee: obj.consignee,
+            shipper: obj.shipper,
+            notifyees: obj.notifyees,
+            hsCode: obj.hsCode,
+            totalGoodsValue: obj.totalGoodsValue,
+            cargoNotes: obj.cargoNotes
+        });
+    }
 
     setFromBook(target, value) {
         this.setState({
@@ -214,9 +230,10 @@ export class BookingDetails extends Component {
         const addrView = this.state.addressBook ? aBook : cForm;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-100 layout-row layout-align-end-center">
+                <div className="flex-none content-width layout-row layout-align-end-center" style="padding: 15px;">
                     <RoundButton
                         active
+                        theme={theme}
                         text="Address Book"
                         handleNext={this.toggleAddressBook}
                     />
@@ -230,6 +247,9 @@ export class BookingDetails extends Component {
                 <CargoDetails
                     handleChange={this.handleCargoInput}
                     shipmentData={shipmentData}
+                    hsCode={this.state.hsCode}
+                    cargoNotes={this.state.cargoNotes}
+                    totalGoodsValue={this.state.totalGoodsValue}
                 />
                 <div className="flex-100 layout-row layout-align-center-center">
                     <div className="content-width layout-row layout-align-start-center button_padding">

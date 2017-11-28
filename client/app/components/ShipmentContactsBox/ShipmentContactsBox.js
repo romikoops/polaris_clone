@@ -10,6 +10,7 @@ export class ShipmentContactsBox extends Component {
         this.handleNotifyeeChange = this.handleNotifyeeChange.bind(this);
         this.addNotifyee = this.addNotifyee.bind(this);
     }
+
     handleFormChange(event) {
         this.props.handleChange(event);
     }

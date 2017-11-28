@@ -8,12 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
-        // const ntfy = {};
-        // if (this.props.contacts) {
-        //     this.props.contacts.forEach(c=>{
-        //         ntfy[c.contact.id] = false;
-        //     });
-        // }
+
         this.state = {
             setShipper: true,
             setConsignee: false,
@@ -252,17 +247,12 @@ export class AddressBook extends Component {
                         {this.state.setNotifyees ? notifyeeArray : ''}
                     </div>
                     <div className="flex-100 layout-row layout-align-center-center">
-                        <div className="content-width layout-row layout-align-start-center button_padding">
+                        <div className="content-width layout-row layout-align-end-center button_padding">
                             <RoundButton
                                 active
-                                handleNext={this.toNextStage}
+                                handleNext={this.closeAddressBook}
                                 theme={theme}
                                 text="Done"
-                            />
-                            <RoundButton
-                                handleNext={this.saveDraft}
-                                text="Save as Draft"
-                                iconClass="fa-floppy-o"
                             />
                         </div>
                     </div>
@@ -271,6 +261,7 @@ export class AddressBook extends Component {
         );
     }
 }
+
 AddressBook.PropTypes = {
     contacts: PropTypes.array,
     userLocations: PropTypes.array,
@@ -278,16 +269,3 @@ AddressBook.PropTypes = {
     setDetails: PropTypes.func,
     closeAddressBook: PropTypes.func
 };
-
-// function mapStateToProps(state) {
-//     const { tenant, shipment } = state;
-//     const {contacts, user_locations, shipment} = shipment;
-//     return {
-//         contacts,
-//         user_locations,
-//         tenant,
-//         shipment
-//     };
-// }
-
-// export default withRouter(connect(mapStateToProps)(AddressBook));

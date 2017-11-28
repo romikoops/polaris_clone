@@ -69,7 +69,7 @@ export function shipment(state = {}, action) {
 
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
             const req4 = merge({}, state, {
-                request: { stage3: action.shipmentData },
+                request: { stage4: action.shipmentData },
                 loading: true
             });
             return req4;
