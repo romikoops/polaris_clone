@@ -15,11 +15,23 @@
 	.top_row {
 		margin-bottom: 20px;
 	}
-	.map_marker {
-		position: absolute;
-		left: 15px;
-		top: 24px;
+	.header_hub {
+		position: relative;
+		.map_marker {
+			position: absolute;
+			left: -18px;
+			top: -1px;
+		}
+		.flag {
+			position: absolute;
+			left: -23px;
+			top: -1px;
+		}
 	}
+	.connection_graphics {
+		margin-top: -41px;
+	}
+
 	h4.date_title {
 		-webkit-background-clip: text !important;
 		-webkit-text-fill-color: transparent !important;
@@ -29,5 +41,15 @@
 	}
 	p.sched_elem {
 		margin-right: 10px;
+	}
+	.total_price {
+		font-size: 30px;
+		span {
+			margin: 0 2px;
+			font-size: 16px;
+		}
+		span.total_price_currency {
+			font-size: 22px;
+		}
 	}
 }
