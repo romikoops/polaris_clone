@@ -72,7 +72,7 @@ export class RouteResult extends Component {
           <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
             <div className="flex-75 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
-                <div className={`flex-20 layout-row layout-wrap ${styles.header_hub}`}>
+                <div className={`${styles.header_hub}`}>
                   <i className={`fa fa-map-marker ${styles.map_marker}`}></i>
                   <div className="flex-100 layout-row">
                     <h4 className="flex-100"> {originHub.name} </h4>
@@ -81,19 +81,15 @@ export class RouteResult extends Component {
                     <p className="flex-100"> {originHub.hub_code ? originHub.hub_code : 'Code Unavailable'} </p>
                   </div>
                 </div>
-                <div className={`flex-20 layout-row layout-wrap layout-align-start-start ${styles.connection_graphics}`} >
-                  <div className="flex-100 layout-row layout-align-start-start">
-                    <div className="flex-70">
-                        <div className="flex-none layout-row layout-align-center-center">
-                          {this.switchIcon(schedule)}
-                        </div>
-                        <div style={dashedLineStyles}></div>
-                    </div>
+                <div className={`${styles.connection_graphics}`} >
+                  <div className="flex-none layout-row layout-align-center-center">
+                    {this.switchIcon(schedule)}
                   </div>
+                  <div style={dashedLineStyles}></div>
                 </div>
-                <div className={`flex-50 layout-row layout-wrap ${styles.header_hub}`}>
+                <div className={`${styles.header_hub}`}>
                   <i className={`fa fa-flag-o ${styles.flag}`}></i>
-                  <div className="flex-55 layout-row">
+                  <div className="flex-100 layout-row">
                     <h4 className="flex-100"> {destHub.name} </h4>
                   </div>
                   <div className="flex-100">

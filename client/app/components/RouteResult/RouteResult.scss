@@ -29,7 +29,8 @@
 		}
 	}
 	.connection_graphics {
-		margin-top: -41px;
+		margin: -41px 27px 0 10px;
+		width: 110px;
 	}
 
 	h4.date_title {
@@ -38,9 +39,11 @@
 		text-shadow: 1px 1px rgba(black, .14);
 		opacity: .7;
 		margin-bottom: 8px;
+		font-size: 14px;
 	}
 	p.sched_elem {
 		margin-right: 10px;
+		font-size: 14px;
 	}
 	.total_price {
 		font-size: 30px;

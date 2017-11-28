@@ -37,7 +37,7 @@ export class ChooseRoute extends Component {
     }
     render() {
         const {shipmentData} = this.props;
-        const depDay = shipmentData.shipment.planned_pickup_date;
+        const depDay = shipmentData ? shipmentData.shipment.planned_pickup_date : new Date();
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
