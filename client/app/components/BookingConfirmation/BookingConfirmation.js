@@ -11,6 +11,10 @@ export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount() {
+        const {setStage} = this.props;
+        setStage(1);
+    }
     render() {
         const { theme, shipmentData } = this.props;
         if (shipmentData) {

@@ -5,14 +5,14 @@ import { Promise } from 'babel-polyfill';
 import { push } from 'react-router-redux';
 
 
-function newShipment(user, type) {
+function newShipment(type) {
     function request(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }; }
     function success(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }; }
     function failure(error) { return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error }; }
     return dispatch => {
-        dispatch(request(user));
+        dispatch(request(type));
 
-        shipmentService.newShipment(user, type)
+        shipmentService.newShipment(type)
             .then(
                 shipmentData => {
                     dispatch(alertActions.success('Fetching New Shipment successful'));

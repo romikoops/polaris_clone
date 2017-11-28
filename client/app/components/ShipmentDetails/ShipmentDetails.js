@@ -70,9 +70,11 @@ export class ShipmentDetails extends Component {
     }
 
     componentDidMount() {
-        if (this.props.prevRequest && this.props.prevRequest.shipment) {
-            this.loadPrevReq(this.props.prevRequest.shipment);
+        const {prevRequest, setStage} = this.props;
+        if (prevRequest && prevRequest.shipment) {
+            this.loadPrevReq(prevRequest.shipment);
         }
+        setStage(1);
     }
 
     loadPrevReq(obj) {

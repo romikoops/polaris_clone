@@ -38,6 +38,7 @@ class OpenShop extends Component {
         this.setShipmentData = this.setShipmentData.bind(this);
         this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
+        this.selectShipmentStage = this.selectShipmentStage.bind(this);
     }
     componentDidUpdate() {
         // const { match } = this.props;
@@ -52,8 +53,8 @@ class OpenShop extends Component {
     }
 
     getShipment(type) {
-        const { dispatch, user } = this.props;
-        dispatch(shipmentActions.newShipment(user.data, type));
+        const { dispatch } = this.props;
+        dispatch(shipmentActions.newShipment(type));
     }
 
     selectShipmentType(type) {
@@ -139,6 +140,7 @@ class OpenShop extends Component {
                             theme={theme}
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
+                            setStage={this.selectShipmentStage}
                         />
                     )}
                 />
@@ -153,6 +155,7 @@ class OpenShop extends Component {
                                 request && request.stage2 ? request.stage2 : {}
                             }
                             setShipmentDetails={this.setShipmentData}
+                            setStage={this.selectShipmentStage}
                         />
                     )}
                 />
@@ -171,6 +174,7 @@ class OpenShop extends Component {
                             prevRequest={
                                 request && request.stage3 ? request.stage3 : {}
                             }
+                            setStage={this.selectShipmentStage}
                         />
                     )}
                 />
@@ -192,6 +196,7 @@ class OpenShop extends Component {
                                         ? request.stage4
                                         : {}
                                 }
+                                setStage={this.selectShipmentStage}
                             />
                         )}
                     />
@@ -205,6 +210,7 @@ class OpenShop extends Component {
                             {...props}
                             theme={theme}
                             shipmentData={response ? response.stage4 : {}}
+                            setStage={this.selectShipmentStage}
                         />
                     )}
                 />

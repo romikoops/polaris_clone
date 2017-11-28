@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './BookingDetails.scss';
+import styles from './BookingDetails.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
@@ -74,10 +74,11 @@ export class BookingDetails extends Component {
         this.handleCargoInput = this.handleCargoInput.bind(this);
     }
     componentDidMount() {
-        if (this.props.prevRequest && this.props.prevRequest.shipment) {
-            // debugger;
-            this.loadPrevReq(this.props.prevRequest.shipment);
+        const {prevRequest, setStage} = this.props;
+        if (prevRequest && prevRequest.shipment) {
+            this.loadPrevReq(prevRequest.shipment);
         }
+        setStage(3);
     }
     loadPrevReq(obj) {
         this.setState({
@@ -223,6 +224,7 @@ export class BookingDetails extends Component {
                 addNotifyee={this.addNotifyee}
                 notifyees={notifyees}
                 theme={theme}
+                toggleAddressBook={this.toggleAddressBook}
                 handleChange={this.handleInput}
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
@@ -230,20 +232,15 @@ export class BookingDetails extends Component {
         const addrView = this.state.addressBook ? aBook : cForm;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-none content-width layout-row layout-align-end-center" style="padding: 15px;">
-                    <RoundButton
-                        active
-                        theme={theme}
-                        text="Address Book"
-                        handleNext={this.toggleAddressBook}
-                    />
-                </div>
+
                 {shipment && theme && hubs ? (
                     <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
                 ) : (
                     ''
                 )}
-                {addrView}
+                <div className={` ${styles.contacts_border} flex-100 layout-row`}>
+                    {addrView}
+                </div>
                 <CargoDetails
                     handleChange={this.handleCargoInput}
                     shipmentData={shipmentData}
@@ -253,17 +250,21 @@ export class BookingDetails extends Component {
                 />
                 <div className="flex-100 layout-row layout-align-center-center">
                     <div className="content-width layout-row layout-align-start-center button_padding">
-                        <RoundButton
-                            active
-                            handleNext={this.toNextStage}
-                            theme={theme}
-                            text="Finish Booking"
-                        />
-                        <RoundButton
-                            handleNext={this.saveDraft}
-                            text="Save as Draft"
-                            iconClass="fa-floppy-o"
-                        />
+                        <div className="flex-33 layout-row layout-align-start-center">
+                            <RoundButton
+                                active
+                                handleNext={this.toNextStage}
+                                theme={theme}
+                                text="Finish Booking"
+                            />
+                        </div>
+                        <div className="flex-33 layout-row layout-align-start-center">
+                            <RoundButton
+                                handleNext={this.saveDraft}
+                                text="Save as Draft"
+                                iconClass="fa-floppy-o"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-center-center">

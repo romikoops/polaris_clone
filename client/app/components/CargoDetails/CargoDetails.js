@@ -26,18 +26,19 @@ export class CargoDetails extends Component {
     handleChange(event) {
       // const { name, value } = event.target;
       // this.setState({[name]: value});
-      this.props.handleChange(event);
+        this.props.handleChange(event);
     }
     render() {
-        let packUrl;
-        let insuranceVal;
-        if (this.props.shipmentData) {
-          packUrl = '/shipments/' + this.props.shipmentData.shipment.id + '/upload/packing_sheet';
-          insuranceVal = (this.props.shipmentData.shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17;
-        } else {
-          packUrl = '';
-          insuranceVal = 0;
-        }
+        const {shipmentData} = this.props;
+        const { shipment, dangerousGoods} = shipmentData;
+        const packUrl = shipmentData ? '/shipments/' + shipment.id + '/upload/packing_sheet' : '';
+        const cInvUrl = shipmentData ? '/shipments/' + shipment.id + '/upload/commercial_invoice' : '';
+        const custDec = shipmentData ? '/shipments/' + shipment.id + '/upload/customs_declaration' : '';
+        const custVal = shipmentData ? '/shipments/' + shipment.id + '/upload/customs_value_declaration' : '';
+        const eori = shipmentData ? '/shipments/' + shipment.id + '/upload/eori' : '';
+        const certOrigin = shipmentData ? '/shipments/' + shipment.id + '/upload/certificate_of_origin' : '';
+        const dGoods = shipmentData ? '/shipments/' + shipment.id + '/upload/dangerous_goods' : '';
+        const insuranceVal = shipmentData ? (shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17 : 0;
         const insuranceBox = (
           <div className="flex-100 layout-row padd_top">
             <div className="flex-80 layout-row layout-wrap">
@@ -49,7 +50,7 @@ export class CargoDetails extends Component {
                   Note that if you choose not to pay to insure your shipment, the goods shipped are automatically covered under legal liability standard to the transportation industry.
                 </p>
             </div>
-            <div className="flex-20 layout-row layout-wrap">
+            <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
               <h5 className="flex-100"> Price </h5>
               <h6 className="flex-100"> {insuranceVal.toFixed(2)} €</h6>
             </div>
@@ -66,60 +67,138 @@ export class CargoDetails extends Component {
                   The customs clearance is typically given to a shipping agent to prove that all applicable customs duties have been paid and the shipment has been appoved.
                 </p>
             </div>
-            <div className="flex-20 layout-row layout-wrap">
+            <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
               <h5 className="flex-100"> Price </h5>
               <h6 className="flex-100"> 18.50 €</h6>
             </div>
           </div>
         );
+        const noCustomsBox = (
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-33-layout-row layout-align-center-center">
+                {custDec ? (
+                   <div className="flex-90 layout-row layout-wrap">
+                      <div className="flex-100">
+                        <p className={`flex-none ${styles.f_header}`}> Customs Declaration</p>
+                      </div>
+                      <div className="flex-100">
+                        <FileUploader url={custDec} type="customs_declaration" text="Customs Declaration"/>
+                       </div>
+                    </div>
+                  ) : ''}
+              </div>
+              <div className="flex-33-layout-row layout-align-center-center">
+                {custVal && this.props.totalGoodsValue > 20000 ? (
+                  <div className="flex-90 layout-row layout-wrap">
+                    <div className="flex-100">
+                      <p className={`flex-none ${styles.f_header}`}> Customs Value Declaration</p>
+                    </div>
+                    <div className="flex-100">
+                      <FileUploader url={custVal} type="customs_value_declaration" text="Customs Value Declaration"/>
+                   </div>
+                  </div>
+                  ) : ''}
+              </div>
+              <div className="flex-33-layout-row layout-align-center-center">
+                {eori ? (
+                  <div className="flex-90 layout-row layout-wrap">
+                    <div className="flex-100">
+                      <p className={`flex-none ${styles.f_header}`}> EORI</p>
+                    </div>
+                    <div className="flex-100">
+                      <FileUploader url={eori} type="eori" text="EORI"/>
+                    </div>
+                  </div>
+                  ) : ''}
+              </div>
+            </div>
+          );
         return(
         <div className="flex-100 layout-row layout-wrap padd_top">
           <div className="flex-100 layout-row layout-align-center">
-            <div className="flex-75 layout-row layout-wrap">
+            <div className="flex-none content-width layout-row layout-wrap">
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.f_header}`}> Cargo Details</p>
               </div>
               <div className="flex-100 layout-row layout-wrap">
-                <div className="flex-25 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <p className="flex-none"> HS Code</p>
+                <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
+                  <div className="flex-50 layout-row layout-wrap">
+                    <div className="flex-100">
+                      <p className="flex-none"> HS Code</p>
+                    </div>
+                    <div className="flex-100">
+                      <input className={styles.cargo_input} type="text" name="hsCode" value={this.props.hsCode} onChange={this.handleChange}/>
+                    </div>
                   </div>
-                  <div className="flex-100">
-                    <input className={styles.cargo_input} type="text" name="hsCode" value={this.props.hsCode} onChange={this.handleChange}/>
+                  <div className="flex-50 layout-row layout-wrap">
+                    <div className="flex-100">
+                      <p className={`flex-none ${styles.f_header}`}> Total Value of Goods</p>
+                    </div>
+                    <div className="flex-100">
+                      <input className={styles.cargo_input} type="number" name="totalGoodsValue" value={this.props.totalGoodsValue} onChange={this.handleChange}/>
+                    </div>
+                  </div>
+                  <div className="flex-100 layout-row layout-wrap">
+                    <div className="flex-100">
+                      <p className={`flex-none ${styles.f_header}`}> Number and kind of packages, description of goods</p>
+                    </div>
+                    <div className="flex-100">
+                      <textarea className={styles.cargo_text_area} rows="6" name="cargoNotes" value={this.props.cargoNotes} onChange={this.handleChange}/>
+                    </div>
                   </div>
                 </div>
-                <div className="flex-25 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <p className={`flex-none ${styles.f_header}`}> Total Value of Goods</p>
+                <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
+                  <div className="flex-100 layout-row">
+                    <p className={`flex-none ${styles.f_header}`}> Required Documents</p>
                   </div>
-                  <div className="flex-100">
-                    <input className={styles.cargo_input} type="number" name="totalGoodsValue" value={this.props.totalGoodsValue} onChange={this.handleChange}/>
-                  </div>
-                </div>
+                  {packUrl ? (
+                    <div className="flex-50 layout-row layout-wrap">
+                      <div className="flex-100">
+                        <p className={`flex-none ${styles.f_header}`}> Packing Sheet</p>
+                      </div>
+                      <div className="flex-100">
+                        <FileUploader url={packUrl} type="packing_sheet" text="Packing Sheet"/>
+                      </div>
+                    </div>
+                        ) : ''}
+                  {cInvUrl ? (
+                     <div className="flex-50 layout-row layout-wrap">
+                      <div className="flex-100">
+                        <p className={`flex-none ${styles.f_header}`}> Commercial Invoice</p>
+                      </div>
+                      <div className="flex-100">
+                        <FileUploader url={cInvUrl} type="commercial_invoice" text="Commercial Invoice"/>
+                      </div>
+                    </div>
+                        ) : ''}
+                  {certOrigin ? (
+                    <div className="flex-50 layout-row layout-wrap">
+                      <div className="flex-100">
+                        <p className={`flex-none ${styles.f_header}`}>Certificate of Origin</p>
+                      </div>
+                      <div className="flex-100">
+                        <FileUploader url={certOrigin} type="commercial_invoice" text="Certificate of Origin"/>
+                      </div>
+                    </div>
+                        ) : ''}
+                  {dGoods && dangerousGoods ? (
+                     <div className="flex-50 layout-row layout-wrap">
+                      <div className="flex-100">
+                        <p className={`flex-none ${styles.f_header}`}> Dangerous Goods Declaration</p>
+                      </div>
+                      <div className="flex-100">
+                        <FileUploader url={dGoods} type="commercial_invoice" text="Dangerous Goods Declaration"/>
+                        </div>
+                      </div>
+                        ) : ''}
 
-                <div className="flex-25 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <p className={`flex-none ${styles.f_header}`}> Packing Sheet</p>
-                  </div>
-                  <div className="flex-100">
-                    {packUrl ? <FileUploader url={packUrl} type="packing_sheet" text="Packing Sheet"/> : ''}
-                  </div>
-                </div>
 
-                <div className="flex-50 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <p className={`flex-none ${styles.f_header}`}> Number and kind of packages, description of goods</p>
-                  </div>
-                  <div className="flex-100">
-                    <textarea className={styles.cargo_text_area} rows="6" name="cargoNotes" value={this.props.cargoNotes} onChange={this.handleChange}/>
-                  </div>
                 </div>
-
               </div>
             </div>
           </div>
            <div className="flex-100 layout-row layout-align-center padd_top">
-            <div className="flex-75 layout-row layout-wrap">
+            <div className="flex-none content-width layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-start-center">
                 <h4 className="flex-none">Insurance</h4>
                 <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} />
@@ -128,12 +207,12 @@ export class CargoDetails extends Component {
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-center padd_top">
-            <div className="flex-75 layout-row layout-wrap">
+            <div className="flex-none content-width layout-row layout-wrap">
               <div className="flex-100 layout-row layout-align-start-center">
                 <h4 className="flex-none">Customs</h4>
                 <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} />
               </div>
-              {this.state.customsView ? customsBox : ''}
+              {this.state.customsView ? customsBox : noCustomsBox}
             </div>
           </div>
         </div>

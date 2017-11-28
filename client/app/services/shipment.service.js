@@ -35,7 +35,7 @@ function getShipment(id) {
     );
 }
 
-function newShipment(user, type) {
+function newShipment(type) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
