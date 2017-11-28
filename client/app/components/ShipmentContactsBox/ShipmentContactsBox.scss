@@ -9,28 +9,46 @@
   }
   .input_50 {
     @extend .input;
-    width: 250px;
-    
+    // width: 250px;
+    width: calc(50% - 14px);
   }
   .input_100 {
     @extend .input;
-    width: 510px;
-    
+    // width: 5 14px;
+    width: calc(100% - 14px);
   }
   .input_zip {
     @extend .input;
-    width: 141px;
+    // width: 141px;
+    width: calc(30% - 14px);
   }
   .input_cc{
     @extend .input;
-    width: 174px;
+    // width: 174px;
+    width: calc(35% - 14px);
   }
   .input_no {
     @extend .input;
-    width: 115px;
+    // width: 115px;
+    width: calc(20% - 14px);
   }
   .input_street {
     @extend .input;
-    width: 385px;
+    // width: 385px;
+    width: calc(80% - 14px);
+  }
+  .contact_header, .contact_header p {
+    color: #212121;
+    // font-family: ".SF NS Display";
+    font-size: 16px;
+    line-height: 18px;
+    
+  }
+  .contact_header i {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
   }
 }

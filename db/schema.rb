@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171120113058) do
+ActiveRecord::Schema.define(version: 20171128095139) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20171120113058) do
     t.decimal "dimension_z"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "dangerous_goods"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -46,6 +47,7 @@ ActiveRecord::Schema.define(version: 20171120113058) do
     t.decimal "gross_weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "dangerous_goods"
   end
 
   create_table "currencies", force: :cascade do |t|

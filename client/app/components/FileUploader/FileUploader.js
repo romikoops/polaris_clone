@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Promise } from 'babel-polyfill';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
-import styles from './FileUploader';
+import styles from './FileUploader.scss';
 class FileUploader extends React.Component {
 
     constructor(props) {
@@ -40,13 +40,10 @@ class FileUploader extends React.Component {
         formData.append('type', type);
         const requestOptions = {
             method: 'POST',
-            headers: { ...authHeader(), 'Content-Type': file.type },
-            body: {
-              file: file
-            }
+            headers: { ...authHeader()},
+            body: formData
         };
         const uploadUrl = BASE_URL + url;
-        debugger;
         return fetch(uploadUrl, requestOptions).then(this.handleResponse);
     }
 

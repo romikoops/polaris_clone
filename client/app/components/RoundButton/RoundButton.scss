@@ -1,7 +1,5 @@
 :local {
   .round_btn {
-    height: 41px;
-    width: 317px;
     border-radius: 39px;
     // font-family: "Open Sans";  
     font-size: 18px;  
@@ -9,6 +7,16 @@
     text-align: center;
     color: #FFFFFF;
     border: none;
+
+    // margin: 5px 20px;
+  }
+  .large {
+    height: 41px;
+    width: 317px;
+  }
+  .small {
+     height: 33.83px;
+     width: 167px;
   }
   .neutral {
     background-color: #D8D8D8;

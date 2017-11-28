@@ -4,7 +4,7 @@ import styles from './RoundButton.scss';
 
 export class RoundButton extends Component {
     render() {
-        const { text, theme, active, back, icon, iconClass, width, height, fontSize } = this.props;
+        const { text, theme, active, back, icon, iconClass, size } = this.props;
         const activeBtnStyle = {
             background:
                 theme && theme.colors
@@ -31,12 +31,21 @@ export class RoundButton extends Component {
             const classStr = 'flex-none icon_f fa ' + iconClass;
             iconC = <i className={classStr} />;
         }
-        if (width)  btnStyle.width  = width;
-        if (height) btnStyle.height = height;
-        if (fontSize) btnStyle.fontSize = fontSize;
+        let sizeClass;
+        switch(size) {
+            case 'large':
+                sizeClass = styles.large;
+                break;
+            case 'small':
+                sizeClass = styles.small;
+                break;
+            default:
+                sizeClass = styles.large;
+                break;
+        }
         return (
             <button
-                className={styles.round_btn + ' ' + bStyle}
+                className={styles.round_btn + ' ' + bStyle + ' ' + sizeClass}
                 onClick={this.props.handleNext}
                 style={btnStyle}
             >
@@ -56,5 +65,6 @@ RoundButton.propTypes = {
     back: PropTypes.bool,
     theme: PropTypes.object,
     icon: PropTypes.string,
-    iconClass: PropTypes.string
+    iconClass: PropTypes.string,
+    size: PropTypes.string
 };
