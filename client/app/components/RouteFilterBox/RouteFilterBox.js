@@ -61,7 +61,7 @@ export class RouteFilterBox extends Component {
                   <p>100 days</p>
                 </div>
               </div>
-              <RoundButton width="100%" height="21px" fontSize="18px" text="save filter" theme={theme} active/>
+              <RoundButton size="small" text="save filter" theme={theme} active/>
             </div>
           </div>
         );

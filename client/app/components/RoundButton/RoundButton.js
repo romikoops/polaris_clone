@@ -39,6 +39,7 @@ export class RoundButton extends Component {
         }
 
         let sizeClass;
+
         switch (size) {
             case 'large':
                 sizeClass = styles.large;
