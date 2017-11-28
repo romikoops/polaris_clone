@@ -66,6 +66,29 @@ export class ShipmentDetails extends Component {
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
     }
+    componentDidMount() {
+        if (this.props.prevRequest && this.props.prevRequest.shipment) {
+            this.loadPrevReq(this.props.prevRequest.shipment);
+        }
+    }
+    loadPrevReq(obj) {
+        this.setState({
+            cargoItems: obj.cargo_items_attributes,
+            containers: obj.containers_attributes,
+            selectedDay: obj.planned_pickup_date,
+            origin: {
+                fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
+                hub_id: obj.origin_id
+            },
+            destination: {
+                fullAddress: obj.destination_user_input ? obj.destination_user_input : '',
+                hub_id: obj.destination_id
+            },
+            has_on_carriage: obj.has_on_carriage,
+            has_pre_carriage: obj.has_pre_carriage,
+            routeSet: true
+        });
+    }
 
     newContainerGrossWeight() {
         const container = this.state.containers.new;

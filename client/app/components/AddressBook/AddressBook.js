@@ -152,9 +152,8 @@ export class AddressBook extends Component {
                 {this.state.setNotifyees ? notifyeeArray : ''}
             </div>
             <div className="flex-100 layout-row layout-align-center-center">
-                <div className="content-width layout-row layout-align-start-center button_padding">
-                    <RoundButton active handleNext={this.toNextStage} theme={theme} text="Done" />
-                    <RoundButton  handleNext={this.saveDraft} text="Save as Draft" iconClass="fa-floppy-o"/>
+                <div className="content-width layout-row layout-align-end-center button_padding">
+                    <RoundButton active handleNext={this.closeAddressBook} theme={theme} text="Done" />
                 </div>
           </div>
           </div>
