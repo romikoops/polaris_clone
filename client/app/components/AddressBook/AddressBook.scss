@@ -5,6 +5,7 @@
     font-size: 16px;  
     line-height: 18px;
   }
+
   .contact_details {
     margin: 0;
     color: #212121; 
@@ -19,9 +20,37 @@
     overflow-y: scroll;
     overflow-x: none;
   }
-  .prompt {
+  .prompt h1{
     color: #2C2C2C;
     font-size: 20px;
     line-height: 45px;
   }
+  .results, .n_results {
+    margin: 10px 0;
+  }
+  .results p{
+    margin: 0;
+    color: #212121; 
+    font-size: 12px;  
+    line-height: 14px;
+  }
+  .n_results p{
+    margin: 0;
+    color: #212121; 
+    font-size: 10px;  
+    line-height: 12px;
+  }
+  .results p.title {
+    margin: 0;
+    color: #212121; 
+    font-size: 16px;  
+    line-height: 18px;
+  }
+  .n_results p.title {
+    margin: 0;
+    color: #212121; 
+    font-size: 14px;  
+    line-height: 16px;
+  }
+
 }
