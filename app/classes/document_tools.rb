@@ -9,7 +9,7 @@ def create(file, shipment)
     objKey = 'documents/' + shipment['uuid'] +"/" + file.name
 		
     awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
-    s3.put_object(bucket: 'tktr.es', key: objKey, body: pass.stream.string, content_type: 'application/vnd.apple.pkpass', acl: 'public-read')
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'private')
 		shipment.documents.create(url: awsurl, shipment_id: shipment['uuid'], text: file.name)
 	end
 	

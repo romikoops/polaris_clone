@@ -4,6 +4,7 @@ import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import { Checkbox } from '../Checkbox/Checkbox';
 import {v4} from 'node-uuid';
+import { CSSTransitionGroup } from 'react-transition-group';
 export class RouteSelector extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +56,9 @@ export class RouteSelector extends Component {
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap">
-                  {routesArr}
+                   <CSSTransitionGroup className="flex-100 layout-row layout-wrap" transitionName="route_entry"  transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+                    {routesArr}
+                  </CSSTransitionGroup>
                 </div>
               </div>
             </div>

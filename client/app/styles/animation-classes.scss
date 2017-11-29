@@ -1,0 +1,34 @@
+  .loader_anim-enter {
+    opacity: 0.01;
+  }
+
+  .loader_anim-enter.loader_anim-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .loader_anim-leave {
+    opacity: 1;
+  }
+
+  .loader_anim-leave.loader_anim-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+  }
+  .lroute_entry-enter {
+    opacity: 0.01;
+  }
+
+  .lroute_entry-enter.lroute_entry-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .lroute_entry-leave {
+    opacity: 1;
+  }
+
+  .lroute_entry-leave.lroute_entry-leave-active {
+    opacity: 0.01;
+    transition: opacity 300ms ease-in;
+  }

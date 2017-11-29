@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './NavDropdown.scss';
-
 export class NavDropdown extends Component {
     constructor(props) {
         super(props);

@@ -2,7 +2,7 @@
   .btn_sec{
     height: 227px;
     padding-top: 48px;
-    border-top: 1px solid #EDEDED;
+    // border-top: 1px solid #EDEDED;
   }
   .cargo_sec {
     min-height: 187px;
@@ -11,5 +11,35 @@
   .date_sec {
     min-height: 187px;
     border-top: 1px solid #EDEDED;
+  }
+  .dpb{
+    height: 36px;
+    width: 250px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+  }
+  .dpb_icon {
+    height: 36px;
+    width: 36px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    i{
+      font-size: 30px;
+      height:30px;
+      width: 30px;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+  }
+  .dpb_picker {
+    height: 36px;
+    width: 214px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
 }

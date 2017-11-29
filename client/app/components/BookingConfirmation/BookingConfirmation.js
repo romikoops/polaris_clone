@@ -13,7 +13,7 @@ export class BookingConfirmation extends Component {
     }
     componentDidMount() {
         const {setStage} = this.props;
-        setStage(1);
+        setStage(4);
     }
     render() {
       const { theme, shipmentData } = this.props;

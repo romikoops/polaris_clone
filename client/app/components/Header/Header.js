@@ -16,7 +16,6 @@ class Header extends Component {
         const { user, theme } = this.props;
         const dropDownText = user.data.first_name + ' ' + user.data.last_name;
         const dropDownImage = accountIcon;
-
         const accountLinks = [
             {
                 url: '/account',
@@ -32,6 +31,7 @@ class Header extends Component {
             }
         ];
 
+
         return (
             <div
                 className={`${
@@ -41,7 +41,7 @@ class Header extends Component {
                 <div className="content-width layout-row flex-none">
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
-                            src={theme ? theme.logo : ''}
+                            src={theme ? theme.logoLarge : ''}
                             className={styles.logo}
                             alt=""
                         />
