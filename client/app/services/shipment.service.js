@@ -1,6 +1,7 @@
 import { authHeader } from '../helpers';
 import { Promise } from 'babel-polyfill';
 import { BASE_URL } from '../constants';
+
 function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -8,7 +9,6 @@ function handleResponse(response) {
 
     return response.json();
 }
-
 
 function getStoredShipment() {
     const storedShipment = JSON.parse(localStorage.getItem('shipment'));
@@ -30,14 +30,16 @@ function getShipment(id) {
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/shipments/' + id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/shipments/' + id, requestOptions).then(
+        handleResponse
+    );
 }
 
 function newShipment(type) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({type: type})
+        body: JSON.stringify({ type: type })
     };
     const url = BASE_URL + '/shipments';
     return fetch(url, requestOptions).then(handleResponse);

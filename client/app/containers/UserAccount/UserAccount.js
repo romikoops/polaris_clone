@@ -12,6 +12,7 @@ import {
     UserPassword,
     UserBilling
 } from '../../components/UserAccount/UserAccount';
+import { userActions } from '../../actions/user.actions';
 
 import './UserAccount.scss';
 
@@ -24,10 +25,16 @@ class UserAccount extends Component {
         };
 
         this.toggleActiveClass = this.toggleActiveClass.bind(this);
+        this.getLocations = this.getLocations.bind(this);
     }
 
     toggleActiveClass(key) {
         this.setState({ activeLink: key });
+    }
+
+    getLocations() {
+        const { dispatch, user } = this.props;
+        dispatch(userActions.getLocations(user.data));
     }
 
     render() {
@@ -43,7 +50,12 @@ class UserAccount extends Component {
         let viewComponent;
         switch (this.state.activeLink) {
             case 'profile':
-                viewComponent = <UserProfile />;
+                {
+                    /*                 viewComponent = <UserProfile />; */
+                }
+                viewComponent = (
+                    <UserLocations locations={this.props.users.items} getLocations={this.getLocations} />
+                );
                 break;
             case 'locations':
                 viewComponent = <UserLocations />;
@@ -58,7 +70,7 @@ class UserAccount extends Component {
                 viewComponent = <UserBilling />;
                 break;
             default:
-                viewComponent = <h1>pro</h1>;
+                viewComponent = <UserProfile />;
                 break;
         }
 
@@ -103,9 +115,10 @@ UserAccount.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    const { authentication, tenant, shipment } = state;
+    const { authentication, tenant, shipment, users } = state;
     const { user, loggedIn } = authentication;
     return {
+        users,
         user,
         tenant,
         loggedIn,

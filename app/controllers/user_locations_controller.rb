@@ -1,17 +1,25 @@
-class UsersController < ApplicationController
+class UserLocationsController < ApplicationController
   # before_action :require_login_and_correct_id
 
-  layout 'dashboard'
+  include Response
 
-  def home
-    @pricings = current_user.pricings
+  def index
+    user = User.find(params[:user_id])
+    resp = user.locations
+
+    json_response(resp, 200)
   end
 
-  def account
-    @user = current_user
-    @locations = @user.locations
+  def create
+    
+  end
 
-    return {locations: @locations}
+  def update
+    
+  end
+
+  def destroy
+    
   end
 
   private

@@ -64,6 +64,14 @@ shipper = tenant.users.new(
 
   confirmed_at: DateTime.new(2017, 1, 20)
 )
+loc1 = Location.new(geocoded_address: "Torgny Segerstedtsgatan 80 Gothenburg")
+loc1.geocode
+loc1.reverse_geocode
+loc2 = Location.new(geocoded_address: "Redegatan 1B Gothenburg")
+loc2.geocode
+loc2.reverse_geocode
+shipper.locations << loc1
+shipper.locations << loc2
 shipper.skip_confirmation!
 shipper.save!
 
