@@ -1,6 +1,5 @@
 include ExcelTools
 
-<<<<<<< HEAD
 # Tenant.destroy_all
 # User.destroy_all
 # TruckingPricing.destroy_all
