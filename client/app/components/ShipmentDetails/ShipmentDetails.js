@@ -211,14 +211,14 @@ export class ShipmentDetails extends Component {
             { this.state.routeSet ? mapBox : rSelect }
           </div>
           <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`} >
-            {cargoDetails}
+                {cargoDetails}
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
+          <div className="layout-row flex-100 layout-wrap layout-align-center-center border_divider" >
             <div className={` ${styles.btn_sec} layout-row content-width flex-none layout-wrap layout-align-start-start`} >
               <RoundButton text="Choose from haulage options" handleNext={this.handleNextStage} theme={theme} active />
             </div>
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
+          <div className="layout-row flex-100 layout-wrap layout-align-center-center border_divider" >
             <div className={` ${styles.btn_sec} layout-row content-width flex-none layout-wrap layout-align-start-start`} >
               <RoundButton text="Back to Dashboard" handleNext={this.returnToDashboard} iconClass="fa-angle-left" theme={theme} back/>
             </div>

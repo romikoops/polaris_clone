@@ -16,7 +16,7 @@ function newShipment(type) {
             .then(
                 shipmentData => {
                     dispatch(alertActions.success('Fetching New Shipment successful'));
-                    dispatch(push('open/' + shipmentData.data.id + '/shipment_details'));
+                    dispatch(push('booking/' + shipmentData.data.id + '/shipment_details'));
                     dispatch(success(shipmentData));
                 },
                 error => {

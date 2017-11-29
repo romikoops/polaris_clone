@@ -37,13 +37,13 @@ export class ChooseRoute extends Component {
     }
     render() {
         const {shipmentData} = this.props;
-        const depDay = shipmentData ? shipmentData.shipment.planned_pickup_date : new Date();
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
         let smallestDiff = 100;
-        if (this.props.shipmentData) {
-            const { shipment, originHubs, destinationHubs, schedules } = this.props.shipmentData;
+        if (shipmentData) {
+            const { shipment, originHubs, destinationHubs, schedules } = shipmentData;
+            const depDay = shipment ? shipment.planned_pickup_date : new Date();
             if (schedules) {
                 schedules.forEach(sched => {
                     if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
@@ -61,7 +61,7 @@ export class ChooseRoute extends Component {
             }
         }
         return (
-        <div className="flex-100 layout-row layout-align-center-start">
+        <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px'}}>
           <div className="flex-none content-width layout-row layout-wrap">
            <div className="flex-20 layout-row layout-wrap">
               <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>

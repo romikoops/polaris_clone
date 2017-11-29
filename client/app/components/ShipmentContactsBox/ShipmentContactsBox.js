@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
-import {v4} from 'node-uuid';
+// import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 
 export class ShipmentContactsBox extends Component {
@@ -30,7 +30,7 @@ export class ShipmentContactsBox extends Component {
         if (notifyees) {
             notifyees.forEach((n, i) => {
                 notifyeesArray.push(
-                  <div key={v4()} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                  <div key={'notifyee' + i} className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
                     <p className={` ${styles.contact_header} flex-100`}> Notifyee {i + 1}</p>
                     <input className={styles.input_100} type="text" value={n.companyName} name={'notifyees-' + i + '-companyName'} placeholder="Company Name" onChange={this.handleNotifyeeChange} />
                     <input className={styles.input_50} type="text" value={n.firstName} name={'notifyees-' + i + '-firstName'} placeholder="First Name" onChange={this.handleNotifyeeChange} />

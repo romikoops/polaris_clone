@@ -1,4 +1,5 @@
 module ExcelTools
+  include ImageTools
   def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
     old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
@@ -395,5 +396,18 @@ module ExcelTools
 
     kicked_hub_ids = old_ids - new_ids
     Hub.where(id: kicked_hub_ids).destroy_all
+  end
+  def load_hub_images(params)
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+
+    hub_rows = first_sheet.parse(hub_name: 'NAME', url: 'URL')
+
+    hub_rows.each do |hub_row|
+      imgstr = reduce_and_upload(hub_row[:hub_name], hub_row[:url])
+      nexus = Location.find_by_name(hub_row[:hub_name])
+      nexus.update_attributes(photo: imgstr[:sm])
+      nexus.save!
+    end
   end
 end

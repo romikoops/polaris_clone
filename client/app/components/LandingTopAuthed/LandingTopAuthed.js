@@ -10,13 +10,13 @@ export class LandingTopAuthed extends Component {
         this.state = {
             shops: [
                 {
-                    name: 'Open Shop',
-                    url: '/open',
+                    name: 'Book a shipment',
+                    url: '/booking',
                     img: 'https://assets.itsmycargo.com/assets/images/welcome/country/performance.jpg'
                 },
                 {
-                    name: 'Dedicated Shop',
-                    url: '/dedicated',
+                    name: 'My Shipments',
+                    url: '/shipments',
                     img: 'https://assets.itsmycargo.com/assets/images/welcome/country/shipping-containers.jpg'
                 }
             ]
@@ -26,13 +26,13 @@ export class LandingTopAuthed extends Component {
         const {user, theme} = this.props;
         return (
             <div className="landing_top_authed layout-wrap layout-row flex-100 layout-align-center">
-            <Header user={user} theme={theme} />
-            <div className="layout-row flex-none layout-wrap content-width">
-                <div className="flex-100 layout-wrap layout-row">
-                    <h3>Choose your shop</h3>
-                    <CardLinkRow theme={theme} cardArray={this.state.shops} />
+                <Header user={user} theme={theme} />
+                <div className="layout-row flex-none layout-wrap content-width">
+                    <div className="flex-100 layout-wrap layout-row">
+                        <h3>What would you like to do?</h3>
+                        <CardLinkRow theme={theme} cardArray={this.state.shops} />
+                    </div>
                 </div>
-            </div>
             </div>
         );
     }

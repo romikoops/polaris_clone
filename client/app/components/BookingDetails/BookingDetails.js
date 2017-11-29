@@ -139,7 +139,6 @@ export class BookingDetails extends Component {
     handleInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
-        console.log(name, value);
         this.setState({
             [targetKeys[0]]: {
                 ...this.state[targetKeys[0]],
@@ -157,6 +156,7 @@ export class BookingDetails extends Component {
         const ind = parseInt(targetKeys[1], 10);
         const notifyees = this.state.notifyees;
         notifyees[ind][targetKeys[2]] = value;
+        console.log(notifyees[ind]);
         this.setState({
             notifyees: notifyees
         });

@@ -52,7 +52,7 @@ gem 'will_paginate', '~> 3.1.5'
 # Easier CSS for emails
 gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
-
+gem "mini_magick"
 # AWS SDK for hosting and S3
 gem 'aws-sdk'
 
