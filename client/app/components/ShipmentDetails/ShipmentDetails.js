@@ -255,7 +255,9 @@ export class ShipmentDetails extends Component {
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
-
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -269,13 +271,20 @@ export class ShipmentDetails extends Component {
                                 {' '}
                                 {'Approximate Pickup Date:'}{' '}
                             </p>
-                            <DayPickerInput
-                                name="birthday"
-                                placeholder="DD/MM/YYYY"
-                                format="DD/MM/YYYY"
-                                value={value}
-                                onDayChange={this.handleDayChange}
-                            />
+                            <div className={'flex-none layout-row ' + styles.dpb}>
+                                <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
+                                    <i className="flex-none fa fa-calendar" style={textStyle}></i>
+                                </div>
+                                <DayPickerInput
+                                    name="birthday"
+                                    placeholder="DD/MM/YYYY"
+                                    format="DD/MM/YYYY"
+                                    value={value}
+                                    className={styles.dpb_picker}
+                                    onDayChange={this.handleDayChange}
+                                />
+                            </div>
+
                         </div>
                     </div>
                 </div>

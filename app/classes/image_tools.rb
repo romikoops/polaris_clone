@@ -13,9 +13,10 @@ module ImageTools
     # resized_small.destroy!
     return {sm: sm_str, lg: lg_str}
   end
-  def load_city_images
+  def self.load_city_images
     Dir.glob(Rails.root + '/assets/images/cityimages/*.jpg') do |image|
-      # do work on files ending in .rb in the desired directory
+      resp = reduce_and_upload(image.name, image)
+      p resp[:sm]
     end
   end
   def upload_image(filepath)
