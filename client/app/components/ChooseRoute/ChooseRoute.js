@@ -36,14 +36,14 @@ export class ChooseRoute extends Component {
         this.props.chooseRoute(obj);
     }
     render() {
-        const {shipmentData} = this.props;
-        const depDay = shipmentData ? shipmentData.shipment.planned_pickup_date : new Date();
+        const { shipmentData } = this.props;
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
         let smallestDiff = 100;
-        if (this.props.shipmentData) {
+        if (shipmentData) {
             const { shipment, originHubs, destinationHubs, schedules } = this.props.shipmentData;
+            const depDay = shipment ? shipment.planned_pickup_date : new Date();
             if (schedules) {
                 schedules.forEach(sched => {
                     if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
