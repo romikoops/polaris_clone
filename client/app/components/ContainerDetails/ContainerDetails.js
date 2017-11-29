@@ -13,15 +13,15 @@ export class ContainerDetails extends Component {
         return (
             <div className={` ${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex-100 layout-row">
-                    <h4 className="flex-none">Unit {index + 1 }</h4>
+                    <h4>Unit {index + 1 }</h4>
                 </div>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Gross Weight</p>
-                    <p className="flex-none">{item.payload_in_kg} kg</p>
+                    <p>Gross Weight</p>
+                    <p>{item.payload_in_kg} kg</p>
                 </div>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Container Class</p>
-                    <p className="flex-none">{cDesc[item.size_class]} </p>
+                    <p>Container Class</p>
+                    <p>{cDesc[item.size_class]} </p>
                 </div>
             </div>
         );

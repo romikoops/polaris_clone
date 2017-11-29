@@ -85,11 +85,11 @@ export class BookingConfirmation extends Component {
                   <div className={`${styles.b_summ_top} flex-100 layout-row`}>
                     <div className="flex-33 layout-row">
                       <div className="flex-15 layout-column layout-align-start-center">
-                        <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
+                        <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                       </div>
                       <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                         <p className="flex-100">Shipper</p>
-                        <p className={` ${styles.address} flex-100`}>
+                        <p className={`${styles.address} flex-100`}>
                           {shipper.data.first_name} {shipper.data.last_name} <br/>
                           {shipper.location.street} {shipper.location.street_number} <br/>
                           {shipper.location.zip_code} {shipper.location.city} <br/>
@@ -112,7 +112,7 @@ export class BookingConfirmation extends Component {
                       </div>
                     </div>
                      <div className="flex-33 layout-row layout-align-end">
-                      <p className="flex-100">{createdDate}</p>
+                      <p>{createdDate}</p>
                       </div>
                   </div>
                   <div className="flex-100 layout-row">
