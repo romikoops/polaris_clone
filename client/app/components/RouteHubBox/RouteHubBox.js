@@ -34,7 +34,7 @@ export class RouteHubBox extends Component {
         return (
         <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
           <div className="flex-none content-width layout-row layout-align-start-center">
-            <div className={`flex-none ${styles.hub_card} layout-row`}>
+            <div className={`flex ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
                 <i className="fa fa-map-marker" style={gradientStyle}/>
               </div>
@@ -44,9 +44,9 @@ export class RouteHubBox extends Component {
               </div>
             </div>
 
-            <div className={`${styles.connection_graphics} flex-20 layout-row layout-align-center-start`} >
+            <div className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-start`} >
                 <div className="flex-100 layout-row layout-align-center-start">
-                    <div className="flex-80">
+                    <div className="flex-75">
                         <div className="flex-none layout-row layout-align-center-center">
                             {this.faIcon(route[0])}
                         </div>
@@ -55,7 +55,7 @@ export class RouteHubBox extends Component {
                 </div>
             </div>
 
-            <div className={`flex-none ${styles.hub_card} layout-row`}>
+            <div className={`flex ${styles.hub_card} layout-row`}>
               <div className="flex-15 layout-column layout-align-start-center">
                 <i className="fa fa-flag" style={gradientStyle}/>
               </div>

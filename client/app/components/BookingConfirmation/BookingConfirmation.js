@@ -76,53 +76,55 @@ export class BookingConfirmation extends Component {
                     Thank you for booking with Greencarrier.<br/>
                     Hope to see you again soon!
                   </div>
-                  <div className={`flex-100 layout-row layout-align-start ${styles.b_summ}`}>
+                  <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
                     Booking Reference: {shipment.imc_reference}
                   </div>
                 </div>
                 <RouteHubBox hubs={hubs} route={schedules} theme={theme}/>
-                <div className="flex-100 layout-row">
-                  <div className="flex-33 layout-row">
-                    <div className="flex-15 layout-column layout-align-start-center">
-                      <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
+                <div className={`${styles.b_summ} flex-100`}>
+                  <div className={`${styles.b_summ_top} flex-100 layout-row`}>
+                    <div className="flex-33 layout-row">
+                      <div className="flex-15 layout-column layout-align-start-center">
+                        <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
+                      </div>
+                      <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+                        <p className="flex-100">Shipper</p>
+                        <p className={` ${styles.address} flex-100`}>
+                          {shipper.data.first_name} {shipper.data.last_name} <br/>
+                          {shipper.location.street} {shipper.location.street_number} <br/>
+                          {shipper.location.zip_code} {shipper.location.city} <br/>
+                          {shipper.location.country}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                      <p className="flex-100">Shipper</p>
-                      <p className={` ${styles.address} flex-100`}>
-                        {shipper.data.first_name} {shipper.data.last_name} <br/>
-                        {shipper.location.street} {shipper.location.street_number} <br/>
-                        {shipper.location.zip_code} {shipper.location.city} <br/>
-                        {shipper.location.country}
-                      </p>
+                    <div className="flex-33 layout-row">
+                      <div className="flex-15 layout-column layout-align-start-center">
+                        <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle}></i>
+                      </div>
+                      <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+                        <p className="flex-100">Consignee</p>
+                        <p className={` ${styles.address} flex-100`}>
+                          {consignee.data.first_name} {consignee.data.last_name} <br/>
+                          {consignee.location.street} {consignee.location.street_number} <br/>
+                          {consignee.location.zip_code} {consignee.location.city} <br/>
+                          {consignee.location.country}
+                        </p>
+                      </div>
                     </div>
+                     <div className="flex-33 layout-row layout-align-end">
+                      <p className="flex-100">{createdDate}</p>
+                      </div>
                   </div>
-                  <div className="flex-33 layout-row">
-                    <div className="flex-15 layout-column layout-align-start-center">
-                      <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle}></i>
-                    </div>
-                    <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                      <p className="flex-100">Consignee</p>
-                      <p className={` ${styles.address} flex-100`}>
-                        {consignee.data.first_name} {consignee.data.last_name} <br/>
-                        {consignee.location.street} {consignee.location.street_number} <br/>
-                        {consignee.location.zip_code} {consignee.location.city} <br/>
-                        {consignee.location.country}
-                      </p>
-                    </div>
+                  <div className="flex-100 layout-row">
+                    {nArray}
                   </div>
-                   <div className="flex-33 layout-row layout-align-end">
-                    <p className="flex-100">{createdDate}</p>
-                    </div>
-                </div>
-                <div className="flex-100 layout-row">
-                  {nArray}
-                </div>
-                <div className="flex-100 layout-row layout-wrap">
-                  {cargo}
+                  <div className={`${styles.b_summ_bottom} flex-100 layout-row layout-wrap`}>
+                    {cargo}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className={` ${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+            <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
               <div className="flex-none content-width layout-row layout-align-start-center">
                 <div className="flex-none layout-row">
                   <RoundButton theme={theme} text="Save as pdf" iconClass="fa-download" />
@@ -132,7 +134,7 @@ export class BookingConfirmation extends Component {
                 </div>
               </div>
             </div>
-            <div className={` ${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+            <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
               <div className="flex-none content-width layout-row layout-align-start-center">
                 <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
               </div>
