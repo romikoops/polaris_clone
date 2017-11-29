@@ -44,7 +44,7 @@ export class NavSidebar extends Component {
                             width: 2px;
                             content: '';
                             background-color: ${theme.colors.primary};
-                         }
+                        }
                     `}
                 </Style>
 
