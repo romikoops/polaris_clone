@@ -86,7 +86,7 @@ export class AddressBook extends Component {
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
           <div className="flex-none content-width layout-row layout-wrap">
-            <div className="flex-50 layout-row layout-wrap layout-align-start-start">
+            <div className="flex-40 layout-row layout-wrap layout-align-start-start">
                 <div className={` ${styles.prompt} flex-100 layout-row layout-align-start-center`}>
                     {this.state.setShipper ? <h1> Set Shipper Details</h1> : ''}
                     {this.state.setConsignee ? <h1> Set Consignee Details</h1> : ''}
@@ -117,7 +117,7 @@ export class AddressBook extends Component {
                     ) : ''}
                 </div>
             </div>
-            <div className={`${styles.contact_scroll} flex-50 layout-row layout-wrap`}>
+            <div className={`${styles.contact_scroll} flex-60 layout-row layout-wrap`}>
                 {this.state.setShipper ? shipperArray : ''}
                 {this.state.setConsignee ? contactsArray : ''}
                 {this.state.setNotifyees ? notifyeeArray : ''}

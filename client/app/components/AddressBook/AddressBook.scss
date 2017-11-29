@@ -17,8 +17,10 @@
   }
   .contact_scroll {
     height: 300px;
+    padding: 20px 10px;
     overflow-y: scroll;
     overflow-x: none;
+    box-shadow: 0 0 7px rgba(black, 0.08);
   }
   .prompt h1{
     color: #2C2C2C;
