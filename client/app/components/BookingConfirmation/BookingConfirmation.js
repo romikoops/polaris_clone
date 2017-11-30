@@ -29,25 +29,20 @@ export class BookingConfirmation extends Component {
       const textStyle = {
           background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
       };
-      if (shipment.load_type.includes('lcl') && cargoItems) {
-        cargoItems.forEach((ci, i) => {
+
+      const pushToCargo = (array, Comp) => {
+        array.forEach((ci, i) => {
           const offset = i % 3 !== 0 ? 'offset-5' : '';
           cargo.push(
             <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-              <CargoItemDetails item={ci} index={i} />
+              <Comp item={ci} index={i} />
             </div>
           );
         });
-      }
-      if (shipment.load_type.includes('fcl') && containers) {
-        containers.forEach((ci, i) => {
-          cargo.push(
-            <div key={v4()} className="flex-33 layout-row layout-align-center-center">
-              <ContainerDetails item={ci} index={i} />
-            </div>
-          );
-        });
-      }
+      };
+      if (shipment.load_type.includes('lcl') && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
+      if (shipment.load_type.includes('fcl') && containers) pushToCargo(containers, ContainerDetails);
+
       const nArray = [];
       if (notifyees) {
           notifyees.forEach(n => {
