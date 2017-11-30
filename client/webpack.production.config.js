@@ -5,12 +5,13 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var StatsPlugin = require('stats-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     // The entry file. All your app roots from here.
     entry: [
         // Polyfills go here too, like babel-polyfill or whatwg-fetch
-        'babel-polyfill',
+        '@babel/polyfill',
         path.join(__dirname, 'app/index.js')
     ],
     // Where you want the output to go
@@ -23,7 +24,7 @@ module.exports = {
         // webpack gives your modules and chunks ids to identify them. Webpack can vary the
         // distribution of the ids to get the smallest id length for often used ids with
         // this plugin
-        new webpack.optimize.OccurenceOrderPlugin(),
+        // new webpack.optimize.OccurenceOrderPlugin(),
 
         // handles creating an index.html file and injecting assets. necessary because assets
         // change name because the hash part changes. We want hash name changes to bust cache
@@ -52,6 +53,9 @@ module.exports = {
         // plugin for passing in data to the js, like what NODE_ENV we are in.
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new UglifyJsPlugin({
+            sourceMap: true
         })
     ],
 
@@ -63,34 +67,72 @@ module.exports = {
     },
 
     module: {
-        // Runs before loaders
-        preLoaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'eslint'
-            }
-        ],
-        // loaders handle the assets, like transforming sass to css or jsx to js.
-        loaders: [{
-            test: /\.js?$/,
-            exclude: /node_modules/,
-            loader: 'babel'
-        }, {
-            test: /\.json?$/,
-            loader: 'json'
-        }, {
+                use: 'eslint-loader',
+                enforce: 'pre'
+            },
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        babelrc: false,
+                        presets: [
+                            ["@babel/env", {
+                                "targets": {
+                                    'browsers': ['Chrome >=59']
+                                },
+                                "modules":false,
+                                "loose":true
+                            }],"@babel/react"],
+
+                        plugins: [
+                            "react-hot-loader/babel",
+                            ["import", {libraryName: "antd", style: "css"}],
+                            "@babel/proposal-object-rest-spread"
+
+                        ]
+                    }
+                }
+                ]
+
+            },
+            {
+                test: /\.scss$/,
+                use:[
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
+                use: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, use: 'file-loader' },
+            {
+                test: /\.(png|jpg)$/,
+                use: 'url-loader?limit=25000'
+            } {
             test: /\.scss$/,
             // we extract the styles into their own .css file instead of having
             // them inside the js.
-            loader: ExtractTextPlugin.extract('style', 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!sass')
-        }, {
-            test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
-            loader: 'url?limit=10000&mimetype=application/font-woff'
-        }, {
-            test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/,
-            loader: 'file'
-        }]
+            loader: ExtractTextPlugin.extract({
+                fallback:'style-loader', 
+                use: 'css?modules&localIdentName=[name]---[local]---[hash:base64:5]!sass',
+                publicPath: '/dist'
+            })
+        }
+        ]
     },
     postcss: [
         require('autoprefixer')

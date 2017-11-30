@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 // import { Alert } from '../Alert/Alert';
 import { CSSTransitionGroup } from 'react-transition-group';
 export class FlashMessages extends Component {
-
     constructor(props) {
         super(props);
         this.state = { messages: props.messages };
@@ -26,16 +25,16 @@ export class FlashMessages extends Component {
     //   <Alert key={ message.id } message={ message }
     //     onClose={ () => this.removeMessage(message) } />
     // );
-    const alerts = [];
+        const alerts = [];
 
         return(
-      <CSSTransitionGroup
-        transitionName="alerts"
-        transitionEnter={false}
-        transitionLeaveTimeout={500}>
-        { alerts }
-      </CSSTransitionGroup>
-    );
+            <CSSTransitionGroup
+                transitionName="alerts"
+                transitionEnter={false}
+                transitionLeaveTimeout={500}>
+                { alerts }
+            </CSSTransitionGroup>
+        );
     }
 }
 

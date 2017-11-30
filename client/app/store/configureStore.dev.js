@@ -26,12 +26,12 @@ const persistedState = loadState();
 
 export function configureStore() {
     const store = createStore(rootReducer, persistedState, compose(
-            applyMiddleware(
-                middleware,
-                thunkMiddleware,
-                loggerMiddleware),
-            DevTools.instrument()
-        ));
+        applyMiddleware(
+            middleware,
+            thunkMiddleware,
+            loggerMiddleware),
+        DevTools.instrument()
+    ));
     store.subscribe(throttle(() => {
         saveState({
             bookingData: store.getState().bookingData,

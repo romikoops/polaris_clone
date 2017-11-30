@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers';
-import { Promise } from 'babel-polyfill';
+import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
 
 function handleResponse(response) {
@@ -11,10 +11,7 @@ function handleResponse(response) {
 
     return response.json();
 }
-function handleError(err) {
-    debugger;
-    return err.json();
-}
+
 
 function getStoredShipment() {
     const storedShipment = JSON.parse(localStorage.getItem('shipment'));
@@ -49,7 +46,7 @@ function newShipment(type) {
     };
     const url = BASE_URL + '/shipments';
     console.log(Promise);
-    return fetch(url, requestOptions).then(handleResponse).catch(handleError);
+    return fetch(url, requestOptions).then(handleResponse);
 }
 
 function setShipmentDetails(data) {
