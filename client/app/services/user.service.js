@@ -39,14 +39,14 @@ function login(username, password) {
                 const expiry = response.headers.get('expiry');
                 const tokenType = response.headers.get('token-type');
                 const uid = response.headers.get('uid');
-                const authHeader = {
+                const aHeader = {
                     client: client,
                     expiry: expiry,
                     uid: uid,
                     'access-token': accessToken,
                     'token-type': tokenType
                 };
-                localStorage.setItem('authHeader', JSON.stringify(authHeader));
+                localStorage.setItem('authHeader', JSON.stringify(aHeader));
             }
             return response.json();
         })

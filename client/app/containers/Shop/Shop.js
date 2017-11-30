@@ -27,7 +27,7 @@ class Shop extends Component {
             shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
-            shopType: 'Open Shop',
+            shopType: 'Booking',
             contacts: {
                 shipper: {},
                 consignee: {},
