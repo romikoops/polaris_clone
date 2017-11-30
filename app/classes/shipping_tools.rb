@@ -4,7 +4,7 @@ module ShippingTools
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
       session[:shipment_uuid] = @shipment.uuid
-      # byebug
+      # 
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
@@ -52,10 +52,10 @@ module ShippingTools
     public_routes = []
     private_routes = []
     private_prices.each do |pr|
-      private_routes << pr.route
+      private_routes << {route: pr.route, next: pr.route.next_departure}
     end
     public_prices.each do |pr|
-      public_routes << pr.route
+      public_routes << {route: pr.route, next: pr.route.next_departure}
     end
 
     resp = {
@@ -86,7 +86,7 @@ module ShippingTools
   def get_shipment_offer(session, params, load_type)
     # @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
     @shipment = Shipment.find(params[:shipment_id])
-    # byebug
+    # 
     case load_type
     when 'fcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
@@ -95,12 +95,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    # begin
+    begin
     offer_calculation.calc_offer!
-    # rescue
-    #   @no_transport_available = true
-    # render 'new_get_offer' and return
-    # end
+    rescue
+      @no_transport_available = true
+      flash[:err] = "Please check you inputs and try again"
+    end
 
     @shipment = offer_calculation.shipment
     @shipment.save!
@@ -188,7 +188,12 @@ module ShippingTools
     if new_user_loc.id == 1
       new_user_loc.update_attributes!(primary: true)
     end
-
+    if shipment_data[:insurance][:bool]
+      key = @shipment.generated_fees.first[0]
+      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance], currency: "EUR"}
+      @shipment.generated_fees[key][:total] += shipment_data[:insurance]
+      @shipment.total_price = @shipment.generated_fees[key][:total]
+    end
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []

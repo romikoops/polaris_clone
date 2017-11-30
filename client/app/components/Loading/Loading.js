@@ -13,7 +13,7 @@ export class Loading extends Component {
 
     return (
       <div className={`layout-row layout-align-center-center ${styles.loader_box}`}>
-        <CSSTransitionGroup transitionName="loader_anim" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+        <CSSTransitionGroup transitionName="loader_anim" transitionAppear transitionAppearTimeout={500} transitionEnterTimeout={750} transitionLeaveTimeout={750}>
           <div className={`layout-column layout-align-center-center ${styles.loader}`} style={backgroundStyle}>
             <img src={logo} alt="" className="flex-none"/>
             <p className="flex-none">{text}</p>

@@ -41,7 +41,7 @@ export class RouteSelector extends Component {
         } else {
             routesArr = privRoutes;
         }
-
+        console.log(routesArr.length);
         return (
         <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
             <div className="content-width layout-row layout-wrap">
@@ -56,7 +56,7 @@ export class RouteSelector extends Component {
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap">
-                   <CSSTransitionGroup className="flex-100 layout-row layout-wrap" transitionName="route_entry"  transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+                   <CSSTransitionGroup className="flex-100 layout-row layout-wrap layout-align-space-between-start" transitionAppear={false} transitionName="route_entry"  transitionEnterTimeout={500} transitionLeaveTimeout={500}>
                     {routesArr}
                   </CSSTransitionGroup>
                 </div>

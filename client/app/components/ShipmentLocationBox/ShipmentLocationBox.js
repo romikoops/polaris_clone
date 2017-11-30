@@ -22,14 +22,16 @@ export class ShipmentLocationBox extends Component {
                 city: '',
                 country: '',
                 fullAddress: '',
-                hub_id: ''
+                hub_id: '',
+                hub_name: ''
             },
             destination: {
                 street: '',
                 zipCode: '',
                 city: '',
                 fullAddress: '',
-                hub_id: ''
+                hub_id: '',
+                hub_name: ''
             },
             shipment: {
                 has_pre_carriage: false,
@@ -57,9 +59,10 @@ export class ShipmentLocationBox extends Component {
             this.setHubsFromRoute(this.props.selectedRoute);
         }
     }
-    setHubsFromRoute(route) {
+    setHubsFromRoute(routeObj) {
         let tmpOrigin = {};
         let tmpDest = {};
+        const {route} = routeObj;
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
@@ -193,12 +196,12 @@ export class ShipmentLocationBox extends Component {
         });
     }
     setOriginHub(event) {
-        this.setState({origin: {...this.state.origin, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
+        this.setState({oSelect: event, origin: {...this.state.origin, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
         this.props.setTargetAddress('origin', {...this.state.origin, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
         this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);
     }
     setDestHub(event) {
-        this.setState({destination: {...this.state.destination, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
+        this.setState({dSelect: event, destination: {...this.state.destination, hub_id: event.value.id, hub_name: event.label, lat: event.value.latitude, lng: event.value.longitude}});
         this.props.setTargetAddress('destination', {...this.state.destination, hub_id: event.value.id, hub_name: event.value.name, lat: event.value.latitude, lng: event.value.longitude});
         this.setMarker({lat: event.value.latitude, lng: event.value.longitude}, event.value.name);
     }
@@ -243,10 +246,10 @@ export class ShipmentLocationBox extends Component {
             });
         }
         const originHubSelect = (
-            <Select name="origin-hub" className={`${styles.select}`} placeholder={this.state.origin.hub_name} value={this.state.origin.hub_name} options={nexuses} onChange={this.setOriginHub}/>
+            <Select name="origin-hub" className={`${styles.select}`}  value={this.state.oSelect} options={nexuses} onChange={this.setOriginHub}/>
         );
         const destinationHubSelect = (
-            <Select name="destination-hub" className={`${styles.select}`} placeholder={this.state.destination.hub_name} value={this.state.destination.hub_name} options={nexuses} onChange={this.setDestHub}/>
+            <Select name="destination-hub" className={`${styles.select}`}  value={this.state.dSelect} options={nexuses} onChange={this.setDestHub}/>
         );
         const originFields = (<div className="flex-100 layout-row layout-wrap">
                     <input  name="origin-number" className={`flex-none ${styles.input}`} type="string" onChange={this.handleAddressChange} value={this.state.origin.number} placeholder="Number"/>

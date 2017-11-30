@@ -6,7 +6,7 @@ export const SHIPMENT_TYPES = [
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
         code: 'fcl',
     }
 ];
@@ -19,7 +19,7 @@ export const OPEN_SHIPMENT_TYPES = [
     },
     {
         name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.jpg',
+        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
         code: 'openfcl',
     }
 ];

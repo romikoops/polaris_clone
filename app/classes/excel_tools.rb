@@ -38,12 +38,15 @@ module ExcelTools
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
-      new_route_ids << route.id
       route.generate_weekly_schedules('ocean', row[:effective_date], row[:expiration_date], [1,5], 30)
-      if !row[:customer_id]
+      new_route_ids << route.id
+      if !dedicated
         cust_id = nil
         ded_bool = false
-      else
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
         cust_id = row[:customer_id].to_i
         ded_bool = true
       end
@@ -368,6 +371,7 @@ module ExcelTools
   def overwrite_hubs(params, user = current_user)
     old_ids = Hub.pluck(:id)
     new_ids = []
+    hubs = []
 
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -382,20 +386,23 @@ module ExcelTools
 
     hub_rows.each do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
-      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude])
+      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude]) 
 
-      if !hub_row[:hub_code] || hub_row[:hub_code] == ""
-        hub_code = Hub.generate_hub_code(nexus, hub_row[:hub_name], hub_row[:hub_type])
-      else
+      unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
       end
 
       hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}")
+      hubs << hub
       new_ids << hub.id
     end
 
     kicked_hub_ids = old_ids - new_ids
     Hub.where(id: kicked_hub_ids).destroy_all
+
+    hubs.each do |hub|
+        hub.generate_hub_code!
+    end
   end
   def load_hub_images(params)
     xlsx = Roo::Spreadsheet.open(params['xlsx'])

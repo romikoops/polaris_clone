@@ -56,10 +56,12 @@ export class BookingDetails extends Component {
                 }
             },
             insurance: {
-                bool: false
+                bool: false,
+                val: 0
             },
             customs: {
-                bool: false
+                bool: false,
+                val: 0
             },
             hsCode: '',
             totalGoodsValue: 0,
@@ -72,6 +74,7 @@ export class BookingDetails extends Component {
         this.toggleAddressBook = this.toggleAddressBook.bind(this);
         this.toNextStage = this.toNextStage.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
+        this.handleInsurance = this.handleInsurance.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage} = this.props;
@@ -109,6 +112,16 @@ export class BookingDetails extends Component {
                     country: value.location.country
                 }
             });
+        }
+    }
+    handleInsurance() {
+        const {insurance} = this.state;
+        const {shipmentData} = this.props;
+        if (insurance.bool) {
+            this.setState({insurance: {bool: false, val: 0}});
+        } else {
+            const iVal = (shipmentData.shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17;
+            this.setState({insurance: {bool: true, val: iVal}});
         }
     }
 
@@ -183,7 +196,9 @@ export class BookingDetails extends Component {
             notifyees,
             hsCode,
             totalGoodsValue,
-            cargoNotes
+            cargoNotes,
+            insurance,
+            customs
         } = this.state;
         const data = {
             shipment: {
@@ -193,7 +208,9 @@ export class BookingDetails extends Component {
                 notifyees,
                 hsCode,
                 totalGoodsValue,
-                cargoNotes
+                cargoNotes,
+                insurance,
+                customs
             }
         };
         this.props.nextStage(data);
@@ -247,11 +264,13 @@ export class BookingDetails extends Component {
                     {addrView}
                 </div>
                 <CargoDetails
+                    theme={theme}
                     handleChange={this.handleCargoInput}
                     shipmentData={shipmentData}
                     hsCode={this.state.hsCode}
                     cargoNotes={this.state.cargoNotes}
                     totalGoodsValue={this.state.totalGoodsValue}
+                    handleInsurance
                 />
                 <div className="flex-100 layout-row layout-align-center-center">
                     <div className="content-width layout-row layout-align-start-center button_padding">
