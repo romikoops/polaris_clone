@@ -47,7 +47,7 @@ class ShipmentsController < ApplicationController
 
   def create
     resp = new_shipment(session, params[:type])
-    if resp[0][:error]
+    if resp[:error]
       json_response(resp, 400)
     else
       json_response(resp, 200)
