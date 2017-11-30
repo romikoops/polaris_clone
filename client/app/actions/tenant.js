@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch';
-import { Promise } from 'babel-polyfill';
+import { Promise } from '@babel/polyfill';
 export const REQUEST_TENANT = 'REQUEST_TENANT';
 export const RECEIVE_TENANT = 'RECEIVE_TENANT';
 export const INVALIDATE_SUBDOMAIN = 'INVALIDATE_SUBDOMAIN';

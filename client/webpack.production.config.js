@@ -10,7 +10,7 @@ module.exports = {
     // The entry file. All your app roots from here.
     entry: [
         // Polyfills go here too, like babel-polyfill or whatwg-fetch
-        'babel-polyfill',
+        '@babel/polyfill',
         path.join(__dirname, 'app/index.js')
     ],
     // Where you want the output to go

@@ -1,7 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 import PropTypes from 'prop-types';
-import { Promise } from 'babel-polyfill';
+import { Promise } from '@babel/polyfill';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 import styles from './FileUploader.scss';

@@ -1,7 +1,7 @@
 import { shipmentConstants } from '../constants';
 import { shipmentService } from '../services';
 import { alertActions } from './';
-import { Promise } from 'babel-polyfill';
+import { Promise } from '@babel/polyfill';
 import { push } from 'react-router-redux';
 
 
