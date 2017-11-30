@@ -386,7 +386,7 @@ module ExcelTools
 
     hub_rows.each do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
-      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude]) 
+      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude])
 
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
@@ -401,9 +401,10 @@ module ExcelTools
     Hub.where(id: kicked_hub_ids).destroy_all
 
     hubs.each do |hub|
-        hub.generate_hub_code!
+      hub.generate_hub_code!
     end
   end
+
   def load_hub_images(params)
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
