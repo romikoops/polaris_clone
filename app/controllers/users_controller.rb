@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   # before_action :require_login_and_correct_id
 
-  layout 'dashboard'
+  
 
   def home
     @pricings = current_user.pricings

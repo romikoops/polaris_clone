@@ -11,9 +11,9 @@ export class ChooseShipment extends Component {
         const cards = [];
 
         shipmentTypes.forEach((shop, i) => {
-            let display = shop.name;
-            let imgClass = { backgroundImage: 'url(' + shop.img + ')' };
-            let textColour = { color: color };
+            const display = shop.name;
+            const imgClass = { backgroundImage: 'url(' + shop.img + ')' };
+            const textColour = { color: color };
             cards.push(
                 <div
                     key={i}

@@ -1,5 +1,5 @@
 import { authHeader } from '../helpers';
-import { Promise } from 'babel-polyfill';
+import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
 
 function handleResponse(response) {

@@ -3,7 +3,7 @@ class Shipments::FclController < ApplicationController
 
   before_action :require_login_and_correct_id, except: [:test_email]
 
-  layout 'dashboard'
+  
 
   def reuse_booking_data
 		reuse_shipment_data(params, session, 'fcl')

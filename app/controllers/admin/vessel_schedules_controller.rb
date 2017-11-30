@@ -1,7 +1,7 @@
 class Admin::VesselSchedulesController < ApplicationController
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)

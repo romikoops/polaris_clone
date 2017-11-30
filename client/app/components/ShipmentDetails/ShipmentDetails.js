@@ -74,6 +74,10 @@ export class ShipmentDetails extends Component {
             this.loadPrevReq(prevRequest.shipment);
         }
         setStage(1);
+        console.log('######### MOUNTED ###########');
+    }
+    componentDidUpdate() {
+        console.log('######### UPDATED ###########');
     }
 
     loadPrevReq(obj) {
@@ -283,7 +287,7 @@ export class ShipmentDetails extends Component {
                                     format="DD/MM/YYYY"
                                     value={value}
                                     className={styles.dpb_picker}
-                                    onDayChange={this.handleDayChange}
+                                    onDayChange={() => this.handleDayChange}
                                 />
                             </div>
 

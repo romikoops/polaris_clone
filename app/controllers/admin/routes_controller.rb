@@ -1,7 +1,7 @@
 class Admin::RoutesController < ApplicationController
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @routes = Route.where(tenant_id: current_user.tenant_id)

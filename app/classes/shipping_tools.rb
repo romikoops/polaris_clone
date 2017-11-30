@@ -1,6 +1,5 @@
 module ShippingTools
   def new_shipment(session, load_type)
-    return [{error: "No routes found. Please check you inputs and try again.", type: 'error'}]
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
       session[:shipment_uuid] = @shipment.uuid

@@ -40,7 +40,7 @@ export class ActiveRoutes extends Component {
         // const theme = this.props.theme;
         const activeRouteBoxes = [];
         activeRoutesData.map((route, index) => {
-            let divStyle = {
+            const divStyle = {
                 backgroundImage: 'url(' + route.image + ')',
             };
 

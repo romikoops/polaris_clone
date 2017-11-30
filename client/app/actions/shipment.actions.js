@@ -1,7 +1,7 @@
 import { shipmentConstants } from '../constants';
 import { shipmentService } from '../services';
 import { alertActions } from './';
-import { Promise } from 'babel-polyfill';
+import { Promise } from 'es6-promise-promise';
 import { push } from 'react-router-redux';
 
 
@@ -20,7 +20,7 @@ function newShipment(type) {
                     dispatch(success(shipmentData));
                 },
                 error => {
-                    debugger;
+                    // debugger;
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }

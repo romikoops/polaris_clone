@@ -3,7 +3,7 @@ class Admin::SchedulesController < ApplicationController
 
   include ExcelTools
 
-  layout 'dashboard'
+  
 
   def index
     @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 15)
