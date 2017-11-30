@@ -1,6 +1,7 @@
 module ImageTools
   require "mini_magick"
-   def reduce_and_upload(name, url)
+
+  def reduce_and_upload(name, url)
     img = MiniMagick::Image.open(url)
     resized_small = img.resize "600x400"
     # resized_large = img.resize "800x600"
@@ -13,12 +14,14 @@ module ImageTools
     # resized_small.destroy!
     return {sm: sm_str, lg: lg_str}
   end
+
   def self.load_city_images
     Dir.glob(Rails.root + '/assets/images/cityimages/*.jpg') do |image|
       resp = reduce_and_upload(image.name, image)
       p resp[:sm]
     end
   end
+
   def upload_image(filepath)
     s3 = Aws::S3::Client.new(
       access_key_id: ENV['AWS_KEY'],
