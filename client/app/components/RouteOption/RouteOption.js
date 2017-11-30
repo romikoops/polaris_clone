@@ -17,18 +17,6 @@ export class RouteOption extends Component {
         const iconStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        // const dedHeader = (
-        //    <div className={`${styles.op_type} b_border flex-100 layout-row`}>
-        //       <i className="fa fa-star flex-none"></i>
-        //       <p className="flex-none"> Dedicated Pricing </p>
-        //     </div>
-        //   )
-        //  const pubHeader = (
-        //    <div className={`${styles.op_type} b_border flex-100 layout-row`}>
-        //       <i className="fa fa-users flex-none"></i>
-        //       <p className="flex-none"> Public Pricing </p>
-        //     </div>
-        //   )
         return (
             <div className={`option flex-gt-sm-30 flex-100 layout-row layout-wrap layout-align-space-between-center b_border ${styles.option}`} onClick={this.choose}>
             <div className={'flex-100 layout-row layout-align-start-center ' + styles.op_content }>

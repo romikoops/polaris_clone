@@ -1,15 +1,24 @@
 import createHistory from 'history/createBrowserHistory';
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import rootReducer from '../reducers';
-
+import thunkMiddleware from 'redux-thunk';
+import { saveState, loadState } from '../helpers';
+import throttle from 'lodash/throttle';
 export const history = createHistory();
 const middleware = routerMiddleware(history);
-
-export function configureStore(initialState) {
-    return createStore(
-        rootReducer,
-        initialState,
-        applyMiddleware(middleware),
-    );
+const persistedState = loadState();
+export function configureStore() {
+    const store = createStore(rootReducer, persistedState, compose(
+        applyMiddleware(
+            middleware,
+            thunkMiddleware)
+    ));
+    store.subscribe(throttle(() => {
+        saveState({
+            bookingData: store.getState().bookingData,
+            tenant: store.getState().tenant
+        });
+    }), 1000);
+    return store;
 }
