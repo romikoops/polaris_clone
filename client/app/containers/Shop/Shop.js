@@ -60,7 +60,7 @@ class Shop extends Component {
     selectShipmentType(type) {
         // const { history } = this.props;
         this.getShipment(type);
-        this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
+        // this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
         // history.push('/booking/shipment_details');
     }
 
@@ -69,25 +69,25 @@ class Shop extends Component {
     }
 
     setShipmentData(data) {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
-        this.setState({
-            stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
-        });
-        history.push('/booking/' + data.shipment.id + '/choose_route');
+        // this.setState({
+        //     stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
+        // });
+        // history.push('/booking/' + data.shipment.id + '/choose_route');
     }
 
     setShipmentContacts(data) {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
         dispatch(shipmentActions.setShipmentContacts(data));
-        this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 4 }
-        });
-        history.push('/booking/' + data.shipment.id + '/finish_booking');
+        // this.setState({
+        //     stageTracker: { shipmentType: data.load_type, stage: 4 }
+        // });
+        // history.push('/booking/' + data.shipment.id + '/finish_booking');
     }
 
     selectShipmentRoute(obj) {
-        const { dispatch, history, bookingData } = this.props;
+        const { dispatch, bookingData } = this.props;
         const { schedule, total } = obj;
         const shipmentData = bookingData.response.stage2;
         const req = {
@@ -96,15 +96,15 @@ class Shop extends Component {
             shipment: shipmentData.shipment
         };
         dispatch(shipmentActions.setShipmentRoute(req));
-        history.push(
-            '/booking/' + shipmentData.shipment.id + '/booking_details'
-        );
-        this.setState({
-            stageTracker: {
-                shipmentType: shipmentData.shipment.load_type,
-                stage: 3
-            }
-        });
+        // history.push(
+        //     '/booking/' + shipmentData.shipment.id + '/booking_details'
+        // );
+        // this.setState({
+        //     stageTracker: {
+        //         shipmentType: shipmentData.shipment.load_type,
+        //         stage: 3
+        //     }
+        // });
     }
 
     render() {

@@ -45,9 +45,10 @@ export class RouteOption extends Component {
                                      .b_border {
                                            box-shadow: 0 0 7px ${theme.colors.secondary}28;
                                       }
-                                      .option::hover {
-                                         box-shadow: 2px 1px 2px 1px ${theme.colors.secondary};
-                                       }
+                                       &:hover {
+                                        margin: 4.8px 5.1px 5.2px 4.9px;
+                                        box-shadow: 1.3px 2.6px 4px 0 ${theme.colors.secondary}48;
+                                      }
                                   `}
                               </Style> : ''}
             </div>

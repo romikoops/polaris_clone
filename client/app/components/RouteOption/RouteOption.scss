@@ -1,10 +1,11 @@
 :local {
   .option {
-    height: 40px;
-    padding: 2px;
+    height: 45px;
+    padding: 3px;
     margin: 5px;
-    box-shadow: 0 0 7px rgba(black, 0.08);
-   
+    // box-shadow: 0 0 7px rgba(black, 0.08);
+    transition: all 0.2s ease;
+  
   }
   .op_type {
     font-size: 10px;
@@ -17,19 +18,13 @@
     font-size: 16px;
     line-height: 18px;
   }
-  // .option p {
-  //   color: #2C2C2C;
-  //   // font-family: ".SF NS Display";
-  //   font-size: 18px;
-  //   line-height: 21px;
-  //   margin: 0;
-  // }
   .date {
     color: #2C2C2C;
     // font-family: ".SF NS Display";
     font-size: 10px;
     line-height: 16px;
     margin: 0;
+    padding-bottom: 2px;
   }
   .option i {
       font-size: 15px;

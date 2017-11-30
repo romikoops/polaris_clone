@@ -16,9 +16,10 @@ export function shipment(state = {}, action) {
                 }
             };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
-            return {
-                error: action.error
-            };
+            const err1 = merge({}, state, {
+                error: { stage1: action.error }
+            });
+            return err1;
 
         case shipmentConstants.GET_SHIPMENT_REQUEST:
             return {
@@ -27,9 +28,10 @@ export function shipment(state = {}, action) {
         case shipmentConstants.GET_SHIPMENT_SUCCESS:
             return action.shipmentData;
         case shipmentConstants.GET_SHIPMENT_FAILURE:
-            return {
-                error: action.error
-            };
+            const errG = merge({}, state, {
+                error: { get: action.error }
+            });
+            return errG;
 
         case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
             const req2 = merge({}, state, {
@@ -47,10 +49,10 @@ export function shipment(state = {}, action) {
         // };
         // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
-            return {
-                error: action.error
-            };
-
+            const err2 = merge({}, state, {
+                error: { stage2: action.error }
+            });
+            return err2;
         case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
             const req3 = merge({}, state, {
                 request: { stage3: action.shipmentData },
@@ -63,10 +65,10 @@ export function shipment(state = {}, action) {
             });
             return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
-            return {
-                error: action.error
-            };
-
+            const err3 = merge({}, state, {
+                error: { stage3: action.error }
+            });
+            return err3;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
             const req4 = merge({}, state, {
                 request: { stage4: action.shipmentData },
@@ -79,9 +81,10 @@ export function shipment(state = {}, action) {
             });
             return resp4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
-            return {
-                error: action.error
-            };
+            const err4 = merge({}, state, {
+                error: { stage3: action.error }
+            });
+            return err4;
 
         case shipmentConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
