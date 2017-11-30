@@ -2,7 +2,7 @@ class Admin::ServiceChargesController < ApplicationController
   include ExcelTools
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     # @import_charges = ServiceCharge.where(trade_direction: "import")

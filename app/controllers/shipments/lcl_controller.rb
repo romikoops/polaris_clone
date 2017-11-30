@@ -3,7 +3,7 @@ class Shipments::LclController < ApplicationController
 
   before_action :require_login_and_correct_id, except: [:test_email]
 
-  layout 'dashboard'
+  
 
   def test_email
     forwarder_notification_email(current_user, Shipment.first)

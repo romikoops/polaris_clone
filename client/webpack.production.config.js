@@ -44,12 +44,12 @@ module.exports = {
           allChunks: true
         }),
         // handles uglifying js
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compressor: {
-        //         warnings: false,
-        //         screw_ie8: true
-        //     }
-        // }),
+        new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: true,
+                screw_ie8: true
+            }
+        }),
         // creates a stats.json
         new StatsPlugin('webpack.stats.json', {
             source: false,

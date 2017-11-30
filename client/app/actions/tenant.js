@@ -3,7 +3,7 @@ import { Promise } from 'es6-promise-promise';
 export const REQUEST_TENANT = 'REQUEST_TENANT';
 export const RECEIVE_TENANT = 'RECEIVE_TENANT';
 export const INVALIDATE_SUBDOMAIN = 'INVALIDATE_SUBDOMAIN';
-
+import { BASE_URL } from '../constants';
 const requestTenant = (subdomain) => {
     return {
         type: REQUEST_TENANT,
@@ -28,9 +28,10 @@ export const invalidateSubdomain = (subdomain) => {
 };
 
 const fetchTenant = (subdomain) => {
+    console.log(BASE_URL);
     return dispatch => {
         dispatch(requestTenant(subdomain));
-        return fetch(`http://localhost:3000/tenants/${subdomain}`)
+        return fetch(`${BASE_URL}/tenant/${subdomain}`)
       .then(response => response.json())
       .then(json => dispatch(receiveTenant(subdomain, json)));
     };
