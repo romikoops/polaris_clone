@@ -31,8 +31,9 @@ export class BookingConfirmation extends Component {
       };
       if (shipment.load_type.includes('lcl') && cargoItems) {
         cargoItems.forEach((ci, i) => {
+          const offset = i % 3 !== 0 ? 'offset-5' : '';
           cargo.push(
-            <div key={v4()} className="flex-33 layout-row layout-align-center-center">
+            <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
               <CargoItemDetails item={ci} index={i} />
             </div>
           );
@@ -126,7 +127,7 @@ export class BookingConfirmation extends Component {
                     </div>
                     <div className="flex-100 layout-row layout-align-end-end">
                       <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`}>
-                        <p>Total Price:</p> <Price value="300"/>
+                        <p>Total Price:</p> <Price value={shipment.total_price}/>
                       </div>
                     </div>
                   </div>
