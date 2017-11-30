@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Redirect } from 'react-router';
 import { userActions } from '../../actions';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
+
 class SignOut extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
@@ -10,11 +11,10 @@ class SignOut extends Component {
     }
 
     render() {
-        return(
-      <Redirect to="/" />
-      );
+        return <Redirect to="/" />;
     }
 }
+
 function mapStateToProps(state) {
     const { loggingIn } = state.authentication;
     return {
@@ -30,4 +30,3 @@ SignOut.propTypes = {
 
 const connectedSignOut = connect(mapStateToProps)(SignOut);
 export { connectedSignOut as SignOut };
-

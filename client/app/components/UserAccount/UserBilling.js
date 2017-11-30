@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './UserAccount.scss';
+// import styles from './UserAccount.scss';
 
-class UserBilling extends Component {
+export class UserBilling extends Component {
     constructor(props) {
         super(props);
     }

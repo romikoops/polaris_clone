@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserAccount.scss';
 
-class UserLocations extends Component {
+export class UserLocations extends Component {
     constructor(props) {
         super(props);
 
@@ -18,34 +18,34 @@ class UserLocations extends Component {
 
         const locations = locInfo
             ? locInfo.map(op => {
-                  return (
-                      <div key={op.id} className={'flex-33'}>
-                          <div className={`${styles['location-box']}`}>
-                              <div className={`${styles.header}`}>
-                                  {op.isPrimary ? (
-                                      <h3 className={`${styles.standard}`}>
+                return (
+                    <div key={op.id} className={'flex-33'}>
+                        <div className={`${styles['location-box']}`}>
+                            <div className={`${styles.header}`}>
+                                {op.isPrimary ? (
+                                    <h3 className={`${styles.standard}`}>
                                           Standard
-                                      </h3>
-                                  ) : (
-                                      <h3 className={`${styles.other}`}>
+                                    </h3>
+                                ) : (
+                                    <h3 className={`${styles.other}`}>
                                           Other
-                                      </h3>
-                                  )}
-                              </div>
-                              <div className={`${styles.content}`}>
-                                  {op.geocoded_address}
-                              </div>
-                              <div className={`${styles.footer}`}>
-                                  <div className="layout-row layout-align-center-center">
-                                      <span>Edit</span>
+                                    </h3>
+                                )}
+                            </div>
+                            <div className={`${styles.content}`}>
+                                {op.geocoded_address}
+                            </div>
+                            <div className={`${styles.footer}`}>
+                                <div className="layout-row layout-align-center-center">
+                                    <span>Edit</span>
                                       &nbsp; | &nbsp;
-                                      <span>Delete</span>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  );
-              })
+                                    <span>Delete</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })
             : '';
 
         return (

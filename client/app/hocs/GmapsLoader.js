@@ -16,8 +16,22 @@ export default class GmapsLoader extends Component {
         };
         const ParamComponent = this.props.component;
         return (
-        <ReactGoogleMapLoader params={params} render={googleMaps => googleMaps && (<ParamComponent allNexuses={this.props.allNexuses} setTargetAddress={this.props.selectLocation} theme={this.props.theme} gMaps={googleMaps} selectedRoute={this.props.selectedRoute} setCarriage={this.props.toggleCarriage}/>)}/>
-            );
+            <ReactGoogleMapLoader
+                params={params}
+                render={googleMaps =>
+                    googleMaps && (
+                        <ParamComponent
+                            allNexuses={this.props.allNexuses}
+                            setTargetAddress={this.props.selectLocation}
+                            theme={this.props.theme}
+                            gMaps={googleMaps}
+                            selectedRoute={this.props.selectedRoute}
+                            setCarriage={this.props.toggleCarriage}
+                        />
+                    )
+                }
+            />
+        );
     }
 }
 GmapsLoader.PropTypes = {
