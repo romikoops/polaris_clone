@@ -1,16 +1,19 @@
 class Hub < ApplicationRecord
-    belongs_to :tenant
-  belongs_to :location
+  belongs_to :tenant
+  belongs_to :nexus, class_name: "Location", foreign_key: "location_id"
+
+  has_many :schedules
   
   has_one :service_charge
 
-  def self.generate_hub_code(nexus, hub_name, type)
-    existing_hubs = nexus.hubs.where(hub_type: type)
-    num = existing_hubs.length + 1
-    letters = hub_name[0..1].upcase
-    type_letter = type[0].upcase
+  def generate_hub_code!
+    existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type)
+    num = existing_hubs.length
+    letters = self.name[0..1].upcase
+    type_letter = self.hub_type[0].upcase
     code = letters + type_letter + num.to_s
-    return code
+    self.hub_code = code
+    self.save
   end
 
   def self.ports
@@ -24,7 +27,7 @@ class Hub < ApplicationRecord
   def self.rail
     self.where(hub_type: "rail")
   end
-  
+
   def lat_lng_string
     "#{latitude},#{longitude}"
   end
