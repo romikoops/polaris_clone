@@ -6,7 +6,6 @@ import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 import styles from './FileUploader.scss';
 class FileUploader extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -17,12 +16,12 @@ class FileUploader extends React.Component {
         this.fileUpload = this.fileUpload.bind(this);
     }
     handleResponse(response) {
-      if (!response.ok) {
-          return Promise.reject(response.statusText);
-      }
+        if (!response.ok) {
+            return Promise.reject(response.statusText);
+        }
 
-      return response.json();
-  }
+        return response.json();
+    }
     onFormSubmit(e) {
         e.preventDefault(); // Stop form submit
         this.fileUpload(this.state.file).then((response)=>{
@@ -60,13 +59,13 @@ class FileUploader extends React.Component {
                     : 'black'
         };
         return (
-          <form onSubmit={this.onFormSubmit}>
-            <div className={styles.upload_btn_wrapper}>
-              <button className={styles.btn} style={btnStyle}>Upload</button>
-              <input type="file" onChange={this.onChange} name={type} />
-            </div>
-          </form>
-       );
+            <form onSubmit={this.onFormSubmit}>
+                <div className={styles.upload_btn_wrapper}>
+                    <button className={styles.btn} style={btnStyle}>Upload</button>
+                    <input type="file" onChange={this.onChange} name={type} />
+                </div>
+            </form>
+        );
     }
 }
 

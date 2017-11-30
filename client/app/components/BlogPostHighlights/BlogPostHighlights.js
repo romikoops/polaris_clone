@@ -12,7 +12,7 @@ export class BlogPostHighlights extends Component {
         const dummyPosts = [];
         const theme = this.props.theme;
         for (let i = 2; i >= 0; i--) {
-            let divStyle = {
+            const divStyle = {
                 backgroundImage: 'url(' + dummyPost.image + ')',
             };
 

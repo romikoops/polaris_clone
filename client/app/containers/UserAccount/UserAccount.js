@@ -50,9 +50,6 @@ class UserAccount extends Component {
         let viewComponent;
         switch (this.state.activeLink) {
             case 'profile':
-                {
-                    /*                 viewComponent = <UserProfile />; */
-                }
                 viewComponent = (
                     <UserLocations locations={this.props.users.items} getLocations={this.getLocations} />
                 );

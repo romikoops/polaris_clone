@@ -27,50 +27,75 @@ module.exports = {
             inject: 'body',
             filename: 'index.html'
         }),
-        new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('development')
         })
     ],
-    eslint: {
-        configFile: '.eslintrc',
-        failOnWarning: false,
-        failOnError: false
-    },
+    // eslint: {
+    //     configFile: '.eslintrc',
+    //     failOnWarning: false,
+    //     failOnError: false
+    // },
     module: {
-        preLoaders: [
+        rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'eslint'
-            }
-        ],
-        loaders: [
-            {
-                test: /\.js?$/,
-                exclude: /node_modules/,
-                loader: 'babel'
+                use: 'eslint-loader',
+                enforce: 'pre'
             },
+            // {
+            //     test: /\.js?$/,
+            //     exclude: /node_modules/,
+            //     use: 'babel-loader'
+            // },
             {
-                test: /\.json?$/,
-                loader: 'json'
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        babelrc: false,
+                        presets: [
+                            ["@babel/env", {
+                                "targets": {
+                                    'browsers': ['Chrome >=59']
+                                },
+                                "modules":false,
+                                "loose":true
+                            }],"@babel/react"],
+
+                        plugins: [
+                            "react-hot-loader/babel",
+                            ["import", {libraryName: "antd", style: "css"}],
+                            "@babel/proposal-object-rest-spread"
+
+                        ]
+                    }
+                }
+                ]
+
             },
             {
                 test: /\.scss$/,
-                loader:
-                    'style!css!sass?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+                use:[
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]'
+                ]
             },
             {
                 test: /\.css$/,
-                loaders: ['style-loader', 'css-loader']
+                use: ['style-loader', 'css-loader']
             },
             {
                 test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
-                loader: 'url?limit=10000&mimetype=application/font-woff'
+                use: 'url-loader?limit=10000&mimetype=application/font-woff'
             },
-            { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, loader: 'file' },
+            { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, use: 'file-loader' },
             // {
             //     test: /\.(gif|png|jpe?g|svg)$/i,
             //     loaders: [
@@ -102,7 +127,7 @@ module.exports = {
             // },
             {
                 test: /\.(png|jpg)$/,
-                loader: 'url?limit=25000'
+                use: 'url-loader?limit=25000'
             }
         ]
     }

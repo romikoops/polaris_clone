@@ -20,7 +20,7 @@ function newShipment(type) {
                     dispatch(success(shipmentData));
                 },
                 error => {
-                    debugger;
+                    // debugger;
                     dispatch(failure(error));
                     dispatch(alertActions.error(error));
                 }
