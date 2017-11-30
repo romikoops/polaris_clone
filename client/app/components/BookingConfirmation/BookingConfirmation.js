@@ -74,8 +74,8 @@ export class BookingConfirmation extends Component {
           <div className="flex-100 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap layout-align-center">
               <div className="flex-none content-width layout-row layout-wrap layout-align-start">
-                <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
-                  <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
+                <div className={`${styles.thank_box} flex-100 layout-row layout-wrap`}>
+                  <div className={`${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                     Thank you for booking with Greencarrier.<br/>
                     Hope to see you again soon!
                   </div>
