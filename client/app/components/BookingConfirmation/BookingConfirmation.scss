@@ -13,11 +13,14 @@
     font-size: 16px;
     line-height: 23px;
   }
-
+  .sec_break {
+    border-color: rgba(black, 0.03);
+  }
   .btn_sec{
-    height: 227px;
-    padding-top: 48px;
-    border-top: 1px solid #EDEDED;
+    padding: 100px 0 70px 0;
+  }
+  .back_to_dash_sec {
+    padding: 50px 0 100px 0;
   }
   .cargo_sec {
     min-height: 187px;

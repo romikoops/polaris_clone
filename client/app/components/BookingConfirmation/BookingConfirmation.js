@@ -144,7 +144,8 @@ export class BookingConfirmation extends Component {
                 </div>
               </div>
             </div>
-            <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+            <hr className={`${styles.sec_break} flex-100`}/>
+            <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
               <div className="flex-none content-width layout-row layout-align-start-center">
                 <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
               </div>
