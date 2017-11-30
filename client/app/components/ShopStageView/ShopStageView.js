@@ -21,27 +21,23 @@ export class ShopStageView extends Component {
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
-            <div className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`} >
-                <i className="fa fa-check flex-none" style={textStyle}></i>
-            </div>
-
-        );
+                <div className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`} >
+                    <i className="fa fa-check flex-none" style={textStyle}></i>
+                </div>
+            );
         } else if (stage.step === this.props.currentStage) {
             stageBox = (
-            <div className={`${styles.shop_stage_current} flex-none layout-column layout-align-center-center`} style={borderStyle}>
-              <h3 className="flex-none" style={textStyle}> { stage.step } </h3>
-            </div>
-
-        );
+                <div className={`${styles.shop_stage_current} flex-none layout-column layout-align-center-center`} style={borderStyle}>
+                  <h3 className="flex-none" style={textStyle}> { stage.step } </h3>
+                </div>
+            );
         } else {
             stageBox = (
-            <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`} >
-              <h3 className="flex-none" > { stage.step } </h3>
-            </div>
-
-        );
+                <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`} >
+                  <h3 className="flex-none" > { stage.step } </h3>
+                </div>
+            );
         }
-        // debugger;
         return stageBox;
     }
 
@@ -59,7 +55,8 @@ export class ShopStageView extends Component {
                 <div key={stage.step} className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}>
                     { this.stageFunction(stage) }
                     <p className={`flex-none ${styles.stage_text}`}>{stage.text}</p>
-                </div>);
+                </div>
+            );
         });
         return (
             <div className="layout-row flex-100 layout-align-center layout-wrap">
@@ -74,8 +71,8 @@ export class ShopStageView extends Component {
                     <div className="flex-none content-width layout-row layout-align-start-center">
                         <div className={` ${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}>
                             <div className={` ${styles.line} flex-none`}></div>
-                                { stageBoxes }
-                             </div>
+                            { stageBoxes }
+                        </div>
                     </div>
                 </div>
             </div>
