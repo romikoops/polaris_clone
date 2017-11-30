@@ -65,9 +65,6 @@ class FileUploader extends React.Component {
               <button className={styles.btn} style={btnStyle}>Upload</button>
               <input type="file" onChange={this.onChange} name={type} />
             </div>
-            {/* <h1>File Upload</h1>*/}
-            {/* <input type="file"  placeholder={text} /> */}
-    {/*        <button type="submit">Upload</button>*/}
           </form>
        );
     }

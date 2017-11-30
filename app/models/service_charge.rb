@@ -79,7 +79,6 @@ class ServiceCharge < ApplicationRecord
     fixed_keys.each do |key|
       result[key] = {value: self[key]["value"], currency: self[key]["currency"]}
     end
-    
     result
   end
 
