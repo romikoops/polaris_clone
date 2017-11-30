@@ -95,12 +95,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    # begin
+    begin
     offer_calculation.calc_offer!
-    # rescue
-    #   @no_transport_available = true
-    # render 'new_get_offer' and return
-    # end
+    rescue
+      @no_transport_available = true
+      flash[:err] = "Please check you inputs and try again"
+    end
 
     @shipment = offer_calculation.shipment
     @shipment.save!

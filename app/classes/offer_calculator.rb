@@ -365,7 +365,6 @@ class OfferCalculator
   end
 
   def price_from_cargos
-    
     prices = []
     case @load_type
     when 'fcl'
@@ -386,7 +385,7 @@ class OfferCalculator
         prices << price
       end
     end
-    
-    prices.inject(:+)
+
+    total_price_obj = { value: prices.map{ |p| p[:value]}.reduce(0, :+), currency: prices[0][:currency] }
   end
 end
