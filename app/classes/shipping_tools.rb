@@ -1,6 +1,6 @@
 module ShippingTools
   def new_shipment(session, load_type)
-
+    return [{error: "No routes found. Please check you inputs and try again.", type: 'error'}]
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
       session[:shipment_uuid] = @shipment.uuid
@@ -95,12 +95,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    # begin
+    begin
     offer_calculation.calc_offer!
-    # rescue
-    #   @no_transport_available = true
-    # render 'new_get_offer' and return
-    # end
+    rescue
+      # @no_transport_available = true
+      return {error: "No routes found. Please check you inputs and try again.", type: 'error'}
+    end
 
     @shipment = offer_calculation.shipment
     @shipment.save!

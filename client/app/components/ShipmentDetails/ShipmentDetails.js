@@ -10,7 +10,7 @@ import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 import { RouteSelector } from '../RouteSelector/RouteSelector';
-
+import { FlashMessages } from '../FlashMessages/FlashMessages';
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
@@ -205,10 +205,10 @@ export class ShipmentDetails extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // }
 
-        const { theme } = this.props;
+        const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
-        if (this.props.shipmentData.data) {
-            if (this.props.shipmentData.data.load_type.includes('fcl')) {
+        if (shipmentData.data) {
+            if (shipmentData.data.load_type.includes('fcl')) {
                 cargoDetails = (
                     <ShipmentContainers
                         containers={this.state.containers}
@@ -217,7 +217,7 @@ export class ShipmentDetails extends Component {
                     />
                 );
             }
-            if (this.props.shipmentData.data.load_type.includes('lcl')) {
+            if (shipmentData.data.load_type.includes('lcl')) {
                 cargoDetails = (
                     <ShipmentCargoItems
                         cargoItems={this.state.cargoItems}
@@ -234,8 +234,8 @@ export class ShipmentDetails extends Component {
             <RouteSelector
                 theme={theme}
                 setRoute={this.selectRoute}
-                publicRoutes={this.props.shipmentData.public_routes}
-                privateRoutes={this.props.shipmentData.private_routes}
+                publicRoutes={shipmentData.public_routes}
+                privateRoutes={shipmentData.private_routes}
             />
         );
 
@@ -243,7 +243,7 @@ export class ShipmentDetails extends Component {
             <GmapsLoader
                 theme={theme}
                 selectLocation={this.setTargetLocation}
-                allNexuses={this.props.shipmentData.all_nexuses}
+                allNexuses={shipmentData.all_nexuses}
                 component={ShipmentLocationBox}
                 selectedRoute={this.state.selectedRoute}
                 toggleCarriage={this.toggleCarriage}
@@ -258,8 +258,10 @@ export class ShipmentDetails extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const flash = messages ? <FlashMessages messages={messages} /> : '';
         return (
             <div className="layout-row flex-100 layout-wrap">
+                {flash}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                     <div
                         className={`${

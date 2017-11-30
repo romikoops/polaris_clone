@@ -5,6 +5,7 @@ import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox';
 import { RouteResult } from '../RouteResult/RouteResult';
 import {moment} from '../../constants';
 import styles from './ChooseRoute.scss';
+import { FlashMessages } from '../FlashMessages/FlashMessages';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -36,7 +37,7 @@ export class ChooseRoute extends Component {
         this.props.chooseRoute(obj);
     }
     render() {
-        const { shipmentData } = this.props;
+        const { shipmentData, messages } = this.props;
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
@@ -60,8 +61,10 @@ export class ChooseRoute extends Component {
                 });
             }
         }
+        const flash = messages ? <FlashMessages messages={messages} /> : '';
         return (
         <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
+        {flash}
           <div className="flex-none content-width layout-row layout-wrap">
            <div className="flex-20 layout-row layout-wrap">
               <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>
@@ -99,7 +102,7 @@ ChooseRoute.PropTypes = {
     shipmentData: PropTypes.object,
     chooseRoute: PropTypes.func,
     selectedDay: PropTypes.string,
-
+    messages: PropTypes.object
     // shipment: PropTypes.object,
     // schedules: PropTypes.array
 };

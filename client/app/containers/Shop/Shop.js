@@ -7,7 +7,6 @@ import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetail
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
-
 import { connect } from 'react-redux';
 import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
@@ -60,7 +59,7 @@ class Shop extends Component {
     selectShipmentType(type) {
         // const { history } = this.props;
         this.getShipment(type);
-        this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
+        // this.setState({ stageTracker: { shipmentType: type, stage: 1 } });
         // history.push('/booking/shipment_details');
     }
 
@@ -69,25 +68,25 @@ class Shop extends Component {
     }
 
     setShipmentData(data) {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
-        this.setState({
-            stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
-        });
-        history.push('/booking/' + data.shipment.id + '/choose_route');
+        // this.setState({
+        //     stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
+        // });
+        // history.push('/booking/' + data.shipment.id + '/choose_route');
     }
 
     setShipmentContacts(data) {
-        const { dispatch, history } = this.props;
+        const { dispatch } = this.props;
         dispatch(shipmentActions.setShipmentContacts(data));
-        this.setState({
-            stageTracker: { shipmentType: data.load_type, stage: 4 }
-        });
-        history.push('/booking/' + data.shipment.id + '/finish_booking');
+        // this.setState({
+        //     stageTracker: { shipmentType: data.load_type, stage: 4 }
+        // });
+        // history.push('/booking/' + data.shipment.id + '/finish_booking');
     }
 
     selectShipmentRoute(obj) {
-        const { dispatch, history, bookingData } = this.props;
+        const { dispatch, bookingData } = this.props;
         const { schedule, total } = obj;
         const shipmentData = bookingData.response.stage2;
         const req = {
@@ -96,15 +95,15 @@ class Shop extends Component {
             shipment: shipmentData.shipment
         };
         dispatch(shipmentActions.setShipmentRoute(req));
-        history.push(
-            '/booking/' + shipmentData.shipment.id + '/booking_details'
-        );
-        this.setState({
-            stageTracker: {
-                shipmentType: shipmentData.shipment.load_type,
-                stage: 3
-            }
-        });
+        // history.push(
+        //     '/booking/' + shipmentData.shipment.id + '/booking_details'
+        // );
+        // this.setState({
+        //     stageTracker: {
+        //         shipmentType: shipmentData.shipment.load_type,
+        //         stage: 3
+        //     }
+        // });
     }
 
     render() {
@@ -116,7 +115,7 @@ class Shop extends Component {
 
         const { bookingData, theme, match } = this.props;
 
-        const { request, response } = bookingData;
+        const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
@@ -125,7 +124,6 @@ class Shop extends Component {
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <Header theme={this.props.theme} />
-
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}
@@ -144,6 +142,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage1 : {}}
                         />
                     )}
                 />
@@ -159,6 +158,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage2 : {}}
                         />
                     )}
                 />
@@ -178,6 +178,7 @@ class Shop extends Component {
                                 request && request.stage3 ? request.stage3 : {}
                             }
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage3 : {}}
                         />
                     )}
                 />
@@ -200,6 +201,7 @@ class Shop extends Component {
                                         : {}
                                 }
                                 setStage={this.selectShipmentStage}
+                                messages={error ? error.stage4 : {}}
                             />
                         )}
                     />
