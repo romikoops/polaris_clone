@@ -55,6 +55,17 @@
   .b_summ_top {
     border-bottom: 1px solid rgba(black, 0.04);
   }
+  .wrapper_cargo {
+    margin-bottom: 40px;
+  }
+  .tot_price {
+    color: white;
+    padding: 0 15px;
+    height: 49px;
+    width: 296px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, #06CA52 0%, #0CA7F7 100%);
+  }
   .thank_box {
     height: 380px;
     padding-top: 48px;

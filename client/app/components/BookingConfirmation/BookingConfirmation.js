@@ -7,6 +7,8 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails';
 import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { Price } from '../Price/Price';
+
 export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
@@ -119,7 +121,14 @@ export class BookingConfirmation extends Component {
                     {nArray}
                   </div>
                   <div className={`${styles.b_summ_bottom} flex-100 layout-row layout-wrap`}>
-                    {cargo}
+                    <div className={`${styles.wrapper_cargo} flex-100 layout-row layout-wrap`}>
+                      {cargo}
+                    </div>
+                    <div className="flex-100 layout-row layout-align-end-end">
+                      <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`}>
+                        <p>Total Price:</p> <Price value="300"/>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
