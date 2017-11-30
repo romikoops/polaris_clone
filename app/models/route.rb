@@ -145,6 +145,9 @@ class Route < ApplicationRecord
     
     find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
+  def next_departure
+    self.schedules.where("etd > ?", DateTime.now).order(:etd).limit(1).first
+  end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length)
     tmp_date = start_date

@@ -6,7 +6,7 @@ class Container < ApplicationRecord
     containers = []
     
     params.each do |value|
-      byebug
+      
       size_class = value["sizeClass"]
       payload_in_kg = value["payload_in_kg"].to_d
       tare_weight = CONTAINER_WEIGHTS[size_class].to_d

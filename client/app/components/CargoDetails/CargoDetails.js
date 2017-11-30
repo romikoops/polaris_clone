@@ -19,6 +19,7 @@ export class CargoDetails extends Component {
     }
     toggleInsurance() {
         this.setState({insuranceView: !this.state.insuranceView});
+        this.props.handleInsurance();
     }
     toggleCustoms() {
         this.setState({customsView: !this.state.customsView});
@@ -29,7 +30,7 @@ export class CargoDetails extends Component {
         this.props.handleChange(event);
     }
     render() {
-        const {shipmentData} = this.props;
+        const {shipmentData, theme} = this.props;
         const { shipment, dangerousGoods} = shipmentData;
         const packUrl = shipmentData ? '/shipments/' + shipment.id + '/upload/packing_sheet' : '';
         const cInvUrl = shipmentData ? '/shipments/' + shipment.id + '/upload/commercial_invoice' : '';
@@ -82,7 +83,7 @@ export class CargoDetails extends Component {
                         <p className={`flex-none ${styles.f_header}`}> Customs Declaration</p>
                       </div>
                       <div className="flex-100">
-                        <FileUploader url={custDec} type="customs_declaration" text="Customs Declaration"/>
+                        <FileUploader theme={theme} url={custDec} type="customs_declaration" text="Customs Declaration"/>
                        </div>
                     </div>
                   ) : ''}
@@ -94,7 +95,7 @@ export class CargoDetails extends Component {
                       <p className={`flex-none ${styles.f_header}`}> Customs Value Declaration</p>
                     </div>
                     <div className="flex-100">
-                      <FileUploader url={custVal} type="customs_value_declaration" text="Customs Value Declaration"/>
+                      <FileUploader theme={theme} url={custVal} type="customs_value_declaration" text="Customs Value Declaration"/>
                    </div>
                   </div>
                   ) : ''}
@@ -106,7 +107,7 @@ export class CargoDetails extends Component {
                       <p className={`flex-none ${styles.f_header}`}> EORI</p>
                     </div>
                     <div className="flex-100">
-                      <FileUploader url={eori} type="eori" text="EORI"/>
+                      <FileUploader theme={theme} url={eori} type="eori" text="EORI"/>
                     </div>
                   </div>
                   ) : ''}
@@ -157,7 +158,7 @@ export class CargoDetails extends Component {
                         <p className={`flex-none ${styles.f_header}`}> Packing Sheet</p>
                       </div>
                       <div className="flex-100">
-                        <FileUploader url={packUrl} type="packing_sheet" text="Packing Sheet"/>
+                        <FileUploader theme={theme} url={packUrl} type="packing_sheet" text="Packing Sheet"/>
                       </div>
                     </div>
                         ) : ''}
@@ -167,7 +168,7 @@ export class CargoDetails extends Component {
                         <p className={`flex-none ${styles.f_header}`}> Commercial Invoice</p>
                       </div>
                       <div className="flex-100">
-                        <FileUploader url={cInvUrl} type="commercial_invoice" text="Commercial Invoice"/>
+                        <FileUploader theme={theme} url={cInvUrl} type="commercial_invoice" text="Commercial Invoice"/>
                       </div>
                     </div>
                         ) : ''}
@@ -177,7 +178,7 @@ export class CargoDetails extends Component {
                         <p className={`flex-none ${styles.f_header}`}>Certificate of Origin</p>
                       </div>
                       <div className="flex-100">
-                        <FileUploader url={certOrigin} type="commercial_invoice" text="Certificate of Origin"/>
+                        <FileUploader theme={theme} url={certOrigin} type="commercial_invoice" text="Certificate of Origin"/>
                       </div>
                     </div>
                         ) : ''}
@@ -187,7 +188,7 @@ export class CargoDetails extends Component {
                         <p className={`flex-none ${styles.f_header}`}> Dangerous Goods Declaration</p>
                       </div>
                       <div className="flex-100">
-                        <FileUploader url={dGoods} type="commercial_invoice" text="Dangerous Goods Declaration"/>
+                        <FileUploader theme={theme} url={dGoods} type="commercial_invoice" text="Dangerous Goods Declaration"/>
                         </div>
                       </div>
                         ) : ''}

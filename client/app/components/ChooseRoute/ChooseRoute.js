@@ -36,7 +36,7 @@ export class ChooseRoute extends Component {
         this.props.chooseRoute(obj);
     }
     render() {
-        const {shipmentData} = this.props;
+        const { shipmentData } = this.props;
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
@@ -61,7 +61,7 @@ export class ChooseRoute extends Component {
             }
         }
         return (
-        <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px'}}>
+        <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
           <div className="flex-none content-width layout-row layout-wrap">
            <div className="flex-20 layout-row layout-wrap">
               <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>

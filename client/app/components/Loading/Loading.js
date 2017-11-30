@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransitionGroup } from 'react-transition-group';
-import styles from './loading.scss';
+import styles from './Loading.scss';
 export class Loading extends Component {
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        const {theme, text} = this.props;
-        const logo = theme && theme.logo ? theme.logo : '';
-        const backgroundStyle = { backgroundColor: theme && theme.colors ? theme.colors.primary : 'darkslategrey'};
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const {theme, text} = this.props;
+    const logo = theme && theme.logo ? theme.logo : '';
+    const backgroundStyle = { backgroundColor: theme && theme.colors ? theme.colors.primary : 'darkslategrey'};
 
-        return (
+    return (
       <div className={`layout-row layout-align-center-center ${styles.loader_box}`}>
         <CSSTransitionGroup transitionName="loader_anim" transitionAppear transitionAppearTimeout={500} transitionEnterTimeout={750} transitionLeaveTimeout={750}>
           <div className={`layout-column layout-align-center-center ${styles.loader}`} style={backgroundStyle}>
@@ -20,10 +20,10 @@ export class Loading extends Component {
           </div>
         </CSSTransitionGroup>
       </div>
-      );
-    }
+    );
+  }
 }
 Loading.PropTypes = {
-    theme: PropTypes.object,
-    text: PropTypes.string
+  theme: PropTypes.object,
+  text: PropTypes.string
 };

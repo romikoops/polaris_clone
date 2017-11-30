@@ -48,11 +48,25 @@ class FileUploader extends React.Component {
     }
 
     render() {
-        const text = this.props.text;
+        const {theme, type} = this.props;
+        const btnStyle = {
+            background:
+                theme && theme.colors
+                    ? '-webkit-linear-gradient(95.41deg, ' +
+                      theme.colors.primary +
+                      ' 0%,' +
+                      theme.colors.secondary +
+                      ' 100%)'
+                    : 'black'
+        };
         return (
           <form onSubmit={this.onFormSubmit}>
+            <div className={styles.upload_btn_wrapper}>
+              <button className={styles.btn} style={btnStyle}>Upload</button>
+              <input type="file" onChange={this.onChange} name={type} />
+            </div>
             {/* <h1>File Upload</h1>*/}
-            <input type="file" onChange={this.onChange} placeholder={text} className={styles.uploader}/>
+            {/* <input type="file"  placeholder={text} /> */}
     {/*        <button type="submit">Upload</button>*/}
           </form>
        );
@@ -62,7 +76,8 @@ class FileUploader extends React.Component {
 FileUploader.PropTypes = {
     url: PropTypes.string,
     text: PropTypes.string,
-    type: PropTypes.string
+    type: PropTypes.string,
+    theme: PropTypes.object
 };
 
 

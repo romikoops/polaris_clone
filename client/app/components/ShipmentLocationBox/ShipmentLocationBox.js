@@ -57,9 +57,10 @@ export class ShipmentLocationBox extends Component {
             this.setHubsFromRoute(this.props.selectedRoute);
         }
     }
-    setHubsFromRoute(route) {
+    setHubsFromRoute(routeObj) {
         let tmpOrigin = {};
         let tmpDest = {};
+        const {route} = routeObj;
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;

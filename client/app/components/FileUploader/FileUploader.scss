@@ -15,23 +15,33 @@
     line-height: 21px;  
     text-align: center;
     color: #FFFFFF;
+    height: 33.83px;
+    width: 167px;
     // margin: 5px 20px;
   }
-  .large {
-    height: 41px;
-    width: 317px;
-  }
-  .small {
-     height: 33.83px;
-     width: 167px;
-  }
-  .neutral {
-    background-color: #D8D8D8;
-    color: #2C2C2C !important;
-  }
-  .back {
-    background-color: #787878;
-    color: #FFFFFF !important; 
+  .upload_btn_wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
   }
 
+  .btn {
+    // font-family: "Open Sans";  
+    font-size: 10px; 
+    border-radius: 39px;
+    line-height: 21px;  
+    text-align: center;
+    color: #FFFFFF;
+    height: 33.83px;
+    width: 167px;
+  }
+
+  .upload_btn_wrapper input[type=file] {
+    font-size: 10px;  
+    line-height: 21px;  
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
 }

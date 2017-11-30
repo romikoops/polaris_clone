@@ -35,6 +35,9 @@ export class RouteResult extends Component {
     dashedGradient(color1, color2) {
         return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
+    format2Digit(n) {
+      return ('0' + n).slice(-2);
+    }
     render() {
         const { theme, schedule } = this.props;
         const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
@@ -57,7 +60,7 @@ export class RouteResult extends Component {
         };
         const price = this.props.fees[schedKey].total;
         const priceUnits = Math.floor(price);
-        const priceCents = Math.floor((price * 100) % 100);
+        const priceCents = this.format2Digit(Math.floor((price * 100) % 100));
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -131,7 +134,7 @@ export class RouteResult extends Component {
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                 <p className="flex-none">Total price: </p>
                 <h4 className={`flex-none ${styles.total_price}`}>
-                  {priceUnits}<span>{priceCents}</span>  <span className={styles.total_price_currency}>EUR</span>
+                  {priceUnits}<sup>.{priceCents}</sup>  <span className={styles.total_price_currency}>EUR</span>
                 </h4>
               </div>
               <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">

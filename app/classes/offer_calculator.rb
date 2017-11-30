@@ -13,7 +13,6 @@ class OfferCalculator
     case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
-      byebug
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
       @shipment.containers = @containers
     when 'lcl'

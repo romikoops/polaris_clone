@@ -1,19 +1,41 @@
 :local {
   .option {
-    width: 240px;
-    height: 75px;
+    height: 40px;
     padding: 2px;
-    background: floralwhite;
-    margin: 3px;
-
-    color: #212121;
+    margin: 5px;
+    box-shadow: 0 0 7px rgba(black, 0.08);
+   
+  }
+  .op_type {
+    font-size: 10px;
+    width: 90%;
+    // border-bottom: 1px solid 
+  }
+  .op_content {
+     color: #212121;
     // font-family: ".SF NS Display";
     font-size: 16px;
     line-height: 18px;
   }
-  .op_type {
-    font-size: 8px;
-    width: 90%;
-    // border-bottom: 1px solid 
+  // .option p {
+  //   color: #2C2C2C;
+  //   // font-family: ".SF NS Display";
+  //   font-size: 18px;
+  //   line-height: 21px;
+  //   margin: 0;
+  // }
+  .date {
+    color: #2C2C2C;
+    // font-family: ".SF NS Display";
+    font-size: 10px;
+    line-height: 16px;
+    margin: 0;
+  }
+  .option i {
+      font-size: 15px;
+      height:15px;
+      width: 15px;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
   }
 }

@@ -9,30 +9,36 @@ export class CargoItemDetails extends Component {
     render() {
         const { index, item } = this.props;
         return (
-            <div className={` ${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
-                <div className="flex-100 layout-row">
-                    <h4 className="flex-none">Unit {index + 1}</h4>
+            <div className={`${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
+                <div className="flex-100">
+                    <h4>Unit {index + 1}</h4>
                 </div>
+                <hr/>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Gross Weight</p>
-                    <p className="flex-none">{item.payload_in_kg} kg</p>
+                    <p>Gross Weight</p>
+                    <p>{item.payload_in_kg} kg</p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Length</p>
-                    <p className="flex-none">{item.dimension_y} cm</p>
+                    <p>Length</p>
+                    <p>{item.dimension_y} cm</p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Width</p>
-                    <p className="flex-none">{item.dimension_x} cm</p>
+                    <p>Width</p>
+                    <p>{item.dimension_x} cm</p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Height</p>
-                    <p className="flex-none">{item.dimension_z} cm</p>
+                    <p>Height</p>
+                    <p>{item.dimension_z} cm</p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
-                    <p className="flex-none">Volume</p>
-                    <p className="flex-none">{(item.dimension_y * item.dimension_x * item.dimension_y) / 1000000} m<sup>3</sup></p>
+                    <p>Volume</p>
+                    <p>{(item.dimension_y * item.dimension_x * item.dimension_y) / 1000000} m<sup>3</sup></p>
                 </div>
+                <hr className="flex-100"/>
             </div>
         );
     }
