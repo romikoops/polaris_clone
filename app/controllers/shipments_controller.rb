@@ -47,12 +47,21 @@ class ShipmentsController < ApplicationController
 
   def create
     resp = new_shipment(session, params[:type])
-    json_response(resp, 200)
+    if resp[0][:error]
+      json_response(resp, 400)
+    else
+      json_response(resp, 200)
+    end
   end
 
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
-    json_response(resp, 200)
+    if resp[0].error
+      json_response(resp, 500)
+    else
+      json_response(resp, 200)
+    end
+    
   end
 
   def finish_booking
