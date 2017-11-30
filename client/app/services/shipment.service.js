@@ -4,9 +4,10 @@ import { BASE_URL } from '../constants';
 
 function handleResponse(response) {
     const promise = Promise;
+    console.log('response');
+    // console.log(response.json());
     if (!response.ok) {
-        console.log(Promise);
-        return promise.reject(response.statusText);
+        return promise.reject(response.json());
     }
 
     return response.json();
@@ -45,7 +46,6 @@ function newShipment(type) {
         body: JSON.stringify({ type: type })
     };
     const url = BASE_URL + '/shipments';
-    console.log(Promise);
     return fetch(url, requestOptions).then(handleResponse);
 }
 

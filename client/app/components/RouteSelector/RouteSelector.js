@@ -66,7 +66,7 @@ export class RouteSelector extends Component {
         );
     }
 }
-RouteSelector.PropTypes = {
+RouteSelector.propTypes = {
     theme: PropTypes.object,
     privateRoutes: PropTypes.array,
     publicRoutes: PropTypes.array,

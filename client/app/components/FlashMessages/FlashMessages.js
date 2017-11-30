@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { Alert } from '../Alert/Alert';
+import { Alert } from '../Alert/Alert';
 import { CSSTransitionGroup } from 'react-transition-group';
 export class FlashMessages extends Component {
     constructor(props) {
@@ -21,11 +21,13 @@ export class FlashMessages extends Component {
     }
 
     render() {
-    //     const alerts = this.state.messages.map( message =>
-    //   <Alert key={ message.id } message={ message }
-    //     onClose={ () => this.removeMessage(message) } />
-    // );
-        const alerts = [];
+        const message = {type: 'error', text: this.props.messages, id: 1};
+        // const alerts = this.state.messages.map( message =>
+        // );
+        const alerts = [
+            <Alert key={ message.id } message={ message }
+            onClose={ () => this.removeMessage(message) } />
+        ];
 
         return(
             <CSSTransitionGroup

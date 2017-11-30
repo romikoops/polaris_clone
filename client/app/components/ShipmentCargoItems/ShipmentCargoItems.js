@@ -134,7 +134,7 @@ export class ShipmentCargoItems extends Component {
     }
 }
 
-ShipmentCargoItems.PropTypes = {
+ShipmentCargoItems.propTypes = {
     theme: PropTypes.object,
     cargoItems: PropTypes.array,
     addCargoItem: PropTypes.func,

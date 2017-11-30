@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Alert.scss';
 export class Alert extends Component {
-
     componentDidMount() {
         this.timer = setTimeout(
-      this.props.onClose,
-      this.props.timeout
-    );
+            this.props.onClose,
+            this.props.timeout
+        );
     }
 
     componentWillUnmount() {
@@ -27,16 +26,13 @@ export class Alert extends Component {
     render() {
         const message = this.props.message;
         const alertClassName = `alert ${ this.alertClass(message.type) } fade in`;
-
         return(
-      <div className={ alertClassName }>
-        <button className="close"
-          onClick={ this.props.onClose }>
-          &times;
-        </button>
-        { message.text }
-      </div>
-    );
+            <div className={ alertClassName }>
+                <button className="close" onClick={ this.props.onClose }>
+                </button>
+                { message.text }
+            </div>
+        );
     }
 }
 

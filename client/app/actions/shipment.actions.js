@@ -43,8 +43,9 @@ function setShipmentDetails(data) {
                     dispatch(alertActions.success('Set Shipment Details successful'));
                 },
                 error => {
-                    dispatch(failure(error));
-                    dispatch(alertActions.error(error));
+                    error.then(data => {
+                        dispatch(failure(data.message));
+                    });
                 }
             );
     };

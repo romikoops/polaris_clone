@@ -56,12 +56,8 @@ class ShipmentsController < ApplicationController
 
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
-    if resp[0].error
-      json_response(resp, 500)
-    else
-      json_response(resp, 200)
-    end
-    
+    byebug
+    response_handler(resp)
   end
 
   def finish_booking

@@ -1,9 +1,11 @@
 :local{
   .alert {
+    z-index: 200;
     width: 100px;
     padding: 15px;
     border-radius: 30px;
-    position: absolute;
+    position: fixed;
+    margin: 0 auto;
   }
   .danger {
     @extend .alert;

@@ -1,6 +1,7 @@
+require "#{Rails.root}/app/classes/application_error.rb"
+
 class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
-  include ApplicationError
 
   rescue_from ApplicationError do |ex|
     response_handler(ex)
@@ -16,7 +17,8 @@ class ApplicationController < ActionController::API
 
   def error_handler(e)
     code = e.config[:http_code] || 500
-    render status: code, json: { success: false, error: e.message, code: e.code }
+    resp = { success: false, message: e.message, code: e.code }
+    json_response(resp, code)
   end
 
   def success_handler(e)

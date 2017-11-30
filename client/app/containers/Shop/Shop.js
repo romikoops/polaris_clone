@@ -142,7 +142,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage1 : {}}
+                            messages={error ? error.stage1 : null}
                         />
                     )}
                 />
@@ -158,7 +158,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage2 : {}}
+                            messages={error ? error.stage2 : null}
                         />
                     )}
                 />
@@ -175,10 +175,10 @@ class Shop extends Component {
                                     : {}
                             }
                             prevRequest={
-                                request && request.stage3 ? request.stage3 : {}
+                                request && request.stage3 ? request.stage3 : null
                             }
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage3 : {}}
+                            messages={error ? error.stage3 : null}
                         />
                     )}
                 />
@@ -193,15 +193,15 @@ class Shop extends Component {
                                 shipmentData={
                                     response && response.stage3
                                         ? response.stage3
-                                        : {}
+                                        : null
                                 }
                                 prevRequest={
                                     request && request.stage4
                                         ? request.stage4
-                                        : {}
+                                        : null
                                 }
                                 setStage={this.selectShipmentStage}
-                                messages={error ? error.stage4 : {}}
+                                messages={error ? error.stage4 : null}
                             />
                         )}
                     />
