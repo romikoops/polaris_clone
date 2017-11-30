@@ -7,7 +7,6 @@ import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetail
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
-
 import { connect } from 'react-redux';
 import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
@@ -116,7 +115,7 @@ class Shop extends Component {
 
         const { bookingData, theme, match } = this.props;
 
-        const { request, response } = bookingData;
+        const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
@@ -125,7 +124,6 @@ class Shop extends Component {
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <Header theme={this.props.theme} />
-
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}
@@ -144,6 +142,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage1 : {}}
                         />
                     )}
                 />
@@ -159,6 +158,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage2 : {}}
                         />
                     )}
                 />
@@ -178,6 +178,7 @@ class Shop extends Component {
                                 request && request.stage3 ? request.stage3 : {}
                             }
                             setStage={this.selectShipmentStage}
+                            messages={error ? error.stage3 : {}}
                         />
                     )}
                 />
@@ -200,6 +201,7 @@ class Shop extends Component {
                                         : {}
                                 }
                                 setStage={this.selectShipmentStage}
+                                messages={error ? error.stage4 : {}}
                             />
                         )}
                     />

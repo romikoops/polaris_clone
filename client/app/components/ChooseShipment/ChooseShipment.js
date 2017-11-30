@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ChooseShipment.scss';
+import { FlashMessages } from '../FlashMessages/FlashMessages';
 export class ChooseShipment extends Component {
     render() {
-        const color = this.props.theme
-            ? this.props.theme.colors.primary
+        const { theme, messages, shipmentTypes, selectShipment } = this.props;
+        const color = theme
+            ? theme.colors.primary
             : 'black';
         const cards = [];
 
-        this.props.shipmentTypes.forEach((shop, i) => {
+        shipmentTypes.forEach((shop, i) => {
             let display = shop.name;
             let imgClass = { backgroundImage: 'url(' + shop.img + ')' };
             let textColour = { color: color };
@@ -18,7 +20,7 @@ export class ChooseShipment extends Component {
                     className={`${
                         styles.card_link
                     } layout-column flex-100 flex-gt-sm-30`}
-                    onClick={() => this.props.selectShipment(shop.code)}
+                    onClick={() => selectShipment(shop.code)}
                 >
                     <div
                         className={`${styles.card_img} flex-85`}
@@ -42,12 +44,15 @@ export class ChooseShipment extends Component {
                 </div>
             );
         });
+        const flash = messages ? <FlashMessages messages={messages} /> : '';
         return (
+
             <div
                 className={`${
                     styles.card_link_row
                 } layout-row flex-100 layout-align-center`}
             >
+                {flash}
                 <div className="flex-none content-width layout-row layout-align-start-center layout-wrap">
                     <div
                         className={` ${
@@ -66,5 +71,6 @@ export class ChooseShipment extends Component {
 ChooseShipment.propTypes = {
     theme: PropTypes.object,
     shipmentTypes: PropTypes.array,
-    selectShipment: PropTypes.func
+    selectShipment: PropTypes.func,
+    meesages: PropTypes.object
 };

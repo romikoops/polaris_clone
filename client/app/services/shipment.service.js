@@ -3,11 +3,17 @@ import { Promise } from 'babel-polyfill';
 import { BASE_URL } from '../constants';
 
 function handleResponse(response) {
+    const promise = Promise;
     if (!response.ok) {
-        return Promise.reject(response.statusText);
+        console.log(Promise);
+        return promise.reject(response.statusText);
     }
 
     return response.json();
+}
+function handleError(err) {
+    debugger;
+    return err.json();
 }
 
 function getStoredShipment() {
@@ -42,7 +48,8 @@ function newShipment(type) {
         body: JSON.stringify({ type: type })
     };
     const url = BASE_URL + '/shipments';
-    return fetch(url, requestOptions).then(handleResponse);
+    console.log(Promise);
+    return fetch(url, requestOptions).then(handleResponse).catch(handleError);
 }
 
 function setShipmentDetails(data) {
