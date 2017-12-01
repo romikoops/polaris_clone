@@ -66,6 +66,67 @@ shipper = tenant.users.new(
 )
 shipper.skip_confirmation!
 shipper.save!
+dummy_locations = [
+  {
+    street: "Kehrwieder",
+    street_number: "2",
+    zip_code: "20457",
+    city: "Hamburg",
+    country:"Germany"
+  },
+  {
+    street: "Carer del Cid",
+    street_number: "13",
+    zip_code: "08001",
+    city: "Barcelona",
+    country:"Spain"
+  },
+  {
+    street: "College Rd",
+    street_number: "1",
+    zip_code: "PO1 3LX",
+    city: "Portsmouth",
+    country:"United Kingdom"
+  },
+  {
+    street: "Tuna St",
+    street_number: "64",
+    zip_code: "90731",
+    city: "San Pedro",
+    country:"USA"
+  }
+]
+dummy_contacts = [
+  {
+    company_name: "Another Example Shipper Company",
+    first_name: "Jane",
+    last_name: "Doe",
+    phone: "123456789",
+    email: "jane@doe.com"
+  },
+  {
+    company_name: "Yet Another Example Shipper Company",
+    first_name: "Javier",
+    last_name: "Garcia",
+    phone: "0034123456789",
+    email: "javi@shipping.com"
+  },
+  {
+    company_name: "Forwarder Company",
+    first_name: "Gertrude",
+    last_name: "Hummels",
+    phone: "0049123456789",
+    email: "gerti@fwd.com"
+  },
+  {
+    company_name: "Another Forwarder Company",
+    first_name: "Jerry",
+    last_name: "Lin",
+    phone: "001123456789",
+    email: "jerry@fwder2.com"
+  }
+]
+
 
 hubs = File.open("./db/dummydata/1_hubs.xlsx")
 req = {"xlsx" => hubs}
@@ -79,10 +140,19 @@ public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
 req = {"xlsx" => public_pricings}
 overwrite_main_carriage_rates(req, false, shipper)
 
-client_prices = File.open("./db/dummydata/4_CLIENT_ocean_ptp_rates.xlsx")
-req = {"xlsx" => client_prices}
-overwrite_main_carriage_rates(req, true, shipper)
+users = User.where(email: 'demo@greencarrier.com')
+users.each do |tmpuser|
+  dummy_contacts.each_with_index do |c, i|
+    loc = Location.find_or_create_by(dummy_locations[i])
+    c[:location_id] = loc.id
+    tmpuser.contacts.create(c)
+  end
 
+
+  client_prices = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+  req = {"xlsx" => client_prices}
+  overwrite_main_carriage_rates(req, true, tmpuser)
+end
 trucking = File.open("./db/dummydata/5_trucking_rates_per_city.xlsx")
 req = {"xlsx" => trucking}
 overwrite_trucking_rates(req, shipper)
@@ -91,9 +161,9 @@ trucking = File.open("./db/dummydata/shanghai_trucking.xlsx")
 req = {"xlsx" => trucking}
 overwrite_shanghai_trucking_rates(req, shipper)
 
-hubs = File.open("./db/dummydata/hub_images.xlsx")
-req = {"xlsx" => hubs}
-load_hub_images(req)
+# hubs = File.open("./db/dummydata/hub_images.xlsx")
+# req = {"xlsx" => hubs}
+# load_hub_images(req)
 
 # schedules = File.open("./db/dummydata/6_vessel_schedules.xlsx")
 # req = {"xlsx" => schedules}

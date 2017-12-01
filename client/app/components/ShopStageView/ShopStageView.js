@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styles from './ShopStageView.scss';
 import PropTypes from 'prop-types';
-// import SignIn from '../SignIn/SignIn';  default ShopStageView;
+import defs from '../../styles/default_classes.scss';
 export class ShopStageView extends Component {
     constructor(props) {
         super(props);
@@ -64,14 +64,14 @@ export class ShopStageView extends Component {
         return (
             <div className="layout-row flex-100 layout-align-center layout-wrap">
                 <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
-                    <div className="layout-row content-width layout-wrap layout-align-start-center">
+                    <div className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center`}>
                         <h3 className="flex-none header"> {this.props.shopType } </h3>
                         <i className="fa fa-chevron-right fade"></i>
                         <p className="flex-none fade"> {this.state.title} </p>
                     </div>
                 </div>
                 <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
-                    <div className="flex-none content-width layout-row layout-align-start-center">
+                    <div className={`layout-row ${defs.content_width} layout-align-start-center`}>
                         <div className={` ${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}>
                             <div className={` ${styles.line} flex-none`}></div>
                                 { stageBoxes }

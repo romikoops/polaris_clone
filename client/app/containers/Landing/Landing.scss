@@ -1,5 +1,5 @@
 @import "../../styles/defaults";
-
+:local {
 .wrapper_landing {
   background: $light-grey;
 }
@@ -54,7 +54,7 @@
   height: max-content;
 }
 .btm_promo_img {
-  background-image: url('https://assets.itsmycargo.com/assets/images/welcome/country/performance.jpg');
+  background-image: url('https://assets.itsmycargo.com/assets/cityimages/performance_sm.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -96,4 +96,4 @@
     margin-left: 50px;
     padding-bottom: 10px;
   }
-}
+}}

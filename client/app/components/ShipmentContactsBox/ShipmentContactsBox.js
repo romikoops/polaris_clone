@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
 // import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
-
+import defs from '../../styles/default_classes.scss';
 export class ShipmentContactsBox extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ export class ShipmentContactsBox extends Component {
         }
         return (
         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <div className="flex-none content-width layout-row layout-wrap">
+          <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
             <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
               <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
                 <i className="fa fa-user flex-none" style={textStyle}></i>
@@ -106,7 +106,7 @@ export class ShipmentContactsBox extends Component {
       );
     }
 }
-ShipmentContactsBox.PropTypes = {
+ShipmentContactsBox.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     user: PropTypes.object,

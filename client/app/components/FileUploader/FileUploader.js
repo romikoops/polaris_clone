@@ -69,7 +69,7 @@ class FileUploader extends React.Component {
     }
 }
 
-FileUploader.PropTypes = {
+FileUploader.propTypes = {
     url: PropTypes.string,
     text: PropTypes.string,
     type: PropTypes.string,

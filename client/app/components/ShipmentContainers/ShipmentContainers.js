@@ -5,6 +5,7 @@ import 'react-select/dist/react-select.css';
 import styles from './ShipmentContainers.scss';
 import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../../constants';
 import { Checkbox } from '../Checkbox/Checkbox';
+import defs from '../../styles/default_classes.scss';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const containerTareWeights = CONTAINER_TARE_WEIGHTS;
 export class ShipmentContainers extends Component {
@@ -60,7 +61,7 @@ export class ShipmentContainers extends Component {
         }
         return (
         <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-none content-width layout-wrap layout-align-start-center" >
+            <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`} >
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                   <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                     <p className="flex-100"> Container Size </p>
@@ -98,7 +99,7 @@ export class ShipmentContainers extends Component {
                     </div>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                  <div className="layout-row flex-100 layout-wrap" >
+                  <div className={`layout-row flex-none ${defs.content_width} layout-wrap`} >
                     { containersAdded }
                   </div>
                 </div>
@@ -108,7 +109,7 @@ export class ShipmentContainers extends Component {
     }
 }
 
-ShipmentContainers.PropTypes = {
+ShipmentContainers.propTypes = {
     theme: PropTypes.object,
     addContainer: PropTypes.func,
     containers: PropTypes.array,

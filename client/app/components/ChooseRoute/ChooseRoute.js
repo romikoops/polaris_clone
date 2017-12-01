@@ -6,6 +6,7 @@ import { RouteResult } from '../RouteResult/RouteResult';
 import {moment} from '../../constants';
 import styles from './ChooseRoute.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import defs from '../../styles/default_classes.scss';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -65,7 +66,7 @@ export class ChooseRoute extends Component {
         return (
         <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
         {flash}
-          <div className="flex-none content-width layout-row layout-wrap">
+          <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
            <div className="flex-20 layout-row layout-wrap">
               <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>
             </div>
@@ -97,7 +98,7 @@ export class ChooseRoute extends Component {
         );
     }
 }
-ChooseRoute.PropTypes = {
+ChooseRoute.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     chooseRoute: PropTypes.func,

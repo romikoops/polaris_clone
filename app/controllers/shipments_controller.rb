@@ -3,6 +3,7 @@ class ShipmentsController < ApplicationController
 
   include ShippingTools
   include Response
+  
 
   def index
     @shipper = current_user
@@ -12,8 +13,7 @@ class ShipmentsController < ApplicationController
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
   end
 
-  def new
-
+  def new 
   end
 
   def reuse_booking_data
@@ -47,21 +47,12 @@ class ShipmentsController < ApplicationController
 
   def create
     resp = new_shipment(session, params[:type])
-    if resp[:error]
-      json_response(resp, 400)
-    else
       json_response(resp, 200)
-    end
   end
 
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
-    if resp[0].error
-      json_response(resp, 500)
-    else
       json_response(resp, 200)
-    end
-    
   end
 
   def finish_booking

@@ -31,7 +31,7 @@ const fetchTenant = (subdomain) => {
     console.log(BASE_URL);
     return dispatch => {
         dispatch(requestTenant(subdomain));
-        return fetch(`${BASE_URL}/tenant/${subdomain}`)
+        return fetch(`${BASE_URL}/tenants/${subdomain}`)
       .then(response => response.json())
       .then(json => dispatch(receiveTenant(subdomain, json)));
     };

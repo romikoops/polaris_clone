@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
+import defs from '../../styles/default_classes.scss';
 export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
@@ -74,7 +75,7 @@ export class ShipmentCargoItems extends Component {
         }
         return (
         <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-            <div className="layout-row flex-none content-width layout-wrap layout-align-center-center" >
+            <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center`} >
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                 <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                   <p className="flex-100"> Gross Weight </p>
@@ -124,7 +125,7 @@ export class ShipmentCargoItems extends Component {
                 </div>
               </div>
               <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                <div className="layout-row flex-none content-width layout-wrap" >
+                <div className={`layout-row flex-none ${defs.content_width} layout-wrap`} >
                   { cargosAdded }
                 </div>
               </div>
@@ -134,7 +135,7 @@ export class ShipmentCargoItems extends Component {
     }
 }
 
-ShipmentCargoItems.PropTypes = {
+ShipmentCargoItems.propTypes = {
     theme: PropTypes.object,
     cargoItems: PropTypes.array,
     addCargoItem: PropTypes.func,

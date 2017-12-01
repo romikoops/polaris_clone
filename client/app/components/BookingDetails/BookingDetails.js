@@ -7,7 +7,7 @@ import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
-
+import defaults from '../../styles/default_classes.scss';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
@@ -273,7 +273,7 @@ export class BookingDetails extends Component {
                     handleInsurance
                 />
                 <div className="flex-100 layout-row layout-align-center-center">
-                    <div className="content-width layout-row layout-align-start-center button_padding">
+                    <div className={`${defaults.content_width} layout-row layout-align-start-center ${defaults.button_padding}`}>
                         <div className="flex-33 layout-row layout-align-start-center">
                             <RoundButton
                                 active
@@ -292,7 +292,7 @@ export class BookingDetails extends Component {
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-center-center">
-                    <div className="content-width layout-row layout-align-start-center button_padding">
+                    <div className={`${defaults.content_width} layout-row layout-align-start-center ${defaults.button_padding}`}>
                         <RoundButton
                             back
                             handleNext={this.toDashboard}
@@ -306,7 +306,7 @@ export class BookingDetails extends Component {
     }
 }
 
-BookingDetails.PropTypes = {
+BookingDetails.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     nextStage: PropTypes.func

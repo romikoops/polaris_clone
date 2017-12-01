@@ -94,12 +94,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    begin
+    # begin
     offer_calculation.calc_offer!
-    rescue
-      # @no_transport_available = true
-      return {error: "No routes found. Please check you inputs and try again.", type: 'error'}
-    end
+    # rescue
+    #   # @no_transport_available = true
+    #   return {error: "No routes found. Please check you inputs and try again.", type: 'error'}
+    # end
 
     @shipment = offer_calculation.shipment
     @shipment.save!
@@ -207,7 +207,7 @@ module ShippingTools
     end
     @origin = @schedules.first.starthub
     @destination =  @schedules.last.endhub
-    hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
+    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
 
@@ -264,7 +264,7 @@ module ShippingTools
     @origin = @schedules.first.starthub
     @destination =  @schedules.last.endhub
     @schedules = params[:schedules]
-    hubs = {startHub: {data: @origin, location: @origin.location}, endHub: {data: @destination, location: @destination.location}}
+    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}
   end
 

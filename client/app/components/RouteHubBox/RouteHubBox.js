@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-
+import defs from '../../styles/default_classes.scss';
 import styles from './RouteHubBox.scss';
 export class RouteHubBox extends Component {
     constructor(props) {
@@ -36,7 +36,7 @@ export class RouteHubBox extends Component {
         // debugger;
         return (
         <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
-          <div className="flex-none content-width layout-row layout-align-start-center">
+          <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center`}>
             <div className={`flex ${styles.hub_card} layout-row`} style={bg1}>
                 <div className={styles.fade}></div>
                 <div className={`${styles.content} layout-row`}>
@@ -79,7 +79,7 @@ export class RouteHubBox extends Component {
       );
     }
 }
-RouteHubBox.PropTypes = {
+RouteHubBox.propTypes = {
     theme: PropTypes.object,
     route: PropTypes.object,
     hubs: PropTypes.object

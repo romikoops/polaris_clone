@@ -136,7 +136,7 @@ export class BestRoutesBox extends Component {
         );
     }
 }
-BestRoutesBox.PropTypes = {
+BestRoutesBox.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object
 };

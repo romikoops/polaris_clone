@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 // import { Link } from 'react'
-import './CardLink.scss';
+import styles from './CardLink.scss';
 // import { connect } from 'react-redux';
 import { tenantDefaults } from '../../constants';
 export class CardLink extends Component {
@@ -26,10 +26,10 @@ export class CardLink extends Component {
         const imgClass = { backgroundImage: 'url(' + this.props.img + ')'};
         const textColour = { color: theme.colors.primary };
         return (
-          <div className="card_link card layout-column flex-100 flex-gt-sm-30" onClick={handleClick} >
-            <div className="card_img card flex-85" style={imgClass}>
+          <div className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30`} onClick={handleClick} >
+            <div className={`${styles.card_img}  flex-85`} style={imgClass}>
             </div>
-            <div className="card_action card flex-15 layout-row layout-align-space-between-center">
+            <div className={`${styles.card_action}  flex-15 layout-row layout-align-space-between-center`}>
               <div className="flex-none layout-row layout-align-center-center" >
                 <p className="flex-none">{display} </p>
               </div>

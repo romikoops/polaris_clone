@@ -40,7 +40,7 @@ export class Alert extends Component {
     }
 }
 
-Alert.PropTypes = {
+Alert.propTypes = {
     onClose: PropTypes.func,
     timeout: PropTypes.number,
     message: PropTypes.object.isRequired

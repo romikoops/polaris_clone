@@ -43,7 +43,7 @@ export class RouteOption extends Component {
         );
     }
 }
-RouteOption.PropTypes = {
+RouteOption.propTypes = {
     theme: PropTypes.object,
     route: PropTypes.object,
     selectOption: PropTypes.func,

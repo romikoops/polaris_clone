@@ -38,6 +38,6 @@ export class FlashMessages extends Component {
     }
 }
 
-FlashMessages.PropTypes = {
+FlashMessages.propTypes = {
     messages: PropTypes.array.isRequired
 };

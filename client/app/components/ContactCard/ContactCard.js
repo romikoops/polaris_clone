@@ -69,7 +69,7 @@ export class ContactCard extends Component {
     }
 }
 
-ContactCard.PropTypes = {
+ContactCard.propTypes = {
     contactData: PropTypes.array,
     theme: PropTypes.object,
     select: PropTypes.func,

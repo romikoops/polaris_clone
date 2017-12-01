@@ -5,7 +5,7 @@ import 'react-toggle/style.css';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import styles from './ShipmentLocationBox.scss';
-
+import defaults from '../../styles/default_classes.scss';
 const mapStyle = {
     width: '100%',
     height: '400px'
@@ -288,10 +288,10 @@ export class ShipmentLocationBox extends Component {
         };
         return (
           <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
-            <div className="layout-row content-width flex-none layout-align-start-start" >
+            <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start'} >
                 <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
                   <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className="flex-100 layout-row mc">
+                    <div className={'flex-100 layout-row ' + defaults.mc}>
                       <Toggle
                         className="flex-none"
                         id="has_pre_carriage"
@@ -307,7 +307,7 @@ export class ShipmentLocationBox extends Component {
                   </div>
                  {/* <div ref="map" id="map" style={mapStyle} />*/}
                   <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className="flex-100 layout-row mc">
+                    <div className={'flex-100 layout-row ' + defaults.mc}>
                       <Toggle
                         className="flex-none"
                         id="has_on_carriage"
@@ -331,10 +331,10 @@ export class ShipmentLocationBox extends Component {
     }
 }
 
-ShipmentLocationBox.PropTypes = {
+ShipmentLocationBox.propTypes = {
     gMaps: PropTypes.object,
     theme: PropTypes.object,
     setTargetAddress: PropTypes.func,
-    allNexuses: PropTypes.object,
+    allNexuses: PropTypes.array,
     selectedRoute: PropTypes.object
 };

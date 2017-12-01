@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { Route } from 'react-router';
+import defs from '../../styles/default_classes.scss';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
@@ -75,7 +75,7 @@ class UserAccount extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-center">
                 <Header theme={this.props.theme} />
 
-                <div className="content-width layout-row flex-none spacing-md-top spacing-md-bottom">
+                <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
                     <div className="layout-row flex-20">
                         <NavSidebar
                             theme={this.props.theme}

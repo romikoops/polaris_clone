@@ -7,6 +7,7 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails';
 import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
+import defaults from '../../styles/default_classes.scss';
 export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
@@ -70,7 +71,7 @@ export class BookingConfirmation extends Component {
       return (
           <div className="flex-100 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap layout-align-center">
-              <div className="flex-none content-width layout-row layout-wrap layout-align-start">
+              <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start'}>
                 <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
                   <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                     Thank you for booking with Greencarrier.<br/>
@@ -125,7 +126,7 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-              <div className="flex-none content-width layout-row layout-align-start-center">
+              <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                 <div className="flex-none layout-row">
                   <RoundButton theme={theme} text="Save as pdf" iconClass="fa-download" />
                 </div>
@@ -135,7 +136,7 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-              <div className="flex-none content-width layout-row layout-align-start-center">
+              <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                 <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
               </div>
             </div>
@@ -143,7 +144,7 @@ export class BookingConfirmation extends Component {
       );
     }
 }
-BookingConfirmation.PropTypes = {
+BookingConfirmation.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     setData: PropTypes.func

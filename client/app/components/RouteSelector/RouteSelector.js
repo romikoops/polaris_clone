@@ -4,6 +4,7 @@ import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import { Checkbox } from '../Checkbox/Checkbox';
 import {v4} from 'node-uuid';
+import defs from '../../styles/default_classes.scss';
 import { CSSTransitionGroup } from 'react-transition-group';
 export class RouteSelector extends Component {
     constructor(props) {
@@ -44,7 +45,7 @@ export class RouteSelector extends Component {
         console.log(routesArr.length);
         return (
         <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
-            <div className="content-width layout-row layout-wrap">
+            <div className={`${defs.content_width} layout-row layout-wrap`}>
               <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-align-space-between-center">
                     <div className="flex-none ayput-row layout-align-start-center">
@@ -66,7 +67,7 @@ export class RouteSelector extends Component {
         );
     }
 }
-RouteSelector.PropTypes = {
+RouteSelector.propTypes = {
     theme: PropTypes.object,
     privateRoutes: PropTypes.array,
     publicRoutes: PropTypes.array,

@@ -4,7 +4,7 @@ import styles from './AddressBook.scss';
 import { v4 } from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
-
+import defs from '../../styles/default_classes.scss';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
@@ -154,7 +154,7 @@ export class AddressBook extends Component {
 
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-none content-width layout-row layout-wrap">
+                <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-50">
                         <div className={`${styles.summary} flex-90 layout-row layout-wrap layout-align-start-start`}>
                             <div className={`${styles.prompt} flex-100 layout-row layout-align-start-center`}>
@@ -265,13 +265,13 @@ export class AddressBook extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className={`${styles.contact_scroll} flex-50 layout-row layout-wrap`}>
+                    <div className={`${styles.contact_scroll} flex-50 layout-row layout-wrap layout-align-center-start`}>
                         {this.state.setShipper ? shipperArray : ''}
                         {this.state.setConsignee ? contactsArray : ''}
                         {this.state.setNotifyees ? notifyeeArray : ''}
                     </div>
                     <div className="flex-100 layout-row layout-align-center-center">
-                        <div className="content-width layout-row layout-align-end-center button_padding">
+                        <div className={`${defs.content_width} layout-row layout-align-end-center ${defs.button_padding}`}>
                             <RoundButton
                                 active
                                 handleNext={this.props.closeAddressBook}
@@ -286,7 +286,7 @@ export class AddressBook extends Component {
     }
 }
 
-AddressBook.PropTypes = {
+AddressBook.propTypes = {
     contacts: PropTypes.array,
     userLocations: PropTypes.array,
     theme: PropTypes.object,

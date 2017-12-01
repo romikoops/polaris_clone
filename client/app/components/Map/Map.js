@@ -108,7 +108,7 @@ export class MapContainer extends Component {
     }
 }
 
-MapContainer.PropTypes = {
+MapContainer.propTypes = {
     theme: PropTypes.object,
     gMaps: PropTypes.object,
     target: PropTypes.string,

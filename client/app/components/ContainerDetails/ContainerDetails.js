@@ -27,7 +27,7 @@ export class ContainerDetails extends Component {
         );
     }
 }
-ContainerDetails.PropTypes = {
+ContainerDetails.propTypes = {
     item: PropTypes.object,
     index: PropTypes.number
 };

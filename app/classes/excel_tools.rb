@@ -376,7 +376,7 @@ module ExcelTools
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
 
-    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', trucking_type: 'TRUCKING_METHOD', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', hub_address_details: 'ADDRESS_DETAILS')
+    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', trucking_type: 'TRUCKING_METHOD', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', hub_address_details: 'ADDRESS_DETAILS', photo: 'PHOTO')
 
     hub_type_name = {
       "ocean" => "Port",
@@ -392,7 +392,7 @@ module ExcelTools
         hub_code = hub_row[:hub_code]
       end
 
-      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}")
+      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
       new_ids << hub.id
     end

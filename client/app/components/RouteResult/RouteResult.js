@@ -145,7 +145,7 @@ export class RouteResult extends Component {
         );
     }
 }
-RouteResult.PropTypes = {
+RouteResult.propTypes = {
     theme: PropTypes.object,
     schedule: PropTypes.object,
     selectResult: PropTypes.func,

@@ -5,7 +5,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var StatsPlugin = require('stats-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = {
     // The entry file. All your app roots from here.
@@ -44,12 +44,12 @@ module.exports = {
           allChunks: true
         }),
         // handles uglifying js
-        new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                warnings: true,
-                screw_ie8: true
-            }
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compressor: {
+        //         warnings: true,
+        //         screw_ie8: true
+        //     }
+        // }),
         // creates a stats.json
         new StatsPlugin('webpack.stats.json', {
             source: false,
@@ -58,11 +58,8 @@ module.exports = {
         // plugin for passing in data to the js, like what NODE_ENV we are in.
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
-        })
-        // ,
-        // new UglifyJsPlugin({
-        //     sourceMap: true
-        // })
+        }),
+        new BabiliPlugin()
     ],
 
     // ESLint options

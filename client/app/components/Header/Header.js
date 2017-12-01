@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
-
+import defs from '../../styles/default_classes.scss';
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +38,7 @@ class Header extends Component {
                     styles.header
                 } layout-row flex-100 layout-wrap layout-align-center`}
             >
-                <div className="content-width layout-row flex-none">
+                <div className={`${defs.content_width} layout-row flex-none`}>
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
                             src={theme ? theme.logoLarge : ''}

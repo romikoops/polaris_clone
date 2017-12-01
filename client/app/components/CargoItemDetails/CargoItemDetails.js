@@ -43,7 +43,7 @@ export class CargoItemDetails extends Component {
         );
     }
 }
-CargoItemDetails.PropTypes = {
+CargoItemDetails.propTypes = {
     item: PropTypes.object,
     index: PropTypes.number
 };

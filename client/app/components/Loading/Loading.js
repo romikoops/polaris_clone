@@ -23,7 +23,7 @@ export class Loading extends Component {
     );
   }
 }
-Loading.PropTypes = {
+Loading.propTypes = {
   theme: PropTypes.object,
   text: PropTypes.string
 };

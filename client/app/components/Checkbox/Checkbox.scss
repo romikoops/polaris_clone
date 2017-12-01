@@ -1,4 +1,5 @@
-$brand: #00FF7B;
+:local {
+  $brand: #00FF7B;
 $checkboxSize: 25px;
 $uncheckedBG: transparent;
 $checkedBG: $brand;
@@ -22,11 +23,11 @@ $disabledBG: rgba(0, 0, 0, .35);
   justify-content: center;
 }
 
-.React__checkbox--input {
+.React__checkbox__input {
   display: none;
 }
 
-.React__checkbox--input {
+.React__checkbox__input {
   + span {
     color: red;
     display: flex;
@@ -57,4 +58,4 @@ $disabledBG: rgba(0, 0, 0, .35);
       background: $disabledBG;
     }
   }
-}
+}}

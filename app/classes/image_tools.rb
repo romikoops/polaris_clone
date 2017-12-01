@@ -5,9 +5,9 @@ module ImageTools
     img = MiniMagick::Image.open(url)
     resized_small = img.resize "600x400"
     # resized_large = img.resize "800x600"
-    resized_small.write("./#{name}_sm.jpg")
+    resized_small.write("./#{name}_sm.png")
     # resized_large.write("./#{name}_lg.jpg")
-    sm_str = upload_image("./#{name}_sm.jpg")
+    sm_str = upload_image("./#{name}_sm.png")
     # lg_str = upload_image("./#{name}_lg.jpg")
     lg_str = 'test'
     # img.destroy!
@@ -15,9 +15,11 @@ module ImageTools
     return {sm: sm_str, lg: lg_str}
   end
 
-  def self.load_city_images
-    Dir.glob(Rails.root + '/assets/images/cityimages/*.jpg') do |image|
-      resp = reduce_and_upload(image.name, image)
+  def load_city_images
+    Dir.glob(Rails.root.to_s + '/app/assets/welcome/country/*.png') do |image|
+      file = image.split('/').last
+      filename = file.split('.')[0]
+      resp = reduce_and_upload(filename, image)
       p resp[:sm]
     end
   end

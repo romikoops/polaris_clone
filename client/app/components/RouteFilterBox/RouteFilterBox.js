@@ -74,7 +74,7 @@ export class RouteFilterBox extends Component {
         );
     }
 }
-RouteFilterBox.PropTypes = {
+RouteFilterBox.propTypes = {
     theme: PropTypes.object,
     setDurationFilter: PropTypes.func,
     setMoT: PropTypes.func,
