@@ -69,6 +69,7 @@
     background-position: 0% 85%;
     background-repeat: no-repeat;
     position: relative;
+    text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
   }
   .shop_banner h3 {
 
@@ -104,11 +105,13 @@
     color: floralwhite;
   }
   .stage_row {
-    height: 171px;
+    height: 130px;
     box-shadow: 0 2px 4px 0 rgba(black, 0.1);
   }
   .line_box {
     position: relative;
+    transform: scale(0.8);
+    padding-bottom: 10px;
   }
   .line {
     position: absolute;
@@ -116,6 +119,5 @@
     width: 739px;
     border-top: 3px solid #4A4A4A;
     margin-top: 70.5px;
-    // z-index: 20;
   }
 }
