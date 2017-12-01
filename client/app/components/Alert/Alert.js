@@ -28,15 +28,14 @@ export class Alert extends Component {
         const alertClassName = `alert ${ this.alertClass(message.type) } fade in`;
         return(
             <div className={ alertClassName }>
-                <button className="close" onClick={ this.props.onClose }>
-                </button>
-                { message.text }
+                <button className="close" onClick={ this.props.onClose }></button>
+                { typeof message.text === 'object' ? 'An error occurred' : message.text }
             </div>
         );
     }
 }
 
-Alert.PropTypes = {
+Alert.propTypes = {
     onClose: PropTypes.func,
     timeout: PropTypes.number,
     message: PropTypes.object.isRequired

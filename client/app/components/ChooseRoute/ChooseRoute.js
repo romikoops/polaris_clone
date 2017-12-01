@@ -61,7 +61,7 @@ export class ChooseRoute extends Component {
                 });
             }
         }
-        const flash = messages ? <FlashMessages messages={messages} /> : '';
+        const flash = messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
         <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
         {flash}
@@ -102,7 +102,7 @@ ChooseRoute.PropTypes = {
     shipmentData: PropTypes.object,
     chooseRoute: PropTypes.func,
     selectedDay: PropTypes.string,
-    messages: PropTypes.object
+    messages: PropTypes.array
     // shipment: PropTypes.object,
     // schedules: PropTypes.array
 };

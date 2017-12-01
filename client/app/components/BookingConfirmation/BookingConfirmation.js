@@ -143,7 +143,7 @@ export class BookingConfirmation extends Component {
       );
     }
 }
-BookingConfirmation.PropTypes = {
+BookingConfirmation.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     setData: PropTypes.func

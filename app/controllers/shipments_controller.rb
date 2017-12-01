@@ -2,7 +2,6 @@ class ShipmentsController < ApplicationController
   before_action :require_login_and_correct_id, except: [:test_email]
 
   include ShippingTools
-  include Response
 
   def index
     @shipper = current_user
@@ -42,32 +41,27 @@ class ShipmentsController < ApplicationController
 
   def show
     resp = Shipment.find(params[:shipment_id])
-    json_response(resp, 200)
+    response_handler(resp)
   end
 
   def create
     resp = new_shipment(session, params[:type])
-    if resp[:error]
-      json_response(resp, 400)
-    else
-      json_response(resp, 200)
-    end
+    response_handler(resp)
   end
 
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
-    byebug
     response_handler(resp)
   end
 
   def finish_booking
     resp = finish_shipment_booking(params)
-    json_response(resp, 200)
+    response_handler(resp)
   end
 
   def update
     resp = update_shipment(session, params)
-    json_response(resp, 200)
+    response_handler(resp)
   end
 
   def get_shipper_pdf
@@ -77,9 +71,7 @@ class ShipmentsController < ApplicationController
   private
 
   def require_login_and_correct_id
-    unless user_signed_in?
-      json_response({error: "You are not signed in"}, 500)
-    end
+    raise ApplicationError::NotAuthenticated unless user_signed_in?
   end
 
   def forwarder_notification_email(user, shipment)

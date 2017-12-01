@@ -6,23 +6,24 @@ import { push } from 'react-router-redux';
 
 
 function newShipment(type) {
-    function request(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }; }
-    function success(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }; }
+    function request(shipmentData) { console.log('REQ: shipmentData'); console.log(shipmentData); return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }; }
+    function success(shipmentData) { console.log('SUC: shipmentData'); console.log(shipmentData); return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }; }
     function failure(error) { return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error }; }
     return dispatch => {
         dispatch(request(type));
 
         shipmentService.newShipment(type)
             .then(
-                shipmentData => {
+                resp => {
+                    const shipmentData = resp.data;
                     dispatch(alertActions.success('Fetching New Shipment successful'));
                     dispatch(push('/booking/' + shipmentData.data.id + '/shipment_details'));
                     dispatch(success(shipmentData));
                 },
                 error => {
-                    // debugger;
-                    dispatch(failure(error));
-                    dispatch(alertActions.error(error));
+                    error.then(data => {
+                        dispatch(failure({ type: 'error', text: data.message }));
+                    });
                 }
             );
     };
@@ -37,14 +38,15 @@ function setShipmentDetails(data) {
 
         shipmentService.setShipmentDetails(data)
             .then(
-                shipmentData => {
+                resp => {
+                    const shipmentData = resp.data;
                     dispatch(success(shipmentData));
                     dispatch(push('/booking/' + shipmentData.shipment.id + '/choose_route'));
                     dispatch(alertActions.success('Set Shipment Details successful'));
                 },
                 error => {
                     error.then(data => {
-                        dispatch(failure(data.message));
+                        dispatch(failure({ type: 'error', text: data.message }));
                     });
                 }
             );
@@ -60,7 +62,8 @@ function setShipmentRoute(data) {
 
         shipmentService.setShipmentRoute(data)
             .then(
-                shipmentData => {
+                resp => {
+                    const shipmentData = resp.data;
                     dispatch(success(shipmentData));
                     dispatch(push('/booking/' + shipmentData.shipment.id + '/booking_details'));
                     dispatch(alertActions.success('Set Shipment Route successful'));
@@ -82,7 +85,8 @@ function setShipmentContacts(data) {
 
         shipmentService.setShipmentContacts(data)
             .then(
-                shipmentData => {
+                resp => {
+                    const shipmentData = resp.data;
                     dispatch(success(shipmentData));
                     dispatch(push('/booking/' + shipmentData.shipment.id + '/finish_booking'));
                     dispatch(alertActions.success('Set Shipment Contacts successful'));

@@ -5,12 +5,15 @@ import { BASE_URL } from '../constants';
 function handleResponse(response) {
     const promise = Promise;
     console.log('response');
+    const respJSON = response.json();
+    console.log(respJSON);
+    console.log(response.ok);
     // console.log(response.json());
     if (!response.ok) {
-        return promise.reject(response.json());
+        return promise.reject(respJSON);
     }
 
-    return response.json();
+    return respJSON;
 }
 
 

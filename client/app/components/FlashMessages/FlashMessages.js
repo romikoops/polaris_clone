@@ -10,7 +10,7 @@ export class FlashMessages extends Component {
 
     addMessage(message) {
         const messages = this.state.messages;
-        message.push(message);
+        messages.push(message);
         this.setState({ messages: messages });
     }
 
@@ -22,12 +22,10 @@ export class FlashMessages extends Component {
 
     render() {
         const message = {type: 'error', text: this.props.messages, id: 1};
-        // const alerts = this.state.messages.map( message =>
-        // );
-        const alerts = [
-            <Alert key={ message.id } message={ message }
+        const alerts = this.state.messages.map( (message, i) =>
+            <Alert key={ i } message={ message }
             onClose={ () => this.removeMessage(message) } />
-        ];
+        );
 
         return(
             <CSSTransitionGroup
@@ -40,6 +38,6 @@ export class FlashMessages extends Component {
     }
 }
 
-FlashMessages.PropTypes = {
+FlashMessages.propTypes = {
     messages: PropTypes.array.isRequired
 };

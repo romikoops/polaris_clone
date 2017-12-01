@@ -114,13 +114,15 @@ class Shop extends Component {
         // };
 
         const { bookingData, theme, match } = this.props;
-
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-
+        console.log('Shop: response');
+        console.log(response);
+        console.log('bookingData: response');
+        console.log(bookingData);
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <Header theme={this.props.theme} />
@@ -142,7 +144,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage1 : null}
+                            messages={error ? error.stage1 : []}
                         />
                     )}
                 />
@@ -158,7 +160,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage2 : null}
+                            messages={error ? error.stage2 : []}
                         />
                     )}
                 />
@@ -178,7 +180,7 @@ class Shop extends Component {
                                 request && request.stage3 ? request.stage3 : null
                             }
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage3 : null}
+                            messages={error ? error.stage3 : []}
                         />
                     )}
                 />
@@ -193,7 +195,7 @@ class Shop extends Component {
                                 shipmentData={
                                     response && response.stage3
                                         ? response.stage3
-                                        : null
+                                        : {}
                                 }
                                 prevRequest={
                                     request && request.stage4
@@ -201,7 +203,7 @@ class Shop extends Component {
                                         : null
                                 }
                                 setStage={this.selectShipmentStage}
-                                messages={error ? error.stage4 : null}
+                                messages={error ? error.stage4 : []}
                             />
                         )}
                     />

@@ -44,7 +44,7 @@ export class ChooseShipment extends Component {
                 </div>
             );
         });
-        const flash = messages ? <FlashMessages messages={messages} /> : '';
+        const flash = messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
             <div
@@ -72,5 +72,5 @@ ChooseShipment.propTypes = {
     theme: PropTypes.object,
     shipmentTypes: PropTypes.array,
     selectShipment: PropTypes.func,
-    meesages: PropTypes.object
+    messages: PropTypes.array
 };
