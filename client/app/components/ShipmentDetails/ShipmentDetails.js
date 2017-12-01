@@ -264,6 +264,9 @@ export class ShipmentDetails extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         const flash = messages ? <FlashMessages messages={messages} /> : '';
+        const future = {
+            after: new Date(),
+        };
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
@@ -289,6 +292,7 @@ export class ShipmentDetails extends Component {
                                     value={value}
                                     className={styles.dpb_picker}
                                     onDayChange={this.handleDayChange}
+                                    modifiers={future}
                                 />
                             </div>
 

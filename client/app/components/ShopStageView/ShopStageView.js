@@ -58,7 +58,6 @@ export class ShopStageView extends Component {
                 </div>
             );
         }
-        // debugger;
         return stageBox;
     }
 
@@ -100,8 +99,8 @@ export class ShopStageView extends Component {
                     <div className={`layout-row ${defs.content_width} layout-align-start-center`}>
                         <div className={` ${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}>
                             <div className={` ${styles.line} flex-none`}></div>
-                                { stageBoxes }
-                             </div>
+                            { stageBoxes }
+                        </div>
                     </div>
                 </div>
             </div>

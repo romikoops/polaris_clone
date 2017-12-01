@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
 import 'react-toggle/style.css';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 const mapStyle = {
@@ -52,6 +52,7 @@ export class ShipmentLocationBox extends Component {
         this.postToggleAutocomplete = this.postToggleAutocomplete.bind(this);
         this.initAutocomplete = this.initAutocomplete.bind(this);
         this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
+        this.resetAuto = this.resetAuto.bind(this);
     }
 
     componentDidMount() {
@@ -76,6 +77,8 @@ export class ShipmentLocationBox extends Component {
         });
 
         this.setState({
+            oSelect: {value: tmpOrigin, label: tmpOrigin.name},
+            dSelect: {value: tmpDest, label: tmpDest.name},
             origin: {
                 ...this.state.origin,
                 hub_id: tmpOrigin.id,
@@ -303,55 +306,73 @@ export class ShipmentLocationBox extends Component {
         });
     }
     setOriginHub(event) {
-        this.setState({
-            oSelect: event,
-            origin: {
+        if (event) {
+            this.setState({
+                oSelect: event,
+                origin: {
+                    ...this.state.origin,
+                    hub_id: event.value.id,
+                    hub_name: event.label,
+                    lat: event.value.latitude,
+                    lng: event.value.longitude
+                }
+            });
+
+            this.props.setTargetAddress('origin', {
                 ...this.state.origin,
                 hub_id: event.value.id,
-                hub_name: event.label,
+                hub_name: event.value.name,
                 lat: event.value.latitude,
                 lng: event.value.longitude
-            }
-        });
+            });
 
-        this.props.setTargetAddress('origin', {
-            ...this.state.origin,
-            hub_id: event.value.id,
-            hub_name: event.value.name,
-            lat: event.value.latitude,
-            lng: event.value.longitude
-        });
+            this.setMarker(
+                { lat: event.value.latitude, lng: event.value.longitude },
+                event.value.name
+            );
+        } else {
+            this.setState({
+                oSelect: '',
+                origin: {}
+            });
 
-        this.setMarker(
-            { lat: event.value.latitude, lng: event.value.longitude },
-            event.value.name
-        );
+            this.props.setTargetAddress('origin', {});
+        }
     }
 
     setDestHub(event) {
-        this.setState({
-            dSelect: event,
-            destination: {
+        if (event) {
+            this.setState({
+                dSelect: event,
+                destination: {
+                    ...this.state.destination,
+                    hub_id: event.value.id,
+                    hub_name: event.label,
+                    lat: event.value.latitude,
+                    lng: event.value.longitude
+                }
+            });
+
+            this.props.setTargetAddress('destination', {
                 ...this.state.destination,
                 hub_id: event.value.id,
-                hub_name: event.label,
+                hub_name: event.value.name,
                 lat: event.value.latitude,
                 lng: event.value.longitude
-            }
-        });
+            });
 
-        this.props.setTargetAddress('destination', {
-            ...this.state.destination,
-            hub_id: event.value.id,
-            hub_name: event.value.name,
-            lat: event.value.latitude,
-            lng: event.value.longitude
-        });
+            this.setMarker(
+                { lat: event.value.latitude, lng: event.value.longitude },
+                event.value.name
+            );
+        } else {
+            this.setState({
+                dSelect: '',
+                destination: {}
+            });
 
-        this.setMarker(
-            { lat: event.value.latitude, lng: event.value.longitude },
-            event.value.name
-        );
+            this.props.setTargetAddress('destination', {});
+        }
     }
 
     selectLocation(place, target) {
@@ -391,6 +412,11 @@ export class ShipmentLocationBox extends Component {
         this.props.setTargetAddress(target, tmpAddress);
         this.setState({
             autocomplete: { ...this.state.autocomplete, [target]: true }
+        });
+    }
+    resetAuto(target) {
+        this.setState({
+            autocomplete: { ...this.state.autocomplete, [target]: false }
         });
     }
 
@@ -465,6 +491,12 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.origin.country}
                     placeholder="Country"
                 />
+                <div className="flex-100 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('origin')}>
+                        <i className="fa fa-times flex-none"></i>
+                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
+                    </div>
+                </div>
             </div>
         );
 
@@ -524,6 +556,12 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.destination.country}
                     placeholder="Country"
                 />
+                <div className="flex-100 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('destination')}>
+                        <i className="fa fa-times flex-none"></i>
+                        <p className="flex-none offset-5" style={{paddingRight: '10px'}}>Clear</p>
+                    </div>
+                </div>
             </div>
         );
 
@@ -569,34 +607,34 @@ export class ShipmentLocationBox extends Component {
         };
 
         return (
-          <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
-            <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start'} >
-                <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
-                  <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className={'flex-100 layout-row ' + defaults.mc}>
-                      <Toggle
-                        className="flex-none"
-                        id="has_pre_carriage"
-                        name="has_pre_carriage"
-                        defaultChecked={this.state.shipment.has_pre_carriage}
-                        onChange={this.handleTrucking} />
-                      <label htmlFor="pre-carriage">Pre-Carriage</label>
-                    </div>
-                     <div className="flex-100 layout-row layout-wrap">
-                      <p className="flex-100"> Origin Address </p>
-                      { displayLocationOptions('origin') }
-                     </div>
-                  </div>
-                 {/* <div ref="map" id="map" style={mapStyle} />*/}
-                  <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className={'flex-100 layout-row ' + defaults.mc}>
-                      <Toggle
-                        className="flex-none"
-                        id="has_on_carriage"
-                        name="has_on_carriage"
-                        defaultChecked={this.state.shipment.has_on_carriage}
-                        onChange={this.handleTrucking} />
-                      <label htmlFor="on-carriage">On-Carriage</label>
+            <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+                <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start'} >
+                    <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                            <div className={'flex-100 layout-row ' + defaults.mc}>
+                                <Toggle
+                                    className="flex-none"
+                                    id="has_pre_carriage"
+                                    name="has_pre_carriage"
+                                    defaultChecked={this.state.shipment.has_pre_carriage}
+                                    onChange={this.handleTrucking} />
+                                <label htmlFor="pre-carriage">Pre-Carriage</label>
+                            </div>
+                            <div className="flex-100 layout-row layout-wrap">
+                                <p className="flex-100"> Origin Address </p>
+                                { displayLocationOptions('origin') }
+                            </div>
+                        </div>
+                        {/* <div ref="map" id="map" style={mapStyle} />*/}
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                            <div className={'flex-100 layout-row ' + defaults.mc}>
+                                <Toggle
+                                    className="flex-none"
+                                    id="has_on_carriage"
+                                    name="has_on_carriage"
+                                    defaultChecked={this.state.shipment.has_on_carriage}
+                                    onChange={this.handleTrucking} />
+                                <label htmlFor="on-carriage">On-Carriage</label>
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
                                 <p className="flex-100">

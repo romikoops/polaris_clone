@@ -29,9 +29,6 @@ class App extends Component {
     render() {
         const { tenant, isFetching } = this.props;
         const theme = tenant.data.theme;
-        // const tenant = this.state.tenant;
-        console.log(tenant);
-
         return (
             <div className="layout-fill layout-column scroll">
                 {isFetching && <Loading theme={theme} text="loading..." />}
@@ -60,7 +57,7 @@ class App extends Component {
                         ''
                     )}
                 </Switch>
-                <Footer />
+                <Footer theme={theme} tenant={tenant}/>
             </div>
         );
     }

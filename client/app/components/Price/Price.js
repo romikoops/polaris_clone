@@ -22,7 +22,7 @@ export class Price extends Component {
         );
     }
 }
-Price.PropTypes = {
+Price.propTypes = {
     value: PropTypes.string,
     scale: PropTypes.string
 };

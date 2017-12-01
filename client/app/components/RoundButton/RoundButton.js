@@ -63,8 +63,10 @@ export class RoundButton extends Component {
                 style={btnStyle}
             >
                 <div className="layout-fill layout-row layout-align-space-around-center">
-                    {iconC}
-                    <p className="flex-none">{text}</p>
+                    <p className={styles.content}>
+                        <span className={styles.icon}>{iconC}</span>
+                        {text}
+                    </p>
                 </div>
             </button>
         );
