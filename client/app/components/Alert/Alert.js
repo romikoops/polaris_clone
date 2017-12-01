@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Alert.scss';
+import { StickyContainer, Sticky } from 'react-sticky';
+
 export class Alert extends Component {
+    constructor(props) {
+        super(props);
+        this.close = this.close.bind(this);
+    }
     componentDidMount() {
         this.timer = setTimeout(
-            this.props.onClose,
+            this.close,
             this.props.timeout
         );
     }
@@ -22,15 +28,32 @@ export class Alert extends Component {
         };
         return classes[type] || classes.success;
     }
+    close() {
+        const { onClose, message } = this.props;
+        onClose(message);
+    }
 
     render() {
         const message = this.props.message;
         const alertClassName = `alert ${ this.alertClass(message.type) } fade in`;
         return(
-            <div className={ alertClassName }>
-                <button className="close" onClick={ this.props.onClose }></button>
-                { typeof message.text === 'object' ? 'An error occurred' : message.text }
-            </div>
+            <StickyContainer>
+                <Sticky>
+                    {
+                        ({
+                            style,
+                        }) => {
+                            return (
+                                <div className={ alertClassName } style={style}>
+                                    <div className={styles.alert_inner_wrapper}></div>
+                                    { typeof message.text === 'object' ? 'An error occurred' : message.text }
+                                    <i className="fa fa-times close" onClick={ this.close }></i>
+                                </div>
+                            );
+                        }
+                    }
+                </Sticky>
+            </StickyContainer>
         );
     }
 }
@@ -42,5 +65,5 @@ Alert.propTypes = {
 };
 
 Alert.defaultProps = {
-    timeout: 3000
+    timeout: 5000
 };

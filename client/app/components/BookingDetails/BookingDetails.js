@@ -175,7 +175,6 @@ export class BookingDetails extends Component {
         const ind = parseInt(targetKeys[1], 10);
         const notifyees = this.state.notifyees;
         notifyees[ind][targetKeys[2]] = value;
-        console.log(notifyees[ind]);
         this.setState({
             notifyees: notifyees
         });

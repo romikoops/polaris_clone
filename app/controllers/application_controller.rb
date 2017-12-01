@@ -11,7 +11,7 @@ class ApplicationController < ActionController::API
   def response_handler(res)
     if res.kind_of? StandardError
       error_handler(res)
-    else
+    else 
       success_handler(res)
     end
   end

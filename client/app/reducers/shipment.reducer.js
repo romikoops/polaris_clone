@@ -3,8 +3,6 @@ import merge from 'lodash/merge';
 export function shipment(state = {}, action) {
     switch (action.type) {
         case shipmentConstants.NEW_SHIPMENT_REQUEST:
-        console.log('ACTION');
-        console.log(action);
             return {
                 request: {
                     stage1: action.shipmentData

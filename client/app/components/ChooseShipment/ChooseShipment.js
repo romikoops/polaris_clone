@@ -44,7 +44,7 @@ export class ChooseShipment extends Component {
                 </div>
             );
         });
-        const flash = messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+        const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
             <div

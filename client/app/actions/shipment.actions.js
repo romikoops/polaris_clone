@@ -6,8 +6,8 @@ import { push } from 'react-router-redux';
 
 
 function newShipment(type) {
-    function request(shipmentData) { console.log('REQ: shipmentData'); console.log(shipmentData); return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }; }
-    function success(shipmentData) { console.log('SUC: shipmentData'); console.log(shipmentData); return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }; }
+    function request(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }; }
+    function success(shipmentData) { return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }; }
     function failure(error) { return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error }; }
     return dispatch => {
         dispatch(request(type));

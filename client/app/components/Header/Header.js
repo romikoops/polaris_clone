@@ -8,8 +8,6 @@ import accountIcon from '../../assets/images/icons/person-dark.svg';
 class Header extends Component {
     constructor(props) {
         super(props);
-
-        // console.log(props);
     }
 
     render() {

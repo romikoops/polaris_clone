@@ -119,10 +119,6 @@ class Shop extends Component {
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-        console.log('Shop: response');
-        console.log(response);
-        console.log('bookingData: response');
-        console.log(bookingData);
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <Header theme={this.props.theme} />

@@ -61,7 +61,7 @@ export class ChooseRoute extends Component {
                 });
             }
         }
-        const flash = messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+        const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
         <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
         {flash}

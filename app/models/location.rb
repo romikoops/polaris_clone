@@ -28,7 +28,7 @@ class Location < ApplicationRecord
     if truck_carriage
       geocoded_location(user_input)
     else
-      return Location.find(hub_id)
+      Location.where(id: hub_id).first
     end
   end
 

@@ -7,7 +7,6 @@ import { RoundButton } from '../RoundButton/RoundButton';
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
 export class LandingTop extends Component {
     render() {
-        console.log(this.props);
         let logo;
         const theme = this.props.theme;
         if (theme) {

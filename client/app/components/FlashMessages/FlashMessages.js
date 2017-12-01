@@ -6,6 +6,8 @@ export class FlashMessages extends Component {
     constructor(props) {
         super(props);
         this.state = { messages: props.messages };
+        this.addMessage = this.addMessage.bind(this);
+        this.removeMessage = this.removeMessage.bind(this);
     }
 
     addMessage(message) {
@@ -15,16 +17,15 @@ export class FlashMessages extends Component {
     }
 
     removeMessage(message) {
-        const index = this.state.messages.indexOf(message);
-        const messages = this.state.messages.splice(index, 1);
+        const messages = this.state.messages;
+        const index = messages.indexOf(message);
+        messages.splice(index, 1);
         this.setState({ messages: messages });
     }
 
     render() {
-        const message = {type: 'error', text: this.props.messages, id: 1};
         const alerts = this.state.messages.map( (message, i) =>
-            <Alert key={ i } message={ message }
-            onClose={ () => this.removeMessage(message) } />
+            <Alert key={ i } message={ message } onClose={ this.removeMessage } />
         );
 
         return(
