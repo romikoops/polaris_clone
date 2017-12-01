@@ -89,7 +89,8 @@ export class ShopStageView extends Component {
         return (
             <div className="layout-row flex-100 layout-align-center layout-wrap">
                 <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
-                    <div className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center`}>
+                    <div className={styles.fade}></div>
+                    <div className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${styles.banner_content}`}>
                         <h3 className="flex-none header"> {this.props.shopType } </h3>
                         <i className="fa fa-chevron-right fade"></i>
                         <p className="flex-none fade"> {this.state.title} </p>

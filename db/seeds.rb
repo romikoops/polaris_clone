@@ -23,14 +23,22 @@ tenant = Tenant.create(
       brightPrimary: "#06CA52", 
       brightSecondary: "#0CA7F7"
     },
-    logoLarge: "https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/logos/logo_black.png",
-    logoSmall: "https://s3.eu-central-1.amazonaws.com/imcdev/assets/images/logos/logo_black_small.png"
+    logoLarge: "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
+    logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png"
   },
-  address: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda",
-  phone: "+46 31-85 32 00",
+  addresses: {
+    main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+    },
+  phones:{ 
+    main:"+46 31-85 32 00",
+    support: "0173042031020"
+    },
   emails: {
+    sales: "sales@greencarrier.com",
+    support: "support@greencarrier.com"
   },
-  subdomain: "greencarrier"
+  subdomain: "greencarrier",
+  name: "Greencarrier"
 )
 
 admin = tenant.users.new(

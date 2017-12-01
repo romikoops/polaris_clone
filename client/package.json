@@ -8,7 +8,7 @@
     "start": "node server",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint .",
-    "build-and-deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev && echo '🚀  Deployed!'"
+    "build-and-deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'"
   },
   "keywords": [
     "es6",
@@ -20,8 +20,6 @@
   "dependencies": {
     "@babel/core": "^7.0.0-beta.32",
     "@babel/polyfill": "^7.0.0-beta.32",
-    "@babel/preset-env": "^7.0.0-beta.32",
-    "@babel/preset-react": "^7.0.0-beta.32",
     "babel-preset-stage-2": "^6.24.1",
     "es6-promise-promise": "^1.0.0",
     "lodash": "^4.17.4",
@@ -52,6 +50,11 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.32",
+    "@babel/preset-env": "^7.0.0-beta.32",
+    "@babel/preset-es2015": "^7.0.0-beta.32",
+    "@babel/preset-react": "^7.0.0-beta.32",
+    "@babel/preset-stage-0": "^7.0.0-beta.32",
+    "@babel/preset-stage-2": "^7.0.0-beta.32",
     "autoprefixer": "^6.3.6",
     "babel-core": "^6.8.0",
     "babel-eslint": "^8.0.2",
