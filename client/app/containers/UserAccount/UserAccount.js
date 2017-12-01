@@ -6,17 +6,19 @@ import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
 
-import { UserProfile } from '../../components/UserAccount/UserProfile';
-import { UserLocations } from '../../components/UserAccount/UserLocations';
-import { UserEmails } from '../../components/UserAccount/UserEmails';
-import { UserPassword } from '../../components/UserAccount/UserPassword';
-import { UserBilling } from '../../components/UserAccount/UserBilling';
+import {
+    UserProfile,
+    UserLocations,
+    UserEmails,
+    UserPassword,
+    UserBilling
+} from '../../components/UserAccount';
 
 import { userActions } from '../../actions/user.actions';
 
 import './UserAccount.scss';
 
-class UserAccount extends Component {
+export class UserAccount extends Component {
     constructor(props) {
         super(props);
 

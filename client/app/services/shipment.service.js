@@ -5,13 +5,11 @@ import { BASE_URL } from '../constants';
 function handleResponse(response) {
     const promise = Promise;
     if (!response.ok) {
-        console.log(Promise);
         return promise.reject(response.statusText);
     }
 
     return response.json();
 }
-
 
 function getStoredShipment() {
     const storedShipment = JSON.parse(localStorage.getItem('shipment'));
@@ -45,7 +43,6 @@ function newShipment(type) {
         body: JSON.stringify({ type: type })
     };
     const url = BASE_URL + '/shipments';
-    console.log(Promise);
     return fetch(url, requestOptions).then(handleResponse);
 }
 
