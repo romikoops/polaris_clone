@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
@@ -19,7 +19,7 @@ export class RouteSelector extends Component {
         this.props.setRoute(route);
     }
     togglePublic() {
-        this.setState({viewPublic: !this.state.viewPublic});
+        this.setState({ viewPublic: !this.state.viewPublic });
     }
 
     render() {
@@ -27,13 +27,28 @@ export class RouteSelector extends Component {
         const pubRoutes = [];
         if (publicRoutes) {
             publicRoutes.forEach(route => {
-                pubRoutes.push(<RouteOption key={v4()} theme={theme} route={route} selectOption={this.selectRoute} />);
+                pubRoutes.push(
+                    <RouteOption
+                        key={v4()}
+                        theme={theme}
+                        route={route}
+                        selectOption={this.selectRoute}
+                    />
+                );
             });
         }
         const privRoutes = [];
         if (privateRoutes) {
             privateRoutes.forEach(route => {
-                privRoutes.push(<RouteOption key={v4()} theme={theme} route={route} selectOption={this.selectRoute} isPrivate/>);
+                privRoutes.push(
+                    <RouteOption
+                        key={v4()}
+                        theme={theme}
+                        route={route}
+                        selectOption={this.selectRoute}
+                        isPrivate
+                    />
+                );
             });
         }
         let routesArr;
@@ -44,26 +59,40 @@ export class RouteSelector extends Component {
         }
         console.log(routesArr.length);
         return (
+
         <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
             <div className={`${defs.content_width} layout-row layout-wrap`}>
               <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-align-space-between-center">
                     <div className="flex-none ayput-row layout-align-start-center">
                         <h4 className="flex-none"> Available Routes</h4>
-                    </div>
-                    <div className="flex-none layout-row layout-align-end-center">
-                        <h4 className="flex-none"> Show Public Routes</h4>
-                        <Checkbox onChange={this.togglePublic} checked={this.state.viewPublic} />
+                            </div>
+                            <div className="flex-none layout-row layout-align-end-center">
+                                <h4 className="flex-none">
+                                    {' '}
+                                    Show Public Routes
+                                </h4>
+                                <Checkbox
+                                    onChange={this.togglePublic}
+                                    checked={this.state.viewPublic}
+                                />
+                            </div>
+                        </div>
+                        <div className="flex-100 layout-row layout-wrap">
+                            <CSSTransitionGroup
+                                className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+                                transitionAppear={false}
+                                transitionName="route_entry"
+                                transitionEnterTimeout={500}
+                                transitionLeaveTimeout={500}
+                            >
+                                {routesArr}
+                            </CSSTransitionGroup>
+                        </div>
+
                     </div>
                 </div>
-                <div className="flex-100 layout-row layout-wrap">
-                   <CSSTransitionGroup className="flex-100 layout-row layout-wrap layout-align-space-between-start" transitionAppear={false} transitionName="route_entry"  transitionEnterTimeout={500} transitionLeaveTimeout={500}>
-                    {routesArr}
-                  </CSSTransitionGroup>
-                </div>
-              </div>
             </div>
-        </div>
         );
     }
 }
@@ -73,4 +102,3 @@ RouteSelector.propTypes = {
     publicRoutes: PropTypes.array,
     setRoute: PropTypes.func
 };
-

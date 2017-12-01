@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react';
 import {LoginPage} from '../../containers/LoginPage';
 import styles from './LandingTop.scss';
@@ -47,5 +48,3 @@ export class LandingTop extends Component {
 LandingTop.propTypes = {
     theme: PropTypes.object
 };
-
-

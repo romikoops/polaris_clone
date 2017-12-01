@@ -1,13 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import styles from './ShipmentContainers.scss';
-import { CONTAINER_DESCRIPTIONS, CONTAINER_TARE_WEIGHTS } from '../../constants';
+import {
+    CONTAINER_DESCRIPTIONS,
+    CONTAINER_TARE_WEIGHTS
+} from '../../constants';
 import { Checkbox } from '../Checkbox/Checkbox';
 import defs from '../../styles/default_classes.scss';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const containerTareWeights = CONTAINER_TARE_WEIGHTS;
+
 export class ShipmentContainers extends Component {
     constructor(props) {
         super(props);
@@ -16,14 +20,19 @@ export class ShipmentContainers extends Component {
     }
 
     handleContainerSelect(val) {
-        const ev1 = {target: {name: 'sizeClass', value: val.value}};
-        const ev2 = {target: {name: 'tareWeight', value: val.tare_weight}};
+        const ev1 = { target: { name: 'sizeClass', value: val.value } };
+        const ev2 = { target: { name: 'tareWeight', value: val.tare_weight } };
         this.props.handleDelta(ev1);
         this.props.handleDelta(ev2);
     }
 
     toggleDangerousGoods() {
-        const event = {target: {name: 'dangerousGoods', value: !this.props.containers[0].dangerousGoods}};
+        const event = {
+            target: {
+                name: 'dangerousGoods',
+                value: !this.props.containers[0].dangerousGoods
+            }
+        };
         this.props.handleDelta(event);
     }
 
@@ -32,26 +41,35 @@ export class ShipmentContainers extends Component {
         const newContainer = containers[0];
         const containerOptions = [];
         Object.keys(containerDescriptions).forEach(key => {
-            containerOptions.push({value: key, label: containerDescriptions[key], tare_weight: containerTareWeights[key]});
+            containerOptions.push({
+                value: key,
+                label: containerDescriptions[key],
+                tare_weight: containerTareWeights[key]
+            });
         });
-        const grossWeight = parseInt(newContainer.payload_in_kg, 10) + parseInt(newContainer.tareWeight, 10);
+        const grossWeight =
+            parseInt(newContainer.payload_in_kg, 10) +
+            parseInt(newContainer.tareWeight, 10);
         const containersAdded = [];
         if (this.props.containers) {
             this.props.containers.forEach((cont, i) => {
                 if (i !== 0) {
                     const tmpCont = (
                         <div className="flex-100 layout-row">
-                          <div className="flex-20 layout-row layout-align-center-center">
-                            {containerDescriptions[cont.sizeClass]}
-                          </div>
-                          <div className="flex-20 layout-row layout-align-center-center">
-                            {cont.payload_in_kg} kg
-                          </div>
-                          <div className="flex-20 layout-row layout-align-center-center">
-                            {parseInt(cont.payload_in_kg, 10) + parseInt(cont.tareWeight, 10)} kg
-                          </div>
-                          <div className="flex-20 layout-row layout-align-center-center">
-                              Dangerous Goods: {cont.dangerousGoods ? 'Yes' : 'No'}
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                {containerDescriptions[cont.sizeClass]}
+                            </div>
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                {cont.payload_in_kg} kg
+                            </div>
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                {parseInt(cont.payload_in_kg, 10) +
+                                    parseInt(cont.tareWeight, 10)}{' '}
+                                kg
+                            </div>
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                Dangerous Goods:{' '}
+                                {cont.dangerousGoods ? 'Yes' : 'No'}
                             </div>
                         </div>
                     );
@@ -67,35 +85,68 @@ export class ShipmentContainers extends Component {
                     <p className="flex-100"> Container Size </p>
                     <Select placeholder={newContainer.sizeClass} className={styles.select} name="container-size" value={newContainer.type} options={containerOptions} onChange={this.handleContainerSelect} />
                   </div>
-
-                  <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                      <p className="flex-100"> Net Weight </p>
-                      <div className={`flex-95 layout-row ${styles.input_box}`}>
-                        <input className="flex-80" name="payload_in_kg" value={newContainer.payload_in_kg} type="number" onChange={handleDelta}/>
-                        <div className="flex-20 layout-row layout-align-center-center">
-                          kg
+                        <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                            <p className="flex-100"> Net Weight </p>
+                            <div
+                                className={`flex-95 layout-row ${
+                                    styles.input_box
+                                }`}
+                            >
+                                <input
+                                    className="flex-80"
+                                    name="payload_in_kg"
+                                    value={newContainer.payload_in_kg}
+                                    type="number"
+                                    onChange={handleDelta}
+                                />
+                                <div className="flex-20 layout-row layout-align-center-center">
+                                    kg
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                  <p className="flex-100"> Gross Weight </p>
-                  <div className={`flex-95 layout-row ${styles.input_box}`}>
-                    <input className="flex-80" name="payload_in_kg" value={grossWeight} type="number" />
-                    <div className="flex-20 layout-row layout-align-center-center">
-                      kg
-                    </div>
-                  </div>
-                </div>
+                        <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                            <p className="flex-100"> Gross Weight </p>
+                            <div
+                                className={`flex-95 layout-row ${
+                                    styles.input_box
+                                }`}
+                            >
+                                <input
+                                    className="flex-80"
+                                    name="payload_in_kg"
+                                    value={grossWeight}
+                                    type="number"
+                                />
+                                <div className="flex-20 layout-row layout-align-center-center">
+                                    kg
+                                </div>
+                            </div>
+                        </div>
 
-                  <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                    <p className="flex-100"> Dangerous Goods </p>
-                    <Checkbox onChange={this.toggleDangerousGoods} checked={newContainer.dangerousGoods} />
-                  </div>
-                </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                    <div className="layout-row flex-none layout-align-start-center" onClick={addContainer}>
-                      <i className="flex-none fa fa-plus-square-o" />
-                      <p className="flex-none flex-offset-5"> Add unit </p>
+                        <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                            <p className="flex-100"> Dangerous Goods </p>
+                            <Checkbox
+                                onChange={this.toggleDangerousGoods}
+                                checked={newContainer.dangerousGoods}
+                            />
+                        </div>
+                    </div>
+                    <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div
+                            className="layout-row flex-none layout-align-start-center"
+                            onClick={addContainer}
+                        >
+                            <i className="flex-none fa fa-plus-square-o" />
+                            <p className="flex-none flex-offset-5">
+                                {' '}
+                                Add unit{' '}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div className="layout-row flex-100 layout-wrap">
+                            {containersAdded}
+                        </div>
                     </div>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
@@ -104,7 +155,6 @@ export class ShipmentContainers extends Component {
                   </div>
                 </div>
             </div>
-          </div>
         );
     }
 }

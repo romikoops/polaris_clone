@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import styles from './ShopStageView.scss';
 import PropTypes from 'prop-types';
 import defs from '../../styles/default_classes.scss';
@@ -14,32 +14,49 @@ export class ShopStageView extends Component {
         this.stageName(this.props.currentStage);
     }
     stageFunction(stage) {
-        const colour = this.props.theme ? this.props.theme.colors.primary : 'white';
-        const borderColour = this.props.theme ? this.props.theme.colors.primary : 'black';
-        const textStyle = { color: colour};
-        const borderStyle = { borderColor: borderColour};
+        const colour = this.props.theme
+            ? this.props.theme.colors.primary
+            : 'white';
+        const borderColour = this.props.theme
+            ? this.props.theme.colors.primary
+            : 'black';
+        const textStyle = { color: colour };
+        const borderStyle = { borderColor: borderColour };
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
-            <div className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`} >
-                <i className="fa fa-check flex-none" style={textStyle}></i>
-            </div>
-
-        );
+                <div
+                    className={`${
+                        styles.shop_stage_past
+                    } flex-none layout-column layout-align-center-center`}
+                >
+                    <i className="fa fa-check flex-none" style={textStyle} />
+                </div>
+            );
         } else if (stage.step === this.props.currentStage) {
             stageBox = (
-            <div className={`${styles.shop_stage_current} flex-none layout-column layout-align-center-center`} style={borderStyle}>
-              <h3 className="flex-none" style={textStyle}> { stage.step } </h3>
-            </div>
-
-        );
+                <div
+                    className={`${
+                        styles.shop_stage_current
+                    } flex-none layout-column layout-align-center-center`}
+                    style={borderStyle}
+                >
+                    <h3 className="flex-none" style={textStyle}>
+                        {' '}
+                        {stage.step}{' '}
+                    </h3>
+                </div>
+            );
         } else {
             stageBox = (
-            <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`} >
-              <h3 className="flex-none" > { stage.step } </h3>
-            </div>
-
-        );
+                <div
+                    className={`${
+                        styles.shop_stage_yet
+                    } layout-column layout-align-center-center`}
+                >
+                    <h3 className="flex-none"> {stage.step} </h3>
+                </div>
+            );
         }
         // debugger;
         return stageBox;
@@ -48,7 +65,7 @@ export class ShopStageView extends Component {
     stageName(cStage) {
         this.props.stages.forEach(stage => {
             if (stage.step === cStage) {
-                this.setState({title: stage.header});
+                this.setState({ title: stage.header });
             }
         });
     }
@@ -56,10 +73,18 @@ export class ShopStageView extends Component {
         const stageBoxes = [];
         this.props.stages.map(stage => {
             stageBoxes.push(
-                <div key={stage.step} className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}>
-                    { this.stageFunction(stage) }
-                    <p className={`flex-none ${styles.stage_text}`}>{stage.text}</p>
-                </div>);
+                <div
+                    key={stage.step}
+                    className={`${
+                        styles.stage_box
+                    } flex-none layout-column layout-align-start-center`}
+                >
+                    {this.stageFunction(stage)}
+                    <p className={`flex-none ${styles.stage_text}`}>
+                        {stage.text}
+                    </p>
+                </div>
+            );
         });
         return (
             <div className="layout-row flex-100 layout-align-center layout-wrap">

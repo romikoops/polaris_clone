@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router';
 // import { Link } from 'react'
@@ -20,10 +20,12 @@ export class CardLink extends Component {
         if (this.state.redirect) {
             return <Redirect push to={this.props.path} />;
         }
-        const theme = this.props.theme ? this.props.theme : tenantDefaults.theme;
+        const theme = this.props.theme
+            ? this.props.theme
+            : tenantDefaults.theme;
         const display = this.props.text;
         const handleClick = () => this.setState({ redirect: true });
-        const imgClass = { backgroundImage: 'url(' + this.props.img + ')'};
+        const imgClass = { backgroundImage: 'url(' + this.props.img + ')' };
         const textColour = { color: theme.colors.primary };
         return (
           <div className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30`} onClick={handleClick} >
