@@ -108,6 +108,6 @@ export class RouteHubBox extends Component {
 }
 RouteHubBox.propTypes = {
     theme: PropTypes.object,
-    route: PropTypes.object,
+    route: PropTypes.array,
     hubs: PropTypes.object
 };

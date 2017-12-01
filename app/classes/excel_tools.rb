@@ -386,7 +386,7 @@ module ExcelTools
 
     hub_rows.each do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
-      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude])
+      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude], photo: hub_row[:photo])
 
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]

@@ -1099,6 +1099,17 @@ p.RouteResult---sched_elem---ftf7I {
 .BookingConfirmation---b_summ_top---2AFUf {
   border-bottom: 1px solid rgba(0, 0, 0, 0.04); }
 
+.BookingConfirmation---wrapper_cargo---1FIJ7 {
+  margin-bottom: 30px; }
+
+.BookingConfirmation---tot_price---LQpLo {
+  color: white;
+  padding: 0 15px;
+  height: 49px;
+  width: 296px;
+  border-radius: 50px;
+  background: linear-gradient(90deg, #06CA52 0%, #0CA7F7 100%); }
+
 .BookingConfirmation---thank_box---wUyIA {
   height: 380px;
   padding-top: 48px;
@@ -1107,7 +1118,10 @@ p.RouteResult---sched_elem---ftf7I {
 .CargoItemDetails---info---3-Zgh {
   color: #2C2C2C;
   font-size: 16px;
-  line-height: 18px; }
+  line-height: 18px;
+  margin-bottom: 20px; }
+  .CargoItemDetails---info---3-Zgh h4 {
+    font-weight: normal; }
   .CargoItemDetails---info---3-Zgh hr {
     border: 0.5px solid rgba(0, 0, 0, 0.03); }
   .CargoItemDetails---info---3-Zgh p {
@@ -1119,6 +1133,13 @@ p.RouteResult---sched_elem---ftf7I {
   color: #2C2C2C;
   font-size: 16px;
   line-height: 18px; }
+p.Price---price---3H2qD {
+  font-size: 30px;
+  margin: 9px 0; }
+  p.Price---price---3H2qD sup {
+    font-size: 16px; }
+  p.Price---price---3H2qD span.Price---price_currency---VaTKC {
+    font-size: 22px; }
 .Footer---footer---2FrqF {
   height: 175px;
   background: #5E5E5E; }

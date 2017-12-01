@@ -7,7 +7,8 @@
     "test": "",
     "start": "node server",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "build-and-deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev && echo '🚀  Deployed!'"
   },
   "keywords": [
     "es6",

@@ -14,7 +14,6 @@ export class RouteOption extends Component {
     }
 
     render() {
-        debugger;
         const { theme, isPrivate, route } = this.props;
         const iconStyle = {
             background:
