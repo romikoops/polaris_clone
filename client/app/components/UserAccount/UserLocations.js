@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserAccount.scss';
+import defaults from '../../styles/default_classes.scss';
 
 export class UserLocations extends Component {
     constructor(props) {
@@ -15,43 +16,46 @@ export class UserLocations extends Component {
         const locInfo = this.props.locations;
         const locations = locInfo
             ? locInfo.map(op => {
-                return (
-                    <div key={op.id} className={'flex-33'}>
-                        <div className={`${styles['location-box']}`}>
-                            <div className={`${styles.header}`}>
-                                {op.primary ? (
-                                    <h3 className={`${styles.standard}`}>
+                  return (
+                      <div key={op.id} className={'flex-33'}>
+                          <div className={`${styles['location-box']}`}>
+                              <div className={`${styles.header}`}>
+                                  {op.primary ? (
+                                      <h3 className={`${styles.standard}`}>
                                           Primary
-                                    </h3>
-                                ) : (
-                                    <h3 className={`${styles.other}`}>
+                                      </h3>
+                                  ) : (
+                                      <h3 className={`${styles.other}`}>
                                           Other
-                                    </h3>
-                                )}
-                            </div>
-                            <div className={`${styles.content}`}>
-                                {op.geocoded_address}
-                            </div>
-                            <div className={`${styles.footer}`}>
-                                <div className="layout-row layout-align-center-center">
-                                    <span>Edit</span>
+                                      </h3>
+                                  )}
+                              </div>
+                              <div className={`${styles.content}`}>
+                                  {op.geocoded_address}
+                              </div>
+                              <div className={`${styles.footer}`}>
+                                  <div className="layout-row layout-align-center-center">
+                                      <span className={`${defaults.pointy}`}>Edit</span>
                                       &nbsp; | &nbsp;
-                                    <span
-                                        onClick={() => this.props.destroyLocation(op.id)}
-                                    >
+                                      <span
+                                          className={`${defaults.pointy}`}
+                                          onClick={() =>
+                                              this.props.destroyLocation(op.id)
+                                          }
+                                      >
                                           Delete
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            })
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  );
+              })
             : '';
 
         return (
             <div className="layout-row flex-100 layout-wrap">
-                <div className={'flex-33'}>
+                <div className={`${defaults.pointy} flex-33`}>
                     <div
                         className={`${styles['location-box']} ${
                             styles['new-address']

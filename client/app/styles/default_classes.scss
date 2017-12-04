@@ -1,37 +1,48 @@
 @import './defaults';
 
-:local{.content_width {
-  width: 1000px;
-}
-.button_padding {
-  padding: 60px 5px;
-}
-.padd_top {
+:local {
+  .content_width {
+    width: 1000px;
+  }
+
+  .button_padding {
+    padding: 60px 5px;
+  }
+
+  .padd_top {
     padding-top: 35px;
-}
+  }
 
-.spacing_lg_top {
-  margin-top: $spacing-lg;
-}
+  .spacing_lg_top {
+    margin-top: $spacing-lg;
+  }
 
-.spacing_md_top {
-  margin-top: $spacing-md;
-}
+  .spacing_md_top {
+    margin-top: $spacing-md;
+  }
 
-.spacing_md_bottom {
-  margin-bottom: $spacing-md;
-}
+  .spacing_md_bottom {
+    margin-bottom: $spacing-md;
+  }
 
-.spacing_sm_left {
-  margin-left: $spacing-sm;
-}
+  .spacing_sm_left {
+    margin-left: $spacing-sm;
+  }
 
-.spacing_sm_right {
-  margin-right: $spacing-sm;
+  .spacing_sm_right {
+    margin-right: $spacing-sm;
+  }
+
+  .mc {
+    height: max-content;
+  }
+
+  .border_divider {
+    border-top: 1px solid #ededed;
+  }
+
+  .pointy {
+    cursor: pointer;
+  }
+
 }
-.mc {
-  height: max-content;
-}
-.border_divider {
-  border-top: 1px solid #EDEDED;
-}}
