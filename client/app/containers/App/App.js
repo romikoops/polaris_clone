@@ -8,6 +8,7 @@ import Landing from '../Landing/Landing';
 import Shop from '../Shop/Shop';
 import { Footer } from '../../components/Footer/Footer';
 import UserAccount from '../UserAccount/UserAccount';
+import Admin from '../Admin/Admin';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
@@ -31,7 +32,7 @@ class App extends Component {
         const theme = tenant.data.theme;
         return (
             <div className="layout-fill layout-column scroll">
-                {isFetching && <Loading theme={theme} text="loading..." />}
+                {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
                 <Switch className="flex">
                     <Route
                         exact
@@ -41,6 +42,10 @@ class App extends Component {
                     <Route
                         path="/booking"
                         render={props => <Shop theme={theme} {...props} />}
+                    />
+                    <Route
+                        path="/admin"
+                        render={props => <Admin theme={theme} {...props} />}
                     />
                     <Route
                         path="/signout"
@@ -57,7 +62,7 @@ class App extends Component {
                         ''
                     )}
                 </Switch>
-                <Footer theme={theme} tenant={tenant}/>
+                <Footer theme={theme} tenant={tenant.data}/>
             </div>
         );
     }

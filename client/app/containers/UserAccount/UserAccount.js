@@ -6,17 +6,19 @@ import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
 
-import { UserProfile } from '../../components/UserAccount/UserProfile';
-import { UserLocations } from '../../components/UserAccount/UserLocations';
-import { UserEmails } from '../../components/UserAccount/UserEmails';
-import { UserPassword } from '../../components/UserAccount/UserPassword';
-import { UserBilling } from '../../components/UserAccount/UserBilling';
+import {
+    UserProfile,
+    UserLocations,
+    UserEmails,
+    UserPassword,
+    UserBilling
+} from '../../components/UserAccount';
 
 import { userActions } from '../../actions/user.actions';
 
 import './UserAccount.scss';
 
-class UserAccount extends Component {
+export class UserAccount extends Component {
     constructor(props) {
         super(props);
 
@@ -78,7 +80,11 @@ class UserAccount extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-center">
                 <Header theme={this.props.theme} />
 
-                <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
+                <div
+                    className={`${defs.content_width} layout-row flex-none ${
+                        defs.spacing_md_top
+                    } ${defs.spacing_md_bottom}`}
+                >
                     <div className="layout-row flex-20">
                         <NavSidebar
                             theme={this.props.theme}

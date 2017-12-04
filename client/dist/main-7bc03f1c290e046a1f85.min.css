@@ -29,6 +29,13 @@
 .RoundButton---back---2dpdT {
   background-color: #787878;
   color: #FFFFFF !important; }
+
+.RoundButton---content---148VH {
+  position: relative; }
+
+.RoundButton---icon---19tWI {
+  position: absolute;
+  left: -40px; }
 form {
   width: 317px; }
   form ::-webkit-input-placeholder {
@@ -105,9 +112,11 @@ label {
   align-items: flex-end;
   z-index: 1; }
 
-.LandingTop---top_row---2GPgl .LandingTop---layout_elem---1f5HV {
-  align-items: flex-start;
-  margin-top: 20px; }
+.LandingTop---top_row---2GPgl {
+  z-index: 2; }
+  .LandingTop---top_row---2GPgl .LandingTop---layout_elem---1f5HV {
+    align-items: flex-start;
+    margin-top: 20px; }
 
 .LandingTop---wrapper_tenant_logo---3XodY {
   width: 317px; }
@@ -126,6 +135,91 @@ label {
   bottom: 0;
   opacity: 0.7;
   z-index: 0; }
+img.NavDropdown---dropDownImage---3bEJ_ {
+  position: relative;
+  top: 3px;
+  height: 20px;
+  width: 20px;
+  margin-right: 10px; }
+
+.NavDropdown---dropbtn---16n4R {
+  background-color: transparent;
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer; }
+
+.NavDropdown---dropdown---2QqSt {
+  position: relative;
+  display: inline-block; }
+
+.NavDropdown---dropdowncontent---1KR-9 {
+  display: none;
+  position: absolute;
+  top: 50px;
+  left: 7px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 5; }
+
+.NavDropdown---dropdowncontent---1KR-9 a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block; }
+
+.NavDropdown---dropdowncontent---1KR-9 a:hover {
+  background-color: #f1f1f1; }
+
+.NavDropdown---dropdown---2QqSt:hover .NavDropdown---dropdowncontent---1KR-9 {
+  display: block; }
+
+.NavDropdown---dropdown---2QqSt:hover .NavDropdown---dropbtn---16n4R {
+  text-decoration: underline; }
+.Header---header---2nHSY {
+  height: 100px;
+  background-color: transparent; }
+
+img.Header---logo---2g7zk {
+  height: 80px; }
+
+.Header---signin---1d_K8 {
+  height: 22px;
+  width: 82px;
+  color: #FFFFFF;
+  font-size: 16px;
+  line-height: 18px; }
+.default_classes---content_width---3pLqn {
+  width: 1000px; }
+
+.default_classes---button_padding---1CLgZ {
+  padding: 60px 5px; }
+
+.default_classes---padd_top---2L3Ti {
+  padding-top: 35px; }
+
+.default_classes---spacing_lg_top---2d-PR {
+  margin-top: 50px; }
+
+.default_classes---spacing_md_top---1Xgtr {
+  margin-top: 25px; }
+
+.default_classes---spacing_md_bottom---2y5F0 {
+  margin-bottom: 25px; }
+
+.default_classes---spacing_sm_left---dFgu8 {
+  margin-left: 10px; }
+
+.default_classes---spacing_sm_right---3oFSa {
+  margin-right: 10px; }
+
+.default_classes---mc---35hOq {
+  height: max-content; }
+
+.default_classes---border_divider---3wrLw {
+  border-top: 1px solid #EDEDED; }
 .LandingTopAuthed---landing_top_authed---1Nnrj {
   color: #212121;
   background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url("https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg");
@@ -165,84 +259,6 @@ label {
     background: transparent; }
 .CardLinkRow---card_link_row---12aqr {
   margin-bottom: 77px; }
-img.NavDropdown---dropDownImage---3bEJ_ {
-  position: relative;
-  top: 3px;
-  height: 20px;
-  width: 20px;
-  margin-right: 10px; }
-
-.NavDropdown---dropbtn---16n4R {
-  background-color: transparent;
-  color: black;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer; }
-
-.NavDropdown---dropdown---2QqSt {
-  position: relative;
-  display: inline-block; }
-
-.NavDropdown---dropdowncontent---1KR-9 {
-  display: none;
-  position: absolute;
-  top: 50px;
-  left: 7px;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1; }
-
-.NavDropdown---dropdowncontent---1KR-9 a {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block; }
-
-.NavDropdown---dropdowncontent---1KR-9 a:hover {
-  background-color: #f1f1f1; }
-
-.NavDropdown---dropdown---2QqSt:hover .NavDropdown---dropdowncontent---1KR-9 {
-  display: block; }
-
-.NavDropdown---dropdown---2QqSt:hover .NavDropdown---dropbtn---16n4R {
-  text-decoration: underline; }
-.Header---header---2nHSY {
-  height: 100px;
-  background-color: transparent; }
-
-img.Header---logo---2g7zk {
-  height: 80px; }
-.default_classes---content_width---3pLqn {
-  width: 1000px; }
-
-.default_classes---button_padding---1CLgZ {
-  padding: 60px 5px; }
-
-.default_classes---padd_top---2L3Ti {
-  padding-top: 35px; }
-
-.default_classes---spacing_lg_top---2d-PR {
-  margin-top: 50px; }
-
-.default_classes---spacing_md_top---1Xgtr {
-  margin-top: 25px; }
-
-.default_classes---spacing_md_bottom---2y5F0 {
-  margin-bottom: 25px; }
-
-.default_classes---spacing_sm_left---dFgu8 {
-  margin-left: 10px; }
-
-.default_classes---spacing_sm_right---3oFSa {
-  margin-right: 10px; }
-
-.default_classes---mc---35hOq {
-  height: max-content; }
-
-.default_classes---border_divider---3wrLw {
-  border-top: 1px solid #EDEDED; }
 .ActiveRoutes---active_routes---3Zp_L {
   height: max-content;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
@@ -385,17 +401,6 @@ img.Header---logo---2g7zk {
   .Landing---btm_promo---2bLDS i {
     color: #83BC45;
     margin-right: 10px; }
-
-.Landing---contact_bar---PbaeD {
-  background: white;
-  padding: 10px 0; }
-  .Landing---contact_bar---PbaeD i {
-    margin-right: 15px; }
-  .Landing---contact_bar---PbaeD img {
-    width: 110px; }
-  .Landing---contact_bar---PbaeD .Landing---contact_elem---CAVhN {
-    margin-left: 50px;
-    padding-bottom: 10px; }
 .ChooseShipment---card_link---258oX {
   width: 420px;
   height: 270px;
@@ -470,12 +475,27 @@ img.Header---logo---2g7zk {
   font-size: 16px;
   line-height: 18px; }
 
+.ShopStageView---banner_content---x7_iY {
+  z-index: 3; }
+
+.ShopStageView---fade---3PjRV {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 2;
+  background: rgba(0, 10, 4, 0.26); }
+
 .ShopStageView---shop_banner---3WjcT {
   height: 124px;
   background-image: url("https://assets.itsmycargo.com/assets/images/welcome/header.jpg");
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat; }
+  background-position: 0% 85%;
+  background-repeat: no-repeat;
+  position: relative; }
 
 .ShopStageView---shop_banner---3WjcT h3 {
   height: 41px;
@@ -505,7 +525,8 @@ img.Header---logo---2g7zk {
   color: floralwhite; }
 
 .ShopStageView---stage_row---37Ma1 {
-  height: 171px; }
+  height: 171px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1); }
 
 .ShopStageView---line_box---2EY8i {
   position: relative; }
@@ -783,6 +804,62 @@ p.RouteResult---sched_elem---ftf7I {
   color: #2C2C2C;
   font-size: 21px;
   line-height: 24px; }
+.Loading---loader_box---3eMhX {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100; }
+
+.Loading---loader---35Bja {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: whitesmoke; }
+
+.Loading---loader_anim-enter---SNqeU {
+  opacity: 0.01; }
+
+.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.Loading---loader_anim-leave---2Cea6 {
+  opacity: 1; }
+
+.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+@keyframes Loading---dot_bulge---12l94 {
+  0%, 100% {
+    height: 10px;
+    width: 10px; }
+  50% {
+    height: 20px;
+    width: 20px; } }
+
+@keyframes Loading---infinite-spinning---1H3MP {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.Loading---dot---3PVfi, .Loading---dot1---bigVG, .Loading---dot2---IgUia, .Loading---dot3---1aXbX {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px; }
+
+.Loading---dot_row---2N1bU {
+  width: 200px;
+  height: 50px; }
 .BookingDetails---contacts_border---1gXHB {
   margin-top: 80px; }
 .RouteHubBox---hub_card---7Uyqk {
@@ -1060,10 +1137,14 @@ p.RouteResult---sched_elem---ftf7I {
   font-size: 16px;
   line-height: 23px; }
 
+.BookingConfirmation---sec_break---1eYis {
+  border-color: rgba(0, 0, 0, 0.03); }
+
 .BookingConfirmation---btn_sec---9N4kD {
-  height: 227px;
-  padding-top: 48px;
-  border-top: 1px solid #EDEDED; }
+  padding: 100px 0 70px 0; }
+
+.BookingConfirmation---back_to_dash_sec---y3pkq {
+  padding: 50px 0 100px 0; }
 
 .BookingConfirmation---cargo_sec---wSMSF {
   min-height: 187px;
@@ -1112,9 +1193,11 @@ p.RouteResult---sched_elem---ftf7I {
 
 .BookingConfirmation---thank_box---wUyIA {
   height: 380px;
-  padding-top: 48px;
-  border-top: 1px solid #EDEDED;
-  border-bottom: 1px solid #EDEDED; }
+  padding-top: 48px; }
+
+.BookingConfirmation---pre_footer_break---3ms8y {
+  height: 65px;
+  background: #F5F5F5; }
 .CargoItemDetails---info---3-Zgh {
   color: #2C2C2C;
   font-size: 16px;
@@ -1132,7 +1215,17 @@ p.RouteResult---sched_elem---ftf7I {
 .ContainerDetails---info---2vXj1 {
   color: #2C2C2C;
   font-size: 16px;
-  line-height: 18px; }
+  line-height: 18px;
+  margin-bottom: 20px; }
+  .ContainerDetails---info---2vXj1 h4 {
+    font-weight: normal; }
+  .ContainerDetails---info---2vXj1 hr {
+    border: 0.5px solid rgba(0, 0, 0, 0.03); }
+  .ContainerDetails---info---2vXj1 p {
+    margin: 0;
+    height: 18px; }
+    .ContainerDetails---info---2vXj1 p sup {
+      font-size: 10px; }
 p.Price---price---3H2qD {
   font-size: 30px;
   margin: 9px 0; }
@@ -1157,6 +1250,18 @@ p.Price---price---3H2qD {
   color: white;
   border-top: 1px solid #979797;
   font-size: 14px; }
+
+.Footer---contact_bar---TwMPD {
+  background: white;
+  padding: 10px 0; }
+  .Footer---contact_bar---TwMPD i {
+    margin-right: 15px; }
+  .Footer---contact_bar---TwMPD img {
+    width: 110px; }
+
+.Footer---contact_elem---2bWHg {
+  margin-left: 50px;
+  padding-bottom: 10px; }
 nav.NavSidebar---menu---3eXWA {
   margin-bottom: 15px;
   list-style: none;
@@ -1233,38 +1338,6 @@ nav.NavSidebar---menu---3eXWA {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gMfFBUB8Kc3yAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAABmJLR0QA/wD/AP+gvaeTAAAAP0lEQVRYw+3UsQkAMAwDsPz/o29pHkjnlCKDV6PJVb8myZkKBgYGBgYGBvYg7Da+VTAwMD8GBgYGBgYGBraWBpeqjFTlGtDAAAAAAElFTkSuQmCC) left center no-repeat;
     width: 38px;
     height: 50px; }
-.Loading---loader_box---3eMhX {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 100; }
-
-.Loading---loader---35Bja {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0; }
-
-.Loading---loader_anim-enter---SNqeU {
-  opacity: 0.01; }
-
-.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
-  opacity: 1;
-  transition: opacity 500ms ease-in; }
-
-.Loading---loader_anim-leave---2Cea6 {
-  opacity: 1; }
-
-.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in; }
 .index---content_width---1PnTA {
   width: 1000px; }
 
