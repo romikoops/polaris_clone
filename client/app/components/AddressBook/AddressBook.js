@@ -4,7 +4,7 @@ import styles from './AddressBook.scss';
 import { v4 } from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
-
+import defs from '../../styles/default_classes.scss';
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
@@ -63,15 +63,15 @@ export class AddressBook extends Component {
     }
 
     availableContacts(contacts) {
-        return contacts.filter(c => (
-            this.state.shipper !== c &&
-            this.state.consignee !== c &&
-            this.state.notifyees.indexOf(c) === -1
-        ));
+        return contacts.filter(
+            c =>
+                this.state.shipper !== c &&
+                this.state.consignee !== c &&
+                this.state.notifyees.indexOf(c) === -1
+        );
     }
 
     render() {
-        // console.log(this.props.contacts);
         const { contacts, userLocations, theme } = this.props;
         const { notifyees, shipper, consignee } = this.state;
         const shipperOptions = [...userLocations, ...contacts];
@@ -79,7 +79,7 @@ export class AddressBook extends Component {
         const shipperArray = [];
         const notifyeeArray = [];
         const noteArr = [];
-        console.log(this.availableContacts(contacts));
+
         if (contacts) {
             this.availableContacts(contacts).forEach(c => {
                 contactsArray.push(
@@ -120,16 +120,19 @@ export class AddressBook extends Component {
         if (notifyees.length > 0) {
             notifyees.forEach((nt, i) => {
                 noteArr.push(
-                    <div key={v4()} className={`${styles.n_arr_elem} flex-45 ${i % 2 !== 0 ? 'offset-10' : ''}`}>
-                        <div className={`${styles.result_content} flex-100 layout-row`}>
-                            <p className="flex-50">
-                                {nt.contact.first_name}
-                                {' '}
-                            </p>
-                            <p className="flex-50">
-                                {nt.contact.last_name}
-                                {' '}
-                            </p>
+                    <div
+                        key={v4()}
+                        className={`${styles.n_arr_elem} flex-45 ${
+                            i % 2 !== 0 ? 'offset-10' : ''
+                        }`}
+                    >
+                        <div
+                            className={`${
+                                styles.result_content
+                            } flex-100 layout-row`}
+                        >
+                            <p className="flex-50">{nt.contact.first_name} </p>
+                            <p className="flex-50">{nt.contact.last_name} </p>
                         </div>
                     </div>
                 );
@@ -138,14 +141,19 @@ export class AddressBook extends Component {
         if (notifyees.length < 2) {
             for (let i = notifyees.length; i < 2; i++) {
                 noteArr.push(
-                    <div key={v4()} className={`${styles.n_arr_elem} flex-45 ${i % 2 !== 0 ? 'offset-10' : ''}`}>
-                        <div className={`${styles.result_content} flex-100 layout-row`}>
-                            <p className="flex-50">
-                                {' '}
-                            </p>
-                            <p className="flex-50">
-                                {' '}
-                            </p>
+                    <div
+                        key={v4()}
+                        className={`${styles.n_arr_elem} flex-45 ${
+                            i % 2 !== 0 ? 'offset-10' : ''
+                        }`}
+                    >
+                        <div
+                            className={`${
+                                styles.result_content
+                            } flex-100 layout-row`}
+                        >
+                            <p className="flex-50"> </p>
+                            <p className="flex-50"> </p>
                         </div>
                     </div>
                 );
@@ -154,10 +162,22 @@ export class AddressBook extends Component {
 
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-none content-width layout-row layout-wrap">
+                <div
+                    className={`flex-none ${
+                        defs.content_width
+                    } layout-row layout-wrap`}
+                >
                     <div className="flex-50">
-                        <div className={`${styles.summary} flex-90 layout-row layout-wrap layout-align-start-start`}>
-                            <div className={`${styles.prompt} flex-100 layout-row layout-align-start-center`}>
+                        <div
+                            className={`${
+                                styles.summary
+                            } flex-90 layout-row layout-wrap layout-align-start-start`}
+                        >
+                            <div
+                                className={`${
+                                    styles.prompt
+                                } flex-100 layout-row layout-align-start-center`}
+                            >
                                 {this.state.setShipper ? (
                                     <h1> Set Shipper Details</h1>
                                 ) : (
@@ -176,102 +196,156 @@ export class AddressBook extends Component {
                             </div>
                             <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                                 {shipper ? (
-                                    <div className={`${styles.results} flex-100 layout-row layout-wrap`}>
+                                    <div
+                                        className={`${
+                                            styles.results
+                                        } flex-100 layout-row layout-wrap`}
+                                    >
                                         <div className="flex-100">
                                             <h4 className="title">
                                                 {' '}
                                                 Shipping from:
                                             </h4>
                                         </div>
-                                        <div className={`${styles.result_content} flex-100 layout-row`}>
+                                        <div
+                                            className={`${
+                                                styles.result_content
+                                            } flex-100 layout-row`}
+                                        >
                                             <p className="flex-60 offset-5">
                                                 {' '}
-                                                {shipper.contact.first_name}{' '}
+                                                {
+                                                    shipper.contact.first_name
+                                                }{' '}
                                                 {shipper.contact.last_name}{' '}
                                             </p>
                                             <p className="flex-100 ">
                                                 {' '}
-                                                {shipper.location.geocoded_address}{' '}
+                                                {
+                                                    shipper.location
+                                                        .geocoded_address
+                                                }{' '}
                                             </p>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className={`${styles.results} flex-100 layout-row layout-wrap`}>
+                                    <div
+                                        className={`${
+                                            styles.results
+                                        } flex-100 layout-row layout-wrap`}
+                                    >
                                         <div className="flex-100">
                                             <h4 className="title">
                                                 {' '}
                                                 Shipping from:
                                             </h4>
                                         </div>
-                                        <div className={`${styles.result_content} flex-100 layout-row`}>
+                                        <div
+                                            className={`${
+                                                styles.result_content
+                                            } flex-100 layout-row`}
+                                        >
                                             <p className="flex-60 offset-5">
                                                 {' '}
                                             </p>
-                                            <p className="flex-100 ">
-                                                {' '}
-                                            </p>
+                                            <p className="flex-100 "> </p>
                                         </div>
                                     </div>
                                 )}
                                 {consignee ? (
-                                    <div className={`${styles.results} flex-100 layout-row layout-wrap`}>
+                                    <div
+                                        className={`${
+                                            styles.results
+                                        } flex-100 layout-row layout-wrap`}
+                                    >
                                         <div className="flex-100">
                                             <h4 className="title">
                                                 {' '}
                                                 Consigned by:
                                             </h4>
                                         </div>
-                                        <div className={`${styles.result_content} flex-100 layout-row`}>
+                                        <div
+                                            className={`${
+                                                styles.result_content
+                                            } flex-100 layout-row`}
+                                        >
                                             <p className="flex-60 offset-5">
                                                 {' '}
-                                                {consignee.contact.first_name}{' '}
+                                                {
+                                                    consignee.contact.first_name
+                                                }{' '}
                                                 {consignee.contact.last_name}{' '}
                                             </p>
                                             <p className="flex-100 ">
                                                 {' '}
-                                                {consignee.location.geocoded_address}{' '}
+                                                {
+                                                    consignee.location
+                                                        .geocoded_address
+                                                }{' '}
                                             </p>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className={`${styles.results} flex-100 layout-row layout-wrap`}>
+                                    <div
+                                        className={`${
+                                            styles.results
+                                        } flex-100 layout-row layout-wrap`}
+                                    >
                                         <div className="flex-100">
                                             <h4 className="title">
                                                 {' '}
                                                 Consigned by:
                                             </h4>
                                         </div>
-                                        <div className={`${styles.result_content} flex-100 layout-row`}>
+                                        <div
+                                            className={`${
+                                                styles.result_content
+                                            } flex-100 layout-row`}
+                                        >
                                             <p className="flex-60 offset-5">
                                                 {' '}
                                             </p>
-                                            <p className="flex-100 ">
-                                                {' '}
-                                            </p>
+                                            <p className="flex-100 "> </p>
                                         </div>
                                     </div>
                                 )}
                                 {
-                                    <div className={`${styles.results} flex-100 layout-row layout-wrap`}>
+                                    <div
+                                        className={`${
+                                            styles.results
+                                        } flex-100 layout-row layout-wrap`}
+                                    >
                                         <div className="flex-100">
                                             <h4 className="title">
                                                 {' '}
                                                 Notifying:
                                             </h4>
                                         </div>
-                                        { noteArr }
+                                        {noteArr}
                                     </div>
                                 }
                             </div>
                         </div>
                     </div>
-                    <div className={`${styles.contact_scroll} flex-50 layout-row layout-wrap`}>
+
+                    <div
+                        className={`${
+                            styles.contact_scroll
+                        } flex-50 layout-row layout-wrap layout-align-center-start`}
+                    >
                         {this.state.setShipper ? shipperArray : ''}
                         {this.state.setConsignee ? contactsArray : ''}
                         {this.state.setNotifyees ? notifyeeArray : ''}
                     </div>
+
                     <div className="flex-100 layout-row layout-align-center-center">
-                        <div className="content-width layout-row layout-align-end-center button_padding">
+                        <div
+                            className={`${
+                                defs.content_width
+                            } layout-row layout-align-end-center ${
+                                defs.button_padding
+                            }`}
+                        >
                             <RoundButton
                                 active
                                 handleNext={this.props.closeAddressBook}
@@ -286,7 +360,7 @@ export class AddressBook extends Component {
     }
 }
 
-AddressBook.PropTypes = {
+AddressBook.propTypes = {
     contacts: PropTypes.array,
     userLocations: PropTypes.array,
     theme: PropTypes.object,

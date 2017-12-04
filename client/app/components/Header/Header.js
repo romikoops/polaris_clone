@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
-
+import defs from '../../styles/default_classes.scss';
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -12,7 +12,7 @@ class Header extends Component {
 
     render() {
         const { user, theme } = this.props;
-        const dropDownText = user.data.first_name + ' ' + user.data.last_name;
+        const dropDownText = user ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
         const accountLinks = [
             {
@@ -28,7 +28,11 @@ class Header extends Component {
                 key: 'signOut'
             }
         ];
-
+        const dropDown = user ? <NavDropdown
+                                dropDownText={dropDownText}
+                                dropDownImage={dropDownImage}
+                                linkOptions={accountLinks}
+                            /> : '';
 
         return (
             <div
@@ -36,7 +40,7 @@ class Header extends Component {
                     styles.header
                 } layout-row flex-100 layout-wrap layout-align-center`}
             >
-                <div className="content-width layout-row flex-none">
+                <div className={`${defs.content_width} layout-row flex-none`}>
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
                             src={theme ? theme.logoLarge : ''}
@@ -45,11 +49,7 @@ class Header extends Component {
                         />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        <NavDropdown
-                            dropDownText={dropDownText}
-                            dropDownImage={dropDownImage}
-                            linkOptions={accountLinks}
-                        />
+                        {dropDown}
                     </div>
                 </div>
             </div>

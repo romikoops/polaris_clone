@@ -1,11 +1,11 @@
 import * as tenantActions from '../actions/tenant';
 export const tenant = (
-  state = {
-      isFetching: false,
-      didInvalidate: false,
-      data: {}
-  },
-  action
+    state = {
+        isFetching: false,
+        didInvalidate: false,
+        data: {}
+    },
+    action
 ) => {
     switch (action.type) {
         case tenantActions.INVALIDATE_SUBDOMAIN:

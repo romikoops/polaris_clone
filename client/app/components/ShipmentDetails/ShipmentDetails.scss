@@ -15,31 +15,25 @@
   .dpb{
     height: 36px;
     width: 250px;
-    border: 1px solid #F2F2F2;
-    border-radius: 3px;
-    background-color: #F9F9F9;
   }
   .dpb_icon {
-    height: 36px;
-    width: 36px;
+    height: 38px;
+    width: 38px;
     border: 1px solid #F2F2F2;
-    border-radius: 3px;
+    border-radius: 3px 0 0 3px;
     background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-    i{
-      font-size: 30px;
-      height:30px;
-      width: 30px;
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);    
+    i {
+      font-size: 20px;
     }
   }
   .dpb_picker {
     height: 36px;
     width: 214px;
     border: 1px solid #F2F2F2;
-    border-radius: 3px;
+    border-radius: 0 3px 3px 0;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 9px;
   }
 }

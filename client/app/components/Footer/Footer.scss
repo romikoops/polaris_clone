@@ -1,18 +1,34 @@
-.footer {
-  height:175px;
-  background: #5E5E5E;
-}
-.button_row {
-  height: 80%;
-}
-.buttons a {
-	text-decoration: none;
-	color: white;
-  font-size: 16px;
-}
-.copyright {
-  height: 20%;
-  color: white;
-  border-top: 1px solid #979797;
-  font-size: 14px;
-}
+ :local {
+    .footer {
+      height:175px;
+      background: #5E5E5E;
+    }
+    .button_row {
+      height: 80%;
+    }
+    .buttons a {
+      text-decoration: none;
+      color: white;
+      font-size: 16px;
+    }
+    .copyright {
+      height: 20%;
+      color: white;
+      border-top: 1px solid #979797;
+      font-size: 14px;
+    }
+    .contact_bar {
+      background: white;
+      padding: 10px 0;
+      i {
+        margin-right: 15px;
+      }
+      img {
+        width: 110px;
+      }
+    }
+    .contact_elem {
+      margin-left: 50px;
+      padding-bottom: 10px;
+    }
+  }

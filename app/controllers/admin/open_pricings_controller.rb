@@ -3,7 +3,7 @@ class Admin::OpenPricingsController < ApplicationController
 
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @pricings = Pricing.where(customer_id: nil)

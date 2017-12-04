@@ -41,7 +41,8 @@ export function shipment(state = {}, action) {
             return req2;
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
             const resp2 = merge({}, state, {
-                response: { stage2: action.shipmentData }
+                response: { stage2: action.shipmentData },
+                loading: false
             });
             return resp2;
         // return {
@@ -50,7 +51,8 @@ export function shipment(state = {}, action) {
         // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
             const err2 = merge({}, state, {
-                error: { stage2: [ action.error ] }
+                error: { stage2: [ action.error ] },
+                loading: false
             });
             return err2;
         case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
@@ -61,12 +63,14 @@ export function shipment(state = {}, action) {
             return req3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
             const resp3 = merge({}, state, {
-                response: { stage3: action.shipmentData }
+                response: { stage3: action.shipmentData },
+                loading: false
             });
             return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             const err3 = merge({}, state, {
-                error: { stage3: [ action.error ] }
+                error: { stage3: [ action.error ] },
+                loading: false
             });
             return err3;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
@@ -77,12 +81,14 @@ export function shipment(state = {}, action) {
             return req4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
             const resp4 = merge({}, state, {
-                response: { stage4: action.shipmentData }
+                response: { stage4: action.shipmentData },
+                loading: false
             });
             return resp4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
             const err4 = merge({}, state, {
-                error: { stage3: [ action.error ] }
+                error: { stage3: [ action.error ] },
+                loading: false
             });
             return err4;
 

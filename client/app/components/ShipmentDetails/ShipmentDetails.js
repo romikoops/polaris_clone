@@ -11,6 +11,7 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import defaults from '../../styles/default_classes.scss';
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
@@ -73,6 +74,10 @@ export class ShipmentDetails extends Component {
             this.loadPrevReq(prevRequest.shipment);
         }
         setStage(1);
+        console.log('######### MOUNTED ###########');
+    }
+    componentDidUpdate() {
+        console.log('######### UPDATED ###########');
     }
 
     loadPrevReq(obj) {
@@ -200,10 +205,6 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // }
-
         const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
         if (shipmentData.data) {
@@ -258,6 +259,9 @@ export class ShipmentDetails extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+        const future = {
+            after: new Date(),
+        };
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
@@ -265,7 +269,7 @@ export class ShipmentDetails extends Component {
                     <div
                         className={`${
                             styles.date_sec
-                        } layout-row flex-none content-width layout-align-start-center`}
+                        } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
                     >
                         <div className="layout-row flex-none layout-wrap">
                             <p className="flex-100">
@@ -274,7 +278,7 @@ export class ShipmentDetails extends Component {
                             </p>
                             <div className={'flex-none layout-row ' + styles.dpb}>
                                 <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
-                                    <i className="flex-none fa fa-calendar" style={textStyle}></i>
+                                    <i className="flex-none fa fa-calendar"></i>
                                 </div>
                                 <DayPickerInput
                                     name="birthday"
@@ -283,6 +287,7 @@ export class ShipmentDetails extends Component {
                                     value={value}
                                     className={styles.dpb_picker}
                                     onDayChange={this.handleDayChange}
+                                    modifiers={future}
                                 />
                             </div>
 
@@ -299,11 +304,11 @@ export class ShipmentDetails extends Component {
                 >
                     {cargoDetails}
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-center-center border_divider">
+                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div
                         className={`${
                             styles.btn_sec
-                        } layout-row content-width flex-none layout-wrap layout-align-start-start`}
+                        } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
                     >
                         <RoundButton
                             text="Choose from haulage options"
@@ -313,11 +318,11 @@ export class ShipmentDetails extends Component {
                         />
                     </div>
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-center-center border_divider">
+                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div
                         className={`${
                             styles.btn_sec
-                        } layout-row content-width flex-none layout-wrap layout-align-start-start`}
+                        } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
                     >
                         <RoundButton
                             text="Back to Dashboard"

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ChooseShipment.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import defs from '../../styles/default_classes.scss';
 export class ChooseShipment extends Component {
     render() {
         const { theme, messages, shipmentTypes, selectShipment } = this.props;
@@ -53,7 +54,7 @@ export class ChooseShipment extends Component {
                 } layout-row flex-100 layout-align-center`}
             >
                 {flash}
-                <div className="flex-none content-width layout-row layout-align-start-center layout-wrap">
+                <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`}>
                     <div
                         className={` ${
                             styles.header

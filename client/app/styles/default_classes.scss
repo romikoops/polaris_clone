@@ -1,6 +1,6 @@
 @import './defaults';
 
-.content-width {
+:local{.content_width {
   width: 1000px;
 }
 .button_padding {
@@ -10,23 +10,23 @@
     padding-top: 35px;
 }
 
-.spacing-lg-top {
+.spacing_lg_top {
   margin-top: $spacing-lg;
 }
 
-.spacing-md-top {
+.spacing_md_top {
   margin-top: $spacing-md;
 }
 
-.spacing-md-bottom {
+.spacing_md_bottom {
   margin-bottom: $spacing-md;
 }
 
-.spacing-sm-left {
+.spacing_sm_left {
   margin-left: $spacing-sm;
 }
 
-.spacing-sm-right {
+.spacing_sm_right {
   margin-right: $spacing-sm;
 }
 .mc {
@@ -34,4 +34,4 @@
 }
 .border_divider {
   border-top: 1px solid #EDEDED;
-}
+}}

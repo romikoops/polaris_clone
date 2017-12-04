@@ -1,10 +1,10 @@
 import fetch from 'isomorphic-fetch';
-import { Promise } from '@babel/polyfill';
+import { Promise } from 'es6-promise-promise';
 export const REQUEST_TENANT = 'REQUEST_TENANT';
 export const RECEIVE_TENANT = 'RECEIVE_TENANT';
 export const INVALIDATE_SUBDOMAIN = 'INVALIDATE_SUBDOMAIN';
-
-const requestTenant = (subdomain) => {
+import { BASE_URL } from '../constants';
+const requestTenant = subdomain => {
     return {
         type: REQUEST_TENANT,
         subdomain
@@ -20,17 +20,18 @@ const receiveTenant = (subdomain, json) => {
     };
 };
 
-export const invalidateSubdomain = (subdomain) => {
+export const invalidateSubdomain = subdomain => {
     return {
         type: INVALIDATE_SUBDOMAIN,
         subdomain
     };
 };
 
-const fetchTenant = (subdomain) => {
+const fetchTenant = subdomain => {
+    console.log(BASE_URL);
     return dispatch => {
         dispatch(requestTenant(subdomain));
-        return fetch(`http://localhost:3000/tenants/${subdomain}`)
+        return fetch(`${BASE_URL}/tenants/${subdomain}`)
       .then(response => response.json())
       .then(json => dispatch(receiveTenant(subdomain, json)));
     };
@@ -47,20 +48,20 @@ const shouldFetchTenant = (state, subdomain) => {
     return tenant.didInvalidate;
 };
 
-export const fetchTenantIfNeeded = (subdomain) => {
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
+export const fetchTenantIfNeeded = subdomain => {
+    // Note that the function also receives getState()
+    // which lets you choose what to dispatch next.
 
-  // This is useful for avoiding a network request if
-  // a cached value is already available.
+    // This is useful for avoiding a network request if
+    // a cached value is already available.
 
     return (dispatch, getState) => {
         if (shouldFetchTenant(getState(), subdomain)) {
-      // Dispatch a thunk from thunk!
+            // Dispatch a thunk from thunk!
             return dispatch(fetchTenant(subdomain));
         }
 
-      // Let the calling code know there's nothing to wait for.
+        // Let the calling code know there's nothing to wait for.
         return Promise.resolve();
     };
 };

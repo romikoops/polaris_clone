@@ -11,8 +11,7 @@ class ShipmentsController < ApplicationController
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
   end
 
-  def new
-
+  def new 
   end
 
   def reuse_booking_data

@@ -1,7 +1,7 @@
 class Admin::ShipmentsController < ApplicationController
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @documents = {}

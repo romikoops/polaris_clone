@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './Checkbox.scss';
+import styles from './Checkbox.scss';
 
 export class Checkbox extends Component {
     // static propTypes = {
@@ -30,18 +30,18 @@ export class Checkbox extends Component {
         const { disabled } = this.props;
         const { checked } = this.state;
         return (
-            <div className="React__checkbox flex-none">
+            <div className={`${styles.React__checkbox} flex-none`}>
                 <label>
                     <input
                         type="checkbox"
-                        className="React__checkbox--input"
+                        className={`${styles.React__checkbox__input}`}
                         checked={checked}
                         disabled={disabled}
                         onChange={this.handleChange}
                     />
-                    <span className="React__checkbox--span">
+                    <span className={`${styles.React__checkbox__span}`}>
                         <i
-                            className="React__checkbox--span fa fa-check"
+                            className={`${styles.React__checkbox__span} fa fa-check`}
                         />
                     </span>
                 </label>

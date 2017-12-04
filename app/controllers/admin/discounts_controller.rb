@@ -1,7 +1,7 @@
 class Admin::DiscountsController < ApplicationController
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @filterrific = initialize_filterrific(

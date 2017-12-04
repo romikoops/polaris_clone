@@ -12,7 +12,6 @@ function handleResponse(response) {
     return respJSON;
 }
 
-
 function getStoredShipment() {
     const storedShipment = JSON.parse(localStorage.getItem('shipment'));
     return storedShipment ? storedShipment : {};

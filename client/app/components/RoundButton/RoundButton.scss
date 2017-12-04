@@ -34,5 +34,11 @@
     background-color: #787878;
     color: #FFFFFF !important;
   }
-
+  .content {
+    position: relative;
+  }
+  .icon {
+    position: absolute;
+    left: -40px;
+  }
 }

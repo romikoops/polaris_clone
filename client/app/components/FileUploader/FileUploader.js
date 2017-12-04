@@ -1,7 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 import PropTypes from 'prop-types';
-import { Promise } from '@babel/polyfill';
+import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 import styles from './FileUploader.scss';
@@ -69,7 +69,7 @@ class FileUploader extends React.Component {
     }
 }
 
-FileUploader.PropTypes = {
+FileUploader.propTypes = {
     url: PropTypes.string,
     text: PropTypes.string,
     type: PropTypes.string,

@@ -48,13 +48,28 @@
     font-size: 16px;
     line-height: 18px;
   }
-
+  .banner_content {
+    z-index:3;
+  }
+  .fade {
+    height: 100%;
+    width: 100%;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    position: absolute;
+    z-index: 2;
+    background: rgba(0,10,4,0.26);
+  }
   .shop_banner {
     height: 124px;
-    background-image: url('https://assets.itsmycargo.com/assets/images/welcome/country/shipping-containers.jpg');
+    background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: 0% 85%;
     background-repeat: no-repeat;
+    position: relative;
+    text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
   }
   .shop_banner h3 {
 
@@ -83,18 +98,19 @@
 
   .fade {
     color: lightgrey;
-    margin-left: 5px;
   }
 
   .header {
     color: floralwhite;
   }
   .stage_row {
-    height: 171px;
-
+    height: 130px;
+    box-shadow: 0 2px 4px 0 rgba(black, 0.1);
   }
   .line_box {
     position: relative;
+    transform: scale(0.8);
+    padding-bottom: 10px;
   }
   .line {
     position: absolute;
@@ -102,6 +118,5 @@
     width: 739px;
     border-top: 3px solid #4A4A4A;
     margin-top: 70.5px;
-    // z-index: 20;
   }
 }

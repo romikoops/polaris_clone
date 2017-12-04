@@ -2,7 +2,7 @@ class Admin::HubsController < ApplicationController
   include ExcelTools
   before_action :require_login_and_role_is_admin
 
-  layout 'dashboard'
+  
 
   def index
     @ocean_hubs = Hub.ports
