@@ -58,6 +58,20 @@ export function users(state = {}, action) {
             return {
                 error: action.error
             };
+        case userConstants.DESTROYLOCATION_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case userConstants.DESTROYLOCATION_SUCCESS:
+            // debugger;
+            return {
+                items: state.items.filter(item => item.id !== parseInt(action.payload.id, 10))
+            };
+        case userConstants.DESTROYLOCATION_FAILURE:
+            return {
+                error: action.error
+            };
         default:
             return state;
     }

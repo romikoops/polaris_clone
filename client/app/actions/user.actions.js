@@ -83,6 +83,28 @@ function getLocations(user) {
     };
 }
 
+function destroyLocation(userId, locationId) {
+    function request() {
+        return { type: userConstants.DESTROYLOCATION_REQUEST };
+    }
+    function success(payload) {
+        return { type: userConstants.DESTROYLOCATION_SUCCESS, payload };
+    }
+    function failure(error) {
+        return { type: userConstants.DESTROYLOCATION_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService
+            .destroyLocation(userId, locationId)
+            .then(
+                payload => dispatch(success(payload)),
+                error => dispatch(failure(error))
+            );
+    };
+}
+
 function getAll() {
     function request() {
         return { type: userConstants.GETALL_REQUEST };
@@ -131,6 +153,7 @@ function _delete(id) {
 }
 export const userActions = {
     getLocations,
+    destroyLocation,
     login,
     logout,
     register,

@@ -10,14 +10,26 @@ function handleResponse(response) {
     return response.json();
 }
 
-function getLocations(user) {
+function getLocations(userId) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
     return fetch(
-        BASE_URL + '/users/' + user.id + '/locations',
+        BASE_URL + '/users/' + userId + '/locations',
+        requestOptions
+    ).then(handleResponse);
+}
+
+function destroyLocation(userId, locationId) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(
+        BASE_URL + '/users/' + userId + '/locations/' + locationId,
         requestOptions
     ).then(handleResponse);
 }
@@ -127,6 +139,7 @@ function _delete(id) {
 
 export const userService = {
     getLocations,
+    destroyLocation,
     login,
     logout,
     register,

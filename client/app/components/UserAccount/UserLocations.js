@@ -1,4 +1,4 @@
-    import React, { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserAccount.scss';
 
@@ -13,9 +13,6 @@ export class UserLocations extends Component {
 
     render() {
         const locInfo = this.props.locations;
-        if (locInfo !== undefined) {
-            // debugger;
-        }
         const locations = locInfo
             ? locInfo.map(op => {
                 return (
@@ -39,7 +36,11 @@ export class UserLocations extends Component {
                                 <div className="layout-row layout-align-center-center">
                                     <span>Edit</span>
                                       &nbsp; | &nbsp;
-                                    <span>Delete</span>
+                                    <span
+                                        onClick={() => this.props.destroyLocation(op.id)}
+                                    >
+                                          Delete
+                                    </span>
                                 </div>
                             </div>
                         </div>

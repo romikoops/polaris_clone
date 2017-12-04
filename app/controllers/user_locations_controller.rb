@@ -24,7 +24,9 @@ class UserLocationsController < ApplicationController
   end
 
   def destroy
-    
+    ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
+    ul.destroy
+    json_response({id: params[:id]}, 200)
   end
 
   private
