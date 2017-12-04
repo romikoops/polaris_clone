@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {AdminNavItem} from './AdminNavItem';
+import { v4 } from 'node-uuid';
 export class AdminNav extends Component {
     constructor(props) {
         super(props);
@@ -49,7 +50,7 @@ export class AdminNav extends Component {
         const {theme, navLink} = this.props;
         const {links} = this.state;
         const linkItems = links.map((li) =>
-            <AdminNavItem url={li.url} target={li.target} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
+            <AdminNavItem key={v4()} url={li.url} target={li.target} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
         );
         console.log(linkItems);
         return(

@@ -5,11 +5,18 @@ export class AdminHubTile extends Component {
     constructor(props) {
         super(props);
         this.handleLink = this.handleLink.bind(this);
+        this.clickEv = this.clickEv.bind(this);
     }
     handleLink() {
         const {target, navFn} = this.props;
         console.log('NAV ' + target);
         navFn(target);
+    }
+    clickEv() {
+        const {handleClick, hub } = this.props;
+        if (handleClick) {
+            handleClick(hub);
+        }
     }
     render() {
         const { theme, hub} = this.props;
@@ -26,7 +33,7 @@ export class AdminHubTile extends Component {
                     : 'black'
         };
         return(
-            <div className={`flex-none ${styles.hub_card} layout-row`} style={bg1}>
+            <div className={`flex-none ${styles.hub_card} layout-row`} style={bg1} onClick={this.clickEv}>
                 <div className={styles.fade}></div>
                 <div className={`${styles.content} layout-row`}>
                     <div className="flex-15 layout-column layout-align-start-center">
@@ -44,5 +51,6 @@ export class AdminHubTile extends Component {
 AdminHubTile.propTypes = {
     theme: PropTypes.object,
     hub: PropTypes.object,
-    navFn: PropTypes.func
+    navFn: PropTypes.func,
+    handleClick: PropTypes.func
 };

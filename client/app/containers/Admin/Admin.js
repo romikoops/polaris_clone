@@ -7,6 +7,8 @@ import { Switch, Route } from 'react-router-dom';
 import { AdminNav } from './AdminNav';
 import { AdminDashboard } from './AdminDashboard';
 import { AdminHubs } from './AdminHubs';
+import { AdminPricings } from './AdminPricings';
+import { AdminSchedules } from './AdminSchedules';
 import { AdminServiceCharges } from './AdminServiceCharges';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
@@ -25,13 +27,23 @@ class Admin extends Component {
             case 'serviceCharges':
                 dispatch(adminActions.getServiceCharges());
                 break;
+            case 'pricing':
+                dispatch(adminActions.getPricings());
+                break;
+            case 'schedules':
+                dispatch(adminActions.getSchedules());
+                break;
+            case 'trucking':
+                dispatch(adminActions.getTrucking());
+                break;
             default:
                 break;
         }
     }
     render() {
         const {theme, adminData} = this.props;
-        const {hubs, serviceCharges} = adminData;
+        const {hubs, serviceCharges, pricingData, schedules} = adminData;
+        // debugger;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                 <Header theme={theme} />
@@ -51,10 +63,20 @@ class Admin extends Component {
                                 path="/admin/hubs"
                                 render={props => <AdminHubs theme={theme} {...props} hubs={hubs} />}
                             />
+                            <Route
+
+                                path="/admin/pricings"
+                                render={props => <AdminPricings theme={theme} {...props} hubs={hubs} pricingData={pricingData} />}
+                            />
+                            <Route
+
+                                path="/admin/schedules"
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubs} schedules={schedules} />}
+                            />
                              <Route
 
                                 path="/admin/service_charges"
-                                render={props => <AdminServiceCharges theme={theme} {...props} serviceCharges={serviceCharges} />}
+                                render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} />}
                             />
                         </Switch>
                     </div>

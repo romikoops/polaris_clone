@@ -1,7 +1,7 @@
 {
-  "name": "webpack-react-redux",
+  "name": "ItsMyCargo",
   "version": "1.0.0",
-  "description": "A boilerplate for playing around with react, redux and react-router with the help of webpack.",
+  "description": "v0.9 dev version",
   "main": "index.js",
   "scripts": {
     "test": "",
@@ -39,6 +39,7 @@
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
     "react-select": "^1.0.0",
+    "react-sticky": "^6.0.1",
     "react-toggle": "^4.0.2",
     "react-transition-group": "^1.2.1",
     "redux": "^3.5.2",

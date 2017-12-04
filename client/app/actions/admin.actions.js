@@ -14,7 +14,6 @@ function getHubs() {
     function failure(error) {
         return { type: adminConstants.GET_HUBS_FAILURE, error };
     }
-    console.log(adminConstants);
     return dispatch => {
         dispatch(request());
 
@@ -38,25 +37,118 @@ function getHubs() {
 }
 function getServiceCharges() {
     function request(scData) {
-        return { type: adminConstants.GET_HUBS_REQUEST, payload: scData };
+        return { type: adminConstants.GET_SERVICE_CHARGES_REQUEST, payload: scData };
     }
     function success(scData) {
-        return { type: adminConstants.GET_HUBS_SUCCESS, payload: scData };
+        return { type: adminConstants.GET_SERVICE_CHARGES_SUCCESS, payload: scData };
     }
     function failure(error) {
-        return { type: adminConstants.GET_HUBS_FAILURE, error };
+        return { type: adminConstants.GET_SERVICE_CHARGES_FAILURE, error };
     }
-    console.log(adminConstants);
     return dispatch => {
         dispatch(request());
 
         adminService.getServiceCharges().then(
             data => {
                 dispatch(
-                    alertActions.success('Fetching Hubs successful')
+                    alertActions.success('Fetching Service Charges successful')
                 );
                 dispatch(
                     push('/admin/service_charges')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+function getPricings() {
+    function request(prData) {
+        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getPricings().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Prices successful')
+                );
+                dispatch(
+                    push('/admin/pricings')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+function getSchedules() {
+    function request(schedData) {
+        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: schedData };
+    }
+    function success(schedData) {
+        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: schedData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getSchedules().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Schedules successful')
+                );
+                dispatch(
+                    push('/admin/schedules')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getTrucking() {
+    function request(truckData) {
+        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: truckData };
+    }
+    function success(truckData) {
+        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: truckData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getTrucking().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Trucking successful')
+                );
+                dispatch(
+                    push('/admin/trucking')
                 );
                 dispatch(success(data));
             },
@@ -101,5 +193,8 @@ function getServiceCharges() {
 // }
 export const adminActions = {
     getHubs,
-    getServiceCharges
+    getServiceCharges,
+    getPricings,
+    getTrucking,
+    getSchedules
 };
