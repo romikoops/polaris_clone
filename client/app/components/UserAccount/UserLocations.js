@@ -25,9 +25,18 @@ export class UserLocations extends Component {
                                           Primary
                                       </h3>
                                   ) : (
-                                      <h3 className={`${styles.other}`}>
-                                          Other
-                                      </h3>
+                                      <div className="layout-row layout-wrap">
+                                          <div className="layout-row flex-80">
+                                              <h3 className={`${styles.other}`}>
+                                                  Other
+                                              </h3>
+                                          </div>
+                                          <div className="layout-row flex-20 layout-align-end">
+                                              <div className={`${styles.makePrimary} ${defaults.pointy}`}>
+                                                Set as primary
+                                              </div>
+                                          </div>
+                                      </div>
                                   )}
                               </div>
                               <div className={`${styles.content}`}>
@@ -35,7 +44,9 @@ export class UserLocations extends Component {
                               </div>
                               <div className={`${styles.footer}`}>
                                   <div className="layout-row layout-align-center-center">
-                                      <span className={`${defaults.pointy}`}>Edit</span>
+                                      <span className={`${defaults.pointy}`}>
+                                          Edit
+                                      </span>
                                       &nbsp; | &nbsp;
                                       <span
                                           className={`${defaults.pointy}`}
