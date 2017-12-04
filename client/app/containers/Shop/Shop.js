@@ -5,6 +5,7 @@ import Header from '../../components/Header/Header';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
+import { Loading } from '../../components/Loading/Loading';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 import { connect } from 'react-redux';
@@ -113,16 +114,18 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match } = this.props;
+        const { bookingData, theme, match, isLoading } = this.props;
 
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-
+        const loading =  isLoading ? <Loading theme={theme} /> : '';
         return (
+
             <div className="layout-row flex-100 layout-wrap">
+                {loading}
                 <Header theme={this.props.theme} />
                 <ShopStageView
                     shopType={this.state.shopType}
@@ -142,7 +145,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage1 : {}}
+                            messages={error ? error.stage1 : false}
                         />
                     )}
                 />
@@ -158,7 +161,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage2 : {}}
+                            messages={error ? error.stage2 : false}
                         />
                     )}
                 />
@@ -178,7 +181,7 @@ class Shop extends Component {
                                 request && request.stage3 ? request.stage3 : {}
                             }
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage3 : {}}
+                            messages={error ? error.stage3 : false}
                         />
                     )}
                 />
@@ -201,7 +204,7 @@ class Shop extends Component {
                                         : {}
                                 }
                                 setStage={this.selectShipmentStage}
-                                messages={error ? error.stage4 : {}}
+                                messages={error ? error.stage4 : false}
                             />
                         )}
                     />
@@ -245,12 +248,14 @@ Shop.defaultProps = {
 function mapStateToProps(state) {
     const { users, authentication, tenant, bookingData } = state;
     const { user, loggedIn } = authentication;
+    const isLoading = bookingData.loading;
     return {
         user,
         users,
         tenant,
         loggedIn,
-        bookingData
+        bookingData,
+        isLoading
     };
 }
 

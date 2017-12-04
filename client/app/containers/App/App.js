@@ -31,7 +31,7 @@ class App extends Component {
         const theme = tenant.data.theme;
         return (
             <div className="layout-fill layout-column scroll">
-                {isFetching && <Loading theme={theme} text="loading..." />}
+                {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
                 <Switch className="flex">
                     <Route
                         exact
