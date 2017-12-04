@@ -1,8 +1,6 @@
 class UserLocationsController < ApplicationController
   # before_action :require_login_and_correct_id
 
-  include Response
-
   def index
     resp = []
     user = User.find(params[:user_id])
@@ -26,7 +24,8 @@ class UserLocationsController < ApplicationController
   def destroy
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.destroy
-    json_response({id: params[:id]}, 200)
+    
+    response_handler({id: params[:id]})
   end
 
   private

@@ -87,7 +87,8 @@ function destroyLocation(userId, locationId) {
     function request() {
         return { type: userConstants.DESTROYLOCATION_REQUEST };
     }
-    function success(payload) {
+    function success(response) {
+        const payload = response.data;
         return { type: userConstants.DESTROYLOCATION_SUCCESS, payload };
     }
     function failure(error) {
@@ -99,7 +100,7 @@ function destroyLocation(userId, locationId) {
         userService
             .destroyLocation(userId, locationId)
             .then(
-                payload => dispatch(success(payload)),
+                response => dispatch(success(response)),
                 error => dispatch(failure(error))
             );
     };
