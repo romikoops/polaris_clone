@@ -1,12 +1,16 @@
 class UserLocation < ApplicationRecord
-   CATEGORIES = %w(main secondary)
+  CATEGORIES = %w(main secondary)
 
   belongs_to :user
   belongs_to :location
 
- #  validates :category, presence: true, inclusion: CATEGORIES
-  # validates :category, uniqueness: { 
-  #   scope: :user, 
+  # def  
+    
+  # end
+
+  #  validates :category, presence: true, inclusion: CATEGORIES
+  # validates :category, uniqueness: {
+  #   scope: :user,
   #   message: "'main' has already been taken by this User"
   # }, if: -> { category == 'main' }
 

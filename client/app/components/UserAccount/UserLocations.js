@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+    import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserAccount.scss';
 
 export class UserLocations extends Component {
     constructor(props) {
         super(props);
-
-        console.log(this.props);
     }
 
     componentDidMount() {
@@ -15,16 +13,18 @@ export class UserLocations extends Component {
 
     render() {
         const locInfo = this.props.locations;
-
+        if (locInfo !== undefined) {
+            // debugger;
+        }
         const locations = locInfo
             ? locInfo.map(op => {
                 return (
                     <div key={op.id} className={'flex-33'}>
                         <div className={`${styles['location-box']}`}>
                             <div className={`${styles.header}`}>
-                                {op.isPrimary ? (
+                                {op.primary ? (
                                     <h3 className={`${styles.standard}`}>
-                                          Standard
+                                          Primary
                                     </h3>
                                 ) : (
                                     <h3 className={`${styles.other}`}>

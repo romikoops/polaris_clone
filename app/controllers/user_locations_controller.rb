@@ -4,8 +4,13 @@ class UserLocationsController < ApplicationController
   include Response
 
   def index
+    resp = []
     user = User.find(params[:user_id])
-    resp = user.locations
+    locations = user.locations
+    locations.each do |loc|
+      prim = {primary: loc.is_primary_for?(user)}
+      resp << loc.attributes.merge(prim)
+    end
 
     json_response(resp, 200)
   end

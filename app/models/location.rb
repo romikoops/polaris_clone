@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
   has_many :user_locations
-  has_many :users, through: :user_locations
+  has_many :users, through: :user_locations, dependent: :destroy
   has_many :shipments
   has_many :contacts
 
@@ -103,6 +103,15 @@ class Location < ApplicationRecord
   end
 
   # Instance methods
+  def is_primary_for?(user)
+    user_loc = UserLocation.find_by(location_id: self.id, user_id: user.id)
+    if user_loc.nil?
+      raise "This 'Location' object is not associated with a user!"
+    else
+      return !!user_loc.primary
+    end
+  end
+
   def hubs_by_type(hub_type)
     hubs.where(hub_type: hub_type)
   end
