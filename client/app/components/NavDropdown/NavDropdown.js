@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './NavDropdown.scss';
+import defaults from '../../styles/default_classes.scss';
+
 export class NavDropdown extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +12,7 @@ export class NavDropdown extends Component {
         const links = this.props.linkOptions.map(op => {
             const icon = (
                 <i
-                    className={`fa ${op.fontAwesomeIcon} spacing-sm-right`}
+                    className={`fa ${op.fontAwesomeIcon} ${defaults.spacing_sm_right}`}
                     aria-hidden="true"
                 />
             );
@@ -36,7 +38,7 @@ export class NavDropdown extends Component {
                         ''
                     )}
                     <i
-                        className="fa fa-caret-down spacing-sm-left"
+                        className={`fa fa-caret-down ${defaults.spacing_sm_left}`}
                         aria-hidden="true"
                     />
                 </div>
