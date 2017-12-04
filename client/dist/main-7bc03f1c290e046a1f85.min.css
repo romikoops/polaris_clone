@@ -804,6 +804,62 @@ p.RouteResult---sched_elem---ftf7I {
   color: #2C2C2C;
   font-size: 21px;
   line-height: 24px; }
+.Loading---loader_box---3eMhX {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100; }
+
+.Loading---loader---35Bja {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: whitesmoke; }
+
+.Loading---loader_anim-enter---SNqeU {
+  opacity: 0.01; }
+
+.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.Loading---loader_anim-leave---2Cea6 {
+  opacity: 1; }
+
+.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+@keyframes Loading---dot_bulge---12l94 {
+  0%, 100% {
+    height: 10px;
+    width: 10px; }
+  50% {
+    height: 20px;
+    width: 20px; } }
+
+@keyframes Loading---infinite-spinning---1H3MP {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.Loading---dot---3PVfi, .Loading---dot1---bigVG, .Loading---dot2---IgUia, .Loading---dot3---1aXbX {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px; }
+
+.Loading---dot_row---2N1bU {
+  width: 200px;
+  height: 50px; }
 .BookingDetails---contacts_border---1gXHB {
   margin-top: 80px; }
 .RouteHubBox---hub_card---7Uyqk {
@@ -1282,38 +1338,6 @@ nav.NavSidebar---menu---3eXWA {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gMfFBUB8Kc3yAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAABmJLR0QA/wD/AP+gvaeTAAAAP0lEQVRYw+3UsQkAMAwDsPz/o29pHkjnlCKDV6PJVb8myZkKBgYGBgYGBvYg7Da+VTAwMD8GBgYGBgYGBraWBpeqjFTlGtDAAAAAAElFTkSuQmCC) left center no-repeat;
     width: 38px;
     height: 50px; }
-.Loading---loader_box---3eMhX {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 100; }
-
-.Loading---loader---35Bja {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0; }
-
-.Loading---loader_anim-enter---SNqeU {
-  opacity: 0.01; }
-
-.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
-  opacity: 1;
-  transition: opacity 500ms ease-in; }
-
-.Loading---loader_anim-leave---2Cea6 {
-  opacity: 1; }
-
-.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in; }
 .index---content_width---1PnTA {
   width: 1000px; }
 

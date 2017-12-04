@@ -8,6 +8,7 @@ import Landing from '../Landing/Landing';
 import Shop from '../Shop/Shop';
 import { Footer } from '../../components/Footer/Footer';
 import UserAccount from '../UserAccount/UserAccount';
+import Admin from '../Admin/Admin';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
@@ -43,6 +44,10 @@ class App extends Component {
                         render={props => <Shop theme={theme} {...props} />}
                     />
                     <Route
+                        path="/admin"
+                        render={props => <Admin theme={theme} {...props} />}
+                    />
+                    <Route
                         path="/signout"
                         render={props => <SignOut theme={theme} {...props} />}
                     />
@@ -57,7 +62,7 @@ class App extends Component {
                         ''
                     )}
                 </Switch>
-                <Footer theme={theme} tenant={tenant}/>
+                <Footer theme={theme} tenant={tenant.data}/>
             </div>
         );
     }
