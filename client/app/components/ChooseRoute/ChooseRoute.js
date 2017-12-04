@@ -119,7 +119,7 @@ export class ChooseRoute extends Component {
                     <div className="flex-20 layout-row layout-wrap">
                         <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>
                     </div>
-                    <div className="flex-80 layout-row layout-wrap">
+                    <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row">
                             <BestRoutesBox theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
