@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './BookingDetails.scss';
+import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
-import defaults from '../../styles/default_classes.scss';
+
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
@@ -175,7 +176,6 @@ export class BookingDetails extends Component {
         const ind = parseInt(targetKeys[1], 10);
         const notifyees = this.state.notifyees;
         notifyees[ind][targetKeys[2]] = value;
-        console.log(notifyees[ind]);
         this.setState({
             notifyees: notifyees
         });
@@ -272,9 +272,9 @@ export class BookingDetails extends Component {
                     totalGoodsValue={this.state.totalGoodsValue}
                     handleInsurance
                 />
-                <div className="flex-100 layout-row layout-align-center-center">
-                    <div className={`${defaults.content_width} layout-row layout-align-start-center ${defaults.button_padding}`}>
-                        <div className="flex-33 layout-row layout-align-start-center">
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
+                        <div className="flex-none layout-row">
                             <RoundButton
                                 active
                                 handleNext={this.toNextStage}
@@ -282,7 +282,7 @@ export class BookingDetails extends Component {
                                 text="Finish Booking"
                             />
                         </div>
-                        <div className="flex-33 layout-row layout-align-start-center">
+                        <div className="flex-none offset-5 layout-row">
                             <RoundButton
                                 handleNext={this.saveDraft}
                                 text="Save as Draft"
@@ -291,22 +291,18 @@ export class BookingDetails extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="flex-100 layout-row layout-align-center-center">
-                    <div className={`${defaults.content_width} layout-row layout-align-start-center ${defaults.button_padding}`}>
-                        <RoundButton
-                            back
-                            handleNext={this.toDashboard}
-                            text="Back to Dashboard"
-                            iconClass="fa-angle-left"
-                        />
-                    </div>
+                <hr className={`${styles.sec_break} flex-100`}/>
+                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                  <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
+                  </div>
                 </div>
             </div>
         );
     }
 }
 
-BookingDetails.propTypes = {
+BookingDetails.PropTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     nextStage: PropTypes.func

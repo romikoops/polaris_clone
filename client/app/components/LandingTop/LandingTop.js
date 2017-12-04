@@ -9,14 +9,7 @@ import Header from '../Header/Header';
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
 export class LandingTop extends Component {
     render() {
-        console.log(this.props);
-        // let logo;
         const theme = this.props.theme;
-        // if (theme) {
-        //     logo = theme.logoLarge;
-        // } else {
-        //     logo = '';
-        // }
         return (
             <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>
                 <div className={styles.top_mask}> </div>

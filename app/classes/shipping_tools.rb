@@ -94,12 +94,12 @@ module ShippingTools
     when 'openlcl'
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
-    # begin
-    offer_calculation.calc_offer!
-    # rescue
-    #   # @no_transport_available = true
-    #   return {error: "No routes found. Please check you inputs and try again.", type: 'error'}
-    # end
+
+    begin
+      offer_calculation.calc_offer!
+    rescue
+      raise ApplicationError::NoRoutes
+    end
 
     @shipment = offer_calculation.shipment
     @shipment.save!

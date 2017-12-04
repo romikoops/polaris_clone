@@ -4,11 +4,12 @@ import { BASE_URL } from '../constants';
 
 function handleResponse(response) {
     const promise = Promise;
+    const respJSON = response.json();
     if (!response.ok) {
-        return promise.reject(response.statusText);
+        return promise.reject(respJSON);
     }
 
-    return response.json();
+    return respJSON;
 }
 
 function getStoredShipment() {

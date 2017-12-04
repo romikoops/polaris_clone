@@ -7,9 +7,9 @@ export class AdminNavItem extends Component {
         this.handleLink = this.handleLink.bind(this);
     }
     handleLink() {
-        const {url, navFn} = this.props;
-        console.log('NAV ' + url);
-        navFn(url);
+        const {target, navFn} = this.props;
+        console.log('NAV ' + target);
+        navFn(target);
     }
     render() {
         const { iconClass, theme, text} = this.props;

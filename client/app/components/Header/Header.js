@@ -8,13 +8,11 @@ import defs from '../../styles/default_classes.scss';
 class Header extends Component {
     constructor(props) {
         super(props);
-
-        // console.log(props);
     }
 
     render() {
         const { user, theme } = this.props;
-        const dropDownText = user ? user.data.first_name + ' ' + user.data.last_name : '';
+        const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
         const accountLinks = [
             {

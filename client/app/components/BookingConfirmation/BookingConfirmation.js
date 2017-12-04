@@ -56,7 +56,7 @@ export class BookingConfirmation extends Component {
 
       const nArray = [];
       if (notifyees) {
-          notifyees.forEach(n => {
+        notifyees.forEach(n => {
             nArray.push(
               <div key={v4()} className="flex-33 layout-row">
                 <div className="flex-15 layout-column layout-align-start-center">
@@ -73,10 +73,10 @@ export class BookingConfirmation extends Component {
                 </div>
               </div>
             );
-          });
+         });
       }
 
-     return (
+        return (
             <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-wrap layout-align-center">
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start'}>
@@ -186,20 +186,14 @@ export class BookingConfirmation extends Component {
                         </div>
                     </div>
                 </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
-                    </div>
+                <hr className={`${styles.sec_break} flex-100`}/>
+                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                  <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" />
+                  </div>
                 </div>
-            <hr className={`${styles.sec_break} flex-100`}/>
-            <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-              <div className="flex-none content-width layout-row layout-align-start-center">
-                <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
-              </div>
             </div>
-            <div className={`${styles.pre_footer_break} flex-100`}></div>
-        </div>
-      );
+        );
     }
 }
 BookingConfirmation.propTypes = {

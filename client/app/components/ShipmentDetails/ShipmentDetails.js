@@ -15,7 +15,6 @@ import defaults from '../../styles/default_classes.scss';
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             origin: {
                 street: '',
@@ -206,10 +205,6 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // }
-
         const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
         if (shipmentData.data) {
@@ -260,10 +255,7 @@ export class ShipmentDetails extends Component {
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
-        const flash = messages ? <FlashMessages messages={messages} /> : '';
+        const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         const future = {
             after: new Date(),
         };
@@ -283,7 +275,7 @@ export class ShipmentDetails extends Component {
                             </p>
                             <div className={'flex-none layout-row ' + styles.dpb}>
                                 <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
-                                    <i className="flex-none fa fa-calendar" style={textStyle}></i>
+                                    <i className="flex-none fa fa-calendar"></i>
                                 </div>
                                 <DayPickerInput
                                     name="birthday"
@@ -348,5 +340,6 @@ ShipmentDetails.propTypes = {
     shipmentData: PropTypes.object,
     history: PropTypes.object,
     match: PropTypes.object,
-    setShipmentDetails: PropTypes.func
+    setShipmentDetails: PropTypes.func,
+    messages: PropTypes.array
 };

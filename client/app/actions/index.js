@@ -2,6 +2,7 @@ import * as types from './types';
 export * from './alert.actions';
 export * from './user.actions';
 export * from './shipment.actions';
+export * from './admin.actions';
 
 export function filterTable(filter) {
     return {

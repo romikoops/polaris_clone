@@ -1,5 +1,6 @@
 class Admin::ServiceChargesController < ApplicationController
   include ExcelTools
+  include Response
   before_action :require_login_and_role_is_admin
 
   
@@ -7,13 +8,18 @@ class Admin::ServiceChargesController < ApplicationController
   def index
     # @import_charges = ServiceCharge.where(trade_direction: "import")
     @service_charges = ServiceCharge.all
+    handle_response(@service_charges)
     # @export_charges = ServiceCharge.where(trade_direction: "export")
   end
 
   def overwrite
-    overwrite_service_charges(params)
-
-    redirect_to :back
+    if params[:file]
+      req = {'xlsx' => params[:file]}
+      overwrite_service_charges(req)
+      json_response(true, 200)
+    else
+      json_response(false, 200)
+    end
   end
 
   private
