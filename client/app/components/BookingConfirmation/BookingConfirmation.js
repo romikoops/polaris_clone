@@ -192,7 +192,6 @@ export class BookingConfirmation extends Component {
                     <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" />
                   </div>
                 </div>
-                <div className={`${styles.pre_footer_break} flex-100`}></div>
             </div>
         );
     }

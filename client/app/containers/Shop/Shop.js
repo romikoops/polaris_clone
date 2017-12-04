@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment';
 import Header from '../../components/Header/Header';
+import styles from './Shop.scss';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
@@ -222,6 +223,7 @@ class Shop extends Component {
                         />
                     )}
                 />
+                <div className={`${styles.pre_footer_break} flex-100`}></div>
             </div>
         );
     }
