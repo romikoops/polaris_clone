@@ -57,7 +57,6 @@ export class RouteSelector extends Component {
         } else {
             routesArr = privRoutes;
         }
-        console.log(routesArr.length);
         return (
 
         <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>

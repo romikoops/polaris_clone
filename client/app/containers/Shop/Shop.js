@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment';
 import Header from '../../components/Header/Header';
+import styles from './Shop.scss';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
@@ -115,13 +116,13 @@ class Shop extends Component {
         // };
 
         const { bookingData, theme, match, isLoading } = this.props;
-
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
         const loading =  isLoading ? <Loading theme={theme} /> : '';
+
         return (
 
             <div className="layout-row flex-100 layout-wrap">
@@ -145,7 +146,7 @@ class Shop extends Component {
                             shipmentTypes={this.state.shipmentOptions}
                             selectShipment={this.selectShipmentType}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage1 : false}
+                            messages={error ? error.stage1 : []}
                         />
                     )}
                 />
@@ -161,7 +162,7 @@ class Shop extends Component {
                             }
                             setShipmentDetails={this.setShipmentData}
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage2 : false}
+                            messages={error ? error.stage2 : []}
                         />
                     )}
                 />
@@ -178,10 +179,10 @@ class Shop extends Component {
                                     : {}
                             }
                             prevRequest={
-                                request && request.stage3 ? request.stage3 : {}
+                                request && request.stage3 ? request.stage3 : null
                             }
                             setStage={this.selectShipmentStage}
-                            messages={error ? error.stage3 : false}
+                            messages={error ? error.stage3 : []}
                         />
                     )}
                 />
@@ -201,10 +202,10 @@ class Shop extends Component {
                                 prevRequest={
                                     request && request.stage4
                                         ? request.stage4
-                                        : {}
+                                        : null
                                 }
                                 setStage={this.selectShipmentStage}
-                                messages={error ? error.stage4 : false}
+                                messages={error ? error.stage4 : []}
                             />
                         )}
                     />
@@ -222,6 +223,7 @@ class Shop extends Component {
                         />
                     )}
                 />
+                <div className={`${styles.pre_footer_break} flex-100`}></div>
             </div>
         );
     }

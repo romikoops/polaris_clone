@@ -1,4 +1,37 @@
+.DayPickerInput-OverlayWrapper {
+	z-index: 9999;
+}
 :local {
+	.filterbox {
+		height: fit-content;
+		padding: 25px;
+		background-color: #FCFCFC;
+		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
+	}
+	.dpb{
+	  height: 36px;
+	  width: 160px;
+	}
+	.dpb_icon {
+	  height: 38px;
+	  width: 38px;
+	  border: 1px solid #F2F2F2;
+	  border-radius: 3px 0 0 3px;
+	  background-color: #F9F9F9;
+	  box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);    
+	  i {
+	    font-size: 20px;
+	  }
+	}
+	.dpb_picker {
+	  height: 36px;
+	  width: calc(100% - 20px);
+	  border: 1px solid #F2F2F2;
+	  border-radius: 0 3px 3px 0;
+	  background-color: #F9F9F9;
+	  box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+	  padding: 0 9px;
+	}
 	.transit_time_labels {
 		display: flex;
 		justify-content: space-between;

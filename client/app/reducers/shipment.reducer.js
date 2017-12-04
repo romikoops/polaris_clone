@@ -17,7 +17,7 @@ export function shipment(state = {}, action) {
             };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             const err1 = merge({}, state, {
-                error: { stage1: action.error }
+                error: { stage1: [ action.error ] }
             });
             return err1;
 
@@ -29,7 +29,7 @@ export function shipment(state = {}, action) {
             return action.shipmentData;
         case shipmentConstants.GET_SHIPMENT_FAILURE:
             const errG = merge({}, state, {
-                error: { get: action.error }
+                error: { get: [ action.error ] }
             });
             return errG;
 
@@ -51,7 +51,7 @@ export function shipment(state = {}, action) {
         // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
             const err2 = merge({}, state, {
-                error: { stage2: action.error },
+                error: { stage2: [ action.error ] },
                 loading: false
             });
             return err2;
@@ -69,7 +69,7 @@ export function shipment(state = {}, action) {
             return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             const err3 = merge({}, state, {
-                error: { stage3: action.error },
+                error: { stage3: [ action.error ] },
                 loading: false
             });
             return err3;
@@ -87,7 +87,7 @@ export function shipment(state = {}, action) {
             return resp4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
             const err4 = merge({}, state, {
-                error: { stage3: action.error },
+                error: { stage3: [ action.error ] },
                 loading: false
             });
             return err4;
@@ -118,7 +118,7 @@ export function shipment(state = {}, action) {
                         const { deleting, ...userCopy } = user;
                         console.log(deleting);
                         // return copy of user with 'deleteError:[error]' property
-                        return { ...userCopy, deleteError: action.error };
+                        return { ...userCopy, deleteError: [ action.error ] };
                     }
 
                     return user;

@@ -32,71 +32,72 @@ export class RouteFilterBox extends Component {
     render() {
         const { theme } = this.props;
         return (
-            <div
-                className={`${
-                    styles.filterbox
-                } flex-100 layout-row layout-wrap`}
-            >
+            <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
-                    <div className="">
-                        <p> Pickup date </p>
+                    <p> Pickup date </p>
+
+                    <div className={'flex-none layout-row ' + styles.dpb}>
+                        <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
+                            <i className="flex-none fa fa-calendar"></i>
+                        </div>
                         <DayPickerInput
                             placeholder="DD/MM/YYYY"
                             format="DD/MM/YYYY"
+                            className={styles.dpb_picker}
                             value={this.state.selectedDay}
                             onDayChange={this.editFilterDay}
                         />
                     </div>
-                    <div className={styles.mode_of_transport}>
-                        <p>Mode of transport</p>
-                        <div className="radio">
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="air"
-                                    checked={
-                                        this.state.selectedOption === 'air'
-                                    }
-                                    onChange={this.handleOptionChange}
-                                />
-                                <i className="fa fa-plane" />
-                                Air
-                            </label>
-                        </div>
-                        <div className="radio">
-                            <label>
-                                <input
-                                    type="radio"
-                                    value="ocean"
-                                    checked={
-                                        this.state.selectedOption === 'ocean'
-                                    }
-                                    onChange={this.handleOptionChange}
-                                />
-                                <i className="fa fa-ship" />
-                                Ocean
-                            </label>
-                        </div>
-                    </div>
-                    <div className={styles.transit_time}>
-                        <p>Transit time</p>
-                        <input
-                            type="range"
-                            value={this.props.durationFilter}
-                            onChange={this.setFilterDuration}
-                        />
-                        <div className={styles.transit_time_labels}>
-                            <p>20 days</p>
-                            <p>100 days</p>
-                        </div>
-                    </div>
-                    <RoundButton
-                        size="small"
-                        text="save filter"
-                        theme={theme}
-                        active
-                    />
                 </div>
+                <div className={styles.mode_of_transport}>
+                    <p>Mode of transport</p>
+                    <div className="radio">
+                        <label>
+                            <input
+                                type="radio"
+                                value="air"
+                                checked={
+                                    this.state.selectedOption === 'air'
+                                }
+                                onChange={this.handleOptionChange}
+                            />
+                            <i className="fa fa-plane" />
+                            Air
+                        </label>
+                    </div>
+                    <div className="radio">
+                        <label>
+                            <input
+                                type="radio"
+                                value="ocean"
+                                checked={
+                                    this.state.selectedOption === 'ocean'
+                                }
+                                onChange={this.handleOptionChange}
+                            />
+                            <i className="fa fa-ship" />
+                            Ocean
+                        </label>
+                    </div>
+                </div>
+                <div className={styles.transit_time}>
+                    <p>Transit time</p>
+                    <input
+                        type="range"
+                        value={this.props.durationFilter}
+                        onChange={this.setFilterDuration}
+                    />
+                    <div className={styles.transit_time_labels}>
+                        <p>20 days</p>
+                        <p>100 days</p>
+                    </div>
+                </div>
+                <RoundButton
+                    size="full"
+                    text="save filter"
+                    theme={theme}
+                    active
+                />
             </div>
         );
     }

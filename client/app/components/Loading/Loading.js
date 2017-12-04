@@ -102,9 +102,7 @@ export class Loading extends Component {
         );
     }
 }
-
 Loading.propTypes = {
     theme: PropTypes.object,
     text: PropTypes.string
-
 };
