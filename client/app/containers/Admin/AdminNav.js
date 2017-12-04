@@ -9,32 +9,38 @@ export class AdminNav extends Component {
                 {
                     icon: 'fa-tachometer',
                     text: 'Dashboard',
-                    url: '/admin/dashboard'
+                    url: '/admin/dashboard',
+                    target: 'dashboard'
                 },
                 {
                     icon: 'fa-building-o',
                     text: 'Hubs',
-                    url: '/admin/hubs'
+                    url: '/admin/hubs',
+                    target: 'hubs'
                 },
                 {
                     icon: 'fa-calculator',
                     text: 'Service Charges',
-                    url: '/admin/service_charges'
+                    url: '/admin/service_charges',
+                    target: 'serviceCharges'
                 },
                 {
                     icon: 'fa-area-chart',
                     text: 'Pricing',
-                    url: '/admin/pricing'
+                    url: '/admin/pricing',
+                    target: 'pricing'
                 },
                 {
                     icon: 'fa-list',
                     text: 'Schedules',
-                    url: '/admin/schedules'
+                    url: '/admin/schedules',
+                    target: 'schedules'
                 },
                 {
                     icon: 'fa-truck',
                     text: 'Trucking',
-                    url: '/admin/trucking'
+                    url: '/admin/trucking',
+                    target: 'trucking'
                 }
             ]
         };
@@ -43,7 +49,7 @@ export class AdminNav extends Component {
         const {theme, navLink} = this.props;
         const {links} = this.state;
         const linkItems = links.map((li) =>
-            <AdminNavItem url={li.url} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
+            <AdminNavItem url={li.url} target={li.target} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
         );
         console.log(linkItems);
         return(

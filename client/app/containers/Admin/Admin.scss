@@ -1,0 +1,15 @@
+:local {
+  .sec_title {
+    height: 75px;
+  }
+  .sec_title p {
+    margin: 0;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 30px;
+
+  }
+  .sec_upload {
+    height: 150px;
+  }
+}

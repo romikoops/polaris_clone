@@ -33,9 +33,11 @@ export function configureStore() {
         DevTools.instrument()
     ));
     store.subscribe(throttle(() => {
+        const oldState = store.getState();
         saveState({
-            bookingData: store.getState().bookingData,
-            tenant: store.getState().tenant
+            bookingData: oldState.bookingData,
+            tenant: oldState.tenant,
+            admin: oldState.admin
         });
     }), 1000);
     if (module.hot) {

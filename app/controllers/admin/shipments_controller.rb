@@ -1,8 +1,6 @@
 class Admin::ShipmentsController < ApplicationController
   before_action :require_login_and_role_is_admin
 
-  
-
   def index
     @documents = {}
     @requested_shipments = Shipment.where(status: "requested")

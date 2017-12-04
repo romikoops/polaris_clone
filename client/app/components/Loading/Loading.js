@@ -25,12 +25,12 @@ export class Loading extends Component {
                 0%, 100% {
                   height: 10px;
                   width: 10px;
-                  background: ${theme.colors.primary};
+                  background: ${theme && theme.colors ? theme.colors.primary : 'black'};
                 }
                 50% {
                   height: 20px;
                   width: 20px;
-                  background: ${theme.colors.secondary};
+                  background: ${theme && theme.colors ? theme.colors.secondary : 'black'};
                 }
         `;
         // const Logo = () => {

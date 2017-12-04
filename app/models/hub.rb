@@ -19,6 +19,14 @@ class Hub < ApplicationRecord
   def self.ports
     self.where(hub_type: "ocean")
   end
+  def self.prepped_ports
+    ports = self.where(hub_type: "ocean")
+    resp = []
+    ports.each do |po|
+      resp << {data: po, location: po.nexus}
+    end
+    resp
+  end
 
   def self.air_ports
     self.where(hub_type: "air")

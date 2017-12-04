@@ -8,7 +8,7 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_HUBS_SUCCESS:
             return {
-                hubs: action.shipmentData,
+                hubs: action.payload,
                 loading: false
             };
         case adminConstants.GET_HUBS_FAILURE:
@@ -22,7 +22,7 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_SHIPMENTS_SUCCESS:
             return {
-                shipments: action.shipmentData,
+                shipments: action.payload,
                 loading: false
             };
         case adminConstants.GET_SHIPMENTS_FAILURE:
@@ -36,7 +36,7 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_SCHEDULES_SUCCESS:
             return {
-                schedules: action.shipmentData,
+                schedules: action.payload,
                 loading: false
             };
         case adminConstants.GET_SCHEDULES_FAILURE:
@@ -50,7 +50,7 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_TRUCKING_SUCCESS:
             return {
-                trucking: action.shipmentData,
+                trucking: action.payload,
                 loading: false
             };
         case adminConstants.GET_TRUCKING_FAILURE:
@@ -65,7 +65,7 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_PRICINGS_SUCCESS:
             return {
-                pricings: action.shipmentData,
+                pricings: action.payload,
                 loading: false
             };
         case adminConstants.GET_PRICINGS_FAILURE:
@@ -79,12 +79,12 @@ export function admin(state = {}, action) {
             };
         case adminConstants.GET_SERVICE_CHARGES_SUCCESS:
             return {
-                hubs: action.shipmentData,
+                serviceCharges: action.payload,
                 loading: false
             };
         case adminConstants.GET_SERVICE_CHARGES_FAILURE:
             const errSC = merge({}, state, {
-                error: { hubs: action.error }
+                error: { serviceCharges: action.error }
             });
             return errSC;
         default:

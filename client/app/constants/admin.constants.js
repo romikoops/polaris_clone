@@ -27,3 +27,26 @@ export const adminConstants = {
     FETCH_SHIPMENT_SUCCESS: 'FETCH_SHIPMENT_SUCCESS',
     FETCH_SHIPMENT_FAILURE: 'FETCH_SHIPMENT_FAILURE'
 };
+
+export const serviceChargeNames = {
+    effective_date: 'Effective Date',
+    expiration_date: 'Expiration Date',
+    terminal_handling_cbm: 'Terminal handling / CBM',
+    terminal_handling_ton: 'Terminal Handling /Ton',
+    terminal_handling_min: 'Terminal Handling Min',
+    lcl_service_cbm: 'LCL Service /CBM',
+    lcl_service_ton: 'LCL Service /Ton',
+    lcl_service_min: 'LCL Service Min',
+    isps: 'ISPS',
+    exp_declaration: 'Export Declaration',
+    extra_hs_code: 'Extra HS Code',
+    doc_fee: 'Document Fee',
+    liner_service_fee: 'Liner Service Fee',
+    vgm_fee: 'VGM Fee',
+    security_fee: 'Security Fee',
+    documentation_fee: 'Documentation Fee',
+    handling_fee: 'Handling Fee',
+    customs_clearance: 'Customs Clearance',
+    cfs_terminal_charges: 'CFS Terminal Charges',
+    misc_fees: 'Miscellaneous Fees'
+};

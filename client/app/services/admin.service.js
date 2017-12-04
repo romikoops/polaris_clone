@@ -17,7 +17,16 @@ function getHubs() {
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/admins/hubs', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
+}
+
+function getServiceCharges() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/service_charges', requestOptions).then(handleResponse);
 }
 
 // function getShipment(id) {
@@ -73,5 +82,6 @@ function getHubs() {
 
 
 export const adminService = {
-    getHubs
+    getHubs,
+    getServiceCharges
 };
