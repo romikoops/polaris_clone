@@ -58,13 +58,12 @@ export class RouteSelector extends Component {
             routesArr = privRoutes;
         }
         return (
-
-        <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
-            <div className={`${defs.content_width} layout-row layout-wrap`}>
-              <div className="flex-100 layout-row layout-wrap">
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                    <div className="flex-none ayput-row layout-align-start-center">
-                        <h4 className="flex-none"> Available Routes</h4>
+            <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
+                <div className={`${defs.content_width} layout-row layout-wrap`}>
+                    <div className="flex-100 layout-row layout-wrap">
+                        <div className="flex-100 layout-row layout-align-space-between-center">
+                            <div className="flex-none ayput-row layout-align-start-center">
+                                <h4 className="flex-none"> Available Routes</h4>
                             </div>
                             <div className="flex-none layout-row layout-align-end-center">
                                 <h4 className="flex-none">
@@ -88,7 +87,6 @@ export class RouteSelector extends Component {
                                 {routesArr}
                             </CSSTransitionGroup>
                         </div>
-
                     </div>
                 </div>
             </div>

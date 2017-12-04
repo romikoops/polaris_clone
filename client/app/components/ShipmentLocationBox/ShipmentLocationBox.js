@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
-import 'react-toggle/style.css';
+import '../../styles/react-toggle.scss';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
@@ -605,6 +605,7 @@ export class ShipmentLocationBox extends Component {
             }
             return '';
         };
+        const { theme } = this.props;
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
@@ -617,7 +618,8 @@ export class ShipmentLocationBox extends Component {
                                     id="has_pre_carriage"
                                     name="has_pre_carriage"
                                     defaultChecked={this.state.shipment.has_pre_carriage}
-                                    onChange={this.handleTrucking} />
+                                    onChange={this.handleTrucking}
+                                />
                                 <label htmlFor="pre-carriage">Pre-Carriage</label>
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
@@ -633,7 +635,8 @@ export class ShipmentLocationBox extends Component {
                                     id="has_on_carriage"
                                     name="has_on_carriage"
                                     defaultChecked={this.state.shipment.has_on_carriage}
-                                    onChange={this.handleTrucking} />
+                                    onChange={this.handleTrucking}
+                                />
                                 <label htmlFor="on-carriage">On-Carriage</label>
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
@@ -649,6 +652,11 @@ export class ShipmentLocationBox extends Component {
                         <div ref="map" id="map" style={mapStyle} />
                     </div>
                 </div>
+                <style dangerouslySetInnerHTML={{__html: `
+                    .react-toggle--checked .react-toggle-track {
+                        background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                    }
+                `}} />
             </div>
         );
     }
