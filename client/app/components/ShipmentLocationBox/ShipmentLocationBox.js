@@ -6,6 +6,7 @@ import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
+import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
     height: '400px'
@@ -428,9 +429,27 @@ export class ShipmentLocationBox extends Component {
                 nexuses.push({ value: nex, label: nex.name });
             });
         }
+        const StyledSelect = styled(Select)`
+            .Select-control {
+                background-color: #F9F9F9;
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2 !important;
+            }
+            .Select-menu-outer {
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2;
+            }
+            .Select-value {
+                background-color: #F9F9F9;
+                border: 1px solid #F2F2F2;
+            }
+            .Select-option {
+                background-color: #F9F9F9;
+            }
+        `;
 
         const originHubSelect = (
-            <Select
+            <StyledSelect
                 name="origin-hub"
                 className={`${styles.select}`}
                 value={this.state.oSelect}
@@ -440,7 +459,7 @@ export class ShipmentLocationBox extends Component {
         );
 
         const destinationHubSelect = (
-            <Select
+            <StyledSelect
                 name="destination-hub"
                 className={`${styles.select}`}
                 value={this.state.dSelect}
