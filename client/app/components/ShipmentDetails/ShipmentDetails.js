@@ -255,9 +255,6 @@ export class ShipmentDetails extends Component {
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         const future = {
             after: new Date(),
