@@ -195,7 +195,6 @@ export class ShipmentDetails extends Component {
         data.shipment.has_on_carriage = this.state.has_on_carriage;
         data.shipment.has_pre_carriage = this.state.has_pre_carriage;
         data.shipment.planned_pickup_date = this.state.selectedDay;
-        debugger;
         this.props.setShipmentDetails(data);
     }
 

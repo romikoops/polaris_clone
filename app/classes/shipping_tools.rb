@@ -189,9 +189,10 @@ module ShippingTools
     end
     if shipment_data[:insurance][:bool]
       key = @shipment.generated_fees.first[0]
-      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance], currency: "EUR"}
-      @shipment.generated_fees[key][:total] += shipment_data[:insurance]
-      @shipment.total_price = @shipment.generated_fees[key][:total]
+      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
+      @shipment.generated_fees[key]["total"] += shipment_data[:insurance][:val]
+      @shipment.total_price = @shipment.generated_fees[key]["total"]
+
     end
     @shipment.shipper_location = new_loc
     @shipment.save!
