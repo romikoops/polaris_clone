@@ -35,7 +35,6 @@ export class RouteFilterBox extends Component {
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
                     <p> Pickup date </p>
-
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
