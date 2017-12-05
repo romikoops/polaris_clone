@@ -8,7 +8,7 @@ export function users(state = {}, action) {
             };
         case userConstants.GETALL_SUCCESS:
             return {
-                items: action.users
+                items: action.payload
             };
         case userConstants.GETALL_FAILURE:
             return {
@@ -48,11 +48,12 @@ export function users(state = {}, action) {
             };
         case userConstants.GETLOCATIONS_REQUEST:
             return {
+                ...state,
                 loading: true
             };
         case userConstants.GETLOCATIONS_SUCCESS:
             return {
-                items: action.locations
+                items: action.payload
             };
         case userConstants.GETLOCATIONS_FAILURE:
             return {
@@ -64,11 +65,25 @@ export function users(state = {}, action) {
                 loading: true
             };
         case userConstants.DESTROYLOCATION_SUCCESS:
-            // debugger;
             return {
-                items: state.items.filter(item => item.id !== parseInt(action.payload.id, 10))
+                items: state.items.filter(
+                    item => item.id !== parseInt(action.payload.id, 10)
+                )
             };
         case userConstants.DESTROYLOCATION_FAILURE:
+            return {
+                error: action.error
+            };
+        case userConstants.MAKEPRIMARY_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case userConstants.MAKEPRIMARY_SUCCESS:
+            return {
+                items: action.payload
+            };
+        case userConstants.MAKEPRIMARY_FAILURE:
             return {
                 error: action.error
             };

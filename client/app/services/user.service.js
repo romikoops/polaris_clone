@@ -34,6 +34,18 @@ function destroyLocation(userId, locationId) {
     ).then(handleResponse);
 }
 
+function makePrimary(userId, locationId) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: authHeader()
+    };
+
+    return fetch(
+        BASE_URL + '/users/' + userId + '/locations/' + locationId,
+        requestOptions
+    ).then(handleResponse);
+}
+
 function login(username, password) {
     const requestOptions = {
         method: 'POST',
@@ -140,6 +152,7 @@ function _delete(id) {
 export const userService = {
     getLocations,
     destroyLocation,
+    makePrimary,
     login,
     logout,
     register,

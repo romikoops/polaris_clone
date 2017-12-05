@@ -45,4 +45,12 @@
     cursor: pointer;
   }
 
+  .emulate_link {
+    cursor: pointer;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
 }

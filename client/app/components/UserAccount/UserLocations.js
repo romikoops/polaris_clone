@@ -32,8 +32,17 @@ export class UserLocations extends Component {
                                               </h3>
                                           </div>
                                           <div className="layout-row flex-20 layout-align-end">
-                                              <div className={`${styles.makePrimary} ${defaults.pointy}`}>
-                                                Set as primary
+                                              <div
+                                                  className={`${
+                                                      styles.makePrimary
+                                                  } ${defaults.pointy}`}
+                                                  onClick={() =>
+                                                      this.props.makePrimary(
+                                                          op.id
+                                                      )
+                                                  }
+                                              >
+                                                  Set as primary
                                               </div>
                                           </div>
                                       </div>
@@ -44,12 +53,14 @@ export class UserLocations extends Component {
                               </div>
                               <div className={`${styles.footer}`}>
                                   <div className="layout-row layout-align-center-center">
-                                      <span className={`${defaults.pointy}`}>
+                                      <span
+                                          className={`${defaults.emulate_link}`}
+                                      >
                                           Edit
                                       </span>
                                       &nbsp; | &nbsp;
                                       <span
-                                          className={`${defaults.pointy}`}
+                                          className={`${defaults.emulate_link}`}
                                           onClick={() =>
                                               this.props.destroyLocation(op.id)
                                           }

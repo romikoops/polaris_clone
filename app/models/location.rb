@@ -102,6 +102,14 @@ class Location < ApplicationRecord
     nexuses_client(client).pluck(:id, :name).to_h.invert
   end
 
+  def self.all_with_primary_for(user)
+    locations = user.locations
+    locations.map do |loc|
+      prim = {primary: loc.is_primary_for?(user)}
+      loc.attributes.merge(prim)
+    end
+  end
+
   # Instance methods
   def is_primary_for?(user)
     user_loc = UserLocation.find_by(location_id: self.id, user_id: user.id)
