@@ -13,7 +13,7 @@ class Button extends Component {
         // Toggle the state every second
     }
     render() {
-        let display = this.props.text;
+        const display = this.props.text;
         return (
           <button className="btn_style"> {display} </button>
         );

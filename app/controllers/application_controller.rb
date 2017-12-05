@@ -4,8 +4,8 @@ class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include Response
 
-  rescue_from ApplicationError do |ex|
-    response_handler(ex)
+  rescue_from ApplicationError do |error|
+    response_handler(error)
   end
 
   def response_handler(res)

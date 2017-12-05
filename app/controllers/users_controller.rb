@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
   # before_action :require_login_and_correct_id
 
-  
-
   def home
     @pricings = current_user.pricings
   end

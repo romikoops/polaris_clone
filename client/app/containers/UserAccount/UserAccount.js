@@ -28,6 +28,8 @@ export class UserAccount extends Component {
 
         this.toggleActiveClass = this.toggleActiveClass.bind(this);
         this.getLocations = this.getLocations.bind(this);
+        this.destroyLocation = this.destroyLocation.bind(this);
+        this.makePrimary = this.makePrimary.bind(this);
     }
 
     toggleActiveClass(key) {
@@ -36,7 +38,17 @@ export class UserAccount extends Component {
 
     getLocations() {
         const { dispatch, user } = this.props;
-        dispatch(userActions.getLocations(user.data));
+        dispatch(userActions.getLocations(user.data.id));
+    }
+
+    destroyLocation(locationId) {
+        const { dispatch, user } = this.props;
+        dispatch(userActions.destroyLocation(user.data.id, locationId));
+    }
+
+    makePrimary(locationId) {
+        const { dispatch, user } = this.props;
+        dispatch(userActions.makePrimary(user.data.id, locationId));
     }
 
     render() {
@@ -56,6 +68,8 @@ export class UserAccount extends Component {
                     <UserLocations
                         locations={this.props.users.items}
                         getLocations={this.getLocations}
+                        destroyLocation={this.destroyLocation}
+                        makePrimary={this.makePrimary}
                     />
                 );
                 break;
