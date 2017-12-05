@@ -3,56 +3,64 @@ import merge from 'lodash/merge';
 export function admin(state = {}, action) {
     switch (action.type) {
         case adminConstants.GET_HUBS_REQUEST:
-            return {
+            const reqHubs = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqHubs;
         case adminConstants.GET_HUBS_SUCCESS:
-            return {
-                hubs: action.payload,
+            const succHubs = merge({}, state, {
+                hubs: action.payload.data,
                 loading: false
-            };
+            });
+            return succHubs;
         case adminConstants.GET_HUBS_FAILURE:
             const errHubs = merge({}, state, {
                 error: { hubs: action.error }
             });
             return errHubs;
         case adminConstants.GET_SHIPMENTS_REQUEST:
-            return {
+             const reqShips = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqShips;
         case adminConstants.GET_SHIPMENTS_SUCCESS:
-            return {
-                shipments: action.payload,
+            const succShip = merge({}, state, {
+                shipments: action.payload.data,
                 loading: false
-            };
+            });
+            return succShip;
         case adminConstants.GET_SHIPMENTS_FAILURE:
             const errShip = merge({}, state, {
                 error: { shipments: action.error }
             });
             return errShip;
         case adminConstants.GET_SCHEDULES_REQUEST:
-            return {
+             const reqSched = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqSched;
         case adminConstants.GET_SCHEDULES_SUCCESS:
-            return {
-                schedules: action.payload,
+            const succSched = merge({}, state, {
+                schedules: action.payload.data,
                 loading: false
-            };
+            });
+            return succSched;
         case adminConstants.GET_SCHEDULES_FAILURE:
             const errSched = merge({}, state, {
                 error: { schedules: action.error }
             });
             return errSched;
         case adminConstants.GET_TRUCKING_REQUEST:
-            return {
+             const reqTruck = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqTruck;
         case adminConstants.GET_TRUCKING_SUCCESS:
-            return {
-                trucking: action.payload,
+            const succTruck = merge({}, state, {
+                trucking: action.payload.data,
                 loading: false
-            };
+            });
+            return succTruck;
         case adminConstants.GET_TRUCKING_FAILURE:
             const errTruck = merge({}, state, {
                 error: { trucking: action.error }
@@ -60,28 +68,32 @@ export function admin(state = {}, action) {
             return errTruck;
 
         case adminConstants.GET_PRICINGS_REQUEST:
-            return {
+             const reqPric = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqPric;
         case adminConstants.GET_PRICINGS_SUCCESS:
-            return {
-                pricings: action.payload,
+            const succPric = merge({}, state, {
+                pricingData: action.payload.data,
                 loading: false
-            };
+            });
+            return succPric;
         case adminConstants.GET_PRICINGS_FAILURE:
             const errPric = merge({}, state, {
                 error: { pricings: action.error }
             });
             return errPric;
         case adminConstants.GET_SERVICE_CHARGES_REQUEST:
-            return {
+             const reqSC = merge({}, state, {
                 loading: true
-            };
+            });
+            return reqSC;
         case adminConstants.GET_SERVICE_CHARGES_SUCCESS:
-            return {
-                serviceCharges: action.payload,
+            const succSC = merge({}, state, {
+                serviceCharges: action.payload.data,
                 loading: false
-            };
+            });
+            return succSC;
         case adminConstants.GET_SERVICE_CHARGES_FAILURE:
             const errSC = merge({}, state, {
                 error: { serviceCharges: action.error }
