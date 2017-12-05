@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
-import '../../styles/react-toggle.scss';
+// import '../../styles/react-toggle.scss';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
