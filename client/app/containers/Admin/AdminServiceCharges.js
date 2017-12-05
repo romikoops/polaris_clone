@@ -23,10 +23,6 @@ export class AdminServiceCharges extends Component {
     render() {
         const {theme, hubs, charges } = this.props;
         const {selectedHub} = this.state;
-        const hubHash = {};
-        hubs.forEach((hub) => {
-            hubHash[hub.data.id] = hub;
-        });
         let hubList;
         if (hubs) {
             hubList = hubs.map((hub) =>

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { v4 } from 'node-uuid';
-import { serviceChargeNames } from '../../constants/admin.constants';
-export class AdminChargePanel extends Component {
+import { pricingNames } from '../../constants/admin.constants';
+const pricingNamesHash = pricingNames;
+export class AdminPricePanel extends Component {
     constructor(props) {
         super(props);
         this.handleLink = this.handleLink.bind(this);
@@ -21,39 +22,63 @@ export class AdminChargePanel extends Component {
         this.setState({expanded: !this.state.expanded});
     }
     render() {
-        const { expanded } = this.state;
-        const { theme, hub, pricing} = this.props;
-        if (!hub || !pricing) {
-            debugger;
+        const { theme, pricing} = this.props;
+        if (!pricing) {
             return '';
         }
-        const bg1 = { backgroundImage: 'url(' + hub.location.photo + ')' };
-        const gradientStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${
-                        theme.colors.secondary
-                    })`
-                    : 'black'
+        const priceTiles = [];
+        const sections = {};
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        const panelStyle = expanded ? {height: '150px', opacity: '1'} : {height: '0px', opacity: '0'};
-        // const ChargeSection = ({tag, value, currency}) => {
-        //     return (<div className={`flex-30 layout-row layout-align-space-between-center ${styles.charge_opt}`}>
-        //                     <p className="flex-none"> {serviceChargeNames[tag]}</p>
-        //                     <p className="flex-none"> {value} {currency}</p>
-        //                 </div>);
-        // };
-        const expandIcon = expanded ? <i className="flex-none fa fa-chevron-up" style={gradientStyle}/> : <i className="flex-none fa fa-chevron-down" style={gradientStyle}/>;
-        // debugger;
-        return(
-            <div className={`flex-100 ${styles.charge_card} layout-row layout-wrap`} style={bg1}>
+        Object.keys(pricing).forEach(key => {
+            if (key !== 'created_at' && key !== 'updated_at' && key !== 'tenant_id' && key !== 'customer_id' && key !== 'route_id' && key !== 'dedicated') {
+                if (!sections[key]) {
+                    sections[key] = [];
+                }
+                Object.keys(pricing[key]).forEach(ky2 => {
+                    if (ky2 !== 'currency') {
+                        sections[key].push(
+                            <div key={v4()} className="flex-100 layout-row">
+                                <div className="flex-50 layout-align-start-center layout-row">
+                                    <p className="flex-none">{pricingNamesHash[ky2]}</p>
+                                </div>
+                                <div className="flex-50 layout-align-start-center layout-row">
+                                    <p className="flex-none">{pricing[key].currency} {pricing[key][ky2]}</p>
+                                </div>
+                            </div>
+                        );
+                    }
+                });
+            }
+        });
 
-                
+        const PriceSection = ({pkey}) => {
+            return (<div key={v4()} className={`flex-none layout-row layout-wrap ${styles.price_card}`}>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <p className={`flex-none ${styles.title}`} style={textStyle}> {pricingNamesHash[pkey]}</p>
+                            </div>
+                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                                {sections[pkey]}
+                            </div>
+                        </div>);
+        };
+        Object.keys(pricing).forEach(key => {
+            priceTiles.push(<PriceSection  pkey={key} />);
+        });
+        return (
+            <div key={v4()} className={`flex-100 layout-row layout-wrap ${styles.price_panel}`}>
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <p className="flex-none">{pricing.customer_id ? 'Dedicated Pricing' : 'Open Pricing'}</p>
+                </div>
+                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                    {priceTiles}
+                </div>
             </div>
         );
     }
 }
-AdminChargePanel.propTypes = {
+AdminPricePanel.propTypes = {
     theme: PropTypes.object,
     hub: PropTypes.object,
     pricing: PropTypes.object,

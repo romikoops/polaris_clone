@@ -7,7 +7,7 @@ class Admin::HubsController < ApplicationController
 
   def index
     @ocean_hubs = Hub.prepped_ports
-    json_response(@ocean_hubs, 200)
+    response_handler(@ocean_hubs)
   end
 
   def set_status
@@ -21,9 +21,9 @@ class Admin::HubsController < ApplicationController
     if params[:file]
       req = {'xlsx' => params[:file]}
       overwrite_hubs(req)
-      json_response(true, 200)
+      response_handler(true)
     else
-      json_response(false, 200)
+      response_handler(false)
     end
     
   end

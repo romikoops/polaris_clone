@@ -43,6 +43,12 @@ class Admin extends Component {
     render() {
         const {theme, adminData} = this.props;
         const {hubs, serviceCharges, pricingData, schedules} = adminData;
+        const hubHash = {};
+        if (hubs) {
+          hubs.forEach((hub) => {
+              hubHash[hub.data.id] = hub;
+          });
+        }
         // debugger;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
@@ -71,7 +77,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/schedules"
-                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubs} schedules={schedules} />}
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} schedules={schedules} />}
                             />
                              <Route
 

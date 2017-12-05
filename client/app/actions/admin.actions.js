@@ -71,6 +71,7 @@ function getPricings() {
         return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData };
     }
     function success(prData) {
+        // debugger;
         return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData };
     }
     function failure(error) {

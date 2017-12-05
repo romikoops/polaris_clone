@@ -6,12 +6,13 @@ import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
+import { isEmpty } from '../../helpers/isEmpty';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
     height: '400px'
 };
-
+const isObjectEmpty = isEmpty;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +43,10 @@ export class ShipmentLocationBox extends Component {
                 origin: false,
                 destination: false
             },
-            markers: []
+            markers: {
+                origin: {},
+                destination: {}
+            }
         };
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -54,6 +58,7 @@ export class ShipmentLocationBox extends Component {
         this.initAutocomplete = this.initAutocomplete.bind(this);
         this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
         this.resetAuto = this.resetAuto.bind(this);
+        this.setMarker = this.setMarker.bind(this);
     }
 
     componentDidMount() {
@@ -115,18 +120,18 @@ export class ShipmentLocationBox extends Component {
         if (this.state.map) {
             this.setMarker(
                 { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
-                tmpOrigin.name
+                tmpOrigin.name, 'origin'
             );
             this.setMarker(
                 { lat: tmpDest.latitude, lng: tmpDest.longitude },
-                tmpDest.name
+                tmpDest.name, 'destination'
             );
         } else {
             setTimeout(
                 function() {
                     this.setMarker(
                         { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
-                        tmpOrigin.name
+                        tmpOrigin.name, 'origin'
                     );
                 }.bind(this),
                 750
@@ -135,7 +140,7 @@ export class ShipmentLocationBox extends Component {
                 function() {
                     this.setMarker(
                         { lat: tmpDest.latitude, lng: tmpDest.longitude },
-                        tmpDest.name
+                        tmpDest.name, 'destination'
                     );
                 }.bind(this),
                 750
@@ -238,37 +243,33 @@ export class ShipmentLocationBox extends Component {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng()
                 },
-                place.name
+                place.name, target
             );
 
             this.selectLocation(place, target);
         });
     }
 
-    setMarker(location, name) {
+    setMarker(location, name, target) {
         const { markers, map } = this.state;
-        let newMarkers = [];
-
-        if (markers.length < 2) {
-            newMarkers = markers;
-        } else {
-            for (let i = 0; i < markers.length; i++) {
-                markers[i].setMap(null);
-            }
+        const newMarkers = [];
+        if (!isObjectEmpty(markers[target])) {
+            markers[target].setMap(null);
         }
-
         const marker = new this.props.gMaps.Marker({
             position: location,
             map: map,
             title: name
         });
-
-        newMarkers.push(marker);
-
-        this.setState({ markers: newMarkers });
-
+        markers[target] = marker;
+        if (!isObjectEmpty(markers.origin)) {
+            newMarkers.push(markers.origin);
+        }
+        if (!isObjectEmpty(markers.destination)) {
+            newMarkers.push(markers.destination);
+        }
+        this.setState({ markers: markers});
         const bounds = new this.props.gMaps.LatLngBounds();
-
         for (let i = 0; i < newMarkers.length; i++) {
             bounds.extend(newMarkers[i].getPosition());
         }
@@ -329,7 +330,7 @@ export class ShipmentLocationBox extends Component {
 
             this.setMarker(
                 { lat: event.value.latitude, lng: event.value.longitude },
-                event.value.name
+                event.value.name, 'origin'
             );
         } else {
             this.setState({
@@ -364,7 +365,7 @@ export class ShipmentLocationBox extends Component {
 
             this.setMarker(
                 { lat: event.value.latitude, lng: event.value.longitude },
-                event.value.name
+                event.value.name, 'destination'
             );
         } else {
             this.setState({
