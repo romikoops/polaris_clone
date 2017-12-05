@@ -6,10 +6,62 @@ import defaults from '../../styles/default_classes.scss';
 export class UserLocations extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            showLocations: true,
+            showAddLocationForm: false,
+            showEditLocationForm: false
+        };
+
+        this.showLocations = this.showLocations.bind(this);
+        this.showAddLocationForm = this.showAddLocationForm.bind(this);
+        this.showEditLocation = this.showEditLocation.bind(this);
     }
 
     componentDidMount() {
         this.props.getLocations();
+    }
+
+    showLocations() {
+        const {
+            showAddLocationForm,
+            showAddLocationForm,
+            showEditLocationForm
+        } = this.state;
+
+        this.setState({
+            showLocations: true,
+            showAddLocationForm: false,
+            showEditLocationForm: false
+        });
+    }
+
+    showAddLocationForm() {
+        const {
+            showAddLocationForm,
+            showAddLocationForm,
+            showEditLocationForm
+        } = this.state;
+
+        this.setState({
+            showLocations: false,
+            showAddLocationForm: true,
+            showEditLocationForm: false
+        });
+    }
+
+    showEditLocation() {
+        const {
+            showAddLocationForm,
+            showAddLocationForm,
+            showEditLocationForm
+        } = this.state;
+
+        this.setState({
+            showLocations: false,
+            showAddLocationForm: false,
+            showEditLocationForm: true
+        });
     }
 
     render() {
@@ -88,12 +140,12 @@ export class UserLocations extends Component {
                         </div>
 
                         <div className="layout-row layout-align-center flex-100">
-                            <h3>Add address</h3>
+                            <h3>Add location</h3>
                         </div>
                     </div>
                 </div>
 
-                {locations}
+                {/*                 {switch this.state.showLocations ? locations :} */}
             </div>
         );
     }

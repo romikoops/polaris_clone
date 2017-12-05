@@ -5,6 +5,7 @@ import { v4 } from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
 import defs from '../../styles/default_classes.scss';
+
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
