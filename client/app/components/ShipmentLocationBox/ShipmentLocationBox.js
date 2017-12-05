@@ -10,7 +10,9 @@ import { isEmpty } from '../../helpers/isEmpty';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
-    height: '400px'
+    height: '400px',
+    borderRadius: '3px',
+    boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
 const isObjectEmpty = isEmpty;
 export class ShipmentLocationBox extends Component {
