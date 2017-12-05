@@ -61,34 +61,13 @@ function register(user) {
     };
 }
 
-function getLocations(user) {
-    function request() {
-        return { type: userConstants.GETLOCATIONS_REQUEST };
-    }
-    function success(locations) {
-        return { type: userConstants.GETLOCATIONS_SUCCESS, locations };
-    }
-    function failure(error) {
-        return { type: userConstants.GETLOCATIONS_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
-
-        userService
-            .getLocations(user)
-            .then(
-                locations => dispatch(success(locations)),
-                error => dispatch(failure(error))
-            );
-    };
-}
-
 function getAll() {
     function request() {
         return { type: userConstants.GETALL_REQUEST };
     }
-    function success(users) {
-        return { type: userConstants.GETALL_SUCCESS, users };
+    function success(response) {
+        const payload = response.data;
+        return { type: userConstants.GETALL_SUCCESS, payload };
     }
     function failure(error) {
         return { type: userConstants.GETALL_FAILURE, error };
@@ -99,7 +78,7 @@ function getAll() {
         userService
             .getAll()
             .then(
-                users => dispatch(success(users)),
+                response => dispatch(success(response)),
                 error => dispatch(failure(error))
             );
     };
@@ -129,8 +108,80 @@ function _delete(id) {
         );
     };
 }
+
+function getLocations(user) {
+    function request() {
+        return { type: userConstants.GETLOCATIONS_REQUEST };
+    }
+    function success(response) {
+        const payload = response.data;
+        return { type: userConstants.GETLOCATIONS_SUCCESS, payload };
+    }
+    function failure(error) {
+        return { type: userConstants.GETLOCATIONS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService
+            .getLocations(user)
+            .then(
+                response => dispatch(success(response)),
+                error => dispatch(failure(error))
+            );
+    };
+}
+
+function destroyLocation(userId, locationId) {
+    function request() {
+        return { type: userConstants.DESTROYLOCATION_REQUEST };
+    }
+    function success(response) {
+        const payload = response.data;
+        return { type: userConstants.DESTROYLOCATION_SUCCESS, payload };
+    }
+    function failure(error) {
+        return { type: userConstants.DESTROYLOCATION_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService
+            .destroyLocation(userId, locationId)
+            .then(
+                response => dispatch(success(response)),
+                error => dispatch(failure(error))
+            );
+    };
+}
+
+function makePrimary(userId, locationId) {
+    function request() {
+        return { type: userConstants.MAKEPRIMARY_REQUEST };
+    }
+    function success(response) {
+        const payload = response.data;
+        return { type: userConstants.MAKEPRIMARY_SUCCESS, payload };
+    }
+    function failure(error) {
+        return { type: userConstants.MAKEPRIMARY_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService
+            .makePrimary(userId, locationId)
+            .then(
+                response => dispatch(success(response)),
+                error => dispatch(failure(error))
+            );
+    };
+}
+
 export const userActions = {
     getLocations,
+    destroyLocation,
+    makePrimary,
     login,
     logout,
     register,

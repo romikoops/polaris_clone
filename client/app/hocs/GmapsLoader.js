@@ -34,7 +34,7 @@ export default class GmapsLoader extends Component {
         );
     }
 }
-GmapsLoader.PropTypes = {
+GmapsLoader.propTypes = {
     theme: PropTypes.object,
     selectLocation: PropTypes.func,
     component: PropTypes.func,

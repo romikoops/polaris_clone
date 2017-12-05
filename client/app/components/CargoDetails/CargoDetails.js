@@ -77,7 +77,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const customsBox = (
-            <div className="flex-100 layout-row padd_top">
+            <div className={`flex-100 layout-row ${defaults.padd_top}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> {' '} Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country o to exported goods so that they can leave the country.

@@ -19,8 +19,14 @@ function newShipment(type) {
         shipmentService.newShipment(type).then(
             resp => {
                 const shipmentData = resp.data;
-                dispatch(alertActions.success('Fetching New Shipment successful'));
-                dispatch(push('/booking/' + shipmentData.data.id + '/shipment_details'));
+                dispatch(
+                    alertActions.success('Fetching New Shipment successful')
+                );
+                dispatch(
+                    push(
+                        '/booking/' + shipmentData.data.id + '/shipment_details'
+                    )
+                );
                 dispatch(success(shipmentData));
             },
             error => {
@@ -54,8 +60,14 @@ function setShipmentDetails(data) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
-                dispatch(push('/booking/' + shipmentData.shipment.id + '/choose_route'));
-                dispatch(alertActions.success('Set Shipment Details successful'));
+                dispatch(
+                    push(
+                        '/booking/' + shipmentData.shipment.id + '/choose_route'
+                    )
+                );
+                dispatch(
+                    alertActions.success('Set Shipment Details successful')
+                );
             },
             error => {
                 error.then(data => {
@@ -89,7 +101,13 @@ function setShipmentRoute(data) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
-                dispatch(push('/booking/' + shipmentData.shipment.id + '/booking_details'));
+                dispatch(
+                    push(
+                        '/booking/' +
+                            shipmentData.shipment.id +
+                            '/booking_details'
+                    )
+                );
                 dispatch(alertActions.success('Set Shipment Route successful'));
             },
             error => {
@@ -123,8 +141,16 @@ function setShipmentContacts(data) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
-                dispatch(push('/booking/' + shipmentData.shipment.id + '/finish_booking'));
-                dispatch(alertActions.success('Set Shipment Contacts successful'));
+                dispatch(
+                    push(
+                        '/booking/' +
+                            shipmentData.shipment.id +
+                            '/finish_booking'
+                    )
+                );
+                dispatch(
+                    alertActions.success('Set Shipment Contacts successful')
+                );
             },
             error => {
                 dispatch(failure(error));
