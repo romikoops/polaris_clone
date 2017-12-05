@@ -139,6 +139,7 @@ class Route < ApplicationRecord
   def self.for_locations(origin, destination, radius = 100)
     start_city, start_city_dist = origin.closest_location_with_distance
     end_city, end_city_dist = destination.closest_location_with_distance
+    
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end

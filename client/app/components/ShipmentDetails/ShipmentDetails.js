@@ -17,12 +17,14 @@ export class ShipmentDetails extends Component {
         super(props);
         this.state = {
             origin: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
                 fullAddress: ''
             },
             destination: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
@@ -45,6 +47,8 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            has_on_carriage: false,
+            has_pre_carriage: false,
             shipment: this.props.shipmentData.data,
             allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
@@ -115,11 +119,13 @@ export class ShipmentDetails extends Component {
         const key1 = eventKeys[0];
         const key2 = eventKeys[1];
         const val = event.target.value;
+        const addObj = this.state[key1];
+        addObj[key2] = val;
+        addObj.fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         this.setState({
-            [key1]: {
-                [key2]: val
-            }
+            [key1]: addObj
         });
+        console.log(addObj);
     }
 
     handleCargoItemChange(event) {
@@ -189,6 +195,7 @@ export class ShipmentDetails extends Component {
         data.shipment.has_on_carriage = this.state.has_on_carriage;
         data.shipment.has_pre_carriage = this.state.has_pre_carriage;
         data.shipment.planned_pickup_date = this.state.selectedDay;
+        debugger;
         this.props.setShipmentDetails(data);
     }
 
@@ -201,6 +208,7 @@ export class ShipmentDetails extends Component {
     }
 
     toggleCarriage(target, value) {
+        console.log(this.state[target]);
         this.setState({ [target]: value });
     }
 
@@ -249,6 +257,7 @@ export class ShipmentDetails extends Component {
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
+                handleAddressChange={this.handleAddressChange}
             />
         );
 
