@@ -5,6 +5,13 @@
     width: 75px !important;
     border: 2px solid darkslategrey;
     position: relative;
+    i {
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;      
+    }
+    h3 {
+      font-weight: normal;
+    }
   }
 
   .stage_box {
@@ -33,12 +40,34 @@
   .shop_stage_yet h3, .shop_stage_current h3 {
     font-size: 30px;
   }
-
+  .wrapper_shop_stage_current {
+    position: relative;    
+    height: 75px !important;
+    width: 75px !important;
+  }
   .shop_stage_current {
-    @extend .shop_stage;
-    background: #FFFFFF;
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    top: 2px; 
+    bottom: 2px;
+    left: 2px; 
+    right: 2px;
+    border-radius: 50% !important;
+    background: white;
+    h3 {
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;      
+    }
+  }
+  .shop_stage_current_border {
+    position: absolute;
+    top: 0; 
+    bottom: 0;
+    left: 0; 
+    right: 0;
+    content: '';
+    z-index: -1;
+    width: auto;
+    border-radius: 50%;
   }
   .stage_text  {
     height: 22px;
