@@ -62,10 +62,11 @@ export class UserAccount extends Component {
         ];
 
         let viewComponent;
-        switch (this.state.activeLink) {
+        switch(this.state.activeLink) {
             case 'profile':
                 viewComponent = (
                     <UserLocations
+                        theme={this.props.theme}
                         locations={this.props.users.items}
                         getLocations={this.getLocations}
                         destroyLocation={this.destroyLocation}
