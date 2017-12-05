@@ -23,12 +23,6 @@ export class UserLocations extends Component {
     }
 
     showLocations() {
-        const {
-            showAddLocationForm,
-            showAddLocationForm,
-            showEditLocationForm
-        } = this.state;
-
         this.setState({
             showLocations: true,
             showAddLocationForm: false,
@@ -37,12 +31,6 @@ export class UserLocations extends Component {
     }
 
     showAddLocationForm() {
-        const {
-            showAddLocationForm,
-            showAddLocationForm,
-            showEditLocationForm
-        } = this.state;
-
         this.setState({
             showLocations: false,
             showAddLocationForm: true,
@@ -51,12 +39,6 @@ export class UserLocations extends Component {
     }
 
     showEditLocation() {
-        const {
-            showAddLocationForm,
-            showAddLocationForm,
-            showEditLocationForm
-        } = this.state;
-
         this.setState({
             showLocations: false,
             showAddLocationForm: false,
@@ -65,66 +47,71 @@ export class UserLocations extends Component {
     }
 
     render() {
+        if (false) {
+            this.showLocations();
+            this.showAddLocationForm();
+            this.showEditLocation();
+        }
         const locInfo = this.props.locations;
         const locations = locInfo
             ? locInfo.map(op => {
-                  return (
-                      <div key={op.id} className={'flex-33'}>
-                          <div className={`${styles['location-box']}`}>
-                              <div className={`${styles.header}`}>
-                                  {op.primary ? (
-                                      <h3 className={`${styles.standard}`}>
+                return (
+                    <div key={op.id} className={'flex-33'}>
+                        <div className={`${styles['location-box']}`}>
+                            <div className={`${styles.header}`}>
+                                {op.primary ? (
+                                    <h3 className={`${styles.standard}`}>
                                           Primary
-                                      </h3>
-                                  ) : (
-                                      <div className="layout-row layout-wrap">
-                                          <div className="layout-row flex-80">
-                                              <h3 className={`${styles.other}`}>
+                                    </h3>
+                                ) : (
+                                    <div className="layout-row layout-wrap">
+                                        <div className="layout-row flex-80">
+                                            <h3 className={`${styles.other}`}>
                                                   Other
-                                              </h3>
-                                          </div>
-                                          <div className="layout-row flex-20 layout-align-end">
-                                              <div
-                                                  className={`${
-                                                      styles.makePrimary
-                                                  } ${defaults.pointy}`}
-                                                  onClick={() =>
-                                                      this.props.makePrimary(
-                                                          op.id
-                                                      )
-                                                  }
-                                              >
+                                            </h3>
+                                        </div>
+                                        <div className="layout-row flex-20 layout-align-end">
+                                            <div
+                                                className={`${
+                                                    styles.makePrimary
+                                                } ${defaults.pointy}`}
+                                                onClick={() =>
+                                                    this.props.makePrimary(
+                                                        op.id
+                                                    )
+                                                }
+                                            >
                                                   Set as primary
-                                              </div>
-                                          </div>
-                                      </div>
-                                  )}
-                              </div>
-                              <div className={`${styles.content}`}>
-                                  {op.geocoded_address}
-                              </div>
-                              <div className={`${styles.footer}`}>
-                                  <div className="layout-row layout-align-center-center">
-                                      <span
-                                          className={`${defaults.emulate_link}`}
-                                      >
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className={`${styles.content}`}>
+                                {op.geocoded_address}
+                            </div>
+                            <div className={`${styles.footer}`}>
+                                <div className="layout-row layout-align-center-center">
+                                    <span
+                                        className={`${defaults.emulate_link}`}
+                                    >
                                           Edit
-                                      </span>
+                                    </span>
                                       &nbsp; | &nbsp;
-                                      <span
-                                          className={`${defaults.emulate_link}`}
-                                          onClick={() =>
-                                              this.props.destroyLocation(op.id)
-                                          }
-                                      >
+                                    <span
+                                        className={`${defaults.emulate_link}`}
+                                        onClick={() =>
+                                            this.props.destroyLocation(op.id)
+                                        }
+                                    >
                                           Delete
-                                      </span>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  );
-              })
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            })
             : '';
 
         return (
@@ -142,10 +129,10 @@ export class UserLocations extends Component {
                         <div className="layout-row layout-align-center flex-100">
                             <h3>Add location</h3>
                         </div>
+
+                        {locations}
                     </div>
                 </div>
-
-                {/*                 {switch this.state.showLocations ? locations :} */}
             </div>
         );
     }
