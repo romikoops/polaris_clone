@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Toggle from 'react-toggle';
-import 'react-toggle/style.css';
+import '../../styles/react-toggle.scss';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
+import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
     height: '400px'
@@ -428,9 +429,27 @@ export class ShipmentLocationBox extends Component {
                 nexuses.push({ value: nex, label: nex.name });
             });
         }
+        const StyledSelect = styled(Select)`
+            .Select-control {
+                background-color: #F9F9F9;
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2 !important;
+            }
+            .Select-menu-outer {
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2;
+            }
+            .Select-value {
+                background-color: #F9F9F9;
+                border: 1px solid #F2F2F2;
+            }
+            .Select-option {
+                background-color: #F9F9F9;
+            }
+        `;
 
         const originHubSelect = (
-            <Select
+            <StyledSelect
                 name="origin-hub"
                 className={`${styles.select}`}
                 value={this.state.oSelect}
@@ -440,7 +459,7 @@ export class ShipmentLocationBox extends Component {
         );
 
         const destinationHubSelect = (
-            <Select
+            <StyledSelect
                 name="destination-hub"
                 className={`${styles.select}`}
                 value={this.state.dSelect}
@@ -605,6 +624,7 @@ export class ShipmentLocationBox extends Component {
             }
             return '';
         };
+        const { theme } = this.props;
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
@@ -617,7 +637,8 @@ export class ShipmentLocationBox extends Component {
                                     id="has_pre_carriage"
                                     name="has_pre_carriage"
                                     defaultChecked={this.state.shipment.has_pre_carriage}
-                                    onChange={this.handleTrucking} />
+                                    onChange={this.handleTrucking}
+                                />
                                 <label htmlFor="pre-carriage">Pre-Carriage</label>
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
@@ -633,7 +654,8 @@ export class ShipmentLocationBox extends Component {
                                     id="has_on_carriage"
                                     name="has_on_carriage"
                                     defaultChecked={this.state.shipment.has_on_carriage}
-                                    onChange={this.handleTrucking} />
+                                    onChange={this.handleTrucking}
+                                />
                                 <label htmlFor="on-carriage">On-Carriage</label>
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
@@ -649,6 +671,11 @@ export class ShipmentLocationBox extends Component {
                         <div ref="map" id="map" style={mapStyle} />
                     </div>
                 </div>
+                <style dangerouslySetInnerHTML={{__html: `
+                    .react-toggle--checked .react-toggle-track {
+                        background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                    }
+                `}} />
             </div>
         );
     }

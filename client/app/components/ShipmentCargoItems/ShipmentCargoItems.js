@@ -95,7 +95,7 @@ export class ShipmentCargoItems extends Component {
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <input className="flex-80" name="payload_in_kg" value={newCargoItem.payload_in_kg} type="number" onChange={handleDelta}/>
                                 <div className="flex-20 layout-row layout-align-center-center">
-                      kg
+                                    kg
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ export class ShipmentCargoItems extends Component {
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <input className="flex-80" name="dimension_z" value={newCargoItem.dimension_z} type="number" onChange={handleDelta}/>
                                 <div className="flex-20 layout-row layout-align-center-center">
-                      cm
+                                    cm
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@ export class ShipmentCargoItems extends Component {
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <input className="flex-80" name="dimension_y" value={newCargoItem.dimension_y} type="number" onChange={handleDelta}/>
                                 <div className="flex-20 layout-row layout-align-center-center">
-                      cm
+                                    cm
                                 </div>
                             </div>
                         </div>
@@ -122,7 +122,7 @@ export class ShipmentCargoItems extends Component {
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <input className="flex-80" name="dimension_x" value={newCargoItem.dimension_x} type="number" onChange={handleDelta}/>
                                 <div className="flex-20 layout-row layout-align-center-center">
-                      cm
+                                    cm
                                 </div>
                             </div>
                         </div>
@@ -132,15 +132,14 @@ export class ShipmentCargoItems extends Component {
                         </div>
 
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <div className={`layout-row flex-none ${defs.content_width} layout-align-start-center`} onClick={this.addNewCargo}>
-                                <i className="flex-none fa fa-plus-square-o" />
-                                <p className="flex-none flex-offset-5"> Add unit </p>
+                            <div className={`layout-row flex-none ${defs.content_width} ${styles.add_unit} layout-align-start-center`} onClick={this.addNewCargo}>
+                                <i className="fa fa-plus-square-o" />
+                                <p> Add unit </p>
                             </div>
                         </div>
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                             <div className={`layout-row flex-none ${defs.content_width} layout-wrap`} >
                                 { cargosAdded }
-
                             </div>
                         </div>
                     </div>
