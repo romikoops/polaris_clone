@@ -7,18 +7,33 @@ class Admin::PricingsController < ApplicationController
 
   def index
     
-    @pricings = Pricing.where.not(customer_id: nil)
+    @ded_pricings = Pricing.where.not(customer_id: nil)
+    @open_pricings = Pricing.where(customer_id: nil)
 
     @routes = []
-    @pricings.each do |p|
-      @routes.push(p.route)
+    @open_pricings.each do |p|
+      rt = p.route
+      if !@routes.include? rt
+         @routes.push(rt)
+      end 
     end
+    @ded_pricings.each do |p|
+      rt = p.route
+      if !@routes.include? rt
+         @routes.push(rt)
+      end 
+    end
+    response_handler({routes: @routes, pricings: {open: @open_pricings, dedicated: @ded_pricings}})
   end
 
   def overwrite_main_carriage
-    overwrite_main_carriage_rates(params)
-
-    redirect_to :back
+    if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_main_carriage_rates(req, true)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   def update_general_fee

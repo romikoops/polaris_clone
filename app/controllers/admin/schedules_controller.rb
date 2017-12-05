@@ -9,20 +9,36 @@ class Admin::SchedulesController < ApplicationController
     @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 15)
     @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)
     @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 15)
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules})
   end
 
   def overwrite_trains
-    overwrite_train_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_train_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   def overwrite_vessels
-    overwrite_vessel_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_vessel_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
   def overwrite_air
-    overwrite_air_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_air_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   private
