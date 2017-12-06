@@ -179,6 +179,9 @@ img.NavDropdown---dropDownImage---3bEJ_ {
   text-decoration: underline; }
 .default_classes---content_width---3pLqn {
   width: 1000px; }
+  @media screen and (min-width: 1920px) {
+    .default_classes---content_width---3pLqn {
+      width: 1600px; } }
 
 .default_classes---button_padding---1CLgZ {
   padding: 60px 5px; }
@@ -1622,104 +1625,58 @@ nav.NavSidebar---menu---3eXWA {
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3gMfFBUB8Kc3yAAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAABmJLR0QA/wD/AP+gvaeTAAAAP0lEQVRYw+3UsQkAMAwDsPz/o29pHkjnlCKDV6PJVb8myZkKBgYGBgYGBvYg7Da+VTAwMD8GBgYGBgYGBraWBpeqjFTlGtDAAAAAAElFTkSuQmCC) left center no-repeat;
     width: 38px;
     height: 50px; }
-.AdminNavItem---nav_item---2rJv4 i, .AdminNavItem---nav_item---2rJv4 h3 {
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  margin: 0; }
-
-.AdminNavItem---nav_item---2rJv4 {
-  height: 50px; }
-.AdminHubTile---hub_card---3Xq1T {
-  width: calc(30% - 10px);
-  height: 200px;
-  margin: 5px;
-  color: #FFFFFF;
-  position: relative;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center; }
-
-.AdminHubTile---hub_card---3Xq1T .AdminHubTile---fade---8t1wr {
-  height: 100%;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  position: absolute;
-  z-index: 10;
-  background: rgba(0, 10, 4, 0.26); }
-
-.AdminHubTile---hub_card---3Xq1T .AdminHubTile---content---GzkTB {
-  height: 100%;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  position: absolute;
-  z-index: 12; }
-
-.AdminHubTile---hub_card---3Xq1T i {
-  height: 30px;
-  width: 30px;
-  font-size: 30px;
-  margin-top: 23px;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  font-size: 24px !important; }
-.Admin---sec_title---2nJyI {
+.Admin---sec_title---13mwW {
   height: 75px; }
 
-.Admin---sec_title---2nJyI p {
+.Admin---sec_title---13mwW p {
   margin: 0;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   font-size: 30px; }
 
-.Admin---sec_upload---13Y6x {
+.Admin---sec_upload---34s5g {
   height: 150px; }
 
-.Admin---charge_card---1g7Ak {
+.Admin---charge_card---iSE0L {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center; }
 
-.Admin---charge_header---2_DBg {
+.Admin---charge_header---3aX72 {
   position: relative; }
 
-.Admin---fade---23IWl {
+.Admin---fade---2p8wN {
   width: 100%;
   height: 100%;
   position: absolute;
   background: rgba(0, 0, 0, 0.25);
   z-index: 3; }
 
-.Admin---content----Bm1b {
+.Admin---content---9rdTr {
   width: 100%;
   height: 100%;
   z-index: 4; }
 
-.Admin---content----Bm1b i, .Admin---content----Bm1b h3, .Admin---content----Bm1b p {
+.Admin---content---9rdTr i, .Admin---content---9rdTr h3, .Admin---content---9rdTr p {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important; }
 
-.Admin---charge_opt---Gh0xR {
+.Admin---charge_opt---1eK7S {
   color: black;
   margin: 5px; }
 
-.Admin---charge_opt---Gh0xR p {
+.Admin---charge_opt---1eK7S p {
   margin: 0; }
 
-.Admin---charge_panel---2REg_ {
+.Admin---charge_panel---2ePoW {
   background: whitesmoke;
   height: max-content; }
 
-.Admin---sched_selector---2Oc3f i, .Admin---sched_selector---2Oc3f p {
+.Admin---sched_selector---3inj6 i, .Admin---sched_selector---3inj6 p {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important; }
 
-.Admin---hub_card---2pYjB {
+.Admin---hub_card---3vI4D {
   height: 200px;
   margin: 5px;
   color: #FFFFFF;
@@ -1728,7 +1685,7 @@ nav.NavSidebar---menu---3eXWA {
   background-repeat: no-repeat;
   background-position: center; }
 
-.Admin---route_hub_bg---nrJZv {
+.Admin---route_hub_bg---11sbS {
   position: absolute;
   z-index: 1;
   height: 100%;
@@ -1738,7 +1695,7 @@ nav.NavSidebar---menu---3eXWA {
   left: 0;
   bottom: 0; }
 
-.Admin---route_hub_top---1bBTe {
+.Admin---route_hub_top---3mo4K {
   position: absolute;
   z-index: 1;
   height: 50%;
@@ -1751,7 +1708,7 @@ nav.NavSidebar---menu---3eXWA {
   background-repeat: no-repeat;
   background-position: center; }
 
-.Admin---route_hub_bottom---3e8D7 {
+.Admin---route_hub_bottom---2i8ck {
   position: absolute;
   z-index: 1;
   height: 50%;
@@ -1764,22 +1721,71 @@ nav.NavSidebar---menu---3eXWA {
   background-repeat: no-repeat;
   background-position: center; }
 
-.Admin---icon_box---2m82B {
+.Admin---icon_box---5tRTw {
   height: 100%;
   padding: 10px; }
 
-.Admin---price_card---3t0tF {
+.Admin---price_card---21N_C {
   margin: 5px;
   width: calc(50% - 10px); }
 
-.Admin---price_card---3t0tF .Admin---title---1xkQd {
+.Admin---price_card---21N_C .Admin---title---zLL4Y {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important; }
 
-.Admin---price_card---3t0tF p {
+.Admin---price_card---21N_C p {
   margin: 0; }
+.AdminHubTile---hub_card---iJa0a {
+  width: calc(30% - 10px);
+  height: 200px;
+  margin: 5px;
+  color: #FFFFFF;
+  position: relative;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center; }
+
+.AdminHubTile---hub_card---iJa0a .AdminHubTile---fade---3JvVc {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10;
+  background: rgba(0, 10, 4, 0.26); }
+
+.AdminHubTile---hub_card---iJa0a .AdminHubTile---content---2p3du {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 12; }
+
+.AdminHubTile---hub_card---iJa0a i {
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
+  margin-top: 23px;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-size: 24px !important; }
+.AdminNavItem---nav_item---hm9wC i, .AdminNavItem---nav_item---hm9wC h3 {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  margin: 0; }
+
+.AdminNavItem---nav_item---hm9wC {
+  height: 50px; }
 .index---content_width---1PnTA {
   width: 1000px; }
+  @media screen and (min-width: 1920px) {
+    .index---content_width---1PnTA {
+      width: 1600px; } }
 
 .index---button_padding---25iEW {
   padding: 60px 5px; }

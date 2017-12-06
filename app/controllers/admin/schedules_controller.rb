@@ -6,9 +6,9 @@ class Admin::SchedulesController < ApplicationController
   
 
   def index
-    @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 15)
-    @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)
-    @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 15)
+    @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
+    @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
+    @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules})
   end
 

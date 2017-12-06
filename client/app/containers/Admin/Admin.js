@@ -4,12 +4,7 @@ import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
-import { AdminNav } from './AdminNav';
-import { AdminDashboard } from './AdminDashboard';
-import { AdminHubs } from './AdminHubs';
-import { AdminPricings } from './AdminPricings';
-import { AdminSchedules } from './AdminSchedules';
-import { AdminServiceCharges } from './AdminServiceCharges';
+import { AdminNav, AdminDashboard, AdminHubs, AdminPricings, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -77,7 +72,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/schedules"
-                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} schedules={schedules} />}
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} schedules={schedules} routes={pricingData.routes}/>}
                             />
                              <Route
 
