@@ -3,6 +3,9 @@
 :local {
   .content_width {
     width: 1000px;
+    @media screen and (min-width: 1920px) {
+      width: 1600px;
+    }
   }
 
   .button_padding {

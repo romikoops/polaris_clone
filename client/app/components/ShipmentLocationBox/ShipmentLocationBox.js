@@ -7,6 +7,7 @@ import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
+import { colorSVG } from '../../helpers/svgColourer';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
@@ -15,6 +16,7 @@ const mapStyle = {
     boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
 const isObjectEmpty = isEmpty;
+const colourSVG = colorSVG;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -65,6 +67,7 @@ export class ShipmentLocationBox extends Component {
         this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
         this.resetAuto = this.resetAuto.bind(this);
         this.setMarker = this.setMarker.bind(this);
+        this.handleAuto = this.handleAuto.bind(this);
     }
 
     componentDidMount() {
@@ -260,14 +263,30 @@ export class ShipmentLocationBox extends Component {
 
     setMarker(location, name, target) {
         const { markers, map } = this.state;
+        const {theme} = this.props;
         const newMarkers = [];
         if (!isObjectEmpty(markers[target])) {
             markers[target].setMap(null);
         }
+        let icon;
+        if (target === 'origin') {
+            icon = {
+                url: colourSVG('location', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(50, 50)
+            };
+        } else {
+            icon = {
+                url: colourSVG('flag', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(50, 50)
+            };
+        }
         const marker = new this.props.gMaps.Marker({
             position: location,
             map: map,
-            title: name
+            title: name,
+            icon
         });
         markers[target] = marker;
         if (!isObjectEmpty(markers.origin)) {
@@ -287,17 +306,22 @@ export class ShipmentLocationBox extends Component {
 
     handleTrucking(event) {
         const { name, checked } = event.target;
+        console.log(name, checked);
         this.setState({
             shipment: { ...this.state.shipment, [name]: checked }
         });
 
-        if (name === 'has_pre_carriage' && checked) {
-            this.postToggleAutocomplete('origin');
+        if (name === 'has_pre_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('origin');
+            }
             this.props.setCarriage('has_pre_carriage', checked);
         }
 
-        if (name === 'has_on_carriage' && checked) {
-            this.postToggleAutocomplete('destination');
+        if (name === 'has_on_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('destination');
+            }
             this.props.setCarriage('has_on_carriage', checked);
         }
     }
@@ -350,6 +374,11 @@ export class ShipmentLocationBox extends Component {
 
             this.props.setTargetAddress('origin', {});
         }
+    }
+    handleAuto(event) {
+        console.log(event.target);
+        const {name, value} = event.target;
+        this.setState({autoText: {[name]: value}});
     }
 
     setDestHub(event) {
@@ -459,7 +488,10 @@ export class ShipmentLocationBox extends Component {
                 background-color: #F9F9F9;
             }
         `;
-
+        const autoHide = {
+            height: '0px',
+            display: 'none'
+        };
         const originHubSelect = (
             <StyledSelect
                 name="origin-hub"
@@ -483,6 +515,7 @@ export class ShipmentLocationBox extends Component {
         const originFields = (
             <div className="flex-100 layout-row layout-wrap">
                 <input
+                    id="not-auto"
                     name="origin-number"
                     className={`flex-none ${styles.input}`}
                     type="string"
@@ -532,7 +565,7 @@ export class ShipmentLocationBox extends Component {
         );
 
         const originAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.origin ? autoHide : {}}>
                 <input
                     id="origin"
                     name="origin-fullAddress"
@@ -597,14 +630,14 @@ export class ShipmentLocationBox extends Component {
         );
 
         const destAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.destination ? autoHide : {}}>
                 <input
                     id="destination"
-                    name="destination-fullAddress"
+                    name="destination"
                     className={`flex-none ${styles.input}`}
                     type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.fullAddress}
+                    onChange={this.handleAuto}
+                    value={this.state.autoText}
                     placeholder="Search for address"
                 />
             </div>
@@ -618,7 +651,7 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.origin
                     ? originFields
-                    : originAuto;
+                    : '';
             }
 
             if (
@@ -632,7 +665,7 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.destination
                     ? destFields
-                    : destAuto;
+                    : '';
             }
             return '';
         };
@@ -656,6 +689,7 @@ export class ShipmentLocationBox extends Component {
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
                                 <p className="flex-100"> Origin Address </p>
+                                { this.state.shipment.has_pre_carriage ? originAuto : '' }
                                 { displayLocationOptions('origin') }
                             </div>
                         </div>
@@ -677,6 +711,7 @@ export class ShipmentLocationBox extends Component {
                                     {' '}
                                     Destination Address{' '}
                                 </p>
+                                { this.state.shipment.has_on_carriage ? destAuto : '' }
                                 {displayLocationOptions('destination')}
                             </div>
                         </div>

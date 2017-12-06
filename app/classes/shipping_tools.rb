@@ -95,11 +95,11 @@ module ShippingTools
       offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
     end
 
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    # rescue
+    #   raise ApplicationError::NoRoutes
+    # end
 
     @shipment = offer_calculation.shipment
     @shipment.save!

@@ -4,6 +4,9 @@ import styles from './ChooseShipment.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 export class ChooseShipment extends Component {
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
     render() {
         const { theme, messages, shipmentTypes, selectShipment } = this.props;
         const color = theme

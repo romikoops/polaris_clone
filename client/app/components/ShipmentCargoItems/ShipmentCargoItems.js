@@ -52,6 +52,9 @@ export class ShipmentCargoItems extends Component {
         // this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
         this.props.handleDelta(event);
     }
+    deleteCargo(index) {
+        this.props.deleteItem('cargoItems', index);
+    }
 
     render() {
         const { cargoItems, handleDelta } = this.props;
@@ -62,21 +65,27 @@ export class ShipmentCargoItems extends Component {
                 if (i !== 0) {
                     const tmpCont = (
                         <div key={i} className="flex-100 layout-row">
-                            <div className="flex-20 layout-row layout-align-center-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
+                                Unit {i}
+                            </div>
+                            <div className="flex-15 layout-row layout-align-center-center">
                                 {cont.payload_in_kg} kg
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
                                 {cont.dimension_y} cm
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
                                 {cont.dimension_x} cm
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
                                 {cont.dimension_z} cm
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
                                 Dangerous Goods:{' '}
                                 {cont.dangerousGoods ? 'Yes' : 'No'}
+                            </div>
+                            <div className="flex-10 layout-row layout-align-center-center">
+                                <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
                             </div>
                         </div>
                     );
@@ -151,6 +160,7 @@ export class ShipmentCargoItems extends Component {
 
 ShipmentCargoItems.propTypes = {
     theme: PropTypes.object,
+    deleteItem: PropTypes.func,
     cargoItems: PropTypes.array,
     addCargoItem: PropTypes.func,
     handleDelta: PropTypes.func
