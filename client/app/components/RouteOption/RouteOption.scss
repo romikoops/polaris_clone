@@ -3,10 +3,11 @@
     background-color: #FCFCFC;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
     margin: 4px 0;
-    padding: 20px 20px 15px 36px;
+    padding: 18px 15px 13px 31px;
     position: relative;
-    width: 27%;
+    width: 282px;
     cursor: pointer;
+    transition: margin 0.1s ease, box-shadow 0.2s ease;
     h4, p {
       margin: 0;
     }
@@ -36,9 +37,12 @@
   }
   .connection_graphics {
     position: absolute;
-    left: calc((326px - 60px) / 2);
+    left: calc((328px - 76px) / 2);
     top: 20px;
-    width: 60px;
+    width: 76px;
+    i {
+      margin: 0 4px;
+    }
   }
   h4.date_title {
     -webkit-background-clip: text !important;

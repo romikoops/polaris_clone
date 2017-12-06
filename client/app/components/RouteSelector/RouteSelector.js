@@ -51,13 +51,8 @@ export class RouteSelector extends Component {
                 );
             });
         }
-        let routesArr;
-        if (this.state.viewPublic) {
-            routesArr = [...privRoutes, ...pubRoutes];
-        } else {
-            routesArr = privRoutes;
-        }
-        console.log(routesArr);
+        const routesArr = this.state.viewPublic ? [...privRoutes, ...pubRoutes] : privRoutes;
+
         return (
             <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
                 <div className={`${defs.content_width} layout-row layout-wrap`}>

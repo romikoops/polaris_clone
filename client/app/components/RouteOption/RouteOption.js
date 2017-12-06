@@ -26,9 +26,10 @@ export class RouteOption extends Component {
     render() {
         const { theme, isPrivate, route } = this.props;
         console.log(isPrivate);
-        const originNexus      = route.route.name.split(' - ')[0];
-        const destinationNexus = route.route.name.split(' - ')[1];
-        const modeOfTransport  = route.next.mode_of_transport;
+        const originNexus       = route.name.split(' - ')[0];
+        const destinationNexus  = route.name.split(' - ')[1];
+        const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
+        // const modesOfTransport  = ['ocean', 'air', 'train'];
         // console.log(route);
         // console.log(originNexus);
         // console.log(destinationNexus);
@@ -54,7 +55,7 @@ export class RouteOption extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-
+        const icons = modesOfTransport.map(mot => this.faIcon(mot));
 
         return (
             <div className={styles.route_option} onClick={this.choose} >
@@ -76,7 +77,7 @@ export class RouteOption extends Component {
                     </div>
                     <div className={`${styles.connection_graphics}`}>
                         <div className="flex-none layout-row layout-align-center-center">
-                            {this.faIcon(modeOfTransport)}
+                            {icons}
                         </div>
                         <div style={dashedLineStyles} />
                     </div>
