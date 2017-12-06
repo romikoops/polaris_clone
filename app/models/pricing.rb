@@ -12,7 +12,6 @@ class Pricing < ApplicationRecord
   end
 
   def lcl_price(cargo)
-    
     # cargo.weight_or_volume * lcl_m3_ton_price    
     min = self.lcl["wm_min"] * self.lcl["wm_rate"]
     tmp_val = cargo.weight_or_volume * self.lcl["wm_rate"]
@@ -24,7 +23,6 @@ class Pricing < ApplicationRecord
   end
 
   def fcl_price(container)
-    
     case container.size_class    
     when "20_dc"
       container_rate = self.fcl_20f
@@ -36,5 +34,20 @@ class Pricing < ApplicationRecord
       raise "Unknown container size class!"
     end
     return {value: container_rate["rate"], currency: container_rate["currency"]}
+  end
+
+  def route_h
+    route_h = route.attributes
+    route_h[:modes_of_transport] = route.modes_of_transport
+    route_h[:next_departure]     = route.next_departure
+    route_h
+  end
+
+  def self.private(user = nil)
+    user ? Pricing.where(customer_id: user.id) : Pricing.where.not(customer_id: nil)
+  end
+
+  def self.public
+    Pricing.where(customer_id: nil)
   end
 end

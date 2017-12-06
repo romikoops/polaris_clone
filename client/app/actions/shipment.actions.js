@@ -19,6 +19,8 @@ function newShipment(type) {
         shipmentService.newShipment(type).then(
             resp => {
                 const shipmentData = resp.data;
+                console.log(resp.data);
+                debugger;
                 dispatch(
                     alertActions.success('Fetching New Shipment successful')
                 );

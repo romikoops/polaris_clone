@@ -197,4 +197,13 @@ class Route < ApplicationRecord
       raise "Unknown container size class!"
     end
   end
+
+  def modes_of_transport
+    exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }    
+    {
+      ocean: exists.('ocean'),
+      air:   exists.('air'),
+      rails: exists.('rails')
+    }
+  end
 end

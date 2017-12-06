@@ -46,25 +46,14 @@ module ShippingTools
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
-    private_prices = Pricing.where(customer_id: current_user.id)
-    public_prices = Pricing.where(customer_id: nil)
-    public_routes = []
-    private_routes = []
-    private_prices.each do |pr|
-      private_routes << {route: pr.route, next: pr.route.next_departure}
-    end
-    public_prices.each do |pr|
-      public_routes << {route: pr.route, next: pr.route.next_departure}
-    end
 
-    resp = {
-      data: @shipment,
-      all_nexuses: @all_nexuses,
-      public_routes: public_routes,
-      private_routes: private_routes
+    return {
+      data:           @shipment,
+      all_nexuses:    @all_nexuses,
+      public_routes:  Pricing.public.map(&:route_h),
+      private_routes: Pricing.private.map(&:route_h)
     }
-    return resp
-  end
+  end 
 
   def reuse_booking_data(params, session, load_type)
     user = User.find(params[:user_id])
