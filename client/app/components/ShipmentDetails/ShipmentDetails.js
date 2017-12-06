@@ -45,6 +45,10 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            availableRoutes: {
+                privateRoutes: [],
+                publicRoutes: []
+            },
             shipment: this.props.shipmentData.data,
             allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
@@ -108,6 +112,7 @@ export class ShipmentDetails extends Component {
 
     handleDayChange(selectedDay) {
         this.setState({ selectedDay });
+        this.props.updateAvailableRoutes(selectedDay);
     }
 
     handleAddressChange(event) {
@@ -338,6 +343,7 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
+    updateAvailableRoutes: PropTypes.func,
     history: PropTypes.object,
     match: PropTypes.object,
     setShipmentDetails: PropTypes.func,

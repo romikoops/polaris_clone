@@ -107,6 +107,9 @@ class Shop extends Component {
         //     }
         // });
     }
+    updateAvailableRoutes(date) {
+        dispatch(shipmentActions.updateAvailableRoutes(date));
+    }
 
     render() {
         // const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
@@ -157,6 +160,7 @@ class Shop extends Component {
                             {...props}
                             theme={theme}
                             shipmentData={response ? response.stage1 : {}}
+                            updateAvailableRoutes={this.updateAvailableRoutes}
                             prevRequest={
                                 request && request.stage2 ? request.stage2 : {}
                             }
