@@ -1,0 +1,146 @@
+<spacer size="16"></spacer>
+
+<container class="body-drip">
+
+  <spacer size="16"></spacer>
+
+  <center>
+    <%= image_tag attachments['logo.png'].url %>
+  </center>
+
+  <spacer size="16"></spacer>
+
+  <row>
+    <columns>      
+      <p>Dear <span><%= @user.full_name %>,</span></p>
+    </columns>
+  </row>
+
+  <row>
+    <columns>
+      <p>We have received your booking request! We will confirm after checking space and equipment availability. Please allow up to one working day for this process.</p>
+    </columns>
+  </row>
+  
+  <row>
+    <columns>
+      <h5><span class="bold">Shipment | Reference Number: <%= @shipment.imc_reference %></span></h5>
+    </columns>
+  </row>
+
+  <row>
+    <columns>
+      <p><span class="bold">Booked:</span> <span><%= formatted_datetime(@shipment.updated_at) %></span></p>
+    </columns>
+  </row>
+
+  <row>
+    <columns>
+      <p class="text-center"><span class="bold">Departure:</span> <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span></p>
+    </columns>
+    <columns>
+      <p class="text-center"><span class="bold">ETA:</span> <span><%= "?" %></span></p>
+    </columns>
+  </row>
+
+  <row>    
+    <columns small="4">
+      <callout class="Light Gray" style="height: 145px;">
+        <h6><span class="bold">From:</span></h6>
+        <p>
+          <span><%= @shipment.origin.city_country %></span>
+        </p>
+      </callout>
+    </columns>
+    <columns small="4">
+      <callout class="Light Gray" style="height: 145px;">
+        <h6><span class="bold">To:</span class="bold"></p
+        h6>
+        <p>
+          <span><%= @shipment.destination.city_country %></span>
+        </p>
+      </callout>
+    </columns>
+  </row>
+
+  <row>    
+    <columns small="4">
+      <callout class="Light Gray" style="height: 160px;">
+        <h6><span class="bold">Shipment Details:</span></h6>
+        <p>
+          <span class="bold">Mode of transport:</span> <span>Ocean</span><br>  
+          <span class="bold">Pre- and On-Carriage:</span> <span>None</span><br>
+          <span class="bold">Type of transport:</span> <span>FCL – 20’ dry container</span>
+        </p>
+      </callout>
+    </columns>
+    <columns small="4">
+      <callout class="Light Gray" style="height: 160px;">
+        <h6><span class="bold">Pricing Details:</span></h6>
+        <p>
+          <span class="bold">Overall Rate:</span> <span><%= format_to_price("€", @shipment.total_price) %></span><br>  
+          <span class="bold">Service Charges:</span> <span><%= format_to_price("€", @shipment.total_price) %></span><br>
+          <span class="bold">Discount:</span> <span>None</span>
+        </p>
+      </callout>
+    </columns>
+  </row>
+
+  <row>    
+    <columns small="4">
+      <callout class="Light Gray" style="height: 160px;">
+        <h6><span class="bold">Cargo Details:</span></h6>
+        <p>
+          <span class="bold">Hazardous Good:</span> <span>None</span><br>  
+          <span class="bold">Customs Clearance:</span> <span>None</span><br>
+          <span class="bold">Insurance:</span> <span>None</span>
+        </p>
+      </callout>
+    </columns>
+    <columns small="4">
+      <callout class="Light Gray" style="height: 160px;">
+        <h6><span class="bold">Customer Details:</span></h6>
+        <p>
+          <span class="bold"><%= @user.full_name_and_company %></span><br>  
+          <span class="bold">Phone:</span> <span><%= @user.phone %></span><br>
+          <span class="bold">Mail:</span> <span><%= @user.email %></span>
+        </p>
+      </callout>
+    </columns>
+  </row>
+
+  <row>
+    <columns>      
+      <p>Thank you for your interest and best regards,</p>
+    </columns>
+  </row>
+
+  <row>
+    <columns small='2'> 
+      <%= image_tag attachments['logo_small.png'].url %>
+    </columns>
+  </row>
+
+  <row>
+    <columns>
+
+      <p>
+        <span class="bold">Greencarrier Freight Services International AB</span><br>
+        Torgny Segerstedtsgatan 80 <br>
+        P.O Box 1037 <br>
+        SE-405 22 Gothenburg <br>
+        Visiting adress: Redegatan 1B <br>
+        Phone: +46 31 85 79 00 
+      <p>
+    </columns>
+  </row>
+  
+  <row>
+    <columns>      
+      <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on <a href="http://freightservices.greencarrier.com/contact/">http://freightservices.greencarrier.com/contact/</a>.<p>
+    </columns>
+  </row>
+
+  <spacer class="body-drip" size="16"></spacer>
+
+</container>

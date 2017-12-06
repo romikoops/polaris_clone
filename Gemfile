@@ -5,7 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
 # Use sqlite3 as the database for Active Record
@@ -33,6 +32,9 @@ gem 'geocoder'
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'
 
+# Use os to get information about the operating system
+gem 'os'
+
 # Use Wicked PDF to generate PDFs from HTML
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
@@ -46,13 +48,17 @@ gem 'table_print'
 
 # Filter and sort Active record collections
 gem "filterrific"
+
 # Pagination library
 gem 'will_paginate', '~> 3.1.5'
 
 # Easier CSS for emails
 gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
+
+# Image resizing
 gem "mini_magick"
+
 # AWS SDK for hosting and S3
 gem 'aws-sdk'
 
