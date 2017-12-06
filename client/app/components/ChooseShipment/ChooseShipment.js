@@ -3,51 +3,26 @@ import PropTypes from 'prop-types';
 import styles from './ChooseShipment.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
+import { CardLinkRow } from '../CardLinkRow/CardLinkRow';
 export class ChooseShipment extends Component {
+    constructor(props) {
+        super(props);
+        console.log(this.props.selectShipment);
+        const cards = this.props.shipmentTypes.map((shipmentType) => (
+            {
+                name: shipmentType.name,
+                img: shipmentType.img,
+                options: { contained: true },
+                handleClick: () => this.props.selectShipment(shipmentType.code)
+            }
+        ));
+        console.log(cards[0].handleClick);
+        this.state = { cards: cards};
+    }
     render() {
-        const { theme, messages, shipmentTypes, selectShipment } = this.props;
-        const color = theme
-            ? theme.colors.primary
-            : 'black';
-        const cards = [];
-
-        shipmentTypes.forEach((shop, i) => {
-            const display = shop.name;
-            const imgClass = { backgroundImage: 'url(' + shop.img + ')' };
-            const textColour = { color: color };
-            cards.push(
-                <div
-                    key={i}
-                    className={`${
-                        styles.card_link
-                    } layout-column flex-100 flex-gt-sm-30`}
-                    onClick={() => selectShipment(shop.code)}
-                >
-                    <div
-                        className={`${styles.card_img} flex-85`}
-                        style={imgClass}
-                    />
-                    <div
-                        className={`${
-                            styles.card_action
-                        } flex-15 layout-row layout-align-space-between-center`}
-                    >
-                        <div className="flex-none layout-row layout-align-center-center">
-                            <p className="flex-none">{display} </p>
-                        </div>
-                        <div className="flex-none layout-row layout-align-center-center">
-                            <i
-                                className="flex-none fa fa-chevron-right"
-                                style={textColour}
-                            />
-                        </div>
-                    </div>
-                </div>
-            );
-        });
+        const { theme, messages } = this.props;
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
-
             <div
                 className={`${
                     styles.card_link_row
@@ -62,7 +37,7 @@ export class ChooseShipment extends Component {
                     >
                         <p className="flex-none"> Choose your shipment type</p>
                     </div>
-                    {cards}
+                    <CardLinkRow theme={theme} cardArray={this.state.cards} />
                 </div>
             </div>
         );

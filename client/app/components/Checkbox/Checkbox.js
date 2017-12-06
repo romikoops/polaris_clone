@@ -36,7 +36,7 @@ export class Checkbox extends Component {
         const { disabled, theme } = this.props;
         const { checked } = this.state;
         const checkGradient = {
-            background: `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)`,
+            background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
         };
         return (
             <div className={`${styles.checkbox} flex-none`}>
