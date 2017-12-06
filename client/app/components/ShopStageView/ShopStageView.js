@@ -16,7 +16,7 @@ export class ShopStageView extends Component {
     stageFunction(stage) {
         const { theme } = this.props;
         const gradientStyle = {
-            background: theme ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black'
+            background: theme ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%)` : 'black'
         };
 
         let stageBox;
