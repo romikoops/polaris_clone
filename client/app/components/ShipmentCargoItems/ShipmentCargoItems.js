@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
@@ -95,14 +96,22 @@ export class ShipmentCargoItems extends Component {
         }
 
         return (
-
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Gross Weight </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="payload_in_kg" value={newCargoItem.payload_in_kg} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="payload_in_kg"
+                                    value={newCargoItem.payload_in_kg}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationError="Must not be 0"
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     kg
                                 </div>
@@ -111,7 +120,16 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Height </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_z" value={newCargoItem.dimension_z} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_z"
+                                    value={newCargoItem.dimension_z}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationError="Must not be 0"
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
@@ -120,7 +138,16 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Width </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_y" value={newCargoItem.dimension_y} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_y"
+                                    value={newCargoItem.dimension_y}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationError="Must not be 0"
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
@@ -129,7 +156,16 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Length </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_x" value={newCargoItem.dimension_x} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_x"
+                                    value={newCargoItem.dimension_x}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationError="Must not be 0"
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
