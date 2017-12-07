@@ -7,6 +7,19 @@
     text-align: center;
     color: #FFFFFF;
     border: none;
+    transition: margin 0.2s ease;
+    transition: shadow 0.4s ease;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      margin: -1px 1px 1px -1px;
+      box-shadow: 1px 1px 1px rgba(black, 0.3);
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
   }
 
   .large {
@@ -17,12 +30,13 @@
   .small {
     height: 33.83px;
     width: 167px;
-    border: none;
+    font-size: 16px;
   }
 
   .full {
     height: 33.83px;
     width: 100%;
+    font-size: 16px;
   }
 
   .neutral {

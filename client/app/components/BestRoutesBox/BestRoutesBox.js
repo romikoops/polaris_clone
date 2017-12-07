@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { moment } from '../../constants';
+import { Price } from '../Price/Price';
 import styles from './BestRoutesBox.scss';
 export class BestRoutesBox extends Component {
     constructor(props) {
@@ -29,7 +30,7 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Fastest route</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{fastestFare.toFixed(2)} EUR</p>
+                    <Price value={fastestFare} scale="0.75" />
                 </div>
             </div>
         );
@@ -56,7 +57,7 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Cheapest Route</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{cheapestFare.toFixed(2)} EUR</p>
+                    <Price value={cheapestFare} scale="0.75" />
                 </div>
             </div>
         );
@@ -100,7 +101,7 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Best Deal</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{bestFare.toFixed(2)} EUR</p>
+                    <Price value={bestFare} scale="0.75"/>
                 </div>
             </div>
         );

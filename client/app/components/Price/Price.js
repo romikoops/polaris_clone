@@ -10,7 +10,7 @@ export class Price extends Component {
     }
     render() {
         const { value, scale } = this.props;
-        const scaleTransformation = scale ? { transform: `scale(${scale})` } : {};
+        const scaleTransformation = scale ? { transform: `scale(${scale})`, transformOrigin: `0 ${35.5 * scale / 2}px` } : {};
         const priceUnits = Math.floor(value);
         const priceCents = this.format2Digit(Math.floor((value * 100) % 100));
         return (

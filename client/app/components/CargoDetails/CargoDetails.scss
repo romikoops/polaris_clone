@@ -1,19 +1,19 @@
 :local {
   .cargo_input {
-      height: 36px; 
-      width: calc(100% - 10px);
-      border: 1px solid #F2F2F2;  
-      border-radius: 3px; 
-      background-color: #F9F9F9;  
-      box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    height: 36px; 
+    width: calc(100% - 10px);
+    border: 1px solid #F2F2F2;  
+    border-radius: 3px; 
+    background-color: #F9F9F9;  
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
   .cargo_text_area {
-      height: 112px;
-      width: calc(100% - 10px);
-      border: 1px solid #F2F2F2;
-      border-radius: 3px;
-      background-color: #F9F9F9;
-      box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    height: 112px;
+    width: calc(100% - 10px);
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
   .f_header {
     color: #39393A;
@@ -24,5 +24,28 @@
     color: #39393A;
     font-size: 16px; 
     line-height: 18px;
+  }
+  .box_content {
+    transition: all 1s ease;
+    visibility: hidden;
+    height: 0px;
+    padding-top: 0px;
+    overflow: hidden;
+  }
+  .box_content.show {
+    visibility: visible;
+    height: 199px;
+  }
+  .no_customs_box {
+    transition: all 1s ease;
+    visibility: hidden;
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+  }
+  .no_customs_box.show {
+    visibility: visible;
+    opacity: 1;
+    height: 87.83px;
   }
 }

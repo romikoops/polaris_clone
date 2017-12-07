@@ -14,14 +14,11 @@ export class ShopStageView extends Component {
         this.stageName(this.props.currentStage);
     }
     stageFunction(stage) {
-        const colour = this.props.theme
-            ? this.props.theme.colors.primary
-            : 'white';
-        const borderColour = this.props.theme
-            ? this.props.theme.colors.primary
-            : 'black';
-        const textStyle = { color: colour };
-        const borderStyle = { borderColor: borderColour };
+        const { theme } = this.props;
+        const gradientStyle = {
+            background: theme ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%)` : 'black'
+        };
+
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
@@ -30,21 +27,23 @@ export class ShopStageView extends Component {
                         styles.shop_stage_past
                     } flex-none layout-column layout-align-center-center`}
                 >
-                    <i className="fa fa-check flex-none" style={textStyle} />
+                    <i className="fa fa-check flex-none" style={gradientStyle} />
                 </div>
             );
         } else if (stage.step === this.props.currentStage) {
             stageBox = (
-                <div
-                    className={`${
-                        styles.shop_stage_current
-                    } flex-none layout-column layout-align-center-center`}
-                    style={borderStyle}
-                >
-                    <h3 className="flex-none" style={textStyle}>
-                        {' '}
-                        {stage.step}{' '}
-                    </h3>
+                <div className={styles.wrapper_shop_stage_current} >
+                    <div
+                        className={`${
+                            styles.shop_stage_current
+                        } flex-none layout-column layout-align-center-center`}
+                    >
+                        <h3 className="flex-none" style={gradientStyle}>
+                            {' '}
+                            {stage.step}{' '}
+                        </h3>
+                    </div>
+                    <div className={styles.shop_stage_current_border} style={gradientStyle}></div>
                 </div>
             );
         } else {

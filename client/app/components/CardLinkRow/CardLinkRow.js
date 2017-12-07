@@ -4,14 +4,22 @@ import { CardLink } from '../CardLink/CardLink';
 import styles from './CardLinkRow.scss';
 export class CardLinkRow extends Component {
     render() {
-        const cards = [];
-        this.props.cardArray.forEach(shop => {
-            cards.push(<CardLink key={shop.name} text={shop.name} img={shop.img} path={shop.url} handleLink={this.handleLink} theme={this.props.theme} />);
-        });
+        const cards = this.props.cardArray.map(card => (
+                <CardLink
+                    key={card.name}
+                    text={card.name}
+                    img={card.img}
+                    path={card.url}
+                    handleClick={card.handleClick ? card.handleClick : this.props.handleClick}
+                    theme={this.props.theme}
+                    options={card.options}
+                />
+            )
+        );
         return (
-          <div className={`${styles.card_link_row} layout-row flex-100`}>
-            { cards }
-          </div>
+            <div className={`${styles.card_link_row} layout-row flex-100`}>
+                { cards }
+            </div>
         );
     }
 }
@@ -19,6 +27,7 @@ export class CardLinkRow extends Component {
 CardLinkRow.propTypes = {
     theme: PropTypes.object,
     history: PropTypes.any,
-    cardArray: PropTypes.array
+    cardArray: PropTypes.array,
+    handleClick: PropTypes.func
 };
 

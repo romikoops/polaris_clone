@@ -24,13 +24,14 @@ export class LandingTopAuthed extends Component {
     }
     render() {
         const {user, theme} = this.props;
+        const handleClick = () => this.setState({ redirect: true });
         return (
             <div className={styles.landing_top_authed + ' layout-wrap layout-row flex-100 layout-align-center'}>
                 <Header user={user} theme={theme} />
                 <div className={'layout-row flex-none layout-wrap ' + defaults.content_width}>
                     <div className="flex-100 layout-wrap layout-row">
                         <p className={styles.header_text} >What would you like to do?</p>
-                        <CardLinkRow theme={theme} cardArray={this.state.shops} />
+                        <CardLinkRow theme={theme} cardArray={this.state.shops} handleClick={handleClick} />
                     </div>
                 </div>
             </div>
