@@ -34,9 +34,7 @@ export class RouteResult extends Component {
         this.props.selectResult({ schedule: schedule, total: totalFees });
     }
     dashedGradient(color1, color2) {
-        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
-            color1
-        }, ${color2})`;
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     format2Digit(n) {
         return ('0' + n).slice(-2);
