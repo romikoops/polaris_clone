@@ -179,6 +179,9 @@ img.NavDropdown---dropDownImage---3bEJ_ {
   text-decoration: underline; }
 .default_classes---content_width---3pLqn {
   width: 1000px; }
+  @media screen and (min-width: 1920px) {
+    .default_classes---content_width---3pLqn {
+      width: 1600px; } }
 
 .default_classes---button_padding---1CLgZ {
   padding: 60px 5px; }
@@ -1780,6 +1783,9 @@ nav.NavSidebar---menu---3eXWA {
   margin: 0; }
 .index---content_width---1PnTA {
   width: 1000px; }
+  @media screen and (min-width: 1920px) {
+    .index---content_width---1PnTA {
+      width: 1600px; } }
 
 .index---button_padding---25iEW {
   padding: 60px 5px; }
