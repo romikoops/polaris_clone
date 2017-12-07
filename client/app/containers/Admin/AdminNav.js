@@ -42,6 +42,12 @@ export class AdminNav extends Component {
                     text: 'Trucking',
                     url: '/admin/trucking',
                     target: 'trucking'
+                },
+                {
+                    icon: 'fa-suers',
+                    text: 'Client',
+                    url: '/admin/clients',
+                    target: 'clients'
                 }
             ]
         };

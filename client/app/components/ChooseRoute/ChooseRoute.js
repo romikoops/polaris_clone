@@ -23,6 +23,7 @@ export class ChooseRoute extends Component {
     componentDidMount() {
         const { setStage } = this.props;
         setStage(2);
+        window.scrollTo(0, 0);
     }
     setDuration(val) {
         this.setState({ durationFilter: val });

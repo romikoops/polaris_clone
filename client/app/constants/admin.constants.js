@@ -50,3 +50,18 @@ export const serviceChargeNames = {
     cfs_terminal_charges: 'CFS Terminal Charges',
     misc_fees: 'Miscellaneous Fees'
 };
+export const pricingNames = {
+    air: 'Air',
+    wm_min: 'Weight measure (min)',
+    wm_rate: 'Weight Measure (rate)',
+    currency: 'Currency',
+    kg_per_cbm: 'Kg per CBM',
+    heavy_weight: 'Heavy Weight (rate)',
+    heavy_wm_min: 'HeavyWeight (min)',
+    lcl: 'LCL',
+    fcl_20f: 'FCL 20ft',
+    rate: 'Container Rate',
+    heavy_kg_min: 'Heavy Weight (min kg)',
+    fcl_40f: 'FCL 40ft',
+    fcl_40f_hq: 'FCL 40ft HQ'
+};

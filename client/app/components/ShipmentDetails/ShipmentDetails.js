@@ -17,12 +17,14 @@ export class ShipmentDetails extends Component {
         super(props);
         this.state = {
             origin: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
                 fullAddress: ''
             },
             destination: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
@@ -45,6 +47,8 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            has_on_carriage: false,
+            has_pre_carriage: false,
             shipment: this.props.shipmentData.data,
             allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
@@ -66,6 +70,7 @@ export class ShipmentDetails extends Component {
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
+        this.deleteCargo = this.deleteCargo.bind(this);
     }
 
     componentDidMount() {
@@ -73,6 +78,7 @@ export class ShipmentDetails extends Component {
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
+        window.scrollTo(0, 0);
         setStage(1);
         console.log('######### MOUNTED ###########');
     }
@@ -109,17 +115,28 @@ export class ShipmentDetails extends Component {
     handleDayChange(selectedDay) {
         this.setState({ selectedDay });
     }
+    deleteCargo(target, index) {
+        const arr = this.state[target];
+        arr.splice(index, 1);
+        this.setState({[target]: arr});
+    }
 
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
         const key2 = eventKeys[1];
         const val = event.target.value;
+        const addObj = this.state[key1];
+        addObj[key2] = val;
+        let fullAddress = this.state[key1].fullAddress;
+        // debugger;
+        if (fullAddress) {
+            fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
+        }
         this.setState({
-            [key1]: {
-                [key2]: val
-            }
+            [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
+        console.log({...this.state[key1], [key2]: val, fullAddress });
     }
 
     handleCargoItemChange(event) {
@@ -214,6 +231,7 @@ export class ShipmentDetails extends Component {
                         containers={this.state.containers}
                         addContainer={this.addNewContainer}
                         handleDelta={this.handleContainerChange}
+                        deleteItem={this.deleteCargo}
                     />
                 );
             }
@@ -223,6 +241,7 @@ export class ShipmentDetails extends Component {
                         cargoItems={this.state.cargoItems}
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
+                        deleteItem={this.deleteCargo}
                     />
                 );
             }
@@ -249,6 +268,7 @@ export class ShipmentDetails extends Component {
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
+                handleAddressChange={this.handleAddressChange}
             />
         );
 

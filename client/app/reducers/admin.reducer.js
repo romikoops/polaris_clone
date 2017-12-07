@@ -73,10 +73,11 @@ export function admin(state = {}, action) {
             });
             return reqPric;
         case adminConstants.GET_PRICINGS_SUCCESS:
-            const succPric = merge({}, state, {
+            // debugger;
+            const succPric = merge({}, {
                 pricingData: action.payload.data,
                 loading: false
-            });
+            }, state);
             return succPric;
         case adminConstants.GET_PRICINGS_FAILURE:
             const errPric = merge({}, state, {
