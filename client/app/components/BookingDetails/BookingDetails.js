@@ -76,6 +76,7 @@ export class BookingDetails extends Component {
         this.toNextStage = this.toNextStage.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
         this.handleInsurance = this.handleInsurance.bind(this);
+        this.calcInsurance = this.calcInsurance.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage} = this.props;
@@ -83,6 +84,7 @@ export class BookingDetails extends Component {
             this.loadPrevReq(prevRequest.shipment);
         }
         setStage(3);
+        window.scrollTo(0, 0);
     }
     loadPrevReq(obj) {
         this.setState({
@@ -117,11 +119,18 @@ export class BookingDetails extends Component {
     }
     handleInsurance() {
         const {insurance} = this.state;
-        const {shipmentData} = this.props;
+
         if (insurance.bool) {
             this.setState({insurance: {bool: false, val: 0}});
         } else {
-            const iVal = (shipmentData.shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17;
+            this.calcInsurance();
+        }
+    }
+    calcInsurance(val) {
+        const gVal = val ? val : parseInt(this.state.totalGoodsValue, 10);
+        const {shipmentData} = this.props;
+        if (this.state.insurance) {
+            const iVal = (parseFloat(shipmentData.shipment.total_price, 10) + gVal) * 1.1 * 0.17;
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }
@@ -167,7 +176,13 @@ export class BookingDetails extends Component {
 
     handleCargoInput(event) {
         const { name, value } = event.target;
-        this.setState({ [name]: value });
+        if (name === 'totalGoodsValue') {
+            const gVal = parseInt(value, 10);
+            this.setState({ [name]: gVal });
+            this.calcInsurance(gVal);
+        } else {
+            this.setState({ [name]: value });
+        }
     }
 
     handleNotifyeeInput(event) {
@@ -270,7 +285,8 @@ export class BookingDetails extends Component {
                     hsCode={this.state.hsCode}
                     cargoNotes={this.state.cargoNotes}
                     totalGoodsValue={this.state.totalGoodsValue}
-                    handleInsurance
+                    handleInsurance={this.handleInsurance}
+                    insurance={this.state.insurance}
                 />
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
@@ -293,9 +309,9 @@ export class BookingDetails extends Component {
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                  <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
-                  </div>
+                    <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" />
+                    </div>
                 </div>
             </div>
         );

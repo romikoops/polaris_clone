@@ -35,7 +35,7 @@ export class CargoDetails extends Component {
         this.props.handleChange(event);
     }
     render() {
-        const { shipmentData, theme } = this.props;
+        const { shipmentData, theme, insurance } = this.props;
         const { shipment, dangerousGoods } = shipmentData;
         const packUrl = shipmentData
             ? '/shipments/' + shipment.id + '/upload/packing_sheet'
@@ -58,9 +58,9 @@ export class CargoDetails extends Component {
         const dGoods = shipmentData
             ? '/shipments/' + shipment.id + '/upload/dangerous_goods'
             : '';
-        const insuranceVal = shipmentData
-            ? (shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17
-            : 0;
+        // const insuranceVal = shipmentData
+        //     ? (shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17
+        //     : 0;
         const insuranceBox = (
 
             <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.insuranceView ? styles.show : ''}`}>
@@ -75,7 +75,7 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {insuranceVal.toFixed(2)} €</h6>
+                    <h6 className="flex-100"> {insurance.val.toFixed(2)} €</h6>
                 </div>
             </div>
         );
@@ -359,5 +359,7 @@ CargoDetails.propTypes = {
     handleChange: PropTypes.func,
     hsCode: PropTypes.string,
     cargoNotes: PropTypes.string,
-    totalGoodsValue: PropTypes.number
+    totalGoodsValue: PropTypes.number,
+    handleInsurance: PropTypes.func,
+    insurance: PropTypes.object
 };

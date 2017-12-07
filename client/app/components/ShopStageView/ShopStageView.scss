@@ -89,13 +89,14 @@
     left:0;
     position: absolute;
     z-index: 2;
-    background: rgba(0,10,4,0.26);
+    background: rgba(0,10,4,0.60);
   }
   .shop_banner {
     height: 124px;
-    background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
+    // background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
+    background-image: url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg');
     background-size: cover;
-    background-position: 0% 85%;
+    background-position: 0% 15%;
     background-repeat: no-repeat;
     position: relative;
     text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);

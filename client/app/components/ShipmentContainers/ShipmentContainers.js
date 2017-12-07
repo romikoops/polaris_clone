@@ -35,6 +35,9 @@ export class ShipmentContainers extends Component {
         };
         this.props.handleDelta(event);
     }
+    deleteCargo(index) {
+        this.props.deleteItem('containers', index);
+    }
 
     render() {
         const { containers, handleDelta, addContainer } = this.props;
@@ -70,6 +73,9 @@ export class ShipmentContainers extends Component {
                             <div className="flex-20 layout-row layout-align-center-center">
                                 Dangerous Goods:{' '}
                                 {cont.dangerousGoods ? 'Yes' : 'No'}
+                            </div>
+                            <div className="flex-10 layout-row layout-align-center-center">
+                                <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
                             </div>
                         </div>
                     );
@@ -163,5 +169,6 @@ ShipmentContainers.propTypes = {
     theme: PropTypes.object,
     addContainer: PropTypes.func,
     containers: PropTypes.array,
-    handleDelta: PropTypes.func
+    handleDelta: PropTypes.func,
+    deleteCargo: PropTypes.func
 };

@@ -57,4 +57,66 @@
     -webkit-text-fill-color: transparent !important;
   
   }
+  .hub_card {
+    // width: 300px;
+    height: 200px;
+    margin: 5px;
+    // background: rgba(10,1,12,0.75);
+    color: #FFFFFF;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .route_hub_bg {
+    position: absolute;
+    z-index:1;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    right:0;
+    left:0;
+    bottom: 0;
+  }
+  .route_hub_top {
+    position: absolute;
+    z-index:1;
+    height: 50%;
+    width: 100%;
+    top: 0;
+    right:0;
+    left:0;
+    bottom: 50%;
+     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .route_hub_bottom {
+    position: absolute;
+    z-index:1;
+    height: 50%;
+    width: 100%;
+    top: 50%;
+    right:0;
+    left:0;
+    bottom: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .icon_box {
+    height: 100%;
+    padding: 10px;
+  }
+  .price_card {
+    margin: 5px;
+    width: calc(50% - 10px);
+  }
+  .price_card .title {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  .price_card p {
+    margin: 0;
+  }
 }

@@ -28,8 +28,8 @@ class OfferCalculator
     end
 
     @shipment.planned_pickup_date = Chronic.parse(params[:shipment][:planned_pickup_date], endian_precedence: :little)
-    @shipment.origin = Location.get_geocoded_location(params[:origin_user_input], params[:shipment][:origin_id], @has_pre_carriage)
-    @shipment.destination = Location.get_geocoded_location(params[:destination_user_input], params[:shipment][:destination_id], @has_on_carriage)
+    @shipment.origin = Location.get_geocoded_location(params[:shipment][:origin_user_input], params[:shipment][:origin_id], @has_pre_carriage)
+    @shipment.destination = Location.get_geocoded_location(params[:shipment][:destination_user_input], params[:shipment][:destination_id], @has_on_carriage)
 
     @truck_seconds_pre_carriage = 0
     @pricing = nil
@@ -77,6 +77,7 @@ class OfferCalculator
   private
 
   def determine_route!
+    
     @route = Route.for_locations(@shipment.origin, @shipment.destination)
     @shipment.route = @route
   end
@@ -204,10 +205,12 @@ class OfferCalculator
         if !fees[sched_key]
           fees[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}}
           if @has_pre_carriage
+          
             fees[sched_key][:trucking_pre] = determine_trucking_options(@shipment.origin, sched.starthub)
           end
           
           if @has_on_carriage
+          
             fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.endhub)
           end
           
@@ -265,19 +268,19 @@ class OfferCalculator
       case @load_type
       when 'fcl'
         @containers.each do |container|
-          price_results << TruckingPricing.calc_final_price(origin, container.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, container.payload_in_kg, km, hub) #################
         end
       when 'lcl'
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
           #########################!!!!!!!!!!!!!!!!!!!
         end
       when "openlcl"
         
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
         end
       end
       trucking_total = {value: 0, currency:""}

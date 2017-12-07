@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-// import { AdminPricePanel } from './AdminPricePanel';
+
 // import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
 export class AdminSchedules extends Component {
@@ -18,24 +18,12 @@ export class AdminSchedules extends Component {
     render() {
         const {theme, hubs, schedules } = this.props;
         const { currentView } = this.state;
-        // const {pricings, routes} = pricingData;
-        const hubHash = {};
-        hubs.forEach((hub) => {
-            hubHash[hub.data.id] = hub;
-        });
-        console.log(schedules);
-        // if (charges && hubs) {
-        //     charges.forEach((charge) =>{
-        //         console.log(charge.hub_id);
-        //         console.log(hubHash[charge.hub_id]);
-        //         if (hubHash[charge.hub_id]) {
-        //             chargeList.push(<AdminChargePanel key={v4()} hub={hubHash[charge.hub_id]} theme={theme} charge={charge}/>);
-        //         }
-        //     });
-        // }
+        console.log(schedules, hubs);
         const trainUrl = '/admin/train_schedules/process_csv';
         const vesUrl = '/admin/vessel_schedules/process_csv';
         const airUrl = '/admin/air_schedules/process_csv';
+        let routesArr;
+
         const railView = (
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
@@ -43,6 +31,7 @@ export class AdminSchedules extends Component {
                     <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx"/>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    {routesArr}
                 </div>
             </div>
         );
@@ -53,6 +42,7 @@ export class AdminSchedules extends Component {
                     <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx"/>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    {routesArr}
                 </div>
             </div>
         );
@@ -63,6 +53,7 @@ export class AdminSchedules extends Component {
                     <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx"/>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    {routesArr}
                 </div>
             </div>
         );
@@ -84,6 +75,7 @@ export class AdminSchedules extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
