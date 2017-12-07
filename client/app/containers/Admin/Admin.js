@@ -72,7 +72,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/schedules"
-                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} schedules={schedules} routes={pricingData.routes}/>}
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} scheduleData={schedules} />}
                             />
                              <Route
 

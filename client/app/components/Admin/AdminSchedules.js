@@ -105,9 +105,9 @@ export class AdminSchedules extends Component {
         };
     }
     render() {
-        const {theme, hubs, schedules, routes } = this.props;
+        const {theme, hubs, scheduleData} = this.props;
         const {filters, hubFilter, motFilter, sortFilter} = this.state;
-        if (!schedules || !hubs) {
+        if (!scheduleData || !hubs) {
             return '';
         }
         const filterMoTOptions = [
@@ -119,14 +119,14 @@ export class AdminSchedules extends Component {
             {value: 'eta', label: 'ETA'},
             {value: 'etd', label: 'ETD'}
         ];
+        const {routes, air, train, ocean} = scheduleData;
         const { showList } = this.state;
-        console.log(schedules, hubs);
         const trainUrl = '/admin/train_schedules/process_csv';
         const vesUrl = '/admin/vessel_schedules/process_csv';
         const airUrl = '/admin/air_schedules/process_csv';
         const truckUrl = '/admin/truck_schedules/process_csv';
         const schedArr = [];
-        const allSchedules = [...schedules.air, ...schedules.ocean, ...schedules.train];
+        const allSchedules = [...air, ...ocean, ...train];
         const hFilterVal = parseInt(hubFilter.value, 10);
         allSchedules.forEach(sched => {
             if (!filters.hub && filters.mot && sched.mode_of_transport === motFilter.value) {
@@ -151,16 +151,6 @@ export class AdminSchedules extends Component {
         if (filters.sort) {
             schedArr.sort(this.dynamicSort(sortFilter.value));
         }
-        const listView = (
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                {schedArr}
-            </div>
-        );
-
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
-
         const StyledSelect = styled(Select)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -179,43 +169,12 @@ export class AdminSchedules extends Component {
                 background-color: #F9F9F9;
             }
         `;
-        const genView = (
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                        <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Excel Uploads</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-                        <p className="flex-80">Upload Train Schedules Sheet</p>
-                        <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx"/>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-                        <p className="flex-80">Upload Air Schedules Sheet</p>
-                        <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx"/>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-                        <p className="flex-80">Upload Vessel Schedules Sheet</p>
-                        <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx"/>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-                        <p className="flex-80">Upload Trucking Schedules Sheet</p>
-                        <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx"/>
-                    </div>
-                </div>
-                <AdminScheduleGenerator theme={theme} routes={routes} />
-            </div>
-        );
-
-        const currView = showList ? listView : genView;
         const hubList = [];
         Object.keys(hubs).forEach(key => {
             hubList.push({value: key, label: hubs[key].data.name});
         });
-        const backButton = (<RoundButton theme={theme} text="Back to list" size="small" back iconClass="fa-th-list" handleNext={this.toggleView} />);
-        const newButton = (<RoundButton theme={theme} text="New Upload" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
-        return(
-            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
+        const listView = (
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-align-start-center">
                     <div className="flex-33 layout-row layout-align-start-center">
                         <StyledSelect
@@ -245,6 +204,48 @@ export class AdminSchedules extends Component {
                         />
                     </div>
                 </div>
+                {schedArr}
+            </div>
+        );
+
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
+
+
+        const genView = (
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                        <p className={` ${styles.sec_header_text} flex-none`}  >Excel Uploads</p>
+                    </div>
+                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                        <p className="flex-80">Upload Train Schedules Sheet</p>
+                        <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx"/>
+                    </div>
+                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                        <p className="flex-80">Upload Air Schedules Sheet</p>
+                        <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx"/>
+                    </div>
+                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                        <p className="flex-80">Upload Vessel Schedules Sheet</p>
+                        <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx"/>
+                    </div>
+                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                        <p className="flex-80">Upload Trucking Schedules Sheet</p>
+                        <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx"/>
+                    </div>
+                </div>
+                <AdminScheduleGenerator theme={theme} routes={routes} hubs={hubList} />
+            </div>
+        );
+
+        const currView = showList ? listView : genView;
+
+        const backButton = (<RoundButton theme={theme} text="Back to list" size="small" back iconClass="fa-th-list" handleNext={this.toggleView} />);
+        const newButton = (<RoundButton theme={theme} text="New Upload" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
+        return(
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Schedules</p>
                     { showList ? newButton : backButton }
@@ -257,5 +258,5 @@ export class AdminSchedules extends Component {
 AdminSchedules.propTypes = {
     theme: PropTypes.object,
     hubs: PropTypes.object,
-    pricings: PropTypes.array
+    scheduleData: PropTypes.array
 };

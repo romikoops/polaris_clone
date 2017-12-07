@@ -9,7 +9,8 @@ class Admin::SchedulesController < ApplicationController
     @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
     @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
     @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
-    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules})
+    @routes = Route.where(tenant_id: current_user.tenant_id)
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
   end
   def auto_generate_schedules
     @route = Route.find(params[:route_id])
