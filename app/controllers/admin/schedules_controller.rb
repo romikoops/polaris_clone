@@ -11,6 +11,11 @@ class Admin::SchedulesController < ApplicationController
     @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules})
   end
+  def auto_generate_schedules
+    @route = Route.find(params[:route_id])
+    @route.generate_weekly_schedules(params[:mot], params[:start_date], params[:end_date], params[:ordinal_array], params[:journey_length])
+    response_handler(true)
+  end
 
   def overwrite_trains
      if params[:file]

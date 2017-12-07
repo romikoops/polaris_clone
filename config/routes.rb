@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     post "vessel_schedules/process_csv", to: "schedules#overwrite_vessels", as: :schedules_vessel_overwrite
     post "air_schedules/process_csv", to: "schedules#overwrite_air", as: :schedules_air_overwrite
     get 'hubs', to: 'hubs#index'
+    post 'schedules/auto_generate', to: 'schedules#auto_generate_schedules'
   end
 
   resources :users do
