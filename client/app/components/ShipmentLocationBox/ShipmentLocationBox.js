@@ -168,18 +168,137 @@ export class ShipmentLocationBox extends Component {
             disableDefaultUI: true,
             styles: [
                 {
-                    featureType: 'water',
-                    elementType: 'all',
-                    stylers: [
+                    'featureType': 'administrative',
+                    'elementType': 'all',
+                    'stylers': [
                         {
-                            color: '#275b9b'
-                        },
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'administrative.locality',
+                    'elementType': 'labels',
+                    'stylers': [
                         {
-                            invert_lightness: true
+                            'visibility': 'on'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'landscape',
+                    'elementType': 'all',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'poi',
+                    'elementType': 'all',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'road',
+                    'elementType': 'all',
+                    'stylers': [
+                        {
+                            'visibility': 'on'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'road',
+                    'elementType': 'labels',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'road',
+                    'elementType': 'labels.text',
+                    'stylers': [
+                        {
+                            'visibility': 'on'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'transit',
+                    'elementType': 'all',
+                    'stylers': [
+                        {
+                            'visibility': 'on'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'transit',
+                    'elementType': 'labels',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'water',
+                    'elementType': 'all',
+                    'stylers': [
+                        {
+                            'visibility': 'on'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'water',
+                    'elementType': 'geometry',
+                    'stylers': [
+                        {
+                            'color': '#12608d'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'water',
+                    'elementType': 'labels.text.fill',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
+                        }
+                    ]
+                },
+                {
+                    'featureType': 'water',
+                    'elementType': 'labels.text.stroke',
+                    'stylers': [
+                        {
+                            'visibility': 'off'
                         }
                     ]
                 }
             ]
+            // [
+            //     {
+            //         featureType: 'water',
+            //         elementType: 'all',
+            //         stylers: [
+            //             {
+            //                 color: '#275b9b'
+            //             },
+            //             {
+            //                 invert_lightness: true
+            //             }
+            //         ]
+            //     }
+            // ]
         };
 
         const map = new this.props.gMaps.Map(

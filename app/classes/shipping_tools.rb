@@ -48,13 +48,14 @@ module ShippingTools
     # end
     private_prices = Pricing.where(customer_id: current_user.id)
     public_prices = Pricing.where(customer_id: nil)
+    @routes = Route.all
     public_routes = []
     private_routes = []
-    private_prices.each do |pr|
-      private_routes << {route: pr.route, next: pr.route.next_departure}
+    @routes.each do |pr|
+      private_routes << {route: pr, next: pr.next_departure}
     end
-    public_prices.each do |pr|
-      public_routes << {route: pr.route, next: pr.route.next_departure}
+    @routes.each do |pr|
+      public_routes << {route: pr, next: pr.next_departure}
     end
 
     resp = {
@@ -88,11 +89,11 @@ module ShippingTools
     # 
     case load_type
     when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
     when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
     when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
     end
 
     # begin
