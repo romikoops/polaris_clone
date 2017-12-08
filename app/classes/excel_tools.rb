@@ -478,11 +478,11 @@ module ExcelTools
       tt_obj = {}
       if !row[:cargo_type]
         load_types.each do |lt|
-          tt_obj[lt] = vt.transport_types.find_by(name: "any", cargo_class: lt)
+          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
         load_types.each do |lt|
-          tt_obj[lt] = vt.transport_types.find_by(name: row[:cargo_type], cargo_class: lt)
+          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)

@@ -1,6 +1,5 @@
 include ExcelTools
 include DynamoTools
-<<<<<<< HEAD
 Vehicle.destroy_all
 TransportCategory.destroy_all
 Tenant.destroy_all
