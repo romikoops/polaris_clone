@@ -109,7 +109,7 @@ class OfferCalculator
 
   def determine_schedules!
     
-    @schedules = @route.schedules.joins(:vehicle_type).joins(:transport_types).where("transport_types.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
+    @schedules = @route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
   def determine_longest_trucking_time!
@@ -227,7 +227,7 @@ class OfferCalculator
           if @cargo_items
             @cargo_items.each do |ci|
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
-              transport_type = sched.vehicle_type.transport_types.find_by(name: transport_type_key, cargo_class: 'lcl')
+              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
               pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
               fees[sched_key][:cargo][ci.id] = Pricing.lcl_price(ci, pathKey, @user)
               
@@ -262,7 +262,7 @@ class OfferCalculator
           
           if @containers
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
-              transport_type = sched.vehicle_type.transport_types.find_by(name: transport_type_key, cargo_class: container.size_class)
+              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: container.size_class)
               pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
               fees[sched_key][:cargo][ci.id] = Pricing.lcl_price(ci, pathKey, @user)
               @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]

@@ -7,11 +7,19 @@ import 'react-day-picker/lib/style.css';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styled from 'styled-components';
+import { adminActions } from '../../actions';
+import { moTOptions } from '../../constants';
+// import { dispatch } from 'react-redux';
 import { Checkbox } from '../Checkbox/Checkbox';
 import {RoundButton} from '../RoundButton/RoundButton';
-export class AdminScheduleGenerator extends Component {
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+const filterMoTOptions = moTOptions;
+
+class AdminScheduleGenerator extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {
             startDate: moment().add(10, 'd').format('DD/MM/YYYY'),
             endDate: moment().add(375, 'd').format('DD/MM/YYYY'),
@@ -26,37 +34,94 @@ export class AdminScheduleGenerator extends Component {
             },
             duration: 30
         };
+        this.handleDayChange = this.handleDayChange.bind(this);
+        this.setStartHub = this.setStartHub.bind(this);
+        this.setEndHub = this.setEndHub.bind(this);
+        this.setMoT = this.setMoT.bind(this);
+        this.setVehicleType = this.setVehicleType.bind(this);
+        this.handleDuration = this.handleDuration.bind(this);
+        this.genSchedules = this.genSchedules.bind(this);
     }
-    toggleWeekdays(ev) {
-        console.log(ev);
+    componentDidMount() {
+        const { hubs, vehicleTypes, adminDispatch} = this.props;
+        if (!vehicleTypes) {
+            adminDispatch.getVehicleTypes();
+        }
+        if (!hubs) {
+            adminDispatch.getHubs();
+        }
+    }
+    toggleWeekdays(ord) {
+        this.setState({weekdays: {...this.state.weekdays, [ord]: !this.state.weekdays[ord]}});
     }
     handleDayChange(ev) {
-        console.log(ev);
+        this.setState({startHub: ev.format('DD/MM/YYYY')});
     }
-    setRoute(ev) {
-        console.log(ev);
+    setStartHub(ev) {
+        this.setState({startHub: ev});
     }
-    setMot(ev) {
-        console.log(ev);
+    setEndHub(ev) {
+        this.setState({endHub: ev});
+    }
+    setMoT(ev) {
+        this.setState({mot: ev});
+    }
+    setVehicleType(ev) {
+        this.setState({vehicleType: ev});
     }
     handleDuration(ev) {
         const {name, value} = ev.target;
         this.setState({[name]: value});
     }
+    genSchedules() {
+        const {adminDispatch} = this.props;
+        const {startHub, endHub, startDate, endDate, weekdays, duration, mot, vehicleType} = this.state;
+        const  ordinalArray = [];
+        Object.keys(weekdays).forEach(key => {
+            if (weekdays[key]) {
+                ordinalArray.push(parseInt(key, 10));
+            }
+        });
+        const req = {
+            startHubId: startHub.value,
+            endHubId: endHub.value,
+            startDate,
+            endDate,
+            duration,
+            mot: mot.value,
+            weekdays: ordinalArray,
+            vehicleTypeId: vehicleType.value
+        };
+
+        adminDispatch.autoGenSchedules(req);
+    }
     render() {
-        const {theme, hubs } = this.props;
-        const {weekdays, startDate, endDate, duration} = this.state;
+        const {theme, hubs, vehicleTypes } = this.props;
+        const {weekdays, startDate, endDate, duration, mot, vehicleType} = this.state;
+        const motKey = mot && mot.value ? mot.value.split('_')[0] : '';
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
         const future = {
             after: new Date(),
         };
-        const filterMoTOptions = [
-            {value: 'rail', label: 'Rail'},
-            {value: 'air', label: 'Air'},
-            {value: 'ocean', label: 'Ocean'}
-        ];
+        const vehicleTypeOptions = [];
+        if (vehicleTypes && mot) {
+            vehicleTypes.forEach((vt) => {
+                if (vt.mode_of_transport === mot.value) {
+                    vehicleTypeOptions.push( {value: vt.id, label: vt.name ? vt.name : vt.mode_of_transport + '_default'});
+                }
+                if (vt.is_default && !vehicleType && vt.mode_of_transport === motKey) {
+                    this.setState({vehicleType: {value: vt.id, label: vt.name ? vt.name : vt.mode_of_transport + '_default'}});
+                }
+            });
+        }
+        const hubList = [];
+        if (hubs) {
+            Object.keys(hubs).forEach(key => {
+                hubList.push({value: hubs[key].data.id, label: hubs[key].data.name});
+            });
+        }
         const StyledSelect = styled(Select)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -75,9 +140,13 @@ export class AdminScheduleGenerator extends Component {
                 background-color: #F9F9F9;
             }
         `;
-        // const routeOptions = routes.map((rt) => {
-        //     return {value: rt.id, label: rt.name};
-        // });
+        const vehicleSelect = mot && mot.value ? (<StyledSelect
+                                    name="mot-type"
+                                    className={`${styles.select}`}
+                                    value={this.state.vehicleType}
+                                    options={vehicleTypeOptions}
+                                    onChange={this.setVehicleType}
+                                />) : '';
         return(
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
 
@@ -94,18 +163,18 @@ export class AdminScheduleGenerator extends Component {
                                 <StyledSelect
                                     name="starthub"
                                     className={`${styles.select}`}
-                                    value={this.state.routeForSched}
-                                    options={hubs}
-                                    onChange={this.setHubs}
+                                    value={this.state.startHub}
+                                    options={hubList}
+                                    onChange={this.setStartHub}
                                 />
                             </div>
                             <div className="flex-33 layout-row layout-align-start-center">
                                 <StyledSelect
                                     name="endhub"
                                     className={`${styles.select}`}
-                                    value={this.state.routeForSched}
-                                    options={hubs}
-                                    onChange={this.setHubs}
+                                    value={this.state.endHub}
+                                    options={hubList}
+                                    onChange={this.setEndHub}
                                 />
                             </div>
                         </div>
@@ -125,13 +194,7 @@ export class AdminScheduleGenerator extends Component {
                                 />
                             </div>
                             <div className="flex-33 layout-row layout-align-start-center">
-                                <StyledSelect
-                                    name="mot-type"
-                                    className={`${styles.select}`}
-                                    value={this.state.motType}
-                                    options={filterMoTOptions}
-                                    onChange={this.setMoT}
-                                />
+                                {vehicleSelect}
                             </div>
                         </div>
                     </div>
@@ -176,31 +239,31 @@ export class AdminScheduleGenerator extends Component {
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="1" checked={weekdays['1']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('1')} name="1" checked={weekdays['1']} />
                                     <p className="flex-none">Mon</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="2" checked={weekdays['2']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('2')} name="2" checked={weekdays['2']} />
                                     <p className="flex-none">Tue</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="3" checked={weekdays['3']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('3')} name="3" checked={weekdays['3']} />
                                     <p className="flex-none">Wed</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="4" checked={weekdays['4']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('4')} name="4" checked={weekdays['4']} />
                                     <p className="flex-none">Thu</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="5" checked={weekdays['5']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('5')} name="5" checked={weekdays['5']} />
                                     <p className="flex-none">Fri</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="6" checked={weekdays['6']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('6')} name="6" checked={weekdays['6']} />
                                     <p className="flex-none">Sat</p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
-                                    <Checkbox onChange={this.toggleWeekdays} name="7" checked={weekdays['7']} />
+                                    <Checkbox theme={theme} onChange={() => this.toggleWeekdays('7')} name="7" checked={weekdays['7']} />
                                     <p className="flex-none">Sun</p>
                                 </div>
                             </div>
@@ -232,3 +295,19 @@ AdminScheduleGenerator.propTypes = {
     hubs: PropTypes.array,
     routes: PropTypes.array
 };
+
+function mapDispatchToProps(dispatch) {
+    return {
+        adminDispatch: bindActionCreators(adminActions, dispatch)
+    };
+}
+function mapStateToProps(state) {
+    const { admin } = state;
+    const { hubs, vehicleTypes} = admin;
+    return {
+        hubs,
+        vehicleTypes
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminScheduleGenerator);

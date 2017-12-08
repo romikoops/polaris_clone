@@ -1,8 +1,10 @@
 class Schedule < ApplicationRecord
   belongs_to :hub_route
-  belongs_to :vehicle_type
-  has_many :transport_types, through: :vehicle_type
-
+  belongs_to :vehicle, optional: true
+  has_many :transport_categories, through: :vehicle
+  # after_validation do |sched|
+  #   byebug
+  # end 
 
   def get_pickup_date(truck_seconds)
     self.etd - truck_seconds - 1.hour

@@ -50,6 +50,24 @@ export function admin(state = {}, action) {
                 error: { schedules: action.error }
             });
             return errSched;
+
+        case adminConstants.GENERATE_SCHEDULES_REQUEST:
+             const reqGenSched = merge({}, state, {
+                loading: true
+            });
+            return reqGenSched;
+        case adminConstants.GENERATE_SCHEDULES_SUCCESS:
+            const succGenSched = merge({}, state, {
+                schedules: action.payload.data,
+                loading: false
+            });
+            return succGenSched;
+        case adminConstants.GENERATE_SCHEDULES_FAILURE:
+            const errGenSched = merge({}, state, {
+                error: { schedules: action.error }
+            });
+            return errGenSched;
+
         case adminConstants.GET_TRUCKING_REQUEST:
              const reqTruck = merge({}, state, {
                 loading: true
@@ -66,6 +84,24 @@ export function admin(state = {}, action) {
                 error: { trucking: action.error }
             });
             return errTruck;
+
+        case adminConstants.GET_VEHICLE_TYPES_REQUEST:
+             const reqVehicleTypes = merge({}, state, {
+                loading: true
+            });
+            return reqVehicleTypes;
+        case adminConstants.GET_VEHICLE_TYPES_SUCCESS:
+            const succVehicleTypes = merge({}, state, {
+                vehicleTypes: action.payload.data,
+                loading: false
+            });
+            return succVehicleTypes;
+        case adminConstants.GET_VEHICLE_TYPES_FAILURE:
+            const errVehicleTypes = merge({}, state, {
+                error: { vehicleTypes: action.error }
+            });
+            return errVehicleTypes;
+
 
         case adminConstants.GET_PRICINGS_REQUEST:
              const reqPric = merge({}, state, {

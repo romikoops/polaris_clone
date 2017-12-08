@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
     resources :routes, only: [:index]
     post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
-
+    resources :vehicle_types, only: [:index]
     resources :pricings, only: [:index]
     post "pricings/train_and_ocean_pricings/process_csv", to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
 

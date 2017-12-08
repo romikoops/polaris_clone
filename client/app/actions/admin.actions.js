@@ -162,6 +162,65 @@ function getTrucking() {
     };
 }
 
+function getVehicleTypes() {
+    function request(vehicleData) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_REQUEST, payload: vehicleData };
+    }
+    function success(vehicleData) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_SUCCESS, payload: vehicleData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getVehicleTypes().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Vehicle Types successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+
+function autoGenSchedules(data) {
+    function request(schedData) {
+        return { type: adminConstants.GENERATE_SCHEDULES_REQUEST, payload: schedData };
+    }
+    function success(schedData) {
+        return { type: adminConstants.GENERATE_SCHEDULES_SUCCESS, payload: schedData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GENERATE_SCHEDULES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.autoGenSchedules(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Generating Schedules successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 // function shouldFetchShipment(state, id) {
 //     const shipment = state.shipment.data;
 //     if (!shipment) {
@@ -197,5 +256,7 @@ export const adminActions = {
     getServiceCharges,
     getPricings,
     getTrucking,
-    getSchedules
+    getSchedules,
+    autoGenSchedules,
+    getVehicleTypes
 };

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import { AdminScheduleLine, AdminScheduleGenerator } from './';
+import { AdminScheduleLine } from './';
+import AdminScheduleGenerator from './AdminScheduleGenerator';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 // import {v4} from 'node-uuid';
@@ -12,6 +13,7 @@ import {v4} from 'node-uuid';
 export class AdminSchedules extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {
             showList: false,
             filters: {
@@ -258,5 +260,5 @@ export class AdminSchedules extends Component {
 AdminSchedules.propTypes = {
     theme: PropTypes.object,
     hubs: PropTypes.object,
-    scheduleData: PropTypes.array
+    scheduleData: PropTypes.object
 };
