@@ -465,9 +465,9 @@ module ExcelTools
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       hubroute = HubRoute.create_from_route(route, row[:mot])
       if !row[:vehicle_type]
-        vt = VehicleType.find_by_name("#{row[:mot]}_default")
+        vt = Vehicle.find_by_name("#{row[:mot]}_default")
       else
-        vt = VehicleType.find_by_name(row[:vehicle_type])
+        vt = Vehicle.find_by_name(row[:vehicle_type])
       end
       load_types = [
         'fcl_20f',

@@ -1,5 +1,6 @@
 include ExcelTools
 include DynamoTools
+<<<<<<< HEAD
 Vehicle.destroy_all
 TransportCategory.destroy_all
 Tenant.destroy_all
@@ -237,6 +238,7 @@ tenant_data.each do |ten|
   req = {"xlsx" => trucking}
   overwrite_shanghai_trucking_rates(req, shipper)
 end
+
 # hubs = File.open("./db/dummydata/hub_images.xlsx")
 # req = {"xlsx" => hubs}
 # load_hub_images(req)
