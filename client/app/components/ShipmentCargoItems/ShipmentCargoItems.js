@@ -11,6 +11,8 @@ export class ShipmentCargoItems extends Component {
         this.handleCargoChange = this.handleCargoChange.bind(this);
         this.addNewCargo = this.addNewCargo.bind(this);
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
+        this.state = {firstRenderInput: true};
+        this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
     }
 
     handleCargoChange(event) {
@@ -19,9 +21,13 @@ export class ShipmentCargoItems extends Component {
             newCargoItem: { ...this.state.newCargoItem, [name]: value }
         });
     }
+    setFirstRenderInputs(bool) {
+        this.setState({firstRenderInputs: bool});
+    }
 
     addNewCargo() {
         this.props.addCargoItem();
+        this.setState({firstRenderInputs: true});
     }
 
     toggleDangerousGoods() {
@@ -39,6 +45,8 @@ export class ShipmentCargoItems extends Component {
     }
 
     render() {
+        console.log('PARENT this.state.firstRenderInputs');
+        console.log(this.state.firstRenderInputs);
         const { cargoItems, handleDelta } = this.props;
         const cargosAdded = [];
         const newCargoItem = cargoItems[0];
@@ -89,8 +97,10 @@ export class ShipmentCargoItems extends Component {
                                     value={newCargoItem.payload_in_kg}
                                     type="number"
                                     onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
                                     validations={ {matchRegexp: /[^0]/} }
-                                    validationError="Must not be 0"
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
                                 />
                                 <div className="flex-20 layout-row layout-align-center-center">
@@ -107,8 +117,10 @@ export class ShipmentCargoItems extends Component {
                                     value={newCargoItem.dimension_z}
                                     type="number"
                                     onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
                                     validations={ {matchRegexp: /[^0]/} }
-                                    validationError="Must not be 0"
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
                                 />
                                 <div className="flex-20 layout-row layout-align-center-center">
@@ -125,8 +137,10 @@ export class ShipmentCargoItems extends Component {
                                     value={newCargoItem.dimension_y}
                                     type="number"
                                     onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
                                     validations={ {matchRegexp: /[^0]/} }
-                                    validationError="Must not be 0"
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
                                 />
                                 <div className="flex-20 layout-row layout-align-center-center">
@@ -143,8 +157,10 @@ export class ShipmentCargoItems extends Component {
                                     value={newCargoItem.dimension_x}
                                     type="number"
                                     onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
                                     validations={ {matchRegexp: /[^0]/} }
-                                    validationError="Must not be 0"
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
                                 />
                                 <div className="flex-20 layout-row layout-align-center-center">
@@ -157,8 +173,8 @@ export class ShipmentCargoItems extends Component {
                             <Checkbox onChange={this.toggleDangerousGoods} checked={newCargoItem.dangerousGoods} />
                         </div>
 
-                        <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <div className={`layout-row flex-none ${defs.content_width} ${styles.add_unit} layout-align-start-center`} onClick={this.addNewCargo}>
+                        <div className="layout-row layout-align-start-center" >
+                            <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addNewCargo}>
                                 <i className="fa fa-plus-square-o" />
                                 <p> Add unit </p>
                             </div>
