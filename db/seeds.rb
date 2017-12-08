@@ -164,8 +164,8 @@ include DynamoTools
 #     end
 #   end
 # end
-# seed_init_table('pricings', 'price_id')
-# seed_init_table('pathPricings', 'pathKey')
+seed_init_table('pricings', 'price_id')
+seed_init_table('pathPricings', 'pathKey')
 # hubs = File.open("./db/dummydata/1_hubs.xlsx")
 # req = {"xlsx" => hubs}
 # overwrite_hubs(req, shipper)
