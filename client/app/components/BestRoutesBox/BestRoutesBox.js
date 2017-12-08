@@ -40,6 +40,9 @@ export class BestRoutesBox extends Component {
         // let cheapestSchedule;
         schedules.forEach(sched => {
             const schedKey = sched.hub_route_key;
+            if (!fees[schedKey]) {
+                debugger;
+            }
             const fare = fees[schedKey].total;
             if (!cheapestFare || fare < cheapestFare) {
                 cheapestFare = fare;
@@ -63,8 +66,8 @@ export class BestRoutesBox extends Component {
     }
     sortBestOption(schedules, fees, depDate, style) {
         const fareArray = schedules.sort((a, b) => {
-            const aKey = a.starthub_id + '-' + a.endhub_id;
-            const bKey = b.starthub_id + '-' + b.endhub_id;
+            const aKey = a.hub_route_key;
+            const bKey = b.hub_route_key;
             return fees[aKey] - fees[bKey];
         });
         const timeArray = schedules.sort((a, b) => {
@@ -81,7 +84,7 @@ export class BestRoutesBox extends Component {
             const fareScore = fareArray.indexOf(sched);
             const depScore = depArray.indexOf(sched);
             const schedKey = sched.hub_route_key;
-            const fare = fees[schedKey].total;
+            const fare = fees[schedKey] ? fees[schedKey].total : 0;
             const totalScore = timeScore + fareScore + depScore;
             if (totalScore < lowScore) {
                 lowScore = totalScore;

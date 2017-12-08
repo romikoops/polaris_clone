@@ -10,11 +10,12 @@ class HubRoute < ApplicationRecord
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length, vehicle_type_id)
     tmp_date = start_date
+    sched_key = "#{self.starthub.id}-#{self.endhub.id}"
     while tmp_date < end_date
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         etd = tmp_date.midday
         eta = etd + journey_length.days
-        new_sched = {mode_of_transport: mot, eta: eta, etd: etd, vehicle_type_id: vehicle_type_id}
+        new_sched = {mode_of_transport: mot, eta: eta, etd: etd, vehicle_type_id: vehicle_type_id, hub_route_key: sched_key}
          # byebug
         self.schedules.find_or_create_by!(new_sched)
         

@@ -207,8 +207,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
     end
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
@@ -263,8 +263,8 @@ module ShippingTools
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}

@@ -8,6 +8,7 @@ import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
+import mapStyling from '../../constants/map.constants';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
@@ -17,6 +18,7 @@ const mapStyle = {
 };
 const isObjectEmpty = isEmpty;
 const colourSVG = colorSVG;
+const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -166,125 +168,7 @@ export class ShipmentLocationBox extends Component {
             zoom: 5,
             mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
-            styles: [
-                {
-                    'featureType': 'administrative',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'administrative.locality',
-                    'elementType': 'labels',
-                    'stylers': [
-                        {
-                            'visibility': 'on'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'landscape',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'poi',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'road',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'on'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'road',
-                    'elementType': 'labels',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'road',
-                    'elementType': 'labels.text',
-                    'stylers': [
-                        {
-                            'visibility': 'on'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'transit',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'on'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'transit',
-                    'elementType': 'labels',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'water',
-                    'elementType': 'all',
-                    'stylers': [
-                        {
-                            'visibility': 'on'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'water',
-                    'elementType': 'geometry',
-                    'stylers': [
-                        {
-                            'color': '#12608d'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'water',
-                    'elementType': 'labels.text.fill',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                },
-                {
-                    'featureType': 'water',
-                    'elementType': 'labels.text.stroke',
-                    'stylers': [
-                        {
-                            'visibility': 'off'
-                        }
-                    ]
-                }
-            ]
+            styles: mapStyles
             // [
             //     {
             //         featureType: 'water',

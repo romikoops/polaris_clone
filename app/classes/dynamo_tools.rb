@@ -19,8 +19,7 @@ module DynamoTools
       update_str += "user_#{k} = :#{k}r"
       upd_val[":#{k}r"] = v
     end
-    # byebug
-    p update_str
+
     resp = client.update_item({
       key: {
         "#{key}" => keyName
@@ -40,13 +39,47 @@ module DynamoTools
     table_name: "#{table}", 
   })
   end
+  def seed_init_table(table_name, primary_key)
+    client = init
+    params = {
+        table_name: table_name,
+        key_schema: [
+            {
+                attribute_name: "#{primary_key}",
+                key_type: 'HASH'  #Partition key
+            }
+        ],
+        attribute_definitions: [
+            {
+                attribute_name: "#{primary_key}",
+                attribute_type: 'S'
+            }
+        ],
+        provisioned_throughput: {
+            read_capacity_units: 5,
+            write_capacity_units: 5
+      }
+    }
+
+    begin
+        result = client.create_table(params)
+
+        puts 'Created table. Status: ' +
+            result.table_description.table_status;
+    rescue  Aws::DynamoDB::Errors::ServiceError => error
+        puts 'Unable to create table:'
+        puts error.message
+    end
+  end
   private
   def init
-    dynamodb = Aws::DynamoDB::Client.new(
-      region: 'eu-central-1',
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET']
-    )
+    #dynamodb = Aws::DynamoDB::Client.new(
+    #   region: 'eu-central-1',
+    #   access_key_id: ENV['AWS_KEY'],
+    #   secret_access_key: ENV['AWS_SECRET']
+    # )
+    dynamodb = Aws::DynamoDB::Client.new(endpoint:'http://localhost:8000')
     return dynamodb
   end
+
 end

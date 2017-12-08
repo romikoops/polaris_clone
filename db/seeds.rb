@@ -1,12 +1,11 @@
 include ExcelTools
-
+include DynamoTools
 # VehicleType.destroy_all
 # TransportType.destroy_all
 # Tenant.destroy_all
 # User.destroy_all
 # TruckingPricing.destroy_all
 # Hub.destroy_all
-# Schedule.destroy_all
 # Pricing.destroy_all
 # ServiceCharge.destroy_all
 # Route.destroy_all
@@ -165,25 +164,26 @@ include ExcelTools
 #     end
 #   end
 # end
-
+# seed_init_table('pricings', 'price_id')
+# seed_init_table('pathPricings', 'pathKey')
 # hubs = File.open("./db/dummydata/1_hubs.xlsx")
 # req = {"xlsx" => hubs}
 # overwrite_hubs(req, shipper)
-shipper = User.find_by_email('demo@greencarrier.com')
-service_charges = File.open("./db/dummydata/2_service_charges.xlsx")
-req = {"xlsx" => service_charges}
-overwrite_service_charges(req, shipper)
+# shipper = User.find_by_email('demo@greencarrier.com')
+# service_charges = File.open("./db/dummydata/2_service_charges.xlsx")
+# req = {"xlsx" => service_charges}
+# overwrite_service_charges(req, shipper)
 
 # # public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
 # # req = {"xlsx" => public_pricings}
 # # overwrite_main_carriage_rates(req, false, shipper)
-# # shipper = User.find_by_email('demo@greencarrier.com')
-# public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
-# req = {"xlsx" => public_pricings}
-# overwrite_dynamo_pricings(req, true, shipper)
-# public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
-# req = {"xlsx" => public_pricings}
-# overwrite_dynamo_pricings(req, false, shipper)
+ shipper = User.find_by_email('demo@greencarrier.com')
+ public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+ req = {"xlsx" => public_pricings}
+ overwrite_dynamo_pricings(req, true, shipper)
+ public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+ req = {"xlsx" => public_pricings}
+ overwrite_dynamo_pricings(req, false, shipper)
 
 
 #   dummy_contacts.each_with_index do |c, i|

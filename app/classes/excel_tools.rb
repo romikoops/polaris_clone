@@ -485,7 +485,7 @@ module ExcelTools
           tt_obj[lt] = vt.transport_types.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
-      hubroute.generate_weekly_schedules('ocean', row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
       new_route_ids << route.id
       new_hub_route_ids << hubroute.id
       if !dedicated
