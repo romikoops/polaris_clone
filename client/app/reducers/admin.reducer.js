@@ -19,7 +19,7 @@ export function admin(state = {}, action) {
             });
             return errHubs;
         case adminConstants.GET_SHIPMENTS_REQUEST:
-             const reqShips = merge({}, state, {
+            const reqShips = merge({}, state, {
                 loading: true
             });
             return reqShips;
@@ -35,7 +35,7 @@ export function admin(state = {}, action) {
             });
             return errShip;
         case adminConstants.GET_SCHEDULES_REQUEST:
-             const reqSched = merge({}, state, {
+            const reqSched = merge({}, state, {
                 loading: true
             });
             return reqSched;
@@ -52,7 +52,7 @@ export function admin(state = {}, action) {
             return errSched;
 
         case adminConstants.GENERATE_SCHEDULES_REQUEST:
-             const reqGenSched = merge({}, state, {
+            const reqGenSched = merge({}, state, {
                 loading: true
             });
             return reqGenSched;
@@ -69,7 +69,7 @@ export function admin(state = {}, action) {
             return errGenSched;
 
         case adminConstants.GET_TRUCKING_REQUEST:
-             const reqTruck = merge({}, state, {
+            const reqTruck = merge({}, state, {
                 loading: true
             });
             return reqTruck;
@@ -86,7 +86,7 @@ export function admin(state = {}, action) {
             return errTruck;
 
         case adminConstants.GET_VEHICLE_TYPES_REQUEST:
-             const reqVehicleTypes = merge({}, state, {
+            const reqVehicleTypes = merge({}, state, {
                 loading: true
             });
             return reqVehicleTypes;
@@ -104,7 +104,7 @@ export function admin(state = {}, action) {
 
 
         case adminConstants.GET_PRICINGS_REQUEST:
-             const reqPric = merge({}, state, {
+            const reqPric = merge({}, state, {
                 loading: true
             });
             return reqPric;
@@ -121,7 +121,7 @@ export function admin(state = {}, action) {
             });
             return errPric;
         case adminConstants.GET_SERVICE_CHARGES_REQUEST:
-             const reqSC = merge({}, state, {
+            const reqSC = merge({}, state, {
                 loading: true
             });
             return reqSC;

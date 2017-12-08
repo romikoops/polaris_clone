@@ -8,7 +8,7 @@ import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
-import mapStyling from '../../constants/map.constants';
+import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
