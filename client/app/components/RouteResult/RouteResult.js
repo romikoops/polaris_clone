@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './RouteResult.scss';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { Price } from '../Price/Price';
 export class RouteResult extends Component {
     constructor(props) {
         super(props);
@@ -33,9 +34,7 @@ export class RouteResult extends Component {
         this.props.selectResult({ schedule: schedule, total: totalFees });
     }
     dashedGradient(color1, color2) {
-        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
-            color1
-        }, ${color2})`;
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     format2Digit(n) {
         return ('0' + n).slice(-2);
@@ -66,9 +65,6 @@ export class RouteResult extends Component {
                     }, ${theme.colors.brightSecondary})`
                     : 'black'
         };
-        const price = this.props.fees[schedKey].total;
-        const priceUnits = Math.floor(price);
-        const priceCents = this.format2Digit(Math.floor((price * 100) % 100));
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -208,13 +204,7 @@ export class RouteResult extends Component {
                 <div className="flex-25 layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <p className="flex-none">Total price: </p>
-                        <h4 className={`flex-none ${styles.total_price}`}>
-                            {priceUnits}
-                            <sup>.{priceCents}</sup>{' '}
-                            <span className={styles.total_price_currency}>
-                                EUR
-                            </span>
-                        </h4>
+                        <Price value={this.props.fees[schedKey].total} />
                     </div>
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <RoundButton

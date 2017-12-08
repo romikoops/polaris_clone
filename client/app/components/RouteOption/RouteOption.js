@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './RouteOption.scss';
-import Style from 'style-it';
 import { moment } from '../../constants';
 
 export class RouteOption extends Component {
@@ -12,69 +11,113 @@ export class RouteOption extends Component {
     choose() {
         this.props.selectOption(this.props.route);
     }
-
+    faIcon(modeOfTransport) {
+        const faKeywords = {
+            ocean: 'ship',
+            air: 'plane',
+            train: 'train'
+        };
+        const faClass = `fa fa-${faKeywords[modeOfTransport]}`;
+        return <i className={faClass} />;
+    }
+    dashedGradient(color1, color2) {
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
+    }
     render() {
         const { theme, isPrivate, route } = this.props;
-        const iconStyle = {
+        console.log(isPrivate);
+        const originNexus      = route.route.name.split(' - ')[0];
+        const destinationNexus = route.route.name.split(' - ')[1];
+        const modeOfTransport  = route.next.mode_of_transport;
+        // console.log(route);
+        // console.log(originNexus);
+        // console.log(destinationNexus);
+
+        const gradientFontStyle = {
             background:
                 theme && theme.colors
-                    ? '-webkit-linear-gradient(left, ' +
-                      theme.colors.primary +
-                      ',' +
-                      theme.colors.secondary +
-                      ')'
+                    ? `-webkit-linear-gradient(left, ${
+                        theme.colors.brightPrimary
+                    }, ${theme.colors.brightSecondary})`
                     : 'black'
         };
+        const dashedLineStyles = {
+            marginTop: '6px',
+            height: '2px',
+            width: '100%',
+            background:
+                theme && theme.colors
+                    ? this.dashedGradient(
+                        theme.colors.primary,
+                        theme.colors.secondary
+                    )
+                    : 'black',
+            backgroundSize: '16px 2px, 100% 2px'
+        };
+
 
         return (
-            <div
-                className={`option flex-gt-sm-30 flex-100 layout-row layout-wrap layout-align-space-between-center b_border ${
-                    styles.option
-                }`}
-                onClick={this.choose}
-            >
+            <div className={styles.route_option} onClick={this.choose} >
                 <div
-                    className={
-                        'flex-100 layout-row layout-align-start-center ' +
-                        styles.op_content
-                    }
+                    className={`flex-100 layout-row layout-align-space-between ${
+                        styles.top_row
+                    }`}
                 >
-                    {isPrivate ? (
-                        <i className="fa fa-star flex-none" style={iconStyle} />
-                    ) : (
-                        <i
-                            className="fa fa-users flex-none"
-                            style={iconStyle}
-                        />
-                    )}
-                    <p className="flex-offset-5 flex-none">
-                        {route.route.name}
-                    </p>
+                    <div className={`${styles.header_hub}`}>
+                        <i className={`fa fa-map-marker ${styles.map_marker}`} />
+                        <div className="flex-100 layout-row">
+                            <h4 className="flex-100"> {originNexus} </h4>
+                        </div>
+                        <div className="flex-100">
+                            <p className="flex-100">
+                                CODE
+                            </p>
+                        </div>
+                    </div>
+                    <div className={`${styles.connection_graphics}`}>
+                        <div className="flex-none layout-row layout-align-center-center">
+                            {this.faIcon(modeOfTransport)}
+                        </div>
+                        <div style={dashedLineStyles} />
+                    </div>
+                    <div className={`${styles.header_hub}`}>
+                        <i className={`fa fa-flag-o ${styles.flag}`} />
+                        <div className="flex-100 layout-row">
+                            <h4 className="flex-100"> {destinationNexus} </h4>
+                        </div>
+                        <div className="flex-100">
+                            <p className="flex-100">
+                                CODE
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex-100 layout-row layout-align-space-between-center">
-                    <p className={'flex-none ' + styles.date}>Next departure</p>
-                    <p className={'flex-none ' + styles.date}>
-                        {moment(route.next).format('lll')}
-                    </p>
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-100 layout-wrap layout-row layout-align-space-between">
+                        <div>
+                            <h4
+                                className={styles.date_title}
+                                style={gradientFontStyle}
+                            >
+                                Next Departure
+                            </h4>
+                        </div>
+                        <div className="layout-row">
+                            <p className={styles.sched_elem}>
+                                {' '}
+                                {moment(this.props.pickupDate).format(
+                                    'YYYY-MM-DD'
+                                )}{' '}
+                            </p>
+                            <p className={styles.sched_elem}>
+                                {' '}
+                                {moment(this.props.pickupDate).format(
+                                    'HH:mm'
+                                )}{' '}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-
-                {theme ? (
-                    <Style>
-                        {`
-                            .b_border {
-                                box-shadow: 0 0 7px ${theme.colors.secondary}28;
-                            }
-                            &:hover {
-                                margin: 4.8px 5.1px 5.2px 4.9px;
-                                box-shadow: 1.3px 2.6px 4px 0 ${
-                                    theme.colors.secondary
-                                }48;
-                            }
-                        `}
-                    </Style>
-                ) : (
-                    ''
-                )}
             </div>
         );
     }

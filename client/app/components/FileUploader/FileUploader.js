@@ -5,6 +5,8 @@ import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 import styles from './FileUploader.scss';
+import { RoundButton } from '../RoundButton/RoundButton';
+
 class FileUploader extends React.Component {
     constructor(props) {
         super(props);
@@ -47,24 +49,17 @@ class FileUploader extends React.Component {
     }
 
     render() {
-        const {theme, type} = this.props;
-        const btnStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(95.41deg, ' +
-                      theme.colors.primary +
-                      ' 0%,' +
-                      theme.colors.secondary +
-                      ' 100%)'
-                    : 'black'
+        const clickUploaderInput = () => {
+            this.uploaderInput.click();
         };
+        const {theme, type} = this.props;
         return (
-            <form onSubmit={this.onFormSubmit}>
-                <div className={styles.upload_btn_wrapper}>
-                    <button className={styles.btn} style={btnStyle}>Upload</button>
-                    <input type="file" onChange={this.onChange} name={type} />
-                </div>
-            </form>
+            <div className={styles.upload_btn_wrapper}>
+                <form onSubmit={this.onFormSubmit}>
+                    <RoundButton text="Upload" theme={theme} size="small" handleNext={clickUploaderInput} active />
+                    <input type="file" onChange={this.onChange} name={type} ref={input => { this.uploaderInput = input; }}/>
+                </form>
+            </div>
         );
     }
 }

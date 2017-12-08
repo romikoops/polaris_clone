@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import styles from './Landing.scss';
 // import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
+import { withRouter } from 'react-router-dom';
+
 class Landing extends Component {
     constructor(props) {
         super(props);
@@ -108,4 +110,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Landing);
+export default withRouter(connect(mapStateToProps)(Landing));

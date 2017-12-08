@@ -8,6 +8,12 @@
 		background-color: #FCFCFC;
 		box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
 	}
+	.pickup_date {		
+		p {
+			margin: 0 0 15px 0;
+		}
+		margin-bottom: 30px;
+	}
 	.dpb{
 	  height: 36px;
 	  width: 160px;
@@ -16,9 +22,9 @@
 	  height: 38px;
 	  width: 38px;
 	  border: 1px solid #F2F2F2;
+	  border-right: none;
 	  border-radius: 3px 0 0 3px;
-	  background-color: #F9F9F9;
-	  box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);    
+	  background-color: white;
 	  i {
 	    font-size: 20px;
 	  }
@@ -28,9 +34,19 @@
 	  width: calc(100% - 20px);
 	  border: 1px solid #F2F2F2;
 	  border-radius: 0 3px 3px 0;
-	  background-color: #F9F9F9;
-	  box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+	  background-color: white;
 	  padding: 0 9px;
+	}
+	.mode_of_transport {
+		input {
+			margin: 5px 0;
+		}
+		i {
+			margin: 0 8px;
+			width: 19px;
+			text-align: center;
+		}
+		margin-bottom: 30px;
 	}
 	.transit_time_labels {
 		display: flex;

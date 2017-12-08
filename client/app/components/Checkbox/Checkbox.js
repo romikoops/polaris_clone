@@ -15,8 +15,15 @@ export class Checkbox extends Component {
         super(props);
         this.state = {
             checked: props.checked,
+            showCheck: true
         };
         this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillUnmount() {
+        if (this.timeoutId) {
+            clearTimeout(this.timeoutId);
+        }
     }
 
     handleChange() {
@@ -25,24 +32,23 @@ export class Checkbox extends Component {
         });
         this.props.onChange();
     }
-
     render() {
-        const { disabled } = this.props;
+        const { disabled, theme } = this.props;
         const { checked } = this.state;
+        const checkGradient = {
+            background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
+        };
         return (
-            <div className={`${styles.React__checkbox} flex-none`}>
+            <div className={`${styles.checkbox} flex-none`}>
                 <label>
                     <input
                         type="checkbox"
-                        className={`${styles.React__checkbox__input}`}
                         checked={checked}
                         disabled={disabled}
                         onChange={this.handleChange}
                     />
-                    <span className={`${styles.React__checkbox__span}`}>
-                        <i
-                            className={`${styles.React__checkbox__span} fa fa-check`}
-                        />
+                    <span>
+                        <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />
                     </span>
                 </label>
             </div>
