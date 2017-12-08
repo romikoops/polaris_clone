@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import adminStyles from './Admin.scss';
+import styles from './Admin.scss';
 import {AdminHubTile} from './AdminHubTile';
 import { AdminChargePanel } from './AdminChargePanel';
 import {v4} from 'node-uuid';
@@ -46,10 +46,10 @@ export class AdminServiceCharges extends Component {
         };
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                <div className={`flex-100 layout-row layout-align-start-center ${adminStyles.sec_title}`}>
-                    <p className="flex-none" style={textStyle}>service charges</p>
+                <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
+                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>service charges</p>
                 </div>
-                <div className={`flex-100 layout-row layout-align-space-between-center ${adminStyles.sec_upload}`}>
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <p className="flex-none">Upload Service Charges Sheet</p>
                     <FileUploader theme={theme} url={scUrl} type="xlsx" text="Service Charges .xlsx"/>
                 </div>

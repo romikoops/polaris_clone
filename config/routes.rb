@@ -29,7 +29,7 @@ Rails.application.routes.draw do
 
     resources :routes, only: [:index]
     post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
-
+    resources :vehicle_types, only: [:index]
     resources :pricings, only: [:index]
     post "pricings/train_and_ocean_pricings/process_csv", to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
 
@@ -49,6 +49,7 @@ Rails.application.routes.draw do
     post "vessel_schedules/process_csv", to: "schedules#overwrite_vessels", as: :schedules_vessel_overwrite
     post "air_schedules/process_csv", to: "schedules#overwrite_air", as: :schedules_air_overwrite
     get 'hubs', to: 'hubs#index'
+    post 'schedules/auto_generate', to: 'schedules#auto_generate_schedules'
   end
 
   resources :users do

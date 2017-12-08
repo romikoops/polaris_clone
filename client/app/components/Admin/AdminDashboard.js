@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styles from './Admin.scss';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +11,7 @@ export class AdminDashboard extends Component {
         // const {theme} = this.props;
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                <h1>Dashboard</h1>
+                <h1 className={` ${styles.sec_title_text} flex-none`} >Dashboard</h1>
             </div>
         );
     }

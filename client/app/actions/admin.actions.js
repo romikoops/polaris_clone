@@ -100,13 +100,13 @@ function getPricings() {
 }
 function getSchedules() {
     function request(schedData) {
-        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: schedData };
+        return { type: adminConstants.GET_SCHEDULES_REQUEST, payload: schedData };
     }
     function success(schedData) {
-        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: schedData };
+        return { type: adminConstants.GET_SCHEDULES_SUCCESS, payload: schedData };
     }
     function failure(error) {
-        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+        return { type: adminConstants.GET_SCHEDULES_FAILURE, error };
     }
     return dispatch => {
         dispatch(request());
@@ -132,13 +132,13 @@ function getSchedules() {
 
 function getTrucking() {
     function request(truckData) {
-        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: truckData };
+        return { type: adminConstants.GET_TRUCKING_REQUEST, payload: truckData };
     }
     function success(truckData) {
-        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: truckData };
+        return { type: adminConstants.GET_TRUCKING_SUCCESS, payload: truckData };
     }
     function failure(error) {
-        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+        return { type: adminConstants.GET_TRUCKING_FAILURE, error };
     }
     return dispatch => {
         dispatch(request());
@@ -150,6 +150,65 @@ function getTrucking() {
                 );
                 dispatch(
                     push('/admin/trucking')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getVehicleTypes() {
+    function request(vehicleData) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_REQUEST, payload: vehicleData };
+    }
+    function success(vehicleData) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_SUCCESS, payload: vehicleData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_VEHICLE_TYPES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getVehicleTypes().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Vehicle Types successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+
+function autoGenSchedules(data) {
+    function request(schedData) {
+        return { type: adminConstants.GENERATE_SCHEDULES_REQUEST, payload: schedData };
+    }
+    function success(schedData) {
+        return { type: adminConstants.GENERATE_SCHEDULES_SUCCESS, payload: schedData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GENERATE_SCHEDULES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.autoGenSchedules(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Generating Schedules successful')
                 );
                 dispatch(success(data));
             },
@@ -197,5 +256,7 @@ export const adminActions = {
     getServiceCharges,
     getPricings,
     getTrucking,
-    getSchedules
+    getSchedules,
+    autoGenSchedules,
+    getVehicleTypes
 };

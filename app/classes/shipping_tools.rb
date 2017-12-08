@@ -48,13 +48,14 @@ module ShippingTools
     # end
     private_prices = Pricing.where(customer_id: current_user.id)
     public_prices = Pricing.where(customer_id: nil)
+    @routes = Route.all
     public_routes = []
     private_routes = []
-    private_prices.each do |pr|
-      private_routes << {route: pr.route, next: pr.route.next_departure}
+    @routes.each do |pr|
+      private_routes << {route: pr, next: pr.next_departure}
     end
-    public_prices.each do |pr|
-      public_routes << {route: pr.route, next: pr.route.next_departure}
+    @routes.each do |pr|
+      public_routes << {route: pr, next: pr.next_departure}
     end
 
     resp = {
@@ -88,11 +89,11 @@ module ShippingTools
     # 
     case load_type
     when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
     when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
     when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
     end
 
     # begin
@@ -206,8 +207,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
     end
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
@@ -262,8 +263,8 @@ module ShippingTools
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}

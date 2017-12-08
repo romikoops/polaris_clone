@@ -15,6 +15,10 @@ export const adminConstants = {
     GET_SCHEDULES_SUCCESS: 'GET_SCHEDULES_SUCCESS',
     GET_SCHEDULES_FAILURE: 'GET_SCHEDULES_FAILURE',
 
+    GENERATE_SCHEDULES_REQUEST: 'GENERATE_SCHEDULES_REQUEST',
+    GENERATE_SCHEDULES_SUCCESS: 'GENERATE_SCHEDULES_SUCCESS',
+    GENERATE_SCHEDULES_FAILURE: 'GENERATE_SCHEDULES_FAILURE',
+
     GET_PRICINGS_REQUEST: 'GET_PRICINGS_REQUEST',
     GET_PRICINGS_SUCCESS: 'GET_PRICINGS_SUCCESS',
     GET_PRICINGS_FAILURE: 'GET_PRICINGS_FAILURE',
@@ -22,6 +26,10 @@ export const adminConstants = {
     GET_TRUCKING_REQUEST: 'GET_TRUCKING_REQUEST',
     GET_TRUCKING_SUCCESS: 'GET_TRUCKING_SUCCESS',
     GET_TRUCKING_FAILURE: 'GET_TRUCKING_FAILURE',
+
+    GET_VEHICLE_TYPES_REQUEST: 'GET_VEHICLE_TYPES_REQUEST',
+    GET_VEHICLE_TYPES_SUCCESS: 'GET_VEHICLE_TYPES_SUCCESS',
+    GET_VEHICLE_TYPES_FAILURE: 'GET_VEHICLE_TYPES_FAILURE',
 
     FETCH_SHIPMENT_REQUEST: 'FETCH_SHIPMENT_REQUEST',
     FETCH_SHIPMENT_SUCCESS: 'FETCH_SHIPMENT_SUCCESS',
@@ -65,3 +73,17 @@ export const pricingNames = {
     fcl_40f: 'FCL 40ft',
     fcl_40f_hq: 'FCL 40ft HQ'
 };
+
+export const moTOptions = [
+    {value: 'rail_default', label: 'Rail'},
+    {value: 'air_default', label: 'Air'},
+    {value: 'ocean_default', label: 'Ocean'}
+];
+
+export const cargoOptions = [
+    {value: 'dry_goods', label: 'Dry Goods'},
+    {value: 'liquid_bulk', label: 'Liquid Bulk'},
+    {value: 'gas_bulk', label: 'Gas Bulk'},
+    {value: 'any', label: 'Any'}
+];
+

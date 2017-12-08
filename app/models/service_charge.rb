@@ -91,6 +91,7 @@ class ServiceCharge < ApplicationRecord
     fixed_keys.each do |key|
       result[key] = {value: self[key]["value"], currency: self[key]["currency"]}
     end
+    
     # currency_values = {}
     # result.each_pair do |key, charge|
     #   if !currency_values[charge[:currency]]

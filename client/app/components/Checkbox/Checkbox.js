@@ -30,7 +30,7 @@ export class Checkbox extends Component {
         this.setState({
             checked: !this.state.checked,
         });
-        this.props.onChange();
+        this.props.onChange(!this.state.checked);
     }
     render() {
         const { disabled, theme } = this.props;
@@ -58,6 +58,7 @@ export class Checkbox extends Component {
 Checkbox.propTypes = {
     checked: PropTypes.bool,
     disabled: PropTypes.bool,
+    theme: PropTypes.object
 };
 Checkbox.defaultProps = {
     checked: false,

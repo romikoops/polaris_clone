@@ -8,6 +8,7 @@ import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
+import mapStyling from '../../constants/map.constants';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
@@ -17,6 +18,7 @@ const mapStyle = {
 };
 const isObjectEmpty = isEmpty;
 const colourSVG = colorSVG;
+const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -166,20 +168,21 @@ export class ShipmentLocationBox extends Component {
             zoom: 5,
             mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
-            styles: [
-                {
-                    featureType: 'water',
-                    elementType: 'all',
-                    stylers: [
-                        {
-                            color: '#275b9b'
-                        },
-                        {
-                            invert_lightness: true
-                        }
-                    ]
-                }
-            ]
+            styles: mapStyles
+            // [
+            //     {
+            //         featureType: 'water',
+            //         elementType: 'all',
+            //         stylers: [
+            //             {
+            //                 color: '#275b9b'
+            //             },
+            //             {
+            //                 invert_lightness: true
+            //             }
+            //         ]
+            //     }
+            // ]
         };
 
         const map = new this.props.gMaps.Map(
