@@ -43,6 +43,7 @@ class ValidatedInputFormsy extends Component {
                     onChange={this.changeValue}
                     type={this.props.type}
                     value={(this.props.getValue().toString()) || ''}
+                    name={this.props.name}
                 />
                 <span>{this.state.firstRender ? '' : errorMessage}</span>
             </div>

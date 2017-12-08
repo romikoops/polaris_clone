@@ -8,15 +8,6 @@ import defs from '../../styles/default_classes.scss';
 export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            newCargoItem: {
-                payload_in_kg: 0,
-                dimension_x: 0,
-                dimension_y: 0,
-                dimension_z: 0,
-                dangerousGoods: false
-            }
-        };
         this.handleCargoChange = this.handleCargoChange.bind(this);
         this.addNewCargo = this.addNewCargo.bind(this);
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
@@ -30,17 +21,7 @@ export class ShipmentCargoItems extends Component {
     }
 
     addNewCargo() {
-        const newCont = this.state.newCargoItem;
-        this.props.addCargoItem(newCont);
-        this.setState({
-            newCargoItem: {
-                payload_in_kg: 0,
-                dimension_x: 0,
-                dimension_y: 0,
-                dimension_z: 0,
-                dangerousGoods: false
-            }
-        });
+        this.props.addCargoItem();
     }
 
     toggleDangerousGoods() {
