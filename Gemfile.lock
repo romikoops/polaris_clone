@@ -621,7 +621,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  aws-sdk
+  aws-sdk (~> 3)
   byebug
   chronic
   devise_token_auth

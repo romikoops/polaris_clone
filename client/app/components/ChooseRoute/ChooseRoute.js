@@ -7,6 +7,7 @@ import { moment } from '../../constants';
 import styles from './ChooseRoute.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
+import {v4} from 'node-uuid';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -67,7 +68,7 @@ export class ChooseRoute extends Component {
                             );
                             closestRoute = (
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}
@@ -83,7 +84,7 @@ export class ChooseRoute extends Component {
                         ) {
                             focusRoutes.push(
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}
@@ -96,7 +97,7 @@ export class ChooseRoute extends Component {
                         } else {
                             altRoutes.push(
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}

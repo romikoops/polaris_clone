@@ -54,7 +54,7 @@ gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
 gem "mini_magick"
 # AWS SDK for hosting and S3
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

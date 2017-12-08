@@ -1,5 +1,6 @@
 module ExcelTools
   include ImageTools
+  include DynamoTools
   def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
     old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
@@ -417,5 +418,164 @@ module ExcelTools
       nexus.update_attributes(photo: imgstr[:sm])
       nexus.save!
     end
+  end
+
+  def overwrite_dynamo_pricings(params, dedicated, user = current_user)
+    old_route_ids = Route.pluck(:id)
+    old_hub_route_ids = HubRoute.pluck(:id)
+    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
+    new_route_ids = []
+    new_hub_route_ids = []
+    new_pricing_ids = []
+
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    pricing_rows = first_sheet.parse(
+      customer_id: 'CUSTOMER_ID',
+      effective_date: 'EFFECTIVE_DATE',
+      expiration_date: 'EXPIRATION_DATE',
+      origin: 'ORIGIN',
+      vehicle_type: 'VEHICLE_TYPE',
+      mot: 'MOT',
+      cargo_type: 'CARGO_TYPE',
+      destination: 'DESTINATION',
+      lcl_currency: 'LCL_CURRENCY',
+      lcl_rate_wm: 'LCL_RATE_WM',
+      lcl_rate_min: 'LCL_RATE_MIN',
+      lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
+      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_20_currency: 'FCL_20_CURRENCY',
+      fcl_20_rate: 'FCL_20_RATE',
+      fcl_20_heavy_weight_surcharge_wm: 'FCL_20_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_20_heavy_weight_surcharge_min: 'FCL_20_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_40_currency: 'FCL_40_CURRENCY',
+      fcl_40_rate: 'FCL_40_RATE',
+      fcl_40_heavy_weight_surcharge_wm: 'FCL_40_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_40_heavy_weight_surcharge_min: 'FCL_40_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_40_hq_currency: 'FCL_40_HQ_CURRENCY',
+      fcl_40_hq_rate: 'FCL_40_HQ_RATE',
+      fcl_40_hq_heavy_weight_surcharge_wm: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_40_hq_heavy_weight_surcharge_min: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_MIN'
+    )
+
+
+    pricing_rows.each do |row|
+      origin = Location.find_by(name: row[:origin])
+      destination = Location.find_by(name: row[:destination])
+      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+      hubroute = HubRoute.create_from_route(route, row[:mot])
+      if !row[:vehicle_type]
+        vt = VehicleType.find_by_name("#{row[:mot]}_default")
+      else
+        vt = VehicleType.find_by_name(row[:vehicle_type])
+      end
+      load_types = [
+        'fcl_20f',
+        'fcl_40f',
+        'fcl_40f_hq',
+        'lcl'
+      ]
+      tt_obj = {}
+      if !row[:cargo_type]
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_types.find_by(name: "any", cargo_class: lt)
+        end
+      else
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_types.find_by(name: row[:cargo_type], cargo_class: lt)
+        end
+      end
+      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      new_route_ids << route.id
+      new_hub_route_ids << hubroute.id
+      if !dedicated
+        cust_id = nil
+        ded_bool = false
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
+        cust_id = row[:customer_id].to_i
+        ded_bool = true
+      end
+      lcl_obj = {
+        wm:{
+          currency: row[:lcl_currency],
+          rate: row[:lcl_rate_wm],
+          min: row[:lcl_rate_min]
+        },
+        heavy_wm: {
+          currency: row[:lcl_currency],
+          heavy_weight: row[:lcl_heavy_weight_surcharge_wm],
+          heavy_wm_min: row[:lcl_heavy_weight_surcharge_min]}
+      }
+
+      fcl_20f_obj = {
+        wm:{
+          currency: row[:fcl_20_currency],
+          rate: row[:fcl_20_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_20_currency],
+          heavy_weight: row[:fcl_20_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_20_heavy_weight_surcharge_min]
+        }
+      }
+
+      fcl_40f_obj = {
+        wm:{
+          currency: row[:fcl_40f_currency],
+          rate: row[:fcl_40f_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_40f_currency],
+          heavy_weight: row[:fcl_40f_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40f_heavy_weight_surcharge_min]
+        }
+      }
+
+      fcl_40f_hq_obj = {
+        wm:{
+          currency: row[:fcl_40f_hq_currency],
+          rate: row[:fcl_40f_hq_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_40f_hq_currency],
+          heavy_weight: row[:fcl_40f_hq_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40f_hq_heavy_weight_surcharge_min]
+        }
+      }
+      price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
+      # byebug
+      if dedicated
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          put_item('pricings', 'price_id', uuid, price_obj[lt])
+          pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
+          update_item('pathPricings', 'pathKey', pathKey, {"#{user.id}" => uuid})
+
+        end
+      else
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          # byebug
+          put_item('pricings', 'price_id', uuid, price_obj[lt])
+          pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
+          update_item('pathPricings', 'pathKey', pathKey, {"open" => uuid})
+
+        end
+        
+      end
+
+
+
+      # pricing = route.pricings.find_or_create_by(dedicated: ded_bool, tenant_id: user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
+
+      # new_pricing_ids << pricing.id
+    end
+    kicked_hub_route_ids = old_hub_route_ids - new_hub_route_ids
+    HubRoute.where(id: kicked_hub_route_ids).destroy_all
+    kicked_route_ids = old_route_ids - new_route_ids
+    Route.where(id: kicked_route_ids).destroy_all
   end
 end

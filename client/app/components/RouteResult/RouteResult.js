@@ -28,7 +28,7 @@ export class RouteResult extends Component {
     }
     selectRoute() {
         const { schedule, fees } = this.props;
-        const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
+        const schedKey = schedule.hub_route_key;
         const totalFees = fees[schedKey].total;
         this.props.selectResult({ schedule: schedule, total: totalFees });
     }
@@ -42,17 +42,18 @@ export class RouteResult extends Component {
     }
     render() {
         const { theme, schedule } = this.props;
-        const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
+        const schedKey = schedule.hub_route_key;
+        const hubKeyArr = schedKey.split('-');
         let originHub = {};
         let destHub = {};
         if (this.props.originHubs) {
             this.props.originHubs.forEach(hub => {
-                if (hub.id === schedule.starthub_id) {
+                if (String(hub.id) === hubKeyArr[0]) {
                     originHub = hub;
                 }
             });
             this.props.destinationHubs.forEach(hub => {
-                if (hub.id === schedule.endhub_id) {
+                if (String(hub.id) === hubKeyArr[1]) {
                     destHub = hub;
                 }
             });

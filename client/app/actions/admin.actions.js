@@ -100,13 +100,13 @@ function getPricings() {
 }
 function getSchedules() {
     function request(schedData) {
-        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: schedData };
+        return { type: adminConstants.GET_SCHEDULES_REQUEST, payload: schedData };
     }
     function success(schedData) {
-        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: schedData };
+        return { type: adminConstants.GET_SCHEDULES_SUCCESS, payload: schedData };
     }
     function failure(error) {
-        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+        return { type: adminConstants.GET_SCHEDULES_FAILURE, error };
     }
     return dispatch => {
         dispatch(request());
@@ -132,13 +132,13 @@ function getSchedules() {
 
 function getTrucking() {
     function request(truckData) {
-        return { type: adminConstants.GET_PRICINGS_REQUEST, payload: truckData };
+        return { type: adminConstants.GET_TRUCKING_REQUEST, payload: truckData };
     }
     function success(truckData) {
-        return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: truckData };
+        return { type: adminConstants.GET_TRUCKING_SUCCESS, payload: truckData };
     }
     function failure(error) {
-        return { type: adminConstants.GET_PRICINGS_FAILURE, error };
+        return { type: adminConstants.GET_TRUCKING_FAILURE, error };
     }
     return dispatch => {
         dispatch(request());

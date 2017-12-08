@@ -6,10 +6,16 @@ class Admin::SchedulesController < ApplicationController
   
 
   def index
-    @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 15)
-    @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)
-    @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 15)
-    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules})
+    @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
+    @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
+    @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
+    @routes = Route.where(tenant_id: current_user.tenant_id)
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
+  end
+  def auto_generate_schedules
+    @route = Route.find(params[:route_id])
+    @route.generate_weekly_schedules(params[:mot], params[:start_date], params[:end_date], params[:ordinal_array], params[:journey_length])
+    response_handler(true)
   end
 
   def overwrite_trains
