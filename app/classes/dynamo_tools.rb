@@ -87,8 +87,6 @@ module DynamoTools
         secret_access_key: ENV['AWS_SECRET']
       )
     end
-    
-    
     return dynamodb
   end
 end
