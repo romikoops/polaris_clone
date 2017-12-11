@@ -10,8 +10,6 @@ class ValidatedInputFormsy extends Component {
     }
 
     componentWillReceiveProps() {
-        console.log('this.props.firstRenderInputs');
-        console.log(this.props.firstRenderInputs);
         if (this.props.firstRenderInputs) this.setState({firstRender: true});
     }
 
@@ -26,14 +24,8 @@ class ValidatedInputFormsy extends Component {
         this.props.setValue(event.currentTarget.value);
     }
     render() {
-        console.log('this.state.firstRender');
-        console.log(this.state.firstRender);
     // An error message is returned only if the component is invalid
-        // console.log(this.state);
-        // console.log(this.props.getValue().toString());
-        // console.log(typeof this.props.getValue());
         const errorMessage = this.props.getErrorMessage();
-    	// console.log(errorMessage);
         const inputStyles = {
             width: '100%',
             height: '100%',
