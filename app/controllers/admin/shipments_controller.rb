@@ -60,25 +60,39 @@ class Admin::ShipmentsController < ApplicationController
 
   def update
     @shipment = Shipment.find(params[:id])
-
+    byebug
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       when "decline"
         @shipment.decline!
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       else
         raise "Unknown action!"
       end
     else # This happens when shipment is edited with edit form
       if @shipment.update(shipment_params)
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       else
-        render 'edit'
+        # render 'edit'
       end
     end
+    @cargo_items = @shipment.cargo_items
+    @containers = @shipment.containers
+    @shipment_contacts = @shipment.shipment_contacts
+    @contacts = []
+    @shipment_contacts.each do |sc|
+      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    end
+    @schedules = []
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
+    end
+    @documents = @shipment.documents
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
+    response_handler(resp)
   end
 
   private

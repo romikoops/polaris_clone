@@ -46,8 +46,8 @@ module ShippingTools
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
-    private_prices = Pricing.where(customer_id: current_user.id)
-    public_prices = Pricing.where(customer_id: nil)
+    # private_prices = Pricing.where(customer_id: current_user.id)
+    # public_prices = Pricing.where(customer_id: nil)
     @routes = Route.all
     public_routes = []
     private_routes = []

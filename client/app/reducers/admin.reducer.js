@@ -59,7 +59,7 @@ export function admin(state = {}, action) {
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
             const succConfShip = merge({}, state, {
-                shipments: action.payload.data,
+                shipment: action.payload.data,
                 loading: false
             });
             return succConfShip;

@@ -33,12 +33,10 @@ class AdminShipments extends Component {
     }
     handleShipmentAction(id, action) {
         const { adminDispatch } = this.props;
-        debugger;
         adminDispatch.confirmShipment(id, action);
     }
 
     render() {
-        console.log(this.props.match);
         const {selectedShipment} = this.state;
         const { theme, hubs, shipments, clients, shipment } = this.props;
         // debugger;

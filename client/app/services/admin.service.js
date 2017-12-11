@@ -48,11 +48,12 @@ function getShipment(id) {
 
 function confirmShipment(id, action) {
     const requestOptions = {
-        method: 'PATCH',
+        method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ shipment_action: action })
     };
     const url = BASE_URL + '/admin/shipments/' + id;
+    console.log(url);
     return fetch(url, requestOptions).then(handleResponse);
 }
 

@@ -79,6 +79,18 @@ export class AdminShipmentRow extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
+        const btnsRow = (
+            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+                <div className={`flex-40 layout-row layout-align-center-center ${styles.deny}`} onClick={this.handleDeny}>
+                    <i className="flex-none fa fa-trash"></i>
+                    <p className="flex-none">Deny</p>
+                </div>
+                <div className={`flex-40 layout-row layout-align-center-center ${styles.grant}`} onClick={this.handleAccept}>
+                    <i className="flex-none fa fa-check"></i>
+                    <p className="flex-none">Accept</p>
+                </div>
+            </div>
+        );
         return (
             <div
                 key={v4()}
@@ -138,16 +150,7 @@ export class AdminShipmentRow extends Component {
                                 <p className="flex-none"> {client.first_name} </p>
                                 <p className="flex-none"> {client.last_name} </p>
                             </div>
-                            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
-                                <div className={`flex-40 layout-row layout-align-center-center ${styles.deny}`} onClick={this.handleDeny}>
-                                    <i className="flex-none fa fa-trash"></i>
-                                    <p className="flex-none">Deny</p>
-                                </div>
-                                <div className={`flex-40 layout-row layout-align-center-center ${styles.grant}`} onClick={this.handleAccept}>
-                                    <i className="flex-none fa fa-check"></i>
-                                    <p className="flex-none">Accept</p>
-                                </div>
-                            </div>
+                            { shipment.status === 'requested' ? btnsRow : ''}
                         </div>
                         <div className="flex-100 layout-row layout-align-start-center"  onClick={this.selectShipment}>
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
