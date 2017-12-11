@@ -16,7 +16,7 @@ export class BookingConfirmation extends Component {
     }
     componentDidMount() {
         const { setStage } = this.props;
-        setStage(4);
+        setStage(5);
         window.scrollTo(0, 0);
     }
     render() {

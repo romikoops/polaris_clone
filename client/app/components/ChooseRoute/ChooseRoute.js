@@ -23,7 +23,7 @@ export class ChooseRoute extends Component {
     }
     componentDidMount() {
         const { setStage } = this.props;
-        setStage(2);
+        setStage(3);
         window.scrollTo(0, 0);
     }
     setDuration(val) {

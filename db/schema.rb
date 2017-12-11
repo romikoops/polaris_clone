@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171208164255) do
+ActiveRecord::Schema.define(version: 20171211102844) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,10 +215,10 @@ ActiveRecord::Schema.define(version: 20171208164255) do
     t.string "cargo_notes"
     t.string "haulage"
     t.string "hs_code", default: [], array: true
-    t.integer "schedule_set", default: [], array: true
     t.jsonb "generated_fees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "schedule_set", default: [], array: true
   end
 
   create_table "tenant_vehicle_types", force: :cascade do |t|

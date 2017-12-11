@@ -14,6 +14,12 @@ export class AdminNav extends Component {
                     target: 'dashboard'
                 },
                 {
+                    icon: 'fa-ship',
+                    text: 'Shipments',
+                    url: '/admin/shipments',
+                    target: 'shipments'
+                },
+                {
                     icon: 'fa-building-o',
                     text: 'Hubs',
                     url: '/admin/hubs',
@@ -44,7 +50,7 @@ export class AdminNav extends Component {
                     target: 'trucking'
                 },
                 {
-                    icon: 'fa-suers',
+                    icon: 'fa-users',
                     text: 'Client',
                     url: '/admin/clients',
                     target: 'clients'

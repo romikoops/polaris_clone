@@ -13,7 +13,8 @@ export function shipment(state = {}, action) {
             return {
                 response: {
                     stage1: action.shipmentData
-                }
+                },
+                activeShipment: action.shipmentData.shipment.id
             };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             const err1 = merge({}, state, {
@@ -42,7 +43,8 @@ export function shipment(state = {}, action) {
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
             const resp2 = merge({}, state, {
                 response: { stage2: action.shipmentData },
-                loading: false
+                loading: false,
+                activeShipment: action.shipmentData.shipment.id
             });
             return resp2;
         // return {
@@ -64,7 +66,8 @@ export function shipment(state = {}, action) {
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
             const resp3 = merge({}, state, {
                 response: { stage3: action.shipmentData },
-                loading: false
+                loading: false,
+                activeShipment: action.shipmentData.shipment.id
             });
             return resp3;
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
@@ -82,7 +85,8 @@ export function shipment(state = {}, action) {
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
             const resp4 = merge({}, state, {
                 response: { stage4: action.shipmentData },
-                loading: false
+                loading: false,
+                activeShipment: action.shipmentData.shipment.id
             });
             return resp4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:

@@ -45,10 +45,10 @@ class AdminScheduleGenerator extends Component {
     componentDidMount() {
         const { hubs, vehicleTypes, adminDispatch} = this.props;
         if (!vehicleTypes) {
-            adminDispatch.getVehicleTypes();
+            adminDispatch.getVehicleTypes(false);
         }
         if (!hubs) {
-            adminDispatch.getHubs();
+            adminDispatch.getHubs(false);
         }
     }
     toggleWeekdays(ord) {

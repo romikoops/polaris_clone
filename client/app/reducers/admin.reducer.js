@@ -24,16 +24,34 @@ export function admin(state = {}, action) {
             });
             return reqShips;
         case adminConstants.GET_SHIPMENTS_SUCCESS:
-            const succShip = merge({}, state, {
+            const succShips = merge({}, state, {
                 shipments: action.payload.data,
                 loading: false
             });
-            return succShip;
+            return succShips;
         case adminConstants.GET_SHIPMENTS_FAILURE:
+            const errShips = merge({}, state, {
+                error: { shipments: action.error }
+            });
+            return errShips;
+
+        case adminConstants.ADMIN_GET_SHIPMENT_REQUEST:
+            const reqShip = merge({}, state, {
+                loading: true
+            });
+            return reqShip;
+        case adminConstants.ADMIN_GET_SHIPMENT_SUCCESS:
+            const succShip = merge({}, state, {
+                shipment: action.payload.data,
+                loading: false
+            });
+            return succShip;
+        case adminConstants.ADMIN_GET_SHIPMENT_FAILURE:
             const errShip = merge({}, state, {
                 error: { shipments: action.error }
             });
             return errShip;
+
         case adminConstants.GET_SCHEDULES_REQUEST:
             const reqSched = merge({}, state, {
                 loading: true
@@ -120,6 +138,25 @@ export function admin(state = {}, action) {
                 error: { pricings: action.error }
             });
             return errPric;
+
+        case adminConstants.GET_CLIENTS_REQUEST:
+            const reqClients = merge({}, state, {
+                loading: true
+            });
+            return reqClients;
+        case adminConstants.GET_CLIENTS_SUCCESS:
+            // debugger;
+            const succClients = merge({}, {
+                clients: action.payload.data,
+                loading: false
+            }, state);
+            return succClients;
+        case adminConstants.GET_CLIENTS_FAILURE:
+            const errClients = merge({}, state, {
+                error: { pricings: action.error }
+            });
+            return errClients;
+
         case adminConstants.GET_SERVICE_CHARGES_REQUEST:
             const reqSC = merge({}, state, {
                 loading: true

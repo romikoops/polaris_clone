@@ -59,7 +59,7 @@ module ShippingTools
     end
 
     resp = {
-      data: @shipment,
+      shipment: @shipment,
       all_nexuses: @all_nexuses,
       public_routes: public_routes,
       private_routes: private_routes
@@ -198,8 +198,8 @@ module ShippingTools
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []
-    @shipment.schedule_set.each do |id|
-      @schedules.push(Schedule.find(id))
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
     end
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
@@ -243,7 +243,7 @@ module ShippingTools
     @schedules = []
     params[:schedules].each do |sched|
       schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << schedule.id
+      @shipment.schedule_set << {id: schedule.id, hub_route_key: schedule.hub_route_key}
       @schedules << schedule
     end
     case @shipment.load_type

@@ -276,13 +276,13 @@ export class ShipmentLocationBox extends Component {
             icon = {
                 url: colourSVG('location', theme),
                 anchor: new this.props.gMaps.Point(25, 50),
-                scaledSize: new this.props.gMaps.Size(50, 50)
+                scaledSize: new this.props.gMaps.Size(36, 36)
             };
         } else {
             icon = {
                 url: colourSVG('flag', theme),
                 anchor: new this.props.gMaps.Point(25, 50),
-                scaledSize: new this.props.gMaps.Size(50, 50)
+                scaledSize: new this.props.gMaps.Size(36, 36)
             };
         }
         const marker = new this.props.gMaps.Marker({

@@ -4,7 +4,7 @@ import { alertActions } from './';
 // import { Promise } from 'es6-promise-promise';
 import { push } from 'react-router-redux';
 
-function getHubs() {
+function getHubs(redirect) {
     function request(hubData) {
         return { type: adminConstants.GET_HUBS_REQUEST, payload: hubData };
     }
@@ -22,9 +22,11 @@ function getHubs() {
                 dispatch(
                     alertActions.success('Fetching Hubs successful')
                 );
-                dispatch(
-                    push('/admin/hubs')
-                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/hubs')
+                    );
+                }
                 dispatch(success(data));
             },
             error => {
@@ -35,7 +37,7 @@ function getHubs() {
         );
     };
 }
-function getServiceCharges() {
+function getServiceCharges(redirect) {
     function request(scData) {
         return { type: adminConstants.GET_SERVICE_CHARGES_REQUEST, payload: scData };
     }
@@ -53,9 +55,11 @@ function getServiceCharges() {
                 dispatch(
                     alertActions.success('Fetching Service Charges successful')
                 );
-                dispatch(
-                    push('/admin/service_charges')
-                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/service_charges')
+                    );
+                }
                 dispatch(success(data));
             },
             error => {
@@ -66,7 +70,7 @@ function getServiceCharges() {
         );
     };
 }
-function getPricings() {
+function getPricings(redirect) {
     function request(prData) {
         return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData };
     }
@@ -85,9 +89,11 @@ function getPricings() {
                 dispatch(
                     alertActions.success('Fetching Prices successful')
                 );
-                dispatch(
-                    push('/admin/pricings')
-                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/pricings')
+                    );
+                }
                 dispatch(success(data));
             },
             error => {
@@ -98,7 +104,7 @@ function getPricings() {
         );
     };
 }
-function getSchedules() {
+function getSchedules(redirect) {
     function request(schedData) {
         return { type: adminConstants.GET_SCHEDULES_REQUEST, payload: schedData };
     }
@@ -116,9 +122,11 @@ function getSchedules() {
                 dispatch(
                     alertActions.success('Fetching Schedules successful')
                 );
-                dispatch(
-                    push('/admin/schedules')
-                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/schedules')
+                    );
+                }
                 dispatch(success(data));
             },
             error => {
@@ -130,7 +138,7 @@ function getSchedules() {
     };
 }
 
-function getTrucking() {
+function getTrucking(redirect) {
     function request(truckData) {
         return { type: adminConstants.GET_TRUCKING_REQUEST, payload: truckData };
     }
@@ -148,9 +156,115 @@ function getTrucking() {
                 dispatch(
                     alertActions.success('Fetching Trucking successful')
                 );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/trucking')
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getShipments(redirect) {
+    function request(shipmentData) {
+        return { type: adminConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData };
+    }
+    function success(shipmentData) {
+        return { type: adminConstants.GET_SHIPMENTS_SUCCESS, payload: shipmentData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_SHIPMENTS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getShipments().then(
+            data => {
                 dispatch(
-                    push('/admin/trucking')
+                    alertActions.success('Fetching Shipments successful')
                 );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/shipments')
+                    );
+                }
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getShipment(id, redirect) {
+    function request(shipmentData) {
+        return { type: adminConstants.ADMIN_GET_SHIPMENT_REQUEST, payload: shipmentData };
+    }
+    function success(shipmentData) {
+        return { type: adminConstants.ADMIN_GET_SHIPMENT_SUCCESS, payload: shipmentData };
+    }
+    function failure(error) {
+        return { type: adminConstants.ADMIN_GET_SHIPMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getShipment(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Shipment successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/shipments/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getClients(redirect) {
+    function request(clientData) {
+        return { type: adminConstants.GET_CLIENTS_REQUEST, payload: clientData };
+    }
+    function success(clientData) {
+        return { type: adminConstants.GET_CLIENTS_SUCCESS, payload: clientData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_CLIENTS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getClients().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Clients successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/clients')
+                    );
+                }
+
                 dispatch(success(data));
             },
             error => {
@@ -206,11 +320,11 @@ function autoGenSchedules(data) {
         dispatch(request());
 
         adminService.autoGenSchedules(data).then(
-            data => {
+            schedData => {
                 dispatch(
                     alertActions.success('Generating Schedules successful')
                 );
-                dispatch(success(data));
+                dispatch(success(schedData));
             },
             error => {
                 // debugger;
@@ -256,7 +370,10 @@ export const adminActions = {
     getServiceCharges,
     getPricings,
     getTrucking,
+    getShipment,
     getSchedules,
     autoGenSchedules,
-    getVehicleTypes
+    getVehicleTypes,
+    getShipments,
+    getClients
 };

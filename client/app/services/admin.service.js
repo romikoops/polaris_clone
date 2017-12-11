@@ -28,6 +28,24 @@ function getServiceCharges() {
 
     return fetch(BASE_URL + '/admin/service_charges', requestOptions).then(handleResponse);
 }
+function getShipments() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/shipments', requestOptions).then(handleResponse);
+}
+
+function getShipment(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/shipments/' + id, requestOptions).then(handleResponse);
+}
+
 function getPricings() {
     const requestOptions = {
         method: 'GET',
@@ -35,6 +53,15 @@ function getPricings() {
     };
 
     return fetch(BASE_URL + '/admin/pricings', requestOptions).then(handleResponse);
+}
+
+function getClients() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/clients', requestOptions).then(handleResponse);
 }
 
 function getSchedules() {
@@ -45,6 +72,7 @@ function getSchedules() {
 
     return fetch(BASE_URL + '/admin/schedules', requestOptions).then(handleResponse);
 }
+
 function getTrucking() {
     const requestOptions = {
         method: 'GET',
@@ -77,8 +105,11 @@ export const adminService = {
     getHubs,
     getServiceCharges,
     getPricings,
+    getShipment,
     getSchedules,
     getTrucking,
     autoGenSchedules,
-    getVehicleTypes
+    getVehicleTypes,
+    getShipments,
+    getClients
 };

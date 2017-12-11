@@ -15,6 +15,32 @@
     font-size: 30px;
 
   }
+  .icon {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 24px !important;
+    margin-top: 9px;
+  }
+.address {
+    height: 92px;
+    width: 118px;
+    color: #212121;
+    // font-family: ".SF NS Display";
+    font-size: 16px;
+    line-height: 23px;
+  }
+.btn_sec{
+    padding: 100px 0 70px 0;
+  }
+.cargo_sec {
+    min-height: 187px;
+    border-top: 1px solid #EDEDED;
+  }
+  .sec_title_text_normal {
+    margin: 0;
+    font-size: 30px;
+
+  }
   .sec_header_text {
     margin: 0;
     font-size: 22px;

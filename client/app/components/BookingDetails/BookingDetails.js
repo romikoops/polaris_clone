@@ -83,7 +83,7 @@ export class BookingDetails extends Component {
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
-        setStage(3);
+        setStage(4);
         window.scrollTo(0, 0);
     }
     loadPrevReq(obj) {
