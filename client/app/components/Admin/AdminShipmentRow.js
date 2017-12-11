@@ -7,6 +7,8 @@ export class AdminShipmentRow extends Component {
     constructor(props) {
         super(props);
         this.selectShipment = this.selectShipment.bind(this);
+        this.handleDeny = this.handleDeny.bind(this);
+        this.handleAccept = this.handleAccept.bind(this);
     }
     switchIcon(sched) {
         let icon;
@@ -35,6 +37,15 @@ export class AdminShipmentRow extends Component {
     selectShipment() {
         const {shipment, handleSelect} = this.props;
         handleSelect(shipment);
+    }
+    handleDeny() {
+        const {shipment, handleAction} = this.props;
+        handleAction(shipment.id, 'decline');
+    }
+
+    handleAccept() {
+        const {shipment, handleAction} = this.props;
+        handleAction(shipment.id, 'accept');
     }
     render() {
         const { theme, shipment, hubs, client } = this.props;
@@ -72,13 +83,14 @@ export class AdminShipmentRow extends Component {
             <div
                 key={v4()}
                 className={`flex-100 layout-row ${styles.route_result}`}
-                onClick={this.selectShipment}
+
             >
                 <div className="flex-100 layout-row layout-wrap">
                     <div
                         className={`flex-40 layout-row layout-align-start-center ${
                             styles.top_row
                         }`}
+                        onClick={this.selectShipment}
                     >
                         <div className={`${styles.header_hub}`}>
                             <i
@@ -120,12 +132,24 @@ export class AdminShipmentRow extends Component {
                         </div>
                     </div>
                     <div className="flex-60 layout-row layout-align-start-center layout-wrap">
-                        <div className={`flex-100 layout-row layout-align-start-center ${styles.user_info}`}>
-                            <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle}></i>
-                            <p className="flex-none"> {client.first_name} </p>
-                            <p className="flex-none"> {client.last_name} </p>
+                        <div className={`flex-100 layout-row layout-align-start-center ${styles.action_bar}`}>
+                            <div className={`flex-60 layout-row layout-align-start-center layout-wrap ${styles.user_info}`}  onClick={this.selectShipment}>
+                                <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle}></i>
+                                <p className="flex-none"> {client.first_name} </p>
+                                <p className="flex-none"> {client.last_name} </p>
+                            </div>
+                            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+                                <div className={`flex-40 layout-row layout-align-center-center ${styles.deny}`} onClick={this.handleDeny}>
+                                    <i className="flex-none fa fa-trash"></i>
+                                    <p className="flex-none">Deny</p>
+                                </div>
+                                <div className={`flex-40 layout-row layout-align-center-center ${styles.grant}`} onClick={this.handleAccept}>
+                                    <i className="flex-none fa fa-check"></i>
+                                    <p className="flex-none">Accept</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="flex-100 layout-row layout-align-start-center">
+                        <div className="flex-100 layout-row layout-align-start-center"  onClick={this.selectShipment}>
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                                 <div className="flex-100 layout-row">
                                     <h4

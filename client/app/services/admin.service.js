@@ -46,6 +46,16 @@ function getShipment(id) {
     return fetch(BASE_URL + '/admin/shipments/' + id, requestOptions).then(handleResponse);
 }
 
+function confirmShipment(id, action) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shipment_action: action })
+    };
+    const url = BASE_URL + '/admin/shipments/' + id;
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 function getPricings() {
     const requestOptions = {
         method: 'GET',
@@ -109,6 +119,7 @@ export const adminService = {
     getSchedules,
     getTrucking,
     autoGenSchedules,
+    confirmShipment,
     getVehicleTypes,
     getShipments,
     getClients

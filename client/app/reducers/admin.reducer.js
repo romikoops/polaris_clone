@@ -52,6 +52,24 @@ export function admin(state = {}, action) {
             });
             return errShip;
 
+        case adminConstants.CONFIRM_SHIPMENT_REQUEST:
+            const reqConfShip = merge({}, state, {
+                loading: true
+            });
+            return reqConfShip;
+        case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
+            const succConfShip = merge({}, state, {
+                shipments: action.payload.data,
+                loading: false
+            });
+            return succConfShip;
+        case adminConstants.CONFIRM_SHIPMENT_FAILURE:
+            const errConfShip = merge({}, state, {
+                error: { shipments: action.error }
+            });
+            return errConfShip;
+
+
         case adminConstants.GET_SCHEDULES_REQUEST:
             const reqSched = merge({}, state, {
                 loading: true

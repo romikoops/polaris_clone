@@ -10,6 +10,17 @@ import { RoundButton } from '../RoundButton/RoundButton';
 export class AdminShipmentView extends Component {
     constructor(props) {
         super(props);
+        this.handleDeny = this.handleDeny.bind(this);
+        this.handleAccept = this.handleAccept.bind(this);
+    }
+    handleDeny() {
+        const {shipmentData, handleShipmentAction} = this.props;
+        handleShipmentAction(shipmentData.shipment.id, 'decline');
+    }
+
+    handleAccept() {
+        const {shipmentData, handleShipmentAction} = this.props;
+        handleShipmentAction(shipmentData.shipment.id, 'accept');
     }
 
     render() {
@@ -151,6 +162,7 @@ export class AdminShipmentView extends Component {
                                 size="small"
                                 text="Deny"
                                 iconClass="fa-trash"
+                                handleNext={this.handleDeny}
                             />
                         </div>
                         <div className="flex-none offset-5 layout-row">
@@ -160,6 +172,7 @@ export class AdminShipmentView extends Component {
                                 text="Accept"
                                 iconClass="fa-check"
                                 active
+                                handleNext={this.handleAccept}
                             />
                         </div>
                     </div>
@@ -203,5 +216,6 @@ AdminShipmentView.propTypes = {
     theme: PropTypes.object,
     hubs: PropTypes.array,
     shipmentData: PropTypes.object,
-    clients: PropTypes.array
+    clients: PropTypes.array,
+    handleShipmentAction: PropTypes.func
 };

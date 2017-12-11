@@ -334,6 +334,40 @@ function autoGenSchedules(data) {
         );
     };
 }
+function confirmShipment(id, action) {
+    function request(shipmentData) {
+        return {
+            type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
+            payload: shipmentData
+        };
+    }
+    function success(shipmentData) {
+        return {
+            type: adminConstants.CONFIRM_SHIPMENT_SUCCESS,
+            payload: shipmentData
+        };
+    }
+    function failure(error) {
+        return { type: adminConstants.CONFIRM_SHIPMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request(id, action));
+        adminService.confirmShipment(id, action).then(
+            resp => {
+                const shipmentData = resp.data;
+                dispatch(success(shipmentData));
+                dispatch(
+                    alertActions.success('Shipment Action Set successful')
+                );
+            },
+            error => {
+                error.then(data => {
+                    dispatch(failure({ type: 'error', text: data.message }));
+                });
+            }
+        );
+    };
+}
 
 // function shouldFetchShipment(state, id) {
 //     const shipment = state.shipment.data;
@@ -375,5 +409,6 @@ export const adminActions = {
     autoGenSchedules,
     getVehicleTypes,
     getShipments,
-    getClients
+    getClients,
+    confirmShipment
 };

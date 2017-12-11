@@ -20,7 +20,7 @@ export class AdminShipmentsIndex extends Component {
     render() {
         console.log(this.props);
         // const {selectedShipment} = this.state;
-        const { theme, hubs, shipments, clients } = this.props;
+        const { theme, hubs, shipments, clients, handleShipmentAction } = this.props;
         // debugger;
         if (!shipments || !hubs || !clients) {
             return '';
@@ -35,30 +35,29 @@ export class AdminShipmentsIndex extends Component {
         // };
 
         const openShipments = shipments.open.shipments.map((ship) => {
-            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} client={clientHash[ship.shipper_id]}/>;
+            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
         const requestedShipments = shipments.requested.shipments.map((ship) => {
-            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} client={clientHash[ship.shipper_id]}/>;
+            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
         const finishedShipments = shipments.finished.shipments.map((ship) => {
-            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} client={clientHash[ship.shipper_id]}/>;
+            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
         const listView = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  >Open Shipments</p>
-                    </div>
-                    {openShipments}
-                </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  >Requested Shipments</p>
                     </div>
                     {requestedShipments}
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                        <p className={` ${styles.sec_header_text} flex-none`}  >Open Shipments</p>
+                    </div>
+                    {openShipments}
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
@@ -80,5 +79,6 @@ AdminShipmentsIndex.propTypes = {
     theme: PropTypes.object,
     hubs: PropTypes.array,
     shipments: PropTypes.object,
-    clients: PropTypes.array
+    clients: PropTypes.array,
+    handleShipmentAction: PropTypes.func
 };

@@ -11,7 +11,7 @@ class Admin::SchedulesController < ApplicationController
     @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
     @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
     @routes = Route.where(tenant_id: current_user.tenant_id)
-    byebug
+    # byebug
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
   end
   def auto_generate_schedules

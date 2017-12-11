@@ -12,6 +12,34 @@
       font-weight: normal;
     }
   }
+    .deny {
+    border: 2px solid #DA2C29;
+    border-radius: 5px;
+    height: 30px;
+  }
+  .deny p {
+    font-size: 12px;
+    color: #DA2C29;
+  }
+  .deny i {
+    font-size: 12px;
+    color: #DA2C29;
+  }
+
+  .grant {
+    border: 2px solid #12B415;
+    border-radius: 5px;
+    height: 30px;
+  }
+  .grant p {
+    font-size: 12px;
+    color: #12B415;
+  }
+  .grant i {
+    font-size: 12px;
+    color: #12B415;
+  }
+
   .top_row {
     margin-bottom: 20px;
   }
