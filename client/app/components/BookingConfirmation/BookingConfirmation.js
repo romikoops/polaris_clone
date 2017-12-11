@@ -20,7 +20,7 @@ export class BookingConfirmation extends Component {
         window.scrollTo(0, 0);
     }
     render() {
-        const { theme, shipmentData } = this.props;
+        const { theme, shipmentData, tenant } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
 
         const {

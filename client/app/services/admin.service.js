@@ -48,7 +48,7 @@ function getShipment(id) {
 
 function confirmShipment(id, action) {
     const requestOptions = {
-        method: 'PUT',
+        method: 'PATCH',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
         body: JSON.stringify({ shipment_action: action })
     };

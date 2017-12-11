@@ -127,7 +127,7 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, isLoading } = this.props;
+        const { bookingData, theme, match, isLoading, tenant } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -228,6 +228,7 @@ class Shop extends Component {
                                 }
                                 setStage={this.selectShipmentStage}
                                 messages={error ? error.stage4 : []}
+                                tenant={tenant}
                             />
                         )}
                     />
