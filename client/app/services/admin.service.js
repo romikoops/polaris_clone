@@ -37,6 +37,15 @@ function getShipments() {
     return fetch(BASE_URL + '/admin/shipments', requestOptions).then(handleResponse);
 }
 
+function getDashboard() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/dashboard', requestOptions).then(handleResponse);
+}
+
 function getShipment(id) {
     const requestOptions = {
         method: 'GET',
@@ -119,6 +128,7 @@ export const adminService = {
     getShipment,
     getSchedules,
     getTrucking,
+    getDashboard,
     autoGenSchedules,
     confirmShipment,
     getVehicleTypes,

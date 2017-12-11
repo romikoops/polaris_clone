@@ -60,7 +60,6 @@ class Admin::ShipmentsController < ApplicationController
 
   def update
     @shipment = Shipment.find(params[:id])
-    byebug
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
       when "accept"

@@ -43,13 +43,16 @@ class Admin extends Component {
              case 'clients':
                 dispatch(adminActions.getClients(true));
                 break;
+            case 'dashboard':
+                dispatch(adminActions.getDashboard(true));
+                break;
             default:
                 break;
         }
     }
     render() {
         const {theme, adminData} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules, shipments, clients} = adminData;
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard} = adminData;
         const hubHash = {};
         if (hubs) {
           hubs.forEach((hub) => {
@@ -69,7 +72,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/dashboard"
-                                render={props => <AdminDashboard theme={theme} {...props} />}
+                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
                             />
                             <Route
 

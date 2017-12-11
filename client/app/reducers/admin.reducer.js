@@ -18,6 +18,25 @@ export function admin(state = {}, action) {
                 error: { hubs: action.error }
             });
             return errHubs;
+
+        case adminConstants.GET_DASHBOARD_REQUEST:
+            const reqDash = merge({}, state, {
+                loading: true
+            });
+            return reqDash;
+        case adminConstants.GET_DASHBOARD_SUCCESS:
+            const succDash = merge({}, state, {
+                dashboard: action.payload.data,
+                loading: false
+            });
+            return succDash;
+        case adminConstants.GET_DASHBOARD_FAILURE:
+            const errDash = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDash;
+
+
         case adminConstants.GET_SHIPMENTS_REQUEST:
             const reqShips = merge({}, state, {
                 loading: true

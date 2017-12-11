@@ -305,6 +305,40 @@ function getVehicleTypes() {
     };
 }
 
+function getDashboard(redirect) {
+    function request(dashData) {
+        return { type: adminConstants.GET_DASHBOARD_REQUEST, payload: dashData };
+    }
+    function success(dashData) {
+        return { type: adminConstants.GET_DASHBOARD_SUCCESS, payload: dashData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_DASHBOARD_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getDashboard().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Dashboard successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/dashboard')
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 
 function autoGenSchedules(data) {
     function request(schedData) {
@@ -406,6 +440,7 @@ export const adminActions = {
     getTrucking,
     getShipment,
     getSchedules,
+    getDashboard,
     autoGenSchedules,
     getVehicleTypes,
     getShipments,

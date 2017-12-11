@@ -1,14 +1,14 @@
 module ShippingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
+      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
       session[:shipment_uuid] = @shipment.uuid
       # 
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
         if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type)
+          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
         else
           @shipment = shipment.dup
         end
@@ -48,7 +48,7 @@ module ShippingTools
     # end
     # private_prices = Pricing.where(customer_id: current_user.id)
     # public_prices = Pricing.where(customer_id: nil)
-    @routes = Route.all
+    @routes = Route.where(tenant_id: current_user.tenant_id)
     public_routes = []
     private_routes = []
     @routes.each do |pr|
