@@ -19,7 +19,6 @@ const filter = (state = '', action) => {
     }
 };
 
-
 const rootReducer = combineReducers({
     authentication,
     registration,

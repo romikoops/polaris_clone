@@ -6,8 +6,9 @@ class Admin::HubsController < ApplicationController
   
 
   def index
-    @ocean_hubs = Hub.prepped_ports
-    response_handler(@ocean_hubs)
+    @hubs = Hub.prepped(current_user)
+    
+    response_handler(@hubs)
   end
 
   def set_status

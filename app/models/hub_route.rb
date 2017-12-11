@@ -1,5 +1,6 @@
 class HubRoute < ApplicationRecord
   has_many :schedules
+  belongs_to :route
   has_many :vehicles, through: :schedules
   belongs_to :starthub, class_name: "Hub"
   belongs_to :endhub, class_name: "Hub"
@@ -21,14 +22,14 @@ class HubRoute < ApplicationRecord
     else
       end_date_parsed = DateTime.parse(end_date)
     end
-
+    tenant_id = self.route.tenant_id
     sched_key = "#{self.starthub.id}-#{self.endhub.id}"
     
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         etd = tmp_date.midday
         eta = etd + journey_length.days
-        new_sched = {mode_of_transport: mot, eta: eta, etd: etd, vehicle_id: vehicle_type_id, hub_route_key: sched_key}
+        new_sched = {mode_of_transport: mot, eta: eta, etd: etd, vehicle_id: vehicle_type_id, hub_route_key: sched_key, tenant_id: tenant_id}
          # byebug
         self.schedules.find_or_create_by!(new_sched)
         

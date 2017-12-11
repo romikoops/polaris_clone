@@ -1,5 +1,6 @@
 class Schedule < ApplicationRecord
   belongs_to :hub_route
+  belongs_to :tenant
   belongs_to :vehicle, optional: true
   has_many :transport_categories, through: :vehicle
   # after_validation do |sched|
@@ -29,5 +30,8 @@ class Schedule < ApplicationRecord
     #   end
     # }
     # return results
+  end
+  def assign_tenant
+    
   end
 end

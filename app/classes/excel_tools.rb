@@ -227,7 +227,8 @@ module ExcelTools
         customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
         cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
       }
-
+      p new_charge[:hub_code]
+      p user.tenant_id
       hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
       new_charge.delete(:hub_code)
       new_charge[:hub_id] = hub.id
@@ -272,31 +273,36 @@ module ExcelTools
 
         route = Route.find_by("origin_id = ? AND destination_id = ?", locations[row[:from]].id, locations[row[:to]].id)
       end
-      hub1 = locations[row[:from]].hubs_by_type("ocean").first
-      hub2 = locations[row[:to]].hubs_by_type("ocean").first
+      
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
 
-      row[:starthub_id] = hub1.id
-      row[:endhub_id] = hub2.id
+      hub1 = locations[row[:from]].hubs_by_type(row[:mode_of_transport]).first
+      hub2 = locations[row[:to]].hubs_by_type(row[:mode_of_transport]).first
 
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
+      row[:tenant_id] = user.tenant_id
       row.delete(:from)
       row.delete(:to)
 
       if route
         sched = route.schedules.find_or_create_by(row)
-        new_ids << sched.id
+        # new_ids << sched.id
       else
         raise "Route cannot be found!"
       end
     end
 
-    kicked_vs_ids = old_ids - new_ids
-    Schedule.where(id: kicked_vs_ids).destroy_all
+    # kicked_vs_ids = old_ids - new_ids
+    # Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
   def overwrite_vessel_schedules(params, user = current_user)
 
-    old_ids = Schedule.pluck(:id)
-    new_ids = []
+    # old_ids = Schedule.pluck(:id)
+    # new_ids = []
     locations = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -313,30 +319,31 @@ module ExcelTools
 
         route = Route.find_by("origin_nexus_id = ? AND destination_nexus_id = ?", locations[row[:from]].id, locations[row[:to]].id)
       end
-      hub1 = locations[row[:from]].hubs_by_type("ocean").first
-      hub2 = locations[row[:to]].hubs_by_type("ocean").first
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
 
-      row[:starthub_id] = hub1.id
-      row[:endhub_id] = hub2.id
-
+      row[:tenant_id] = user.tenant_id
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       row.delete(:from)
       row.delete(:to)
 
       if route
-        sched = route.schedules.find_or_create_by(row)
-        new_ids << sched.id
+        sched = hubroute.schedules.find_or_create_by(row)
+        # new_ids << sched.id
       else
         raise "Route cannot be found!"
       end
     end
 
-    kicked_vs_ids = old_ids - new_ids
-    Schedule.where(id: kicked_vs_ids).destroy_all
+    # kicked_vs_ids = old_ids - new_ids
+    # Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
   def overwrite_train_schedules(params, user = current_user)
-    old_ids = Schedule.pluck(:id)
-    new_ids = []
+    # old_ids = Schedule.pluck(:id)
+    # new_ids = []
     data_box = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -352,26 +359,31 @@ module ExcelTools
         data_box[train_schedule[:to]] = Location.find_by_hub_name(train_schedule[:to])
         robj = Route.where("origin_id = ? AND destination_id = ?", data_box[train_schedule[:from]], data_box[train_schedule[:to]]).first
       end
-      # robj = get_route_from_schedule(train_schedule[:from], train_schedule[:to])
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+
+      hub1 = locations[row[:from]].hubs_by_type("rail").first
+      hub2 = locations[row[:to]].hubs_by_type("rail").first
+      row[:tenant_id] = user.tenant_id
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       if robj
         ts = robj.schedules.find_or_create_by(train_schedule)
-        new_ids << ts.id
+        # new_ids << ts.id
       else
-        nrt = Route.create_from_schedule(train_schedule, user.tenant_id)
-        ts = nrt.schedules.find_or_create_by(train_schedule)
-        new_ids << ts.id
+        raise "Route cannot be found!"
 
       end
     end
 
-    kicked_ts_ids = old_ids - new_ids
-    Schedule.where(id: kicked_ts_ids).destroy_all
+    # kicked_ts_ids = old_ids - new_ids
+    # Schedule.where(id: kicked_ts_ids).destroy_all
 
   end
 
   def overwrite_hubs(params, user = current_user)
-    old_ids = Hub.pluck(:id)
-    new_ids = []
+
     hubs = []
 
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
@@ -395,14 +407,9 @@ module ExcelTools
 
       hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
-      new_ids << hub.id
     end
-
-    kicked_hub_ids = old_ids - new_ids
-    Hub.where(id: kicked_hub_ids).destroy_all
-
     hubs.each do |hub|
-      hub.generate_hub_code!
+      hub.generate_hub_code!(user.tenant_id)
     end
   end
 
@@ -421,12 +428,9 @@ module ExcelTools
   end
 
   def overwrite_dynamo_pricings(params, dedicated, user = current_user)
-    old_route_ids = Route.pluck(:id)
-    old_hub_route_ids = HubRoute.pluck(:id)
+   
     # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
-    new_route_ids = []
-    new_hub_route_ids = []
-    new_pricing_ids = []
+    
 
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -486,8 +490,6 @@ module ExcelTools
         end
       end
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
-      new_route_ids << route.id
-      new_hub_route_ids << hubroute.id
       if !dedicated
         cust_id = nil
         ded_bool = false
@@ -566,16 +568,7 @@ module ExcelTools
         end
         
       end
-
-
-
-      # pricing = route.pricings.find_or_create_by(dedicated: ded_bool, tenant_id: user.tenant_id, customer_id: cust_id, lcl: lcl_obj, fcl_20f: fcl_20f_obj, fcl_40f: fcl_40f_obj, fcl_40f_hq: fcl_40f_hq_obj)
-
-      # new_pricing_ids << pricing.id
     end
-    kicked_hub_route_ids = old_hub_route_ids - new_hub_route_ids
-    HubRoute.where(id: kicked_hub_route_ids).destroy_all
-    kicked_route_ids = old_route_ids - new_route_ids
-    Route.where(id: kicked_route_ids).destroy_all
+    
   end
 end

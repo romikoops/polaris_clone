@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171208135516) do
+ActiveRecord::Schema.define(version: 20171208164255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 20171208135516) do
     t.integer "hub_route_id"
     t.string "hub_route_key"
     t.integer "vehicle_id"
+    t.integer "tenant_id"
   end
 
   create_table "service_charges", force: :cascade do |t|
