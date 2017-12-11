@@ -11,7 +11,7 @@ export class ShipmentCargoItems extends Component {
         this.handleCargoChange = this.handleCargoChange.bind(this);
         this.addNewCargo = this.addNewCargo.bind(this);
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
-        this.state = {firstRenderInput: true};
+        this.state = {firstRenderInputs: !this.props.nextStageAttempt};
         this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
     }
 
@@ -21,6 +21,7 @@ export class ShipmentCargoItems extends Component {
             newCargoItem: { ...this.state.newCargoItem, [name]: value }
         });
     }
+
     setFirstRenderInputs(bool) {
         this.setState({firstRenderInputs: bool});
     }
@@ -45,8 +46,6 @@ export class ShipmentCargoItems extends Component {
     }
 
     render() {
-        console.log('PARENT this.state.firstRenderInputs');
-        console.log(this.state.firstRenderInputs);
         const { cargoItems, handleDelta } = this.props;
         const cargosAdded = [];
         const newCargoItem = cargoItems[0];
@@ -99,6 +98,7 @@ export class ShipmentCargoItems extends Component {
                                     onChange={handleDelta}
                                     firstRenderInputs={this.state.firstRenderInputs}
                                     setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
                                     validations={ {matchRegexp: /[^0]/} }
                                     validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
@@ -119,6 +119,7 @@ export class ShipmentCargoItems extends Component {
                                     onChange={handleDelta}
                                     firstRenderInputs={this.state.firstRenderInputs}
                                     setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
                                     validations={ {matchRegexp: /[^0]/} }
                                     validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
@@ -139,6 +140,7 @@ export class ShipmentCargoItems extends Component {
                                     onChange={handleDelta}
                                     firstRenderInputs={this.state.firstRenderInputs}
                                     setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
                                     validations={ {matchRegexp: /[^0]/} }
                                     validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required
@@ -159,6 +161,7 @@ export class ShipmentCargoItems extends Component {
                                     onChange={handleDelta}
                                     firstRenderInputs={this.state.firstRenderInputs}
                                     setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
                                     validations={ {matchRegexp: /[^0]/} }
                                     validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                     required

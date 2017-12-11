@@ -47,6 +47,14 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            cargoItemErrors: {
+                payload_in_kg: true,
+                dimension_x: true,
+                dimension_y: true,
+                dimension_z: true
+            },
+            nextStageAttempt: false,
+            addCargoItemAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
             shipment: this.props.shipmentData.data,
@@ -72,7 +80,6 @@ export class ShipmentDetails extends Component {
         this.handleContainerChange = this.handleContainerChange.bind(this);
         this.deleteCargo = this.deleteCargo.bind(this);
     }
-
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
         if (prevRequest && prevRequest.shipment) {
@@ -136,15 +143,18 @@ export class ShipmentDetails extends Component {
         this.setState({
             [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
-        console.log({...this.state[key1], [key2]: val, fullAddress });
     }
 
-    handleCargoItemChange(event) {
+    handleCargoItemChange(event, hasError) {
         const { name, value } = event.target;
         const itemArr = this.state.cargoItems;
         itemArr[0][name] = value;
-        console.log(itemArr);
-        this.setState({ cargoItems: itemArr });
+        const cargoItemErrors = this.state.cargoItemErrors;
+        cargoItemErrors[name] = hasError;
+        this.setState({
+            cargoItems: itemArr,
+            cargoItemErrors: cargoItemErrors
+        });
     }
 
     handleContainerChange(event) {
@@ -156,6 +166,14 @@ export class ShipmentDetails extends Component {
     }
 
     addNewCargoItem() {
+        if (this.errorsExist(this.state.cargoItemErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({addCargoItemAttempt: true});
+            return;
+        }
+
+        this.setState({addCargoItemAttempt: false});
+
         const newCI = {
             payload_in_kg: 0,
             dimension_x: 0,
@@ -163,9 +181,18 @@ export class ShipmentDetails extends Component {
             dimension_z: 0,
             dangerousGoods: false
         };
+        const newErrors = {
+            payload_in_kg: true,
+            dimension_x: true,
+            dimension_y: true,
+            dimension_z: true
+        };
         const currArray = this.state.cargoItems;
         currArray.unshift(newCI);
-        this.setState({ cargoItems: currArray });
+        this.setState({
+            cargoItems: currArray,
+            cargoItemErrors: newErrors
+        });
     }
 
     addNewContainer() {
@@ -183,8 +210,16 @@ export class ShipmentDetails extends Component {
     setTargetLocation(target, address) {
         this.setState({ [target]: address });
     }
+    errorsExist(errorsObj) {
+        return Object.values(errorsObj).indexOf(true) > -1;
+    }
 
     handleNextStage() {
+        if (this.errorsExist(this.state.cargoItemErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({nextStageAttempt: true});
+            return;
+        }
         console.log('NEXT STAGE PLZ');
 
         const data = {
@@ -242,6 +277,7 @@ export class ShipmentDetails extends Component {
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
                         deleteItem={this.deleteCargo}
+                        nextStageAttempt={this.state.nextStageAttempt || this.state.addCargoItemAttempt}
                     />
                 );
             }

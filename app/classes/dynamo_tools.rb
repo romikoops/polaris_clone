@@ -83,7 +83,12 @@ module DynamoTools
     #   access_key_id: ENV['AWS_KEY'],
     #   secret_access_key: ENV['AWS_SECRET']
     # )
-    dynamodb = Aws::DynamoDB::Client.new(endpoint:'http://localhost:8000')
+    dynamodb = Aws::DynamoDB::Client.new(
+      access_key_id: 'key',
+      secret_access_key: 'key',
+      endpoint:'http://localhost:8000'
+    )
+
     return dynamodb
   end
 end
