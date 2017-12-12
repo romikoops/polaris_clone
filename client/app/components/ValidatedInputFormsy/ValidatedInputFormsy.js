@@ -7,24 +7,31 @@ class ValidatedInputFormsy extends Component {
         super(props);
         this.changeValue = this.changeValue.bind(this);
         this.state = {firstRender: true};
+        this.errorsHaveUpdated = false;
     }
-
-    // componentWillMount() {
-    //     const event = {target: {name: this.props.name, value: this.props.getValue()}};
-    //     this.props.onChange(event, !this.props.isValidValue(event.target.value));
-    //     console.log('Will Mount');
-    //     console.log(event);
-    // }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.firstRenderInputs) {
             this.setState({firstRender: true});
-            console.log('PROPS');
         }
     }
 
+    componentDidUpdate() {
+        if (this.errorsHaveUpdated) return; // Break the loop if erros have updated
+
+        const event = {target: {name: this.props.name, value: this.props.getValue()}};
+        const validationPassed = this.props.isValidValue(event.target.value);
+
+        // break out of function if validation did not pass. This assumes default state in
+        // shipmentDetails has errors set to true
+        if (!validationPassed) return;
+
+        // Trigger onChange event, and flag errorsHaveUpdated as true, in order to avoid an infinite loop.
+        this.props.onChange(event, !validationPassed);
+        this.errorsHaveUpdated = true;
+    }
+
     changeValue(event) {
-        console.log('CHANGED');
         this.props.onChange(event, !this.props.isValidValue(event.target.value));
         this.props.setFirstRenderInputs(false);
         this.setState({firstRender: false});
@@ -35,17 +42,7 @@ class ValidatedInputFormsy extends Component {
         this.props.setValue(event.currentTarget.value);
     }
     render() {
-    // An error message is returned only if the component is invalid
-        // console.log('this.state.firstRender');
-        // console.log(this.state.firstRender);
-        // console.log('this.props.firstRenderInputs');
-        // console.log(this.props.firstRenderInputs);
-        // console.log('this.props.nextStageAttempt');
-        // console.log(this.props.nextStageAttempt);
-        // console.log('this.props.isValid()');
-        // console.log(this.props.isValid());
-        console.log('this.props.getValue()');
-        console.log(this.props.getValue());
+        // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
         const inputStyles = {
             width: '100%',

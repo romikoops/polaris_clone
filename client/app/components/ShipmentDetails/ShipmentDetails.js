@@ -146,6 +146,7 @@ export class ShipmentDetails extends Component {
     }
 
     handleCargoItemChange(event, hasError) {
+        console.log('ShipmentDetails CHANGED');
         const { name, value } = event.target;
         const itemArr = this.state.cargoItems;
         itemArr[0][name] = value;
