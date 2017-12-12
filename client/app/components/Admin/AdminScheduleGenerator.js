@@ -227,7 +227,7 @@ class AdminScheduleGenerator extends Component {
                             </div>
 
                             <div className={`flex-33 layout-row layout-align-start-center ${styles.input_box}`}>
-                                <input type="number" value={duration} onChange={this.setDuration}/>
+                                <input type="number" name="duration" value={duration} onChange={this.handleDuration}/>
                             </div>
                         </div>
 

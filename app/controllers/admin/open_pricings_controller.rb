@@ -17,7 +17,7 @@ class Admin::OpenPricingsController < ApplicationController
   def overwrite_main_carriage
     if params[:file]
       req = {'xlsx' => params[:file]}
-       overwrite_main_carriage_rates(req, false)
+      overwrite_dynamo_pricings(req, false)
       response_handler(true)
     else
       response_handler(false)

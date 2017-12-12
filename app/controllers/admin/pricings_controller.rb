@@ -27,9 +27,9 @@ class Admin::PricingsController < ApplicationController
   end
 
   def overwrite_main_carriage
-    if params[:file]
+    if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-       overwrite_main_carriage_rates(req, true)
+        overwrite_dynamo_pricings(req, true)
       response_handler(true)
     else
       response_handler(false)
