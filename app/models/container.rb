@@ -1,6 +1,12 @@
 class Container < ApplicationRecord
   belongs_to :shipment
 
+  validates :size_class,    presence: true
+  validates :weight_class,  presence: true
+  validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :tare_weight,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :gross_weight,  presence: true, numericality: { greater_than_or_equal_to: 0 }
+
   # Class methods
   def self.extract_containers(params)
     containers = []
