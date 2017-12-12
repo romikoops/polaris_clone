@@ -47,6 +47,9 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            containerErrors: {
+                payload_in_kg: true,
+            },
             cargoItemErrors: {
                 payload_in_kg: true,
                 dimension_x: true,
@@ -54,7 +57,7 @@ export class ShipmentDetails extends Component {
                 dimension_z: true
             },
             nextStageAttempt: false,
-            addCargoItemAttempt: false,
+            addUnitAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
             shipment: this.props.shipmentData.data,
@@ -146,7 +149,6 @@ export class ShipmentDetails extends Component {
     }
 
     handleCargoItemChange(event, hasError) {
-        console.log('ShipmentDetails CHANGED');
         const { name, value } = event.target;
         const itemArr = this.state.cargoItems;
         itemArr[0][name] = value;
@@ -158,22 +160,26 @@ export class ShipmentDetails extends Component {
         });
     }
 
-    handleContainerChange(event) {
+    handleContainerChange(event, hasError) {
         const { name, value } = event.target;
         const itemArr = this.state.containers;
         itemArr[0][name] = value;
+        const containerErrors = this.state.containerErrors;
+        containerErrors[name] = hasError;
 
-        this.setState({ containers: itemArr });
+        this.setState({
+            cargoItems: itemArr,
+            containerErrors: containerErrors
+        });
     }
 
     addNewCargoItem() {
         if (this.errorsExist(this.state.cargoItemErrors)) {
             console.log('(!) Errors exist (!)');
-            this.setState({addCargoItemAttempt: true});
+            this.setState({addUnitAttempt: true});
             return;
         }
-
-        this.setState({addCargoItemAttempt: false});
+        this.setState({addUnitAttempt: false});
 
         const newCI = {
             payload_in_kg: 0,
@@ -197,15 +203,28 @@ export class ShipmentDetails extends Component {
     }
 
     addNewContainer() {
+        if (this.errorsExist(this.state.containerErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({addUnitAttempt: true});
+            return;
+        }
+        this.setState({addUnitAttempt: false});
+
         const newCont = {
             payload_in_kg: 0,
             sizeClass: '',
             tareWeight: 0,
             dangerousGoods: false
         };
+        const newErrors = {
+            payload_in_kg: true,
+        };
         const currArray = this.state.containers;
         currArray.unshift(newCont);
-        this.setState({ containers: currArray });
+        this.setState({
+            cargoItems: currArray,
+            containerErrors: newErrors
+        });
     }
 
     setTargetLocation(target, address) {
@@ -268,6 +287,8 @@ export class ShipmentDetails extends Component {
                         addContainer={this.addNewContainer}
                         handleDelta={this.handleContainerChange}
                         deleteItem={this.deleteCargo}
+                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        theme={theme}
                     />
                 );
             }
@@ -278,7 +299,8 @@ export class ShipmentDetails extends Component {
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
                         deleteItem={this.deleteCargo}
-                        nextStageAttempt={this.state.nextStageAttempt || this.state.addCargoItemAttempt}
+                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        theme={theme}
                     />
                 );
             }

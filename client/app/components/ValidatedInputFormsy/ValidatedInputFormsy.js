@@ -61,7 +61,7 @@ class ValidatedInputFormsy extends Component {
                 	style={inputStyles}
                     onChange={this.changeValue}
                     type={this.props.type}
-                    value={(this.props.getValue().toString()) || ''}
+                    value={(this.props.getValue() || this.props.getValue().toString()) || ''}
                     name={this.props.name}
                 />
                 <span className={styles.error_message}>{ErrorVisible ? '' : errorMessage}</span>

@@ -173,7 +173,11 @@ export class ShipmentCargoItems extends Component {
                         </div>
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Dangerous Goods </p>
-                            <Checkbox onChange={this.toggleDangerousGoods} checked={newCargoItem.dangerousGoods} />
+                            <Checkbox
+                                onChange={this.toggleDangerousGoods}
+                                checked={newCargoItem.dangerousGoods}
+                                theme={this.props.theme}
+                            />
                         </div>
 
                         <div className="layout-row layout-align-start-center" >
