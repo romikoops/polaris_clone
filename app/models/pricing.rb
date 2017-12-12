@@ -39,7 +39,7 @@ class Pricing < ApplicationRecord
   end
 
   def self.fcl_price(container, pathKey, user)
-    pricing = Pricing.get_user_price(pathKey, user)
+    pricing = Pricing.new.get_user_price(pathKey, user)
     # case container.size_class    
     # when "20_dc"
     #   container_rate = self.fcl_20f

@@ -261,15 +261,18 @@ class OfferCalculator
           end
           
           if @containers
-              transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
-              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: container.size_class)
+            @containers.each do |cnt|
+              transport_type_key = cnt.cargo_class ? cnt.cargo_class : 'any'
+              
+              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
               pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
-              fees[sched_key][:cargo][ci.id] = Pricing.lcl_price(ci, pathKey, @user)
-              @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
+              fees[sched_key][:cargo][cnt.id] = Pricing.fcl_price(cnt, pathKey, @user)
+              @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
+              @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|
             #   fees[sched_key][:import][cnt.id] = @import_charges.calc_import_charge(cnt)
             #   fees[sched_key][:export][cnt.id] = @export_charges.calc_export_charge(cnt)
-            # end
+            end
           end
           
         end
@@ -334,6 +337,7 @@ class OfferCalculator
           end
         end
       end
+
       
       if !raw_totals[svalue["trucking_on"]["currency"]]
         raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
@@ -350,6 +354,7 @@ class OfferCalculator
       else
         raw_totals[@total_price[:cargo][:currency]] += @total_price[:cargo][:value].to_f
       end
+      
       converted_totals = sum_and_convert(raw_totals, "EUR")
       @shipment.generated_fees[key]["total"] = converted_totals
       
@@ -385,6 +390,7 @@ class OfferCalculator
 
   def price_from_cargos
     prices = []
+    
     case @load_type
     when 'fcl'
       @containers.each do |container|

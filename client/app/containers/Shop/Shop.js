@@ -241,6 +241,7 @@ class Shop extends Component {
                         <BookingConfirmation
                             {...props}
                             theme={theme}
+                            tenant={tenant.data}
                             shipmentData={response ? response.stage4 : {}}
                             setStage={this.selectShipmentStage}
                         />
