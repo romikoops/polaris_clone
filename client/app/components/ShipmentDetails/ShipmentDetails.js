@@ -235,11 +235,18 @@ export class ShipmentDetails extends Component {
     }
 
     handleNextStage() {
-        if (this.errorsExist(this.state.cargoItemErrors)) {
+        // This was implemented under the assuption that in the initial state the following return values apply:
+        //      (1) this.errorsExist(this.state.cargoItemErrors) #=> true
+        //      (2) this.errorsExist(this.state.containerErrors) #=> true
+        // So it will break out of the function and set nextStage attempt to true,
+        // in case one of them returns false
+        if (this.errorsExist(this.state.cargoItemErrors) && this.errorsExist(this.state.containerErrors)) {
             console.log('(!) Errors exist (!)');
             this.setState({nextStageAttempt: true});
             return;
         }
+
+
         console.log('NEXT STAGE PLZ');
 
         const data = {
