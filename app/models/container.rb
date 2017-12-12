@@ -10,7 +10,7 @@ class Container < ApplicationRecord
         'fcl_40f_hq' => 4000,
         
     }
-    byebug
+
     params.each do |value|
       
       size_class = value["sizeClass"]
