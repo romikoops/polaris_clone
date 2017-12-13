@@ -11,11 +11,10 @@ class Admin::PricingsController < ApplicationController
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
     @pricings = get_tenant_pricings(current_user.tenant_id)
-    @user_pricings = get_user_pricings(current_user.id)
-    @hub_route_pricings
+    @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
     byebug
     @routes = Route.where(tenant_id: current_user.tenant_id)
-    response_handler({routes: @routes, pricings: {open: @open_pricings, dedicated: @ded_pricings}})
+    response_handler({routes: @routes, tenant_pricings: @tenant_pricings, pricings: @pricings})
   end
 
   def overwrite_main_carriage
