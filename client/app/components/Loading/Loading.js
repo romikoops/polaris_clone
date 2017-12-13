@@ -12,7 +12,7 @@ export class Loading extends Component {
         const { theme } = this.props;
         const logo = theme && theme.logoLarge ? theme.logoLarge : '';
         const kfLogo = keyframes` 
-                0% {
+                0%, 100% {
                   transform: rotateY(0deg);
                   content:url(${logo});
                 }

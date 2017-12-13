@@ -32,8 +32,16 @@ export class AdminScheduleLine extends Component {
     }
     render() {
         const { theme, schedule, hubs } = this.props;
-        const originHub = hubs[schedule.starthub_id].data;
-        const destHub = hubs[schedule.endhub_id].data;
+        if (!schedule || !schedule.hub_route_key) {
+            return '';
+        }
+        const hubKeys = schedule.hub_route_key.split('-');
+        if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
+            // debugger;
+            return '';
+        }
+        const originHub = hubs[hubKeys[0]].data;
+        const destHub = hubs[hubKeys[1]].data;
         const gradientFontStyle = {
             background:
                 theme && theme.colors

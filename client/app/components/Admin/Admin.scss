@@ -8,10 +8,51 @@
   .select {
     width: 195px;
   }
+  .address_card {
+    height: 300px;
+    width: 225px;
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 1px 2px 1px rgba(0,0,0,0.25);
+  }
+  .address_card p {
+    margin: 5px;
+  }
   .sec_title_text {
     margin: 0;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    font-size: 30px;
+
+  }
+  .clip {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
+  .icon {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 24px !important;
+    margin-top: 9px;
+  }
+.address {
+    height: 92px;
+    width: 118px;
+    color: #212121;
+    // font-family: ".SF NS Display";
+    font-size: 16px;
+    line-height: 23px;
+  }
+.btn_sec{
+    padding: 100px 0 70px 0;
+  }
+
+.cargo_sec {
+    min-height: 187px;
+    border-top: 1px solid #EDEDED;
+  }
+  .sec_title_text_normal {
+    margin: 0;
     font-size: 30px;
 
   }
@@ -95,7 +136,7 @@
     margin: 0;
   }
   .charge_panel {
-    background: whitesmoke;
+    // background: whitesmoke;
     height: max-content;
   }
   .shed_selector {
@@ -107,7 +148,7 @@
   
   }
   .hub_card {
-    // width: 300px;
+    width: 240px;
     height: 200px;
     margin: 5px;
     // background: rgba(10,1,12,0.75);
@@ -167,5 +208,16 @@
   }
   .price_card p {
     margin: 0;
+  }
+  .slider_container {
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: none;
+
+  }
+  .slider_inner {
+    position: absolute;
+    width: max-content;
+    min-width: 100%;
   }
 }

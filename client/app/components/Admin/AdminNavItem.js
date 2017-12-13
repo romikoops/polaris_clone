@@ -22,7 +22,7 @@ export class AdminNavItem extends Component {
                     <i className={`flex-none fa ${iconClass}`} style={textStyle}></i>
                 </div>
                 <div className="flex layout-row layout-wrap">
-                    <h3 className="flex-none" style={textStyle}>{text}</h3>
+                    <h3 className="flex-none" >{text}</h3>
                 </div>
             </div>
         );

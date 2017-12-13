@@ -45,10 +45,10 @@ class AdminScheduleGenerator extends Component {
     componentDidMount() {
         const { hubs, vehicleTypes, adminDispatch} = this.props;
         if (!vehicleTypes) {
-            adminDispatch.getVehicleTypes();
+            adminDispatch.getVehicleTypes(false);
         }
         if (!hubs) {
-            adminDispatch.getHubs();
+            adminDispatch.getHubs(false);
         }
     }
     toggleWeekdays(ord) {
@@ -227,7 +227,7 @@ class AdminScheduleGenerator extends Component {
                             </div>
 
                             <div className={`flex-33 layout-row layout-align-start-center ${styles.input_box}`}>
-                                <input type="number" value={duration} onChange={this.setDuration}/>
+                                <input type="number" name="duration" value={duration} onChange={this.handleDuration}/>
                             </div>
                         </div>
 

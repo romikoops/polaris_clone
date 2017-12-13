@@ -12,17 +12,19 @@ import Admin from '../Admin/Admin';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
-
+import {getSubdomain} from '../../helpers';
 class App extends Component {
     constructor(props) {
         super(props);
     }
     componentDidMount() {
-        const { dispatch, selectedSubdomain } = this.props;
-        dispatch(fetchTenantIfNeeded(selectedSubdomain));
+        const { dispatch } = this.props;
+        const subdomain = getSubdomain();
+        dispatch(fetchTenantIfNeeded(subdomain));
     }
     componentDidUpdate(prevProps) {
         if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
+        // const subdomain = getSubdomain();
             const { dispatch, selectedSubdomain } = this.props;
             dispatch(fetchTenantIfNeeded(selectedSubdomain));
         }

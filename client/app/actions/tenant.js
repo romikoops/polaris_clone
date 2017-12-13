@@ -4,6 +4,8 @@ export const REQUEST_TENANT = 'REQUEST_TENANT';
 export const RECEIVE_TENANT = 'RECEIVE_TENANT';
 export const INVALIDATE_SUBDOMAIN = 'INVALIDATE_SUBDOMAIN';
 import { BASE_URL } from '../constants';
+
+
 const requestTenant = subdomain => {
     return {
         type: REQUEST_TENANT,
@@ -32,10 +34,11 @@ const fetchTenant = subdomain => {
     return dispatch => {
         dispatch(requestTenant(subdomain));
         return fetch(`${BASE_URL}/tenants/${subdomain}`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveTenant(subdomain, json)));
+            .then(response => response.json())
+            .then(json => dispatch(receiveTenant(subdomain, json)));
     };
 };
+
 
 const shouldFetchTenant = (state, subdomain) => {
     const tenant = state[subdomain];
@@ -65,3 +68,5 @@ export const fetchTenantIfNeeded = subdomain => {
         return Promise.resolve();
     };
 };
+
+

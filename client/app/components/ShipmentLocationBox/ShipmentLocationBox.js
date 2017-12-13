@@ -8,7 +8,7 @@ import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
-import mapStyling from '../../constants/map.constants';
+import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
 
 const mapStyle = {
@@ -277,13 +277,13 @@ export class ShipmentLocationBox extends Component {
             icon = {
                 url: colourSVG('location', theme),
                 anchor: new this.props.gMaps.Point(25, 50),
-                scaledSize: new this.props.gMaps.Size(50, 50)
+                scaledSize: new this.props.gMaps.Size(36, 36)
             };
         } else {
             icon = {
                 url: colourSVG('flag', theme),
                 anchor: new this.props.gMaps.Point(25, 50),
-                scaledSize: new this.props.gMaps.Size(50, 50)
+                scaledSize: new this.props.gMaps.Size(36, 36)
             };
         }
         const marker = new this.props.gMaps.Marker({

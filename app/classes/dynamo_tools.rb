@@ -78,17 +78,15 @@ module DynamoTools
   private
 
   def init
-    #dynamodb = Aws::DynamoDB::Client.new(
-    #   region: 'eu-central-1',
-    #   access_key_id: ENV['AWS_KEY'],
-    #   secret_access_key: ENV['AWS_SECRET']
-    # )
-    dynamodb = Aws::DynamoDB::Client.new(
-      access_key_id: 'key',
-      secret_access_key: 'key',
-      endpoint:'http://localhost:8000'
-    )
-
+    if Rails.env == 'development'
+      dynamodb = Aws::DynamoDB::Client.new(endpoint:'http://localhost:8000')
+    else
+      dynamodb = Aws::DynamoDB::Client.new(
+        region: 'eu-central-1',
+        access_key_id: ENV['AWS_KEY'],
+        secret_access_key: ENV['AWS_SECRET']
+      )
+    end
     return dynamodb
   end
 end

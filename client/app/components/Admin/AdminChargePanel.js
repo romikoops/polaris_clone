@@ -77,7 +77,7 @@ export class AdminChargePanel extends Component {
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel}`}>
                     <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
                         <div className="flex-100 layout-row layout-align-start-start">
-                            <p className="flex-none">Import</p>
+                            <h3 className="flex-none">Import</h3>
                         </div>
                         <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
                             {importArr}
@@ -85,7 +85,7 @@ export class AdminChargePanel extends Component {
                     </div>
                     <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
                         <div className="flex-100 layout-row layout-align-start-start">
-                            <p className="flex-none">Export</p>
+                            <h3 className="flex-none">Export</h3>
                         </div>
                         <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
                             {exportArr}

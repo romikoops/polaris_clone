@@ -1,14 +1,14 @@
 module ShippingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
+      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
       session[:shipment_uuid] = @shipment.uuid
       # 
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
         if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type)
+          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
         else
           @shipment = shipment.dup
         end
@@ -46,9 +46,9 @@ module ShippingTools
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
-    private_prices = Pricing.where(customer_id: current_user.id)
-    public_prices = Pricing.where(customer_id: nil)
-    @routes = Route.all
+    # private_prices = Pricing.where(customer_id: current_user.id)
+    # public_prices = Pricing.where(customer_id: nil)
+    @routes = Route.where(tenant_id: current_user.tenant_id)
     public_routes = []
     private_routes = []
     @routes.each do |pr|
@@ -59,7 +59,7 @@ module ShippingTools
     end
 
     resp = {
-      data: @shipment,
+      shipment: @shipment,
       all_nexuses: @all_nexuses,
       public_routes: public_routes,
       private_routes: private_routes
@@ -198,8 +198,8 @@ module ShippingTools
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []
-    @shipment.schedule_set.each do |id|
-      @schedules.push(Schedule.find(id))
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
     end
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
@@ -243,7 +243,7 @@ module ShippingTools
     @schedules = []
     params[:schedules].each do |sched|
       schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << schedule.id
+      @shipment.schedule_set << {id: schedule.id, hub_route_key: schedule.hub_route_key}
       @schedules << schedule
     end
     case @shipment.load_type

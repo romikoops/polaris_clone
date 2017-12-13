@@ -1,6 +1,7 @@
 :local {
   .hub_card {
     width: calc(30% - 10px);
+    min-width: 200px;
     height: 200px;
     margin: 5px;
     color: #FFFFFF;

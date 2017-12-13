@@ -4,7 +4,12 @@ import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
-import { AdminNav, AdminDashboard, AdminHubs, AdminPricings, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import AdminShipments from '../../components/Admin/AdminShipments';
+import AdminClients from '../../components/Admin/AdminClients';
+import AdminHubs from '../../components/Admin/AdminHubs';
+import AdminRoutes from '../../components/Admin/AdminRoutes';
+import AdminPricings from '../../components/Admin/AdminPricings';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -12,24 +17,41 @@ class Admin extends Component {
         super(props);
         this.setUrl = this.setUrl.bind(this);
     }
+    componentDidMount() {
+        const {dispatch} = this.props;
+        dispatch(adminActions.getClients(false));
+        dispatch(adminActions.getHubs(false));
+    }
     setUrl(target) {
         console.log(target);
         const {dispatch} = this.props;
         switch(target) {
             case 'hubs':
-                dispatch(adminActions.getHubs());
+                dispatch(adminActions.getHubs(true));
                 break;
             case 'serviceCharges':
-                dispatch(adminActions.getServiceCharges());
+                dispatch(adminActions.getServiceCharges(true));
                 break;
             case 'pricing':
-                dispatch(adminActions.getPricings());
+                dispatch(adminActions.getPricings(true));
                 break;
             case 'schedules':
-                dispatch(adminActions.getSchedules());
+                dispatch(adminActions.getSchedules(true));
                 break;
             case 'trucking':
-                dispatch(adminActions.getTrucking());
+                dispatch(adminActions.getTrucking(true));
+                break;
+            case 'shipments':
+                dispatch(adminActions.getShipments(true));
+                break;
+             case 'clients':
+                dispatch(adminActions.getClients(true));
+                break;
+            case 'dashboard':
+                dispatch(adminActions.getDashboard(true));
+                break;
+            case 'routes':
+                dispatch(adminActions.getRoutes(true));
                 break;
             default:
                 break;
@@ -37,7 +59,7 @@ class Admin extends Component {
     }
     render() {
         const {theme, adminData} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules} = adminData;
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
         if (hubs) {
           hubs.forEach((hub) => {
@@ -57,12 +79,12 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/dashboard"
-                                render={props => <AdminDashboard theme={theme} {...props} />}
+                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
                             />
                             <Route
 
                                 path="/admin/hubs"
-                                render={props => <AdminHubs theme={theme} {...props} hubs={hubs} />}
+                                render={props => <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs}/>}
                             />
                             <Route
 
@@ -78,6 +100,21 @@ class Admin extends Component {
 
                                 path="/admin/service_charges"
                                 render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} />}
+                            />
+                            <Route
+
+                                path="/admin/shipments"
+                                render={props => <AdminShipments theme={theme} {...props} hubs={hubs} shipments={shipments} clients={clients}/>}
+                            />
+                            <Route
+
+                                path="/admin/clients"
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients}/>}
+                            />
+                             <Route
+
+                                path="/admin/routes"
+                                render={props => <AdminRoutes theme={theme} {...props} hubHash={hubHash} routes={routes} clients={clients}/>}
                             />
                         </Switch>
                     </div>

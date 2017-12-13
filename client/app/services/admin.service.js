@@ -20,6 +20,33 @@ function getHubs() {
     return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
 }
 
+function getHub(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/hubs/' + id, requestOptions).then(handleResponse);
+}
+
+function getRoutes() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+}
+
+function getRoute(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/routes/' + id, requestOptions).then(handleResponse);
+}
+
 function getServiceCharges() {
     const requestOptions = {
         method: 'GET',
@@ -28,6 +55,44 @@ function getServiceCharges() {
 
     return fetch(BASE_URL + '/admin/service_charges', requestOptions).then(handleResponse);
 }
+function getShipments() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/shipments', requestOptions).then(handleResponse);
+}
+
+function getDashboard() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/dashboard', requestOptions).then(handleResponse);
+}
+
+function getShipment(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/shipments/' + id, requestOptions).then(handleResponse);
+}
+
+function confirmShipment(id, action) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shipment_action: action })
+    };
+    const url = BASE_URL + '/admin/shipments/' + id;
+    console.log(url);
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 function getPricings() {
     const requestOptions = {
         method: 'GET',
@@ -35,6 +100,24 @@ function getPricings() {
     };
 
     return fetch(BASE_URL + '/admin/pricings', requestOptions).then(handleResponse);
+}
+
+function getClients() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/clients', requestOptions).then(handleResponse);
+}
+
+function getClient(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/clients/' + id, requestOptions).then(handleResponse);
 }
 
 function getSchedules() {
@@ -45,6 +128,7 @@ function getSchedules() {
 
     return fetch(BASE_URL + '/admin/schedules', requestOptions).then(handleResponse);
 }
+
 function getTrucking() {
     const requestOptions = {
         method: 'GET',
@@ -75,10 +159,19 @@ function autoGenSchedules(data) {
 
 export const adminService = {
     getHubs,
+    getHub,
+    getRoutes,
+    getRoute,
+    getClient,
     getServiceCharges,
     getPricings,
+    getShipment,
     getSchedules,
     getTrucking,
+    getDashboard,
     autoGenSchedules,
-    getVehicleTypes
+    confirmShipment,
+    getVehicleTypes,
+    getShipments,
+    getClients
 };

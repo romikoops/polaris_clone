@@ -60,15 +60,15 @@ export class ShipmentDetails extends Component {
             addUnitAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
-            shipment: this.props.shipmentData.data,
+            shipment: this.props.shipmentData.shipment,
             allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
         };
 
-        if (this.props.shipmentData.data) {
-            this.state.selectedDay = this.props.shipmentData.data.planned_pickup_date;
-            this.state.has_on_carriage = this.props.shipmentData.data.has_on_carriage;
-            this.state.has_pre_carriage = this.props.shipmentData.data.has_pre_carriage;
+        if (this.props.shipmentData.shipment) {
+            this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date;
+            this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage;
+            this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage;
         }
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -89,7 +89,7 @@ export class ShipmentDetails extends Component {
             this.loadPrevReq(prevRequest.shipment);
         }
         window.scrollTo(0, 0);
-        setStage(1);
+        setStage(2);
         console.log('######### MOUNTED ###########');
     }
     componentDidUpdate() {
@@ -252,7 +252,7 @@ export class ShipmentDetails extends Component {
         const data = {
             shipment: this.state.shipment
                 ? this.state.shipment
-                : this.props.shipmentData.data
+                : this.props.shipmentData.shipment
         };
         data.shipment.origin_user_input = this.state.origin.fullAddress
             ? this.state.origin.fullAddress
@@ -286,8 +286,8 @@ export class ShipmentDetails extends Component {
     render() {
         const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
-        if (shipmentData.data) {
-            if (shipmentData.data.load_type.includes('fcl')) {
+        if (shipmentData.shipment) {
+            if (shipmentData.shipment.load_type.includes('fcl')) {
                 cargoDetails = (
                     <ShipmentContainers
                         containers={this.state.containers}
@@ -299,7 +299,7 @@ export class ShipmentDetails extends Component {
                     />
                 );
             }
-            if (shipmentData.data.load_type.includes('lcl')) {
+            if (shipmentData.shipment.load_type.includes('lcl')) {
                 cargoDetails = (
                     <ShipmentCargoItems
                         cargoItems={this.state.cargoItems}

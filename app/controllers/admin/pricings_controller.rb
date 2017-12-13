@@ -1,5 +1,6 @@
 class Admin::PricingsController < ApplicationController
   include ExcelTools
+  include PricingTools
   
   before_action :require_login_and_role_is_admin
 
@@ -7,29 +8,19 @@ class Admin::PricingsController < ApplicationController
 
   def index
     
-    @ded_pricings = Pricing.where.not(customer_id: nil)
-    @open_pricings = Pricing.where(customer_id: nil)
-
-    @routes = []
-    @open_pricings.each do |p|
-      rt = p.route
-      if !@routes.include? rt
-         @routes.push(rt)
-      end 
-    end
-    @ded_pricings.each do |p|
-      rt = p.route
-      if !@routes.include? rt
-         @routes.push(rt)
-      end 
-    end
-    response_handler({routes: @routes, pricings: {open: @open_pricings, dedicated: @ded_pricings}})
+    # @ded_pricings = Pricing.where.not(customer_id: nil)
+    # @open_pricings = Pricing.where(customer_id: nil)
+    @pricings = get_tenant_pricings(current_user.tenant_id)
+    @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
+    byebug
+    @routes = Route.where(tenant_id: current_user.tenant_id)
+    response_handler({routes: @routes, tenant_pricings: @tenant_pricings, pricings: @pricings})
   end
 
   def overwrite_main_carriage
-    if params[:file]
+    if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-       overwrite_main_carriage_rates(req, true)
+        overwrite_dynamo_pricings(req, true)
       response_handler(true)
     else
       response_handler(false)
