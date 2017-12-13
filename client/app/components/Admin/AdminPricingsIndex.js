@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import { AdminRouteTile, AdminClientTile } from './AdminRouteTile';
+import { AdminRouteTile, AdminClientTile } from './';
 // import { pricingNames } from '../../constants/admin.constants';
 import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
@@ -9,17 +9,17 @@ export class AdminPricingsIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedRoute: null,
+            selectedPricing: null,
             currentView: 'open'
         };
         this.setRoute = this.setRoute.bind(this);
     }
     setRoute(route) {
-        this.setState({selectedRoute: route});
+        this.setState({selectedPricing: route});
     }
     render() {
         const {theme, hubs, pricingData, clients } = this.props;
-        // const { selectedRoute } = this.state;
+        // const { selectedPricing } = this.state;
         if (!pricingData) {
             return '';
         }

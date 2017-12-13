@@ -578,6 +578,7 @@ module ExcelTools
           end
           new_path_pricings[pathKey]["open"] = uuid
           new_path_pricings[pathKey]["hub_route"] = hubroute.id
+          new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
           new_path_pricings[pathKey]["route"] = route.id
           new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
 

@@ -24,6 +24,11 @@ module PricingTools
     return resp.to_a
   end
 
+  def get_tenant_path_pricings(tenant_id)
+    resp = get_items('pathPricing', 'tenant_id', tenant_id)
+    return resp.to_a
+  end
+
   def get_hub_route_pricings(hub_route_id)
     resp = get_items('pathPricing', 'hub_route', hub_route_id)
     return resp.to_a
