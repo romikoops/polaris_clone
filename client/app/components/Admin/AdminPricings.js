@@ -13,7 +13,7 @@ class AdminPricings extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedRoute: false,
+            selectedPricing: false,
             currentView: 'open'
         };
         this.viewRoute = this.viewRoute.bind(this);
@@ -22,18 +22,18 @@ class AdminPricings extends Component {
     viewRoute(route) {
         const { adminDispatch } = this.props;
         adminDispatch.getRoute(route.id, true);
-        this.setState({selectedRoute: true});
+        this.setState({selectedPricing: true});
     }
 
     backToIndex() {
         const { dispatch, history } = this.props;
-        this.setState({selectedHub: false});
+        this.setState({selectedPricing: false});
         dispatch(history.push('/admin/routes'));
     }
 
     render() {
-        const {selectedRoute} = this.state;
-        const {theme, hubs, pricingData, routes, hubHash, adminDispatch} = this.props;
+        const {selectedPricing} = this.state;
+        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -47,19 +47,19 @@ class AdminPricings extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
-        const title = selectedHub ? 'Pricing Overview' : 'Pricings';
+        const title = selectedPricing ? 'Pricing Overview' : 'Pricings';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
-                    {selectedRoute ? backButton : ''}
+                    {selectedPricing ? backButton : ''}
                 </div>
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={clients} pricingData={pricingData} routes={routes} {...props} viewRoute={this.viewRoute} />}
+                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={clients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch} viewRoute={this.viewRoute} />}
                     />
                     {/* <Route
                         exact

@@ -4,11 +4,12 @@ import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
-import { AdminNav, AdminDashboard, AdminPricings, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
 import AdminShipments from '../../components/Admin/AdminShipments';
 import AdminClients from '../../components/Admin/AdminClients';
 import AdminHubs from '../../components/Admin/AdminHubs';
 import AdminRoutes from '../../components/Admin/AdminRoutes';
+import AdminPricings from '../../components/Admin/AdminPricings';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {

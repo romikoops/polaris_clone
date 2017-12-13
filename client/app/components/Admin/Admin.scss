@@ -148,7 +148,7 @@
   
   }
   .hub_card {
-    // width: 300px;
+    width: 240px;
     height: 200px;
     margin: 5px;
     // background: rgba(10,1,12,0.75);
@@ -208,5 +208,16 @@
   }
   .price_card p {
     margin: 0;
+  }
+  .slider_container {
+    position: relative;
+    overflow-x: scroll;
+    overflow-y: none;
+
+  }
+  .slider_inner {
+    position: absolute;
+    width: max-content;
+    min-width: 100%;
   }
 }

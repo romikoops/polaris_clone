@@ -12,6 +12,11 @@ export * from './AdminNavItem';
 export * from './AdminPricePanel';
 export * from './AdminPricings';
 export * from './AdminPricingView';
+export * from './AdminPricingsIndex';
+export * from './AdminPricingsRouteIndex';
+export * from './AdminPricingsClientIndex';
+export * from './AdminPricingClientView';
+export * from './AdminPricingRouteView';
 
 export * from './AdminRouteTile';
 export * from './AdminRouteView';

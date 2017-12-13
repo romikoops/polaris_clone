@@ -372,7 +372,6 @@ module ExcelTools
         ts = robj.schedules.find_or_create_by(train_schedule)
       else
         raise "Route cannot be found!"
-
       end
     end
   end
