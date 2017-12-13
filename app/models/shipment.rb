@@ -1,29 +1,36 @@
 class Shipment < ApplicationRecord
-  # id:                       #<ActiveModel::Type::Integer:0x000056399d0eaf38>
-  # shipper_id:               #<ActiveModel::Type::Integer:0x000056399d0ea010>
-  # shipper_location_id:      #<ActiveModel::Type::Integer:0x000056399d0ea010>
-  # origin_id:                #<ActiveModel::Type::Integer:0x000056399d0ea010>
-  # destination_id:           #<ActiveModel::Type::Integer:0x000056399d0ea010>
-  # route_id:                 #<ActiveModel::Type::Integer:0x000056399d0ea010>
-  # uuid:                     #<ActiveModel::Type::String:0x000056399d0e3580>
-  # imc_reference:            #<ActiveModel::Type::String:0x000056399d0e3580>
-  # status:                   #<ActiveModel::Type::String:0x000056399d0e3580>
-  # load_type:                #<ActiveModel::Type::String:0x000056399d0e3580>
-  # planned_pickup_date:      #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime:0x000056399d0e1d20>
-  # has_pre_carriage:         #<ActiveModel::Type::Boolean:0x00007f25e14e5580>
-  # pre_carriage_distance_km: #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
-  # has_on_carriage:          #<ActiveModel::Type::Boolean:0x00007f25e14e5580>
-  # on_carriage_distance_km:  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
-  # total_price:              #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
-  # total_goods_value:        #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>  
-  # cargo_notes:              #<ActiveModel::Type::String:0x000056399d0e3580>
-  # haulage:                  #<ActiveModel::Type::String:0x000056399d0e3580>
-  # hs_code:                  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array:0x000056399d15b120>
-  # schedule_set:             #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array:0x000056399d15a590>
-  # generated_fees:           #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Jsonb:0x00007f25e14e4720>
-  
+  STATUSES = %w(
+    requested
+    booking_process_started
+    pending
+    confirmed
+    declined
+  )
+  LOAD_TYPES = %w(
+    fcl
+    lcl
+    openlcl
+  )
   
 
+  # Validations 
+  validates :status, 
+    inclusion: { 
+      in: STATUSES, 
+      message: "must be included in [#{STATUSES.join(', ')}]" 
+    },
+    allow_nil: true
+  validates :load_type, 
+    inclusion: { 
+      in: LOAD_TYPES, 
+      message: "must be included in [#{LOAD_TYPES.join(', ')}]" 
+    },
+    allow_nil: true
+  validate :planned_pickup_date_is_a_datetime?
+  validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :total_price,              numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
   before_create :assign_uuid
@@ -31,20 +38,15 @@ class Shipment < ApplicationRecord
 
   # Basic associations
   belongs_to :shipper, class_name: "User", optional: true
-
   belongs_to :consignee, optional: true
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-
   belongs_to :origin, class_name: "Location", optional: true
   belongs_to :destination, class_name: "Location", optional: true
-
   belongs_to :route, optional: true
-
   has_many :containers
   has_many :cargo_items
-
   belongs_to :shipper_location, class_name: "Location", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
@@ -213,5 +215,10 @@ class Shipment < ApplicationRecord
 
   def assign_uuid
     self.uuid = SecureRandom.uuid
+  end
+
+  def planned_pickup_date_is_a_datetime?
+    return if planned_pickup_date.nil?
+    errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone) 
   end
 end
