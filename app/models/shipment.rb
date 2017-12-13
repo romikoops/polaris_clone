@@ -1,4 +1,30 @@
 class Shipment < ApplicationRecord
+  # id:                       #<ActiveModel::Type::Integer:0x000056399d0eaf38>
+  # shipper_id:               #<ActiveModel::Type::Integer:0x000056399d0ea010>
+  # shipper_location_id:      #<ActiveModel::Type::Integer:0x000056399d0ea010>
+  # origin_id:                #<ActiveModel::Type::Integer:0x000056399d0ea010>
+  # destination_id:           #<ActiveModel::Type::Integer:0x000056399d0ea010>
+  # route_id:                 #<ActiveModel::Type::Integer:0x000056399d0ea010>
+  # uuid:                     #<ActiveModel::Type::String:0x000056399d0e3580>
+  # imc_reference:            #<ActiveModel::Type::String:0x000056399d0e3580>
+  # status:                   #<ActiveModel::Type::String:0x000056399d0e3580>
+  # load_type:                #<ActiveModel::Type::String:0x000056399d0e3580>
+  # planned_pickup_date:      #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::DateTime:0x000056399d0e1d20>
+  # has_pre_carriage:         #<ActiveModel::Type::Boolean:0x00007f25e14e5580>
+  # pre_carriage_distance_km: #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
+  # has_on_carriage:          #<ActiveModel::Type::Boolean:0x00007f25e14e5580>
+  # on_carriage_distance_km:  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
+  # total_price:              #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
+  # total_goods_value:        #<ActiveModel::Type::String:0x000056399d0e3580>
+  # cargo_notes:              #<ActiveModel::Type::String:0x000056399d0e3580>
+  # haulage:                  #<ActiveModel::Type::String:0x000056399d0e3580>
+  # hs_code:                  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array:0x000056399d15b120>
+  # schedule_set:             #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array:0x000056399d15a590>
+  # generated_fees:           #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Jsonb:0x00007f25e14e4720>
+  
+  
+
+
   # ActiveRecord Callbacks
   before_create :assign_uuid
   before_create :generate_imc_reference
