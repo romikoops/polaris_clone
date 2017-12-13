@@ -1,5 +1,5 @@
 class Pricing < ApplicationRecord
-  include PricingTools
+  extend PricingTools
   validates :tenant_id, presence: true
 
   belongs_to :route
