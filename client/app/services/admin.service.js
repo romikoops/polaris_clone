@@ -102,6 +102,15 @@ function getPricings() {
     return fetch(BASE_URL + '/admin/pricings', requestOptions).then(handleResponse);
 }
 
+function getClientPricings(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/client_pricings/' + id, requestOptions).then(handleResponse);
+}
+
 function getClients() {
     const requestOptions = {
         method: 'GET',
@@ -168,6 +177,7 @@ export const adminService = {
     getShipment,
     getSchedules,
     getTrucking,
+    getClientPricings,
     getDashboard,
     autoGenSchedules,
     confirmShipment,

@@ -19,9 +19,18 @@ module PricingTools
     return resp.to_a
   end
 
+  def get_tenant_pricings_hash(tenant_id)
+    resp = get_items('pricings', 'tenant_id', tenant_id).to_a
+    result = {}
+    resp.each do |pr|
+      result[pr["_id"]] = pr
+    end
+    return result
+  end
+
   def get_user_pricings(user_id)
     resp = get_items('userPricings', '_id', "#{user_id}")
-    return resp.to_a
+    return resp.first
   end
 
   def get_tenant_path_pricings(tenant_id)

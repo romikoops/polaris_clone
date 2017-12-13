@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminPricingsIndex} from './';
+import {AdminPricingsIndex, AdminPricingClientView} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -33,7 +33,7 @@ class AdminPricings extends Component {
 
     render() {
         const {selectedPricing} = this.state;
-        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients} = this.props;
+        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -70,13 +70,13 @@ class AdminPricings extends Component {
                         exact
                         path="/admin/pricings/routes"
                         render={props => <AdminPricingsRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewRoute={this.viewRoute} />}
-                    />
+                    />*/}
                     <Route
                         exact
                         path="/admin/pricings/clients/:id"
-                        render={props => <AdminPricingClientView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminPricingClientView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clientPricings={clientPricings} adminActions={adminDispatch} {...props} />}
                     />
-                    <Route
+                   {/* <Route
                         exact
                         path="/admin/pricings/routes/:id"
                         render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} />}
@@ -94,7 +94,7 @@ AdminPricings.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, pricingData, routes } = admin;
+    const { clients, hubs, pricingData, routes, transportCategories, clientPricings } = admin;
 
     return {
         user,
@@ -102,6 +102,8 @@ function mapStateToProps(state) {
         loggedIn,
         hubs,
         pricingData,
+        transportCategories,
+        clientPricings,
         routes,
         clients
     };

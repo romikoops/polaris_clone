@@ -52,4 +52,19 @@ class HubRoute < ApplicationRecord
       tmp_date += 1.day
     end
   end
+
+  def update_name
+    starthub = self.starthub
+    endhub = self.endhub
+    newname = "#{starthub.name} - #{endhub.name}"
+    self.name = newname
+    self.save!
+  end
+
+  def self.update_all_names
+   all_hub_routes = HubRoute.all
+   all_hub_routes.each do |hr|
+      hr.update_name
+   end
+  end
 end
