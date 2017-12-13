@@ -1,6 +1,6 @@
 module ExcelTools
   include ImageTools
-  include DynamoTools
+  include MongoTools
   
   def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
@@ -370,15 +370,11 @@ module ExcelTools
       row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       if robj
         ts = robj.schedules.find_or_create_by(train_schedule)
-        # new_ids << ts.id
       else
         raise "Route cannot be found!"
 
       end
     end
-
-    # kicked_ts_ids = old_ids - new_ids
-    # Schedule.where(id: kicked_ts_ids).destroy_all
   end
 
   def overwrite_hubs(params, user = current_user)
@@ -427,7 +423,7 @@ module ExcelTools
 
   def overwrite_dynamo_pricings(params, dedicated, user = current_user)
     # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
-
+    mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
     pricing_rows = first_sheet.parse(
@@ -457,7 +453,8 @@ module ExcelTools
       fcl_40_hq_heavy_weight_surcharge_wm: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_WM',
       fcl_40_hq_heavy_weight_surcharge_min: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_MIN'
     )
-
+    new_pricings = []
+    new_path_pricings = {}
     pricing_rows.each do |row|
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
@@ -555,18 +552,44 @@ module ExcelTools
       if dedicated
         load_types.each do |lt|
           uuid = SecureRandom.uuid
-          put_item('pricings', 'price_id', uuid, price_obj[lt])
+          tmpItem = price_obj[lt]
           pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
-          update_item('pathPricings', 'pathKey', pathKey, {"#{user.id}" => uuid})
+          tmpItem[:_id] = uuid;
+          tmpItem[:tenant_id] = user.tenant_id;
+          userObj = {}
+          userObj[pathKey] = uuid
+          put_item_fn(mongo, 'pricings', tmpItem)
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+          new_path_pricings[pathKey]["#{user.id}"] = uuid
         end
       else
         load_types.each do |lt|
           uuid = SecureRandom.uuid
-          put_item('pricings', 'price_id', uuid, price_obj[lt])
+          tmpItem = price_obj[lt]
           pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
-          update_item('pathPricings', 'pathKey', pathKey, {"open" => uuid})
+          tmpItem[:_id] = uuid;
+          tmpItem[:tenant_id] = user.tenant_id
+          pr = put_item_fn(mongo, 'pricings', tmpItem)
+
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
+          new_path_pricings[pathKey]["open"] = uuid
+          new_path_pricings[pathKey]["hub_route"] = hubroute.id
+          new_path_pricings[pathKey]["route"] = route.id
+          new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
+
         end
       end
     end
+    npps = []
+    new_path_pricings.each do |key, value|
+      tmpObj = value
+      ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+    end
+
   end
 end

@@ -37,6 +37,40 @@ function getHubs(redirect) {
         );
     };
 }
+
+function getHub(id, redirect) {
+    function request(hubData) {
+        return { type: adminConstants.GET_HUB_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.GET_HUB_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_HUB_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getHub(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Hubs successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/hubs/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 function getServiceCharges(redirect) {
     function request(scData) {
         return { type: adminConstants.GET_SERVICE_CHARGES_REQUEST, payload: scData };
@@ -276,6 +310,41 @@ function getClients(redirect) {
     };
 }
 
+function getClient(id, redirect) {
+    function request(clientData) {
+        return { type: adminConstants.GET_CLIENT_REQUEST, payload: clientData };
+    }
+    function success(clientData) {
+        return { type: adminConstants.GET_CLIENT_SUCCESS, payload: clientData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_CLIENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getClient(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Clients successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/clients/' + id)
+                    );
+                }
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function getVehicleTypes() {
     function request(vehicleData) {
         return { type: adminConstants.GET_VEHICLE_TYPES_REQUEST, payload: vehicleData };
@@ -402,42 +471,81 @@ function confirmShipment(id, action) {
         );
     };
 }
+function getRoutes(redirect) {
+    function request(routeData) {
+        return { type: adminConstants.GET_ROUTES_REQUEST, payload: routeData };
+    }
+    function success(routeData) {
+        return { type: adminConstants.GET_ROUTES_SUCCESS, payload: routeData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_ROUTES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
 
-// function shouldFetchShipment(state, id) {
-//     const shipment = state.shipment.data;
-//     if (!shipment) {
-//         return true;
-//     }
-//     if (shipment && shipment.id !== id) {
-//         return true;
-//     }
-//     if (shipment.isFetching) {
-//         return false;
-//     }
-//     return shipment.didInvalidate;
-// }
-// function fetchShipmentIfNeeded(id) {
-//     // Note that the function also receives getState()
-//     // which lets you choose what to dispatch next.
+        adminService.getRoutes().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Routes successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/routes')
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 
-//     // This is useful for avoiding a network request if
-//     // a cached value is already available.
+function getRoute(id, redirect) {
+    function request(routeData) {
+        return { type: adminConstants.GET_ROUTE_REQUEST, payload: routeData };
+    }
+    function success(routeData) {
+        return { type: adminConstants.GET_ROUTE_SUCCESS, payload: routeData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_ROUTE_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
 
-//     return (dispatch, getState) => {
-//         if (shouldFetchShipment(getState(), id)) {
-//             // Dispatch a thunk from thunk!
-//             return dispatch(getShipment(id));
-//         }
-
-//         // Let the calling code know there's nothing to wait for.
-//         return Promise.resolve();
-//     };
-// }
+        adminService.getRoute(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Route successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/routes/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 export const adminActions = {
     getHubs,
+    getRoutes,
+    getRoute,
     getServiceCharges,
     getPricings,
     getTrucking,
+    getClient,
     getShipment,
     getSchedules,
     getDashboard,
@@ -445,5 +553,6 @@ export const adminActions = {
     getVehicleTypes,
     getShipments,
     getClients,
-    confirmShipment
+    confirmShipment,
+    getHub
 };

@@ -1,5 +1,6 @@
 class Admin::PricingsController < ApplicationController
   include ExcelTools
+  include PricingTools
   
   before_action :require_login_and_role_is_admin
 
@@ -7,22 +8,13 @@ class Admin::PricingsController < ApplicationController
 
   def index
     
-    @ded_pricings = Pricing.where.not(customer_id: nil)
-    @open_pricings = Pricing.where(customer_id: nil)
-
-    @routes = []
-    @open_pricings.each do |p|
-      rt = p.route
-      if !@routes.include? rt
-         @routes.push(rt)
-      end 
-    end
-    @ded_pricings.each do |p|
-      rt = p.route
-      if !@routes.include? rt
-         @routes.push(rt)
-      end 
-    end
+    # @ded_pricings = Pricing.where.not(customer_id: nil)
+    # @open_pricings = Pricing.where(customer_id: nil)
+    @pricings = get_tenant_pricings(current_user.tenant_id)
+    @user_pricings = get_user_pricings(current_user.id)
+    @hub_route_pricings
+    byebug
+    @routes = Route.where(tenant_id: current_user.tenant_id)
     response_handler({routes: @routes, pricings: {open: @open_pricings, dedicated: @ded_pricings}})
   end
 

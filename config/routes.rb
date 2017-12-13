@@ -22,15 +22,15 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :hubs, only: [:index] do
+    resources :hubs, only: [:index, :show] do
       patch "set_status"
     end
     post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
-    resources :routes, only: [:index]
+    resources :routes, only: [:index, :show]
     post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
     resources :vehicle_types, only: [:index]
-    resources :clients, only: [:index]
+    resources :clients, only: [:index, :show]
     resources :pricings, only: [:index]
     post "pricings/train_and_ocean_pricings/process_csv", to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
 

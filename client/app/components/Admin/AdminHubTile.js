@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminHubTile.scss';
+
 export class AdminHubTile extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            redirect: false
+        };
         this.handleLink = this.handleLink.bind(this);
         this.clickEv = this.clickEv.bind(this);
     }
@@ -13,9 +17,9 @@ export class AdminHubTile extends Component {
         navFn(target);
     }
     clickEv() {
-        const {handleClick, hub } = this.props;
+        const { hub, handleClick } = this.props;
         if (handleClick) {
-            handleClick(hub);
+            handleClick(hub.data);
         }
     }
     render() {
@@ -32,6 +36,7 @@ export class AdminHubTile extends Component {
                     })`
                     : 'black'
         };
+
         return(
             <div className={`flex-none ${styles.hub_card} layout-row`} style={bg1} onClick={this.clickEv}>
                 <div className={styles.fade}></div>

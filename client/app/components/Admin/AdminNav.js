@@ -54,6 +54,12 @@ export class AdminNav extends Component {
                     text: 'Client',
                     url: '/admin/clients',
                     target: 'clients'
+                },
+                {
+                    icon: 'fa-map-signs',
+                    text: 'Routes',
+                    url: '/admin/routes',
+                    target: 'routes'
                 }
             ]
         };

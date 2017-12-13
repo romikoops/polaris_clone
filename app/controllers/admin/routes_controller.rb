@@ -5,7 +5,21 @@ class Admin::RoutesController < ApplicationController
 
   def index
     @routes = Route.where(tenant_id: current_user.tenant_id)
-    @number_of_columns = @routes.map { |r| r.stops.length }.max || 1
+    response_handler(@routes)
+  end
+
+  def show
+    @route = Route.find(params[:id])
+    @hub_routes = @route.hub_routes
+    @starthubs = @hub_routes.map(&:starthub).to_a
+    @endhubs = @hub_routes.map(&:endhub).to_a
+    # @hubs = (@starthubs + @endhubs) - (@starthubs & @endhubs)
+    @schedules = @hub_routes.flat_map(&:schedules).slice!(0,20)
+    @import_charges = @endhubs.map(&:service_charge)
+    @export_charges = @starthubs.map(&:service_charge)
+    # byebug
+    resp = {startHubs: @starthubs, endHubs: @endhubs, route: @route, hubRoutes: @hub_routes, schedules: @schedules, importCharges: @import_charges, exportCharges: @export_charges}
+    response_handler(resp)
   end
 
   def overwrite

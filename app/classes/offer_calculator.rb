@@ -1,7 +1,6 @@
 class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs
   include CurrencyTools
-  include DynamoTools
   def initialize(shipment, params, load_type, user)
     
     @load_type = shipment.load_type

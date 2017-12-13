@@ -14,11 +14,13 @@ export function shipment(state = {}, action) {
                 response: {
                     stage1: action.shipmentData
                 },
-                activeShipment: action.shipmentData.shipment.id
+                activeShipment: action.shipmentData.shipment.id,
+                loading: false
             };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             const err1 = merge({}, state, {
-                error: { stage1: [ action.error ] }
+                error: { stage1: [ action.error ] },
+                loading: false
             });
             return err1;
 
@@ -30,7 +32,8 @@ export function shipment(state = {}, action) {
             return action.shipmentData;
         case shipmentConstants.GET_SHIPMENT_FAILURE:
             const errG = merge({}, state, {
-                error: { get: [ action.error ] }
+                error: { get: [ action.error ] },
+                loading: false
             });
             return errG;
 

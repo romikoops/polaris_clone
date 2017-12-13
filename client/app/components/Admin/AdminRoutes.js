@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminHubsIndex, AdminHubView} from './';
+import {AdminRoutesIndex, AdminRouteView} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,31 +9,31 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
-class AdminHubs extends Component {
+class AdminRoutes extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedHub: false,
+            selectedRoute: false,
             currentView: 'open'
         };
-        this.viewHub = this.viewHub.bind(this);
+        this.viewRoute = this.viewRoute.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
-    viewHub(hub) {
+    viewRoute(route) {
         const { adminDispatch } = this.props;
-        adminDispatch.getHub(hub.id, true);
-        this.setState({selectedHub: true});
+        adminDispatch.getRoute(route.id, true);
+        this.setState({selectedRoute: true});
     }
 
     backToIndex() {
         const { dispatch, history } = this.props;
-        this.setState({selectedHub: false});
-        dispatch(history.push('/admin/hubs'));
+        this.setState({selectedRoute: false});
+        dispatch(history.push('/admin/routes'));
     }
 
     render() {
-        const {selectedHub} = this.state;
-        const {theme, hubs, hub, dispatch, hubHash, adminDispatch} = this.props;
+        const {selectedRoute} = this.state;
+        const {theme, hubs, route, routes, hubHash, adminDispatch} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -47,31 +47,31 @@ class AdminHubs extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
-        const title = selectedHub ? 'Hub Overview' : 'Hub';
+        const title = selectedRoute ? 'Route Overview' : 'Routes';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
-                    {selectedHub ? backButton : ''}
+                    {selectedRoute ? backButton : ''}
                 </div>
                 <Switch className="flex">
                     <Route
                         exact
-                        path="/admin/hubs"
-                        render={props => <AdminHubsIndex theme={theme} hubs={hubs} hubHash={hubHash} dispatch={dispatch} {...props} viewHub={this.viewHub} />}
+                        path="/admin/routes"
+                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewRoute={this.viewRoute} />}
                     />
                     <Route
                         exact
-                        path="/admin/hubs/:id"
-                        render={props => <AdminHubView theme={theme} hubs={hubs} hubHash={hubHash} hubData={hub} adminActions={adminDispatch} {...props} />}
+                        path="/admin/routes/:id"
+                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>
         );
     }
 }
-AdminHubs.propTypes = {
+AdminRoutes.propTypes = {
     theme: PropTypes.object,
     hubs: PropTypes.array
 };
@@ -79,14 +79,15 @@ AdminHubs.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, hub } = admin;
+    const { clients, hubs, route, routes } = admin;
 
     return {
         user,
         tenant,
         loggedIn,
         hubs,
-        hub,
+        route,
+        routes,
         clients
     };
 }
@@ -96,4 +97,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminHubs);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminRoutes);

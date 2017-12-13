@@ -19,6 +19,23 @@ export function admin(state = {}, action) {
             });
             return errHubs;
 
+        case adminConstants.GET_HUB_REQUEST:
+            const reqHub = merge({}, state, {
+                loading: true
+            });
+            return reqHub;
+        case adminConstants.GET_HUB_SUCCESS:
+            const succHub = merge({}, state, {
+                hub: action.payload.data,
+                loading: false
+            });
+            return succHub;
+        case adminConstants.GET_HUB_FAILURE:
+            const errHub = merge({}, state, {
+                error: { hub: action.error }
+            });
+            return errHub;
+
         case adminConstants.GET_DASHBOARD_REQUEST:
             const reqDash = merge({}, state, {
                 loading: true
@@ -190,9 +207,27 @@ export function admin(state = {}, action) {
             return succClients;
         case adminConstants.GET_CLIENTS_FAILURE:
             const errClients = merge({}, state, {
-                error: { pricings: action.error }
+                error: { clients: action.error }
             });
             return errClients;
+
+        case adminConstants.GET_CLIENT_REQUEST:
+            const reqClient = merge({}, state, {
+                loading: true
+            });
+            return reqClient;
+        case adminConstants.GET_CLIENT_SUCCESS:
+            // debugger;
+            const succClient = merge({}, {
+                client: action.payload.data,
+                loading: false
+            }, state);
+            return succClient;
+        case adminConstants.GET_CLIENT_FAILURE:
+            const errClient = merge({}, state, {
+                error: { client: action.error }
+            });
+            return errClient;
 
         case adminConstants.GET_SERVICE_CHARGES_REQUEST:
             const reqSC = merge({}, state, {
@@ -210,6 +245,41 @@ export function admin(state = {}, action) {
                 error: { serviceCharges: action.error }
             });
             return errSC;
+
+        case adminConstants.GET_ROUTES_REQUEST:
+            const reqRoutes = merge({}, state, {
+                loading: true
+            });
+            return reqRoutes;
+        case adminConstants.GET_ROUTES_SUCCESS:
+            const succRoutes = merge({}, state, {
+                routes: action.payload.data,
+                loading: false
+            });
+            return succRoutes;
+        case adminConstants.GET_ROUTES_FAILURE:
+            const errRoutes = merge({}, state, {
+                error: { routes: action.error }
+            });
+            return errRoutes;
+
+        case adminConstants.GET_ROUTE_REQUEST:
+            const reqRoute = merge({}, state, {
+                loading: true
+            });
+            return reqRoute;
+        case adminConstants.GET_ROUTE_SUCCESS:
+            const succRoute = merge({}, state, {
+                route: action.payload.data,
+                loading: false
+            });
+            return succRoute;
+        case adminConstants.GET_ROUTE_FAILURE:
+            const errRoute = merge({}, state, {
+                error: { route: action.error }
+            });
+            return errRoute;
+
         default:
             return state;
     }

@@ -8,12 +8,26 @@
   .select {
     width: 195px;
   }
+  .address_card {
+    height: 300px;
+    width: 225px;
+    margin: 10px;
+    padding: 5px;
+    box-shadow: 1px 2px 1px rgba(0,0,0,0.25);
+  }
+  .address_card p {
+    margin: 5px;
+  }
   .sec_title_text {
     margin: 0;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 30px;
 
+  }
+  .clip {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
   }
   .icon {
     -webkit-background-clip: text !important;
@@ -122,7 +136,7 @@
     margin: 0;
   }
   .charge_panel {
-    background: whitesmoke;
+    // background: whitesmoke;
     height: max-content;
   }
   .shed_selector {

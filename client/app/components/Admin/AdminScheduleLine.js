@@ -32,6 +32,9 @@ export class AdminScheduleLine extends Component {
     }
     render() {
         const { theme, schedule, hubs } = this.props;
+        if (!schedule || !schedule.hub_route_key) {
+            return '';
+        }
         const hubKeys = schedule.hub_route_key.split('-');
         if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
             // debugger;

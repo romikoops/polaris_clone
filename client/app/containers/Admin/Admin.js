@@ -4,8 +4,11 @@ import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
-import { AdminNav, AdminDashboard, AdminHubs, AdminPricings, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import { AdminNav, AdminDashboard, AdminPricings, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
 import AdminShipments from '../../components/Admin/AdminShipments';
+import AdminClients from '../../components/Admin/AdminClients';
+import AdminHubs from '../../components/Admin/AdminHubs';
+import AdminRoutes from '../../components/Admin/AdminRoutes';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -46,13 +49,16 @@ class Admin extends Component {
             case 'dashboard':
                 dispatch(adminActions.getDashboard(true));
                 break;
+            case 'routes':
+                dispatch(adminActions.getRoutes(true));
+                break;
             default:
                 break;
         }
     }
     render() {
         const {theme, adminData} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard} = adminData;
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
         if (hubs) {
           hubs.forEach((hub) => {
@@ -77,7 +83,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/hubs"
-                                render={props => <AdminHubs theme={theme} {...props} hubs={hubs} />}
+                                render={props => <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs}/>}
                             />
                             <Route
 
@@ -98,6 +104,16 @@ class Admin extends Component {
 
                                 path="/admin/shipments"
                                 render={props => <AdminShipments theme={theme} {...props} hubs={hubs} shipments={shipments} clients={clients}/>}
+                            />
+                            <Route
+
+                                path="/admin/clients"
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients}/>}
+                            />
+                             <Route
+
+                                path="/admin/routes"
+                                render={props => <AdminRoutes theme={theme} {...props} hubHash={hubHash} routes={routes} clients={clients}/>}
                             />
                         </Switch>
                     </div>

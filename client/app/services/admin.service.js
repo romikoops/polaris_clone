@@ -20,6 +20,33 @@ function getHubs() {
     return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
 }
 
+function getHub(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/hubs/' + id, requestOptions).then(handleResponse);
+}
+
+function getRoutes() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+}
+
+function getRoute(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/routes/' + id, requestOptions).then(handleResponse);
+}
+
 function getServiceCharges() {
     const requestOptions = {
         method: 'GET',
@@ -84,6 +111,15 @@ function getClients() {
     return fetch(BASE_URL + '/admin/clients', requestOptions).then(handleResponse);
 }
 
+function getClient(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/clients/' + id, requestOptions).then(handleResponse);
+}
+
 function getSchedules() {
     const requestOptions = {
         method: 'GET',
@@ -123,6 +159,10 @@ function autoGenSchedules(data) {
 
 export const adminService = {
     getHubs,
+    getHub,
+    getRoutes,
+    getRoute,
+    getClient,
     getServiceCharges,
     getPricings,
     getShipment,

@@ -1,16 +1,13 @@
 :local {
-  .hub_card {
+    .client_card {
     width: calc(30% - 10px);
-    min-width: 200px;
     height: 200px;
     margin: 5px;
-    color: #FFFFFF;
+    color: black;
     position: relative;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    box-shadow: 1px 2px 1px rgba(0,0,0,0.25);
   }
-.hub_card .fade {
+  .client_card .fade {
     height: 100%;
     width: 100%;
     top:0;
@@ -19,9 +16,9 @@
     left:0;
     position: absolute;
     z-index: 10;
-    background: rgba(0,10,4,0.26);
+    // background: rgba(0,10,4,0.26);
   }
-  .hub_card .content {
+  .client_card .content {
     height: 100%;
     width: 100%;
     top:0;
@@ -32,7 +29,10 @@
     z-index: 12;
     // background: rgba(0,10,4,0.16);
   }
-  .hub_card i {
+  .client_card .content p {
+    margin: 2px;
+  }
+  .client_card i {
     height: 30px;
     width: 30px;
     font-size: 30px;

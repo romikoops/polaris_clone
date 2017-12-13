@@ -7,6 +7,14 @@ class Admin::ClientsController < ApplicationController
     response_handler(@clients)
   end
 
+  def show
+    @client = User.find(params[:id])
+    @locations = @client.locations
+    @shipments = @client.shipments
+    resp = {client: @client, locations: @locations, shipments: @shipments}
+    response_handler(resp)
+  end
+
   
 
   private

@@ -1,10 +1,14 @@
 class Hub < ApplicationRecord
+
   belongs_to :tenant
   belongs_to :nexus, class_name: "Location", foreign_key: "location_id"
-
-  has_many :schedules
+  has_many :hub_routes
+  has_many :schedules, through: :hub_routes
+  has_many :routes, through: :hub_routes
   
   has_one :service_charge
+
+
 
   def generate_hub_code!(tenant_id)
     existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type, tenant_id: tenant_id)

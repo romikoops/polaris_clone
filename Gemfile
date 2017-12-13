@@ -36,7 +36,7 @@ gem 'nokogiri'
 # Use Wicked PDF to generate PDFs from HTML
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
-
+gem 'mongo', '~> 2.4'
 # Use roo for handling CSV and Excel files
 gem 'roo'
 gem 'http'
