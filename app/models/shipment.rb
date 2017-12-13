@@ -15,7 +15,7 @@ class Shipment < ApplicationRecord
   # has_on_carriage:          #<ActiveModel::Type::Boolean:0x00007f25e14e5580>
   # on_carriage_distance_km:  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
   # total_price:              #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>
-  # total_goods_value:        #<ActiveModel::Type::String:0x000056399d0e3580>
+  # total_goods_value:        #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Decimal:0x000056399d0e0380>  
   # cargo_notes:              #<ActiveModel::Type::String:0x000056399d0e3580>
   # haulage:                  #<ActiveModel::Type::String:0x000056399d0e3580>
   # hs_code:                  #<ActiveRecord::ConnectionAdapters::PostgreSQL::OID::Array:0x000056399d15b120>
