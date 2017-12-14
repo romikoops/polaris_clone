@@ -2,7 +2,6 @@ module PricingTools
   include MongoTools
   def get_user_price(pathKey, user)
     priceObj = get_item('pathPricing', '_id', pathKey)
-    
     if priceObj["#{user.id}"]
       priceKey = priceObj["#{user.id}"]
     else

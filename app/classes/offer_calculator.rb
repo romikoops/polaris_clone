@@ -227,7 +227,7 @@ class OfferCalculator
             @cargo_items.each do |ci|
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
-              pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
               fees[sched_key][:cargo][ci.id] = Pricing.lcl_price(ci, pathKey, @user)
               
               @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
@@ -264,7 +264,7 @@ class OfferCalculator
               transport_type_key = cnt.cargo_class ? cnt.cargo_class : 'any'
               
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
-              pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
               fees[sched_key][:cargo][cnt.id] = Pricing.fcl_price(cnt, pathKey, @user)
               @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
