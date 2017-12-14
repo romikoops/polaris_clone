@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminPricingsIndex, AdminPricingClientView, AdminPricingRouteView} from './';
+import {AdminPricingsIndex, AdminPricingClientView, AdminPricingRouteView, AdminPricingsClientIndex, AdminPricingsRouteIndex} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -34,6 +34,7 @@ class AdminPricings extends Component {
     render() {
         const {selectedPricing} = this.state;
         const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings} = this.props;
+
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -59,18 +60,18 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={clients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch} viewRoute={this.viewRoute} />}
+                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={clients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch}  />}
                     />
-                    {/* <Route
+                    <Route
                         exact
                         path="/admin/pricings/clients"
-                        render={props => <AdminPricingsClientsIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewRoute={this.viewRoute} />}
+                        render={props => <AdminPricingsClientIndex theme={theme} clients={clients} adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/routes"
-                        render={props => <AdminPricingsRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewRoute={this.viewRoute} />}
-                    />*/}
+                        render={props => <AdminPricingsRouteIndex theme={theme} hubs={hubs}  routes={routes ? routes : pricingData.routes}  adminTools={adminDispatch} {...props}  />}
+                    />
                     <Route
                         exact
                         path="/admin/pricings/clients/:id"
@@ -79,7 +80,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings/routes/:id"
-                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={clients} routeData={routePricings} adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={clients} routePricings={routePricings} adminActions={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>

@@ -11,6 +11,7 @@ export * from './AdminNavItem';
 
 export * from './AdminPricePanel';
 export * from './AdminPricings';
+export * from './AdminPriceEditor';
 export * from './AdminPricingView';
 export * from './AdminPricingsIndex';
 export * from './AdminPricingsRouteIndex';

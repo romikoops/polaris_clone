@@ -193,6 +193,13 @@ export function admin(state = {}, action) {
             });
             return errPric;
 
+        case adminConstants.UPDATE_PRICING_REQUEST:
+            return state;
+        case adminConstants.UPDATE_PRICING_SUCCESS:
+            return state;
+        case adminConstants.UPDATE_PRICING_FAILURE:
+            return state;
+
         case adminConstants.GET_CLIENT_PRICINGS_REQUEST:
             const reqClientPric = merge({}, state, {
                 loading: true

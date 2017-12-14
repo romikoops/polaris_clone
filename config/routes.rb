@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     resources :clients, only: [:index, :show]
     resources :pricings, only: [:index]
     post "pricings/train_and_ocean_pricings/process_csv", to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
+    post "pricings/update/:id", to: "pricings#update_price"
 
     resources :open_pricings, only: [:index]
     post "open_pricings/trucking_pricings", to: "open_pricings#overwrite_trucking", as: :open_trucking_pricing_overwrite

@@ -175,12 +175,23 @@ function autoGenSchedules(data) {
     return fetch(BASE_URL + '/admin/schedules/auto_generate', requestOptions).then(handleResponse);
 }
 
+function updatePricing(id, data) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+
+    return fetch(BASE_URL + '/admin/pricings/update/' + id, requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
     getRoutes,
     getRoute,
     getClient,
+    updatePricing,
     getServiceCharges,
     getPricings,
     getShipment,

@@ -238,11 +238,45 @@
     }
   }
   .price_row_detail {
-    margin: 2px 0;
+    margin: 4px 0;
     padding: 5px;
     p {
       margin: 0;
     }
     border-bottom: 1px solid rgba(0,0,0,0.25);
+  }
+
+  .price_row_detail {
+    margin: 5px 0;
+    padding: 10px;
+    p {
+      margin: 0;
+    }
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+  }
+  .editor_backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 50;
+    // background: rgba(255,255,255,0.75);
+  }
+  .editor_box {
+    width: 800px;
+    background: #FFFFFF;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
+  }
+  .editor_input input{
+    height: 38px;
+    width: 170px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+
   }
 }

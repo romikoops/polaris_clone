@@ -1,4 +1,5 @@
 module ShippingTools
+  include PricingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
@@ -49,13 +50,14 @@ module ShippingTools
     # private_prices = Pricing.where(customer_id: current_user.id)
     # public_prices = Pricing.where(customer_id: nil)
     @routes = Route.where(tenant_id: current_user.tenant_id)
+    dedicatedHash = get_dedicated_hash(current_user.id, current_user.tenant_id)
     public_routes = []
     private_routes = []
     @routes.each do |pr|
-      private_routes << {route: pr, next: pr.next_departure}
+      private_routes << {route: pr, next: pr.next_departure, dedicated: dedicatedHash["#{pr.id}"]}
     end
     @routes.each do |pr|
-      public_routes << {route: pr, next: pr.next_departure}
+      public_routes << {route: pr, next: pr.next_departure, dedicated: dedicatedHash["#{pr.id}"]}
     end
 
     resp = {

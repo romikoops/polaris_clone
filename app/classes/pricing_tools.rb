@@ -49,6 +49,16 @@ module PricingTools
     return resp.first
   end
 
+  def get_dedicated_hash(user_id, tenant_id)
+    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"#{user_id}" => {"$exists" => true}}]
+    resp = get_items_query('pathPricing', query).to_a
+    result = {}
+    resp.each do |pr|
+      result["#{pr["route"]}"] = true
+    end
+    return result
+  end
+
   def get_tenant_path_pricings(tenant_id)
     resp = get_items('pathPricing', 'tenant_id', tenant_id)
     return resp.to_a
@@ -64,9 +74,25 @@ module PricingTools
     return resp.to_a
   end
 
+  def update_pricing(id, data)
+    resp = update_item('pricings', {_id: id }, data)
+    return resp
+  end
+
+  def get_route_pricings_hash(route_id)
+    resp = get_items('pathPricing', 'route', route_id).to_a
+    result = {}
+    resp.each do |pr|
+      result[pr["_id"]] = pr
+    end
+    return result
+  end
+
   def get_hub_route_user_pricings(hub_route_id, user_id)
     query = [{'hub_route' => {"$eq" => hub_route_id}}, {"#{user_id}" => {"$exists" => true}}]
     resp = get_items_query('pathPricing', query)
     return resp.to_a
   end
 end
+
+

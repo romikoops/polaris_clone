@@ -209,6 +209,37 @@ function getRoutePricings(id, redirect) {
     };
 }
 
+function updatePricing(id, req) {
+    function request(prData) {
+        return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.UPDATE_PRICING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.updatePricing(id, req).then(
+            data => {
+                dispatch(
+                    alertActions.success('Updating Pricing successful')
+                );
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function getSchedules(redirect) {
     function request(schedData) {
         return { type: adminConstants.GET_SCHEDULES_REQUEST, payload: schedData };
@@ -612,6 +643,7 @@ function getRoute(id, redirect) {
 export const adminActions = {
     getHubs,
     getRoutes,
+    updatePricing,
     getClientPricings,
     getRoute,
     getServiceCharges,

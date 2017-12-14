@@ -12,7 +12,7 @@ module MongoTools
 
   def update_item(table, key, updates)
     client = init
-    resp = client[table.to_sym].update_one(key, {'$set' => updates})
+    resp = client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
   end
 
   def get_item(table, keyName, key)
@@ -55,11 +55,11 @@ module MongoTools
   private
 
   def init
-    # if Rails.env == 'development'
-    #   client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'development')
-    # else
+    if Rails.env == 'development'
+      client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'development')
+    else
       client = Mongo::Client.new('mongodb://imcdbadmin:DZYKIdOZk3vP6erN@staging-shard-00-00-sco92.mongodb.net:27017,staging-shard-00-01-sco92.mongodb.net:27017,staging-shard-00-02-sco92.mongodb.net:27017/test?ssl=true&replicaSet=Staging-shard-0&authSource=admin')
-    # end
+    end
     return client
   end
 end

@@ -47,6 +47,10 @@ export const adminConstants = {
     GET_PRICINGS_SUCCESS: 'GET_PRICINGS_SUCCESS',
     GET_PRICINGS_FAILURE: 'GET_PRICINGS_FAILURE',
 
+    UPDATE_PRICING_REQUEST: 'UPDATE_PRICING_REQUEST',
+    UPDATE_PRICING_SUCCESS: 'UPDATE_PRICING_SUCCESS',
+    UPDATE_PRICING_FAILURE: 'UPDATE_PRICING_FAILURE',
+
     GET_CLIENT_PRICINGS_REQUEST: 'GET_CLIENT_PRICINGS_REQUEST',
     GET_CLIENT_PRICINGS_SUCCESS: 'GET_CLIENT_PRICINGS_SUCCESS',
     GET_CLIENT_PRICINGS_FAILURE: 'GET_CLIENT_PRICINGS_FAILURE',
@@ -113,6 +117,12 @@ export const pricingNames = {
     fcl_40f: 'FCL 40ft',
     fcl_40f_hq: 'FCL 40ft HQ'
 };
+export const cargoClassOptions = [
+    {value: 'lcl', label: 'LCL'},
+    {value: 'fcl_20f', label: 'FCL 20ft'},
+    {value: 'fcl_40f', label: 'FCL 40ft'},
+    {value: 'fcl_40f_hq', label: 'FCL 40ft HQ'}
+];
 
 export const moTOptions = [
     {value: 'rail_default', label: 'Rail'},
@@ -121,9 +131,16 @@ export const moTOptions = [
 ];
 
 export const cargoOptions = [
+    {value: 'any', label: 'Any'},
     {value: 'dry_goods', label: 'Dry Goods'},
     {value: 'liquid_bulk', label: 'Liquid Bulk'},
-    {value: 'gas_bulk', label: 'Gas Bulk'},
-    {value: 'any', label: 'Any'}
+    {value: 'gas_bulk', label: 'Gas Bulk'}
+];
+export const currencyOptions = [
+    {value: 'EUR', label: 'EUR'}, {value: 'AUD', label: 'AUD'}, {value: 'BGN', label: 'BGN'}, {value: 'BRL', label: 'BRL'}, {value: 'CAD', label: 'CAD'}, {value: 'CHF', label: 'CHF'}, {value: 'CNY', label: 'CNY'},
+    {value: 'CZK', label: 'CZK'}, {value: 'DKK', label: 'DKK'}, {value: 'GBP', label: 'GBP'}, {value: 'HKD', label: 'HKD'}, {value: 'HRK', label: 'HRK'}, {value: 'HUF', label: 'HUF'}, {value: 'IDR', label: 'IDR'},
+    {value: 'ILS', label: 'ILS'}, {value: 'INR', label: 'INR'}, {value: 'JPY', label: 'JPY'}, {value: 'KRW', label: 'KRW'}, {value: 'MXN', label: 'MXN'}, {value: 'MYR', label: 'MYR'}, {value: 'NOK', label: 'NOK'},
+    {value: 'NZD', label: 'NZD'}, {value: 'PHP', label: 'PHP'}, {value: 'PLN', label: 'PLN'}, {value: 'RON', label: 'RON'}, {value: 'RUB', label: 'RUB'}, {value: 'SEK', label: 'SEK'}, {value: 'SGD', label: 'SGD'},
+    {value: 'THB', label: 'THB'}, {value: 'TRY', label: 'TRY'}, {value: 'USD', label: 'USD'}, {value: 'ZAR', label: 'ZAR'},
 ];
 
