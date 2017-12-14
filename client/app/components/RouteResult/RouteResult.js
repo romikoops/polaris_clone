@@ -166,13 +166,13 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format(
+                                    {moment(schedule.etd).format(
                                         'YYYY-MM-DD'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format('HH:mm')}{' '}
+                                    {moment(schedule.etd).format('HH:mm')}{' '}
                                 </p>
                             </div>
                         </div>

@@ -28,6 +28,8 @@ Rails.application.routes.draw do
     post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
     resources :routes, only: [:index, :show]
+    get 'client_pricings/:id', to: "pricings#client"
+    get 'route_pricings/:id', to: "pricings#route"
     post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
     resources :vehicle_types, only: [:index]
     resources :clients, only: [:index, :show]

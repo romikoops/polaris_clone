@@ -385,7 +385,7 @@ export class ShipmentDetails extends Component {
                         styles.cargo_sec
                     }`}
                 >
-                    {cargoDetails}
+                    {this.state.routeSet ? cargoDetails : ''}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div

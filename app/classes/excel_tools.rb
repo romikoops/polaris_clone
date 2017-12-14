@@ -524,25 +524,25 @@ module ExcelTools
 
       fcl_40f_obj = {
         wm:{
-          currency: row[:fcl_40f_currency],
-          rate: row[:fcl_40f_rate]
+          currency: row[:fcl_40_currency],
+          rate: row[:fcl_40_rate]
         },
         heavy_kg:{
-          currency: row[:fcl_40f_currency],
-          heavy_weight: row[:fcl_40f_heavy_weight_surcharge_wm],
-          heavy_kg_min: row[:fcl_40f_heavy_weight_surcharge_min]
+          currency: row[:fcl_40_currency],
+          heavy_weight: row[:fcl_40_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40_heavy_weight_surcharge_min]
         }
       }
 
       fcl_40f_hq_obj = {
         wm:{
-          currency: row[:fcl_40f_hq_currency],
-          rate: row[:fcl_40f_hq_rate]
+          currency: row[:fcl_40_hq_currency],
+          rate: row[:fcl_40_hq_rate]
         },
         heavy_kg:{
-          currency: row[:fcl_40f_hq_currency],
-          heavy_weight: row[:fcl_40f_hq_heavy_weight_surcharge_wm],
-          heavy_kg_min: row[:fcl_40f_hq_heavy_weight_surcharge_min]
+          currency: row[:fcl_40_hq_currency],
+          heavy_weight: row[:fcl_40_hq_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40_hq_heavy_weight_surcharge_min]
         }
       }
 
@@ -552,7 +552,7 @@ module ExcelTools
         load_types.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = price_obj[lt]
-          pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
           tmpItem[:_id] = uuid;
           tmpItem[:tenant_id] = user.tenant_id;
           userObj = {}
@@ -568,7 +568,7 @@ module ExcelTools
         load_types.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = price_obj[lt]
-          pathKey = "#{hubroute.id}-#{tt_obj[lt].id}"
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
           tmpItem[:_id] = uuid;
           tmpItem[:tenant_id] = user.tenant_id
           pr = put_item_fn(mongo, 'pricings', tmpItem)

@@ -9,7 +9,7 @@ export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedDay: moment().format('DD-MM-YYYY'),
+            selectedDay: props.departureDate ? moment(props.departureDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
             selectedOption: this.props.moT
         };
         this.editFilterDay = this.editFilterDay.bind(this);

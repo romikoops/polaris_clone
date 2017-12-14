@@ -193,6 +193,42 @@ export function admin(state = {}, action) {
             });
             return errPric;
 
+        case adminConstants.GET_CLIENT_PRICINGS_REQUEST:
+            const reqClientPric = merge({}, state, {
+                loading: true
+            });
+            return reqClientPric;
+        case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
+            // debugger;
+            const succClientPric = merge({}, {
+                clientPricings: action.payload.data,
+                loading: false
+            }, state);
+            return succClientPric;
+        case adminConstants.GET_CLIENT_PRICINGS_FAILURE:
+            const errClientPric = merge({}, state, {
+                error: { pricings: action.error }
+            });
+            return errClientPric;
+
+        case adminConstants.GET_ROUTE_PRICINGS_REQUEST:
+            const reqRoutePric = merge({}, state, {
+                loading: true
+            });
+            return reqRoutePric;
+        case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
+            // debugger;
+            const succRoutePric = merge({}, {
+                routePricings: action.payload.data,
+                loading: false
+            }, state);
+            return succRoutePric;
+        case adminConstants.GET_ROUTE_PRICINGS_FAILURE:
+            const errRoutePric = merge({}, state, {
+                error: { pricings: action.error }
+            });
+            return errRoutePric;
+
         case adminConstants.GET_CLIENTS_REQUEST:
             const reqClients = merge({}, state, {
                 loading: true

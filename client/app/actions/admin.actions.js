@@ -138,6 +138,77 @@ function getPricings(redirect) {
         );
     };
 }
+
+function getClientPricings(id, redirect) {
+    function request(prData) {
+        return { type: adminConstants.GET_CLIENT_PRICINGS_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.GET_CLIENT_PRICINGS_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_CLIENT_PRICINGS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getClientPricings(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Client Prices successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/pricings/clients/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getRoutePricings(id, redirect) {
+    function request(prData) {
+        return { type: adminConstants.GET_ROUTE_PRICINGS_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.GET_ROUTE_PRICINGS_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_ROUTE_PRICINGS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getRoutePricings(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Route Prices successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/admin/pricings/routes/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function getSchedules(redirect) {
     function request(schedData) {
         return { type: adminConstants.GET_SCHEDULES_REQUEST, payload: schedData };
@@ -541,6 +612,7 @@ function getRoute(id, redirect) {
 export const adminActions = {
     getHubs,
     getRoutes,
+    getClientPricings,
     getRoute,
     getServiceCharges,
     getPricings,
@@ -554,5 +626,6 @@ export const adminActions = {
     getShipments,
     getClients,
     confirmShipment,
-    getHub
+    getHub,
+    getRoutePricings
 };

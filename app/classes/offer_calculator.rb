@@ -1,8 +1,9 @@
 class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs
   include CurrencyTools
+  include PricingTools
+  include MongoTools
   def initialize(shipment, params, load_type, user)
-    
     @load_type = shipment.load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
@@ -195,7 +196,7 @@ class OfferCalculator
   end
 
   def add_service_charges!
-    
+    mongo = get_client
     fees = {}
     @total_price[:cargo] = {value: 0, currency:''}
       @schedules.each do |sched|
@@ -227,8 +228,8 @@ class OfferCalculator
             @cargo_items.each do |ci|
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
-              pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
-              fees[sched_key][:cargo][ci.id] = Pricing.lcl_price(ci, pathKey, @user)
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
+              fees[sched_key][:cargo][ci.id] = determine_lcl_price(mongo, ci, pathKey, @user)
               
               @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][ci.id][:currency]
@@ -264,8 +265,8 @@ class OfferCalculator
               transport_type_key = cnt.cargo_class ? cnt.cargo_class : 'any'
               
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
-              pathKey = "#{sched.hub_route_id}-#{transport_type.id}"
-              fees[sched_key][:cargo][cnt.id] = Pricing.fcl_price(cnt, pathKey, @user)
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
+              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(mongo, cnt, pathKey, @user)
               @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|
