@@ -22,6 +22,7 @@ class HubRoute < ApplicationRecord
     else
       end_date_parsed = DateTime.parse(end_date)
     end
+    end_date = tmp_date + 3.months
     tenant_id = self.route.tenant_id
     sched_key = "#{self.starthub.id}-#{self.endhub.id}"
     

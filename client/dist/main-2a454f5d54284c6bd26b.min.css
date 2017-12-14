@@ -228,6 +228,10 @@ img.NavDropdown---dropDownImage---3bEJ_ {
   cursor: pointer; }
   .default_classes---emulate_link---3x33-:hover {
     text-decoration: underline; }
+
+.clip {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; }
 .Header---header---2nHSY {
   height: 100px;
   background-color: transparent; }
@@ -288,7 +292,8 @@ img.Header---logo---2g7zk {
   position: relative; }
 
 .ActiveRoutes---active_route---3E5oV {
-  height: 391px;
+  height: 300px;
+  width: 350px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -1713,11 +1718,25 @@ nav.NavSidebar---menu---3eXWA {
 .Admin---select---3xQVe {
   width: 195px; }
 
+.Admin---address_card---3bYm5 {
+  height: 300px;
+  width: 225px;
+  margin: 10px;
+  padding: 5px;
+  box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.25); }
+
+.Admin---address_card---3bYm5 p {
+  margin: 5px; }
+
 .Admin---sec_title_text---30sCv {
   margin: 0;
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   font-size: 30px; }
+
+.Admin---clip---2EdeZ {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; }
 
 .Admin---icon---hCE2R {
   -webkit-background-clip: text !important;
@@ -1819,7 +1838,6 @@ nav.NavSidebar---menu---3eXWA {
   margin: 0; }
 
 .Admin---charge_panel---2ePoW {
-  background: whitesmoke;
   height: max-content; }
 
 .Admin---sched_selector---3inj6 i, .Admin---sched_selector---3inj6 p {
@@ -1827,6 +1845,7 @@ nav.NavSidebar---menu---3eXWA {
   -webkit-text-fill-color: transparent !important; }
 
 .Admin---hub_card---3vI4D {
+  width: 240px;
   height: 200px;
   margin: 5px;
   color: #FFFFFF;
@@ -1885,8 +1904,38 @@ nav.NavSidebar---menu---3eXWA {
 
 .Admin---price_card---21N_C p {
   margin: 0; }
+
+.Admin---slider_container---14nZv {
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: none;
+  height: 250px; }
+
+.Admin---slider_inner---3Sy_k {
+  margin-right: 15px;
+  position: absolute;
+  width: max-content;
+  min-width: 100%; }
+
+.Admin---route_price---ouUPn h3 {
+  margin: 0; }
+
+.Admin---hub_route_price---2WYM9 {
+  box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.25);
+  margin: 10px 0; }
+
+.Admin---price_row---7DH8r p {
+  margin: 0; }
+
+.Admin---price_row_detail---38XCh {
+  margin: 2px 0;
+  padding: 5px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+  .Admin---price_row_detail---38XCh p {
+    margin: 0; }
 .AdminHubTile---hub_card---iJa0a {
   width: calc(30% - 10px);
+  min-width: 200px;
   height: 200px;
   margin: 5px;
   color: #FFFFFF;
@@ -1931,6 +1980,45 @@ nav.NavSidebar---menu---3eXWA {
 
 .AdminNavItem---nav_item---hm9wC {
   height: 50px; }
+.AdminClientTile---client_card---1IPe6 {
+  width: calc(30% - 10px);
+  height: 200px;
+  margin: 5px;
+  color: black;
+  position: relative;
+  box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.25); }
+
+.AdminClientTile---client_card---1IPe6 .AdminClientTile---fade---9lPX3 {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10; }
+
+.AdminClientTile---client_card---1IPe6 .AdminClientTile---content---1-5hH {
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  position: absolute;
+  z-index: 12; }
+
+.AdminClientTile---client_card---1IPe6 .AdminClientTile---content---1-5hH p {
+  margin: 2px; }
+
+.AdminClientTile---client_card---1IPe6 i {
+  height: 30px;
+  width: 30px;
+  font-size: 30px;
+  margin-top: 23px;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  font-size: 24px !important; }
 .AdminShipmentRow---route_result---1CTbX {
   background-color: #FCFCFC;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
@@ -2100,6 +2188,10 @@ p.AdminScheduleLine---sched_elem---27SQR {
   cursor: pointer; }
   .index---emulate_link---2_riS:hover {
     text-decoration: underline; }
+
+.clip {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important; }
 
 .index---loader_anim-enter---1OpIA {
   opacity: 0.01; }
