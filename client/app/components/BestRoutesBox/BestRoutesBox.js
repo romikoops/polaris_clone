@@ -12,12 +12,14 @@ export class BestRoutesBox extends Component {
         // let fastestSchedule;
         let fastestFare;
         schedules.forEach(sched => {
-            const travelTime = moment(sched.eta).diff(sched.etd);
-            const schedKey = sched.hub_route_key;
-            if (!fastestTime || travelTime < fastestTime) {
-                fastestTime = travelTime;
-                // fastestSchedule = sched;
-                fastestFare = fees[schedKey].total;
+            if (sched.mode_of_transport === this.props.moT) {
+                const travelTime = moment(sched.eta).diff(sched.etd);
+                const schedKey = sched.hub_route_key;
+                if (!fastestTime || travelTime < fastestTime) {
+                    fastestTime = travelTime;
+                    // fastestSchedule = sched;
+                    fastestFare = fees[schedKey].total;
+                }
             }
         });
         return (
@@ -40,14 +42,16 @@ export class BestRoutesBox extends Component {
         let cheapestFare;
         // let cheapestSchedule;
         schedules.forEach(sched => {
-            const schedKey = sched.hub_route_key;
-            if (!fees[schedKey]) {
-                debugger;
-            }
-            const fare = fees[schedKey].total;
-            if (!cheapestFare || fare < cheapestFare) {
-                cheapestFare = fare;
-                // cheapestSchedule = sched;
+            if (sched.mode_of_transport === this.props.moT) {
+                const schedKey = sched.hub_route_key;
+                if (!fees[schedKey]) {
+                    debugger;
+                }
+                const fare = fees[schedKey].total;
+                if (!cheapestFare || fare < cheapestFare) {
+                    cheapestFare = fare;
+                    // cheapestSchedule = sched;
+                }
             }
         });
         return (
@@ -81,16 +85,18 @@ export class BestRoutesBox extends Component {
         let bestFare;
         // let bestOption;
         schedules.forEach(sched => {
-            const timeScore = timeArray.indexOf(sched);
-            const fareScore = fareArray.indexOf(sched);
-            const depScore = depArray.indexOf(sched);
-            const schedKey = sched.hub_route_key;
-            const fare = fees[schedKey] ? fees[schedKey].total : 0;
-            const totalScore = timeScore + fareScore + depScore;
-            if (totalScore < lowScore) {
-                lowScore = totalScore;
-                // bestOption = sched;
-                bestFare = fare;
+            if (sched.mode_of_transport === this.props.moT) {
+                const timeScore = timeArray.indexOf(sched);
+                const fareScore = fareArray.indexOf(sched);
+                const depScore = depArray.indexOf(sched);
+                const schedKey = sched.hub_route_key;
+                const fare = fees[schedKey] ? fees[schedKey].total : 0;
+                const totalScore = timeScore + fareScore + depScore;
+                if (totalScore < lowScore) {
+                    lowScore = totalScore;
+                    // bestOption = sched;
+                    bestFare = fare;
+                }
             }
         });
         return (
@@ -172,5 +178,6 @@ export class BestRoutesBox extends Component {
 }
 BestRoutesBox.propTypes = {
     theme: PropTypes.object,
-    shipmentData: PropTypes.object
+    shipmentData: PropTypes.object,
+    moT: PropTypes.string
 };

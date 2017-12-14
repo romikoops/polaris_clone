@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import { AdminScheduleLine, AdminHubTile, AdminImportChargePanel, AdminExportChargePanel } from './';
 import styles from './Admin.scss';
-
+import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
-import {}
+import {CONTAINER_DESCRIPTIONS} from '../../constants';
+const containerDescriptions = CONTAINER_DESCRIPTIONS;
 export class AdminPricingClientView extends Component {
     constructor(props) {
         super(props);
         this.state = {
             scheduleLimit: 20
         };
+        this.editThis = this.editThis.bind(this);
+    }
+    editThis(pricing) {
+        console.log(pricing);
+        debugger;
     }
     render() {
         const {theme, pricingData, clientPricings} = this.props;
@@ -27,6 +33,16 @@ export class AdminPricingClientView extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const backButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Back"
+                    handleNext={this.backToIndex}
+                    iconClass="fa-chevron-left"
+                />
+            </div>);
         const RPBInner = ({hubRoute, pricing, transport}) => {
             const panel = pricing.heavy_wm ?
                 (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
@@ -64,8 +80,13 @@ export class AdminPricingClientView extends Component {
             return (
                 <div key={v4()} className={` ${styles.hub_route_price} flex-45 layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-100 layout-row layout-align-start-center">
-                        <i className="fa fa-map-signs clip" style={textStyle}></i>
-                        <p className="flex-none offset-5">{hubRoute.name}</p>
+                         <div className="flex-90 layout-row layout-align-start-center">
+                            <i className="fa fa-map-signs clip" style={textStyle}></i>
+                            <p className="flex-none offset-5">{hubRoute.name}</p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing)}>
+                            <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
+                        </div>
                     </div>
                     <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">MoT:</p>
@@ -77,7 +98,7 @@ export class AdminPricingClientView extends Component {
                     </div>
                     <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Class:</p>
-                        <p className="flex-none"> {transport.cargo_class}</p>
+                        <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
                     </div>
                     {panel}
 
@@ -105,6 +126,7 @@ export class AdminPricingClientView extends Component {
                 <div key={v4()} className={` ${styles.route_price} flex-100 layout-row layout-wrap layout-align-start-start `}>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <h3 className="flex-none clip"> {route.name} </h3>
+                        {backButton}
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
                         {inner}
