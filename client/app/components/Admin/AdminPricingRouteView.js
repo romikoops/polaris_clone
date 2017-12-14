@@ -129,7 +129,7 @@ export class AdminPricingRouteView extends Component {
                         <h3 className="flex-none clip"> {route.name} </h3>
                         {backButton}
                     </div>
-                    <RouteHubBox 
+                    <RouteHubBox />
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
                         {inner}
                     </div>
