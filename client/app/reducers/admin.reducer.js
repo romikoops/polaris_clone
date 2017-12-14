@@ -211,6 +211,24 @@ export function admin(state = {}, action) {
             });
             return errClientPric;
 
+        case adminConstants.GET_ROUTE_PRICINGS_REQUEST:
+            const reqRoutePric = merge({}, state, {
+                loading: true
+            });
+            return reqRoutePric;
+        case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
+            // debugger;
+            const succRoutePric = merge({}, {
+                routePricings: action.payload.data,
+                loading: false
+            }, state);
+            return succRoutePric;
+        case adminConstants.GET_ROUTE_PRICINGS_FAILURE:
+            const errRoutePric = merge({}, state, {
+                error: { pricings: action.error }
+            });
+            return errRoutePric;
+
         case adminConstants.GET_CLIENTS_REQUEST:
             const reqClients = merge({}, state, {
                 loading: true

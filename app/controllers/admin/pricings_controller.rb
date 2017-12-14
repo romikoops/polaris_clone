@@ -24,6 +24,12 @@ class Admin::PricingsController < ApplicationController
     response_handler({userPricings: @pricings, client: @client})
   end
 
+  def route
+    @pricings = get_route_pricings(params[:id])
+    @route = Route.find(params[:id])
+    response_handler({userPricings: @pricings, route: @route})
+  end
+
   def overwrite_main_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
