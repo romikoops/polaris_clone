@@ -238,10 +238,10 @@ tenant_data.each do |ten|
   overwrite_shanghai_trucking_rates(req, shipper)
 end
 
-# hubs = File.open("./db/dummydata/hub_images.xlsx")
-# req = {"xlsx" => hubs}
-# load_hub_images(req)
+hubs = File.open("./db/dummydata/hub_images.xlsx")
+req = {"xlsx" => hubs}
+load_hub_images(req)
 
-# schedules = File.open("./db/dummydata/6_vessel_schedules.xlsx")
-# req = {"xlsx" => schedules}
-# overwrite_vessel_schedules(req, shipper)
+schedules = File.open("./db/dummydata/6_vessel_schedules.xlsx")
+req = {"xlsx" => schedules}
+overwrite_vessel_schedules(req, shipper)
