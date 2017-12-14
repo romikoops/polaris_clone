@@ -47,11 +47,7 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
-            availableRoutes: {
-                privateRoutes: [],
-                publicRoutes: []
-            },
-            shipment: this.props.shipmentData.data,
+            routes: {},
             has_on_carriage: false,
             has_pre_carriage: false,
             shipment: this.props.shipmentData.shipment,
@@ -119,7 +115,7 @@ export class ShipmentDetails extends Component {
 
     handleDayChange(selectedDay) {
         this.setState({ selectedDay });
-        this.props.updateAvailableRoutes(selectedDay);
+        // this.props.updateAvailableRoutes(selectedDay);
     }
     deleteCargo(target, index) {
         const arr = this.state[target];
@@ -259,8 +255,7 @@ export class ShipmentDetails extends Component {
             <RouteSelector
                 theme={theme}
                 setRoute={this.selectRoute}
-                publicRoutes={shipmentData.public_routes}
-                privateRoutes={shipmentData.private_routes}
+                routes={shipmentData.routes}
             />
         );
 

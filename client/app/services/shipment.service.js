@@ -55,7 +55,7 @@ function updateAvailableRoutes(date) {
 
     return fetch(BASE_URL + '/available_routes&date=' + date, requestOptions).then(
         handleResponse
-    );    
+    );
 }
 
 function setShipmentDetails(data) {
@@ -128,6 +128,7 @@ function setShipmentContacts(data) {
 
 export const shipmentService = {
     newShipment,
+    updateAvailableRoutes,
     getAll,
     getShipment,
     setShipmentRoute,

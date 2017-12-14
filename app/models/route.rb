@@ -1,4 +1,5 @@
 class Route < ApplicationRecord
+  extend RouteTools
   has_many :hub_routes
   has_many :pricings
   has_many :shipments
@@ -146,11 +147,14 @@ class Route < ApplicationRecord
     
     find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
-  def next_departure
-    self.schedules.where("etd > ?", DateTime.now).order(:etd).limit(1).first
+
+  def self.ids_dedicated(user = nil)
+    get_routes_with_dedicated_pricings(user.id, user.tenant_id)
   end
 
-  
+  def next_departure
+    self.schedules.where("etd > ?", DateTime.now).order(:etd).limit(1).first
+  end 
 
   def lcl_price(cargo)
     cargo.weight_or_volume * lcl_m3_ton_price    
@@ -176,5 +180,13 @@ class Route < ApplicationRecord
       air:   exists.('air'),
       rails: exists.('rails')
     }
+  end
+
+  def detailed_hash(options = {})
+    return_h = attributes
+    return_h[:modes_of_transport] = modes_of_transport
+    return_h[:next_departure]     = next_departure
+    return_h[:dedicated]          = options[:ids_dedicated].include?(id)
+    return_h
   end
 end

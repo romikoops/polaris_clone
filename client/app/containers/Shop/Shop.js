@@ -41,6 +41,7 @@ class Shop extends Component {
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
         this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
+        this.updateAvailableRoutes = this.updateAvailableRoutes.bind(this);
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
@@ -120,7 +121,8 @@ class Shop extends Component {
         // });
     }
     updateAvailableRoutes(date) {
-        dispatch(shipmentActions.updateAvailableRoutes(date));
+        console.log(date);
+        // dispatch(shipmentActions.updateAvailableRoutes(date));
     }
 
     render() {

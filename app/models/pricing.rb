@@ -27,19 +27,4 @@ class Pricing < ApplicationRecord
     pricing = get_user_price(pathKey, user)
     return {value: pricing["wm"]["rate"], currency: pricing["wm"]["currency"]}
   end
-
-  def route_h
-    route_h = route.attributes
-    route_h[:modes_of_transport] = route.modes_of_transport
-    route_h[:next_departure]     = route.next_departure
-    route_h
-  end
-
-  def self.private(user = nil)
-    user ? Pricing.where(customer_id: user.id) : Pricing.where.not(customer_id: nil)
-  end
-
-  def self.public
-    Pricing.where(customer_id: nil)
-  end
 end

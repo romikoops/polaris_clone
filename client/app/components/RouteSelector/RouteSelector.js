@@ -22,37 +22,20 @@ export class RouteSelector extends Component {
     }
 
     render() {
-        const { theme, publicRoutes, privateRoutes } = this.props;
-        const pubRoutes = [];
-        if (publicRoutes) {
-            publicRoutes.forEach(route => {
-                pubRoutes.push(
-                    <RouteOption
-                        key={v4()}
-                        theme={theme}
-                        route={route}
-                        selectOption={this.selectRoute}
-                    />
-                );
-            });
+        const { theme, routes } = this.props;
+        if (!routes) {
+            console.log('(!) No Routes Found (!)');
+            return <div>No Routes Found</div>;
         }
-        const privRoutes = [];
-        if (privateRoutes) {
-            privateRoutes.forEach(route => {
-                privRoutes.push(
-                    <RouteOption
-                        key={v4()}
-                        theme={theme}
-                        route={route}
-                        selectOption={this.selectRoute}
-                        isPrivate
-                    />
-                );
-            });
-        }
-        const routesArr = this.state.viewPublic ? [...privRoutes, ...pubRoutes] : privRoutes;
-
-        return (
+        const routesOptions = routes.map(route => (
+            <RouteOption
+                key={v4()}
+                theme={theme}
+                route={route}
+                selectOption={this.selectRoute}
+            />
+        ));
+        return(
             <div className={`flex-100 layout-row layout-align-center-start ${styles.selector}`}>
                 <div className={`${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-100 layout-row layout-wrap">
@@ -72,7 +55,7 @@ export class RouteSelector extends Component {
                             </div>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
-                                {routesArr}
+                            {routesOptions}
                         </div>
                     </div>
                 </div>

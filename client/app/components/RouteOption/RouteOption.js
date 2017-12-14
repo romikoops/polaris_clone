@@ -24,21 +24,14 @@ export class RouteOption extends Component {
         return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     render() {
-        const { theme, isPrivate, route } = this.props;
-        console.log(isPrivate);
+        const { theme, route } = this.props;
         const originNexus       = route.name.split(' - ')[0];
         const destinationNexus  = route.name.split(' - ')[1];
         const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
+        const nextDeparture     = route.next_departure;
         // const modesOfTransport  = ['ocean', 'air', 'train'];
-
-        // const originNexus      = route.route.name.split(' - ')[0];
-        // const destinationNexus = route.route.name.split(' - ')[1];
-        // const modeOfTransport  = route.next.mode_of_transport;
-        // const nextDate = route.next.etd;
-        // console.log(route);
-        // console.log(originNexus);
-        // console.log(destinationNexus);
-
+        route.dedicated = Math.random() < 0.3;
+        console.log(route.dedicated);
         const gradientFontStyle = {
             background:
                 theme && theme.colors
@@ -61,23 +54,21 @@ export class RouteOption extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const icons = modesOfTransport.map(mot => this.faIcon(mot));
-
+        const RouteOptionStyles = {
+            background: route.dedicated ? theme.colors.brightPrimary + '16' : '#FCFCFC'
+        };
         return (
-            <div className={styles.route_option} onClick={this.choose} >
+            <div className={styles.route_option} onClick={this.choose} style={RouteOptionStyles} >
                 <div
                     className={`flex-100 layout-row layout-align-space-between ${
                         styles.top_row
                     }`}
                 >
+                    <div className="dedicated_decorator"></div>
                     <div className={`${styles.header_hub}`}>
                         <i className={`fa fa-map-marker ${styles.map_marker}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {originNexus} </h4>
-                        </div>
-                        <div className="flex-100">
-                            <p className="flex-100">
-                                CODE
-                            </p>
                         </div>
                     </div>
                     <div className={`${styles.connection_graphics}`}>
@@ -90,11 +81,6 @@ export class RouteOption extends Component {
                         <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {destinationNexus} </h4>
-                        </div>
-                        <div className="flex-100">
-                            <p className="flex-100">
-                                CODE
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -111,13 +97,13 @@ export class RouteOption extends Component {
                         <div className="layout-row">
                             <p className={styles.sched_elem}>
                                 {' '}
-                                {moment(nextDate).format(
+                                {moment(nextDeparture).format(
                                     'YYYY-MM-DD'
                                 )}{' '}
                             </p>
                             <p className={styles.sched_elem}>
                                 {' '}
-                                {moment(nextDate).format(
+                                {moment(nextDeparture).format(
                                     'HH:mm'
                                 )}{' '}
                             </p>

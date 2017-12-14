@@ -49,7 +49,7 @@ function updateAvailableRoutes(date) {
         return { type: '', error };
     }
     return dispatch => {
-        dispatch(request(type));
+        dispatch(request(date));
         shipmentService.updateAvailableRoutes(date).then(
             resp => {
                 dispatch(success(resp.data));
@@ -334,6 +334,7 @@ function fetchShipmentIfNeeded(id) {
 }
 export const shipmentActions = {
     newShipment,
+    updateAvailableRoutes,
     setShipmentRoute,
     setShipmentDetails,
     setShipmentContacts,
