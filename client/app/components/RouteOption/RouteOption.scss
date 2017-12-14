@@ -28,6 +28,18 @@
       box-shadow: 1px 3px 8px 0 rgba(0,0,0,0.17);
     }
   }
+  .dedicated_decorator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    // background: black;
+    i {
+      position: absolute;
+      top: -26px;
+      right: 4px;
+      color: white;
+    }
+  }
   .top_row {
     margin-bottom: 5px;
   }

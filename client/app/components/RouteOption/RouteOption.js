@@ -30,8 +30,7 @@ export class RouteOption extends Component {
         const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
         const nextDeparture     = route.next_departure;
         // const modesOfTransport  = ['ocean', 'air', 'train'];
-        route.dedicated = Math.random() < 0.3;
-        console.log(route.dedicated);
+        // route.dedicated = Math.random() < 0.3;
         const gradientFontStyle = {
             background:
                 theme && theme.colors
@@ -54,17 +53,24 @@ export class RouteOption extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const icons = modesOfTransport.map(mot => this.faIcon(mot));
-        const RouteOptionStyles = {
-            background: route.dedicated ? theme.colors.brightPrimary + '16' : '#FCFCFC'
+        const dedicatedDecoratorStyles = {
+            borderTop: route.dedicated ? `28px solid ${theme.colors.primary}66` : '',
+            borderLeft: '55px solid transparent'
+        };
+        const dedicatedDecoratorIconStyles = {
+            WebkitTextFillColor: 'transparent',
+            WebkitTextStroke: '2px white',
         };
         return (
-            <div className={styles.route_option} onClick={this.choose} style={RouteOptionStyles} >
+            <div className={styles.route_option} onClick={this.choose} >
                 <div
                     className={`flex-100 layout-row layout-align-space-between ${
                         styles.top_row
                     }`}
                 >
-                    <div className="dedicated_decorator"></div>
+                    <div className={styles.dedicated_decorator} style={dedicatedDecoratorStyles}>
+                        <i className="fa fa-star" style={dedicatedDecoratorIconStyles}></i>
+                    </div>
                     <div className={`${styles.header_hub}`}>
                         <i className={`fa fa-map-marker ${styles.map_marker}`} />
                         <div className="flex-100 layout-row">
