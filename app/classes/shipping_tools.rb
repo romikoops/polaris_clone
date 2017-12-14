@@ -1,14 +1,14 @@
 module ShippingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
+      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
       session[:shipment_uuid] = @shipment.uuid
       # 
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
         if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type)
+          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
         else
           @shipment = shipment.dup
         end
@@ -53,6 +53,26 @@ module ShippingTools
       public_routes:  Pricing.public.map(&:route_h),
       private_routes: Pricing.private.map(&:route_h)
     }
+
+
+    # # private_prices = Pricing.where(customer_id: current_user.id)
+    # # public_prices = Pricing.where(customer_id: nil)
+    # @routes = Route.where(tenant_id: current_user.tenant_id)
+    # public_routes = []
+    # private_routes = []
+    # @routes.each do |pr|
+    #   private_routes << {route: pr, next: pr.next_departure}
+    # end
+    # @routes.each do |pr|
+    #   public_routes << {route: pr, next: pr.next_departure}
+    # end
+
+    # resp = {
+    #   shipment: @shipment,
+    #   all_nexuses: @all_nexuses,
+    #   public_routes: public_routes,
+    #   private_routes: private_routes
+    # }
   end 
 
   def reuse_booking_data(params, session, load_type)
@@ -77,18 +97,18 @@ module ShippingTools
     # 
     case load_type
     when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
     when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
     when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
     end
 
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    # rescue
+    #   raise ApplicationError::NoRoutes
+    # end
 
     @shipment = offer_calculation.shipment
     @shipment.save!
@@ -178,15 +198,16 @@ module ShippingTools
     end
     if shipment_data[:insurance][:bool]
       key = @shipment.generated_fees.first[0]
-      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance], currency: "EUR"}
-      @shipment.generated_fees[key][:total] += shipment_data[:insurance]
-      @shipment.total_price = @shipment.generated_fees[key][:total]
+      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
+      @shipment.generated_fees[key]["total"] += shipment_data[:insurance][:val]
+      @shipment.total_price = @shipment.generated_fees[key]["total"]
+
     end
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []
-    @shipment.schedule_set.each do |id|
-      @schedules.push(Schedule.find(id))
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
     end
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
@@ -194,8 +215,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
     end
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
@@ -230,7 +251,7 @@ module ShippingTools
     @schedules = []
     params[:schedules].each do |sched|
       schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << schedule.id
+      @shipment.schedule_set << {id: schedule.id, hub_route_key: schedule.hub_route_key}
       @schedules << schedule
     end
     case @shipment.load_type
@@ -250,8 +271,8 @@ module ShippingTools
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}

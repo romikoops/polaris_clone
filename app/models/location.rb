@@ -57,6 +57,7 @@ class Location < ApplicationRecord
     location = Location.new(geocoded_address: user_input)
     location.geocode
     location.reverse_geocode
+    
     return location
   end
 

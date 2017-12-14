@@ -26,6 +26,7 @@
     "moment": "^2.19.2",
     "moment-range": "^3.0.3",
     "node-uuid": "^1.4.8",
+    "parse-domain": "^2.0.0",
     "prop-types": "^15.6.0",
     "rc-slider": "^8.4.0",
     "react": "^16.0.0",
@@ -39,6 +40,7 @@
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
     "react-select": "^1.0.0",
+    "react-slick": "^0.16.0",
     "react-sticky": "^6.0.1",
     "react-toggle": "^4.0.2",
     "react-transition-group": "^1.2.1",
@@ -47,6 +49,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
     "resolve-url-loader": "^2.1.1",
+    "slick-carousel": "^1.8.1",
     "style-it": "^1.6.13",
     "styled-components": "^2.2.4"
   },

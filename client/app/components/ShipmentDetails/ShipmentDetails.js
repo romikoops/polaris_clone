@@ -17,12 +17,14 @@ export class ShipmentDetails extends Component {
         super(props);
         this.state = {
             origin: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
                 fullAddress: ''
             },
             destination: {
+                number: '',
                 street: '',
                 zipCode: '',
                 city: '',
@@ -50,14 +52,17 @@ export class ShipmentDetails extends Component {
                 publicRoutes: []
             },
             shipment: this.props.shipmentData.data,
+            has_on_carriage: false,
+            has_pre_carriage: false,
+            shipment: this.props.shipmentData.shipment,
             allNexuses: this.props.shipmentData.all_nexuses,
             routeSet: false
         };
 
-        if (this.props.shipmentData.data) {
-            this.state.selectedDay = this.props.shipmentData.data.planned_pickup_date;
-            this.state.has_on_carriage = this.props.shipmentData.data.has_on_carriage;
-            this.state.has_pre_carriage = this.props.shipmentData.data.has_pre_carriage;
+        if (this.props.shipmentData.shipment) {
+            this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date;
+            this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage;
+            this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage;
         }
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -70,6 +75,7 @@ export class ShipmentDetails extends Component {
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
+        this.deleteCargo = this.deleteCargo.bind(this);
     }
 
     componentDidMount() {
@@ -77,7 +83,8 @@ export class ShipmentDetails extends Component {
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
-        setStage(1);
+        window.scrollTo(0, 0);
+        setStage(2);
         console.log('######### MOUNTED ###########');
     }
     componentDidUpdate() {
@@ -114,17 +121,28 @@ export class ShipmentDetails extends Component {
         this.setState({ selectedDay });
         this.props.updateAvailableRoutes(selectedDay);
     }
+    deleteCargo(target, index) {
+        const arr = this.state[target];
+        arr.splice(index, 1);
+        this.setState({[target]: arr});
+    }
 
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
         const key2 = eventKeys[1];
         const val = event.target.value;
+        const addObj = this.state[key1];
+        addObj[key2] = val;
+        let fullAddress = this.state[key1].fullAddress;
+        // debugger;
+        if (fullAddress) {
+            fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
+        }
         this.setState({
-            [key1]: {
-                [key2]: val
-            }
+            [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
+        console.log({...this.state[key1], [key2]: val, fullAddress });
     }
 
     handleCargoItemChange(event) {
@@ -178,7 +196,7 @@ export class ShipmentDetails extends Component {
         const data = {
             shipment: this.state.shipment
                 ? this.state.shipment
-                : this.props.shipmentData.data
+                : this.props.shipmentData.shipment
         };
         data.shipment.origin_user_input = this.state.origin.fullAddress
             ? this.state.origin.fullAddress
@@ -212,22 +230,24 @@ export class ShipmentDetails extends Component {
     render() {
         const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
-        if (shipmentData.data) {
-            if (shipmentData.data.load_type.includes('fcl')) {
+        if (shipmentData.shipment) {
+            if (shipmentData.shipment.load_type.includes('fcl')) {
                 cargoDetails = (
                     <ShipmentContainers
                         containers={this.state.containers}
                         addContainer={this.addNewContainer}
                         handleDelta={this.handleContainerChange}
+                        deleteItem={this.deleteCargo}
                     />
                 );
             }
-            if (shipmentData.data.load_type.includes('lcl')) {
+            if (shipmentData.shipment.load_type.includes('lcl')) {
                 cargoDetails = (
                     <ShipmentCargoItems
                         cargoItems={this.state.cargoItems}
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
+                        deleteItem={this.deleteCargo}
                     />
                 );
             }
@@ -254,6 +274,7 @@ export class ShipmentDetails extends Component {
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
+                handleAddressChange={this.handleAddressChange}
             />
         );
 
@@ -304,7 +325,7 @@ export class ShipmentDetails extends Component {
                         styles.cargo_sec
                     }`}
                 >
-                    {cargoDetails}
+                    {this.state.routeSet ? cargoDetails : ''}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div

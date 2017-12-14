@@ -6,23 +6,53 @@ class Admin::SchedulesController < ApplicationController
   
 
   def index
-    @train_schedules = Schedule.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 15)
-    @ocean_schedules = Schedule.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 15)
-    @air_schedules = Schedule.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 15)
+    tenant = Tenant.find(current_user.tenant_id)
+    @train_schedules = tenant.schedules.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
+    @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
+    @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
+    @routes = Route.where(tenant_id: current_user.tenant_id)
+    # byebug
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
+  end
+  def auto_generate_schedules
+    tenant = Tenant.find(current_user.tenant_id)
+    @hub_route = HubRoute.find_by(starthub_id: params[:startHubId], endhub_id: params[:endHubId])
+    mot = params[:mot].split('_')[0]
+    @hub_route.generate_weekly_schedules(mot, params[:startDate], params[:endDate], params[:weekdays], params[:duration], params[:vehicleTypeId])
+    @train_schedules = tenant.schedules.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
+    @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
+    @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
+    @routes = Route.where(tenant_id: current_user.tenant_id)
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
   end
 
   def overwrite_trains
-    overwrite_train_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_train_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   def overwrite_vessels
-    overwrite_vessel_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_vessel_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
   def overwrite_air
-    overwrite_air_schedules(params)
-    redirect_to :back
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_air_schedules(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   private

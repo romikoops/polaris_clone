@@ -27,6 +27,9 @@ export default class GmapsLoader extends Component {
                             gMaps={googleMaps}
                             selectedRoute={this.props.selectedRoute}
                             setCarriage={this.props.toggleCarriage}
+                            origin={this.props.origin}
+                            destination={this.props.destination}
+                            handleAddressChange={this.props.handleAddressChange}
                         />
                     )
                 }
@@ -38,6 +41,8 @@ GmapsLoader.propTypes = {
     theme: PropTypes.object,
     selectLocation: PropTypes.func,
     component: PropTypes.func,
-    allNexuses: PropTypes.object,
+    allNexuses: PropTypes.array,
+    origin: PropTypes.object,
+    destination: PropTypes.object,
     toggleCarraige: PropTypes.func
 };

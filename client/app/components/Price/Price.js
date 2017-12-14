@@ -23,6 +23,6 @@ export class Price extends Component {
     }
 }
 Price.propTypes = {
-    value: PropTypes.string,
+    value: PropTypes.number,
     scale: PropTypes.string
 };

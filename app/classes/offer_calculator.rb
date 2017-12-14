@@ -1,15 +1,16 @@
 class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs
   include CurrencyTools
-  def initialize(shipment, params, load_type)
-    
+  include PricingTools
+  include MongoTools
+  def initialize(shipment, params, load_type, user)
     @load_type = shipment.load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @has_on_carriage = params[:shipment][:has_on_carriage] ? true : false
     @shipment.has_pre_carriage = @has_pre_carriage
     @shipment.has_on_carriage = @has_on_carriage
-    
+    @user = user
     case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
@@ -28,8 +29,8 @@ class OfferCalculator
     end
 
     @shipment.planned_pickup_date = Chronic.parse(params[:shipment][:planned_pickup_date], endian_precedence: :little)
-    @shipment.origin = Location.get_geocoded_location(params[:origin_user_input], params[:shipment][:origin_id], @has_pre_carriage)
-    @shipment.destination = Location.get_geocoded_location(params[:destination_user_input], params[:shipment][:destination_id], @has_on_carriage)
+    @shipment.origin = Location.get_geocoded_location(params[:shipment][:origin_user_input], params[:shipment][:origin_id], @has_pre_carriage)
+    @shipment.destination = Location.get_geocoded_location(params[:shipment][:destination_user_input], params[:shipment][:destination_id], @has_on_carriage)
 
     @truck_seconds_pre_carriage = 0
     @pricing = nil
@@ -42,7 +43,7 @@ class OfferCalculator
   def calc_offer!
     determine_route!
     
-    determine_pricing!
+    # determine_pricing!
     
     determine_hubs!
     
@@ -54,7 +55,7 @@ class OfferCalculator
     
     # add_on_carriage!
     
-    add_carriage!
+    # add_carriage!
     
     add_service_charges!
     
@@ -77,7 +78,9 @@ class OfferCalculator
   private
 
   def determine_route!
+    
     @route = Route.for_locations(@shipment.origin, @shipment.destination)
+    @hub_routes = @route.hub_routes
     @shipment.route = @route
   end
 
@@ -95,12 +98,9 @@ class OfferCalculator
   def determine_hubs!
     @origin_hubs = []
     @destination_hubs = []
-
-    @hub_schedules = @route.schedules.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
-
-    @hub_schedules.each do |sched|
-      @origin_hubs << sched.starthub
-      @destination_hubs << sched.endhub
+    @hub_routes.each do |hr|
+      @origin_hubs << hr.starthub
+      @destination_hubs << hr.endhub
     end
 
     @furthest_hub_from_origin = @origin_hubs.sort_by {|obj| -obj.distance_to(@shipment.origin)}.first
@@ -109,7 +109,7 @@ class OfferCalculator
 
   def determine_schedules!
     
-    @schedules = @hub_schedules.where("etd > ? AND etd < ?", @current_eta_in_search, @current_eta_in_search + 10.days).order(etd: :asc)
+    @schedules = @route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
   def determine_longest_trucking_time!
@@ -196,18 +196,21 @@ class OfferCalculator
   end
 
   def add_service_charges!
-    
+    mongo = get_client
     fees = {}
+    @total_price[:cargo] = {value: 0, currency:''}
       @schedules.each do |sched|
-        sched_key = "#{sched.starthub_id}-#{sched.endhub_id}"
-        
+
+        sched_key = "#{sched.hub_route.starthub_id}-#{sched.hub_route.endhub_id}"
         if !fees[sched_key]
-          fees[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}}
+          fees[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}, cargo:{}}
           if @has_pre_carriage
+          
             fees[sched_key][:trucking_pre] = determine_trucking_options(@shipment.origin, sched.starthub)
           end
           
           if @has_on_carriage
+          
             fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.endhub)
           end
           
@@ -223,11 +226,22 @@ class OfferCalculator
           fees[sched_key][:export]["totals"] = {}
           if @cargo_items
             @cargo_items.each do |ci|
+              transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
+              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
+              fees[sched_key][:cargo][ci.id] = determine_lcl_price(mongo, ci, pathKey, @user)
               
+              @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
+              @total_price[:cargo][:currency] = fees[sched_key][:cargo][ci.id][:currency]
+              p @import_charges
+              p @export_charges
               fees[sched_key][:import][ci.id] = @import_charges.calc_import_charge(ci)
               fees[sched_key][:export][ci.id] = @export_charges.calc_export_charge(ci)
          
-              
+              p "##################################################"
+              p fees[sched_key][:import][ci.id]
+              p "##################################################"
+              p fees[sched_key][:export][ci.id]
               fees[sched_key][:import][ci.id].each do |key, value|
                 
                 if !fees[sched_key][:import]["totals"][key]
@@ -247,10 +261,18 @@ class OfferCalculator
           end
           
           if @containers
+            @containers.each do |cnt|
+              transport_type_key = cnt.cargo_class ? cnt.cargo_class : 'any'
+              
+              transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
+              pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
+              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(mongo, cnt, pathKey, @user)
+              @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
+              @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|
             #   fees[sched_key][:import][cnt.id] = @import_charges.calc_import_charge(cnt)
             #   fees[sched_key][:export][cnt.id] = @export_charges.calc_export_charge(cnt)
-            # end
+            end
           end
           
         end
@@ -265,19 +287,19 @@ class OfferCalculator
       case @load_type
       when 'fcl'
         @containers.each do |container|
-          price_results << TruckingPricing.calc_final_price(origin, container.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, container.payload_in_kg, km, hub) #################
         end
       when 'lcl'
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
           #########################!!!!!!!!!!!!!!!!!!!
         end
       when "openlcl"
         
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km) #################
+          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
         end
       end
       trucking_total = {value: 0, currency:""}
@@ -315,6 +337,7 @@ class OfferCalculator
           end
         end
       end
+
       
       if !raw_totals[svalue["trucking_on"]["currency"]]
         raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
@@ -331,6 +354,7 @@ class OfferCalculator
       else
         raw_totals[@total_price[:cargo][:currency]] += @total_price[:cargo][:value].to_f
       end
+      
       converted_totals = sum_and_convert(raw_totals, "EUR")
       @shipment.generated_fees[key]["total"] = converted_totals
       
@@ -366,22 +390,23 @@ class OfferCalculator
 
   def price_from_cargos
     prices = []
+    
     case @load_type
     when 'fcl'
       @containers.each do |container|
-        price = @pricing.fcl_price(container)
+        price = Pricing.fcl_price(container)
 
         prices << price
       end
     when 'lcl'
       @cargo_items.each do |cargo|
-        price = @pricing.lcl_price(cargo)
+        price = Pricing.lcl_price(cargo)
 
         prices << price
       end
     when 'openlcl'
       @cargo_items.each do |cargo|
-        price = @pricing.lcl_price(cargo)
+        price = Pricing.lcl_price(cargo)
         prices << price
       end
     end

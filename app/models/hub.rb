@@ -1,13 +1,17 @@
 class Hub < ApplicationRecord
+
   belongs_to :tenant
   belongs_to :nexus, class_name: "Location", foreign_key: "location_id"
-
-  has_many :schedules
+  has_many :hub_routes
+  has_many :schedules, through: :hub_routes
+  has_many :routes, through: :hub_routes
   
   has_one :service_charge
 
-  def generate_hub_code!
-    existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type)
+
+
+  def generate_hub_code!(tenant_id)
+    existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type, tenant_id: tenant_id)
     num = existing_hubs.length
     letters = self.name[0..1].upcase
     type_letter = self.hub_type[0].upcase
@@ -23,6 +27,15 @@ class Hub < ApplicationRecord
     ports = self.where(hub_type: "ocean")
     resp = []
     ports.each do |po|
+      resp << {data: po, location: po.nexus}
+    end
+    resp
+  end
+
+  def self.prepped(user)
+    hubs = self.where(tenant_id: user.tenant_id)
+    resp = []
+    hubs.each do |po|
       resp << {data: po, location: po.nexus}
     end
     resp

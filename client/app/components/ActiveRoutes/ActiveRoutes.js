@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import {EmailSignInForm} from 'redux-auth/bootstrap-theme';
 import styles from './ActiveRoutes.scss';
 import PropTypes from 'prop-types';
+
 // import SignIn from '../SignIn/SignIn';
 export class ActiveRoutes extends Component {
     render() {
@@ -58,10 +59,11 @@ export class ActiveRoutes extends Component {
                     <h2 className={styles.city + ' flex-none'}> {route.name} </h2>
                     <h5 className={styles.country + ' flex-none'}> {route.country} </h5>
                 </div>
-                </div>
+            </div>
             );
             activeRouteBoxes.push(arb);
         });
+
         return (
             <div className={'layout-row flex-100 layout-wrap ' + styles.active_routes}>
                 <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>

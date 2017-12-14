@@ -36,7 +36,9 @@ gem 'nokogiri'
 # Use Wicked PDF to generate PDFs from HTML
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
-
+# MongoDB gems
+gem 'mongo', '~> 2.4'
+gem 'mongoid', '~> 6.1.0'
 # Use roo for handling CSV and Excel files
 gem 'roo'
 gem 'http'
@@ -54,7 +56,7 @@ gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
 gem "mini_magick"
 # AWS SDK for hosting and S3
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 3'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

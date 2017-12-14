@@ -6,12 +6,19 @@ import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
+import { isEmpty } from '../../helpers/isEmpty';
+import { colorSVG } from '../../helpers/svgColourer';
+import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
 const mapStyle = {
     width: '100%',
-    height: '400px'
+    height: '400px',
+    borderRadius: '3px',
+    boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
-
+const isObjectEmpty = isEmpty;
+const colourSVG = colorSVG;
+const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +41,10 @@ export class ShipmentLocationBox extends Component {
                 hub_id: '',
                 hub_name: ''
             },
+            autoTextOrigin: '',
+            autoTextDest: '',
+            // origin: this.props.origin,
+            // destination: this.props.destination,
             shipment: {
                 has_pre_carriage: false,
                 has_on_carriage: false
@@ -42,7 +53,10 @@ export class ShipmentLocationBox extends Component {
                 origin: false,
                 destination: false
             },
-            markers: []
+            markers: {
+                origin: {},
+                destination: {}
+            }
         };
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -54,6 +68,8 @@ export class ShipmentLocationBox extends Component {
         this.initAutocomplete = this.initAutocomplete.bind(this);
         this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
         this.resetAuto = this.resetAuto.bind(this);
+        this.setMarker = this.setMarker.bind(this);
+        this.handleAuto = this.handleAuto.bind(this);
     }
 
     componentDidMount() {
@@ -115,18 +131,18 @@ export class ShipmentLocationBox extends Component {
         if (this.state.map) {
             this.setMarker(
                 { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
-                tmpOrigin.name
+                tmpOrigin.name, 'origin'
             );
             this.setMarker(
                 { lat: tmpDest.latitude, lng: tmpDest.longitude },
-                tmpDest.name
+                tmpDest.name, 'destination'
             );
         } else {
             setTimeout(
                 function() {
                     this.setMarker(
                         { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
-                        tmpOrigin.name
+                        tmpOrigin.name, 'origin'
                     );
                 }.bind(this),
                 750
@@ -135,7 +151,7 @@ export class ShipmentLocationBox extends Component {
                 function() {
                     this.setMarker(
                         { lat: tmpDest.latitude, lng: tmpDest.longitude },
-                        tmpDest.name
+                        tmpDest.name, 'destination'
                     );
                 }.bind(this),
                 750
@@ -152,20 +168,21 @@ export class ShipmentLocationBox extends Component {
             zoom: 5,
             mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
-            styles: [
-                {
-                    featureType: 'water',
-                    elementType: 'all',
-                    stylers: [
-                        {
-                            color: '#275b9b'
-                        },
-                        {
-                            invert_lightness: true
-                        }
-                    ]
-                }
-            ]
+            styles: mapStyles
+            // [
+            //     {
+            //         featureType: 'water',
+            //         elementType: 'all',
+            //         stylers: [
+            //             {
+            //                 color: '#275b9b'
+            //             },
+            //             {
+            //                 invert_lightness: true
+            //             }
+            //         ]
+            //     }
+            // ]
         };
 
         const map = new this.props.gMaps.Map(
@@ -184,9 +201,11 @@ export class ShipmentLocationBox extends Component {
     }
 
     initAutocomplete(map, target) {
+        // const targetId = target + '-gmac';
         const input = document.getElementById(target);
         const autocomplete = new this.props.gMaps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
+        this.setState({autoListener: {...this.state.autoListener, [target]: autocomplete }});
         this.autocompleteListener(map, autocomplete, target);
     }
 
@@ -238,37 +257,49 @@ export class ShipmentLocationBox extends Component {
                     lat: place.geometry.location.lat(),
                     lng: place.geometry.location.lng()
                 },
-                place.name
+                place.name, target
             );
 
             this.selectLocation(place, target);
         });
     }
 
-    setMarker(location, name) {
+    setMarker(location, name, target) {
         const { markers, map } = this.state;
-        let newMarkers = [];
-
-        if (markers.length < 2) {
-            newMarkers = markers;
-        } else {
-            for (let i = 0; i < markers.length; i++) {
-                markers[i].setMap(null);
-            }
+        const {theme} = this.props;
+        const newMarkers = [];
+        if (!isObjectEmpty(markers[target])) {
+            markers[target].setMap(null);
         }
-
+        let icon;
+        if (target === 'origin') {
+            icon = {
+                url: colourSVG('location', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(36, 36)
+            };
+        } else {
+            icon = {
+                url: colourSVG('flag', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(36, 36)
+            };
+        }
         const marker = new this.props.gMaps.Marker({
             position: location,
             map: map,
-            title: name
+            title: name,
+            icon
         });
-
-        newMarkers.push(marker);
-
-        this.setState({ markers: newMarkers });
-
+        markers[target] = marker;
+        if (!isObjectEmpty(markers.origin)) {
+            newMarkers.push(markers.origin);
+        }
+        if (!isObjectEmpty(markers.destination)) {
+            newMarkers.push(markers.destination);
+        }
+        this.setState({ markers: markers});
         const bounds = new this.props.gMaps.LatLngBounds();
-
         for (let i = 0; i < newMarkers.length; i++) {
             bounds.extend(newMarkers[i].getPosition());
         }
@@ -278,22 +309,28 @@ export class ShipmentLocationBox extends Component {
 
     handleTrucking(event) {
         const { name, checked } = event.target;
+        console.log(name, checked);
         this.setState({
             shipment: { ...this.state.shipment, [name]: checked }
         });
 
-        if (name === 'has_pre_carriage' && checked) {
-            this.postToggleAutocomplete('origin');
+        if (name === 'has_pre_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('origin');
+            }
             this.props.setCarriage('has_pre_carriage', checked);
         }
 
-        if (name === 'has_on_carriage' && checked) {
-            this.postToggleAutocomplete('destination');
+        if (name === 'has_on_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('destination');
+            }
             this.props.setCarriage('has_on_carriage', checked);
         }
     }
 
     handleAddressChange(event) {
+        this.props.handleAddressChange(event);
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
         const key2 = eventKeys[1];
@@ -305,6 +342,7 @@ export class ShipmentLocationBox extends Component {
                 [key2]: val
             }
         });
+        // console.log(this.state[key1]);
     }
     setOriginHub(event) {
         if (event) {
@@ -329,7 +367,7 @@ export class ShipmentLocationBox extends Component {
 
             this.setMarker(
                 { lat: event.value.latitude, lng: event.value.longitude },
-                event.value.name
+                event.value.name, 'origin'
             );
         } else {
             this.setState({
@@ -339,6 +377,11 @@ export class ShipmentLocationBox extends Component {
 
             this.props.setTargetAddress('origin', {});
         }
+    }
+    handleAuto(event) {
+        console.log(event.target);
+        const {name, value} = event.target;
+        this.setState({autoText: {[name]: value}});
     }
 
     setDestHub(event) {
@@ -364,7 +407,7 @@ export class ShipmentLocationBox extends Component {
 
             this.setMarker(
                 { lat: event.value.latitude, lng: event.value.longitude },
-                event.value.name
+                event.value.name, 'destination'
             );
         } else {
             this.setState({
@@ -416,6 +459,7 @@ export class ShipmentLocationBox extends Component {
         });
     }
     resetAuto(target) {
+        // this.state.autoListener[target].clearListeners();
         this.setState({
             autocomplete: { ...this.state.autocomplete, [target]: false }
         });
@@ -447,7 +491,10 @@ export class ShipmentLocationBox extends Component {
                 background-color: #F9F9F9;
             }
         `;
-
+        const autoHide = {
+            height: '0px',
+            display: 'none'
+        };
         const originHubSelect = (
             <StyledSelect
                 name="origin-hub"
@@ -471,11 +518,12 @@ export class ShipmentLocationBox extends Component {
         const originFields = (
             <div className="flex-100 layout-row layout-wrap">
                 <input
+                    id="not-auto"
                     name="origin-number"
                     className={`flex-none ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
-                    value={this.state.origin.number}
+                    value={this.props.origin.number}
                     placeholder="Number"
                 />
                 <input
@@ -520,7 +568,7 @@ export class ShipmentLocationBox extends Component {
         );
 
         const originAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.origin ? autoHide : {}}>
                 <input
                     id="origin"
                     name="origin-fullAddress"
@@ -585,14 +633,14 @@ export class ShipmentLocationBox extends Component {
         );
 
         const destAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.destination ? autoHide : {}}>
                 <input
                     id="destination"
-                    name="destination-fullAddress"
+                    name="destination"
                     className={`flex-none ${styles.input}`}
                     type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.fullAddress}
+                    onChange={this.handleAuto}
+                    value={this.state.autoText}
                     placeholder="Search for address"
                 />
             </div>
@@ -606,7 +654,7 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.origin
                     ? originFields
-                    : originAuto;
+                    : '';
             }
 
             if (
@@ -620,7 +668,7 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.destination
                     ? destFields
-                    : destAuto;
+                    : '';
             }
             return '';
         };
@@ -636,6 +684,7 @@ export class ShipmentLocationBox extends Component {
                                     className="flex-none"
                                     id="has_pre_carriage"
                                     name="has_pre_carriage"
+                                    value={String(this.state.shipment.has_pre_carriage)}
                                     defaultChecked={this.state.shipment.has_pre_carriage}
                                     onChange={this.handleTrucking}
                                 />
@@ -643,6 +692,7 @@ export class ShipmentLocationBox extends Component {
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
                                 <p className="flex-100"> Origin Address </p>
+                                { this.state.shipment.has_pre_carriage ? originAuto : '' }
                                 { displayLocationOptions('origin') }
                             </div>
                         </div>
@@ -653,6 +703,7 @@ export class ShipmentLocationBox extends Component {
                                     className="flex-none"
                                     id="has_on_carriage"
                                     name="has_on_carriage"
+                                    value={String(this.state.shipment.has_on_carriage)}
                                     defaultChecked={this.state.shipment.has_on_carriage}
                                     onChange={this.handleTrucking}
                                 />
@@ -663,6 +714,7 @@ export class ShipmentLocationBox extends Component {
                                     {' '}
                                     Destination Address{' '}
                                 </p>
+                                { this.state.shipment.has_on_carriage ? destAuto : '' }
                                 {displayLocationOptions('destination')}
                             </div>
                         </div>
@@ -685,6 +737,10 @@ ShipmentLocationBox.propTypes = {
     gMaps: PropTypes.object,
     theme: PropTypes.object,
     setTargetAddress: PropTypes.func,
+    handleAddressChange: PropTypes.func,
+    setCarriage: PropTypes.func,
     allNexuses: PropTypes.array,
-    selectedRoute: PropTypes.object
+    selectedRoute: PropTypes.object,
+    origin: PropTypes.object,
+    destination: PropTypes.object
 };

@@ -1,0 +1,99 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import {AdminHubsIndex, AdminHubView} from './';
+import styles from './Admin.scss';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
+import { RoundButton } from '../RoundButton/RoundButton';
+import { adminActions } from '../../actions';
+// import {v4} from 'node-uuid';
+// import FileUploader from '../../components/FileUploader/FileUploader';
+class AdminHubs extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedHub: false,
+            currentView: 'open'
+        };
+        this.viewHub = this.viewHub.bind(this);
+        this.backToIndex = this.backToIndex.bind(this);
+    }
+    viewHub(hub) {
+        const { adminDispatch } = this.props;
+        adminDispatch.getHub(hub.id, true);
+        this.setState({selectedHub: true});
+    }
+
+    backToIndex() {
+        const { dispatch, history } = this.props;
+        this.setState({selectedHub: false});
+        dispatch(history.push('/admin/hubs'));
+    }
+
+    render() {
+        const {selectedHub} = this.state;
+        const {theme, hubs, hub, dispatch, hubHash, adminDispatch} = this.props;
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
+        const backButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Back"
+                    handleNext={this.backToIndex}
+                    iconClass="fa-chevron-left"
+                />
+            </div>);
+        const title = selectedHub ? 'Hub Overview' : 'Hub';
+        return(
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
+                    {selectedHub ? backButton : ''}
+                </div>
+                <Switch className="flex">
+                    <Route
+                        exact
+                        path="/admin/hubs"
+                        render={props => <AdminHubsIndex theme={theme} hubs={hubs} hubHash={hubHash} dispatch={dispatch} {...props} viewHub={this.viewHub} />}
+                    />
+                    <Route
+                        exact
+                        path="/admin/hubs/:id"
+                        render={props => <AdminHubView theme={theme} hubs={hubs} hubHash={hubHash} hubData={hub} adminActions={adminDispatch} {...props} />}
+                    />
+                </Switch>
+            </div>
+        );
+    }
+}
+AdminHubs.propTypes = {
+    theme: PropTypes.object,
+    hubs: PropTypes.array
+};
+
+function mapStateToProps(state) {
+    const {authentication, tenant, admin } = state;
+    const { user, loggedIn } = authentication;
+    const { clients, hubs, hub } = admin;
+
+    return {
+        user,
+        tenant,
+        loggedIn,
+        hubs,
+        hub,
+        clients
+    };
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        adminDispatch: bindActionCreators(adminActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHubs);

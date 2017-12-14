@@ -9,6 +9,29 @@ class Admin::ShipmentsController < ApplicationController
     @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
     @finished_shipments = Shipment.where(status: ["declined", "finished"])
     @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
+    resp = {
+      requested: {documents: @documents['requested_shipments'], shipments: @requested_shipments},
+      open: {documents: @documents['open_shipments'], shipments: @open_shipments},
+      finished: {documents: @documents['finished_shipments'], shipments: @finished_shipments}
+    }
+    response_handler(resp)
+  end
+  def show
+    @shipment = Shipment.find(params[:id])
+    @cargo_items = @shipment.cargo_items
+    @containers = @shipment.containers
+    @shipment_contacts = @shipment.shipment_contacts
+    @contacts = []
+    @shipment_contacts.each do |sc|
+      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    end
+    @schedules = []
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
+    end
+    @documents = @shipment.documents
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
+    response_handler(resp)
   end
 
   def email_action
@@ -37,25 +60,38 @@ class Admin::ShipmentsController < ApplicationController
 
   def update
     @shipment = Shipment.find(params[:id])
-
     if params[:shipment_action] # This happens when accept or decline buttons are used
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       when "decline"
         @shipment.decline!
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       else
         raise "Unknown action!"
       end
     else # This happens when shipment is edited with edit form
       if @shipment.update(shipment_params)
-        redirect_to admin_shipments_path
+        # redirect_to admin_shipments_path
       else
-        render 'edit'
+        # render 'edit'
       end
     end
+    @cargo_items = @shipment.cargo_items
+    @containers = @shipment.containers
+    @shipment_contacts = @shipment.shipment_contacts
+    @contacts = []
+    @shipment_contacts.each do |sc|
+      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    end
+    @schedules = []
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
+    end
+    @documents = @shipment.documents
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
+    response_handler(resp)
   end
 
   private

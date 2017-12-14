@@ -8,7 +8,7 @@ class Admin::ServiceChargesController < ApplicationController
   def index
     # @import_charges = ServiceCharge.where(trade_direction: "import")
     @service_charges = ServiceCharge.all
-    handle_response(@service_charges)
+    response_handler(@service_charges)
     # @export_charges = ServiceCharge.where(trade_direction: "export")
   end
 
@@ -16,9 +16,9 @@ class Admin::ServiceChargesController < ApplicationController
     if params[:file]
       req = {'xlsx' => params[:file]}
       overwrite_service_charges(req)
-      json_response(true, 200)
+      response_handler(true)
     else
-      json_response(false, 200)
+      response_handler(false)
     end
   end
 

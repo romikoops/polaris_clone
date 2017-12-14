@@ -11,12 +11,17 @@ class Admin::OpenPricingsController < ApplicationController
     @pricings.each do |p|
       @routes.push(p.route)
     end
+     response_handler({routes: @routes, pricings: @pricings})
   end
 
   def overwrite_main_carriage
-    overwrite_main_carriage_rates(params)
-
-    redirect_to :back
+    if params[:file] && params[:file] !='null'
+      req = {'xlsx' => params[:file]}
+      overwrite_dynamo_pricings(req, false)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
 
   def overwrite_trucking

@@ -26,6 +26,7 @@ export class ShopStageView extends Component {
                     className={`${
                         styles.shop_stage_past
                     } flex-none layout-column layout-align-center-center`}
+                    onClick={() => this.props.setStage(stage)}
                 >
                     <i className="fa fa-check flex-none" style={gradientStyle} />
                 </div>

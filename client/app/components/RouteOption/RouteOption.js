@@ -30,6 +30,11 @@ export class RouteOption extends Component {
         const destinationNexus  = route.name.split(' - ')[1];
         const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
         // const modesOfTransport  = ['ocean', 'air', 'train'];
+
+        // const originNexus      = route.route.name.split(' - ')[0];
+        // const destinationNexus = route.route.name.split(' - ')[1];
+        // const modeOfTransport  = route.next.mode_of_transport;
+        // const nextDate = route.next.etd;
         // console.log(route);
         // console.log(originNexus);
         // console.log(destinationNexus);
@@ -106,13 +111,13 @@ export class RouteOption extends Component {
                         <div className="layout-row">
                             <p className={styles.sched_elem}>
                                 {' '}
-                                {moment(this.props.pickupDate).format(
+                                {moment(nextDate).format(
                                     'YYYY-MM-DD'
                                 )}{' '}
                             </p>
                             <p className={styles.sched_elem}>
                                 {' '}
-                                {moment(this.props.pickupDate).format(
+                                {moment(nextDate).format(
                                     'HH:mm'
                                 )}{' '}
                             </p>

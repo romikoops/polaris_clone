@@ -13,13 +13,15 @@ import { Price } from '../Price/Price';
 export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
     }
     componentDidMount() {
         const { setStage } = this.props;
-        setStage(4);
+        setStage(5);
+        window.scrollTo(0, 0);
     }
     render() {
-        const { theme, shipmentData } = this.props;
+        const { theme, shipmentData, tenant } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
 
         const {
@@ -40,6 +42,7 @@ export class BookingConfirmation extends Component {
       const textStyle = {
           background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
       };
+      const tenantName = tenant ? tenant.name : '';
 
       const pushToCargo = (array, Comp) => {
         array.forEach((ci, i) => {
@@ -82,7 +85,7 @@ export class BookingConfirmation extends Component {
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start'}>
                         <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
                             <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
-                    Thank you for booking with Greencarrier.<br/>
+                    Thank you for booking with {tenantName}.<br/>
                     Hope to see you again soon!
                             </div>
                             <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>

@@ -34,8 +34,10 @@ export function configureStore() {
     ));
     store.subscribe(throttle(() => {
         const oldState = store.getState();
+        const bData = oldState.bookingData;
+        delete bData.loading;
         saveState({
-            bookingData: oldState.bookingData,
+            bookingData: bData,
             tenant: oldState.tenant,
             admin: oldState.admin
         });

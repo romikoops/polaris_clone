@@ -3,6 +3,9 @@
 :local {
   .content_width {
     width: 1000px;
+    @media screen and (min-width: 1920px) {
+      width: 1200px;
+    }
   }
 
   .button_padding {
@@ -53,4 +56,11 @@
     }
   }
 
+
+}
+:global {
+  .clip {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
 }
