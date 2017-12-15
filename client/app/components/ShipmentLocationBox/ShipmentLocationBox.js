@@ -74,7 +74,6 @@ export class ShipmentLocationBox extends Component {
 
     componentDidMount() {
         this.initMap();
-        debugger;
         if (this.props.selectedRoute) {
             this.setHubsFromRoute(this.props.selectedRoute);
         }

@@ -56,13 +56,14 @@ export class RouteSelector extends Component {
                 <div className={`${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-100 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-space-between-center">
-                            <div className="flex-none ayput-row layout-align-start-center">
+                            <div className="flex-none layput-row layout-align-start-center">
                                 <h4 className="flex-none"> Available Routes</h4>
                             </div>
-                            <div className="flex-none ayput-row layout-align-start-center">
+                            <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                                 <input
                                     type="text"
                                     name="search"
+                                    placeholder="search by origin or destination"
                                     onChange={this.handleSearchChange}
                                 />
                             </div>

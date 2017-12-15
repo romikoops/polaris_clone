@@ -215,7 +215,6 @@ export class ShipmentDetails extends Component {
     }
 
     selectRoute(route) {
-        debugger;
         this.setState({ selectedRoute: route, routeSet: true });
     }
 
