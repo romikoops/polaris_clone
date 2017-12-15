@@ -4,7 +4,7 @@ import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import {v4} from 'node-uuid';
 import defs from '../../styles/default_classes.scss';
-import Fuse from 'fuse.js';
+// import Fuse from 'fuse.js';
 export class RouteSelector extends Component {
     constructor(props) {
         super(props);
@@ -22,42 +22,43 @@ export class RouteSelector extends Component {
         this.setState({ viewPublic: !this.state.viewPublic });
     }
     handleSearchChange(event) {
-        if (event.target.value === '') {
-            this.setState({
-                routes: this.props.routes
-            });
-            return;
-        }
+        console.log(event);
+        // if (event.target.value === '') {
+        //     this.setState({
+        //         routes: this.props.routes
+        //     });
+        //     return;
+        // }
 
-        const search = (key) => {
-            const options = {
-                shouldSort: true,
-                tokenize: true,
-                threshold: 0.2,
-                location: 0,
-                distance: 50,
-                maxPatternLength: 32,
-                minMatchCharLength: 5,
-                keys: [key]
-            };
-            const fuse = new Fuse(this.props.routes, options);
-            return fuse.search(event.target.value);
-        };
+        // const search = (key) => {
+        //     const options = {
+        //         shouldSort: true,
+        //         tokenize: true,
+        //         threshold: 0.2,
+        //         location: 0,
+        //         distance: 50,
+        //         maxPatternLength: 32,
+        //         minMatchCharLength: 5,
+        //         keys: [key]
+        //     };
+        //     const fuse = new Fuse(this.props.routes, options);
+        //     return fuse.search(event.target.value);
+        // };
 
-        const filteredRoutesOrigin = search('origin_nexus');
-        const filteredRoutesDestination = search('destination_nexus');
+        // const filteredRoutesOrigin = search('origin_nexus');
+        // const filteredRoutesDestination = search('destination_nexus');
 
-        let TopRoutes = filteredRoutesDestination.filter(route => (
-            filteredRoutesOrigin.includes(route)
-        ));
+        // let TopRoutes = filteredRoutesDestination.filter(route => (
+        //     filteredRoutesOrigin.includes(route)
+        // ));
 
-        if(TopRoutes.length === 0) {
-            TopRoutes = filteredRoutesDestination.concat(filteredRoutesOrigin);
-        }
+        // if(TopRoutes.length === 0) {
+        //     TopRoutes = filteredRoutesDestination.concat(filteredRoutesOrigin);
+        // }
 
-        this.setState({
-            routes: TopRoutes
-        });
+        // this.setState({
+        //     routes: TopRoutes
+        // });
     }
 
     render() {

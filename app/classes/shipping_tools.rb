@@ -57,7 +57,6 @@ module ShippingTools
       )
     end
 
-    # byebug
     return {
       shipment:    @shipment,
       all_nexuses: @all_nexuses,

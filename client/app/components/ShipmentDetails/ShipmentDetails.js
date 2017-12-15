@@ -270,7 +270,6 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
             />
         );
-
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
@@ -278,37 +277,41 @@ export class ShipmentDetails extends Component {
         const future = {
             after: new Date(),
         };
+        const dayPickerSection = (
+            <div
+                className={`${
+                    styles.date_sec
+                } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
+            >
+                <div className="layout-row flex-none layout-wrap">
+                    <p className="flex-100">
+                        {' '}
+                        {'Approximate Pickup Date:'}
+                        {' '}
+                    </p>
+                    <div className={'flex-none layout-row ' + styles.dpb}>
+                        <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
+                            <i className="flex-none fa fa-calendar"></i>
+                        </div>
+                        <DayPickerInput
+                            name="birthday"
+                            placeholder="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
+                            value={value}
+                            className={styles.dpb_picker}
+                            onDayChange={this.handleDayChange}
+                            modifiers={future}
+                        />
+                    </div>
+
+                </div>
+            </div>
+        );
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                    <div
-                        className={`${
-                            styles.date_sec
-                        } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
-                    >
-                        <div className="layout-row flex-none layout-wrap">
-                            <p className="flex-100">
-                                {' '}
-                                {'Approximate Pickup Date:'}{' '}
-                            </p>
-                            <div className={'flex-none layout-row ' + styles.dpb}>
-                                <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
-                                    <i className="flex-none fa fa-calendar"></i>
-                                </div>
-                                <DayPickerInput
-                                    name="birthday"
-                                    placeholder="DD/MM/YYYY"
-                                    format="DD/MM/YYYY"
-                                    value={value}
-                                    className={styles.dpb_picker}
-                                    onDayChange={this.handleDayChange}
-                                    modifiers={future}
-                                />
-                            </div>
-
-                        </div>
-                    </div>
+                    {this.state.routeSet ? dayPickerSection : '' }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
                     {this.state.routeSet ? mapBox : rSelect}
