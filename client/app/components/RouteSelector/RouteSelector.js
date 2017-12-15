@@ -8,10 +8,11 @@ export class RouteSelector extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            viewPublic: false
+            routes: this.props.routes
         };
         this.selectRoute = this.selectRoute.bind(this);
         this.togglePublic = this.togglePublic.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
     }
     selectRoute(route) {
         this.props.setRoute(route);
@@ -19,9 +20,21 @@ export class RouteSelector extends Component {
     togglePublic() {
         this.setState({ viewPublic: !this.state.viewPublic });
     }
+    handleSearchChange(event) {
+        console.log('changed');
+        console.log(this.state.routes);
+        const filteredRoutes = this.props.routes.filter(route => (
+            route.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
+        ));
+        console.log(filteredRoutes);
+        this.setState({
+            routes: filteredRoutes
+        });
+    }
 
     render() {
-        const { theme, routes } = this.props;
+        const { theme } = this.props;
+        const { routes } = this.state;
         if (!routes) {
             console.log('(!) No Routes Found (!)');
             return(
@@ -45,6 +58,13 @@ export class RouteSelector extends Component {
                         <div className="flex-100 layout-row layout-align-space-between-center">
                             <div className="flex-none ayput-row layout-align-start-center">
                                 <h4 className="flex-none"> Available Routes</h4>
+                            </div>
+                            <div className="flex-none ayput-row layout-align-start-center">
+                                <input
+                                    type="text"
+                                    name="search"
+                                    onChange={this.handleSearchChange}
+                                />
                             </div>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
