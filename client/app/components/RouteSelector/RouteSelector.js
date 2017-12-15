@@ -4,6 +4,7 @@ import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import {v4} from 'node-uuid';
 import defs from '../../styles/default_classes.scss';
+import Fuse from 'fuse.js';
 export class RouteSelector extends Component {
     constructor(props) {
         super(props);
@@ -22,13 +23,30 @@ export class RouteSelector extends Component {
     }
     handleSearchChange(event) {
         console.log('changed');
-        console.log(this.state.routes);
-        const filteredRoutes = this.props.routes.filter(route => (
-            route.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
-        ));
-        console.log(filteredRoutes);
+        // console.log(this.state.routes);
+
+        const options = {
+            shouldSort: true,
+            threshold: 0.6,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 5,
+            keys: [
+                'name'
+            ]
+        };
+        const fuse = new Fuse(this.props.routes, options); // "list" is the item array
+        const result = fuse.search(event.target.value);
+        console.log(result);
+
+        // const filteredRoutes = this.props.routes.filter(route => (
+        //     route.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
+        // ));
+        // console.log(filteredRoutes);
         this.setState({
-            routes: filteredRoutes
+            // routes: filteredRoutes
+            routes: result
         });
     }
 
