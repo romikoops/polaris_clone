@@ -47,17 +47,6 @@ function newShipment(type) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
-function updateAvailableRoutes(date) {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch(BASE_URL + '/available_routes&date=' + date, requestOptions).then(
-        handleResponse
-    );
-}
-
 function setShipmentDetails(data) {
     const requestOptions = {
         method: 'POST',
@@ -128,7 +117,6 @@ function setShipmentContacts(data) {
 
 export const shipmentService = {
     newShipment,
-    updateAvailableRoutes,
     getAll,
     getShipment,
     setShipmentRoute,

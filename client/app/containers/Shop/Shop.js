@@ -41,7 +41,6 @@ class Shop extends Component {
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
         this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
-        this.updateAvailableRoutes = this.updateAvailableRoutes.bind(this);
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
@@ -120,10 +119,6 @@ class Shop extends Component {
         //     }
         // });
     }
-    updateAvailableRoutes(date) {
-        console.log(date);
-        // dispatch(shipmentActions.updateAvailableRoutes(date));
-    }
 
     render() {
         // const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
@@ -184,7 +179,6 @@ class Shop extends Component {
                             {...props}
                             theme={theme}
                             shipmentData={response ? response.stage1 : {}}
-                            updateAvailableRoutes={this.updateAvailableRoutes}
                             prevRequest={
                                 request && request.stage2 ? request.stage2 : {}
                             }

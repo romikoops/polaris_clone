@@ -38,31 +38,6 @@ function newShipment(type) {
     };
 }
 
-function updateAvailableRoutes(date) {
-    function request(resp) {
-        return { type: '', resp };
-    }
-    function success(resp) {
-        return { type: '', resp };
-    }
-    function failure(error) {
-        return { type: '', error };
-    }
-    return dispatch => {
-        dispatch(request(date));
-        shipmentService.updateAvailableRoutes(date).then(
-            resp => {
-                dispatch(success(resp.data));
-            },
-            error => {
-                error.then(data => {
-                    dispatch(failure({ type: 'error', text: data.message }));
-                });
-            }
-        );
-    };
-}
-
 function setShipmentDetails(data) {
     function request(shipmentData) {
         return {
@@ -334,7 +309,6 @@ function fetchShipmentIfNeeded(id) {
 }
 export const shipmentActions = {
     newShipment,
-    updateAvailableRoutes,
     setShipmentRoute,
     setShipmentDetails,
     setShipmentContacts,

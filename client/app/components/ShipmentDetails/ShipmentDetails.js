@@ -115,7 +115,6 @@ export class ShipmentDetails extends Component {
 
     handleDayChange(selectedDay) {
         this.setState({ selectedDay });
-        // this.props.updateAvailableRoutes(selectedDay);
     }
     deleteCargo(target, index) {
         const arr = this.state[target];
@@ -359,7 +358,6 @@ export class ShipmentDetails extends Component {
 ShipmentDetails.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
-    updateAvailableRoutes: PropTypes.func,
     history: PropTypes.object,
     match: PropTypes.object,
     setShipmentDetails: PropTypes.func,
