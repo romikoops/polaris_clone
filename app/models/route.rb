@@ -184,8 +184,10 @@ class Route < ApplicationRecord
 
   def detailed_hash(options = {})
     return_h = attributes
-    return_h[:modes_of_transport] = modes_of_transport
-    return_h[:next_departure]     = next_departure
+    return_h[:origin_nexus]       = origin_nexus.name                    if options[:nexus_names] 
+    return_h[:destination_nexus]  = destination_nexus.name               if options[:nexus_names]
+    return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
+    return_h[:next_departure]     = next_departure                       if options[:next_departure]
     return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
   end

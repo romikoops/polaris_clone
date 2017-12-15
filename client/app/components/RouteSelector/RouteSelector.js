@@ -22,31 +22,41 @@ export class RouteSelector extends Component {
         this.setState({ viewPublic: !this.state.viewPublic });
     }
     handleSearchChange(event) {
-        console.log('changed');
-        // console.log(this.state.routes);
+        if (event.target.value === '') {
+            this.setState({
+                routes: this.props.routes
+            });
+            return;
+        }
 
-        const options = {
-            shouldSort: true,
-            threshold: 0.6,
-            location: 0,
-            distance: 100,
-            maxPatternLength: 32,
-            minMatchCharLength: 5,
-            keys: [
-                'name'
-            ]
+        const search = (key) => {
+            const options = {
+                shouldSort: true,
+                tokenize: true,
+                threshold: 0.2,
+                location: 0,
+                distance: 50,
+                maxPatternLength: 32,
+                minMatchCharLength: 5,
+                keys: [key]
+            };
+            const fuse = new Fuse(this.props.routes, options);
+            return fuse.search(event.target.value);
         };
-        const fuse = new Fuse(this.props.routes, options); // "list" is the item array
-        const result = fuse.search(event.target.value);
-        console.log(result);
 
-        // const filteredRoutes = this.props.routes.filter(route => (
-        //     route.name.toLowerCase().indexOf(event.target.value.toLowerCase()) > -1
-        // ));
-        // console.log(filteredRoutes);
+        const filteredRoutesOrigin = search('origin_nexus');
+        const filteredRoutesDestination = search('destination_nexus');
+
+        let TopRoutes = filteredRoutesDestination.filter(route => (
+            filteredRoutesOrigin.includes(route)
+        ));
+
+        if(TopRoutes.length === 0) {
+            TopRoutes = filteredRoutesDestination.concat(filteredRoutesOrigin);
+        }
+
         this.setState({
-            // routes: filteredRoutes
-            routes: result
+            routes: TopRoutes
         });
     }
 
@@ -81,7 +91,7 @@ export class RouteSelector extends Component {
                                 <input
                                     type="text"
                                     name="search"
-                                    placeholder="search by origin or destination"
+                                    placeholder="Search route"
                                     onChange={this.handleSearchChange}
                                 />
                             </div>

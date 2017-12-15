@@ -50,7 +50,11 @@ module ShippingTools
     route_ids_dedicated = Route.ids_dedicated(current_user)
     routes = Route.where(tenant_id: current_user.tenant_id)
     detailed_routes = routes.map do |route| 
-      route.detailed_hash(ids_dedicated: route_ids_dedicated)
+      route.detailed_hash(
+        ids_dedicated: route_ids_dedicated, 
+        nexus_names: true, 
+        modes_of_transport: true
+      )
     end
 
     # byebug
