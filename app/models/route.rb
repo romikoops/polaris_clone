@@ -186,7 +186,7 @@ class Route < ApplicationRecord
     return_h = attributes
     return_h[:modes_of_transport] = modes_of_transport
     return_h[:next_departure]     = next_departure
-    return_h[:dedicated]          = options[:ids_dedicated].include?(id)
+    return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
   end
 end

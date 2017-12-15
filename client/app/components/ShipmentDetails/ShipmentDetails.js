@@ -216,6 +216,7 @@ export class ShipmentDetails extends Component {
     }
 
     selectRoute(route) {
+        debugger;
         this.setState({ selectedRoute: route, routeSet: true });
     }
 
@@ -258,7 +259,6 @@ export class ShipmentDetails extends Component {
                 routes={shipmentData.routes}
             />
         );
-
         const mapBox = (
             <GmapsLoader
                 theme={theme}

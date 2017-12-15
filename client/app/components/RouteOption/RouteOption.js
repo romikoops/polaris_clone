@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './RouteOption.scss';
-import { moment } from '../../constants';
 
 export class RouteOption extends Component {
     constructor(props) {
@@ -28,17 +27,8 @@ export class RouteOption extends Component {
         const originNexus       = route.name.split(' - ')[0];
         const destinationNexus  = route.name.split(' - ')[1];
         const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
-        const nextDeparture     = route.next_departure;
         // const modesOfTransport  = ['ocean', 'air', 'train'];
         // route.dedicated = Math.random() < 0.3;
-        const gradientFontStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'black'
-        };
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -72,47 +62,21 @@ export class RouteOption extends Component {
                         <i className="fa fa-star" style={dedicatedDecoratorIconStyles}></i>
                     </div>
                     <div className={`${styles.header_hub}`}>
-                        <i className={`fa fa-map-marker ${styles.map_marker}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {originNexus} </h4>
                         </div>
                     </div>
                     <div className={`${styles.connection_graphics}`}>
+                        <i className={`fa fa-map-marker ${styles.map_marker}`} />
+                        <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-none layout-row layout-align-center-center">
                             {icons}
                         </div>
                         <div style={dashedLineStyles} />
                     </div>
                     <div className={`${styles.header_hub}`}>
-                        <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {destinationNexus} </h4>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <div className="flex-100 layout-wrap layout-row layout-align-space-between">
-                        <div>
-                            <h4
-                                className={styles.date_title}
-                                style={gradientFontStyle}
-                            >
-                                Next Departure
-                            </h4>
-                        </div>
-                        <div className="layout-row">
-                            <p className={styles.sched_elem}>
-                                {' '}
-                                {moment(nextDeparture).format(
-                                    'YYYY-MM-DD'
-                                )}{' '}
-                            </p>
-                            <p className={styles.sched_elem}>
-                                {' '}
-                                {moment(nextDeparture).format(
-                                    'HH:mm'
-                                )}{' '}
-                            </p>
                         </div>
                     </div>
                 </div>

@@ -7,9 +7,9 @@
 
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
     margin: $v_margin $h_margin;
-    padding: 8px 15px 13px 31px;
+    padding: 8px 15px 13px 15px;
     position: relative;
-    width: 279px;
+    width: 212px;
     cursor: pointer;
     transition: margin 0.1s ease, box-shadow 0.2s ease;
     h4, p {
@@ -45,25 +45,25 @@
   }
   .header_hub {
     position: relative;
-    margin: 16px 0 12px 0;
-    .map_marker {
-      position: absolute;
-      left: -18px;
-      top: -1px;
-    }
-    .flag {
-      position: absolute;
-      left: -23px;
-      top: -1px;
-    }
+    margin-top: 40px;
   }
   .connection_graphics {
     position: absolute;
-    left: calc((325px - 76px) / 2);
+    left: calc((242px - 76px) / 2);
     top: 10px;
     width: 76px;
     i {
       margin: 0 4px;
+    }
+    i.map_marker {
+      position: absolute;
+      left: -26px;
+      top: 10px;
+    }
+    i.flag {
+      position: absolute;
+      right: -34px;
+      top: 10px;
     }
   }
   h4.date_title {
