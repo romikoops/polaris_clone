@@ -420,7 +420,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_dynamo_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_pricings(params, dedicated, user = current_user)
     # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
@@ -454,6 +454,7 @@ module ExcelTools
     )
     new_pricings = []
     new_path_pricings = {}
+    
     pricing_rows.each do |row|
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
@@ -576,20 +577,20 @@ module ExcelTools
           if !new_path_pricings[pathKey]
             new_path_pricings[pathKey] = {}
           end
+
           new_path_pricings[pathKey]["open"] = uuid
           new_path_pricings[pathKey]["hub_route"] = hubroute.id
           new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
           new_path_pricings[pathKey]["route"] = route.id
           new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
-
         end
       end
     end
+
     npps = []
     new_path_pricings.each do |key, value|
       tmpObj = value
       ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
     end
-
   end
 end
