@@ -47,6 +47,18 @@ export class ShipmentDetails extends Component {
                     dangerousGoods: false
                 }
             ],
+            routes: {},
+            containerErrors: {
+                payload_in_kg: true,
+            },
+            cargoItemErrors: {
+                payload_in_kg: true,
+                dimension_x: true,
+                dimension_y: true,
+                dimension_z: true
+            },
+            nextStageAttempt: false,
+            addUnitAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
             shipment: this.props.shipmentData.shipment,
@@ -72,7 +84,6 @@ export class ShipmentDetails extends Component {
         this.handleContainerChange = this.handleContainerChange.bind(this);
         this.deleteCargo = this.deleteCargo.bind(this);
     }
-
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
         if (prevRequest && prevRequest.shipment) {
@@ -136,26 +147,41 @@ export class ShipmentDetails extends Component {
         this.setState({
             [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
-        console.log({...this.state[key1], [key2]: val, fullAddress });
     }
 
-    handleCargoItemChange(event) {
+    handleCargoItemChange(event, hasError) {
         const { name, value } = event.target;
         const itemArr = this.state.cargoItems;
         itemArr[0][name] = value;
-        console.log(itemArr);
-        this.setState({ cargoItems: itemArr });
+        const cargoItemErrors = this.state.cargoItemErrors;
+        cargoItemErrors[name] = hasError;
+        this.setState({
+            cargoItems: itemArr,
+            cargoItemErrors: cargoItemErrors
+        });
     }
 
-    handleContainerChange(event) {
+    handleContainerChange(event, hasError) {
         const { name, value } = event.target;
         const itemArr = this.state.containers;
         itemArr[0][name] = value;
+        const containerErrors = this.state.containerErrors;
+        containerErrors[name] = hasError;
 
-        this.setState({ containers: itemArr });
+        this.setState({
+            cargoItems: itemArr,
+            containerErrors: containerErrors
+        });
     }
 
     addNewCargoItem() {
+        if (this.errorsExist(this.state.cargoItemErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({addUnitAttempt: true});
+            return;
+        }
+        this.setState({addUnitAttempt: false});
+
         const newCI = {
             payload_in_kg: 0,
             dimension_x: 0,
@@ -163,28 +189,65 @@ export class ShipmentDetails extends Component {
             dimension_z: 0,
             dangerousGoods: false
         };
+        const newErrors = {
+            payload_in_kg: true,
+            dimension_x: true,
+            dimension_y: true,
+            dimension_z: true
+        };
         const currArray = this.state.cargoItems;
         currArray.unshift(newCI);
-        this.setState({ cargoItems: currArray });
+        this.setState({
+            cargoItems: currArray,
+            cargoItemErrors: newErrors
+        });
     }
 
     addNewContainer() {
+        if (this.errorsExist(this.state.containerErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({addUnitAttempt: true});
+            return;
+        }
+        this.setState({addUnitAttempt: false});
+
         const newCont = {
             payload_in_kg: 0,
             sizeClass: '',
             tareWeight: 0,
             dangerousGoods: false
         };
+        const newErrors = {
+            payload_in_kg: true,
+        };
         const currArray = this.state.containers;
         currArray.unshift(newCont);
-        this.setState({ containers: currArray });
+        this.setState({
+            cargoItems: currArray,
+            containerErrors: newErrors
+        });
     }
 
     setTargetLocation(target, address) {
         this.setState({ [target]: address });
     }
+    errorsExist(errorsObj) {
+        return Object.values(errorsObj).indexOf(true) > -1;
+    }
 
     handleNextStage() {
+        // This was implemented under the assuption that in the initial state the following return values apply:
+        //      (1) this.errorsExist(this.state.cargoItemErrors) #=> true
+        //      (2) this.errorsExist(this.state.containerErrors) #=> true
+        // So it will break out of the function and set nextStage attempt to true,
+        // in case one of them returns false
+        if (this.errorsExist(this.state.cargoItemErrors) && this.errorsExist(this.state.containerErrors)) {
+            console.log('(!) Errors exist (!)');
+            this.setState({nextStageAttempt: true});
+            return;
+        }
+
+
         console.log('NEXT STAGE PLZ');
 
         const data = {
@@ -232,6 +295,8 @@ export class ShipmentDetails extends Component {
                         addContainer={this.addNewContainer}
                         handleDelta={this.handleContainerChange}
                         deleteItem={this.deleteCargo}
+                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        theme={theme}
                     />
                 );
             }
@@ -242,6 +307,8 @@ export class ShipmentDetails extends Component {
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
                         deleteItem={this.deleteCargo}
+                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        theme={theme}
                     />
                 );
             }
@@ -253,11 +320,9 @@ export class ShipmentDetails extends Component {
             <RouteSelector
                 theme={theme}
                 setRoute={this.selectRoute}
-                publicRoutes={shipmentData.public_routes}
-                privateRoutes={shipmentData.private_routes}
+                routes={shipmentData.routes}
             />
         );
-
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -271,7 +336,6 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
             />
         );
-
         const value = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
@@ -279,37 +343,41 @@ export class ShipmentDetails extends Component {
         const future = {
             after: new Date(),
         };
+        const dayPickerSection = (
+            <div
+                className={`${
+                    styles.date_sec
+                } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
+            >
+                <div className="layout-row flex-none layout-wrap">
+                    <p className="flex-100">
+                        {' '}
+                        {'Approximate Pickup Date:'}
+                        {' '}
+                    </p>
+                    <div className={'flex-none layout-row ' + styles.dpb}>
+                        <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
+                            <i className="flex-none fa fa-calendar"></i>
+                        </div>
+                        <DayPickerInput
+                            name="birthday"
+                            placeholder="DD/MM/YYYY"
+                            format="DD/MM/YYYY"
+                            value={value}
+                            className={styles.dpb_picker}
+                            onDayChange={this.handleDayChange}
+                            modifiers={future}
+                        />
+                    </div>
+
+                </div>
+            </div>
+        );
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                    <div
-                        className={`${
-                            styles.date_sec
-                        } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
-                    >
-                        <div className="layout-row flex-none layout-wrap">
-                            <p className="flex-100">
-                                {' '}
-                                {'Approximate Pickup Date:'}{' '}
-                            </p>
-                            <div className={'flex-none layout-row ' + styles.dpb}>
-                                <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
-                                    <i className="flex-none fa fa-calendar"></i>
-                                </div>
-                                <DayPickerInput
-                                    name="birthday"
-                                    placeholder="DD/MM/YYYY"
-                                    format="DD/MM/YYYY"
-                                    value={value}
-                                    className={styles.dpb_picker}
-                                    onDayChange={this.handleDayChange}
-                                    modifiers={future}
-                                />
-                            </div>
-
-                        </div>
-                    </div>
+                    {this.state.routeSet ? dayPickerSection : '' }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
                     {this.state.routeSet ? mapBox : rSelect}

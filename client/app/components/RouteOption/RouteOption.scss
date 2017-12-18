@@ -1,12 +1,17 @@
 :local {
   .route_option {
-    background-color: #FCFCFC;
+    $v_margin: 4px;
+    $h_margin: 4px;
+    $v_offset: 1px;
+    $h_offset: 1px;
+
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
-    margin: 4px 0;
-    padding: 20px 20px 15px 36px;
+    margin: $v_margin $h_margin;
+    padding: 8px 15px 13px 15px;
     position: relative;
-    width: 27%;
+    width: 212px;
     cursor: pointer;
+    transition: margin 0.1s ease, box-shadow 0.2s ease;
     h4, p {
       margin: 0;
     }
@@ -14,8 +19,25 @@
       font-weight: normal;
     }
     &:hover {
-      margin: 3px 1px 5px -1px;
+      margin: (
+        calc(#{$v_margin} - #{$v_offset}) 
+        calc(#{$h_margin} + #{$h_offset}) 
+        calc(#{$v_margin} + #{$v_offset}) 
+        calc(#{$h_margin} - #{$h_offset})
+      );
       box-shadow: 1px 3px 8px 0 rgba(0,0,0,0.17);
+    }
+  }
+  .dedicated_decorator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    // background: black;
+    i {
+      position: absolute;
+      top: -26px;
+      right: 4px;
+      color: white;
     }
   }
   .top_row {
@@ -23,22 +45,26 @@
   }
   .header_hub {
     position: relative;
-    .map_marker {
-      position: absolute;
-      left: -18px;
-      top: -1px;
-    }
-    .flag {
-      position: absolute;
-      left: -23px;
-      top: -1px;
-    }
+    margin-top: 40px;
   }
   .connection_graphics {
     position: absolute;
-    left: calc((326px - 60px) / 2);
-    top: 20px;
-    width: 60px;
+    left: calc((242px - 76px) / 2);
+    top: 10px;
+    width: 76px;
+    i {
+      margin: 0 4px;
+    }
+    i.map_marker {
+      position: absolute;
+      left: -26px;
+      top: 10px;
+    }
+    i.flag {
+      position: absolute;
+      right: -34px;
+      top: 10px;
+    }
   }
   h4.date_title {
     -webkit-background-clip: text !important;

@@ -10,6 +10,7 @@ import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
 import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
+
 const mapStyle = {
     width: '100%',
     height: '400px',
@@ -22,7 +23,6 @@ const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.state = {
             origin: {
                 street: '',
@@ -79,10 +79,9 @@ export class ShipmentLocationBox extends Component {
         }
     }
 
-    setHubsFromRoute(routeObj) {
+    setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
-        const { route } = routeObj;
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;

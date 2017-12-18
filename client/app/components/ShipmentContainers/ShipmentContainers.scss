@@ -12,11 +12,19 @@
     border: 1px solid #F2F2F2;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    &:focus {
+      outline: none;
+    }
   }
   .select{
     width: 195px;
-    border: 1px solid #F2F2F2;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .add_unit {
+    margin-top: 20px;
+    cursor: pointer;
+    i {
+      margin-right: 15px;
+    }
   }
 }
