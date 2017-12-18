@@ -212,7 +212,7 @@ ActiveRecord::Schema.define(version: 20171213153656) do
     t.boolean "has_on_carriage"
     t.decimal "on_carriage_distance_km"
     t.decimal "total_price"
-    t.string "total_goods_value"
+    t.decimal "total_goods_value"
     t.string "cargo_notes"
     t.string "haulage"
     t.string "hs_code", default: [], array: true
