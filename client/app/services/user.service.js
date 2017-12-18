@@ -122,7 +122,7 @@ function register(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch(BASE_URL + '/auth/sign_up', requestOptions).then(
+    return fetch(BASE_URL + '/auth/', requestOptions).then(
         handleResponse
     );
 }

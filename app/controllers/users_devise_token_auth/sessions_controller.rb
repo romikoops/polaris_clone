@@ -1,4 +1,4 @@
-module Overrides
+module UsersDeviseTokenAuth
   class SessionsController < DeviseTokenAuth::SessionsController
     wrap_parameters false
     # def render_create_success

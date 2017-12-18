@@ -14,6 +14,8 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { userActions } from '../../actions';
+
 
 import './Shop.scss';
 
@@ -41,6 +43,16 @@ class Shop extends Component {
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
         this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
+    }
+    componentDidMount() {
+        if (!this.props.loggedIn) {
+            this.props.dispatch(userActions.register({
+                email: 'guest@email.com',
+                password: 'guestpassword',
+                password_confirmation: 'guestpassword'
+                // guest: true
+            }));
+        }
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
