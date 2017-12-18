@@ -17,7 +17,11 @@
       outline: none;
     }
   }
-  .add_unit i {
-    margin-right: 15px;
-  }
+  .add_unit {
+    margin-top: 20px;
+    cursor: pointer;
+    i {
+      margin-right: 15px;
+    }
+  } 
 }

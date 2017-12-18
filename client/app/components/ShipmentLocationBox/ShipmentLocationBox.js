@@ -10,6 +10,7 @@ import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers/svgColourer';
 import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
+
 const mapStyle = {
     width: '100%',
     height: '400px',

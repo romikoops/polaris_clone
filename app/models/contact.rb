@@ -3,7 +3,14 @@ class Contact < ApplicationRecord
   has_many :shipment_contacts
   belongs_to :location
 
+  # Validations
+  validates :company_name, presence: true, length: { in: 2..50 }
+  validates :first_name,   presence: true, length: { in: 2..50 }
+  validates :last_name,    presence: true, length: { in: 2..50 }
+  validates :phone,        presence: true, length: { in: 4..22 }
+  validates :email,        presence: true, length: { in: 8..50 }
 
+  # Filterrific configuration
   filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
               :available_filters => %w(
                 sorted_by
