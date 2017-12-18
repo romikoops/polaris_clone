@@ -9,12 +9,13 @@ export class RouteSelector extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            routes: this.props.routes
+            routes: this.props.routes,
         };
         this.selectRoute = this.selectRoute.bind(this);
         this.togglePublic = this.togglePublic.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
+
     selectRoute(route) {
         this.props.setRoute(route);
     }
@@ -62,7 +63,7 @@ export class RouteSelector extends Component {
 
     render() {
         const { theme } = this.props;
-        const { routes } = this.state;
+        const routes = this.state.routes ? this.state.routes : this.props.routes;
         if (!routes) {
             console.log('(!) No Routes Found (!)');
             return(
