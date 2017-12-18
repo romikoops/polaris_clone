@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
 import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
@@ -7,18 +8,11 @@ import defs from '../../styles/default_classes.scss';
 export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            newCargoItem: {
-                payload_in_kg: 0,
-                dimension_x: 0,
-                dimension_y: 0,
-                dimension_z: 0,
-                dangerousGoods: false
-            }
-        };
         this.handleCargoChange = this.handleCargoChange.bind(this);
         this.addNewCargo = this.addNewCargo.bind(this);
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
+        this.state = {firstRenderInputs: !this.props.nextStageAttempt};
+        this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
     }
 
     handleCargoChange(event) {
@@ -28,18 +22,13 @@ export class ShipmentCargoItems extends Component {
         });
     }
 
+    setFirstRenderInputs(bool) {
+        this.setState({firstRenderInputs: bool});
+    }
+
     addNewCargo() {
-        const newCont = this.state.newCargoItem;
-        this.props.addCargoItem(newCont);
-        this.setState({
-            newCargoItem: {
-                payload_in_kg: 0,
-                dimension_x: 0,
-                dimension_y: 0,
-                dimension_z: 0,
-                dangerousGoods: false
-            }
-        });
+        this.props.addCargoItem();
+        this.setState({firstRenderInputs: true});
     }
 
     toggleDangerousGoods() {
@@ -95,14 +84,25 @@ export class ShipmentCargoItems extends Component {
         }
 
         return (
-
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Gross Weight </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="payload_in_kg" value={newCargoItem.payload_in_kg} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="payload_in_kg"
+                                    value={newCargoItem.payload_in_kg}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     kg
                                 </div>
@@ -111,7 +111,19 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Height </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_z" value={newCargoItem.dimension_z} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_z"
+                                    value={newCargoItem.dimension_z}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
@@ -120,7 +132,19 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Width </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_y" value={newCargoItem.dimension_y} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_y"
+                                    value={newCargoItem.dimension_y}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
@@ -129,7 +153,19 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Length </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                <input className="flex-80" name="dimension_x" value={newCargoItem.dimension_x} type="number" onChange={handleDelta}/>
+                                <ValidatedInput
+                                    className="flex-80"
+                                    name="dimension_x"
+                                    value={newCargoItem.dimension_x}
+                                    type="number"
+                                    onChange={handleDelta}
+                                    firstRenderInputs={this.state.firstRenderInputs}
+                                    setFirstRenderInputs={this.setFirstRenderInputs}
+                                    nextStageAttempt={this.props.nextStageAttempt}
+                                    validations={ {matchRegexp: /[^0]/} }
+                                    validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                    required
+                                />
                                 <div className="flex-20 layout-row layout-align-center-center">
                                     cm
                                 </div>
@@ -137,11 +173,15 @@ export class ShipmentCargoItems extends Component {
                         </div>
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Dangerous Goods </p>
-                            <Checkbox onChange={this.toggleDangerousGoods} checked={newCargoItem.dangerousGoods} />
+                            <Checkbox
+                                onChange={this.toggleDangerousGoods}
+                                checked={newCargoItem.dangerousGoods}
+                                theme={this.props.theme}
+                            />
                         </div>
 
-                        <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <div className={`layout-row flex-none ${defs.content_width} ${styles.add_unit} layout-align-start-center`} onClick={this.addNewCargo}>
+                        <div className="layout-row layout-align-start-center" >
+                            <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addNewCargo}>
                                 <i className="fa fa-plus-square-o" />
                                 <p> Add unit </p>
                             </div>

@@ -1,24 +1,52 @@
 class Shipment < ApplicationRecord
+  STATUSES = %w(
+    requested
+    booking_process_started
+    pending
+    confirmed
+    declined
+  )
+  LOAD_TYPES = %w(
+    fcl
+    lcl
+    openlcl
+  )
+  
+
+  # Validations 
+  validates :status, 
+    inclusion: { 
+      in: STATUSES, 
+      message: "must be included in [#{STATUSES.join(', ')}]" 
+    },
+    allow_nil: true
+  validates :load_type, 
+    inclusion: { 
+      in: LOAD_TYPES, 
+      message: "must be included in [#{LOAD_TYPES.join(', ')}]" 
+    },
+    allow_nil: true
+  validate :planned_pickup_date_is_a_datetime?
+  validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :total_price,              numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+
   # ActiveRecord Callbacks
   before_create :assign_uuid
   before_create :generate_imc_reference
 
   # Basic associations
   belongs_to :shipper, class_name: "User", optional: true
-
   belongs_to :consignee, optional: true
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts
-
   belongs_to :origin, class_name: "Location", optional: true
   belongs_to :destination, class_name: "Location", optional: true
-
   belongs_to :route, optional: true
-
   has_many :containers
   has_many :cargo_items
-
   belongs_to :shipper_location, class_name: "Location", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
@@ -187,5 +215,10 @@ class Shipment < ApplicationRecord
 
   def assign_uuid
     self.uuid = SecureRandom.uuid
+  end
+
+  def planned_pickup_date_is_a_datetime?
+    return if planned_pickup_date.nil?
+    errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone) 
   end
 end
