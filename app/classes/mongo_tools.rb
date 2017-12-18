@@ -29,7 +29,6 @@ module MongoTools
 
   def get_items_query(table, query)
     client = init
-    byebug
     resp = client[table.to_sym].find({"$and" => query})
     return resp
   end

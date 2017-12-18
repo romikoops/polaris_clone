@@ -272,6 +272,8 @@ Shop.defaultProps = {
 };
 
 function mapStateToProps(state) {
+    console.log('*********************************');
+    console.log(state);
     const { users, authentication, tenant, bookingData } = state;
     const { user, loggedIn } = authentication;
     const isLoading = bookingData.loading;
