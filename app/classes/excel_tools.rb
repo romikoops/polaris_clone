@@ -1,7 +1,7 @@
 module ExcelTools
   include ImageTools
   include MongoTools
-  
+
   def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
     old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
@@ -227,8 +227,6 @@ module ExcelTools
         customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
         cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
       }
-      p new_charge[:hub_code]
-      p user.tenant_id
       hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
       new_charge.delete(:hub_code)
       new_charge[:hub_id] = hub.id
@@ -454,8 +452,9 @@ module ExcelTools
     )
     new_pricings = []
     new_path_pricings = {}
-    
-    pricing_rows.each do |row|
+
+    pricing_rows.each_with_index do |row, index|
+      puts "load pricing row #{index}..."
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
