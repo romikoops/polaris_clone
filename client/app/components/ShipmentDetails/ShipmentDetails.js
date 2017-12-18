@@ -144,7 +144,6 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const itemArr = this.state.cargoItems;
         itemArr[0][name] = value;
-        console.log(itemArr);
         this.setState({ cargoItems: itemArr });
     }
 
