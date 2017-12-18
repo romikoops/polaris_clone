@@ -35,7 +35,7 @@ export function configureStore() {
     store.subscribe(throttle(() => {
         const oldState = store.getState();
         const bData = oldState.bookingData;
-        delete bData.loading;
+        // delete bData.loading;
         saveState({
             bookingData: bData,
             tenant: oldState.tenant,

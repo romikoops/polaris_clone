@@ -6,7 +6,7 @@ import 'react-select/dist/react-select.css';
 import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
-import {v4} from 'node-uuid';
+// import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions;
 const cargoOpts = cargoOptions;
 const cargoClassOpts = cargoClassOptions;
@@ -16,9 +16,9 @@ export class AdminPriceEditor extends Component {
         super(props);
         this.state = {
             currency: props.currency ? props.currency : 'EUR',
-            mot: props.transport.mode_of_transportation ? this.selectFromOptions(moTOpts, props.transport.mode_of_transportation) : moTOpts[0],
-            cargoClass: props.transport.cargo_class ? this.selectFromOptions(cargoClassOpts, props.transport.cargo_class) : cargoClassOpts[0],
-            cargo: props.transport.name ? this.selectFromOptions(cargoOpts, props.transport.name) : cargoOpts[0],
+            mot: this.selectFromOptions(moTOpts, props.transport.mode_of_transportation),
+            cargoClass: this.selectFromOptions(cargoClassOpts, props.transport.cargo_class),
+            cargo: this.selectFromOptions(cargoOpts, props.transport.name),
             wmRate: props.pricing.wm.rate ? props.pricing.wm.rate : 0,
             wmMin: props.pricing.wm.min ? props.pricing.wm.min : 0,
             heavyWmMin: props.pricing.heavy_wm && props.pricing.heavy_wm.heavy_weight ? props.pricing.heavy_wm.heavy_weight : 0,
@@ -26,6 +26,7 @@ export class AdminPriceEditor extends Component {
             heavyKg: props.pricing.heavy_kg && props.pricing.heavy_kg.heavy_weight ? props.pricing.heavy_kg.heavy_weight : 0,
             heavyKgMin: props.pricing.heavy_kg && props.pricing.heavy_kg.heavy_kg_min ? props.pricing.heavy_kg.heavy_kg_min : 0
         };
+        this.editPricing = props.pricing;
         this.handleChange = this.handleChange.bind(this);
         this.setCurrency = this.setCurrency.bind(this);
         this.setMOT = this.setMOT.bind(this);
@@ -179,7 +180,7 @@ export class AdminPriceEditor extends Component {
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
                 <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-center`}>
-                    <div key={v4()} className="flex-80 layout-row layout-wrap layout-align-center-start">
+                    <div className="flex-80 layout-row layout-wrap layout-align-center-start">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Edit Pricing</p>
                         </div>

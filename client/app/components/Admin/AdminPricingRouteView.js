@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AdminClientTile } from './';
+import { AdminClientTile, AdminPriceEditor } from './';
 import styles from './Admin.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
@@ -19,18 +19,27 @@ export class AdminPricingRouteView extends Component {
         this.backToIndex = this.backToIndex.bind(this);
         this.selectClient = this.selectClient.bind(this);
     }
-    editThis(pricing) {
-        console.log(pricing);
-    }
+
     backToIndex() {
-       history.goBack();
+        history.goBack();
+    }
+    editThis(pricing, hubRoute, transport) {
+        this.setState({
+            editPricing: pricing, editHubRoute: hubRoute, editTransport: transport, editorBool: true
+        });
+    }
+    closeEdit() {
+        this.setState({
+            editPricing: false, editHubRoute: false, editTransport: false, editorBool: false
+        });
     }
     selectClient(client) {
         console.log(client);
         this.setState({selectedClient: client});
     }
     render() {
-        const {theme, pricingData, routePricings, hubs, clients} = this.props;
+        const {theme, pricingData, routePricings, hubs, clients, adminActions} = this.props;
+        const { editorBool, editTransport, editPricing, editHubRoute } = this.state;
         const {selectedClient} = this.state;
         console.log(this.props);
         if (!pricingData || !routePricings) {
@@ -105,7 +114,7 @@ export class AdminPricingRouteView extends Component {
                             <i className="fa fa-map-signs clip" style={textStyle}></i>
                             <p className="flex-none offset-5">{hubRoute.name}</p>
                         </div>
-                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing)}>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing, hubRoute, transport)}>
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
                         </div>
                     </div>
@@ -176,7 +185,7 @@ export class AdminPricingRouteView extends Component {
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                     <p className={` ${styles.sec_header_text} flex-none`}  > Dedicated Pricing </p>
                 </div>
-                 <RoutePricingBox key={v4()} routeData={route} hrArr={relHR} pricingsObj={pricings} rPriceObj={routePricingData} transports={transportCategories} userId={selectedClient.id}/>
+                <RoutePricingBox key={v4()} routeData={route} hrArr={relHR} pricingsObj={pricings} rPriceObj={routePricingData} transports={transportCategories} userId={selectedClient.id}/>
             </div>
         );
         // let routeBoxes;
@@ -212,6 +221,7 @@ export class AdminPricingRouteView extends Component {
                         {selectedClient ? clientPriceView : clientsView }
                     </div>
                 </div>
+                { editorBool ? <AdminPriceEditor closeEdit={this.closeEdit} theme={theme} hubRoute={editHubRoute} transport={editTransport} userId={selectedClient.id} isNew={false} pricing={editPricing} adminTools={adminActions} /> : '' }
             </div>
         );
     }
