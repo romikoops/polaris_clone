@@ -13,7 +13,6 @@ import { Price } from '../Price/Price';
 export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
     }
     componentDidMount() {
         const { setStage } = this.props;
