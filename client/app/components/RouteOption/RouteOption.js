@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './RouteOption.scss';
-import { moment } from '../../constants';
 
 export class RouteOption extends Component {
     constructor(props) {
@@ -24,24 +23,12 @@ export class RouteOption extends Component {
         return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     render() {
-        const { theme, isPrivate, route } = this.props;
-        console.log(isPrivate);
-        const originNexus      = route.route.name.split(' - ')[0];
-        const destinationNexus = route.route.name.split(' - ')[1];
-        const modeOfTransport  = route.next.mode_of_transport;
-        const nextDate = route.next.etd;
-        // console.log(route);
-        // console.log(originNexus);
-        // console.log(destinationNexus);
-
-        const gradientFontStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'black'
-        };
+        const { theme, route } = this.props;
+        const originNexus       = route.origin_nexus;
+        const destinationNexus  = route.destination_nexus;
+        const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
+        // const modesOfTransport  = ['ocean', 'air', 'train'];
+        // route.dedicated = Math.random() < 0.3;
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -55,8 +42,15 @@ export class RouteOption extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-
-
+        const icons = modesOfTransport.map(mot => this.faIcon(mot));
+        const dedicatedDecoratorStyles = {
+            borderTop: route.dedicated ? `28px solid ${theme.colors.primary}66` : '',
+            borderLeft: '55px solid transparent'
+        };
+        const dedicatedDecoratorIconStyles = {
+            WebkitTextFillColor: 'transparent',
+            WebkitTextStroke: '2px white',
+        };
         return (
             <div className={styles.route_option} onClick={this.choose} >
                 <div
@@ -64,58 +58,25 @@ export class RouteOption extends Component {
                         styles.top_row
                     }`}
                 >
+                    <div className={styles.dedicated_decorator} style={dedicatedDecoratorStyles}>
+                        <i className="fa fa-star" style={dedicatedDecoratorIconStyles}></i>
+                    </div>
                     <div className={`${styles.header_hub}`}>
-                        <i className={`fa fa-map-marker ${styles.map_marker}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {originNexus} </h4>
                         </div>
-                        <div className="flex-100">
-                            <p className="flex-100">
-                                CODE
-                            </p>
-                        </div>
                     </div>
                     <div className={`${styles.connection_graphics}`}>
+                        <i className={`fa fa-map-marker ${styles.map_marker}`} />
+                        <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-none layout-row layout-align-center-center">
-                            {this.faIcon(modeOfTransport)}
+                            {icons}
                         </div>
                         <div style={dashedLineStyles} />
                     </div>
                     <div className={`${styles.header_hub}`}>
-                        <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-100 layout-row">
                             <h4 className="flex-100"> {destinationNexus} </h4>
-                        </div>
-                        <div className="flex-100">
-                            <p className="flex-100">
-                                CODE
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <div className="flex-100 layout-wrap layout-row layout-align-space-between">
-                        <div>
-                            <h4
-                                className={styles.date_title}
-                                style={gradientFontStyle}
-                            >
-                                Next Departure
-                            </h4>
-                        </div>
-                        <div className="layout-row">
-                            <p className={styles.sched_elem}>
-                                {' '}
-                                {moment(nextDate).format(
-                                    'YYYY-MM-DD'
-                                )}{' '}
-                            </p>
-                            <p className={styles.sched_elem}>
-                                {' '}
-                                {moment(nextDate).format(
-                                    'HH:mm'
-                                )}{' '}
-                            </p>
                         </div>
                     </div>
                 </div>
