@@ -43,9 +43,10 @@ module MongoTools
     client[table.to_sym].insert_one(value)
   end
 
-   def update_item_fn(client, table, key, updates)
+  def update_item_fn(client, table, key, updates)
     client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
   end
+  
   def get_item_fn(client, table, keyName, key)
     resp = client[table.to_sym].find({"#{keyName}" => "#{key}"})
     return resp.first
@@ -54,11 +55,12 @@ module MongoTools
   private
 
   def init
-    if Rails.env == 'development'
-      client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'development')
-    else
-      client = Mongo::Client.new([ 'mongodb+srv://imcdbadmin:DZYKIdOZk3vP6erN@staging-sco92.mongodb.net/test' ], :database => 'production')
-    end
+    # if Rails.env == 'development'
+    #   client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'development')
+    # else
+      client = Mongo::Client.new('mongodb://imcdbadmin:DZYKIdOZk3vP6erN@staging-shard-00-00-sco92.mongodb.net:27017,staging-shard-00-01-sco92.mongodb.net:27017,staging-shard-00-02-sco92.mongodb.net:27017/test?ssl=true&replicaSet=Staging-shard-0&authSource=admin')
+    # end
     return client
   end
 end
+

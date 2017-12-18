@@ -5,11 +5,19 @@ import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss';
+import { Redirect } from 'react-router';
+
 class Header extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            redirect: false
+        };
+        this.goHome = this.goHome.bind(this);
     }
-
+    goHome() {
+        this.setState({redirect: true});
+    }
     render() {
         const { user, theme } = this.props;
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
@@ -28,6 +36,9 @@ class Header extends Component {
                 key: 'signOut'
             }
         ];
+        if (this.state.redirect) {
+            return <Redirect push to="/" />;
+        }
         const dropDown = user ? <NavDropdown
                                 dropDownText={dropDownText}
                                 dropDownImage={dropDownImage}
@@ -46,6 +57,7 @@ class Header extends Component {
                             src={theme ? theme.logoLarge : ''}
                             className={styles.logo}
                             alt=""
+                            onClick={this.goHome}
                         />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">

@@ -10,11 +10,24 @@ class Admin::PricingsController < ApplicationController
     
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
-    @pricings = get_tenant_pricings(current_user.tenant_id)
+    @pricings = get_tenant_pricings_hash(current_user.tenant_id)
     @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
-    byebug
+    @transports = TransportCategory.all
     @routes = Route.where(tenant_id: current_user.tenant_id)
-    response_handler({routes: @routes, tenant_pricings: @tenant_pricings, pricings: @pricings})
+    @hub_routes = @routes.flat_map(&:hub_routes)
+    response_handler({routes: @routes, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, hubRoutes: @hub_routes })
+  end
+
+  def client
+    @pricings = get_user_pricings(params[:id])
+    @client = User.find(params[:id])
+    response_handler({userPricings: @pricings, client: @client})
+  end
+
+  def route
+    @pricings = get_route_pricings(params[:id])
+    @route = Route.find(params[:id])
+    response_handler({userPricings: @pricings, route: @route})
   end
 
   def overwrite_main_carriage

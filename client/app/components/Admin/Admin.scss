@@ -213,11 +213,36 @@
     position: relative;
     overflow-x: scroll;
     overflow-y: none;
+    height: 250px;
 
   }
   .slider_inner {
+    margin-right: 15px;
     position: absolute;
     width: max-content;
     min-width: 100%;
+  }
+  .route_price {
+
+  }
+  .route_price h3 {
+    margin: 0;
+  }
+  .hub_route_price {
+    box-shadow: 1px 2px 1px rgba(0,0,0,0.25);
+    margin: 10px 0;
+  }
+  .price_row {
+    p {
+      margin: 0;
+    }
+  }
+  .price_row_detail {
+    margin: 2px 0;
+    padding: 5px;
+    p {
+      margin: 0;
+    }
+    border-bottom: 1px solid rgba(0,0,0,0.25);
   }
 }

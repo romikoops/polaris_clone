@@ -64,7 +64,7 @@ export class AdminRouteTile extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         return(
-            <div className={`flex-30 ${styles.hub_card} layout-row layout-wrap`} onClick={this.clickEv}>
+            <div className={`flex-none ${styles.hub_card} layout-row layout-wrap`} onClick={this.clickEv}>
                 <div className={`flex-none ${styles.route_hub_bg} layout-row`} >
                     <div className={`flex-none ${styles.route_hub_top} layout-row`} style={bg1} ></div>
                     <div className={`flex-none ${styles.route_hub_bottom} layout-row`} style={bg2} ></div>

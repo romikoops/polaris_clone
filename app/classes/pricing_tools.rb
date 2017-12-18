@@ -1,17 +1,33 @@
 module PricingTools
   include MongoTools
-  def get_user_price(pathKey, user)
-    priceObj = get_item('pathPricing', '_id', pathKey)
+  def get_user_price(client, pathKey, user)
     
+    priceObj = get_item_fn(client, 'pathPricing', '_id', pathKey)
     if priceObj["#{user.id}"]
       priceKey = priceObj["#{user.id}"]
     else
       priceKey = priceObj["open"]
     end
     
-    priceHash = get_item('pricings', '_id', priceKey)
+    priceHash = get_item_fn(client, 'pricings', '_id', priceKey)
     
     return priceHash
+  end
+
+  def determine_lcl_price(client, cargo, pathKey, user)
+    pricing = get_user_price(client, pathKey, user)
+    min = pricing["wm"]["min"] * pricing["wm"]["rate"]
+    tmp_val = cargo.weight_or_volume * pricing["wm"]["rate"]
+    if tmp_val > min
+      return {value: tmp_val, currency: pricing["wm"]["currency"]}
+    else
+      return {value: min, currency: pricing["wm"]["currency"]}
+    end
+  end
+
+  def determine_fcl_price(client, container, pathKey, user)
+    pricing = get_user_price(client, pathKey, user)
+    return {value: pricing["wm"]["rate"], currency: pricing["wm"]["currency"]}
   end
 
   def get_tenant_pricings(tenant_id)
@@ -19,9 +35,18 @@ module PricingTools
     return resp.to_a
   end
 
+  def get_tenant_pricings_hash(tenant_id)
+    resp = get_items('pricings', 'tenant_id', tenant_id).to_a
+    result = {}
+    resp.each do |pr|
+      result[pr["_id"]] = pr
+    end
+    return result
+  end
+
   def get_user_pricings(user_id)
     resp = get_items('userPricings', '_id', "#{user_id}")
-    return resp.to_a
+    return resp.first
   end
 
   def get_tenant_path_pricings(tenant_id)
