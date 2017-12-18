@@ -23,7 +23,6 @@ const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.state = {
             origin: {
                 street: '',
