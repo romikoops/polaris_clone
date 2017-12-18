@@ -4,7 +4,7 @@ import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import {v4} from 'node-uuid';
 import defs from '../../styles/default_classes.scss';
-// import Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 export class RouteSelector extends Component {
     constructor(props) {
         super(props);
