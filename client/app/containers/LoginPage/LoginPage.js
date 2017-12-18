@@ -5,6 +5,7 @@ import { PropTypes } from 'prop-types';
 import { userActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
 import styles from './LoginPage.scss';
+import styled from 'styled-components';
 
 class LoginPage extends React.Component {
     constructor(props) {
@@ -42,11 +43,16 @@ class LoginPage extends React.Component {
     render() {
         const { loggingIn, theme } = this.props;
         const { username, password, submitted } = this.state;
+        const StyledInput = styled.input`
+            &:focus + hr {
+                border-color: ${theme && theme.colors ? theme.colors.primary : 'black'};
+            }
+        `;
         return (
             <form className={styles.login_form} name="form" onSubmit={this.handleSubmit}>
                 <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
                     <label htmlFor="username">Username</label>
-                    <input type="text" className={styles.form_control} name="username" value={username} placeholder="enter your username" onChange={this.handleChange} />
+                    <StyledInput type="text" className={styles.form_control} name="username" value={username} placeholder="enter your username" onChange={this.handleChange} />
                     {submitted && !username &&
                         <div className="help-block">Username is required</div>
                     }
@@ -54,7 +60,7 @@ class LoginPage extends React.Component {
                 </div>
                 <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
                     <label htmlFor="password">Password</label>
-                    <input type="password" className={styles.form_control} name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
+                    <StyledInput type="password" className={styles.form_control} name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
                     {submitted && !password &&
                         <div className="help-block">Password is required</div>
                     }

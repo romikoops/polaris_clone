@@ -43,13 +43,12 @@
 		border-radius: 4px;
 		width: 100%;
 		padding: 4px 0;
-
 		&:focus {
 			outline: none;
 			background: rgba(black, .016);
 		}
 		&:focus + hr {
-			border: 1px solid $primary;
+			border-width: 1px;
 			margin-bottom: 23px;
 		}
 	}
