@@ -4,7 +4,7 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_create :set_default_role
+  before_validation :set_default_role
   validates :tenant_id, presence: true
 
   # Basic associations
@@ -125,6 +125,5 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= Role.find_by_name('shipper')
-    byebug
   end
 end

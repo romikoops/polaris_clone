@@ -14,7 +14,7 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import { userActions } from '../../actions';
+import { authenticationActions } from '../../actions';
 
 
 import './Shop.scss';
@@ -46,11 +46,13 @@ class Shop extends Component {
     }
     componentDidMount() {
         if (!this.props.loggedIn) {
-            this.props.dispatch(userActions.register({
-                email: 'guest@email.com',
+            const randSuffix = Math.floor(Math.random() * 100000);
+            this.props.dispatch(authenticationActions.register({
+                email: `guest@email${randSuffix}.com`,
                 password: 'guestpassword',
-                password_confirmation: 'guestpassword'
-                // guest: true
+                password_confirmation: 'guestpassword',
+                tenant_id: 1,
+                guest: true
             }));
         }
     }
