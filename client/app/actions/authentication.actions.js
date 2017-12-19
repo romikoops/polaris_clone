@@ -1,9 +1,10 @@
 import { authenticationConstants } from '../constants';
 import { authenticationService } from '../services';
+import { shipmentActions } from './';
 import { alertActions } from './';
 import { history } from '../helpers';
 
-function login(username, password) {
+function login(data) {
     function request(user) {
         return { type: authenticationConstants.LOGIN_REQUEST, user };
     }
@@ -14,8 +15,8 @@ function login(username, password) {
         return { type: authenticationConstants.LOGIN_FAILURE, error };
     }
     return dispatch => {
-        dispatch(request({ username }));
-        authenticationService.login(username, password).then(
+        dispatch(request({ username: data.username }));
+        authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
                 history.push('/');
@@ -33,8 +34,7 @@ function logout() {
     return { type: authenticationConstants.LOGOUT };
 }
 
-function register(user) {
-    console.log('New Guest Acount');
+function register(user, req) {
     function request(response) {
         return { type: authenticationConstants.REGISTRATION_REQUEST, user: response };
     }
@@ -52,6 +52,8 @@ function register(user) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
+                console.log(req);
+                dispatch(shipmentActions.setShipmentRoute(req));
             },
             error => {
                 dispatch(failure(error));

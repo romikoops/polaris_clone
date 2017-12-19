@@ -5,7 +5,7 @@ module UsersDeviseTokenAuth
     #   render json: {data: @resource.errors}
     # end
     def create
-      byebug
+      # byebug
       super
     end
     def render_create_error_not_confirmed

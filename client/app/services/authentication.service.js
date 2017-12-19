@@ -1,11 +1,11 @@
 import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
 
-function login(username, password) {
+function login(data) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: username, password })
+        body: JSON.stringify({ email: data.email, password: data.password })
     };
     return fetch(BASE_URL + '/auth/sign_in', requestOptions)
         .then(response => {

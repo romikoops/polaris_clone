@@ -36,7 +36,10 @@ class LoginPage extends React.Component {
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if (username && password) {
-            dispatch(authenticationActions.login(username, password));
+            dispatch(authenticationActions.login({
+                email: username,
+                password
+            }));
         }
     }
 
