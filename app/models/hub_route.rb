@@ -4,6 +4,7 @@ class HubRoute < ApplicationRecord
   has_many :vehicles, through: :schedules
   belongs_to :starthub, class_name: "Hub"
   belongs_to :endhub, class_name: "Hub"
+
   def self.create_from_route(route, mot)
     o_hubs = route.origin_nexus.hubs_by_type(mot)
     d_hubs = route.destination_nexus.hubs_by_type(mot)
@@ -12,7 +13,6 @@ class HubRoute < ApplicationRecord
   end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length, vehicle_type_id)
-    
     if start_date.kind_of? Date
       tmp_date = start_date
     else
@@ -26,16 +26,15 @@ class HubRoute < ApplicationRecord
     end_date = tmp_date + 3.months
     tenant_id = self.route.tenant_id
     sched_key = "#{self.starthub.id}-#{self.endhub.id}"
-    
+
     
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         etd = tmp_date.midday
         eta = etd + journey_length.days
         new_sched = {mode_of_transport: mot, eta: eta, etd: etd, vehicle_id: vehicle_type_id, hub_route_key: sched_key, tenant_id: tenant_id}
-         # byebug
+
         self.schedules.find_or_create_by!(new_sched)
-        
       end
       tmp_date += 1.day
     end

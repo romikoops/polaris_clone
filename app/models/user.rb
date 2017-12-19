@@ -3,7 +3,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :trackable, :validatable,
           :confirmable, :omniauthable
+
   include DeviseTokenAuth::Concerns::User
+  
   before_create :set_default_role
   validates :tenant_id, presence: true
 

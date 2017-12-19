@@ -12,7 +12,6 @@ class Pricing < ApplicationRecord
     find_by(customer_id: user.id)
   end
 
-
   def self.lcl_price(cargo, pathKey, user)
     pricing = get_user_price(pathKey, user)
     min = pricing["wm"]["min"] * pricing["wm"]["rate"]

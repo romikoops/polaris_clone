@@ -1,13 +1,10 @@
 class Admin::PricingsController < ApplicationController
   include ExcelTools
   include PricingTools
-  
+
   before_action :require_login_and_role_is_admin
 
-  
-
   def index
-    
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
     @pricings = get_tenant_pricings_hash(current_user.tenant_id)
@@ -61,7 +58,7 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-        overwrite_dynamo_pricings(req, true)
+      overwrite_mongo_pricings(req, true)
       response_handler(true)
     else
       response_handler(false)
