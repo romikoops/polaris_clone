@@ -2,80 +2,26 @@ export const API_KEY = 'AIzaSyBEJhYgBzz9MVTOybSNSu5IMPz5eC2-J5M';
 
 export const mapStyling = [
     {
-        featureType: 'administrative',
+        featureType: 'landscape.man_made',
         elementType: 'all',
         stylers: [
             {
-                visibility: 'off'
-            }
-        ]
-    },
-    {
-        featureType: 'administrative.country',
-        elementType: 'labels.text',
-        stylers: [
-            {
-                visibility: 'on'
-            }
-        ]
-    },
-    {
-        featureType: 'administrative.locality',
-        elementType: 'labels.text',
-        stylers: [
-            {
-                visibility: 'on'
-            }
-        ]
-    },
-    {
-        featureType: 'administrative.neighborhood',
-        elementType: 'labels.text',
-        stylers: [
-            {
-                visibility: 'on'
-            }
-        ]
-    },
-    {
-        featureType: 'landscape',
-        elementType: 'all',
-        stylers: [
-            {
-                visibility: 'off'
-            }
-        ]
-    },
-    {
-        featureType: 'landscape',
-        elementType: 'geometry',
-        stylers: [
-            {
-                visibility: 'simplified'
+                color: '#faf5ed'
             },
             {
-                'saturation': -81
+                lightness: '0'
             },
             {
-                'lightness': -10
+                gamma: '1'
             }
         ]
     },
     {
-        featureType: 'landscape',
-        elementType: 'labels.text.stroke',
+        featureType: 'poi.park',
+        elementType: 'geometry.fill',
         stylers: [
             {
-                'saturation': '-60'
-            }
-        ]
-    },
-    {
-        featureType: 'poi',
-        elementType: 'all',
-        stylers: [
-            {
-                visibility: 'off'
+                color: '#bae5a6'
             }
         ]
     },
@@ -84,43 +30,52 @@ export const mapStyling = [
         elementType: 'all',
         stylers: [
             {
-                visibility: 'on'
+                weight: '1.00'
+            },
+            {
+                gamma: '1.8'
+            },
+            {
+                saturation: '0'
             }
         ]
     },
     {
         featureType: 'road',
-        elementType: 'labels',
+        elementType: 'geometry.fill',
         stylers: [
             {
-                visibility: 'off'
+                hue: '#ffb200'
             }
         ]
     },
     {
-        featureType: 'road.highway',
-        elementType: 'labels',
+        featureType: 'road.arterial',
+        elementType: 'geometry.fill',
         stylers: [
             {
-                visibility: 'on'
+                lightness: '0'
+            },
+            {
+                gamma: '1'
             }
         ]
     },
     {
-        featureType: 'transit',
+        featureType: 'transit.station.airport',
         elementType: 'all',
         stylers: [
             {
-                visibility: 'on'
-            }
-        ]
-    },
-    {
-        featureType: 'transit',
-        elementType: 'labels',
-        stylers: [
+                hue: '#b000ff'
+            },
             {
-                visibility: 'off'
+                saturation: '23'
+            },
+            {
+                lightness: '-4'
+            },
+            {
+                gamma: '0.80'
             }
         ]
     },
@@ -129,34 +84,7 @@ export const mapStyling = [
         elementType: 'all',
         stylers: [
             {
-                visibility: 'on'
-            }
-        ]
-    },
-    {
-        featureType: 'water',
-        elementType: 'geometry',
-        stylers: [
-            {
-                'color': '#12608d '
-            }
-        ]
-    },
-    {
-        featureType: 'water',
-        elementType: 'labels.text.fill',
-        stylers: [
-            {
-                visibility: 'off'
-            }
-        ]
-    },
-    {
-        featureType: 'water',
-        elementType: 'labels.text.stroke',
-        stylers: [
-            {
-                visibility: 'off'
+                color: '#a0daf2'
             }
         ]
     }
