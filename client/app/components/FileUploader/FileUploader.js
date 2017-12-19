@@ -35,7 +35,13 @@ class FileUploader extends React.Component {
         this.fileUpload(e.target.files[0]);
     }
     fileUpload(file) {
-        const {url, type} = this.props;
+        const {url, type, dispatchFn} = this.props;
+        if (!file) {
+            return '';
+        }
+        if (dispatchFn) {
+            return dispatchFn(file);
+        }
         const formData = new FormData();
         formData.append('file', file);
         formData.append('type', type);
@@ -68,7 +74,8 @@ FileUploader.propTypes = {
     url: PropTypes.string,
     text: PropTypes.string,
     type: PropTypes.string,
-    theme: PropTypes.object
+    theme: PropTypes.object,
+    dispatchFn: PropTypes.func
 };
 
 

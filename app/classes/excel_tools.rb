@@ -94,9 +94,9 @@ module ExcelTools
   end
 
   def overwrite_trucking_rates(params, user = current_user)
-    old_trucking_ids = nil
-    new_trucking_ids = []
-
+    # old_trucking_ids = nil
+    # new_trucking_ids = []
+    mongo = get_client
     defaults = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
@@ -105,7 +105,7 @@ module ExcelTools
       old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
 
       currency_row = first_sheet.row(1)
-
+      hubs = nexus.hubs
       header_row = first_sheet.row(2)
       header_row.shift
       header_row.shift
@@ -117,12 +117,15 @@ module ExcelTools
         min_max_arr = cell.split(" - ")
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
+      results = []
+      truckingTable = "#{nexus.name}_trucking" 
       (4..num_rows).each do |line|
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
         row_min_value = row_data.shift
-        ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
         row_data.each_with_index do |val, index|
           tmp = defaults[index]
           if row_min_value < weight_min_row[index]
@@ -132,30 +135,39 @@ module ExcelTools
           end
           tmp[:min_value] = min_value
           tmp[:value] = val
-          ntp.rate_table.push(tmp)
+          ntp[:rate_table].push(tmp)
 
-          ntp.save!
+          
 
-          new_trucking_ids << ntp.id
+          # new_trucking_ids << ntp.id
         end
+        # p ntp
+        results << ntp
+        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
+      end
+      # byebug
+      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+      hubs.each do |h|
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable})
       end
     end
 
-    kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
-  def overwrite_shanghai_trucking_rates(params, user = current_user)
-    old_trucking_ids = nil
-    new_trucking_ids = []
-
+  def overwrite_city_trucking_rates(params, user = current_user)
+    
+    mongo = get_client
     defaults = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
-      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
-
+      # old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
+      results = []
+      hubs = nexus.hubs
+      truckingTable = "#{nexus.name}_trucking" 
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
       [3,4,5,6].each do |i|
@@ -174,7 +186,7 @@ module ExcelTools
         new_pricing[:nexus_id] = nexus.id
         new_pricing[:rate_type] = "city"
         new_pricing[:rate_table] = []
-        ntp = TruckingPricing.new(new_pricing)
+        ntp = new_pricing
 
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3]
@@ -184,17 +196,19 @@ module ExcelTools
           tmp[:delivery_eta_in_days] = row_data[10]
           tmp[:per_cbm_rate] = row_data[7]
 
-          ntp.rate_table.push(tmp)
+          ntp[:rate_table].push(tmp)
         end
-        ntp.save!
+        results << ntp
 
-        new_trucking_ids << ntp.id
-
+      end
+      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+      hubs.each do |h|
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable})
       end
     end
 
-    kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
   def overwrite_service_charges(params, user = current_user)
@@ -227,8 +241,6 @@ module ExcelTools
         customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
         cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
       }
-      p new_charge[:hub_code]
-      p user.tenant_id
       hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
       new_charge.delete(:hub_code)
       new_charge[:hub_id] = hub.id
@@ -397,13 +409,16 @@ module ExcelTools
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
       end
-
-      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
+      # byebug
+      hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
     end
     hubs.each do |hub|
-      hub.generate_hub_code!(user.tenant_id)
+      if !hub.hub_code
+         hub.generate_hub_code!(user.tenant_id)
+      end
     end
+    return hubs
   end
 
   def load_hub_images(params)

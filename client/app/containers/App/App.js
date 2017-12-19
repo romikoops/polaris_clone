@@ -12,6 +12,7 @@ import Admin from '../Admin/Admin';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
+
 import {getSubdomain} from '../../helpers';
 class App extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class App extends Component {
         const { dispatch } = this.props;
         const subdomain = getSubdomain();
         dispatch(fetchTenantIfNeeded(subdomain));
+        // dispatch(anonymousLogin());
     }
     componentDidUpdate(prevProps) {
         if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {

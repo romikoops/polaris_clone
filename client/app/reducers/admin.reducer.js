@@ -2,6 +2,101 @@ import { adminConstants } from '../constants';
 import merge from 'lodash/merge';
 export function admin(state = {}, action) {
     switch (action.type) {
+        case adminConstants.WIZARD_HUBS_REQUEST:
+            const reqWzHubs = merge({}, state, {
+                loading: true
+            });
+            return reqWzHubs;
+        case adminConstants.WIZARD_HUBS_SUCCESS:
+            const succWzHubs = merge({}, state, {
+                wizard: {
+                    newHubs: action.payload.data},
+                loading: false
+            });
+            return succWzHubs;
+        case adminConstants.WIZARD_HUBS_FAILURE:
+            const errWzHubs = merge({}, state, {
+                error: {wizard: {
+                    newHubs: action.error }}
+            });
+            return errWzHubs;
+
+        case adminConstants.WIZARD_SERVICE_CHARGE_REQUEST:
+            const reqWzScs = merge({}, state, {
+                loading: true
+            });
+            return reqWzScs;
+        case adminConstants.WIZARD_SERVICE_CHARGE_SUCCESS:
+            const succWzScs = merge({}, state, {
+                wizard: {
+                    newScs: action.payload.data},
+                loading: false
+            });
+            return succWzScs;
+        case adminConstants.WIZARD_SERVICE_CHARGE_FAILURE:
+            const errWzScs = merge({}, state, {
+                error: {wizard: {
+                    newScs: action.error }}
+            });
+            return errWzScs;
+
+        case adminConstants.WIZARD_TRUCKING_REQUEST:
+            const reqWzTrucking = merge({}, state, {
+                loading: true
+            });
+            return reqWzTrucking;
+        case adminConstants.WIZARD_TRUCKING_SUCCESS:
+            const succWzTrucking = merge({}, state, {
+                wizard: {
+                    newTrucking: action.payload.data},
+                loading: false
+            });
+            return succWzTrucking;
+        case adminConstants.WIZARD_TRUCKING_FAILURE:
+            const errWzTrucking = merge({}, state, {
+                error: {wizard: {
+                    newTrucking: action.error }}
+            });
+            return errWzTrucking;
+
+        case adminConstants.WIZARD_PRICINGS_REQUEST:
+            const reqWzPric = merge({}, state, {
+                loading: true
+            });
+            return reqWzPric;
+        case adminConstants.WIZARD_PRICINGS_SUCCESS:
+            const succWzPric = merge({}, state, {
+                wizard: {
+                    newPricings: action.payload.data},
+                loading: false
+            });
+            return succWzPric;
+        case adminConstants.WIZARD_PRICINGS_FAILURE:
+            const errWzPric = merge({}, state, {
+                error: {wizard: {
+                    newPricings: action.error }}
+            });
+            return errWzPric;
+
+        case adminConstants.WIZARD_OPEN_PRICINGS_REQUEST:
+            const reqWzOpenPric = merge({}, state, {
+                loading: true
+            });
+            return reqWzOpenPric;
+        case adminConstants.WIZARD_OPEN_PRICINGS_SUCCESS:
+            const succWzOpenPric = merge({}, state, {
+                wizard: {
+                    newOpenPricings: action.payload.data},
+                loading: false
+            });
+            return succWzOpenPric;
+        case adminConstants.WIZARD_OPEN_PRICINGS_FAILURE:
+            const errWzOpenPric = merge({}, state, {
+                error: {wizard: {
+                    newOpenPricings: action.error }}
+            });
+            return errWzOpenPric;
+
         case adminConstants.GET_HUBS_REQUEST:
             const reqHubs = merge({}, state, {
                 loading: true

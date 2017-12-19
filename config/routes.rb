@@ -21,7 +21,8 @@ Rails.application.routes.draw do
         get "email_action"
       end
     end
-
+    post "trucking/trucking_zip_pricings", to: "trucking#overwrite_zip_trucking"
+    post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
     resources :hubs, only: [:index, :show] do
       patch "set_status"
     end
@@ -38,7 +39,7 @@ Rails.application.routes.draw do
     post "pricings/update/:id", to: "pricings#update_price"
 
     resources :open_pricings, only: [:index]
-    post "open_pricings/trucking_pricings", to: "open_pricings#overwrite_trucking", as: :open_trucking_pricing_overwrite
+    
     post "open_pricings/train_and_ocean_pricings/process_csv", to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
     resources :service_charges, only: [:index]
@@ -56,10 +57,11 @@ Rails.application.routes.draw do
     get 'dashboard', to: 'dashboard#index'
     post 'schedules/auto_generate', to: 'schedules#auto_generate_schedules'
   end
-
+  post "users/guest_login", to: "users#anon_login"
   resources :users do
     get "home", as: :home
     get "account", as: :account
+
 
     resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
 

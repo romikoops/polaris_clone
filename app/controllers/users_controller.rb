@@ -11,6 +11,16 @@ class UsersController < ApplicationController
 
     return {locations: @locations}
   end
+  def anon_login
+      byebug
+      pword = "guest_#{Time.now.to_i}#{rand(100)}"
+      u = User.new(:first_name => "Guest", :email => "guest_#{Time.now.to_i}#{rand(100)}@example.com", :password => pword, :password_confirmation => pword, anonymous: true)
+      # u.save!(:validate => false)
+      byebug
+      sign_in u
+
+      sign_in u, :bypass => true 
+  end
 
   private
 

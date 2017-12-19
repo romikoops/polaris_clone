@@ -198,26 +198,24 @@ include MongoTools
 #        end
 #      end
 #    end
-#   # seed_init_table('pricings', 'price_id')
-#   # seed_init_table('pathPricings', 'pathKey')
 #   hubs = File.open("./db/dummydata/1_hubs.xlsx")
 #   req = {"xlsx" => hubs}
 #   overwrite_hubs(req, shipper)
-#   # shipper = User.find_by_email('demo@greencarrier.com')
+ shipper = User.find_by_email('demo@greencarrier.com')
 #   service_charges = File.open("./db/dummydata/2_service_charges.xlsx")
 #   req = {"xlsx" => service_charges}
 #   overwrite_service_charges(req, shipper)
 
-  # public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_main_carriage_rates(req, false, shipper)
-   shipper = User.find_by_email('demo@greencarrier.com')
-   public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
-   req = {"xlsx" => public_pricings}
-   overwrite_dynamo_pricings(req, true, shipper)
-   public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
-   req = {"xlsx" => public_pricings}
-   overwrite_dynamo_pricings(req, false, shipper)
+#   # public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+#   # req = {"xlsx" => public_pricings}
+#   # overwrite_main_carriage_rates(req, false, shipper)
+#    # shipper = User.find_by_email('demo@greencarrier.com')
+#    public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+#    req = {"xlsx" => public_pricings}
+#    overwrite_dynamo_pricings(req, true, shipper)
+#    public_pricings = File.open("./db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+#    req = {"xlsx" => public_pricings}
+#    overwrite_dynamo_pricings(req, false, shipper)
 
 
 #     dummy_contacts.each_with_index do |c, i|
@@ -229,13 +227,13 @@ include MongoTools
 #       loc = Location.find_or_create_by(l)
 #       shipper.locations << loc
 #     end
-#   trucking = File.open("./db/dummydata/5_trucking_rates_per_city.xlsx")
-#   req = {"xlsx" => trucking}
-#   overwrite_trucking_rates(req, shipper)
+  # trucking = File.open("./db/dummydata/5_trucking_rates_per_city.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_trucking_rates(req, shipper)
 
-#   trucking = File.open("./db/dummydata/shanghai_trucking.xlsx")
-#   req = {"xlsx" => trucking}
-#   overwrite_shanghai_trucking_rates(req, shipper)
+  trucking = File.open("./db/dummydata/shanghai_trucking.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_city_trucking_rates(req, shipper)
 # end
 
 # hubs = File.open("./db/dummydata/hub_images.xlsx")

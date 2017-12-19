@@ -24,11 +24,7 @@ class Admin::OpenPricingsController < ApplicationController
     end
   end
 
-  def overwrite_trucking
-    overwrite_trucking_rates(params)
-
-    redirect_to :back
-  end
+ 
 
   private
 

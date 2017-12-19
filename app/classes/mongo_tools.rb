@@ -29,7 +29,7 @@ module MongoTools
 
   def get_items_query(table, query)
     client = init
-    byebug
+    # byebug
     resp = client[table.to_sym].find({"$and" => query})
     return resp
   end
@@ -42,9 +42,19 @@ module MongoTools
   def put_item_fn(client, table, value)
     client[table.to_sym].insert_one(value)
   end
+  def put_items_fn(client, table, valueArr)
+    resp = client[table.to_sym].insert_many(valueArr)
+  end
 
   def update_item_fn(client, table, key, updates)
     client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
+  end
+
+  def update_array_fn(client, table, key, updates)
+    updateArr = {}
+    updateArr = {data: {'$each' => updates}}
+    p updateArr
+    client[table.to_sym].update_one(key, {'$push' => updateArr}, {upsert: true})
   end
   
   def get_item_fn(client, table, keyName, key)

@@ -37,8 +37,12 @@ class Admin::HubsController < ApplicationController
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_hubs(req)
-      response_handler(true)
+      hubs = overwrite_hubs(req)
+      resp = []
+      hubs.each do |po|
+        resp << {data: po, location: po.nexus}
+      end
+      response_handler(resp)
     else
       response_handler(false)
     end
