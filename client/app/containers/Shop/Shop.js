@@ -51,6 +51,8 @@ class Shop extends Component {
                 email: `guest@email${randSuffix}.com`,
                 password: 'guestpassword',
                 password_confirmation: 'guestpassword',
+                first_name: 'Guest',
+                last_name: '',
                 tenant_id: 1,
                 guest: true
             }));

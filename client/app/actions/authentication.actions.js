@@ -34,11 +34,12 @@ function logout() {
 }
 
 function register(user) {
+    console.log('New Guest Acount');
     function request(response) {
-        return { type: authenticationConstants.REGISTRATION_REQUEST, user: response.data };
+        return { type: authenticationConstants.REGISTRATION_REQUEST, user: response };
     }
     function success(response) {
-        return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response.data };
+        return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response };
     }
     function failure(error) {
         return { type: authenticationConstants.REGISTRATION_FAILURE, error };

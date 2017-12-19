@@ -30,6 +30,7 @@ class Header extends Component {
     }
     render() {
         const { user, theme } = this.props;
+
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
         const accountLinks = [
