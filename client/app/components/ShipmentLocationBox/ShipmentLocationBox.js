@@ -41,6 +41,10 @@ export class ShipmentLocationBox extends Component {
                 hub_id: '',
                 hub_name: ''
             },
+            autoText: {
+                origin: '',
+                destination: ''
+            },
             autoTextOrigin: '',
             autoTextDest: '',
             // origin: this.props.origin,
@@ -427,13 +431,13 @@ export class ShipmentLocationBox extends Component {
             country: '',
             fullAddress: ''
         };
-
+        // debugger;
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
                 tmpAddress.number = ac.long_name;
             }
 
-            if (ac.types.includes('route')) {
+            if (ac.types.includes('route') || ac.types.includes('premise')) {
                 tmpAddress.street = ac.long_name;
             }
 
@@ -557,7 +561,7 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.origin.country}
                     placeholder="Country"
                 />
-                <div className="flex-100 layout-row layout-align-end-center">
+                <div className="flex-100 layout-row layout-align-start-center">
                     <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('origin')}>
                         <i className="fa fa-times flex-none"></i>
                         <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
@@ -570,11 +574,11 @@ export class ShipmentLocationBox extends Component {
             <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.origin ? autoHide : {}}>
                 <input
                     id="origin"
-                    name="origin-fullAddress"
+                    name="origin"
                     className={`flex-none ${styles.input}`}
                     type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.fullAddress}
+                    onChange={this.handleAuto}
+                    value={this.state.autoText.origin}
                     placeholder="Search for address"
                 />
             </div>
@@ -639,7 +643,7 @@ export class ShipmentLocationBox extends Component {
                     className={`flex-none ${styles.input}`}
                     type="string"
                     onChange={this.handleAuto}
-                    value={this.state.autoText}
+                    value={this.state.autoText.destination}
                     placeholder="Search for address"
                 />
             </div>
@@ -674,10 +678,10 @@ export class ShipmentLocationBox extends Component {
         const { theme } = this.props;
 
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+            <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start'} >
                     <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
-                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start mc">
                             <div className={'flex-100 layout-row ' + defaults.mc}>
                                 <Toggle
                                     className="flex-none"

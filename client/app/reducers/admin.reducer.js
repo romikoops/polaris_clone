@@ -295,6 +295,24 @@ export function admin(state = {}, action) {
         case adminConstants.UPDATE_PRICING_FAILURE:
             return state;
 
+        case adminConstants.UPDATE_SERVICE_CHARGES_REQUEST:
+            return state;
+        case adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS:
+            const scs = state.serviceCharges;
+            const newScs = [action.payload];
+            scs.forEach(sc => {
+                if (sc.id !== action.payload.id) {
+                    newScs.push(sc);
+                }
+            });
+            const newState = merge({}, {
+                serviceCharges: newScs,
+                loading: false
+            }, state);
+            return newState;
+        case adminConstants.UPDATE_SERVICE_CHARGES_FAILURE:
+            return state;
+
         case adminConstants.GET_CLIENT_PRICINGS_REQUEST:
             const reqClientPric = merge({}, state, {
                 loading: true

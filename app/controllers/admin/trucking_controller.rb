@@ -3,6 +3,9 @@ class Admin::TruckingController < ApplicationController
   include PricingTools
   
   before_action :require_login_and_role_is_admin
+  def index
+    response_handler(true)
+  end
    def overwrite_zip_trucking
      if params[:file]
       req = {'xlsx' => params[:file]}

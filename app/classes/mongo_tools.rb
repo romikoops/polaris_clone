@@ -28,7 +28,13 @@ module MongoTools
     return resp
   end
 
-  def get_items_query(table, query)
+  def query_table(table, key, query)
+    client = init
+    resp = client[table.to_sym].find(key, query)
+    return resp.to_a
+  end
+
+  def get_items_query(table,  query)
     client = init
     resp = client[table.to_sym].find({"$and" => query})
     return resp
@@ -49,11 +55,12 @@ module MongoTools
   def update_item_fn(client, table, key, updates)
     client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
   end
-
+ 
 
   def update_array_fn(client, table, key, updates)
     updateArr = {}
     updateArr = {data: {'$each' => updates}}
+    # updateArr = {'$each' => updates}
     p updateArr
     client[table.to_sym].update_one(key, {'$push' => updateArr}, {upsert: true})
   end

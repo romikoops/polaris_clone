@@ -21,7 +21,7 @@ export class AdminServiceCharges extends Component {
         this.setState({selectedHub: false});
     }
     render() {
-        const {theme, hubs, charges } = this.props;
+        const {theme, hubs, charges, adminTools } = this.props;
         const {selectedHub} = this.state;
         let hubList;
         if (hubs) {
@@ -34,8 +34,8 @@ export class AdminServiceCharges extends Component {
         let chargeList = '';
         if (charges && selectedHub) {
             charges.forEach((charge) =>{
-                if (charge.hub_id === selectedHub.data.id) {
-                    chargeList = <AdminChargePanel key={v4()} hub={selectedHub} theme={theme} charge={charge} backFn={this.deselectHub}/>;
+                if (charge.hub_id === selectedHub.id) {
+                    chargeList = <AdminChargePanel key={selectedHub.id} hub={selectedHub} theme={theme} charge={charge} backFn={this.deselectHub} adminTools={adminTools}/>;
                 }
             });
         }

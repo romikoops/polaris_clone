@@ -250,6 +250,16 @@ function updatePricing(id, data) {
     return fetch(BASE_URL + '/admin/pricings/update/' + id, requestOptions).then(handleResponse);
 }
 
+function updateServiceCharge(id, data) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({data})
+    };
+
+    return fetch(BASE_URL + '/admin/service_charges/' + id, requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
@@ -274,5 +284,6 @@ export const adminService = {
     wizardSCharge,
     wizardPricings,
     wizardOpenPricings,
-    wizardTrucking
+    wizardTrucking,
+    updateServiceCharge
 };

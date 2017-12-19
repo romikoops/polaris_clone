@@ -11,6 +11,7 @@ import AdminClients from '../../components/Admin/AdminClients';
 import AdminHubs from '../../components/Admin/AdminHubs';
 import AdminRoutes from '../../components/Admin/AdminRoutes';
 import AdminPricings from '../../components/Admin/AdminPricings';
+import AdminTrucking from '../../components/Admin/AdminTrucking';
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
@@ -63,7 +64,7 @@ class Admin extends Component {
         }
     }
     render() {
-        const {theme, adminData} = this.props;
+        const {theme, adminData, adminDispatch} = this.props;
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
         if (hubs) {
@@ -104,7 +105,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/service_charges"
-                                render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} />}
+                                render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} adminTools={adminDispatch}/>}
                             />
                             <Route
 
@@ -125,6 +126,11 @@ class Admin extends Component {
 
                                 path="/admin/wizard"
                                 render={props => <AdminWizard theme={theme} {...props} hubHash={hubHash} />}
+                            />
+                            <Route
+
+                                path="/admin/trucking"
+                                render={props => <AdminTrucking theme={theme} {...props} hubHash={hubHash} />}
                             />
                         </Switch>
                     </div>

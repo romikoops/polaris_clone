@@ -786,6 +786,38 @@ function getRoute(id, redirect) {
         );
     };
 }
+
+function updateServiceCharge(id, req) {
+    function request(prData) {
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.updateServiceCharge(id, req).then(
+            data => {
+                dispatch(
+                    alertActions.success('Updating Pricing successful')
+                );
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -794,6 +826,7 @@ function goTo(path) {
 export const adminActions = {
     getHubs,
     getRoutes,
+    updateServiceCharge,
     updatePricing,
     getClientPricings,
     getRoute,

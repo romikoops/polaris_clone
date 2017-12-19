@@ -118,7 +118,7 @@ module ExcelTools
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
       results = []
-      truckingTable = "#{nexus.name}_trucking" 
+      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
       (4..num_rows).each do |line|
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
@@ -148,7 +148,7 @@ module ExcelTools
       # byebug
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable})
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
       end
     end
 
@@ -167,7 +167,7 @@ module ExcelTools
       # old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
       results = []
       hubs = nexus.hubs
-      truckingTable = "#{nexus.name}_trucking" 
+      truckingTable = "#{nexus.id}_#{user.tenant_id}"  
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
       [3,4,5,6].each do |i|
@@ -203,7 +203,7 @@ module ExcelTools
       end
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable})
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "city", table: truckingTable, tenant_id: user.tenant_id})
       end
     end
 

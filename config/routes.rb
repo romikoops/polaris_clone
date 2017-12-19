@@ -21,6 +21,7 @@ Rails.application.routes.draw do
         get "email_action"
       end
     end
+    resources :trucking, only: [:index]
     post "trucking/trucking_zip_pricings", to: "trucking#overwrite_zip_trucking"
     post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
     resources :hubs, only: [:index, :show] do
@@ -42,7 +43,7 @@ Rails.application.routes.draw do
     
     post "open_pricings/train_and_ocean_pricings/process_csv", to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
-    resources :service_charges, only: [:index]
+    resources :service_charges, only: [:index, :update]
     post "service_charges/process_csv", to: "service_charges#overwrite", as: :service_charges_overwrite
 
     resources :discounts, only: [:index]

@@ -19,6 +19,8 @@ export * from './AdminPricingsClientIndex';
 export * from './AdminPricingClientView';
 export * from './AdminPricingRouteView';
 
+export * from './AdminTrucking';
+
 export * from './AdminRouteTile';
 export * from './AdminRouteView';
 export * from './AdminRoutesIndex';
@@ -37,7 +39,7 @@ export * from './AdminShipmentView';
 
 export * from './AdminScheduleGenerator';
 export * from './AdminScheduleLine';
-
+export * from './AdminChargeSection';
 export * from './AdminServiceCharges';
 export * from './AdminChargePanel';
 export * from './AdminImportChargePanel';

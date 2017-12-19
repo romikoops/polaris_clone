@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import { v4 } from 'node-uuid';
-import { serviceChargeNames } from '../../constants/admin.constants';
+import { AdminChargeSection } from './';
+// import { v4 } from 'node-uuid';
+import { RoundButton } from '../RoundButton/RoundButton';
+
 export class AdminChargePanel extends Component {
     constructor(props) {
         super(props);
         this.handleLink = this.handleLink.bind(this);
         this.state = {
-            expanded: false
+            editCharge: false,
+            tmpObj: props.charge ? props.charge : {}
         };
         this.toggleExpand = this.toggleExpand.bind(this);
+        this.toggleEdit = this.toggleEdit.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+        this.saveEdit = this.saveEdit.bind(this);
+        this.setCurrency = this.setCurrency.bind(this);
     }
     handleLink() {
         const {target, navFn} = this.props;
@@ -20,11 +27,61 @@ export class AdminChargePanel extends Component {
     toggleExpand() {
         this.props.backFn();
     }
+    toggleEdit() {
+        const { editCharge } = this.state;
+        const { charge } = this.props;
+        if (!editCharge) {
+            this.setState({
+                editCharge: true,
+                tmpObj: charge
+            });
+        } else {
+            this.setState({
+                editCharge: false,
+                tmpObj: {}
+            });
+        }
+    }
+    handleEdit(ev) {
+        const {name, value} = ev.target;
+        console.log(name, value);
+        this.setState({
+            tmpObj: {
+                ...this.state.tmpObj,
+                [name]: {
+                    ...this.state.tmpObj[name],
+                    value: parseInt(value, 10)
+                }
+            }
+        });
+        console.log(this.state.tmpObj);
+    }
+    saveEdit() {
+        const { tmpObj } = this.state;
+        const { charge, adminTools } = this.props;
+        delete tmpObj.id;
+        delete tmpObj.hub_id;
+        delete tmpObj.created_at;
+        delete tmpObj.updated_at;
+        adminTools.updateServiceCharge(charge.id, tmpObj);
+        this.toggleExpand();
+    }
+    setCurrency(val, tag) {
+        this.setState({
+            tmpObj: {
+                ...this.state.tmpObj,
+                [tag]: {
+                    ...this.state.tmpObj[tag],
+                    currency: val.value
+                }
+            }
+        });
+    }
+
     render() {
-        // const { expanded } = this.state;
-        const { theme, hub, charge} = this.props;
+        const { editCharge, tmpObj } = this.state;
+        const { theme, hub, charge } = this.props;
         if (!hub || !charge) {
-            debugger;
             return '';
         }
         // const bg1 = { backgroundImage: 'url(' + hub.location.photo + ')' };
@@ -36,46 +93,54 @@ export class AdminChargePanel extends Component {
                     })`
                     : 'black'
         };
+        const saveButton = (
+            <div className="flex-100 layout-row layout-align-end-start layout-wrap button_padding">
+                <div className="flex-none layout-row">
+                    <RoundButton
+                        theme={theme}
+                        size="small"
+                        text="Save"
+                        active
+                        handleNext={this.saveEdit}
+                        iconClass="fa-floppy-o"
+                    />
+                </div>
+            </div>);
         // const panelStyle = expanded ? {height: '150px', opacity: '1'} : {height: '0px', opacity: '0'};
         const exportArr = [];
         const importArr = [];
-        const ChargeSection = ({tag, value, currency}) => {
-            return (<div className={`flex-30 layout-row layout-align-space-between-center ${styles.charge_opt}`}>
-                            <p className="flex-none"> {serviceChargeNames[tag]}</p>
-                            <p className="flex-none"> {value} {currency}</p>
-                        </div>);
-        };
+
         Object.keys(charge).forEach(key => {
-            // debugger;
             if (charge[key] && charge[key].trade_direction && charge[key].trade_direction === 'import') {
-                // debugger;
-                importArr.push(<ChargeSection key={v4()} tag={key} value={charge[key].value} currency={charge[key].currency}/>);
+                importArr.push(<AdminChargeSection key={key} tag={key} value={charge[key].value} editCharge={editCharge} currency={charge[key].currency} editCurr={{value: tmpObj[key].currency, label: tmpObj[key].currency}} editVal={tmpObj[key].value} handleEdit={this.handleEdit} setCurrency={this.setCurrency}/>);
             } else if (charge[key] && charge[key].trade_direction && charge[key].trade_direction === 'export') {
-                // debugger;
-                exportArr.push(<ChargeSection key={v4()} tag={key} value={charge[key].value} currency={charge[key].currency}/>);
+                exportArr.push(<AdminChargeSection key={key} tag={key} value={charge[key].value} editCharge={editCharge} currency={charge[key].currency}  editCurr={{value: tmpObj[key].currency, label: tmpObj[key].currency}} editVal={tmpObj[key].value} handleEdit={this.handleEdit} setCurrency={this.setCurrency}/>);
             }
         });
-        // const expandIcon = expanded ? <i className="flex-none fa fa-chevron-up" style={gradientStyle}/> : <i className="flex-none fa fa-chevron-down" style={gradientStyle}/>;
-        // debugger;
         return(
             <div className={`flex-100 ${styles.charge_card} layout-row layout-wrap`}>
 
                 <div className={`${styles.charge_header} layout-row layout-wrap flex-100`}>
-                    <div className={`flex-none ${styles.fade}`}></div>
-                    <div className={`flex-100 ${styles.content} layout-row`} >
-                        <div className="flex-10 layout-column layout-align-center-center">
-                            <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
+
+                    <div className="flex-100 layout-row" >
+                        <div className="flex-5 layout-column layout-align-center-center">
+                            <i className="flex-none fa fa-map-marker clip" style={gradientStyle}/>
                         </div>
                         <div className="flex-80 layout-row layout-wrap layout-align-start-start">
-                            <h3 className="flex-100" style={gradientStyle}> {hub.data.name} </h3>
+                            <h3 className="flex-100 clip" style={gradientStyle}> {hub.name} </h3>
                         </div>
-                        <div className="flex-10 layout-column layout-align-start-center"  onClick={this.toggleExpand}>
-                            <p className="flex-none" style={gradientStyle}>Back</p>
+                        <div className="flex-15 layout-row layout-align-end-center"  >
+                            <div className="flex layout-row layout-align-center-center" onClick={this.toggleEdit} >
+                                <i className="flex-none fa fa-pencil clip" style={gradientStyle}/>
+                            </div>
+                            <div className="flex layout-row layout-align-center-center" onClick={this.toggleExpand}>
+                                <p className="flex-none clip" style={gradientStyle}>Back</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel}`}>
-                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
+                <div className={`flex-100 layout-row layout-wrap layout-align-space-around-start ${styles.charge_panel}`}>
+                    <div className={`flex-80 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
                         <div className="flex-100 layout-row layout-align-start-start">
                             <h3 className="flex-none">Import</h3>
                         </div>
@@ -83,7 +148,7 @@ export class AdminChargePanel extends Component {
                             {importArr}
                         </div>
                     </div>
-                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
+                    <div className={`flex-80 layout-row layout-wrap layout-align-start-start ${styles.charge_panel_xxport}`}>
                         <div className="flex-100 layout-row layout-align-start-start">
                             <h3 className="flex-none">Export</h3>
                         </div>
@@ -91,6 +156,7 @@ export class AdminChargePanel extends Component {
                             {exportArr}
                         </div>
                     </div>
+                    {editCharge ? saveButton : ''}
                 </div>
             </div>
         );

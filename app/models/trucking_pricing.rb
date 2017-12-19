@@ -1,6 +1,6 @@
 class TruckingPricing < ApplicationRecord
   has_many :shipments
-  include MongoTools
+  extend MongoTools
   # Validations
 
   # Class methods
