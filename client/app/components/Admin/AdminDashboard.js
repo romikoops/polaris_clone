@@ -16,6 +16,11 @@ export class AdminDashboard extends Component {
         adminDispatch.getShipment(shipment.id, true);
         this.setState({selectedShipment: true});
     }
+    viewHub(hub) {
+        const { adminDispatch } = this.props;
+        adminDispatch.getHub(hub.id, true);
+        this.setState({selectedHub: true});
+    }
     handleShipmentAction(id, action) {
         const { adminDispatch } = this.props;
         adminDispatch.confirmShipment(id, action);
@@ -68,7 +73,7 @@ export class AdminDashboard extends Component {
         });
         const hubList = hubs.map((hub, i) =>{
                 if (i <= 5) {
-                    return <AdminHubTile key={v4()} hub={hub} theme={theme} />;
+                    return <AdminHubTile key={v4()} hub={hub} theme={theme} handleClick={this.viewHub}/>;
                 }
                 return '';
             }

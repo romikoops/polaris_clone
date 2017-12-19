@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { AdminScheduleLine, AdminHubTile, AdminImportChargePanel, AdminExportChargePanel } from './';
+import { AdminPriceEditor } from './';
 import styles from './Admin.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import {CONTAINER_DESCRIPTIONS} from '../../constants';
+import { history } from '../../helpers';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 export class AdminPricingClientView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            scheduleLimit: 20
+            scheduleLimit: 20,
+            editorBool: false,
+            editTransport: false,
+            editPricing: false,
+            editHubRoute: false
         };
         this.editThis = this.editThis.bind(this);
+        this.closeEdit = this.closeEdit.bind(this);
+        this.backToIndex = this.backToIndex.bind(this);
     }
-    editThis(pricing) {
-        console.log(pricing);
-        debugger;
+    editThis(pricing, hubRoute, transport) {
+        this.setState({
+            editPricing: pricing, editHubRoute: hubRoute, editTransport: transport, editorBool: true
+        });
+    }
+    closeEdit() {
+        this.setState({
+            editPricing: false, editHubRoute: false, editTransport: false, editorBool: false
+        });
+    }
+    backToIndex() {
+        history.goBack();
     }
     render() {
-        const {theme, pricingData, clientPricings} = this.props;
+        const {theme, pricingData, clientPricings, adminActions} = this.props;
+        const { editorBool, editTransport, editPricing, editHubRoute } = this.state;
         console.log(this.props);
         if (!pricingData || !clientPricings) {
             return '';
@@ -80,11 +97,11 @@ export class AdminPricingClientView extends Component {
             return (
                 <div key={v4()} className={` ${styles.hub_route_price} flex-45 layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-100 layout-row layout-align-start-center">
-                         <div className="flex-90 layout-row layout-align-start-center">
+                        <div className="flex-90 layout-row layout-align-start-center">
                             <i className="fa fa-map-signs clip" style={textStyle}></i>
                             <p className="flex-none offset-5">{hubRoute.name}</p>
                         </div>
-                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing)}>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing, hubRoute, transport)}>
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
                         </div>
                     </div>
@@ -126,7 +143,6 @@ export class AdminPricingClientView extends Component {
                 <div key={v4()} className={` ${styles.route_price} flex-100 layout-row layout-wrap layout-align-start-start `}>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <h3 className="flex-none clip"> {route.name} </h3>
-                        {backButton}
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
                         {inner}
@@ -151,12 +167,14 @@ export class AdminPricingClientView extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{client.first_name} {client.last_name}</p>
+                    {backButton}
                 </div>
 
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     {routeBoxes}
 
                 </div>
+                { editorBool ? <AdminPriceEditor closeEdit={this.closeEdit} theme={theme} hubRoute={editHubRoute} transport={editTransport} userId={client.id} isNew={false} pricing={editPricing} adminTools={adminActions} /> : '' }
             </div>
         );
     }

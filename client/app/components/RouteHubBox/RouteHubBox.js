@@ -7,13 +7,20 @@ export class RouteHubBox extends Component {
         super(props);
     }
     faIcon(sched) {
-        const faKeywords = {
-            ocean: 'ship',
-            air: 'plane',
-            train: 'train'
-        };
-        const faClass = `fa fa-${faKeywords[sched.mode_of_transport]}`;
-        return <i className={faClass} />;
+        if (sched) {
+            const faKeywords = {
+                ocean: 'ship',
+                air: 'plane',
+                train: 'train'
+            };
+            const faClass = `fa fa-${faKeywords[sched[0].mode_of_transport]}`;
+            return <i className={faClass} />;
+        }
+        return [
+            <i className="fa fa-ship" />,
+            <i className="fa fa-plane" />,
+            <i className="fa fa-train" />
+        ];
     }
     dashedGradient(color1, color2) {
         return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
@@ -69,8 +76,8 @@ export class RouteHubBox extends Component {
                     >
                         <div className="flex-100 layout-row layout-align-center-start">
                             <div className="flex-75">
-                                <div className="flex-none layout-row layout-align-center-center">
-                                    {this.faIcon(route[0])}
+                                <div className="flex-none layout-row layout-align-space-between-center">
+                                    {this.faIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
                             </div>

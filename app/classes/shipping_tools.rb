@@ -1,4 +1,5 @@
 module ShippingTools
+  include PricingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
@@ -46,6 +47,7 @@ module ShippingTools
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
+
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
     routes = Route.where(tenant_id: current_user.tenant_id)

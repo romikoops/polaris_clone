@@ -29,6 +29,71 @@ function getHub(id) {
     return fetch(BASE_URL + '/admin/hubs/' + id, requestOptions).then(handleResponse);
 }
 
+function wizardHubs(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    const uploadUrl = BASE_URL + '/admin/hubs/process_csv';
+    return fetch(uploadUrl, requestOptions).then(handleResponse);
+}
+
+function wizardSCharge(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    const uploadUrl = BASE_URL + '/admin/service_charges/process_csv';
+    return fetch(uploadUrl, requestOptions).then(handleResponse);
+}
+
+function wizardPricings(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    const uploadUrl = BASE_URL + '/admin/pricings/train_and_ocean_pricings/process_csv';
+    return fetch(uploadUrl, requestOptions).then(handleResponse);
+}
+
+function wizardTrucking(type, file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    let uploadUrl;
+    if (type === 'zipcode') {
+        uploadUrl = BASE_URL + '/admin/trucking/trucking_zip_pricings';
+    } else if (type === 'city') {
+        uploadUrl = BASE_URL + '/admin/trucking/trucking_city_pricings';
+    }
+    return fetch(uploadUrl, requestOptions).then(handleResponse);
+}
+
+function wizardOpenPricings(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader()},
+        body: formData
+    };
+    const uploadUrl = BASE_URL + '/admin/open_pricings/train_and_ocean_pricings/process_csv';
+    return fetch(uploadUrl, requestOptions).then(handleResponse);
+}
+
 function getRoutes() {
     const requestOptions = {
         method: 'GET',
@@ -175,12 +240,33 @@ function autoGenSchedules(data) {
     return fetch(BASE_URL + '/admin/schedules/auto_generate', requestOptions).then(handleResponse);
 }
 
+function updatePricing(id, data) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    };
+
+    return fetch(BASE_URL + '/admin/pricings/update/' + id, requestOptions).then(handleResponse);
+}
+
+function updateServiceCharge(id, data) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({data})
+    };
+
+    return fetch(BASE_URL + '/admin/service_charges/' + id, requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
     getRoutes,
     getRoute,
     getClient,
+    updatePricing,
     getServiceCharges,
     getPricings,
     getShipment,
@@ -193,5 +279,11 @@ export const adminService = {
     getVehicleTypes,
     getShipments,
     getClients,
-    getRoutePricings
+    getRoutePricings,
+    wizardHubs,
+    wizardSCharge,
+    wizardPricings,
+    wizardOpenPricings,
+    wizardTrucking,
+    updateServiceCharge
 };

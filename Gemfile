@@ -43,7 +43,6 @@ gem 'wicked_pdf'
 
 # MongoDB gems
 gem 'mongo', '~> 2.4'
-gem 'mongoid', '~> 6.1.0'
 
 # Use roo for handling CSV and Excel files
 gem 'roo'

@@ -64,6 +64,7 @@ export class RouteSelector extends Component {
     render() {
         const { theme } = this.props;
         const routes = this.state.routes ? this.state.routes : this.props.routes;
+        console.log(routes);
         if (!routes) {
             console.log('(!) No Routes Found (!)');
             return(

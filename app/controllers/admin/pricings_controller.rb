@@ -22,9 +22,37 @@ class Admin::PricingsController < ApplicationController
   end
 
   def route
-    @pricings = get_route_pricings(params[:id])
+    @pricings = get_route_pricings_hash(params[:id].to_i)
     @route = Route.find(params[:id])
-    response_handler({userPricings: @pricings, route: @route})
+    response_handler({routePricingData: @pricings, route: @route})
+  end
+
+  def update_price
+    update = {}
+    if params[:heavy_kg]
+      update[:heavy_kg] = {
+        heavy_kg_min: params[:heavy_kg][:heavy_kg_min],
+        heavy_weight: params[:heavy_kg][:heavy_weight],
+        currency: params[:heavy_kg][:currency]
+      }
+      update[:wm] = {
+        rate: params[:wm][:rate],
+        currency: params[:wm][:currency]
+      }
+    end
+    if params[:heavy_wm]
+      update[:wm] = {
+        rate: params[:wm][:rate],
+        min: params[:wm][:min],
+        currency: params[:wm][:currency]
+      }
+      update[:heavy_wm] = {
+        heavy_wm_min: params[:heavy_wm][:heavy_wm_min],
+        heavy_weight: params[:heavy_wm][:heavy_weight],
+        currency: params[:heavy_wm][:currency]
+      }
+    end
+    resp = update_pricing(params[:id], update)
   end
 
   def overwrite_main_carriage
@@ -53,4 +81,10 @@ class Admin::PricingsController < ApplicationController
       redirect_to root_path
     end
   end
+  def update_params
+    params.require(:update).permit(
+      :wm, :heavy_wm, :heavy_kg
+    )
+  end
+
 end

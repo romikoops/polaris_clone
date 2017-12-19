@@ -71,6 +71,152 @@ function getHub(id, redirect) {
         );
     };
 }
+
+function wizardHubs(file) {
+    function request(hubData) {
+        return { type: adminConstants.WIZARD_HUBS_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.WIZARD_HUBS_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.WIZARD_HUBS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.wizardHubs(file).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Hubs successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function wizardSCharge(file) {
+    function request(hubData) {
+        return { type: adminConstants.WIZARD_SERVICE_CHARGE_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.WIZARD_SERVICE_CHARGE_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.WIZARD_SERVICE_CHARGE_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.wizardSCharge(file).then(
+            data => {
+                dispatch(
+                    alertActions.success('Wizard Service Charges successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function wizardPricings(file) {
+    function request(hubData) {
+        return { type: adminConstants.WIZARD_PRICING_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.WIZARD_PRICING_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.WIZARD_PRICING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.wizardPricings(file).then(
+            data => {
+                dispatch(
+                    alertActions.success('Wizard Pricings successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function wizardTrucking(type, file) {
+    function request(hubData) {
+        return { type: adminConstants.WIZARD_TRUCKING_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.WIZARD_TRUCKING_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.WIZARD_TRUCKING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.wizardTrucking(type, file).then(
+            data => {
+                dispatch(
+                    alertActions.success('Wizard Trucking successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function wizardOpenPricings(file) {
+    function request(hubData) {
+        return { type: adminConstants.WIZARD_OPEN_PRICING_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.WIZARD_OPEN_PRICING_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.WIZARD_OPEN_PRICING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.wizardOpenPricings(file).then(
+            data => {
+                dispatch(
+                    alertActions.success('Wizard Open Pricings successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function getServiceCharges(redirect) {
     function request(scData) {
         return { type: adminConstants.GET_SERVICE_CHARGES_REQUEST, payload: scData };
@@ -198,6 +344,37 @@ function getRoutePricings(id, redirect) {
                         push('/admin/pricings/routes/' + id)
                     );
                 }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function updatePricing(id, req) {
+    function request(prData) {
+        return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.UPDATE_PRICING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.updatePricing(id, req).then(
+            data => {
+                dispatch(
+                    alertActions.success('Updating Pricing successful')
+                );
+
                 dispatch(success(data));
             },
             error => {
@@ -609,9 +786,48 @@ function getRoute(id, redirect) {
         );
     };
 }
+
+function updateServiceCharge(id, req) {
+    function request(prData) {
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_REQUEST, payload: prData };
+    }
+    function success(prData) {
+        // debugger;
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS, payload: prData };
+    }
+    function failure(error) {
+        return { type: adminConstants.UPDATE_SERVICE_CHARGES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.updateServiceCharge(id, req).then(
+            data => {
+                dispatch(
+                    alertActions.success('Updating Pricing successful')
+                );
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function goTo(path) {
+    return dispatch => {
+        dispatch(push(path));
+    };
+}
 export const adminActions = {
     getHubs,
     getRoutes,
+    updateServiceCharge,
+    updatePricing,
     getClientPricings,
     getRoute,
     getServiceCharges,
@@ -621,11 +837,17 @@ export const adminActions = {
     getShipment,
     getSchedules,
     getDashboard,
+    goTo,
     autoGenSchedules,
     getVehicleTypes,
     getShipments,
     getClients,
     confirmShipment,
     getHub,
-    getRoutePricings
+    getRoutePricings,
+    wizardHubs,
+    wizardSCharge,
+    wizardPricings,
+    wizardOpenPricings,
+    wizardTrucking
 };

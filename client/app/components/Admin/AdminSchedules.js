@@ -132,9 +132,6 @@ export class AdminSchedules extends Component {
         const hFilterVal = parseInt(hubFilter.value, 10);
         allSchedules.forEach(sched => {
             const schedKeys = sched.hub_route_key.split('-');
-            console.log(String(hFilterVal));
-            console.log(schedKeys);
-            console.log(schedKeys[0] === String(hFilterVal));
             if (!filters.hub && filters.mot && sched.mode_of_transport === motFilter.value) {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
             }

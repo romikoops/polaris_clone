@@ -23,6 +23,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "es6-promise-promise": "^1.0.0",
     "formsy-react": "^1.1.1",
+    "fuse.js": "^3.2.0",
     "lodash": "^4.17.4",
     "moment": "^2.19.2",
     "moment-range": "^3.0.3",

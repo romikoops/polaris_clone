@@ -169,6 +169,7 @@ class Location < ApplicationRecord
       
       distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [location.latitude, location.longitude])
     end
+    
 
     lowest_distance = distances.min
     

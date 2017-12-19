@@ -1,32 +1,32 @@
-class Admin::OpenPricingsController < ApplicationController
+class Admin::TruckingController < ApplicationController
   include ExcelTools
-
+  include PricingTools
+  
   before_action :require_login_and_role_is_admin
-
   def index
-    @pricings = Pricing.where(customer_id: nil)
-    
-    @routes = []
-    @pricings.each do |p|
-      @routes.push(p.route)
-    end
-
-    response_handler({routes: @routes, pricings: @pricings})
+    response_handler(true)
   end
-
-  def overwrite_main_carriage
-    if params[:file] && params[:file] !='null'
+   def overwrite_zip_trucking
+     if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_pricings(req, false)
+      overwrite_trucking_rates(req)
       response_handler(true)
     else
       response_handler(false)
     end
   end
+   def overwrite_city_trucking
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+       overwrite_city_trucking_rates(req)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
+  end
+  
 
- 
-
-  private
+ private
 
   def require_login_and_role_is_admin
     unless user_signed_in? && current_user.role.name == "admin"
@@ -34,4 +34,5 @@ class Admin::OpenPricingsController < ApplicationController
       redirect_to root_path
     end
   end
+  
 end

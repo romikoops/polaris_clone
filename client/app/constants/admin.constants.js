@@ -47,6 +47,14 @@ export const adminConstants = {
     GET_PRICINGS_SUCCESS: 'GET_PRICINGS_SUCCESS',
     GET_PRICINGS_FAILURE: 'GET_PRICINGS_FAILURE',
 
+    UPDATE_PRICING_REQUEST: 'UPDATE_PRICING_REQUEST',
+    UPDATE_PRICING_SUCCESS: 'UPDATE_PRICING_SUCCESS',
+    UPDATE_PRICING_FAILURE: 'UPDATE_PRICING_FAILURE',
+
+    UPDATE_SERVICE_CHARGES_REQUEST: 'UPDATE_SERVICE_CHARGES_REQUEST',
+    UPDATE_SERVICE_CHARGES_SUCCESS: 'UPDATE_SERVICE_CHARGES_SUCCESS',
+    UPDATE_SERVICE_CHARGES_FAILURE: 'UPDATE_SERVICE_CHARGES_FAILURE',
+
     GET_CLIENT_PRICINGS_REQUEST: 'GET_CLIENT_PRICINGS_REQUEST',
     GET_CLIENT_PRICINGS_SUCCESS: 'GET_CLIENT_PRICINGS_SUCCESS',
     GET_CLIENT_PRICINGS_FAILURE: 'GET_CLIENT_PRICINGS_FAILURE',
@@ -73,7 +81,28 @@ export const adminConstants = {
 
     FETCH_SHIPMENT_REQUEST: 'FETCH_SHIPMENT_REQUEST',
     FETCH_SHIPMENT_SUCCESS: 'FETCH_SHIPMENT_SUCCESS',
-    FETCH_SHIPMENT_FAILURE: 'FETCH_SHIPMENT_FAILURE'
+    FETCH_SHIPMENT_FAILURE: 'FETCH_SHIPMENT_FAILURE',
+
+    WIZARD_HUBS_REQUEST: 'WIZARD_HUBS_REQUEST',
+    WIZARD_HUBS_SUCCESS: 'WIZARD_HUBS_SUCCESS',
+    WIZARD_HUBS_FAILURE: 'WIZARD_HUBS_FAILURE',
+
+    WIZARD_SERVICE_CHARGE_REQUEST: 'WIZARD_SERVICE_CHARGE_REQUEST',
+    WIZARD_SERVICE_CHARGE_SUCCESS: 'WIZARD_SERVICE_CHARGE_SUCCESS',
+    WIZARD_SERVICE_CHARGE_FAILURE: 'WIZARD_SERVICE_CHARGE_FAILURE',
+
+    WIZARD_PRICINGS_REQUEST: 'WIZARD_PRICINGS_REQUEST',
+    WIZARD_PRICINGS_SUCCESS: 'WIZARD_PRICINGS_SUCCESS',
+    WIZARD_PRICINGS_FAILURE: 'WIZARD_PRICINGS_FAILURE',
+
+    WIZARD_OPEN_PRICINGS_REQUEST: 'WIZARD_OPEN_PRICINGS_REQUEST',
+    WIZARD_OPEN_PRICINGS_SUCCESS: 'WIZARD_OPEN_PRICINGS_SUCCESS',
+    WIZARD_OPEN_PRICINGS_FAILURE: 'WIZARD_OPEN_PRICINGS_FAILURE',
+
+    WIZARD_TRUCKING_REQUEST: 'WIZARD_TRUCKING_REQUEST',
+    WIZARD_TRUCKING_SUCCESS: 'WIZARD_TRUCKING_SUCCESS',
+    WIZARD_TRUCKING_FAILURE: 'WIZARD_TRUCKING_FAILURE',
+
 };
 
 export const serviceChargeNames = {
@@ -113,6 +142,12 @@ export const pricingNames = {
     fcl_40f: 'FCL 40ft',
     fcl_40f_hq: 'FCL 40ft HQ'
 };
+export const cargoClassOptions = [
+    {value: 'lcl', label: 'LCL'},
+    {value: 'fcl_20f', label: 'FCL 20ft'},
+    {value: 'fcl_40f', label: 'FCL 40ft'},
+    {value: 'fcl_40f_hq', label: 'FCL 40ft HQ'}
+];
 
 export const moTOptions = [
     {value: 'rail_default', label: 'Rail'},
@@ -121,9 +156,16 @@ export const moTOptions = [
 ];
 
 export const cargoOptions = [
+    {value: 'any', label: 'Any'},
     {value: 'dry_goods', label: 'Dry Goods'},
     {value: 'liquid_bulk', label: 'Liquid Bulk'},
-    {value: 'gas_bulk', label: 'Gas Bulk'},
-    {value: 'any', label: 'Any'}
+    {value: 'gas_bulk', label: 'Gas Bulk'}
+];
+export const currencyOptions = [
+    {value: 'EUR', label: 'EUR'}, {value: 'AUD', label: 'AUD'}, {value: 'BGN', label: 'BGN'}, {value: 'BRL', label: 'BRL'}, {value: 'CAD', label: 'CAD'}, {value: 'CHF', label: 'CHF'}, {value: 'CNY', label: 'CNY'},
+    {value: 'CZK', label: 'CZK'}, {value: 'DKK', label: 'DKK'}, {value: 'GBP', label: 'GBP'}, {value: 'HKD', label: 'HKD'}, {value: 'HRK', label: 'HRK'}, {value: 'HUF', label: 'HUF'}, {value: 'IDR', label: 'IDR'},
+    {value: 'ILS', label: 'ILS'}, {value: 'INR', label: 'INR'}, {value: 'JPY', label: 'JPY'}, {value: 'KRW', label: 'KRW'}, {value: 'MXN', label: 'MXN'}, {value: 'MYR', label: 'MYR'}, {value: 'NOK', label: 'NOK'},
+    {value: 'NZD', label: 'NZD'}, {value: 'PHP', label: 'PHP'}, {value: 'PLN', label: 'PLN'}, {value: 'RON', label: 'RON'}, {value: 'RUB', label: 'RUB'}, {value: 'SEK', label: 'SEK'}, {value: 'SGD', label: 'SGD'},
+    {value: 'THB', label: 'THB'}, {value: 'TRY', label: 'TRY'}, {value: 'USD', label: 'USD'}, {value: 'ZAR', label: 'ZAR'},
 ];
 

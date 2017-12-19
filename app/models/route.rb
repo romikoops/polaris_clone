@@ -137,10 +137,10 @@ class Route < ApplicationRecord
     return nrt
   end
 
-  def self.for_locations(origin, destination, radius = 100)
+  def self.for_locations(origin, destination, radius = 200)
     start_city, start_city_dist = origin.closest_location_with_distance
     end_city, end_city_dist = destination.closest_location_with_distance
-    
+    # byebug
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end
@@ -148,8 +148,15 @@ class Route < ApplicationRecord
     find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
 
+  def next_departure
+    resp = Schedule.where(route_id: self.id).where("etd > ?", DateTime.now).order(:etd).limit(1).first
+    
+    return resp
+  end
+
   def self.ids_dedicated(user = nil)
     get_routes_with_dedicated_pricings(user.id, user.tenant_id)
+
   end
 
   def next_departure

@@ -3,7 +3,9 @@ class OfferCalculator
   include CurrencyTools
   include PricingTools
   include MongoTools
+  include TruckingTools
   def initialize(shipment, params, load_type, user)
+    @mongo = get_client
     @load_type = shipment.load_type
     @shipment = shipment
     @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
@@ -139,19 +141,19 @@ class OfferCalculator
       case @load_type
       when 'fcl'
         @containers.each do |container|
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, container.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.origin, container, km) #################
         end
       when 'lcl'
         @cargo_items.each do |cargo_item|
           
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item, km) #################
           #########################!!!!!!!!!!!!!!!!!!!
         end
       when "openlcl"
         
         @cargo_items.each do |cargo_item|
           
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item, km) #################
         end
       end
     else
@@ -178,16 +180,16 @@ class OfferCalculator
       case @load_type
       when 'fcl'
         @containers.each do |container|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, container.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.destination, container, km) #################
         end
       when 'lcl'
         @cargo_items.each do |cargo_item|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item, km) #################
           #########################!!!!!!!!!!!!!!!!!!!
         end
       when "openlcl"
         @cargo_items.each do |cargo_item|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item.payload_in_kg, km) #################
+          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item, km) #################
         end
       end
 
@@ -196,7 +198,7 @@ class OfferCalculator
   end
 
   def add_service_charges!
-    mongo = get_client
+    
     fees = {}
     @total_price[:cargo] = {value: 0, currency:''}
       @schedules.each do |sched|
@@ -206,12 +208,12 @@ class OfferCalculator
           fees[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}, cargo:{}}
           if @has_pre_carriage
           
-            fees[sched_key][:trucking_pre] = determine_trucking_options(@shipment.origin, sched.starthub)
+            fees[sched_key][:trucking_pre] = determine_trucking_options(@shipment.origin, sched.hub_route.starthub)
           end
           
           if @has_on_carriage
           
-            fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.endhub)
+            fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.hub_route.endhub)
           end
           
           @import_charges = sched.get_service_charges("import")
@@ -229,7 +231,7 @@ class OfferCalculator
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
-              fees[sched_key][:cargo][ci.id] = determine_lcl_price(mongo, ci, pathKey, @user)
+              fees[sched_key][:cargo][ci.id] = determine_lcl_price(@mongo, ci, pathKey, @user)
               
               @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][ci.id][:currency]
@@ -266,7 +268,7 @@ class OfferCalculator
               
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
-              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(mongo, cnt, pathKey, @user)
+              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(@mongo, cnt, pathKey, @user)
               @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|
@@ -283,23 +285,24 @@ class OfferCalculator
     def determine_trucking_options(origin, hub)
       gd_pre_carriage = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
       km = gd_pre_carriage.distance_in_km
+      byebug
       price_results = []    
       case @load_type
       when 'fcl'
         @containers.each do |container|
-          price_results << TruckingPricing.calc_final_price(origin, container.payload_in_kg, km, hub) #################
+          price_results << calc_trucking_price(origin, container, km, hub, @mongo) #################
         end
       when 'lcl'
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
+          price_results << calc_trucking_price(origin, cargo_item, km, hub, @mongo) #################
           #########################!!!!!!!!!!!!!!!!!!!
         end
       when "openlcl"
         
         @cargo_items.each do |cargo_item|
           
-          price_results << TruckingPricing.calc_final_price(origin, cargo_item.payload_in_kg, km, hub) #################
+          price_results << calc_trucking_price(origin, cargo_item, km, hub, @mongo) #################
         end
       end
       trucking_total = {value: 0, currency:""}

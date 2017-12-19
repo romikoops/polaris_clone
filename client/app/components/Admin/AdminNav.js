@@ -60,6 +60,12 @@ export class AdminNav extends Component {
                     text: 'Routes',
                     url: '/admin/routes',
                     target: 'routes'
+                },
+                {
+                    icon: 'fa-magic',
+                    text: 'Set Up',
+                    url: '/admin/wizard',
+                    target: 'wizard'
                 }
             ]
         };
