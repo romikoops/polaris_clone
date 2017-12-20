@@ -6,20 +6,31 @@ import styles from './Header.scss';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
+import { LoginPage } from '../../containers/LoginPage';
+import { Modal } from '../Modal/Modal';
+
 
 class Header extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            redirect: false
+            redirect: false,
+            showLogin: false
         };
         this.goHome = this.goHome.bind(this);
+        this.toggleShowLogin = this.toggleShowLogin.bind(this);
     }
     goHome() {
         this.setState({redirect: true});
     }
+    toggleShowLogin() {
+        this.setState({
+            showLogin: !this.state.showLogin
+        });
+    }
     render() {
         const { user, theme } = this.props;
+
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
         const accountLinks = [
@@ -39,12 +50,16 @@ class Header extends Component {
         if (this.state.redirect) {
             return <Redirect push to="/" />;
         }
-        const dropDown = user ? <NavDropdown
-                                dropDownText={dropDownText}
-                                dropDownImage={dropDownImage}
-                                linkOptions={accountLinks}
-                            /> : '';
-
+        const dropDown = (
+            <NavDropdown
+                dropDownText={dropDownText}
+                dropDownImage={dropDownImage}
+                linkOptions={accountLinks}
+            />
+        );
+        const loginPrompt = <a className={defs.pointy} onClick={this.toggleShowLogin}>Log in</a>;
+        const rightCorner = user ? dropDown : loginPrompt;
+        const loginModal = <Modal component={<LoginPage theme={theme}/>} parentToggle={this.toggleShowLogin} />;
         return (
             <div
                 className={`${
@@ -61,9 +76,10 @@ class Header extends Component {
                         />
                     </div>
                     <div className="layout-row flex-50 layout-align-end-center">
-                        {dropDown}
+                        {rightCorner}
                     </div>
                 </div>
+                { this.state.showLogin ? loginModal : '' }
             </div>
         );
     }

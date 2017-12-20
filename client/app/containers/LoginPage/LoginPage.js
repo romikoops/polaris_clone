@@ -2,16 +2,17 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { userActions } from '../../actions';
+import { authenticationActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
 import styles from './LoginPage.scss';
+// import styled from 'styled-components';
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
         // reset login status
-        this.props.dispatch(userActions.logout());
+        this.props.dispatch(authenticationActions.logout());
 
         this.state = {
             username: '',
@@ -35,13 +36,21 @@ class LoginPage extends React.Component {
         const { username, password } = this.state;
         const { dispatch } = this.props;
         if (username && password) {
-            dispatch(userActions.login(username, password));
+            dispatch(authenticationActions.login({
+                email: username,
+                password
+            }));
         }
     }
 
     render() {
         const { loggingIn, theme } = this.props;
         const { username, password, submitted } = this.state;
+        // const StyledInput = styled.input`
+        //     &:focus + hr {
+        //         border-color: ${theme && theme.colors ? theme.colors.primary : 'black'};
+        //     }
+        // `;
         return (
             <form className={styles.login_form} name="form" onSubmit={this.handleSubmit}>
                 <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>

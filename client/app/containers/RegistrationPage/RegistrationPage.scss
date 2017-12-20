@@ -1,6 +1,6 @@
 @import "../../styles/defaults";
 :local {
-	form.login_form {
+	form.registration_form {
 		width: 317px;
 
 		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
@@ -35,7 +35,6 @@
 		}
 	}
 
-
 	.form_control {
 		font-size: 14px;
 		background: transparent;
@@ -51,14 +50,5 @@
 			border-width: 1px;
 			margin-bottom: 23px;
 		}
-	}
-
-
-	.forget_password_link {
-		text-decoration: none;
-		color: inherit;
-		font-size: 13px;
-		float: right;
-		margin-top: -20px;	
 	}
 }

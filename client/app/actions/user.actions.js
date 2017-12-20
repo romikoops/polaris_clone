@@ -1,5 +1,6 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
+<<<<<<< HEAD
 import { alertActions } from './';
 
 import { push } from 'react-router-redux';
@@ -65,6 +66,8 @@ function register(user) {
         );
     };
 }
+=======
+>>>>>>> 113becd58bc8b08da7f3a5ff99d22cb9f80c035a
 
 function getAll(redirect) {
     function request() {
@@ -324,9 +327,6 @@ export const userActions = {
     getShipments,
     getShipment,
     goTo,
-    login,
-    logout,
-    register,
     getAll,
     delete: _delete
 };

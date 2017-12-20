@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  # devise_for :users, controllers: { sessions: "users_devise/sessions", registrations: "users_devise/registrations" }
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-    sessions:  'overrides/sessions'
+    sessions:  'users_devise_token_auth/sessions',
+    registrations:  'users_devise_token_auth/registrations'
   }
   root 'welcome#index'
 

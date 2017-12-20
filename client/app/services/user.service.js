@@ -46,6 +46,7 @@ function makePrimary(userId, locationId) {
     ).then(handleResponse);
 }
 
+<<<<<<< HEAD
 function getShipments(id) {
     const requestOptions = {
         method: 'GET',
@@ -132,15 +133,13 @@ function anonymousLogin() {
         });
 }
 
+=======
+>>>>>>> 113becd58bc8b08da7f3a5ff99d22cb9f80c035a
 function getStoredUser() {
     const sortedUser = JSON.parse(localStorage.getItem('user'));
     return sortedUser ? sortedUser : {};
 }
 
-function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
-}
 
 function getAll() {
     const requestOptions = {
@@ -162,17 +161,6 @@ function getById(id) {
     );
 }
 
-function register(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
-
-    return fetch(BASE_URL + '/auth/sign_up', requestOptions).then(
-        handleResponse
-    );
-}
 
 function update(user) {
     const requestOptions = {
@@ -220,10 +208,7 @@ export const userService = {
     getShipment,
     getShipments,
     anonymousLogin,
-    login,
     getHubs,
-    logout,
-    register,
     getAll,
     getById,
     update,

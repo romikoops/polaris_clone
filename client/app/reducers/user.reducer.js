@@ -1,6 +1,14 @@
 import { userConstants } from '../constants';
+<<<<<<< HEAD:client/app/reducers/users.reducer.js
 import merge from 'lodash/merge';
 export function users(state = {}, action) {
+=======
+
+const userData = JSON.parse(localStorage.getItem('user'));
+const initialState = userData ? { loggedIn: true, userData } : {};
+
+export function user(state = initialState, action) {
+>>>>>>> 113becd58bc8b08da7f3a5ff99d22cb9f80c035a:client/app/reducers/user.reducer.js
     switch (action.type) {
         case userConstants.GETALL_REQUEST:
             return {
@@ -19,25 +27,25 @@ export function users(state = {}, action) {
             return {
                 ...state,
                 items: state.items.map(
-                    user =>
-                        user.id === action.id
-                            ? { ...user, deleting: true }
-                            : user
+                    userData =>
+                        userData.id === action.id
+                            ? { ...userData, deleting: true }
+                            : userData
                 )
             };
         case userConstants.DELETE_SUCCESS:
             // remove deleted user from state
             return {
-                items: state.items.filter(user => user.id !== action.id)
+                items: state.items.filter(userData => userData.id !== action.id)
             };
         case userConstants.DELETE_FAILURE:
             // remove 'deleting:true' property and add 'deleteError:[error]' property to user
             return {
                 ...state,
-                items: state.items.map(user => {
-                    if (user.id === action.id) {
+                items: state.items.map(userData => {
+                    if (userData.id === action.id) {
                         // make copy of user without 'deleting:true' property
-                        const { deleting, ...userCopy } = user;
+                        const { deleting, ...userCopy } = userData;
                         console.log(deleting);
                         // return copy of user with 'deleteError:[error]' property
                         return { ...userCopy, deleteError: action.error };

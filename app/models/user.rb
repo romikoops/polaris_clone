@@ -1,16 +1,14 @@
 class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :trackable, :validatable,
-          :confirmable, :omniauthable
-
+          :recoverable, :rememberable, :trackable, :validatable
+          # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  
-  before_create :set_default_role
+  before_validation :set_default_role
   validates :tenant_id, presence: true
 
   # Basic associations
-  belongs_to :tenant
+  # belongs_to :tenant
   belongs_to :role
 
   has_many :user_locations, dependent: :destroy
@@ -41,7 +39,6 @@ class User < ApplicationRecord
                 sorted_by
                 search_query
               )
-
   self.per_page = 10 # default for will_paginate
 
   scope :search_query, lambda { |query|

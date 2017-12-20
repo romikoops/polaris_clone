@@ -14,6 +14,9 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { authenticationActions } from '../../actions';
+import { RegistrationPage } from '../RegistrationPage/RegistrationPage';
+import { Modal } from '../../components/Modal/Modal';
 
 import './Shop.scss';
 
@@ -33,7 +36,8 @@ class Shop extends Component {
                 shipper: {},
                 consignee: {},
                 notifyees: []
-            }
+            },
+            showRegistration: false
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
@@ -41,6 +45,22 @@ class Shop extends Component {
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
         this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
+        this.toggleShowRegistration = this.toggleShowRegistration.bind(this);
+        this.hideRegistration = this.hideRegistration.bind(this);
+    }
+    componentDidMount() {
+        if (!this.props.loggedIn) {
+            const randSuffix = Math.floor(Math.random() * 100000);
+            this.props.dispatch(authenticationActions.register({
+                email: `guest@email${randSuffix}.com`,
+                password: 'guestpassword',
+                password_confirmation: 'guestpassword',
+                first_name: 'Guest',
+                last_name: '',
+                tenant_id: 1,
+                guest: true
+            }));
+        }
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
@@ -99,6 +119,19 @@ class Shop extends Component {
         // history.push('/booking/' + data.shipment.id + '/finish_booking');
     }
 
+    toggleShowRegistration(req) {
+        this.setState({
+            showRegistration: !this.state.showRegistration,
+            req: req
+        });
+    }
+
+    hideRegistration() {
+        this.setState({
+            showRegistration: false,
+        });
+    }
+
     selectShipmentRoute(obj) {
         const { dispatch, bookingData } = this.props;
         const { schedule, total } = obj;
@@ -108,16 +141,12 @@ class Shop extends Component {
             total,
             shipment: shipmentData.shipment
         };
+        if (this.props.user.data.guest) {
+            this.toggleShowRegistration(req);
+            return;
+        }
+        console.log('Not Guest');
         dispatch(shipmentActions.setShipmentRoute(req));
-        // history.push(
-        //     '/booking/' + shipmentData.shipment.id + '/booking_details'
-        // );
-        // this.setState({
-        //     stageTracker: {
-        //         shipmentType: shipmentData.shipment.load_type,
-        //         stage: 3
-        //     }
-        // });
     }
 
     render() {
@@ -144,6 +173,14 @@ class Shop extends Component {
         } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
             shipmentId = response.stage4.shipment.id;
         }
+        const loginModal = (
+            <Modal
+                component={
+                    <RegistrationPage theme={theme} req={this.state.req}/>
+                }
+                parentToggle={this.toggleShowRegistration}
+            />
+        );
         return (
 
             <div className="layout-row flex-100 layout-wrap">
@@ -229,6 +266,7 @@ class Shop extends Component {
                                 setStage={this.selectShipmentStage}
                                 messages={error ? error.stage4 : []}
                                 tenant={tenant}
+                                hideRegistration={this.hideRegistration}
                             />
                         )}
                     />
@@ -247,6 +285,7 @@ class Shop extends Component {
                         />
                     )}
                 />
+                { this.state.showRegistration ? loginModal : '' }
                 <div className={`${styles.pre_footer_break} flex-100`}></div>
             </div>
         );

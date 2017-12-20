@@ -23,7 +23,6 @@ export class NavDropdown extends Component {
                 </a>
             );
         });
-
         return (
             <div className={`${styles.dropdown}`}>
                 <div className={`${styles.dropbtn}`}>

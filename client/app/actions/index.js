@@ -1,6 +1,7 @@
 import * as types from './types';
 export * from './alert.actions';
 export * from './user.actions';
+export * from './authentication.actions';
 export * from './shipment.actions';
 export * from './admin.actions';
 
