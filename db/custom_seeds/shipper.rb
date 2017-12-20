@@ -14,7 +14,7 @@ Tenant.all.each do |tenant|
 
     confirmed_at: DateTime.new(2017, 1, 20)
   )
-  shipper.skip_confirmation!
+  # shipper.skip_confirmation!
   shipper.save!
   # Create dummy locations for shipper
   dummy_locations = [

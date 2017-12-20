@@ -181,7 +181,7 @@ class Shop extends Component {
         const loginModal = (
             <Modal
                 component={
-                    <RegistrationPage theme={theme} req={this.state.req}/>
+                    <RegistrationPage theme={theme} req={this.state.req} user={this.props.user} tenant={this.props.tenant} />
                 }
                 parentToggle={this.toggleShowRegistration}
             />

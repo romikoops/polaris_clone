@@ -62,8 +62,41 @@ function register(user, req) {
     };
 }
 
+function update(user, req) {
+    function request(response) {
+        return { type: authenticationConstants.UPDATE_REQUEST, user: response };
+    }
+    function success(response) {
+        return { type: authenticationConstants.UPDATE_SUCCESS, user: response };
+    }
+    function failure(error) {
+        return { type: authenticationConstants.UPDATE_FAILURE, error };
+    }
+
+    return dispatch => {
+        dispatch(request(user));
+
+        authenticationService.update(user).then(
+            response => {
+                dispatch(success(response));
+                if (req) {
+                    dispatch(shipmentActions.setShipmentRoute(req));
+                    dispatch(alertActions.success('Registration successful'));
+                } else {
+                    dispatch(alertActions.success('Update successful'));
+                }
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 export const authenticationActions = {
     login,
     logout,
     register,
+    update
 };

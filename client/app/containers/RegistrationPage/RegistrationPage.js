@@ -7,14 +7,14 @@ import styles from './RegistrationPage.scss';
 class RegistrationPage extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             user: {
                 first_name: '',
                 last_name: '',
                 email: '',
                 password: '',
-                tenant_id: 1
+                tenant_id: '',
+                guest: false
             },
             submitted: false
         };
@@ -26,6 +26,7 @@ class RegistrationPage extends React.Component {
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
+        user.id = this.props.user.data.id;
         this.setState({
             user: {
                 ...user,
@@ -36,12 +37,20 @@ class RegistrationPage extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-
         this.setState({ submitted: true });
+
         const { user } = this.state;
+        if (!(user.first_name && user.last_name && user.email && user.password)) {
+            return;
+        }
+        user.tenant_id = this.props.tenant.data.id;
+
         const { dispatch, req } = this.props;
-        if (user.first_name && user.last_name && user.email && user.password) {
-            dispatch(authenticationActions.register(user, req));
+        if (req) {
+            // user.current_password = 'guestpassword';
+            dispatch(authenticationActions.update(user, req));
+        } else {
+            dispatch(authenticationActions.register(user));
         }
     }
 

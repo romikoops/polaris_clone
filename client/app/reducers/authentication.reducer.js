@@ -19,15 +19,33 @@ export function authentication(state = initialState, action) {
             return {};
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
-                loggingIn: true,
+                loggedIn: true,
+                registering: true,
                 user: action.user
             };
         case authenticationConstants.REGISTRATION_SUCCESS:
             return {
                 loggedIn: true,
+                registered: true,
                 user: action.user
             };
         case authenticationConstants.REGISTRATION_FAILURE:
+            return {};
+        case authenticationConstants.UPDATE_REQUEST:
+            return {
+                loggedIn: true,
+                registering: true,
+                updating: true,
+                user: action.user
+            };
+        case authenticationConstants.UPDATE_SUCCESS:
+            return {
+                loggedIn: true,
+                registered: true,
+                updated: true,
+                user: action.user
+            };
+        case authenticationConstants.UPDATE_FAILURE:
             return {};
         case authenticationConstants.LOGOUT:
             return {};
