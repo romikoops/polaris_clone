@@ -100,7 +100,7 @@ function updateUser(user, req) {
     };
 
     return fetch(BASE_URL + '/users/' + user.id + '/update', requestOptions)
-    .then(response => {
+        .then(response => {
             if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
@@ -108,14 +108,16 @@ function updateUser(user, req) {
         })
         .then(data => {
             // login successful if there's a jwt token in the response
+            let resp;
             if (data) {
                 if (data.data.headers) {
                     localStorage.setItem('authHeader', JSON.stringify(data.headers));
                 }
+                resp = {data: data.data.user};
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(data.data.user));
+                localStorage.setItem('user', JSON.stringify(resp));
             }
-            const resp = {data: data.data.user};
+
             return resp;
         });
 }

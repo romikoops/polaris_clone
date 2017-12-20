@@ -19,7 +19,11 @@ function login(data) {
         authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
-                history.push('/');
+                if (user.data.role_id === 1) {
+                    history.push('/admin');
+                } else if (user.data.role_id === 1) {
+                    history.push('/account');
+                }
             },
             error => {
                 dispatch(failure(error));
