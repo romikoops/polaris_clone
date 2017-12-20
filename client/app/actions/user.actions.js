@@ -186,7 +186,7 @@ function getShipments(id, redirect) {
     };
 }
 
-function getHubs() {
+function getHubs(id) {
     function request(hubData) {
         return { type: userConstants.GET_HUBS_REQUEST, payload: hubData };
     }
@@ -199,7 +199,7 @@ function getHubs() {
     return dispatch => {
         dispatch(request());
 
-        userService.getHubs().then(
+        userService.getHubs(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Hubs successful')
@@ -263,7 +263,7 @@ function getDashboard(id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        userService.getDashboard().then(
+        userService.getDashboard(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Dashboard successful')

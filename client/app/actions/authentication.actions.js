@@ -62,8 +62,36 @@ function register(user, req) {
     };
 }
 
+function updateUser(user, req) {
+    function request(response) {
+        return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response };
+    }
+    function success(response) {
+        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response };
+    }
+    function failure(error) {
+        return { type: authenticationConstants.UPDATE_USER_FAILURE, error };
+    }
+
+    return dispatch => {
+        dispatch(request(user));
+
+        authenticationService.updateUser(user, req).then(
+            response => {
+                dispatch(success(response));
+                dispatch(alertActions.success('Update successful'));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 export const authenticationActions = {
     login,
     logout,
     register,
+    updateUser
 };

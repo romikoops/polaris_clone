@@ -1,5 +1,6 @@
 import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
+import { authHeader } from '../helpers';
 
 function login(data) {
     const requestOptions = {
@@ -90,9 +91,39 @@ function register(user) {
         });
 }
 
+
+function updateUser(user, req) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({update: req})
+    };
+
+    return fetch(BASE_URL + '/users/' + user.id + '/update', requestOptions)
+    .then(response => {
+            if (!response.ok) {
+                return Promise.reject(response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // login successful if there's a jwt token in the response
+            if (data) {
+                if (data.data.headers) {
+                    localStorage.setItem('authHeader', JSON.stringify(data.headers));
+                }
+                // store user details and jwt token in local storage to keep user logged in between page refreshes
+                localStorage.setItem('user', JSON.stringify(data.data.user));
+            }
+            const resp = {data: data.data.user};
+            return resp;
+        });
+}
+
 export const authenticationService = {
     login,
     logout,
     register,
-    getStoredUser
+    getStoredUser,
+    updateUser
 };

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from '../Admin/Admin.scss';
 import { UserShipmentRow, UserLocations } from './';
 import { AdminClientTile } from '../Admin';
+import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 export class UserDashboard extends Component {
     constructor(props) {
@@ -11,7 +12,7 @@ export class UserDashboard extends Component {
         };
         this.viewShipment = this.viewShipment.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
-        this.handleShipmentAction = this.handleShipmentAction.bind(this);
+        this.startBooking = this.startBooking.bind(this);
     }
     componentDidMount() {
         this.props.setNav('dashboard');
@@ -21,11 +22,10 @@ export class UserDashboard extends Component {
         userDispatch.getShipment(user.id, shipment.id, true);
         this.setState({selectedShipment: true});
     }
-
-    handleShipmentAction(id, action) {
-        const { userDispatch } = this.props;
-        userDispatch.confirmShipment(id, action);
+    startBooking() {
+        this.props.userDispatch.goTo('/booking');
     }
+
     doNothing() {
         console.log('');
     }
@@ -46,7 +46,7 @@ export class UserDashboard extends Component {
     }
     makePrimary(locationId) {
         const { userDispatch, user } = this.props;
-        userDispatch.makePrimary(user.data.id, locationId);
+        userDispatch.makePrimary(user.id, locationId);
     }
 
     render() {
@@ -79,6 +79,12 @@ export class UserDashboard extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
+                </div>
+
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
+                        <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
+                    </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>

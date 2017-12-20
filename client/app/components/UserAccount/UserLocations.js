@@ -25,12 +25,11 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
         </div>
     </div>,
     locInfo.map(op => {
-        console.log(op);
         return (
-            <div key={op.id} className={'flex-33'}>
+            <div key={op.user.id} className={'flex-33'}>
                 <div className={`${styles['location-box']}`}>
                     <div className={`${styles.header}`}>
-                        {op.primary ? (
+                        {op.user.primary ? (
                             <h3 className={`${styles.standard}`}>Primary</h3>
                         ) : (
                             <div className="layout-row layout-wrap">
@@ -42,7 +41,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
                                         className={`${styles.makePrimary} ${
                                             defaults.pointy
                                         }`}
-                                        onClick={() => makePrimary(op.id)}
+                                        onClick={() => makePrimary(op.location.id)}
                                     >
                                         Set as primary
                                     </div>
@@ -50,8 +49,11 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
                             </div>
                         )}
                     </div>
-                    <div className={`${styles.content}`}>
-                        {op.geocoded_address}
+                    <div className={`${styles.content} layout-row layout-wrap layout-align-start-start`}>
+                        <p className="flex-100">{op.location.street_number} {op.location.street} </p>
+                        <p className="flex-100">{op.location.city} </p>
+                        <p className="flex-100">{op.location.zip_code} </p>
+                        <p className="flex-100">{op.location.country} </p>
                     </div>
                     <div className={`${styles.footer}`}>
                         <div className="layout-row layout-align-center-center">
@@ -62,7 +64,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
                             <span
                                 className={`${defaults.emulate_link}`}
                                 onClick={() =>
-                                    this.props.destroyLocation(op.id)
+                                    this.props.destroyLocation(op.user.id)
                                 }
                             >
                                 Delete
