@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Admin.scss';
+import styles from '../Admin/Admin.scss';
 import { UserShipmentRow } from './';
 import {v4} from 'node-uuid';
 export class UserDashboard extends Component {
@@ -12,14 +12,14 @@ export class UserDashboard extends Component {
         this.handleShipmentAction = this.handleShipmentAction.bind(this);
     }
     viewShipment(shipment) {
-        const { adminDispatch } = this.props;
-        adminDispatch.getShipment(shipment.id, true);
+        const { userDispatch, user } = this.props;
+        userDispatch.getShipment(user.id, shipment.id, true);
         this.setState({selectedShipment: true});
     }
-    
+
     handleShipmentAction(id, action) {
-        const { adminDispatch } = this.props;
-        adminDispatch.confirmShipment(id, action);
+        const { userDispatch } = this.props;
+        userDispatch.confirmShipment(id, action);
     }
     dynamicSort(property) {
         let sortOrder = 1;
@@ -38,19 +38,20 @@ export class UserDashboard extends Component {
     }
 
     render() {
-        const { theme, dashData, clients } = this.props;
+        const { theme, hubs, shipments, user } = this.props;
         // debugger;
-        if (!dashData) {
-            return <h1>NO DASHBOARD DATA</h1>;
+        if (!user) {
+            return <h1>NO DATA</h1>;
         }
-        const { routes, shipments, hubs, air, ocean} = dashData;
-        const clientHash = {};
-        clients.forEach(cl => {
-            clientHash[cl.id] = cl;
-        });
-        const schedArr = [];
-        const openShipments = shipments && shipments.open && shipments.open.shipments ? shipments.open.shipments.map((ship) => {
-            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
+
+        const openShipments = shipments && shipments.open ? shipments.open.map((ship) => {
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
+        }) : '';
+        const reqShipments = shipments && shipments.requested ? shipments.requested.map((ship) => {
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
+        }) : '';
+        const finishedShipments = shipments && shipments.finished ? shipments.finished.map((ship) => {
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
         }) : '';
 
         const textStyle = {
@@ -63,11 +64,23 @@ export class UserDashboard extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Requested Shipments</p>
+                        <p className={` ${styles.sec_header_text} flex-none`}  > Open Shipments</p>
                     </div>
                     { openShipments }
                 </div>
-                
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                        <p className={` ${styles.sec_header_text} flex-none`}  > Requested Shipments</p>
+                    </div>
+                    { reqShipments }
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                        <p className={` ${styles.sec_header_text} flex-none`}  > Finished Shipments</p>
+                    </div>
+                    { finishedShipments }
+                </div>
+
             </div>
         );
     }

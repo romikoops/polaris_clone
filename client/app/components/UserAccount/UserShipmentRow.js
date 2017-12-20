@@ -83,7 +83,7 @@ export class UserShipmentRow extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const pendingRow = (
-            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
                 <div className={`flex-40 layout-row layout-align-center-center ${styles.pending}`} >
                     <i className="flex-none fa fa-clock-o"></i>
                     <p className="flex-none">Pending</p>
@@ -91,7 +91,7 @@ export class UserShipmentRow extends Component {
             </div>
         );
         const acceptedRow = (
-            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
                 <div className={`flex-75 layout-row layout-align-center-center ${styles.grant}`} >
                     <i className="flex-none fa fa-check"></i>
                     <p className="flex-none">Accepted</p>
@@ -99,7 +99,7 @@ export class UserShipmentRow extends Component {
             </div>
         );
         const deniedRow = (
-            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
                 <div className={`flex-75 layout-row layout-align-center-center ${styles.deny}`} >
                     <i className="flex-none fa fa-trash"></i>
                     <p className="flex-none">Denied</p>
@@ -108,31 +108,37 @@ export class UserShipmentRow extends Component {
         );
         let statusRow;
         switch(shipment.status) {
-          case 'pending':
-            statusRow = pendingRow;
-            break;
-          case 'denied':
-            statusRow = deniedRow;
-            break;
-          case 'accepted':
-            statusRow = acceptedRow;
-            break;
-          default:
-            statusRow = '';
-            break;
+            case 'pending':
+                statusRow = pendingRow;
+                break;
+            case 'requested':
+                statusRow = pendingRow;
+                break;
+            case 'denied':
+                statusRow = deniedRow;
+                break;
+            case 'accepted':
+                statusRow = acceptedRow;
+                break;
+            case 'in_progress':
+                statusRow = acceptedRow;
+                break;
+            default:
+                statusRow = '';
+                break;
         }
         return (
             <div
                 key={v4()}
                 className={`flex-100 layout-row ${styles.route_result}`}
-
+                onClick={this.selectShipment}
             >
                 <div className="flex-100 layout-row layout-wrap">
                     <div
                         className={`flex-40 layout-row layout-align-start-center ${
                             styles.top_row
                         }`}
-                        onClick={this.selectShipment}
+
                     >
                         <div className={`${styles.header_hub}`}>
                             <i
@@ -182,7 +188,7 @@ export class UserShipmentRow extends Component {
                             </div>
                             { statusRow }
                         </div>
-                        <div className="flex-100 layout-row layout-align-start-center"  onClick={this.selectShipment}>
+                        <div className="flex-100 layout-row layout-align-start-center" >
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                                 <div className="flex-100 layout-row">
                                     <h4

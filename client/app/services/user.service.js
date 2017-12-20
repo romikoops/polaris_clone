@@ -46,6 +46,15 @@ function makePrimary(userId, locationId) {
     ).then(handleResponse);
 }
 
+function getShipments(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + id + '/shipments', requestOptions).then(handleResponse);
+}
+
 function login(username, password) {
     const requestOptions = {
         method: 'POST',
@@ -187,12 +196,32 @@ function _delete(id) {
     return fetch('/users/' + id, requestOptions).then(handleResponse);
 }
 
+function getHubs(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + id + '/hubs', requestOptions).then(handleResponse);
+}
+function getShipment(userId, id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + userId + '/shipments/' + id, requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
     makePrimary,
+    getShipment,
+    getShipments,
     anonymousLogin,
     login,
+    getHubs,
     logout,
     register,
     getAll,

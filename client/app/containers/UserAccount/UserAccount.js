@@ -9,6 +9,9 @@ import { bindActionCreators } from 'redux';
 import { Switch, Route } from 'react-router-dom';
 import {
     UserProfile,
+    UserDashboard,
+    UserShipments,
+    UserShipmentView,
     UserLocations,
     UserEmails,
     UserPassword,
@@ -32,6 +35,15 @@ export class UserAccount extends Component {
         this.destroyLocation = this.destroyLocation.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
         this.setUrl = this.setUrl.bind(this);
+    }
+    componentDidUpdate() {
+        const {userDispatch, users, user} = this.props;
+        if (user && user.data && users && !users.loading && !users.hubs) {
+            userDispatch.getHubs(user.data.id);
+        }
+        if (user && user.data && users && !users.loading && !users.shipments) {
+            userDispatch.getShipments(user.data.id);
+        }
     }
 
     toggleActiveClass(key) {
@@ -86,45 +98,24 @@ export class UserAccount extends Component {
     }
 
     render() {
-        const { user, theme, users } = this.props;
+        const { user, theme, users, userDispatch } = this.props;
+        const { shipments, hubs, shipment } = users;
         const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
+            { key: 'dashboard', text: 'Dashboard' },
             { key: 'profile', text: 'Profile' },
             { key: 'locations', text: 'Locations' },
             { key: 'emails', text: 'Emails' },
             { key: 'password', text: 'Password' },
-            { key: 'billing', text: 'Billing' }
+            { key: 'billing', text: 'Billing' },
+            { key: 'shipments', text: 'Shipments' }
         ];
-
-        // let viewComponent;
-        // switch(this.state.activeLink) {
-        //     case 'profile':
-        //         viewComponent = (
-        //             <UserLocations
-        //                 theme={theme}
-        //                 locations={users.items}
-        //                 getLocations={this.getLocations}
-        //                 destroyLocation={this.destroyLocation}
-        //                 makePrimary={this.makePrimary}
-        //             />
-        //         );
-        //         break;
-        //     case 'locations':
-        //         viewComponent = <UserLocations />;
-        //         break;
-        //     case 'emails':
-        //         viewComponent = <UserEmails />;
-        //         break;
-        //     case 'password':
-        //         viewComponent = <UserPassword />;
-        //         break;
-        //     case 'billing':
-        //         viewComponent = <UserBilling />;
-        //         break;
-        //     default:
-        //         viewComponent = <UserProfile />;
-        //         break;
-        // }
+        const hubHash = {};
+        if (hubs) {
+            hubs.forEach((hub) => {
+                hubHash[hub.data.id] = hub;
+            });
+        }
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center">
@@ -147,11 +138,11 @@ export class UserAccount extends Component {
 
                     <div className="layout-row flex-80">
                         <Switch className="flex">
-                            {/* <Route
-
-                                path="/account/dashboard"
-                                render={props => <UserDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
-                            /> */}
+                            <Route
+                                exact
+                                path="/account"
+                                render={props => <UserDashboard theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} shipments={shipments}/>}
+                            />
                             <Route
 
                                 path="/account/locations"
@@ -161,7 +152,7 @@ export class UserAccount extends Component {
                                     makePrimary={this.makePrimary} />}
                             />
                             <Route
-                                exact
+
                                 path="/account/profile"
                                 render={props => <UserProfile theme={theme} {...props} locations={users.items} />}
                             />
@@ -178,6 +169,16 @@ export class UserAccount extends Component {
 
                                 path="/account/billing"
                                 render={props => <UserBilling theme={theme} user={user} {...props} />}
+                            />
+                            <Route
+                                exact
+                                path="/account/shipments"
+                                render={props => <UserShipments theme={theme} hubs={hubHash} user={user} {...props} shipments={shipments} userDispatch={userDispatch}/>}
+                            />
+                            <Route
+
+                                path="/account/shipments/:id"
+                                render={props => <UserShipmentView theme={theme} hubs={hubs} user={user} {...props} shipmentData={shipment} userDispatch={userDispatch}/>}
                             />
 
                         </Switch>

@@ -1,5 +1,5 @@
 import { userConstants } from '../constants';
-
+import merge from 'lodash/merge';
 export function users(state = {}, action) {
     switch (action.type) {
         case userConstants.GETALL_REQUEST:
@@ -87,6 +87,55 @@ export function users(state = {}, action) {
             return {
                 error: action.error
             };
+         case userConstants.GET_SHIPMENTS_REQUEST:
+            const reqShips = merge({}, state, {
+                loading: true
+            });
+            return reqShips;
+        case userConstants.GET_SHIPMENTS_SUCCESS:
+            const succShips = merge({}, state, {
+                shipments: action.payload.data,
+                loading: false
+            });
+            return succShips;
+        case userConstants.GET_SHIPMENTS_FAILURE:
+            const errShips = merge({}, state, {
+                error: { shipments: action.error }
+            });
+            return errShips;
+        case userConstants.GET_HUBS_REQUEST:
+            const reqHubs = merge({}, state, {
+                loading: true
+            });
+            return reqHubs;
+        case userConstants.GET_HUBS_SUCCESS:
+            const succHubs = merge({}, state, {
+                hubs: action.payload.data,
+                loading: false
+            });
+            return succHubs;
+        case userConstants.GET_HUBS_FAILURE:
+            const errHubs = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errHubs;
+
+        case userConstants.USER_GET_SHIPMENT_REQUEST:
+            const reqShip = merge({}, state, {
+                loading: true
+            });
+            return reqShip;
+        case userConstants.USER_GET_SHIPMENT_SUCCESS:
+            const succShip = merge({}, state, {
+                shipment: action.payload.data,
+                loading: false
+            });
+            return succShip;
+        case userConstants.USER_GET_SHIPMENT_FAILURE:
+            const errShip = merge({}, state, {
+                error: { shipments: action.error }
+            });
+            return errShip;
         default:
             return state;
     }

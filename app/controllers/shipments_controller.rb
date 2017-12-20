@@ -9,6 +9,12 @@ class ShipmentsController < ApplicationController
     @requested_shipments = @shipper.shipments.where(status: "requested")
     @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
+    resp = {
+      requested: @requested_shipments,
+      open: @open_shipments,
+      finished: @finished_shipments
+    }
+    response_handler(resp)
   end
 
   def new 
@@ -39,7 +45,20 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    resp = Shipment.find(params[:shipment_id])
+    @shipment = Shipment.find(params[:id])
+    @cargo_items = @shipment.cargo_items
+    @containers = @shipment.containers
+    @shipment_contacts = @shipment.shipment_contacts
+    @contacts = []
+    @shipment_contacts.each do |sc|
+      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    end
+    @schedules = []
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
+    end
+    @documents = @shipment.documents
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
   end
 

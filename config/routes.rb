@@ -62,7 +62,7 @@ Rails.application.routes.draw do
   resources :users do
     get "home", as: :home
     get "account", as: :account
-
+    get "hubs", as: :hubs
 
     resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
 

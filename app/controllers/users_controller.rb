@@ -22,6 +22,12 @@ class UsersController < ApplicationController
       sign_in u, :bypass => true 
   end
 
+  def hubs
+    @hubs = Hub.prepped(current_user)
+    
+    response_handler(@hubs)
+  end
+
   private
 
   def require_login_and_correct_id

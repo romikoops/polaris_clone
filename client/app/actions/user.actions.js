@@ -246,11 +246,84 @@ function getShipments(id, redirect) {
     };
 }
 
+function getHubs() {
+    function request(hubData) {
+        return { type: userConstants.GET_HUBS_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: userConstants.GET_HUBS_SUCCESS, payload: hubData };
+    }
+    function failure(error) {
+        return { type: userConstants.GET_HUBS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getHubs().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Hubs successful')
+                );
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getShipment(userId, id, redirect) {
+    function request(shipmentData) {
+        return { type: userConstants.USER_GET_SHIPMENT_REQUEST, payload: shipmentData };
+    }
+    function success(shipmentData) {
+        return { type: userConstants.USER_GET_SHIPMENT_SUCCESS, payload: shipmentData };
+    }
+    function failure(error) {
+        return { type: userConstants.USER_GET_SHIPMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getShipment(userId, id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Shipment successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/account/shipments/' + id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function goTo(path) {
+    return dispatch => {
+        dispatch(push(path));
+    };
+}
+
 export const userActions = {
     getLocations,
     destroyLocation,
     makePrimary,
+    getHubs,
     getShipments,
+    getShipment,
+    goTo,
     login,
     logout,
     register,

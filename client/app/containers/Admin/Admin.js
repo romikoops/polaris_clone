@@ -22,8 +22,8 @@ class Admin extends Component {
     }
     componentDidMount() {
         const {adminDispatch} = this.props;
-       adminDispatch.getClients(false);
-       adminDispatch.getHubs(false);
+        adminDispatch.getClients(false);
+        adminDispatch.getHubs(false);
     }
     setUrl(target) {
         console.log(target);
