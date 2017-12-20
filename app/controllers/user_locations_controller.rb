@@ -1,5 +1,6 @@
 class UserLocationsController < ApplicationController
-  # before_action :require_login_and_correct_id
+  skip_before_action :require_authentication!
+  skip_before_action :require_non_guest_authentication!
 
   def index
     user = User.find(params[:user_id])
@@ -32,14 +33,5 @@ class UserLocationsController < ApplicationController
     ul.destroy
     
     response_handler({id: params[:id]})
-  end
-
-  private
-
-  def require_login_and_correct_id
-    unless user_signed_in? && current_user.id.to_s == params[:user_id]
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
   end
 end
