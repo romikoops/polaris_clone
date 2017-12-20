@@ -123,9 +123,19 @@ function getShipment(userId, id) {
     return fetch(BASE_URL + '/users/' + userId + '/shipments/' + id, requestOptions).then(handleResponse);
 }
 
+function getDashboard(userId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + userId + '/home', requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
+    getDashboard,
     makePrimary,
     getShipment,
     getShipments,

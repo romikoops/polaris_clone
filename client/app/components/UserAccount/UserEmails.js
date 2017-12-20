@@ -6,6 +6,9 @@ export class UserEmails extends Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount() {
+        this.props.setNav('emails');
+    }
 
     render() {
         return <h1>UserEmails</h1>;

@@ -9,6 +9,9 @@ export class UserShipments extends Component {
         super(props);
         this.viewShipment = this.viewShipment.bind(this);
     }
+    componentDidMount() {
+        this.props.setNav('shipments');
+    }
      viewShipment(shipment) {
         const { userDispatch, user } = this.props;
         userDispatch.getShipment(user.data.id, shipment.id, true);

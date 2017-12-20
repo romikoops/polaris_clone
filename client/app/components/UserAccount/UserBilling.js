@@ -6,6 +6,9 @@ export class UserBilling extends Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount() {
+        this.props.setNav('billing');
+    }
 
     render() {
         return <h1>UserBilling</h1>;

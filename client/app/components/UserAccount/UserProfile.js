@@ -6,6 +6,9 @@ export class UserProfile extends Component {
     constructor(props) {
         super(props);
     }
+    componentDidMount() {
+        this.props.setNav('profile');
+    }
 
     render() {
         return <h1>UserProfile</h1>;

@@ -35,17 +35,20 @@ export class UserAccount extends Component {
         this.destroyLocation = this.destroyLocation.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
         this.setUrl = this.setUrl.bind(this);
+        this.setNavLink = this.setNavLink.bind(this);
     }
     componentDidUpdate() {
         const {userDispatch, users, user} = this.props;
+        if (user && user.data && users && !users.loading && !users.dashboard) {
+            userDispatch.getDashboard(user.data.id);
+        }
         if (user && user.data && users && !users.loading && !users.hubs) {
             userDispatch.getHubs(user.data.id);
         }
-        if (user && user.data && users && !users.loading && !users.shipments) {
-            userDispatch.getShipments(user.data.id);
-        }
     }
-
+    setNavLink(target) {
+        this.setState({activeLink: target});
+    }
     toggleActiveClass(key) {
         this.setState({ activeLink: key });
     }
@@ -99,7 +102,10 @@ export class UserAccount extends Component {
 
     render() {
         const { user, theme, users, userDispatch } = this.props;
-        const { shipments, hubs, shipment } = users;
+        if (!users) {
+            return '';
+        }
+        const { shipments, hubs, shipment, dashboard } = users;
         const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
             { key: 'dashboard', text: 'Dashboard' },
@@ -141,12 +147,12 @@ export class UserAccount extends Component {
                             <Route
                                 exact
                                 path="/account"
-                                render={props => <UserDashboard theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} shipments={shipments}/>}
+                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} dashboard={dashboard}/>}
                             />
                             <Route
 
                                 path="/account/locations"
-                                render={props => <UserLocations theme={theme} {...props} locations={users.items}
+                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} locations={users.items}
                                     getLocations={this.getLocations}
                                     destroyLocation={this.destroyLocation}
                                     makePrimary={this.makePrimary} />}
@@ -154,31 +160,31 @@ export class UserAccount extends Component {
                             <Route
 
                                 path="/account/profile"
-                                render={props => <UserProfile theme={theme} {...props} locations={users.items} />}
+                                render={props => <UserProfile setNav={this.setNavLink} theme={theme} {...props} locations={users.items} />}
                             />
                             <Route
                                 path="/account/emails"
-                                render={props => <UserEmails theme={theme} user={user} {...props} />}
+                                render={props => <UserEmails setNav={this.setNavLink} theme={theme} user={user} {...props} />}
                             />
                             <Route
 
                                 path="/account/password"
-                                render={props => <UserPassword theme={theme} user={user} {...props} />}
+                                render={props => <UserPassword setNav={this.setNavLink} theme={theme} user={user} {...props} />}
                             />
                             <Route
 
                                 path="/account/billing"
-                                render={props => <UserBilling theme={theme} user={user} {...props} />}
+                                render={props => <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />}
                             />
                             <Route
                                 exact
                                 path="/account/shipments"
-                                render={props => <UserShipments theme={theme} hubs={hubHash} user={user} {...props} shipments={shipments} userDispatch={userDispatch}/>}
+                                render={props => <UserShipments setNav={this.setNavLink} theme={theme} hubs={hubHash} user={user} {...props} shipments={shipments} userDispatch={userDispatch}/>}
                             />
                             <Route
 
                                 path="/account/shipments/:id"
-                                render={props => <UserShipmentView theme={theme} hubs={hubs} user={user} {...props} shipmentData={shipment} userDispatch={userDispatch}/>}
+                                render={props => <UserShipmentView setNav={this.setNavLink} theme={theme} hubs={hubs} user={user} {...props} shipmentData={shipment} userDispatch={userDispatch}/>}
                             />
 
                         </Switch>

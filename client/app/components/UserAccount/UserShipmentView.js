@@ -11,7 +11,9 @@ export class UserShipmentView extends Component {
     constructor(props) {
         super(props);
     }
-
+    componentDidMount() {
+        this.props.setNav('shipments');
+    }
 
     render() {
         console.log(this.props);

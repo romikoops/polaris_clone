@@ -1,8 +1,26 @@
 class UsersController < ApplicationController
   # before_action :require_login_and_correct_id
-
+  include PricingTools
   def home
-    @pricings = current_user.pricings
+    @shipper = current_user
+
+    @requested_shipments = @shipper.shipments.where(status: "requested")
+    @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
+    @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
+    @pricings = get_user_pricings(@shipper.id)
+    @contacts = @shipper.contacts
+    @locations = @shipper.locations
+    resp = {
+      shipments:{
+        requested: @requested_shipments,
+        open: @open_shipments,
+        finished: @finished_shipments
+      },
+      pricings: @pricings,
+      contacts: @contacts,
+      locations: @locations
+    }
+    response_handler(resp)
   end
 
   def account
@@ -11,16 +29,7 @@ class UsersController < ApplicationController
 
     return {locations: @locations}
   end
-  def anon_login
-      byebug
-      pword = "guest_#{Time.now.to_i}#{rand(100)}"
-      u = User.new(:first_name => "Guest", :email => "guest_#{Time.now.to_i}#{rand(100)}@example.com", :password => pword, :password_confirmation => pword, anonymous: true)
-      # u.save!(:validate => false)
-      byebug
-      sign_in u
-
-      sign_in u, :bypass => true 
-  end
+  
 
   def hubs
     @hubs = Hub.prepped(current_user)

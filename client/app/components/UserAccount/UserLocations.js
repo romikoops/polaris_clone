@@ -25,6 +25,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
         </div>
     </div>,
     locInfo.map(op => {
+        console.log(op);
         return (
             <div key={op.id} className={'flex-33'}>
                 <div className={`${styles['location-box']}`}>
@@ -77,17 +78,17 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
 export class UserLocations extends Component {
     constructor(props) {
         super(props);
-
+        console.log(props);
         this.state = {
-            // activeView: 'allLocations'
-            activeView: 'editLocation'
+            activeView: 'allLocations'
+            // activeView: 'editLocation'
         };
 
         this.toggleActiveView = this.toggleActiveView.bind(this);
     }
 
     componentDidMount() {
-        this.props.getLocations();
+        this.props.setNav('locations');
     }
 
     toggleActiveView(key) {
