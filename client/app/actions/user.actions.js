@@ -1,8 +1,8 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
 import { alertActions } from './';
-import { history } from '../helpers';
 
+import { push } from 'react-router-redux';
 function login(username, password) {
     function request(user) {
         return { type: userConstants.LOGIN_REQUEST, user };
@@ -18,7 +18,11 @@ function login(username, password) {
         userService.login(username, password).then(
             user => {
                 dispatch(success(user));
-                history.push('/');
+                if (user.data.role === 1) {
+                    dispatch(push('/admin'));
+                } else {
+                    dispatch(push('/'));
+                }
             },
             error => {
                 dispatch(failure(error));
@@ -62,7 +66,7 @@ function register(user) {
     };
 }
 
-function getAll() {
+function getAll(redirect) {
     function request() {
         return { type: userConstants.GETALL_REQUEST };
     }
@@ -79,7 +83,14 @@ function getAll() {
         userService
             .getAll()
             .then(
-                response => dispatch(success(response)),
+                response => {
+                    if (redirect) {
+                        dispatch(
+                            push('/account/users')
+                        );
+                    }
+                    dispatch(success(response));
+                },
                 error => dispatch(failure(error))
             );
     };
@@ -110,7 +121,7 @@ function _delete(id) {
     };
 }
 
-function getLocations(user) {
+function getLocations(user, redirect) {
     function request() {
         return { type: userConstants.GETLOCATIONS_REQUEST };
     }
@@ -127,13 +138,20 @@ function getLocations(user) {
         userService
             .getLocations(user)
             .then(
-                response => dispatch(success(response)),
+                response => {
+                    if (redirect) {
+                        dispatch(
+                            push('/account/locations')
+                        );
+                    }
+                    dispatch(success(response));
+                },
                 error => dispatch(failure(error))
             );
     };
 }
 
-function destroyLocation(userId, locationId) {
+function destroyLocation(userId, locationId, redirect) {
     function request() {
         return { type: userConstants.DESTROYLOCATION_REQUEST };
     }
@@ -150,13 +168,20 @@ function destroyLocation(userId, locationId) {
         userService
             .destroyLocation(userId, locationId)
             .then(
-                response => dispatch(success(response)),
+                response => {
+                    if (redirect) {
+                        dispatch(
+                            push('/account/locations')
+                        );
+                    }
+                    dispatch(success(response));
+                },
                 error => dispatch(failure(error))
             );
     };
 }
 
-function makePrimary(userId, locationId) {
+function makePrimary(userId, locationId, redirect) {
     function request() {
         return { type: userConstants.MAKEPRIMARY_REQUEST };
     }
@@ -173,9 +198,51 @@ function makePrimary(userId, locationId) {
         userService
             .makePrimary(userId, locationId)
             .then(
-                response => dispatch(success(response)),
+                response =>{
+                    if (redirect) {
+                        dispatch(
+                            push('/account/shipments')
+                        );
+                    }
+                    dispatch(success(response));
+                },
                 error => dispatch(failure(error))
             );
+    };
+}
+
+function getShipments(id, redirect) {
+    function request(shipmentData) {
+        return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData };
+    }
+    function success(shipmentData) {
+        return { type: userConstants.GET_SHIPMENTS_SUCCESS, payload: shipmentData };
+    }
+    function failure(error) {
+        return { type: userConstants.GET_SHIPMENTS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getShipments(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Shipments successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/account/shipments')
+                    );
+                }
+
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
     };
 }
 
@@ -183,6 +250,7 @@ export const userActions = {
     getLocations,
     destroyLocation,
     makePrimary,
+    getShipments,
     login,
     logout,
     register,

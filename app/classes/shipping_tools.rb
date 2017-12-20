@@ -141,8 +141,8 @@ module ShippingTools
 
   end
 
-  def create_document(file, shipment, type) 
-    Document.new_upload(file, shipment, type)
+  def create_document(file, shipment, type, user) 
+    Document.new_upload(file, shipment, type, user)
   end
 
   def update_shipment(session, params)
@@ -151,27 +151,28 @@ module ShippingTools
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
     shipper_data = shipment_data[:shipper]
-    contacts_data = shipment_data[:contacts_attributes]
+    contacts_data = shipment_data[:notifyees]
 
     @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hsCode], total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
 
     contact_location = Location.create_and_geocode(street_number: consignee_data[:number], street: consignee_data[:street], zip_code: consignee_data[:zipCode], city: consignee_data[:city], country: consignee_data[:country])
     contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:firstName], last_name: consignee_data[:lastName], email: consignee_data[:email], phone: consignee_data[:phone])
+    
 
 
-    @consignee = @shipment.shipment_contacts.create(contact_id: contact.id, contact_type: 'consignee')
+    @consignee = @shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
     notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
-      contacts_data.values.each do |value|
+      contacts_data.each do |value|
 
         notifyee = current_user.contacts.find_or_create_by(first_name: value[:firstName],
                                                            last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
         notifyee_contacts << notifyee
-        @notifyees << @shipment.shipment_contacts.create(contact_id: notifyee.id, contact_type: 'notifyee')
+        @notifyees << @shipment.shipment_contacts.find_or_create_by(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
 
@@ -180,9 +181,10 @@ module ShippingTools
     else 
       new_loc = Location.find(shipment_data[:shipper][:location_id])
     end
-    shipper_contact = current_user.contacts.find_or_create_by(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
-    @shipper = @shipment.shipment_contacts.create(contact_id: shipper_contact.id, contact_type: 'shipper')
+    shipper_contact = current_user.contacts.find_or_create_by!(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
+    @shipper = @shipment.shipment_contacts.find_or_create_by(contact_id: shipper_contact.id, contact_type: 'shipper')
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
+
 
     if new_user_loc.id == 1
       new_user_loc.update_attributes!(primary: true)
@@ -194,6 +196,7 @@ module ShippingTools
       @shipment.total_price = @shipment.generated_fees[key]["total"]
 
     end
+    
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []

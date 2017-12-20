@@ -2,7 +2,7 @@ class Document < ApplicationRecord
   belongs_to :shipment
   belongs_to :user
 
-  def self.new_upload(file, shipment, type)
+  def self.new_upload(file, shipment, type, user)
     
     s3 = Aws::S3::Client.new(
       access_key_id: ENV['AWS_KEY'],
@@ -16,7 +16,7 @@ class Document < ApplicationRecord
     awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + obj_key
     
     s3.put_object(bucket: 'imcdev', key: obj_key, body: file.tempfile, content_type: file.content_type, acl: 'private')
-    shipment.documents.create(url: obj_key, shipment_id: shipment['uuid'], text: file_name, doc_type: type)
+    shipment.documents.create!(url: obj_key, shipment_id: shipment['uuid'], text: file_name, doc_type: type, user_id: user.id)
   end
   def self.get_file_url(id)
     @doc = Document.find(id)

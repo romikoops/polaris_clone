@@ -30,7 +30,7 @@ class ShipmentsController < ApplicationController
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
     if params[:file]
-      create_document(params[:file], @shipment, params[:type])
+      create_document(params[:file], @shipment, params[:type], current_user)
     end
   end
 

@@ -136,8 +136,6 @@ class OfferCalculator
       @shipment.pre_carriage_distance_km = km
       car_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds
       @truck_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds_for_trucks(car_seconds_pre_carriage)
-
-      
       case @load_type
       when 'fcl'
         @containers.each do |container|

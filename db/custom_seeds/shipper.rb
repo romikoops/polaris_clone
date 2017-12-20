@@ -16,7 +16,6 @@ Tenant.all.each do |tenant|
   )
   shipper.skip_confirmation!
   shipper.save!
-
   # Create dummy locations for shipper
   dummy_locations = [
     {
@@ -56,6 +55,13 @@ Tenant.all.each do |tenant|
 
   # Create dummy contacts for shipper address book
   dummy_contacts = [
+    {
+      company_name: "Example Shipper Company",
+      first_name: "John",
+      last_name: "Smith",
+      phone: "123456789",
+      email: "demo@#{tenant.subdomain}.com",
+    },
     {
       company_name: "Another Example Shipper Company",
       first_name: "Jane",

@@ -4,7 +4,7 @@ class Contact < ApplicationRecord
   belongs_to :location
 
   # Validations
-  validates :company_name, presence: true, length: { in: 2..50 }
+  # validates :company_name, presence: true, length: { in: 2..50 }
   validates :first_name,   presence: true, length: { in: 2..50 }
   validates :last_name,    presence: true, length: { in: 2..50 }
   validates :phone,        presence: true, length: { in: 4..22 }

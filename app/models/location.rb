@@ -40,7 +40,7 @@ class Location < ApplicationRecord
     loc = Location.find_or_create_by(
     latitude: location_params[:latitude],
     longitude: location_params[:longitude],
-    geocoded_address: location_params[:geocoded_address],
+    # geocoded_address: location_params[:geocoded_address],
     street: location_params[:street],
     street_address: location_params[:street_address],
     street_number: location_params[:street_number],
