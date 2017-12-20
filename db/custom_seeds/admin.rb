@@ -14,6 +14,6 @@ Tenant.all.each do |tenant|
 
     confirmed_at: DateTime.new(2017, 1, 20)
   )
-  admin.skip_confirmation!
+  # admin.skip_confirmation!
   admin.save!
 end
