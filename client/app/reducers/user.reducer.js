@@ -6,7 +6,6 @@ const userData = JSON.parse(localStorage.getItem('user'));
 const initialState = userData ? { loggedIn: true, userData } : {};
 
 export function user(state = initialState, action) {
-
     switch (action.type) {
         case userConstants.GETALL_REQUEST:
             return {
