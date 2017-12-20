@@ -181,7 +181,7 @@ module ShippingTools
     else 
       new_loc = Location.find(shipment_data[:shipper][:location_id])
     end
-    shipper_contact = current_user.contacts.find_or_create_by!(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
+    shipper_contact = current_user.contacts.find_or_create_by!(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone], alias: true)
     @shipper = @shipment.shipment_contacts.find_or_create_by(contact_id: shipper_contact.id, contact_type: 'shipper')
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
 

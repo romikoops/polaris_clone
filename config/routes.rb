@@ -63,6 +63,8 @@ Rails.application.routes.draw do
     get "home", as: :home
     get "account", as: :account
     get "hubs", as: :hubs
+    put "update", as: :update
+
 
     resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
 

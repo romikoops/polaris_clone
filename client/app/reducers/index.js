@@ -3,7 +3,7 @@ import { combineReducers } from 'redux';
 // import { authStateReducer } from 'redux-auth';
 import * as types from '../actions/types';
 import { authentication } from './authentication.reducer';
-import { user } from './user.reducer';
+import { users } from './user.reducer';
 import { registration } from './registration.reducer';
 import { shipment } from './shipment.reducer';
 import { alert } from './alert.reducer';
@@ -22,7 +22,7 @@ const filter = (state = '', action) => {
 const rootReducer = combineReducers({
     authentication,
     registration,
-    user,
+    users,
     alert,
     filter,
     bookingData: shipment,

@@ -186,7 +186,7 @@ function getShipments(id, redirect) {
     };
 }
 
-function getHubs() {
+function getHubs(id) {
     function request(hubData) {
         return { type: userConstants.GET_HUBS_REQUEST, payload: hubData };
     }
@@ -199,7 +199,7 @@ function getHubs() {
     return dispatch => {
         dispatch(request());
 
-        userService.getHubs().then(
+        userService.getHubs(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Hubs successful')
@@ -250,6 +250,40 @@ function getShipment(userId, id, redirect) {
     };
 }
 
+function getDashboard(id, redirect) {
+    function request(dashData) {
+        return { type: userConstants.GET_DASHBOARD_REQUEST, payload: dashData };
+    }
+    function success(dashData) {
+        return { type: userConstants.GET_DASHBOARD_SUCCESS, payload: dashData };
+    }
+    function failure(error) {
+        return { type: userConstants.GET_DASHBOARD_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getDashboard(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Dashboard successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/account')
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -260,6 +294,7 @@ export const userActions = {
     getLocations,
     destroyLocation,
     makePrimary,
+    getDashboard,
     getHubs,
     getShipments,
     getShipment,

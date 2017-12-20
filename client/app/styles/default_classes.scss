@@ -69,4 +69,45 @@
   .button_padding {
     padding: 60px 5px;
   }
+  .sec_title_text {
+    margin: 0;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 30px;
+
+  }
+  .sec_title_text_normal {
+    margin: 0;
+    font-size: 30px;
+
+  }
+  .sec_header_text {
+    margin: 0;
+    font-size: 22px;
+  }
+  .sec_subheader {
+    height: 50px;
+  }
+  .sec_subheader_text {
+    margin: 0;
+    font-size: 18px;
+  }
+    .input_box {
+    // height: 38px;
+    // // width: 170px;
+    // border: 1px solid #F2F2F2;
+    // border-radius: 3px;
+    // background-color: #F9F9F9;
+    // box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .input_box input {
+    height: 38px;
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    &:focus {
+      outline: none;
+    }
+  }
 }

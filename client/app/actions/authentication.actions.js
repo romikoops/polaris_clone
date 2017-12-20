@@ -19,7 +19,11 @@ function login(data) {
         authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
-                history.push('/');
+                if (user.data.role_id === 1) {
+                    history.push('/admin');
+                } else if (user.data.role_id === 1) {
+                    history.push('/account');
+                }
             },
             error => {
                 dispatch(failure(error));
@@ -62,25 +66,25 @@ function register(user, req) {
     };
 }
 
-function update(user, req) {
+function updateUser(user, req, shipmentReq) {
     function request(response) {
-        return { type: authenticationConstants.UPDATE_REQUEST, user: response };
+        return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response };
     }
     function success(response) {
-        return { type: authenticationConstants.UPDATE_SUCCESS, user: response };
+        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response };
     }
     function failure(error) {
-        return { type: authenticationConstants.UPDATE_FAILURE, error };
+        return { type: authenticationConstants.UPDATE_USER_FAILURE, error };
     }
 
     return dispatch => {
         dispatch(request(user));
 
-        authenticationService.update(user).then(
+        authenticationService.updateUser(user, req).then(
             response => {
                 dispatch(success(response));
-                if (req) {
-                    dispatch(shipmentActions.setShipmentRoute(req));
+                if (shipmentReq) {
+                    dispatch(shipmentActions.setShipmentRoute(shipmentReq));
                     dispatch(alertActions.success('Registration successful'));
                 } else {
                     dispatch(alertActions.success('Update successful'));
@@ -98,5 +102,5 @@ export const authenticationActions = {
     login,
     logout,
     register,
-    update
+    updateUser
 };

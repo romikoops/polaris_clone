@@ -88,10 +88,10 @@ function update(user) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        body: JSON.stringify({update: user})
     };
 
-    return fetch(BASE_URL + '/users/' + user.id, requestOptions).then(
+    return fetch(BASE_URL + '/users/' + user.id + '/update', requestOptions).then(
         handleResponse
     );
 }
@@ -123,9 +123,19 @@ function getShipment(userId, id) {
     return fetch(BASE_URL + '/users/' + userId + '/shipments/' + id, requestOptions).then(handleResponse);
 }
 
+function getDashboard(userId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + userId + '/home', requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
+    getDashboard,
     makePrimary,
     getShipment,
     getShipments,

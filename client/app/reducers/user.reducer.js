@@ -5,7 +5,7 @@ import merge from 'lodash/merge';
 const userData = JSON.parse(localStorage.getItem('user'));
 const initialState = userData ? { loggedIn: true, userData } : {};
 
-export function user(state = initialState, action) {
+export function users(state = initialState, action) {
     switch (action.type) {
         case userConstants.GETALL_REQUEST:
             return {
@@ -48,7 +48,7 @@ export function user(state = initialState, action) {
                         return { ...userCopy, deleteError: action.error };
                     }
 
-                    return user;
+                    return userData;
                 })
             };
         case userConstants.GETLOCATIONS_REQUEST:
@@ -92,7 +92,7 @@ export function user(state = initialState, action) {
             return {
                 error: action.error
             };
-         case userConstants.GET_SHIPMENTS_REQUEST:
+        case userConstants.GET_SHIPMENTS_REQUEST:
             const reqShips = merge({}, state, {
                 loading: true
             });
@@ -141,6 +141,24 @@ export function user(state = initialState, action) {
                 error: { shipments: action.error }
             });
             return errShip;
+
+        case userConstants.GET_DASHBOARD_REQUEST:
+            const reqDash = merge({}, state, {
+                loading: true
+            });
+            return reqDash;
+        case userConstants.GET_DASHBOARD_SUCCESS:
+            const succDash = merge({}, state, {
+                dashboard: action.payload.data,
+                loading: false
+            });
+            return succDash;
+        case userConstants.GET_DASHBOARD_FAILURE:
+            const errDash = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDash;
+
         default:
             return state;
     }

@@ -17,6 +17,20 @@ export function authentication(state = initialState, action) {
             };
         case authenticationConstants.LOGIN_FAILURE:
             return {};
+
+        case authenticationConstants.UPDATE_USER_REQUEST:
+            return {
+                loading: true,
+                user: action.user
+            };
+        case authenticationConstants.UPDATE_USER_SUCCESS:
+            return {
+                loading: true,
+                user: action.user
+            };
+        case authenticationConstants.UPDATE_USER_FAILURE:
+            return {};
+
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
                 loggedIn: true,
@@ -30,22 +44,6 @@ export function authentication(state = initialState, action) {
                 user: action.user
             };
         case authenticationConstants.REGISTRATION_FAILURE:
-            return {};
-        case authenticationConstants.UPDATE_REQUEST:
-            return {
-                loggedIn: true,
-                registering: true,
-                updating: true,
-                user: action.user
-            };
-        case authenticationConstants.UPDATE_SUCCESS:
-            return {
-                loggedIn: true,
-                registered: true,
-                updated: true,
-                user: action.user
-            };
-        case authenticationConstants.UPDATE_FAILURE:
             return {};
         case authenticationConstants.LOGOUT:
             return {};
