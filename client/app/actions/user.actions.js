@@ -1,73 +1,10 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
-<<<<<<< HEAD
+
 import { alertActions } from './';
 
 import { push } from 'react-router-redux';
-function login(username, password) {
-    function request(user) {
-        return { type: userConstants.LOGIN_REQUEST, user };
-    }
-    function success(user) {
-        return { type: userConstants.LOGIN_SUCCESS, user };
-    }
-    function failure(error) {
-        return { type: userConstants.LOGIN_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request({ username }));
-        userService.login(username, password).then(
-            user => {
-                dispatch(success(user));
-                if (user.data.role === 1) {
-                    dispatch(push('/admin'));
-                } else {
-                    dispatch(push('/'));
-                }
-            },
-            error => {
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
-}
 
-
-function logout() {
-    userService.logout();
-    return { type: userConstants.LOGOUT };
-}
-
-function register(user) {
-    function request(userData) {
-        return { type: userConstants.REGISTER_REQUEST, userData };
-    }
-    function success(userResp) {
-        return { type: userConstants.REGISTER_SUCCESS, userResp };
-    }
-    function failure(error) {
-        return { type: userConstants.REGISTER_FAILURE, error };
-    }
-
-    return dispatch => {
-        dispatch(request(user));
-
-        userService.register(user).then(
-            userData => {
-                dispatch(success(userData));
-                history.push('/login');
-                dispatch(alertActions.success('Registration successful'));
-            },
-            error => {
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
-}
-=======
->>>>>>> 113becd58bc8b08da7f3a5ff99d22cb9f80c035a
 
 function getAll(redirect) {
     function request() {
