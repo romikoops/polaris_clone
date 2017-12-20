@@ -16,7 +16,6 @@ export class ChooseShipment extends Component {
                 handleClick: () => this.props.selectShipment(shipmentType.code)
             }
         ));
-        console.log(cards[0].handleClick);
         this.state = { cards: cards};
     }
     render() {

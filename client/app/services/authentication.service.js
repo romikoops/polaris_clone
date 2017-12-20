@@ -110,7 +110,7 @@ function updateUser(user, req) {
             let resp;
             if (data) {
                 if (data.data.headers) {
-                    localStorage.setItem('authHeader', JSON.stringify(data.headers));
+                    localStorage.setItem('authHeader', JSON.stringify(data.data.headers));
                 }
                 resp = {data: data.data.user};
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
