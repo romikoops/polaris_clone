@@ -106,6 +106,21 @@ export class UserShipmentRow extends Component {
                 </div>
             </div>
         );
+        let statusRow;
+        switch(shipment.status) {
+          case 'pending':
+            statusRow = pendingRow;
+            break;
+          case 'denied':
+            statusRow = deniedRow;
+            break;
+          case 'accepted':
+            statusRow = acceptedRow;
+            break;
+          default:
+            statusRow = '';
+            break;
+        }
         return (
             <div
                 key={v4()}
@@ -165,7 +180,7 @@ export class UserShipmentRow extends Component {
                                 <p className="flex-none"> {client.first_name} </p>
                                 <p className="flex-none"> {client.last_name} </p>
                             </div>
-                            { shipment.status === 'requested' ? btnsRow : ''}
+                            { statusRow }
                         </div>
                         <div className="flex-100 layout-row layout-align-start-center"  onClick={this.selectShipment}>
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
