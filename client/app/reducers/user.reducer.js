@@ -1,14 +1,12 @@
 import { userConstants } from '../constants';
-<<<<<<< HEAD:client/app/reducers/users.reducer.js
+
 import merge from 'lodash/merge';
-export function users(state = {}, action) {
-=======
 
 const userData = JSON.parse(localStorage.getItem('user'));
 const initialState = userData ? { loggedIn: true, userData } : {};
 
 export function user(state = initialState, action) {
->>>>>>> 113becd58bc8b08da7f3a5ff99d22cb9f80c035a:client/app/reducers/user.reducer.js
+
     switch (action.type) {
         case userConstants.GETALL_REQUEST:
             return {
