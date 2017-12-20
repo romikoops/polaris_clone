@@ -17,6 +17,7 @@ import { withRouter } from 'react-router-dom';
 import { authenticationActions } from '../../actions';
 import { RegistrationPage } from '../RegistrationPage/RegistrationPage';
 import { Modal } from '../../components/Modal/Modal';
+import { moment } from '../../constants';
 
 import './Shop.scss';
 
@@ -50,14 +51,18 @@ class Shop extends Component {
     }
     componentDidMount() {
         if (!this.props.loggedIn) {
-            const randSuffix = Math.floor(Math.random() * 100000);
+            const unixTimeStamp = moment().unix().toString();
+            const randNum = Math.floor(Math.random() * 100).toString();
+            const randSuffix = unixTimeStamp + randNum;
+            const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`;
+
             this.props.dispatch(authenticationActions.register({
-                email: `guest@email${randSuffix}.com`,
+                email: email,
                 password: 'guestpassword',
                 password_confirmation: 'guestpassword',
                 first_name: 'Guest',
                 last_name: '',
-                tenant_id: 1,
+                tenant_id: this.props.tenant.data.id,
                 guest: true
             }));
         }
