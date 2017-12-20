@@ -79,10 +79,11 @@ export class BookingDetails extends Component {
         this.calcInsurance = this.calcInsurance.bind(this);
     }
     componentDidMount() {
-        const {prevRequest, setStage} = this.props;
+        const {prevRequest, setStage, hideRegistration} = this.props;
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
+        hideRegistration();
         setStage(4);
         window.scrollTo(0, 0);
     }

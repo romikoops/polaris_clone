@@ -46,6 +46,7 @@ class Shop extends Component {
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
         this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
         this.toggleShowRegistration = this.toggleShowRegistration.bind(this);
+        this.hideRegistration = this.hideRegistration.bind(this);
     }
     componentDidMount() {
         if (!this.props.loggedIn) {
@@ -122,6 +123,12 @@ class Shop extends Component {
         this.setState({
             showRegistration: !this.state.showRegistration,
             req: req
+        });
+    }
+
+    hideRegistration() {
+        this.setState({
+            showRegistration: false,
         });
     }
 
@@ -259,6 +266,7 @@ class Shop extends Component {
                                 setStage={this.selectShipmentStage}
                                 messages={error ? error.stage4 : []}
                                 tenant={tenant}
+                                hideRegistration={this.hideRegistration}
                             />
                         )}
                     />

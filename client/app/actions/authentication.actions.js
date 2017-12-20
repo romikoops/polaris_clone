@@ -52,8 +52,7 @@ function register(user, req) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
-                console.log(req);
-                dispatch(shipmentActions.setShipmentRoute(req));
+                if (req) dispatch(shipmentActions.setShipmentRoute(req));
             },
             error => {
                 dispatch(failure(error));
