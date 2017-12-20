@@ -26,7 +26,6 @@ class RegistrationPage extends React.Component {
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
-        user.id = this.props.user.data.id;
         this.setState({
             user: {
                 ...user,
@@ -48,7 +47,7 @@ class RegistrationPage extends React.Component {
         const { dispatch, req } = this.props;
         if (req) {
             // user.current_password = 'guestpassword';
-            dispatch(authenticationActions.update(user, req));
+            dispatch(authenticationActions.updateUser(this.props.user.data, user, req));
         } else {
             dispatch(authenticationActions.register(user));
         }
