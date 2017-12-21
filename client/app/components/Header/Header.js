@@ -6,7 +6,7 @@ import styles from './Header.scss';
 import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
-import { LoginPage } from '../../containers/LoginPage';
+import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
 
 
@@ -29,7 +29,7 @@ class Header extends Component {
         });
     }
     render() {
-        const { user, theme } = this.props;
+        const { user, theme, tenant } = this.props;
 
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
@@ -59,7 +59,17 @@ class Header extends Component {
         );
         const loginPrompt = <a className={defs.pointy} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user ? dropDown : loginPrompt;
-        const loginModal = <Modal component={<LoginPage theme={theme}/>} parentToggle={this.toggleShowLogin} />;
+        const loginModal = (
+            <Modal
+                component={
+                    <LoginRegistrationWrapper
+                        LoginPageProps={{theme}}
+                        RegistrationPageProps={{theme, tenant}}
+                    />
+                }
+                parentToggle={this.toggleShowLogin}
+            />
+        );
         return (
             <div
                 className={`${

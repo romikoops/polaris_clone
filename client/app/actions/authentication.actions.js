@@ -56,7 +56,14 @@ function register(user, redirect) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
-                if (redirect) dispatch(push('/booking'));
+
+                if (redirect) {
+                    dispatch(push('/booking'));
+                } else if (response.data.role_id === 1) {
+                    dispatch(push('/admin'));
+                } else if (response.data.role_id === 2) {
+                    dispatch(push('/account'));
+                }
             },
             error => {
                 dispatch(failure(error));

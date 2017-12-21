@@ -46,7 +46,6 @@ class RegistrationPage extends React.Component {
 
         const { dispatch, req } = this.props;
         if (req) {
-            // user.current_password = 'guestpassword';
             dispatch(authenticationActions.updateUser(this.props.user.data, user, req));
         } else {
             dispatch(authenticationActions.register(user));
