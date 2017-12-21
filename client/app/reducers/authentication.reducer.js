@@ -33,7 +33,7 @@ export function authentication(state = initialState, action) {
 
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
-                loggedIn: true,
+                loading: true,
                 registering: true,
                 user: action.user
             };

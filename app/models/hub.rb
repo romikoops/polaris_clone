@@ -8,7 +8,16 @@ class Hub < ApplicationRecord
   
   has_one :service_charge
 
-
+  def self.create_from_nexus(nexus, mot, tenant_id)
+    hub_type_name = {
+      "ocean" => "Port",
+      "air" => "Airport",
+      "rail" => "Railway Station"
+    }
+    
+    hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: tenant_id, hub_type: mot, latitude: nexus.latitude, longitude: nexus.longitude, name: "#{nexus.name} #{hub_type_name[mot]}", photo: nexus.photo)
+    return hub
+  end
 
   def generate_hub_code!(tenant_id)
     existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type, tenant_id: tenant_id)

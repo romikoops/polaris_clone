@@ -47,24 +47,7 @@ class Shop extends Component {
         this.toggleShowRegistration = this.toggleShowRegistration.bind(this);
         this.hideRegistration = this.hideRegistration.bind(this);
     }
-    componentDidMount() {
-        // if (!this.props.loggedIn) {
-        //     const unixTimeStamp = moment().unix().toString();
-        //     const randNum = Math.floor(Math.random() * 100).toString();
-        //     const randSuffix = unixTimeStamp + randNum;
-        //     const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`;
 
-        //     this.props.dispatch(authenticationActions.register({
-        //         email: email,
-        //         password: 'guestpassword',
-        //         password_confirmation: 'guestpassword',
-        //         first_name: 'Guest',
-        //         last_name: '',
-        //         tenant_id: this.props.tenant.data.id,
-        //         guest: true
-        //     }));
-        // }
-    }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
     //     const {response} = bookingData;
@@ -159,13 +142,13 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, isLoading, tenant } = this.props;
+        const { bookingData, theme, match, loading, tenant } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-        const loading =  isLoading ? <Loading theme={theme} /> : '';
+        const loadingScreen = loading ? <Loading theme={theme} /> : '';
         let shipmentId = '';
         if (response && response.stage1 && !response.stage2) {
             shipmentId = response.stage1.shipment.id;
@@ -187,7 +170,7 @@ class Shop extends Component {
         return (
 
             <div className="layout-row flex-100 layout-wrap">
-                {loading}
+                {loadingScreen}
                 <Header theme={this.props.theme} />
                 <ShopStageView
                     shopType={this.state.shopType}
@@ -316,14 +299,14 @@ Shop.defaultProps = {
 function mapStateToProps(state) {
     const { users, authentication, tenant, bookingData } = state;
     const { user, loggedIn } = authentication;
-    const isLoading = bookingData.loading;
+    const loading = bookingData.loading;
     return {
         user,
         users,
         tenant,
         loggedIn,
         bookingData,
-        isLoading
+        loading
     };
 }
 

@@ -2,7 +2,7 @@ import { authenticationConstants } from '../constants';
 import { authenticationService } from '../services';
 import { shipmentActions } from './';
 import { alertActions } from './';
-import { history } from '../helpers';
+import { push } from 'react-router-redux';
 
 function login(data) {
     function request(user) {
@@ -20,9 +20,9 @@ function login(data) {
             user => {
                 dispatch(success(user));
                 if (user.data.role_id === 1) {
-                    history.push('/admin');
-                } else if (user.data.role_id === 1) {
-                    history.push('/account');
+                    dispatch(push('/admin'));
+                } else if (user.data.role_id === 2) {
+                    dispatch(push('/account'));
                 }
             },
             error => {

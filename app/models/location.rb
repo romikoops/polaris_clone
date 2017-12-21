@@ -19,6 +19,7 @@ class Location < ApplicationRecord
       obj.geocoded_address = geo.address
       obj.country = geo.country
       obj.city = geo.city
+      
       obj.zip_code = geo.postal_code
     end
   end
@@ -30,6 +31,16 @@ class Location < ApplicationRecord
     else
       Location.where(id: hub_id).first
     end
+  end
+  def self.from_short_name(input)
+    newname = input.split(" ,")[0]
+    location = Location.new(geocoded_address: input)
+    location.geocode
+    location.reverse_geocode
+    location.name = newname
+    
+    location.save!
+    return location
   end
 
   def self.create_and_geocode(location_params)
