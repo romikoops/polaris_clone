@@ -38,7 +38,7 @@ function logout() {
     return { type: authenticationConstants.LOGOUT };
 }
 
-function register(user, req) {
+function register(user, redirect) {
     function request(response) {
         return { type: authenticationConstants.REGISTRATION_REQUEST, user: response };
     }
@@ -56,7 +56,7 @@ function register(user, req) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
-                if (req) dispatch(shipmentActions.setShipmentRoute(req));
+                if (redirect) dispatch(push('/booking'));
             },
             error => {
                 dispatch(failure(error));

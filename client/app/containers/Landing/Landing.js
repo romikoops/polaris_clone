@@ -13,18 +13,16 @@ import { withRouter } from 'react-router-dom';
 class Landing extends Component {
     constructor(props) {
         super(props);
-        this.tenant = this.props.tenant;
-        console.log(this.props);
     }
 
     render() {
-        const {loggedIn, theme, user} = this.props;
+        const { loggedIn, theme, user, tenant, dispatch } = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >
-                { loggedIn ? <LandingTopAuthed className="flex-100" user={user} theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> }
+                { loggedIn ? <LandingTopAuthed className="flex-100" user={user} theme={theme} /> : <LandingTop className="flex-100" theme={theme} loggedIn={loggedIn} tenant={tenant} dispatch={dispatch}/> }
                 <div className={styles.service_box + ' layout-row flex-100 layout-wrap'}>
                     <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>
                         <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
@@ -101,11 +99,12 @@ Landing.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { users, authentication } = state;
+    const { users, authentication, tenant } = state;
     const { user, loggedIn } = authentication;
     return {
         user,
         users,
+        tenant,
         loggedIn
     };
 }

@@ -14,10 +14,8 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import { authenticationActions } from '../../actions';
 import { RegistrationPage } from '../RegistrationPage/RegistrationPage';
 import { Modal } from '../../components/Modal/Modal';
-import { moment } from '../../constants';
 
 import './Shop.scss';
 
@@ -50,22 +48,22 @@ class Shop extends Component {
         this.hideRegistration = this.hideRegistration.bind(this);
     }
     componentDidMount() {
-        if (!this.props.loggedIn) {
-            const unixTimeStamp = moment().unix().toString();
-            const randNum = Math.floor(Math.random() * 100).toString();
-            const randSuffix = unixTimeStamp + randNum;
-            const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`;
+        // if (!this.props.loggedIn) {
+        //     const unixTimeStamp = moment().unix().toString();
+        //     const randNum = Math.floor(Math.random() * 100).toString();
+        //     const randSuffix = unixTimeStamp + randNum;
+        //     const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`;
 
-            this.props.dispatch(authenticationActions.register({
-                email: email,
-                password: 'guestpassword',
-                password_confirmation: 'guestpassword',
-                first_name: 'Guest',
-                last_name: '',
-                tenant_id: this.props.tenant.data.id,
-                guest: true
-            }));
-        }
+        //     this.props.dispatch(authenticationActions.register({
+        //         email: email,
+        //         password: 'guestpassword',
+        //         password_confirmation: 'guestpassword',
+        //         first_name: 'Guest',
+        //         last_name: '',
+        //         tenant_id: this.props.tenant.data.id,
+        //         guest: true
+        //     }));
+        // }
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;

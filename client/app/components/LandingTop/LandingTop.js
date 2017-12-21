@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { RoundButton } from '../RoundButton/RoundButton';
 import Header from '../Header/Header';
 import { Redirect } from 'react-router';
+import { moment } from '../../constants';
+import { authenticationActions } from '../../actions';
 
 
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
@@ -18,11 +20,30 @@ export class LandingTop extends Component {
     }
 
     render() {
+        const { dispatch, theme } = this.props;
         if (this.state.redirect) {
             return <Redirect push to="/booking" />;
         }
-        const handleNext = () => this.setState({ redirect: true });
-        const theme = this.props.theme;
+        const handleNext = () => {
+            if (this.props.loggedIn) {
+                this.setState({ redirect: true });
+            else {                
+                const unixTimeStamp = moment().unix().toString();
+                const randNum = Math.floor(Math.random() * 100).toString();
+                const randSuffix = unixTimeStamp + randNum;
+                const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`;
+
+                this.props.dispatch(authenticationActions.register({
+                    email: email,
+                    password: 'guestpassword',
+                    password_confirmation: 'guestpassword',
+                    first_name: 'Guest',
+                    last_name: '',
+                    tenant_id: this.props.tenant.data.id,
+                    guest: true
+                }, true));
+            }
+        };
         return (
             <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>
                 <div className={styles.top_mask}> </div>
