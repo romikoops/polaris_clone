@@ -5,9 +5,16 @@ class HubRoute < ApplicationRecord
   belongs_to :starthub, class_name: "Hub"
   belongs_to :endhub, class_name: "Hub"
 
-  def self.create_from_route(route, mot)
+  def self.create_from_route(route, mot, tenant_id)
     o_hubs = route.origin_nexus.hubs_by_type(mot)
+    if o_hubs.empty?
+      o_hubs = [Hub.create_from_nexus(route.origin_nexus, mot, tenant_id)]
+    end
     d_hubs = route.destination_nexus.hubs_by_type(mot)
+    if d_hubs.empty?
+      d_hubs = [Hub.create_from_nexus(route.destination_nexus, mot, tenant_id)]
+    end
+    
     newname = "#{o_hubs[0].name} - #{d_hubs[0].name}"
     return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
   end

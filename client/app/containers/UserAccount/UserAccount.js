@@ -36,7 +36,7 @@ export class UserAccount extends Component {
         this.setUrl = this.setUrl.bind(this);
         this.setNavLink = this.setNavLink.bind(this);
     }
-    componentDidUpdate() {
+    componentDidMount() {
         const {userDispatch, users, user} = this.props;
         if (user && user.data && users && !users.loading && !users.dashboard) {
             userDispatch.getDashboard(user.data.id, false);
@@ -46,7 +46,11 @@ export class UserAccount extends Component {
         }
     }
     setNavLink(target) {
+        const {userDispatch, users, user} = this.props;
         this.setState({activeLink: target});
+        if (user && user.data && users && !users.loading && !users.dashboard) {
+            userDispatch.getDashboard(user.data.id, false);
+        }
     }
     toggleActiveClass(key) {
         this.setState({ activeLink: key });

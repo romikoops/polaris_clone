@@ -5,8 +5,6 @@ import styles from './LandingTop.scss';
 import PropTypes from 'prop-types';
 import { RoundButton } from '../RoundButton/RoundButton';
 import Header from '../Header/Header';
-import { Redirect } from 'react-router';
-
 
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
 export class LandingTop extends Component {
@@ -15,24 +13,32 @@ export class LandingTop extends Component {
         this.state = {
             redirect: false
         };
+        this.toAccount = this.toAccount.bind(this);
+        this.toBooking = this.toBooking.bind(this);
     }
-
+    toAccount() {
+        this.props.goTo('/account');
+    }
+    toBooking() {
+        this.props.goTo('/booking');
+    }
     render() {
-        if (this.state.redirect) {
-            return <Redirect push to="/booking" />;
-        }
-        const handleNext = () => this.setState({ redirect: true });
-        const theme = this.props.theme;
+        const { theme, user } = this.props;
+        const myAccount = (
+            <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active/>
+        );
         return (
             <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>
                 <div className={styles.top_mask}> </div>
                 <div className="layout-row flex-100 layout-wrap">
                     <div className={styles.top_row + ' flex-100 layout-row'}>
-                        <Header user={false} theme={theme} />
+                        <Header user={user} theme={theme} />
                     </div>
-                    <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-center ' + styles.layout_elem}>
-                        <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>
+                    <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
+                        <RoundButton text="Book Now" theme={theme} handleNext={() => this.toBooking()} active/>
+                        { user ? myAccount : '' }
                     </div>
+
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>
                         <div className={styles.sign_up}>
                             <h2>Never spend precious time on transportation again LCL shipping made simple</h2>

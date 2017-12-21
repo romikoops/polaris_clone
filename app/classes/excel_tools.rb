@@ -609,4 +609,196 @@ module ExcelTools
       ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
     end
   end
+
+  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
+    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
+    mongo = get_client
+    terms = {
+      "BAS" => "Basic Ocean Freight",
+      "CFD" => "Congestion Fee Destination",
+      "CFO" => "Congestion Fee Origin",
+      "DDF" => "Documentation fee - Destination",
+      "DHC" => "Terminal Handling Service - Destination",
+      "DPA" => "Arbitrary - Destination",
+      "ERS" => "Emergency Risk Surcharge",
+      "EXP" => "Export Service",
+      "IHE" => "Inland Haulage Export",
+      "IMP" => "Import Service",
+      "LSS" => "Low Sulphur Surcharge",
+        
+      "ODF" => "Documentation Fee Origin",
+      "OHC" => "Terminal Handling Service - Origin",
+      "OPA" => "Arbitrary - Origin",
+        
+      "PSS" => "Peak Season Surcharge",
+      "SBF" => "Standard Bunker Adjustment Factor",
+
+      "SOC" => "Shipper Owned container",
+      "NOR" => "Non Operating Refer container",
+      "EMPTY" => "Empty Container",
+
+      "CY" =>  "Container Yard",
+      "SD" => "Store Door",
+
+      "20DRY" => "20 Dry container",
+      "40DRY" => "40 Dry container",
+      "40HDRY"  => "40 High Cube Dry Container",
+      "45HDRY"  => "45 High Cube Dry Container"
+    }
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    pricing_rows = first_sheet.parse(
+      receipt: 'RECEIPT',
+      effective_date: 'EFFECTIVE_DATE',
+      expiration_date: 'EXPIRY_DATE',
+      origin: 'RECEIPT',
+      cargo_type: 'COMMODITY_NAME',
+      destination: 'DELIVERY',
+      charge: 'CHARGE',
+      inclusive_surcharge: 'INCLUSIVE_SURCHARGE',
+      service_code: 'SERVICE_CODE',
+      rate_basis: 'RATE_BASIS',
+      fcl_20_rate: '20DRY',
+      fcl_40_rate: '40DRY',
+      fcl_40_hq_rate: '40HDRY',
+      fcl_45_hq_rate: '45HDRY',
+    )
+    new_pricings = []
+    new_path_pricings = {}
+    dataObj = {}
+    vt = Vehicle.find_by_name("ocean_default")
+    new_pricings = {}
+    tt_obj = {}
+    pricing_rows.each_with_index do |row, index|
+      row[:mot] = 'ocean'
+      puts "load pricing row #{index}..."
+      pp_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}"
+       
+      if !new_pricings[pp_key]
+        new_pricings[pp_key] = {
+          "data" => {},
+          "sizes" => {
+            "fcl_20f" => {},
+            "fcl_40f" => {},
+            "fcl_40f_hq" => {},
+            "fcl_45f_hq" => {}
+            }
+          }
+          dataObj[pp_key] = {}
+        origin = Location.from_short_name(row[:origin])
+        destination = Location.from_short_name(row[:destination])
+        route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+        hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+        dataObj[pp_key]["origin"] = origin
+        dataObj[pp_key]["destination"] = destination
+        dataObj[pp_key]["route"] = route
+        dataObj[pp_key]["hubroute"] = hubroute
+        new_pricings[pp_key]["data"]["route"] = route.id
+        new_pricings[pp_key]["data"]["hub_route"] = hubroute.id
+        new_pricings[pp_key]["data"]["service_code"] = row[:service_code]
+        new_pricings[pp_key]["data"]["inclusive_surcharge"] = row[:inclusive_surcharge]
+      end
+
+      tmpPrice = new_pricings[pp_key]
+
+      load_types = [
+        'fcl_20f',
+        'fcl_40f',
+        'fcl_40f_hq'
+      ]
+
+      
+
+      if !row[:cargo_type] || row[:cargo_type] == 'FAK'
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
+        end
+      else
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
+        end
+      end
+
+      # dataObj[pp_key]["hubroute"].generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+
+      if !dedicated
+        cust_id = nil
+        ded_bool = false
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
+        cust_id = row[:customer_id].to_i
+        ded_bool = true
+      end
+
+      tmpPrice["sizes"]["fcl_20f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_20_rate])
+      tmpPrice["sizes"]["fcl_40f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_rate])
+      tmpPrice["sizes"]["fcl_40f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_hq_rate])
+      tmpPrice["sizes"]["fcl_45f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_45_hq_rate])
+     
+
+    end
+      # price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
+      # byebug
+
+        new_pricings.each do |key, value|
+          value["sizes"].each do |skey, svalue|
+           if skey != 'fcl_45f_hq'
+            tmpItem = value["data"]
+            svalue.each do |pkey, pvalue|
+              tmpItem[pkey] = pvalue
+            end
+            p tmpItem
+             if dedicated
+                uuid = SecureRandom.uuid
+               
+                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+                tmpItem[:_id] = uuid;
+                tmpItem[:tenant_id] = user.tenant_id;
+                userObj = {}
+                userObj[pathKey] = uuid
+                put_item_fn(mongo, 'pricings', tmpItem)
+                if !new_path_pricings[pathKey]
+                  new_path_pricings[pathKey] = {}
+                end
+                update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+                new_path_pricings[pathKey]["#{user.id}"] = uuid
+            else
+                uuid = SecureRandom.uuid
+               p skey
+               p tt_obj
+                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+                tmpItem[:_id] = uuid;
+                tmpItem[:tenant_id] = user.tenant_id
+                pr = put_item_fn(mongo, 'pricings', tmpItem)
+
+                if !new_path_pricings[pathKey]
+                  new_path_pricings[pathKey] = {}
+                end
+
+                new_path_pricings[pathKey]["open"] = uuid
+                new_path_pricings[pathKey]["hub_route"] = dataObj[key]["hubroute"].id
+                new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
+                new_path_pricings[pathKey]["route"] = dataObj[key]["route"].id
+                new_path_pricings[pathKey]["transport_category"] = tt_obj[skey].id
+            end
+          end
+        end
+      end
+      npps = []
+      new_path_pricings.each do |key, value|
+        tmpObj = value
+        ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+      
+    end
+  end
+  def price_split(basis, string)
+    vals = string.split(' ')
+    return {
+      "currency" => vals[1],
+      "rate" => vals[0].to_i,
+      "rate_basis" => basis
+    }
+  end
 end

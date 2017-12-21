@@ -14,7 +14,7 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import { authenticationActions } from '../../actions';
+// import { authenticationActions } from '../../actions';
 import { RegistrationPage } from '../RegistrationPage/RegistrationPage';
 import { Modal } from '../../components/Modal/Modal';
 
@@ -49,18 +49,18 @@ class Shop extends Component {
         this.hideRegistration = this.hideRegistration.bind(this);
     }
     componentDidMount() {
-        if (!this.props.loggedIn) {
-            const randSuffix = Math.floor(Math.random() * 100000);
-            this.props.dispatch(authenticationActions.register({
-                email: `guest@email${randSuffix}.com`,
-                password: 'guestpassword',
-                password_confirmation: 'guestpassword',
-                first_name: 'Guest',
-                last_name: '',
-                tenant_id: 1,
-                guest: true
-            }));
-        }
+        // if (!this.props.loggedIn) {
+        //     const randSuffix = Math.floor(Math.random() * 100000);
+        //     this.props.dispatch(authenticationActions.register({
+        //         email: `guest@email${randSuffix}.com`,
+        //         password: 'guestpassword',
+        //         password_confirmation: 'guestpassword',
+        //         first_name: 'Guest',
+        //         last_name: '',
+        //         tenant_id: 1,
+        //         guest: true
+        //     }));
+        // }
     }
     // componentDidUpdate() {
     //     const { bookingData} = this.props;

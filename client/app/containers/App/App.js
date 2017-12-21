@@ -12,7 +12,7 @@ import Admin from '../Admin/Admin';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
-
+import { PrivateRoute, AdminPrivateRoute } from '../../routes/index';
 import {getSubdomain} from '../../helpers';
 class App extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class App extends Component {
         }
     }
     render() {
-        const { tenant, isFetching } = this.props;
+        const { tenant, isFetching, loggedIn } = this.props;
         const theme = tenant.data.theme;
         return (
             <div className="layout-fill layout-column scroll">
@@ -43,28 +43,37 @@ class App extends Component {
                         path="/"
                         render={props => <Landing theme={theme} {...props} />}
                     />
-                    <Route
+                    {/* <Route
                         path="/booking"
                         render={props => <Shop theme={theme} {...props} />}
+                    /> */}
+                    <PrivateRoute
+                        path="/booking"
+                        component={Shop}
+                        loggedIn={loggedIn}
+                        theme={theme}
                     />
-                    <Route
+                    {/* <Route
                         path="/admin"
                         render={props => <Admin theme={theme} {...props} />}
+                    /> */}
+                    <AdminPrivateRoute
+                        path="/admin"
+                        component={Admin}
+                        loggedIn={loggedIn}
+                        theme={theme}
                     />
                     <Route
                         path="/signout"
                         render={props => <SignOut theme={theme} {...props} />}
                     />
-                    {theme ? (
-                        <Route
-                            path="/account"
-                            render={props => (
-                                <UserAccount theme={theme} {...props} />
-                            )}
-                        />
-                    ) : (
-                        ''
-                    )}
+                    <PrivateRoute
+                        path="/account"
+                        component={UserAccount}
+                        loggedIn={loggedIn}
+                        theme={theme}
+                    />
+
                 </Switch>
                 <Footer theme={theme} tenant={tenant.data}/>
             </div>

@@ -37,4 +37,45 @@
         font-weight: normal;
       }
     }
+
+    .slick_slide {
+      height: 350px;
+      width: 450px;
+      position: relative;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .slick_slide_bg {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .slick_city {
+      position: absolute;
+      top: 20px;
+      left: 58px;
+      color: white;
+      font-size: 40px;
+      text-shadow: 0 1px 16px rgba(black,0.7);
+      font-weight: normal;
+    }
+    .slick_country {
+      position: absolute;
+      top: 70px;
+      left: 58px;
+      color: white;
+      font-size: 24px;
+      text-shadow: 0 2px 9px rgba(black,0.8);
+    }
+    .slider_container{
+      width: 100%;
+      * {
+        min-height: 0;
+        min-width: 0;
+      }
+    }
   }
