@@ -10,6 +10,7 @@ export class LoginRegistrationWrapper extends Component {
         this.state = {
             Comp: LoginPage
         };
+        this.components = { LoginPage, RegistrationPage };
     }
 
     render() {
@@ -19,7 +20,8 @@ export class LoginRegistrationWrapper extends Component {
                 Comp: Comp
             });
         };
-    	const { Comp } = this.state;
+        const { initialCompName } = this.props;
+    	const Comp = initialCompName ? this.components[initialCompName] : this.state.Comp;
         const compProps = this.props[Comp.WrappedComponent.name + 'Props'];
         return (
             <div>

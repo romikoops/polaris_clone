@@ -18,6 +18,12 @@ class Landing extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps) {
+        const { loggingIn, registering, loading } = nextProps;
+        // debugger;
+        return loading || !(loggingIn || registering);
+    }
+
     render() {
         const { loggedIn, theme, user, tenant, userDispatch, authDispatch } = this.props;
         const textStyle = {
@@ -112,12 +118,14 @@ function mapDispatchToProps(dispatch) {
 }
 function mapStateToProps(state) {
     const { users, authentication, tenant } = state;
-    const { user, loggedIn, loading } = authentication;
+    const { user, loggedIn, loggingIn, registering, loading } = authentication;
     return {
         user,
         users,
         tenant,
         loggedIn,
+        loggingIn,
+        registering,
         loading
     };
 }

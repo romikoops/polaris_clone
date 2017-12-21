@@ -102,7 +102,7 @@ class RegistrationPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { registering } = state.registration;
+    const { registering } = state.authentication;
     return {
         registering
     };
