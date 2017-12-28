@@ -12,11 +12,19 @@ export class Modal extends Component {
         };
         this.hide = this.hide.bind(this);
         this.updateHeights = this.updateHeights.bind(this);
+        this.updatedHeights = false;
     }
 
     componentDidMount() {
         this.updateHeights();
         window.addEventListener('resize', this.updateHeights);
+    }
+
+    componentDidUpdate() {
+        if (!this.updatedHeights) {
+            this.updateHeights();
+            this.updatedHeights = true;
+        }
     }
 
     componentWillUnmount() {
@@ -41,7 +49,9 @@ export class Modal extends Component {
         if (this.state.hidden) return '';
         const modalStyles = {
             top: Math.min(this.state.windowHeight * 0.5 - this.state.height / 2, 100) + 'px',
-            minHeight: this.state.windowHeight * 0.5
+            minHeight: this.state.windowHeight * 0.5,
+            maxHeight: this.state.windowHeight * 0.9,
+            overflowY: 'auto'
         };
         return (
             <div>
