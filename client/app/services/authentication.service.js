@@ -2,6 +2,11 @@ import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
 import { authHeader } from '../helpers';
 
+function logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem('user');
+}
+
 function login(data) {
     const requestOptions = {
         method: 'POST',
@@ -44,11 +49,6 @@ function login(data) {
 function getStoredUser() {
     const sortedUser = JSON.parse(localStorage.getItem('user'));
     return sortedUser ? sortedUser : {};
-}
-
-function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
 }
 
 function register(user) {

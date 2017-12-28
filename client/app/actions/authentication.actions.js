@@ -4,6 +4,11 @@ import { shipmentActions } from './';
 import { alertActions } from './';
 import { push } from 'react-router-redux';
 
+function logout() {
+    authenticationService.logout();
+    return { type: authenticationConstants.LOGOUT };
+}
+
 function login(data) {
     function request(user) {
         return { type: authenticationConstants.LOGIN_REQUEST, user };
@@ -15,11 +20,16 @@ function login(data) {
         return { type: authenticationConstants.LOGIN_FAILURE, error };
     }
     return dispatch => {
+        if (data.shipmentReq) logout();
+
         dispatch(request({ username: data.username }));
         authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
-                if (user.data.role_id === 1) {
+                if (data.shipmentReq) {
+                    data.shipmentReq.shipment.shipper_id = user.data.id;
+                    dispatch(shipmentActions.setShipmentRoute(data.shipmentReq));
+                } else if (user.data.role_id === 1) {
                     dispatch(push('/admin'));
                 } else if (user.data.role_id === 2) {
                     dispatch(push('/account'));
@@ -31,11 +41,6 @@ function login(data) {
             }
         );
     };
-}
-
-function logout() {
-    authenticationService.logout();
-    return { type: authenticationConstants.LOGOUT };
 }
 
 function register(user, redirect) {

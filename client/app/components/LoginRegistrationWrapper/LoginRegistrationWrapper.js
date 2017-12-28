@@ -7,25 +7,24 @@ import { RegistrationPage } from '../../containers/RegistrationPage/Registration
 export class LoginRegistrationWrapper extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            Comp: LoginPage
-        };
+        this.state = {};
         this.components = { LoginPage, RegistrationPage };
     }
 
     render() {
-        const toggleComp = () => {
-            const Comp = this.state.Comp === LoginPage ? RegistrationPage : LoginPage;
+        const toggleComp = (CurrentComp) => {
+            const NextComp = CurrentComp === LoginPage ? RegistrationPage : LoginPage;
             this.setState({
-                Comp: Comp
+                Comp: NextComp
             });
         };
         const { initialCompName } = this.props;
-    	const Comp = initialCompName ? this.components[initialCompName] : this.state.Comp;
+        const DefaultComp = initialCompName ? this.components[initialCompName] : LoginPage;
+    	const Comp = this.state.Comp || DefaultComp;
         const compProps = this.props[Comp.WrappedComponent.name + 'Props'];
         return (
             <div>
-                <div onClick={toggleComp}>Toggle</div>
+                <div onClick={() => toggleComp(Comp)}>Toggle</div>
                 <div>
                     <Comp {...compProps} />
                 </div>

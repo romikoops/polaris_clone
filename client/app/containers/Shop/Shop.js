@@ -177,7 +177,7 @@ class Shop extends Component {
             <Modal
                 component={
                     <LoginRegistrationWrapper
-                        LoginPageProps={{theme}}
+                        LoginPageProps={{theme, req}}
                         RegistrationPageProps={{theme, tenant, req, user}}
                         initialCompName="RegistrationPage"
                     />
