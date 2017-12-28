@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import styles from './LoginRegistrationWrapper.scss';
+import styles from './LoginRegistrationWrapper.scss';
 import defs from '../../styles/default_classes.scss';
 import { LoginPage } from '../../containers/LoginPage/LoginPage';
 import { RegistrationPage } from '../../containers/RegistrationPage/RegistrationPage';
@@ -10,7 +10,7 @@ export class LoginRegistrationWrapper extends Component {
         super(props);
         this.state = {};
         this.components = { LoginPage, RegistrationPage };
-        this.togglePromptText = {
+        this.togglePrompt = {
             LoginPage: {
                 promptText: 'New account?',
                 linkText: 'Register'
@@ -42,16 +42,15 @@ export class LoginRegistrationWrapper extends Component {
 
                 <hr/>
 
-                <div className="layout-row layout-align-space-between">
-                    <div className="">
-                        {this.togglePromptText[compName].promptText}
-
+                <div className={`${styles.toggle_prompt} layout-row layout-align-space-between`}>
+                    <div>
+                        {this.togglePrompt[compName].promptText}
                     </div>
                     <div
-                        className={`${defs.emulate_link} layout-row layout-align-center-end`}
+                        className={`${defs.emulate_link}`}
                         onClick={() => toggleComp(Comp)}
                     >
-                        {this.togglePromptText[compName].linkText}
+                        {this.togglePrompt[compName].linkText}
                     </div>
                 </div>
             </div>
