@@ -40,9 +40,9 @@ export class LoginRegistrationWrapper extends Component {
                     <Comp {...compProps} />
                 </div>
 
-                <hr/>
 
-                <div className={`${styles.toggle_prompt} layout-row layout-align-space-between`}>
+                <hr className={styles.toggle_prompt_separator}/>
+                <div className="layout-row layout-align-space-between">
                     <div>
                         {this.togglePrompt[compName].promptText}
                     </div>
