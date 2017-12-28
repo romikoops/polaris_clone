@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import styles from './LoginRegistrationWrapper.scss';
+import defs from '../../styles/default_classes.scss';
 import { LoginPage } from '../../containers/LoginPage/LoginPage';
 import { RegistrationPage } from '../../containers/RegistrationPage/RegistrationPage';
 
@@ -9,6 +10,16 @@ export class LoginRegistrationWrapper extends Component {
         super(props);
         this.state = {};
         this.components = { LoginPage, RegistrationPage };
+        this.togglePromptText = {
+            LoginPage: {
+                promptText: 'New account?',
+                linkText: 'Register'
+            },
+            RegistrationPage: {
+                promptText: 'Already have an account?',
+                linkText: 'Login'
+            }
+        };
     }
 
     render() {
@@ -21,12 +32,27 @@ export class LoginRegistrationWrapper extends Component {
         const { initialCompName } = this.props;
         const DefaultComp = initialCompName ? this.components[initialCompName] : LoginPage;
     	const Comp = this.state.Comp || DefaultComp;
-        const compProps = this.props[Comp.WrappedComponent.name + 'Props'];
+        const compName = Comp.WrappedComponent.name;
+        const compProps = this.props[compName + 'Props'];
         return (
             <div>
-                <div onClick={() => toggleComp(Comp)}>Toggle</div>
                 <div>
                     <Comp {...compProps} />
+                </div>
+
+                <hr/>
+
+                <div className="layout-row layout-align-space-between">
+                    <div className="">
+                        {this.togglePromptText[compName].promptText}
+
+                    </div>
+                    <div
+                        className={`${defs.emulate_link} layout-row layout-align-center-end`}
+                        onClick={() => toggleComp(Comp)}
+                    >
+                        {this.togglePromptText[compName].linkText}
+                    </div>
                 </div>
             </div>
 	    );
