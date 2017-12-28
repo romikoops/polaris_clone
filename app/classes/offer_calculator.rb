@@ -5,41 +5,46 @@ class OfferCalculator
   include MongoTools
   include TruckingTools
   def initialize(shipment, params, load_type, user)
-    @mongo = get_client
-    @load_type = shipment.load_type
+    @mongo    = get_client
+    @user     = user
     @shipment = shipment
-    @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
-    @has_on_carriage = params[:shipment][:has_on_carriage] ? true : false
-    @shipment.has_pre_carriage = @has_pre_carriage
-    @shipment.has_on_carriage = @has_on_carriage
-    @user = user
+
+    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
+    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false   
+    
     case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
       @shipment.containers = @containers
-    when 'lcl'
-      @shipment.cargo_items.destroy_all
-      @cargo_items = CargoItem.extract_cargos(params[:shipment][:cargo_items_attributes])
-      @shipment.cargo_items = @cargo_items
-      @schedules = nil
-    when 'openlcl'
+    when 'lcl', 'openlcl'
       @shipment.cargo_items.destroy_all
       @cargo_items = CargoItem.extract_cargos(params[:shipment][:cargo_items_attributes])
       @shipment.cargo_items = @cargo_items
       @schedules = nil
     end
 
-    @shipment.planned_pickup_date = Chronic.parse(params[:shipment][:planned_pickup_date], endian_precedence: :little)
-    @shipment.origin = Location.get_geocoded_location(params[:shipment][:origin_user_input], params[:shipment][:origin_id], @has_pre_carriage)
-    @shipment.destination = Location.get_geocoded_location(params[:shipment][:destination_user_input], params[:shipment][:destination_id], @has_on_carriage)
+    @shipment.planned_pickup_date = Chronic.parse(
+      params[:shipment][:planned_pickup_date], 
+      endian_precedence: :little
+    )
+    @shipment.origin = Location.get_geocoded_location(
+      params[:shipment][:origin_user_input],
+      params[:shipment][:origin_id],
+      shipment.has_pre_carriage
+    )
+    @shipment.destination = Location.get_geocoded_location(
+      params[:shipment][:destination_user_input],
+      params[:shipment][:destination_id],
+      shipment.has_on_carriage
+    )
 
     @truck_seconds_pre_carriage = 0
     @pricing = nil
     @route = nil
 
     @current_eta_in_search = DateTime.new()
-    @total_price = {total:0, currency: "EUR"}
+    @total_price = { total:0, currency: "EUR" }
   end
 
   def calc_offer!
@@ -70,7 +75,7 @@ class OfferCalculator
       up_to.times do
         @current_eta_in_search = @schedule_set_arr.last.set.first.eta + 1.second
         schedules = schedules_on_route
-        @schedule_set_arr << ScheduleSet.new(schedules, @truck_seconds_pre_carriage, @has_on_carriage)
+        @schedule_set_arr << ScheduleSet.new(schedules, @truck_seconds_pre_carriage, shipment.has_on_carriage)
       end
     rescue
       return
@@ -80,21 +85,18 @@ class OfferCalculator
   private
 
   def determine_route!
-    
     @route = Route.for_locations(@shipment.origin, @shipment.destination)
     @hub_routes = @route.hub_routes
     @shipment.route = @route
   end
 
   def determine_pricing!
-    
-    if @load_type.starts_with?("open")
+    if shipment.load_type.starts_with?("open")
       @pricing = @route.pricings.get_open
     else
       
       @pricing = @route.pricings.get_dedicated(@shipment.shipper)
     end
-
   end
 
   def determine_hubs!
@@ -109,14 +111,13 @@ class OfferCalculator
     @furthest_hub_to_destination = @destination_hubs.sort_by {|obj| -obj.distance_to(@shipment.destination)}.first
   end
 
-  def determine_schedules!
-    
+  def determine_schedules! 
     @schedules = @route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
   def determine_longest_trucking_time!
     
-    if @has_pre_carriage
+    if shipment.has_pre_carriage
       gd_pre_carriage = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
       car_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds
       @longest_trucking_time = gd_pre_carriage.driving_time_in_seconds_for_trucks(car_seconds_pre_carriage)
@@ -130,13 +131,13 @@ class OfferCalculator
   
 
   def add_pre_carriage!
-    if @has_pre_carriage
+    if shipment.has_pre_carriage
       gd_pre_carriage = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
       km = gd_pre_carriage.distance_in_km
       @shipment.pre_carriage_distance_km = km
       car_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds
       @truck_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds_for_trucks(car_seconds_pre_carriage)
-      case @load_type
+      case shipment.load_type
       when 'fcl'
         @containers.each do |container|
           @total_price += TruckingPricing.calc_final_price(@shipment.origin, container, km) #################
@@ -166,7 +167,7 @@ class OfferCalculator
   end
 
   def add_on_carriage!
-    if @has_on_carriage
+    if shipment.has_on_carriage
       
       on_carriage_departure = @schedules.first.eta + 6.hours ##############
       gd_on_carriage = GoogleDirections.new(@furthest_hub_to_destination.lat_lng_string, @shipment.destination.lat_lng_string, on_carriage_departure.to_i)
@@ -175,7 +176,7 @@ class OfferCalculator
       km = gd_on_carriage.distance_in_km
       @shipment.on_carriage_distance_km = km
       
-      case @load_type
+      case shipment.load_type
       when 'fcl'
         @containers.each do |container|
           @total_price += TruckingPricing.calc_final_price(@shipment.destination, container, km) #################
@@ -204,12 +205,12 @@ class OfferCalculator
         sched_key = "#{sched.hub_route.starthub_id}-#{sched.hub_route.endhub_id}"
         if !fees[sched_key]
           fees[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}, cargo:{}}
-          if @has_pre_carriage
+          if shipment.has_pre_carriage
           
             fees[sched_key][:trucking_pre] = determine_trucking_options(@shipment.origin, sched.hub_route.starthub)
           end
           
-          if @has_on_carriage
+          if shipment.has_on_carriage
           
             fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.hub_route.endhub)
           end
@@ -285,7 +286,7 @@ class OfferCalculator
       km = gd_pre_carriage.distance_in_km
       byebug
       price_results = []    
-      case @load_type
+      case shipment.load_type
       when 'fcl'
         @containers.each do |container|
           price_results << calc_trucking_price(origin, container, km, hub, @mongo) #################
@@ -392,7 +393,7 @@ class OfferCalculator
   def price_from_cargos
     prices = []
     
-    case @load_type
+    case shipment.load_type
     when 'fcl'
       @containers.each do |container|
         price = Pricing.fcl_price(container)
