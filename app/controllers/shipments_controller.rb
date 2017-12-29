@@ -63,7 +63,7 @@ class ShipmentsController < ApplicationController
   end
 
   def create
-    resp = new_shipment(session, params[:type])
+    resp = new_shipment(params[:type])
     response_handler(resp)
   end
 

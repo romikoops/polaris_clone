@@ -1,67 +1,29 @@
 module ShippingTools
   include PricingTools
-  def new_shipment(session, load_type)
-    if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
-      session[:shipment_uuid] = @shipment.uuid
-      # 
-    else
-      shipment = Shipment.find_by_uuid(session[:shipment_uuid])
-      if shipment.booked?
-        if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
-        else
-          @shipment = shipment.dup
-        end
-        session[:shipment_uuid] = @shipment.uuid
-      else
-        @shipment = shipment
-      end
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    end
+  def new_shipment(load_type)
+    shipment = Shipment.create(
+      shipper_id: current_user.id, 
+      status: "booking_process_started", 
+      load_type: load_type, 
+      tenant_id: current_user.tenant_id
+    )
 
-    case load_type
-    when 'fcl'
-      @tare_weights = CONTAINER_WEIGHTS
-      @container_descriptions = CONTAINER_DESCRIPTIONS.invert
-      if @shipment.containers.empty?
-        @shipment.containers.create
-      end
-    when 'lcl'
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    when 'openlcl'
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    end
-
-    @has_pre_carriage = @shipment.has_pre_carriage || true
-    @has_on_carriage = @shipment.has_on_carriage || true
-
-    # if load_type.starts_with?('open')
-    @all_nexuses = Location.nexuses
-    # else
-    #   @all_nexuses = Location.nexuses_prepared_client(current_user)
-    # end
-
+    shipment.containers.create  if load_type.include?('fcl') && shipment.containers.empty?
+    shipment.cargo_items.create if load_type.include?('lcl') && shipment.cargo_items.empty?
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
     routes = Route.where(tenant_id: current_user.tenant_id)
     detailed_routes = routes.map do |route| 
       route.detailed_hash(
-        ids_dedicated: route_ids_dedicated, 
-        nexus_names: true, 
+        ids_dedicated:      route_ids_dedicated, 
+        nexus_names:        true, 
         modes_of_transport: true
       )
     end
 
     return {
-      shipment:    @shipment,
-      all_nexuses: @all_nexuses,
+      shipment:    shipment,
+      all_nexuses: Location.nexuses,
       routes:      detailed_routes
     }
   end 
