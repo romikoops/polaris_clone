@@ -50,22 +50,13 @@ class OfferCalculator
 
   def calc_offer!
     determine_route!
-    determine_hubs!
-    
+    determine_hubs!    
     determine_longest_trucking_time!
-    
     determine_schedules!
-    
-    # add_pre_carriage!
-    
-    # add_on_carriage!
-    
-    # add_carriage!
     
     add_service_charges!
     
     convert_currencies!
-    # @shipment.total_price = @total_price
   end
 
   def calc_alternative_schedules!(up_to)
@@ -96,10 +87,6 @@ class OfferCalculator
     @furthest_hub_to_destination = @shipment.destination.furthest_hub(@destination_hubs)
   end
 
-  def determine_schedules! 
-    @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
-  end
-
   def determine_longest_trucking_time!
     if shipment.has_pre_carriage
       google_directions = GoogleDirections.new(
@@ -116,70 +103,10 @@ class OfferCalculator
     @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
   end
 
-  def add_pre_carriage!
-    if shipment.has_pre_carriage
-      google_directions = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
-      km = google_directions.distance_in_km
-      @shipment.pre_carriage_distance_km = km
-      driving_time = google_directions.driving_time_in_seconds
-      @truck_seconds_pre_carriage = google_directions.driving_time_in_seconds_for_trucks(driving_time)
-      case shipment.load_type
-      when 'fcl'
-        @containers.each do |container|
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, container, km) #################
-        end
-      when 'lcl'
-        @cargo_items.each do |cargo_item|
-          
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item, km) #################
-          #########################!!!!!!!!!!!!!!!!!!!
-        end
-      when "openlcl"
-        
-        @cargo_items.each do |cargo_item|
-          
-          @total_price += TruckingPricing.calc_final_price(@shipment.origin, cargo_item, km) #################
-        end
-      end
-    else
-      @truck_seconds_pre_carriage = 0
-    end
-    @current_eta_in_search = @shipment.planned_pickup_date + @truck_seconds_pre_carriage + 3.days
-  end
-
-  def add_carriage!
-    ############
-    @total_price[:cargo] = price_from_cargos
-  end
-
-  def add_on_carriage!
-    if shipment.has_on_carriage
-      
-      on_carriage_departure = @schedules.first.eta + 6.hours ##############
-      gd_on_carriage = GoogleDirections.new(@furthest_hub_to_destination.lat_lng_string, @shipment.destination.lat_lng_string, on_carriage_departure.to_i)
-      truck_seconds_on_carriage = gd_on_carriage.driving_time_in_seconds_for_trucks(gd_on_carriage.driving_time_in_seconds)
-      eta_on_carriage = on_carriage_departure + truck_seconds_on_carriage
-      km = gd_on_carriage.distance_in_km
-      @shipment.on_carriage_distance_km = km
-      
-      case shipment.load_type
-      when 'fcl'
-        @containers.each do |container|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, container, km) #################
-        end
-      when 'lcl'
-        @cargo_items.each do |cargo_item|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item, km) #################
-          #########################!!!!!!!!!!!!!!!!!!!
-        end
-      when "openlcl"
-        @cargo_items.each do |cargo_item|
-          @total_price += TruckingPricing.calc_final_price(@shipment.destination, cargo_item, km) #################
-        end
-      end
-
-    end
-
+  def determine_schedules! 
+    @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
+      .where("transport_categories.name = 'any'")
+      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
   def add_service_charges!
