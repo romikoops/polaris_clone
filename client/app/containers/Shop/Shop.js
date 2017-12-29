@@ -14,8 +14,7 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
-// import { authenticationActions } from '../../actions';
-import { RegistrationPage } from '../RegistrationPage/RegistrationPage';
+import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../../components/Modal/Modal';
 
 import './Shop.scss';
@@ -48,20 +47,12 @@ class Shop extends Component {
         this.toggleShowRegistration = this.toggleShowRegistration.bind(this);
         this.hideRegistration = this.hideRegistration.bind(this);
     }
-    componentDidMount() {
-        // if (!this.props.loggedIn) {
-        //     const randSuffix = Math.floor(Math.random() * 100000);
-        //     this.props.dispatch(authenticationActions.register({
-        //         email: `guest@email${randSuffix}.com`,
-        //         password: 'guestpassword',
-        //         password_confirmation: 'guestpassword',
-        //         first_name: 'Guest',
-        //         last_name: '',
-        //         tenant_id: 1,
-        //         guest: true
-        //     }));
-        // }
+
+    shouldComponentUpdate(nextProps) {
+        const { loggingIn, registering, loading } = nextProps;
+        return loading || !(loggingIn || registering);
     }
+
     // componentDidUpdate() {
     //     const { bookingData} = this.props;
     //     const {response} = bookingData;
@@ -156,13 +147,13 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, isLoading, tenant } = this.props;
+        const { bookingData, theme, match, loading, tenant, user } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-        const loading =  isLoading ? <Loading theme={theme} /> : '';
+        const loadingScreen = loading ? <Loading theme={theme} /> : '';
         let shipmentId = '';
         if (response && response.stage1 && !response.stage2) {
             shipmentId = response.stage1.shipment.id;
@@ -173,18 +164,32 @@ class Shop extends Component {
         } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
             shipmentId = response.stage4.shipment.id;
         }
+        // const loginModal = (
+        //     <Modal
+        //         component={
+        //             <RegistrationPage theme={theme} req={this.state.req} user={this.props.user} tenant={this.props.tenant} />
+        //         }
+        //         parentToggle={this.toggleShowRegistration}
+        //     />
+        // );
+        const { req } = this.state;
         const loginModal = (
             <Modal
                 component={
-                    <RegistrationPage theme={theme} req={this.state.req}/>
+                    <LoginRegistrationWrapper
+                        LoginPageProps={{theme, req}}
+                        RegistrationPageProps={{theme, tenant, req, user}}
+                        initialCompName="RegistrationPage"
+                    />
                 }
                 parentToggle={this.toggleShowRegistration}
             />
         );
-        return (
 
+        return (
             <div className="layout-row flex-100 layout-wrap">
-                {loading}
+                {loadingScreen}
+                { this.state.showRegistration && !loading ? loginModal : '' }
                 <Header theme={this.props.theme} />
                 <ShopStageView
                     shopType={this.state.shopType}
@@ -285,7 +290,6 @@ class Shop extends Component {
                         />
                     )}
                 />
-                { this.state.showRegistration ? loginModal : '' }
                 <div className={`${styles.pre_footer_break} flex-100`}></div>
             </div>
         );
@@ -312,15 +316,17 @@ Shop.defaultProps = {
 
 function mapStateToProps(state) {
     const { users, authentication, tenant, bookingData } = state;
-    const { user, loggedIn } = authentication;
-    const isLoading = bookingData.loading;
+    const { user, loggedIn, loggingIn, registering } = authentication;
+    const loading = bookingData.loading;
     return {
         user,
         users,
         tenant,
         loggedIn,
         bookingData,
-        isLoading
+        loggingIn,
+        registering,
+        loading
     };
 }
 

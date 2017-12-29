@@ -239,8 +239,8 @@ module ShippingTools
     current_user.contacts.each do |c|
       @contacts.push({location: c.location, contact: c})
     end
-
     @shipment = Shipment.find(params[:shipment_id])
+    @shipment.shipper_id = params[:shipment][:shipper_id]
     @shipment.total_price = params[:total]
     @schedules = []
     params[:schedules].each do |sched|

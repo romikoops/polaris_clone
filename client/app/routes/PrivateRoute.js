@@ -32,13 +32,11 @@
 
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-const user = localStorage.getItem('user');
-console.log(user);
-export const PrivateRoute = ({ component: Component, loggedIn, ...rest }) => (
 
-    <Route {...rest} render={props => (
+export const PrivateRoute = ({ component: Component, user, loggedIn, theme, ...rest }) => (
+    <Route {...rest} render={ props => (
         user && loggedIn
-            ? <Component {...props} />
+            ? <Component theme={theme} {...props} />
             : <Redirect to={{ pathname: '/', state: { from: props.location } }} />
     )} />
 );
