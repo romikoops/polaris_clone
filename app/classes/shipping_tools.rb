@@ -28,34 +28,9 @@ module ShippingTools
     }
   end 
 
-  def reuse_booking_data(params, session, load_type)
-    user = User.find(params[:user_id])
-    shipment = user.shipments.find(params[:lcl_id])
-    session[:shipment_uuid] = shipment.uuid
-    session[:reuse_shipment] = "true"
-
-    case load_type
-    when 'fcl'
-      redirect_to(new_user_shipments_fcl_path)
-    when 'lcl'
-      redirect_to(new_user_shipments_lcl_path)
-    when 'openlcl'
-      redirect_to(new_user_shipments_open_lcl_path)
-    end
-  end
-
   def get_shipment_offer(session, params, load_type)
-    # @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
     @shipment = Shipment.find(params[:shipment_id])
-    # 
-    case load_type
-    when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
-    when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
-    when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
-    end
+    offer_calculation = OfferCalculator.new(@shipment, params, load_type, current_user)
 
     # begin
       offer_calculation.calc_offer!
@@ -63,25 +38,20 @@ module ShippingTools
     #   raise ApplicationError::NoRoutes
     # end
 
-    @shipment = offer_calculation.shipment
-    @shipment.save!
-    @total_price = @shipment.total_price
-    @has_pre_carriage = @shipment.has_pre_carriage
-    @has_on_carriage = @shipment.has_on_carriage
-    @schedules = offer_calculation.schedules
-    @truck_seconds_pre_carriage = offer_calculation.truck_seconds_pre_carriage
-
-    resp = {
-      shipment: @shipment,
-      total_price: @total_price,
-      has_pre_carriage: @has_pre_carriage,
-      has_on_carriage: @has_on_carriage,
-      schedules: @schedules,
-      truck_seconds_pre_carriage: @truck_seconds_pre_carriage,
-      originHubs: offer_calculation.origin_hubs,
-      destinationHubs: offer_calculation.destination_hubs
-    }
-    return resp
+    if offer_calculation.shipment.save
+      return {
+        shipment:                   offer_calculation.shipment,
+        total_price:                offer_calculation.total_price,
+        has_pre_carriage:           offer_calculation.has_pre_carriage,
+        has_on_carriage:            offer_calculation.has_on_carriage,
+        schedules:                  offer_calculation.shipment.route.schedules,
+        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+        originHubs:                 offer_calculation.origin_hubs,
+        destinationHubs:            offer_calculation.destination_hubs
+      }
+    else
+      raise ApplicationError::NoRoutes # TBD - Customize Errors
+    end
   end
 
   def create_documents(form, shipment)
