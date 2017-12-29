@@ -202,4 +202,10 @@ class Location < ApplicationRecord
 
     hubs_array
   end
+
+  def furthest_hub(hubs)
+    hubs.max do |hub_x, hub_y| 
+      hub_x.distance_to(self) <=> hub_y.distance_to(self)
+    end
+  end
 end

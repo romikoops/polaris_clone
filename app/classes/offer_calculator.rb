@@ -5,13 +5,21 @@ class OfferCalculator
   include MongoTools
   include TruckingTools
   def initialize(shipment, params, load_type, user)
-    @mongo    = get_client
-    @user     = user
-    @shipment = shipment
+    @mongo            = get_client
+    @user             = user
+    @shipment         = shipment
+    @origin_hubs      = []
+    @destination_hubs = []
 
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false   
     
+    @truck_seconds_pre_carriage = 0
+    @pricing = nil
+
+    @current_eta_in_search = DateTime.new()
+    @total_price = { total:0, currency: "EUR" }
+
     case @shipment.load_type
     when 'fcl'
       @shipment.containers.destroy_all
@@ -38,12 +46,6 @@ class OfferCalculator
       params[:shipment][:destination_id],
       shipment.has_on_carriage
     )
-
-    @truck_seconds_pre_carriage = 0
-    @pricing = nil
-
-    @current_eta_in_search = DateTime.new()
-    @total_price = { total:0, currency: "EUR" }
   end
 
   def calc_offer!
@@ -85,16 +87,13 @@ class OfferCalculator
   end
 
   def determine_hubs!
-    origin_hubs      = []
-    destination_hubs = []
-
     @shipment.route.hub_routes.each do |hub_route|
-      origin_hubs      << hub_route.starthub
-      destination_hubs << hub_route.endhub
+      @origin_hubs      << hub_route.starthub
+      @destination_hubs << hub_route.endhub
     end
 
-    @furthest_hub_from_origin    = @shipment.origin.furthest_hub(origin_hubs)
-    @furthest_hub_to_destination = @shipment.destination.furthest_hub(destination_hubs)
+    @furthest_hub_from_origin    = @shipment.origin.furthest_hub(@origin_hubs)
+    @furthest_hub_to_destination = @shipment.destination.furthest_hub(@destination_hubs)
   end
 
   def determine_schedules! 
