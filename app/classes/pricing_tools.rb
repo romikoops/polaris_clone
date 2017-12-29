@@ -26,7 +26,14 @@ module PricingTools
 
   def determine_fcl_price(client, container, pathKey, user)
     pricing = get_user_price(client, pathKey, user)
-    return {value: pricing["wm"]["rate"], currency: pricing["wm"]["currency"]}
+    byebug
+    totals = {}
+    pricing["data"].each do |k, v|
+      if v["rate_basis"].include?('CONTAINER')
+        totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
+      end
+    end
+    return totals
   end
 
   def get_tenant_pricings(tenant_id)

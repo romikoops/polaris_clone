@@ -33,6 +33,8 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 const user = localStorage.getItem('user');
+console.log(user);
+console.log('######################');
 export const PrivateRoute = ({ component: Component, loggedIn, theme, ...rest }) => (
     <Route {...rest} render={props => (
         user && loggedIn

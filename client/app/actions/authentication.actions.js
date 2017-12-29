@@ -61,7 +61,7 @@ function register(user, redirect) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
-
+                debugger;
                 if (redirect) {
                     dispatch(push('/booking'));
                 } else if (response.data.role_id === 1) {

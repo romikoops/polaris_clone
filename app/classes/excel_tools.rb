@@ -475,7 +475,7 @@ module ExcelTools
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
-      hubroute = HubRoute.create_from_route(route, row[:mot])
+      hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
 
       if !row[:vehicle_type]
         vt = Vehicle.find_by_name("#{row[:mot]}_default")
@@ -746,8 +746,9 @@ module ExcelTools
           value["sizes"].each do |skey, svalue|
            if skey != 'fcl_45f_hq'
             tmpItem = value["data"]
+            tmpItem["data"] = {}
             svalue.each do |pkey, pvalue|
-              tmpItem[pkey] = pvalue
+              tmpItem["data"][pkey] = pvalue
             end
             p tmpItem
              if dedicated

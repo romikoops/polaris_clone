@@ -85,8 +85,10 @@ function register(user) {
             if (data) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(data));
+                const user2 = localStorage.getItem('user');
+                console.log(user2);
             }
-
+            debugger;
             return data;
         });
 }
