@@ -81,7 +81,6 @@ class OfferCalculator
   private
 
   def determine_route!
-    byebug
     @route = Route.for_locations(@shipment.origin, @shipment.destination)
     @hub_routes = @route.hub_routes
     @shipment.route = @route
@@ -214,50 +213,13 @@ class OfferCalculator
           
             fees[sched_key][:trucking_on] = determine_trucking_options(@shipment.destination, sched.hub_route.endhub)
           end
-          
-          @import_charges = sched.get_service_charges("import")
-          
-          @export_charges = sched.get_service_charges("export")
-          
-          charges =  {
-            import: {},
-            export: {}
-          }
-          fees[sched_key][:import]["totals"] = {}
-          fees[sched_key][:export]["totals"] = {}
           if @cargo_items
             @cargo_items.each do |ci|
               transport_type_key = ci.cargo_class ? ci.cargo_class : 'any'
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
-              fees[sched_key][:cargo][ci.id] = determine_lcl_price(@mongo, ci, pathKey, @user)
-              
-              @total_price[:cargo][:value] += fees[sched_key][:cargo][ci.id][:value]
-              @total_price[:cargo][:currency] = fees[sched_key][:cargo][ci.id][:currency]
-              p @import_charges
-              p @export_charges
-              fees[sched_key][:import][ci.id] = @import_charges.calc_import_charge(ci)
-              fees[sched_key][:export][ci.id] = @export_charges.calc_export_charge(ci)
-         
-              p "##################################################"
-              p fees[sched_key][:import][ci.id]
-              p "##################################################"
-              p fees[sched_key][:export][ci.id]
-              fees[sched_key][:import][ci.id].each do |key, value|
-                
-                if !fees[sched_key][:import]["totals"][key]
-                  fees[sched_key][:import]["totals"][key] = {value: 0, currency: value[:currency]}
-                end
-                fees[sched_key][:import]["totals"][key][:value] += value[:value]
-              end
-              fees[sched_key][:export][ci.id].each do |key, value|
-                
-                if !fees[sched_key][:export]["totals"][key]
-                  fees[sched_key][:export]["totals"][key] = {value: 0, currency: value[:currency]}
-                end
-                fees[sched_key][:export]["totals"][key][:value] += value[:value]
-              end
-
+              fees[sched_key][:cargo][ci.id] = determine_lcl_price(@mongo, ci, pathKey, @user, @cargo_items.length)
+              byebug
             end
           end
           
@@ -267,10 +229,8 @@ class OfferCalculator
               
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
-              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(@mongo, cnt, pathKey, @user)
+              fees[sched_key][:cargo][cnt.id] = determine_fcl_price(@mongo, cnt, pathKey, @user, @containers.length)
               byebug
-              @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
-              @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|
             #   fees[sched_key][:import][cnt.id] = @import_charges.calc_import_charge(cnt)
             #   fees[sched_key][:export][cnt.id] = @export_charges.calc_export_charge(cnt)
@@ -319,28 +279,15 @@ class OfferCalculator
     raw_totals = {}
    
     @shipment.generated_fees.each do |key, svalue|
-      if svalue["import"]["totals"] != {}
-          svalue["import"]["totals"].each do |key, fee|
-          
-          if !raw_totals[fee["currency"]]
-            raw_totals[fee["currency"]] = fee["value"]
-          else
-            raw_totals[fee["currency"]] += fee["value"]
-          end
-        end
-      end
-        
-      if svalue["export"]["totals"] != {}  
-        svalue["export"]["totals"].each do |key, fee|
-          
-          if !raw_totals[fee["currency"]]
+      svalue["cargo"].each do |id, fees|
+        fees.each do |fid, fee|
+           if !raw_totals[fee["currency"]]
             raw_totals[fee["currency"]] = fee["value"].to_f
           else
             raw_totals[fee["currency"]] += fee["value"].to_f
           end
         end
       end
-
       
       if !raw_totals[svalue["trucking_on"]["currency"]]
         raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
@@ -352,11 +299,7 @@ class OfferCalculator
       else
         raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
       end
-      if !raw_totals[@total_price[:cargo][:currency]]
-        raw_totals[@total_price[:cargo][:currency]] = @total_price[:cargo][:value].to_f
-      else
-        raw_totals[@total_price[:cargo][:currency]] += @total_price[:cargo][:value].to_f
-      end
+      
       
       converted_totals = sum_and_convert(raw_totals, "EUR")
       @shipment.generated_fees[key]["total"] = converted_totals

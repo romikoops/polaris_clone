@@ -13,18 +13,45 @@ module PricingTools
     return priceHash
   end
 
-  def determine_lcl_price(client, cargo, pathKey, user)
+  def determine_lcl_price(client, cargo, pathKey, user, quantity)
+        
     pricing = get_user_price(client, pathKey, user)
-    min = pricing["wm"]["min"] * pricing["wm"]["rate"]
-    tmp_val = cargo.weight_or_volume * pricing["wm"]["rate"]
-    if tmp_val > min
-      return {value: tmp_val, currency: pricing["wm"]["currency"]}
-    else
-      return {value: min, currency: pricing["wm"]["currency"]}
+
+    
+    totals = {}
+    pricing["data"].each do |k, v|
+      case v["rate_basis"]
+      when "PER_ITEM"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i * cargo.volume : totals[k] = {"value" => v["rate"].to_i * cargo.volume, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM_TON"
+        ton = cargo.payload_in_tons * v["ton"]
+        cbm = cargo.volume * v["cbm"]
+        tmp = 0
+        cbm > ton ? tmp = cbm : tmp = ton
+        tmp > v["min"] ? res = tmp : res = v["min"]
+        totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_SHIPMENT"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i / quantity : totals[k] = {"value" => v["rate"].to_i / quantity, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      end
     end
+    return totals
   end
 
-  def determine_fcl_price(client, container, pathKey, user)
+  def determine_fcl_price(client, container, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
     
     totals = {}
@@ -37,7 +64,7 @@ module PricingTools
         # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
       end
     end
-    byebug
+    
     return totals
   end
 
