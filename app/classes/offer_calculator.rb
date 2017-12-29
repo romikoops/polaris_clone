@@ -41,7 +41,6 @@ class OfferCalculator
 
     @truck_seconds_pre_carriage = 0
     @pricing = nil
-    @route = nil
 
     @current_eta_in_search = DateTime.new()
     @total_price = { total:0, currency: "EUR" }
@@ -49,9 +48,6 @@ class OfferCalculator
 
   def calc_offer!
     determine_route!
-    
-    # determine_pricing!
-    
     determine_hubs!
     
     determine_longest_trucking_time!
@@ -88,29 +84,21 @@ class OfferCalculator
     @shipment.route = Route.for_locations(@shipment.origin, @shipment.destination)
   end
 
-  def determine_pricing!
-    if shipment.load_type.starts_with?("open")
-      @pricing = @route.pricings.get_open
-    else
-      
-      @pricing = @route.pricings.get_dedicated(@shipment.shipper)
-    end
-  end
-
   def determine_hubs!
-    @origin_hubs = []
-    @destination_hubs = []
-    @shipment.route.hub_routes.each do |hr|
-      @origin_hubs << hr.starthub
-      @destination_hubs << hr.endhub
+    origin_hubs      = []
+    destination_hubs = []
+
+    @shipment.route.hub_routes.each do |hub_route|
+      origin_hubs      << hub_route.starthub
+      destination_hubs << hub_route.endhub
     end
 
-    @furthest_hub_from_origin = @origin_hubs.sort_by {|obj| -obj.distance_to(@shipment.origin)}.first
-    @furthest_hub_to_destination = @destination_hubs.sort_by {|obj| -obj.distance_to(@shipment.destination)}.first
+    @furthest_hub_from_origin    = @shipment.origin.furthest_hub(origin_hubs)
+    @furthest_hub_to_destination = @shipment.destination.furthest_hub(destination_hubs)
   end
 
   def determine_schedules! 
-    @schedules = @route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
+    @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories).where("transport_categories.name = 'any'").where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
   def determine_longest_trucking_time!
@@ -369,8 +357,8 @@ class OfferCalculator
   end
 
   def schedules_on_route
-    stop1 = Location.find(@route.origin_nexus_id)
-    stop2 = Location.find(@route.destination_nexus_id)
+    stop1 = Location.find(@shipment.route.origin_nexus_id)
+    stop2 = Location.find(@shipment.route.destination_nexus_id)
 
     mode_of_transport = Route.get_mode_of_transport(stop1, stop2)
     Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)

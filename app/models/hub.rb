@@ -76,4 +76,11 @@ class Hub < ApplicationRecord
       raise "Location contains invalid hub status!"
     end
   end
+
+  def furthest_hub(hubs)
+    hubs.max do |hub_x, hub_y| 
+      hub_x.distance_to(self) <=> hub_y.distance_to(self)
+    end
+    byebug
+  end
 end
