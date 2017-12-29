@@ -101,11 +101,14 @@ class OfferCalculator
   end
 
   def determine_longest_trucking_time!
-    
     if shipment.has_pre_carriage
-      gd_pre_carriage = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
-      car_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds
-      @longest_trucking_time = gd_pre_carriage.driving_time_in_seconds_for_trucks(car_seconds_pre_carriage)
+      google_directions = GoogleDirections.new(
+        @shipment.origin.lat_lng_string,
+        @furthest_hub_from_origin.lat_lng_string,
+        @shipment.planned_pickup_date.to_i
+      )
+      driving_time = google_directions.driving_time_in_seconds
+      @longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
     else
       @longest_trucking_time = 0
     end
@@ -113,15 +116,13 @@ class OfferCalculator
     @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
   end
 
-  
-
   def add_pre_carriage!
     if shipment.has_pre_carriage
-      gd_pre_carriage = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
-      km = gd_pre_carriage.distance_in_km
+      google_directions = GoogleDirections.new(@shipment.origin.lat_lng_string, @furthest_hub_from_origin.lat_lng_string, @shipment.planned_pickup_date.to_i)
+      km = google_directions.distance_in_km
       @shipment.pre_carriage_distance_km = km
-      car_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds
-      @truck_seconds_pre_carriage = gd_pre_carriage.driving_time_in_seconds_for_trucks(car_seconds_pre_carriage)
+      driving_time = google_directions.driving_time_in_seconds
+      @truck_seconds_pre_carriage = google_directions.driving_time_in_seconds_for_trucks(driving_time)
       case shipment.load_type
       when 'fcl'
         @containers.each do |container|
@@ -267,8 +268,8 @@ class OfferCalculator
         @shipment.generated_fees = fees
     end
     def determine_trucking_options(origin, hub)
-      gd_pre_carriage = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
-      km = gd_pre_carriage.distance_in_km
+      google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
+      km = google_directions.distance_in_km
       byebug
       price_results = []    
       case shipment.load_type
