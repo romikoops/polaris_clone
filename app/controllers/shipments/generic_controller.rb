@@ -34,6 +34,7 @@ class Shipments::GenericController < ApplicationController
   end
 
   def create
+    
     resp = new_shipment(session, 'openlcl')
     json_response(resp, 200)
   end

@@ -32,13 +32,14 @@ class Location < ApplicationRecord
       Location.where(id: hub_id).first
     end
   end
+
   def self.from_short_name(input)
     newname = input.split(" ,")[0]
     location = Location.new(geocoded_address: input)
     location.geocode
     location.reverse_geocode
     location.name = newname
-    
+    location.location_type = 'nexus'
     location.save!
     return location
   end

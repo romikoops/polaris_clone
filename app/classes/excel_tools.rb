@@ -719,7 +719,7 @@ module ExcelTools
         end
       end
 
-      # dataObj[pp_key]["hubroute"].generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      dataObj[pp_key]["hubroute"].generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
 
       if !dedicated
         cust_id = nil

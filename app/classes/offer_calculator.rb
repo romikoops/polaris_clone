@@ -8,6 +8,7 @@ class OfferCalculator
     @mongo = get_client
     @load_type = shipment.load_type
     @shipment = shipment
+
     @has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @has_on_carriage = params[:shipment][:has_on_carriage] ? true : false
     @shipment.has_pre_carriage = @has_pre_carriage
@@ -80,7 +81,7 @@ class OfferCalculator
   private
 
   def determine_route!
-    
+    byebug
     @route = Route.for_locations(@shipment.origin, @shipment.destination)
     @hub_routes = @route.hub_routes
     @shipment.route = @route
@@ -267,6 +268,7 @@ class OfferCalculator
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
               fees[sched_key][:cargo][cnt.id] = determine_fcl_price(@mongo, cnt, pathKey, @user)
+              byebug
               @total_price[:cargo][:value] += fees[sched_key][:cargo][cnt.id][:value]
               @total_price[:cargo][:currency] = fees[sched_key][:cargo][cnt.id][:currency]
             # @containers.each do |cnt|

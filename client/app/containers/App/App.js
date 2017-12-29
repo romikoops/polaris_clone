@@ -32,7 +32,7 @@ class App extends Component {
         }
     }
     render() {
-        const { tenant, isFetching, loggedIn } = this.props;
+        const { tenant, isFetching, user, loggedIn } = this.props;
         const theme = tenant.data.theme;
         return (
             <div className="layout-fill layout-column scroll">
@@ -50,6 +50,7 @@ class App extends Component {
                     <PrivateRoute
                         path="/booking"
                         component={Shop}
+                        user={user}
                         loggedIn={loggedIn}
                         theme={theme}
                     />
@@ -60,6 +61,7 @@ class App extends Component {
                     <AdminPrivateRoute
                         path="/admin"
                         component={Admin}
+                        user={user}
                         loggedIn={loggedIn}
                         theme={theme}
                     />
@@ -70,6 +72,7 @@ class App extends Component {
                     <PrivateRoute
                         path="/account"
                         component={UserAccount}
+                        user={user}
                         loggedIn={loggedIn}
                         theme={theme}
                     />

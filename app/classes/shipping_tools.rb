@@ -1,6 +1,7 @@
 module ShippingTools
   include PricingTools
   def new_shipment(session, load_type)
+    byebug
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
       session[:shipment_uuid] = @shipment.uuid

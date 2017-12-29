@@ -26,13 +26,18 @@ module PricingTools
 
   def determine_fcl_price(client, container, pathKey, user)
     pricing = get_user_price(client, pathKey, user)
-    byebug
+    
     totals = {}
     pricing["data"].each do |k, v|
       if v["rate_basis"].include?('CONTAINER')
-        totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
+        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+        # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
       end
     end
+    byebug
     return totals
   end
 
