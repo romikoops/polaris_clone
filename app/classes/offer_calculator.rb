@@ -85,9 +85,7 @@ class OfferCalculator
   private
 
   def determine_route!
-    @route = Route.for_locations(@shipment.origin, @shipment.destination)
-    @hub_routes = @route.hub_routes
-    @shipment.route = @route
+    @shipment.route = Route.for_locations(@shipment.origin, @shipment.destination)
   end
 
   def determine_pricing!
@@ -102,7 +100,7 @@ class OfferCalculator
   def determine_hubs!
     @origin_hubs = []
     @destination_hubs = []
-    @hub_routes.each do |hr|
+    @shipment.route.hub_routes.each do |hr|
       @origin_hubs << hr.starthub
       @destination_hubs << hr.endhub
     end
