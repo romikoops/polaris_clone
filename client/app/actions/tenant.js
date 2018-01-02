@@ -2,8 +2,11 @@ import fetch from 'isomorphic-fetch';
 import { Promise } from 'es6-promise-promise';
 export const REQUEST_TENANT = 'REQUEST_TENANT';
 export const RECEIVE_TENANT = 'RECEIVE_TENANT';
+export const RECEIVE_TENANT_ERROR = 'RECEIVE_TENANT_ERROR';
 export const INVALIDATE_SUBDOMAIN = 'INVALIDATE_SUBDOMAIN';
 import { BASE_URL } from '../constants';
+
+
 const requestTenant = subdomain => {
     return {
         type: REQUEST_TENANT,
@@ -28,14 +31,21 @@ export const invalidateSubdomain = subdomain => {
 };
 
 const fetchTenant = subdomain => {
+    function failure(error) {
+        return { type: RECEIVE_TENANT_ERROR, error };
+    }
     console.log(BASE_URL);
     return dispatch => {
         dispatch(requestTenant(subdomain));
         return fetch(`${BASE_URL}/tenants/${subdomain}`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveTenant(subdomain, json)));
+            .then(response => response.json())
+            .then(
+                json => dispatch(receiveTenant(subdomain, json)),
+                err => dispatch(failure(err))
+            );
     };
 };
+
 
 const shouldFetchTenant = (state, subdomain) => {
     const tenant = state[subdomain];
@@ -65,3 +75,5 @@ export const fetchTenantIfNeeded = subdomain => {
         return Promise.resolve();
     };
 };
+
+

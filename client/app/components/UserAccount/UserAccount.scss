@@ -44,9 +44,9 @@
         font-weight: bold;
         text-shadow: rgb(255, 255, 255) 0px 1px 0px;
         -webkit-user-select: none;
-           -moz-user-select: none;
-            -ms-user-select: none;
-                user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
 
         &:hover {
           background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
@@ -71,6 +71,10 @@
     .content {
       margin: 15px;
       font-size: 87%;
+    }
+    .content p {
+      font-size: 12px;
+      margin: 5px 0;
     }
 
     .footer {
@@ -116,6 +120,16 @@
       height: 50px;
     }
 
+  }
+
+  .input {
+    height: 36px;
+    width: 195px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    padding: 0 10px;
   }
 
 }

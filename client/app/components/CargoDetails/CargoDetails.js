@@ -21,10 +21,13 @@ export class CargoDetails extends Component {
     }
     toggleInsurance() {
         this.setState({ insuranceView: !this.state.insuranceView });
-        this.props.handleInsurance();
+        // this.props.handleInsurance();
     }
     toggleCustoms() {
         this.setState({ customsView: !this.state.customsView });
+        // this.timeoutId = setTimeout(function() {
+            this.setState({ showNoCustoms: this.state.customsView });
+        // }.bind(this), 1000);
     }
     handleChange(event) {
         // const { name, value } = event.target;
@@ -60,7 +63,7 @@ export class CargoDetails extends Component {
         //     : 0;
         const insuranceBox = (
 
-            <div className={`flex-100 layout-row ${defaults.padd_top}`}>
+            <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.insuranceView ? styles.show : ''}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> Sign an insurance for the replacement of the goods shipped in case of total or partial loss or damage. The price of the insurance will be determined by the goods value and the transport charges.
@@ -77,7 +80,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const customsBox = (
-            <div className={`flex-100 layout-row ${defaults.padd_top}`}>
+            <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : ''}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> {' '} Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country o to exported goods so that they can leave the country.
@@ -94,7 +97,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const noCustomsBox = (
-            <div className="flex-100 layout-row layout-align-start-center">
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${this.state.showNoCustoms ? styles.show : ''}`}>
                 <div className="flex-33-layout-row layout-align-center-center">
                     {custDec ? (
                         <div className="flex-90 layout-row layout-wrap">
@@ -330,9 +333,9 @@ export class CargoDetails extends Component {
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <h4 className="flex-none">Insurance</h4>
-                            <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} />
+                            <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} theme={theme} />
                         </div>
-                        {this.state.insuranceView ? insuranceBox : ''}
+                        {insuranceBox}
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-center padd_top">
@@ -340,9 +343,10 @@ export class CargoDetails extends Component {
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <h4 className="flex-none">Customs</h4>
-                            <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} />
+                            <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} theme={theme} />
                         </div>
-                        {this.state.customsView ? customsBox : noCustomsBox}
+                        {customsBox}
+                        {noCustomsBox}
                     </div>
                 </div>
             </div>

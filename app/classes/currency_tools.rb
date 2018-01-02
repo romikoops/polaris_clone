@@ -18,7 +18,6 @@ module CurrencyTools
     base_value = 0
     hash_obj.each do |key, value|
       if rates[:today][key]
-        
         base_value += value * (1/rates[:today][key])
       end
     end

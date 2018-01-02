@@ -1,5 +1,12 @@
 class CargoItem < ApplicationRecord
   belongs_to :shipment
+
+  validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :dimension_x,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :dimension_y,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :dimension_z,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+
+  # Class Methods
   def self.extract_cargos(params)
     cargos = []
     params.each do |value|
@@ -15,6 +22,7 @@ class CargoItem < ApplicationRecord
     cargos
   end
 
+  # Instance Methods
   def volume
     dimension_x * dimension_y * dimension_z / 1000000    
   end

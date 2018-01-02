@@ -24,7 +24,7 @@ function newShipment(type) {
                 );
                 dispatch(
                     push(
-                        '/booking/' + shipmentData.data.id + '/shipment_details'
+                        '/booking/' + shipmentData.shipment.id + '/shipment_details'
                     )
                 );
                 dispatch(success(shipmentData));

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  # devise_for :users, controllers: { sessions: "users_devise/sessions", registrations: "users_devise/registrations" }
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
-    sessions:  'overrides/sessions'
+    sessions: 'users_devise_token_auth/sessions',
+    registrations: 'users_devise_token_auth/registrations'
   }
   root 'welcome#index'
 
@@ -21,23 +21,29 @@ Rails.application.routes.draw do
         get "email_action"
       end
     end
-
-    resources :hubs, only: [:index] do
+    resources :trucking, only: [:index]
+    post "trucking/trucking_zip_pricings", to: "trucking#overwrite_zip_trucking"
+    post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
+    resources :hubs, only: [:index, :show] do
       patch "set_status"
     end
     post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
-    resources :routes, only: [:index]
+    resources :routes, only: [:index, :show]
+    get 'client_pricings/:id', to: "pricings#client"
+    get 'route_pricings/:id', to: "pricings#route"
     post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
-
+    resources :vehicle_types, only: [:index]
+    resources :clients, only: [:index, :show]
     resources :pricings, only: [:index]
     post "pricings/train_and_ocean_pricings/process_csv", to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
+    post "pricings/update/:id", to: "pricings#update_price"
 
     resources :open_pricings, only: [:index]
-    post "open_pricings/trucking_pricings", to: "open_pricings#overwrite_trucking", as: :open_trucking_pricing_overwrite
+    
     post "open_pricings/train_and_ocean_pricings/process_csv", to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
-    resources :service_charges, only: [:index]
+    resources :service_charges, only: [:index, :update]
     post "service_charges/process_csv", to: "service_charges#overwrite", as: :service_charges_overwrite
 
     resources :discounts, only: [:index]
@@ -49,11 +55,16 @@ Rails.application.routes.draw do
     post "vessel_schedules/process_csv", to: "schedules#overwrite_vessels", as: :schedules_vessel_overwrite
     post "air_schedules/process_csv", to: "schedules#overwrite_air", as: :schedules_air_overwrite
     get 'hubs', to: 'hubs#index'
+    get 'dashboard', to: 'dashboard#index'
+    post 'schedules/auto_generate', to: 'schedules#auto_generate_schedules'
   end
-
+  post "users/guest_login", to: "users#anon_login"
   resources :users do
     get "home", as: :home
     get "account", as: :account
+    get "hubs", as: :hubs
+    put "update", as: :update
+
 
     resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
 

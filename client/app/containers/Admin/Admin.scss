@@ -2,7 +2,7 @@
   .sec_title {
     height: 75px;
   }
-  .sec_title p {
+  .sec_title_text {
     margin: 0;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
@@ -19,6 +19,9 @@
   }
   .charge_header {
     position: relative;
+  }
+  .select {
+    width: 195px;
   }
   .fade {
     width: 100%;

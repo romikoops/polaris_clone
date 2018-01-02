@@ -1,6 +1,7 @@
 :local {
   .input_box {
-    height: 550px;
+    min-height: 550px;
+    height: max-content;
     width: 295px;
   }
   .select {
@@ -14,5 +15,10 @@
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
+  }
+  .slbox {
+    min-height: 550px;
+    height: max-content;
+    padding: 15px 0;
   }
 }

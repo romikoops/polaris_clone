@@ -6,10 +6,27 @@ class Admin::HubsController < ApplicationController
   
 
   def index
-    @ocean_hubs = Hub.prepped_ports
-    response_handler(@ocean_hubs)
+    @hubs = Hub.prepped(current_user)
+    
+    response_handler(@hubs)
   end
-
+  def show
+    @hub = Hub.find(params[:id])
+    @related_hubs = @hub.nexus.hubs
+    @service_charges = @hub.service_charge
+    # @schedules = @hub.schedules.limit(10)
+    @hub_routes = HubRoute.where('endhub_id = ? OR starthub_id = ?', @hub.id, @hub.id)
+    
+    @routes = []
+    @schedules = []
+    @hub_routes.each do |hr|
+      @routes.push(Route.find(hr.route_id))
+      @schedules += hr.schedules.limit(5).to_a
+    end
+    
+    resp = {hub: @hub, routes: @routes, relatedHubs: @related_hubs, serviceCharges: @service_charges, schedules: @schedules, hubRoutes: @hub_routes}
+    response_handler(resp)
+  end
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
@@ -20,8 +37,12 @@ class Admin::HubsController < ApplicationController
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_hubs(req)
-      response_handler(true)
+      hubs = overwrite_hubs(req)
+      resp = []
+      hubs.each do |po|
+        resp << {data: po, location: po.nexus}
+      end
+      response_handler(resp)
     else
       response_handler(false)
     end

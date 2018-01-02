@@ -79,11 +79,13 @@ export class BookingDetails extends Component {
         this.calcInsurance = this.calcInsurance.bind(this);
     }
     componentDidMount() {
-        const {prevRequest, setStage} = this.props;
+        const {prevRequest, setStage, hideRegistration} = this.props;
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
-        setStage(3);
+        hideRegistration();
+        setStage(4);
+        window.scrollTo(0, 0);
     }
     loadPrevReq(obj) {
         this.setState({
@@ -129,7 +131,9 @@ export class BookingDetails extends Component {
         const gVal = val ? val : parseInt(this.state.totalGoodsValue, 10);
         const {shipmentData} = this.props;
         if (this.state.insurance) {
-            const iVal = (parseFloat(shipmentData.shipment.total_price, 10) + gVal) * 1.1 * 0.17;
+            const iVal = ((gVal * 1.1) + parseFloat(shipmentData.shipment.total_price, 10)) * 0.0017;
+            // const finalVal = iVal > 22.13 ? iVal : 22.13;
+            console.log(iVal);
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }
@@ -317,7 +321,7 @@ export class BookingDetails extends Component {
     }
 }
 
-BookingDetails.PropTypes = {
+BookingDetails.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     nextStage: PropTypes.func

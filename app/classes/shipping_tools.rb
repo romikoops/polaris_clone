@@ -1,14 +1,15 @@
 module ShippingTools
+  include PricingTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type)
+      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
       session[:shipment_uuid] = @shipment.uuid
       # 
     else
       shipment = Shipment.find_by_uuid(session[:shipment_uuid])
       if shipment.booked?
         if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type)
+          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
         else
           @shipment = shipment.dup
         end
@@ -46,25 +47,24 @@ module ShippingTools
     # else
     #   @all_nexuses = Location.nexuses_prepared_client(current_user)
     # end
-    private_prices = Pricing.where(customer_id: current_user.id)
-    public_prices = Pricing.where(customer_id: nil)
-    public_routes = []
-    private_routes = []
-    private_prices.each do |pr|
-      private_routes << {route: pr.route, next: pr.route.next_departure}
-    end
-    public_prices.each do |pr|
-      public_routes << {route: pr.route, next: pr.route.next_departure}
+
+
+    route_ids_dedicated = Route.ids_dedicated(current_user)
+    routes = Route.where(tenant_id: current_user.tenant_id)
+    detailed_routes = routes.map do |route| 
+      route.detailed_hash(
+        ids_dedicated: route_ids_dedicated, 
+        nexus_names: true, 
+        modes_of_transport: true
+      )
     end
 
-    resp = {
-      data: @shipment,
+    return {
+      shipment:    @shipment,
       all_nexuses: @all_nexuses,
-      public_routes: public_routes,
-      private_routes: private_routes
+      routes:      detailed_routes
     }
-    return resp
-  end
+  end 
 
   def reuse_booking_data(params, session, load_type)
     user = User.find(params[:user_id])
@@ -88,11 +88,11 @@ module ShippingTools
     # 
     case load_type
     when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
     when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
     when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl')
+      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
     end
 
     # begin
@@ -141,8 +141,8 @@ module ShippingTools
 
   end
 
-  def create_document(file, shipment, type) 
-    Document.new_upload(file, shipment, type)
+  def create_document(file, shipment, type, user) 
+    Document.new_upload(file, shipment, type, user)
   end
 
   def update_shipment(session, params)
@@ -151,27 +151,28 @@ module ShippingTools
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
     shipper_data = shipment_data[:shipper]
-    contacts_data = shipment_data[:contacts_attributes]
+    contacts_data = shipment_data[:notifyees]
 
     @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hsCode], total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
 
     contact_location = Location.create_and_geocode(street_number: consignee_data[:number], street: consignee_data[:street], zip_code: consignee_data[:zipCode], city: consignee_data[:city], country: consignee_data[:country])
     contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:firstName], last_name: consignee_data[:lastName], email: consignee_data[:email], phone: consignee_data[:phone])
+    
 
 
-    @consignee = @shipment.shipment_contacts.create(contact_id: contact.id, contact_type: 'consignee')
+    @consignee = @shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
     notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
-      contacts_data.values.each do |value|
+      contacts_data.each do |value|
 
         notifyee = current_user.contacts.find_or_create_by(first_name: value[:firstName],
                                                            last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
         notifyee_contacts << notifyee
-        @notifyees << @shipment.shipment_contacts.create(contact_id: notifyee.id, contact_type: 'notifyee')
+        @notifyees << @shipment.shipment_contacts.find_or_create_by(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
 
@@ -180,9 +181,10 @@ module ShippingTools
     else 
       new_loc = Location.find(shipment_data[:shipper][:location_id])
     end
-    shipper_contact = current_user.contacts.find_or_create_by(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone])
-    @shipper = @shipment.shipment_contacts.create(contact_id: shipper_contact.id, contact_type: 'shipper')
+    shipper_contact = current_user.contacts.find_or_create_by!(location_id: new_loc.id, first_name: shipper_data[:firstName], last_name: shipper_data[:lastName], email: shipper_data[:email], phone: shipper_data[:phone], alias: true)
+    @shipper = @shipment.shipment_contacts.find_or_create_by(contact_id: shipper_contact.id, contact_type: 'shipper')
     new_user_loc = current_user.user_locations.find_or_create_by(location_id: new_loc.id)
+
 
     if new_user_loc.id == 1
       new_user_loc.update_attributes!(primary: true)
@@ -194,11 +196,12 @@ module ShippingTools
       @shipment.total_price = @shipment.generated_fees[key]["total"]
 
     end
+    
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []
-    @shipment.schedule_set.each do |id|
-      @schedules.push(Schedule.find(id))
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
     end
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
@@ -206,8 +209,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
     end
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     #    forwarder_notification_email(user, @shipment)
     #    booking_confirmation_email(consignee, @shipment)
@@ -236,13 +239,13 @@ module ShippingTools
     current_user.contacts.each do |c|
       @contacts.push({location: c.location, contact: c})
     end
-
     @shipment = Shipment.find(params[:shipment_id])
+    @shipment.shipper_id = params[:shipment][:shipper_id]
     @shipment.total_price = params[:total]
     @schedules = []
     params[:schedules].each do |sched|
       schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << schedule.id
+      @shipment.schedule_set << {id: schedule.id, hub_route_key: schedule.hub_route_key}
       @schedules << schedule
     end
     case @shipment.load_type
@@ -262,8 +265,8 @@ module ShippingTools
     @shipment.origin_id = params[:schedules].first[:starthub_id]
     @shipment.destination_id = params[:schedules].last[:endhub_id]
     @shipment.save!
-    @origin = @schedules.first.starthub
-    @destination =  @schedules.last.endhub
+    @origin = @schedules.first.hub_route.starthub
+    @destination =  @schedules.last.hub_route.endhub
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}

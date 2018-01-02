@@ -7,7 +7,10 @@ import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
+import { colorSVG } from '../../helpers/svgColourer';
+import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
+
 const mapStyle = {
     width: '100%',
     height: '400px',
@@ -15,10 +18,11 @@ const mapStyle = {
     boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
 const isObjectEmpty = isEmpty;
+const colourSVG = colorSVG;
+const mapStyles = mapStyling;
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.state = {
             origin: {
                 street: '',
@@ -36,6 +40,10 @@ export class ShipmentLocationBox extends Component {
                 fullAddress: '',
                 hub_id: '',
                 hub_name: ''
+            },
+            autoText: {
+                origin: '',
+                destination: ''
             },
             autoTextOrigin: '',
             autoTextDest: '',
@@ -65,6 +73,7 @@ export class ShipmentLocationBox extends Component {
         this.setHubsFromRoute = this.setHubsFromRoute.bind(this);
         this.resetAuto = this.resetAuto.bind(this);
         this.setMarker = this.setMarker.bind(this);
+        this.handleAuto = this.handleAuto.bind(this);
     }
 
     componentDidMount() {
@@ -74,10 +83,9 @@ export class ShipmentLocationBox extends Component {
         }
     }
 
-    setHubsFromRoute(routeObj) {
+    setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
-        const { route } = routeObj;
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
@@ -163,20 +171,21 @@ export class ShipmentLocationBox extends Component {
             zoom: 5,
             mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
-            styles: [
-                {
-                    featureType: 'water',
-                    elementType: 'all',
-                    stylers: [
-                        {
-                            color: '#275b9b'
-                        },
-                        {
-                            invert_lightness: true
-                        }
-                    ]
-                }
-            ]
+            styles: mapStyles
+            // [
+            //     {
+            //         featureType: 'water',
+            //         elementType: 'all',
+            //         stylers: [
+            //             {
+            //                 color: '#275b9b'
+            //             },
+            //             {
+            //                 invert_lightness: true
+            //             }
+            //         ]
+            //     }
+            // ]
         };
 
         const map = new this.props.gMaps.Map(
@@ -260,14 +269,30 @@ export class ShipmentLocationBox extends Component {
 
     setMarker(location, name, target) {
         const { markers, map } = this.state;
+        const {theme} = this.props;
         const newMarkers = [];
         if (!isObjectEmpty(markers[target])) {
             markers[target].setMap(null);
         }
+        let icon;
+        if (target === 'origin') {
+            icon = {
+                url: colourSVG('location', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(36, 36)
+            };
+        } else {
+            icon = {
+                url: colourSVG('flag', theme),
+                anchor: new this.props.gMaps.Point(25, 50),
+                scaledSize: new this.props.gMaps.Size(36, 36)
+            };
+        }
         const marker = new this.props.gMaps.Marker({
             position: location,
             map: map,
-            title: name
+            title: name,
+            icon
         });
         markers[target] = marker;
         if (!isObjectEmpty(markers.origin)) {
@@ -287,17 +312,22 @@ export class ShipmentLocationBox extends Component {
 
     handleTrucking(event) {
         const { name, checked } = event.target;
+        console.log(name, checked);
         this.setState({
             shipment: { ...this.state.shipment, [name]: checked }
         });
 
-        if (name === 'has_pre_carriage' && checked) {
-            this.postToggleAutocomplete('origin');
+        if (name === 'has_pre_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('origin');
+            }
             this.props.setCarriage('has_pre_carriage', checked);
         }
 
-        if (name === 'has_on_carriage' && checked) {
-            this.postToggleAutocomplete('destination');
+        if (name === 'has_on_carriage') {
+            if (checked) {
+                this.postToggleAutocomplete('destination');
+            }
             this.props.setCarriage('has_on_carriage', checked);
         }
     }
@@ -351,6 +381,11 @@ export class ShipmentLocationBox extends Component {
             this.props.setTargetAddress('origin', {});
         }
     }
+    handleAuto(event) {
+        console.log(event.target);
+        const {name, value} = event.target;
+        this.setState({autoText: {[name]: value}});
+    }
 
     setDestHub(event) {
         if (event) {
@@ -396,13 +431,13 @@ export class ShipmentLocationBox extends Component {
             country: '',
             fullAddress: ''
         };
-
+        // debugger;
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
                 tmpAddress.number = ac.long_name;
             }
 
-            if (ac.types.includes('route')) {
+            if (ac.types.includes('route') || ac.types.includes('premise')) {
                 tmpAddress.street = ac.long_name;
             }
 
@@ -459,7 +494,10 @@ export class ShipmentLocationBox extends Component {
                 background-color: #F9F9F9;
             }
         `;
-
+        const autoHide = {
+            height: '0px',
+            display: 'none'
+        };
         const originHubSelect = (
             <StyledSelect
                 name="origin-hub"
@@ -483,6 +521,7 @@ export class ShipmentLocationBox extends Component {
         const originFields = (
             <div className="flex-100 layout-row layout-wrap">
                 <input
+                    id="not-auto"
                     name="origin-number"
                     className={`flex-none ${styles.input}`}
                     type="string"
@@ -522,7 +561,7 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.origin.country}
                     placeholder="Country"
                 />
-                <div className="flex-100 layout-row layout-align-end-center">
+                <div className="flex-100 layout-row layout-align-start-center">
                     <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('origin')}>
                         <i className="fa fa-times flex-none"></i>
                         <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
@@ -532,14 +571,14 @@ export class ShipmentLocationBox extends Component {
         );
 
         const originAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.origin ? autoHide : {}}>
                 <input
                     id="origin"
-                    name="origin-fullAddress"
+                    name="origin"
                     className={`flex-none ${styles.input}`}
                     type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.fullAddress}
+                    onChange={this.handleAuto}
+                    value={this.state.autoText.origin}
                     placeholder="Search for address"
                 />
             </div>
@@ -597,14 +636,14 @@ export class ShipmentLocationBox extends Component {
         );
 
         const destAuto = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.destination ? autoHide : {}}>
                 <input
                     id="destination"
-                    name="destination-fullAddress"
+                    name="destination"
                     className={`flex-none ${styles.input}`}
                     type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.fullAddress}
+                    onChange={this.handleAuto}
+                    value={this.state.autoText.destination}
                     placeholder="Search for address"
                 />
             </div>
@@ -618,7 +657,7 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.origin
                     ? originFields
-                    : originAuto;
+                    : '';
             }
 
             if (
@@ -632,17 +671,17 @@ export class ShipmentLocationBox extends Component {
             ) {
                 return this.state.autocomplete.destination
                     ? destFields
-                    : destAuto;
+                    : '';
             }
             return '';
         };
         const { theme } = this.props;
 
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+            <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start'} >
                     <div className={`flex-30 layout-row layout-wrap ${styles.input_box}`}>
-                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start mc">
                             <div className={'flex-100 layout-row ' + defaults.mc}>
                                 <Toggle
                                     className="flex-none"
@@ -656,6 +695,7 @@ export class ShipmentLocationBox extends Component {
                             </div>
                             <div className="flex-100 layout-row layout-wrap">
                                 <p className="flex-100"> Origin Address </p>
+                                { this.state.shipment.has_pre_carriage ? originAuto : '' }
                                 { displayLocationOptions('origin') }
                             </div>
                         </div>
@@ -677,6 +717,7 @@ export class ShipmentLocationBox extends Component {
                                     {' '}
                                     Destination Address{' '}
                                 </p>
+                                { this.state.shipment.has_on_carriage ? destAuto : '' }
                                 {displayLocationOptions('destination')}
                             </div>
                         </div>

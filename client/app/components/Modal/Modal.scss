@@ -1,0 +1,24 @@
+:local {
+	.full_size {
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 100;
+	}
+	.modal_background {
+		background: rgba(black, 0.4);
+	}
+
+	$w: 40vw;
+	.modal {
+		z-index: 200;
+		position: fixed;
+		padding: 60px 30px;
+		box-shadow: 0 0 50px rgba(black, 0.6);
+		background: white;
+		width: $w;
+		left: calc(50vw - #{$w}/2);
+	}
+}

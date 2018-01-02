@@ -3,7 +3,11 @@ class Tenant < ApplicationRecord
     has_many :routes
     has_many :hubs
     has_many :routes
+    has_many :hub_routes, through: :routes
+    has_many :schedules
     has_many :users
+    has_many :tenant_vehicles
+    has_many :vehicles, through: :tenant_vehicles
     
   def test
     # str =  Rails.root + '/app/assets/images/cityimages/Hanoi.jpg'

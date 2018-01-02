@@ -1,8 +1,9 @@
 class Route < ApplicationRecord
-  has_many :schedules
+  extend RouteTools
+  has_many :hub_routes
   has_many :pricings
   has_many :shipments
-
+  has_many :schedules, through: :hub_routes
   belongs_to :origin_nexus, class_name: "Location"
   belongs_to :destination_nexus, class_name: "Location"
   # belongs_to :customer, class_name: "User"
@@ -136,51 +137,31 @@ class Route < ApplicationRecord
     return nrt
   end
 
-  def self.for_locations(origin, destination, radius = 100)
+  def self.for_locations(origin, destination, radius = 200)
     start_city, start_city_dist = origin.closest_location_with_distance
     end_city, end_city_dist = destination.closest_location_with_distance
-    
+    # byebug
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end
     
     find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
   end
+
+  def next_departure
+    resp = Schedule.where(route_id: self.id).where("etd > ?", DateTime.now).order(:etd).limit(1).first
+    
+    return resp
+  end
+
+  def self.ids_dedicated(user = nil)
+    get_routes_with_dedicated_pricings(user.id, user.tenant_id)
+
+  end
+
   def next_departure
     self.schedules.where("etd > ?", DateTime.now).order(:etd).limit(1).first
-  end
-
-  def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length)
-    tmp_date = start_date
-    hub1 = self.origin_nexus.hubs_by_type(mot).first
-    hub2 = self.destination_nexus.hubs_by_type(mot).first
-    while tmp_date < end_date
-      if ordinal_array.include?(tmp_date.strftime("%u").to_i)
-        etd = tmp_date.midday
-        eta = etd + journey_length.days
-        new_sched = {mode_of_transport: mot, starthub_id: hub1.id, endhub_id: hub2.id, eta: eta, etd: etd}
-         # byebug
-        self.schedules.find_or_create_by(new_sched)
-        
-      end
-      tmp_date += 1.day
-    end
-  end
-
-  def generate_weekly_schedules_from_hubs(starthub, endhub, mot, start_date, end_date, ordinal_array, journey_length)
-    tmp_date = start_date
-    while tmp_date < end_date
-      if ordinal_array.include?(tmp_date.strftime("%u").to_i)
-        etd = tmp_date.midday
-        eta = etd + journey_length.days
-        new_sched = {starthub_id: starthub, endhub_id: endhub, eta: eta, etd: etd}
-         # byebug
-        self.schedules.find_or_create_by(new_sched)
-        
-      end
-      tmp_date += 1.day
-    end
-  end
+  end 
 
   def lcl_price(cargo)
     cargo.weight_or_volume * lcl_m3_ton_price    
@@ -197,5 +178,24 @@ class Route < ApplicationRecord
     else
       raise "Unknown container size class!"
     end
+  end
+
+  def modes_of_transport
+    exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }    
+    {
+      ocean: exists.('ocean'),
+      air:   exists.('air'),
+      rails: exists.('rails')
+    }
+  end
+
+  def detailed_hash(options = {})
+    return_h = attributes
+    return_h[:origin_nexus]       = origin_nexus.name                    if options[:nexus_names] 
+    return_h[:destination_nexus]  = destination_nexus.name               if options[:nexus_names]
+    return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
+    return_h[:next_departure]     = next_departure                       if options[:next_departure]
+    return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
+    return_h
   end
 end

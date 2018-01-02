@@ -24,6 +24,10 @@ export const tenant = (
                 data: action.data,
                 lastUpdated: action.receivedAt
             });
+        case tenantActions.RECEIVE_TENANT_ERROR:
+            return Object.assign({}, state, {
+                isFetching: false
+            });
         default:
             return state;
     }

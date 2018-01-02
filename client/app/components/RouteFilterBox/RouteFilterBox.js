@@ -9,7 +9,7 @@ export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedDay: moment().format('DD-MM-YYYY'),
+            selectedDay: props.departureDate ? moment(props.departureDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
             selectedOption: this.props.moT
         };
         this.editFilterDay = this.editFilterDay.bind(this);
@@ -35,7 +35,6 @@ export class RouteFilterBox extends Component {
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
                     <p> Pickup date </p>
-
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>

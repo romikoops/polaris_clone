@@ -19,6 +19,7 @@ class Location < ApplicationRecord
       obj.geocoded_address = geo.address
       obj.country = geo.country
       obj.city = geo.city
+      
       obj.zip_code = geo.postal_code
     end
   end
@@ -31,6 +32,16 @@ class Location < ApplicationRecord
       Location.where(id: hub_id).first
     end
   end
+  def self.from_short_name(input)
+    newname = input.split(" ,")[0]
+    location = Location.new(geocoded_address: input)
+    location.geocode
+    location.reverse_geocode
+    location.name = newname
+    
+    location.save!
+    return location
+  end
 
   def self.create_and_geocode(location_params)
     if !location_params[:geocoded_address]
@@ -40,7 +51,7 @@ class Location < ApplicationRecord
     loc = Location.find_or_create_by(
     latitude: location_params[:latitude],
     longitude: location_params[:longitude],
-    geocoded_address: location_params[:geocoded_address],
+    # geocoded_address: location_params[:geocoded_address],
     street: location_params[:street],
     street_address: location_params[:street_address],
     street_number: location_params[:street_number],
@@ -169,6 +180,7 @@ class Location < ApplicationRecord
       
       distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [location.latitude, location.longitude])
     end
+    
 
     lowest_distance = distances.min
     

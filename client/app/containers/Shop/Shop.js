@@ -14,6 +14,8 @@ import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
+import { Modal } from '../../components/Modal/Modal';
 
 import './Shop.scss';
 
@@ -33,25 +35,37 @@ class Shop extends Component {
                 shipper: {},
                 consignee: {},
                 notifyees: []
-            }
+            },
+            showRegistration: false
         };
         this.selectShipmentType = this.selectShipmentType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
         this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
         this.selectShipmentStage = this.selectShipmentStage.bind(this);
+        this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this);
+        this.toggleShowRegistration = this.toggleShowRegistration.bind(this);
+        this.hideRegistration = this.hideRegistration.bind(this);
     }
-    componentDidUpdate() {
-        // const { match } = this.props;
-        // debugger;
-        // if (!this.props.shipment && match.params.shipmentId) {
-        //     const { dispatch } = this.props;
-        //     dispatch(shipmentActions.fetchShipmentIfNeeded(match.params.shipmentId));
-        // } else if (this.props.shipment && this.props.shipment.data && match.params.shipmentId && this.props.shipment.data.id !== match.params.shipmentId) {
-        //     const { dispatch } = this.props;
-        //     dispatch(shipmentActions.fetchShipmentIfNeeded(match.params.shipmentId));
-        // }
+
+    shouldComponentUpdate(nextProps) {
+        const { loggingIn, registering, loading } = nextProps;
+        return loading || !(loggingIn || registering);
     }
+
+    // componentDidUpdate() {
+    //     const { bookingData} = this.props;
+    //     const {response} = bookingData;
+    //     if (response.stage1 && !response.stage2) {
+    //         this.setState({shipment: response.stage1.shipment})
+    //     } else if (response.stage1 && response.stage2 && !response.stage3) {
+    //         this.setState({shipment: response.stage2.shipment})
+    //     } else if (response.stage1 && response.stage2 && response.stage3 && !response.stage4) {
+    //         this.setState({shipment: response.stage3.shipment})
+    //     } else if (response.stage1 && response.stage2 && response.stage3 && response.stage4) {
+    //         this.setState({shipment: response.stage4.shipment})
+    //     }
+    // }
 
     getShipment(type) {
         const { dispatch } = this.props;
@@ -68,14 +82,23 @@ class Shop extends Component {
     selectShipmentStage(stage) {
         this.setState({ stageTracker: { stage: stage } });
     }
+    selectShipmentStageAndGo(stage) {
+        const { history, bookingData } = this.props;
+        const activeId = bookingData.activeShipment;
+        this.setState({ stageTracker: { stage: stage.step } });
+        if (stage.step === 1) {
+            history.push('/booking/');
+        } else {
+            history.push('/booking/' + activeId + stage.url);
+        }
+    }
 
     setShipmentData(data) {
-        const { dispatch } = this.props;
+        const { dispatch} = this.props;
         dispatch(shipmentActions.setShipmentDetails(data));
         // this.setState({
         //     stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
         // });
-        // history.push('/booking/' + data.shipment.id + '/choose_route');
     }
 
     setShipmentContacts(data) {
@@ -87,6 +110,19 @@ class Shop extends Component {
         // history.push('/booking/' + data.shipment.id + '/finish_booking');
     }
 
+    toggleShowRegistration(req) {
+        this.setState({
+            showRegistration: !this.state.showRegistration,
+            req: req
+        });
+    }
+
+    hideRegistration() {
+        this.setState({
+            showRegistration: false,
+        });
+    }
+
     selectShipmentRoute(obj) {
         const { dispatch, bookingData } = this.props;
         const { schedule, total } = obj;
@@ -96,16 +132,12 @@ class Shop extends Component {
             total,
             shipment: shipmentData.shipment
         };
+        if (this.props.user.data.guest) {
+            this.toggleShowRegistration(req);
+            return;
+        }
+        console.log('Not Guest');
         dispatch(shipmentActions.setShipmentRoute(req));
-        // history.push(
-        //     '/booking/' + shipmentData.shipment.id + '/booking_details'
-        // );
-        // this.setState({
-        //     stageTracker: {
-        //         shipmentType: shipmentData.shipment.load_type,
-        //         stage: 3
-        //     }
-        // });
     }
 
     render() {
@@ -115,18 +147,49 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, isLoading } = this.props;
+        const { bookingData, theme, match, loading, tenant, user } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
-        const loading =  isLoading ? <Loading theme={theme} /> : '';
+        const loadingScreen = loading ? <Loading theme={theme} /> : '';
+        let shipmentId = '';
+        if (response && response.stage1 && !response.stage2) {
+            shipmentId = response.stage1.shipment.id;
+        } else if (response && response.stage1 && response.stage2 && !response.stage3) {
+            shipmentId = response.stage2.shipment.id;
+        } else if (response && response.stage1 && response.stage2 && response.stage3 && !response.stage4) {
+            shipmentId = response.stage3.shipment.id;
+        } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
+            shipmentId = response.stage4.shipment.id;
+        }
+        // const loginModal = (
+        //     <Modal
+        //         component={
+        //             <RegistrationPage theme={theme} req={this.state.req} user={this.props.user} tenant={this.props.tenant} />
+        //         }
+        //         parentToggle={this.toggleShowRegistration}
+        //     />
+        // );
+        const { req } = this.state;
+        const loginModal = (
+            <Modal
+                component={
+                    <LoginRegistrationWrapper
+                        LoginPageProps={{theme, req}}
+                        RegistrationPageProps={{theme, tenant, req, user}}
+                        initialCompName="RegistrationPage"
+                    />
+                }
+                parentToggle={this.toggleShowRegistration}
+            />
+        );
 
         return (
-
             <div className="layout-row flex-100 layout-wrap">
-                {loading}
+                {loadingScreen}
+                { this.state.showRegistration && !loading ? loginModal : '' }
                 <Header theme={this.props.theme} />
                 <ShopStageView
                     shopType={this.state.shopType}
@@ -134,7 +197,8 @@ class Shop extends Component {
                     theme={theme}
                     stages={this.state.shipmentStages}
                     currentStage={this.state.stageTracker.stage}
-                    setStage={this.selectShipmentStage}
+                    setStage={this.selectShipmentStageAndGo}
+                    shipmentId={shipmentId}
                 />
                 <Route
                     exact
@@ -206,6 +270,8 @@ class Shop extends Component {
                                 }
                                 setStage={this.selectShipmentStage}
                                 messages={error ? error.stage4 : []}
+                                tenant={tenant}
+                                hideRegistration={this.hideRegistration}
                             />
                         )}
                     />
@@ -218,6 +284,7 @@ class Shop extends Component {
                         <BookingConfirmation
                             {...props}
                             theme={theme}
+                            tenant={tenant.data}
                             shipmentData={response ? response.stage4 : {}}
                             setStage={this.selectShipmentStage}
                         />
@@ -249,15 +316,17 @@ Shop.defaultProps = {
 
 function mapStateToProps(state) {
     const { users, authentication, tenant, bookingData } = state;
-    const { user, loggedIn } = authentication;
-    const isLoading = bookingData.loading;
+    const { user, loggedIn, loggingIn, registering } = authentication;
+    const loading = bookingData.loading;
     return {
         user,
         users,
         tenant,
         loggedIn,
         bookingData,
-        isLoading
+        loggingIn,
+        registering,
+        loading
     };
 }
 

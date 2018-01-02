@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { moment } from '../../constants';
+import { Price } from '../Price/Price';
 import styles from './BestRoutesBox.scss';
 export class BestRoutesBox extends Component {
     constructor(props) {
@@ -11,12 +12,14 @@ export class BestRoutesBox extends Component {
         // let fastestSchedule;
         let fastestFare;
         schedules.forEach(sched => {
-            const travelTime = moment(sched.eta).diff(sched.etd);
-            const schedKey = sched.starthub_id + '-' + sched.endhub_id;
-            if (!fastestTime || travelTime < fastestTime) {
-                fastestTime = travelTime;
-                // fastestSchedule = sched;
-                fastestFare = fees[schedKey].total;
+            if (sched.mode_of_transport === this.props.moT) {
+                const travelTime = moment(sched.eta).diff(sched.etd);
+                const schedKey = sched.hub_route_key;
+                if (!fastestTime || travelTime < fastestTime) {
+                    fastestTime = travelTime;
+                    // fastestSchedule = sched;
+                    fastestFare = fees[schedKey].total;
+                }
             }
         });
         return (
@@ -29,7 +32,7 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Fastest route</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{fastestFare.toFixed(2)} EUR</p>
+                    <Price value={fastestFare} scale="0.75" />
                 </div>
             </div>
         );
@@ -39,11 +42,16 @@ export class BestRoutesBox extends Component {
         let cheapestFare;
         // let cheapestSchedule;
         schedules.forEach(sched => {
-            const schedKey = sched.starthub_id + '-' + sched.endhub_id;
-            const fare = fees[schedKey].total;
-            if (!cheapestFare || fare < cheapestFare) {
-                cheapestFare = fare;
-                // cheapestSchedule = sched;
+            if (sched.mode_of_transport === this.props.moT) {
+                const schedKey = sched.hub_route_key;
+                if (!fees[schedKey]) {
+                    debugger;
+                }
+                const fare = fees[schedKey].total;
+                if (!cheapestFare || fare < cheapestFare) {
+                    cheapestFare = fare;
+                    // cheapestSchedule = sched;
+                }
             }
         });
         return (
@@ -56,15 +64,15 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Cheapest Route</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{cheapestFare.toFixed(2)} EUR</p>
+                    <Price value={cheapestFare} scale="0.75" />
                 </div>
             </div>
         );
     }
     sortBestOption(schedules, fees, depDate, style) {
         const fareArray = schedules.sort((a, b) => {
-            const aKey = a.starthub_id + '-' + a.endhub_id;
-            const bKey = b.starthub_id + '-' + b.endhub_id;
+            const aKey = a.hub_route_key;
+            const bKey = b.hub_route_key;
             return fees[aKey] - fees[bKey];
         });
         const timeArray = schedules.sort((a, b) => {
@@ -77,16 +85,18 @@ export class BestRoutesBox extends Component {
         let bestFare;
         // let bestOption;
         schedules.forEach(sched => {
-            const timeScore = timeArray.indexOf(sched);
-            const fareScore = fareArray.indexOf(sched);
-            const depScore = depArray.indexOf(sched);
-            const schedKey = sched.starthub_id + '-' + sched.endhub_id;
-            const fare = fees[schedKey].total;
-            const totalScore = timeScore + fareScore + depScore;
-            if (totalScore < lowScore) {
-                lowScore = totalScore;
-                // bestOption = sched;
-                bestFare = fare;
+            if (sched.mode_of_transport === this.props.moT) {
+                const timeScore = timeArray.indexOf(sched);
+                const fareScore = fareArray.indexOf(sched);
+                const depScore = depArray.indexOf(sched);
+                const schedKey = sched.hub_route_key;
+                const fare = fees[schedKey] ? fees[schedKey].total : 0;
+                const totalScore = timeScore + fareScore + depScore;
+                if (totalScore < lowScore) {
+                    lowScore = totalScore;
+                    // bestOption = sched;
+                    bestFare = fare;
+                }
             }
         });
         return (
@@ -100,7 +110,7 @@ export class BestRoutesBox extends Component {
                     <h4 className="flex-none">Best Deal</h4>
                 </div>
                 <div className="flex-100 layout-row">
-                    <p className="flex-none">{bestFare.toFixed(2)} EUR</p>
+                    <Price value={bestFare} scale="0.75"/>
                 </div>
             </div>
         );
@@ -168,5 +178,6 @@ export class BestRoutesBox extends Component {
 }
 BestRoutesBox.propTypes = {
     theme: PropTypes.object,
-    shipmentData: PropTypes.object
+    shipmentData: PropTypes.object,
+    moT: PropTypes.string
 };

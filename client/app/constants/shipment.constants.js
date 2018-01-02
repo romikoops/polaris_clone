@@ -26,29 +26,34 @@ export const OPEN_SHIPMENT_TYPES = [
 
 export const SHIPMENT_STAGES = [
     {
-        step: 0,
-        text: 'Choose shipment type',
-        header: 'Choose shipment'
-    },
-    {
         step: 1,
-        text: 'Shipment Details',
-        header: 'Shipment Details'
+        text: 'Choose shipment type',
+        header: 'Choose shipment',
+        url: '/'
     },
     {
         step: 2,
-        text: 'Choose Route',
-        header: 'Choose Route'
+        text: 'Shipment Details',
+        header: 'Shipment Details',
+        url: '/shipment_details'
     },
     {
         step: 3,
-        text: 'Booking overview & details',
-        header: 'Booking Details'
+        text: 'Choose Route',
+        header: 'Choose Route',
+        url: '/choose_route'
     },
     {
         step: 4,
+        text: 'Booking overview & details',
+        header: 'Booking Details',
+        url: '/booking_details'
+    },
+    {
+        step: 5,
         text: 'Booking Confirmation',
-        header: 'Booking Confirmation'
+        header: 'Booking Confirmation',
+        url: '/finish_booking'
     }
 ];
 

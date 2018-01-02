@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171201143205) do
+ActiveRecord::Schema.define(version: 20171220153514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "dangerous_goods"
+    t.string "cargo_class"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -36,6 +37,7 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "alias", default: false
   end
 
   create_table "containers", force: :cascade do |t|
@@ -48,6 +50,7 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "dangerous_goods"
+    t.string "cargo_class"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -66,6 +69,15 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "hub_routes", force: :cascade do |t|
+    t.integer "starthub_id"
+    t.integer "endhub_id"
+    t.integer "route_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -137,8 +149,6 @@ ActiveRecord::Schema.define(version: 20171201143205) do
 
   create_table "schedules", force: :cascade do |t|
     t.integer "route_id"
-    t.integer "starthub_id"
-    t.integer "endhub_id"
     t.string "mode_of_transport"
     t.datetime "etd"
     t.datetime "eta"
@@ -146,6 +156,10 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.string "call_sign"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "hub_route_id"
+    t.string "hub_route_key"
+    t.integer "vehicle_id"
+    t.integer "tenant_id"
   end
 
   create_table "service_charges", force: :cascade do |t|
@@ -199,14 +213,34 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.boolean "has_on_carriage"
     t.decimal "on_carriage_distance_km"
     t.decimal "total_price"
-    t.string "total_goods_value"
+    t.decimal "total_goods_value"
     t.string "cargo_notes"
     t.string "haulage"
     t.string "hs_code", default: [], array: true
-    t.integer "schedule_set", default: [], array: true
     t.jsonb "generated_fees"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.jsonb "schedule_set", default: [], array: true
+    t.integer "tenant_id"
+  end
+
+  create_table "tenant_vehicle_types", force: :cascade do |t|
+    t.integer "vehicle_type_id"
+    t.integer "tenant_id"
+    t.boolean "is_default"
+    t.string "mode_of_transport"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tenant_vehicles", force: :cascade do |t|
+    t.integer "vehicle_id"
+    t.integer "tenant_id"
+    t.boolean "is_default"
+    t.string "mode_of_transport"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "tenants", force: :cascade do |t|
@@ -218,6 +252,25 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.jsonb "phones"
     t.jsonb "addresses"
     t.string "name"
+  end
+
+  create_table "transport_categories", force: :cascade do |t|
+    t.integer "vehicle_id"
+    t.string "mode_of_transport"
+    t.string "name"
+    t.string "cargo_class"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transport_types", force: :cascade do |t|
+    t.integer "vehicle_type_id"
+    t.string "mot"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "cargo_class"
+    t.string "mode_of_transport"
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
@@ -272,11 +325,27 @@ ActiveRecord::Schema.define(version: 20171201143205) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "role_id"
+    t.boolean "guest", default: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  end
+
+  create_table "vehicle_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "mot"
+    t.string "mode_of_transport"
+  end
+
+  create_table "vehicles", force: :cascade do |t|
+    t.string "name"
+    t.string "mode_of_transport"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "users", "roles"

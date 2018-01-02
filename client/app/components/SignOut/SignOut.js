@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router';
-import { userActions } from '../../actions';
+import { authenticationActions } from '../../actions';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 
 class SignOut extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch(userActions.logout());
+        dispatch(authenticationActions.logout());
     }
 
     render() {

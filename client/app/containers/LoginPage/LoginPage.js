@@ -2,16 +2,17 @@ import React from 'react';
 // import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { userActions } from '../../actions';
+import { authenticationActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
-import './LoginPage.scss';
+import styles from './LoginPage.scss';
+// import styled from 'styled-components';
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
         // reset login status
-        this.props.dispatch(userActions.logout());
+        // this.props.dispatch(authenticationActions.logout());
 
         this.state = {
             username: '',
@@ -33,20 +34,29 @@ class LoginPage extends React.Component {
 
         this.setState({ submitted: true });
         const { username, password } = this.state;
-        const { dispatch } = this.props;
+        const { dispatch, req } = this.props;
         if (username && password) {
-            dispatch(userActions.login(username, password));
+            dispatch(authenticationActions.login({
+                email: username,
+                password: password,
+                shipmentReq: req
+            }));
         }
     }
 
     render() {
         const { loggingIn, theme } = this.props;
         const { username, password, submitted } = this.state;
+        // const StyledInput = styled.input`
+        //     &:focus + hr {
+        //         border-color: ${theme && theme.colors ? theme.colors.primary : 'black'};
+        //     }
+        // `;
         return (
-            <form name="form" onSubmit={this.handleSubmit}>
+            <form className={styles.login_form} name="form" onSubmit={this.handleSubmit}>
                 <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
                     <label htmlFor="username">Username</label>
-                    <input type="text" className="form-control" name="username" value={username} placeholder="enter your username" onChange={this.handleChange} />
+                    <input type="text" className={styles.form_control} name="username" value={username} placeholder="enter your username" onChange={this.handleChange} />
                     {submitted && !username &&
                         <div className="help-block">Username is required</div>
                     }
@@ -54,14 +64,14 @@ class LoginPage extends React.Component {
                 </div>
                 <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
                     <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
+                    <input type="password" className={styles.form_control} name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
                     {submitted && !password &&
                         <div className="help-block">Password is required</div>
                     }
                     <hr/>
-                    <a href="#" className="forget_password_link">forget password?</a>
+                    <a href="#" className={styles.forget_password_link}>forget password?</a>
                 </div>
-                <div className="form-group form_group_submit_btn">
+                <div className={`form-group ${styles.form_group_submit_btn}`}>
                     <RoundButton text="sign in" theme={theme} active/>
 
                     {loggingIn &&

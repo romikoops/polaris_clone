@@ -1,7 +1,7 @@
 class ShipmentsController < ApplicationController
-  before_action :require_login_and_correct_id, except: [:test_email]
-
   include ShippingTools
+
+  skip_before_action :require_non_guest_authentication!, except: [:finish_booking, :upload_document]
 
   def index
     @shipper = current_user
@@ -9,6 +9,12 @@ class ShipmentsController < ApplicationController
     @requested_shipments = @shipper.shipments.where(status: "requested")
     @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
+    resp = {
+      requested: @requested_shipments,
+      open: @open_shipments,
+      finished: @finished_shipments
+    }
+    response_handler(resp)
   end
 
   def new 
@@ -30,7 +36,7 @@ class ShipmentsController < ApplicationController
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
     if params[:file]
-      create_document(params[:file], @shipment, params[:type])
+      create_document(params[:file], @shipment, params[:type], current_user)
     end
   end
 
@@ -39,7 +45,20 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    resp = Shipment.find(params[:shipment_id])
+    @shipment = Shipment.find(params[:id])
+    @cargo_items = @shipment.cargo_items
+    @containers = @shipment.containers
+    @shipment_contacts = @shipment.shipment_contacts
+    @contacts = []
+    @shipment_contacts.each do |sc|
+      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    end
+    @schedules = []
+    @shipment.schedule_set.each do |ss|
+      @schedules.push(Schedule.find(ss['id']))
+    end
+    @documents = @shipment.documents
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
   end
 
@@ -68,10 +87,6 @@ class ShipmentsController < ApplicationController
   end
 
   private
-
-  def require_login_and_correct_id
-    raise ApplicationError::NotAuthenticated unless user_signed_in?
-  end
 
   def forwarder_notification_email(user, shipment)
     ShipmentMailer.forwarder_notification(user, shipment).deliver_now

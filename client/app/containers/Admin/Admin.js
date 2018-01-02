@@ -4,12 +4,15 @@ import Header from '../../components/Header/Header';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
-import { AdminNav } from './AdminNav';
-import { AdminDashboard } from './AdminDashboard';
-import { AdminHubs } from './AdminHubs';
-import { AdminPricings } from './AdminPricings';
-import { AdminSchedules } from './AdminSchedules';
-import { AdminServiceCharges } from './AdminServiceCharges';
+import { bindActionCreators } from 'redux';
+import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import AdminShipments from '../../components/Admin/AdminShipments';
+import AdminClients from '../../components/Admin/AdminClients';
+import AdminHubs from '../../components/Admin/AdminHubs';
+import AdminRoutes from '../../components/Admin/AdminRoutes';
+import AdminPricings from '../../components/Admin/AdminPricings';
+import AdminTrucking from '../../components/Admin/AdminTrucking';
+import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -17,37 +20,57 @@ class Admin extends Component {
         super(props);
         this.setUrl = this.setUrl.bind(this);
     }
+    componentDidMount() {
+        const {adminDispatch} = this.props;
+        adminDispatch.getClients(false);
+        adminDispatch.getHubs(false);
+    }
     setUrl(target) {
         console.log(target);
-        const {dispatch} = this.props;
+        const {adminDispatch} = this.props;
         switch(target) {
             case 'hubs':
-                dispatch(adminActions.getHubs());
+                adminDispatch.getHubs(true);
                 break;
             case 'serviceCharges':
-                dispatch(adminActions.getServiceCharges());
+                adminDispatch.getServiceCharges(true);
                 break;
             case 'pricing':
-                dispatch(adminActions.getPricings());
+                adminDispatch.getPricings(true);
                 break;
             case 'schedules':
-                dispatch(adminActions.getSchedules());
+                adminDispatch.getSchedules(true);
                 break;
             case 'trucking':
-                dispatch(adminActions.getTrucking());
+                adminDispatch.getTrucking(true);
+                break;
+            case 'shipments':
+                adminDispatch.getShipments(true);
+                break;
+            case 'clients':
+                adminDispatch.getClients(true);
+                break;
+            case 'dashboard':
+                adminDispatch.getDashboard(true);
+                break;
+            case 'routes':
+                adminDispatch.getRoutes(true);
+                break;
+            case 'wizard':
+                adminDispatch.goTo('/admin/wizard');
                 break;
             default:
                 break;
         }
     }
     render() {
-        const {theme, adminData} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules} = adminData;
+        const {theme, adminData, adminDispatch} = this.props;
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
         if (hubs) {
-          hubs.forEach((hub) => {
-              hubHash[hub.data.id] = hub;
-          });
+            hubs.forEach((hub) => {
+                hubHash[hub.data.id] = hub;
+            });
         }
         // debugger;
         return (
@@ -62,12 +85,12 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/dashboard"
-                                render={props => <AdminDashboard theme={theme} {...props} />}
+                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
                             />
                             <Route
 
                                 path="/admin/hubs"
-                                render={props => <AdminHubs theme={theme} {...props} hubs={hubs} />}
+                                render={props => <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs}/>}
                             />
                             <Route
 
@@ -77,12 +100,37 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/schedules"
-                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} schedules={schedules} />}
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} scheduleData={schedules} />}
                             />
-                             <Route
+                            <Route
 
                                 path="/admin/service_charges"
-                                render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} />}
+                                render={props => <AdminServiceCharges theme={theme} {...props} hubs={hubs} charges={serviceCharges} adminTools={adminDispatch}/>}
+                            />
+                            <Route
+
+                                path="/admin/shipments"
+                                render={props => <AdminShipments theme={theme} {...props} hubs={hubs} shipments={shipments} clients={clients}/>}
+                            />
+                            <Route
+
+                                path="/admin/clients"
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients}/>}
+                            />
+                            <Route
+
+                                path="/admin/routes"
+                                render={props => <AdminRoutes theme={theme} {...props} hubHash={hubHash} routes={routes} clients={clients}/>}
+                            />
+                            <Route
+
+                                path="/admin/wizard"
+                                render={props => <AdminWizard theme={theme} {...props} hubHash={hubHash} />}
+                            />
+                            <Route
+
+                                path="/admin/trucking"
+                                render={props => <AdminTrucking theme={theme} {...props} hubHash={hubHash} />}
                             />
                         </Switch>
                     </div>
@@ -118,5 +166,10 @@ function mapStateToProps(state) {
         adminData: admin
     };
 }
+function mapDispatchToProps(dispatch) {
+    return {
+        adminDispatch: bindActionCreators(adminActions, dispatch)
+    };
+}
 
-export default withRouter(connect(mapStateToProps)(Admin));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));

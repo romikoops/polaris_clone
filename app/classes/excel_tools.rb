@@ -1,5 +1,7 @@
 module ExcelTools
   include ImageTools
+  include MongoTools
+
   def overwrite_main_carriage_rates(params, dedicated, user = current_user)
     old_route_ids = Route.pluck(:id)
     old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
@@ -92,9 +94,9 @@ module ExcelTools
   end
 
   def overwrite_trucking_rates(params, user = current_user)
-    old_trucking_ids = nil
-    new_trucking_ids = []
-
+    # old_trucking_ids = nil
+    # new_trucking_ids = []
+    mongo = get_client
     defaults = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
@@ -103,7 +105,7 @@ module ExcelTools
       old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
 
       currency_row = first_sheet.row(1)
-
+      hubs = nexus.hubs
       header_row = first_sheet.row(2)
       header_row.shift
       header_row.shift
@@ -115,12 +117,15 @@ module ExcelTools
         min_max_arr = cell.split(" - ")
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
+      results = []
+      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
       (4..num_rows).each do |line|
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
         row_min_value = row_data.shift
-        ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
         row_data.each_with_index do |val, index|
           tmp = defaults[index]
           if row_min_value < weight_min_row[index]
@@ -130,30 +135,39 @@ module ExcelTools
           end
           tmp[:min_value] = min_value
           tmp[:value] = val
-          ntp.rate_table.push(tmp)
+          ntp[:rate_table].push(tmp)
 
-          ntp.save!
+          
 
-          new_trucking_ids << ntp.id
+          # new_trucking_ids << ntp.id
         end
+        # p ntp
+        results << ntp
+        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
+      end
+      # byebug
+      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+      hubs.each do |h|
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
       end
     end
 
-    kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
-  def overwrite_shanghai_trucking_rates(params, user = current_user)
-    old_trucking_ids = nil
-    new_trucking_ids = []
-
+  def overwrite_city_trucking_rates(params, user = current_user)
+    
+    mongo = get_client
     defaults = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
-      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
-
+      # old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
+      results = []
+      hubs = nexus.hubs
+      truckingTable = "#{nexus.id}_#{user.tenant_id}"  
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
       [3,4,5,6].each do |i|
@@ -172,7 +186,7 @@ module ExcelTools
         new_pricing[:nexus_id] = nexus.id
         new_pricing[:rate_type] = "city"
         new_pricing[:rate_table] = []
-        ntp = TruckingPricing.new(new_pricing)
+        ntp = new_pricing
 
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3]
@@ -182,21 +196,22 @@ module ExcelTools
           tmp[:delivery_eta_in_days] = row_data[10]
           tmp[:per_cbm_rate] = row_data[7]
 
-          ntp.rate_table.push(tmp)
+          ntp[:rate_table].push(tmp)
         end
-        ntp.save!
+        results << ntp
 
-        new_trucking_ids << ntp.id
-
+      end
+      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+      hubs.each do |h|
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "city", table: truckingTable, tenant_id: user.tenant_id})
       end
     end
 
-    kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
   def overwrite_service_charges(params, user = current_user)
-
     old_ids = ServiceCharge.pluck(:id)
     new_ids = []
 
@@ -226,7 +241,6 @@ module ExcelTools
         customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
         cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
       }
-
       hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
       new_charge.delete(:hub_code)
       new_charge[:hub_id] = hub.id
@@ -234,9 +248,11 @@ module ExcelTools
       if hub.service_charge
         hub.service_charge.destroy
       end
+
       sc = ServiceCharge.create(new_charge)
       hub.service_charge = sc
     end
+
     # service_charge_rows.each do |service_charge_row|
 
     #   service_charge_row.each do |k, v|
@@ -252,7 +268,6 @@ module ExcelTools
   end
 
   def overwrite_air_schedules(params, user = current_user)
-
     old_ids = Schedule.pluck(:id)
     new_ids = []
     locations = {}
@@ -271,31 +286,35 @@ module ExcelTools
 
         route = Route.find_by("origin_id = ? AND destination_id = ?", locations[row[:from]].id, locations[row[:to]].id)
       end
-      hub1 = locations[row[:from]].hubs_by_type("ocean").first
-      hub2 = locations[row[:to]].hubs_by_type("ocean").first
 
-      row[:starthub_id] = hub1.id
-      row[:endhub_id] = hub2.id
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
 
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+
+      hub1 = locations[row[:from]].hubs_by_type(row[:mode_of_transport]).first
+      hub2 = locations[row[:to]].hubs_by_type(row[:mode_of_transport]).first
+
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
+      row[:tenant_id] = user.tenant_id
       row.delete(:from)
       row.delete(:to)
 
       if route
         sched = route.schedules.find_or_create_by(row)
-        new_ids << sched.id
+        # new_ids << sched.id
       else
         raise "Route cannot be found!"
       end
     end
 
-    kicked_vs_ids = old_ids - new_ids
-    Schedule.where(id: kicked_vs_ids).destroy_all
+    # kicked_vs_ids = old_ids - new_ids
+    # Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
   def overwrite_vessel_schedules(params, user = current_user)
-
-    old_ids = Schedule.pluck(:id)
-    new_ids = []
+    # old_ids = Schedule.pluck(:id)
+    # new_ids = []
     locations = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -312,30 +331,31 @@ module ExcelTools
 
         route = Route.find_by("origin_nexus_id = ? AND destination_nexus_id = ?", locations[row[:from]].id, locations[row[:to]].id)
       end
-      hub1 = locations[row[:from]].hubs_by_type("ocean").first
-      hub2 = locations[row[:to]].hubs_by_type("ocean").first
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
 
-      row[:starthub_id] = hub1.id
-      row[:endhub_id] = hub2.id
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
 
+      row[:tenant_id] = user.tenant_id
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       row.delete(:from)
       row.delete(:to)
 
       if route
-        sched = route.schedules.find_or_create_by(row)
-        new_ids << sched.id
+        sched = hubroute.schedules.find_or_create_by(row)
+        # new_ids << sched.id
       else
         raise "Route cannot be found!"
       end
     end
 
-    kicked_vs_ids = old_ids - new_ids
-    Schedule.where(id: kicked_vs_ids).destroy_all
+    # kicked_vs_ids = old_ids - new_ids
+    # Schedule.where(id: kicked_vs_ids).destroy_all
   end
 
   def overwrite_train_schedules(params, user = current_user)
-    old_ids = Schedule.pluck(:id)
-    new_ids = []
+    # old_ids = Schedule.pluck(:id)
+    # new_ids = []
     data_box = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -351,26 +371,24 @@ module ExcelTools
         data_box[train_schedule[:to]] = Location.find_by_hub_name(train_schedule[:to])
         robj = Route.where("origin_id = ? AND destination_id = ?", data_box[train_schedule[:from]], data_box[train_schedule[:to]]).first
       end
-      # robj = get_route_from_schedule(train_schedule[:from], train_schedule[:to])
+      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+
+      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+
+      hub1 = locations[row[:from]].hubs_by_type("rail").first
+      hub2 = locations[row[:to]].hubs_by_type("rail").first
+      row[:tenant_id] = user.tenant_id
+      row[:vehicle_id] = vt.vehicle_id
+      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       if robj
         ts = robj.schedules.find_or_create_by(train_schedule)
-        new_ids << ts.id
       else
-        nrt = Route.create_from_schedule(train_schedule, user.tenant_id)
-        ts = nrt.schedules.find_or_create_by(train_schedule)
-        new_ids << ts.id
-
+        raise "Route cannot be found!"
       end
     end
-
-    kicked_ts_ids = old_ids - new_ids
-    Schedule.where(id: kicked_ts_ids).destroy_all
-
   end
 
   def overwrite_hubs(params, user = current_user)
-    old_ids = Hub.pluck(:id)
-    new_ids = []
     hubs = []
 
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
@@ -391,18 +409,16 @@ module ExcelTools
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
       end
-
-      hub = nexus.hubs.find_or_create_by(hub_code: hub_code, location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
+      # byebug
+      hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
-      new_ids << hub.id
     end
-
-    kicked_hub_ids = old_ids - new_ids
-    Hub.where(id: kicked_hub_ids).destroy_all
-
     hubs.each do |hub|
-      hub.generate_hub_code!
+      if !hub.hub_code
+         hub.generate_hub_code!(user.tenant_id)
+      end
     end
+    return hubs
   end
 
   def load_hub_images(params)
@@ -417,5 +433,372 @@ module ExcelTools
       nexus.update_attributes(photo: imgstr[:sm])
       nexus.save!
     end
+  end
+
+  def overwrite_mongo_pricings(params, dedicated, user = current_user)
+    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
+    mongo = get_client
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    pricing_rows = first_sheet.parse(
+      customer_id: 'CUSTOMER_ID',
+      effective_date: 'EFFECTIVE_DATE',
+      expiration_date: 'EXPIRATION_DATE',
+      origin: 'ORIGIN',
+      vehicle_type: 'VEHICLE_TYPE',
+      mot: 'MOT',
+      cargo_type: 'CARGO_TYPE',
+      destination: 'DESTINATION',
+      lcl_currency: 'LCL_CURRENCY',
+      lcl_rate_wm: 'LCL_RATE_WM',
+      lcl_rate_min: 'LCL_RATE_MIN',
+      lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
+      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_20_currency: 'FCL_20_CURRENCY',
+      fcl_20_rate: 'FCL_20_RATE',
+      fcl_20_heavy_weight_surcharge_wm: 'FCL_20_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_20_heavy_weight_surcharge_min: 'FCL_20_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_40_currency: 'FCL_40_CURRENCY',
+      fcl_40_rate: 'FCL_40_RATE',
+      fcl_40_heavy_weight_surcharge_wm: 'FCL_40_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_40_heavy_weight_surcharge_min: 'FCL_40_HEAVY_WEIGHT_SURCHARGE_MIN',
+      fcl_40_hq_currency: 'FCL_40_HQ_CURRENCY',
+      fcl_40_hq_rate: 'FCL_40_HQ_RATE',
+      fcl_40_hq_heavy_weight_surcharge_wm: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_WM',
+      fcl_40_hq_heavy_weight_surcharge_min: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_MIN'
+    )
+    new_pricings = []
+    new_path_pricings = {}
+
+    pricing_rows.each_with_index do |row, index|
+      puts "load pricing row #{index}..."
+      origin = Location.find_by(name: row[:origin])
+      destination = Location.find_by(name: row[:destination])
+      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+      hubroute = HubRoute.create_from_route(route, row[:mot])
+
+      if !row[:vehicle_type]
+        vt = Vehicle.find_by_name("#{row[:mot]}_default")
+      else
+        vt = Vehicle.find_by_name(row[:vehicle_type])
+      end
+
+      load_types = [
+        'fcl_20f',
+        'fcl_40f',
+        'fcl_40f_hq',
+        'lcl'
+      ]
+
+      tt_obj = {}
+
+      if !row[:cargo_type]
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
+        end
+      else
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
+        end
+      end
+
+      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+
+      if !dedicated
+        cust_id = nil
+        ded_bool = false
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
+        cust_id = row[:customer_id].to_i
+        ded_bool = true
+      end
+
+      lcl_obj = {
+        wm:{
+          currency: row[:lcl_currency],
+          rate: row[:lcl_rate_wm],
+          min: row[:lcl_rate_min]
+        },
+        heavy_wm: {
+          currency: row[:lcl_currency],
+          heavy_weight: row[:lcl_heavy_weight_surcharge_wm],
+        heavy_wm_min: row[:lcl_heavy_weight_surcharge_min]}
+      }
+
+      fcl_20f_obj = {
+        wm:{
+          currency: row[:fcl_20_currency],
+          rate: row[:fcl_20_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_20_currency],
+          heavy_weight: row[:fcl_20_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_20_heavy_weight_surcharge_min]
+        }
+      }
+
+      fcl_40f_obj = {
+        wm:{
+          currency: row[:fcl_40_currency],
+          rate: row[:fcl_40_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_40_currency],
+          heavy_weight: row[:fcl_40_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40_heavy_weight_surcharge_min]
+        }
+      }
+
+      fcl_40f_hq_obj = {
+        wm:{
+          currency: row[:fcl_40_hq_currency],
+          rate: row[:fcl_40_hq_rate]
+        },
+        heavy_kg:{
+          currency: row[:fcl_40_hq_currency],
+          heavy_weight: row[:fcl_40_hq_heavy_weight_surcharge_wm],
+          heavy_kg_min: row[:fcl_40_hq_heavy_weight_surcharge_min]
+        }
+      }
+
+      price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
+
+      if dedicated
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          tmpItem = price_obj[lt]
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
+          tmpItem[:_id] = uuid;
+          tmpItem[:tenant_id] = user.tenant_id;
+          userObj = {}
+          userObj[pathKey] = uuid
+          put_item_fn(mongo, 'pricings', tmpItem)
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+          new_path_pricings[pathKey]["#{user.id}"] = uuid
+        end
+      else
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          tmpItem = price_obj[lt]
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
+          tmpItem[:_id] = uuid;
+          tmpItem[:tenant_id] = user.tenant_id
+          pr = put_item_fn(mongo, 'pricings', tmpItem)
+
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
+
+          new_path_pricings[pathKey]["open"] = uuid
+          new_path_pricings[pathKey]["hub_route"] = hubroute.id
+          new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
+          new_path_pricings[pathKey]["route"] = route.id
+          new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
+        end
+      end
+    end
+
+    npps = []
+    new_path_pricings.each do |key, value|
+      tmpObj = value
+      ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+    end
+  end
+
+  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
+    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
+    mongo = get_client
+    terms = {
+      "BAS" => "Basic Ocean Freight",
+      "CFD" => "Congestion Fee Destination",
+      "CFO" => "Congestion Fee Origin",
+      "DDF" => "Documentation fee - Destination",
+      "DHC" => "Terminal Handling Service - Destination",
+      "DPA" => "Arbitrary - Destination",
+      "ERS" => "Emergency Risk Surcharge",
+      "EXP" => "Export Service",
+      "IHE" => "Inland Haulage Export",
+      "IMP" => "Import Service",
+      "LSS" => "Low Sulphur Surcharge",
+        
+      "ODF" => "Documentation Fee Origin",
+      "OHC" => "Terminal Handling Service - Origin",
+      "OPA" => "Arbitrary - Origin",
+        
+      "PSS" => "Peak Season Surcharge",
+      "SBF" => "Standard Bunker Adjustment Factor",
+
+      "SOC" => "Shipper Owned container",
+      "NOR" => "Non Operating Refer container",
+      "EMPTY" => "Empty Container",
+
+      "CY" =>  "Container Yard",
+      "SD" => "Store Door",
+
+      "20DRY" => "20 Dry container",
+      "40DRY" => "40 Dry container",
+      "40HDRY"  => "40 High Cube Dry Container",
+      "45HDRY"  => "45 High Cube Dry Container"
+    }
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    pricing_rows = first_sheet.parse(
+      receipt: 'RECEIPT',
+      effective_date: 'EFFECTIVE_DATE',
+      expiration_date: 'EXPIRY_DATE',
+      origin: 'RECEIPT',
+      cargo_type: 'COMMODITY_NAME',
+      destination: 'DELIVERY',
+      charge: 'CHARGE',
+      inclusive_surcharge: 'INCLUSIVE_SURCHARGE',
+      service_code: 'SERVICE_CODE',
+      rate_basis: 'RATE_BASIS',
+      fcl_20_rate: '20DRY',
+      fcl_40_rate: '40DRY',
+      fcl_40_hq_rate: '40HDRY',
+      fcl_45_hq_rate: '45HDRY',
+    )
+    new_pricings = []
+    new_path_pricings = {}
+    dataObj = {}
+    vt = Vehicle.find_by_name("ocean_default")
+    new_pricings = {}
+    tt_obj = {}
+    pricing_rows.each_with_index do |row, index|
+      row[:mot] = 'ocean'
+      puts "load pricing row #{index}..."
+      pp_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}"
+       
+      if !new_pricings[pp_key]
+        new_pricings[pp_key] = {
+          "data" => {},
+          "sizes" => {
+            "fcl_20f" => {},
+            "fcl_40f" => {},
+            "fcl_40f_hq" => {},
+            "fcl_45f_hq" => {}
+            }
+          }
+          dataObj[pp_key] = {}
+        origin = Location.from_short_name(row[:origin])
+        destination = Location.from_short_name(row[:destination])
+        route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+        hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+        dataObj[pp_key]["origin"] = origin
+        dataObj[pp_key]["destination"] = destination
+        dataObj[pp_key]["route"] = route
+        dataObj[pp_key]["hubroute"] = hubroute
+        new_pricings[pp_key]["data"]["route"] = route.id
+        new_pricings[pp_key]["data"]["hub_route"] = hubroute.id
+        new_pricings[pp_key]["data"]["service_code"] = row[:service_code]
+        new_pricings[pp_key]["data"]["inclusive_surcharge"] = row[:inclusive_surcharge]
+      end
+
+      tmpPrice = new_pricings[pp_key]
+
+      load_types = [
+        'fcl_20f',
+        'fcl_40f',
+        'fcl_40f_hq'
+      ]
+
+      
+
+      if !row[:cargo_type] || row[:cargo_type] == 'FAK'
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
+        end
+      else
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
+        end
+      end
+
+      # dataObj[pp_key]["hubroute"].generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+
+      if !dedicated
+        cust_id = nil
+        ded_bool = false
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
+        cust_id = row[:customer_id].to_i
+        ded_bool = true
+      end
+
+      tmpPrice["sizes"]["fcl_20f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_20_rate])
+      tmpPrice["sizes"]["fcl_40f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_rate])
+      tmpPrice["sizes"]["fcl_40f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_hq_rate])
+      tmpPrice["sizes"]["fcl_45f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_45_hq_rate])
+     
+
+    end
+      # price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
+      # byebug
+
+        new_pricings.each do |key, value|
+          value["sizes"].each do |skey, svalue|
+           if skey != 'fcl_45f_hq'
+            tmpItem = value["data"]
+            svalue.each do |pkey, pvalue|
+              tmpItem[pkey] = pvalue
+            end
+            p tmpItem
+             if dedicated
+                uuid = SecureRandom.uuid
+               
+                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+                tmpItem[:_id] = uuid;
+                tmpItem[:tenant_id] = user.tenant_id;
+                userObj = {}
+                userObj[pathKey] = uuid
+                put_item_fn(mongo, 'pricings', tmpItem)
+                if !new_path_pricings[pathKey]
+                  new_path_pricings[pathKey] = {}
+                end
+                update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+                new_path_pricings[pathKey]["#{user.id}"] = uuid
+            else
+                uuid = SecureRandom.uuid
+               p skey
+               p tt_obj
+                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+                tmpItem[:_id] = uuid;
+                tmpItem[:tenant_id] = user.tenant_id
+                pr = put_item_fn(mongo, 'pricings', tmpItem)
+
+                if !new_path_pricings[pathKey]
+                  new_path_pricings[pathKey] = {}
+                end
+
+                new_path_pricings[pathKey]["open"] = uuid
+                new_path_pricings[pathKey]["hub_route"] = dataObj[key]["hubroute"].id
+                new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
+                new_path_pricings[pathKey]["route"] = dataObj[key]["route"].id
+                new_path_pricings[pathKey]["transport_category"] = tt_obj[skey].id
+            end
+          end
+        end
+      end
+      npps = []
+      new_path_pricings.each do |key, value|
+        tmpObj = value
+        ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+      
+    end
+  end
+  def price_split(basis, string)
+    vals = string.split(' ')
+    return {
+      "currency" => vals[1],
+      "rate" => vals[0].to_i,
+      "rate_basis" => basis
+    }
   end
 end

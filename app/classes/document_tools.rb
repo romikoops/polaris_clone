@@ -14,11 +14,17 @@ def create(file, shipment)
 	end
 	
 	def get_file_url(key)
-		signer = Aws::S3::Presigner.new(
-      access_key_id: ENV['AWS_KEY'],
-      secret_access_key: ENV['AWS_SECRET'],
-      region: ENV['AWS_REGION']
+		# signer = Aws::S3::Presigner.new(
+  #     access_key_id: ENV['AWS_KEY'],
+  #     secret_access_key: ENV['AWS_SECRET'],
+  #     region: ENV['AWS_REGION']
+  #   )
+  signer = Aws::S3::Presigner.new(
+      :access_key_id => ENV['AWS_KEY'],
+      :secret_access_key => ENV['AWS_SECRET'],
+      :region => ENV['AWS_REGION']
     )
+    byebug
  		@url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: key)	
 	end
 end

@@ -7,6 +7,7 @@ import { moment } from '../../constants';
 import styles from './ChooseRoute.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
+import {v4} from 'node-uuid';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -22,7 +23,8 @@ export class ChooseRoute extends Component {
     }
     componentDidMount() {
         const { setStage } = this.props;
-        setStage(2);
+        setStage(3);
+        window.scrollTo(0, 0);
     }
     setDuration(val) {
         this.setState({ durationFilter: val });
@@ -37,13 +39,31 @@ export class ChooseRoute extends Component {
     chooseResult(obj) {
         this.props.chooseRoute(obj);
     }
+    dynamicSort(property) {
+        let sortOrder = 1;
+        let prop;
+        if(property[0] === '-') {
+            sortOrder = -1;
+            prop = property.substr(1);
+        } else {
+            prop = property;
+        }
+        return function(a, b) {
+            const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
+            const result2 = result1 ? 1 : 0;
+            return result2 * sortOrder;
+        };
+    }
     render() {
         const { shipmentData, messages } = this.props;
         const focusRoutes = [];
         const altRoutes = [];
         let closestRoute;
         let smallestDiff = 100;
-        if (shipmentData) {
+        if (!shipmentData) {
+            return '';
+        }
+
             const {
                 shipment,
                 originHubs,
@@ -51,7 +71,7 @@ export class ChooseRoute extends Component {
                 schedules
             } = shipmentData;
             const depDay = shipment ? shipment.planned_pickup_date : new Date();
-            if (schedules) {
+                schedules.sort(this.dynamicSort('etd'));
                 schedules.forEach(sched => {
                     if (
                         Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <=
@@ -59,14 +79,14 @@ export class ChooseRoute extends Component {
                     ) {
                         if (
                             Math.abs(moment(sched.etd).diff(depDay, 'days')) <
-                            smallestDiff
+                            smallestDiff && sched.mode_of_transport === this.state.selectedMoT
                         ) {
                             smallestDiff = Math.abs(
                                 moment(sched.etd).diff(depDay, 'days')
                             );
                             closestRoute = (
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}
@@ -82,7 +102,7 @@ export class ChooseRoute extends Component {
                         ) {
                             focusRoutes.push(
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}
@@ -95,7 +115,7 @@ export class ChooseRoute extends Component {
                         } else {
                             altRoutes.push(
                                 <RouteResult
-                                    key={sched.id}
+                                    key={v4()}
                                     selectResult={this.chooseResult}
                                     theme={this.props.theme}
                                     originHubs={originHubs}
@@ -108,8 +128,8 @@ export class ChooseRoute extends Component {
                         }
                     }
                 });
-            }
-        }
+        // altRoutes.sort(this.dynamicSort('etd'));
+        // focusRoutes.sort(this.dynamicSort('etd'));
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
@@ -117,11 +137,11 @@ export class ChooseRoute extends Component {
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-20 layout-row layout-wrap">
-                        <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} setDepartureDate={this.setDepDate}/>
+                        <RouteFilterBox theme={this.props.theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} departureDate={depDay} setDepartureDate={this.setDepDate}/>
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row">
-                            <BestRoutesBox theme={this.props.theme} shipmentData={this.props.shipmentData}/>
+                            <BestRoutesBox moT={this.state.selectedMoT} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>

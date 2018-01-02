@@ -46,54 +46,22 @@ function makePrimary(userId, locationId) {
     ).then(handleResponse);
 }
 
-function login(username, password) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: username, password })
-    };
-    return fetch(BASE_URL + '/auth/sign_in', requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response.statusText);
-            }
-            if (response.headers.get('access-token')) {
-                const accessToken = response.headers.get('access-token');
-                const client = response.headers.get('client');
-                const expiry = response.headers.get('expiry');
-                const tokenType = response.headers.get('token-type');
-                const uid = response.headers.get('uid');
-                const aHeader = {
-                    client: client,
-                    expiry: expiry,
-                    uid: uid,
-                    'access-token': accessToken,
-                    'token-type': tokenType
-                };
-                localStorage.setItem('authHeader', JSON.stringify(aHeader));
-            }
-            return response.json();
-        })
-        .then(user => {
-            // login successful if there's a jwt token in the response
-            if (user) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-            }
 
-            return user;
-        });
+function getShipments(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + id + '/shipments', requestOptions).then(handleResponse);
 }
+
 
 function getStoredUser() {
     const sortedUser = JSON.parse(localStorage.getItem('user'));
     return sortedUser ? sortedUser : {};
 }
 
-function logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem('user');
-}
 
 function getAll() {
     const requestOptions = {
@@ -115,26 +83,15 @@ function getById(id) {
     );
 }
 
-function register(user) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
-
-    return fetch(BASE_URL + '/auth/sign_up', requestOptions).then(
-        handleResponse
-    );
-}
 
 function update(user) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
+        body: JSON.stringify({update: user})
     };
 
-    return fetch(BASE_URL + '/users/' + user.id, requestOptions).then(
+    return fetch(BASE_URL + '/users/' + user.id + '/update', requestOptions).then(
         handleResponse
     );
 }
@@ -149,13 +106,40 @@ function _delete(id) {
     return fetch('/users/' + id, requestOptions).then(handleResponse);
 }
 
+function getHubs(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + id + '/hubs', requestOptions).then(handleResponse);
+}
+function getShipment(userId, id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + userId + '/shipments/' + id, requestOptions).then(handleResponse);
+}
+
+function getDashboard(userId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/users/' + userId + '/home', requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
+    getDashboard,
     makePrimary,
-    login,
-    logout,
-    register,
+    getShipment,
+    getShipments,
+    getHubs,
     getAll,
     getById,
     update,

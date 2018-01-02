@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './RouteResult.scss';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { Price } from '../Price/Price';
 export class RouteResult extends Component {
     constructor(props) {
         super(props);
@@ -28,31 +29,30 @@ export class RouteResult extends Component {
     }
     selectRoute() {
         const { schedule, fees } = this.props;
-        const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
+        const schedKey = schedule.hub_route_key;
         const totalFees = fees[schedKey].total;
         this.props.selectResult({ schedule: schedule, total: totalFees });
     }
     dashedGradient(color1, color2) {
-        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
-            color1
-        }, ${color2})`;
+        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
     }
     format2Digit(n) {
         return ('0' + n).slice(-2);
     }
     render() {
         const { theme, schedule } = this.props;
-        const schedKey = schedule.starthub_id + '-' + schedule.endhub_id;
+        const schedKey = schedule.hub_route_key;
+        const hubKeyArr = schedKey.split('-');
         let originHub = {};
         let destHub = {};
         if (this.props.originHubs) {
             this.props.originHubs.forEach(hub => {
-                if (hub.id === schedule.starthub_id) {
+                if (String(hub.id) === hubKeyArr[0]) {
                     originHub = hub;
                 }
             });
             this.props.destinationHubs.forEach(hub => {
-                if (hub.id === schedule.endhub_id) {
+                if (String(hub.id) === hubKeyArr[1]) {
                     destHub = hub;
                 }
             });
@@ -65,9 +65,6 @@ export class RouteResult extends Component {
                     }, ${theme.colors.brightSecondary})`
                     : 'black'
         };
-        const price = this.props.fees[schedKey].total;
-        const priceUnits = Math.floor(price);
-        const priceCents = this.format2Digit(Math.floor((price * 100) % 100));
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -169,13 +166,13 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format(
+                                    {moment(schedule.etd).format(
                                         'YYYY-MM-DD'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format('HH:mm')}{' '}
+                                    {moment(schedule.etd).format('HH:mm')}{' '}
                                 </p>
                             </div>
                         </div>
@@ -207,13 +204,7 @@ export class RouteResult extends Component {
                 <div className="flex-25 layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <p className="flex-none">Total price: </p>
-                        <h4 className={`flex-none ${styles.total_price}`}>
-                            {priceUnits}
-                            <sup>.{priceCents}</sup>{' '}
-                            <span className={styles.total_price_currency}>
-                                EUR
-                            </span>
-                        </h4>
+                        <Price value={this.props.fees[schedKey].total} />
                     </div>
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <RoundButton

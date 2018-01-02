@@ -1,0 +1,10 @@
+:local {
+  .nav_item i {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    margin: 0;
+  }
+  .nav_item {
+    height: 50px;
+  }
+}
