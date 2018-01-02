@@ -71,6 +71,11 @@ class FileTile extends React.Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const link = doc.signed_url ?
+            (<Link to={doc.signed_url} className="flex-none layout-row layout-align-center-center" target="_blank">
+                <i className="clip fa fa-eye" style={textStyle}></i>
+            </Link>) :
+            '';
         return (
             <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile}`}>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-center">
@@ -114,9 +119,7 @@ class FileTile extends React.Component {
                         </div>
                     </div>
                     <div className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}>
-                        <Link to={doc.signed_url} className="flex-none layout-row layout-align-center-center" target="_blank">
-                            <i className="clip fa fa-eye" style={textStyle}></i>
-                        </Link>
+                        {link}
                     </div>
                 </div>
 

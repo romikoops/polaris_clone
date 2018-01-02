@@ -64,6 +64,7 @@ class Admin extends Component {
         }
     }
     render() {
+        console.log(this.props);
         const {theme, adminData, adminDispatch} = this.props;
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
@@ -162,6 +163,7 @@ function mapStateToProps(state) {
         user,
         users,
         tenant,
+        theme: tenant.data.theme,
         loggedIn,
         adminData: admin
     };

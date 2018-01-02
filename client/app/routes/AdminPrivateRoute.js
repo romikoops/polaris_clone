@@ -1,7 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
-const isAdmin = user => (user && user.role_id === 1);
+// const isAdmin = user => (user && user.role_id === 1);
+const isAdmin = (user) => {
+  return user && user.data.role_id === 1;
+};
 
 export const AdminPrivateRoute = ({ component: Component, user, loggedIn, ...rest }) => (
     <Route {...rest} render={ props => (

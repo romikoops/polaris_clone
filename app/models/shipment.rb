@@ -182,11 +182,13 @@ class Shipment < ApplicationRecord
   end
 
   def accept!
-    self.update_attributes(status: "accepted")
+    self.update_attributes(status: "confirmed")
+    self.save!
   end
 
   def decline!
     self.update_attributes(status: "declined")
+    self.save!
   end
 
   def is_lcl?

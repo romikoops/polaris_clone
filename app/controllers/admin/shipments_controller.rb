@@ -29,7 +29,12 @@ class Admin::ShipmentsController < ApplicationController
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    @documents = @shipment.documents
+    @documents = []
+    @shipment.documents.each do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      @documents << tmp
+    end
     resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
   end
@@ -89,7 +94,12 @@ class Admin::ShipmentsController < ApplicationController
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    @documents = @shipment.documents
+     @documents = []
+    @shipment.documents.each do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      @documents << tmp
+    end
     resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
   end

@@ -33,16 +33,16 @@ export class AdminShipmentsIndex extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
-
-        const openShipments = shipments.open.shipments.map((ship) => {
+        // debugger;
+        const openShipments = shipments.open.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
-        const requestedShipments = shipments.requested.shipments.map((ship) => {
+        const requestedShipments = shipments.requested.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
-        const finishedShipments = shipments.finished.shipments.map((ship) => {
+        const finishedShipments = shipments.finished.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
         const listView = (

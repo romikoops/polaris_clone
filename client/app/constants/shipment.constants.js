@@ -140,3 +140,58 @@ export const activeRoutesData = [
 
     }
 ];
+
+export const fclChargeGlossary = {
+    BAS: 'Basic Ocean Freight',
+    CFD: 'Congestion Fee Destination',
+    CFO: 'Congestion Fee Origin',
+    DDF: 'Documentation fee - Destination',
+    DHC: 'Terminal Handling Service - Destination',
+    DPA: 'Arbitrary - Destination',
+    ERS: 'Emergency Risk Surcharge',
+    EXP: 'Export Service',
+    IHE: 'Inland Haulage Export',
+    IMP: 'Import Service',
+    LSS: 'Low Sulphur Surcharge',
+    ODF: 'Documentation Fee Origin',
+    OHC: 'Terminal Handling Service - Origin',
+    OPA: 'Arbitrary - Origin',
+    PSS: 'Peak Season Surcharge',
+    SBF: 'Standard Bunker Adjustment Factor',
+    SOC: 'Shipper Owned container',
+    NOR: 'Non Operating Refer container',
+    EMPTY: 'Empty Container',
+    CY: 'Container Yard',
+    SD: 'Store Door',
+    '20DRY': '20 Dry container',
+    '40DRY': '40 Dry container',
+    '40HDRY': '40 High Cube Dry Container',
+    '45HDRY': '45 High Cube Dry Container'
+};
+
+export const lclChargeGlossary = {
+    BAS: 'Basic Freight',
+    HAS: 'Heavy Weight Freight',
+    OHC: 'Origin Handling Costs',
+    DHC: 'Destination Handling Costs',
+    CUSTOMS: 'Customs Fee',
+    CFS: 'CFS Handling',
+    LS: 'Liner Service Fee',
+    LCLS: 'LCL Handling Fee',
+    ISPS: 'ISPS Fee',
+    DDF: 'Destination Document Fee',
+    ODF: 'Origin Document Fee',
+    EXP: 'Export Fee'
+};
+export const chargeGlossary = {
+    rate_basis: 'Rate Basis',
+    rate: 'Rate',
+    cbm: 'CBM',
+    ton: 'Ton',
+    min: 'Minimum',
+    PER_ITEM: 'Per Item',
+    PER_CONTAINER: 'Per Container',
+    PER_SHIPMENT: 'Per Shipment',
+    PER_CBM_TON: 'Per cbm/ton',
+    PER_CBM: 'Per cbm'
+};

@@ -19,7 +19,7 @@
     width: 175px;
     box-shadow: 2px 2px 1px rgba(0,0,0,0.25);
     margin: 10px;
-    padding: 2px;
+    padding: 10px;
   }
   .file_header {
     height: 20px;
@@ -32,7 +32,8 @@
   .file_text {
     p {
       font-size: 14px;
-      margin: 5px;
+      margin: 2px;
+      padding: 4px;
     }
   }
 }

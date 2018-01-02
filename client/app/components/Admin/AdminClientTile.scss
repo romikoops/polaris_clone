@@ -25,7 +25,7 @@
     bottom:0;
     right:0;
     left:0;
-    position: absolute;
+    // position: absolute;
     z-index: 12;
     // background: rgba(0,10,4,0.16);
   }
@@ -40,5 +40,21 @@
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
+  }
+  .client_subheader {
+    padding: 5px;
+    
+    p, i {
+      font-size: 12px;
+      margin: 2px;
+    }
+  }
+  .client_text {
+    padding: 5px;
+    font-size: 10px;
+    p, h4 {
+      margin: 2px;
+      flex-flow: row wrap;
+    }
   }
 }

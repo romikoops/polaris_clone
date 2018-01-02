@@ -189,6 +189,7 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
+            debugger;
             const succConfShip = merge({}, state, {
                 shipment: action.payload.data,
                 loading: false
