@@ -32,15 +32,22 @@ class Location < ApplicationRecord
       Location.where(id: hub_id).first
     end
   end
+
   def self.from_short_name(input)
     newname = input.split(" ,")[0]
     location = Location.new(geocoded_address: input)
     location.geocode
     location.reverse_geocode
     location.name = newname
-    
-    location.save!
-    return location
+    location.location_type = 'nexus'
+    hl = location.as_json
+    hl.each do |k, v|
+      if !v
+        hl.delete(k)        
+      end
+    end
+    nl = Location.find_or_create_by!(hl)
+    return nl
   end
 
   def self.create_and_geocode(location_params)
@@ -177,12 +184,9 @@ class Location < ApplicationRecord
     distances = []
 
     locations.each do |location|
-      
       distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [location.latitude, location.longitude])
     end
-    
-
-    lowest_distance = distances.min
+    lowest_distance = distances.reject {|i| i.nan?}.min
     
     return locations[distances.find_index(lowest_distance)], lowest_distance
   end
