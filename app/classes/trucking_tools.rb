@@ -32,9 +32,9 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
-  def retrieve_tp_from_array(table, zip_int, client)
+  def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
-    { "$match" => { "_id" => "Gothenburg_trucking" }},
+    { "$match" => { "_id" => tableKey }},
     {"$project" => {
         data: {"$filter" => {
             input: '$data',
@@ -50,7 +50,7 @@ module TruckingTools
     }
     ])
     p "resp achieved"
-
+    byebug
     return resp.first["data"][0]
   end
 
@@ -73,9 +73,7 @@ module TruckingTools
   def calc_by_zipcode(destination, weight, km, tpKey, client)
     zc = destination.get_zip_code
     zip_int = zc.gsub!(" ", "").to_i
-    # tps = TruckingPricing.find_by("? < upper_zip AND ? > lower_zip", zip_int, zip_int)
-    # tps = query_table('truckingTables', {"_id" => tpKey}, { "data" => {"$and" => [ { "lower_zip" => { "$gte" => zip_int } }, { "upper_zip" => { "$lte" => zip_int } } ] } })
-    tps = retrieve_tp_from_array('truckingTables', zip_int, client)
+    tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
     @selected_rate
     
     if tps

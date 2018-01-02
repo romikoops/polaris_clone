@@ -39,16 +39,17 @@
     }
 
     .slick_slide {
-      height: 350px;
+      height: 275px;
       width: 450px;
       position: relative;
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
     }
-    .slick_slide_bg {
+    .slick_content {
       position: absolute;
       height: 100%;
+      min-height: 275px;
       width: 100%;
       background-position: center;
       background-size: cover;

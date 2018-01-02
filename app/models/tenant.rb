@@ -1,5 +1,6 @@
 class Tenant < ApplicationRecord
   include ImageTools
+  include MongoTools
     has_many :routes
     has_many :hubs
     has_many :routes
@@ -26,5 +27,16 @@ class Tenant < ApplicationRecord
     #   p resp[:sm]
     # end
     load_city_images
+  end
+  # Generates the static info for the choose route page
+  def update_route_details
+    routes = Route.where(tenant_id: self.id)
+    detailed_routes = routes.map do |route| 
+      route.detailed_hash(
+        nexus_names: true, 
+        modes_of_transport: true
+      )
+    end
+    put_item('routeOptions', {id: self.id, data:detailed_routes})
   end
 end

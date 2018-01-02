@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Admin/Admin.scss';
+import ustyles from './UserAccount.scss';
 import { UserShipmentRow, UserLocations } from './';
 import { AdminClientTile } from '../Admin';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+import {Carousel} from '../Carousel/Carousel';
+import { activeRoutesData } from '../../constants';
+const actRoutesData = activeRoutesData;
+
 export class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -85,26 +90,33 @@ export class UserDashboard extends Component {
                     <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
                         <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                     </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Open Shipments</p>
+                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
+                        <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1}/>
                     </div>
-                    { openShipments }
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Requested Shipments</p>
+                            <p className={` ${styles.sec_header_text} flex-none`}  > Shipments</p>
+                        </div>
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Open</p>
+                        </div>
+                        { openShipments }
+                     </div>
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Requested</p>
+                        </div>
+                        { reqShipments }
                     </div>
-                    { reqShipments }
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Finished Shipments</p>
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Finished</p>
+                        </div>
+                        { finishedShipments }
                     </div>
-                    { finishedShipments }
                 </div>
-
                  <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Contacts </p>

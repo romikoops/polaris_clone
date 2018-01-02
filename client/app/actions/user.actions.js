@@ -284,6 +284,66 @@ function getDashboard(id, redirect) {
     };
 }
 
+function deleteDocument(id) {
+    function request(deleteId) {
+        return { type: userConstants.DELETE_DOCUMENT_REQUEST, payload: deleteId };
+    }
+    function success(deleteId) {
+        return { type: userConstants.DELETE_DOCUMENT_SUCCESS, payload: deleteId };
+    }
+    function failure(error) {
+        return { type: userConstants.DELETE_DOCUMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.deleteDocument(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Deleting Document successful')
+                );
+                console.log(data);
+                dispatch(success(id));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function uploadDocument(doc, type, url) {
+    function request(file) {
+        return { type: userConstants.UPLOAD_DOCUMENT_REQUEST, payload: file };
+    }
+    function success(file) {
+        return { type: userConstants.UPLOAD_DOCUMENT_SUCCESS, payload: file.data };
+    }
+    function failure(error) {
+        return { type: userConstants.UPLOAD_DOCUMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.uploadDocument(doc, type, url).then(
+            data => {
+                dispatch(
+                    alertActions.success('Uploading Document successful')
+                );
+                console.log(data);
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -295,6 +355,8 @@ export const userActions = {
     destroyLocation,
     makePrimary,
     getDashboard,
+    deleteDocument,
+    uploadDocument,
     getHubs,
     getShipments,
     getShipment,

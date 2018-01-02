@@ -8,11 +8,12 @@ export class Carousel extends Component {
       if (!this.props.slides) {
         return '';
       }
+      const slideNumber = this.props.noSlides ? this.props.noSlides : 4;
         const settings = {
             dots: true,
             autoplay: true,
             infinite: true,
-            slidesToShow: 4,
+            slidesToShow: slideNumber,
             arrows: true
         };
         const slides = this.props.slides.map((route) => {
@@ -21,7 +22,7 @@ export class Carousel extends Component {
             };
             return (
                 <div key={route.name} className={styles.slick_slide + ' flex-none layout-row layout-align-center-center'} style={divStyle}>
-                    <div className=" layout-column layout-align-center-center">
+                    <div className={`flex-none layout-column layout-align-center-center ${styles.slick_content}`}>
                         <h2 className={styles.slick_city + ' flex-none'}> {route.header} </h2>
                         <h5 className={styles.slick_country + ' flex-none'}> {route.subheader} </h5>
                     </div>
@@ -29,7 +30,7 @@ export class Carousel extends Component {
             );
         });
         return (
-            <div className={` layout-row ${styles.slider_container}`}>
+            <div className={`flex-100 layout-row ${styles.slider_container}`}>
                 <Slider {...settings}>
                     {slides}
                 </Slider>

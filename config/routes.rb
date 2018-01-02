@@ -109,7 +109,7 @@ Rails.application.routes.draw do
     post "finish_booking", as: :finish_booking
     post "update", as: :update_booking
   end
-
+  get "/documents/delete/:document_id", to: "documents#delete", as: :document_delete
   get "/documents/download/:document_id", to: "documents#download_redirect", as: :document_download
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'

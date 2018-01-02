@@ -729,7 +729,7 @@ DEPENDENCIES
   mongo (~> 2.4)
   nokogiri
   omniauth
-  pg (~> 0.20)
+  pg (~> 0.21)
   premailer-rails
   puma (~> 3.7)
   rack-cors

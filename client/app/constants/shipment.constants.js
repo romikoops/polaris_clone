@@ -56,6 +56,15 @@ export const SHIPMENT_STAGES = [
         url: '/finish_booking'
     }
 ];
+export const documentTypes = {
+    packing_sheet: 'Packing Sheet',
+    commercial_invoice: 'Commercial Invoice',
+    customs_declaration: 'Customs Declaration',
+    customs_value_declaration: 'Customs Value Declaration',
+    eori: 'EORI',
+    certificate_of_origin: 'Certificate Of Origin',
+    dangerous_goods: 'Dangerous Goods'
+};
 
 export const shipmentConstants = {
     NEW_SHIPMENT_REQUEST: 'NEW_SHIPMENT_REQUEST',
@@ -90,3 +99,44 @@ export const shipmentConstants = {
     FETCH_SHIPMENT_SUCCESS: 'FETCH_SHIPMENT_SUCCESS',
     FETCH_SHIPMENT_FAILURE: 'FETCH_SHIPMENT_FAILURE'
 };
+
+export const activeRoutesData = [
+    {
+        header: 'New York',
+        subheader: 'USA',
+
+        image: 'https://assets.itsmycargo.com/assets/cityimages/NY_sm.jpg'
+    },
+    {
+        header: 'Shanghai',
+        subheader: 'China',
+        image: 'https://assets.itsmycargo.com/assets/cityimages/shanghai_sm.jpg'
+    },
+    {
+        header: 'Singapore',
+        subheader: 'Singapore',
+
+        image: 'https://assets.itsmycargo.com/assets/cityimages/Singapore_sm.jpg'
+    },
+    {
+        header: 'Seoul',
+        subheader: 'South Korea',
+
+        image: 'https://assets.itsmycargo.com/assets/cityimages/seoul_sm.jpg'
+
+    },
+    {
+        header: 'Hanoi',
+        subheader: 'Vietnam',
+
+        image: 'https://assets.itsmycargo.com/assets/cityimages/Hanoi_sm.jpg'
+
+    },
+    {
+        header: 'Shenzhen',
+        subheader: 'China',
+
+        image: 'https://assets.itsmycargo.com/assets/cityimages/Shenzhen_sm.jpg'
+
+    }
+];

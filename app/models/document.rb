@@ -29,6 +29,16 @@ class Document < ApplicationRecord
     
     @url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: @doc.url)  
   end
+  def get_signed_url
+    s3 = Aws::S3::Client.new(
+      access_key_id: ENV['AWS_KEY'],
+      secret_access_key: ENV['AWS_SECRET'],
+      region: ENV['AWS_REGION']
+    )
+    signer = Aws::S3::Presigner.new({client: s3})
+    
+    @url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: self.url)  
+  end
   def self.delete_document(id)
     @doc = Document.find(id)
     s3 = Aws::S3::Client.new(

@@ -159,6 +159,47 @@ export function users(state = initialState, action) {
             });
             return errDash;
 
+         case userConstants.UPLOAD_DOCUMENT_REQUEST:
+            const reqDocUpload = merge({}, state, {
+            });
+            return reqDocUpload;
+        case userConstants.UPLOAD_DOCUMENT_SUCCESS:
+            const docs = state.shipment.documents;
+            docs.push(action.payload);
+            debugger;
+            const succDocUpload = merge({}, state, {
+                shipment: {
+                    documents: docs
+                },
+                loading: false
+            });
+            return succDocUpload;
+        case userConstants.UPLOAD_DOCUMENT_FAILURE:
+            const errDocUpload = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDocUpload;
+
+
+        case userConstants.DELETE_DOCUMENT_REQUEST:
+            const reqDocDelete = merge({}, state, {
+            });
+            return reqDocDelete;
+        case userConstants.DELETE_DOCUMENT_SUCCESS:
+        debugger;
+            const succDocDelete = merge({}, state, {
+                shipment: {
+                    documents: state.shipment.documents.filter(item => item.id !== action.payload)
+                },
+                loading: false
+            });
+            return succDocDelete;
+        case userConstants.DELETE_DOCUMENT_FAILURE:
+            const errDocDelete = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDocDelete;
+
         default:
             return state;
     }

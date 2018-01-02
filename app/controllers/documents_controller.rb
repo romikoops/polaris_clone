@@ -5,4 +5,8 @@ class DocumentsController < ApplicationController
 		@url = Document.get_file_url(params[:document_id])
 		redirect_to @url
 	end
+  def delete
+    @document = Document.delete_document(params[:document_id])
+    response_handler({deleted: true})
+  end
 end

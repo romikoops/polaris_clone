@@ -1,5 +1,6 @@
 module ShippingTools
   include PricingTools
+  include MongoTools
   def new_shipment(session, load_type)
     if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
       @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
@@ -51,14 +52,14 @@ module ShippingTools
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
     routes = Route.where(tenant_id: current_user.tenant_id)
-    detailed_routes = routes.map do |route| 
-      route.detailed_hash(
-        ids_dedicated: route_ids_dedicated, 
-        nexus_names: true, 
-        modes_of_transport: true
-      )
+    route_data = get_item('routeOptions', 'id', current_user.tenant_id)["data"]
+    detailed_routes = []
+    route_data.each do |rt|
+      if route_ids_dedicated[rt["id"]]
+        rt["dedicated"] = true
+      end
+      detailed_routes << rt
     end
-
     return {
       shipment:    @shipment,
       all_nexuses: @all_nexuses,
