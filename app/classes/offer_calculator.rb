@@ -25,7 +25,7 @@ class OfferCalculator
       @shipment.containers.destroy_all
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
       @shipment.containers = @containers
-    when 'lcl', 'openlcl'
+    when 'lcl'
       @shipment.cargo_items.destroy_all
       @cargo_items = CargoItem.extract_cargos(params[:shipment][:cargo_items_attributes])
       @shipment.cargo_items = @cargo_items
@@ -53,8 +53,7 @@ class OfferCalculator
     determine_hubs!    
     determine_longest_trucking_time!
     determine_schedules!
-    
-    add_service_charges!
+    add_schedules_charges!
     
     convert_currencies!
   end
@@ -109,37 +108,41 @@ class OfferCalculator
       .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
   end
 
-  def add_service_charges!
+  def add_schedules_charges!
     charges = {}
-    @total_price[:cargo] = {value: 0, currency:''}
+    @total_price[:cargo] = { value: 0, currency: '' }
     @schedules.each do |sched|
       sched_key = "#{sched.hub_route.starthub_id}-#{sched.hub_route.endhub_id}"
-
+      
       next if charges[sched_key]
 
-      charges[sched_key] = {trucking_on: {}, trucking_pre: {}, import: {}, export:{}, cargo:{}}
-      if @shipment.has_pre_carriage
-        charges[sched_key][:trucking_pre] = determine_trucking_options(
-          @shipment.origin, 
-          sched.hub_route.starthub
-        )
-      end
+      charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
       
-      if @shipment.has_on_carriage
-        charges[sched_key][:trucking_on] = determine_trucking_options(
-          @shipment.destination, 
-          sched.hub_route.endhub
-        )
-      end
-
-      set_cargo_charges!(charges, @cargo_items, sched, sched_key) if @cargo_items
-      set_cargo_charges!(charges, @containers, sched, sched_key)  if @containers
+      set_trucking_charges!(charges, sched, sched_key)
+      set_cargo_charges!(charges, sched, sched_key)
     end
-    
-    @shipment.generated_charges = charges
+    @shipment.schedules_charges = charges
   end
 
-  def set_cargo_charges!(charges, array, sched, sched_key)
+  def set_trucking_charges!(charges, sched, sched_key)
+    if @shipment.has_pre_carriage
+      charges[sched_key][:trucking_pre] = determine_trucking_options(
+        @shipment.origin, 
+        sched.hub_route.starthub
+      )
+    end
+    
+    if @shipment.has_on_carriage
+      charges[sched_key][:trucking_on] = determine_trucking_options(
+        @shipment.destination, 
+        sched.hub_route.endhub
+      )
+    end
+  end
+
+  def set_cargo_charges!(charges, sched, sched_key)
+    array = @cargo_items || @containers
+
     array.each do |elem|
       path_key = path_key(elem, sched)
 
@@ -197,7 +200,7 @@ class OfferCalculator
     
     raw_totals = {}
    
-    @shipment.generated_charges.each do |key, svalue|
+    @shipment.schedules_charges.each do |key, svalue|
       svalue["cargo"].each do |id, charges|
         charges.each do |fid, fee|
            if !raw_totals[fee["currency"]]
@@ -221,7 +224,7 @@ class OfferCalculator
       
       
       converted_totals = sum_and_convert(raw_totals, "EUR")
-      @shipment.generated_charges[key]["total"] = converted_totals
+      @shipment.schedules_charges[key]["total"] = converted_totals
       
       if @total_price[:total] == 0 
         

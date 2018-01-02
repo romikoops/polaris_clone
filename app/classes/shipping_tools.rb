@@ -122,10 +122,10 @@ module ShippingTools
       new_user_loc.update_attributes!(primary: true)
     end
     if shipment_data[:insurance][:bool]
-      key = @shipment.generated_fees.first[0]
-      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-      @shipment.generated_fees[key]["total"] += shipment_data[:insurance][:val]
-      @shipment.total_price = @shipment.generated_fees[key]["total"]
+      key = @shipment.schedules_charges.first[0]
+      @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
+      @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
+      @shipment.total_price = @shipment.schedules_charges[key]["total"]
 
     end
     
