@@ -219,7 +219,7 @@ class OfferCalculator
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: 'lcl')
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
               fees[sched_key][:cargo][ci.id] = determine_lcl_price(@mongo, ci, pathKey, @user, @cargo_items.length)
-              byebug
+              
             end
           end
           
@@ -230,10 +230,6 @@ class OfferCalculator
               transport_type = sched.vehicle.transport_categories.find_by(name: transport_type_key, cargo_class: cnt.size_class)
               pathKey = "#{sched.hub_route_id}_#{transport_type.id}"
               fees[sched_key][:cargo][cnt.id] = determine_fcl_price(@mongo, cnt, pathKey, @user, @containers.length)
-              byebug
-            # @containers.each do |cnt|
-            #   fees[sched_key][:import][cnt.id] = @import_charges.calc_import_charge(cnt)
-            #   fees[sched_key][:export][cnt.id] = @export_charges.calc_export_charge(cnt)
             end
           end
           
@@ -245,7 +241,7 @@ class OfferCalculator
     def determine_trucking_options(origin, hub)
       gd_pre_carriage = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
       km = gd_pre_carriage.distance_in_km
-      byebug
+      
       price_results = []    
       case @load_type
       when 'fcl'
@@ -322,16 +318,7 @@ class OfferCalculator
     Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)
     .where("eta > ?", @current_eta_in_search)
     .order(eta: :asc)
-    # case mode_of_transport
-    # when "train"
-    #   Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)
-    #                .where("eta > ?", @current_eta_in_search)
-    #                .order(eta: :asc)
-    # when "vessel"
-    #   Schedule.where(from: stop1.hub_name, to: stop2.hub_name)
-    #                 .where("eta > ?", @current_eta_in_search)
-    #                 .order(eta: :asc)
-    # end
+  
   end
 
   def price_from_cargos

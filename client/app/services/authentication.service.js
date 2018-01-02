@@ -88,7 +88,6 @@ function register(user) {
                 const user2 = localStorage.getItem('user');
                 console.log(user2);
             }
-            debugger;
             return data;
         });
 }
