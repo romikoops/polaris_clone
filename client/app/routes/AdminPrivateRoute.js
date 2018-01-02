@@ -1,14 +1,12 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-const user = localStorage.getItem('user');
-const admin = user.role_id === 1 ? true : false;
 
-console.log(user);
+const isAdmin = user => (user && user.role_id === 1);
 
-export const AdminPrivateRoute = ({ component: Component, loggedIn, ...rest }) => (
-    <Route {...rest} render={props => (
-        user && admin && loggedIn
+export const AdminPrivateRoute = ({ component: Component, user, loggedIn, ...rest }) => (
+    <Route {...rest} render={ props => (
+        isAdmin(user) && loggedIn
             ? <Component {...props} />
             : <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-    )} />
+	)} />
 );

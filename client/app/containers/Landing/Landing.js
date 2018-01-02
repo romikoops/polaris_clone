@@ -8,25 +8,33 @@ import { connect } from 'react-redux';
 import styles from './Landing.scss';
 // import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
+import { Loading } from '../../components/Loading/Loading';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { userActions } from '../../actions';
+import { userActions, authenticationActions } from '../../actions';
+
 class Landing extends Component {
     constructor(props) {
         super(props);
-        this.tenant = this.props.tenant;
-        console.log(this.props);
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const { loggingIn, registering, loading } = nextProps;
+        // debugger;
+        return loading || !(loggingIn || registering);
     }
 
     render() {
-        const { theme, user, userDispatch } = this.props;
+        const { loggedIn, theme, user, tenant, userDispatch, authDispatch } = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const loadingScreen = this.props.loading ? <Loading theme={theme} /> : '';
+
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >
-                {/* loggedIn ? <LandingTopAuthed className="flex-100" user={user} theme={theme} /> : <LandingTop className="flex-100" theme={theme} /> */}
-                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo}/>
+                {loadingScreen}
+                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
                 <div className={styles.service_box + ' layout-row flex-100 layout-wrap'}>
                     <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>
                         <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
@@ -104,16 +112,21 @@ Landing.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return {
-        userDispatch: bindActionCreators(userActions, dispatch)
+        userDispatch: bindActionCreators(userActions, dispatch),
+        authDispatch: bindActionCreators(authenticationActions, dispatch)
     };
 }
 function mapStateToProps(state) {
-    const { users, authentication } = state;
-    const { user, loggedIn } = authentication;
+    const { users, authentication, tenant } = state;
+    const { user, loggedIn, loggingIn, registering, loading } = authentication;
     return {
         user,
         users,
-        loggedIn
+        tenant,
+        loggedIn,
+        loggingIn,
+        registering,
+        loading
     };
 }
 

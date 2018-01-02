@@ -1,7 +1,7 @@
 class ShipmentsController < ApplicationController
-  before_action :require_login_and_correct_id, except: [:test_email]
-
   include ShippingTools
+
+  skip_before_action :require_non_guest_authentication!, except: [:finish_booking, :upload_document]
 
   def index
     @shipper = current_user
@@ -87,10 +87,6 @@ class ShipmentsController < ApplicationController
   end
 
   private
-
-  def require_login_and_correct_id
-    raise ApplicationError::NotAuthenticated unless user_signed_in?
-  end
 
   def forwarder_notification_email(user, shipment)
     ShipmentMailer.forwarder_notification(user, shipment).deliver_now

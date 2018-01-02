@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
-  # before_action :require_login_and_correct_id
   include PricingTools
+
+  skip_before_action :require_authentication!
+  skip_before_action :require_non_guest_authentication!
+
   def home
     @shipper = current_user
 
@@ -44,7 +47,6 @@ class UsersController < ApplicationController
     response_handler({user: @user, headers: headers})
   end
   
-
   def hubs
     @hubs = Hub.prepped(current_user)
     
@@ -53,16 +55,9 @@ class UsersController < ApplicationController
 
   private
 
-  def require_login_and_correct_id
-    unless user_signed_in? && current_user.id.to_s == params[:user_id]
-      flash[:error] = "You are not authorized to access this section."
-      redirect_to root_path
-    end
-  end
-
   def update_params
     params.require(:update).permit(
-      :first_name, :last_name, :email, :phone, :company_name
+      :first_name, :last_name, :email, :phone, :company_name, :password, :guest, :tenant_id
     )
   end
 end

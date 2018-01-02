@@ -4,6 +4,11 @@ import { shipmentActions } from './';
 import { alertActions } from './';
 import { push } from 'react-router-redux';
 
+function logout() {
+    authenticationService.logout();
+    return { type: authenticationConstants.LOGOUT };
+}
+
 function login(data) {
     function request(user) {
         return { type: authenticationConstants.LOGIN_REQUEST, user };
@@ -15,11 +20,16 @@ function login(data) {
         return { type: authenticationConstants.LOGIN_FAILURE, error };
     }
     return dispatch => {
+        if (data.shipmentReq) logout();
+
         dispatch(request({ username: data.username }));
         authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
-                if (user.data.role_id === 1) {
+                if (data.shipmentReq) {
+                    data.shipmentReq.shipment.shipper_id = user.data.id;
+                    dispatch(shipmentActions.setShipmentRoute(data.shipmentReq));
+                } else if (user.data.role_id === 1) {
                     dispatch(push('/admin'));
                 } else if (user.data.role_id === 2) {
                     dispatch(push('/account'));
@@ -33,12 +43,7 @@ function login(data) {
     };
 }
 
-function logout() {
-    authenticationService.logout();
-    return { type: authenticationConstants.LOGOUT };
-}
-
-function register(user, req) {
+function register(user, redirect) {
     function request(response) {
         return { type: authenticationConstants.REGISTRATION_REQUEST, user: response };
     }
@@ -56,7 +61,14 @@ function register(user, req) {
             response => {
                 dispatch(success(response));
                 dispatch(alertActions.success('Registration successful'));
-                if (req) dispatch(shipmentActions.setShipmentRoute(req));
+
+                if (redirect) {
+                    dispatch(push('/booking'));
+                } else if (response.data.role_id === 1) {
+                    dispatch(push('/admin'));
+                } else if (response.data.role_id === 2) {
+                    dispatch(push('/account'));
+                }
             },
             error => {
                 dispatch(failure(error));
@@ -66,7 +78,7 @@ function register(user, req) {
     };
 }
 
-function updateUser(user, req) {
+function updateUser(user, req, shipmentReq) {
     function request(response) {
         return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response };
     }
@@ -83,7 +95,12 @@ function updateUser(user, req) {
         authenticationService.updateUser(user, req).then(
             response => {
                 dispatch(success(response));
-                dispatch(alertActions.success('Update successful'));
+                if (shipmentReq) {
+                    dispatch(shipmentActions.setShipmentRoute(shipmentReq));
+                    dispatch(alertActions.success('Registration successful'));
+                } else {
+                    dispatch(alertActions.success('Update successful'));
+                }
             },
             error => {
                 dispatch(failure(error));

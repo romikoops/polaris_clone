@@ -12,7 +12,7 @@ class LoginPage extends React.Component {
         super(props);
 
         // reset login status
-        this.props.dispatch(authenticationActions.logout());
+        // this.props.dispatch(authenticationActions.logout());
 
         this.state = {
             username: '',
@@ -34,11 +34,12 @@ class LoginPage extends React.Component {
 
         this.setState({ submitted: true });
         const { username, password } = this.state;
-        const { dispatch } = this.props;
+        const { dispatch, req } = this.props;
         if (username && password) {
             dispatch(authenticationActions.login({
                 email: username,
-                password
+                password: password,
+                shipmentReq: req
             }));
         }
     }

@@ -321,7 +321,7 @@ export class BookingDetails extends Component {
     }
 }
 
-BookingDetails.PropTypes = {
+BookingDetails.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     nextStage: PropTypes.func
