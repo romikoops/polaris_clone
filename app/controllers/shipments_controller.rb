@@ -74,6 +74,7 @@ class ShipmentsController < ApplicationController
 
   def finish_booking
     resp = finish_shipment_booking(params)
+    send_booking_emails(resp.shipment)
     response_handler(resp)
   end
 
