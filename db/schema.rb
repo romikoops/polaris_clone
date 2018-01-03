@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171220153514) do
+ActiveRecord::Schema.define(version: 20180103084917) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,17 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.string "photo"
   end
 
+  create_table "mot_scopes", force: :cascade do |t|
+    t.boolean "ocean_container"
+    t.boolean "ocean_cargo_item"
+    t.boolean "air_container"
+    t.boolean "air_cargo_item"
+    t.boolean "rail_container"
+    t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "pricings", force: :cascade do |t|
     t.integer "tenant_id"
     t.integer "route_id"
@@ -145,6 +156,8 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "mot_scope_id"
+    t.index ["mot_scope_id"], name: "index_routes_on_mot_scope_id"
   end
 
   create_table "schedules", force: :cascade do |t|
@@ -217,20 +230,11 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.string "cargo_notes"
     t.string "haulage"
     t.string "hs_code", default: [], array: true
-    t.jsonb "generated_fees"
+    t.jsonb "schedules_charges"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
-  end
-
-  create_table "tenant_vehicle_types", force: :cascade do |t|
-    t.integer "vehicle_type_id"
-    t.integer "tenant_id"
-    t.boolean "is_default"
-    t.string "mode_of_transport"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|
@@ -252,6 +256,7 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.jsonb "phones"
     t.jsonb "addresses"
     t.string "name"
+    t.jsonb "scope"
   end
 
   create_table "transport_categories", force: :cascade do |t|
@@ -261,16 +266,6 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.string "cargo_class"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "transport_types", force: :cascade do |t|
-    t.integer "vehicle_type_id"
-    t.string "mot"
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "cargo_class"
-    t.string "mode_of_transport"
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
@@ -333,14 +328,6 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  create_table "vehicle_types", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "mot"
-    t.string "mode_of_transport"
-  end
-
   create_table "vehicles", force: :cascade do |t|
     t.string "name"
     t.string "mode_of_transport"
@@ -348,5 +335,6 @@ ActiveRecord::Schema.define(version: 20171220153514) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "routes", "mot_scopes"
   add_foreign_key "users", "roles"
 end

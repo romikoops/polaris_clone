@@ -20,15 +20,6 @@ class ShipmentsController < ApplicationController
   def new 
   end
 
-  def reuse_booking_data
-    shipment = Shipment.find(params[:generic_id])
-    if shipment.is_lcl?
-      redirect_to user_shipments_lcl_reuse_booking_path(lcl_id: shipment.id)
-    else
-      redirect_to user_shipments_fcl_reuse_booking_path(fcl_id: shipment.id)
-    end
-  end
-
   def test_email
     forwarder_notification_email(current_user, Shipment.first)
   end
@@ -38,10 +29,6 @@ class ShipmentsController < ApplicationController
     if params[:file]
       create_document(params[:file], @shipment, params[:type], current_user)
     end
-  end
-
-  def reuse_booking_data
-    reuse_shipment_data(params, session, 'openlcl')
   end
 
   def show
@@ -63,7 +50,7 @@ class ShipmentsController < ApplicationController
   end
 
   def create
-    resp = new_shipment(session, params[:type])
+    resp = new_shipment(params[:type])
     response_handler(resp)
   end
 

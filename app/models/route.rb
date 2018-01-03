@@ -6,6 +6,7 @@ class Route < ApplicationRecord
   has_many :schedules, through: :hub_routes
   belongs_to :origin_nexus, class_name: "Location"
   belongs_to :destination_nexus, class_name: "Location"
+  belongs_to :mot_scope, optional: true
   # belongs_to :customer, class_name: "User"
   has_many :user_route_discounts
 
@@ -181,7 +182,7 @@ class Route < ApplicationRecord
   end
 
   def modes_of_transport
-    exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }    
+    exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }
     {
       ocean: exists.('ocean'),
       air:   exists.('air'),
@@ -198,4 +199,31 @@ class Route < ApplicationRecord
     return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
   end
+
+  def set_scope!
+    # Needs Refactoring
+
+    acronym_to_load_type = {
+      'fcl' => 'container',
+      'lcl' => 'cargo_item'
+    }
+
+    acronym_load_types = schedules.map do |schedule| 
+      schedule.vehicle.transport_categories.pluck(:cargo_class)
+    end.flatten.uniq.map { |cargo_class| cargo_class[0..2]  }.uniq
+
+    load_types = acronym_load_types.map { |load_type| acronym_to_load_type[load_type] }
+    
+    scope_attributes_arr = modes_of_transport.select { |k, v| v }.keys.map do |mode_of_transport|
+      load_types.map { |load_type| "#{mode_of_transport}_#{load_type}" }
+    end.flatten
+
+    scope_attributes = MotScope.given_attribute_names.reduce({}) do |h, attribute_name|
+      h[attribute_name] = scope_attributes_arr.include?(attribute_name)
+      h
+    end
+
+    self.mot_scope = MotScope.find_by(scope_attributes)
+    save!
+  end 
 end
