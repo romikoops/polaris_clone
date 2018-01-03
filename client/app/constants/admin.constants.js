@@ -169,3 +169,11 @@ export const currencyOptions = [
     {value: 'THB', label: 'THB'}, {value: 'TRY', label: 'TRY'}, {value: 'USD', label: 'USD'}, {value: 'ZAR', label: 'ZAR'},
 ];
 
+export const rateBasises = [
+    {value: 'PER_ITEM', label: 'Per Item'},
+    {value: 'PER_CONTAINER', label: 'Per Container'},
+    {value: 'PER_SHIPMENT', label: 'Per Shipment'},
+    {value: 'PER_CBM_TON', label: 'Per cbm/ton'},
+    {value: 'PER_CBM', label: 'Per cbm'}
+];
+

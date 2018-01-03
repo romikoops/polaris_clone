@@ -19,6 +19,7 @@ class AdminRoutes extends Component {
         this.viewRoute = this.viewRoute.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
+
     viewRoute(route) {
         const { adminDispatch } = this.props;
         adminDispatch.getRoute(route.id, true);
@@ -33,7 +34,7 @@ class AdminRoutes extends Component {
 
     render() {
         const {selectedRoute} = this.state;
-        const {theme, hubs, route, routes, hubHash, adminDispatch} = this.props;
+        const {theme, hubs, route, routes, hubHash, adminDispatch, loading} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -59,12 +60,12 @@ class AdminRoutes extends Component {
                     <Route
                         exact
                         path="/admin/routes"
-                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewRoute={this.viewRoute} />}
+                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} adminDispatch={adminDispatch} {...props} viewRoute={this.viewRoute} loading={loading} />}
                     />
                     <Route
                         exact
                         path="/admin/routes/:id"
-                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} loading={loading} />}
                     />
                 </Switch>
             </div>
@@ -79,7 +80,7 @@ AdminRoutes.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, route, routes } = admin;
+    const { clients, hubs, route, routes, loading } = admin;
 
     return {
         user,
@@ -88,7 +89,8 @@ function mapStateToProps(state) {
         hubs,
         route,
         routes,
-        clients
+        clients,
+        loading
     };
 }
 function mapDispatchToProps(dispatch) {

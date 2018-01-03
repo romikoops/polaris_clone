@@ -13,9 +13,13 @@ export class LandingTop extends Component {
         super(props);
         this.toAccount = this.toAccount.bind(this);
         this.toBooking = this.toBooking.bind(this);
+        this.toAdmin = this.toAdmin.bind(this);
     }
     toAccount() {
         this.props.goTo('/account');
+    }
+    toAdmin() {
+        this.props.toAdmin;
     }
     toBooking() {
         this.props.goTo('/booking');
@@ -45,6 +49,9 @@ export class LandingTop extends Component {
         const myAccount = (
             <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active/>
         );
+        const toAdmin = (
+            <RoundButton text="Admin Dashboard" theme={theme} handleNext={() => this.toAdmin()} active/>
+        );
         return (
             <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>
                 <div className={styles.top_mask}> </div>
@@ -55,6 +62,7 @@ export class LandingTop extends Component {
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
                         <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>
                         { user ? myAccount : '' }
+                        { user && user.data.role_id === 1 ? toAdmin : '' }
                     </div>
 
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>

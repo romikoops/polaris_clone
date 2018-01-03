@@ -40,21 +40,21 @@ export class AdminClientTile extends Component {
                             <p className="flex-90">Name</p>
                         </div>
                         <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
-                            <h4 className="flex-90"> {client.first_name} {client.last_name} </h4>
+                            <h4 className="flex-90 flex-offset-10"> {client.first_name} {client.last_name} </h4>
                         </div>
                         <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                             <i className="flex-none fa fa-envelope" style={gradientStyle}/>
                             <p className="flex-90">Email</p>
                         </div>
                         <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
-                            <p className="flex-90">{ client.email }</p>
+                            <p className="flex-90 flex-offset-10">{ client.email }</p>
                         </div>
                         <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                             <i className="flex-none fa fa-building" style={gradientStyle}/>
                             <p className="flex-90">Company</p>
                         </div>
                         <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
-                            <p className="flex-90">{ client.company_name }</p>
+                            <p className="flex-90 flex-offset-10">{ client.company_name }</p>
                         </div>
                     </div>
                 </div>

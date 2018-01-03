@@ -76,14 +76,14 @@ export class AdminRouteTile extends Component {
                         <div flex style={dashedLineStyles} />
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
                     </div>
-                    <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
-                            <h4 className="flex-100" > { startHub.data.name } </h4>
-                            <p className="flex-100">{ startHub.location.geocoded_address }</p>
+                    <div className="flex-85 layout-column layout-wrap layout-align-start-start">
+                        <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
+                            <h4 className="flex-100" > { route.origin_nexus } </h4>
+                            { startHub.location.geocoded_address ? <p className="flex-100">{ startHub.location.geocoded_address }</p> : '' }
                         </div>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
-                            <h4 className="flex-100" > { endHub.data.name } </h4>
-                            <p className="flex-100">{ endHub.location.geocoded_address }</p>
+                        <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
+                            <h4 className="flex-100" > { route.destination_nexus } </h4>
+                            { endHub.location.geocoded_address ? <p className="flex-100">{ endHub.location.geocoded_address }</p> : '' }
                         </div>
                     </div>
                 </div>

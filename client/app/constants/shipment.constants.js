@@ -186,6 +186,7 @@ export const lclChargeGlossary = {
 export const chargeGlossary = {
     rate_basis: 'Rate Basis',
     rate: 'Rate',
+    currency: 'Currency',
     cbm: 'CBM',
     ton: 'Ton',
     min: 'Minimum',

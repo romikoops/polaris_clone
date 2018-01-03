@@ -5,9 +5,12 @@ import styles from './Admin.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import {v4} from 'node-uuid';
-import {CONTAINER_DESCRIPTIONS} from '../../constants';
+import {CONTAINER_DESCRIPTIONS, fclChargeGlossary, lclChargeGlossary, chargeGlossary} from '../../constants';
 import { history } from '../../helpers';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
+const fclChargeGloss = fclChargeGlossary;
+const lclChargeGloss = lclChargeGlossary;
+const chargeGloss = chargeGlossary;
 export class AdminPricingRouteView extends Component {
     constructor(props) {
         super(props);
@@ -74,41 +77,41 @@ export class AdminPricingRouteView extends Component {
                 />
             </div>);
         const RPBInner = ({hubRoute, pricing, transport}) => {
-            const panel = pricing.heavy_wm ?
-                (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Rate per WM</p>
-                        <p className="flex-none">{pricing.wm.rate} {pricing.wm.currency}</p>
+            const panel = [];
+            let gloss;
+            // debugger;
+            if (pricing._id.includes('lcl')) {
+                gloss = lclChargeGloss;
+            } else {
+                gloss = fclChargeGloss;
+            }
+            Object.keys(pricing.data).forEach((key) => {
+                const cells = [];
+                Object.keys(pricing.data[key]).forEach(chargeKey => {
+                    if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+                            <p className="flex-none">{chargeGloss[chargeKey]}</p>
+                            <p className="flex">{pricing.data[key][chargeKey]} {pricing.data[key].currency}</p>
+                        </div>);
+                    } else if (chargeKey === 'rate_basis') {
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+                            <p className="flex-none">{chargeGloss[chargeKey]}</p>
+                            <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
+                        </div>);
+                    }
+                });
+                panel.push( <div className="flex-100 layout-row layout-align-none-center layout-wrap">
+                    <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+                        <p className="flex-none">{key} - {gloss[key]}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum WM: </p>
-                        <p className="flex-none">{pricing.wm.min} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none"> Heavy Weight Surcharge</p>
-                        <p className="flex-none">{pricing.heavy_wm.heavy_weight} {pricing.heavy_wm.currency} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum Heavy WM</p>
-                        <p className="flex-none">{pricing.heavy_wm.heavy_wm_min}</p>
-                    </div>
-                </div>) :
-                (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Rate per Container</p>
-                        <p className="flex-none">{pricing.wm.rate} {pricing.wm.currency}</p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Surcharge per Heavy Container</p>
-                        <p className="flex-none">{pricing.heavy_kg.heavy_weight} {pricing.heavy_kg.currency} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum Heavy Weight</p>
-                        <p className="flex-none">{pricing.heavy_kg.heavy_kg_min} kg</p>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        { cells }
                     </div>
                 </div>);
+            });
+
             return (
-                <div key={v4()} className={` ${styles.hub_route_price} flex-45 layout-row layout-wrap layout-align-center-start`}>
+                <div key={v4()} className={` ${styles.hub_route_price} flex-100 layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                             <i className="fa fa-map-signs clip" style={textStyle}></i>
@@ -118,15 +121,15 @@ export class AdminPricingRouteView extends Component {
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
                         </div>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">MoT:</p>
                         <p className="flex-none">  {transport.mode_of_transport}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Type: </p>
                         <p className="flex-none">{transport.name}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Class:</p>
                         <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
                     </div>

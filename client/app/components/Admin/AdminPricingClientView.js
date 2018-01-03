@@ -18,15 +18,22 @@ export class AdminPricingClientView extends Component {
             editorBool: false,
             editTransport: false,
             editPricing: false,
-            editHubRoute: false
+            editHubRoute: false,
+            open: {}
         };
         this.editThis = this.editThis.bind(this);
+        this.viewThis = this.viewThis.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
     editThis(pricing, hubRoute, transport) {
         this.setState({
             editPricing: pricing, editHubRoute: hubRoute, editTransport: transport, editorBool: true
+        });
+    }
+    viewThis(pricingId) {
+        this.setState({
+            open: {...this.state.open, [pricingId]: !this.state.open[pricingId]}
         });
     }
     closeEdit() {
@@ -53,6 +60,7 @@ export class AdminPricingClientView extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -63,31 +71,39 @@ export class AdminPricingClientView extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+
         const RPBInner = ({hubRoute, pricing, transport}) => {
             const panel = [];
             let gloss;
+            let toggleStyle;
             // debugger;
             if (pricing._id.includes('lcl')) {
                 gloss = lclChargeGloss;
             } else {
                 gloss = fclChargeGloss;
             }
+            if (this.state.open[pricing._id]) {
+                toggleStyle = styles.show_style;
+            } else {
+                toggleStyle = styles.hide_style;
+            }
+            const expandIcon = this.state.open[pricing._id] ?  <i className="flex-none fa fa-chevron-up clip" style={textStyle}></i> :  <i className="flex-none fa fa-chevron-down clip" style={textStyle}></i>;
             Object.keys(pricing.data).forEach((key) => {
                 const cells = [];
                 Object.keys(pricing.data[key]).forEach(chargeKey => {
                     if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-                        cells.push( <div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-                            <p className="flex-none">{chargeGloss[chargeKey]}</p>
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                            <p className="flex-100">{chargeGloss[chargeKey]}</p>
                             <p className="flex">{pricing.data[key][chargeKey]} {pricing.data[key].currency}</p>
                         </div>);
                     } else if (chargeKey === 'rate_basis') {
-                        cells.push( <div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
-                            <p className="flex-none">{chargeGloss[chargeKey]}</p>
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                            <p className="flex-100">{chargeGloss[chargeKey]}</p>
                             <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
                         </div>);
                     }
                 });
-                panel.push( <div className="flex-100 layout-row layout-align-none-center layout-wrap">
+                panel.push( <div className={`flex-100 layout-row layout-align-none-center layout-wrap ${styles.expand_panel} ${toggleStyle}`} >
                     <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
                         <p className="flex-none">{key} - {gloss[key]}</p>
                     </div>
@@ -106,6 +122,9 @@ export class AdminPricingClientView extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing, hubRoute, transport)}>
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.viewThis(pricing._id)}>
+                           {expandIcon}
                         </div>
                     </div>
                     <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>

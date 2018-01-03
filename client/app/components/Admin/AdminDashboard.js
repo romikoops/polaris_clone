@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import {AdminShipmentRow, AdminRouteTile, AdminScheduleLine, AdminHubTile } from './';
+import {AdminShipmentRow, AdminScheduleLine } from './';
+import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients } from './AdminSearchables';
 import {v4} from 'node-uuid';
 export class AdminDashboard extends Component {
     constructor(props) {
@@ -10,6 +11,15 @@ export class AdminDashboard extends Component {
         };
         this.viewShipment = this.viewShipment.bind(this);
         this.handleShipmentAction = this.handleShipmentAction.bind(this);
+    }
+
+    componentDidMount() {
+        const { dashData, loading, adminDispatch } = this.props;
+        if (!dashData && !loading) {
+            adminDispatch.getDashboard(false);
+        } else if (dashData && !dashData.schedules) {
+            adminDispatch.getDashboard(false);
+        }
     }
     viewShipment(shipment) {
         const { adminDispatch } = this.props;
@@ -42,42 +52,33 @@ export class AdminDashboard extends Component {
     }
 
     render() {
-        const { theme, dashData, clients } = this.props;
+        const { theme, dashData, clients, hubs, hubHash, adminDispatch } = this.props;
         // debugger;
         if (!dashData) {
             return <h1>NO DASHBOARD DATA</h1>;
         }
-        const { routes, shipments, hubs, air, ocean} = dashData;
+        const { routes, shipments, air, ocean} = dashData;
         const clientHash = {};
-        clients.forEach(cl => {
-            clientHash[cl.id] = cl;
-        });
+        console.log(hubHash);
+        if (clients) {
+            clients.forEach(cl => {
+                clientHash[cl.id] = cl;
+            });
+        }
         const schedArr = [];
         const openShipments = shipments && shipments.open && shipments.open.shipments ? shipments.open.shipments.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         }) : '';
-        let routesArr;
-        if (routes) {
-            routesArr = routes.map((rt, i) => {
-                if (i <= 5) {
-                    return  <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={this.setRoute}/>;
-                }
-                return '';
+        if (air) {
+            air.forEach(asched => {
+                schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
             });
         }
-        air.forEach(asched => {
-            schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
-        });
-        ocean.forEach(osched => {
-            schedArr.push(<AdminScheduleLine key={v4()} schedule={osched} hubs={hubs} theme={theme}/>);
-        });
-        const hubList = hubs.map((hub, i) =>{
-                if (i <= 5) {
-                    return <AdminHubTile key={v4()} hub={hub} theme={theme} handleClick={this.viewHub}/>;
-                }
-                return '';
-            }
-        );
+        if (ocean) {
+            ocean.forEach(osched => {
+                schedArr.push(<AdminScheduleLine key={v4()} schedule={osched} hubs={hubs} theme={theme}/>);
+            });
+        }
         const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5);
 
         // const requestedShipments = shipments.requested.shipments.map((ship) => {
@@ -101,24 +102,16 @@ export class AdminDashboard extends Component {
                     </div>
                     { openShipments }
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Routes </p>
-                    </div>
-                    { routesArr }
-                </div>
+                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
                     </div>
                     { shortSchedArr }
                 </div>
-                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Hubs </p>
-                    </div>
-                    { hubList }
-                </div>
+                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch}/>
+                <AdminSearchableClients theme={theme} clients={clients} adminDispatch={adminDispatch}/>
+
             </div>
         );
     }

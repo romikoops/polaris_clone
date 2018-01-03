@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminClientTile} from './';
+import {AdminSearchableClients} from './AdminSearchables';
 import styles from './Admin.scss';
-import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
 export class AdminClientsIndex extends Component {
     constructor(props) {
@@ -11,15 +10,7 @@ export class AdminClientsIndex extends Component {
         };
     }
     render() {
-        const {theme, clients, hubs, viewClient} = this.props;
-        let clientList;
-        if (clients) {
-            clientList = clients.map((client) =>
-                <AdminClientTile key={v4()} hub={hubs} client={client} theme={theme} handleClick={viewClient}/>
-            );
-        } else {
-            clientList = [];
-        }
+        const {theme, clients, adminDispatch } = this.props;
         const hubUrl = '/admin/clients/process_csv';
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -31,11 +22,9 @@ export class AdminClientsIndex extends Component {
                 </div>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <p className="flex-none">Upload Clients Sheet</p>
-                   <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Hub .xlsx"/>
+                    <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Client .xlsx"/>
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    {clientList}
-                </div>
+                <AdminSearchableClients theme={theme} clients={clients} adminDispatch={adminDispatch}/>
             </div>
         );
     }

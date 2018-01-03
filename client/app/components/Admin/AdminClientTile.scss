@@ -1,7 +1,7 @@
 :local {
     .client_card {
     width: calc(30% - 10px);
-    height: 200px;
+    height: 250px;
     margin: 5px;
     color: black;
     position: relative;
@@ -44,7 +44,11 @@
   .client_subheader {
     padding: 5px;
     
-    p, i {
+    p {
+      font-size: 12px;
+      margin: 2px;
+    }
+    i {
       font-size: 12px;
       margin: 2px;
     }

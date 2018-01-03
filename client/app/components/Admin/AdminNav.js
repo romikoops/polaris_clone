@@ -25,12 +25,12 @@ export class AdminNav extends Component {
                     url: '/admin/hubs',
                     target: 'hubs'
                 },
-                {
-                    icon: 'fa-calculator',
-                    text: 'Service Charges',
-                    url: '/admin/service_charges',
-                    target: 'serviceCharges'
-                },
+                // {
+                //     icon: 'fa-calculator',
+                //     text: 'Service Charges',
+                //     url: '/admin/service_charges',
+                //     target: 'serviceCharges'
+                // },
                 {
                     icon: 'fa-area-chart',
                     text: 'Pricing',

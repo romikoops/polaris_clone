@@ -86,7 +86,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/dashboard"
-                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
+                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} hubs={hubs} hubHash={hubHash} dashData={dashboard} adminDispatch={adminDispatch}/>}
                             />
                             <Route
 
@@ -116,7 +116,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/clients"
-                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients}/>}
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients} adminDispatch={adminDispatch}/>}
                             />
                             <Route
 

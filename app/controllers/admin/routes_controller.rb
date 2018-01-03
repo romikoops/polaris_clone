@@ -4,12 +4,19 @@ class Admin::RoutesController < ApplicationController
   
 
   def index
-    @routes = Route.where(tenant_id: current_user.tenant_id)
-    response_handler(@routes)
+    routes = Route.where(tenant_id: current_user.tenant_id)
+    @detailed_routes = routes.map do |route| 
+      route.detailed_hash(
+        nexus_names: true
+      )
+    end
+    response_handler(@detailed_routes)
   end
 
   def show
-    @route = Route.find(params[:id])
+    @route = Route.find(params[:id]).detailed_hash(
+        nexus_names: true
+      )
     @hub_routes = @route.hub_routes
     @starthubs = @hub_routes.map(&:starthub).to_a
     @endhubs = @hub_routes.map(&:endhub).to_a

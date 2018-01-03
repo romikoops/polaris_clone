@@ -19,6 +19,12 @@ class AdminPricings extends Component {
         this.viewRoute = this.viewRoute.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
+    componentDidMount() {
+        const { pricingData, loading, adminDispatch } = this.props;
+        if (!pricingData && !loading) {
+            adminDispatch.getPricings(false);
+        }
+    }
     viewRoute(route) {
         const { adminDispatch } = this.props;
         adminDispatch.getRoute(route.id, true);
@@ -33,7 +39,7 @@ class AdminPricings extends Component {
 
     render() {
         const {selectedPricing} = this.state;
-        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings} = this.props;
+        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
 
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -95,7 +101,7 @@ AdminPricings.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, pricingData, routes, transportCategories, clientPricings, routePricings } = admin;
+    const { clients, hubs, pricingData, routes, transportCategories, clientPricings, routePricings, loading } = admin;
 
     return {
         user,
@@ -107,7 +113,8 @@ function mapStateToProps(state) {
         clientPricings,
         routes,
         clients,
-        routePricings
+        routePricings,
+        loading
     };
 }
 function mapDispatchToProps(dispatch) {

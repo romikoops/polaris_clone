@@ -193,6 +193,9 @@
     background-repeat: no-repeat;
     background-position: center;
   }
+  .content_top, .content_bottom {
+    width: 100%;
+  }
   .icon_box {
     height: 100%;
     padding: 10px;
@@ -211,7 +214,7 @@
   .slider_container {
     position: relative;
     overflow-x: scroll;
-    overflow-y: none;
+    overflow-y: hidden;
     height: 250px;
 
   }
@@ -268,7 +271,7 @@
     border-bottom: 1px solid rgba(0,0,0,0.25);
   }
   .editor_backdrop {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
@@ -276,20 +279,33 @@
     height: 100%;
     width: 100%;
     z-index: 50;
-    // background: rgba(255,255,255,0.75);
+    background: rgba(0,0,0,0.25);
   }
   .editor_box {
     width: 800px;
+    height: 95%;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
+    overflow-y: scroll;
   }
   .editor_input input{
-    height: 38px;
-    width: 170px;
+    height: 34px !important;
+    width: 95%;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
 
+  }
+  .expand_panel {
+    transition: all 2s bounce;
+  }
+  .show_style {
+    height: max-content !important;
+    opacity: 1 !important;
+  }
+  .hide_style {
+    height: 0;
+    opacity: 0;
   }
 }

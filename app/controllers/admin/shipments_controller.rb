@@ -10,9 +10,10 @@ class Admin::ShipmentsController < ApplicationController
     @finished_shipments = Shipment.where(status: ["declined", "finished"])
     @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
     resp = {
-      requested: {documents: @documents['requested_shipments'], shipments: @requested_shipments},
-      open: {documents: @documents['open_shipments'], shipments: @open_shipments},
-      finished: {documents: @documents['finished_shipments'], shipments: @finished_shipments}
+      requested: @requested_shipments,
+      open: @open_shipments,
+      finished: @finished_shipments,
+      documents: @documents
     }
     response_handler(resp)
   end

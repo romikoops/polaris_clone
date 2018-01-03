@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import { AdminClientTile } from './';
 import { history } from '../../helpers';
 // import { pricingNames } from '../../constants/admin.constants';
+import { AdminSearchableClients } from './AdminSearchables';
 import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 
@@ -30,7 +31,7 @@ export class AdminPricingsClientIndex extends Component {
     }
 
     render() {
-        const {theme, clients } = this.props;
+        const {theme, clients, adminTools } = this.props;
         // const { selectedPricing } = this.state;
         if (!clients) {
             return '';
@@ -62,6 +63,7 @@ export class AdminPricingsClientIndex extends Component {
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>pricings</p>
                     {backButton}
                 </div>
+                <AdminSearchableClients theme={theme} clients={clients} handleClick={this.viewClient} seeAll={() => adminTools.goTo('/admin/pricings/clients')}/>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className="layout-row flex-100 layout-align-start-center">
                         {clientsArr}
