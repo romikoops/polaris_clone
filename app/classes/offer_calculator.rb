@@ -102,7 +102,7 @@ class OfferCalculator
     @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
   end
 
-  def determine_schedules! 
+  def determine_schedules!
     @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
       .where("transport_categories.name = 'any'")
       .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)

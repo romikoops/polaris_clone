@@ -32,25 +32,24 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
-  def retrieve_tp_from_array(table, zip_int, client)
+  def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
-    { "$match" => { "_id" => "Gothenburg_trucking" }},
-    {"$project" => {
-        data: {"$filter" => {
-            input: '$data',
-            as: 'tp',
-            cond: { "$and" => [
-                {"$lte" => ["$$tp.lower_zip", zip_int]},
-                {"$gte" => [ "$$tp.upper_zip", zip_int ]}  
-              ] 
-            }
-        }},
-        _id: 0
+      { "$match" => { "_id" => table_key }},
+      {"$project" => {
+          data: {"$filter" => {
+              input: '$data',
+              as: 'tp',
+              cond: { "$and" => [
+                  {"$lte" => ["$$tp.lower_zip", zip_int]},
+                  {"$gte" => [ "$$tp.upper_zip", zip_int ]}  
+                ] 
+              }
+          }},
+          _id: 0
+        }
       }
-    }
     ])
     p "resp achieved"
-
     return resp.first["data"][0]
   end
 
@@ -75,7 +74,7 @@ module TruckingTools
     zip_int = zc.gsub!(" ", "").to_i
     # tps = TruckingPricing.find_by("? < upper_zip AND ? > lower_zip", zip_int, zip_int)
     # tps = query_table('truckingTables', {"_id" => tpKey}, { "data" => {"$and" => [ { "lower_zip" => { "$gte" => zip_int } }, { "upper_zip" => { "$lte" => zip_int } } ] } })
-    tps = retrieve_tp_from_array('truckingTables', zip_int, client)
+    tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
     @selected_rate
     
     if tps
@@ -106,7 +105,6 @@ module TruckingTools
     cbm = (cargo_item.dimension_x * cargo_item.dimension_y * cargo_item.dimension_z) / 1000
     weight = cargo_item.payload_in_kg
     hub_pricings = get_item_fn(client, 'truckingTables', "_id", tpKey)
-    byebug
     hub_pricings["data"].each do |tps|
       if destination.geocoded_address.downcase.include?(tps["city"]) && destination.geocoded_address.downcase.include?(tps["province"])
         p tps["city"]
@@ -124,7 +122,6 @@ module TruckingTools
           @selected_rate = rate
         end
       end
-      byebug
       price = ((weight) * @selected_rate["value"]) + @selected_rate["pickup_fee"] + @selected_rate["delivery_fee"]
       if !@selected_rate["min_value"] || price > @selected_rate["min_value"]
         return {value:price, currency: @trucking_pricing["currency"]}
@@ -132,7 +129,6 @@ module TruckingTools
         return {value: @selected_rate["min_value"], currency: @trucking_pricing["currency"]}
       end
     else
-      byebug
       return {value: 1.25 * km, currency: "EUR"}
     end
   end

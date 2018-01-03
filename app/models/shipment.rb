@@ -39,6 +39,7 @@ class Shipment < ApplicationRecord
   # Basic associations
   belongs_to :shipper, class_name: "User", optional: true
   belongs_to :consignee, optional: true
+  belongs_to :tenant, optional: true
   has_many :documents
   has_many :shipment_contacts
   has_many :contacts, through: :shipment_contacts

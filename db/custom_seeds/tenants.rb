@@ -23,7 +23,23 @@ tenant_data = [
       support: "support@greencarrier.com"
     },
     subdomain: "greencarrier",
-    name: "Greencarrier"
+    name: "Greencarrier",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      }
+    }
   },
   {
     theme: {
@@ -48,7 +64,23 @@ tenant_data = [
       support: "support@demo.com"
     },
     subdomain: "demo",
-    name: "Demo"
+    name: "Demo",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      }
+    }
   }
 ]
 
