@@ -33,7 +33,7 @@ class AdminHubs extends Component {
 
     render() {
         const {selectedHub} = this.state;
-        const {theme, hubs, hub, dispatch, hubHash, adminDispatch} = this.props;
+        const {theme, hubs, hub, hubHash, adminDispatch} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -47,19 +47,21 @@ class AdminHubs extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
-        const title = selectedHub ? 'Hub Overview' : 'Hub';
+        const title = selectedHub ?
+            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+                <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hub Overview</p>
+                {selectedHub ? backButton : ''}
+            </div> :
+            '';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
-                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
-                    {selectedHub ? backButton : ''}
-                </div>
+                {title}
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/hubs"
-                        render={props => <AdminHubsIndex theme={theme} hubs={hubs} hubHash={hubHash} dispatch={dispatch} {...props} viewHub={this.viewHub} />}
+                        render={props => <AdminHubsIndex theme={theme} hubs={hubs} hubHash={hubHash} adminDispatch={adminDispatch} {...props} viewHub={this.viewHub} />}
                     />
                     <Route
                         exact

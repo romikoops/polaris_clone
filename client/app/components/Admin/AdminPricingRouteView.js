@@ -22,7 +22,12 @@ export class AdminPricingRouteView extends Component {
         this.backToIndex = this.backToIndex.bind(this);
         this.selectClient = this.selectClient.bind(this);
     }
-
+    componentDidMount() {
+        const { routePricings,  loading, adminActions, match } = this.props;
+        if (!routePricings && !loading) {
+            adminActions.getRoutePricings(parseInt(match.params.id, 10), false);
+        }
+    }
     backToIndex() {
         history.goBack();
     }

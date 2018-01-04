@@ -11,7 +11,7 @@ export class AdminSearchableRoutes extends Component {
             routes: props.routes
         };
         this.handleSearchChange = this.handleSearchChange.bind(this);
-         this.handleClick = this.handleClick.bind(this);
+        this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
     seeAll() {
@@ -22,12 +22,12 @@ export class AdminSearchableRoutes extends Component {
             adminDispatch.goTo('/clients');
         }
     }
-    handleClick(client) {
+    handleClick(route) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {
-            handleClick(client);
+            handleClick(route);
         } else {
-            adminDispatch.getClient(client.id, true);
+            adminDispatch.getRoute(route.id, true);
         }
     }
     handleSearchChange(event) {
@@ -72,6 +72,10 @@ export class AdminSearchableRoutes extends Component {
         const { routes } = this.state;
         let routesArr;
         if (routes) {
+            routesArr = routes.map((rt) => {
+                return  <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={this.handleClick}/>;
+            });
+        } else if (this.props.routes) {
             routesArr = routes.map((rt) => {
                 return  <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={this.handleClick}/>;
             });

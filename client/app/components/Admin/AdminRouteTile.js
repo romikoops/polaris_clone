@@ -76,7 +76,7 @@ export class AdminRouteTile extends Component {
                 <div className={`${styles.content} layout-row`}>
                     <div className={`flex-15 layout-column layout-align-space-between-center ${styles.icon_box}`}>
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
-                        <div flex style={dashedLineStyles} />
+                        <div className="flex" style={dashedLineStyles} />
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
                     </div>
                     <div className="flex-85 layout-column layout-wrap layout-align-start-start">

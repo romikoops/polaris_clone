@@ -685,7 +685,7 @@ function autoGenSchedules(data) {
         );
     };
 }
-function confirmShipment(id, action) {
+function confirmShipment(id, action, redirect) {
     function request(shipmentData) {
         return {
             type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
@@ -707,6 +707,11 @@ function confirmShipment(id, action) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
+                if (redirect) {
+                    dispatch(
+                        push('/admin/shipments/' + id)
+                    );
+                }
                 dispatch(
                     alertActions.success('Shipment Action Set successful')
                 );

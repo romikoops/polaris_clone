@@ -109,7 +109,7 @@ export class AdminDashboard extends Component {
                     </div>
                     { shortSchedArr }
                 </div>
-                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch}/>
+                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
                 <AdminSearchableClients theme={theme} clients={clients} adminDispatch={adminDispatch}/>
 
             </div>

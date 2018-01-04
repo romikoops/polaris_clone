@@ -26,6 +26,12 @@ export class AdminPricingClientView extends Component {
         this.closeEdit = this.closeEdit.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
+    componentDidMount() {
+        const { clientPricings,  loading, adminActions, match } = this.props;
+        if (!clientPricings && !loading) {
+            adminActions.getClientPricings(parseInt(match.params.id, 10), false);
+        }
+    }
     editThis(pricing, hubRoute, transport) {
         this.setState({
             editPricing: pricing, editHubRoute: hubRoute, editTransport: transport, editorBool: true

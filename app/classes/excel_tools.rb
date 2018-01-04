@@ -998,7 +998,7 @@ module ExcelTools
           priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
           tmpItem[:_id] = priceKey
           tmpItem[:route] = route.id
-          tmpitem[:hub_route] = hubroute.id
+          tmpItem[:hub_route] = hubroute.id
           tmpItem[:tenant_id] = user.tenant_id
           pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
 
@@ -1099,7 +1099,9 @@ module ExcelTools
           }
           dataObj[pp_key] = {}
         origin = Location.from_short_name(row[:origin])
+        sleep(1)
         destination = Location.from_short_name(row[:destination])
+        sleep(1)
         route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
         hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
         dataObj[pp_key]["origin"] = origin

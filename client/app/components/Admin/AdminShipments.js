@@ -20,6 +20,12 @@ class AdminShipments extends Component {
         this.backToIndex = this.backToIndex.bind(this);
         this.handleShipmentAction = this.handleShipmentAction.bind(this);
     }
+    componentDidMount() {
+        const { shipments, loading, adminDispatch } = this.props;
+        if (!shipments && !loading) {
+            adminDispatch.getShipments(false);
+        }
+    }
     viewShipment(shipment) {
         const { adminDispatch } = this.props;
         adminDispatch.getShipment(shipment.id, true);

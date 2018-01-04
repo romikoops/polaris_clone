@@ -59,7 +59,7 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-        const { theme} = this.props;
+        const { theme, title} = this.props;
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -71,7 +71,7 @@ export class AdminSearchableClients extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-align-space-between-center">
                     <div className="flex-none layput-row layout-align-start-center">
-                        <h4 className="flex-none"> Clients</h4>
+                        <h4 className="flex-none"> {title ? title : 'Clients'}</h4>
                     </div>
                     <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                         <input

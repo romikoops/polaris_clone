@@ -9,6 +9,7 @@ import Shop from '../Shop/Shop';
 import { Footer } from '../../components/Footer/Footer';
 import UserAccount from '../UserAccount/UserAccount';
 import Admin from '../Admin/Admin';
+import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction';
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
@@ -68,6 +69,10 @@ class App extends Component {
                     <Route
                         path="/signout"
                         render={props => <SignOut theme={theme} {...props} />}
+                    />
+                     <Route
+                        path="/redirects/shipment/:uuid"
+                        render={props => <AdminShipmentAction theme={theme} {...props} />}
                     />
                     <PrivateRoute
                         path="/account"

@@ -1,6 +1,6 @@
 Geocoder.configure(
   # Use API key (server key from Google)
-  :api_key => Rails.application.secrets.google_maps_server_api_key,
+  :api_key => ENV["GOOGLE_MAPS_SERVER_API_KEY"],
 
   # Set default units to kilometers:
   :units => :km,

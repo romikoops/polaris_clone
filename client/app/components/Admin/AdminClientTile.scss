@@ -1,7 +1,7 @@
 :local {
     .client_card {
     width: calc(30% - 10px);
-    height: 250px;
+    height: 200px;
     margin: 5px;
     color: black;
     position: relative;
@@ -45,17 +45,19 @@
     padding: 5px;
     
     p {
-      font-size: 12px;
+      font-size: 14px;
       margin: 2px;
     }
     i {
-      font-size: 12px;
+      font-size: 14px !important;
+      height: 16px !important;
+      width: 16px !important;
       margin: 2px;
     }
   }
   .client_text {
     padding: 5px;
-    font-size: 10px;
+    font-size: 12px;
     p, h4 {
       margin: 2px;
       flex-flow: row wrap;

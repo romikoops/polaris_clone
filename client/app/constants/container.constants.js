@@ -13,6 +13,7 @@ export const CONTAINER_DESCRIPTIONS = {
     'fcl_20f': '20‘ Dry Container',
     'fcl_40f': '40‘ Dry Container',
     'fcl_40f_hq': '40‘ High Cube',
+    'lcl': 'LCL'
     // '45_hq': '45‘ High Cube',
     // '45_pw': '45‘ Pallet Wide'
 };
