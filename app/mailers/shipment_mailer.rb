@@ -5,11 +5,15 @@ class ShipmentMailer < ApplicationMailer
 
   def forwarder_notification(user, shipment)
     @user = user
+    tenant = user.tenant
     @shipment = shipment
     @eta = Schedule.find(@shipment.schedule_set.last["id"]).eta
     attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black.png")
     
-    mail(to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, subject: 'Your booking through ItsMyCargo')
+    mail(
+      to: tenant.emails && tenant.emails["sales"] ? tenant.emails["sales"] : "itsmycargodev@gmail.com", 
+      subject: 'Your booking through ItsMyCargo'
+    )
   end
 
   def booking_confirmation(user, shipment)

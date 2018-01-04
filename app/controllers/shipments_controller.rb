@@ -66,18 +66,15 @@ class ShipmentsController < ApplicationController
 
   def update
     resp = update_shipment(session, params)
-    # send_booking_emails(resp[:shipment])
-    forwarder_notification_email(resp[:shipment].shipper, resp[:shipment])
+    # Notification to forwarder
+    forwarder_notification_email(current_user, resp[:shipment])
+    # Notification to shipper
+
+
     response_handler(resp)
   end
 
   def get_shipper_pdf
     get_shipment_pdf(params)
-  end
-
-  private
-
-  def forwarder_notification_email(user, shipment)
-    ShipmentMailer.forwarder_notification(user, shipment).deliver_now
   end
 end
