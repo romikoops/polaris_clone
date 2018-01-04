@@ -54,6 +54,12 @@ module TruckingTools
     return resp.first["data"][0]
   end
 
+  def retrieve_tp_array(table, table_key, client)
+        resp = get_item_fn(table, tableKey, client)
+    res = resp.first['data']
+    return res
+  end
+
 
   def calc_trucking_price(destination, cargo_item, km, hub, client)
     hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")

@@ -20,6 +20,8 @@ export * from './AdminPricingClientView';
 export * from './AdminPricingRouteView';
 
 export * from './AdminTrucking';
+export * from './AdminTruckingView';
+export * from './AdminTruckingIndex';
 
 export * from './AdminRouteTile';
 export * from './AdminRouteView';

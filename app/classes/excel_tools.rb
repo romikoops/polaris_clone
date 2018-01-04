@@ -404,7 +404,7 @@ module ExcelTools
 
     hub_rows.each do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
-      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude], photo: hub_row[:photo])
+      nexus = Location.find_or_create_by(name: hub_row[:hub_name], location_type: "nexus", latitude: hub_row[:latitude], longitude: hub_row[:longitude], photo: hub_row[:photo], country: hub_row[:country], city: hub_row[:hub_name])
 
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
@@ -996,7 +996,9 @@ module ExcelTools
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
           priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = priceKey;
+          tmpItem[:_id] = priceKey
+          tmpItem[:route] = route.id
+          tmpitem[:hub_route] = hubroute.id
           tmpItem[:tenant_id] = user.tenant_id
           pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
 

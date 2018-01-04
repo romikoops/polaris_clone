@@ -308,4 +308,50 @@
     height: 0;
     opacity: 0;
   }
+  .trucking_city_header {
+    padding: 4px;
+    p {margin: 0;}
+  }
+  .trucking_city_header_label {
+    font-size: 14px;
+    margin: 0;
+  }
+  .trucking_cell {
+    padding: 4px;
+    p {
+      margin: 0;
+      font-size: 12px;
+    }
+  }
+  .trucking_cell_label {
+    font-size: 10px;
+  }
+  .trucking_zip {
+    margin-bottom: 15px;
+  }
+  .trucking_header_card {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid rgba(0,0,0, 0.15);
+    box-shadow: 1px 1px 1px rgba(0,12,12,0.25);
+  }
+  .trucking_zip_row {
+    margin: 4px;
+    padding: 5px;
+    border: 1px solid rgba(0,0,0, 0.15);
+    box-shadow: 1px 1px 1px rgba(0,12,12,0.25);
+
+  }
+  .trucking_panel {
+    transition: all 2s bounce;
+  }
+  .trucking_expanded {
+    height: max-content !important;
+    opacity: 1 !important;
+  }
+  .trucking_closed {
+    height: 0;
+    opacity: 0;
+    z-index: -1;
+  }
 }

@@ -1,10 +1,19 @@
 class Admin::TruckingController < ApplicationController
   include ExcelTools
-  include PricingTools
+  include TruckingTools
+  include MongoTools
   
   before_action :require_login_and_role_is_admin
   def index
-    response_handler(true)
+    client = get_client
+    all_trucking_hubs = get_items_fn(client, 'truckingHubs', "tenant_id", current_user.tenant_id)
+    all_trucking_prices = {}
+
+    all_trucking_hubs.each do |th|
+      tp = get_item_fn(client, 'truckingTables', "_id", th["table"])
+      all_trucking_prices[th["_id"]] = tp
+    end
+    response_handler({truckingHubs: all_trucking_hubs, truckingPrices: all_trucking_prices})
   end
    def overwrite_zip_trucking
      if params[:file]

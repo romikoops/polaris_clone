@@ -818,6 +818,18 @@ function updateServiceCharge(id, req) {
     };
 }
 
+function viewTrucking(truckingHub, pricing) {
+    const payload = {truckingHub, pricing};
+    function set(data) {
+        // debugger;
+        return { type: adminConstants.VIEW_TRUCKING, payload: data };
+    }
+    return dispatch => {
+        dispatch(push('/admin/trucking/' + truckingHub._id));
+        dispatch(set(payload));
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -849,5 +861,6 @@ export const adminActions = {
     wizardSCharge,
     wizardPricings,
     wizardOpenPricings,
-    wizardTrucking
+    wizardTrucking,
+    viewTrucking
 };

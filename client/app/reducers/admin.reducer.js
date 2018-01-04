@@ -437,6 +437,12 @@ export function admin(state = {}, action) {
             });
             return errRoute;
 
+        case adminConstants.VIEW_TRUCKING:
+            const newTrucking = merge({}, state, {
+                truckingDetail: action.payload
+            });
+            return newTrucking;
+
         default:
             return state;
     }

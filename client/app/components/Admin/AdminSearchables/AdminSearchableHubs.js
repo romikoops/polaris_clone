@@ -11,6 +11,24 @@ export class AdminSearchableHubs extends Component {
             hubs: props.hubs
         };
         this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.seeAll = this.seeAll.bind(this);
+    }
+    handleClick(hub) {
+        const {handleClick, adminDispatch} = this.props;
+        if (handleClick) {
+            handleClick(hub);
+        } else {
+            adminDispatch.getHub(hub.id, true);
+        }
+    }
+    seeAll() {
+        const {seeAll, adminDispatch} = this.props;
+        if (seeAll) {
+            seeAll();
+        } else {
+            adminDispatch.goTo('/hubs');
+        }
     }
     handleSearchChange(event) {
         if (event.target.value === '') {
@@ -47,9 +65,20 @@ export class AdminSearchableHubs extends Component {
         let hubsArr;
         if (hubs) {
             hubsArr = hubs.map((hub) => {
-                return  <AdminHubTile key={v4()} hub={hub} theme={theme}  handleClick={() => adminDispatch.getHub(hub.id, true)}/>;
+                return  <AdminHubTile key={v4()} hub={hub} theme={theme}  handleClick={this.handleClick}/>;
             });
         }
+         const viewType = this.props.sideScroll ?
+            (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
+                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+                        {hubsArr}
+                    </div>
+                </div>) :
+            (<div className="layout-row flex-100 layout-align-start-center ">
+                    <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                        {hubsArr}
+                    </div>
+                </div>);
         return(
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-align-space-between-center">
@@ -65,11 +94,7 @@ export class AdminSearchableHubs extends Component {
                         />
                     </div>
                 </div>
-                <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-                        {hubsArr}
-                    </div>
-                </div>
+                {viewType}
                 <div className="flex-100 layout-row layout-align-end-center">
                     <div className="flex-none layout-row layout-align-center-center" onClick={() => adminDispatch.goTo('/hubs')}>
                         <p className="flex-none">See all</p>

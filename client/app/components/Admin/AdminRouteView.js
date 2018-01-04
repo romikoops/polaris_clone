@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AdminScheduleLine, AdminHubTile, AdminImportChargePanel, AdminExportChargePanel } from './';
+import { AdminScheduleLine, AdminHubTile } from './';
 import styles from './Admin.scss';
 import {v4} from 'node-uuid';
 export class AdminRouteView extends Component {
@@ -16,7 +16,7 @@ export class AdminRouteView extends Component {
         if (!routeData) {
             return '';
         }
-        const { route, startHubs, endHubs, hubRoutes, schedules, importCharges, exportCharges} = routeData;
+        const { route, startHubs, endHubs, hubRoutes, schedules} = routeData;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -53,12 +53,7 @@ export class AdminRouteView extends Component {
             }
             return '';
         });
-        const importArr = importCharges.map((charge) =>{
-                return (<AdminImportChargePanel key={v4()} hub={hubHash[charge.hub_id]} theme={theme} charge={charge} />);
-        });
-        const exportArr = exportCharges.map((charge) =>{
-                return (<AdminExportChargePanel key={v4()} hub={hubHash[charge.hub_id]} theme={theme} charge={charge} />);
-        });
+
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -77,7 +72,7 @@ export class AdminRouteView extends Component {
                     </div>
 
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+               {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Service Charges </p>
                     </div>
@@ -89,7 +84,7 @@ export class AdminRouteView extends Component {
                             {importArr}
                         </div>
                     </div>
-                </div>
+                </div>*/}
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Routes </p>

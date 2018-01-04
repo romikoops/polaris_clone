@@ -40,8 +40,11 @@ export class AdminRouteTile extends Component {
                 endHub = hub;
             }
         });
-        const bg1 = { backgroundImage: 'url(' + startHub.location.photo + ')' };
-        const bg2 = { backgroundImage: 'url(' + endHub.location.photo + ')' };
+        const bg1 = startHub ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : {};
+        const bg2 = endHub ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : {};
+        if (!endHub || !startHub) {
+            // debugger;
+        }
         const gradientStyle = {
             background:
                 theme && theme.colors
@@ -79,11 +82,11 @@ export class AdminRouteTile extends Component {
                     <div className="flex-85 layout-column layout-wrap layout-align-start-start">
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
                             <h4 className="flex-100" > { route.origin_nexus } </h4>
-                            { startHub.location.geocoded_address ? <p className="flex-100">{ startHub.location.geocoded_address }</p> : '' }
+                            { startHub && startHub.location.geocoded_address ? <p className="flex-100">{ startHub.location.geocoded_address }</p> : '' }
                         </div>
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
                             <h4 className="flex-100" > { route.destination_nexus } </h4>
-                            { endHub.location.geocoded_address ? <p className="flex-100">{ endHub.location.geocoded_address }</p> : '' }
+                            { endHub && endHub.location.geocoded_address ? <p className="flex-100">{ endHub.location.geocoded_address }</p> : '' }
                         </div>
                     </div>
                 </div>

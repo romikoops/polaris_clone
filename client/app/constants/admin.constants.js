@@ -103,6 +103,8 @@ export const adminConstants = {
     WIZARD_TRUCKING_SUCCESS: 'WIZARD_TRUCKING_SUCCESS',
     WIZARD_TRUCKING_FAILURE: 'WIZARD_TRUCKING_FAILURE',
 
+    VIEW_TRUCKING: 'VIEW_TRUCKING'
+
 };
 
 export const serviceChargeNames = {

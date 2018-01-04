@@ -263,11 +263,10 @@ module ShippingTools
           @dangerous = true
         end
     end
-    @shipment.origin_id = params[:schedules].first[:starthub_id]
-    @shipment.destination_id = params[:schedules].last[:endhub_id]
-    @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
+    @shipment.save!
+
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous}

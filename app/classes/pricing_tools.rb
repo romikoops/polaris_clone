@@ -1,5 +1,9 @@
 module PricingTools
   include MongoTools
+  def get_mongo_client 
+    client = get_client
+    return client
+  end
   def get_user_price(client, pathKey, user)
     priceObj = get_item_fn(client, 'pathPricing', '_id', pathKey)
     if priceObj["#{user.id}"]
@@ -80,6 +84,13 @@ module PricingTools
       result[pr["_id"]] = pr
     end
     return result
+  end
+
+  def get_route_pricings_array(route_id, tenant_id)
+    client = get_client
+    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"route" => {"$eq" => route_id.to_i}}]
+    resp = get_items_query_fn(client, 'pricings', query).to_a
+    return resp
   end
 
   def get_user_pricings(user_id)
