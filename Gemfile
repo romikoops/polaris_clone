@@ -16,6 +16,9 @@ gem 'puma', '~> 3.7'
 gem 'devise_token_auth'
 gem 'omniauth'
 
+gem 'sprockets-rails', require: 'sprockets/railtie'
+gem 'sass-rails'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 
