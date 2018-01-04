@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :tenant_id, presence: true
 
   # Basic associations
-  # belongs_to :tenant
+  belongs_to :tenant
   belongs_to :role
 
   has_many :user_locations, dependent: :destroy

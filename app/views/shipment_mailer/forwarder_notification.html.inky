@@ -1,7 +1,8 @@
-<spacer size="16"></spacer>
-
 <container class="body-drip">
 
+  <% primary_color = @user.tenant.theme["colors"]["primary"] %>
+  <hr style="width: 100%; border: 4px solid <%= primary_color %>;">
+  
   <spacer size="16"></spacer>
 
   <center>
@@ -24,15 +25,21 @@
 
   <row>
     <columns>
-      <p class="text-center"><span class="bold">Departure:</span> <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span></p>
+      <p class="text-center">
+        <span class="bold">Departure:</span> 
+        <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span>
+      </p>
     </columns>
     <columns>
-      <p class="text-center"><span class="bold">ETA:</span> <span><%= "?" %></span></p>
+      <p class="text-center">
+        <span class="bold">ETA:</span>
+        <span><%= formatted_datetime(@eta) %></span>
+      </p>
     </columns>
   </row>
 
   <row>    
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 145px;">
         <h6><span class="bold">From:</span></h6>
         <p>
@@ -40,10 +47,9 @@
         </p>
       </callout>
     </columns>
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 145px;">
-        <h6><span class="bold">To:</span class="bold"></p
-        h6>
+        <h6><span class="bold">To:</span class="bold"></span></h6>
         <p>
           <span><%= @shipment.destination.city_country %></span>
         </p>
@@ -52,7 +58,7 @@
   </row>
 
   <row>    
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 160px;">
         <h6><span class="bold">Shipment Details:</span></h6>
         <p>
@@ -62,7 +68,7 @@
         </p>
       </callout>
     </columns>
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 160px;">
         <h6><span class="bold">Pricing Details:</span></h6>
         <p>
@@ -75,7 +81,7 @@
   </row>
 
   <row>    
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 160px;">
         <h6><span class="bold">Cargo Details:</span></h6>
         <p>
@@ -85,13 +91,13 @@
         </p>
       </callout>
     </columns>
-    <columns small="4">
+    <columns small="4" style="width: 50%;">
       <callout class="Light Gray" style="height: 160px;">
         <h6><span class="bold">Customer Details:</span></h6>
         <p>
-          <span class="bold"><%= @user.full_name_and_company %></span><br>  
+          <span class="bold"><%= @user.full_name_and_company %></span> <span> </span><br>    
           <span class="bold">Phone:</span> <span><%= @user.phone %></span><br>
-          <span class="bold">Mail:</span> <span><%= @user.email %></span>
+          <span class="bold">Email:</span> <span><%= @user.email %></span>
         </p>
       </callout>
     </columns>
@@ -140,21 +146,5 @@
     </columns>
   </row>
 
-  <spacer class="body-drip" size="16"></spacer>
-
- <!--  <row class="collapsed footer">
-    <columns>
-      <spacer size="16"></spacer>
-      <p class="text-center">Copyright © 2017 Greencarrier. All rights reserved.<br/>
-      <a href="#">itsmycargo@greencarrier.com</a>    |    <a href="#">Manage Email Notifications</a> | <a href="#">Unsubscribe</a></p>
-      <center>
-        <menu>
-          <item><%= image_tag attachments['logo.png'].url %></item>
-          <item><%= image_tag attachments['logo.png'].url %></item>
-          <item><%= image_tag attachments['logo.png'].url %></item>
-        </menu>
-      </center>
-    </columns>
-  </row> -->
-
+  <hr style="width: 100%; border: 4px solid <%= primary_color %>;">
 </container>

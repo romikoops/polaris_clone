@@ -9,19 +9,18 @@ body, html, .body {
   background: #f3f3f3;
 }
 table.body-drip {
-  width: 768px; ////// Change grid system???
-  border-top: 8px solid green;
+  width: 100%; ////// Change grid system???
 }
-.bold{
+.bold {
 	font-weight: bold;
 }
-.button{
+.button {
 	border-radius: 10px;
 }
-.primary{
+.primary {
 	background-color: #000000;
 }
-a{
+a {
 	text-decoration: underline;
 	color: black;
 }
