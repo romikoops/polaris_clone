@@ -194,8 +194,7 @@ module ShippingTools
           @dangerous = true
         end
     end
-    @shipment.origin_id = params[:schedules].first[:starthub_id]
-    @shipment.destination_id = params[:schedules].last[:endhub_id]
+
     @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub

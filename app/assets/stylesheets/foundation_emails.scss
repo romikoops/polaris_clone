@@ -1,0 +1,29 @@
+@import "foundation-emails";
+
+// $global-width: 1200px;
+
+body, html, .body {
+  background: #f3f3f3 !important;
+}
+.container.header {
+  background: #f3f3f3;
+}
+table.body-drip {
+  width: 768px; ////// Change grid system???
+  border-top: 8px solid green;
+}
+.bold{
+	font-weight: bold;
+}
+.button{
+	border-radius: 10px;
+}
+.primary{
+	background-color: #000000;
+}
+a{
+	text-decoration: underline;
+	color: black;
+}
+
+

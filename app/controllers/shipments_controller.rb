@@ -61,12 +61,13 @@ class ShipmentsController < ApplicationController
 
   def finish_booking
     resp = finish_shipment_booking(params)
-    send_booking_emails(resp.shipment)
     response_handler(resp)
   end
 
   def update
     resp = update_shipment(session, params)
+    # send_booking_emails(resp[:shipment])
+    forwarder_notification_email(resp[:shipment].shipper, resp[:shipment])
     response_handler(resp)
   end
 
