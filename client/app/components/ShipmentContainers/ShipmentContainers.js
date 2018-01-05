@@ -18,9 +18,15 @@ const containerTareWeights = CONTAINER_TARE_WEIGHTS;
 export class ShipmentContainers extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectors: {
+                // sizeClass: {value: 'fcl_20f', label: '20‘ Dry Container', tare_weight: 2370}
+            },
+            firstRenderInputs: !this.props.nextStageAttempt
+        };
         this.handleContainerSelect = this.handleContainerSelect.bind(this);
+        this.handleContainerQ = this.handleContainerQ.bind(this);
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
-        this.state = {firstRenderInputs: !this.props.nextStageAttempt};
         this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
         this.addContainer = this.addContainer.bind(this);
     }
@@ -28,8 +34,14 @@ export class ShipmentContainers extends Component {
     handleContainerSelect(val) {
         const ev1 = { target: { name: 'sizeClass', value: val.value } };
         const ev2 = { target: { name: 'tareWeight', value: val.tare_weight } };
+        this.setState({selectors: {sizeClass: val.value}});
         this.props.handleDelta(ev1);
         this.props.handleDelta(ev2);
+    }
+
+    handleContainerQ(ev) {
+        const ev1 = { target: { name: 'quantity', value: ev } };
+        this.props.handleDelta(ev1);
     }
 
     setFirstRenderInputs(bool) {
@@ -55,15 +67,25 @@ export class ShipmentContainers extends Component {
 
     render() {
         const { containers, handleDelta } = this.props;
+        const { selectors } = this.state;
         const newContainer = containers[0];
         const containerOptions = [];
         Object.keys(containerDescriptions).forEach(key => {
-            containerOptions.push({
-                value: key,
-                label: containerDescriptions[key],
-                tare_weight: containerTareWeights[key]
-            });
+            if (key !== 'lcl') {
+                containerOptions.push({
+                    value: key,
+                    label: containerDescriptions[key],
+                    tare_weight: containerTareWeights[key]
+                });
+            }
         });
+        if (!selectors.sizeClass) {
+            this.handleContainerSelect(containerOptions[0]);
+        }
+        const numbers = [];
+        for (let i = 1; i <= 20; i++) {
+            numbers.push({label: i, value: i});
+        }
         const grossWeight =
             parseInt(newContainer.payload_in_kg, 10) +
             parseInt(newContainer.tareWeight, 10);
@@ -72,21 +94,29 @@ export class ShipmentContainers extends Component {
             this.props.containers.forEach((cont, i) => {
                 if (i !== 0) {
                     const tmpCont = (
-                        <div className="flex-100 layout-row">
-                            <div className="flex-20 layout-row layout-align-center-center">
-                                {containerDescriptions[cont.sizeClass]}
+                        <div className={`flex-100 layout-row ${styles.container_row}`}>
+                            <div className="flex-20 layout-row layout-align-start-center layout-wrap">
+                                <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
+                                <p className="flex-100">{containerDescriptions[cont.sizeClass]}</p>
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
-                                {cont.payload_in_kg} kg
+                            <div className="flex-20 layout-row layout-align-start-center layout-wrap">
+                                <p className={`flex-100 ${styles.cell_header}`}>Net Weight</p>
+                                <p className="flex-100">{cont.payload_in_kg} kg</p>
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
-                                {parseInt(cont.payload_in_kg, 10) +
-                                    parseInt(cont.tareWeight, 10)}{' '}
-                                kg
+                            <div className="flex-20 layout-row layout-align-start-center layout-wrap">
+                                <p className={`flex-100 ${styles.cell_header}`}> Gross Weight</p>
+                                <p className="flex-100">{parseInt(cont.payload_in_kg, 10) + parseInt(cont.tareWeight, 10)}{' '} kg</p>
+
                             </div>
-                            <div className="flex-20 layout-row layout-align-center-center">
-                                Dangerous Goods:{' '}
-                                {cont.dangerousGoods ? 'Yes' : 'No'}
+                            <div className="flex-20 layout-row layout-align-start-center layout-wrap">
+                                <p className={`flex-100 ${styles.cell_header}`}>No. of Containers:{' '}</p>
+
+                                <p className="flex-100">{cont.quantity}</p>
+                            </div>
+                            <div className="flex-10 layout-row layout-align-start-center layout-wrap">
+                                <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
+
+                                <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
                             </div>
                             <div className="flex-10 layout-row layout-align-center-center">
                                 <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
@@ -125,7 +155,7 @@ export class ShipmentContainers extends Component {
                                 placeholder={newContainer.sizeClass}
                                 className={styles.select}
                                 name="container-size"
-                                value={newContainer.type}
+                                value={selectors.sizeClass}
                                 options={containerOptions}
                                 onChange={this.handleContainerSelect}
                             />
@@ -174,7 +204,18 @@ export class ShipmentContainers extends Component {
                                 </div>
                             </div>
                         </div>
-
+                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                            <p className="flex-100"> No. of Containers </p>
+                            <StyledSelect
+                                placeholder={newContainer.quantity}
+                                className={styles.select}
+                                name="container-quantity"
+                                value={newContainer.quantity}
+                                options={numbers}
+                                simpleValue
+                                onChange={this.handleContainerQ}
+                            />
+                        </div>
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center">
                             <p className="flex-100"> Dangerous Goods </p>
                             <Checkbox
@@ -183,6 +224,7 @@ export class ShipmentContainers extends Component {
                                 theme={this.props.theme}
                             />
                         </div>
+
                     </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addContainer}>

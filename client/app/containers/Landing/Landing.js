@@ -45,7 +45,7 @@ class Landing extends Component {
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >
                 {loadingScreen}
-                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} toAdmin={() => adminDispatch.getDashboard(true)} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
+                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} toAdmin={adminDispatch.getDashboard} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
                 <div className={styles.service_box + ' layout-row flex-100 layout-wrap'}>
                     <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>
                         <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}

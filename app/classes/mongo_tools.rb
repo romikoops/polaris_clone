@@ -76,6 +76,16 @@ module MongoTools
     client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
   end
  
+  def text_search_fn(client, table, query)
+    if !client
+      client = get_client
+    end
+    resp = client[table.to_sym].find(
+      { "$text" => { "$search" => query } }, 
+      projection: { "score" => { "$meta" => "textScore" }}
+    )
+    resp.to_a
+  end
 
   def update_array_fn(client, table, key, updates)
     updateArr = {}

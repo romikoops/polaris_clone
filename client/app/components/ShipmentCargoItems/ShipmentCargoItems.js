@@ -53,25 +53,30 @@ export class ShipmentCargoItems extends Component {
             cargoItems.forEach((cont, i) => {
                 if (i !== 0) {
                     const tmpCont = (
-                        <div key={i} className="flex-100 layout-row">
+                        <div key={i} className={`flex-100 layout-row ${styles.container_row}`}>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                Unit {i}
+                                <p className={`flex-100 ${styles.cell_header}`}>Unit</p>
+                                <p className="flex-100">{i}</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                {cont.payload_in_kg} kg
+                                <p className={`flex-100 ${styles.cell_header}`}>Payload</p>
+                                <p className="flex-100">{cont.payload_in_kg} kg</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                {cont.dimension_y} cm
+                                <p className={`flex-100 ${styles.cell_header}`}>Depth</p>
+                                <p className="flex-100">{cont.dimension_y} cm</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                {cont.dimension_x} cm
+                                <p className={`flex-100 ${styles.cell_header}`}>Width</p>
+                                <p className="flex-100">{cont.dimension_x} cm</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                {cont.dimension_z} cm
+                                <p className={`flex-100 ${styles.cell_header}`}>Height</p>
+                                <p className="flex-100">{cont.dimension_z} cm</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-center-center">
-                                Dangerous Goods:{' '}
-                                {cont.dangerousGoods ? 'Yes' : 'No'}
+                                <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
+                                <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
                             </div>
                             <div className="flex-10 layout-row layout-align-center-center">
                                 <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>

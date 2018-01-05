@@ -115,4 +115,5 @@ Rails.application.routes.draw do
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
   get "tenants/:name" => "tenants#get_tenant"
+  get "search/hscodes/:query" => "search#search_hs_codes"
 end

@@ -19,7 +19,7 @@ export class LandingTop extends Component {
         this.props.goTo('/account');
     }
     toAdmin() {
-        this.props.toAdmin;
+        this.props.toAdmin(true);
     }
     toBooking() {
         this.props.goTo('/booking');
@@ -50,7 +50,7 @@ export class LandingTop extends Component {
             <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active/>
         );
         const toAdmin = (
-            <RoundButton text="Admin Dashboard" theme={theme} handleNext={() => this.toAdmin()} active/>
+            <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active/>
         );
         return (
             <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>

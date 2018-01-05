@@ -40,6 +40,9 @@ class FileUploader extends React.Component {
             return '';
         }
         if (dispatchFn) {
+            if (type) {
+                file.doc_type = type;
+            }
             return dispatchFn(file);
         }
         if (uploadFn) {

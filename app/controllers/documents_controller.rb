@@ -6,7 +6,12 @@ class DocumentsController < ApplicationController
 		redirect_to @url
 	end
   def delete
-    @document = Document.delete_document(params[:document_id])
-    response_handler({deleted: true})
+    @document = Document.find(params[:document_id])
+    if current_user && current_user.id == @document.user_id
+      Document.delete_document(params[:document_id])
+      response_handler({deleted: true})
+    else
+      response_handler({deleted: false})
+    end
   end
 end

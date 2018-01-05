@@ -1,5 +1,6 @@
 class ShipmentsController < ApplicationController
   include ShippingTools
+  include MongoTools
 
   skip_before_action :require_non_guest_authentication!, except: [:finish_booking, :upload_document]
 

@@ -215,11 +215,14 @@ export class ShipmentDetails extends Component {
             payload_in_kg: 0,
             sizeClass: '',
             tareWeight: 0,
-            dangerousGoods: false
+            dangerousGoods: false,
+            quantity: 1
         };
+
         const newErrors = {
             payload_in_kg: true,
         };
+
         const currArray = this.state.containers;
         currArray.unshift(newCont);
         this.setState({
