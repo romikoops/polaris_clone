@@ -50,7 +50,7 @@ class Admin::ShipmentsController < ApplicationController
       when "accept"
         @shipment.accept!
         booking_confirmation_email(current_user, shipment)
-        send_booking_emails(shipment)
+        # send_booking_emails(shipment)
       when "decline"
         @shipment.decline!
       else

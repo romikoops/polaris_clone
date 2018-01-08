@@ -164,7 +164,7 @@ function getShipments(id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        userService.getShipments(id).then(
+        userService.getShipments().then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Shipments successful')
