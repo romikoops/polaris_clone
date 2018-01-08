@@ -34,12 +34,13 @@ class LoginPage extends React.Component {
 
         this.setState({ submitted: true });
         const { username, password } = this.state;
-        const { dispatch, req } = this.props;
+        const { dispatch, req, noRedirect } = this.props;
         if (username && password) {
             dispatch(authenticationActions.login({
                 email: username,
                 password: password,
-                shipmentReq: req
+                shipmentReq: req,
+                noRedirect
             }));
         }
     }

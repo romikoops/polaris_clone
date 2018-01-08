@@ -40,8 +40,11 @@ export class AdminRouteTile extends Component {
                 endHub = hub;
             }
         });
-        const bg1 = { backgroundImage: 'url(' + startHub.location.photo + ')' };
-        const bg2 = { backgroundImage: 'url(' + endHub.location.photo + ')' };
+        const bg1 = startHub ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : {};
+        const bg2 = endHub ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : {};
+        if (!endHub || !startHub) {
+            // debugger;
+        }
         const gradientStyle = {
             background:
                 theme && theme.colors
@@ -73,17 +76,17 @@ export class AdminRouteTile extends Component {
                 <div className={`${styles.content} layout-row`}>
                     <div className={`flex-15 layout-column layout-align-space-between-center ${styles.icon_box}`}>
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
-                        <div flex style={dashedLineStyles} />
+                        <div className="flex" style={dashedLineStyles} />
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
                     </div>
-                    <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
-                            <h4 className="flex-100" > { startHub.data.name } </h4>
-                            <p className="flex-100">{ startHub.location.geocoded_address }</p>
+                    <div className="flex-85 layout-column layout-wrap layout-align-start-start">
+                        <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
+                            <h4 className="flex-100" > { route.origin_nexus } </h4>
+                            { startHub && startHub.location.geocoded_address ? <p className="flex-100">{ startHub.location.geocoded_address }</p> : '' }
                         </div>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
-                            <h4 className="flex-100" > { endHub.data.name } </h4>
-                            <p className="flex-100">{ endHub.location.geocoded_address }</p>
+                        <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
+                            <h4 className="flex-100" > { route.destination_nexus } </h4>
+                            { endHub && endHub.location.geocoded_address ? <p className="flex-100">{ endHub.location.geocoded_address }</p> : '' }
                         </div>
                     </div>
                 </div>

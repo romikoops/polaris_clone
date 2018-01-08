@@ -64,6 +64,7 @@ class Admin extends Component {
         }
     }
     render() {
+        console.log(this.props);
         const {theme, adminData, adminDispatch} = this.props;
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
         const hubHash = {};
@@ -85,7 +86,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/dashboard"
-                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} dashData={dashboard}/>}
+                                render={props => <AdminDashboard theme={theme} {...props} clients={clients} hubs={hubs} hubHash={hubHash} dashData={dashboard} adminDispatch={adminDispatch}/>}
                             />
                             <Route
 
@@ -115,7 +116,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/clients"
-                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients}/>}
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients} adminDispatch={adminDispatch}/>}
                             />
                             <Route
 
@@ -162,6 +163,7 @@ function mapStateToProps(state) {
         user,
         users,
         tenant,
+        theme: tenant.data.theme,
         loggedIn,
         adminData: admin
     };

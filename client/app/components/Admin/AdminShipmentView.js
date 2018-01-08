@@ -7,11 +7,18 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import {v4} from 'node-uuid';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
+import FileTile from '../FileTile/FileTile';
 export class AdminShipmentView extends Component {
     constructor(props) {
         super(props);
         this.handleDeny = this.handleDeny.bind(this);
         this.handleAccept = this.handleAccept.bind(this);
+    }
+    componentDidMount() {
+        const { shipmentData, loading, adminDispatch, match } = this.props;
+        if (!shipmentData && !loading) {
+            adminDispatch.getShipment(match.params.id, false);
+        }
     }
     handleDeny() {
         const {shipmentData, handleShipmentAction} = this.props;
@@ -128,7 +135,7 @@ export class AdminShipmentView extends Component {
                 cargoView.push(
                     <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
                         <ContainerDetails item={cont} index={i} />
-                        </div>
+                    </div>
                 );
             });
         }
@@ -137,45 +144,48 @@ export class AdminShipmentView extends Component {
                 const offset = i % 3 !== 0 ? 'offset-5' : '';
                 cargoView.push(
                     <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-                      <CargoItemDetails item={ci} index={i} />
+                        <CargoItemDetails item={ci} index={i} />
                     </div>
-            );
+                );
             });
         }
         if (documents) {
-            documents.forEach((ci)=> {
-                docView.push(<p> {ci.url}</p>);
+            documents.forEach((doc)=> {
+                docView.push(<FileTile key={doc.id} doc={doc} theme={theme} />);
             });
         }
+        const acceptDeny = shipment && shipment.status === 'requested' ?
+            (<div className="flex-40 layout-row layout-align-space-between-start">
+                <div className="flex-none layout-row">
+
+                    <RoundButton
+                        theme={theme}
+                        size="small"
+                        text="Deny"
+                        iconClass="fa-trash"
+                        handleNext={this.handleDeny}
+                    />
+                </div>
+                <div className="flex-none offset-5 layout-row">
+                    <RoundButton
+                        theme={theme}
+                        size="small"
+                        text="Accept"
+                        iconClass="fa-check"
+                        active
+                        handleNext={this.handleAccept}
+                    />
+                </div>
+            </div>) :
+            '';
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <div className="flex-60 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex layout-row layout-wrap layout-align-space-between-start">
                         <p className={` ${styles.sec_title_text_normal} flex-none`} >Shipment status:</p>
                         <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle} >{ shipment.status }</p>
                     </div>
-                    <div className="flex-40 layout-row layout-align-space-between-start">
-                        <div className="flex-none layout-row">
-
-                            <RoundButton
-                                theme={theme}
-                                size="small"
-                                text="Deny"
-                                iconClass="fa-trash"
-                                handleNext={this.handleDeny}
-                            />
-                        </div>
-                        <div className="flex-none offset-5 layout-row">
-                            <RoundButton
-                                theme={theme}
-                                size="small"
-                                text="Accept"
-                                iconClass="fa-check"
-                                active
-                                handleNext={this.handleAccept}
-                            />
-                        </div>
-                    </div>
+                    {acceptDeny}
                 </div>
                 <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
                     Booking Reference: {shipment.imc_reference}

@@ -239,7 +239,7 @@ export class BookingDetails extends Component {
     }
 
     render() {
-        const { theme, shipmentData } = this.props;
+        const { theme, shipmentData, shipmentDispatch } = this.props;
         const {
             shipment,
             hubs,
@@ -270,6 +270,7 @@ export class BookingDetails extends Component {
             />
         );
         const addrView = this.state.addressBook ? aBook : cForm;
+        debugger;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
 
@@ -290,6 +291,7 @@ export class BookingDetails extends Component {
                     totalGoodsValue={this.state.totalGoodsValue}
                     handleInsurance={this.handleInsurance}
                     insurance={this.state.insurance}
+                    shipmentDispatch={shipmentDispatch}
                 />
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>

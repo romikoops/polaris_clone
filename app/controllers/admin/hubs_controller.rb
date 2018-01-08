@@ -11,20 +11,24 @@ class Admin::HubsController < ApplicationController
     response_handler(@hubs)
   end
   def show
-    @hub = Hub.find(params[:id])
-    @related_hubs = @hub.nexus.hubs
-    @service_charges = @hub.service_charge
-    # @schedules = @hub.schedules.limit(10)
-    @hub_routes = HubRoute.where('endhub_id = ? OR starthub_id = ?', @hub.id, @hub.id)
+    hub = Hub.find(params[:id])
+    related_hubs = hub.nexus.hubs
+    # schedules = hub.schedules.limit(10)
+    hub_routes = HubRoute.where('endhub_id = ? OR starthub_id = ?', hub.id, hub.id)
     
-    @routes = []
-    @schedules = []
-    @hub_routes.each do |hr|
-      @routes.push(Route.find(hr.route_id))
-      @schedules += hr.schedules.limit(5).to_a
+    routes = []
+    schedules = []
+    hub_routes.each do |hr|
+      routes.push(Route.find(hr.route_id))
+      schedules += hr.schedules.limit(5).to_a
+    end
+    detailed_routes = routes.map do |route| 
+      route.detailed_hash(
+        nexus_names: true
+      )
     end
     
-    resp = {hub: @hub, routes: @routes, relatedHubs: @related_hubs, serviceCharges: @service_charges, schedules: @schedules, hubRoutes: @hub_routes}
+    resp = {hub: hub, routes: detailed_routes, relatedHubs: related_hubs, schedules: schedules, hubRoutes: hub_routes}
     response_handler(resp)
   end
   def set_status

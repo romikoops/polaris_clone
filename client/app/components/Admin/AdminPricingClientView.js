@@ -4,9 +4,12 @@ import { AdminPriceEditor } from './';
 import styles from './Admin.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
-import {CONTAINER_DESCRIPTIONS} from '../../constants';
+import {CONTAINER_DESCRIPTIONS, fclChargeGlossary, lclChargeGlossary, chargeGlossary} from '../../constants';
 import { history } from '../../helpers';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
+const fclChargeGloss = fclChargeGlossary;
+const lclChargeGloss = lclChargeGlossary;
+const chargeGloss = chargeGlossary;
 export class AdminPricingClientView extends Component {
     constructor(props) {
         super(props);
@@ -15,15 +18,28 @@ export class AdminPricingClientView extends Component {
             editorBool: false,
             editTransport: false,
             editPricing: false,
-            editHubRoute: false
+            editHubRoute: false,
+            open: {}
         };
         this.editThis = this.editThis.bind(this);
+        this.viewThis = this.viewThis.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
+    }
+    componentDidMount() {
+        const { clientPricings,  loading, adminActions, match } = this.props;
+        if (!clientPricings && !loading) {
+            adminActions.getClientPricings(parseInt(match.params.id, 10), false);
+        }
     }
     editThis(pricing, hubRoute, transport) {
         this.setState({
             editPricing: pricing, editHubRoute: hubRoute, editTransport: transport, editorBool: true
+        });
+    }
+    viewThis(pricingId) {
+        this.setState({
+            open: {...this.state.open, [pricingId]: !this.state.open[pricingId]}
         });
     }
     closeEdit() {
@@ -50,6 +66,7 @@ export class AdminPricingClientView extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -60,42 +77,50 @@ export class AdminPricingClientView extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+
         const RPBInner = ({hubRoute, pricing, transport}) => {
-            const panel = pricing.heavy_wm ?
-                (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Rate per WM</p>
-                        <p className="flex-none">{pricing.wm.rate} {pricing.wm.currency}</p>
+            const panel = [];
+            let gloss;
+            let toggleStyle;
+            // debugger;
+            if (pricing._id.includes('lcl')) {
+                gloss = lclChargeGloss;
+            } else {
+                gloss = fclChargeGloss;
+            }
+            if (this.state.open[pricing._id]) {
+                toggleStyle = styles.show_style;
+            } else {
+                toggleStyle = styles.hide_style;
+            }
+            const expandIcon = this.state.open[pricing._id] ?  <i className="flex-none fa fa-chevron-up clip" style={textStyle}></i> :  <i className="flex-none fa fa-chevron-down clip" style={textStyle}></i>;
+            Object.keys(pricing.data).forEach((key) => {
+                const cells = [];
+                Object.keys(pricing.data[key]).forEach(chargeKey => {
+                    if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+                            <p className="flex">{pricing.data[key][chargeKey]} {pricing.data[key].currency}</p>
+                        </div>);
+                    } else if (chargeKey === 'rate_basis') {
+                        cells.push( <div className={`flex-25 layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+                            <p className="flex">{chargeGloss[pricing.data[key][chargeKey]]}</p>
+                        </div>);
+                    }
+                });
+                panel.push( <div className={`flex-100 layout-row layout-align-none-center layout-wrap ${styles.expand_panel} ${toggleStyle}`} >
+                    <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+                        <p className="flex-none">{key} - {gloss[key]}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum WM: </p>
-                        <p className="flex-none">{pricing.wm.min} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none"> Heavy Weight Surcharge</p>
-                        <p className="flex-none">{pricing.heavy_wm.heavy_weight} {pricing.heavy_wm.currency} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum Heavy WM</p>
-                        <p className="flex-none">{pricing.heavy_wm.heavy_wm_min}</p>
-                    </div>
-                </div>) :
-                (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Rate per Container</p>
-                        <p className="flex-none">{pricing.wm.rate} {pricing.wm.currency}</p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Surcharge per Heavy Container</p>
-                        <p className="flex-none">{pricing.heavy_kg.heavy_weight} {pricing.heavy_kg.currency} </p>
-                    </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">Minimum Heavy Weight</p>
-                        <p className="flex-none">{pricing.heavy_kg.heavy_kg_min} kg</p>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        { cells }
                     </div>
                 </div>);
+            });
+
             return (
-                <div key={v4()} className={` ${styles.hub_route_price} flex-45 layout-row layout-wrap layout-align-center-start`}>
+                <div key={v4()} className={` ${styles.hub_route_price} flex-100 layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                             <i className="fa fa-map-signs clip" style={textStyle}></i>
@@ -104,16 +129,19 @@ export class AdminPricingClientView extends Component {
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing, hubRoute, transport)}>
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
                         </div>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.viewThis(pricing._id)}>
+                           {expandIcon}
+                        </div>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">MoT:</p>
                         <p className="flex-none">  {transport.mode_of_transport}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Type: </p>
                         <p className="flex-none">{transport.name}</p>
                     </div>
-                    <div className={`flex-95 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Class:</p>
                         <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
                     </div>

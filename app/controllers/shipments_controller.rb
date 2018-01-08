@@ -1,5 +1,6 @@
 class ShipmentsController < ApplicationController
   include ShippingTools
+  include MongoTools
 
   skip_before_action :require_non_guest_authentication!, except: [:finish_booking, :upload_document]
 
@@ -23,12 +24,16 @@ class ShipmentsController < ApplicationController
   def test_email
     forwarder_notification_email(current_user, Shipment.first)
   end
-
+  # Uploads document and returns Document item
   def upload_document
     @shipment = Shipment.find(params[:shipment_id])
+    @doc
     if params[:file]
-      create_document(params[:file], @shipment, params[:type], current_user)
+      @doc = create_document(params[:file], @shipment, params[:type], current_user)
+      tmp = @doc.as_json
+      tmp["signed_url"] = @doc.get_signed_url
     end
+    response_handler(tmp)
   end
 
   def show
@@ -44,7 +49,12 @@ class ShipmentsController < ApplicationController
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    @documents = @shipment.documents
+    @documents = []
+    @shipment.documents.each do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      @documents << tmp
+    end
     resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
   end

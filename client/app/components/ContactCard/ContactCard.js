@@ -49,7 +49,7 @@ export class ContactCard extends Component {
                                 className="fa fa-user-circle-o flex-none"
                                 style={iconStyle}
                             />
-                            <p className={`flex-none ${styles.contact_header}`}>
+                            <p className={`flex ${styles.contact_header}`}>
                                 {' '}
                                 {contact.first_name} {contact.last_name}{' '}
                             </p>
@@ -59,7 +59,7 @@ export class ContactCard extends Component {
                                 className="fa fa-building-o flex-none"
                                 style={iconStyle}
                             />
-                            <p className={`flex-none ${styles.contact_header}`}>
+                            <p className={`flex ${styles.contact_header}`}>
                                 {' '}
                                 {contact.company_name}{' '}
                             </p>
@@ -85,13 +85,16 @@ export class ContactCard extends Component {
                             <p className="flex-none"> {contact.phone} </p>
                         </div>
                     </div>
-                    <div className="flex-100 layout-row layout-align-start-center">
-                        <i
-                            className="fa fa-globe flex-none"
-                            style={iconStyle}
-                        />
-                        <p className="flex-100"> {location.geocoded_address}</p>
-                    </div>
+                    { location.geocoded_address ?
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <i
+                                className="fa fa-globe flex-none"
+                                style={iconStyle}
+                            />
+                            <p className="flex-100"> {location.geocoded_address}</p>
+                        </div> :
+                        <div className="flex-100" style={{height: '15px'}}></div>
+                    }
                 </div>
                 {list ? (
                     <div className="flex-15 layout-row layout-align-center-center">

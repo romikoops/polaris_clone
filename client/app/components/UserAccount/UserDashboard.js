@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Admin/Admin.scss';
+import ustyles from './UserAccount.scss';
 import { UserShipmentRow, UserLocations } from './';
-import { AdminClientTile } from '../Admin';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+import {Carousel} from '../Carousel/Carousel';
+import { activeRoutesData } from '../../constants';
+import { AdminSearchableClients } from '../Admin/AdminSearchables';
+const actRoutesData = activeRoutesData;
+
 export class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +60,7 @@ export class UserDashboard extends Component {
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }
-         const { shipments, pricings, contacts, locations} = dashboard;
+        const { shipments, pricings, contacts, locations} = dashboard;
         console.log(pricings);
         const openShipments = shipments && shipments.open ? shipments.open.map((ship) => {
             return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
@@ -70,11 +75,6 @@ export class UserDashboard extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        const contactArr  = contacts.map(cont => {
-            return (
-                <AdminClientTile client={cont} theme={theme} />
-            );
-        });
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
@@ -85,34 +85,52 @@ export class UserDashboard extends Component {
                     <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
                         <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                     </div>
+                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
+                        <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1}/>
+                    </div>
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Open Shipments</p>
+                        <p className={` ${styles.sec_header_text} flex-none`}  > Shipments</p>
                     </div>
-                    { openShipments }
+                    { openShipments.length !== 0 ?
+                        <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                                <p className={` ${styles.sec_subheader_text} flex-none`}  > Open</p>
+                            </div>
+                            { openShipments }
+                        </div> :
+                        ''
+                    }
+                    { reqShipments.length !== 0 ?
+                        <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                                <p className={` ${styles.sec_subheader_text} flex-none`}  > Requested</p>
+                            </div>
+                            { reqShipments }
+                        </div> :
+                        ''
+                    }
+                    { finishedShipments.length !== 0 ?
+                        <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                                <p className={` ${styles.sec_subheader_text} flex-none`}  > Finished</p>
+                            </div>
+                            { finishedShipments }
+                        </div> :
+                        ''
+                    }
+                    { openShipments.length === 0 && reqShipments.length === 0 && finishedShipments.length === 0 ?
+                        <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                                <p className={` ${styles.sec_subheader_text} flex-none`}  > No Shipments yet</p>
+                            </div>
+                            <p className="flex-none"  > Click 'Make a Booking' to begin!</p>
+                        </div> :
+                        ''
+                    }
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Requested Shipments</p>
-                    </div>
-                    { reqShipments }
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Finished Shipments</p>
-                    </div>
-                    { finishedShipments }
-                </div>
-
-                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Contacts </p>
-                    </div>
-                    <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-                        { contactArr }
-                    </div>
-                </div>
+                <AdminSearchableClients theme={theme} clients={contacts} title="Contacts" handleClick={this.viewClient} />
 
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>

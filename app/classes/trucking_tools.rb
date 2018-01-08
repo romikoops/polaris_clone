@@ -53,6 +53,12 @@ module TruckingTools
     return resp.first["data"][0]
   end
 
+  def retrieve_tp_array(table, table_key, client)
+        resp = get_item_fn(table, tableKey, client)
+    res = resp.first['data']
+    return res
+  end
+
 
   def calc_trucking_price(destination, cargo_item, km, hub, client)
     hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
@@ -72,8 +78,11 @@ module TruckingTools
   def calc_by_zipcode(destination, weight, km, tpKey, client)
     zc = destination.get_zip_code
     zip_int = zc.gsub!(" ", "").to_i
+<<<<<<< HEAD
     # tps = TruckingPricing.find_by("? < upper_zip AND ? > lower_zip", zip_int, zip_int)
     # tps = query_table('truckingTables', {"_id" => tpKey}, { "data" => {"$and" => [ { "lower_zip" => { "$gte" => zip_int } }, { "upper_zip" => { "$lte" => zip_int } } ] } })
+=======
+>>>>>>> 48dff554df16a4a5ad7c7a89d735cb59e677ded6
     tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
     @selected_rate
     

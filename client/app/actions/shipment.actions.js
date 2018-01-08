@@ -307,6 +307,66 @@ function fetchShipmentIfNeeded(id) {
         return Promise.resolve();
     };
 }
+
+function uploadDocument(doc, type, url) {
+    function request(file) {
+        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST, payload: file };
+    }
+    function success(file) {
+        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS, payload: file.data };
+    }
+    function failure(error) {
+        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        shipmentService.uploadDocument(doc, type, url).then(
+            data => {
+                dispatch(
+                    alertActions.success('Uploading Document successful')
+                );
+                console.log(data);
+                dispatch(success(data));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+function deleteDocument(id) {
+    function request(deleteId) {
+        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST, payload: deleteId };
+    }
+    function success(deleteId) {
+        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS, payload: deleteId };
+    }
+    function failure(error) {
+        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        shipmentService.deleteDocument(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Deleting Document successful')
+                );
+                console.log(data);
+                dispatch(success(id));
+            },
+            error => {
+                // debugger;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 export const shipmentActions = {
     newShipment,
     setShipmentRoute,
@@ -314,7 +374,9 @@ export const shipmentActions = {
     setShipmentContacts,
     fetchShipment,
     getShipments,
+    uploadDocument,
     getShipment,
+    deleteDocument,
     shouldFetchShipment,
     fetchShipmentIfNeeded,
     getAll,

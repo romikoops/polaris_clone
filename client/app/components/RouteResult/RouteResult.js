@@ -98,14 +98,14 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <h4 className="flex-100"> {originHub.name} </h4>
                             </div>
-                            <div className="flex-100">
-                                <p className="flex-100">
-                                    {' '}
-                                    {originHub.hub_code
-                                        ? originHub.hub_code
-                                        : 'Code Unavailable'}{' '}
-                                </p>
-                            </div>
+                            {originHub.hub_code ?
+                                <div className="flex-100">
+                                    <p className="flex-100">
+                                        {' '}
+                                         {originHub.hub_code}
+                                    </p>
+                                </div> :
+                                '' }
                         </div>
                         <div className={`${styles.connection_graphics}`}>
                             <div className="flex-none layout-row layout-align-center-center">

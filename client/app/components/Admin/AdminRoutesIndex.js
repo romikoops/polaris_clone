@@ -1,22 +1,29 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminRouteTile} from './';
+// import {AdminRouteTile} from './';
 import styles from './Admin.scss';
-import {v4} from 'node-uuid';
+// import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
+import { AdminSearchableRoutes } from './AdminSearchables';
 export class AdminRoutesIndex extends Component {
     constructor(props) {
         super(props);
         this.state = {
         };
     }
+    componentDidMount() {
+        const { routes, loading, adminDispatch } = this.props;
+        if (!routes && !loading) {
+            adminDispatch.getRoutes(false);
+        }
+    }
     render() {
-        const {theme, hubs, routes, viewRoute} = this.props;
+        const {theme, viewRoute, hubs, routes, adminDispatch} = this.props;
         if (!routes) {
             return '';
         }
 
-        const routesArr = routes.map((rt) => <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={viewRoute}/>);
+        // const routesArr = routes.map((rt) => <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={viewRoute}/>);
 
         const hubUrl = '/admin/routes/process_csv';
         // const textStyle = {
@@ -26,11 +33,9 @@ export class AdminRoutesIndex extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <p className="flex-none">Upload Routes Sheet</p>
-                    <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Hub .xlsx"/>
+                    <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Routes .xlsx"/>
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    {routesArr}
-                </div>
+                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewRoute}/>
             </div>
         );
     }

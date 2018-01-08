@@ -10,13 +10,14 @@ export function shipment(state = {}, action) {
                 loading: true
             };
         case shipmentConstants.NEW_SHIPMENT_SUCCESS:
-            return {
+            const resp1 = merge({}, state, {
                 response: {
                     stage1: action.shipmentData
                 },
                 activeShipment: action.shipmentData.shipment.id,
                 loading: false
-            };
+            });
+            return resp1;
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             const err1 = merge({}, state, {
                 error: { stage1: [ action.error ] },
@@ -87,7 +88,12 @@ export function shipment(state = {}, action) {
             return req4;
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
             const resp4 = merge({}, state, {
-                response: { stage4: action.shipmentData },
+                response: {
+                    stage1: {},
+                    stage2: {},
+                    stage3: {},
+                    stage4: action.shipmentData
+                },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
             });
@@ -98,6 +104,67 @@ export function shipment(state = {}, action) {
                 loading: false
             });
             return err4;
+
+        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
+            const reqDocUpload = merge({}, state, {
+            });
+            return reqDocUpload;
+        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS:
+            const docs = state.response.stage3.documents;
+            docs[action.payload.doc_type] = action.payload;
+            const succDocUpload = merge({}, state, {
+                response: {
+                    stage3: {
+                        documents: docs
+                    }
+                },
+                loading: false
+            });
+            return succDocUpload;
+        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE:
+            const errDocUpload = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDocUpload;
+
+
+        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
+            const reqDocDelete = merge({}, state, {
+            });
+            return reqDocDelete;
+        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS:
+            const docObj = {};
+            Object.keys(state.response.stage3.documents).forEach((key) => {
+                if (state.response.stage3.documents[key].id !== action.payload) {
+                    docObj[key] = state.response.stage3.documents[key];
+                }
+            });
+            // const succDocDelete = merge({}, state, {
+            //     response: {
+            //         stage3: {
+            //             documents: docObj
+            //         }
+            //     },
+            //     loading: false
+            // });
+            const succDocDelete = {
+                ...state,
+                response: {
+                    ...state.response,
+                    stage3: {
+                        ...state.response.stage3,
+                        documents: docObj
+                    }
+                },
+                loading: false
+            };
+            return succDocDelete;
+        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE:
+            const errDocDelete = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errDocDelete;
+
 
         case shipmentConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted

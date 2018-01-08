@@ -12,7 +12,7 @@ export class UserShipments extends Component {
     componentDidMount() {
         this.props.setNav('shipments');
     }
-     viewShipment(shipment) {
+    viewShipment(shipment) {
         const { userDispatch, user } = this.props;
         userDispatch.getShipment(user.data.id, shipment.id, true);
         this.setState({selectedShipment: true});

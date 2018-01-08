@@ -836,8 +836,8 @@ module ExcelTools
       isps: "ISPS",
       exp_currency: "EXP_CURRENCY",
       exp_declaration: "EXP_DECLARATION",
-      ehs_currency: "EHS_CURRENCY",
-      extra_hs_code: "EXTRA_HS_CODE",
+      exp_limit: "EXP_LIMIT",
+      exp_extra: "EXP_XTRA",
       odf_currency: "ODF_CURRENCY",
       odf: "ODF",
       ls_currency: "LS_CURRENCY",
@@ -964,15 +964,16 @@ module ExcelTools
           rate: row[:odf],
           rate_basis: 'PER_SHIPMENT'
         },
-        EXP: {
-          currency: row[:exp_currency],
-          rate: row[:exp_declaration],
-          rate_basis: 'PER_SHIPMENT'
-        }
+        
       }
-
+      customsObj = {
+          currency: row[:exp_currency],
+          fee: row[:exp_declaration],
+          limit: row[:exp_limit],
+          extra: row[:exp_extra]
+        }
       price_obj = {"lcl" =>lcl_obj.to_h}
-
+      
       if dedicated
         load_types.each do |lt|
           uuid = SecureRandom.uuid
@@ -987,6 +988,7 @@ module ExcelTools
           if !new_path_pricings[pathKey]
             new_path_pricings[pathKey] = {}
           end
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
           new_path_pricings[pathKey]["#{user.id}"] = priceKey
         end
@@ -996,10 +998,12 @@ module ExcelTools
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
           priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = priceKey;
+          tmpItem[:_id] = priceKey
+          tmpItem[:route] = route.id
+          tmpItem[:hub_route] = hubroute.id
           tmpItem[:tenant_id] = user.tenant_id
           pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
           if !new_path_pricings[pathKey]
             new_path_pricings[pathKey] = {}
           end
@@ -1097,7 +1101,9 @@ module ExcelTools
           }
           dataObj[pp_key] = {}
         origin = Location.from_short_name(row[:origin])
+        sleep(1)
         destination = Location.from_short_name(row[:destination])
+        sleep(1)
         route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
         hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
         dataObj[pp_key]["origin"] = origin

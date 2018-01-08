@@ -31,8 +31,11 @@ class Container < ApplicationRecord
       tare_weight = contWeights[size_class].to_d
       gross_weight = tare_weight + payload_in_kg
       weight_class = get_weight_class(size_class, payload_in_kg)
+      quantity = value["quantity"].to_i
       unless value["_destroy"] == "1"
-        containers << Container.new(size_class: size_class, tare_weight: tare_weight, payload_in_kg: payload_in_kg, gross_weight: gross_weight, weight_class: weight_class)
+        quantity.times do
+          containers << Container.new(size_class: size_class, tare_weight: tare_weight, payload_in_kg: payload_in_kg, gross_weight: gross_weight, weight_class: weight_class)
+        end
       end
     end
     containers

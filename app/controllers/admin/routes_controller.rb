@@ -1,24 +1,33 @@
 class Admin::RoutesController < ApplicationController
   before_action :require_login_and_role_is_admin
+  include PricingTools
 
   
 
   def index
-    @routes = Route.where(tenant_id: current_user.tenant_id)
-    response_handler(@routes)
+    routes = Route.where(tenant_id: current_user.tenant_id)
+    @detailed_routes = routes.map do |route| 
+      route.detailed_hash(
+        nexus_names: true
+      )
+    end
+    response_handler(@detailed_routes)
   end
 
   def show
-    @route = Route.find(params[:id])
-    @hub_routes = @route.hub_routes
-    @starthubs = @hub_routes.map(&:starthub).to_a
-    @endhubs = @hub_routes.map(&:endhub).to_a
-    # @hubs = (@starthubs + @endhubs) - (@starthubs & @endhubs)
-    @schedules = @hub_routes.flat_map(&:schedules).slice!(0,20)
-    @import_charges = @endhubs.map(&:service_charge)
-    @export_charges = @starthubs.map(&:service_charge)
+    route = Route.find(params[:id])
+    hub_routes = route.hub_routes
+    pricings = get_route_pricings_array(params[:id], current_user.tenant_id)
+    starthubs = hub_routes.map(&:starthub).to_a
+    endhubs = hub_routes.map(&:endhub).to_a
+    detailed_route = route.detailed_hash(
+        nexus_names: true
+      )
+    schedules = hub_routes.flat_map(&:schedules).slice!(0,20)
+    import_charges = endhubs.map(&:service_charge)
+    export_charges = starthubs.map(&:service_charge)
     # byebug
-    resp = {startHubs: @starthubs, endHubs: @endhubs, route: @route, hubRoutes: @hub_routes, schedules: @schedules, importCharges: @import_charges, exportCharges: @export_charges}
+    resp = {startHubs: starthubs, endHubs: endhubs, route: detailed_route, hubRoutes: hub_routes, schedules: schedules, importCharges: import_charges, exportCharges: export_charges}
     response_handler(resp)
   end
 

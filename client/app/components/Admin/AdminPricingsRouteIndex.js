@@ -5,6 +5,7 @@ import { Redirect } from 'react-router';
 import { AdminRouteTile } from './';
 import { history } from '../../helpers';
 // import { pricingNames } from '../../constants/admin.constants';
+import { AdminSearchableRoutes } from './AdminSearchables';
 import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 export class AdminPricingsRouteIndex extends Component {
@@ -63,6 +64,7 @@ export class AdminPricingsRouteIndex extends Component {
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>Route Pricings</p>
                     {backButton}
                 </div>
+                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} handleClick={this.viewRoute} sideScroll={false} />
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         {routesArr}

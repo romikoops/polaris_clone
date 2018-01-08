@@ -132,6 +132,28 @@ function getDashboard(userId) {
     return fetch(BASE_URL + '/users/' + userId + '/home', requestOptions).then(handleResponse);
 }
 
+function deleteDocument(documentId) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/documents/delete/' + documentId, requestOptions).then(handleResponse);
+}
+
+function uploadDocument(doc, type, url) {
+    const formData = new FormData();
+    formData.append('file', doc);
+    formData.append('type', type);
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+
+    return fetch(BASE_URL + url, requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
@@ -140,6 +162,8 @@ export const userService = {
     getShipment,
     getShipments,
     getHubs,
+    deleteDocument,
+    uploadDocument,
     getAll,
     getById,
     update,

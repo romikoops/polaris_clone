@@ -26,21 +26,27 @@ class FileUploader extends React.Component {
     }
     onFormSubmit(e) {
         e.preventDefault(); // Stop form submit
-        this.fileUpload(this.state.file).then((response)=>{
-            console.log(response.data);
-        });
+        if (this.state.file) {
+            this.fileUpload(this.state.file);
+        }
     }
     onChange(e) {
         // this.setState({file: e.target.files[0]});
         this.fileUpload(e.target.files[0]);
     }
     fileUpload(file) {
-        const {url, type, dispatchFn} = this.props;
+        const {url, type, dispatchFn, uploadFn} = this.props;
         if (!file) {
             return '';
         }
         if (dispatchFn) {
+            if (type) {
+                file.doc_type = type;
+            }
             return dispatchFn(file);
+        }
+        if (uploadFn) {
+            return uploadFn(file, type, url);
         }
         const formData = new FormData();
         formData.append('file', file);

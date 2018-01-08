@@ -12,7 +12,12 @@ class Admin::PricingsController < ApplicationController
     @transports = TransportCategory.all
     @routes = Route.where(tenant_id: current_user.tenant_id)
     @hub_routes = @routes.flat_map(&:hub_routes)
-    response_handler({routes: @routes, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, hubRoutes: @hub_routes })
+    detailed_routes = @routes.map do |route| 
+      route.detailed_hash(
+        nexus_names: true
+      )
+    end
+    response_handler({routes: detailed_routes, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, hubRoutes: @hub_routes })
   end
 
   def client
@@ -28,37 +33,33 @@ class Admin::PricingsController < ApplicationController
   end
 
   def update_price
-    update = {}
-    if params[:heavy_kg]
-      update[:heavy_kg] = {
-        heavy_kg_min: params[:heavy_kg][:heavy_kg_min],
-        heavy_weight: params[:heavy_kg][:heavy_weight],
-        currency: params[:heavy_kg][:currency]
-      }
-      update[:wm] = {
-        rate: params[:wm][:rate],
-        currency: params[:wm][:currency]
-      }
-    end
-    if params[:heavy_wm]
-      update[:wm] = {
-        rate: params[:wm][:rate],
-        min: params[:wm][:min],
-        currency: params[:wm][:currency]
-      }
-      update[:heavy_wm] = {
-        heavy_wm_min: params[:heavy_wm][:heavy_wm_min],
-        heavy_weight: params[:heavy_wm][:heavy_weight],
-        currency: params[:heavy_wm][:currency]
-      }
-    end
-    resp = update_pricing(params[:id], update)
+    resp = update_pricing(params[:id], params.as_json)
   end
 
-  def overwrite_main_carriage
+  # def overwrite_main_carriage
+  #   if params[:file]  && params[:file] !='null'
+  #     req = {'xlsx' => params[:file]}
+  #     overwrite_mongo_pricings(req, true)
+  #     response_handler(true)
+  #   else
+  #     response_handler(false)
+  #   end
+  # end
+
+  def overwrite_main_lcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_pricings(req, true)
+      overwrite_mongo_lcl_pricings(req, true)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
+  end
+
+  def overwrite_main_fcl_carriage
+    if params[:file]  && params[:file] !='null'
+      req = {'xlsx' => params[:file]}
+      overwrite_mongo_fcl_pricings(req, true)
       response_handler(true)
     else
       response_handler(false)

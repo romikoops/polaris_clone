@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import {AdminTruckingIndex, AdminTruckingView} from './';
+import {AdminTruckingIndex, AdminTruckingView} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import { Switch, Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 // import {v4} from 'node-uuid';
@@ -19,9 +19,12 @@ class AdminTrucking extends Component {
         this.viewTrucking = this.viewTrucking.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
-    viewTrucking(route) {
-        const { adminDispatch } = this.props;
-        adminDispatch.getRoute(route.id, true);
+    viewTrucking(hub) {
+        const { adminDispatch, trucking } = this.props;
+        const {truckingHubs, truckingPrices} = trucking;
+        const hubTable = truckingHubs.filter(th => th._id === String(hub.id))[0];
+        const pricing = truckingPrices[hubTable._id];
+        adminDispatch.viewTrucking(hubTable, pricing);
         this.setState({selectedRoute: true});
     }
 
@@ -33,11 +36,14 @@ class AdminTrucking extends Component {
 
     render() {
         const {selectedRoute} = this.state;
-        const {theme, adminDispatch} = this.props;
+        const {theme, adminDispatch, trucking, hubHash, loading, truckingDetail} = this.props;
+        const { truckingHubs } = trucking;
+        const relHubs = truckingHubs.map(th => {
+            return hubHash[parseInt(th._id, 10)];
+        });
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        console.log(adminDispatch);
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -56,18 +62,18 @@ class AdminTrucking extends Component {
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
                     {selectedRoute ? backButton : ''}
                 </div>
-                {/* <Switch className="flex">
+                <Switch className="flex">
                     <Route
                         exact
-                        path="/admin/routes"
-                        render={props => <AdminTruckingIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} {...props} viewTrucking={this.viewTrucking} />}
+                        path="/admin/trucking"
+                        render={props => <AdminTruckingIndex theme={theme} truckingHubs={truckingHubs} hubs={relHubs} {...props} adminDispatch={adminDispatch} loading={loading} viewTrucking={this.viewTrucking} />}
                     />
                     <Route
                         exact
-                        path="/admin/routes/:id"
-                        render={props => <AdminTruckingView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} />}
+                        path="/admin/trucking/:id"
+                        render={props => <AdminTruckingView theme={theme} hubs={relHubs} hubHash={hubHash} truckingDetail={truckingDetail} loading={loading} adminDispatch={adminDispatch} {...props} />}
                     />
-                </Switch> */}
+                </Switch>
             </div>
         );
     }
@@ -80,16 +86,16 @@ AdminTrucking.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, route, routes } = admin;
+    const { hubs, trucking, truckingDetail, loading } = admin;
 
     return {
         user,
         tenant,
         loggedIn,
         hubs,
-        route,
-        routes,
-        clients
+        trucking,
+        loading,
+        truckingDetail
     };
 }
 function mapDispatchToProps(dispatch) {

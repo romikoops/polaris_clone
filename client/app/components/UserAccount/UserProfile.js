@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import styles from './UserAccount.scss';
+import styles from './UserAccount.scss';
 import { UserLocations } from './';
 import { AdminClientTile } from '../Admin';
 import { RoundButton } from '../RoundButton/RoundButton';
@@ -184,7 +184,7 @@ export class UserProfile extends Component {
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <h1 className="sec_title_text flex-none cli" style={textStyle} >Profile</h1>
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}>
                     <div className="flex-100 layout-row layout-align-space-between-center sec_header">
                         <p className="sec_header_text flex-none"  > Account Details </p>
                     </div>
@@ -198,7 +198,7 @@ export class UserProfile extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}>
                     <div className="flex-100 layout-row layout-align-space-between-center sec_header">
                         <p className="sec_header_text flex-none"  > Aliases </p>
                     </div>
@@ -207,7 +207,7 @@ export class UserProfile extends Component {
                     </div>
                 </div>
 
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.section} `}>
                     <div className="flex-100 layout-row layout-align-space-between-center sec_header">
                         <p className="sec_header_text flex-none"  > Saved Locations </p>
                     </div>

@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
-import styled from 'styled-components';
+import { NamedSelect } from '../NamedSelect/NamedSelect';
+// import 'react-select/dist/react-select.css';
+// import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
+import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises} from '../../constants';
+
+const fclChargeGloss = fclChargeGlossary;
+const lclChargeGloss = lclChargeGlossary;
+const chargeGloss = chargeGlossary;
+const rateOpts = rateBasises;
 // import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions;
 const cargoOpts = cargoOptions;
 const cargoClassOpts = cargoClassOptions;
 const moTOpts = moTOptions;
+const test = '123';
 export class AdminPriceEditor extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            currency: props.currency ? props.currency : 'EUR',
+            pricing: Object.assign({}, this.props.pricing),
             mot: this.selectFromOptions(moTOpts, props.transport.mode_of_transportation),
             cargoClass: this.selectFromOptions(cargoClassOpts, props.transport.cargo_class),
             cargo: this.selectFromOptions(cargoOpts, props.transport.name),
-            wmRate: props.pricing.wm.rate ? props.pricing.wm.rate : 0,
-            wmMin: props.pricing.wm.min ? props.pricing.wm.min : 0,
-            heavyWmMin: props.pricing.heavy_wm && props.pricing.heavy_wm.heavy_weight ? props.pricing.heavy_wm.heavy_weight : 0,
-            heavyWmRate: props.pricing.heavy_wm && props.pricing.heavy_wm.heavy_wm_min ? props.pricing.heavy_wm.heavy_wm_min : 0,
-            heavyKg: props.pricing.heavy_kg && props.pricing.heavy_kg.heavy_weight ? props.pricing.heavy_kg.heavy_weight : 0,
-            heavyKgMin: props.pricing.heavy_kg && props.pricing.heavy_kg.heavy_kg_min ? props.pricing.heavy_kg.heavy_kg_min : 0
+            selectOptions: {},
+            options: {}
         };
         this.editPricing = props.pricing;
         this.handleChange = this.handleChange.bind(this);
-        this.setCurrency = this.setCurrency.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
         this.setMOT = this.setMOT.bind(this);
         this.setCargo = this.setCargo.bind(this);
         this.saveEdit = this.saveEdit.bind(this);
         this.setCargoClass = this.setCargoClass.bind(this);
+        this.setAllFromOptions = this.setAllFromOptions.bind(this);
+    }
+    componentWillMount() {
+        console.log(test);
+        this.setAllFromOptions();
     }
     selectFromOptions(options, value) {
         let result;
@@ -44,12 +52,97 @@ export class AdminPriceEditor extends Component {
         });
         return result ? result : options[0];
     }
+    setAllFromOptions() {
+        const { pricing } = this.props;
+        const newObj = {data: {}};
+        const tmpObj = {};
+
+        Object.keys(pricing.data).forEach((key) => {
+            if (!newObj.data[key]) {
+                newObj.data[key] = {};
+            }
+            if (!tmpObj[key]) {
+                tmpObj[key] = {};
+            }
+            let opts;
+            Object.keys(pricing.data[key]).forEach(chargeKey => {
+                if (chargeKey === 'currency') {
+                    opts = currencyOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                } else if (chargeKey === 'rate_basis') {
+                    opts = rateOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                }
+                newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey]);
+            });
+        });
+        this.setState({selectOptions: newObj, options: tmpObj});
+    }
     handleChange(event) {
         const { name, value } = event.target;
-        this.setState({[name]: value});
+        const nameKeys = name.split('-');
+        this.setState({
+            pricing: {
+                ...this.state.pricing,
+                data: {
+                    ...this.state.pricing.data,
+                    [nameKeys[0]]: {
+                        ...this.state.pricing.data[nameKeys[0]],
+                        [nameKeys[1]]: parseInt(value, 10)
+                    }
+                }
+            }
+        });
     }
-    setCurrency(value) {
-        this.setState({currency: value});
+    handleSelect(selection) {
+        console.log(selection);
+
+        console.log(this.state.pricing.data);
+        const nameKeys = selection.nameKey.split('-');
+        this.setState({
+            pricing: {
+                ...this.state.pricing,
+                data: {
+                    ...this.state.pricing.data,
+                    [nameKeys[0]]: {
+                        ...this.state.pricing.data[nameKeys[0]],
+                        [nameKeys[1]]: selection.value
+                    }
+                }
+            },
+            selectOptions: {
+                ...this.state.selectOptions,
+                data: {
+                    ...this.state.selectOptions.data,
+                    [nameKeys[0]]: {
+                        ...this.state.selectOptions.data[nameKeys[0]],
+                        [nameKeys[1]]: selection
+                    }
+                }
+            }
+        });
+        console.log({
+            pricing: {
+                ...this.state.pricing,
+                data: {
+                    ...this.state.pricing.data,
+                    [nameKeys[0]]: {
+                        ...this.state.pricing.data[nameKeys[0]],
+                        [nameKeys[1]]: selection.value
+                    }
+                }
+            },
+            selectOptions: {
+                ...this.state.selectOptions,
+                data: {
+                    ...this.state.selectOptions.data,
+                    [nameKeys[0]]: {
+                        ...this.state.selectOptions.data[nameKeys[0]],
+                        [nameKeys[1]]: selection
+                    }
+                }
+            }
+        });
     }
     setMOT(value) {
         this.setState({mot: value});
@@ -61,126 +154,77 @@ export class AdminPriceEditor extends Component {
         this.setState({cargoClass: value});
     }
     saveEdit() {
-        const { currency, cargoClass, wmRate, wmMin, heavyWmMin, heavyWmRate, heavyKg, heavyKgMin } = this.state;
-        const req = {};
-
-        if (cargoClass.value === 'lcl') {
-            req.wm = {
-                rate: wmRate,
-                min: wmMin,
-                currency
-            };
-            req.heavy_wm = {
-                currency,
-                heavy_weight: heavyWmRate,
-                heavy_wm_min: heavyWmMin
-            };
-        } else {
-            req.wm = {
-                rate: wmRate,
-                currency
-            };
-            req.heavy_kg = {
-                currency,
-                heavy_weight: heavyKg,
-                heavy_kg_min: heavyKgMin
-            };
-        }
+        const req = this.state.pricing;
+        debugger;
         this.props.adminTools.updatePricing(this.props.pricing._id, req);
         this.props.closeEdit();
     }
     render() {
         const {theme, hubRoute } = this.props;
-        // const { selectedPricing } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        const StyledSelect = styled(Select)`
-            .Select-control {
-                background-color: #F9F9F9;
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-                border: 1px solid #F2F2F2 !important;
-            }
-            .Select-menu-outer {
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-                border: 1px solid #F2F2F2;
-            }
-            .Select-value {
-                background-color: #F9F9F9;
-                border: 1px solid #F2F2F2;
-            }
-            .Select-option {
-                background-color: #F9F9F9;
-            }
-        `;
-        const { currency, mot, cargoClass, cargo, wmRate, wmMin, heavyWmMin, heavyWmRate, heavyKg, heavyKgMin } = this.state;
-        const panel = cargoClass.value === 'lcl' ?
-            (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Rate per WM</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="wmRate" value={wmRate} onChange={this.handleChange}/>
-                    </div>
+        const { pricing, selectOptions } = this.state;
+        const panel = [];
+        let gloss;
+        if (pricing._id.includes('lcl')) {
+            gloss = lclChargeGloss;
+        } else {
+            gloss = fclChargeGloss;
+        }
+
+        Object.keys(pricing.data).forEach((key) => {
+            const cells = [];
+            Object.keys(pricing.data[key]).forEach(chargeKey => {
+                if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+                    cells.push(
+                        <div key={chargeKey} className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+                            <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                                <input type="number" value={pricing.data[key][chargeKey]} onChange={this.handleChange} name={`${key}-${chargeKey}`}/>
+                            </div>
+                        </div>
+                    );
+                } else if (chargeKey === 'rate_basis') {
+                    cells.push( <div className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                        <p className="flex-100">{chargeGloss[chargeKey]}</p>
+                        <NamedSelect
+                            name={`${key}-${chargeKey}`}
+                            classes={`${styles.select}`}
+                            value={selectOptions ? selectOptions.data[key][chargeKey] : ''}
+                            options={rateOpts}
+                            onChange={this.handleSelect}
+                        />
+                    </div>);
+                } else if (chargeKey === 'currency') {
+                    cells.push( <div key={chargeKey} className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+                        <p className="flex-100">{chargeGloss[chargeKey]}</p>
+                        <div className="flex-95 layout-row">
+                            <NamedSelect
+                                name={`${key}-currency`}
+                                classes={`${styles.select}`}
+                                value={selectOptions ? selectOptions.data[key].currency : ''}
+                                options={currencyOpts}
+                                onChange={this.handleSelect}
+                            />
+                        </div>
+                    </div>);
+                }
+            });
+            panel.push( <div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
+                <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+                    <p className="flex-none">{key} - {gloss[key]}</p>
                 </div>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Minimum WM: </p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="wmMin" value={wmMin} onChange={this.handleChange}/>
-                    </div>
-                </div>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none"> Heavy Weight Surcharge</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="heavyWmRate" value={heavyWmRate} onChange={this.handleChange}/>
-                    </div>
-                </div>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Minimum Heavy WM</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="heavyWmMin" value={heavyWmMin} onChange={this.handleChange}/>
-                    </div>
-                </div>
-            </div>) :
-            (<div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.price_row}`}>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Rate per Container</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="wmRate" value={wmRate} onChange={this.handleChange}/>
-                    </div>
-                </div>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Surcharge per Heavy Container</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="heavyKg" value={heavyKg} onChange={this.handleChange}/>
-                    </div>
-                </div>
-                <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                    <div className="flex-50 layout-row layout-align-start-center">
-                        <p className="flex-none">Minimum Heavy Weight</p>
-                    </div>
-                    <div className={`flex-50 layout-row layout-align-end-center ${styles.editor_input}`}>
-                        <input type="number" name="heavyKgMin" value={heavyKgMin} onChange={this.handleChange}/>
-                    </div>
+                <div className="flex-100 layout-row layout-align-start-center">
+                    { cells }
                 </div>
             </div>);
-
+        });
 
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
-                <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-center`}>
-                    <div className="flex-80 layout-row layout-wrap layout-align-center-start">
+                <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
+                    <div className="flex-95 layout-row layout-wrap layout-align-center-start">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Edit Pricing</p>
                         </div>
@@ -189,7 +233,7 @@ export class AdminPriceEditor extends Component {
                                 <i className="fa fa-map-signs clip" style={textStyle}></i>
                                 <p className="flex-none offset-5">{hubRoute.name}</p>
                             </div>
-                            <div className="flex-40 layout-row layout-align-center-center" >
+                            {/* <div className="flex-40 layout-row layout-align-center-center" >
                                 <StyledSelect
                                     name="hub-filter"
                                     className={`${styles.select}`}
@@ -197,20 +241,14 @@ export class AdminPriceEditor extends Component {
                                     options={currencyOpts}
                                     onChange={this.setCurrency}
                                 />
-                            </div>
+                            </div>*/}
                         </div>
                         <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
                             <div className="flex-50 layout-row layout-align-start-center">
                                 <p className="flex-none">MoT:</p>
                             </div>
                             <div className="flex-50 layout-row layout-align-end-center">
-                                <StyledSelect
-                                    name="hub-filter"
-                                    className={`${styles.select}`}
-                                    value={mot}
-                                    options={moTOpts}
-                                    onChange={this.setMOT}
-                                />
+                                <p className="flex-none">{moTOpts[this.props.transport.mode_of_transport]}</p>
                             </div>
                         </div>
                         <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
@@ -218,13 +256,7 @@ export class AdminPriceEditor extends Component {
                                 <p className="flex-none">Cargo Type: </p>
                             </div>
                             <div className="flex-50 layout-row layout-align-end-center">
-                                <StyledSelect
-                                    name="hub-filter"
-                                    className={`${styles.select}`}
-                                    value={cargo}
-                                    options={cargoOpts}
-                                    onChange={this.setCargo}
-                                />
+                                <p className="flex-none">{cargoOpts[this.props.transport.cargo_class]}</p>
                             </div>
                             {/* <p className="flex-none">{transport.name}</p> */}
                         </div>
@@ -233,13 +265,7 @@ export class AdminPriceEditor extends Component {
                                 <p className="flex-none">Cargo Class:</p>
                             </div>
                             <div className="flex-50 layout-row layout-align-end-center">
-                                <StyledSelect
-                                    name="hub-filter"
-                                    className={`${styles.select}`}
-                                    value={cargoClass}
-                                    options={cargoClassOpts}
-                                    onChange={this.setCargoClass}
-                                />
+                                <p className="flex-none">{cargoClassOpts[this.props.transport.name]}</p>
                             </div>
                         </div>
                         {panel}

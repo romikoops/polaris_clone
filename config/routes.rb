@@ -33,6 +33,10 @@ Rails.application.routes.draw do
   
     resources :vehicle_types, only: [:index]
     resources :clients, only: [:index, :show]
+    resources :pricings, only: [:index]
+    post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
+    post "pricings/ocean_fcl_pricings/process_csv", to: "pricings#overwrite_fcl_carriage", as: :main_fcl_carriage_pricings_overwrite
+    post "pricings/update/:id", to: "pricings#update_price"
 
     resources :open_pricings, only: [:index]  
     post "open_pricings/train_and_ocean_pricings/process_csv", 
@@ -85,7 +89,10 @@ Rails.application.routes.draw do
 
   get "/documents/download/:document_id", 
     to: "documents#download_redirect", as: :document_download
+  get "/documents/delete/:document_id", to: "documents#delete", as: :document_delete
+
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
     controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   get "tenants/:name", to: "tenants#get_tenant"
+  get "search/hscodes/:query" => "search#search_hs_codes"
 end

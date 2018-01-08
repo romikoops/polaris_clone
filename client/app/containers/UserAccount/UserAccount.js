@@ -117,8 +117,8 @@ export class UserAccount extends Component {
         const navLinkInfo = [
             { key: 'dashboard', text: 'Dashboard' },
             { key: 'profile', text: 'Profile' },
-            { key: 'locations', text: 'Locations' },
-            { key: 'billing', text: 'Billing' },
+            // { key: 'locations', text: 'Locations' },
+            // { key: 'billing', text: 'Billing' },
             { key: 'shipments', text: 'Shipments' }
         ];
         const hubHash = {};
@@ -176,7 +176,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/shipments/:id"
-                                render={props => <UserShipmentView setNav={this.setNavLink} theme={theme} hubs={hubs} user={user} {...props} shipmentData={shipment} userDispatch={userDispatch}/>}
+                                render={props => <UserShipmentView setNav={this.setNavLink} theme={theme} hubs={hubs} user={user} loading={loading} {...props} shipmentData={shipment} userDispatch={userDispatch}/>}
                             />
                         </Switch>
                     </div>

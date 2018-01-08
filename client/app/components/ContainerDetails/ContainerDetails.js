@@ -23,6 +23,10 @@ export class ContainerDetails extends Component {
                     <p>Container Class</p>
                     <p>{cDesc[item.size_class]} </p>
                 </div>
+                <div className="flex-100 layout-row layout-align-space-between">
+                    <p>No. of Containers</p>
+                    <p>{item.quantity} </p>
+                </div>
             </div>
         );
     }

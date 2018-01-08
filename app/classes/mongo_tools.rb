@@ -18,7 +18,12 @@ module MongoTools
 
   def get_item(table, keyName, key)
     client = init
-    resp = client[table.to_sym].find({"#{keyName}" => "#{key}"})
+    resp = client[table.to_sym].find({"#{keyName}" => key})
+    return resp.first
+  end
+
+  def get_item_fn(client, table, keyName, key)
+    resp = client[table.to_sym].find({"#{keyName}" => key})
     return resp.first
   end
 
@@ -26,6 +31,17 @@ module MongoTools
     client = init
     resp = client[table.to_sym].find({"#{keyName}" => key})
     return resp
+  end
+
+    def get_items_fn(client, table, keyName, key)
+    resp = client[table.to_sym].find({"#{keyName}" => key})
+    return resp.to_a
+  end
+
+  def get_all_items(table)
+    client = init
+    resp = client[table.to_sym].find({})
+    return resp.to_a
   end
 
   def query_table(table, key, query)
@@ -36,6 +52,10 @@ module MongoTools
 
   def get_items_query(table,  query)
     client = init
+    resp = client[table.to_sym].find({"$and" => query})
+    return resp
+  end
+  def get_items_query_fn(client, table,  query)
     resp = client[table.to_sym].find({"$and" => query})
     return resp
   end
@@ -56,6 +76,16 @@ module MongoTools
     client[table.to_sym].update_one(key, {'$set' => updates}, {upsert: true})
   end
  
+  def text_search_fn(client, table, query)
+    if !client
+      client = get_client
+    end
+    resp = client[table.to_sym].find(
+      { "$text" => { "$search" => query } }, 
+      projection: { "score" => { "$meta" => "textScore" }}
+    )
+    resp.to_a
+  end
 
   def update_array_fn(client, table, key, updates)
     updateArr = {}

@@ -103,6 +103,8 @@ export const adminConstants = {
     WIZARD_TRUCKING_SUCCESS: 'WIZARD_TRUCKING_SUCCESS',
     WIZARD_TRUCKING_FAILURE: 'WIZARD_TRUCKING_FAILURE',
 
+    VIEW_TRUCKING: 'VIEW_TRUCKING'
+
 };
 
 export const serviceChargeNames = {
@@ -167,5 +169,13 @@ export const currencyOptions = [
     {value: 'ILS', label: 'ILS'}, {value: 'INR', label: 'INR'}, {value: 'JPY', label: 'JPY'}, {value: 'KRW', label: 'KRW'}, {value: 'MXN', label: 'MXN'}, {value: 'MYR', label: 'MYR'}, {value: 'NOK', label: 'NOK'},
     {value: 'NZD', label: 'NZD'}, {value: 'PHP', label: 'PHP'}, {value: 'PLN', label: 'PLN'}, {value: 'RON', label: 'RON'}, {value: 'RUB', label: 'RUB'}, {value: 'SEK', label: 'SEK'}, {value: 'SGD', label: 'SGD'},
     {value: 'THB', label: 'THB'}, {value: 'TRY', label: 'TRY'}, {value: 'USD', label: 'USD'}, {value: 'ZAR', label: 'ZAR'},
+];
+
+export const rateBasises = [
+    {value: 'PER_ITEM', label: 'Per Item'},
+    {value: 'PER_CONTAINER', label: 'Per Container'},
+    {value: 'PER_SHIPMENT', label: 'Per Shipment'},
+    {value: 'PER_CBM_TON', label: 'Per cbm/ton'},
+    {value: 'PER_CBM', label: 'Per cbm'}
 ];
 

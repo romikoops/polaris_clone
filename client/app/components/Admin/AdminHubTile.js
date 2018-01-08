@@ -45,7 +45,7 @@ export class AdminHubTile extends Component {
                         <i className="flex-none fa fa-map-marker" style={gradientStyle}/>
                     </div>
                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                        <h6 className="flex-100"> {hub.data.name} </h6>
+                        <h4 className="flex-100"> {hub.data.name} </h4>
                         <p className="flex-100">{ hub.location.geocoded_address }</p>
                     </div>
                 </div>

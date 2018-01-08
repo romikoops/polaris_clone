@@ -20,6 +20,12 @@ class AdminShipments extends Component {
         this.backToIndex = this.backToIndex.bind(this);
         this.handleShipmentAction = this.handleShipmentAction.bind(this);
     }
+    componentDidMount() {
+        const { shipments, loading, adminDispatch } = this.props;
+        if (!shipments && !loading) {
+            adminDispatch.getShipments(false);
+        }
+    }
     viewShipment(shipment) {
         const { adminDispatch } = this.props;
         adminDispatch.getShipment(shipment.id, true);
@@ -38,7 +44,7 @@ class AdminShipments extends Component {
 
     render() {
         const {selectedShipment} = this.state;
-        const { theme, hubs, shipments, clients, shipment } = this.props;
+        const { theme, hubs, shipments, clients, shipment, loading, adminDispatch } = this.props;
         // debugger;
         if (!shipments || !hubs || !clients) {
             return <h1>NO SHIPMENTS DATA</h1>;
@@ -72,7 +78,7 @@ class AdminShipments extends Component {
                     <Route
                         exact
                         path="/admin/shipments/:id"
-                        render={props => <AdminShipmentView theme={theme} hubs={hubs} handleShipmentAction={this.handleShipmentAction} shipmentData={shipment} clients={clients} {...props} />}
+                        render={props => <AdminShipmentView theme={theme} adminDispatch={adminDispatch} loading={loading} hubs={hubs} handleShipmentAction={this.handleShipmentAction} shipmentData={shipment} clients={clients} {...props} />}
                     />
                 </Switch>
             </div>
@@ -90,7 +96,7 @@ AdminShipments.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, shipment, shipments, hubs } = admin;
+    const { clients, shipment, shipments, hubs, loading } = admin;
 
     return {
         user,
@@ -99,7 +105,8 @@ function mapStateToProps(state) {
         clients,
         shipments,
         shipment,
-        hubs
+        hubs,
+        loading
     };
 }
 function mapDispatchToProps(dispatch) {

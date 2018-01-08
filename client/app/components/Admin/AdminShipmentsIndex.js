@@ -33,21 +33,21 @@ export class AdminShipmentsIndex extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
-
-        const openShipments = shipments.open.shipments.map((ship) => {
+        // debugger;
+        const openShipments = shipments.open.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
-        const requestedShipments = shipments.requested.shipments.map((ship) => {
+        const requestedShipments = shipments.requested.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
 
-        const finishedShipments = shipments.finished.shipments.map((ship) => {
+        const finishedShipments = shipments.finished.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
         const listView = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                {/* <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  >Requested Shipments</p>
                     </div>
@@ -64,7 +64,43 @@ export class AdminShipmentsIndex extends Component {
                         <p className={` ${styles.sec_header_text} flex-none`}  >Finished Shipments</p>
                     </div>
                     {finishedShipments}
-                </div>
+                </div> */}
+                { openShipments.length !== 0 ?
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Open</p>
+                        </div>
+                        { openShipments }
+                    </div> :
+                    ''
+                }
+                { requestedShipments.length !== 0 ?
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Requested</p>
+                        </div>
+                        { requestedShipments }
+                    </div> :
+                    ''
+                }
+                { finishedShipments.length !== 0 ?
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > Finished</p>
+                        </div>
+                        { finishedShipments }
+                    </div> :
+                    ''
+                }
+                { openShipments.length === 0 && requestedShipments.length === 0 && finishedShipments.length === 0 ?
+                    <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  > No Shipments yet</p>
+                        </div>
+                        <p className="flex-none"  > As shipments are requested, they will appear here</p>
+                    </div> :
+                    ''
+                }
             </div>
         );
 

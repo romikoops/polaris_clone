@@ -189,6 +189,7 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
+            debugger;
             const succConfShip = merge({}, state, {
                 shipment: action.payload.data,
                 loading: false
@@ -435,6 +436,12 @@ export function admin(state = {}, action) {
                 error: { route: action.error }
             });
             return errRoute;
+
+        case adminConstants.VIEW_TRUCKING:
+            const newTrucking = merge({}, state, {
+                truckingDetail: action.payload
+            });
+            return newTrucking;
 
         default:
             return state;

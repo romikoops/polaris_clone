@@ -37,7 +37,7 @@ class AdminClients extends Component {
 
     render() {
         const {selectedClient} = this.state;
-        const {theme, clients, hubs, client} = this.props;
+        const {theme, clients, hubs, client, adminDispatch} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -62,7 +62,7 @@ class AdminClients extends Component {
                     <Route
                         exact
                         path="/admin/clients"
-                        render={props => <AdminClientsIndex theme={theme} handleClientAction={this.handleClientAction} clients={clients} hubs={hubs}  viewClient={this.viewClient} {...props} />}
+                        render={props => <AdminClientsIndex theme={theme} handleClientAction={this.handleClientAction} clients={clients} hubs={hubs} adminDispatch={adminDispatch} viewClient={this.viewClient} {...props} />}
                     />
                     <Route
                         exact

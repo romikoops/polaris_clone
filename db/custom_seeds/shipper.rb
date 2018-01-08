@@ -49,7 +49,7 @@ Tenant.all.each do |tenant|
   ]
 
   dummy_locations.each do |l|
-    loc = Location.find_or_create_by(l)
+    loc = Location.create_and_geocode(l)
     shipper.locations << loc
   end
 

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './CargoDetails.scss';
 import { Checkbox } from '../Checkbox/Checkbox';
 import FileUploader from '../FileUploader/FileUploader';
+import { HSCodeRow } from '../HSCodeRow/HSCodeRow';
 import defaults from '../../styles/default_classes.scss';
-
+import Truncate from 'react-truncate';
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +19,7 @@ export class CargoDetails extends Component {
         this.toggleInsurance = this.toggleInsurance.bind(this);
         this.toggleCustoms = this.toggleCustoms.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.fileFn = this.fileFn.bind(this);
     }
     toggleInsurance() {
         this.setState({ insuranceView: !this.state.insuranceView });
@@ -26,41 +28,43 @@ export class CargoDetails extends Component {
     toggleCustoms() {
         this.setState({ customsView: !this.state.customsView });
         // this.timeoutId = setTimeout(function() {
-            this.setState({ showNoCustoms: this.state.customsView });
+        this.setState({ showNoCustoms: this.state.customsView });
         // }.bind(this), 1000);
     }
+    deleteDoc(key) {
+        const { shipmentData, shipmentDispatch } = this.props;
+        const { documents } = shipmentData;
+        const id = documents[key].id;
+        shipmentDispatch.deleteDocument(id);
+    }
+    fileFn(file) {
+        const { shipmentData, shipmentDispatch } = this.props;
+        const { shipment } = shipmentData;
+        const type = file.doc_type;
+        const url = '/shipments/' + shipment.id + '/upload/' + type;
+        shipmentDispatch.uploadDocument(file, type, url);
+    }
     handleChange(event) {
-        // const { name, value } = event.target;
-        // this.setState({[name]: value});
         this.props.handleChange(event);
     }
     render() {
         const { shipmentData, theme, insurance } = this.props;
-        const { shipment, dangerousGoods } = shipmentData;
-        const packUrl = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/packing_sheet'
-            : '';
-        const cInvUrl = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/commercial_invoice'
-            : '';
-        const custDec = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/customs_declaration'
-            : '';
-        const custVal = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/customs_value_declaration'
-            : '';
-        const eori = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/eori'
-            : '';
-        const certOrigin = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/certificate_of_origin'
-            : '';
-        const dGoods = shipmentData
-            ? '/shipments/' + shipment.id + '/upload/dangerous_goods'
-            : '';
-        // const insuranceVal = shipmentData
-        //     ? (shipment.total_price + this.state.totalGoodsValue) * 1.1 * 0.17
-        //     : 0;
+        const { shipment, dangerousGoods, documents, customs, cargoItems, containers } = shipmentData;
+        console.log(documents);
+        console.log(shipment);
+        debugger;
+        const DocViewer = ({doc}) => {
+            return(
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <p className={`flex-80 ${styles.doc_title}`}>
+                        <Truncate lines={1} >{doc.text} </Truncate>
+                    </p>
+                    <div className="flex-20 layout-row layout-align-center-center" onClick={() => this.deleteDoc(doc.doc_type)}>
+                        <i className="fa fa-trash" />
+                    </div>
+                </div>
+            );
+        };
         const insuranceBox = (
 
             <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.insuranceView ? styles.show : ''}`}>
@@ -80,7 +84,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const customsBox = (
-            <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : ''}`}>
+            <div className={`flex-100 layout-row layout-wrap ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : ''}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> {' '} Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country o to exported goods so that they can leave the country.
@@ -92,36 +96,35 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> 18.50 €</h6>
+                    <h6 className="flex-100"> {customs ? customs.fee : '18.50'} €</h6>
                 </div>
+                <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} />
             </div>
         );
         const noCustomsBox = (
             <div className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${this.state.showNoCustoms ? styles.show : ''}`}>
                 <div className="flex-33-layout-row layout-align-center-center">
-                    {custDec ? (
-                        <div className="flex-90 layout-row layout-wrap">
-                            <div className="flex-100">
-                                <p className={`flex-none ${styles.f_header}`}>
-                                    {' '}
+                    <div className="flex-90 layout-row layout-wrap">
+                        <div className="flex-100">
+                            <p className={`flex-none ${styles.f_header}`}>
+                                {' '}
                                     Customs Declaration
-                                </p>
-                            </div>
-                            <div className="flex-100">
+                            </p>
+                        </div>
+                        <div className="flex-100">
+                             { documents.customs_declaration ?
+                                <DocViewer doc={documents.customs_declaration} /> :
                                 <FileUploader
                                     theme={theme}
-                                    url={custDec}
+                                    dispatchFn={this.fileFn}
                                     type="customs_declaration"
                                     text="Customs Declaration"
-                                />
-                            </div>
+                                />}
                         </div>
-                    ) : (
-                        ''
-                    )}
+                    </div>
                 </div>
                 <div className="flex-33-layout-row layout-align-center-center">
-                    {custVal && this.props.totalGoodsValue > 20000 ? (
+                    {this.props.totalGoodsValue > 20000 ? (
                         <div className="flex-90 layout-row layout-wrap">
                             <div className="flex-100">
                                 <p className={`flex-none ${styles.f_header}`}>
@@ -130,12 +133,14 @@ export class CargoDetails extends Component {
                                 </p>
                             </div>
                             <div className="flex-100">
-                                <FileUploader
-                                    theme={theme}
-                                    url={custVal}
-                                    type="customs_value_declaration"
-                                    text="Customs Value Declaration"
-                                />
+                                 { documents.customs_value_declaration ?
+                                    <DocViewer doc={documents.customs_value_declaration} /> :
+                                    <FileUploader
+                                        theme={theme}
+                                        dispatchFn={this.fileFn}
+                                        type="customs_value_declaration"
+                                        text="Customs Value Declaration"
+                                    />}
                             </div>
                         </div>
                     ) : (
@@ -143,16 +148,17 @@ export class CargoDetails extends Component {
                     )}
                 </div>
                 <div className="flex-33-layout-row layout-align-center-center">
-                    {eori ? (
-                        <div className="flex-90 layout-row layout-wrap">
-                            <div className="flex-100">
-                                <p className={`flex-none ${styles.f_header}`}> EORI</p>
-                            </div>
-                            <div className="flex-100">
-                                <FileUploader theme={theme} url={eori} type="eori" text="EORI"/>
-                            </div>
+                    <div className="flex-90 layout-row layout-wrap">
+                        <div className="flex-100">
+                            <p className={`flex-none ${styles.f_header}`}> EORI</p>
                         </div>
-                    ) : ''}
+                        <div className="flex-100">
+                            { documents.eori ?
+                                <DocViewer doc={documents.eori} /> :
+                                <FileUploader theme={theme} dispatchFn={this.fileFn} type="eori" text="EORI"/>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -229,78 +235,76 @@ export class CargoDetails extends Component {
                                         Required Documents
                                     </p>
                                 </div>
-                                {packUrl ? (
-                                    <div className="flex-50 layout-row layout-wrap">
-                                        <div className="flex-100">
-                                            <p
-                                                className={`flex-none ${
-                                                    styles.f_header
-                                                }`}
-                                            >
-                                                {' '}
+
+                                <div className="flex-50 layout-row layout-wrap">
+                                    <div className="flex-100">
+                                        <p
+                                            className={`flex-none ${
+                                                styles.f_header
+                                            }`}
+                                        >
+                                            {' '}
                                                 Packing Sheet
-                                            </p>
-                                        </div>
-                                        <div className="flex-100">
+                                        </p>
+                                    </div>
+                                    <div className="flex-100">
+                                        { documents.packing_sheet ?
+                                            <DocViewer doc={documents.packing_sheet} /> :
                                             <FileUploader
                                                 theme={theme}
-                                                url={packUrl}
                                                 type="packing_sheet"
+                                                dispatchFn={this.fileFn}
                                                 text="Packing Sheet"
                                             />
-                                        </div>
+                                        }
                                     </div>
-                                ) : (
-                                    ''
-                                )}
-                                {cInvUrl ? (
-                                    <div className="flex-50 layout-row layout-wrap">
-                                        <div className="flex-100">
-                                            <p
-                                                className={`flex-none ${
-                                                    styles.f_header
-                                                }`}
-                                            >
-                                                {' '}
+                                </div>
+
+                                <div className="flex-50 layout-row layout-wrap">
+                                    <div className="flex-100">
+                                        <p
+                                            className={`flex-none ${
+                                                styles.f_header
+                                            }`}
+                                        >
+                                            {' '}
                                                 Commercial Invoice
-                                            </p>
-                                        </div>
-                                        <div className="flex-100">
+                                        </p>
+                                    </div>
+                                    <div className="flex-100">
+                                        { documents.commercial_invoice ?
+                                            <DocViewer doc={documents.commercial_invoice} /> :
                                             <FileUploader
                                                 theme={theme}
-                                                url={cInvUrl}
                                                 type="commercial_invoice"
+                                                dispatchFn={this.fileFn}
                                                 text="Commercial Invoice"
-                                            />
-                                        </div>
+                                            />}
                                     </div>
-                                ) : (
-                                    ''
-                                )}
-                                {certOrigin ? (
-                                    <div className="flex-50 layout-row layout-wrap">
-                                        <div className="flex-100">
-                                            <p
-                                                className={`flex-none ${
-                                                    styles.f_header
-                                                }`}
-                                            >
+                                </div>
+
+                                <div className="flex-50 layout-row layout-wrap">
+                                    <div className="flex-100">
+                                        <p
+                                            className={`flex-none ${
+                                                styles.f_header
+                                            }`}
+                                        >
                                                 Certificate of Origin
-                                            </p>
-                                        </div>
-                                        <div className="flex-100">
+                                        </p>
+                                    </div>
+                                    <div className="flex-100">
+                                        { documents.certificate_of_origin ?
+                                            <DocViewer doc={documents.certificate_of_origin} /> :
                                             <FileUploader
                                                 theme={theme}
-                                                url={certOrigin}
-                                                type="commercial_invoice"
+                                                type="certificate_of_origin"
+                                                dispatchFn={this.fileFn}
                                                 text="Certificate of Origin"
-                                            />
-                                        </div>
+                                            />}
                                     </div>
-                                ) : (
-                                    ''
-                                )}
-                                {dGoods && dangerousGoods ? (
+                                </div>
+                                {dangerousGoods ? (
                                     <div className="flex-50 layout-row layout-wrap">
                                         <div className="flex-100">
                                             <p
@@ -313,12 +317,14 @@ export class CargoDetails extends Component {
                                             </p>
                                         </div>
                                         <div className="flex-100">
+                                            { documents.dangerous_goods ?
+                                            <DocViewer doc={documents.dangerous_goods} /> :
                                             <FileUploader
                                                 theme={theme}
-                                                url={dGoods}
-                                                type="commercial_invoice"
+                                                type="dangerous_goods"
+                                                dispatchFn={this.fileFn}
                                                 text="Dangerous Goods Declaration"
-                                            />
+                                            />}
                                         </div>
                                     </div>
                                 ) : (

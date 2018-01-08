@@ -685,7 +685,7 @@ function autoGenSchedules(data) {
         );
     };
 }
-function confirmShipment(id, action) {
+function confirmShipment(id, action, redirect) {
     function request(shipmentData) {
         return {
             type: adminConstants.CONFIRM_SHIPMENT_REQUEST,
@@ -707,6 +707,11 @@ function confirmShipment(id, action) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
+                if (redirect) {
+                    dispatch(
+                        push('/admin/shipments/' + id)
+                    );
+                }
                 dispatch(
                     alertActions.success('Shipment Action Set successful')
                 );
@@ -818,6 +823,18 @@ function updateServiceCharge(id, req) {
     };
 }
 
+function viewTrucking(truckingHub, pricing) {
+    const payload = {truckingHub, pricing};
+    function set(data) {
+        // debugger;
+        return { type: adminConstants.VIEW_TRUCKING, payload: data };
+    }
+    return dispatch => {
+        dispatch(push('/admin/trucking/' + truckingHub._id));
+        dispatch(set(payload));
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -849,5 +866,6 @@ export const adminActions = {
     wizardSCharge,
     wizardPricings,
     wizardOpenPricings,
-    wizardTrucking
+    wizardTrucking,
+    viewTrucking
 };

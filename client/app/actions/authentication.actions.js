@@ -29,9 +29,9 @@ function login(data) {
                 if (data.shipmentReq) {
                     data.shipmentReq.shipment.shipper_id = user.data.id;
                     dispatch(shipmentActions.setShipmentRoute(data.shipmentReq));
-                } else if (user.data.role_id === 1) {
+                } else if (user.data.role_id === 1 && !data.noRedirect) {
                     dispatch(push('/admin'));
-                } else if (user.data.role_id === 2) {
+                } else if (user.data.role_id === 2 && !data.noRedirect) {
                     dispatch(push('/account'));
                 }
             },

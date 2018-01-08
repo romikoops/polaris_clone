@@ -22,9 +22,13 @@ export class ChooseRoute extends Component {
         this.setDepDate = this.setDepDate.bind(this);
     }
     componentDidMount() {
-        const { setStage } = this.props;
-        setStage(3);
+        const { prevRequest, setStage } = this.props;
+        if (prevRequest && prevRequest.shipment) {
+            // this.loadPrevReq(prevRequest.shipment);
+        }
         window.scrollTo(0, 0);
+        setStage(3);
+        console.log('######### MOUNTED ###########');
     }
     setDuration(val) {
         this.setState({ durationFilter: val });
@@ -63,7 +67,6 @@ export class ChooseRoute extends Component {
         if (!shipmentData) {
             return '';
         }
-
             const {
                 shipment,
                 originHubs,

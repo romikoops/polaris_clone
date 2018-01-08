@@ -11,21 +11,32 @@ import { RoundButton } from '../../components/RoundButton/RoundButton';
 import { Loading } from '../../components/Loading/Loading';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { userActions, authenticationActions } from '../../actions';
+import { userActions, adminActions, authenticationActions } from '../../actions';
 
 class Landing extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showCarousel: false
+        };
+        this.showCarousel = this.showCarousel.bind(this);
     }
-
+    componentDidMount() {
+        this.showCarousel();
+    }
     shouldComponentUpdate(nextProps) {
         const { loggingIn, registering, loading } = nextProps;
         // debugger;
         return loading || !(loggingIn || registering);
     }
 
+    showCarousel() {
+        this.setState({showCarousel: true});
+    }
+
     render() {
-        const { loggedIn, theme, user, tenant, userDispatch, authDispatch } = this.props;
+        const { loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch } = this.props;
+        const { showCarousel } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -34,7 +45,7 @@ class Landing extends Component {
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >
                 {loadingScreen}
-                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
+                <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} toAdmin={adminDispatch.getDashboard} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
                 <div className={styles.service_box + ' layout-row flex-100 layout-wrap'}>
                     <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>
                         <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
@@ -61,7 +72,7 @@ class Landing extends Component {
                         </div>
                     </div>
                 </div>
-                <ActiveRoutes className={styles.mc} theme={theme} />
+                {showCarousel ? <ActiveRoutes className={styles.mc} theme={theme} /> : ''}
                 <BlogPostHighlights theme={theme} />
                 <div className={styles.btm_promo + ' flex-100 layout-row'}>
                     <div className={'flex-50 ' + styles.btm_promo_img}>
@@ -113,6 +124,7 @@ Landing.propTypes = {
 function mapDispatchToProps(dispatch) {
     return {
         userDispatch: bindActionCreators(userActions, dispatch),
+        adminDispatch: bindActionCreators(adminActions, dispatch),
         authDispatch: bindActionCreators(authenticationActions, dispatch)
     };
 }
