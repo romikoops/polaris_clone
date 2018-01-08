@@ -1,54 +1,17 @@
 module ShippingTools
   include PricingTools
   include MongoTools
-  def new_shipment(session, load_type)
-    if session[:shipment_uuid].nil? || session[:shipment_uuid].empty?
-      @shipment = Shipment.create(shipper_id: current_user.id, status: "booking_process_started", load_type: load_type, tenant_id: current_user.tenant_id)
-      session[:shipment_uuid] = @shipment.uuid
-      # 
-    else
-      shipment = Shipment.find_by_uuid(session[:shipment_uuid])
-      if shipment.booked?
-        if session[:reuse_shipment].to_bool
-          @shipment = Shipment.create(shipper_id: current_user.id, load_type: load_type, tenant_id: current_user.tenant_id)
-        else
-          @shipment = shipment.dup
-        end
-        session[:shipment_uuid] = @shipment.uuid
-      else
-        @shipment = shipment
-      end
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    end
+  
+  def new_shipment(load_type)
+    shipment = Shipment.create(
+      shipper_id: current_user.id, 
+      status: "booking_process_started", 
+      load_type: load_type, 
+      tenant_id: current_user.tenant_id
+    )
 
-    case load_type
-    when 'fcl'
-      @tare_weights = CONTAINER_WEIGHTS
-      @container_descriptions = CONTAINER_DESCRIPTIONS.invert
-      if @shipment.containers.empty?
-        @shipment.containers.create
-      end
-    when 'lcl'
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    when 'openlcl'
-      if @shipment.cargo_items.empty?
-        @shipment.cargo_items.create
-      end
-    end
-
-    @has_pre_carriage = @shipment.has_pre_carriage || true
-    @has_on_carriage = @shipment.has_on_carriage || true
-
-    # if load_type.starts_with?('open')
-    @all_nexuses = Location.nexuses
-    # else
-    #   @all_nexuses = Location.nexuses_prepared_client(current_user)
-    # end
-
+    shipment.containers.create  if load_type.include?('fcl') && shipment.containers.empty?
+    shipment.cargo_items.create if load_type.include?('lcl') && shipment.cargo_items.empty?
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
     routes = Route.where(tenant_id: current_user.tenant_id)
@@ -61,40 +24,15 @@ module ShippingTools
       detailed_routes << rt
     end
     return {
-      shipment:    @shipment,
-      all_nexuses: @all_nexuses,
+      shipment:    shipment,
+      all_nexuses: Location.nexuses,
       routes:      detailed_routes
     }
   end 
 
-  def reuse_booking_data(params, session, load_type)
-    user = User.find(params[:user_id])
-    shipment = user.shipments.find(params[:lcl_id])
-    session[:shipment_uuid] = shipment.uuid
-    session[:reuse_shipment] = "true"
-
-    case load_type
-    when 'fcl'
-      redirect_to(new_user_shipments_fcl_path)
-    when 'lcl'
-      redirect_to(new_user_shipments_lcl_path)
-    when 'openlcl'
-      redirect_to(new_user_shipments_open_lcl_path)
-    end
-  end
-
   def get_shipment_offer(session, params, load_type)
-    # @shipment = Shipment.find_by_uuid(session[:shipment_uuid])
     @shipment = Shipment.find(params[:shipment_id])
-    # 
-    case load_type
-    when 'fcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'fcl', current_user)
-    when 'lcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'lcl', current_user)
-    when 'openlcl'
-      offer_calculation = OfferCalculator.new(@shipment, params, 'openlcl', current_user)
-    end
+    offer_calculation = OfferCalculator.new(@shipment, params, load_type, current_user)
 
     # begin
       offer_calculation.calc_offer!
@@ -102,25 +40,20 @@ module ShippingTools
     #   raise ApplicationError::NoRoutes
     # end
 
-    @shipment = offer_calculation.shipment
-    @shipment.save!
-    @total_price = @shipment.total_price
-    @has_pre_carriage = @shipment.has_pre_carriage
-    @has_on_carriage = @shipment.has_on_carriage
-    @schedules = offer_calculation.schedules
-    @truck_seconds_pre_carriage = offer_calculation.truck_seconds_pre_carriage
-
-    resp = {
-      shipment: @shipment,
-      total_price: @total_price,
-      has_pre_carriage: @has_pre_carriage,
-      has_on_carriage: @has_on_carriage,
-      schedules: @schedules,
-      truck_seconds_pre_carriage: @truck_seconds_pre_carriage,
-      originHubs: offer_calculation.origin_hubs,
-      destinationHubs: offer_calculation.destination_hubs
-    }
-    return resp
+    if offer_calculation.shipment.save
+      return {
+        shipment:                   offer_calculation.shipment,
+        total_price:                offer_calculation.total_price,
+        has_pre_carriage:           offer_calculation.has_pre_carriage,
+        has_on_carriage:            offer_calculation.has_on_carriage,
+        schedules:                  offer_calculation.shipment.route.schedules,
+        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+        originHubs:                 offer_calculation.origin_hubs,
+        destinationHubs:            offer_calculation.destination_hubs
+      }
+    else
+      raise ApplicationError::NoRoutes # TBD - Customize Errors
+    end
   end
 
   def create_documents(form, shipment)
@@ -191,10 +124,10 @@ module ShippingTools
       new_user_loc.update_attributes!(primary: true)
     end
     if shipment_data[:insurance][:bool]
-      key = @shipment.generated_fees.first[0]
-      @shipment.generated_fees[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-      @shipment.generated_fees[key]["total"] += shipment_data[:insurance][:val]
-      @shipment.total_price = @shipment.generated_fees[key]["total"]
+      key = @shipment.schedules_charges.first[0]
+      @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
+      @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
+      @shipment.total_price = @shipment.schedules_charges[key]["total"]
 
     end
     if @shipment.cargo_items

@@ -34,23 +34,24 @@ module TruckingTools
   end
   def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
-    { "$match" => { "_id" => tableKey }},
-    {"$project" => {
-        data: {"$filter" => {
-            input: '$data',
-            as: 'tp',
-            cond: { "$and" => [
-                {"$lte" => ["$$tp.lower_zip", zip_int]},
-                {"$gte" => [ "$$tp.upper_zip", zip_int ]}  
-              ] 
-            }
-        }},
-        _id: 0
+
+      { "$match" => { "_id" => table_key }},
+      {"$project" => {
+          data: {"$filter" => {
+              input: '$data',
+              as: 'tp',
+              cond: { "$and" => [
+                  {"$lte" => ["$$tp.lower_zip", zip_int]},
+                  {"$gte" => [ "$$tp.upper_zip", zip_int ]}  
+                ] 
+              }
+          }},
+          _id: 0
+        }
+
       }
-    }
     ])
     p "resp achieved"
-    byebug
     return resp.first["data"][0]
   end
 
@@ -110,7 +111,6 @@ module TruckingTools
     cbm = (cargo_item.dimension_x * cargo_item.dimension_y * cargo_item.dimension_z) / 1000
     weight = cargo_item.payload_in_kg
     hub_pricings = get_item_fn(client, 'truckingTables', "_id", tpKey)
-    byebug
     hub_pricings["data"].each do |tps|
       if destination.geocoded_address.downcase.include?(tps["city"]) && destination.geocoded_address.downcase.include?(tps["province"])
         p tps["city"]
@@ -128,7 +128,6 @@ module TruckingTools
           @selected_rate = rate
         end
       end
-      byebug
       price = ((weight) * @selected_rate["value"]) + @selected_rate["pickup_fee"] + @selected_rate["delivery_fee"]
       if !@selected_rate["min_value"] || price > @selected_rate["min_value"]
         return {value:price, currency: @trucking_pricing["currency"]}
@@ -136,7 +135,6 @@ module TruckingTools
         return {value: @selected_rate["min_value"], currency: @trucking_pricing["currency"]}
       end
     else
-      byebug
       return {value: 1.25 * km, currency: "EUR"}
     end
   end

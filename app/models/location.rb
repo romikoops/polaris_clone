@@ -181,13 +181,15 @@ class Location < ApplicationRecord
 
   def closest_location_with_distance
     locations = Location.where(location_type: "nexus")
-    distances = []
 
-    locations.each do |location|
-      distances << Geocoder::Calculations.distance_between([self.latitude, self.longitude], [location.latitude, location.longitude])
-    end
-    lowest_distance = distances.reject {|i| i.nan?}.min
-    
+    distances = locations.map do |location|
+      Geocoder::Calculations.distance_between(
+        [self.latitude, self.longitude], 
+        [location.latitude, location.longitude]
+      )
+    end.reject(&:nan?)
+
+    lowest_distance = distances.min
     return locations[distances.find_index(lowest_distance)], lowest_distance
   end
 
@@ -205,5 +207,11 @@ class Location < ApplicationRecord
     end
 
     hubs_array
+  end
+
+  def furthest_hub(hubs)
+    hubs.max do |hub_x, hub_y| 
+      hub_x.distance_to(self) <=> hub_y.distance_to(self)
+    end
   end
 end

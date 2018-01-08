@@ -94,7 +94,7 @@ export class ChooseRoute extends Component {
                                     theme={this.props.theme}
                                     originHubs={originHubs}
                                     destinationHubs={destinationHubs}
-                                    fees={shipment.generated_fees}
+                                    fees={shipment.schedules_charges}
                                     schedule={sched}
                                     pickupDate={shipment.planned_pickup_date}
                                 />
@@ -110,7 +110,7 @@ export class ChooseRoute extends Component {
                                     theme={this.props.theme}
                                     originHubs={originHubs}
                                     destinationHubs={destinationHubs}
-                                    fees={shipment.generated_fees}
+                                    fees={shipment.schedules_charges}
                                     schedule={sched}
                                     pickupDate={shipment.planned_pickup_date}
                                 />
@@ -123,7 +123,7 @@ export class ChooseRoute extends Component {
                                     theme={this.props.theme}
                                     originHubs={originHubs}
                                     destinationHubs={destinationHubs}
-                                    fees={shipment.generated_fees}
+                                    fees={shipment.schedules_charges}
                                     schedule={sched}
                                     pickupDate={shipment.planned_pickup_date}
                                 />

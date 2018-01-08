@@ -1,4 +1,11 @@
 class Container < ApplicationRecord
+  # The following Constants are currently being stored directly
+  # in the Front End, but may be needed in future refactoring.
+  #
+  # DESCRIPTIONS         = ContainerLookups.get_descriptions
+  # WEIGHTS              = ContainerLookups.get_weights
+  # PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
+
   belongs_to :shipment
 
   validates :size_class,    presence: true

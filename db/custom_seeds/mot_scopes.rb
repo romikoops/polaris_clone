@@ -1,0 +1,1 @@
+MotScope.create_all!

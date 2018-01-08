@@ -120,7 +120,7 @@ export class BestRoutesBox extends Component {
         const { theme, shipmentData } = this.props;
         const schedules = shipmentData.schedules;
         const fees = shipmentData.shipment
-            ? shipmentData.shipment.generated_fees
+            ? shipmentData.shipment.schedules_charges
             : {};
         const depDate = shipmentData.shipment
             ? shipmentData.shipment.planned_pickup_date
