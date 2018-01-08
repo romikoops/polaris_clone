@@ -34,7 +34,13 @@
   }
   .box_content.show {
     visibility: visible;
-    height: 199px;
+    height: max-content;
+    overflow: visible;
+  }
+  .box_content.hidden {
+    // overflow: hidden;
+    // height: 0px;
+    // padding-top: 0px;
   }
   .no_customs_box {
     transition: all 1s ease;
