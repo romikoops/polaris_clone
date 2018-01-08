@@ -55,8 +55,7 @@ class Admin::ShipmentsController < ApplicationController
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        booking_confirmation_email(@shipment.shipper, @shipment)
-        # send_booking_emails(shipment)
+        shipper_confirmation_email(@shipment.shipper, @shipment)
       when "decline"
         @shipment.decline!
       else

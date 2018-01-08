@@ -3,25 +3,49 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def forwarder_notification(user, shipment)
+  def tenant_notification(user, shipment)
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @eta = Schedule.find(@shipment.schedule_set.last["id"]).eta
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black.png")
-    
+    @eta = find_eta
+
+    attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
+
     mail(
-      to: tenant.emails && tenant.emails["sales"] ? tenant.emails["sales"] : "itsmycargodev@gmail.com", 
+      to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
       subject: 'Your booking through ItsMyCargo'
     )
   end
 
-  def booking_confirmation(user, shipment)
+  def shipper_notification(user, shipment)
     @user = user
+    tenant = user.tenant
     @shipment = shipment
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black.png")
-    attachments.inline['logo_small.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black_small.png")
-    mail(to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, subject: 'Your booking through ItsMyCargo')
+    @eta = find_eta
+
+    attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
+    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+
+    mail(
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      subject: 'Your booking through ItsMyCargo'
+    )
+  end
+
+  def shipper_confirmation(user, shipment, filename, file)
+    @user = user
+    tenant = user.tenant
+    @shipment = shipment
+    @eta = find_eta
+
+    attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
+    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+    attachments[filename] = file
+
+    mail(
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      subject: 'Your booking through ItsMyCargo'
+    )
   end
 
   def summary_mail_shipper(shipment, filename, file)
@@ -46,5 +70,11 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     attachments[filename] = file
     mail(to: shipment.receiver.email, subject: 'Your booking through ItsMyCargo')
+  end
+
+  private
+
+  def find_eta
+    Schedule.find(@shipment.schedule_set.last["id"]).eta
   end
 end

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <%= wicked_pdf_stylesheet_link_tag "booking_pdf" %>
+    <style media="screen" type="text/css">
+      @font-face {
+        font-family: lato;
+        font-style: normal;
+        font-weight: 300;
+        src: url(<%= asset_data_base64(Rails.root.join('app', 'assets', 'fonts', 'lato_normal.otf')) %>)
+      }
+      body {
+        font-family: lato;
+        font-weight: 300;
+      }
+      .wrapper {        
+        position: relative;
+        margin: 0;
+        height: 282mm;
+        width: 170mm;
+      }
+      .logo {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 5mm;
+      }
+      .logo img {
+        width: 45mm;
+      }
+      .footer {
+        position: absolute;
+        bottom: 0mm;
+        border-top: 0.5mm solid gray;
+        width: 100%;
+        text-align: center;
+        font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="logo">
+        <%= wicked_pdf_image_tag 'logos/imc_logo_pdf.png' %>
+        <%= wicked_pdf_image_tag 'logos/logo_black.png' %>
+      </div>
+
+      <%= yield %>
+
+      <div class="footer">
+        ItsMyCargo IVS<br>
+        Tranehavegård 15, 2450 Copenhagen, Denmark<br>
+        Email: support@itsmycargo.com | Phone: +45 27856201<br>
+        CVR-number: 37516988
+      </div>
+    </div>
+    
+  </body>
+</html>

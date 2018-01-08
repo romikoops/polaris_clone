@@ -196,6 +196,14 @@ class Shipment < ApplicationRecord
     raise "Not implemented"
   end
 
+  def notifyees
+    shipment_contacts.where(contact_type: "notifyee").map(&:contact)
+  end    
+
+  def consignee
+    shipment_contacts.find_by(contact_type: "consignee").contact
+  end    
+
   private
 
   def generate_imc_reference

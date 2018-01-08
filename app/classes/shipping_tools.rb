@@ -143,10 +143,6 @@ module ShippingTools
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    #    forwarder_notification_email(user, @shipment)
-    #    booking_confirmation_email(consignee, @shipment)
-
-    # session.delete(:shipment_uuid)
 
     return {
       shipment: @shipment,
@@ -212,7 +208,7 @@ module ShippingTools
     transportKey = @schedules.first.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first.hub_route_id}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
-    byebug
+    
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
@@ -225,12 +221,34 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
-  def forwarder_notification_email(user, shipment)
-    ShipmentMailer.forwarder_notification(user, shipment).deliver_now
+  def tenant_notification_email(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_now
   end
 
-  def booking_confirmation_email(user, shipment)
-    ShipmentMailer.booking_confirmation(user, shipment).deliver_now
+  def shipper_notification_email(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment).deliver_now
+  end
+
+  def shipper_confirmation_email(user, shipment)
+
+    pdf_erb = BasicErb.new(
+      layout: "#{Rails.root}/app/views/layouts/pdfs/simple.pdf.html.erb",
+      template: "#{Rails.root}/app/views/shipments/pdfs/bill_of_lading.pdf.html.erb",
+      locals: { shipment: shipment }
+    )
+    bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
+      pdf_erb.render,
+      margin: { top: 10, bottom: 5, left: 20, right: 20}
+    )
+
+    bill_of_lading_pdf_name = "bill_of_lading_#{shipment.imc_reference}.pdf"
+    
+    ShipmentMailer.shipper_confirmation(
+      user, 
+      shipment, 
+      bill_of_lading_pdf_name, 
+      bill_of_lading_pdf
+    ).deliver_now
   end
 
   def send_booking_emails(shipment)

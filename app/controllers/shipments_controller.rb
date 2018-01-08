@@ -22,7 +22,7 @@ class ShipmentsController < ApplicationController
   end
 
   def test_email
-    forwarder_notification_email(current_user, Shipment.first)
+    tenant_notification_email(current_user, Shipment.first)
   end
   # Uploads document and returns Document item
   def upload_document
@@ -76,10 +76,10 @@ class ShipmentsController < ApplicationController
 
   def update
     resp = update_shipment(session, params)
-    # Notification to forwarder
-    forwarder_notification_email(current_user, resp[:shipment])
-    # Notification to shipper
-
+    
+    shipment = resp[:shipment]
+    tenant_notification_email(shipment.shipper.tenant, shipment)
+    shipper_notification_email(shipment.shipper, shipment)
 
     response_handler(resp)
   end

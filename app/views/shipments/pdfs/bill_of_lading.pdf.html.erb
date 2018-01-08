@@ -125,7 +125,7 @@
         </div>
       </div>
       <div class="col-xs-4 " style="height: 25mm; padding: 10px 0px 5px 5px">
-        <%= image_tag asset_data_base64 'pdfs/bill_of_lading/logo_black.png' %>
+        <%#= image_tag asset_data_base64 'pdfs/bill_of_lading/logo_black.png' %>
       </div>
       <div class="col-xs-3 hr-left">
         <div class="col-xs-12 text hr-bottom" style="height: 10mm; ">
@@ -200,7 +200,7 @@
         </div>
         <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
           <div class="col-xs-6"><strong>PORT OF DISCHARGE</strong></div>
-          <div class="col-xs-6 "><%= Location.find(shipment.route.starthub_id).hub_name %></div>
+          <div class="col-xs-6 "><%= shipment.origin.name %></div>
         </div>
       </div>
       <div class="col-xs-4 hr-right text" style="height: 24mm;">
@@ -210,7 +210,7 @@
         </div>
         <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
           <div class="col-xs-6"><strong>PORT OF LOADING</strong></div>
-          <div class="col-xs-6 "><%= Location.find(shipment.route.endhub_id).hub_name %></div>
+          <div class="col-xs-6 "><%= shipment.destination.name %></div>
         </div>
         <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
           <div class="col-xs-12" style="font-size: 80%;"><strong>FINAL DESTINATION (FOR TRANSSHIPMENT)</strong></div>

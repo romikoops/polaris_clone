@@ -3,13 +3,14 @@
 // $global-width: 1200px;
 
 body, html, .body {
-  background: #f3f3f3 !important;
+  background: white;
 }
 .container.header {
-  background: #f3f3f3;
+  background: white;
 }
 table.body-drip {
-  width: 768px; ////// Change grid system???
+	// (!) changing this value might affect grid system (!)
+  width: 768px;
 }
 .bold {
 	font-weight: bold;

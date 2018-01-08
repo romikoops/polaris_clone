@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     registrations: 'users_devise_token_auth/registrations'
   }
 
+
   namespace :admin do
     resources :shipments do
       collection do

@@ -7,6 +7,13 @@
   </head>
 
   <body>
-    <%= yield %>
+    <container class="body-drip">
+      <% primary_color = @user.tenant.theme["colors"]["primary"] %>
+      <hr style="width: 100%; border: 4px solid <%= primary_color %>;">
+
+        <%= yield %>
+
+      <hr style="width: 100%; border: 4px solid <%= primary_color %>;">
+    </container>
   </body>
 </html>
