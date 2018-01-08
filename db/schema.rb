@@ -10,9 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
 ActiveRecord::Schema.define(version: 20180105144603) do
-
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +158,8 @@ ActiveRecord::Schema.define(version: 20180105144603) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "has_fcl"
+    t.boolean "has_lcl"
     t.bigint "mot_scope_id"
     t.index ["mot_scope_id"], name: "index_routes_on_mot_scope_id"
   end
