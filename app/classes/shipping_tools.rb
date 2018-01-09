@@ -231,10 +231,10 @@ module ShippingTools
 
   def shipper_confirmation_email(user, shipment)
 
-    pdf_erb = BasicErb.new(
-      layout: "#{Rails.root}/app/views/layouts/pdfs/simple.pdf.html.erb",
-      template: "#{Rails.root}/app/views/shipments/pdfs/bill_of_lading.pdf.html.erb",
-      locals: { shipment: shipment }
+    pdf_erb = ErbTemplate.new(
+      layout:   "pdfs/booking.pdf.html.erb",
+      template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
+      locals:   { shipment: shipment }
     )
     bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
       pdf_erb.render,
