@@ -19,7 +19,12 @@
 
 .byebug_history
 
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Ignore files built by 'npm run build'
+/client/dist/*
+

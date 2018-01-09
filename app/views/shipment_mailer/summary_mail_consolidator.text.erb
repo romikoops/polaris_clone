@@ -1,0 +1,10 @@
+Dear <%= @shipment.consolidator.full_name %>, <%= @shipment.consolidator.company_name %>,
+
+Incoming Job from ItsMyCargo.com:
+We have received a booking through our system, further details are attached as a pdf-file.
+Please Note: We need the bill of lading sent back along with the reference number for the shipment.
+
+Kind regards,
+Your ItsMyCargo Booking Team
+
+ItsMyCargo booking: <%= @shipment.imc_reference %>

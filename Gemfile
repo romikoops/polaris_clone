@@ -37,6 +37,9 @@ gem 'geocoder'
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'
 
+# Use os to get information about the operating system
+gem 'os'
+
 # Use Wicked PDF to generate PDFs from HTML
 # The obligatory wkhtmltopdf binaries are here: [Rails.root]/bin/wkhtmltopdf
 gem 'wicked_pdf'
@@ -59,12 +62,15 @@ gem 'table_print'
 
 # Filter and sort Active record collections
 gem "filterrific"
+
 # Pagination library
 gem 'will_paginate', '~> 3.1.5'
 
 # Easier CSS for emails
 gem 'premailer-rails'
 gem 'inky-rb', require: 'inky'
+
+# Image resizing
 gem "mini_magick"
 
 # AWS SDK for hosting and S3

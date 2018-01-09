@@ -1,0 +1,10 @@
+Dear <%= @shipment.trucker.full_name %>, <%= @shipment.trucker.company_name %>,
+
+Incoming Job from ItsMyCargo.com:
+We have received a booking through our system, further details are attached as a pdf-file.
+Please Note: We will send you the Port reference number of the shipment shortly.
+
+Kind regards,
+Your ItsMyCargo Booking Team
+
+ItsMyCargo booking: <%= @shipment.imc_reference %>
