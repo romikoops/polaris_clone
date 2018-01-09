@@ -19,6 +19,8 @@ gem 'omniauth'
 gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sass-rails'
 
+gem 'bootstrap-sass', '~> 3.3.5.1'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 

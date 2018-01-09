@@ -41,6 +41,8 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (8.0.0)
+    autoprefixer-rails (7.1.6)
+      execjs
     aws-partitions (1.53.0)
     aws-sdk (3.0.1)
       aws-sdk-resources (~> 3)
@@ -569,6 +571,9 @@ GEM
     aws-sigv2 (1.0.1)
     aws-sigv4 (1.0.2)
     bcrypt (3.1.11)
+    bootstrap-sass (3.3.5.1)
+      autoprefixer-rails (>= 5.0.0.1)
+      sass (>= 3.3.0)
     bson (4.2.2)
     builder (3.2.3)
     byebug (9.1.0)
@@ -589,6 +594,7 @@ GEM
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.7.0)
+    execjs (2.7.0)
     ffi (1.9.18)
     filterrific (5.0.0)
     foundation_emails (2.2.1.0)
@@ -730,6 +736,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk (~> 3)
+  bootstrap-sass (~> 3.3.5.1)
   byebug
   chronic
   devise_token_auth

@@ -3,21 +3,6 @@
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
     <%= wicked_pdf_stylesheet_link_tag "pdfs" %>
-    <style media="screen" type="text/css">
-      .wrapper {
-        position: relative;
-        margin: 0;
-        width: 200mm;
-      }
-      .footer {
-        position: absolute;
-        bottom: 0mm;
-        border-top: 0.5mm solid gray;
-        width: 100%;
-        text-align: center;
-        font-size: 10px;
-      }
-    </style>
   </head>
   <body>
       <%= yield %>

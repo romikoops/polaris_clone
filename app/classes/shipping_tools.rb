@@ -230,16 +230,18 @@ module ShippingTools
   end
 
   def shipper_confirmation_email(user, shipment)
-
     pdf_erb = ErbTemplate.new(
-      layout:   "pdfs/booking.pdf.html.erb",
+      layout:   "pdfs/simple.pdf.html.erb",
       template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
       locals:   { shipment: shipment }
     )
     bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
       pdf_erb.render,
-      margin: { top: 10, bottom: 5, left: 20, right: 20}
+      margin: { top: 10, bottom: 5, left: 15, right: 15 }
     )
+    
+    # File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
+    # return
 
     bill_of_lading_pdf_name = "bill_of_lading_#{shipment.imc_reference}.pdf"
     
