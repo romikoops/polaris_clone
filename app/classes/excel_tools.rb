@@ -862,171 +862,170 @@ module ExcelTools
       puts "load pricing row #{index}..."
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
-      # route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       p user.tenant_id
-      route = Route.find_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
       p route
       p hubroute
-      # if !row[:vehicle_type]
-      #   vt = Vehicle.find_by_name("#{row[:mot]}_default")
-      # else
-      #   vt = Vehicle.find_by_name(row[:vehicle_type])
-      # end
+      if !row[:vehicle_type]
+        vt = Vehicle.find_by_name("#{row[:mot]}_default")
+      else
+        vt = Vehicle.find_by_name(row[:vehicle_type])
+      end
 
-      # load_types = [
-      #   'lcl'
-      # ]
+      load_types = [
+        'lcl'
+      ]
 
-      # tt_obj = {}
+      tt_obj = {}
 
-      # if !row[:cargo_type]
-      #   load_types.each do |lt|
-      #     tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
-      #   end
-      # else
-      #   load_types.each do |lt|
-      #     tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
-      #   end
-      # end
+      if !row[:cargo_type]
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
+        end
+      else
+        load_types.each do |lt|
+          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
+        end
+      end
 
-      # hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
 
-      # if !dedicated
-      #   cust_id = nil
-      #   ded_bool = false
-      # elsif !row[:customer_id] && dedicated
-      #   cust_id = user.id
-      #   ded_bool = false
-      # elsif row[:customer_id] && dedicated
-      #   cust_id = row[:customer_id].to_i
-      #   ded_bool = true
-      # end
+      if !dedicated
+        cust_id = nil
+        ded_bool = false
+      elsif !row[:customer_id] && dedicated
+        cust_id = user.id
+        ded_bool = false
+      elsif row[:customer_id] && dedicated
+        cust_id = row[:customer_id].to_i
+        ded_bool = true
+      end
 
-      # lcl_obj = {
-      #   BAS: {
-      #     currency: row[:lcl_currency],
-      #     rate: row[:lcl_rate_wm],
-      #     min: row[:lcl_rate_min],
-      #     rate_basis: 'PER_CBM'
-      #   },
-      #   HAS: {
-      #     currency: row[:lcl_currency],
-      #     rate: row[:lcl_heavy_weight_surcharge_wm],
-      #     min: row[:lcl_heavy_weight_surcharge_min],
-      #     rate_basis: 'PER_CBM'
-      #   },
-      #   OHC: {
-      #     currency: row[:ohc_currency],
-      #     cbm: row[:ohc_cbm],
-      #     ton: row[:ohc_ton],
-      #     min: row[:ohc_min],
-      #     rate_basis: 'PER_CBM_TON'
-      #   },
-      #   DHC: {
-      #     currency: row[:dhc_currency],
-      #     rate: row[:dhc],
-      #     rate_basis: 'PER_ITEM'
-      #     # cbm: row[:dhc_cbm],
-      #     # ton: row[:dhc_ton],
-      #     # min: row[:dhc_min],
-      #     # rate_basis: 'PER_CBM_TON'
-      #   },
-      #   CUSTOMS: {
-      #     currency: row[:customs_currency],
-      #     rate: row[:customs_clearance],
-      #     rate_basis: 'PER_SHIPMENT'
-      #   },
-      #   CFS: {
-      #     currency: row[:cfs_currency],
-      #     rate: row[:cfs_terminal_charges],
-      #     rate_basis: 'PER_CBM'
-      #   },
-      #   LS: {
-      #     currency: row[:ls_currency],
-      #     rate: row[:liner_service_fee],
-      #     rate_basis: 'PER_ITEM'
-      #   },
-      #   LCLS: {
-      #     currency: row[:lcls_currency],
-      #     cbm: row[:lcl_service_cbm],
-      #     ton: row[:lcl_service_ton],
-      #     min: row[:lcl_service_min],
-      #     rate_basis: 'PER_CBM_TON'
-      #   },
-      #   ISPS: {
-      #     currency: row[:isps_currency],
-      #     rate: row[:isps],
-      #     rate_basis: 'PER_SHIPMENT'
-      #   },
-      #   DDF: {
-      #     currency: row[:ddf_currency],
-      #     rate: row[:ddf],
-      #     rate_basis: 'PER_SHIPMENT'
-      #   },
-      #   ODF: {
-      #     currency: row[:odf_currency],
-      #     rate: row[:odf],
-      #     rate_basis: 'PER_SHIPMENT'
-      #   },
+      lcl_obj = {
+        BAS: {
+          currency: row[:lcl_currency],
+          rate: row[:lcl_rate_wm],
+          min: row[:lcl_rate_min],
+          rate_basis: 'PER_CBM'
+        },
+        HAS: {
+          currency: row[:lcl_currency],
+          rate: row[:lcl_heavy_weight_surcharge_wm],
+          min: row[:lcl_heavy_weight_surcharge_min],
+          rate_basis: 'PER_CBM'
+        },
+        OHC: {
+          currency: row[:ohc_currency],
+          cbm: row[:ohc_cbm],
+          ton: row[:ohc_ton],
+          min: row[:ohc_min],
+          rate_basis: 'PER_CBM_TON'
+        },
+        DHC: {
+          currency: row[:dhc_currency],
+          rate: row[:dhc],
+          rate_basis: 'PER_ITEM'
+          # cbm: row[:dhc_cbm],
+          # ton: row[:dhc_ton],
+          # min: row[:dhc_min],
+          # rate_basis: 'PER_CBM_TON'
+        },
+        CUSTOMS: {
+          currency: row[:customs_currency],
+          rate: row[:customs_clearance],
+          rate_basis: 'PER_SHIPMENT'
+        },
+        CFS: {
+          currency: row[:cfs_currency],
+          rate: row[:cfs_terminal_charges],
+          rate_basis: 'PER_CBM'
+        },
+        LS: {
+          currency: row[:ls_currency],
+          rate: row[:liner_service_fee],
+          rate_basis: 'PER_ITEM'
+        },
+        LCLS: {
+          currency: row[:lcls_currency],
+          cbm: row[:lcl_service_cbm],
+          ton: row[:lcl_service_ton],
+          min: row[:lcl_service_min],
+          rate_basis: 'PER_CBM_TON'
+        },
+        ISPS: {
+          currency: row[:isps_currency],
+          rate: row[:isps],
+          rate_basis: 'PER_SHIPMENT'
+        },
+        DDF: {
+          currency: row[:ddf_currency],
+          rate: row[:ddf],
+          rate_basis: 'PER_SHIPMENT'
+        },
+        ODF: {
+          currency: row[:odf_currency],
+          rate: row[:odf],
+          rate_basis: 'PER_SHIPMENT'
+        },
         
-      # }
-      # customsObj = {
-      #     currency: row[:exp_currency],
-      #     fee: row[:exp_declaration],
-      #     limit: row[:exp_limit],
-      #     extra: row[:exp_extra]
-      #   }
-      # price_obj = {"lcl" =>lcl_obj.to_h}
+      }
+      customsObj = {
+          currency: row[:exp_currency],
+          fee: row[:exp_declaration],
+          limit: row[:exp_limit],
+          extra: row[:exp_extra]
+        }
+      price_obj = {"lcl" =>lcl_obj.to_h}
       
-      # if dedicated
-      #   load_types.each do |lt|
-      #     uuid = SecureRandom.uuid
-      #     tmpItem = {data: price_obj[lt]}
-      #     pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-      #     priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-      #     tmpItem[:_id] = priceKey;
-      #     tmpItem[:tenant_id] = user.tenant_id;
-      #     userObj = {}
-      #     userObj[pathKey] = priceKey
-      #     update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-      #     if !new_path_pricings[pathKey]
-      #       new_path_pricings[pathKey] = {}
-      #     end
-      #     update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-      #     update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
-      #     new_path_pricings[pathKey]["#{user.id}"] = priceKey
-      #   end
-      # else
-      #   load_types.each do |lt|
-      #     uuid = SecureRandom.uuid
-      #     tmpItem = {data: price_obj[lt]}
-      #     pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-      #     priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-      #     tmpItem[:_id] = priceKey
-      #     tmpItem[:route] = route.id
-      #     tmpItem[:hub_route] = hubroute.id
-      #     tmpItem[:tenant_id] = user.tenant_id
-      #     pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-      #     update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-      #     if !new_path_pricings[pathKey]
-      #       new_path_pricings[pathKey] = {}
-      #     end
+      if dedicated
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          tmpItem = {data: price_obj[lt]}
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
+          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
+          tmpItem[:_id] = priceKey;
+          tmpItem[:tenant_id] = user.tenant_id;
+          userObj = {}
+          userObj[pathKey] = priceKey
+          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+          new_path_pricings[pathKey]["#{user.id}"] = priceKey
+        end
+      else
+        load_types.each do |lt|
+          uuid = SecureRandom.uuid
+          tmpItem = {data: price_obj[lt]}
+          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
+          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
+          tmpItem[:_id] = priceKey
+          tmpItem[:route] = route.id
+          tmpItem[:hub_route] = hubroute.id
+          tmpItem[:tenant_id] = user.tenant_id
+          pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          if !new_path_pricings[pathKey]
+            new_path_pricings[pathKey] = {}
+          end
 
-      #     new_path_pricings[pathKey]["open"] = priceKey
-      #     new_path_pricings[pathKey]["hub_route"] = hubroute.id
-      #     new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
-      #     new_path_pricings[pathKey]["route"] = route.id
-      #     new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
-      #   end
-      # end
+          new_path_pricings[pathKey]["open"] = priceKey
+          new_path_pricings[pathKey]["hub_route"] = hubroute.id
+          new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
+          new_path_pricings[pathKey]["route"] = route.id
+          new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
+        end
+      end
     end
 
-    # npps = []
-    # new_path_pricings.each do |key, value|
-    #   tmpObj = value
-    #   ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
-    # end
+    npps = []
+    new_path_pricings.each do |key, value|
+      tmpObj = value
+      ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+    end
   end
 
   def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)

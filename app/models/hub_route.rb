@@ -18,8 +18,8 @@ class HubRoute < ApplicationRecord
     p d_hubs[0].tenant_id
     p o_hubs[0].tenant_id
     newname = "#{o_hubs[0].name} - #{d_hubs[0].name}"
-    return route.hub_routes.find_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
-    # return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
+    
+    return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
   end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length, vehicle_type_id)
