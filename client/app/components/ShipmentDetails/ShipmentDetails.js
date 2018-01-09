@@ -140,7 +140,7 @@ export class ShipmentDetails extends Component {
         const addObj = this.state[key1];
         addObj[key2] = val;
         let fullAddress = this.state[key1].fullAddress;
-        // debugger;
+        // ;
         if (fullAddress) {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }

@@ -56,7 +56,7 @@ export class UserDashboard extends Component {
 
     render() {
         const { theme, hubs, dashboard, user } = this.props;
-        // debugger;
+        // ;
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }

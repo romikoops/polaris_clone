@@ -40,7 +40,8 @@ class AdminPricings extends Component {
     render() {
         const {selectedPricing} = this.state;
         const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
-
+        const filteredClients = clients.filter(x => !x.guest);
+        console.log(filteredClients);
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -66,12 +67,12 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={clients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch}  />}
+                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={filteredClients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch}  />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/clients"
-                        render={props => <AdminPricingsClientIndex theme={theme} clients={clients} adminTools={adminDispatch} {...props}  />}
+                        render={props => <AdminPricingsClientIndex theme={theme} clients={filteredClients} adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact
@@ -86,7 +87,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings/routes/:id"
-                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={clients} routePricings={routePricings} adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={filteredClients} routePricings={routePricings} adminActions={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>

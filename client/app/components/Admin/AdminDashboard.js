@@ -53,7 +53,7 @@ export class AdminDashboard extends Component {
 
     render() {
         const { theme, dashData, clients, hubs, hubHash, adminDispatch } = this.props;
-        // debugger;
+        // ;
         if (!dashData) {
             return <h1>NO DASHBOARD DATA</h1>;
         }

@@ -85,7 +85,7 @@ export class HSCodeRow extends Component {
                         <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`}>
                             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
                                 <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
-                                <p className="flex-100">{containerDescriptions[cont.sizeClass]}</p>
+                                <p className="flex-100">{containerDescriptions[cont.size_class]}</p>
                             </div>
                             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
                                 <p className={`flex-100 ${styles.cell_header}`}>Net Weight</p>
@@ -93,20 +93,15 @@ export class HSCodeRow extends Component {
                             </div>
                             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
                                 <p className={`flex-100 ${styles.cell_header}`}> Gross Weight</p>
-                                <p className="flex-100">{parseInt(cont.payload_in_kg, 10) + parseInt(cont.tareWeight, 10)}{' '} kg</p>
+                                <p className="flex-100">{parseInt(cont.payload_in_kg, 10) + parseInt(cont.tare_weight, 10)}{' '} kg</p>
 
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-                                <p className={`flex-100 ${styles.cell_header}`}>No. of Containers:{' '}</p>
-
-                                <p className="flex-100">{cont.quantity}</p>
                             </div>
                             <div className="flex-10 layout-row layout-align-start-center layout-wrap">
                                 <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
 
                                 <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
                             </div>
-                            <div className="flex-20 layout-row layout-align-start-center">
+                            <div className="flex-100 layout-row layout-align-start-center">
                                 <NamedAsync
                                     classes="flex-50"
                                     multi
@@ -116,6 +111,9 @@ export class HSCodeRow extends Component {
                                     loadOptions={getOptions}
                                     onChange={this.props.setCode}
                                 />
+                                 <div className="flex-50 layout-row layout-wrap">
+                                    {hsCodes[cont.id] ? hsCodes[cont.id].map((hs) => {return <HSCell code={hs} cargoId={cont.id} />;}) : ''}
+                                </div>
                             </div>
                         </div>
                     );

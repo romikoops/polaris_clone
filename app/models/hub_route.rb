@@ -6,17 +6,20 @@ class HubRoute < ApplicationRecord
   belongs_to :endhub, class_name: "Hub"
 
   def self.create_from_route(route, mot, tenant_id)
-    o_hubs = route.origin_nexus.hubs_by_type(mot)
+    o_hubs = route.origin_nexus.hubs_by_type(mot, tenant_id)
     if o_hubs.empty?
       o_hubs = [Hub.create_from_nexus(route.origin_nexus, mot, tenant_id)]
     end
-    d_hubs = route.destination_nexus.hubs_by_type(mot)
+    d_hubs = route.destination_nexus.hubs_by_type(mot, tenant_id)
     if d_hubs.empty?
       d_hubs = [Hub.create_from_nexus(route.destination_nexus, mot, tenant_id)]
     end
-    
+
+    p d_hubs[0].tenant_id
+    p o_hubs[0].tenant_id
     newname = "#{o_hubs[0].name} - #{d_hubs[0].name}"
-    return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
+    return route.hub_routes.find_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
+    # return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
   end
 
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length, vehicle_type_id)
@@ -59,6 +62,45 @@ class HubRoute < ApplicationRecord
         
       end
       tmp_date += 1.day
+    end
+  end
+
+  def self.fix_hubs
+    hrs = HubRoute.all
+    hrs.each do |hr|
+      p "HUBROUTE #{hr.id}"
+      route = hr.route
+      o_hub = hr.starthub
+      d_hub = hr.endhub
+      mot = hr.schedules.first.mode_of_transport
+      if o_hub.tenant_id != route.tenant_id
+        p route.tenant_id
+        p o_hub.tenant_id
+        o_hubs = route.origin_nexus.hubs_by_type(mot, route.tenant_id)
+        if o_hubs[0]
+          hr.starthub = o_hubs[0]
+        else
+          new_hub = o_hub.as_json
+          new_hub["tenant_id"] = route.tenant_id
+          new_hub.delete("id")
+          hr.starthub = Hub.create!(new_hub)
+        end
+        
+      end
+      if d_hub.tenant_id != route.tenant_id
+        p route.tenant_id
+        p d_hub.tenant_id
+        d_hubs = route.destination_nexus.hubs_by_type(mot, route.tenant_id)
+        if d_hubs[0]
+          hr.endhub = d_hubs[0]
+        else
+          new_hub = d_hub.as_json
+          new_hub["tenant_id"] = route.tenant_id
+          new_hub.delete("id")
+          hr.endhub = Hub.create!(new_hub)
+        end
+      end
+      hr.save!
     end
   end
 

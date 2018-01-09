@@ -21,7 +21,7 @@ export class AdminPricingsRouteIndex extends Component {
     }
 
     backToIndex() {
-        // debugger;
+        // ;
         // this.setState({redirect: true});
         history.goBack();
     }

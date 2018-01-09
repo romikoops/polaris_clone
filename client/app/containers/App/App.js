@@ -36,7 +36,7 @@ class App extends Component {
         const { tenant, isFetching, user, loggedIn } = this.props;
         const theme = tenant.data.theme;
         return (
-            <div className="layout-fill layout-column scroll">
+            <div className="layout-fill layout-column scroll layout-align-end">
                 {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
                 <Switch className="flex">
                     <Route
@@ -44,10 +44,6 @@ class App extends Component {
                         path="/"
                         render={props => <Landing theme={theme} {...props} />}
                     />
-                    {/* <Route
-                        path="/booking"
-                        render={props => <Shop theme={theme} {...props} />}
-                    /> */}
                     <PrivateRoute
                         path="/booking"
                         component={Shop}
@@ -55,10 +51,6 @@ class App extends Component {
                         loggedIn={loggedIn}
                         theme={theme}
                     />
-                    {/* <Route
-                        path="/admin"
-                        render={props => <Admin theme={theme} {...props} />}
-                    /> */}
                     <AdminPrivateRoute
                         path="/admin"
                         component={Admin}

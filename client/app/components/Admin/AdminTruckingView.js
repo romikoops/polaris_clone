@@ -131,7 +131,7 @@ export class AdminTruckingView extends Component {
         };
         const ZipView = ({pricingInstance, viewExpander, expandFn, panelStyle}) => {
             // const expandStyle = expander[pricingInstance._id] ? styles.trucking_expanded : styles.trucking_closed;
-            // debugger;
+            // ;
             return (<div key={v4()} className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.trucking_zip}`}>
                 <div className={`flex-100 layout-row layout-align-start-center ${styles.trucking_header_card}`}>
                     <div className={`flex layout-row layout-align-start-center ${styles.trucking_city_header}`}>

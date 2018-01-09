@@ -24,7 +24,6 @@ export class AdminExportChargePanel extends Component {
         // const { expanded } = this.state;
         const { theme, hub, charge} = this.props;
         if (!hub || !charge) {
-            debugger;
             return '';
         }
         // const bg1 = { backgroundImage: 'url(' + hub.location.photo + ')' };
@@ -40,19 +39,19 @@ export class AdminExportChargePanel extends Component {
         const exportArr = [];
         const ChargeSection = ({tag, value, currency}) => {
             return (<div className={`flex-90 layout-row layout-align-space-between-center ${styles.charge_opt}`}>
-                            <p className="flex-none"> {serviceChargeNames[tag]}</p>
-                            <p className="flex-none"> {value} {currency}</p>
-                        </div>);
+                <p className="flex-none"> {serviceChargeNames[tag]}</p>
+                <p className="flex-none"> {value} {currency}</p>
+            </div>);
         };
         Object.keys(charge).forEach(key => {
-            // debugger;
+            // ;
             if (charge[key] && charge[key].trade_direction && charge[key].trade_direction === 'export') {
-                // debugger;
+                // ;
                 exportArr.push(<ChargeSection key={v4()} tag={key} value={charge[key].value} currency={charge[key].currency}/>);
             }
         });
         // const expandIcon = expanded ? <i className="flex-none fa fa-chevron-up" style={gradientStyle}/> : <i className="flex-none fa fa-chevron-down" style={gradientStyle}/>;
-        // debugger;
+        // ;
         return(
             <div className={`flex-100 ${styles.charge_card} layout-row layout-wrap`}>
 

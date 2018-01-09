@@ -20,7 +20,7 @@ export class UserShipments extends Component {
 
     render() {
       const { theme, hubs, shipments, user } = this.props;
-        // debugger;
+        // ;
         if (!user) {
             return <h1>NO DATA</h1>;
         }

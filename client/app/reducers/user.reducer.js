@@ -164,7 +164,7 @@ export function users(state = initialState, action) {
             });
             return reqDocUpload;
         case userConstants.UPLOAD_DOCUMENT_SUCCESS:
-            debugger;
+
             const docs = state.shipment.documents;
             docs.push(action.payload);
             const succDocUpload = merge({}, state, {

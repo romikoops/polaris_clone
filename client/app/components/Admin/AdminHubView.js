@@ -18,7 +18,7 @@ export class AdminHubView extends Component {
     }
     render() {
         const {theme, hubData, hubs, hubHash, adminActions} = this.props;
-        // debugger;s
+        // ;s
         if (!hubData) {
             return '';
         }

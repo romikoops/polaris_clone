@@ -26,7 +26,7 @@ class Landing extends Component {
     }
     shouldComponentUpdate(nextProps) {
         const { loggingIn, registering, loading } = nextProps;
-        // debugger;
+        // ;
         return loading || !(loggingIn || registering);
     }
 
@@ -41,6 +41,7 @@ class Landing extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         const loadingScreen = this.props.loading ? <Loading theme={theme} /> : '';
+        // const loadingScreen = <Loading theme={theme} />;
 
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >

@@ -12,5 +12,10 @@ AWS_KEY=AKIAJ242ZJKJMZPPS65Q
 AWS_SECRET=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
 AWS_REGION=eu-central-1
 AWS_BUCKET=imcdev
+RDS_DB_NAME=ebdb
+RDS_DB_USERNAME=imcdab
+RDS_DB_PASSWORD=Sh1pmetimb3rs
+RDS_HOSTNAME=aa1ezhftkimwbqi.cvwyyvbuvazx.us-east-1.rds.amazonaws.com
+RDS_PORT=5432
 
 # RAILS_SERVE_STATIC_FILES=true

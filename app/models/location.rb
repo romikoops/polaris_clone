@@ -139,8 +139,8 @@ class Location < ApplicationRecord
     end
   end
 
-  def hubs_by_type(hub_type)
-    hubs.where(hub_type: hub_type)
+  def hubs_by_type(hub_type, tenant_id)
+    hubs.where(hub_type: hub_type, tenant_id: tenant_id)
   end
 
   def pretty_hub_type

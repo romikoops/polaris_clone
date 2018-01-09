@@ -38,7 +38,7 @@ export class AdminShipmentView extends Component {
             return <h1>NO DATA</h1>;
         }
         const { contacts, shipment, documents, cargoItems, containers, schedules, hsCodes } = shipmentData;
-        // debugger;
+        // ;
         const hubKeys = schedules[0].hub_route_key.split('-');
         const hubsObj = {startHub: {}, endHub: {}};
         hubs.forEach(c => {

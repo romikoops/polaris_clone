@@ -21,7 +21,7 @@ export class AdminShipmentsIndex extends Component {
         console.log(this.props);
         // const {selectedShipment} = this.state;
         const { theme, hubs, shipments, clients, handleShipmentAction } = this.props;
-        // debugger;
+        // ;
         if (!shipments || !hubs || !clients) {
             return '';
         }
@@ -33,7 +33,7 @@ export class AdminShipmentsIndex extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
-        // debugger;
+        // ;
         const openShipments = shipments.open.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
         });
