@@ -50,10 +50,15 @@ class OfferCalculator
 
   def calc_offer!
     determine_route!
-    determine_hubs!    
+        byebug
+    determine_hubs!   
+        byebug 
     determine_longest_trucking_time!
+        byebug
     determine_schedules!
+        byebug
     add_schedules_charges!
+        byebug
     
     convert_currencies!
   end

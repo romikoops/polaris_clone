@@ -8,7 +8,8 @@ import { RegistrationPage } from '../../containers/RegistrationPage/Registration
 export class LoginRegistrationWrapper extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+        };
         this.components = { LoginPage, RegistrationPage };
         this.togglePrompt = {
             LoginPage: {
@@ -24,23 +25,19 @@ export class LoginRegistrationWrapper extends Component {
 
     render() {
         const toggleComp = (CurrentComp) => {
-            const NextComp = CurrentComp === LoginPage ? RegistrationPage : LoginPage;
+            const nextComp = CurrentComp === 'LoginPage' ? 'RegistrationPage' : 'LoginPage';
             this.setState({
-                Comp: NextComp
+                compName: nextComp,
             });
         };
-        const { initialCompName } = this.props;
-        const DefaultComp = initialCompName ? this.components[initialCompName] : LoginPage;
-    	const Comp = this.state.Comp || DefaultComp;
-        const compName = Comp.WrappedComponent.name;
+        const compName = this.state.compName ? this.state.compName : this.props.initialCompName;
+    	const Comp = this.components[compName];
         const compProps = this.props[compName + 'Props'];
         return (
             <div>
                 <div>
                     <Comp {...compProps} />
                 </div>
-
-
                 <hr className={styles.toggle_prompt_separator}/>
                 <div className="layout-row layout-align-space-between">
                     <div>
@@ -48,7 +45,7 @@ export class LoginRegistrationWrapper extends Component {
                     </div>
                     <div
                         className={`${defs.emulate_link}`}
-                        onClick={() => toggleComp(Comp)}
+                        onClick={() => toggleComp(compName)}
                     >
                         {this.togglePrompt[compName].linkText}
                     </div>

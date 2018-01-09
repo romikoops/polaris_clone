@@ -4,7 +4,7 @@ class Container < ApplicationRecord
   #
   # DESCRIPTIONS         = ContainerLookups.get_descriptions
   # WEIGHTS              = ContainerLookups.get_weights
-  # PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
+  PRICING_WEIGHT_STEPS = ContainerLookups.get_pricing_weight_steps
 
   belongs_to :shipment
 

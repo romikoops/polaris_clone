@@ -319,7 +319,7 @@ export class BookingDetails extends Component {
                     insurance={this.state.insurance}
                     shipmentDispatch={shipmentDispatch}
                 />
-               {/* <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+               <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         <div className="flex-none layout-row">
                             <RoundButton
@@ -329,15 +329,15 @@ export class BookingDetails extends Component {
                                 text="Finish Booking"
                             />
                         </div>
-                        <div className="flex-none offset-5 layout-row">
+                       {/* <div className="flex-none offset-5 layout-row">
                             <RoundButton
                                 handleNext={this.saveDraft}
                                 text="Save as Draft"
                                 iconClass="fa-floppy-o"
                             />
-                        </div>
+                        </div> */}
                     </div>
-                </div>*/}
+                </div>
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>

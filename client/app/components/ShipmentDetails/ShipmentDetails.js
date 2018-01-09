@@ -169,7 +169,7 @@ export class ShipmentDetails extends Component {
         containerErrors[name] = hasError;
 
         this.setState({
-            cargoItems: itemArr,
+            containers: itemArr,
             containerErrors: containerErrors
         });
     }
@@ -226,7 +226,7 @@ export class ShipmentDetails extends Component {
         const currArray = this.state.containers;
         currArray.unshift(newCont);
         this.setState({
-            cargoItems: currArray,
+            containers: currArray,
             containerErrors: newErrors
         });
     }

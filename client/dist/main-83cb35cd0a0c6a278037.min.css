@@ -228,6 +228,8 @@ img.Header---logo---2g7zk {
   color: #FFFFFF;
   font-size: 16px;
   line-height: 18px; }
+hr.LoginRegistrationWrapper---toggle_prompt_separator---2jSXA {
+  margin: 30px 0; }
 form.LoginPage---login_form---1oQZM {
   width: 317px; }
   form.LoginPage---login_form---1oQZM ::-webkit-input-placeholder {
@@ -277,6 +279,48 @@ form.LoginPage---login_form---1oQZM {
   font-size: 13px;
   float: right;
   margin-top: -20px; }
+form.RegistrationPage---registration_form---2Gxlx {
+  width: 317px; }
+  form.RegistrationPage---registration_form---2Gxlx ::-webkit-input-placeholder {
+    /* Chrome/Opera/Safari */
+    color: #212121;
+    font-size: 14px; }
+  form.RegistrationPage---registration_form---2Gxlx ::-moz-placeholder {
+    /* Firefox 19+ */
+    color: #212121;
+    font-size: 14px; }
+  form.RegistrationPage---registration_form---2Gxlx :-ms-input-placeholder {
+    /* IE 10+ */
+    color: #212121;
+    font-size: 14px; }
+  form.RegistrationPage---registration_form---2Gxlx :-moz-placeholder {
+    /* Firefox 18- */
+    color: #212121;
+    font-size: 14px; }
+  form.RegistrationPage---registration_form---2Gxlx input, form.RegistrationPage---registration_form---2Gxlx label {
+    display: block; }
+  form.RegistrationPage---registration_form---2Gxlx hr {
+    border: 0.5px solid #0a0a0a;
+    margin: 6px 0 24px 0; }
+  form.RegistrationPage---registration_form---2Gxlx .RegistrationPage---form_group_submit_btn---5YRXV {
+    padding-top: 25px; }
+  form.RegistrationPage---registration_form---2Gxlx label {
+    text-transform: uppercase;
+    margin-bottom: 4px; }
+
+.RegistrationPage---form_control---2WlMm {
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  padding: 4px 0; }
+  .RegistrationPage---form_control---2WlMm:focus {
+    outline: none;
+    background: rgba(0, 0, 0, 0.016); }
+  .RegistrationPage---form_control---2WlMm:focus + hr {
+    border-width: 1px;
+    margin-bottom: 23px; }
 .Modal---full_size---gkNOG {
   position: fixed;
   top: 0;
@@ -291,54 +335,11 @@ form.LoginPage---login_form---1oQZM {
 .Modal---modal---3rYbl {
   z-index: 200;
   position: fixed;
-  padding: 30px;
+  padding: 60px 30px;
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.6);
   background: white;
   width: 40vw;
-  height: 60vh;
-  top: calc(50vh - 60vh/2);
   left: calc(50vw - 40vw/2); }
-.LandingTopAuthed---landing_top_authed---1Nnrj {
-  color: #212121;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url("https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg");
-  height: 65vh;
-  background-size: cover;
-  background-position: center;
-  padding-bottom: 120px;
-  position: relative; }
-
-.LandingTopAuthed---header_text---2PLIr {
-  margin: 20px 0 22px 0;
-  color: #2C2C2C;
-  font-size: 21px; }
-.CardLink---card_link---3cTDQ {
-  height: 250px;
-  margin-right: 20px;
-  min-width: 400px;
-  max-width: 453.63px;
-  box-shadow: 1px 1.5px 6px rgba(0, 0, 0, 0.12);
-  cursor: pointer; }
-  .CardLink---card_link---3cTDQ:hover {
-    opacity: 0.9; }
-
-.CardLink---card_img---2K_xi {
-  width: 100% !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important; }
-
-.CardLink---card_action---3mArU {
-  width: 100%;
-  background: white;
-  padding: 30px 25px; }
-  .CardLink---card_action---3mArU p {
-    color: black;
-    margin: 0;
-    background: transparent; }
-  .CardLink---card_action---3mArU i {
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important; }
-.CardLinkRow---card_link_row---12aqr {
-  margin-bottom: 77px; }
 .ActiveRoutes---active_routes---3Zp_L {
   height: max-content;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
@@ -374,6 +375,48 @@ form.LoginPage---login_form---1oQZM {
   padding: 70px 0 40px 0; }
   .ActiveRoutes---service_label---wr3mm h2 {
     font-weight: normal; }
+
+.ActiveRoutes---slick_slide---3J6lp {
+  height: 275px;
+  width: 450px;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; }
+
+.ActiveRoutes---slick_content---201J9 {
+  position: absolute;
+  height: 100%;
+  min-height: 275px;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; }
+
+.ActiveRoutes---slick_city---3edUl {
+  position: absolute;
+  top: 20px;
+  left: 58px;
+  color: white;
+  font-size: 40px;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.7);
+  font-weight: normal; }
+
+.ActiveRoutes---slick_country---2VWXr {
+  position: absolute;
+  top: 70px;
+  left: 58px;
+  color: white;
+  font-size: 24px;
+  text-shadow: 0 2px 9px rgba(0, 0, 0, 0.8); }
+
+.ActiveRoutes---slider_container---1MC9K {
+  width: 100%;
+  height: 275px; }
+  .ActiveRoutes---slider_container---1MC9K *:not(.ActiveRoutes---slick-dots---2zZ_p) {
+    min-height: 0;
+    min-width: 0;
+    height: 100%; }
 .BlogPostHighlights---blog_post---18XPT {
   height: 379px;
   width: 402px;
@@ -482,6 +525,62 @@ form.LoginPage---login_form---1oQZM {
   .Landing---btm_promo---2bLDS i {
     color: #83BC45;
     margin-right: 10px; }
+.Loading---loader_box---3eMhX {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100; }
+
+.Loading---loader---35Bja {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: whitesmoke; }
+
+.Loading---loader_anim-enter---SNqeU {
+  opacity: 0.01; }
+
+.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
+  opacity: 1;
+  transition: opacity 500ms ease-in; }
+
+.Loading---loader_anim-leave---2Cea6 {
+  opacity: 1; }
+
+.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in; }
+
+@keyframes Loading---dot_bulge---12l94 {
+  0%, 100% {
+    height: 10px;
+    width: 10px; }
+  50% {
+    height: 20px;
+    width: 20px; } }
+
+@keyframes Loading---infinite-spinning---1H3MP {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.Loading---dot---3PVfi, .Loading---dot1---bigVG, .Loading---dot2---IgUia, .Loading---dot3---1aXbX {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px; }
+
+.Loading---dot_row---2N1bU {
+  width: 200px;
+  height: 50px; }
 .ChooseShipment---card_link---258oX {
   width: 420px;
   height: 270px;
@@ -553,6 +652,34 @@ form.LoginPage---login_form---1oQZM {
 
 .Alert---success---1ogNR {
   background: rgba(4, 193, 4, 0.85); }
+.CardLink---card_link---3cTDQ {
+  height: 250px;
+  margin-right: 20px;
+  min-width: 400px;
+  max-width: 453.63px;
+  box-shadow: 1px 1.5px 6px rgba(0, 0, 0, 0.12);
+  cursor: pointer; }
+  .CardLink---card_link---3cTDQ:hover {
+    opacity: 0.9; }
+
+.CardLink---card_img---2K_xi {
+  width: 100% !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important; }
+
+.CardLink---card_action---3mArU {
+  width: 100%;
+  background: white;
+  padding: 30px 25px; }
+  .CardLink---card_action---3mArU p {
+    color: black;
+    margin: 0;
+    background: transparent; }
+  .CardLink---card_action---3mArU i {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important; }
+.CardLinkRow---card_link_row---12aqr {
+  margin-bottom: 77px; }
 .Shop---pre_footer_break---3glHw {
   height: 65px;
   background: #F5F5F5; }
@@ -907,6 +1034,16 @@ form.LoginPage---login_form---1oQZM {
   min-height: 550px;
   height: max-content;
   padding: 15px 0; }
+.ShipmentContainers---container_row---3eAld {
+  padding: 4px;
+  border: 1px solid rgba(0, 12, 1, 0.1);
+  box-shadow: 1px 1px 1px rgba(2, 3, 4, 0.25);
+  margin-bottom: 15px; }
+
+.ShipmentContainers---cell_header---XtfYK {
+  font-size: 12px;
+  margin: 0; }
+
 .ShipmentContainers---input_box---6nxnC {
   height: 38px;
   width: 170px;
@@ -1238,62 +1375,10 @@ p.RouteResult---sched_elem---ftf7I {
   color: #2C2C2C;
   font-size: 21px;
   line-height: 24px; }
-.Loading---loader_box---3eMhX {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  z-index: 100; }
 
-.Loading---loader---35Bja {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background: whitesmoke; }
-
-.Loading---loader_anim-enter---SNqeU {
-  opacity: 0.01; }
-
-.Loading---loader_anim-enter---SNqeU.Loading---loader_anim-enter-active---1GR11 {
-  opacity: 1;
-  transition: opacity 500ms ease-in; }
-
-.Loading---loader_anim-leave---2Cea6 {
-  opacity: 1; }
-
-.Loading---loader_anim-leave---2Cea6.Loading---loader_anim-leave-active---Nf8e1 {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in; }
-
-@keyframes Loading---dot_bulge---12l94 {
-  0%, 100% {
-    height: 10px;
-    width: 10px; }
-  50% {
-    height: 20px;
-    width: 20px; } }
-
-@keyframes Loading---infinite-spinning---1H3MP {
-  from {
-    transform: rotate(0deg); }
-  to {
-    transform: rotate(360deg); } }
-
-.Loading---dot---3PVfi, .Loading---dot1---bigVG, .Loading---dot2---IgUia, .Loading---dot3---1aXbX {
-  border-radius: 50%;
-  height: 15px;
-  width: 15px; }
-
-.Loading---dot_row---2N1bU {
-  width: 200px;
-  height: 50px; }
+.ChooseRoute---doc_title---3qEI- {
+  font-size: 10px;
+  margin: 2px; }
 .BookingDetails---contacts_border---1gXHB {
   margin-top: 80px; }
 
@@ -1547,7 +1632,8 @@ p.RouteResult---sched_elem---ftf7I {
 
 .CargoDetails---box_content---hk7_P.CargoDetails---show---1Shds {
   visibility: visible;
-  height: 199px; }
+  height: max-content;
+  overflow: visible; }
 
 .CargoDetails---no_customs_box---1SHYT {
   transition: all 1s ease;
@@ -1574,6 +1660,47 @@ p.RouteResult---sched_elem---ftf7I {
   width: 100%;
   height: 100%;
   padding: 0; }
+.HSCodeRow---container_row---2m4vm {
+  padding: 4px;
+  border: 1px solid rgba(0, 12, 1, 0.1);
+  margin-bottom: 15px;
+  z-index: 50; }
+
+.HSCodeRow---cell_header---3Ikeh {
+  font-size: 12px;
+  margin: 0; }
+
+.HSCodeRow---input_box---3uXJd {
+  height: 38px;
+  width: 170px;
+  border: 1px solid #F2F2F2;
+  border-radius: 3px;
+  background-color: #F9F9F9;
+  box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5); }
+
+.HSCodeRow---input_box---3uXJd input {
+  height: 38px;
+  border: 1px solid #F2F2F2;
+  background-color: #F9F9F9;
+  box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+  padding: 0 10px; }
+  .HSCodeRow---input_box---3uXJd input:focus {
+    outline: none; }
+
+.HSCodeRow---select---3HINv {
+  width: 195px; }
+
+.HSCodeRow---add_unit---tjI8c {
+  margin-top: 20px;
+  cursor: pointer; }
+  .HSCodeRow---add_unit---tjI8c i {
+    margin-right: 15px; }
+
+.HSCodeRow---hs_cell---10jt4 {
+  padding: 2px; }
+  .HSCodeRow---hs_cell---10jt4 p {
+    margin: 2px;
+    font-size: 12px; }
 .BookingConfirmation---icon---3vNS8 {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
@@ -1658,6 +1785,65 @@ p.RouteResult---sched_elem---ftf7I {
     height: 18px; }
     .CargoItemDetails---info---3-Zgh p sup {
       font-size: 10px; }
+
+.CargoItemDetails---open---3CIRR {
+  height: max-content;
+  overflow: visible;
+  visibility: normal;
+  width: 250px;
+  position: absolute;
+  z-index: 50; }
+
+.CargoItemDetails---closed---3ZzeO {
+  height: 0;
+  visibility: hidden;
+  overflow: hidden; }
+
+.CargoItemDetails---hs_cell---28aVP {
+  transition: all 1s bounce;
+  height: max-content; }
+
+.CargoItemDetails---cell_data_toggle---1_25P {
+  transition: all 1s bounce;
+  background: whitesmoke; }
+.HsCodeViewer---backdrop---3EKS6 {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  top: 0;
+  right: 0;
+  background: rgba(0, 12, 0, 0.25); }
+
+.HsCodeViewer---content---PeCgr {
+  background: #FFFFFF;
+  border: 1px solid rgba(1, 4, 6, 0.25);
+  box-shadow: 1px 2px 1px rgba(0, 12, 2, 0.25);
+  width: 600px;
+  height: max-content;
+  min-height: 400px;
+  z-index: 100;
+  padding-left: 15px;
+  overflow-y: scroll; }
+
+.HsCodeViewer---open---1gkBr {
+  height: max-content !important;
+  min-height: 75px;
+  padding-top: 5px;
+  overflow: visible !important; }
+
+.HsCodeViewer---closed---2beS_ {
+  height: 0; }
+  .HsCodeViewer---closed---2beS_ p {
+    font-size: 0px; }
+
+.HsCodeViewer---hs_cell---1fBXZ {
+  transition: all 1s ease;
+  height: max-content; }
+
+.HsCodeViewer---cell_data_toggle---1Hyq_ {
+  transition: all 1s ease;
+  height: max-content; }
 .ContainerDetails---info---2vXj1 {
   color: #2C2C2C;
   font-size: 16px;
@@ -1672,48 +1858,6 @@ p.RouteResult---sched_elem---ftf7I {
     height: 18px; }
     .ContainerDetails---info---2vXj1 p sup {
       font-size: 10px; }
-form.RegistrationPage---registration_form---2Gxlx {
-  width: 317px; }
-  form.RegistrationPage---registration_form---2Gxlx ::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #212121;
-    font-size: 14px; }
-  form.RegistrationPage---registration_form---2Gxlx ::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #212121;
-    font-size: 14px; }
-  form.RegistrationPage---registration_form---2Gxlx :-ms-input-placeholder {
-    /* IE 10+ */
-    color: #212121;
-    font-size: 14px; }
-  form.RegistrationPage---registration_form---2Gxlx :-moz-placeholder {
-    /* Firefox 18- */
-    color: #212121;
-    font-size: 14px; }
-  form.RegistrationPage---registration_form---2Gxlx input, form.RegistrationPage---registration_form---2Gxlx label {
-    display: block; }
-  form.RegistrationPage---registration_form---2Gxlx hr {
-    border: 0.5px solid #0a0a0a;
-    margin: 6px 0 24px 0; }
-  form.RegistrationPage---registration_form---2Gxlx .RegistrationPage---form_group_submit_btn---5YRXV {
-    padding-top: 25px; }
-  form.RegistrationPage---registration_form---2Gxlx label {
-    text-transform: uppercase;
-    margin-bottom: 4px; }
-
-.RegistrationPage---form_control---2WlMm {
-  font-size: 14px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  width: 100%;
-  padding: 4px 0; }
-  .RegistrationPage---form_control---2WlMm:focus {
-    outline: none;
-    background: rgba(0, 0, 0, 0.016); }
-  .RegistrationPage---form_control---2WlMm:focus + hr {
-    border-width: 1px;
-    margin-bottom: 23px; }
 .Footer---footer---2FrqF {
   height: 175px;
   background: #5E5E5E; }
@@ -1864,6 +2008,9 @@ nav.NavSidebar---menu---3eXWA {
   background-color: #F9F9F9;
   box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
   padding: 0 10px; }
+
+.UserAccount---section---wPHLh {
+  min-height: 150px; }
 .Admin---sec_title---13mwW {
   height: 75px; }
 
@@ -2045,6 +2192,9 @@ nav.NavSidebar---menu---3eXWA {
   background-repeat: no-repeat;
   background-position: center; }
 
+.Admin---content_top---cAtIW, .Admin---content_bottom---7q8vT {
+  width: 100%; }
+
 .Admin---icon_box---5tRTw {
   height: 100%;
   padding: 10px; }
@@ -2063,7 +2213,7 @@ nav.NavSidebar---menu---3eXWA {
 .Admin---slider_container---14nZv {
   position: relative;
   overflow-x: scroll;
-  overflow-y: none;
+  overflow-y: hidden;
   height: 250px; }
 
 .Admin---slider_inner---3Sy_k {
@@ -2082,6 +2232,18 @@ nav.NavSidebar---menu---3eXWA {
 .Admin---price_row---7DH8r p {
   margin: 0; }
 
+.Admin---price_subheader---1IKrf {
+  padding: 5px; }
+  .Admin---price_subheader---1IKrf p {
+    margin: 2px;
+    font-size: 14px; }
+
+.Admin---price_cell---1Ejeu {
+  padding: 5px; }
+  .Admin---price_cell---1Ejeu p {
+    margin: 2px;
+    font-size: 12px; }
+
 .Admin---price_row_detail---38XCh {
   margin: 4px 0;
   padding: 5px;
@@ -2097,27 +2259,86 @@ nav.NavSidebar---menu---3eXWA {
     margin: 0; }
 
 .Admin---editor_backdrop---2jGe4 {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: 50; }
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.25); }
 
 .Admin---editor_box---_-uY9 {
   width: 800px;
+  height: 95%;
   background: #FFFFFF;
-  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.45); }
+  box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.45);
+  overflow-y: scroll; }
 
 .Admin---editor_input---3qb-h input {
-  height: 38px;
-  width: 170px;
+  height: 34px !important;
+  width: 95%;
   border: 1px solid #F2F2F2;
   border-radius: 3px;
   background-color: #F9F9F9;
   box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5); }
+
+.Admin---expand_panel---2oHO7 {
+  transition: all 2s bounce; }
+
+.Admin---show_style---3GO4w {
+  height: max-content !important;
+  opacity: 1 !important; }
+
+.Admin---hide_style---1RSY2 {
+  height: 0;
+  opacity: 0; }
+
+.Admin---trucking_city_header---1zPT1 {
+  padding: 4px; }
+  .Admin---trucking_city_header---1zPT1 p {
+    margin: 0; }
+
+.Admin---trucking_city_header_label---1B-zj {
+  font-size: 14px;
+  margin: 0; }
+
+.Admin---trucking_cell---10fjY {
+  padding: 4px; }
+  .Admin---trucking_cell---10fjY p {
+    margin: 0;
+    font-size: 12px; }
+
+.Admin---trucking_cell_label---xuvKA {
+  font-size: 10px; }
+
+.Admin---trucking_zip---2yuHn {
+  margin-bottom: 15px; }
+
+.Admin---trucking_header_card---34Bhq {
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 1px 1px rgba(0, 12, 12, 0.25); }
+
+.Admin---trucking_zip_row---1k_Wk {
+  margin: 4px;
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 1px 1px rgba(0, 12, 12, 0.25); }
+
+.Admin---trucking_panel---31ZRl {
+  transition: all 2s bounce; }
+
+.Admin---trucking_expanded---1Jkqc {
+  height: max-content !important;
+  opacity: 1 !important; }
+
+.Admin---trucking_closed---3yLms {
+  height: 0;
+  opacity: 0;
+  z-index: -1; }
 .AdminHubTile---hub_card---iJa0a {
   width: calc(30% - 10px);
   min-width: 200px;
@@ -2190,7 +2411,6 @@ nav.NavSidebar---menu---3eXWA {
   bottom: 0;
   right: 0;
   left: 0;
-  position: absolute;
   z-index: 12; }
 
 .AdminClientTile---client_card---1IPe6 .AdminClientTile---content---1-5hH p {
@@ -2204,6 +2424,24 @@ nav.NavSidebar---menu---3eXWA {
   -webkit-background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   font-size: 24px !important; }
+
+.AdminClientTile---client_subheader---1vZK3 {
+  padding: 5px; }
+  .AdminClientTile---client_subheader---1vZK3 p {
+    font-size: 14px;
+    margin: 2px; }
+  .AdminClientTile---client_subheader---1vZK3 i {
+    font-size: 14px !important;
+    height: 16px !important;
+    width: 16px !important;
+    margin: 2px; }
+
+.AdminClientTile---client_text---21DDk {
+  padding: 5px;
+  font-size: 12px; }
+  .AdminClientTile---client_text---21DDk p, .AdminClientTile---client_text---21DDk h4 {
+    margin: 2px;
+    flex-flow: row wrap; }
 .AdminShipmentRow---route_result---1CTbX {
   background-color: #FCFCFC;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);
@@ -2286,6 +2524,39 @@ p.AdminShipmentRow---sched_elem---2xCxZ {
     font-size: 16px; }
   .AdminShipmentRow---total_price---1RGUk span.AdminShipmentRow---total_price_currency---2IgEz {
     font-size: 22px; }
+.FileTile---upload_btn_wrapper---1loeh {
+  position: relative;
+  display: inline-block;
+  width: 167px; }
+
+.FileTile---upload_btn_wrapper---1loeh input[type=file] {
+  width: 0;
+  height: 0;
+  opacity: 0; }
+
+.FileTile---upload_btn_wrapper---1loeh form {
+  width: 100%;
+  height: 100%;
+  padding: 0; }
+
+.FileTile---tile---uwf0R {
+  height: 200px;
+  width: 175px;
+  box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.25);
+  margin: 10px;
+  padding: 10px; }
+
+.FileTile---file_header---23Hlt {
+  height: 20px;
+  border-bottom: 1px solid darkslategrey; }
+  .FileTile---file_header---23Hlt p {
+    font-size: 12px;
+    margin: 0; }
+
+.FileTile---file_text---vL8lF p {
+  font-size: 14px;
+  margin: 2px;
+  padding: 4px; }
 .AdminScheduleLine---route_result---MtOWt {
   background-color: #FCFCFC;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.17);

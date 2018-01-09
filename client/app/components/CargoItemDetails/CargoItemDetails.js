@@ -18,7 +18,7 @@ export class CargoItemDetails extends Component {
         console.log(this.state.viewer);
     }
     render() {
-        const { index, item, hsCodes, theme } = this.props;
+        const { index, item, hsCodes, theme, viewHSCodes } = this.props;
         const viewer = this.state.viewer;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -55,10 +55,12 @@ export class CargoItemDetails extends Component {
                     <p>{(item.dimension_y * item.dimension_x * item.dimension_y) / 1000000} m<sup>3</sup></p>
                 </div>
                 <hr className="flex-100"/>
-                <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
-                    <i className="fa fa-eye clip flex-none" style={textStyle} />
-                    <p className="offset-5 flex-none">View Hs Codes</p>
-                </div>
+                {viewHSCodes ?
+                    <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
+                        <i className="fa fa-eye clip flex-none" style={textStyle} />
+                        <p className="offset-5 flex-none">View Hs Codes</p>
+                    </div> :
+                    ''}
                 { viewer ? <HsCodeViewer item={item} hsCodes={hsCodes} theme={theme} close={this.viewHsCodes}/> : ''}
             </div>
         );

@@ -48,7 +48,7 @@ export class BookingConfirmation extends Component {
           const offset = i % 3 !== 0 ? 'offset-5' : '';
           cargo.push(
             <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-              <Comp item={ci} index={i} />
+              <Comp item={ci} index={i} theme={theme} viewHSCodes={false}/>
             </div>
           );
         });
@@ -169,7 +169,7 @@ export class BookingConfirmation extends Component {
                     </div>
 
                 </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                {/* <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         <div className="flex-none layout-row">
 
@@ -187,7 +187,7 @@ export class BookingConfirmation extends Component {
                             />
                         </div>
                     </div>
-                </div>
+                </div>*/}
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                   <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>

@@ -44,7 +44,7 @@ export class HSCodeRow extends Component {
     }
 
     render() {
-        const { containers, cargoItems, hsCodes } = this.props;
+        const { containers, cargoItems, hsCodes, theme } = this.props;
         // const { hsCodes } = this.state;
         const containersAdded = [];
         const cargoItemsAdded = [];
@@ -73,6 +73,9 @@ export class HSCodeRow extends Component {
                     <i className="fa fa-trash" onClick={() => this.props.deleteCode(cargoId, code)}></i>
                 </div>
             </div>);
+        };
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
 
         if (containers) {
@@ -173,6 +176,9 @@ export class HSCodeRow extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div className="layout-row flex-100 layout-wrap">
+                            <h4 className="flex-none clip" style={textStyle}> HS Codes</h4>
+                        </div>
                         <div className="layout-row flex-100 layout-wrap">
                             {containersAdded}
                             {cargoItemsAdded}
