@@ -251,7 +251,7 @@ module ShippingTools
     )
     bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
       bill_of_lading_erb.render,
-      margin: { top: 10, bottom: 5, left: 15, right: 15 }
+      margin: { top: 10, bottom: 5, left: 8, right: 8 }
     )
     
     File.open("bill_of_lading.html", 'wb') { |file| file.write(bill_of_lading_erb.render) }

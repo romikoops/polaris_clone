@@ -1,7 +1,7 @@
 <style media="screen" type="text/css">
   body{
     color: black;
-    font-size: 90%;
+    font-size: 130%;
     font-family: 'Actor';
   }
   .col-xs-12{
@@ -72,37 +72,40 @@
     padding: 0%;
   }
   .watermark {
-  color: #6699ff;
-  font-size: 100pt;
-  -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
-  position: absolute;
-  /*width: 100%;
-  height: 100%;
-  margin: 0;*/
-  z-index: -1;
-  left:200px;
-  top:550px;
-  text-align: center;
-  opacity: 0.1;
+    color: #6699ff;
+    font-size: 100pt;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    position: absolute;
+    /*width: 100%;
+    height: 100%;
+    margin: 0;*/
+    z-index: -1;
+    left:200px;
+    top:550px;
+    text-align: center;
+    opacity: 0.1;
   }
-  .vertical{
-      writing-mode:tb-rl;
-      -webkit-transform:rotate(270deg);
-      -moz-transform:rotate(270deg);
-      -o-transform: rotate(270deg);
-      -ms-transform:rotate(270deg);
-      transform: rotate(270deg);
-      white-space:nowrap;
-      display:block;
-      bottom:0;
-      width:20px;   
+  .wrapper-vertical {
+    transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    text-align: center;
+    height: 25mm;
+    width: 25mm;
+  }
+  .vertical {
+    white-space: nowrap;
+    margin: 0; 
+    font-size: 90%;
   }
   .text{
     padding-left: 2px;
   }
   br{
     padding-bottom: 5px;
+  }
+  .logo {
+    width: 145px;
   }
 </style>
 
@@ -117,38 +120,40 @@
     <!-- first segment  -->
     <div class="col-xs-12 hr-top" style="height: 25mm;">
       <div class="col-xs-5 hr-right">
-        <div class="col-xs-1" style="padding-top: 16%;height: 25mm;">
-          <p class="vertical"><strong> SHIPPER </strong></p>
+        <div class="col-xs-1">
+          <div class="wrapper-vertical">
+            <p class="vertical"><strong> SHIPPER </strong></p>
+          </div>
         </div>
         <div class="col-xs-10 " style="padding-top: 3%;height: 25mm;">
           <%= shipment.shipper.full_name %>
         </div>
       </div>
-      <div class="col-xs-4 " style="height: 25mm; padding: 10px 0px 5px 5px">
-        <%#= image_tag asset_data_base64 'pdfs/bill_of_lading/logo_black.png' %>
+      <div class="col-xs-4 " style="height: 25mm; padding: 10px 0px 5px 5px; text-align: center">
+        <%= image_tag shipment.tenant.theme["logoLarge"], class: 'logo' %>
       </div>
       <div class="col-xs-3 hr-left">
-        <div class="col-xs-12 text hr-bottom" style="height: 10mm; ">
-          <div class="col-xs-2 " style="padding-top: 3%;">
+        <div class="col-xs-12 text hr-bottom" style="height: 9mm; ">
+          <div class="col-xs-2">
             <strong>B/L <br>No.</strong>
           </div>
-          <div class="col-xs-9 " style="padding-top: 6%;">
+          <div class="col-xs-9" style="padding-top: 3%;">
             <%= shipment.imc_reference %>
           </div>
         </div>
-        <div class="col-xs-12 text hr-bottom" style="height: 8mm; ">
-          <div class="col-xs-2 " style="padding-top: 2%;">
+        <div class="col-xs-12 text hr-bottom" style="height: 9mm; ">
+          <div class="col-xs-2">
             <strong>BKG <br>No.</strong>
           </div>
-          <div class="col-xs-9 " style="padding-top: 4%;">
+          <div class="col-xs-9" style="padding-top: 3%;">
             <%= shipment.imc_reference %>
           </div>
         </div>
-        <div class="col-xs-12 text" style="height: 7mm;padding-top: 4%;">
-          <div class="col-xs-2 " >
+        <div class="col-xs-12 text" style="height: 7mm;">
+          <div class="col-xs-2" style="padding-top: 1.5%;" >
             <strong>Page</strong>
           </div>
-          <div class="col-xs-9 ">
+          <div class="col-xs-9" style="padding-top: 1.5%;">
             1
           </div>
         </div>
@@ -158,18 +163,22 @@
     <div class="col-xs-12 hr-top" style="height: 55mm;">
       <div class="col-xs-5 hr-right" style="height: 55mm;">
         <div class="col-xs-12" style="height: 25mm;">
-          <div class="col-xs-1" style="padding-top: 19%;">
-            <p class="vertical"><strong>CONSIGNEE</strong></p>
+          <div class="col-xs-1">
+            <div class="wrapper-vertical">
+              <p class="vertical"><strong>CONSIGNEE</strong></p>
+            </div>
           </div>
           <div class="col-xs-10 " style="padding-top: 3%;">
             <%= shipment.consignee.full_name_and_company %>
           </div>
         </div>
         <div class="col-xs-12 hr-top" style="height: 30mm;">
-          <div class="col-xs-1" style="padding-top: 25%;">
-            <p class="vertical"><strong>NOTIFY ADDRESS</strong></p>
+          <div class="col-xs-1" style="height: 30mm;">
+            <div class="wrapper-vertical" style="height: 30mm; width: 30mm;">
+              <p class="vertical"><strong>NOTIFY ADDRESS</strong></p>
+            </div>
           </div>
-          <div class="col-xs-10 " style="padding-top: 3%;">
+          <div class="col-xs-10" style="padding-top: 3%;">
             <% shipment.notifyees.each do |notifyee| %>
               <%= notifyee.full_name_and_company_and_address %> <br>
             <% end %>
@@ -183,12 +192,12 @@
 
     <!-- Third section -->
     <div class="col-xs-12 hr-top">
-      <div class="col-xs-4 hr-right text" style="height: 24mm;">
-        <div class="col-xs-12 " style="height: 8mm; padding-top: 3px;">
-          <div class="col-xs-4"><strong>LOCAL VESSEL</strong></div>
-          <div class="col-xs-8 ">N/A</div>
+      <div class="col-xs-4 hr-right text" style="height: 27mm;">
+        <div class="col-xs-12" style="height: 6mm; padding-top: 3px;">
+          <div class="col-xs-6"><strong>LOCAL VESSEL</strong></div>
+          <div class="col-xs-6 ">N/A</div>
         </div>
-        <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
+        <div class="col-xs-12 hr-top" style="height: 14mm;padding-top: 3px;">
           <div class="col-xs-6">
             <div class="col-xs-12"><strong>OCEAN VESSEL</strong></div>
             <div class="col-xs-12 ">THALASSA XA</div>
@@ -198,33 +207,33 @@
             <div class="col-xs-12 ">AX901238</div>
           </div>
         </div>
-        <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
+        <div class="col-xs-12 hr-top" style="height: 6mm;padding-top: 3px;">
           <div class="col-xs-6"><strong>PORT OF DISCHARGE</strong></div>
           <div class="col-xs-6 "><%= shipment.origin.name %></div>
         </div>
       </div>
-      <div class="col-xs-4 hr-right text" style="height: 24mm;">
-        <div class="col-xs-12 " style="height: 8mm;padding-top: 3px;">
+      <div class="col-xs-4 hr-right text" style="height: 27mm;">
+        <div class="col-xs-12 " style="height: 6mm;padding-top: 3px;">
           <div class="col-xs-3"><strong>FROM</strong></div>
           <div class="col-xs-9 "><%= shipment.origin.geocoded_address %></div>
         </div>
-        <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
+        <div class="col-xs-12 hr-top" style="height: 14mm;padding-top: 3px;">
           <div class="col-xs-6"><strong>PORT OF LOADING</strong></div>
           <div class="col-xs-6 "><%= shipment.destination.name %></div>
         </div>
-        <div class="col-xs-12 hr-top" style="height: 8mm;padding-top: 3px;">
+        <div class="col-xs-12 hr-top" style="height: 6mm;padding-top: 3px;">
           <div class="col-xs-12" style="font-size: 80%;"><strong>FINAL DESTINATION (FOR TRANSSHIPMENT)</strong></div>
           <div class="col-xs-12 "><%= shipment.destination.geocoded_address %></div>
         </div>
       </div>
 
-      <div class="col-xs-4 text" style="height: 24mm;">
-        <div class="col-xs-12 " style="height: 12mm;padding-top: 3px;">
+      <div class="col-xs-4 text" style="height: 27mm;">
+        <div class="col-xs-12 " style="height: 13.5mm;padding-top: 3px;">
           <div class="col-xs-12"><strong>PLACE OF ACCEPTANCE</strong></div>
           <div class="col-xs-12" style="font-size: 70%;"><strong>(Applicable only when this document is used as a Combined Transport B/L)</strong></div>
           <div class="col-xs-12 ">N/A</div>
         </div>
-        <div class="col-xs-12 hr-top" style="height: 12mm;padding-top: 3px;">
+        <div class="col-xs-12 hr-top" style="height: 13.5mm;padding-top: 3px;">
           <div class="col-xs-12"><strong>PLACE OF DELIVERY</strong></div>
           <div class="col-xs-12" style="font-size: 70%;"><strong>(Applicable only when this document is used as a Combined Transport B/L)</strong></div>
           <div class="col-xs-12 ">N/A</div>
@@ -234,13 +243,13 @@
 
     <!-- Fourth section -->
     <div class="col-xs-12 hr-top">
-      <div class="col-xs-3 hr-right" style="height: 8mm;padding-top: 3px; text-align: center;">
+      <div class="col-xs-3 hr-right" style="height: 11mm;padding-top: 3px; text-align: center;">
         <strong>CONTAINER NUMBERS/MARK AND NUMBERS</strong>
       </div>
-      <div class="col-xs-6 hr-right" style="height: 8mm;padding-top: 8px;text-align: center;">
+      <div class="col-xs-6 hr-right" style="height: 11mm; padding-top: 3px; text-align: center;">
         <strong>**NUMBER AND KIND OF PACKAGES, DESCRIPTION OF GOODS</strong>
       </div>
-      <div class="col-xs-3" style="height: 8mm;padding-top: 3px; text-align: center;">
+      <div class="col-xs-3" style="height: 11mm; padding-top: 3px; text-align: center;">
         <strong>MEASUREMENT (CUBIC METERS)<br> GROSS WEIGHT (KILOS)</strong>
       </div>
     </div>
@@ -259,9 +268,9 @@
   <!-- fifth section -->
 
     <div class="col-xs-12 hr-top">
-      <div class="col-xs-5 hr-right" style="height: 33mm;text-align: center;">
+      <div class="col-xs-5 hr-right" style="height: 42mm; text-align: center;">
         <div class="col-xs-12">
-          <div class="col-xs-6 hr-right" style="height: 10mm">
+          <div class="col-xs-6 hr-right">
             <div class="col-xs-12"><strong>EXCESS VALUE DECLARATION</strong></div>
             <div class="col-xs-12" style="padding-top: 3px;">23.000 €</div>
           </div>
@@ -294,7 +303,7 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-7" style="height: 33mm;padding-top: 3px; padding-left: 15px; padding-right: 15px; font-size: 85%; text-align: justify;">
+      <div class="col-xs-7" style="height: 42mm; padding-top: 3px; padding-left: 15px; padding-right: 15px; font-size: 85%; text-align: justify;">
         <strong>RECEIVED</strong> by the Carrier in apparent good order an condition (unless otherwise stated herein), the goods or the container(s) or package(s) said to contain the cargo herein mentioned, to be transported to such place as agreed, authorized or permitted herein and subject to all the terms an conditions appearing on the front an reverse of this Bill of Lading to which the Merchant agrees by accepting this Bill of Lading, any local privileges and customs notwithstanding. This particulars given below as stated by the shipper and  the weight, measure, quantity, condition, contents and value of the Goods are unknown off the Carrier. The Carrier has had no possibility to check whether these particulars are correct. One original Bill of Lading duly endorsed must be surrendered by the merchant tot he carrier in exchange for the goods or issuing a delivery order. In the witness whereof the number of original Bills of Lading stated below all of this tenor and dates has been signed, one of which being accomplished the others to stand null and void.
       </div>
     </div>
@@ -302,9 +311,9 @@
     <!-- ------------------------------------------------------------------------------------- -->
 
     <div class="col-xs-12 hr-top">
-      <div class="col-xs-8">
+      <div class="col-xs-7">
         <div class="col-xs-12">
-          <div class="col-xs-6 hr-right" style="height: 10mm">
+          <div class="col-xs-8 hr-right" style="height: 10mm">
             <div class="col-xs-6 hr-right" style="height: 10mm; text-align: center;">
               <div class="col-xs-12" style="text-align: center;">
                 <strong>CTR STATUS MOVE TYPE</strong>
@@ -314,15 +323,15 @@
               </div>
             </div> 
             <div class="col-xs-6" style="height: 10mm; padding-left: 3px;" >
-              <div class="col-xs-12" style="">
+              <div class="col-xs-12" style="text-align: center;">
                 <strong>FREIGHT TYPE</strong>
               </div>
-              <div class="col-xs-12" style="padding-top: 3px; padding-left: 3px;">
+              <div class="col-xs-12" style="padding: 3px 0 0 3px; text-align: center;">
                 International shipping
               </div>
             </div>   
           </div>
-          <div class="col-xs-6 hr-right" style="height: 10mm;text-align: center;">
+          <div class="col-xs-4 hr-right" style="height: 10mm;text-align: center;">
             <div class="col-xs-12" style="">
               <strong>N.OF ORIGINALS B(S)/L</strong>
             </div>
@@ -350,11 +359,11 @@
           </div>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-xs-5" style="padding: 0 12px;">
         <div class="col-xs-12"> 
           <strong style="font-size: 90%;">IN WITNESS</strong> of the contract here in contained the number of originals stated opposite have been issued, one of which being accomplished the other(s) to be void.
         </div>
-        <div class="col-xs-12" style="font-size: 90%;padding-top: 8px;">
+        <div class="col-xs-12" style="font-size: 90%; padding-top: 12px;">
           <div class="col-xs-3">  
             <strong style="font-size: 100%;padding-top: 8px;">As Carrier:</strong> 
           </div>
@@ -364,7 +373,7 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-12 hr-top"></div>
+    <div class="col-xs-12 hr-top" style="margin-bottom: 158px"></div>
 
 
 
@@ -374,7 +383,7 @@
       <div class="col-xs-12" style="color: #003d99; text-align: center;">
         <h4 style="font-size: 150%; margin-bottom: 12px"><strong>CONDITIONS</strong></h4>
       </div>
-      <div class="col-xs-12" style="font-size: 50%; color: #003d99; text-align: justify;">      
+      <div class="col-xs-12" style="font-size: 70%; color: #003d99; text-align: justify;">      
         <div class="col-xs-4" style="padding-right: 4px;">
           It is mutually agreed that:<br><br>
 
