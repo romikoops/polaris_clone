@@ -73,7 +73,7 @@ class Admin extends Component {
                 hubHash[hub.data.id] = hub;
             });
         }
-        // debugger;
+        // ;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                 <Header theme={theme} />

@@ -54,10 +54,10 @@ export class UserShipmentRow extends Component {
         }
         const hubKeys = shipment.schedule_set[0].hub_route_key.split('-');
         if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-            // debugger;
+            // ;
             return '';
         }
-        // debugger;
+        // ;
         const schedule = {};
         const originHub = hubs[hubKeys[0]].data;
         const destHub = hubs[hubKeys[1]].data;

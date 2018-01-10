@@ -43,7 +43,7 @@ export class AdminRouteTile extends Component {
         const bg1 = startHub ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : {};
         const bg2 = endHub ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : {};
         if (!endHub || !startHub) {
-            // debugger;
+            // ;
         }
         const gradientStyle = {
             background:

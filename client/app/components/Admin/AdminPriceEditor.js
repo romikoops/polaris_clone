@@ -155,7 +155,7 @@ export class AdminPriceEditor extends Component {
     }
     saveEdit() {
         const req = this.state.pricing;
-        debugger;
+
         this.props.adminTools.updatePricing(this.props.pricing._id, req);
         this.props.closeEdit();
     }

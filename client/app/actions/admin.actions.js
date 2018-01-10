@@ -30,7 +30,7 @@ function getHubs(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -64,7 +64,7 @@ function getHub(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -93,7 +93,7 @@ function wizardHubs(file) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -122,7 +122,7 @@ function wizardSCharge(file) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -151,7 +151,7 @@ function wizardPricings(file) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -180,7 +180,7 @@ function wizardTrucking(type, file) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -209,7 +209,7 @@ function wizardOpenPricings(file) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -243,7 +243,7 @@ function getServiceCharges(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -255,7 +255,7 @@ function getPricings(redirect) {
         return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData };
     }
     function success(prData) {
-        // debugger;
+        // ;
         return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData };
     }
     function failure(error) {
@@ -277,7 +277,7 @@ function getPricings(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -290,7 +290,7 @@ function getClientPricings(id, redirect) {
         return { type: adminConstants.GET_CLIENT_PRICINGS_REQUEST, payload: prData };
     }
     function success(prData) {
-        // debugger;
+        // ;
         return { type: adminConstants.GET_CLIENT_PRICINGS_SUCCESS, payload: prData };
     }
     function failure(error) {
@@ -312,7 +312,7 @@ function getClientPricings(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -325,7 +325,7 @@ function getRoutePricings(id, redirect) {
         return { type: adminConstants.GET_ROUTE_PRICINGS_REQUEST, payload: prData };
     }
     function success(prData) {
-        // debugger;
+        // ;
         return { type: adminConstants.GET_ROUTE_PRICINGS_SUCCESS, payload: prData };
     }
     function failure(error) {
@@ -347,7 +347,7 @@ function getRoutePricings(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -360,7 +360,7 @@ function updatePricing(id, req) {
         return { type: adminConstants.UPDATE_PRICING_REQUEST, payload: prData };
     }
     function success(prData) {
-        // debugger;
+        // ;
         return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData };
     }
     function failure(error) {
@@ -378,7 +378,7 @@ function updatePricing(id, req) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -412,7 +412,7 @@ function getSchedules(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -446,7 +446,7 @@ function getTrucking(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -481,7 +481,7 @@ function getShipments(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -515,7 +515,7 @@ function getShipment(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -550,7 +550,7 @@ function getClients(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -585,7 +585,7 @@ function getClient(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -614,7 +614,7 @@ function getVehicleTypes() {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -648,7 +648,7 @@ function getDashboard(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -678,7 +678,7 @@ function autoGenSchedules(data) {
                 dispatch(success(schedData));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -750,7 +750,7 @@ function getRoutes(redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -784,7 +784,7 @@ function getRoute(id, redirect) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -797,7 +797,7 @@ function updateServiceCharge(id, req) {
         return { type: adminConstants.UPDATE_SERVICE_CHARGES_REQUEST, payload: prData };
     }
     function success(prData) {
-        // debugger;
+        // ;
         return { type: adminConstants.UPDATE_SERVICE_CHARGES_SUCCESS, payload: prData };
     }
     function failure(error) {
@@ -815,7 +815,7 @@ function updateServiceCharge(id, req) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -826,7 +826,7 @@ function updateServiceCharge(id, req) {
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
-        // debugger;
+        // ;
         return { type: adminConstants.VIEW_TRUCKING, payload: data };
     }
     return dispatch => {

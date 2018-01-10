@@ -1,4 +1,5 @@
 class Admin::ShipmentsController < ApplicationController
+  include ShippingTools
   before_action :require_login_and_role_is_admin
   include ShippingTools
 
@@ -23,6 +24,22 @@ class Admin::ShipmentsController < ApplicationController
     @shipment = Shipment.find(params[:id])
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
+    hs_codes = []
+    @cargo_items.each do |ci|
+      if ci && ci.hs_codes
+        ci.hs_codes.each do |hs|
+          hs_codes << hs
+        end
+      end
+    end
+    @containers.each do |cn|
+      if cn && cn.hs_codes
+        cn.hs_codes.each do |hs|
+          hs_codes << hs
+        end
+      end
+    end
+    hsCodes = get_hs_code_hash(hs_codes)
     @shipment_contacts = @shipment.shipment_contacts
     @contacts = []
     @shipment_contacts.each do |sc|
@@ -38,7 +55,7 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] =  doc.get_signed_url
       @documents << tmp
     end
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes}
     response_handler(resp)
   end
 

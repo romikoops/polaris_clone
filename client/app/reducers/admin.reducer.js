@@ -189,7 +189,7 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
-            debugger;
+
             const succConfShip = merge({}, state, {
                 shipment: action.payload.data,
                 loading: false
@@ -277,7 +277,7 @@ export function admin(state = {}, action) {
             });
             return reqPric;
         case adminConstants.GET_PRICINGS_SUCCESS:
-            // debugger;
+            // ;
             const succPric = merge({}, {
                 pricingData: action.payload.data,
                 loading: false
@@ -320,7 +320,7 @@ export function admin(state = {}, action) {
             });
             return reqClientPric;
         case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
-            // debugger;
+            // ;
             const succClientPric = merge({}, {
                 clientPricings: action.payload.data,
                 loading: false
@@ -338,7 +338,7 @@ export function admin(state = {}, action) {
             });
             return reqRoutePric;
         case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
-            // debugger;
+            // ;
             const succRoutePric = merge({}, {
                 routePricings: action.payload.data,
                 loading: false
@@ -356,7 +356,7 @@ export function admin(state = {}, action) {
             });
             return reqClients;
         case adminConstants.GET_CLIENTS_SUCCESS:
-            // debugger;
+            // ;
             const succClients = merge({}, {
                 clients: action.payload.data,
                 loading: false
@@ -374,7 +374,7 @@ export function admin(state = {}, action) {
             });
             return reqClient;
         case adminConstants.GET_CLIENT_SUCCESS:
-            // debugger;
+            // ;
             const succClient = merge({}, {
                 client: action.payload.data,
                 loading: false

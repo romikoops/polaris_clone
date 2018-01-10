@@ -45,7 +45,7 @@ export class BestRoutesBox extends Component {
             if (sched.mode_of_transport === this.props.moT) {
                 const schedKey = sched.hub_route_key;
                 if (!fees[schedKey]) {
-                    debugger;
+                    console.log('err');
                 }
                 const fare = fees[schedKey].total;
                 if (!cheapestFare || fare < cheapestFare) {

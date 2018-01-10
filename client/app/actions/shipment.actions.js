@@ -330,7 +330,7 @@ function uploadDocument(doc, type, url) {
                 dispatch(success(data));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }
@@ -359,7 +359,7 @@ function deleteDocument(id) {
                 dispatch(success(id));
             },
             error => {
-                // debugger;
+                // ;
                 dispatch(failure(error));
                 dispatch(alertActions.error(error));
             }

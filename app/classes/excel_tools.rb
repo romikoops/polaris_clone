@@ -409,6 +409,7 @@ module ExcelTools
       unless hub_row[:hub_code].blank?
         hub_code = hub_row[:hub_code]
       end
+      p user.tenant_id
       # byebug
       hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
@@ -418,6 +419,7 @@ module ExcelTools
          hub.generate_hub_code!(user.tenant_id)
       end
     end
+    # byebug
     return hubs
   end
 
@@ -861,8 +863,10 @@ module ExcelTools
       origin = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
+      p user.tenant_id
       hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
-
+      p route
+      p hubroute
       if !row[:vehicle_type]
         vt = Vehicle.find_by_name("#{row[:mot]}_default")
       else

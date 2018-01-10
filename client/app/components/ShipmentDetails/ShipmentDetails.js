@@ -140,7 +140,7 @@ export class ShipmentDetails extends Component {
         const addObj = this.state[key1];
         addObj[key2] = val;
         let fullAddress = this.state[key1].fullAddress;
-        // debugger;
+        // ;
         if (fullAddress) {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }
@@ -169,7 +169,7 @@ export class ShipmentDetails extends Component {
         containerErrors[name] = hasError;
 
         this.setState({
-            cargoItems: itemArr,
+            containers: itemArr,
             containerErrors: containerErrors
         });
     }
@@ -226,7 +226,7 @@ export class ShipmentDetails extends Component {
         const currArray = this.state.containers;
         currArray.unshift(newCont);
         this.setState({
-            cargoItems: currArray,
+            containers: currArray,
             containerErrors: newErrors
         });
     }

@@ -64,7 +64,7 @@ export class BookingDetails extends Component {
                 bool: false,
                 val: 0
             },
-            hsCode: '',
+            hsCodes: {},
             totalGoodsValue: 0,
             cargoNotes: ''
         };
@@ -77,6 +77,8 @@ export class BookingDetails extends Component {
         this.handleCargoInput = this.handleCargoInput.bind(this);
         this.handleInsurance = this.handleInsurance.bind(this);
         this.calcInsurance = this.calcInsurance.bind(this);
+        this.setHsCode = this.setHsCode.bind(this);
+        this.deleteCode = this.deleteCode.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage, hideRegistration} = this.props;
@@ -97,7 +99,30 @@ export class BookingDetails extends Component {
             cargoNotes: obj.cargoNotes
         });
     }
-
+    setHsCode(id, codes) {
+        let exCodes;
+        if (this.state.hsCodes[id]) {
+            exCodes = [...this.state.hsCodes[id], ...codes];
+        } else {
+            exCodes = codes;
+        }
+        this.setState({
+            hsCodes: {
+                ...this.state.hsCodes,
+                [id]: exCodes
+            }
+        });
+    }
+    deleteCode(cargoId, code) {
+        const codes = this.state.hsCodes[cargoId];
+        const newCodes = codes.filter(x => x !== code );
+        this.setState({
+            hsCodes: {
+                ...this.state.hsCodes,
+                [cargoId]: newCodes
+            }
+        });
+    }
     setFromBook(target, value) {
         if (target === 'notifyee') {
             this.setNotifyeesFromBook(target, value);
@@ -212,7 +237,7 @@ export class BookingDetails extends Component {
             consignee,
             shipper,
             notifyees,
-            hsCode,
+            hsCodes,
             totalGoodsValue,
             cargoNotes,
             insurance,
@@ -224,7 +249,7 @@ export class BookingDetails extends Component {
                 consignee,
                 shipper,
                 notifyees,
-                hsCode,
+                hsCodes,
                 totalGoodsValue,
                 cargoNotes,
                 insurance,
@@ -270,7 +295,6 @@ export class BookingDetails extends Component {
             />
         );
         const addrView = this.state.addressBook ? aBook : cForm;
-        debugger;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
 
@@ -286,14 +310,16 @@ export class BookingDetails extends Component {
                     theme={theme}
                     handleChange={this.handleCargoInput}
                     shipmentData={shipmentData}
-                    hsCode={this.state.hsCode}
+                    hsCodes={this.state.hsCodes}
+                    setHsCode={this.setHsCode}
+                    deleteCode={this.deleteCode}
                     cargoNotes={this.state.cargoNotes}
                     totalGoodsValue={this.state.totalGoodsValue}
                     handleInsurance={this.handleInsurance}
                     insurance={this.state.insurance}
                     shipmentDispatch={shipmentDispatch}
                 />
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+               <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         <div className="flex-none layout-row">
                             <RoundButton
@@ -303,13 +329,13 @@ export class BookingDetails extends Component {
                                 text="Finish Booking"
                             />
                         </div>
-                        <div className="flex-none offset-5 layout-row">
+                       {/* <div className="flex-none offset-5 layout-row">
                             <RoundButton
                                 handleNext={this.saveDraft}
                                 text="Save as Draft"
                                 iconClass="fa-floppy-o"
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>

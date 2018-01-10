@@ -65,6 +65,7 @@ class Header extends Component {
                     <LoginRegistrationWrapper
                         LoginPageProps={{theme}}
                         RegistrationPageProps={{theme, tenant}}
+                        initialCompName="LoginPage"
                     />
                 }
                 parentToggle={this.toggleShowLogin}

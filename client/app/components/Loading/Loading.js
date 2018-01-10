@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {v4} from 'node-uuid';
-// import { CSSTransitionGroup } from 'react-transition-group';
 import styled, { keyframes } from 'styled-components';
 import styles from './Loading.scss';
 export class Loading extends Component {
@@ -11,6 +10,7 @@ export class Loading extends Component {
     render() {
         const { theme } = this.props;
         const logo = theme && theme.logoLarge ? theme.logoLarge : '';
+        console.log(logo);
         const kfLogo = keyframes` 
                 0%, 100% {
                   transform: rotateY(0deg);
@@ -33,12 +33,7 @@ export class Loading extends Component {
                   background: ${theme && theme.colors ? theme.colors.secondary : 'black'};
                 }
         `;
-        // const Logo = () => {
-        //     return <img src={logo} alt="" className={`flex-none ${styles.logo}`}/>;
-        // };
-        // const FlipLogo = styled(Logo)`
-        //     animation: ${kfLogo} 2s linear infinite;
-        // `;
+
         const FlipLogo = styled.img`
             animation: ${kfLogo} 10s linear infinite;
             height: 150px;
@@ -65,39 +60,21 @@ export class Loading extends Component {
             dots.push(<AnimDot key={v4()} delay={i}/>);
         }
 
-        // const logoFlipStyle = {
-        //     animationName: 'spin_logo',
-        //     animationDuration: '2s',
-        //     animationIterationCount: 'infinte'
-        // };
-
         return (
             <div
                 className={`layout-row layout-align-center-center ${styles.loader_box}`}
             >
-                {/* <CSSTransitionGroup
-                    transitionName="loader_anim"
-                    transitionAppear
-                    transitionAppearTimeout={500}
-                    transitionEnterTimeout={750}
-                    transitionLeaveTimeout={750}
-                > */}
                     <div
                         className={`layout-column layout-align-center-center ${
                             styles.loader
                         }`}
                     >
-                        {/* <img src={logo} alt="" className={`flex-none ${styles.logo}`} style={logoFlipStyle}/> */}
                         <FlipLogo />
                         <div className={`flex-none layout-row layout-align-space-between-center ${styles.dot_row}`}>
                             {dots}
-                            {/* <div className={`${styles.dot1} flex-none`} style={dotStyle}></div>
-                            <div className={`${styles.dot2} flex-none`} style={dotStyle}></div>
-                            <div className={`${styles.dot3} flex-none`} style={dotStyle}></div> */}
                         </div>
 
                     </div>
-                {/* </CSSTransitionGroup> */}
             </div>
         );
     }

@@ -124,7 +124,7 @@ module.exports = {
             },
             { test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/, use: 'file-loader' },
             {
-                test: /\.(png|jpg)$/,
+                test: /\.(png|jpg|gif)$/,
                 use: 'url-loader?limit=25000'
             },
             {

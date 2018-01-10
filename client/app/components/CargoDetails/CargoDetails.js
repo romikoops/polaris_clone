@@ -12,7 +12,7 @@ export class CargoDetails extends Component {
         this.state = {
             insuranceView: true,
             customsView: true,
-            hsCode: '',
+            hsCodes: {},
             cargoNotes: '',
             totalGoodsValue: 0
         };
@@ -20,6 +20,7 @@ export class CargoDetails extends Component {
         this.toggleCustoms = this.toggleCustoms.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.fileFn = this.fileFn.bind(this);
+        this.calcCustomsFee = this.calcCustomsFee.bind(this);
     }
     toggleInsurance() {
         this.setState({ insuranceView: !this.state.insuranceView });
@@ -44,15 +45,35 @@ export class CargoDetails extends Component {
         const url = '/shipments/' + shipment.id + '/upload/' + type;
         shipmentDispatch.uploadDocument(file, type, url);
     }
+
+    calcCustomsFee() {
+        const { hsCodes, shipmentData } = this.props;
+        const { customs, cargoItems, containers } = shipmentData;
+        let hsCount = 0;
+        cargoItems.forEach((ci) => {
+            if (hsCodes[ci.id]) {
+                hsCount += hsCodes[ci.id].length;
+            }
+        });
+        containers.forEach((cn) => {
+            if (hsCodes[cn.id]) {
+                hsCount += hsCodes[cn.id].length;
+            }
+        });
+        if (hsCount > customs.limit) {
+            const diff = hsCount - customs.limit;
+            return customs.fee + (diff * customs.extra);
+        }
+        return customs.fee;
+    }
     handleChange(event) {
         this.props.handleChange(event);
     }
     render() {
-        const { shipmentData, theme, insurance } = this.props;
+        const { shipmentData, theme, insurance, hsCodes, setHsCode, deleteCode } = this.props;
         const { shipment, dangerousGoods, documents, customs, cargoItems, containers } = shipmentData;
-        console.log(documents);
+        console.log(customs);
         console.log(shipment);
-        debugger;
         const DocViewer = ({doc}) => {
             return(
                 <div className="flex-100 layout-row layout-align-start-center">
@@ -84,7 +105,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const customsBox = (
-            <div className={`flex-100 layout-row layout-wrap ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : ''}`}>
+            <div className={`flex-100 layout-row layout-wrap ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : styles.hidden}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> {' '} Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country o to exported goods so that they can leave the country.
@@ -96,9 +117,9 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {customs ? customs.fee : '18.50'} €</h6>
+                    <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} €</h6>
                 </div>
-                <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} />
+                <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
             </div>
         );
         const noCustomsBox = (
@@ -112,7 +133,7 @@ export class CargoDetails extends Component {
                             </p>
                         </div>
                         <div className="flex-100">
-                             { documents.customs_declaration ?
+                            { documents.customs_declaration ?
                                 <DocViewer doc={documents.customs_declaration} /> :
                                 <FileUploader
                                     theme={theme}
@@ -133,7 +154,7 @@ export class CargoDetails extends Component {
                                 </p>
                             </div>
                             <div className="flex-100">
-                                 { documents.customs_value_declaration ?
+                                { documents.customs_value_declaration ?
                                     <DocViewer doc={documents.customs_value_declaration} /> :
                                     <FileUploader
                                         theme={theme}
@@ -171,15 +192,7 @@ export class CargoDetails extends Component {
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
-                                <div className="flex-50 layout-row layout-wrap">
-                                    <div className="flex-100">
-                                        <p className="flex-none"> HS Code</p>
-                                    </div>
-                                    <div className="flex-100">
-                                        <input className={styles.cargo_input} type="text" name="hsCode" value={this.props.hsCode} onChange={this.handleChange}/>
-                                    </div>
-                                </div>
-                                <div className="flex-50 layout-row layout-wrap">
+                                <div className="flex-100 layout-row layout-wrap">
                                     <div className="flex-100">
                                         <p
                                             className={`flex-none ${
@@ -318,13 +331,13 @@ export class CargoDetails extends Component {
                                         </div>
                                         <div className="flex-100">
                                             { documents.dangerous_goods ?
-                                            <DocViewer doc={documents.dangerous_goods} /> :
-                                            <FileUploader
-                                                theme={theme}
-                                                type="dangerous_goods"
-                                                dispatchFn={this.fileFn}
-                                                text="Dangerous Goods Declaration"
-                                            />}
+                                                <DocViewer doc={documents.dangerous_goods} /> :
+                                                <FileUploader
+                                                    theme={theme}
+                                                    type="dangerous_goods"
+                                                    dispatchFn={this.fileFn}
+                                                    text="Dangerous Goods Declaration"
+                                                />}
                                         </div>
                                     </div>
                                 ) : (

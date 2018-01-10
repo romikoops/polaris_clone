@@ -84,7 +84,7 @@ export class AdminPricingRouteView extends Component {
         const RPBInner = ({hubRoute, pricing, transport}) => {
             const panel = [];
             let gloss;
-            // debugger;
+            // ;
             if (pricing._id.includes('lcl')) {
                 gloss = lclChargeGloss;
             } else {

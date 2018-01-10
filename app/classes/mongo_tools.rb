@@ -33,7 +33,7 @@ module MongoTools
     return resp
   end
 
-    def get_items_fn(client, table, keyName, key)
+  def get_items_fn(client, table, keyName, key)
     resp = client[table.to_sym].find({"#{keyName}" => key})
     return resp.to_a
   end
@@ -47,6 +47,14 @@ module MongoTools
   def query_table(table, key, query)
     client = init
     resp = client[table.to_sym].find(key, query)
+    return resp.to_a
+  end
+
+  def get_items_by_key_values(client, table, key, values)
+    if !client
+      client = get_client
+    end
+    resp = client[table.to_sym].find(key => {"$in" => values})
     return resp.to_a
   end
 

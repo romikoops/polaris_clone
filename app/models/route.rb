@@ -180,6 +180,25 @@ class Route < ApplicationRecord
     end
   end
 
+  def self.routes_w_no_schedules
+    routes = Route.all.map { |r|
+        if r.schedules.length === 0
+          hrs = r.hub_routes
+          if hrs.length > 0
+             hrs.each do |hr|
+              hr.generate_weekly_schedules('ocean', DateTime.now, DateTime.now + 3.months, [1,5], 35, 1)
+            end
+          else
+            Tenant.all.each do |tnt|
+              nhr = HubRoute.create_from_route(r, 'ocean', tnt.id)
+              nhr.generate_weekly_schedules('ocean', DateTime.now, DateTime.now + 3.months, [1,5], 35, 1)
+            end
+          end
+         
+        end
+      }
+  end
+
   def modes_of_transport
     exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }
     {

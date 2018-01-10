@@ -4,13 +4,17 @@ class SearchController < ApplicationController
   before_action :require_login
 
   def search_hs_codes
-    resp = text_search_fn(false, 'hsCodes', params[:query])
-    results = resp.map { |r| 
+    text = params[:query] != "" ? params[:query] : 'plastics'
+    resp = text_search_fn(false, 'hsCodes', text)
+    # byebug
+    results = []
+    resp.each { |r| 
         tmp = {}
         tmp["label"] = r["text"]
-        tmp["value"] = r["id"]
-        return tmp
+        tmp["value"] = r["_id"]
+        results << tmp
       }
+      p results
       response_handler(results)
   end
 

@@ -59,6 +59,9 @@
 
 }
 :global {
+  .hundred {
+    min-height: 100vh;
+  }
   .clip {
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;

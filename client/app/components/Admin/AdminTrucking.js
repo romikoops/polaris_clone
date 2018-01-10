@@ -37,6 +37,9 @@ class AdminTrucking extends Component {
     render() {
         const {selectedRoute} = this.state;
         const {theme, adminDispatch, trucking, hubHash, loading, truckingDetail} = this.props;
+        if (!trucking) {
+            return '';
+        }
         const { truckingHubs } = trucking;
         const relHubs = truckingHubs.map(th => {
             return hubHash[parseInt(th._id, 10)];

@@ -12,7 +12,7 @@ export class AdminRouteView extends Component {
     }
     render() {
         const {theme, routeData, hubHash, adminActions} = this.props;
-        // debugger;s
+        // ;s
         if (!routeData) {
             return '';
         }

@@ -18,4 +18,25 @@
 			}
 		}
   }
+  .open {
+    height: max-content;
+    overflow: visible;
+    visibility: normal;
+    width: 250px;
+    position: absolute;
+    z-index: 50;
+  }
+  .closed {
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+  }
+  .hs_cell {
+    transition: all 1s bounce;
+    height: max-content;
+  }
+  .cell_data_toggle {
+    transition: all 1s bounce;
+    background: whitesmoke;
+  }
 }

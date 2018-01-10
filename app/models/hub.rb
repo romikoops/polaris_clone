@@ -16,6 +16,7 @@ class Hub < ApplicationRecord
     }
     
     hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: tenant_id, hub_type: mot, latitude: nexus.latitude, longitude: nexus.longitude, name: "#{nexus.name} #{hub_type_name[mot]}", photo: nexus.photo)
+    p tenant_id
     return hub
   end
 

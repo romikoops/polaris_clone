@@ -82,7 +82,7 @@ export class AdminPricingClientView extends Component {
             const panel = [];
             let gloss;
             let toggleStyle;
-            // debugger;
+            // ;
             if (pricing._id.includes('lcl')) {
                 gloss = lclChargeGloss;
             } else {

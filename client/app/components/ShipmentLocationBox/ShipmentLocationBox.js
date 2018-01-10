@@ -431,7 +431,7 @@ export class ShipmentLocationBox extends Component {
             country: '',
             fullAddress: ''
         };
-        // debugger;
+        // ;
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
                 tmpAddress.number = ac.long_name;

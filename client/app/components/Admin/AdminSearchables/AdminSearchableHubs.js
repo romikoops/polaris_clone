@@ -54,7 +54,7 @@ export class AdminSearchableHubs extends Component {
         };
 
         const filteredHubNames = search('data.name');
-        // debugger;
+        // ;
         this.setState({
             hubs: filteredHubNames
         });

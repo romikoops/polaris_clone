@@ -25,6 +25,19 @@ module CurrencyTools
     base_value
   end
 
+  def sum_and_convert_cargo(hash_obj, base)
+    
+    rates = get_rates(base)
+    base_value = 0
+    hash_obj.each do |key, charge|
+      if rates[:today][charge["currency"]]
+        base_value += charge["value"] * (1/rates[:today][charge["currency"]])
+      end
+    end
+    
+    base_value
+  end
+
   def refresh_rates(base)
     curr_obj = Currency.find_by_base(base)
     rates = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)

@@ -43,7 +43,7 @@ export class UserShipmentView extends Component {
             return <h1>NO DATA</h1>;
         }
         const { contacts, shipment, documents, cargoItems, containers, schedules } = shipmentData;
-        // debugger;
+        // ;
         const docOptions = [
             {label: 'Packing Sheet', value: 'packing_sheet'},
             {label: 'Commercial Invoice', value: 'commercial_invoice'},

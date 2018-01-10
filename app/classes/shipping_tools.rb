@@ -1,6 +1,7 @@
 module ShippingTools
   include PricingTools
   include MongoTools
+
   def new_shipment(load_type)
     shipment = Shipment.create(
       shipper_id: current_user.id, 
@@ -31,11 +32,11 @@ module ShippingTools
     @shipment = Shipment.find(params[:shipment_id])
     offer_calculation = OfferCalculator.new(@shipment, params, load_type, current_user)
 
-    # begin
+    begin
       offer_calculation.calc_offer!
-    # rescue
-    #   raise ApplicationError::NoRoutes
-    # end
+    rescue
+      raise ApplicationError::NoRoutes
+    end
 
     if offer_calculation.shipment.save
       return {
@@ -83,8 +84,8 @@ module ShippingTools
     consignee_data = shipment_data[:consignee]
     shipper_data = shipment_data[:shipper]
     contacts_data = shipment_data[:notifyees]
-
-    @shipment.assign_attributes(status: "requested", hs_code: shipment_data[:hsCode], total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
+    hsCodes = shipment_data[:hsCodes].as_json
+    @shipment.assign_attributes(status: "requested", total_goods_value: shipment_data[:totalGoodsValue], cargo_notes: shipment_data[:cargoNotes])
 
     contact_location = Location.create_and_geocode(street_number: consignee_data[:number], street: consignee_data[:street], zip_code: consignee_data[:zipCode], city: consignee_data[:city], country: consignee_data[:country])
     contact = current_user.contacts.find_or_create_by(location_id: contact_location.id, first_name: consignee_data[:firstName], last_name: consignee_data[:lastName], email: consignee_data[:email], phone: consignee_data[:phone])
@@ -127,19 +128,32 @@ module ShippingTools
       @shipment.total_price = @shipment.schedules_charges[key]["total"]
 
     end
-    
+    if @shipment.cargo_items
+      @cargos = @shipment.cargo_items
+      @shipment.cargo_items.map do |ci|
+        hsCodes[ci.id.to_s].each do |hs|
+          ci.hs_codes << hs["value"]
+        end
+        ci.save!
+      end
+    end
+    if @shipment.containers
+      @containers = @shipment.containers
+      @shipment.containers.map do |cn|
+        hsCodes[cn.id.to_s].each do |hs|
+          cn.hs_codes << hs["value"]
+        end
+        cn.save!
+      end
+    end
+
     @shipment.shipper_location = new_loc
     @shipment.save!
     @schedules = []
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    if @shipment.cargo_items
-      @cargos = @shipment.cargo_items
-    end
-    if @shipment.containers
-      @containers = @shipment.containers
-    end
+    
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
@@ -208,7 +222,7 @@ module ShippingTools
     transportKey = @schedules.first.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first.hub_route_id}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
-    
+
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
@@ -283,5 +297,15 @@ module ShippingTools
     ShipmentMailer.summary_mail_receiver(shipment, "Booking_" + shipment.imc_reference + ".pdf", receiver_pdf).deliver_now
 
     # TBD - Set up flash message
+  end
+
+  def get_hs_code_hash(codes)
+    resp = get_items_by_key_values(false, 'hsCodes', '_id', codes)
+    results = {}
+    byebug
+    resp.each do |hs|
+      results[hs["_id"]] = hs 
+    end
+    results
   end
 end

@@ -129,22 +129,14 @@ export class AdminSchedules extends Component {
         const truckUrl = '/admin/truck_schedules/process_csv';
         const schedArr = [];
         const allSchedules = [...air, ...ocean, ...train];
-        const hFilterVal = parseInt(hubFilter.value, 10);
         allSchedules.forEach(sched => {
-            const schedKeys = sched.hub_route_key.split('-');
             if (!filters.hub && filters.mot && sched.mode_of_transport === motFilter.value) {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
             }
-            if (filters.hub && !filters.mot && schedKeys[1] === String(hFilterVal)) {
+            if (filters.hub && !filters.mot && sched.hub_route_key.includes(hubFilter.value)) {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
             }
-            if (filters.hub && !filters.mot && schedKeys[0] === String(hFilterVal)) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
-            }
-            if (filters.hub && filters.mot && sched.mode_of_transport === motFilter.value && schedKeys[0] === String(hFilterVal)) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
-            }
-            if (filters.hub && filters.mot && sched.mode_of_transport === motFilter.value && schedKeys[1] === String(hFilterVal)) {
+            if (filters.hub && filters.mot && sched.mode_of_transport === motFilter.value && sched.hub_route_key.includes(hubFilter.value)) {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
             }
             if (!filters.hub && !filters.mot) {
@@ -222,19 +214,19 @@ export class AdminSchedules extends Component {
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  >Excel Uploads</p>
                     </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`}>
                         <p className="flex-80">Upload Train Schedules Sheet</p>
                         <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx"/>
                     </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`}>
                         <p className="flex-80">Upload Air Schedules Sheet</p>
                         <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx"/>
                     </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`}>
                         <p className="flex-80">Upload Vessel Schedules Sheet</p>
                         <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx"/>
                     </div>
-                    <div className={`flex-50 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`}>
                         <p className="flex-80">Upload Trucking Schedules Sheet</p>
                         <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx"/>
                     </div>

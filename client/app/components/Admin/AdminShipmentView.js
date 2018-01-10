@@ -37,8 +37,8 @@ export class AdminShipmentView extends Component {
         if (!shipmentData || !hubs || !clients) {
             return <h1>NO DATA</h1>;
         }
-        const { contacts, shipment, documents, cargoItems, containers, schedules } = shipmentData;
-        // debugger;
+        const { contacts, shipment, documents, cargoItems, containers, schedules, hsCodes } = shipmentData;
+        // ;
         const hubKeys = schedules[0].hub_route_key.split('-');
         const hubsObj = {startHub: {}, endHub: {}};
         hubs.forEach(c => {
@@ -134,7 +134,7 @@ export class AdminShipmentView extends Component {
                 const offset = i % 3 !== 0 ? 'offset-5' : '';
                 cargoView.push(
                     <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-                        <ContainerDetails item={cont} index={i} />
+                        <ContainerDetails item={cont} index={i} theme={theme} hsCodes={hsCodes}/>
                     </div>
                 );
             });
@@ -144,7 +144,7 @@ export class AdminShipmentView extends Component {
                 const offset = i % 3 !== 0 ? 'offset-5' : '';
                 cargoView.push(
                     <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-                        <CargoItemDetails item={ci} index={i} />
+                        <CargoItemDetails item={ci} index={i} theme={theme} hsCodes={hsCodes}/>
                     </div>
                 );
             });

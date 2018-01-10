@@ -59,7 +59,7 @@ export class RouteHubBox extends Component {
         };
         const bg1 = { backgroundImage: 'url(' + startHub.location.photo + ')' };
         const bg2 = { backgroundImage: 'url(' + endHub.location.photo + ')' };
-        // debugger;
+        // ;
         return (
             <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
                 <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center`}>
