@@ -22,7 +22,7 @@ module PricingTools
     pricing = get_user_price(client, pathKey, user)
 
     
-    totals = {}
+    totals = {"total" => {}}
     pricing["data"].each do |k, v|
       case v["rate_basis"]
       when "PER_ITEM"
@@ -52,13 +52,15 @@ module PricingTools
         end
       end
     end
+    totals["total"] = {value: sum_and_convert_cargo(totals, "EUR"), currency: "EUR"}
+    
     return totals
   end
 
   def determine_fcl_price(client, container, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
     
-    totals = {}
+    totals = {"total" => {}}
     pricing["data"].each do |k, v|
       if v["rate_basis"].include?('CONTAINER')
         totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
@@ -68,7 +70,7 @@ module PricingTools
         # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
       end
     end
-    
+    totals["total"] = {value: sum_and_convert_cargo(totals, "EUR"), currency: "EUR"}
     return totals
   end
 
