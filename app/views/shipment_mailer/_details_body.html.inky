@@ -14,7 +14,7 @@
   <columns>
     <p class="text-center">
       <span class="bold">ETA:</span>
-      <span><%= formatted_datetime(@eta) %></span>
+      <span><%= formatted_datetime(@shipment.eta) %></span>
     </p>
   </columns>
 </row>

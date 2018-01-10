@@ -7,7 +7,6 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @eta = find_eta
 
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
@@ -21,7 +20,6 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @eta = find_eta
 
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
@@ -32,15 +30,17 @@ class ShipmentMailer < ApplicationMailer
     )
   end
 
-  def shipper_confirmation(user, shipment, filename, file)
+  def shipper_confirmation(user, shipment, files = {})
     @user = user
     tenant = user.tenant
     @shipment = shipment
-    @eta = find_eta
 
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
-    attachments[filename] = file
+    
+    files.each do |name, file|
+      attachments[name] = file
+    end
 
     mail(
       to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
@@ -70,11 +70,5 @@ class ShipmentMailer < ApplicationMailer
     @shipment = shipment
     attachments[filename] = file
     mail(to: shipment.receiver.email, subject: 'Your booking through ItsMyCargo')
-  end
-
-  private
-
-  def find_eta
-    Schedule.find(@shipment.schedule_set.last["id"]).eta
   end
 end

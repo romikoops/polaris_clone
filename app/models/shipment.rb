@@ -204,6 +204,20 @@ class Shipment < ApplicationRecord
     shipment_contacts.find_by(contact_type: "consignee").contact
   end    
 
+  def etd
+    Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
+  end
+
+  def eta
+    Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
+  end
+
+  def cargo
+    schedule_set.reduce({}) do |cargo, schedule|
+      cargo.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
+    end
+  end
+
   private
 
   def generate_imc_reference

@@ -230,26 +230,45 @@ module ShippingTools
   end
 
   def shipper_confirmation_email(user, shipment)
-    pdf_erb = ErbTemplate.new(
+    bill_of_lading_erb = ErbTemplate.new(
       layout:   "pdfs/simple.pdf.html.erb",
       template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
       locals:   { shipment: shipment }
     )
     bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
-      pdf_erb.render,
+      bill_of_lading_erb.render,
       margin: { top: 10, bottom: 5, left: 15, right: 15 }
     )
     
-    # File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
-    # return
-
+    File.open("bill_of_lading.html", 'wb') { |file| file.write(bill_of_lading_erb.render) }
+    File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
+    
     bill_of_lading_pdf_name = "bill_of_lading_#{shipment.imc_reference}.pdf"
     
+    invoice_erb = ErbTemplate.new(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/invoice.pdf.html.erb",
+      locals:   { shipment: shipment }
+    )
+    invoice_pdf = WickedPdf.new.pdf_from_string(
+      invoice_erb.render,
+      margin: { top: 10, bottom: 5, left: 15, right: 15 }
+    )
+    
+    File.open("invoice.html", 'wb') { |file| file.write(invoice_erb.render) }
+    File.open("invoice.pdf", 'wb') { |file| file.write(invoice_pdf) }
+    return
+
+    invoice_pdf_name = "invoice_#{shipment.imc_reference}.pdf"
+    
+    files = {
+      invoice_pdf_name => invoice_pdf
+    }
+
     ShipmentMailer.shipper_confirmation(
       user, 
       shipment, 
-      bill_of_lading_pdf_name, 
-      bill_of_lading_pdf
+      files
     ).deliver_now
   end
 
