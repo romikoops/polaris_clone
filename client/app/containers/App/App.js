@@ -36,7 +36,7 @@ class App extends Component {
         const { tenant, isFetching, user, loggedIn } = this.props;
         const theme = tenant.data.theme;
         return (
-            <div className="layout-fill layout-column scroll layout-align-end">
+            <div className="layout-fill layout-column scroll layout-align-end hundred">
                 {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
                 <Switch className="flex">
                     <Route

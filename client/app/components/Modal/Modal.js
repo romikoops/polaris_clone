@@ -66,6 +66,6 @@ export class Modal extends Component {
 }
 
 Modal.propTypes = {
-    component: PropTypes.func,
+    component: PropTypes.object,
     parentToggle: PropTypes.func
 };

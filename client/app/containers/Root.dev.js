@@ -10,7 +10,7 @@ import DevTools from './DevTools';
 export default function Root({store, history}) {
     return (
         <Provider store={store}>
-            <div className="layout-fill">
+            <div className="layout-fill layout-column">
                 <ConnectedRouter history={history}>
                     <Route path="/" component={App}/>
                 </ConnectedRouter>

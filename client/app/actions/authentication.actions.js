@@ -30,7 +30,7 @@ function login(data) {
                     data.shipmentReq.shipment.shipper_id = user.data.id;
                     dispatch(shipmentActions.setShipmentRoute(data.shipmentReq));
                 } else if (user.data.role_id === 1 && !data.noRedirect) {
-                    dispatch(push('/admin'));
+                    dispatch(push('/admin/dashboard'));
                 } else if (user.data.role_id === 2 && !data.noRedirect) {
                     dispatch(push('/account'));
                 }

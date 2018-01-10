@@ -79,8 +79,7 @@ export class HSCodeRow extends Component {
         };
 
         if (containers) {
-            containers.forEach((cont, i) => {
-                if (i !== 0) {
+            containers.forEach((cont) => {
                     const tmpCont = (
                         <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`}>
                             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
@@ -118,7 +117,6 @@ export class HSCodeRow extends Component {
                         </div>
                     );
                     containersAdded.push(tmpCont);
-                }
             });
         }
         if (cargoItems) {
