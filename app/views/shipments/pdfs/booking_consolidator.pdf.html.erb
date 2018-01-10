@@ -142,7 +142,7 @@
       <% unless shipment.cargo_description.notes.empty? %>
       <strong>Extra Notes:</strong> <%= line_wrap(shipment.cargo_description.notes) %><br>
       <% end %>
-      <strong>Estimated value:</strong> <%= line_wrap(format_to_price("USD", shipment.estimated_value)) %><br>
+      <strong>Estimated value:</strong> <%= line_wrap(format_to_price(shipment.estimated_value, "USD")) %><br>
     </div>  
   </div>
 
@@ -163,38 +163,38 @@
           <tbody>
             <tr>
               <td>Price per ton / m&sup3;</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_per_ton_or_m3) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_per_ton_or_m3, shipment.ocean_pricing.currency) %></td>
               <td><%= shipment.ocean_pricing.determine_measure(shipment.cargo_description.weight, shipment.cargo_description.volume) %> &times; <%= shipment.unit_number %></td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_per_ton_or_m3 * shipment.ocean_pricing.determine_measure(shipment.cargo_description.weight, shipment.cargo_description.volume) * shipment.unit_number) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_per_ton_or_m3 * shipment.ocean_pricing.determine_measure(shipment.cargo_description.weight, shipment.cargo_description.volume) * shipment.unit_number, shipment.ocean_pricing.currency) %></td>
             </tr>            
             <tr>
               <td>Wharfage fees per ton</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_wharfage_per_ton) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_wharfage_per_ton, shipment.ocean_pricing.currency) %></td>
               <% if shipment.cargo_description.weight >= 1 %>
                 <td><%= shipment.cargo_description.weight %> &times; <%= shipment.unit_number %></td>
-                <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_wharfage_per_ton * shipment.cargo_description.weight * shipment.unit_number) %></td>
+                <td><%= format_to_price(shipment.ocean_pricing.price_wharfage_per_ton * shipment.cargo_description.weight * shipment.unit_number, shipment.ocean_pricing.currency) %></td>
               <% else %>
                 <td>1</td>
-                <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_wharfage_per_ton * 1) %></td>
+                <td><%= format_to_price(shipment.ocean_pricing.price_wharfage_per_ton * 1, shipment.ocean_pricing.currency) %></td>
               <% end %>   
             </tr>
             <tr>
               <td>ISPS, ATC, ZAPP charges</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_isps) %>, <%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_atc) %>, <%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_zapp) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_isps, shipment.ocean_pricing.currency) %>, <%= format_to_price(shipment.ocean_pricing.price_atc, shipment.ocean_pricing.currency) %>, <%= format_to_price(shipment.ocean_pricing.price_zapp, shipment.ocean_pricing.currency) %></td>
               <td>1</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_isps + shipment.ocean_pricing.price_atc + shipment.ocean_pricing.price_zapp) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_isps + shipment.ocean_pricing.price_atc + shipment.ocean_pricing.price_zapp, shipment.ocean_pricing.currency) %></td>
             </tr>
             <tr>
               <td>Bill of Lading</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_bl) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_bl, shipment.ocean_pricing.currency) %></td>
               <td>1</td>
-              <td><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_pricing.price_bl * 1) %></td>
+              <td><%= format_to_price(shipment.ocean_pricing.price_bl * 1, shipment.ocean_pricing.currency) %></td>
             </tr>
             <tr class="active">
               <td><strong>Total</strong></td>
               <td></td>
               <td></td>
-              <td><strong><%= format_to_price(shipment.ocean_pricing.currency, shipment.ocean_price) %></strong></td>
+              <td><strong><%= format_to_price(shipment.ocean_price, shipment.ocean_pricing.currency) %></strong></td>
             </tr>
           </tbody>
         </table>

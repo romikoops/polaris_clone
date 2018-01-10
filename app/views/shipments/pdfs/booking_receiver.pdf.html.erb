@@ -122,7 +122,7 @@
       <% unless shipment.cargo_description.notes.empty? %>
       <strong>Extra Notes:</strong> <%= line_wrap(shipment.cargo_description.notes) %><br>
       <% end %>
-      <strong>Estimated value:</strong> <%= line_wrap(format_to_price("USD", shipment.estimated_value)) %><br>
+      <strong>Estimated value:</strong> <%= line_wrap(format_to_price(shipment.estimated_value, "USD")) %><br>
     </div>  
   </div>
 </div>

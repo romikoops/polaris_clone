@@ -6,8 +6,12 @@ module ApplicationHelper
     "data:#{asset.content_type};base64,#{Rack::Utils.escape(base64)}"
   end
 
-  def format_to_price(currency, price)
-    number_to_currency(price, unit: currency, format: "%u %n")
+  def format_to_price(price, currency = nil)
+    if currency.nil?
+      ("%.2f" % price)
+    else
+      number_to_currency(price, unit: currency, format: "%u %n")
+    end
   end
 
   def trunc(text)

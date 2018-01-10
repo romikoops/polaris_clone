@@ -111,12 +111,18 @@
 	br {
 	  padding-bottom: 5px;
 	}
+	.logo {
+		width: 200px;
+	}
 </style>
+
+<% cargo_units = shipment.cargo_items.empty? ? shipment.containers : shipment.cargo_items %>
+<% height_of_last = [(299 - (20 * (cargo_units.size - 1))), 20].max.to_s %>
 
 <div class="container-fluid no-padding" style="border-top: 1px solid #0088ce;border-bottom: 1px solid #0088ce;">
   <div class="col-xs-12 ">
     <div class="col-xs-6 img-responsive" style="padding-left: 20px;">
-    	<%= image_tag shipment.tenant.theme["logoLarge"] %>
+    	<%= image_tag shipment.tenant.theme["logoLarge"], class: 'logo' %>
     </div>
     <div class="col-xs-6 heading text-strong">
     	<h1><strong>COMMERCIAL<br>INVOICE</strong></h1>
@@ -130,7 +136,7 @@
       </div>
       <div class="col-xs-12 hr-top">
         <div class="col-xs-7 hr-right text-spacing-left">
-        	<%= shipment.etd %>
+        	<%= formatted_date(shipment.etd) %>
         </div>
         <div class="col-xs-5 text-spacing-left" >FOB</div>
       </div>
@@ -158,6 +164,12 @@
         FULL DESCRIPTION OF GOODS<br>(DESCRIPTION/ HS IF AVAIL.)        
       </div>
       <div class="col-xs-12 hr-top text-spacing-left" style="height: 300px;">        
+        <% cargo_units.each do |cargo_unit| %>
+	        <div>
+	          <%= cargo_unit.hs_codes.uniq.join("&nbsp" * 5) %>
+	        </div>
+	      <% end %>
+
       </div>
       <div class="col-xs-12 hr-top text-spacing-left text-strong heading" style="height: 20px;">
         SUBTOTAL        
@@ -223,27 +235,23 @@
         <div class="col-xs-3 hr-right text-spacing-left heading">UNIT<br>VALUE</div>
         <div class="col-xs-3 text-spacing-left heading">TOTAL<br>VALUE</div>
       </div>
-      <div class="col-xs-12 hr-top">
-      	<% cargo_units = shipment.cargo_items.empty? ? shipment.containers : shipment.cargo_items %>
-        
-				<%# shipment.schedule_set.map do |schedule| %>
-					<%# shipment.schedules_charges[schedule["hub_route_key"]]["cargo"]] %>
-				<%# end %>
+      <div class="col-xs-12 hr-top" style="min-height: 300px;">
+        <% cargo_units.each do |cargo_unit| %>
+					<% style = cargo_unit == cargo_units.last ? 'style="height: ' + height_of_last + 'px"' : '' %>
 
-        <%# cargo_units.each do |cargo_unit| %>
-	        <div class="col-xs-3 hr-right text-spacing-left heading" style="height: 299px;">
-	          1
+	        <div class="col-xs-3 hr-right text-spacing-left heading" <%= style %>>
+	          <%= amount = 1 %>
 	        </div>
-	        <div class="col-xs-3 hr-right text-spacing-left heading" style="height: 299px;">
-	          <%#= cargo_unit.payload_in_kg * 2.20462 %>
+	        <div class="col-xs-3 hr-right text-spacing-left heading" <%= style %>>
+	          <%= cargo_unit.payload_in_kg * 2.20462 %>
 	        </div>
-	        <div class="col-xs-3 hr-right text-spacing-left heading" style="height: 299px;">
-	          <%#= cargo_unit.payload_in_kg * 2.20462 %>
+	        <div class="col-xs-3 hr-right text-spacing-left heading" <%= style %>>
+	          <%= unit_value = format_to_price(shipment.cargo_charges[cargo_unit.id.to_s]["total"]["value"]) %>
 	        </div>
-	        <div class="col-xs-3 text-spacing-left heading" style="height: 299px;">
-	          
+	        <div class="col-xs-3 text-spacing-left heading" <%= style %>>
+	          <%= format_to_price(amount * unit_value.to_f) %>
 	        </div>
-	      <%# end %>
+	      <% end %>
       </div>
       <div class="col-xs-12 text-strong">
         <div class="col-xs-3 hr-top hr-right text-spacing-left heading" style="height: 20px;"></div>
@@ -255,22 +263,26 @@
 
       <div class="col-xs-12 hr-top heading">
         <div class="col-xs-7 hr-right text-spacing-left text-strong" style="height: 21px;">FREIGHT</div>
-        <div class="col-xs-5 text-spacing-left" style="height: 21px;">20.00</div>
+        <div class="col-xs-5 text-spacing-left" style="height: 21px;">[ TBD ]</div>
       </div>
 
       <div class="col-xs-12 hr-top heading">
         <div class="col-xs-7 hr-right text-spacing-left text-strong" style="height: 21px;">INSURANCE</div>
-        <div class="col-xs-5 text-spacing-left" style="height: 21px;">30.00</div>
+        <div class="col-xs-5 text-spacing-left" style="height: 21px;">
+        	<%= format_to_price(shipment.insurance) %>
+        </div>
       </div>
 
       <div class="col-xs-12 hr-top heading">
         <div class="col-xs-7 hr-right text-spacing-left text-strong" style="height: 22px;">ADDITIONAL</div>
-        <div class="col-xs-5 text-spacing-left" style="height: 22px;">0.00</div>
+        <div class="col-xs-5 text-spacing-left" style="height: 22px;">[ TBD ]</div>
       </div>
 
       <div class="col-xs-12 hr-top text-spacing-left heading" style="height: 70px; padding-top: 26px;">
         <div class="col-xs-7 text-strong">TOTAL INVOICE VALUE:</div>
-        <div class="col-xs-5 ">50.00</div>
+        <div class="col-xs-5 ">
+        	<%= format_to_price(shipment.total_price) %>
+        </div>
       </div>
     </div> 
   </div>

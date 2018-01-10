@@ -123,7 +123,7 @@
       <% unless shipment.cargo_description.notes.empty? %>
       <strong>Extra Notes:</strong> <%= line_wrap(shipment.cargo_description.notes) %><br>
       <% end %>
-      <strong>Estimated value:</strong> <%= line_wrap(format_to_price("USD", shipment.estimated_value)) %><br>
+      <strong>Estimated value:</strong> <%= line_wrap(format_to_price(shipment.estimated_value, "USD")) %><br>
     </div>  
   </div>
 
@@ -143,7 +143,7 @@
             <tbody>
               <tr>
                 <td>Trucking of [<%= shipment.cargo_description.volume / 1000000 %> m&sup3; | <%= shipment.cargo_description.weight %> tons] &times; <%= shipment.unit_number %></td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_price) %></td>
+                <td><%= format_to_price(shipment.trucking_price, shipment.trucking_pricing.currency) %></td>
               </tr>
             </tbody>
           </table>
@@ -162,41 +162,41 @@
             <tbody>
               <tr>
                 <td>Price per km</td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_pricing.price_per_km) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_per_km, shipment.trucking_pricing.currency) %></td>
                 <td><%= shipment.trucking_distance_in_km %></td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency,shipment.trucking_pricing.price_per_km * shipment.trucking_distance_in_km) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_per_km * shipment.trucking_distance_in_km, shipment.trucking_pricing.currency) %></td>
               </tr>
               <tr>
                 <td>Price per m&sup3;</td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_pricing.price_per_m3) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_per_m3, shipment.trucking_pricing.currency) %></td>
                 <td><%= shipment.cargo_description.volume / 1000000 %> &times; <%= shipment.unit_number %></td>
                 <% if trucker_volume_price >= trucker_ton_price %>
-                  <td><%= format_to_price(shipment.trucking_pricing.currency, trucker_volume_price) %></td>
+                  <td><%= format_to_price(trucker_volume_price, shipment.trucking_pricing.currency) %></td>
                 <% else %>
-                  <td><s><%= format_to_price(shipment.trucking_pricing.currency, trucker_volume_price) %></s></td>
+                  <td><s><%= format_to_price(trucker_volume_price, shipment.trucking_pricing.currency) %></s></td>
                 <% end %>
               </tr>
               <tr>
                 <td>Price per ton</td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_pricing.price_per_ton) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_per_ton, shipment.trucking_pricing.currency) %></td>
                 <td><%= shipment.cargo_description.weight %> &times; <%= shipment.unit_number %></td>
                 <% if trucker_ton_price >= trucker_volume_price %>
-                  <td><%= format_to_price(shipment.trucking_pricing.currency, trucker_ton_price) %></td>
+                  <td><%= format_to_price(trucker_ton_price, shipment.trucking_pricing.currency) %></td>
                 <% else %>
-                  <td><s><%= format_to_price(shipment.trucking_pricing.currency, trucker_ton_price) %></s></td>
+                  <td><s><%= format_to_price(trucker_ton_price, shipment.trucking_pricing.currency) %></s></td>
                 <% end %>
               </tr>
               <tr>
                 <td>Additional fixed fee</td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_pricing.price_fix) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_fix, shipment.trucking_pricing.currency) %></td>
                 <td>1</td>
-                <td><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_pricing.price_fix * 1) %></td>
+                <td><%= format_to_price(shipment.trucking_pricing.price_fix * 1, shipment.trucking_pricing.currency) %></td>
               </tr>
               <tr class="active">
                 <td><strong>Total</strong></td>
                 <td></td>
                 <td></td>
-                <td><strong><%= format_to_price(shipment.trucking_pricing.currency, shipment.trucking_price) %></strong></td>
+                <td><strong><%= format_to_price(shipment.trucking_price, shipment.trucking_pricing.currency) %></strong></td>
               </tr>
             </tbody>
           </table>

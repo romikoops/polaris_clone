@@ -78,7 +78,7 @@ class ShipmentsController < ApplicationController
     resp = update_shipment(session, params)
     
     shipment = resp[:shipment]
-    tenant_notification_email(shipment.shipper.tenant, shipment)
+    tenant_notification_email(shipment.shipper, shipment)
     shipper_notification_email(shipment.shipper, shipment)
 
     response_handler(resp)

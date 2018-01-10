@@ -212,9 +212,15 @@ class Shipment < ApplicationRecord
     Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
   end
 
-  def cargo
-    schedule_set.reduce({}) do |cargo, schedule|
-      cargo.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
+  def cargo_charges
+    schedule_set.reduce({}) do |cargo_charges, schedule|
+      cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
+    end
+  end
+
+  def insurance
+    schedule_set.reduce(0) do |insurance_value, schedule|
+      insurance_value += schedules_charges[schedule["hub_route_key"]]["insurance"].to_f
     end
   end
 
