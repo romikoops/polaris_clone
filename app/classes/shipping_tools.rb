@@ -60,7 +60,6 @@ module ShippingTools
 
   def update_shipment(session, params)
     @shipment = Shipment.find(params[:shipment_id])
-    create_documents(params, @shipment)
     shipment_data = params[:shipment]
     consignee_data = shipment_data[:consignee]
     shipper_data = shipment_data[:shipper]
