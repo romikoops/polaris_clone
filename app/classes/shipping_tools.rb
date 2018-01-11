@@ -254,8 +254,10 @@ module ShippingTools
       margin: { top: 10, bottom: 5, left: 8, right: 8 }
     )
     
-    File.open("bill_of_lading.html", 'wb') { |file| file.write(bill_of_lading_erb.render) }
-    File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
+    # Debugging
+    # 
+    # File.open("bill_of_lading.html", 'wb') { |file| file.write(bill_of_lading_erb.render) }
+    # File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
     
     bill_of_lading_pdf_name = "bill_of_lading_#{shipment.imc_reference}.pdf"
     
@@ -269,14 +271,17 @@ module ShippingTools
       margin: { top: 10, bottom: 5, left: 15, right: 15 }
     )
     
-    File.open("invoice.html", 'wb') { |file| file.write(invoice_erb.render) }
-    File.open("invoice.pdf", 'wb') { |file| file.write(invoice_pdf) }
-    return
+    # Debugging
+    # 
+    # File.open("invoice.html", 'wb') { |file| file.write(invoice_erb.render) }
+    # File.open("invoice.pdf", 'wb') { |file| file.write(invoice_pdf) }
+    # return
 
     invoice_pdf_name = "invoice_#{shipment.imc_reference}.pdf"
     
     files = {
-      invoice_pdf_name => invoice_pdf
+      bill_of_lading_pdf_name => bill_of_lading_pdf,
+      invoice_pdf_name        => invoice_pdf
     }
 
     ShipmentMailer.shipper_confirmation(
