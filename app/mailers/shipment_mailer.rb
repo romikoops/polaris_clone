@@ -3,20 +3,49 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
-  def forwarder_notification(user, shipment)
+  def tenant_notification(user, shipment)
     @user = user
+    tenant = user.tenant
     @shipment = shipment
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black.png")
-    
-    mail(to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, subject: 'Your booking through ItsMyCargo')
+
+    attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
+
+    mail(
+      to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
+      subject: 'Your booking through ItsMyCargo'
+    )
   end
 
-  def booking_confirmation(user, shipment)
+  def shipper_notification(user, shipment)
     @user = user
+    tenant = user.tenant
     @shipment = shipment
-    attachments.inline['logo.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black.png")
-    attachments.inline['logo_small.png'] = File.read("#{Rails.root}/client/app/assets/images/logos/logo_black_small.png")
-    mail(to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, subject: 'Your booking through ItsMyCargo')
+
+    attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
+    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+
+    mail(
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      subject: 'Your booking through ItsMyCargo'
+    )
+  end
+
+  def shipper_confirmation(user, shipment, files = {})
+    @user = user
+    tenant = user.tenant
+    @shipment = shipment
+
+    attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
+    attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
+    
+    files.each do |name, file|
+      attachments[name] = open(file).read
+    end
+
+    mail(
+      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      subject: 'Your booking through ItsMyCargo'
+    )
   end
 
   def summary_mail_shipper(shipment, filename, file)

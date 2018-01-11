@@ -34,7 +34,6 @@ module TruckingTools
   end
   def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
-
       { "$match" => { "_id" => table_key }},
       {"$project" => {
           data: {"$filter" => {
@@ -48,7 +47,6 @@ module TruckingTools
           }},
           _id: 0
         }
-
       }
     ])
     p "resp achieved"

@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations'
   }
+  
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   namespace :admin do
     resources :shipments do
@@ -92,10 +95,14 @@ Rails.application.routes.draw do
   get "/documents/download/:document_id", 
     to: "documents#download_redirect", as: :document_download
   get "/documents/delete/:document_id", to: "documents#delete", as: :document_delete
-  
+
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
     controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   get "tenants/:name", to: "tenants#get_tenant"
+<<<<<<< HEAD
   get 'currencies/get', to: 'users#currencies'
   post 'currencies/set', to: 'users#set_currency'
+=======
+  get "search/hscodes/:query" => "search#search_hs_codes"
+>>>>>>> a8e053c68a7377b5a0b1725444e7cb55d9041c08
 end

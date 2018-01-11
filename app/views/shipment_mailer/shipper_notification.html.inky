@@ -1,0 +1,53 @@
+<spacer size="16"></spacer>
+
+<center>
+  <%= image_tag attachments['logo.png'].url %>
+</center>
+
+<spacer size="16"></spacer>
+
+<row>
+  <columns>      
+    <p>Dear <span><%= @user.full_name %>,</span></p>
+  </columns>
+</row>
+
+<row>
+  <columns>
+    <p>We have received your booking request! We will confirm after checking space and equipment availability. Please allow up to one working day for this process.</p>
+  </columns>
+</row>
+
+<%= render "details_body" %>
+
+<row>
+  <columns>      
+    <p>Thank you for your interest and best regards,</p>
+  </columns>
+</row>
+
+<row>
+  <columns small='2'> 
+    <%= image_tag attachments['logo_small.png'].url %>
+  </columns>
+</row>
+
+<row>
+  <columns>
+
+    <p>
+      <span class="bold">Greencarrier Freight Services International AB</span><br>
+      Torgny Segerstedtsgatan 80 <br>
+      P.O Box 1037 <br>
+      SE-405 22 Gothenburg <br>
+      Visiting adress: Redegatan 1B <br>
+      Phone: +46 31 85 79 00 
+    <p>
+  </columns>
+</row>
+
+<row>
+  <columns>      
+    <p class="bold text-center" style="font-size: 12px;">This is an auto-generated mail. Please respond to our support mail with any inquiries. <br>Find your dedicated contact on <a href="http://freightservices.greencarrier.com/contact/">http://freightservices.greencarrier.com/contact/</a>.<p>
+  </columns>
+</row>

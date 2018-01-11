@@ -157,7 +157,6 @@ class Route < ApplicationRecord
 
   def self.ids_dedicated(user = nil)
     get_routes_with_dedicated_pricings(user.id, user.tenant_id)
-
   end
 
   def next_departure

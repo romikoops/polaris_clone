@@ -114,13 +114,13 @@ function getHubs(id) {
 
     return fetch(BASE_URL + '/users/' + id + '/hubs', requestOptions).then(handleResponse);
 }
-function getShipment(userId, id) {
+function getShipment(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/users/' + userId + '/shipments/' + id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/shipments/' + id, requestOptions).then(handleResponse);
 }
 
 function getDashboard(userId) {

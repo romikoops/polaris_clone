@@ -1,0 +1,21 @@
+<% environment.context_class.instance_eval { include ApplicationHelper } %>
+
+@import "normalize";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+// @font-face {
+//   font-family: lato;
+//   font-style: normal;
+//   font-weight: 300;
+//   src: url('<%= asset_data_base64(Rails.root.join('app', 'assets', 'fonts', 'lato_normal.otf')) %>');
+// }
+body {
+  font-family: lato;
+}
+
+.wrapper {
+  position: relative;
+  margin: 0;
+  width: 100%;
+}

@@ -1,5 +1,5 @@
 module DocumentTools	
-def create(file, shipment)
+  def create(file, shipment)
 		s3 = Aws::S3::Client.new(
       access_key_id: ENV['AWS_KEY'],
       secret_access_key: ENV['AWS_SECRET'],
@@ -24,7 +24,6 @@ def create(file, shipment)
       :secret_access_key => ENV['AWS_SECRET'],
       :region => ENV['AWS_REGION']
     )
-    
  		@url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: key)	
 	end
 end

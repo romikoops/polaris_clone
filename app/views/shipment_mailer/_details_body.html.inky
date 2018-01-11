@@ -1,0 +1,85 @@
+<row>
+  <columns>
+    <h5><span class="bold">Shipment | Reference Number: <%= @shipment.imc_reference %></span></h5>
+  </columns>
+</row>
+
+<row>
+  <columns>
+    <p class="text-center">
+      <span class="bold">Departure:</span> 
+      <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span>
+    </p>
+  </columns>
+  <columns>
+    <p class="text-center">
+      <span class="bold">ETA:</span>
+      <span><%= formatted_datetime(@shipment.eta) %></span>
+    </p>
+  </columns>
+</row>
+
+<row>    
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 145px;">
+      <h6><span class="bold">From:</span></h6>
+      <p>
+        <span><%= @shipment.origin.city_country %></span>
+      </p>
+    </callout>
+  </columns>
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 145px;">
+      <h6><span class="bold">To:</span class="bold"></span></h6>
+      <p>
+        <span><%= @shipment.destination.city_country %></span>
+      </p>
+    </callout>
+  </columns>
+</row>
+
+<row>    
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 160px;">
+      <h6><span class="bold">Shipment Details:</span></h6>
+      <p>
+        <span class="bold">Mode of transport:</span> <span>Ocean</span><br>  
+        <span class="bold">Pre- and On-Carriage:</span> <span>None</span><br>
+        <span class="bold">Type of transport:</span> <span>FCL – 20’ dry container</span>
+      </p>
+    </callout>
+  </columns>
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 160px;">
+      <h6><span class="bold">Pricing Details:</span></h6>
+      <p>
+        <span class="bold">Overall Rate:</span> <span><%= format_to_price(@shipment.total_price, "€") %></span><br>  
+        <span class="bold">Service Charges (included):</span> <span><%= format_to_price(@shipment.total_price, "€") %></span><br>
+        <span class="bold">Discount:</span> <span>None</span>
+      </p>
+    </callout>
+  </columns>
+</row>
+
+<row>    
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 160px;">
+      <h6><span class="bold">Cargo Details:</span></h6>
+      <p>
+        <span class="bold">Hazardous Good:</span> <span>None</span><br>  
+        <span class="bold">Customs Clearance:</span> <span>None</span><br>
+        <span class="bold">Insurance:</span> <span>None</span>
+      </p>
+    </callout>
+  </columns>
+  <columns small="4" style="width: 50%;">
+    <callout class="Light Gray" style="height: 160px;">
+      <h6><span class="bold">Customer Details:</span></h6>
+      <p>
+        <span class="bold"><%= @user.full_name_and_company %></span> <span> </span><br>    
+        <span class="bold">Phone:</span> <span><%= @user.phone %></span><br>
+        <span class="bold">Email:</span> <span><%= @user.email %></span>
+      </p>
+    </callout>
+  </columns>
+</row>

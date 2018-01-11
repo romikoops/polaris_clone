@@ -196,6 +196,34 @@ class Shipment < ApplicationRecord
     raise "Not implemented"
   end
 
+  def notifyees
+    shipment_contacts.where(contact_type: "notifyee").map(&:contact)
+  end    
+
+  def consignee
+    shipment_contacts.find_by(contact_type: "consignee").contact
+  end    
+
+  def etd
+    Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
+  end
+
+  def eta
+    Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
+  end
+
+  def cargo_charges
+    schedule_set.reduce({}) do |cargo_charges, schedule|
+      cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
+    end
+  end
+
+  def insurance
+    schedule_set.reduce(0) do |insurance_value, schedule|
+      insurance_value += schedules_charges[schedule["hub_route_key"]]["insurance"].to_f
+    end
+  end
+
   private
 
   def generate_imc_reference

@@ -1,6 +1,7 @@
 class Admin::ShipmentsController < ApplicationController
   include ShippingTools
   before_action :require_login_and_role_is_admin
+  include ShippingTools
 
   def index
     @documents = {}
@@ -18,6 +19,7 @@ class Admin::ShipmentsController < ApplicationController
     }
     response_handler(resp)
   end
+
   def show
     @shipment = Shipment.find(params[:id])
     @cargo_items = @shipment.cargo_items
@@ -57,23 +59,6 @@ class Admin::ShipmentsController < ApplicationController
     response_handler(resp)
   end
 
-  def email_action
-    shipment = Shipment.find_by_uuid(params[:uuid])
-
-    case params[:shipment_action]
-    when "accept"
-      shipment.accept!
-      redirect_to admin_shipments_path
-    when "decline"
-      shipment.decline!
-      redirect_to admin_shipments_path
-    when "edit"
-      redirect_to edit_admin_shipment_path(shipment)
-    else
-      raise "Unknown shipment editing option!"
-    end
-  end
-
   def edit
     @shipment = Shipment.find(params[:id])
     @containers = Container.where(shipment_id: @shipment.id)
@@ -87,10 +72,9 @@ class Admin::ShipmentsController < ApplicationController
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        # redirect_to admin_shipments_path
+        shipper_confirmation_email(@shipment.shipper, @shipment)
       when "decline"
         @shipment.decline!
-        # redirect_to admin_shipments_path
       else
         raise "Unknown action!"
       end

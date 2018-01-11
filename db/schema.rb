@@ -158,9 +158,9 @@ ActiveRecord::Schema.define(version: 20180110100416) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "mot_scope_id"
     t.boolean "has_fcl"
     t.boolean "has_lcl"
-    t.bigint "mot_scope_id"
     t.index ["mot_scope_id"], name: "index_routes_on_mot_scope_id"
   end
 

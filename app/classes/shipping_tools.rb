@@ -1,7 +1,7 @@
 module ShippingTools
   include PricingTools
   include MongoTools
-  
+
   def new_shipment(load_type)
     shipment = Shipment.create(
       shipper_id: current_user.id, 
@@ -14,19 +14,17 @@ module ShippingTools
     shipment.cargo_items.create if load_type.include?('lcl') && shipment.cargo_items.empty?
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
-    routes = Route.where(tenant_id: current_user.tenant_id)
-    route_data = get_item('routeOptions', 'id', current_user.tenant_id)["data"]
-    detailed_routes = []
-    route_data.each do |rt|
-      if route_ids_dedicated[rt["id"]]
-        rt["dedicated"] = true
-      end
-      detailed_routes << rt
+    routes = get_item('routeOptions', 'id', current_user.tenant_id)["data"]
+
+    routes.map! do |route|
+      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])        
+      route
     end
+
     return {
       shipment:    shipment,
       all_nexuses: Location.nexuses,
-      routes:      detailed_routes
+      routes:      routes
     }
   end 
 
@@ -54,25 +52,6 @@ module ShippingTools
     else
       raise ApplicationError::NoRoutes # TBD - Customize Errors
     end
-  end
-
-  def create_documents(form, shipment)
-    if  form['packing_sheet']
-      Document.new_upload(form['packing_sheet'], shipment, 'packing_sheet')
-    end
-    if  form['dangerous_goods_form']
-      Document.new_upload(form['dangerous_goods_form'], shipment, 'dangerous_goods_form')
-    end
-    if  form['customs_dec']
-      Document.new_upload(form['customs_dec'], shipment, 'customs_dec')
-    end
-    if  form['customs_value_dec']
-      Document.new_upload(form['customs_value_dec'], shipment, 'customs_value_dec')
-    end
-    if  form['outside_eu']
-      Document.new_upload(form['outside_eu'], shipment, 'outside_eu')
-    end
-
   end
 
   def create_document(file, shipment, type, user) 
@@ -163,10 +142,6 @@ module ShippingTools
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    #    forwarder_notification_email(user, @shipment)
-    #    booking_confirmation_email(consignee, @shipment)
-
-    # session.delete(:shipment_uuid)
 
     return {
       shipment: @shipment,
@@ -213,9 +188,10 @@ module ShippingTools
           @dangerous = true
         end
     end
+
+    @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
-    @shipment.save!
     documents = {}
     @shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -231,6 +207,7 @@ module ShippingTools
     transportKey = @schedules.first.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first.hub_route_id}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
+
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
@@ -243,12 +220,64 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
-  def forwarder_notification_email(user, shipment)
-    ShipmentMailer.forwarder_notification(user, shipment).deliver_now
+  def tenant_notification_email(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
-  def booking_confirmation_email(user, shipment)
-    ShipmentMailer.booking_confirmation(user, shipment).deliver_now
+  def shipper_notification_email(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
+  end
+
+  def shipper_confirmation_email(user, shipment)
+    bill_of_lading = build_and_upload_pdf(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
+      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
+      name:     'bill_of_lading'
+    )
+
+    invoice = build_and_upload_pdf(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/invoice.pdf.html.erb",
+      margin:   { top: 10, bottom: 5, left: 15, right: 15 },
+      shipment: shipment,
+      name:     'invoice'
+    )
+
+    files = {
+      bill_of_lading[:name] => bill_of_lading[:url],
+      invoice[:name]        => invoice[:url]
+    }
+
+    ShipmentMailer.shipper_confirmation(
+      user, 
+      shipment, 
+      files
+    ).deliver_later
+  end
+
+  def build_and_upload_pdf(args)
+    doc_erb = ErbTemplate.new(
+      layout:   args[:layout],
+      template: args[:template],
+      locals:   { shipment: args[:shipment] }
+    )
+
+    doc_string = WickedPdf.new.pdf_from_string(
+      doc_erb.render,
+      margin: args[:margin]
+    )
+        
+    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
+    
+    File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
+    doc_pdf = File.open("tmp/" + doc_name)
+    
+    doc = Document.new_upload_backend(doc_pdf, args[:shipment], 'confirmation', current_user)
+    doc_url = doc.get_signed_url
+    
+    { name: doc_name, url: doc_url }
   end
 
   def send_booking_emails(shipment)
@@ -260,7 +289,8 @@ module ShippingTools
     ShipmentMailer.summary_mail_trucker(shipment, "Booking_" + shipment.imc_reference + ".pdf", trucker_pdf).deliver_now
     ShipmentMailer.summary_mail_consolidator(shipment, "Booking_" + shipment.imc_reference + ".pdf", consolidator_pdf).deliver_now
     ShipmentMailer.summary_mail_receiver(shipment, "Booking_" + shipment.imc_reference + ".pdf", receiver_pdf).deliver_now
-    flash[:message] = "Booking summaries got sent out via email."
+
+    # TBD - Set up flash message
   end
 
   def get_hs_code_hash(codes)
