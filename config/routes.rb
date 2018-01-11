@@ -3,7 +3,9 @@ Rails.application.routes.draw do
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations'
   }
-
+  
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 
   namespace :admin do
     resources :shipments do

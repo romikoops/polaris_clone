@@ -54,25 +54,6 @@ module ShippingTools
     end
   end
 
-  def create_documents(form, shipment)
-    if  form['packing_sheet']
-      Document.new_upload(form['packing_sheet'], shipment, 'packing_sheet')
-    end
-    if  form['dangerous_goods_form']
-      Document.new_upload(form['dangerous_goods_form'], shipment, 'dangerous_goods_form')
-    end
-    if  form['customs_dec']
-      Document.new_upload(form['customs_dec'], shipment, 'customs_dec')
-    end
-    if  form['customs_value_dec']
-      Document.new_upload(form['customs_value_dec'], shipment, 'customs_value_dec')
-    end
-    if  form['outside_eu']
-      Document.new_upload(form['outside_eu'], shipment, 'outside_eu')
-    end
-
-  end
-
   def create_document(file, shipment, type, user) 
     Document.new_upload(file, shipment, type, user)
   end
@@ -236,59 +217,63 @@ module ShippingTools
   end
 
   def tenant_notification_email(user, shipment)
-    ShipmentMailer.tenant_notification(user, shipment).deliver_now
+    ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
   def shipper_notification_email(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment).deliver_now
+    ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 
   def shipper_confirmation_email(user, shipment)
-    bill_of_lading_erb = ErbTemplate.new(
+    bill_of_lading = build_and_upload_pdf(
       layout:   "pdfs/simple.pdf.html.erb",
       template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
-      locals:   { shipment: shipment }
+      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: shipment,
+      name:     'bill_of_lading'
     )
-    bill_of_lading_pdf = WickedPdf.new.pdf_from_string(
-      bill_of_lading_erb.render,
-      margin: { top: 10, bottom: 5, left: 8, right: 8 }
-    )
-    
-    # Debugging
-    # 
-    # File.open("bill_of_lading.html", 'wb') { |file| file.write(bill_of_lading_erb.render) }
-    # File.open("bill_of_lading.pdf", 'wb') { |file| file.write(bill_of_lading_pdf) }
-    
-    bill_of_lading_pdf_name = "bill_of_lading_#{shipment.imc_reference}.pdf"
-    
-    invoice_erb = ErbTemplate.new(
+
+    invoice = build_and_upload_pdf(
       layout:   "pdfs/simple.pdf.html.erb",
       template: "shipments/pdfs/invoice.pdf.html.erb",
-      locals:   { shipment: shipment }
+      margin:   { top: 10, bottom: 5, left: 15, right: 15 },
+      shipment: shipment,
+      name:     'invoice'
     )
-    invoice_pdf = WickedPdf.new.pdf_from_string(
-      invoice_erb.render,
-      margin: { top: 10, bottom: 5, left: 15, right: 15 }
-    )
-    
-    # Debugging
-    # 
-    # File.open("invoice.html", 'wb') { |file| file.write(invoice_erb.render) }
-    # File.open("invoice.pdf", 'wb') { |file| file.write(invoice_pdf) }
-    # return
 
-    invoice_pdf_name = "invoice_#{shipment.imc_reference}.pdf"
-    
     files = {
-      bill_of_lading_pdf_name => bill_of_lading_pdf,
-      invoice_pdf_name        => invoice_pdf
+      bill_of_lading[:name] => bill_of_lading[:url],
+      invoice[:name]        => invoice[:url]
     }
 
     ShipmentMailer.shipper_confirmation(
       user, 
       shipment, 
       files
-    ).deliver_now
+    ).deliver_later
+  end
+
+  def build_and_upload_pdf(args)
+    doc_erb = ErbTemplate.new(
+      layout:   args[:layout],
+      template: args[:template],
+      locals:   { shipment: args[:shipment] }
+    )
+
+    doc_string = WickedPdf.new.pdf_from_string(
+      doc_erb.render,
+      margin: args[:margin]
+    )
+        
+    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
+    
+    File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
+    doc_pdf = File.open("tmp/" + doc_name)
+    
+    doc = Document.new_upload_backend(doc_pdf, args[:shipment], 'confirmation', current_user)
+    doc_url = doc.get_signed_url
+    
+    { name: doc_name, url: doc_url }
   end
 
   def send_booking_emails(shipment)

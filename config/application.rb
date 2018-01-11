@@ -37,5 +37,8 @@ module Imcr
         resource '*', :headers => :any, :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'], :methods => [:get, :post, :patch, :put, :delete, :options]
       end
     end
+    
+    config.encoding = "utf-8"
+    config.active_job.queue_adapter = :sidekiq
   end
 end

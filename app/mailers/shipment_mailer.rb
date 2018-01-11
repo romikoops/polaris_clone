@@ -39,7 +39,7 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
     
     files.each do |name, file|
-      attachments[name] = file
+      attachments[name] = open(file).read
     end
 
     mail(
