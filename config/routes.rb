@@ -99,10 +99,10 @@ Rails.application.routes.draw do
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
     controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
   get "tenants/:name", to: "tenants#get_tenant"
-<<<<<<< HEAD
+
   get 'currencies/get', to: 'users#currencies'
   post 'currencies/set', to: 'users#set_currency'
-=======
+
   get "search/hscodes/:query" => "search#search_hs_codes"
->>>>>>> a8e053c68a7377b5a0b1725444e7cb55d9041c08
+
 end
