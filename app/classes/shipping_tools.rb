@@ -104,7 +104,7 @@ module ShippingTools
     ## TODO Adjust for multiple schedules
     if shipment_data[:insurance][:bool]
       @shipment.schedule_set.each do |ss|
-        key = ss.hub_route_key
+        key = ss["hub_route_key"]
         @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
         @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
         @shipment.total_price = @shipment.schedules_charges[key]["total"]
