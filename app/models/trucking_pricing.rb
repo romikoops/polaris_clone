@@ -1,4 +1,4 @@
-sclass TruckingPricing < ApplicationRecord
+class TruckingPricing < ApplicationRecord
   has_many :shipments
   extend MongoTools
   # Validations
