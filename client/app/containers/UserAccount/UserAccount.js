@@ -73,7 +73,6 @@ export class UserAccount extends Component {
         userDispatch.makePrimary(user.data.id, locationId);
     }
     setUrl(target) {
-        console.log(target);
         const {userDispatch, user} = this.props;
         switch(target) {
             case 'pricing':
@@ -82,7 +81,7 @@ export class UserAccount extends Component {
                 break;
             case 'shipments':
                 this.setState({activeLink: target});
-                userDispatch.getShipments(user.data.id, true);
+                userDispatch.getShipments(true);
                 break;
             case 'clients':
                 this.setState({activeLink: target});

@@ -151,7 +151,7 @@ function makePrimary(userId, locationId, redirect) {
     };
 }
 
-function getShipments(id, redirect) {
+function getShipments(redirect) {
     function request(shipmentData) {
         return { type: userConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData };
     }
@@ -164,7 +164,7 @@ function getShipments(id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        userService.getShipments(id).then(
+        userService.getShipments().then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Shipments successful')

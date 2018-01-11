@@ -96,7 +96,7 @@ export class AdminShipmentRow extends Component {
         return (
             <div
                 key={v4()}
-                className={`flex-100 layout-row ${styles.route_result}`}
+                className={`flex-100 layout-row pointy ${styles.route_result}`}
 
             >
                 <div className="flex-100 layout-row layout-wrap">

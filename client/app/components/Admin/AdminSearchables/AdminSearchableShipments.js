@@ -93,7 +93,7 @@ export class AdminSearchableShipments extends Component {
                         <input
                             type="text"
                             name="search"
-                            placeholder="Search route"
+                            placeholder="Search Shipments"
                             onChange={this.handleSearchChange}
                         />
                     </div>
