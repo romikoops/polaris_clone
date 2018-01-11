@@ -13,6 +13,7 @@ import AdminRoutes from '../../components/Admin/AdminRoutes';
 import AdminPricings from '../../components/Admin/AdminPricings';
 import AdminTrucking from '../../components/Admin/AdminTrucking';
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
+import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -73,15 +74,14 @@ class Admin extends Component {
                 hubHash[hub.data.id] = hub;
             });
         }
+        const nav = (<AdminNav navLink={this.setUrl} theme={theme}/>);
         // ;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                 <Header theme={theme} />
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start `}>
-                    <div className="flex-20 layout-row layout-wrap layout-align-start-center">
-                        <AdminNav navLink={this.setUrl} theme={theme}/>
-                    </div>
-                    <div className="flex-80 layout-row layout-wrap layout-align-start-start">
+                    <FloatingMenu Comp={nav} theme={theme}/>
+                    <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                         <Switch className="flex">
                             <Route
 

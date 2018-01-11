@@ -20,7 +20,7 @@ export class BookingConfirmation extends Component {
         window.scrollTo(0, 0);
     }
     render() {
-        const { theme, shipmentData, tenant } = this.props;
+        const { theme, shipmentData, tenant, user } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
 
         const {
@@ -161,7 +161,7 @@ export class BookingConfirmation extends Component {
                                         } flex-none layout-row layout-align-space-between`}
                                     >
                                         <p>Total Price:</p>{' '}
-                                        <Price value={shipment.total_price} />
+                                        <Price value={shipment.total_price} user={user}/>
                                     </div>
                                 </div>
                             </div>

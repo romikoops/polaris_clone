@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './NavSidebar.scss';
+// import styles from './NavSidebar.scss';
 import Style from 'style-it';
-
+import {AdminNavItem} from '../../components/Admin/AdminNavItem';
+import { v4 } from 'node-uuid';
 export class NavSidebar extends Component {
     constructor(props) {
         super(props);
@@ -11,24 +12,15 @@ export class NavSidebar extends Component {
     render() {
         const {
             navLinkInfo,
-            activeLink,
+            // activeLink,
             toggleActiveClass,
             theme,
-            navHeadlineInfo
+            // navHeadlineInfo
         } = this.props;
 
         const navLinks = navLinkInfo.map(op => {
             return (
-                <div
-                    key={op.key}
-                    className={[
-                        styles['menu-item'],
-                        op.key === activeLink ? 'active' : null
-                    ].join(' ')}
-                    onClick={() => toggleActiveClass(op.key)}
-                >
-                    {op.text}
-                </div>
+                <AdminNavItem key={v4()} url={op.url} target={op.target} text={op.text} iconClass={op.icon} theme={theme} navFn={toggleActiveClass}/>
             );
         });
 
@@ -48,12 +40,12 @@ export class NavSidebar extends Component {
                     `}
                 </Style>
 
-                <nav className={styles.menu}>
+{/*                <nav className={styles.menu}>
                     <h3 className={styles['menu-heading']}>
                         {navHeadlineInfo}
-                    </h3>
+                    </h3>*/}
                     {navLinks}
-                </nav>
+                {/* </nav> */}
             </div>
         );
     }

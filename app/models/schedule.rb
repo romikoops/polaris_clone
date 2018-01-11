@@ -5,7 +5,7 @@ class Schedule < ApplicationRecord
   has_many :transport_categories, through: :vehicle
   after_save :set_route_scope
   # after_validation do |sched|
-  #   byebug
+  #   
   # end 
 
   def get_pickup_date(truck_seconds)

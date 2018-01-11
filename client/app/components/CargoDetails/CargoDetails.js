@@ -6,6 +6,7 @@ import FileUploader from '../FileUploader/FileUploader';
 import { HSCodeRow } from '../HSCodeRow/HSCodeRow';
 import defaults from '../../styles/default_classes.scss';
 import Truncate from 'react-truncate';
+import { converter } from '../../helpers';
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +48,7 @@ export class CargoDetails extends Component {
     }
 
     calcCustomsFee() {
-        const { hsCodes, shipmentData } = this.props;
+        const { hsCodes, shipmentData, currencies } = this.props;
         const { customs, cargoItems, containers } = shipmentData;
         let hsCount = 0;
         cargoItems.forEach((ci) => {
@@ -64,16 +65,14 @@ export class CargoDetails extends Component {
             const diff = hsCount - customs.limit;
             return customs.fee + (diff * customs.extra);
         }
-        return customs.fee;
+        return converter(customs.fee, customs.currency, currencies).toFixed(2);
     }
     handleChange(event) {
         this.props.handleChange(event);
     }
     render() {
-        const { shipmentData, theme, insurance, hsCodes, setHsCode, deleteCode } = this.props;
-        const { shipment, dangerousGoods, documents, customs, cargoItems, containers } = shipmentData;
-        console.log(customs);
-        console.log(shipment);
+        const { shipmentData, theme, insurance, hsCodes, setHsCode, deleteCode, user } = this.props;
+        const { dangerousGoods, documents, customs, cargoItems, containers } = shipmentData;
         const DocViewer = ({doc}) => {
             return(
                 <div className="flex-100 layout-row layout-align-start-center">
@@ -100,7 +99,7 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {insurance.val.toFixed(2)} €</h6>
+                    <h6 className="flex-100"> {insurance.val.toFixed(2)} {user.data.currency}</h6>
                 </div>
             </div>
         );
@@ -117,7 +116,7 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} €</h6>
+                    <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} {user.data.currency}</h6>
                 </div>
                 <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
             </div>

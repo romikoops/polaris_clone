@@ -17,11 +17,11 @@ export class AdminNavItem extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         return(
-            <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.nav_item}`} onClick={this.handleLink}>
-                <div className="flex-15 layout-row layout-align-center-center">
+            <div className={`flex-100 layout-row layout-wrap layout-align-start-center pointy ${styles.nav_item}`} onClick={this.handleLink}>
+                <div className="flex-15 layout-row layout-align-center-center nav_icon">
                     <i className={`flex-none fa ${iconClass}`} style={textStyle}></i>
                 </div>
-                <div className="flex layout-row layout-wrap">
+                <div className="flex layout-row layout-wrap nav_text">
                     <h3 className="flex-none" >{text}</h3>
                 </div>
             </div>

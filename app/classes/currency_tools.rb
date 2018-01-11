@@ -9,7 +9,16 @@ module CurrencyTools
     else 
       rates = cached_rates
     end
-    
+    return rates
+  end
+
+  def get_currency_array(base)
+    rates = get_rates(base)
+    results = [{key: base, rate: 1}]
+    rates["today"].each do |k, v|
+      results.push({key: k, rate: v})
+    end
+    return results
   end
 
   def sum_and_convert(hash_obj, base)
@@ -19,6 +28,8 @@ module CurrencyTools
     hash_obj.each do |key, value|
       if rates[:today][key]
         base_value += value * (1/rates[:today][key])
+      elsif key == base
+        base_value += value
       end
     end
     
@@ -32,6 +43,8 @@ module CurrencyTools
     hash_obj.each do |key, charge|
       if rates[:today][charge["currency"]]
         base_value += charge["value"] * (1/rates[:today][charge["currency"]])
+      elsif charge["currency"] == base
+        base_value += charge["value"]
       end
     end
     

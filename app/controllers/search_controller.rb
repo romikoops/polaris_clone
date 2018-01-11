@@ -6,7 +6,7 @@ class SearchController < ApplicationController
   def search_hs_codes
     text = params[:query] != "" ? params[:query] : 'plastics'
     resp = text_search_fn(false, 'hsCodes', text)
-    # byebug
+    # 
     results = []
     resp.each { |r| 
         tmp = {}

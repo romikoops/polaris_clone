@@ -8,7 +8,8 @@ import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
-
+import { appActions } from '../../actions';
+import { bindActionCreators } from 'redux';
 
 class Header extends Component {
     constructor(props) {
@@ -29,7 +30,7 @@ class Header extends Component {
         });
     }
     render() {
-        const { user, theme, tenant } = this.props;
+        const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
 
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
         const dropDownImage = accountIcon;
@@ -47,6 +48,10 @@ class Header extends Component {
                 key: 'signOut'
             }
         ];
+        const currLinks = currencies ? currencies.map((c) => {
+            c.select = () => appDispatch.setCurrency(c.key);
+            return c;
+        }) : [];
         if (this.state.redirect) {
             return <Redirect push to="/" />;
         }
@@ -55,10 +60,20 @@ class Header extends Component {
                 dropDownText={dropDownText}
                 dropDownImage={dropDownImage}
                 linkOptions={accountLinks}
+                invert={invert}
             />
         );
-        const loginPrompt = <a className={defs.pointy} onClick={this.toggleShowLogin}>Log in</a>;
-        const rightCorner = user ? dropDown : loginPrompt;
+        const currDropDown = (
+            <NavDropdown
+                dropDownText={user && user.data ? user.data.currency : ''}
+                linkOptions={currLinks}
+                invert={invert}
+            />
+        );
+        const textColour = invert ? 'white' : 'black';
+        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}</div>;
+        const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
+        const rightCorner = user ? dropDowns : loginPrompt;
         const loginModal = (
             <Modal
                 component={
@@ -108,14 +123,21 @@ Header.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { authentication, tenant, shipment } = state;
+    const { authentication, tenant, shipment, app } = state;
     const { user, loggedIn } = authentication;
+    const { currencies } = app;
     return {
         user,
         tenant,
         loggedIn,
-        shipment
+        shipment,
+        currencies
+    };
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        appDispatch: bindActionCreators(appActions, dispatch)
     };
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

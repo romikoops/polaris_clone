@@ -76,9 +76,10 @@ export class AdminNav extends Component {
         const linkItems = links.map((li) =>
             <AdminNavItem key={v4()} url={li.url} target={li.target} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
         );
+        const navStyle = {height: `${linkItems.length * 55}px`};
         console.log(linkItems);
         return(
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={navStyle}>
                 {linkItems}
             </div>
         );

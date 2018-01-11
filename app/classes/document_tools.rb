@@ -24,7 +24,7 @@ def create(file, shipment)
       :secret_access_key => ENV['AWS_SECRET'],
       :region => ENV['AWS_REGION']
     )
-    byebug
+    
  		@url = signer.presigned_url(:get_object, bucket: ENV['AWS_BUCKET'], key: key)	
 	end
 end

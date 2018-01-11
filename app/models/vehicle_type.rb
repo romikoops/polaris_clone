@@ -4,6 +4,6 @@ class VehicleType < ApplicationRecord
   include PricingTools
    def test
     r = get_hub_route_user_pricings(1, 2)
-    byebug
+    
   end
 end

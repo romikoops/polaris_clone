@@ -40,7 +40,7 @@ export class RouteResult extends Component {
         return ('0' + n).slice(-2);
     }
     render() {
-        const { theme, schedule } = this.props;
+        const { theme, schedule, user } = this.props;
         const schedKey = schedule.hub_route_key;
         const hubKeyArr = schedKey.split('-');
         let originHub = {};
@@ -204,7 +204,7 @@ export class RouteResult extends Component {
                 <div className="flex-25 layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <p className="flex-none">Total price: </p>
-                        <Price value={this.props.fees[schedKey].total} />
+                        <Price value={this.props.fees[schedKey].total} user={user}/>
                     </div>
                     <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
                         <RoundButton

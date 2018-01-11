@@ -65,6 +65,7 @@ export class AdminDashboard extends Component {
                 clientHash[cl.id] = cl;
             });
         }
+        const filteredClients = clients.filter(x => !x.guest);
         const schedArr = [];
         const openShipments = shipments && shipments.open && shipments.open.shipments ? shipments.open.shipments.map((ship) => {
             return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
@@ -110,7 +111,7 @@ export class AdminDashboard extends Component {
                     { shortSchedArr }
                 </div>
                 <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
-                <AdminSearchableClients theme={theme} clients={clients} adminDispatch={adminDispatch}/>
+                <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
 
             </div>
         );

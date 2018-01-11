@@ -69,7 +69,7 @@ module MongoTools
   end
 
   def get_client
-    client = init
+    client = $db
     return client
   end
 

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include PricingTools
-
+  include CurrencyTools
   skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
 
@@ -45,6 +45,16 @@ class UsersController < ApplicationController
     @user.update_attributes(update_params)
     headers = @user.create_new_auth_token
     response_handler({user: @user, headers: headers})
+  end
+  def currencies
+    results = get_currency_array(current_user.currency)
+    response_handler(results)
+  end
+  def set_currency
+    current_user.currency = params[:currency]
+    current_user.save!
+    rates = get_rates(params[:currency])
+    response_handler({user: current_user, rates: rates})
   end
   
   def hubs

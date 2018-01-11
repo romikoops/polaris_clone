@@ -1,4 +1,4 @@
-class TruckingPricing < ApplicationRecord
+sclass TruckingPricing < ApplicationRecord
   has_many :shipments
   extend MongoTools
   # Validations
@@ -36,7 +36,7 @@ class TruckingPricing < ApplicationRecord
 
   def self.calc_final_price(destination, cargo_item, km, hub)
     hub_trucking_query = get_item('truckingHubs', "_id", "#{hub.id}")
-    byebug
+    
     if hub && hub.trucking_type
       case hub_trucking_query.type
       when 'zipcode'
@@ -54,7 +54,7 @@ class TruckingPricing < ApplicationRecord
     zip_int = zc.gsub!(" ", "").to_i
     tps = TruckingPricing.find_by("? < upper_zip AND ? > lower_zip", zip_int, zip_int)
     tps = query_table('truckingTables', { "$and" => [ { "data.lower_zip" => { "$gte" => zc } }, { "data.upper_zip" => { "$lte" => zc } } ] })
-    byebug
+    
     @selected_rate
     if tps
       tps.rate_table.each do |rate|

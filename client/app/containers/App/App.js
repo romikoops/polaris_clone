@@ -13,6 +13,8 @@ import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
 import { SignOut } from '../../components/SignOut/SignOut';
 import { Loading } from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
+import { appActions } from '../../actions';
+import { bindActionCreators } from 'redux';
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index';
 import {getSubdomain} from '../../helpers';
 class App extends Component {
@@ -20,9 +22,10 @@ class App extends Component {
         super(props);
     }
     componentDidMount() {
-        const { dispatch } = this.props;
+        const { appDispatch } = this.props;
         const subdomain = getSubdomain();
-        dispatch(fetchTenantIfNeeded(subdomain));
+        appDispatch.fetchTenantIfNeeded(subdomain);
+        appDispatch.fetchCurrencies();
         // dispatch(anonymousLogin());
     }
     componentDidUpdate(prevProps) {
@@ -84,7 +87,6 @@ class App extends Component {
 App.propTypes = {
     selectedSubdomain: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    dispatch: PropTypes.func.isRequired,
     tenant: PropTypes.object,
     user: PropTypes.object,
     loggedIn: PropTypes.bool
@@ -93,6 +95,7 @@ App.propTypes = {
 function mapStateToProps(state) {
     const { selectedSubdomain, tenant, authentication } = state;
     const { user, loggedIn } = authentication;
+    // const { currencies } = app;
     const { isFetching } = tenant || {
         isFetching: true
     };
@@ -101,8 +104,14 @@ function mapStateToProps(state) {
         tenant,
         user,
         loggedIn,
-        isFetching
+        isFetching,
+        // currencies
+    };
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        appDispatch: bindActionCreators(appActions, dispatch)
     };
 }
 
-export default withRouter(connect(mapStateToProps)(App));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

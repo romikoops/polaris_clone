@@ -145,7 +145,7 @@ module ExcelTools
         results << ntp
         # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
       end
-      # byebug
+      # 
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
         update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
@@ -410,7 +410,7 @@ module ExcelTools
         hub_code = hub_row[:hub_code]
       end
       p user.tenant_id
-      # byebug
+      # 
       hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: user.tenant_id, hub_type: hub_row[:hub_type], trucking_type: hub_row[:trucking_type], latitude: hub_row[:latitude], longitude: hub_row[:longitude], name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", photo: hub_row[:photo])
       hubs << hub
     end
@@ -419,7 +419,7 @@ module ExcelTools
          hub.generate_hub_code!(user.tenant_id)
       end
     end
-    # byebug
+    # 
     return hubs
   end
 
@@ -1161,7 +1161,7 @@ module ExcelTools
 
     end
       # price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
-      # byebug
+      # 
 
         new_pricings.each do |key, value|
           value["sizes"].each do |skey, svalue|

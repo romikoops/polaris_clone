@@ -131,7 +131,7 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, loading, tenant, user, shipmentDispatch } = this.props;
+        const { bookingData, theme, match, loading, tenant, user, shipmentDispatch, currencies } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -237,6 +237,7 @@ class Shop extends Component {
                             req={
                                 request && request.stage2 ? request.stage2 : {}
                             }
+                            user={user}
                             setStage={this.selectShipmentStage}
                             messages={error ? error.stage3 : []}
                             shipmentDispatch={shipmentDispatch}
@@ -261,9 +262,11 @@ class Shop extends Component {
                                         ? request.stage4
                                         : null
                                 }
+                                currencies={currencies}
                                 setStage={this.selectShipmentStage}
                                 messages={error ? error.stage4 : []}
                                 tenant={tenant}
+                                user={user}
                                 shipmentDispatch={shipmentDispatch}
                                 hideRegistration={this.hideRegistration}
                             />
@@ -279,6 +282,7 @@ class Shop extends Component {
                             {...props}
                             theme={theme}
                             tenant={tenant.data}
+                            user={user}
                             shipmentData={response ? response.stage4 : {}}
                             setStage={this.selectShipmentStage}
                             shipmentDispatch={shipmentDispatch}
@@ -310,8 +314,9 @@ Shop.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    const { users, authentication, tenant, bookingData } = state;
+    const { users, authentication, tenant, bookingData, app } = state;
     const { user, loggedIn, loggingIn, registering } = authentication;
+    const { currencies } = app;
     const loading = bookingData.loading;
     return {
         user,
@@ -321,7 +326,8 @@ function mapStateToProps(state) {
         bookingData,
         loggingIn,
         registering,
-        loading
+        loading,
+        currencies
     };
 }
 

@@ -57,7 +57,7 @@ export class LandingTop extends Component {
                 <div className={styles.top_mask}> </div>
                 <div className="layout-row flex-100 layout-wrap">
                     <div className={styles.top_row + ' flex-100 layout-row'}>
-                        <Header user={user} theme={theme} />
+                        <Header user={user} theme={theme} invert={true}/>
                     </div>
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
                         <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>

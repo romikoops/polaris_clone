@@ -264,7 +264,7 @@ export class BookingDetails extends Component {
     }
 
     render() {
-        const { theme, shipmentData, shipmentDispatch } = this.props;
+        const { theme, shipmentData, shipmentDispatch, currencies, user } = this.props;
         const {
             shipment,
             hubs,
@@ -318,6 +318,8 @@ export class BookingDetails extends Component {
                     handleInsurance={this.handleInsurance}
                     insurance={this.state.insurance}
                     shipmentDispatch={shipmentDispatch}
+                    currencies={currencies}
+                    user={user}
                 />
                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>

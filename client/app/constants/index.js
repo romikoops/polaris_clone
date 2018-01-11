@@ -8,3 +8,4 @@ export * from './shipment.constants';
 export * from './map.constants';
 export * from './container.constants';
 export * from './admin.constants';
+export * from './app.constants';

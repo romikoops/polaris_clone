@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
+import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
 import { bindActionCreators } from 'redux';
 import { Switch, Route } from 'react-router-dom';
 import {
@@ -20,6 +21,7 @@ import { userActions, authenticationActions } from '../../actions';
 
 import './UserAccount.scss';
 import { Loading } from '../../components/Loading/Loading';
+
 
 export class UserAccount extends Component {
     constructor(props) {
@@ -103,6 +105,7 @@ export class UserAccount extends Component {
         }
     }
 
+
     render() {
         const { user, theme, users, userDispatch, authDispatch } = this.props;
         if (!users || !user) {
@@ -115,18 +118,47 @@ export class UserAccount extends Component {
         const loadingScreen =  loading ? <Loading theme={theme} /> : '';
         const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
-            { key: 'dashboard', text: 'Dashboard' },
-            { key: 'profile', text: 'Profile' },
-            // { key: 'locations', text: 'Locations' },
-            // { key: 'billing', text: 'Billing' },
-            { key: 'shipments', text: 'Shipments' }
+            // { key: 'dashboard', text: 'Dashboard' },
+            // { key: 'profile', text: 'Profile' },
+            // // { key: 'locations', text: 'Locations' },
+            // // { key: 'billing', text: 'Billing' },
+            // { key: 'shipments', text: 'Shipments' }
+            {
+                icon: 'fa-tachometer',
+                text: 'Dashboard',
+                url: '/account/dashboard',
+                target: 'dashboard'
+            },
+            {
+                icon: 'fa-ship',
+                text: 'Shipments',
+                url: '/account/shipments',
+                target: 'shipments'
+            },
+            {
+                icon: 'fa-user',
+                text: 'Profile',
+                url: '/account/profile',
+                target: 'profile'
+            }
         ];
+        // const textStyle = {
+        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        // };
+
         const hubHash = {};
         if (hubs) {
             hubs.forEach((hub) => {
                 hubHash[hub.data.id] = hub;
             });
         }
+        const nav = (<NavSidebar
+                                    theme={theme}
+                                    navHeadlineInfo={navHeadlineInfo}
+                                    navLinkInfo={navLinkInfo}
+                                    toggleActiveClass={this.setUrl}
+                                    activeLink={this.state.activeLink}
+                                />);
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center">
@@ -137,17 +169,9 @@ export class UserAccount extends Component {
                         defs.spacing_md_top
                     } ${defs.spacing_md_bottom}`}
                 >
-                    <div className="layout-row flex-20">
-                        <NavSidebar
-                            theme={theme}
-                            navHeadlineInfo={navHeadlineInfo}
-                            navLinkInfo={navLinkInfo}
-                            toggleActiveClass={this.setUrl}
-                            activeLink={this.state.activeLink}
-                        />
-                    </div>
+                    <FloatingMenu Comp={nav} theme={theme}/>
 
-                    <div className="layout-row flex-80">
+                    <div className="layout-row flex-100 ">
                         <Switch className="flex">
                             <Route
                                 exact

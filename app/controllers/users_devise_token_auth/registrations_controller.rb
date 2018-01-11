@@ -6,7 +6,7 @@ module UsersDeviseTokenAuth
 		
 		def create
 			if sign_up_params[:guest]
-				# byebug
+				# 
 			end
 			super
 		end

@@ -1,0 +1,63 @@
+:local {
+  .wrapper {
+    width: 150px;
+    height: max-content;
+    min-height: 500px;
+    position: fixed;
+    top: 100px;
+    left: 50px;
+  }
+  .icon_circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    i {
+      font-size: 20px;
+      height: 30px;
+      width: 30px;
+    }
+  }
+  .menu_content {
+    *{
+      transition: all 0.75s linear;
+      overflow: hidden;
+    }
+    transition: all 0.75s linear;
+    h3 {
+      transition: all 0.75s linear;
+    }
+
+  }
+  .open {
+    height: 100%;
+    *{
+      opacity: 1;
+    }
+    h3 {
+      width: 150px;
+    }
+    i {
+      width: 20px;
+    }
+  }
+  .closed {
+    // height: 0px !important;
+    .nav_icon {
+      width: 20px !important;
+    }
+
+    * {
+      // font-size: 1px !important;
+      
+      overflow: hidden;
+    }
+    h3 {
+      opacity: 0 !important;
+      width: 0;
+    }
+    // i:hover + h3 {
+    //   width: 150px;   
+    //   opacity: 1 !important;
+    // }
+  }
+}

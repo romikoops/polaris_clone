@@ -9,7 +9,7 @@ export class Price extends Component {
         return ('0' + n).slice(-2);
     }
     render() {
-        const { value, scale } = this.props;
+        const { value, scale, user } = this.props;
         const scaleTransformation = scale ? { transform: `scale(${scale})`, transformOrigin: `0 ${35.5 * scale / 2}px` } : {};
         const priceUnits = Math.floor(value);
         const priceCents = this.format2Digit(Math.floor((value * 100) % 100));
@@ -17,12 +17,13 @@ export class Price extends Component {
             <p className={`flex-none ${styles.price}`} style={scaleTransformation}>
                 {priceUnits}
                 <sup>.{priceCents}</sup>{' '}
-                <span className={styles.price_currency}>EUR</span>
+                <span className={styles.price_currency}>{user.data.currency}</span>
             </p>
         );
     }
 }
 Price.propTypes = {
     value: PropTypes.number,
-    scale: PropTypes.string
+    scale: PropTypes.string,
+    user: PropTypes.object
 };

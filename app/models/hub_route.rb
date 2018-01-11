@@ -57,7 +57,7 @@ class HubRoute < ApplicationRecord
         etd = tmp_date.midday
         eta = etd + journey_length.days
         new_sched = {starthub_id: starthub, endhub_id: endhub, eta: eta, etd: etd, vehicle_id: vehicle_type_id}
-         # byebug
+         # 
         self.schedules.find_or_create_by(new_sched)
         
       end

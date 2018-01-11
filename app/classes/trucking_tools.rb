@@ -102,7 +102,7 @@ module TruckingTools
         return {value: @selected_rate["min_value"], currency: tps["currency"]}
       end
     else
-      byebug
+      
       return {value: 1.25 * km, currency: "EUR"}
     end
   end

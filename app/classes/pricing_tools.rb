@@ -52,7 +52,7 @@ module PricingTools
         end
       end
     end
-    totals["total"] = {value: sum_and_convert_cargo(totals, "EUR"), currency: "EUR"}
+    totals["total"] = {value: sum_and_convert_cargo(totals, user.currency), currency: user.currency}
     
     return totals
   end
@@ -70,7 +70,7 @@ module PricingTools
         # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
       end
     end
-    totals["total"] = {value: sum_and_convert_cargo(totals, "EUR"), currency: "EUR"}
+    totals["total"] = {value: sum_and_convert_cargo(totals, user.currency), currency: user.currency}
     return totals
   end
 

@@ -6,7 +6,7 @@ class TenantsController < ApplicationController
 
   def get_tenant
     @tenant = Tenant.find_by_subdomain(params[:name])
-    # byebug
+    # 
     if @tenant
       json_response(@tenant, 200)
     else

@@ -46,7 +46,7 @@ module ShippingTools
         total_price:                offer_calculation.total_price,
         has_pre_carriage:           offer_calculation.has_pre_carriage,
         has_on_carriage:            offer_calculation.has_on_carriage,
-        schedules:                  offer_calculation.shipment.route.schedules,
+        schedules:                  offer_calculation.schedules,
         truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
         originHubs:                 offer_calculation.origin_hubs,
         destinationHubs:            offer_calculation.destination_hubs
@@ -123,20 +123,24 @@ module ShippingTools
     if new_user_loc.id == 1
       new_user_loc.update_attributes!(primary: true)
     end
+    ## TODO Adjust for multiple schedules
     if shipment_data[:insurance][:bool]
-      key = @shipment.schedules_charges.first[0]
-      @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-      @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
-      @shipment.total_price = @shipment.schedules_charges[key]["total"]
-
+      @shipment.schedule_set.each do |ss|
+        key = ss.hub_route_key
+        @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
+        @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
+        @shipment.total_price = @shipment.schedules_charges[key]["total"]
+      end
     end
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
       @shipment.cargo_items.map do |ci|
-        hsCodes[ci.id.to_s].each do |hs|
-          ci.hs_codes << hs["value"]
+        if hsCodes[ci.id.to_s]
+          hsCodes[ci.id.to_s].each do |hs|
+            ci.hs_codes << hs["value"]
+          end
+          ci.save!
         end
-        ci.save!
       end
     end
     if @shipment.containers
@@ -262,7 +266,7 @@ module ShippingTools
   def get_hs_code_hash(codes)
     resp = get_items_by_key_values(false, 'hsCodes', '_id', codes)
     results = {}
-    byebug
+    
     resp.each do |hs|
       results[hs["_id"]] = hs 
     end

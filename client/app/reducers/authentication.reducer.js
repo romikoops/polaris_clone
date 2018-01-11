@@ -53,6 +53,11 @@ export function authentication(state = initialState, action) {
             return {
                 loading: true
             };
+         case authenticationConstants.SET_USER:
+            return {
+                ...state,
+                user: action.user
+            };
         default:
             return state;
     }

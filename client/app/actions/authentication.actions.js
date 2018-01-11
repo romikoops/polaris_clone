@@ -76,6 +76,10 @@ function register(user, redirect) {
         );
     };
 }
+function setUser(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+    return {type: authenticationConstants.SET_USER, user};
+}
 
 function updateUser(user, req, shipmentReq) {
     function request(response) {
@@ -113,5 +117,6 @@ export const authenticationActions = {
     login,
     logout,
     register,
-    updateUser
+    updateUser,
+    setUser
 };

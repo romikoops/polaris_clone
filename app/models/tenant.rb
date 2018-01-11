@@ -15,7 +15,7 @@ class Tenant < ApplicationRecord
     # p str
     # Dir.glob(Rails.root.to_s + '/app/assets/images/cityimages/*.jpg') do |image|
     #   p image
-    #   byebug
+    #   
     #   # resp = reduce_and_upload('Hanoi', str)
     #   # p resp[:sm]
     # end

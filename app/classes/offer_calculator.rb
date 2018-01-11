@@ -105,7 +105,7 @@ class OfferCalculator
   def determine_schedules!
     @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
       .where("transport_categories.name = 'any'")
-      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days)
+      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd)
   end
 
   def add_schedules_charges!
@@ -202,13 +202,12 @@ class OfferCalculator
    
     @shipment.schedules_charges.each do |key, svalue|
       svalue["cargo"].each do |id, charges|
-        charges.each do |fid, fee|
-           if !raw_totals[fee["currency"]]
-            raw_totals[fee["currency"]] = fee["value"].to_f
-          else
-            raw_totals[fee["currency"]] += fee["value"].to_f
-          end
+        if !raw_totals[charges["total"]["currency"]]
+          raw_totals[charges["total"]["currency"]] = charges["total"]["value"].to_f
+        else
+          raw_totals[charges["total"]["currency"]] += charges["total"]["value"].to_f
         end
+        
       end
       
       if !raw_totals[svalue["trucking_on"]["currency"]]
@@ -221,9 +220,7 @@ class OfferCalculator
       else
         raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
       end
-      
-      
-      converted_totals = sum_and_convert(raw_totals, "EUR")
+      converted_totals = sum_and_convert(raw_totals, @user.currency)
       @shipment.schedules_charges[key]["total"] = converted_totals
       
       if @total_price[:total] == 0 
