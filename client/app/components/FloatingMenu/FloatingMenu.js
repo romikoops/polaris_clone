@@ -56,7 +56,7 @@ export class FloatingMenu extends Component {
                         <i className="fa fa-bars flex-none clip" style={textStyle}/>
                     </AnimIcon>
                     <div className="flex layout-row layout-align-start-center">
-                        <h4 className="flex-none">MENU</h4>
+                        <h4 className="flex-none no_m">MENU</h4>
                     </div>
                 </Title>
                 <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>

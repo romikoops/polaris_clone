@@ -277,11 +277,10 @@ export function admin(state = {}, action) {
             });
             return reqPric;
         case adminConstants.GET_PRICINGS_SUCCESS:
-            // ;
-            const succPric = merge({}, {
+            const succPric = merge({}, state, {
                 pricingData: action.payload.data,
                 loading: false
-            }, state);
+            });
             return succPric;
         case adminConstants.GET_PRICINGS_FAILURE:
             const errPric = merge({}, state, {
@@ -339,10 +338,10 @@ export function admin(state = {}, action) {
             return reqRoutePric;
         case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
             // ;
-            const succRoutePric = merge({}, {
+            const succRoutePric = merge({}, state, {
                 routePricings: action.payload.data,
                 loading: false
-            }, state);
+            });
             return succRoutePric;
         case adminConstants.GET_ROUTE_PRICINGS_FAILURE:
             const errRoutePric = merge({}, state, {
@@ -357,10 +356,10 @@ export function admin(state = {}, action) {
             return reqClients;
         case adminConstants.GET_CLIENTS_SUCCESS:
             // ;
-            const succClients = merge({}, {
+            const succClients = merge({}, state, {
                 clients: action.payload.data,
                 loading: false
-            }, state);
+            });
             return succClients;
         case adminConstants.GET_CLIENTS_FAILURE:
             const errClients = merge({}, state, {
@@ -375,10 +374,10 @@ export function admin(state = {}, action) {
             return reqClient;
         case adminConstants.GET_CLIENT_SUCCESS:
             // ;
-            const succClient = merge({}, {
+            const succClient = merge({}, state, {
                 client: action.payload.data,
                 loading: false
-            }, state);
+            });
             return succClient;
         case adminConstants.GET_CLIENT_FAILURE:
             const errClient = merge({}, state, {

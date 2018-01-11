@@ -48,7 +48,7 @@ export class AdminShipmentRow extends Component {
         handleAction(shipment.id, 'accept');
     }
     render() {
-        const { theme, shipment, hubs, client } = this.props;
+        const { theme, shipment, hubs} = this.props;
         if (shipment.schedule_set.length < 1) {
             return '';
         }
@@ -57,7 +57,6 @@ export class AdminShipmentRow extends Component {
             // ;
             return '';
         }
-        // ;
         const schedule = {};
         const originHub = hubs[hubKeys[0]].data;
         const destHub = hubs[hubKeys[1]].data;
@@ -83,7 +82,7 @@ export class AdminShipmentRow extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const btnsRow = (
-            <div className="flex-40 layout-row layout-align-space-between-center layout-wrap">
+            <div className={`flex-40 layout-row layout-align-space-between-start layout-wrap ${styles.btn_row}`}>
                 <div className={`flex-40 layout-row layout-align-center-center ${styles.deny}`} onClick={this.handleDeny}>
                     <i className="flex-none fa fa-trash"></i>
                     <p className="flex-none">Deny</p>
@@ -102,7 +101,7 @@ export class AdminShipmentRow extends Component {
             >
                 <div className="flex-100 layout-row layout-wrap">
                     <div
-                        className={`flex-40 layout-row layout-align-start-center ${
+                        className={`flex-40 layout-row layout-align-start-center layout-wrap ${
                             styles.top_row
                         }`}
                         onClick={this.selectShipment}
@@ -145,13 +144,16 @@ export class AdminShipmentRow extends Component {
                                 </p>
                             </div>
                         </div>
+                        <div className={`flex-100 layout-row layout-align-start-end ${styles.ref_row}`}>
+                            <p className="flex-none">Ref: {shipment.imc_reference}</p>
+                        </div>
                     </div>
-                    <div className="flex-60 layout-row layout-align-start-center layout-wrap">
-                        <div className={`flex-100 layout-row layout-align-start-center ${styles.action_bar}`}>
+                    <div className={`flex-60 layout-row layout-align-start-center layout-wrap ${styles.right_row}`}>
+                        <div className={`flex-100 layout-row layout-align-start-start ${styles.action_bar}`}>
                             <div className={`flex-60 layout-row layout-align-start-center layout-wrap ${styles.user_info}`}  onClick={this.selectShipment}>
                                 <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle}></i>
-                                <p className="flex-none"> {client.first_name} </p>
-                                <p className="flex-none"> {client.last_name} </p>
+                                <p className="flex-none"> {shipment.clientName} </p>
+                                {/* <p className="flex-none"> {client.last_name} </p>*/}
                             </div>
                             { shipment.status === 'requested' ? btnsRow : ''}
                         </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import styles from './NavSidebar.scss';
-import Style from 'style-it';
+// import Style from 'style-it';
 import {AdminNavItem} from '../../components/Admin/AdminNavItem';
 import { v4 } from 'node-uuid';
 export class NavSidebar extends Component {
@@ -23,29 +23,10 @@ export class NavSidebar extends Component {
                 <AdminNavItem key={v4()} url={op.url} target={op.target} text={op.text} iconClass={op.icon} theme={theme} navFn={toggleActiveClass}/>
             );
         });
-
+        const navStyle = {height: `${navLinks.length * 55}px`};
         return (
-            <div>
-                <Style>
-                    {`
-                        .active::before {
-                            position: absolute;
-                            top: 0;
-                            bottom: 0;
-                            left: 0;
-                            width: 2px;
-                            content: '';
-                            background-color: ${theme.colors.primary};
-                        }
-                    `}
-                </Style>
-
-{/*                <nav className={styles.menu}>
-                    <h3 className={styles['menu-heading']}>
-                        {navHeadlineInfo}
-                    </h3>*/}
-                    {navLinks}
-                {/* </nav> */}
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={navStyle}>
+                {navLinks}
             </div>
         );
     }

@@ -68,10 +68,10 @@ export class AdminSearchableClients extends Component {
             });
         }
         return(
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className="flex-100 layout-row layout-align-space-between-center">
                     <div className="flex-none layput-row layout-align-start-center">
-                        <h4 className="flex-none"> {title ? title : 'Clients'}</h4>
+                        <p className="flex-none sub_header_text"> {title ? title : 'Clients'}</p>
                     </div>
                     <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                         <input

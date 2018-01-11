@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import {AdminShipmentRow, AdminScheduleLine } from './';
-import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients } from './AdminSearchables';
+import { AdminScheduleLine } from './';
+import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import {v4} from 'node-uuid';
 export class AdminDashboard extends Component {
     constructor(props) {
@@ -34,6 +34,14 @@ export class AdminDashboard extends Component {
     handleShipmentAction(id, action) {
         const { adminDispatch } = this.props;
         adminDispatch.confirmShipment(id, action);
+    }
+    prepShipment(shipment, clients, hubsObj) {
+        shipment.clientName = clients[shipment.shipper_id] ? `${clients[shipment.shipper_id].first_name} ${clients[shipment.shipper_id].last_name}` : '';
+        shipment.companyName = clients[shipment.shipper_id] ? `${clients[shipment.shipper_id].company_name}` : '';
+        const hubKeys = shipment.schedule_set[0].hub_route_key.split('-');
+        shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : '';
+        shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : '';
+        return shipment;
     }
     dynamicSort(property) {
         let sortOrder = 1;
@@ -67,9 +75,10 @@ export class AdminDashboard extends Component {
         }
         const filteredClients = clients.filter(x => !x.guest);
         const schedArr = [];
-        const openShipments = shipments && shipments.open && shipments.open.shipments ? shipments.open.shipments.map((ship) => {
-            return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
-        }) : '';
+        const mergedRequestedShipments = shipments ? shipments.map((sh) => {
+            return this.prepShipment(sh, clientHash, hubHash);
+        }) : false;
+        const openShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleAction={this.handleShipmentAction}/> : '';
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
@@ -94,13 +103,10 @@ export class AdminDashboard extends Component {
         };
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
                     <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Requested Shipments</p>
-                    </div>
                     { openShipments }
                 </div>
                 <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>

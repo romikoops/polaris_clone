@@ -14,6 +14,7 @@ import AdminPricings from '../../components/Admin/AdminPricings';
 import AdminTrucking from '../../components/Admin/AdminTrucking';
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
 import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
+import { Loading } from '../../components/Loading/Loading';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -67,18 +68,20 @@ class Admin extends Component {
     render() {
         console.log(this.props);
         const {theme, adminData, adminDispatch} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes} = adminData;
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes, loading} = adminData;
         const hubHash = {};
         if (hubs) {
             hubs.forEach((hub) => {
                 hubHash[hub.data.id] = hub;
             });
         }
+        const loadingScreen = loading ? <Loading theme={theme} /> : '';
         const nav = (<AdminNav navLink={this.setUrl} theme={theme}/>);
         // ;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                 <Header theme={theme} />
+                {loadingScreen}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start `}>
                     <FloatingMenu Comp={nav} theme={theme}/>
                     <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -111,7 +114,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/shipments"
-                                render={props => <AdminShipments theme={theme} {...props} hubs={hubs} shipments={shipments} clients={clients}/>}
+                                render={props => <AdminShipments theme={theme} {...props} hubs={hubs} hubHash={hubHash} shipments={shipments} clients={clients}/>}
                             />
                             <Route
 

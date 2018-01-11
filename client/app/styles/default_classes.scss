@@ -66,11 +66,19 @@
   .pointy {
     cursor: pointer;
   }
+  .sub_header_text {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 3px;
+  }
   .backdrop_all {
     height: 100%;
     width: 100%;
     z-index: -1;
     position: absolute;
+  }
+  .letter_spacing {
+    letter-spacing: 3px;
   }
   .rotate_45{
     transform: rotate(45deg);

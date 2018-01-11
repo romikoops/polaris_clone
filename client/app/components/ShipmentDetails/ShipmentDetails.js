@@ -276,7 +276,7 @@ export class ShipmentDetails extends Component {
     }
 
     returnToDashboard() {
-        this.props.history.push('/dashboard');
+        this.props.shipmentDispatch.goTo('/dashboard');
     }
 
     selectRoute(route) {

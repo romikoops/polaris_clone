@@ -367,6 +367,13 @@ function deleteDocument(id) {
     };
 }
 
+function goTo(path) {
+    return dispatch => {
+        dispatch(push(path));
+    };
+}
+
+
 export const shipmentActions = {
     newShipment,
     setShipmentRoute,
@@ -380,5 +387,6 @@ export const shipmentActions = {
     shouldFetchShipment,
     fetchShipmentIfNeeded,
     getAll,
+    goTo,
     delete: _delete
 };

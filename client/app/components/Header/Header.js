@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavDropdown } from '../NavDropdown/NavDropdown';
 import styles from './Header.scss';
-import accountIcon from '../../assets/images/icons/person-dark.svg';
+// import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
 import { appActions } from '../../actions';
+import { accountIconColor } from '../../helpers';
 import { bindActionCreators } from 'redux';
-
+const iconColourer = accountIconColor;
 class Header extends Component {
     constructor(props) {
         super(props);
@@ -33,7 +34,7 @@ class Header extends Component {
         const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
 
         const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
-        const dropDownImage = accountIcon;
+        // const dropDownImage = accountIcon;
         const accountLinks = [
             {
                 url: '/account',
@@ -52,13 +53,14 @@ class Header extends Component {
             c.select = () => appDispatch.setCurrency(c.key);
             return c;
         }) : [];
+        const adjIcon = iconColourer(invert ? '#FFFFFF' : '#000000');
         if (this.state.redirect) {
             return <Redirect push to="/" />;
         }
         const dropDown = (
             <NavDropdown
                 dropDownText={dropDownText}
-                dropDownImage={dropDownImage}
+                dropDownImage={adjIcon}
                 linkOptions={accountLinks}
                 invert={invert}
             />

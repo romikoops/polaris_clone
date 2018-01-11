@@ -44,7 +44,7 @@ class AdminShipments extends Component {
 
     render() {
         const {selectedShipment} = this.state;
-        const { theme, hubs, shipments, clients, shipment, loading, adminDispatch } = this.props;
+        const { theme, hubs, shipments, clients, shipment, loading, adminDispatch, hubHash } = this.props;
         // ;
         if (!shipments || !hubs || !clients) {
             return <h1>NO SHIPMENTS DATA</h1>;
@@ -73,7 +73,7 @@ class AdminShipments extends Component {
                     <Route
                         exact
                         path="/admin/shipments"
-                        render={props => <AdminShipmentsIndex theme={theme} handleShipmentAction={this.handleShipmentAction} clients={clients} hubs={hubs} shipments={shipments} viewShipment={this.viewShipment} {...props} />}
+                        render={props => <AdminShipmentsIndex theme={theme} handleShipmentAction={this.handleShipmentAction} clients={clients} hubs={hubs} hubHash={hubHash} shipments={shipments} viewShipment={this.viewShipment} {...props} />}
                     />
                     <Route
                         exact
