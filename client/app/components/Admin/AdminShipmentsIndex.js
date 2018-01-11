@@ -21,8 +21,8 @@ export class AdminShipmentsIndex extends Component {
         shipment.clientName = clients[shipment.shipper_id] ? `${clients[shipment.shipper_id].first_name} ${clients[shipment.shipper_id].last_name}` : '';
         shipment.companyName = clients[shipment.shipper_id] ? `${clients[shipment.shipper_id].company_name}` : '';
         const hubKeys = shipment.schedule_set[0].hub_route_key.split('-');
-        shipment.originHub = hubsObj[hubKeys[0]].name;
-        shipment.destinationHub = hubsObj[hubKeys[1]].name;
+        shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : '';
+        shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : '';
         return shipment;
     }
 
@@ -53,7 +53,7 @@ export class AdminShipmentsIndex extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 { mergedOpenShipments.length !== 0 ?
-                    <AdminSearchableShipments hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleAction={handleShipmentAction}/>
+                    <AdminSearchableShipments hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                     // <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
                     //     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
                     //         <p className={` ${styles.sec_subheader_text} flex-none`}  > Open</p>
@@ -64,7 +64,7 @@ export class AdminShipmentsIndex extends Component {
                     ''
                 }
                 { mergedReqShipments.length !== 0 ?
-                    <AdminSearchableShipments hubs={hubHash} shipments={mergedReqShipments} title="Requested Shipments" theme={theme} handleAction={handleShipmentAction}/>
+                    <AdminSearchableShipments hubs={hubHash} shipments={mergedReqShipments} title="Requested Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                     // <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
                     //     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
                     //         <p className={` ${styles.sec_subheader_text} flex-none`}  > Requested</p>

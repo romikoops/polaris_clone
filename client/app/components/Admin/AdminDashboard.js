@@ -78,7 +78,7 @@ export class AdminDashboard extends Component {
         const mergedRequestedShipments = shipments ? shipments.map((sh) => {
             return this.prepShipment(sh, clientHash, hubHash);
         }) : false;
-        const openShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleAction={this.handleShipmentAction}/> : '';
+        const openShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);

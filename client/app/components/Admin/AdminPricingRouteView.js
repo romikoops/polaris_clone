@@ -19,6 +19,7 @@ export class AdminPricingRouteView extends Component {
             selectedClient: false
         };
         this.editThis = this.editThis.bind(this);
+        this.closeEdit = this.closeEdit.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
         this.selectClient = this.selectClient.bind(this);
     }
