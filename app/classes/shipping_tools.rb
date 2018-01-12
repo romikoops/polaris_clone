@@ -15,7 +15,16 @@ module ShippingTools
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
 
-    routes = get_scoped_routes(current_user.tenant_id, 16)
+    # Needs refactoring
+    acronym_to_load_type = {
+      'fcl' => 'container',
+      'lcl' => 'cargo_item'
+    }
+    load_type = acronym_to_load_type[load_type]
+    mot_scope_args = { ("only_" + load_type).to_sym => true }
+    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
+    routes = get_scoped_routes(current_user.tenant_id, mot_scope_ids)
+
     routes.map! do |route|
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
