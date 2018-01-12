@@ -14,10 +14,10 @@ module ShippingTools
     shipment.cargo_items.create if load_type.include?('lcl') && shipment.cargo_items.empty?
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
-    routes = get_item('routeOptions', 'id', current_user.tenant_id)["data"]
 
+    routes = get_scoped_routes(current_user.tenant_id, 16)
     routes.map! do |route|
-      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])        
+      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
 
