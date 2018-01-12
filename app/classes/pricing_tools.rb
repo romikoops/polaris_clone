@@ -5,6 +5,7 @@ module PricingTools
     return client
   end
   def get_user_price(client, pathKey, user)
+    byebug
     priceObj = get_item_fn(client, 'pathPricing', '_id', pathKey)
     if priceObj["#{user.id}"]
       priceKey = priceObj["#{user.id}"]

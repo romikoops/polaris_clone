@@ -4,7 +4,7 @@ class OfferCalculator
   include PricingTools
   include MongoTools
   include TruckingTools
-  def initialize(shipment, params, load_type, user)
+  def initialize(shipment, params, user)
     @mongo            = get_client
     @user             = user
     @shipment         = shipment
@@ -20,17 +20,11 @@ class OfferCalculator
     @current_eta_in_search = DateTime.new()
     @total_price = { total:0, currency: "EUR" }
 
-    case @shipment.load_type
-    when 'container'
-      @shipment.containers.destroy_all
-      @containers = Container.extract_containers(params[:shipment][:containers_attributes])
-      @shipment.containers = @containers
-    when 'cargo_item'
-      @shipment.cargo_items.destroy_all
-      @cargo_items = CargoItem.extract_cargos(params[:shipment][:cargo_items_attributes])
-      @shipment.cargo_items = @cargo_items
-      @schedules = nil
-    end
+    cargo_unit_const = @shipment.load_type.camelize.constantize
+    plural_load_type = @shipment.load_type.pluralize
+    @shipment.send(plural_load_type).destroy_all
+    @cargo_units = cargo_unit_const.extract(params[:shipment]["#{plural_load_type}_attributes".to_sym])
+    @shipment.send("#{plural_load_type}=", @cargo_units)
 
     @shipment.planned_pickup_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
@@ -98,7 +92,6 @@ class OfferCalculator
     else
       @longest_trucking_time = 0
     end
-    
     @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
   end
 
@@ -141,9 +134,7 @@ class OfferCalculator
   end
 
   def set_cargo_charges!(charges, sched, sched_key)
-    cargo_units = @cargo_items || @containers
-
-    cargo_units.each do |cargo_unit|
+    @cargo_units.each do |cargo_unit|
       path_key = path_key(cargo_unit, sched)
 
       charges[sched_key][:cargo][cargo_unit.id] = send("determine_#{@shipment.load_type}_price",
@@ -151,7 +142,7 @@ class OfferCalculator
         cargo_unit, 
         path_key, 
         @user, 
-        cargo_units.length
+        @cargo_units.length
       )
     end
   end
@@ -162,28 +153,19 @@ class OfferCalculator
       name: transport_category_name, 
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
-    
+    byebug
     "#{sched.hub_route_id}_#{transport_category.id}"
   end
 
   def determine_trucking_options(origin, hub)
     google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
-    price_results = []    
 
-    case shipment.load_type
-    when 'container'
-      @containers.each do |container|
-        price_results << calc_trucking_price(origin, container, km, hub, @mongo) #################
-      end
-    when 'cargo_item'
-      @cargo_items.each do |cargo_item|
-        
-        price_results << calc_trucking_price(origin, cargo_item, km, hub, @mongo) #################
-        #########################!!!!!!!!!!!!!!!!!!!
-      end
+    price_results = @cargo_units.map do |cargo_unit|
+      calc_trucking_price(origin, container, km, hub, @mongo)
     end
-    trucking_total = {value: 0, currency:""}
+
+    trucking_total = { value: 0, currency: "" }
     price_results.each do |pr|
       trucking_total[:value] += pr[:value]
       trucking_total[:currency] = pr[:currency]
@@ -236,26 +218,5 @@ class OfferCalculator
     Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)
       .where("eta > ?", @current_eta_in_search)
       .order(eta: :asc)
-  end
-
-  def price_from_cargos
-    prices = []
-    
-    case shipment.load_type
-    when 'container'
-      @containers.each do |container|
-        price = Pricing.fcl_price(container)
-
-        prices << price
-      end
-    when 'cargo_item'
-      @cargo_items.each do |cargo|
-        price = Pricing.lcl_price(cargo)
-
-        prices << price
-      end
-    end
-
-    total_price_obj = { value: prices.map{ |p| p[:value]}.reduce(0, :+), currency: prices[0][:currency] }
   end
 end

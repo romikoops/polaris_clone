@@ -32,13 +32,13 @@ module ShippingTools
 
   def get_shipment_offer(session, params, load_type)
     @shipment = Shipment.find(params[:shipment_id])
-    offer_calculation = OfferCalculator.new(@shipment, params, load_type, current_user)
+    offer_calculation = OfferCalculator.new(@shipment, params, current_user)
 
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    # rescue
+    #   raise ApplicationError::NoRoutes
+    # end
 
     if offer_calculation.shipment.save
       return {
