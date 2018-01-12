@@ -33,6 +33,27 @@ module MongoTools
     return resp
   end
 
+  def get_scoped_routes(tenant_id, mot_scope_ids)
+    client = init
+    resp = client["routeOptions"].aggregate([
+      { 
+        "$match" => { "id" => tenant_id } 
+      },
+      { 
+        "$project" => {
+          "data" => { 
+            "$filter" => {
+              "input" => "$data",
+              "as"    => 'route',
+              "cond"  => { "$in" => ["$$route.mot_scope_id", mot_scope_ids]},
+            }
+          }
+        }
+      }
+    ])
+    return resp.first["data"]
+  end
+
   def get_items_fn(client, table, keyName, key)
     resp = client[table.to_sym].find({"#{keyName}" => key})
     return resp.to_a
