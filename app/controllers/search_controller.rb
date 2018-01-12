@@ -14,7 +14,6 @@ class SearchController < ApplicationController
         tmp["value"] = r["_id"]
         results << tmp
       }
-      p results
       response_handler(results)
   end
 
