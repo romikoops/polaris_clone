@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
-  skip_before_action :require_authentication!
-  skip_before_action :require_non_guest_authentication!
+  # skip_before_action :require_authentication!
+  # skip_before_action :require_non_guest_authentication!
 
   def home
     @shipper = current_user
@@ -35,7 +35,6 @@ class UsersController < ApplicationController
   def account
     @user = current_user
     @locations = @user.locations
-
 
     return {locations: @locations}
   end
