@@ -223,6 +223,8 @@ export class AdminPriceEditor extends Component {
 
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
+                <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeEdit}>
+                </div>
                 <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-95 layout-row layout-wrap layout-align-center-start">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>

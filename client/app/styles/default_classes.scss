@@ -156,4 +156,15 @@
       outline: none;
     }
   }
+  .input_box_full input {
+    height: 38px;
+    width: 100%;
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    &:focus {
+      outline: none;
+    }
+  }
 }

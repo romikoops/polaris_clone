@@ -32,7 +32,7 @@ export class AdminClientTile extends Component {
                     : 'black'
         };
         return(
-            <div className={`flex-none ${styles.client_card} layout-row`} onClick={this.clickEv}>
+            <div className={`flex-none ${styles.client_card} layout-row pointy`} onClick={this.clickEv}>
                 <div className={`${styles.content} flex-100 layout-row layout-align-center-start`}>
                     <div className="flex-95 layout-row layout-wrap layout-align-start-start">
                         <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>

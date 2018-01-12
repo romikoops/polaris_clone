@@ -1,9 +1,10 @@
 module MultiTenantTools
+  include ExcelTools
   def test
     tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
     newSiteFn(tenant)
   end
-  def newSiteFn(tenant)
+  def new_site(tenant, is_demo)
         # new_tenant = Tenant.create(tenant)
         title = tenant["name"] + " | ItsMyCargo"
         meta = tenant["meta"]
@@ -32,9 +33,13 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
-        # create_distribution(tenant["subdomain"])
         uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
         uploader.upload!
+
+        if is_demo
+          seed_demo_site(tenant)
+        end
+         # create_distribution(tenant["subdomain"])
     end
   def create_distribution(subd)
         cloudfront = Aws::CloudFront::Client.new(
@@ -135,193 +140,200 @@ module MultiTenantTools
       })
 
     end
-    def new_front(sudb)
-      bkt_name = subd * ".tktr.es"
-      resp = client.create_distribution({
-        distribution_config: { # required
-          caller_reference: bkt_name, # required
-          aliases: {
-            quantity: 1, # required
-            items: [bkt_name],
-          },
-          default_root_object: "index.html",
-          origins: { # required
-            quantity: 1, # required
-            items: [
-              {
-                id: "default", # required
-                domain_name: "string", # required
-                origin_path: "",
-                custom_headers: {
-                  quantity: 1, # required
-                  items: [
-                    {
-                      header_name: "string", # required
-                      header_value: "string", # required
-                    },
-                  ],
-                },
-                s3_origin_config: {
-                  origin_access_identity: "string", # required
-                },
-                custom_origin_config: {
-                  http_port: 1, # required
-                  https_port: 1, # required
-                  origin_protocol_policy: "http-only", # required, accepts http-only, match-viewer, https-only
-                  origin_ssl_protocols: {
-                    quantity: 1, # required
-                    items: ["SSLv3"], # required, accepts SSLv3, TLSv1, TLSv1.1, TLSv1.2
-                  },
-                },
-              },
-            ],
-          },
-          default_cache_behavior: { # required
-            target_origin_id: "string", # required
-            forwarded_values: { # required
-              query_string: false, # required
-              cookies: { # required
-                forward: "none", # required, accepts none, whitelist, all
-                whitelisted_names: {
-                  quantity: 1, # required
-                  items: ["string"],
-                },
-              },
-              headers: {
-                quantity: 1, # required
-                items: ["string"],
-              },
-              query_string_cache_keys: {
-                quantity: 1, # required
-                items: ["string"],
-              },
-            },
-            trusted_signers: { # required
-              enabled: false, # required
-              quantity: 1, # required
-              items: ["string"],
-            },
-            viewer_protocol_policy: "allow-all", # required, accepts allow-all, https-only, redirect-to-https
-            min_ttl: 1, # required
-            allowed_methods: {
-              quantity: 1, # required
-              items: ["GET"], # required, accepts GET, HEAD, POST, PUT, PATCH, OPTIONS, DELETE
-              cached_methods: {
-                quantity: 1, # required
-                items: ["GET"], # required, accepts GET, HEAD, POST, PUT, PATCH, OPTIONS, DELETE
-              },
-            },
-            smooth_streaming: false,
-            default_ttl: 1,
-            max_ttl: 1,
-            compress: false,
-            lambda_function_associations: {
-              quantity: 1, # required
-              items: [
-                {
-                  lambda_function_arn: "string",
-                  event_type: "viewer-request", # accepts viewer-request, viewer-response, origin-request, origin-response
-                },
-              ],
-            },
-          },
-          cache_behaviors: {
-            quantity: 1, # required
-            items: [
-              {
-                path_pattern: "string", # required
-                target_origin_id: "string", # required
-                forwarded_values: { # required
-                  query_string: false, # required
-                  cookies: { # required
-                    forward: "none", # required, accepts none, whitelist, all
-                    whitelisted_names: {
-                      quantity: 1, # required
-                      items: ["string"],
-                    },
-                  },
-                  headers: {
-                    quantity: 1, # required
-                    items: ["string"],
-                  },
-                  query_string_cache_keys: {
-                    quantity: 1, # required
-                    items: ["string"],
-                  },
-                },
-                trusted_signers: { # required
-                  enabled: false, # required
-                  quantity: 1, # required
-                  items: ["string"],
-                },
-                viewer_protocol_policy: "allow-all", # required, accepts allow-all, https-only, redirect-to-https
-                min_ttl: 1, # required
-                allowed_methods: {
-                  quantity: 1, # required
-                  items: ["GET"], # required, accepts GET, HEAD, POST, PUT, PATCH, OPTIONS, DELETE
-                  cached_methods: {
-                    quantity: 1, # required
-                    items: ["GET"], # required, accepts GET, HEAD, POST, PUT, PATCH, OPTIONS, DELETE
-                  },
-                },
-                smooth_streaming: false,
-                default_ttl: 1,
-                max_ttl: 1,
-                compress: false,
-                lambda_function_associations: {
-                  quantity: 1, # required
-                  items: [
-                    {
-                      lambda_function_arn: "string",
-                      event_type: "viewer-request", # accepts viewer-request, viewer-response, origin-request, origin-response
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          custom_error_responses: {
-            quantity: 1, # required
-            items: [
-              {
-                error_code: 1, # required
-                response_page_path: "string",
-                response_code: "string",
-                error_caching_min_ttl: 1,
-              },
-            ],
-          },
-          comment: "string", # required
-          logging: {
-            enabled: false, # required
-            include_cookies: false, # required
-            bucket: "string", # required
-            prefix: "string", # required
-          },
-          price_class: "PriceClass_100", # accepts PriceClass_100, PriceClass_200, PriceClass_All
-          enabled: false, # required
-          viewer_certificate: {
-            cloud_front_default_certificate: false,
-            iam_certificate_id: "string",
-            acm_certificate_arn: "string",
-            ssl_support_method: "sni-only", # accepts sni-only, vip
-            minimum_protocol_version: "SSLv3", # accepts SSLv3, TLSv1
-            certificate: "string",
-            certificate_source: "cloudfront", # accepts cloudfront, iam, acm
-          },
-          restrictions: {
-            geo_restriction: { # required
-              restriction_type: "blacklist", # required, accepts blacklist, whitelist, none
-              quantity: 1, # required
-              items: ["string"],
-            },
-          },
-          web_acl_id: "string",
-          http_version: "http1.1", # accepts http1.1, http2
-          is_ipv6_enabled: false,
-        },
-      })
+    def seed_demo_site(tenant_data)
+      tld = tenant_data["emails"]["support"].split('.')[1]
+        tenant = Tenant.find_or_create_by!(tenant_data)
+        tenant.users.destroy_all
+        admin = tenant.users.new(
+          role: Role.find_by_name('admin'),
 
+          company_name: tenant.name,
+          first_name: "Admin",
+          last_name: "Admin",
+          phone: "123456789",
+
+          email: "admin@#{tenant.subdomain}.#{tld}",
+          password: "demo123456789",
+          password_confirmation: "demo123456789",
+
+          confirmed_at: DateTime.new(2017, 1, 20)
+        )
+        
+        admin.save!
+        shipper = tenant.users.new(
+          role: Role.find_by_name('shipper'),
+
+          company_name: "Example Shipper Company",
+          first_name: "John",
+          last_name: "Smith",
+          phone: "123456789",
+
+          email: "demo@#{tenant.subdomain}.#{tld}",
+          password: "demo123456789",
+          password_confirmation: "demo123456789",
+
+          confirmed_at: DateTime.new(2017, 1, 20)
+        )
+        # shipper.skip_confirmation!
+        shipper.save!
+        # Create dummy locations for shipper
+        dummy_locations = [
+          {
+            street: "Kehrwieder",
+            street_number: "2",
+            zip_code: "20457",
+            city: "Hamburg",
+            country:"Germany"
+          },
+          {
+            street: "Carer del Cid",
+            street_number: "13",
+            zip_code: "08001",
+            city: "Barcelona",
+            country:"Spain"
+          },
+          {
+            street: "College Rd",
+            street_number: "1",
+            zip_code: "PO1 3LX",
+            city: "Portsmouth",
+            country:"United Kingdom"
+          },
+          {
+            street: "Tuna St",
+            street_number: "64",
+            zip_code: "90731",
+            city: "San Pedro",
+            country:"USA"
+          }
+        ]
+
+        dummy_locations.each do |l|
+          loc = Location.create_and_geocode(l)
+          shipper.locations << loc
+        end
+
+        # Create dummy contacts for shipper address book
+        dummy_contacts = [
+          {
+            company_name: "Example Shipper Company",
+            first_name: "John",
+            last_name: "Smith",
+            phone: "123456789",
+            email: "demo@#{tenant.subdomain}.com",
+          },
+          {
+            company_name: "Another Example Shipper Company",
+            first_name: "Jane",
+            last_name: "Doe",
+            phone: "123456789",
+            email: "jane@doe.com"
+          },
+          {
+            company_name: "Yet Another Example Shipper Company",
+            first_name: "Javier",
+            last_name: "Garcia",
+            phone: "0034123456789",
+            email: "javi@shipping.com"
+          },
+          {
+            company_name: "Forwarder Company",
+            first_name: "Gertrude",
+            last_name: "Hummels",
+            phone: "0049123456789",
+            email: "gerti@fwd.com"
+          },
+          {
+            company_name: "Another Forwarder Company",
+            first_name: "Jerry",
+            last_name: "Lin",
+            phone: "001123456789",
+            email: "jerry@fwder2.com"
+          }
+        ]
+
+        dummy_contacts.each_with_index do |contact, i|
+          loc = Location.find_or_create_by(dummy_locations[i])
+          contact[:location_id] = loc.id
+          shipper.contacts.create(contact)
+        end
+
+        vehicle_types = [
+          'ocean_default',
+          'rail_default',
+          'air_default',
+          'truck_default'
+        ]
+        cargo_types = [
+          'dry_goods',
+          'liquid_bulk',
+          'gas_bulk',
+          'any'
+        ]
+        load_types = [
+          'fcl_20f',
+          'fcl_40f',
+          'fcl_40f_hq',
+          'lcl'
+        ]
+
+        vehicle_types.each do |vt|
+          mot = vt.split('_')[0]
+          vehicle = Vehicle.create(name: vt, mode_of_transport: mot)
+          tenant.tenant_vehicles.create(name: vt, mode_of_transport: mot, vehicle_id: vehicle.id)
+
+          load_types.each do |lt|
+            cargo_types.each do |ct|
+              vehicle.transport_categories.create(mode_of_transport: mot, cargo_class: lt, name: ct )
+            end
+          end
+        end
+        puts "# Overwrite hubs from excel sheet"
+        hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+        req = {"xlsx" => hubs}
+        overwrite_hubs(req, shipper)
+
+        # # Overwrite service charges from excel sheet
+        puts "# Overwrite service charges from excel sheet"
+        service_charges = File.open("#{Rails.root}/db/dummydata/2_service_charges.xlsx")
+        req = {"xlsx" => service_charges}
+        overwrite_service_charges(req, shipper)
+
+        # Overwrite dedicated pricings from excel sheet.
+        #   If dedicated == true, shipper.id is automatically inserted.
+        puts "# Overwrite dedicated pricings from excel sheet."
+        public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+        req = {"xlsx" => public_pricings}
+        overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
+
+        # # Overwrite public pricings from excel sheet
+        puts "# Overwrite public pricings from excel sheet"
+        public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+        req = {"xlsx" => public_pricings}
+        overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
+
+        puts "# Overwrite MAERSK pricings from excel sheet"
+        public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
+        req = {"xlsx" => public_pricings}
+        overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
+
+        # OLD, SQL DB method (!): Overwrite public pricings from excel sheet
+        # public_pricings = File.open("#{Rails.root}/db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")
+        # req = {"xlsx" => public_pricings}
+        # overwrite_main_carriage_rates(req, false, shipper)
+        # shipper = User.find_by_email('demo@greencarrier.com')
+
+        # Overwrite trucking data from excel sheet
+        puts "# Overwrite trucking data from excel sheet"
+        trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+        req = {"xlsx" => trucking}
+        overwrite_trucking_rates(req, shipper)
+
+        trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+        req = {"xlsx" => trucking}
+        overwrite_city_trucking_rates(req, shipper)
+
+        tenant.update_route_details()
     end
     def invalidate(cfId, subdomain)
       creds = YAML.load(File.read('./config/application.yml'))

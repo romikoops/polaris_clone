@@ -59,7 +59,7 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-        const { theme, title} = this.props;
+        const { theme, title, seeAll} = this.props;
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -67,6 +67,17 @@ export class AdminSearchableClients extends Component {
                 return  <AdminClientTile key={v4()} client={client} theme={theme}  handleClick={this.handleClick} />;
             });
         }
+        const viewType = this.props.sideScroll ?
+            (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
+                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+                        {clientsArr}
+                    </div>
+                </div>) :
+            (<div className="layout-row flex-100 layout-align-start-center ">
+                    <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                        {clientsArr}
+                    </div>
+                </div>);
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className="flex-100 layout-row layout-align-space-between-center">
@@ -82,16 +93,12 @@ export class AdminSearchableClients extends Component {
                         />
                     </div>
                 </div>
-                <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-                        {clientsArr}
-                    </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
-                        <p className="flex-none">See all</p>
-                    </div>
-                </div>
+                {viewType}
+                { seeAll ? (<div className="flex-100 layout-row layout-align-end-center">
+                                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+                                        <p className="flex-none">See all</p>
+                                    </div>
+                                </div>) : ''}
             </div>
         );
     }

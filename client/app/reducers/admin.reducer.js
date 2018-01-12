@@ -305,10 +305,10 @@ export function admin(state = {}, action) {
                     newScs.push(sc);
                 }
             });
-            const newState = merge({}, {
+            const newState = merge({}, state, {
                 serviceCharges: newScs,
                 loading: false
-            }, state);
+            });
             return newState;
         case adminConstants.UPDATE_SERVICE_CHARGES_FAILURE:
             return state;
@@ -320,10 +320,10 @@ export function admin(state = {}, action) {
             return reqClientPric;
         case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
             // ;
-            const succClientPric = merge({}, {
+            const succClientPric = merge({}, state, {
                 clientPricings: action.payload.data,
                 loading: false
-            }, state);
+            });
             return succClientPric;
         case adminConstants.GET_CLIENT_PRICINGS_FAILURE:
             const errClientPric = merge({}, state, {

@@ -48,7 +48,7 @@ export class UserShipmentRow extends Component {
         handleAction(shipment.id, 'accept');
     }
     render() {
-        const { theme, shipment, hubs, client } = this.props;
+        const { theme, shipment, hubs } = this.props;
         if (shipment.schedule_set.length < 1) {
             return '';
         }
@@ -83,24 +83,33 @@ export class UserShipmentRow extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const pendingRow = (
-            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
-                <div className={`flex-40 layout-row layout-align-center-center ${styles.pending}`} >
+            <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+                <div className="flex-40 layout-row layout-align-start-end">
+                    <p className="flex-none">Status:  </p>
+                </div>
+                <div className={`flex-60 layout-row layout-align-start-end ${styles.pending}`} >
                     <i className="flex-none fa fa-clock-o"></i>
                     <p className="flex-none">Pending</p>
                 </div>
             </div>
         );
         const acceptedRow = (
-            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
-                <div className={`flex-75 layout-row layout-align-center-center ${styles.grant}`} >
+            <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+                <div className="flex-40 layout-row layout-align-start-end">
+                    <p className="flex-none">Status:  </p>
+                </div>
+                <div className={`flex-60 layout-row layout-align-start-end ${styles.grant}`} >
                     <i className="flex-none fa fa-check"></i>
                     <p className="flex-none">Accepted</p>
                 </div>
             </div>
         );
         const deniedRow = (
-            <div className="flex-40 layout-row layout-align-end-center layout-wrap">
-                <div className={`flex-75 layout-row layout-align-center-center ${styles.deny}`} >
+            <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+                <div className="flex-40 layout-row layout-align-start-end">
+                    <p className="flex-none">Status:  </p>
+                </div>
+                <div className={`flex-60 layout-row layout-align-start-end ${styles.deny}`} >
                     <i className="flex-none fa fa-trash"></i>
                     <p className="flex-none">Denied</p>
                 </div>
@@ -135,7 +144,7 @@ export class UserShipmentRow extends Component {
             >
                 <div className="flex-100 layout-row layout-wrap">
                     <div
-                        className={`flex-40 layout-row layout-align-start-center ${
+                        className={`flex-40 layout-row layout-align-start-center layout-wrap ${
                             styles.top_row
                         }`}
 
@@ -181,43 +190,14 @@ export class UserShipmentRow extends Component {
                     </div>
                     <div className="flex-60 layout-row layout-align-start-center layout-wrap">
                         <div className={`flex-100 layout-row layout-align-start-center ${styles.action_bar}`}>
-                            <div className={`flex-60 layout-row layout-align-start-center layout-wrap ${styles.user_info}`}  onClick={this.selectShipment}>
+                            <div className={`flex-33 layout-row layout-align-start-start layout-wrap ${styles.user_info}`}  onClick={this.selectShipment}>
                                 <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle}></i>
-                                <p className="flex-none"> {client.first_name} </p>
-                                <p className="flex-none"> {client.last_name} </p>
-                            </div>
-                            { statusRow }
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center" >
-                            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-                                <div className="flex-100 layout-row">
-                                    <h4
-                                        className={styles.date_title}
-                                        style={gradientFontStyle}
-                                    >
-                                      Pickup Date
-                                    </h4>
-                                </div>
-                                <div className="flex-100 layout-row">
-                                    <p className={`flex-none ${styles.sched_elem}`}>
-                                        {' '}
-                                        {moment(this.props.pickupDate).format(
-                                            'YYYY-MM-DD'
-                                        )}{' '}
-                                    </p>
-                                    <p className={`flex-none ${styles.sched_elem}`}>
-                                        {' '}
-                                        {moment(this.props.pickupDate).format(
-                                            'HH:mm'
-                                        )}{' '}
-                                    </p>
-                                </div>
+                                <p className="flex-none"> {shipment.clientName} </p>
                             </div>
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                        style={gradientFontStyle}
                                     >
                                         {' '}
                                       Date of Departure
@@ -240,7 +220,6 @@ export class UserShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                        style={gradientFontStyle}
                                     >
                                         {' '}
                                       ETA terminal
@@ -260,6 +239,13 @@ export class UserShipmentRow extends Component {
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                    <div className="flex-100 layout-row layout-align-end-center" >
+                        <div className={`flex-50 layout-row layout-align-start-end ${styles.ref_row}`}>
+                            <p className="flex-none">Ref: {shipment.imc_reference}</p>
+                        </div>
+                        { statusRow }
                     </div>
                 </div>
             </div>

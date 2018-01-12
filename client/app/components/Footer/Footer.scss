@@ -6,7 +6,7 @@
     .button_row {
       height: 80%;
     }
-    .buttons a {
+    .buttons div a {
       text-decoration: none;
       color: white;
       font-size: 16px;
@@ -31,5 +31,9 @@
     .contact_elem {
       margin-left: 50px;
       padding-bottom: 10px;
+    }
+    a.contact_elem:-webkit-any-link {
+      color: black !important;
+      text-decoration: none !important;
     }
   }

@@ -17,15 +17,22 @@ class S3FolderUpload
   #   => uploader = S3FolderUpload.new("some_route/test_folder", 'your_bucket_name')
   #
   def initialize(folder_path, bucket, aws_key = ENV['AWS_KEY'], aws_secret = ENV['AWS_SECRET'], include_folder = false)
-    Aws.config.update({
-      region: "us-east-1",
-      credentials: Aws::Credentials.new(ENV['AWS_KEY'], ENV['AWS_SECRET'])
-    })
-
+    # Aws.config.update({
+    #   region: "us-east-1",
+    #   access_key_id: ENV['AWS_KEY'],
+    #   secret_access_key: ENV['AWS_SECRET']
+    #   # credentials: Aws::Credentials.new(ENV['AWS_KEY'], ENV['AWS_SECRET'])
+    # })
+    
     @folder_path       = folder_path
     @files             = Dir.glob("#{folder_path}/**/*")
     @total_files       = files.length
-    @connection        = Aws::S3::Client.new
+    @connection        = Aws::S3::Client.new({
+      region: "us-east-1",
+      access_key_id: ENV['AWS_KEY'],
+      secret_access_key: ENV['AWS_SECRET']
+      # credentials: Aws::Credentials.new(ENV['AWS_KEY'], ENV['AWS_SECRET'])
+    })
     # @s3_bucket         = @connection.bucket(bucket)
     @include_folder    = include_folder
   end

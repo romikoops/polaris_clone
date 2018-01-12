@@ -154,6 +154,15 @@ function uploadDocument(doc, type, url) {
     return fetch(BASE_URL + url, requestOptions).then(handleResponse);
 }
 
+function getContact(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/contacts/' + id, requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
@@ -168,5 +177,6 @@ export const userService = {
     getById,
     update,
     getStoredUser,
+    getContact,
     delete: _delete
 };

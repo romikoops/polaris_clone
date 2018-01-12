@@ -216,7 +216,7 @@ function getHubs(id) {
     };
 }
 
-function getShipment(userId, id, redirect) {
+function getShipment(id, redirect) {
     function request(shipmentData) {
         return { type: userConstants.USER_GET_SHIPMENT_REQUEST, payload: shipmentData };
     }
@@ -229,7 +229,7 @@ function getShipment(userId, id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        userService.getShipment(userId, id).then(
+        userService.getShipment(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Shipment successful')
@@ -344,6 +344,41 @@ function uploadDocument(doc, type, url) {
     };
 }
 
+function getContact(id, redirect) {
+    function request(contentData) {
+        return { type: userConstants.GET_CONTACT_REQUEST, payload: contentData };
+    }
+    function success(contentData) {
+        return { type: userConstants.GET_CONTACT_SUCCESS, payload: contentData };
+    }
+    function failure(error) {
+        return { type: userConstants.GET_CONTACT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.getContact(id).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Contact successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/account/contacts/' + id)
+                    );
+                }
+
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -362,5 +397,6 @@ export const userActions = {
     getShipment,
     goTo,
     getAll,
+    getContact,
     delete: _delete
 };

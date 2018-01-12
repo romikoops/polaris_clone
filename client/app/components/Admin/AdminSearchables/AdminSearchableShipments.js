@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Admin.scss';
 import { AdminShipmentRow } from '../';
+import { UserShipmentRow } from '../../UserAccount';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 export class AdminSearchableShipments extends Component {
@@ -60,16 +61,20 @@ export class AdminSearchableShipments extends Component {
         });
     }
     render() {
-        const { hubs, theme, handleShipmentAction, title } = this.props;
+        const { hubs, theme, handleShipmentAction, title, userView } = this.props;
         const { shipments } = this.state;
         let shipmentsArr;
         if (shipments) {
             shipmentsArr = shipments.map((ship) => {
-                return  <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
+                return  userView ?
+                    <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
+                    : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
             });
         } else if (this.props.shipments) {
             shipmentsArr = shipments.map((ship) => {
-                return  <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
+                return  userView ?
+                    <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
+                    : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
             });
         }
         const viewType = this.props.sideScroll ?

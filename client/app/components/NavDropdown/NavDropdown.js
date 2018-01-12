@@ -32,21 +32,21 @@ export class NavDropdown extends Component {
         });
         return (
             <div className={`${styles.dropdown} ${textClass}`}>
-                <div className={`${styles.dropbtn}`}>
+                <div className={`${styles.dropbtn} layout-row layout-align-center-center`}>
                     {this.props.dropDownImage ?
                         <img
                             src={this.props.dropDownImage}
-                            className={styles.dropDownImage}
+                            className={`flex-none ${styles.dropDownImage}`}
                             alt=""
                         /> :
                         ''}
                     {this.props.dropDownText ? (
-                        <span>{this.props.dropDownText}</span>
+                        <span className="flex-none">{this.props.dropDownText}</span>
                     ) : (
                         ''
                     )}
                     <i
-                        className={`fa fa-caret-down ${defaults.spacing_sm_left}`}
+                        className={`flex-none fa fa-caret-down ${defaults.spacing_sm_left}`}
                         aria-hidden="true"
                     />
                 </div>

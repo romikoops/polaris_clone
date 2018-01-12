@@ -159,6 +159,24 @@ export function users(state = initialState, action) {
             });
             return errDash;
 
+        case userConstants.GET_CONTACT_REQUEST:
+            const reqContact = merge({}, state, {
+                loading: true
+            });
+            return reqContact;
+        case userConstants.GET_CONTACT_SUCCESS:
+            const succContact = merge({}, state, {
+                contactData: action.payload.data,
+                loading: false
+            });
+            return succContact;
+        case userConstants.GET_CONTACT_FAILURE:
+            const errContact = merge({}, state, {
+                error: { hubs: action.error }
+            });
+            return errContact;
+
+
         case userConstants.UPLOAD_DOCUMENT_REQUEST:
             const reqDocUpload = merge({}, state, {
             });

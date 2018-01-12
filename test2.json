@@ -1,0 +1,41 @@
+{
+    "theme": {
+      "colors": {
+        "primary": "#427FAF",
+        "secondary": "#FF9B0A",
+        "brightPrimary": "#539ED7",
+        "brightSecondary": "#FFAC36"
+      },
+      "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
+      "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png"
+    },
+    "addresses": {
+      "main":"Industrivej 2 DK-7860 Spøttrup Denmark"
+    },
+    "phones":{
+      "main":"+45 5353 0300",
+      "support": "+45 5353 0300"
+    },
+    "emails": {
+      "sales": "sales@easyshipping.dk",
+      "support": "support@easyshipping.dk"
+    },
+    "subdomain": "easyshipping",
+    "name": "Easyshipping",
+    "scope": {
+      "modes_of_transport": {
+        "ocean": {
+          "container": true,
+          "cargo_item": true
+        },
+        "rail": {
+          "container": true,
+          "cargo_item": true
+        },
+        "air": {
+          "container": true,
+          "cargo_item": true
+        }
+      }
+    }
+  }

@@ -89,7 +89,7 @@ Rails.application.routes.draw do
     post "finish_booking",     as: :finish_booking
     post "update",             as: :update_booking
   end
-
+  resources :contacts, only: [:index, :show, :create]
   post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
   post "search/hscodes" => "search#search_hs_codes"
   get "/documents/download/:document_id", 
@@ -104,5 +104,5 @@ Rails.application.routes.draw do
   post 'currencies/set', to: 'users#set_currency'
 
   get "search/hscodes/:query" => "search#search_hs_codes"
-
+  post 'super_admins/new_demo' => "super_admins#new_demo_site"
 end
