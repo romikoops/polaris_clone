@@ -9,7 +9,7 @@ module MultiTenantTools
         title = tenant["name"] + " | ItsMyCargo"
         meta = tenant["meta"]
         favicon = tenant["favicon"] ? tenant["favicon"] : "https://assets.itsmycargo.com/assets/favicon.ico"
-        indexHtml = Nokogiri::HTML(File.open("https://s3.eu-central-1.amazonaws.com/imcdev/index.html"))
+        indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
         titles = indexHtml.xpath("//title")
         titles[0].content = title
         metas = indexHtml.xpath("//meta")
