@@ -4,24 +4,19 @@ module PricingTools
     client = get_client
     return client
   end
-  def get_user_price(client, pathKey, user)
-    byebug
-    priceObj = get_item_fn(client, 'pathPricing', '_id', pathKey)
-    if priceObj["#{user.id}"]
-      priceKey = priceObj["#{user.id}"]
-    else
-      priceKey = priceObj["open"]
-    end
-    
-    priceHash = get_item_fn(client, 'pricings', '_id', priceKey)
-    
-    return priceHash
+  def get_user_price(client, path_key, user)
+    path_pricing = get_item_fn(client, 'pathPricing', '_id', path_key)
+
+    raise ApplicationError::NoRoutes if path_pricing.nil?
+
+    path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"
+    price_key        = path_pricing[path_pricing_key]    
+
+    get_item_fn(client, 'pricings', '_id', price_key)
   end
 
   def determine_cargo_item_price(client, cargo, pathKey, user, quantity)
-        
     pricing = get_user_price(client, pathKey, user)
-
     
     totals = {"total" => {}}
     pricing["data"].each do |k, v|

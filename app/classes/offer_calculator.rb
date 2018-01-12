@@ -153,7 +153,7 @@ class OfferCalculator
       name: transport_category_name, 
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
-    byebug
+
     "#{sched.hub_route_id}_#{transport_category.id}"
   end
 
