@@ -21,11 +21,11 @@ class OfferCalculator
     @total_price = { total:0, currency: "EUR" }
 
     case @shipment.load_type
-    when 'fcl'
+    when 'container'
       @shipment.containers.destroy_all
       @containers = Container.extract_containers(params[:shipment][:containers_attributes])
       @shipment.containers = @containers
-    when 'lcl'
+    when 'cargo_item'
       @shipment.cargo_items.destroy_all
       @cargo_items = CargoItem.extract_cargos(params[:shipment][:cargo_items_attributes])
       @shipment.cargo_items = @cargo_items
@@ -141,26 +141,26 @@ class OfferCalculator
   end
 
   def set_cargo_charges!(charges, sched, sched_key)
-    array = @cargo_items || @containers
+    cargo_units = @cargo_items || @containers
 
-    array.each do |elem|
-      path_key = path_key(elem, sched)
+    cargo_units.each do |cargo_unit|
+      path_key = path_key(cargo_unit, sched)
 
-      charges[sched_key][:cargo][elem.id] = send("determine_#{@shipment.load_type}_price",
+      charges[sched_key][:cargo][cargo_unit.id] = send("determine_#{@shipment.load_type}_price",
         @mongo, 
-        elem, 
+        cargo_unit, 
         path_key, 
         @user, 
-        array.length
+        cargo_units.length
       )
     end
   end
 
-  def path_key(elem, sched)
-    transport_category_name = elem.cargo_class ? elem.cargo_class : 'any'
+  def path_key(cargo_unit, sched)
+    transport_category_name = cargo_unit.cargo_class ? cargo_unit.cargo_class : 'any'
     transport_category = sched.vehicle.transport_categories.find_by(
       name: transport_category_name, 
-      cargo_class: elem.try(:size_class) || 'lcl'
+      cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
     
     "#{sched.hub_route_id}_#{transport_category.id}"
@@ -172,20 +172,15 @@ class OfferCalculator
     price_results = []    
 
     case shipment.load_type
-    when 'fcl'
+    when 'container'
       @containers.each do |container|
         price_results << calc_trucking_price(origin, container, km, hub, @mongo) #################
       end
-    when 'lcl'
+    when 'cargo_item'
       @cargo_items.each do |cargo_item|
         
         price_results << calc_trucking_price(origin, cargo_item, km, hub, @mongo) #################
         #########################!!!!!!!!!!!!!!!!!!!
-      end
-    when "openlcl"
-      @cargo_items.each do |cargo_item|
-        
-        price_results << calc_trucking_price(origin, cargo_item, km, hub, @mongo) #################
       end
     end
     trucking_total = {value: 0, currency:""}
@@ -247,21 +242,16 @@ class OfferCalculator
     prices = []
     
     case shipment.load_type
-    when 'fcl'
+    when 'container'
       @containers.each do |container|
         price = Pricing.fcl_price(container)
 
         prices << price
       end
-    when 'lcl'
+    when 'cargo_item'
       @cargo_items.each do |cargo|
         price = Pricing.lcl_price(cargo)
 
-        prices << price
-      end
-    when 'openlcl'
-      @cargo_items.each do |cargo|
-        price = Pricing.lcl_price(cargo)
         prices << price
       end
     end

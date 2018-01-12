@@ -17,7 +17,7 @@ module PricingTools
     return priceHash
   end
 
-  def determine_lcl_price(client, cargo, pathKey, user, quantity)
+  def determine_cargo_item_price(client, cargo, pathKey, user, quantity)
         
     pricing = get_user_price(client, pathKey, user)
 
@@ -57,7 +57,7 @@ module PricingTools
     return totals
   end
 
-  def determine_fcl_price(client, container, pathKey, user, quantity)
+  def determine_container_price(client, container, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
     
     totals = {"total" => {}}
