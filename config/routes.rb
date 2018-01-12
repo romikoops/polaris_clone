@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "/health_check", to: "server_checks#health_checks"
+
+
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations'
