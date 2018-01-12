@@ -10,17 +10,10 @@ module ShippingTools
       tenant_id: current_user.tenant_id
     )
 
-    shipment.containers.create  if load_type.include?('fcl') && shipment.containers.empty?
-    shipment.cargo_items.create if load_type.include?('lcl') && shipment.cargo_items.empty?
+    shipment.send("#{load_type}s").create if shipment.send("#{load_type}s").empty?
 
     route_ids_dedicated = Route.ids_dedicated(current_user)
 
-    # Needs refactoring
-    acronym_to_load_type = {
-      'fcl' => 'container',
-      'lcl' => 'cargo_item'
-    }
-    load_type = acronym_to_load_type[load_type]
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     routes = get_scoped_routes(current_user.tenant_id, mot_scope_ids)

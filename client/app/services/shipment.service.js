@@ -37,11 +37,11 @@ function getShipment(id) {
     );
 }
 
-function newShipment(type) {
+function newShipment(loadType) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: type })
+        body: JSON.stringify({ loadType })
     };
     const url = BASE_URL + '/shipments';
     return fetch(url, requestOptions).then(handleResponse);
