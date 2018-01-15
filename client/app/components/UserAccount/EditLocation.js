@@ -285,7 +285,6 @@ export class EditLocation extends Component {
                     className="layout-row flex-100"
                     onClick={() => this.props.toggleActiveView('allLocations')}
                 >
-                    test
                 </h1>
 
                 {/* <input
