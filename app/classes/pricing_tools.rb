@@ -115,6 +115,11 @@ module PricingTools
     return resp.to_a
   end
 
+  # def get_route_path_pricings(route_id)
+  #   resp = get_items('pathPricing', 'route_id', route_id)
+  #   return resp.to_a
+  # end
+
   def get_hub_route_pricings(hub_route_id)
     resp = get_items('pathPricing', 'hub_route', hub_route_id)
     return resp.to_a
@@ -143,6 +148,12 @@ module PricingTools
     query = [{'hub_route' => {"$eq" => hub_route_id}}, {"#{user_id}" => {"$exists" => true}}]
     resp = get_items_query('pathPricing', query)
     return resp.to_a
+  end
+
+  def update_path_pricing(key, data)
+    update_item('pathPricing', {_id: key }, data)
+
+    Route.find(data["route_id"]).set_scope!
   end
 end
 

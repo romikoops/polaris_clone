@@ -485,7 +485,7 @@ module ExcelTools
   #       vt = Vehicle.find_by_name(row[:vehicle_type])
   #     end
 
-  #     load_types = [
+  #     cargo_classes = [
   #       'fcl_20f',
   #       'fcl_40f',
   #       'fcl_40f_hq',
@@ -495,11 +495,11 @@ module ExcelTools
   #     tt_obj = {}
 
   #     if !row[:cargo_type]
-  #       load_types.each do |lt|
+  #       cargo_classes.each do |lt|
   #         tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
   #       end
   #     else
-  #       load_types.each do |lt|
+  #       cargo_classes.each do |lt|
   #         tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
   #       end
   #     end
@@ -577,7 +577,7 @@ module ExcelTools
   #     price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
 
   #     if dedicated
-  #       load_types.each do |lt|
+  #       cargo_classes.each do |lt|
   #         uuid = SecureRandom.uuid
   #         tmpItem = {data: price_obj[lt]}
   #         pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -594,7 +594,7 @@ module ExcelTools
   #         new_path_pricings[pathKey]["#{user.id}"] = uuid
   #       end
   #     else
-  #       load_types.each do |lt|
+  #       cargo_classes.each do |lt|
   #         uuid = SecureRandom.uuid
   #         tmpItem = {data: price_obj[lt]}
   #         pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -670,7 +670,7 @@ module ExcelTools
         vt = Vehicle.find_by_name(row[:vehicle_type])
       end
 
-      load_types = [
+      cargo_classes = [
         'fcl_20f',
         'fcl_40f',
         'fcl_40f_hq',
@@ -680,11 +680,11 @@ module ExcelTools
       tt_obj = {}
 
       if !row[:cargo_type]
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
@@ -762,7 +762,7 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
 
       if dedicated
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -779,7 +779,7 @@ module ExcelTools
           new_path_pricings[pathKey]["#{user.id}"] = uuid
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -860,31 +860,35 @@ module ExcelTools
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
-      origin = Location.find_by(name: row[:origin])
+      
+      origin      = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
-      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
-      p user.tenant_id
-      hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
-      p route
-      p hubroute
+      route       = Route.find_or_create_by!(
+        name: "#{origin.name} - #{destination.name}", 
+        tenant_id: user.tenant_id, 
+        origin_nexus_id: origin.id, 
+        destination_nexus_id: destination.id
+      )
+      hubroute    = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+
       if !row[:vehicle_type]
         vt = Vehicle.find_by_name("#{row[:mot]}_default")
       else
         vt = Vehicle.find_by_name(row[:vehicle_type])
       end
 
-      load_types = [
+      cargo_classes = [
         'lcl'
       ]
 
       tt_obj = {}
 
       if !row[:cargo_type]
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
@@ -979,7 +983,7 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h}
       
       if dedicated
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -997,7 +1001,7 @@ module ExcelTools
           new_path_pricings[pathKey]["#{user.id}"] = priceKey
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -1122,7 +1126,7 @@ module ExcelTools
 
       tmpPrice = new_pricings[pp_key]
 
-      load_types = [
+      cargo_classes = [
         'fcl_20f',
         'fcl_40f',
         'fcl_40f_hq'
@@ -1131,11 +1135,11 @@ module ExcelTools
       
 
       if !row[:cargo_type] || row[:cargo_type] == 'FAK'
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
