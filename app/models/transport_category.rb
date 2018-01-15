@@ -24,6 +24,10 @@ class TransportCategory < ApplicationRecord
 	      message: "must be included in [#{LOAD_TYPE_CARGO_CLASSES[_load_type].join(', ')}]" 
 	    }, 
 	    if: -> { self.load_type == _load_type }
+
+	  # This allows the following example usage for every load type: 
+	  # TransportCategory.container #=> collection of TransportCategory instances
+  	scope _load_type.to_sym, -> { where(load_type: _load_type) }
   end
 
 	validates :load_type, 
