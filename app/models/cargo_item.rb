@@ -7,7 +7,7 @@ class CargoItem < ApplicationRecord
   validates :dimension_z,   presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   # Class Methods
-  def self.extract_cargos(params)
+  def self.extract(params)
     cargos = []
     params.each do |value|
       

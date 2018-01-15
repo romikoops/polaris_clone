@@ -291,7 +291,7 @@ export class ShipmentDetails extends Component {
         const { theme, messages, shipmentData } = this.props;
         let cargoDetails;
         if (shipmentData.shipment) {
-            if (shipmentData.shipment.load_type.includes('fcl')) {
+            if (shipmentData.shipment.load_type === 'container') {
                 cargoDetails = (
                     <ShipmentContainers
                         containers={this.state.containers}
@@ -303,7 +303,7 @@ export class ShipmentDetails extends Component {
                     />
                 );
             }
-            if (shipmentData.shipment.load_type.includes('lcl')) {
+            if (shipmentData.shipment.load_type === 'cargo_item') {
                 cargoDetails = (
                     <ShipmentCargoItems
                         cargoItems={this.state.cargoItems}

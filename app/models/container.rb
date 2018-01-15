@@ -15,7 +15,7 @@ class Container < ApplicationRecord
   validates :gross_weight,  presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   # Class methods
-  def self.extract_containers(params)
+  def self.extract(params)
     containers = []
     contWeights = {
         'fcl_20f' => 2370,

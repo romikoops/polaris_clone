@@ -11,7 +11,6 @@ import { Loading } from '../../components/Loading/Loading';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 import { connect } from 'react-redux';
-import { SHIPMENT_TYPES, SHIPMENT_STAGES } from '../../constants';
 import { shipmentActions } from '../../actions/shipment.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
@@ -27,8 +26,6 @@ class Shop extends Component {
         this.tenant = this.props.tenant;
 
         this.state = {
-            shipmentOptions: SHIPMENT_TYPES,
-            shipmentStages: SHIPMENT_STAGES,
             shipment: this.props.shipment,
             stageTracker: {},
             shopType: 'Booking',
@@ -39,7 +36,7 @@ class Shop extends Component {
             },
             showRegistration: false
         };
-        this.selectShipmentType = this.selectShipmentType.bind(this);
+        this.selectLoadType = this.selectLoadType.bind(this);
         this.setShipmentData = this.setShipmentData.bind(this);
         this.selectShipmentRoute = this.selectShipmentRoute.bind(this);
         this.setShipmentContacts = this.setShipmentContacts.bind(this);
@@ -54,13 +51,13 @@ class Shop extends Component {
         return loading || !(loggingIn || registering);
     }
 
-    getShipment(type) {
+    getShipment(loadType) {
         const { shipmentDispatch } = this.props;
-        shipmentDispatch.newShipment(type);
+        shipmentDispatch.newShipment(loadType);
     }
 
-    selectShipmentType(type) {
-        this.getShipment(type);
+    selectLoadType(loadType) {
+        this.getShipment(loadType);
     }
 
     selectShipmentStage(stage) {
@@ -80,18 +77,11 @@ class Shop extends Component {
     setShipmentData(data) {
         const { shipmentDispatch} = this.props;
         shipmentDispatch.setShipmentDetails(data);
-        // this.setState({
-        //     stageTracker: { shipmentType: data.shipment.load_type, stage: 2 }
-        // });
     }
 
     setShipmentContacts(data) {
         const { shipmentDispatch } = this.props;
         shipmentDispatch.setShipmentContacts(data);
-        // this.setState({
-        //     stageTracker: { shipmentType: data.load_type, stage: 4 }
-        // });
-        // history.push('/booking/' + data.shipment.id + '/finish_booking');
     }
 
     toggleShowRegistration(req) {
@@ -179,7 +169,6 @@ class Shop extends Component {
                     shopType={this.state.shopType}
                     match={match}
                     theme={theme}
-                    stages={this.state.shipmentStages}
                     currentStage={this.state.stageTracker.stage}
                     setStage={this.selectShipmentStageAndGo}
                     shipmentId={shipmentId}
@@ -191,8 +180,7 @@ class Shop extends Component {
                         <ChooseShipment
                             {...props}
                             theme={theme}
-                            shipmentTypes={this.state.shipmentOptions}
-                            selectShipment={this.selectShipmentType}
+                            selectLoadType={this.selectLoadType}
                             setStage={this.selectShipmentStage}
                             messages={error ? error.stage1 : []}
                             shipmentDispatch={shipmentDispatch}
