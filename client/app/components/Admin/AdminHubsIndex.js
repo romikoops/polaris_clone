@@ -24,7 +24,7 @@ export class AdminHubsIndex extends Component {
                     <p className="flex-none">Upload Hubs Sheet</p>
                    <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Hub .xlsx"/>
                 </div>
-                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewHub}/>
+                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewHub} seeAll={false}/>
             </div>
         );
     }

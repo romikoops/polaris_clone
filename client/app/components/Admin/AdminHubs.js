@@ -19,6 +19,12 @@ class AdminHubs extends Component {
         this.viewHub = this.viewHub.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
     }
+    componentDidMount() {
+        const {hubs, adminDispatch, loading} = this.props;
+        if (!hubs && ! loading) {
+            adminDispatch.getHubs(false);
+        }
+    }
     viewHub(hub) {
         const { adminDispatch } = this.props;
         adminDispatch.getHub(hub.id, true);

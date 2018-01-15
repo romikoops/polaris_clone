@@ -92,7 +92,10 @@ Rails.application.routes.draw do
     post "finish_booking",     as: :finish_booking
     post "update",             as: :update_booking
   end
-  resources :contacts, only: [:index, :show, :create]
+  resources :contacts, only: [:index, :show, :create, :update]
+  post 'contacts/update_contact/:id', to: 'contacts#update_contact'
+  post 'contacts/new_alias', to: 'contacts#new_alias'
+  post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
   post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
   post "search/hscodes" => "search#search_hs_codes"
   get "/documents/download/:document_id", 

@@ -139,4 +139,99 @@
   .section {
     min-height: 150px;
   }
+  .map_box {
+    position: relative;
+  }
+  .loc_map{
+    position: relative;
+  }
+  .overlay_auto {
+    position: absolute;
+    z-index: 25;
+    top: 50px;
+    left: 40px;
+    box-shadow: 1px 2px 1px rgba(0,1,2,0.5);
+  }
+  .new_contact {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .new_contact_backdrop {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    background: rgba(2,3,1,0.25);
+  }
+  .new_contact_content {
+    width: 650px;
+    height: 400px;
+    position: relative;
+    z-index: 20;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 15px;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .input {
+    margin: 5px;
+    height: 36.91px;
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .input_50 {
+    @extend .input;
+    // width: 250px;
+    width: calc(48% - 20px);
+  }
+  .input_100 {
+    @extend .input;
+    // width: 5 20px;
+    width: calc(100% - 20px);
+  }
+  .input_zip {
+    @extend .input;
+    // width: 141px;
+    width: calc(28% - 20px);
+  }
+  .input_cc{
+    @extend .input;
+    // width: 174px;
+    width: calc(33% - 20px);
+  }
+  .input_no {
+    @extend .input;
+    // width: 115px;
+    width: calc(18% - 20px);
+  }
+  .input_street {
+    @extend .input;
+    // width: 385px;
+    width: calc(78% - 20px);
+  }
+  .contact_header, .contact_header p {
+    color: #212121;
+    // font-family: ".SF NS Display";
+    font-size: 16px;
+    line-height: 18px;
+    
+  }
+  .btn_row {
+    padding: 25px;
+  }
+  .contact_header i {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+  }
 }

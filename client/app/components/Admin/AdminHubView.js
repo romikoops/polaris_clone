@@ -4,17 +4,24 @@ import { AdminScheduleLine, AdminHubTile } from './';
 import { AdminSearchableRoutes } from './AdminSearchables';
 import styles from './Admin.scss';
 import {v4} from 'node-uuid';
+import { RoundButton } from '../RoundButton/RoundButton';
 export class AdminHubView extends Component {
     constructor(props) {
         super(props);
         this.state = {
         };
+        this.toggleHubActive = this.toggleHubActive.bind(this);
     }
     componentDidMount() {
         const { hubData,  loading, adminActions, match } = this.props;
         if (!hubData && !loading) {
             adminActions.getHub(parseInt(match.params.id, 10), false);
         }
+    }
+    toggleHubActive() {
+        const { hubData, adminActions } = this.props;
+        const { hub } = hubData;
+        adminActions.activateHub(hub.id);
     }
     render() {
         const {theme, hubData, hubs, hubHash, adminActions} = this.props;
@@ -32,7 +39,27 @@ export class AdminHubView extends Component {
                 relHubs.push( <AdminHubTile key={v4()} hub={hubHash[hubObj.id]} theme={theme} handleClick={() => adminActions.getHub(hubObj.id, true)} />);
             }
         });
-
+        const activate = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Activate"
+                    active
+                    handleNext={this.toggleHubActive}
+                    iconClass="fa-plus"
+                />
+            </div>);
+        const deactivate = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Deactivate"
+                    handleNext={this.toggleHubActive}
+                    iconClass="fa-ban"
+                />
+            </div>);
 
         const schedArr = schedules.map((sched) => {
             return <AdminScheduleLine key={v4()} schedule={sched} hubs={hubHash} theme={theme}/>;
@@ -42,6 +69,7 @@ export class AdminHubView extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{hub.name}</p>
+                    {hub.hub_status === 'active' ? deactivate : activate}
                 </div>
 
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">

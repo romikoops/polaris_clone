@@ -5,6 +5,7 @@ class Shipment < ApplicationRecord
     pending
     confirmed
     declined
+    ignored
   )
   LOAD_TYPES = %w(
     fcl
@@ -189,6 +190,11 @@ class Shipment < ApplicationRecord
 
   def decline!
     self.update_attributes(status: "declined")
+    self.save!
+  end
+
+  def ignore!
+    self.update_attributes(status: "ignored")
     self.save!
   end
 

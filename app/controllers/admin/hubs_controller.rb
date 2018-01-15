@@ -34,8 +34,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-
-    render json: { updated_hub_status: hub.hub_status }, status: 200
+    response_handler(hub)
   end
 
   def overwrite

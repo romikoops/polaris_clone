@@ -74,7 +74,7 @@ export class AdminDashboard extends Component {
                 clientHash[cl.id] = cl;
             });
         }
-        const filteredClients = clients.filter(x => !x.guest);
+        const filteredClients = clients ? clients.filter(x => !x.guest) : [];
         const schedArr = [];
         console.log(shipments);
         // const mergedRequestedShipments = shipments ? shipments.map((sh) => {

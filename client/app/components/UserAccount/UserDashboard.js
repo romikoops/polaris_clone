@@ -63,12 +63,11 @@ export class UserDashboard extends Component {
     }
 
     render() {
-        const { theme, hubs, dashboard, user } = this.props;
+        const { theme, hubs, dashboard, user, userDispatch } = this.props;
         // ;
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }
-
         const { shipments, pricings, contacts, locations} = dashboard;
         console.log(pricings);
         const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
@@ -81,19 +80,9 @@ export class UserDashboard extends Component {
             return this.prepShipment(sh, user, hubs);
         }) : false;
 
-        const openShipments = mergedOpenShipments ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction}/> : '';
-        const reqShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction}/> : '';
-        const finishedShipments = mergedFinishedShipments ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction}/> : '';
-
-        // const openShipments = shipments && shipments.open ? shipments.open.map((ship) => {
-        //     return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
-        // }) : '';
-        // const reqShipments = shipments && shipments.requested ? shipments.requested.map((ship) => {
-        //     return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
-        // }) : '';
-        // const finishedShipments = shipments && shipments.finished ? shipments.finished.map((ship) => {
-        //     return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
-        // }) : '';
+        const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
+        const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
+        const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
 
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -119,7 +108,7 @@ export class UserDashboard extends Component {
                     { openShipments }
                     { reqShipments }
                     { finishedShipments }
-                    { openShipments.length === 0 && reqShipments.length === 0 && finishedShipments.length === 0 ?
+                    { mergedOpenShipments.length === 0 && mergedRequestedShipments.length === 0 && mergedFinishedShipments.length === 0 ?
                         <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
                             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
                                 <p className={` ${styles.sec_subheader_text} flex-none`}  > No Shipments yet</p>
@@ -129,13 +118,13 @@ export class UserDashboard extends Component {
                         ''
                     }
                 </div>
-                <AdminSearchableClients theme={theme} clients={contacts} title="Contacts" handleClick={this.viewClient} />
+                <AdminSearchableClients theme={theme} clients={contacts} title="Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
 
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Saved Locations </p>
                     </div>
-                    <UserLocations setNav={this.doNothing} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user.data}/>
+                    <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                 </div>
 
             </div>

@@ -1,6 +1,6 @@
 import { userConstants } from '../constants';
 import { userService } from '../services';
-
+import { history } from '../helpers';
 import { alertActions } from './';
 
 import { push } from 'react-router-redux';
@@ -379,9 +379,159 @@ function getContact(id, redirect) {
     };
 }
 
+function updateContact(data, redirect) {
+    function request(contactData) {
+        return { type: userConstants.UPDATE_CONTACT_REQUEST, payload: contactData };
+    }
+    function success(contactData) {
+        return { type: userConstants.UPDATE_CONTACT_SUCCESS, payload: contactData };
+    }
+    function failure(error) {
+        return { type: userConstants.UPDATE_CONTACT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.updateContact(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Contact successful')
+                );
+                if (redirect) {
+                    dispatch(
+                        push('/account/contacts/' + data.id)
+                    );
+                }
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function newUserLocation(userId, data) {
+    function request(userlocData) {
+        return { type: userConstants.NEW_USER_LOCATION_REQUEST, payload: userlocData };
+    }
+    function success(userlocData) {
+        return { type: userConstants.NEW_USER_LOCATION_SUCCESS, payload: userlocData };
+    }
+    function failure(error) {
+        return { type: userConstants.NEW_USER_LOCATION_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.newUserLocation(userId, data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Saving User Location successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function newContact(data) {
+    function request(newContactData) {
+        return { type: userConstants.NEW_CONTACT_REQUEST, payload: newContactData };
+    }
+    function success(newContactData) {
+        return { type: userConstants.NEW_CONTACT_SUCCESS, payload: newContactData };
+    }
+    function failure(error) {
+        return { type: userConstants.NEW_CONTACT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.newContact(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Saving New Contact successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function newAlias(data) {
+    function request(newAliasData) {
+        return { type: userConstants.NEW_ALIAS_REQUEST, payload: newAliasData };
+    }
+    function success(newAliasData) {
+        return { type: userConstants.NEW_ALIAS_SUCCESS, payload: newAliasData };
+    }
+    function failure(error) {
+        return { type: userConstants.NEW_ALIAS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.newAlias(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Saving New Alias successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function deleteAlias(aliasId) {
+    function request(newAliasData) {
+        return { type: userConstants.DELETE_ALIAS_REQUEST, payload: newAliasData };
+    }
+    function success(newAliasData) {
+        return { type: userConstants.DELETE_ALIAS_SUCCESS, payload: newAliasData };
+    }
+    function failure(error) {
+        return { type: userConstants.DELETE_ALIAS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.deleteAlias(aliasId).then(
+            data => {
+                dispatch(
+                    alertActions.success('Deleting Alias successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
+    };
+}
+function goBack() {
+    return () => {
+       history.goBack();
     };
 }
 
@@ -398,5 +548,11 @@ export const userActions = {
     goTo,
     getAll,
     getContact,
+    goBack,
+    updateContact,
+    newUserLocation,
+    newContact,
+    newAlias,
+    deleteAlias,
     delete: _delete
 };

@@ -9,6 +9,7 @@ export class AdminShipmentRow extends Component {
         this.selectShipment = this.selectShipment.bind(this);
         this.handleDeny = this.handleDeny.bind(this);
         this.handleAccept = this.handleAccept.bind(this);
+        this.handleIgnore = this.handleIgnore.bind(this);
     }
     switchIcon(sched) {
         let icon;
@@ -47,6 +48,11 @@ export class AdminShipmentRow extends Component {
         const {shipment, handleAction} = this.props;
         handleAction(shipment.id, 'accept');
     }
+
+    handleIgnore() {
+        const {shipment, handleAction} = this.props;
+        handleAction(shipment.id, 'ignore');
+    }
     render() {
         const { theme, shipment, hubs} = this.props;
         if (shipment.schedule_set.length < 1) {
@@ -83,13 +89,16 @@ export class AdminShipmentRow extends Component {
         };
         const btnsRow = (
             <div className={`flex-40 layout-row layout-align-space-between-start layout-wrap ${styles.btn_row}`}>
-                <div className={`flex-40 layout-row layout-align-center-center ${styles.deny}`} onClick={this.handleDeny}>
-                    <i className="flex-none fa fa-trash"></i>
-                    <p className="flex-none">Deny</p>
+                <div className={`flex-40 layout-row layout-align-center-center ${styles.edit}`} onClick={this.handleEdit}>
+                    <i className="flex-none fa fa-pencil"></i>
+                    <p className="flex-none">Edit</p>
                 </div>
                 <div className={`flex-40 layout-row layout-align-center-center ${styles.grant}`} onClick={this.handleAccept}>
                     <i className="flex-none fa fa-check"></i>
                     <p className="flex-none">Accept</p>
+                </div>
+                <div className={`flex-none layout-row layout-align-center-center ${styles.close_x}`} onClick={this.handleIgnore}>
+                    <i className="fa fa-close"></i>
                 </div>
             </div>
         );
@@ -106,6 +115,7 @@ export class AdminShipmentRow extends Component {
                         }`}
                         onClick={this.selectShipment}
                     >
+
                         <div className={`${styles.header_hub}`}>
                             <i
                                 className={`fa fa-map-marker ${

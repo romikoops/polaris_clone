@@ -76,5 +76,6 @@ class Hub < ApplicationRecord
     else
       raise "Location contains invalid hub status!"
     end
+    self.save!
   end
 end

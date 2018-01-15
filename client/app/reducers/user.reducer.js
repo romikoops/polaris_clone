@@ -172,9 +172,62 @@ export function users(state = initialState, action) {
             return succContact;
         case userConstants.GET_CONTACT_FAILURE:
             const errContact = merge({}, state, {
-                error: { hubs: action.error }
+                error: { contact: action.error }
             });
             return errContact;
+
+        case userConstants.NEW_CONTACT_REQUEST:
+            const reqNewContact = merge({}, state, {
+                loading: true
+            });
+            return reqNewContact;
+        case userConstants.NEW_CONTACT_SUCCESS:
+            const succNewContact = merge({}, state, {
+                contactData: action.payload.data,
+                loading: false
+            });
+            return succNewContact;
+        case userConstants.NEW_CONTACT_FAILURE:
+            const errNewContact = merge({}, state, {
+                error: { contactData: action.error }
+            });
+            return errNewContact;
+
+        case userConstants.NEW_ALIAS_REQUEST:
+            const reqNewAlias = merge({}, state, {
+                loading: true
+            });
+            return reqNewAlias;
+        case userConstants.NEW_ALIAS_SUCCESS:
+            const aliases = state.dashboard.aliases;
+            aliases.push(action.payload.data);
+            const succNewAlias = merge({}, state, {
+                contactData: aliases,
+                loading: false
+            });
+            return succNewAlias;
+        case userConstants.NEW_ALIAS_FAILURE:
+            const errNewAlias = merge({}, state, {
+                error: { contactData: action.error }
+            });
+            return errNewAlias;
+
+        case userConstants.DELETE_ALIAS_REQUEST:
+            const reqDeleteAlias = merge({}, state, {
+                loading: true
+            });
+            return reqDeleteAlias;
+        case userConstants.DELETE_ALIAS_SUCCESS:
+            const succDeleteAlias = merge({}, state, {
+                contactData: action.payload.data,
+                loading: false
+            });
+            return succDeleteAlias;
+        case userConstants.DELETE_ALIAS_FAILURE:
+            const errDeleteAlias = merge({}, state, {
+                error: { contactData: action.error }
+            });
+            return errDeleteAlias;
 
 
         case userConstants.UPLOAD_DOCUMENT_REQUEST:

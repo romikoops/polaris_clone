@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './UserAccount.scss';
 import defaults from '../../styles/default_classes.scss';
 import { EditLocation } from './EditLocation';
-
+import EditLocationWrapper from '../../hocs/EditLocationWrapper';
 const LocationView = (locInfo, makePrimary, toggleActiveView) => [
     <div
         key="addLocationButton"
@@ -85,7 +85,7 @@ export class UserLocations extends Component {
             activeView: 'allLocations'
             // activeView: 'editLocation'
         };
-
+        this.saveLocation = this.saveLocation.bind(this);
         this.toggleActiveView = this.toggleActiveView.bind(this);
     }
 
@@ -97,6 +97,11 @@ export class UserLocations extends Component {
         this.setState({
             activeView: key
         });
+    }
+    saveLocation(data) {
+        const { userDispatch, user } = this.props;
+        userDispatch.newUserLocation(user.id, data);
+        this.toggleActiveView();
     }
 
     render() {
@@ -118,10 +123,12 @@ export class UserLocations extends Component {
                 break;
             case 'editLocation':
                 activeView = (
-                    <EditLocation
+                    <EditLocationWrapper
                         theme={this.props.theme}
+                        component={EditLocation}
                         toggleActiveView={this.toggleActiveView}
                         locationId={undefined}
+                        saveLocation={this.saveLocation}
                     />
                 );
                 break;

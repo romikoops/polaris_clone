@@ -37,9 +37,9 @@ module MultiTenantTools
         uploader.upload!
 
         if is_demo
-          seed_demo_site(tenant)
+          # seed_demo_site(tenant)
         end
-         # create_distribution(tenant["subdomain"])
+        create_distribution(tenant["subdomain"])
     end
   def create_distribution(subd)
         cloudfront = Aws::CloudFront::Client.new(

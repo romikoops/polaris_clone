@@ -75,6 +75,8 @@ class Admin::ShipmentsController < ApplicationController
         shipper_confirmation_email(@shipment.shipper, @shipment)
       when "decline"
         @shipment.decline!
+      when "ignore"
+        @shipment.ignore!
       else
         raise "Unknown action!"
       end

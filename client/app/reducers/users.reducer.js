@@ -136,6 +136,31 @@ export function users(state = {}, action) {
                 error: { shipments: action.error }
             });
             return errShip;
+
+        case userConstants.UPDATE_CONTACT_REQUEST:
+            const reqContact = merge({}, state, {
+                loading: true
+            });
+            return reqContact;
+        case userConstants.UPDATE_CONTACT_SUCCESS:
+            debugger;
+            const contacts = state.dashboard.contacts.filter(x => x.id !== action.payload.data.id);
+            contacts.push(action.payload.data);
+            const succContact = merge({}, state, {
+                dashboard: {
+                    contacts: contacts
+                },
+                contactData : {
+                    contact: action.payload.data
+                },
+                loading: false
+            });
+            return succContact;
+        case userConstants.UPDATE_CONTACT_FAILURE:
+            const errContact = merge({}, state, {
+                error: { contacts: action.error }
+            });
+            return errContact;
         default:
             return state;
     }

@@ -260,6 +260,25 @@ function updateServiceCharge(id, data) {
     return fetch(BASE_URL + '/admin/service_charges/' + id, requestOptions).then(handleResponse);
 }
 
+function newClient(data) {
+    const formData = new FormData();
+    formData.append('new_client', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/admins/clients', requestOptions).then(handleResponse);
+}
+
+function activateHub(hubId) {
+    const requestOptions = {
+        method: 'PATCH',
+        headers: authHeader()
+    };
+    return fetch(BASE_URL + '/admin/hubs/' + hubId + '/set_status', requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
@@ -285,5 +304,7 @@ export const adminService = {
     wizardPricings,
     wizardOpenPricings,
     wizardTrucking,
-    updateServiceCharge
+    updateServiceCharge,
+    newClient,
+    activateHub
 };

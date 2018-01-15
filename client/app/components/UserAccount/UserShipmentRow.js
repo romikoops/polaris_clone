@@ -84,10 +84,10 @@ export class UserShipmentRow extends Component {
         };
         const pendingRow = (
             <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-                <div className="flex-40 layout-row layout-align-start-end">
+                <div className="flex-none layout-row layout-align-start-end">
                     <p className="flex-none">Status:  </p>
                 </div>
-                <div className={`flex-60 layout-row layout-align-start-end ${styles.pending}`} >
+                <div className={`flex-40 layout-row layout-align-center-end ${styles.pending}`} >
                     <i className="flex-none fa fa-clock-o"></i>
                     <p className="flex-none">Pending</p>
                 </div>
@@ -95,10 +95,10 @@ export class UserShipmentRow extends Component {
         );
         const acceptedRow = (
             <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-                <div className="flex-40 layout-row layout-align-start-end">
+                <div className="flex-none layout-row layout-align-start-end">
                     <p className="flex-none">Status:  </p>
                 </div>
-                <div className={`flex-60 layout-row layout-align-start-end ${styles.grant}`} >
+                <div className={`flex-40 layout-row layout-align-center-end ${styles.grant}`} >
                     <i className="flex-none fa fa-check"></i>
                     <p className="flex-none">Accepted</p>
                 </div>
@@ -106,10 +106,10 @@ export class UserShipmentRow extends Component {
         );
         const deniedRow = (
             <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-                <div className="flex-40 layout-row layout-align-start-end">
+                <div className="flex-none layout-row layout-align-start-end">
                     <p className="flex-none">Status:  </p>
                 </div>
-                <div className={`flex-60 layout-row layout-align-start-end ${styles.deny}`} >
+                <div className={`flex-40 layout-row layout-align-center-end ${styles.deny}`} >
                     <i className="flex-none fa fa-trash"></i>
                     <p className="flex-none">Denied</p>
                 </div>
@@ -127,6 +127,9 @@ export class UserShipmentRow extends Component {
                 statusRow = deniedRow;
                 break;
             case 'accepted':
+                statusRow = acceptedRow;
+                break;
+            case 'confirmed':
                 statusRow = acceptedRow;
                 break;
             case 'in_progress':
