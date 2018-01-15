@@ -143,7 +143,7 @@ export function users(state = {}, action) {
             });
             return reqContact;
         case userConstants.UPDATE_CONTACT_SUCCESS:
-            debugger;
+            
             const contacts = state.dashboard.contacts.filter(x => x.id !== action.payload.data.id);
             contacts.push(action.payload.data);
             const succContact = merge({}, state, {

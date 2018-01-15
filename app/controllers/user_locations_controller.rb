@@ -12,7 +12,7 @@ class UserLocationsController < ApplicationController
   def create
     user = User.find(params[:user_id])
     location = Location.create!(JSON.parse(params[:new_location]))
-    byebug
+    unless user_signed_in? && current_user.role.name.include?("admin")
     new_user_loc = user.user_locations.create!(primary: false, location_id: location.id)
     user_locations = user.user_locations
     response_handler(user_locations)
