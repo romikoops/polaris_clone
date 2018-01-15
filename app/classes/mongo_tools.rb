@@ -59,6 +59,11 @@ module MongoTools
     return resp.to_a
   end
 
+  def get_item_fn(client, table, keyName, key)
+    resp = client[table.to_sym].find({"#{keyName}" => "#{key}"})
+    return resp.first
+  end
+
   def get_all_items(table)
     client = init
     resp = client[table.to_sym].find({})
@@ -124,10 +129,6 @@ module MongoTools
     client[table.to_sym].update_one(key, {'$push' => updateArr}, {upsert: true})
   end
   
-  def get_item_fn(client, table, keyName, key)
-    resp = client[table.to_sym].find({"#{keyName}" => "#{key}"})
-    return resp.first
-  end
 
   private
 
