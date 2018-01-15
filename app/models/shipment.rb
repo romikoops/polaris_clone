@@ -6,12 +6,8 @@ class Shipment < ApplicationRecord
     confirmed
     declined
   )
-  LOAD_TYPES = %w(
-    container
-    cargo_item
-  )
+  LOAD_TYPES = TransportCategory::LOAD_TYPES
   
-
   # Validations 
   validates :status, 
     inclusion: { 
