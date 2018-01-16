@@ -57,8 +57,8 @@ export class RouteHubBox extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-        const bg1 = { backgroundImage: 'url(' + startHub.location.photo + ')' };
-        const bg2 = { backgroundImage: 'url(' + endHub.location.photo + ')' };
+        const bg1 = startHub && startHub.location && startHub.location.photo  ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'};
+        const bg2 = endHub && endHub.location && endHub.location.photo  ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'};
         // ;
         return (
             <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>

@@ -1,8 +1,18 @@
 :local {
   .input_box {
-    min-height: 550px;
-    height: max-content;
-    width: 295px;
+    // min-height: 550px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 75px;
+    width: 100%;
+    z-index: 15;
+    background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 7%, rgba(0,0,0,0.65) 48%, rgba(0,0,0,0.6) 52%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 7%,rgba(0,0,0,0.65) 48%,rgba(0,0,0,0.6) 52%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.65) 7%,rgba(0,0,0,0.65) 48%,rgba(0,0,0,0.6) 52%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
   }
   .select {
     width: 195px;
@@ -11,6 +21,7 @@
     height: 36px;
     width: 195px;
     border: 1px solid #F2F2F2;
+    margin: 2px;
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
@@ -20,5 +31,8 @@
     min-height: 550px;
     height: max-content;
     padding: 15px 0;
+  }
+  .map_container {
+    position: relative;
   }
 }

@@ -191,3 +191,17 @@ export const chargeGlossary = {
     PER_CBM_TON: 'Per cbm/ton',
     PER_CBM: 'Per cbm'
 };
+
+export const incoterms = [
+    { value: 'EXW', label: 'EXW - Ex Works (named place of delivery)', type: 'any'},
+    { value: 'FCA', label: 'FCA - Free Carrier (named place of delivery)', type: 'any'},
+    { value: 'CPT', label: 'CPT - Carriage Paid To (named place of destination)', type: 'any'},
+    { value: 'CIP', label: 'CIP - Carriage and Insurance Paid to (named place of destination)', type: 'any'},
+    { value: 'DAT', label: 'DAT - Delivered at Terminal (named terminal at port or place of destination)', type: 'any'},
+    { value: 'DAP', label: 'DAP - Delivered at Place (named place of destination)', type: 'any'},
+    { value: 'DDP', label: 'DDP - Delivered Duty Paid (named place of destination)', type: 'any'},
+    { value: 'FAS', label: 'FAS - Free Alongside Ship (named port of shipment)'},
+    { value: 'FOB', label: 'FOB - Free on Board (named port of shipment)'},
+    { value: 'CFR', label: 'CFR - Cost and Freight (named port of destination)'},
+    { value: 'CIF', label: 'CIF - Cost, Insurance and Freight (named port of destination)'}
+];

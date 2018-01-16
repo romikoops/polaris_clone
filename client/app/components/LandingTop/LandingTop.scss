@@ -60,4 +60,20 @@
   bottom: 0;
   opacity: 0.7;
   z-index: 0;
-}}
+}
+.top_shade {
+  background-image: linear-gradient(
+      rgba(black, 0.3),
+      rgba(black, 0.3)
+    );
+  background-position: center;
+  position: absolute;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.7;
+  z-index: 0;
+}
+}

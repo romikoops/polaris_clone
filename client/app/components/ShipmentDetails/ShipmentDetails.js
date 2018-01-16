@@ -355,7 +355,7 @@ export class ShipmentDetails extends Component {
                 <div className="layout-row flex-none layout-wrap">
                     <p className="flex-100">
                         {' '}
-                        {'Approximate Pickup Date:'}
+                        {this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}
                         {' '}
                     </p>
                     <div className={'flex-none layout-row ' + styles.dpb}>
@@ -399,7 +399,7 @@ export class ShipmentDetails extends Component {
                         } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
                     >
                         <RoundButton
-                            text="Choose from haulage options"
+                            text="Get Offers"
                             handleNext={this.handleNextStage}
                             theme={theme}
                             active

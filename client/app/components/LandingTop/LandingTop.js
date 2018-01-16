@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { RoundButton } from '../RoundButton/RoundButton';
 import Header from '../Header/Header';
 import { moment } from '../../constants';
+import styled from 'styled-components';
 
 // import SignIn from '../SignIn/SignIn';  default LandingTop;
 export class LandingTop extends Component {
@@ -52,8 +53,25 @@ export class LandingTop extends Component {
         const toAdmin = (
             <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active/>
         );
+        const backgroundImage = theme && theme.background ? theme.background : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg';
+        const StyledTop = styled.div`
+            color: #83BC45;
+            background-image: linear-gradient(
+              rgba(black, 0.3),
+              rgba(black, 0.3)
+            );
+            background-image: url(${props => props.bg});
+
+            height: 65vh;
+            background-size: cover;
+            background-position: center;
+            padding-bottom: 120px;
+            box-shadow: 0px 1px 15px rgba(black, 0.7);
+            position: relative;
+        `;
         return (
-            <div className={styles.landing_top + ' layout-row flex-100 layout-align-center'}>
+            <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
+                <div className={styles.top_shade}> </div>
                 <div className={styles.top_mask}> </div>
                 <div className="layout-row flex-100 layout-wrap">
                     <div className={styles.top_row + ' flex-100 layout-row'}>
@@ -72,7 +90,7 @@ export class LandingTop extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </StyledTop>
         );
     }
 }
