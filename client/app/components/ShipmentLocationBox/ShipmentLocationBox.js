@@ -520,6 +520,9 @@ export class ShipmentLocationBox extends Component {
 
         const originFields = (
             <div className="flex-100 layout-row layout-wrap">
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <p className="flex-none">Enter Pickup Address</p>
+                </div>
                 <input
                     id="not-auto"
                     name="origin-number"
@@ -586,6 +589,9 @@ export class ShipmentLocationBox extends Component {
 
         const destFields = (
             <div className="flex-100 layout-row layout-wrap">
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <p className="flex-none">Enter Delivery Address</p>
+                </div>
                 <input
                     name="destination-number"
                     className={`flex-none ${styles.input}`}
@@ -684,7 +690,7 @@ export class ShipmentLocationBox extends Component {
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
                     <div className={`flex-none layout-row layout-wrap ${styles.input_box}`}>
                         <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
-                            <div className={'flex-50 layout-row ' + defaults.mc}>
+                            <div className={'flex-50 layout-row layout-align-end-center' + defaults.mc}>
                                 <Toggle
                                     className="flex-none"
                                     id="has_pre_carriage"
@@ -703,7 +709,7 @@ export class ShipmentLocationBox extends Component {
                         </div>
                         {/* <div ref="map" id="map" style={mapStyle} />*/}
                         <div className="flex-50 layout-row layout-wrap layout-align-end-start">
-                            <div className={'flex-50 layout-row ' + defaults.mc}>
+                            <div className={'flex-50 layout-row layout-align-end-center' + defaults.mc}>
                                 <Toggle
                                     className="flex-none"
                                     id="has_on_carriage"
@@ -729,7 +735,7 @@ export class ShipmentLocationBox extends Component {
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <div className="flex-none content_width layout-row layout-wrap layout-align-space-between-start">
+                    <div className="flex-none content_width layout-row layout-align-space-between-start">
                         <div className="flex-10"></div>
                         <div className="flex-33 layout-row layout-wrap layout-align-center-start">
                             {this.state.shipment.has_pre_carriage ? originFields : ''}

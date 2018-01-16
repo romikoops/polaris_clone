@@ -2,7 +2,7 @@ module MultiTenantTools
   include ExcelTools
   def test
     tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    newSiteFn(tenant)
+    new_site(tenant, false)
   end
   def new_site(tenant, is_demo)
         # new_tenant = Tenant.create(tenant)

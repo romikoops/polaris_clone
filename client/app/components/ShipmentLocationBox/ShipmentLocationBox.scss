@@ -9,10 +9,10 @@
     height: 75px;
     width: 100%;
     z-index: 15;
-    background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 7%, rgba(0,0,0,0.65) 48%, rgba(0,0,0,0.6) 52%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 7%,rgba(0,0,0,0.65) 48%,rgba(0,0,0,0.6) 52%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(0,0,0,0.65) 7%,rgba(0,0,0,0.65) 48%,rgba(0,0,0,0.6) 52%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+    background: rgba(1,2,3,0.40);
+  }
+  .input_box label {
+    color: whitesmoke;
   }
   .select {
     width: 195px;
