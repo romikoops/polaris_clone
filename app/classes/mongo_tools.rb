@@ -68,6 +68,7 @@ module MongoTools
     resp = client[table.to_sym].find({"$and" => query})
     return resp
   end
+
   def get_items_query_fn(client, table,  query)
     resp = client[table.to_sym].find({"$and" => query})
     return resp
@@ -81,6 +82,7 @@ module MongoTools
   def put_item_fn(client, table, value)
     client[table.to_sym].insert_one(value)
   end
+  
   def put_items_fn(client, table, valueArr)
     resp = client[table.to_sym].insert_many(valueArr)
   end

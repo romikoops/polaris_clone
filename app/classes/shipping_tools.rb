@@ -18,6 +18,7 @@ module ShippingTools
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
 
+    byebug
     routes.map! do |route|
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route

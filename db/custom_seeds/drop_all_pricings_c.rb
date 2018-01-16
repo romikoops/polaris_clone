@@ -2,7 +2,7 @@ include MongoTools
 
 PRICING_TABLES = %w(
 	customsFees
-	pathPricing
+	hubRoutePricings
 	pricings
 	routeOptions
 	truckingHubs

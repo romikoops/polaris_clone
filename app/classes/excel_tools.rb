@@ -721,11 +721,11 @@ module ExcelTools
           update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
 
           new_hub_route_pricings[pathKey] ||= {}
-          new_hub_route_pricings[pathKey]["open"]               = priceKey
+          new_hub_route_pricings[pathKey]["open"]                  = priceKey
           new_hub_route_pricings[pathKey]["hub_route_id"]          = hubroute.id
-          new_hub_route_pricings[pathKey]["tenant_id"]          = user.tenant_id
+          new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
           new_hub_route_pricings[pathKey]["route_id"]              = route.id
-          new_hub_route_pricings[pathKey]["transport_category"] = transport_category.id
+          new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
     end
