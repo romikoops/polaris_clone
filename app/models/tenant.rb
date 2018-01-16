@@ -32,13 +32,15 @@ class Tenant < ApplicationRecord
   # Generates the static info for the choose route page
   def update_route_details
     routes = Route.where(tenant_id: self.id)
-    detailed_routes = routes.map do |route| 
+    detailed_routes = routes.map do |route, h|
+      route.set_scope!
+
       route.detailed_hash(
         nexus_names: true, 
         modes_of_transport: true
       )
     end
-    put_item('routeOptions', {id: self.id, data:detailed_routes})
+    put_item('routeOptions', {id: self.id, data: detailed_routes})
   end
 
   def mot_scope(args)

@@ -3,10 +3,6 @@ class Schedule < ApplicationRecord
   belongs_to :tenant
   belongs_to :vehicle, optional: true
   has_many :transport_categories, through: :vehicle
-  after_save :set_route_scope
-  # after_validation do |sched|
-  #   
-  # end 
 
   def get_pickup_date(truck_seconds)
     self.etd - truck_seconds - 1.hour
@@ -34,11 +30,5 @@ class Schedule < ApplicationRecord
   end
   def assign_tenant
     
-  end
-
-  private
-
-  def set_route_scope
-    hub_route.route.set_scope!
   end
 end
