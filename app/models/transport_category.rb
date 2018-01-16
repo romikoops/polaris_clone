@@ -26,9 +26,13 @@ class TransportCategory < ApplicationRecord
 	    if: -> { self.load_type == _load_type }
 
 	  # This allows the following example usage for every load type: 
-	  # TransportCategory.container #=> collection of TransportCategory instances
-  	scope _load_type.to_sym, -> { where(load_type: _load_type) }
+	  # TransportCategory.container_load_type #=> collection of TransportCategory instances
+  	scope "#{_load_type}_load_type".to_sym, -> { where(load_type: _load_type) }
   end
+  
+  # This allows the following example usage: 
+  # TransportCategory.load_type("container") #=> collection of TransportCategory instances
+  scope :load_type, -> _load_type { where(load_type: _load_type) }
 
 	validates :load_type, 
 		presence: true, 

@@ -1,5 +1,6 @@
 class Route < ApplicationRecord
   extend RouteTools
+  include RouteTools
   has_many :hub_routes
   has_many :pricings
   has_many :shipments
@@ -7,53 +8,11 @@ class Route < ApplicationRecord
   belongs_to :origin_nexus, class_name: "Location"
   belongs_to :destination_nexus, class_name: "Location"
   belongs_to :mot_scope, optional: true
+  belongs_to :tenant, optional: true
   # belongs_to :customer, class_name: "User"
   has_many :user_route_discounts
 
-  # Filterrific
-  filterrific :default_filter_params => { :sorted_by => 'trade_direction_asc' },
-              :available_filters => %w(
-                sorted_by
-                search_query
-              )
-
-  self.per_page = 10 # default for will_paginate
-
-  scope :search_query, lambda { |query|
-    return nil if query.blank?
-    # condition query, parse into individual keywords
-    terms = query.to_s.gsub(',', '').downcase.split(/\s+/)
-    # replace "*" with "%" for wildcard searches,
-    # prepend and append '%', remove duplicate '%'s
-    terms = terms.map { |e|
-      ('%' + e.gsub('*', '%') + '%').gsub(/%+/, '%')
-    }
-
-    # configure number of OR conditions for provision
-    # of interpolation arguments. Adjust this if you
-    # change the number of OR conditions.
-    num_or_conditions = 1
-    where(
-      terms.map {
-        or_clauses = [
-          "LOWER(routes.name) LIKE ?",
-        ].join(' OR ')
-        "(#{or_clauses})"
-      }.join(' AND '),
-      *terms.map { |e| [e] * num_or_conditions }.flatten
-    )
-  }
-
-  scope :sorted_by, lambda { |sort_option|
-    # extract the sort direction from the param value.
-    direction = (sort_option =~ /desc$/) ? 'desc' : 'asc'
-    case sort_option.to_s
-    when /^trade_direction_/
-      order("routes.trade_direction #{direction}")
-    else
-      raise(ArgumentError, "Invalid sort option: #{sort_option.inspect}")
-    end
-  }
+  after_save -> { update_route_option(self) }
 
   # Class methods
   def self.options_for_sorted_by
@@ -199,6 +158,10 @@ class Route < ApplicationRecord
       }
   end
 
+  def self.mot_scoped(tenant_id, mot_scope_ids)
+    get_scoped_routes(tenant_id, mot_scope_ids)
+  end
+
   def modes_of_transport
     exists = -> mot { schedules.where(mode_of_transport: mot).limit(1).size > 0 }
     {
@@ -218,30 +181,22 @@ class Route < ApplicationRecord
     return_h
   end
 
+  def load_types
+    load_types = TransportCategory::LOAD_TYPES.reject do |load_type|
+      get_route_path_pricings(id, TransportCategory.load_type(load_type).ids).empty?
+    end
+  end
+
   def set_scope!
-    # Needs Refactoring
-
-    acronym_to_load_type = {
-      'fcl' => 'container',
-      'lcl' => 'cargo_item'
-    }
-
-    acronym_load_types = schedules.map do |schedule| 
-      schedule.vehicle.transport_categories.pluck(:cargo_class)
-    end.flatten.uniq.map { |cargo_class| cargo_class[0..2]  }.uniq
-
-    load_types = acronym_load_types.map { |load_type| acronym_to_load_type[load_type] }
-    
     scope_attributes_arr = modes_of_transport.select { |k, v| v }.keys.map do |mode_of_transport|
       load_types.map { |load_type| "#{mode_of_transport}_#{load_type}" }
     end.flatten
 
-    scope_attributes = MotScope.given_attribute_names.reduce({}) do |h, attribute_name|
+    scope_attributes = MotScope.given_attribute_names.each_with_object({}) do |attribute_name, h|
       h[attribute_name] = scope_attributes_arr.include?(attribute_name)
-      h
     end
 
     self.mot_scope = MotScope.find_by(scope_attributes)
     save!
-  end 
+  end
 end
