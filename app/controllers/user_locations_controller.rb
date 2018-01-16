@@ -34,6 +34,7 @@ class UserLocationsController < ApplicationController
   end
 
   def destroy
+    byebug
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.destroy
     

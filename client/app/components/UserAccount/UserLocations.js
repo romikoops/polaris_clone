@@ -4,7 +4,7 @@ import styles from './UserAccount.scss';
 import defaults from '../../styles/default_classes.scss';
 import { EditLocation } from './EditLocation';
 import EditLocationWrapper from '../../hocs/EditLocationWrapper';
-const LocationView = (locInfo, makePrimary, toggleActiveView) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) => [
     <div
         key="addLocationButton"
         className={`${defaults.pointy} flex-33`}
@@ -64,7 +64,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView) => [
                             <span
                                 className={`${defaults.emulate_link}`}
                                 onClick={() =>
-                                    this.props.destroyLocation(op.user.id)
+                                    destroyLocation(op.location.id)
                                 }
                             >
                                 Delete
@@ -87,10 +87,16 @@ export class UserLocations extends Component {
         };
         this.saveLocation = this.saveLocation.bind(this);
         this.toggleActiveView = this.toggleActiveView.bind(this);
+        this.destroyLocation = this.destroyLocation.bind(this);
     }
 
     componentDidMount() {
         this.props.setNav('locations');
+    }
+
+    destroyLocation(locationId) {
+        const { userDispatch, user } = this.props;
+        userDispatch.destroyLocation(user.id, locationId, false);
     }
 
     toggleActiveView(key) {
@@ -112,10 +118,11 @@ export class UserLocations extends Component {
             case 'allLocations':
                 activeView = locInfo
                     ? LocationView(
-                          locInfo,
-                          this.props.makePrimary,
-                          this.toggleActiveView
-                      )
+                        locInfo,
+                        this.props.makePrimary,
+                        this.toggleActiveView,
+                        this.destroyLocation
+                    )
                     : undefined;
                 break;
             case 'addLocation':

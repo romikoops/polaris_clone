@@ -39,6 +39,7 @@ export class UserDashboard extends Component {
         return shipment;
     }
 
+
     doNothing() {
         console.log('');
     }

@@ -71,9 +71,14 @@ export function users(state = initialState, action) {
             };
         case userConstants.DESTROYLOCATION_SUCCESS:
             return {
-                items: state.items.filter(
-                    item => item.id !== parseInt(action.payload.id, 10)
-                )
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    locations: state.dashboard.locations.filter(
+                        item => item.id !== parseInt(action.payload.id, 10)
+                    )
+                },
+                loading: false
             };
         case userConstants.DESTROYLOCATION_FAILURE:
             return {
