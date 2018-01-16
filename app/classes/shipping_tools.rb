@@ -29,7 +29,6 @@ module ShippingTools
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
-
     return {
       shipment:    shipment,
       all_nexuses: Location.nexuses,
