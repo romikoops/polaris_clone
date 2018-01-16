@@ -141,8 +141,8 @@ module PricingTools
     return resp.to_a
   end
 
-  def update_path_pricing(key, data)
-    update_item('pathPricing', {_id: key }, data)
+  def update_hub_route_pricing(key, data)
+    update_item('hubRoutePricings', {_id: key }, data)
   end
 end
 

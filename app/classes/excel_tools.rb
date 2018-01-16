@@ -186,12 +186,15 @@ module ExcelTools
 
       hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
 
-      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+      tenant_vehicle = TenantVehicle.find_by(
+        tenant_id: user.tenant_id, 
+        mode_of_transport: row[:mode_of_transport]
+      )
 
       hub1 = locations[row[:from]].hubs_by_type(row[:mode_of_transport]).first
       hub2 = locations[row[:to]].hubs_by_type(row[:mode_of_transport]).first
 
-      row[:vehicle_id] = vt.vehicle_id
+      row[:vehicle_id] = tenant_vehicle.vehicle_id
       row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       row[:tenant_id] = user.tenant_id
       row.delete(:from)
@@ -224,10 +227,13 @@ module ExcelTools
       end
       hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
 
-      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+      tenant_vehicle = TenantVehicle.find_by(
+        tenant_id: user.tenant_id, 
+        mode_of_transport: row[:mode_of_transport]
+      )
 
       row[:tenant_id] = user.tenant_id
-      row[:vehicle_id] = vt.vehicle_id
+      row[:vehicle_id] = tenant_vehicle.vehicle_id
       row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       row.delete(:from)
       row.delete(:to)
@@ -238,7 +244,6 @@ module ExcelTools
         raise "Route cannot be found!"
       end
     end
-
   end
 
   def overwrite_train_schedules(params, user = current_user)
@@ -258,12 +263,12 @@ module ExcelTools
       end
       hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
 
-      vt = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
+      tenant_vehicle = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
 
       hub1 = locations[row[:from]].hubs_by_type("rail").first
       hub2 = locations[row[:to]].hubs_by_type("rail").first
       row[:tenant_id] = user.tenant_id
-      row[:vehicle_id] = vt.vehicle_id
+      row[:vehicle_id] = tenant_vehicle.vehicle_id
       row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
       if robj
         ts = robj.schedules.find_or_create_by(train_schedule)
@@ -360,7 +365,7 @@ module ExcelTools
       fcl_40_hq_heavy_weight_surcharge_min: 'FCL_40_HQ_HEAVY_WEIGHT_SURCHARGE_MIN'
     )
     new_pricings = []
-    new_path_pricings = {}
+    new_hub_route_pricings = {}
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
@@ -369,11 +374,8 @@ module ExcelTools
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
 
-      if !row[:vehicle_type]
-        vt = Vehicle.find_by_name("#{row[:mot]}_default")
-      else
-        vt = Vehicle.find_by_name(row[:vehicle_type])
-      end
+      vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
+      vehicle      = Vehicle.find_by(name: vehicle_name)
 
       cargo_classes = [
         'fcl_20f',
@@ -382,19 +384,7 @@ module ExcelTools
         'lcl'
       ]
 
-      tt_obj = {}
-
-      if !row[:cargo_type]
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
-        end
-      else
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
-        end
-      end
-
-      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
       if !dedicated
         cust_id = nil
@@ -464,54 +454,54 @@ module ExcelTools
         }
       }
 
-      price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
+      price_obj = {
+        "lcl"        => lcl_obj.to_h, 
+        "fcl_20f"    => fcl_20f_obj.to_h, 
+        "fcl_40f"    => fcl_40f_obj.to_h, 
+        "fcl_40f_hq" => fcl_40f_hq_obj.to_h
+      }
 
-      if dedicated
-        cargo_classes.each do |lt|
-          uuid = SecureRandom.uuid
-          tmpItem = {data: price_obj[lt]}
-          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = uuid;
-          tmpItem[:tenant_id] = user.tenant_id;
-          userObj = {}
-          userObj[pathKey] = uuid
-          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-          if !new_path_pricings[pathKey]
-            new_path_pricings[pathKey] = {}
-          end
-          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
-          new_path_pricings[pathKey]["#{user.id}"] = uuid
-        end
-      else
-        cargo_classes.each do |lt|
-          uuid = SecureRandom.uuid
-          tmpItem = {data: price_obj[lt]}
-          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = uuid;
-          tmpItem[:tenant_id] = user.tenant_id
-          pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
+      cargo_classes.each do |cargo_class|
+        uuid = SecureRandom.uuid
+        transport_category_name = row[:cargo_type] || "any"
+        transport_category = vehicle.transport_categories.find_by(
+          name: transport_category_name, 
+          cargo_class: cargo_class
+        )
 
-          if !new_path_pricings[pathKey]
-            new_path_pricings[pathKey] = {}
-          end
-
-          new_path_pricings[pathKey]["open"] = uuid
-          new_path_pricings[pathKey]["hub_route"] = hubroute.id
-          new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
-          new_path_pricings[pathKey]["route"] = route.id
-          new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
+        pathKey = "#{hubroute.id}_#{transport_category.id}"
+        priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+        
+        pricing = { 
+          data: price_obj[cargo_class], 
+          _id: uuid,
+          tenant_id: user.tenant_id
+        }
+        
+        update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+        
+        new_hub_route_pricings[pathKey] ||= {}
+        if dedicated
+          user_pricing = { pathKey => uuid }
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
+          
+          new_hub_route_pricings[pathKey]["#{user.id}"] = uuid
+        else
+          new_hub_route_pricings[pathKey]["open"]                  = uuid
+          new_hub_route_pricings[pathKey]["hub_route_id"]          = hubroute.id
+          new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_hub_route_pricings[pathKey]["route_id"]              = route.id
+          new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
     end
 
-    new_path_pricings.each do |key, value|
-      update_path_pricing(key, value)
+    new_hub_route_pricings.each do |key, value|
+      update_hub_route_pricing(key, value)
     end
   end
+
   def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user)
-    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -559,7 +549,7 @@ module ExcelTools
       cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
     )
     new_pricings = []
-    new_path_pricings = {}
+    new_hub_route_pricings = {}
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
@@ -574,29 +564,21 @@ module ExcelTools
       )
       hubroute    = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
 
-      if !row[:vehicle_type]
-        vt = Vehicle.find_by_name("#{row[:mot]}_default")
-      else
-        vt = Vehicle.find_by_name(row[:vehicle_type])
-      end
+      vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
+      vehicle      = Vehicle.find_by(name: vehicle_name)
 
       cargo_classes = [
         'lcl'
       ]
 
-      tt_obj = {}
-
-      if !row[:cargo_type]
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
-        end
-      else
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
-        end
-      end
-
-      hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      hubroute.generate_weekly_schedules(
+        row[:mot], 
+        row[:effective_date], 
+        row[:expiration_date], 
+        [1, 5], 
+        30, 
+        vehicle.id
+      )
 
       if !dedicated
         cust_id = nil
@@ -686,55 +668,74 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h}
       
       if dedicated
-        cargo_classes.each do |lt|
+        cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
-          tmpItem = {data: price_obj[lt]}
-          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = priceKey;
-          tmpItem[:tenant_id] = user.tenant_id;
-          userObj = {}
-          userObj[pathKey] = priceKey
-          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-          if !new_path_pricings[pathKey]
-            new_path_pricings[pathKey] = {}
-          end
+
+          transport_category_name = row[:cargo_type] || "any"
+          transport_category = vehicle.transport_categories.find_by(
+            name: transport_category_name, 
+            cargo_class: cargo_class
+          )
+          
+          pathKey  = "#{hubroute.id}_#{transport_category.id}"
+          priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          
+          pricing = { 
+            data:      price_obj[cargo_class], 
+            _id:       priceKey,
+            tenant_id: user.tenant_id
+          }
+          
+          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          
+          user_pricing = { pathKey => priceKey}
+          
           update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
-          new_path_pricings[pathKey]["#{user.id}"] = priceKey
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
+          
+          new_hub_route_pricings[pathKey] ||= {}
+          new_hub_route_pricings[pathKey]["#{user.id}"] = priceKey
         end
       else
-        cargo_classes.each do |lt|
+        cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
-          tmpItem = {data: price_obj[lt]}
-          pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
-          priceKey = "#{hubroute.id}_#{tt_obj[lt].id}_#{user.tenant_id}_#{lt}"
-          tmpItem[:_id] = priceKey
-          tmpItem[:route] = route.id
-          tmpItem[:hub_route] = hubroute.id
-          tmpItem[:tenant_id] = user.tenant_id
-          pr = update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, tmpItem)
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-          if !new_path_pricings[pathKey]
-            new_path_pricings[pathKey] = {}
-          end
 
-          new_path_pricings[pathKey]["open"] = priceKey
-          new_path_pricings[pathKey]["hub_route"] = hubroute.id
-          new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
-          new_path_pricings[pathKey]["route"] = route.id
-          new_path_pricings[pathKey]["transport_category"] = tt_obj[lt].id
+          transport_category_name = row[:cargo_type] || "any"
+          transport_category = vehicle.transport_categories.find_by(
+            name: transport_category_name, 
+            cargo_class: cargo_class
+          )
+
+          pathKey = "#{hubroute.id}_#{transport_category.id}"
+          priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+
+          pricing = { 
+            data:         price_obj[cargo_class], 
+            _id:          priceKey,
+            route_id:     route.id,
+            hub_route_id: hubroute.id,
+            tenant_id:    user.tenant_id
+          }
+
+          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+
+          new_hub_route_pricings[pathKey] ||= {}
+          new_hub_route_pricings[pathKey]["open"]               = priceKey
+          new_hub_route_pricings[pathKey]["hub_route_id"]          = hubroute.id
+          new_hub_route_pricings[pathKey]["tenant_id"]          = user.tenant_id
+          new_hub_route_pricings[pathKey]["route_id"]              = route.id
+          new_hub_route_pricings[pathKey]["transport_category"] = transport_category.id
         end
       end
     end
 
-    new_path_pricings.each do |key, value|
-      update_path_pricing(key, value)
+    new_hub_route_pricings.each do |key, value|
+      update_hub_route_pricing(key, value)
     end
   end
 
   def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
-    # old_pricing_ids = Pricing.where(dedicated: dedicated).pluck(:id)
     mongo = get_client
     terms = {
       "BAS" => "Basic Ocean Freight",
@@ -787,45 +788,49 @@ module ExcelTools
       fcl_40_hq_rate: '40HDRY',
       fcl_45_hq_rate: '45HDRY',
     )
-    new_pricings = []
-    new_path_pricings = {}
-    dataObj = {}
-    vt = Vehicle.find_by_name("ocean_default")
+    new_hub_route_pricings = {}
+    new_pricings_aux_data = {}
+    vehicle = Vehicle.find_by_name("ocean_default")
     new_pricings = {}
-    tt_obj = {}
+
     pricing_rows.each_with_index do |row, index|
       row[:mot] = 'ocean'
       puts "load pricing row #{index}..."
-      pp_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}"
+      pricing_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}"
        
-      if !new_pricings[pp_key]
-        new_pricings[pp_key] = {
+      if !new_pricings[pricing_key]
+        new_pricings[pricing_key] = {
           "data" => {},
-          "sizes" => {
+          "cargo_classes" => {
             "fcl_20f" => {},
             "fcl_40f" => {},
             "fcl_40f_hq" => {},
             "fcl_45f_hq" => {}
-            }
           }
-          dataObj[pp_key] = {}
+        }
         origin = Location.from_short_name(row[:origin])
         sleep(1)
         destination = Location.from_short_name(row[:destination])
         sleep(1)
         route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
         hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
-        dataObj[pp_key]["origin"] = origin
-        dataObj[pp_key]["destination"] = destination
-        dataObj[pp_key]["route"] = route
-        dataObj[pp_key]["hubroute"] = hubroute
-        new_pricings[pp_key]["data"]["route"] = route.id
-        new_pricings[pp_key]["data"]["hub_route"] = hubroute.id
-        new_pricings[pp_key]["data"]["service_code"] = row[:service_code]
-        new_pricings[pp_key]["data"]["inclusive_surcharge"] = row[:inclusive_surcharge]
+
+
+
+        new_pricings_aux_data[pricing_key] = {
+          route:       route,
+          hubroute:    hubroute
+        }
+        new_pricings[pricing_key]["data"] = {
+          "route_id"            => route.id,
+          "hub_route_id"        => hubroute.id,
+          "service_code"        => row[:service_code],
+          "inclusive_surcharge" => row[:inclusive_surcharge]
+          
+        }
       end
 
-      tmpPrice = new_pricings[pp_key]
+      tmpPrice = new_pricings[pricing_key]
 
       cargo_classes = [
         'fcl_20f',
@@ -833,19 +838,16 @@ module ExcelTools
         'fcl_40f_hq'
       ]
 
-      
-
-      if !row[:cargo_type] || row[:cargo_type] == 'FAK'
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
-        end
-      else
-        cargo_classes.each do |lt|
-          tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
-        end
-      end
-
-      dataObj[pp_key]["hubroute"].generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vt.id)
+      new_pricings_aux_data[pricing_key][:hubroute].generate_weekly_schedules(
+        row[:mot], 
+        row[:effective_date], 
+        row[:expiration_date], 
+        [1,5], 
+        30, 
+        vehicle.id
+      )
+      cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
+      new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
 
       if !dedicated
         cust_id = nil
@@ -858,65 +860,62 @@ module ExcelTools
         ded_bool = true
       end
 
-      tmpPrice["sizes"]["fcl_20f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_20_rate])
-      tmpPrice["sizes"]["fcl_40f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_rate])
-      tmpPrice["sizes"]["fcl_40f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_hq_rate])
-      tmpPrice["sizes"]["fcl_45f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_45_hq_rate])
+      tmpPrice["cargo_classes"]["fcl_20f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_20_rate])
+      tmpPrice["cargo_classes"]["fcl_40f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_rate])
+      tmpPrice["cargo_classes"]["fcl_40f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_hq_rate])
+      tmpPrice["cargo_classes"]["fcl_45f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_45_hq_rate])
      
 
     end
-      # price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
-      # 
 
-      new_pricings.each do |key, value|
-        value["sizes"].each do |skey, svalue|
-         if skey != 'fcl_45f_hq'
-          tmpItem = value["data"]
-          tmpItem["data"] = {}
-          svalue.each do |pkey, pvalue|
-            tmpItem["data"][pkey] = pvalue
-          end
-          p tmpItem
-           if dedicated
-              uuid = SecureRandom.uuid
-             
-              pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
-              tmpItem[:_id] = uuid;
-              tmpItem[:tenant_id] = user.tenant_id;
-              userObj = {}
-              userObj[pathKey] = uuid
-              put_item_fn(mongo, 'pricings', tmpItem)
-              if !new_path_pricings[pathKey]
-                new_path_pricings[pathKey] = {}
-              end
-              update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
-              new_path_pricings[pathKey]["#{user.id}"] = uuid
-          else
-              uuid = SecureRandom.uuid
-             p skey
-             p tt_obj
-              pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
-              tmpItem[:_id] = uuid;
-              tmpItem[:tenant_id] = user.tenant_id
-              pr = put_item_fn(mongo, 'pricings', tmpItem)
+    new_pricings.each do |pricing_key, pricing|
+      pricing["cargo_classes"].each do |cargo_class, cargo_class_prices|
+        next if cargo_class == 'fcl_45f_hq'
 
-              if !new_path_pricings[pathKey]
-                new_path_pricings[pathKey] = {}
-              end
+        cargo_type = new_pricings_aux_data[:cargo_type]
+        transport_category_name = cargo_type || "any"
+        transport_category = vehicle.transport_categories.find_by(
+          name: transport_category_name, 
+          cargo_class: cargo_class
+        )
 
-              new_path_pricings[pathKey]["open"] = uuid
-              new_path_pricings[pathKey]["hub_route"] = dataObj[key]["hubroute"].id
-              new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
-              new_path_pricings[pathKey]["route"] = dataObj[key]["route"].id
-              new_path_pricings[pathKey]["transport_category"] = tt_obj[skey].id
-          end
+        pricing_data = pricing["data"]
+        pricing_data["data"] = cargo_class_prices
+        
+        uuid = SecureRandom.uuid
+       
+        pricing_data[:_id] = uuid;
+        pricing_data[:tenant_id] = user.tenant_id;
+
+        pathKey = "#{new_pricings_aux_data[pricing_key][:hubroute].id}_#{transport_category.id}"
+        
+        if dedicated
+          
+          user_pricing = { pathKey => uuid }
+
+          put_item_fn(mongo, 'pricings', pricing_data)
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
+          
+          new_hub_route_pricings[pathKey] ||= {}
+          new_hub_route_pricings[pathKey]["#{user.id}"] = uuid
+        else
+          
+          put_item_fn(mongo, 'pricings', pricing_data)
+
+          new_hub_route_pricings[pathKey] ||= {}
+          new_hub_route_pricings[pathKey]["open"]                  = uuid
+          new_hub_route_pricings[pathKey]["hub_route_id"]          = new_pricings_aux_data[pricing_key][:hubroute].id
+          new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_hub_route_pricings[pathKey]["route_id"]              = new_pricings_aux_data[pricing_key][:route].id
+          new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
     end
-    new_path_pricings.each do |key, value|
-      update_path_pricing(key, value)
+    new_hub_route_pricings.each do |key, value|
+      update_hub_route_pricing(key, value)
     end
   end
+
   def price_split(basis, string)
     vals = string.split(' ')
     return {
