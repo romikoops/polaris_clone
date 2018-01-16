@@ -2,16 +2,48 @@ import React, { Component } from 'react';
 import styles from './UserAccount.scss';
 // import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
-
+import { colorSVG } from '../../helpers';
+import {mapStyling} from '../../constants/map.constants';
+const colourSVG = colorSVG;
+const mapStyles = mapStyling;
+const mapStyle = {
+    width: '100%',
+    height: '400px',
+    borderRadius: '3px',
+    boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
+};
 export class EditLocation extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { geocodedAddress: this.props.geocodedAddress };
-
+        this.state = {
+            geocodedAddress: this.props.geocodedAddress,
+            location: {
+                street: '',
+                zipCode: '',
+                city: '',
+                country: '',
+                fullAddress: ''
+            },
+            autoText: {
+                location: ''
+            },
+            autocomplete: {
+                location: ''
+            },
+            markers: {}
+        };
+        this.handleAddressChange = this.handleAddressChange.bind(this);
+        this.selectLocation = this.selectLocation.bind(this);
+        this.resetAuto = this.resetAuto.bind(this);
+        this.setMarker = this.setMarker.bind(this);
+        this.handleAuto = this.handleAuto.bind(this);
+        this.saveLocation = this.saveLocation.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
-
+    componentDidMount() {
+        this.initMap();
+    }
     handleInputChange(event) {
         const val = event.target.value;
 
@@ -19,32 +51,265 @@ export class EditLocation extends Component {
             geocodedAddress: val
         });
     }
+    handleAuto(event) {
+        console.log(event.target);
+        const {name, value} = event.target;
+        this.setState({autoText: {[name]: value}});
+    }
+    initMap() {
+        const mapsOptions = {
+            center: {
+                lat: 55.675647,
+                lng: 12.567848
+            },
+            zoom: 5,
+            mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
+            disableDefaultUI: true,
+            styles: mapStyles
+        };
+
+        const map = new this.props.gMaps.Map(
+            document.getElementById('map'),
+            mapsOptions
+        );
+        this.setState({ map });
+        this.initAutocomplete(map);
+    }
+
+    initAutocomplete(map) {
+        // const targetId = target + '-gmac';
+        const input = document.getElementById('location');
+        const autocomplete = new this.props.gMaps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', map);
+        this.setState({autoListener: {...this.state.autoListener, location: autocomplete }});
+        this.autocompleteListener(map, autocomplete);
+    }
+    autocompleteListener(aMap, autocomplete) {
+        const infowindow = new this.props.gMaps.InfoWindow();
+        const infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
+
+        const marker = new this.props.gMaps.Marker({
+            map: aMap,
+            anchorPoint: new this.props.gMaps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed', () => {
+            infowindow.close();
+            marker.setVisible(false);
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert(
+                    "No details available for input: '" + place.name + "'"
+                );
+                return;
+            }
+
+            this.setMarker(
+                {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng()
+                },
+                place.name
+            );
+
+            this.selectLocation(place);
+        });
+    }
+    handleAddressChange(event) {
+        const eventKeys = event.target.name.split('-');
+        const key1 = eventKeys[0];
+        const key2 = eventKeys[1];
+        const val = event.target.value;
+
+        this.setState({
+            [key1]: {
+                ...this.state[key1],
+                [key2]: val
+            }
+        });
+        // console.log(this.state[key1]);
+    }
+    selectLocation(place) {
+        const tmpAddress = {
+            number: '',
+            street: '',
+            zipCode: '',
+            city: '',
+            country: '',
+            fullAddress: ''
+        };
+        // ;
+        place.address_components.forEach(ac => {
+            if (ac.types.includes('street_number')) {
+                tmpAddress.number = ac.long_name;
+            }
+
+            if (ac.types.includes('route') || ac.types.includes('premise')) {
+                tmpAddress.street = ac.long_name;
+            }
+
+            if (ac.types.includes('administrative_area_level_1')) {
+                tmpAddress.city = ac.long_name;
+            }
+
+            if (ac.types.includes('postal_code')) {
+                tmpAddress.zipCode = ac.long_name;
+            }
+
+            if (ac.types.includes('country')) {
+                tmpAddress.country = ac.long_name;
+            }
+        });
+        tmpAddress.fullAddress = place.formatted_address;
+
+        this.setState({ location: tmpAddress });
+        this.setState({
+            autocomplete: { ...this.state.autocomplete, location: true }
+        });
+    }
+    resetAuto() {
+        // this.state.autoListener[target].clearListeners();
+        this.setState({
+            autocomplete: { ...this.state.autocomplete, location: false }
+        });
+    }
+    setMarker(location, name) {
+        const { markers, map } = this.state;
+        const {theme} = this.props;
+        const newMarkers = [];
+        const icon = {
+            url: colourSVG('location', theme),
+            anchor: new this.props.gMaps.Point(25, 50),
+            scaledSize: new this.props.gMaps.Size(36, 36)
+        };
+        const marker = new this.props.gMaps.Marker({
+            position: location,
+            map: map,
+            title: name,
+            icon
+        });
+        markers.location = marker;
+        newMarkers.push(markers.location);
+        this.setState({ markers: markers});
+        const bounds = new this.props.gMaps.LatLngBounds();
+        for (let i = 0; i < newMarkers.length; i++) {
+            bounds.extend(newMarkers[i].getPosition());
+        }
+
+        map.fitBounds(bounds);
+    }
+    saveLocation() {
+        const { location } = this.state;
+        const preppedLocation = {};
+        preppedLocation.street_number = location.number;
+        preppedLocation.street = location.street;
+        preppedLocation.zip_code = location.zipCode;
+        preppedLocation.city = location.city;
+        preppedLocation.country = location.country;
+        this.props.saveLocation(preppedLocation);
+    }
 
     render() {
+        const originFields = (
+            <div className="flex-80 layout-row layout-wrap layout-align-end-space-around">
+                <input
+                    id="not-auto"
+                    name="location-number"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={this.state.location.number}
+                    placeholder="Number"
+                />
+                <input
+                    name="location-street"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={this.state.location.street}
+                    placeholder="Street"
+                />
+                <input
+                    name="location-zipCode"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={this.state.location.zipCode}
+                    placeholder="Zip Code"
+                />
+                <input
+                    name="location-city"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={this.state.location.city}
+                    placeholder="City"
+                />
+                <input
+                    name="location-country"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={this.state.location.country}
+                    placeholder="Country"
+                />
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('location')}>
+                        <i className="fa fa-times flex-none"></i>
+                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
+                    </div>
+                </div>
+            </div>
+        );
+        const autoHide = {
+            height: '0px',
+            display: 'none'
+        };
+        const autoInput = (
+            <div className={`flex-100 layout-row layout-wrap ${styles.overlay_auto}`} style={this.state.autocomplete.location ? autoHide : {}}>
+                <input
+                    id="location"
+                    name="location"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAuto}
+                    value={this.state.autoText.location}
+                    placeholder="Search for address"
+                />
+            </div>
+        );
         return (
             <div className="layout-row flex-100 layout-wrap">
                 <h1
                     className="layout-row flex-100"
                     onClick={() => this.props.toggleActiveView('allLocations')}
                 >
-                    test
                 </h1>
 
-                <input
+                {/* <input
                     name="abc"
                     onChange={this.handleInputChange}
                     className={`${styles.input}`}
                     type="string"
                     placeholder="Geocoded address"
-                />
+                />*/}
 
-                <RoundButton
-                    active
-                    text="Save"
-                    theme={this.props.theme}
-                    size="small"
-                    iconClass="fa-check"
-                />
+                <div className={`flex-65 layout-row layout-wrap layout-align-center-start ${styles.map_box}`}>
+                    {autoInput}
+                    <div ref="map" id="map" className={styles.loc_map} style={mapStyle} />
+                </div>
+                <div className="flex-30 offset-5 layout-column layout-align-center-end">
+                    {originFields}
+                    <RoundButton
+                        active
+                        text="Save"
+                        theme={this.props.theme}
+                        size="small"
+                        handleNext={this.saveLocation}
+                        iconClass="fa-check"
+                    />
+                </div>
             </div>
         );
     }

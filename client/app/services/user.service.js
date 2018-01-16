@@ -154,9 +154,70 @@ function uploadDocument(doc, type, url) {
     return fetch(BASE_URL + url, requestOptions).then(handleResponse);
 }
 
+function getContact(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/contacts/' + id, requestOptions).then(handleResponse);
+}
+function updateContact(data) {
+    const formData = new FormData();
+    formData.append('update', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/contacts/update_contact/' + data.id, requestOptions).then(handleResponse);
+}
+
+function newUserLocation(userId, data) {
+    const formData = new FormData();
+    formData.append('new_location', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/users/' + userId + '/locations', requestOptions).then(handleResponse);
+}
+
+function newContact(data) {
+    const formData = new FormData();
+    formData.append('new_contact', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/contacts', requestOptions).then(handleResponse);
+}
+
+function newAlias(data) {
+    const formData = new FormData();
+    formData.append('new_contact', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/contacts/new_alias', requestOptions).then(handleResponse);
+}
+
+function deleteAlias(aliasId) {
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader()
+    };
+    return fetch(BASE_URL + '/contacts/delete_alias/' + aliasId, requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
+    newUserLocation,
     getDashboard,
     makePrimary,
     getShipment,
@@ -168,5 +229,10 @@ export const userService = {
     getById,
     update,
     getStoredUser,
+    getContact,
+    updateContact,
+    newContact,
+    newAlias,
+    deleteAlias,
     delete: _delete
 };

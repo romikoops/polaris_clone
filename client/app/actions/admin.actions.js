@@ -823,6 +823,62 @@ function updateServiceCharge(id, req) {
     };
 }
 
+function newClient(data) {
+    function request(newClientData) {
+        return { type: adminConstants.NEW_CLIENT_REQUEST, payload: newClientData };
+    }
+    function success(newClientData) {
+        return { type: adminConstants.NEW_CLIENT_SUCCESS, payload: newClientData };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_CLIENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.newClient(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Saving New Client successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function activateHub(hubId) {
+    function request(newHubData) {
+        return { type: adminConstants.ACTIVATE_HUB_REQUEST, payload: newHubData };
+    }
+    function success(newHubData) {
+        return { type: adminConstants.ACTIVATE_HUB_SUCCESS, payload: newHubData };
+    }
+    function failure(error) {
+        return { type: adminConstants.ACTIVATE_HUB_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.activateHub(hubId).then(
+            data => {
+                dispatch(
+                    alertActions.success('Activating Hub successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -867,5 +923,7 @@ export const adminActions = {
     wizardPricings,
     wizardOpenPricings,
     wizardTrucking,
-    viewTrucking
+    viewTrucking,
+    newClient,
+    activateHub
 };

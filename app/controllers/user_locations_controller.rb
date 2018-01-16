@@ -10,7 +10,12 @@ class UserLocationsController < ApplicationController
   end
 
   def create
-    
+    user = User.find(params[:user_id])
+    location = Location.create!(JSON.parse(params[:new_location]))
+    new_user_loc = user.user_locations.create!(primary: false, location_id: location.id)
+    user_locations = user.user_locations
+    response_handler(user_locations)
+
   end
 
   def update
@@ -29,6 +34,7 @@ class UserLocationsController < ApplicationController
   end
 
   def destroy
+    byebug
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.destroy
     

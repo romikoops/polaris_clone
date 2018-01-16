@@ -21,10 +21,10 @@ export class Footer extends Component {
                             <img src={logo} />
                         </div>
                         <div className="flex-50 layout-row layout-align-end-end">
-                            <div className={`lex-none layout-row layout-align-center-center ${styles.contact_elem}`}>
+                            <a className={`flex-none layout-row layout-align-center-center pointy ${styles.contact_elem}`} href={`mailto:${supportEmail}`}>
                                 <i className="fa fa-envelope" aria-hidden="true" style={primaryColor}></i>
                                 {supportEmail}
-                            </div>
+                            </a>
                             <div className={`flex-none layout-row layout-align-center-end ${styles.contact_elem}`}>
                                 <i className="fa fa-phone" aria-hidden="true" style={primaryColor}></i>
                                 {supportNumber}
@@ -36,16 +36,16 @@ export class Footer extends Component {
                     <div className={`flex-100 ${styles.button_row} layout-row layout-align-end-center`}>
                         <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
                             <div className="flex-25 layout-row layout-align-center-center">
-                                <a href="#">About Us</a>
+                                <a target="_blank" href="https://www.itsmycargo.com/en/ourstory">About Us</a>
                             </div>
                             <div className="flex-25 layout-row layout-align-center-center">
-                                <a href="#">Privacy Policy</a>
+                                <a target="_blank" href="https://www.itsmycargo.com/en/privacy">Privacy Policy</a>
                             </div>
                             <div className="flex-25 layout-row layout-align-center-center">
-                                <a href="#">Terms and Conditions</a>
+                                <a target="_blank" href="https://www.itsmycargo.com/en/terms">Terms and Conditions</a>
                             </div>
                             <div className="flex-25 layout-row layout-align-center-center">
-                                <a href="#">Imprint</a>
+                                <a target="_blank" href="https://www.itsmycargo.com/en/contact">Impressum</a>
                             </div>
                         </div>
                         <div className="flex-20" />

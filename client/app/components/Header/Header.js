@@ -33,7 +33,7 @@ class Header extends Component {
     render() {
         const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
 
-        const dropDownText = user && user.data ? user.data.first_name + ' ' + user.data.last_name : '';
+        const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
         const accountLinks = [
             {
@@ -58,13 +58,13 @@ class Header extends Component {
             return <Redirect push to="/" />;
         }
         const dropDown = (
-            <NavDropdown
-                dropDownText={dropDownText}
-                dropDownImage={adjIcon}
-                linkOptions={accountLinks}
-                invert={invert}
-            />
-        );
+                <NavDropdown
+                    dropDownText={dropDownText}
+                    dropDownImage={adjIcon}
+                    linkOptions={accountLinks}
+                    invert={invert}
+                />
+            );
         const currDropDown = (
             <NavDropdown
                 dropDownText={user && user.data ? user.data.currency : ''}
@@ -72,10 +72,19 @@ class Header extends Component {
                 invert={invert}
             />
         );
+        let logoUrl = '';
+        let logoStyle;
+        if (theme && theme.logoWide) {
+            logoUrl = theme.logoWide;
+            logoStyle = styles.wide_logo;
+        } else if (theme && theme.logoLarge) {
+            logoUrl = theme.logoLarge;
+            logoStyle = styles.logo;
+        }
         const textColour = invert ? 'white' : 'black';
         const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
-        const rightCorner = user ? dropDowns : loginPrompt;
+        const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
             <Modal
                 component={
@@ -97,8 +106,8 @@ class Header extends Component {
                 <div className={`${defs.content_width} layout-row flex-none`}>
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
-                            src={theme ? theme.logoLarge : ''}
-                            className={styles.logo}
+                            src={logoUrl}
+                            className={logoStyle}
                             alt=""
                             onClick={this.goHome}
                         />

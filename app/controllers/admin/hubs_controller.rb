@@ -34,8 +34,7 @@ class Admin::HubsController < ApplicationController
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
-
-    render json: { updated_hub_status: hub.hub_status }, status: 200
+    response_handler(hub)
   end
 
   def overwrite
@@ -56,7 +55,7 @@ class Admin::HubsController < ApplicationController
   private
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name == "admin"
+    unless user_signed_in? && current_user.role.name.include?("admin")
       # flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end

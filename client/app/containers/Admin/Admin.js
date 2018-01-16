@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges } from '../../components/Admin';
+import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges, SuperAdmin } from '../../components/Admin';
 import AdminShipments from '../../components/Admin/AdminShipments';
 import AdminClients from '../../components/Admin/AdminClients';
 import AdminHubs from '../../components/Admin/AdminHubs';
@@ -61,13 +61,16 @@ class Admin extends Component {
             case 'wizard':
                 adminDispatch.goTo('/admin/wizard');
                 break;
+            case 'super_admin':
+                adminDispatch.goTo('/admin/super_admin/upload');
+                break;
             default:
                 break;
         }
     }
     render() {
         console.log(this.props);
-        const {theme, adminData, adminDispatch} = this.props;
+        const {theme, adminData, adminDispatch, user} = this.props;
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes, loading} = adminData;
         const hubHash = {};
         if (hubs) {
@@ -76,7 +79,7 @@ class Admin extends Component {
             });
         }
         const loadingScreen = loading ? <Loading theme={theme} /> : '';
-        const nav = (<AdminNav navLink={this.setUrl} theme={theme}/>);
+        const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user.data}/>);
         // ;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap">
@@ -135,6 +138,11 @@ class Admin extends Component {
 
                                 path="/admin/trucking"
                                 render={props => <AdminTrucking theme={theme} {...props} hubHash={hubHash} />}
+                            />
+                            <Route
+
+                                path="/admin/super_admin/upload"
+                                render={props => <SuperAdmin theme={theme} {...props} />}
                             />
                         </Switch>
                     </div>

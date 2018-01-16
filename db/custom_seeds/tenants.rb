@@ -50,7 +50,8 @@ tenant_data = [
         brightSecondary: "#25ED36"
       },
       logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
-      logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png'
+      logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
+      logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png'
     },
     addresses: {
       main:"Brooktorkai 7, 20457 Hamburg, Germany"

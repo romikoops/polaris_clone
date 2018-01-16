@@ -2,6 +2,10 @@
   .searchable {
     margin: 15px 0;
   }
+ 
+  .searchable_header{
+    padding: 15px 0;
+  }
   .sec_title {
     height: 75px;
   }
@@ -12,8 +16,8 @@
     width: 195px;
   }
   .address_card {
-    height: 300px;
-    width: 225px;
+    height: 350px;
+    width: 250px;
     margin: 10px;
     padding: 5px;
     box-shadow: 1px 2px 1px rgba(0,0,0,0.25);
@@ -27,6 +31,9 @@
     -webkit-text-fill-color: transparent !important;
     font-size: 30px;
 
+  }
+  .super{
+    font-size: 8px;
   }
   .clip {
     -webkit-background-clip: text !important;
@@ -61,6 +68,32 @@
   .sec_header_text {
     margin: 0;
     font-size: 22px;
+  }
+  .new_contact {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  .new_contact_backdrop {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    background: rgba(2,3,1,0.25);
+  }
+  .new_contact_content {
+    width: 650px;
+    height: 400px;
+    position: relative;
+    z-index: 20;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 15px;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
   .sec_subheader {
     height: 50px;
@@ -282,11 +315,23 @@
     height: 100%;
     width: 100%;
     z-index: 50;
+    // background: rgba(0,0,0,0.25);
+  }
+  .editor_fade{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 51;
     background: rgba(0,0,0,0.25);
   }
   .editor_box {
     width: 800px;
     height: 95%;
+    z-index: 52;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
     overflow-y: scroll;

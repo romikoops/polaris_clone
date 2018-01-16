@@ -5,6 +5,7 @@ class Shipment < ApplicationRecord
     pending
     confirmed
     declined
+    ignored
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   
@@ -184,6 +185,11 @@ class Shipment < ApplicationRecord
 
   def decline!
     self.update_attributes(status: "declined")
+    self.save!
+  end
+
+  def ignore!
+    self.update_attributes(status: "ignored")
     self.save!
   end
 

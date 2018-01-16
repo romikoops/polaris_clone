@@ -38,7 +38,7 @@ class Admin::TruckingController < ApplicationController
  private
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name == "admin"
+    unless user_signed_in? && current_user.role.name.include?("admin")
       flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end

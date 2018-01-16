@@ -12,14 +12,8 @@ export class AdminClientsIndex extends Component {
     render() {
         const {theme, clients, adminDispatch } = this.props;
         const hubUrl = '/admin/clients/process_csv';
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>Clients</p>
-                </div>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <p className="flex-none">Upload Clients Sheet</p>
                     <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Client .xlsx"/>

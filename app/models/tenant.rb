@@ -47,7 +47,6 @@ class Tenant < ApplicationRecord
     mot = scope["modes_of_transport"]
     mot = load_type_filter("container", mot)  if args[:only_container]
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
-
     MotScope.find_by(mot_scope_attributes(mot))
   end
 

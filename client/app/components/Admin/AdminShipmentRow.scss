@@ -12,7 +12,7 @@
       font-weight: normal;
     }
   }
-    .deny {
+  .deny {
     border: 2px solid #DA2C29;
     border-radius: 5px;
     height: 30px;
@@ -24,6 +24,30 @@
   .deny i {
     font-size: 12px;
     color: #DA2C29;
+  }
+
+  .edit {
+    border: 2px solid #FF8800;
+    border-radius: 5px;
+    height: 30px;
+  }
+  .edit p {
+    font-size: 12px;
+    color: #FF8800;
+  }
+  .edit i {
+    font-size: 12px;
+    color: #FF8800;
+  }
+  .close_x {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 10px;
+    right: 10px;
+    i {
+      color: #C60B05;
+    }
   }
 
   .grant {

@@ -16,7 +16,7 @@ import {
     UserLocations,
     UserBilling
 } from '../../components/UserAccount';
-
+import UserContacts from '../../components/UserAccount/UserContacts';
 import { userActions, authenticationActions } from '../../actions';
 
 import './UserAccount.scss';
@@ -83,9 +83,9 @@ export class UserAccount extends Component {
                 this.setState({activeLink: target});
                 userDispatch.getShipments(true);
                 break;
-            case 'clients':
+            case 'contacts':
                 this.setState({activeLink: target});
-                userDispatch.getClients(user.data.id, true);
+                userDispatch.goTo('/account/contacts');
                 break;
             case 'dashboard':
                 this.setState({activeLink: target});
@@ -139,6 +139,12 @@ export class UserAccount extends Component {
                 text: 'Profile',
                 url: '/account/profile',
                 target: 'profile'
+            },
+            {
+                icon: 'fa-address-card',
+                text: 'Contacts',
+                url: '/account/contacts',
+                target: 'contacts'
             }
         ];
         // const textStyle = {
@@ -187,6 +193,10 @@ export class UserAccount extends Component {
                             <Route
                                 path="/account/profile"
                                 render={props => <UserProfile setNav={this.setNavLink} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                            />
+                            <Route
+                                path="/account/contacts"
+                                render={props => <UserContacts setNav={this.setNavLink} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/billing"

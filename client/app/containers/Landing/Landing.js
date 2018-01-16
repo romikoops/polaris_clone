@@ -12,14 +12,18 @@ import { Loading } from '../../components/Loading/Loading';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { userActions, adminActions, authenticationActions } from '../../actions';
+import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
+import { Modal } from '../../components/Modal/Modal';
 
 class Landing extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showCarousel: false
+            showCarousel: false,
+            showLogin: false
         };
         this.showCarousel = this.showCarousel.bind(this);
+        this.toggleShowLogin = this.toggleShowLogin.bind(this);
     }
     componentDidMount() {
         this.showCarousel();
@@ -34,6 +38,12 @@ class Landing extends Component {
         this.setState({showCarousel: true});
     }
 
+    toggleShowLogin() {
+        this.setState({
+            showLogin: !this.state.showLogin
+        });
+    }
+
     render() {
         const { loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch } = this.props;
         const { showCarousel } = this.state;
@@ -42,14 +52,26 @@ class Landing extends Component {
         };
         const loadingScreen = this.props.loading ? <Loading theme={theme} /> : '';
         // const loadingScreen = <Loading theme={theme} />;
-
+        const loginModal = (
+            <Modal
+                component={
+                    <LoginRegistrationWrapper
+                        LoginPageProps={{theme}}
+                        RegistrationPageProps={{theme, tenant}}
+                        initialCompName="RegistrationPage"
+                    />
+                }
+                parentToggle={this.toggleShowLogin}
+            />
+        );
         return (
             <div className={styles.wrapper_landing + ' layout-row flex-100 layout-wrap'} >
                 {loadingScreen}
+                { this.state.showLogin ? loginModal : '' }
                 <LandingTop className="flex-100" user={user} theme={theme} goTo={userDispatch.goTo} toAdmin={adminDispatch.getDashboard} loggedIn={loggedIn} tenant={tenant} authDispatch={authDispatch} />
                 <div className={styles.service_box + ' layout-row flex-100 layout-wrap'}>
                     <div className={styles.service_label + ' layout-row layout-align-center-center flex-100'}>
-                        <h2 className="flex-none"> Introducing Online LCL Services  {this.props.loggedIn}
+                        <h2 className="flex-none"> Introducing Online Freight Booking Services  {this.props.loggedIn}
                         </h2>
                     </div>
                     <div className={styles.services_row + ' flex-100 layout-row layout-align-center'}>
@@ -60,7 +82,7 @@ class Landing extends Component {
                             </div>
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
                                 <i className="fa fa-edit" aria-hidden="true" style={textStyle}></i>
-                                <h3> Real time quotes </h3>
+                                <h3> Real Time Quotes </h3>
                             </div>
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
                                 <i className="fa fa-binoculars" aria-hidden="true" style={textStyle}></i>
@@ -86,23 +108,23 @@ class Landing extends Component {
                             <div className="flex-40 layout-column layout-align-center-start">
                                 <div className="flex layout-row layout-align-start-center">
                                     <i className="fa fa-check"> </i>
-                                    <p> instant booking </p>
+                                    <p> Instant Booking </p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
                                     <i className="fa fa-check"> </i>
-                                    <p> price comparison </p>
+                                    <p> Price Comparison </p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
                                     <i className="fa fa-check"> </i>
-                                    <p> fastest routes </p>
+                                    <p> Fastest Routes </p>
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
                                     <i className="fa fa-check"> </i>
-                                    <p> real time updates </p>
+                                    <p> Real Time Updates </p>
                                 </div>
                             </div>
                             <div className={styles.btm_promo_btn_wrapper + ' flex-20 layout-column layout-align-start-left'}>
-                                <RoundButton text="sign up" theme={theme} active/>
+                                <RoundButton text="Sign Up" theme={theme} active handleNext={this.toggleShowLogin}/>
                             </div>
                         </div>
                     </div>

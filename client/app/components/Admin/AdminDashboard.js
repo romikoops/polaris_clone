@@ -4,6 +4,7 @@ import styles from './Admin.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import {v4} from 'node-uuid';
+import { Loading } from '../../components/Loading/Loading';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -63,7 +64,7 @@ export class AdminDashboard extends Component {
         const { theme, dashData, clients, hubs, hubHash, adminDispatch } = this.props;
         // ;
         if (!dashData) {
-            return <h1>NO DASHBOARD DATA</h1>;
+            return <Loading theme={theme} />;
         }
         const { routes, shipments, air, ocean} = dashData;
         const clientHash = {};
@@ -73,11 +74,13 @@ export class AdminDashboard extends Component {
                 clientHash[cl.id] = cl;
             });
         }
-        const filteredClients = clients.filter(x => !x.guest);
+        const filteredClients = clients ? clients.filter(x => !x.guest) : [];
         const schedArr = [];
-        const mergedRequestedShipments = shipments ? shipments.map((sh) => {
-            return this.prepShipment(sh, clientHash, hubHash);
-        }) : false;
+        console.log(shipments);
+        // const mergedRequestedShipments = shipments ? shipments.map((sh) => {
+        //     return this.prepShipment(sh, clientHash, hubHash);
+        // }) : false;
+        const mergedRequestedShipments = false;
         const openShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
         if (air) {
             air.forEach(asched => {
