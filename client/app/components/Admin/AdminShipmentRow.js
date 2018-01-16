@@ -172,7 +172,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                       
+
                                     >
                                       Pickup Date
                                     </h4>
@@ -196,7 +196,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                       
+
                                     >
                                         {' '}
                                       Date of Departure
@@ -219,7 +219,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                       
+
                                     >
                                         {' '}
                                       ETA terminal
