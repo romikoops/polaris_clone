@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './ContactCard.scss';
 import { v4 } from 'node-uuid';
 import { Checkbox } from '../Checkbox/Checkbox';
+import Truncate from 'react-truncate';
 
 export class ContactCard extends Component {
     constructor(props) {
@@ -43,7 +44,61 @@ export class ContactCard extends Component {
                 onClick={this.selectContact}
             >
                 <div className="flex layout-row layout-wrap">
-                    <div className="flex-60 layout-row layout-align-start-start layout-wrap">
+                    <div className="flex-100 layout-row layout-align-space-between-center">
+                        <div className="flex-60 layout-row layout-align-start-start layout-wrap">
+                            <div className="flex-100 layout-row alyout-align-start-center">
+                                <i
+                                    className="fa fa-user-circle-o flex-none"
+                                    style={iconStyle}
+                                />
+                                <p className={`flex ${styles.contact_header}`}>
+                                    {' '}
+                                    {contact.first_name} {contact.last_name}{' '}
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            className={`flex-40 layout-row layout-wrap layout-align-start-center ${
+                                styles.contact_details
+                            }`}
+                        >
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <i
+                                    className="fa fa-envelope flex-none"
+                                    style={iconStyle}
+                                />
+                                <p className="flex-none"> {contact.email} </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-space-between-center">
+                        <div className="flex-60 layout-row layout-align-start-start layout-wrap">
+                            <div className="flex-100 layout-row alyout-align-start-center">
+                                <i
+                                    className="fa fa-building-o flex-none"
+                                    style={iconStyle}
+                                />
+                                <p className={`flex ${styles.contact_header}`}>
+                                    {' '}
+                                    <Truncate lines={1} >{contact.company_name} </Truncate>{}{' '}
+                                </p>
+                            </div>
+                        </div>
+                        <div
+                            className={`flex-40 layout-row layout-wrap layout-align-start-center ${
+                                styles.contact_details
+                            }`}
+                        >
+                             <div className="flex-100 layout-row layout-align-start-center">
+                                <i
+                                    className="fa fa-phone flex-none"
+                                    style={iconStyle}
+                                />
+                                <p className="flex-none"> {contact.phone} </p>
+                            </div>
+                        </div>
+                    </div>
+                    {/* <div className="flex-60 layout-row layout-align-start-start layout-wrap">
                         <div className="flex-100 layout-row alyout-align-start-center">
                             <i
                                 className="fa fa-user-circle-o flex-none"
@@ -61,7 +116,7 @@ export class ContactCard extends Component {
                             />
                             <p className={`flex ${styles.contact_header}`}>
                                 {' '}
-                                {contact.company_name}{' '}
+                                <Truncate lines={1} >{contact.company_name} </Truncate>{}{' '}
                             </p>
                         </div>
                     </div>
@@ -84,7 +139,7 @@ export class ContactCard extends Component {
                             />
                             <p className="flex-none"> {contact.phone} </p>
                         </div>
-                    </div>
+                    </div>*/}
                     { location.geocoded_address ?
                         <div className="flex-100 layout-row layout-align-start-center">
                             <i

@@ -279,6 +279,15 @@ function activateHub(hubId) {
     return fetch(BASE_URL + '/admin/hubs/' + hubId + '/set_status', requestOptions).then(handleResponse);
 }
 
+function documentAction(docId, action) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(action)
+    };
+    return fetch(BASE_URL + '/admin/documents/action/' + docId, requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
@@ -306,5 +315,6 @@ export const adminService = {
     wizardTrucking,
     updateServiceCharge,
     newClient,
-    activateHub
+    activateHub,
+    documentAction
 };

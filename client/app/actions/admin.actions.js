@@ -879,6 +879,34 @@ function activateHub(hubId) {
     };
 }
 
+function documentAction(docId, action) {
+    function request(docData) {
+        return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData };
+    }
+    function success(docData) {
+        return { type: adminConstants.DOCUMENT_ACTION_SUCCESS, payload: docData };
+    }
+    function failure(error) {
+        return { type: adminConstants.DOCUMENT_ACTION_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.documentAction(docId, action).then(
+            data => {
+                dispatch(
+                    alertActions.success('Document Action successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -908,6 +936,7 @@ export const adminActions = {
     getTrucking,
     getClient,
     getShipment,
+    documentAction,
     getSchedules,
     getDashboard,
     goTo,

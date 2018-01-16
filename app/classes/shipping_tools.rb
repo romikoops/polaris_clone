@@ -1,6 +1,7 @@
 module ShippingTools
   include PricingTools
   include MongoTools
+  include NotificationTools
 
   def new_shipment(load_type)
     shipment = Shipment.create(
@@ -32,11 +33,11 @@ module ShippingTools
     @shipment = Shipment.find(params[:shipment_id])
     offer_calculation = OfferCalculator.new(@shipment, params, current_user)
 
-    # begin
+    begin
       offer_calculation.calc_offer!
-    # rescue
-    #   raise ApplicationError::NoRoutes
-    # end
+    rescue
+      raise ApplicationError::NoRoutes
+    end
 
     if offer_calculation.shipment.save
       return {
@@ -142,6 +143,8 @@ module ShippingTools
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
 
+    message = {title: 'Booking Received', message: "Thank you for making your booking through #{current_user.tenant.name}. You will be notified upon confirmation of the order.", shipmentRef: @shipment.imc_reference}
+    add_message_to_convo(current_user, message)
     return {
       shipment: @shipment,
       schedules: @schedules,
@@ -159,7 +162,6 @@ module ShippingTools
     current_user.user_locations.each do |uloc|
       @user_locations.push({location: uloc.location, contact: current_user})
     end
-
     @contacts = []
     current_user.contacts.each do |c|
       @contacts.push({location: c.location, contact: c})
@@ -187,7 +189,6 @@ module ShippingTools
           @dangerous = true
         end
     end
-
     @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub

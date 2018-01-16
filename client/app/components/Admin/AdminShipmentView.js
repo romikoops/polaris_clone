@@ -32,7 +32,7 @@ export class AdminShipmentView extends Component {
 
     render() {
         console.log(this.props);
-        const { theme, hubs, shipmentData, clients } = this.props;
+        const { theme, hubs, shipmentData, clients, adminDispatch } = this.props;
 
         if (!shipmentData || !hubs || !clients) {
             return <h1>NO DATA</h1>;
@@ -151,7 +151,7 @@ export class AdminShipmentView extends Component {
         }
         if (documents) {
             documents.forEach((doc)=> {
-                docView.push(<FileTile key={doc.id} doc={doc} theme={theme} />);
+                docView.push(<FileTile key={doc.id} doc={doc} theme={theme} adminDispatch={adminDispatch} isAdmin/>);
             });
         }
         const acceptDeny = shipment && shipment.status === 'requested' ?

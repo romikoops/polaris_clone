@@ -130,7 +130,7 @@ export class AdminShipmentRow extends Component {
                                     {' '}
                                     {originHub.hub_code
                                         ? originHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>
@@ -150,7 +150,7 @@ export class AdminShipmentRow extends Component {
                                     {' '}
                                     {destHub.hub_code
                                         ? destHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>
@@ -172,7 +172,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                        style={gradientFontStyle}
+                                       
                                     >
                                       Pickup Date
                                     </h4>
@@ -196,7 +196,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                        style={gradientFontStyle}
+                                       
                                     >
                                         {' '}
                                       Date of Departure
@@ -219,7 +219,7 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <h4
                                         className={styles.date_title}
-                                        style={gradientFontStyle}
+                                       
                                     >
                                         {' '}
                                       ETA terminal

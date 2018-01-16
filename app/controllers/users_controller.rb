@@ -41,8 +41,11 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
+    p @user
     @user.update_attributes(update_params)
+    p @user
     headers = @user.create_new_auth_token
+    p headers
     response_handler({user: @user, headers: headers})
   end
   def currencies

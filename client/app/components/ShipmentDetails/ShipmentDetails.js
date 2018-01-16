@@ -288,7 +288,7 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        const { theme, messages, shipmentData } = this.props;
+        const { theme, messages, shipmentData, shipmentDispatch } = this.props;
         let cargoDetails;
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
@@ -418,6 +418,7 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
+                            handleNext={() => shipmentDispatch.goTo('/account')}
                         />
                     </div>
                 </div>

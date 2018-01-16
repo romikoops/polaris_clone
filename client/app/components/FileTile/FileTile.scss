@@ -36,4 +36,33 @@
       padding: 4px;
     }
   }
+  .input_box textarea {
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .backdrop {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    background: rgba(2,3,1,0.25);
+  }
+  .content {
+    width: 650px;
+    height: 250px;
+    position: relative;
+    z-index: 20;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 15px;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
 }

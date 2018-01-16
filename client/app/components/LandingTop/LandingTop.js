@@ -62,7 +62,7 @@ export class LandingTop extends Component {
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
                         <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>
                         { user ? myAccount : '' }
-                        { user && user.data.role_id === 1 ? toAdmin : '' }
+                        { user && user.role_id === 1 ? toAdmin : '' }
                     </div>
 
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>
