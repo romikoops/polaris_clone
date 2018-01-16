@@ -8,9 +8,8 @@ class Shipment < ApplicationRecord
     ignored
   )
   LOAD_TYPES = %w(
-    fcl
-    lcl
-    openlcl
+    container
+    cargo_item
   )
   
 

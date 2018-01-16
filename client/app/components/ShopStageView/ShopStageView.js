@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import styles from './ShopStageView.scss';
 import PropTypes from 'prop-types';
 import defs from '../../styles/default_classes.scss';
+import { SHIPMENT_STAGES } from '../../constants';
+
 export class ShopStageView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            stages: props.stages,
+            stages: SHIPMENT_STAGES,
             currentStage: props.currentStage
         };
     }
@@ -62,7 +64,7 @@ export class ShopStageView extends Component {
     }
 
     stageName(cStage) {
-        this.props.stages.forEach(stage => {
+        SHIPMENT_STAGES.forEach(stage => {
             if (stage.step === cStage) {
                 this.setState({ title: stage.header });
             }
@@ -70,7 +72,7 @@ export class ShopStageView extends Component {
     }
     render() {
         const stageBoxes = [];
-        this.props.stages.map(stage => {
+        SHIPMENT_STAGES.map(stage => {
             stageBoxes.push(
                 <div
                     key={stage.step}

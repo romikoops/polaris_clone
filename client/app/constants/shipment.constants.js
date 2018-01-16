@@ -1,26 +1,13 @@
-export const SHIPMENT_TYPES = [
+export const LOAD_TYPES = [
     {
-        name: 'LCL Shipment',
+        name: 'Cargo Item Shipment',
         img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
-        code: 'lcl',
+        code: 'cargoItem',
     },
     {
-        name: 'FCL Shipment',
+        name: 'Full Container Shipment',
         img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
-        code: 'fcl',
-    }
-];
-
-export const OPEN_SHIPMENT_TYPES = [
-    {
-        name: 'LCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
-        code: 'openlcl',
-    },
-    {
-        name: 'FCL Shipment',
-        img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
-        code: 'openfcl',
+        code: 'container',
     }
 ];
 

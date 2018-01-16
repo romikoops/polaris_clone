@@ -4,16 +4,17 @@ import styles from './ChooseShipment.scss';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow';
+import { LOAD_TYPES } from '../../constants';
+
 export class ChooseShipment extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.selectShipment);
-        const cards = this.props.shipmentTypes.map((shipmentType) => (
+        const cards = LOAD_TYPES.map((loadType) => (
             {
-                name: shipmentType.name,
-                img: shipmentType.img,
+                name: loadType.name,
+                img: loadType.img,
                 options: { contained: true },
-                handleClick: () => this.props.selectShipment(shipmentType.code)
+                handleClick: () => this.props.selectLoadType(loadType.code)
             }
         ));
         this.state = { cards: cards};
