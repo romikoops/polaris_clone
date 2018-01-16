@@ -41,11 +41,11 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    p @user
+    Rails.logger.debug @user
     @user.update_attributes(update_params)
-    p @user
+    Rails.logger.debug @user
     headers = @user.create_new_auth_token
-    p headers
+    Rails.logger.debug headers
     response_handler({user: @user, headers: headers})
   end
   def currencies
