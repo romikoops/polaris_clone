@@ -140,6 +140,10 @@ module PricingTools
     resp = get_items_query('pathPricing', query)
     return resp.to_a
   end
+
+  def update_path_pricing(key, data)
+    update_item('pathPricing', {_id: key }, data)
+  end
 end
 
 

@@ -1,6 +1,7 @@
 module ExcelTools
   include ImageTools
   include MongoTools
+  include PricingTools
 
   def overwrite_trucking_rates(params, user = current_user)
     # old_trucking_ids = nil
@@ -374,7 +375,7 @@ module ExcelTools
         vt = Vehicle.find_by_name(row[:vehicle_type])
       end
 
-      load_types = [
+      cargo_classes = [
         'fcl_20f',
         'fcl_40f',
         'fcl_40f_hq',
@@ -384,11 +385,11 @@ module ExcelTools
       tt_obj = {}
 
       if !row[:cargo_type]
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
@@ -466,7 +467,7 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
 
       if dedicated
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -483,7 +484,7 @@ module ExcelTools
           new_path_pricings[pathKey]["#{user.id}"] = uuid
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -505,10 +506,8 @@ module ExcelTools
       end
     end
 
-    npps = []
     new_path_pricings.each do |key, value|
-      tmpObj = value
-      ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+      update_path_pricing(key, value)
     end
   end
   def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user)
@@ -564,31 +563,35 @@ module ExcelTools
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
-      origin = Location.find_by(name: row[:origin])
+      
+      origin      = Location.find_by(name: row[:origin])
       destination = Location.find_by(name: row[:destination])
-      route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
-      p user.tenant_id
-      hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
-      p route
-      p hubroute
+      route       = Route.find_or_create_by!(
+        name: "#{origin.name} - #{destination.name}", 
+        tenant_id: user.tenant_id, 
+        origin_nexus_id: origin.id, 
+        destination_nexus_id: destination.id
+      )
+      hubroute    = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+
       if !row[:vehicle_type]
         vt = Vehicle.find_by_name("#{row[:mot]}_default")
       else
         vt = Vehicle.find_by_name(row[:vehicle_type])
       end
 
-      load_types = [
+      cargo_classes = [
         'lcl'
       ]
 
       tt_obj = {}
 
       if !row[:cargo_type]
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
@@ -683,7 +686,7 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h}
       
       if dedicated
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -701,7 +704,7 @@ module ExcelTools
           new_path_pricings[pathKey]["#{user.id}"] = priceKey
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           uuid = SecureRandom.uuid
           tmpItem = {data: price_obj[lt]}
           pathKey = "#{hubroute.id}_#{tt_obj[lt].id}"
@@ -725,10 +728,8 @@ module ExcelTools
       end
     end
 
-    npps = []
     new_path_pricings.each do |key, value|
-      tmpObj = value
-      ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
+      update_path_pricing(key, value)
     end
   end
 
@@ -826,7 +827,7 @@ module ExcelTools
 
       tmpPrice = new_pricings[pp_key]
 
-      load_types = [
+      cargo_classes = [
         'fcl_20f',
         'fcl_40f',
         'fcl_40f_hq'
@@ -835,11 +836,11 @@ module ExcelTools
       
 
       if !row[:cargo_type] || row[:cargo_type] == 'FAK'
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: "any", cargo_class: lt)
         end
       else
-        load_types.each do |lt|
+        cargo_classes.each do |lt|
           tt_obj[lt] = vt.transport_categories.find_by(name: row[:cargo_type], cargo_class: lt)
         end
       end
@@ -867,56 +868,53 @@ module ExcelTools
       # price_obj = {"lcl" =>lcl_obj.to_h, "fcl_20f" =>fcl_20f_obj.to_h, "fcl_40f" =>fcl_40f_obj.to_h, "fcl_40f_hq" =>fcl_40f_hq_obj.to_h}
       # 
 
-        new_pricings.each do |key, value|
-          value["sizes"].each do |skey, svalue|
-           if skey != 'fcl_45f_hq'
-            tmpItem = value["data"]
-            tmpItem["data"] = {}
-            svalue.each do |pkey, pvalue|
-              tmpItem["data"][pkey] = pvalue
-            end
-            p tmpItem
-             if dedicated
-                uuid = SecureRandom.uuid
-               
-                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
-                tmpItem[:_id] = uuid;
-                tmpItem[:tenant_id] = user.tenant_id;
-                userObj = {}
-                userObj[pathKey] = uuid
-                put_item_fn(mongo, 'pricings', tmpItem)
-                if !new_path_pricings[pathKey]
-                  new_path_pricings[pathKey] = {}
-                end
-                update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
-                new_path_pricings[pathKey]["#{user.id}"] = uuid
-            else
-                uuid = SecureRandom.uuid
-               p skey
-               p tt_obj
-                pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
-                tmpItem[:_id] = uuid;
-                tmpItem[:tenant_id] = user.tenant_id
-                pr = put_item_fn(mongo, 'pricings', tmpItem)
+      new_pricings.each do |key, value|
+        value["sizes"].each do |skey, svalue|
+         if skey != 'fcl_45f_hq'
+          tmpItem = value["data"]
+          tmpItem["data"] = {}
+          svalue.each do |pkey, pvalue|
+            tmpItem["data"][pkey] = pvalue
+          end
+          p tmpItem
+           if dedicated
+              uuid = SecureRandom.uuid
+             
+              pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+              tmpItem[:_id] = uuid;
+              tmpItem[:tenant_id] = user.tenant_id;
+              userObj = {}
+              userObj[pathKey] = uuid
+              put_item_fn(mongo, 'pricings', tmpItem)
+              if !new_path_pricings[pathKey]
+                new_path_pricings[pathKey] = {}
+              end
+              update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, userObj)
+              new_path_pricings[pathKey]["#{user.id}"] = uuid
+          else
+              uuid = SecureRandom.uuid
+             p skey
+             p tt_obj
+              pathKey = "#{dataObj[key]["hubroute"].id}_#{tt_obj[skey].id}"
+              tmpItem[:_id] = uuid;
+              tmpItem[:tenant_id] = user.tenant_id
+              pr = put_item_fn(mongo, 'pricings', tmpItem)
 
-                if !new_path_pricings[pathKey]
-                  new_path_pricings[pathKey] = {}
-                end
+              if !new_path_pricings[pathKey]
+                new_path_pricings[pathKey] = {}
+              end
 
-                new_path_pricings[pathKey]["open"] = uuid
-                new_path_pricings[pathKey]["hub_route"] = dataObj[key]["hubroute"].id
-                new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
-                new_path_pricings[pathKey]["route"] = dataObj[key]["route"].id
-                new_path_pricings[pathKey]["transport_category"] = tt_obj[skey].id
-            end
+              new_path_pricings[pathKey]["open"] = uuid
+              new_path_pricings[pathKey]["hub_route"] = dataObj[key]["hubroute"].id
+              new_path_pricings[pathKey]["tenant_id"] = user.tenant_id
+              new_path_pricings[pathKey]["route"] = dataObj[key]["route"].id
+              new_path_pricings[pathKey]["transport_category"] = tt_obj[skey].id
           end
         end
       end
-      npps = []
-      new_path_pricings.each do |key, value|
-        tmpObj = value
-        ppr = update_item_fn(mongo, 'pathPricing', {_id: key }, tmpObj)
-      
+    end
+    new_path_pricings.each do |key, value|
+      update_path_pricing(key, value)
     end
   end
   def price_split(basis, string)
