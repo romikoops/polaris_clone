@@ -478,7 +478,12 @@ export class ShipmentLocationBox extends Component {
             });
         }
 
-        const backgroundColor = value => value || !this.props.nextStageAttempt ? '#F9F9F9' : 'rgba(232, 114, 88, 0.3)';
+        const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
+        const placeholderColorOverwrite = value => (
+            !value && this.props.nextStageAttempt ?
+                'color: rgb(211, 104, 80);' :
+                ''
+        );
 
         const StyledSelect = styled(Select)`
             .Select-control {
@@ -496,6 +501,7 @@ export class ShipmentLocationBox extends Component {
             }
             .Select-placeholder {
                 background-color: ${props => backgroundColor(props.value)};
+                ${props => placeholderColorOverwrite(props.value)}
             }
             .Select-option {
                 background-color: #F9F9F9;
@@ -506,7 +512,7 @@ export class ShipmentLocationBox extends Component {
             display: 'none'
         };
 
-        let showError = !this.state.oSelect && this.props.nextStageAttempt;
+        const showOriginError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
             <div style={{position: 'relative'}}>
                 <StyledSelect
@@ -516,13 +522,13 @@ export class ShipmentLocationBox extends Component {
                     options={nexuses}
                     onChange={this.setOriginHub}
                 />
-                <span className={errorStyles.error_message}>
-                    {showError ? 'Must not be blank' : ''}
+                <span className={errorStyles.error_message} style={{color: 'white'}}>
+                    {showOriginError ? 'Must not be blank' : ''}
                 </span>
             </div>
         );
 
-        showError = !this.state.dSelect && this.props.nextStageAttempt;
+        const showDestinationError = !this.state.dSelect && this.props.nextStageAttempt;
         const destinationHubSelect = (
             <div style={{position: 'relative'}}>
                 <StyledSelect
@@ -533,8 +539,8 @@ export class ShipmentLocationBox extends Component {
                     onChange={this.setDestHub}
                     backgroundColor={backgroundColor}
                 />
-                <span className={errorStyles.error_message}>
-                    {showError ? 'Must not be blank' : ''}
+                <span className={errorStyles.error_message} style={{color: 'white'}}>
+                    {showDestinationError ? 'Must not be blank' : ''}
                 </span>
             </div>
         );
@@ -705,11 +711,11 @@ export class ShipmentLocationBox extends Component {
             return '';
         };
         const { theme } = this.props;
-
+        const errorClass = showOriginError || showDestinationError ? styles.with_errors : '';
         return (
             <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
-                    <div className={`flex-none layout-row layout-wrap ${styles.input_box}`}>
+                    <div className={`flex-none layout-row layout-wrap ${styles.input_box} ${errorClass}`}>
                         <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
                             <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
                                 <Toggle
