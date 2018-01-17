@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116103428) do
+ActiveRecord::Schema.define(version: 20180117143656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,6 +241,7 @@ ActiveRecord::Schema.define(version: 20180116103428) do
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
+    t.string "incoterm"
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|
