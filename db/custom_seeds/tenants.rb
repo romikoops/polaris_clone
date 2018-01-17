@@ -168,6 +168,40 @@ tenant_data = [
         }
       }
     }
+  },
+  {
+    theme: {
+      colors: {
+        primary: "#4E9095",
+        secondary: "#DDDDDD",
+        brightPrimary: "#5bb8bf",
+        brightSecondary: "#FFFFFF"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/logos/integrail.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/integrail.png",
+      logoWide: "https://assets.itsmycargo.com/assets/logos/integrail_wide.png"
+    },
+    addresses: {
+      main:"Révész utca 27. (575.11 mi)Budapest, Hungary 1138"
+    },
+    phones:{
+      main: "+36 1 270 9330",
+      support: "+36 1 270 9330"
+    },
+    emails: {
+      sales: "sales@integrail.hu",
+      support: "info@tantumshipping.com"
+    },
+    subdomain: "integrail",
+    name: "Integrail",
+    scope: {
+      modes_of_transport: {
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+      }
+    }
   }
 ]
 
