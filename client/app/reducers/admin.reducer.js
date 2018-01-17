@@ -464,6 +464,22 @@ export function admin(state = {}, action) {
             });
             return errHubActivate;
 
+        case adminConstants.DOCUMENT_ACTION_REQUEST:
+            const reqDocAction = merge({}, state, {
+                loading: true
+            });
+            return reqDocAction;
+        case adminConstants.DOCUMENT_ACTION_SUCCESS:
+            const succDocAction = merge({}, state, {
+                loading: false
+            });
+            return succDocAction;
+        case adminConstants.DOCUMENT_ACTION_FAILURE:
+            const errDocAction = merge({}, state, {
+                error: { documents: action.error }
+            });
+            return errDocAction;
+
         case adminConstants.VIEW_TRUCKING:
             const newTrucking = merge({}, state, {
                 truckingDetail: action.payload

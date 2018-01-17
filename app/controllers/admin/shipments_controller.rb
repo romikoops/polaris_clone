@@ -1,7 +1,7 @@
 class Admin::ShipmentsController < ApplicationController
-  include ShippingTools
   before_action :require_login_and_role_is_admin
   include ShippingTools
+  include NotificationTools
 
   def index
     @documents = {}
@@ -106,6 +106,33 @@ class Admin::ShipmentsController < ApplicationController
     end
     resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
     response_handler(resp)
+  end
+
+  def document_action
+    @document = Document.find(params[:id])
+    @user = @document.user
+    type = params[:type]
+    text = params[:text]
+    case type
+    when 'approve'
+      @document.approved = 'approved'
+      message = {
+        title: 'Document Approved',
+        message: "Your document #{@document.text} was approved",
+        shipmentRef: @document.shipment.imc_reference
+      }
+      add_message_to_convo(@user, message)
+    when 'reject'
+      @document.approved = 'approved'
+      message = {
+        title: 'Document Rejected',
+        message: "Your document #{@document.text} was rejected: #{text}",
+        shipmentRef: @document.shipment.imc_reference
+      }
+      add_message_to_convo(@user, message)
+    end
+    response_handler(true)
+    
   end
 
   private

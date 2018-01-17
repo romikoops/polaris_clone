@@ -53,34 +53,16 @@ export class AdminShipmentsIndex extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 { mergedOpenShipments.length !== 0 ?
-                    <AdminSearchableShipments hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
-                    // <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-                    //     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-                    //         <p className={` ${styles.sec_subheader_text} flex-none`}  > Open</p>
-                    //     </div>
-                    //     { openShipments }
-                    // </div>
+                    <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                     :
                     ''
                 }
                 { mergedReqShipments.length !== 0 ?
-                    <AdminSearchableShipments hubs={hubHash} shipments={mergedReqShipments} title="Requested Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
-                    // <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-                    //     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-                    //         <p className={` ${styles.sec_subheader_text} flex-none`}  > Requested</p>
-                    //     </div>
-                    //     { requestedShipments }
-                    // </div>
+                    <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedReqShipments} title="Requested Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                     : ''
                 }
                 { mergedFinishedShipments.length !== 0 ?
-                    <AdminSearchableShipments hubs={hubHash} shipments={mergedFinishedShipments} title="Finished Shipments" theme={theme} handleAction={handleShipmentAction}/>
-                    // <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-                    //     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-                    //         <p className={` ${styles.sec_subheader_text} flex-none`}  > Finished</p>
-                    //     </div>
-                    //     { finishedShipments }
-                    // </div>
+                    <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedFinishedShipments} title="Finished Shipments" theme={theme} handleAction={handleShipmentAction}/>
                     : ''
                 }
                 { mergedOpenShipments.length === 0 && mergedReqShipments.length === 0 && mergedFinishedShipments.length === 0 ?

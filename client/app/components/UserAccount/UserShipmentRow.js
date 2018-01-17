@@ -166,7 +166,7 @@ export class UserShipmentRow extends Component {
                                     {' '}
                                     {originHub.hub_code
                                         ? originHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>
@@ -186,7 +186,7 @@ export class UserShipmentRow extends Component {
                                     {' '}
                                     {destHub.hub_code
                                         ? destHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>

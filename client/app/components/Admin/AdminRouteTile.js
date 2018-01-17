@@ -40,8 +40,8 @@ export class AdminRouteTile extends Component {
                 endHub = hub;
             }
         });
-        const bg1 = startHub ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : {};
-        const bg2 = endHub ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : {};
+        const bg1 = startHub && startHub.location && startHub.location.photo  ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'};
+        const bg2 = endHub && endHub.location && endHub.location.photo  ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'};
         if (!endHub || !startHub) {
             // ;
         }
