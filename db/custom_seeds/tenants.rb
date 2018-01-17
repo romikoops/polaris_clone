@@ -94,7 +94,8 @@ tenant_data = [
         brightSecondary: "#9FDAFC"
       },
       logoLarge: "https://assets.itsmycargo.com/assets/logos/nordiclogosmall.png",
-      logoSmall: "https://assets.itsmycargo.com/assets/logos/nordiclogosmall.png"
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/nordiclogosmall.png",
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
     },
     addresses: {
       main: "Bataljonsgatan 12,553 05 Jönköping, Sweden"
@@ -135,7 +136,8 @@ tenant_data = [
         brightSecondary: "#FFAC36"
       },
       logoLarge: "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
-      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png"
+      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_easy_shipping.jpg"
     },
     addresses: {
       main:"Industrivej 2 DK-7860 Spøttrup Denmark"

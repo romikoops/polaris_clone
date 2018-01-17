@@ -18,6 +18,8 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   require './tenants'
   puts 'admin'
   require './admin'
+  puts 'super_admin'
+  require './super_admin'
   puts 'shipper'
   require './shipper'
   puts 'vehicle_types'
