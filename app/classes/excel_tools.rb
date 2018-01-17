@@ -386,17 +386,6 @@ module ExcelTools
 
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
-      if !dedicated
-        cust_id = nil
-        ded_bool = false
-      elsif !row[:customer_id] && dedicated
-        cust_id = user.id
-        ded_bool = false
-      elsif row[:customer_id] && dedicated
-        cust_id = row[:customer_id].to_i
-        ded_bool = true
-      end
-
       lcl_obj = {
         BAS: {
           currency: row[:lcl_currency],
@@ -579,17 +568,6 @@ module ExcelTools
         30, 
         vehicle.id
       )
-
-      if !dedicated
-        cust_id = nil
-        ded_bool = false
-      elsif !row[:customer_id] && dedicated
-        cust_id = user.id
-        ded_bool = false
-      elsif row[:customer_id] && dedicated
-        cust_id = row[:customer_id].to_i
-        ded_bool = true
-      end
 
       lcl_obj = {
         BAS: {
@@ -846,18 +824,8 @@ module ExcelTools
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
 
-      if !dedicated
-        cust_id = nil
-        ded_bool = false
-      elsif !row[:customer_id] && dedicated
-        cust_id = user.id
-        ded_bool = false
-      elsif row[:customer_id] && dedicated
-        cust_id = row[:customer_id].to_i
-        ded_bool = true
-      end
       new_pricings[pricing_key]["cargo_classes"].each do |cargo_class, cargo_class_prices|
-        cargo_class[row[:charge] = price_split(row[:rate_basis], row[rate_key(cargo_class)])
+        cargo_class_prices[row[:charge]] = price_split(row[:rate_basis], row[rate_key(cargo_class)])
       end
     end
 
@@ -919,8 +887,8 @@ module ExcelTools
   end
 
   def rate_key(cargo_class)
-    base_str = cargo_class.clone
-    base_str[cargo_class.rindex("f")] = ""
+    base_str = cargo_class.dup
+    base_str.slice! cargo_class.rindex("f")
     "#{base_str}_rate".to_sym
   end
 end
