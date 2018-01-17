@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import GmapsLoader from '../../hocs/GmapsLoader';
 import styles from './ShipmentDetails.scss';
+import errorStyles from '../../styles/errors.scss';
+import defaults from '../../styles/default_classes.scss';
 import { moment } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
@@ -11,25 +13,15 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
-import defaults from '../../styles/default_classes.scss';
+import { isEmpty } from '../../helpers/isEmpty.js';
+import * as Scroll from 'react-scroll';
+
 export class ShipmentDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            origin: {
-                number: '',
-                street: '',
-                zipCode: '',
-                city: '',
-                fullAddress: ''
-            },
-            destination: {
-                number: '',
-                street: '',
-                zipCode: '',
-                city: '',
-                fullAddress: ''
-            },
+            origin: {},
+            destination: {},
             containers: [
                 {
                     payload_in_kg: 0,
@@ -77,12 +69,13 @@ export class ShipmentDetails extends Component {
         this.handleNextStage = this.handleNextStage.bind(this);
         this.addNewCargoItem = this.addNewCargoItem.bind(this);
         this.addNewContainer = this.addNewContainer.bind(this);
-        this.setTargetLocation = this.setTargetLocation.bind(this);
+        this.setTargetAddress = this.setTargetAddress.bind(this);
         this.selectRoute = this.selectRoute.bind(this);
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
         this.deleteCargo = this.deleteCargo.bind(this);
+        this.scrollTo = this.scrollTo.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -95,6 +88,14 @@ export class ShipmentDetails extends Component {
     }
     componentDidUpdate() {
         console.log('######### UPDATED ###########');
+    }
+
+    scrollTo(target) {
+        Scroll.scroller.scrollTo(target, {
+            duration: 800,
+            smooth: true,
+            offset: -50
+        });
     }
 
     loadPrevReq(obj) {
@@ -231,7 +232,7 @@ export class ShipmentDetails extends Component {
         });
     }
 
-    setTargetLocation(target, address) {
+    setTargetAddress(target, address) {
         this.setState({ [target]: address });
     }
     errorsExist(errorsObj) {
@@ -239,14 +240,27 @@ export class ShipmentDetails extends Component {
     }
 
     handleNextStage() {
+        if (!this.state.selectedDay) {
+            this.setState({ nextStageAttempt: true });
+            this.scrollTo('dayPicker');
+            return;
+        }
+        if (isEmpty(this.state.origin) || isEmpty(this.state.destination)) {
+            this.setState({ nextStageAttempt: true });
+            this.scrollTo('map');
+            return;
+        }
         // This was implemented under the assuption that in the initial state the following return values apply:
         //      (1) this.errorsExist(this.state.cargoItemErrors) #=> true
         //      (2) this.errorsExist(this.state.containerErrors) #=> true
         // So it will break out of the function and set nextStage attempt to true,
         // in case one of them returns false
-        if (this.errorsExist(this.state.cargoItemErrors) && this.errorsExist(this.state.containerErrors)) {
+        if (
+            this.errorsExist(this.state.cargoItemErrors) &&
+            this.errorsExist(this.state.containerErrors)
+        ) {
             console.log('(!) Errors exist (!)');
-            this.setState({nextStageAttempt: true});
+            this.setState({ nextStageAttempt: true });
             return;
         }
 
@@ -329,13 +343,14 @@ export class ShipmentDetails extends Component {
         const mapBox = (
             <GmapsLoader
                 theme={theme}
-                selectLocation={this.setTargetLocation}
+                setTargetAddress={this.setTargetAddress}
                 allNexuses={shipmentData.all_nexuses}
                 component={ShipmentLocationBox}
                 selectedRoute={this.state.selectedRoute}
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
+                nextStageAttempt={this.state.nextStageAttempt}
                 handleAddressChange={this.handleAddressChange}
             />
         );
@@ -346,6 +361,8 @@ export class ShipmentDetails extends Component {
         const future = {
             after: new Date(),
         };
+
+        const showDayPickerErrors = this.state.nextStageAttempt && !this.state.selectedDay;
         const dayPickerSection = (
             <div
                 className={`${
@@ -363,14 +380,17 @@ export class ShipmentDetails extends Component {
                             <i className="flex-none fa fa-calendar"></i>
                         </div>
                         <DayPickerInput
-                            name="birthday"
+                            name="dayPicker"
                             placeholder="DD/MM/YYYY"
                             format="DD/MM/YYYY"
                             value={value}
-                            className={styles.dpb_picker}
+                            className={`${styles.dpb_picker} ${showDayPickerErrors ? styles.with_errors : ''}`}
                             onDayChange={this.handleDayChange}
                             modifiers={future}
                         />
+                        <span className={errorStyles.error_message}>
+                            {showDayPickerErrors ? 'Must not be blank' : ''}
+                        </span>
                     </div>
 
                 </div>

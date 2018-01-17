@@ -5,10 +5,11 @@ import '../../styles/react-toggle.scss';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styles from './ShipmentLocationBox.scss';
+import errorStyles from '../../styles/errors.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers';
-import {mapStyling} from '../../constants/map.constants';
+import { mapStyling } from '../../constants/map.constants';
 import styled from 'styled-components';
 
 const mapStyle = {
@@ -476,19 +477,25 @@ export class ShipmentLocationBox extends Component {
                 nexuses.push({ value: nex, label: nex.name });
             });
         }
+
+        const backgroundColor = value => value || !this.props.nextStageAttempt ? '#F9F9F9' : 'rgba(232, 114, 88, 0.3)';
+
         const StyledSelect = styled(Select)`
             .Select-control {
-                background-color: #F9F9F9;
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                background-color: ${props => backgroundColor(props.value)};
+                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
                 border: 1px solid #F2F2F2 !important;
             }
             .Select-menu-outer {
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
                 border: 1px solid #F2F2F2;
             }
             .Select-value {
-                background-color: #F9F9F9;
+                background-color: ${props => backgroundColor(props.value)};
                 border: 1px solid #F2F2F2;
+            }
+            .Select-placeholder {
+                background-color: ${props => backgroundColor(props.value)};
             }
             .Select-option {
                 background-color: #F9F9F9;
@@ -498,24 +505,38 @@ export class ShipmentLocationBox extends Component {
             height: '0px',
             display: 'none'
         };
+
+        let showError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
-            <StyledSelect
-                name="origin-hub"
-                className={`${styles.select}`}
-                value={this.state.oSelect}
-                options={nexuses}
-                onChange={this.setOriginHub}
-            />
+            <div style={{position: 'relative'}}>
+                <StyledSelect
+                    name="origin-hub"
+                    className={`${styles.select}`}
+                    value={this.state.oSelect}
+                    options={nexuses}
+                    onChange={this.setOriginHub}
+                />
+                <span className={errorStyles.error_message}>
+                    {showError ? 'Must not be blank' : ''}
+                </span>
+            </div>
         );
 
+        showError = !this.state.dSelect && this.props.nextStageAttempt;
         const destinationHubSelect = (
-            <StyledSelect
-                name="destination-hub"
-                className={`${styles.select}`}
-                value={this.state.dSelect}
-                options={nexuses}
-                onChange={this.setDestHub}
-            />
+            <div style={{position: 'relative'}}>
+                <StyledSelect
+                    name="destination-hub"
+                    className={`${styles.select}`}
+                    value={this.state.dSelect}
+                    options={nexuses}
+                    onChange={this.setDestHub}
+                    backgroundColor={backgroundColor}
+                />
+                <span className={errorStyles.error_message}>
+                    {showError ? 'Must not be blank' : ''}
+                </span>
+            </div>
         );
 
         const originFields = (

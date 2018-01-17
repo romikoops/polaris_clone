@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withFormsy } from 'formsy-react';
 import styles from './ValidatedInputFormsy.scss';
+import errorStyles from '../../styles/errors.scss';
 
 class ValidatedInputFormsy extends Component {
     constructor(props) {
@@ -64,7 +65,7 @@ class ValidatedInputFormsy extends Component {
                     value={(this.props.getValue() || this.props.getValue().toString()) || ''}
                     name={this.props.name}
                 />
-                <span className={styles.error_message}>{ErrorVisible ? '' : errorMessage}</span>
+                <span className={errorStyles.error_message}>{ErrorVisible ? '' : errorMessage}</span>
             </div>
         );
     }
