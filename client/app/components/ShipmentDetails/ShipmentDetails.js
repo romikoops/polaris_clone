@@ -9,7 +9,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
-import { RouteSelector } from '../RouteSelector/RouteSelector';
+// import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defaults from '../../styles/default_classes.scss';
 export class ShipmentDetails extends Component {
@@ -319,13 +319,13 @@ export class ShipmentDetails extends Component {
             // cargoDetails = this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
 
-        const rSelect = (
-            <RouteSelector
-                theme={theme}
-                setRoute={this.selectRoute}
-                routes={shipmentData.routes}
-            />
-        );
+        // const rSelect = (
+        //     <RouteSelector
+        //         theme={theme}
+        //         setRoute={this.selectRoute}
+        //         routes={shipmentData.routes}
+        //     />
+        // );
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -376,21 +376,25 @@ export class ShipmentDetails extends Component {
                 </div>
             </div>
         );
+        // {this.state.routeSet ? mapBox : rSelect}
+        // {this.state.routeSet ? dayPickerSection : '' }
+         // {this.state.routeSet ? cargoDetails : ''}
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                    {this.state.routeSet ? dayPickerSection : '' }
+                    { dayPickerSection }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
-                    {this.state.routeSet ? mapBox : rSelect}
+
+                    {mapBox}
                 </div>
                 <div
                     className={`layout-row flex-100 layout-wrap ${
                         styles.cargo_sec
                     }`}
                 >
-                    {this.state.routeSet ? cargoDetails : ''}
+                   {cargoDetails}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div

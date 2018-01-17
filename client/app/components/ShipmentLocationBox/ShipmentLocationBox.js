@@ -690,7 +690,7 @@ export class ShipmentLocationBox extends Component {
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
                     <div className={`flex-none layout-row layout-wrap ${styles.input_box}`}>
                         <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
-                            <div className={'flex-50 layout-row layout-align-end-center' + defaults.mc}>
+                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
                                 <Toggle
                                     className="flex-none"
                                     id="has_pre_carriage"
@@ -701,7 +701,7 @@ export class ShipmentLocationBox extends Component {
                                 />
                                 <label htmlFor="pre-carriage">Pre-Carriage</label>
                             </div>
-                            <div className="flex-50 layout-row layout-wrap">
+                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
                                 {/* <p className="flex-100"> Origin Address </p>*/}
                                 { this.state.shipment.has_pre_carriage ? originAuto : '' }
                                 { displayLocationOptions('origin') }
@@ -709,7 +709,7 @@ export class ShipmentLocationBox extends Component {
                         </div>
                         {/* <div ref="map" id="map" style={mapStyle} />*/}
                         <div className="flex-50 layout-row layout-wrap layout-align-end-start">
-                            <div className={'flex-50 layout-row layout-align-end-center' + defaults.mc}>
+                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
                                 <Toggle
                                     className="flex-none"
                                     id="has_on_carriage"
@@ -720,7 +720,7 @@ export class ShipmentLocationBox extends Component {
                                 />
                                 <label htmlFor="on-carriage">On-Carriage</label>
                             </div>
-                            <div className="flex-50 layout-row layout-wrap">
+                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
                                 {/* <p className="flex-100">
                                     {' '}
                                     Destination Address{' '}

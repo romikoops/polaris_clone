@@ -9,11 +9,9 @@
     height: 75px;
     width: 100%;
     z-index: 15;
-    background: rgba(1,2,3,0.40);
+    background: rgba(1,2,3,0.55);
   }
-  .input_box label {
-    color: whitesmoke;
-  }
+  
   .select {
     width: 195px;
   }
@@ -34,5 +32,16 @@
   }
   .map_container {
     position: relative;
+  }
+  .toggle_box {
+    padding: 15px 10px;
+  }
+  .toggle_box label {
+    color: whitesmoke;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+  .search_box {
+    padding: 10px 5px;
   }
 }
