@@ -126,10 +126,12 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
       @shipment.containers.map do |cn|
-        hsCodes[cn.id.to_s].each do |hs|
-          cn.hs_codes << hs["value"]
+        if hsCodes[cn.id.to_s]
+          hsCodes[cn.id.to_s].each do |hs|
+            cn.hs_codes << hs["value"]
+          end
+          cn.save!
         end
-        cn.save!
       end
     end
 

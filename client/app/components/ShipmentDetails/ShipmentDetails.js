@@ -39,6 +39,7 @@ export class ShipmentDetails extends Component {
                     payload_in_kg: 0,
                     sizeClass: '',
                     tareWeight: 0,
+                    quantity: 1,
                     dangerousGoods: false
                 }
             ],
@@ -48,6 +49,7 @@ export class ShipmentDetails extends Component {
                     dimension_x: 0,
                     dimension_y: 0,
                     dimension_z: 0,
+                    quantity: 1,
                     dangerousGoods: false
                 }
             ],
@@ -192,6 +194,7 @@ export class ShipmentDetails extends Component {
             dimension_x: 0,
             dimension_y: 0,
             dimension_z: 0,
+            quantity: 1,
             dangerousGoods: false
         };
         const newErrors = {

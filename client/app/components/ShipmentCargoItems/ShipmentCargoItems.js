@@ -122,7 +122,7 @@ export class ShipmentCargoItems extends Component {
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Gross Weight </p>
+                            <p className="flex-100 letter_1"> Gross Weight </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
                                     className="flex-80"
@@ -143,7 +143,7 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Height </p>
+                            <p className="flex-100 letter_1"> Height </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
                                     className="flex-80"
@@ -164,7 +164,7 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Width </p>
+                            <p className="flex-100 letter_1"> Width </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
                                     className="flex-80"
@@ -185,7 +185,7 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Length </p>
+                            <p className="flex-100 letter_1"> Length </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
                                     className="flex-80"
@@ -206,11 +206,11 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> No. of Cargo Items </p>
+                            <p className="flex-100 letter_1"> No. of Cargo Items </p>
                             <StyledSelect
                                 placeholder={newCargoItem.quantity}
                                 className={styles.select}
-                                name="container-quantity"
+                                name="cargo-item-quantity"
                                 value={newCargoItem.quantity}
                                 options={numbers}
                                 simpleValue
@@ -218,7 +218,7 @@ export class ShipmentCargoItems extends Component {
                             />
                         </div>
                         <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Dangerous Goods </p>
+                            <p className="flex-100 letter_1"> Dangerous Goods </p>
                             <Checkbox
                                 onChange={this.toggleDangerousGoods}
                                 checked={newCargoItem.dangerousGoods}

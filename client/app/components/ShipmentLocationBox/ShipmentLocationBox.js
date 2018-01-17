@@ -13,7 +13,7 @@ import styled from 'styled-components';
 
 const mapStyle = {
     width: '100%',
-    height: '400px',
+    height: '450px',
     borderRadius: '3px',
     boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
@@ -526,7 +526,7 @@ export class ShipmentLocationBox extends Component {
                 <input
                     id="not-auto"
                     name="origin-number"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.props.origin.number}
@@ -534,7 +534,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="origin-street"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.origin.street}
@@ -542,7 +542,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="origin-zipCode"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.origin.zipCode}
@@ -550,7 +550,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="origin-city"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.origin.city}
@@ -558,7 +558,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="origin-country"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.origin.country}
@@ -594,7 +594,7 @@ export class ShipmentLocationBox extends Component {
                 </div>
                 <input
                     name="destination-number"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.destination.number}
@@ -602,7 +602,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="destination-street"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.destination.street}
@@ -610,7 +610,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="destination-zipCode"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.destination.zipCode}
@@ -618,7 +618,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="destination-city"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.destination.city}
@@ -626,7 +626,7 @@ export class ShipmentLocationBox extends Component {
                 />
                 <input
                     name="destination-country"
-                    className={`flex-none ${styles.input}`}
+                    className={`flex-100 ${styles.input}`}
                     type="string"
                     onChange={this.handleAddressChange}
                     value={this.state.destination.country}
@@ -736,19 +736,24 @@ export class ShipmentLocationBox extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                     <div className="flex-none content_width layout-row layout-align-space-between-start">
-                        <div className="flex-10"></div>
-                        <div className="flex-33 layout-row layout-wrap layout-align-center-start">
+                        <div className="flex"></div>
+                        <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                             {this.state.shipment.has_pre_carriage ? originFields : ''}
                         </div>
-                        <div className="flex-33 layout-row layout-wrap layout-align-center-start">
+                        <div className="flex"></div>
+                        <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                             {this.state.shipment.has_on_carriage ? destFields : ''}
                         </div>
-                        <div className="flex-10"></div>
+                        <div className="flex"></div>
                     </div>
                 </div>
                 <style dangerouslySetInnerHTML={{__html: `
                     .react-toggle--checked .react-toggle-track {
                         background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                        border: none;
+                    }
+                    .react-toggle-track {
+                        background: rgba(255, 255, 255, 0.33);
                         border: none;
                     }
                 `}} />
