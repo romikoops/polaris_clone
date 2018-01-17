@@ -5,7 +5,7 @@ module PricingTools
     return client
   end
   def get_user_price(client, path_key, user)
-    path_pricing = get_item_fn(client, 'pathPricing', '_id', path_key)
+    path_pricing = get_item_fn(client, 'hubRoutePricings', '_id', path_key)
 
     raise ApplicationError::NoRoutes if path_pricing.nil?
 
@@ -98,7 +98,7 @@ module PricingTools
 
   def get_dedicated_hash(user_id, tenant_id)
     query = [{'tenant_id' => {"$eq" => tenant_id}}, {"#{user_id}" => {"$exists" => true}}]
-    resp = get_items_query('pathPricing', query).to_a
+    resp = get_items_query('hubRoutePricings', query).to_a
     result = {}
     resp.each do |pr|
       result["#{pr["route"]}"] = true
@@ -107,17 +107,17 @@ module PricingTools
   end
 
   def get_tenant_path_pricings(tenant_id)
-    resp = get_items('pathPricing', 'tenant_id', tenant_id)
+    resp = get_items('hubRoutePricings', 'tenant_id', tenant_id)
     return resp.to_a
   end
 
   def get_hub_route_pricings(hub_route_id)
-    resp = get_items('pathPricing', 'hub_route', hub_route_id)
+    resp = get_items('hubRoutePricings', 'hub_route_id', hub_route_id)
     return resp.to_a
   end
 
   def get_route_pricings(route_id)
-    resp = get_items('pathPricing', 'route', route_id)
+    resp = get_items('hubRoutePricings', 'route_id', route_id)
     return resp.to_a
   end
 
@@ -127,7 +127,7 @@ module PricingTools
   end
 
   def get_route_pricings_hash(route_id)
-    resp = get_items('pathPricing', 'route', route_id).to_a
+    resp = get_items('hubRoutePricings', 'route_id', route_id).to_a
     result = {}
     resp.each do |pr|
       result[pr["_id"]] = pr
@@ -137,12 +137,12 @@ module PricingTools
 
   def get_hub_route_user_pricings(hub_route_id, user_id)
     query = [{'hub_route' => {"$eq" => hub_route_id}}, {"#{user_id}" => {"$exists" => true}}]
-    resp = get_items_query('pathPricing', query)
+    resp = get_items_query('hubRoutePricings', query)
     return resp.to_a
   end
 
-  def update_path_pricing(key, data)
-    update_item('pathPricing', {_id: key }, data)
+  def update_hub_route_pricing(key, data)
+    update_item('hubRoutePricings', {_id: key }, data)
   end
 end
 
