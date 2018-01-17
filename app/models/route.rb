@@ -183,7 +183,7 @@ class Route < ApplicationRecord
 
   def load_types
     load_types = TransportCategory::LOAD_TYPES.reject do |load_type|
-      get_route_path_pricings(id, TransportCategory.load_type(load_type).ids).empty?
+      get_hub_route_pricings(id, TransportCategory.load_type(load_type).ids).empty?
     end
   end
 

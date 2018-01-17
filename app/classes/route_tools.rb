@@ -5,17 +5,17 @@ module RouteTools
     	{ "tenant_id"  => {"$eq" => tenant_id} }, 
     	{ "#{user_id}" => {"$exists" => true} }
     ]
-    path_pricings = get_items_query('pathPricing', query)
-    return path_pricings.map { |path_pricing| path_pricing["route"] }.uniq
+    hub_route_pricings = get_items_query('hubRoutePricings', query)
+    return hub_route_pricings.map { |hub_route_pricing| hub_route_pricing["route"] }.uniq
   end
 
-  def get_route_path_pricings(route_id, transport_category_ids)
+  def get_hub_route_pricings(route_id, transport_category_ids)
     query = [ 
-      { "route" => { "$eq" => route_id } }, 
-      { "transport_category" => { "$in" => transport_category_ids } }
+      { "route_id" => { "$eq" => route_id } }, 
+      { "transport_category_id" => { "$in" => transport_category_ids } }
     ]
-    path_pricings = get_items_query('pathPricing', query)
-    return path_pricings.to_a
+    hub_route_pricings = get_items_query('hubRoutePricings', query)
+    return hub_route_pricings.to_a
   end
 
   def get_route_option(route)
