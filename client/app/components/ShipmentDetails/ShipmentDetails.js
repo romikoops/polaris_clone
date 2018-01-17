@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import GmapsLoader from '../../hocs/GmapsLoader';
 import styles from './ShipmentDetails.scss';
-import { moment } from '../../constants';
+import { moment, incoterms } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { RoundButton } from '../RoundButton/RoundButton';
