@@ -826,7 +826,6 @@ module ExcelTools
           "hub_route_id"        => hubroute.id,
           "service_code"        => row[:service_code],
           "inclusive_surcharge" => row[:inclusive_surcharge]
-          
         }
       end
 
