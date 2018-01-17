@@ -15,7 +15,7 @@ AWS_BUCKET=imcdev
 RDS_DB_NAME=ebdb
 RDS_DB_USERNAME=imcdab
 RDS_DB_PASSWORD=Sh1pmetimb3rs
-RDS_HOSTNAME=aaj0n86e5nobk4.cvwyyvbuvazx.us-east-1.rds.amazonaws.com
+RDS_HOSTNAME=ebdb.cvwyyvbuvazx.us-east-1.rds.amazonaws.com
 RDS_PORT=5432
 TEST=test
 
