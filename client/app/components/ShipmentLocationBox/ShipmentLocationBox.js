@@ -749,6 +749,7 @@ export class ShipmentLocationBox extends Component {
                 <style dangerouslySetInnerHTML={{__html: `
                     .react-toggle--checked .react-toggle-track {
                         background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                        border: none;
                     }
                 `}} />
             </div>
