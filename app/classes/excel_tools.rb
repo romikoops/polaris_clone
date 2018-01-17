@@ -827,9 +827,7 @@ module ExcelTools
           "service_code"        => row[:service_code],
           "inclusive_surcharge" => row[:inclusive_surcharge]
         }
-      end
-
-      tmpPrice = new_pricings[pricing_key]
+      end 
 
       cargo_classes = [
         'fcl_20f',
@@ -858,13 +856,9 @@ module ExcelTools
         cust_id = row[:customer_id].to_i
         ded_bool = true
       end
-
-      tmpPrice["cargo_classes"]["fcl_20f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_20_rate])
-      tmpPrice["cargo_classes"]["fcl_40f"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_rate])
-      tmpPrice["cargo_classes"]["fcl_40f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_40_hq_rate])
-      tmpPrice["cargo_classes"]["fcl_45f_hq"][row[:charge]] = price_split(row[:rate_basis], row[:fcl_45_hq_rate])
-     
-
+      new_pricings[pricing_key]["cargo_classes"].each do |cargo_class, cargo_class_prices|
+        cargo_class[row[:charge] = price_split(row[:rate_basis], row[rate_key(cargo_class)])
+      end
     end
 
     new_pricings.each do |pricing_key, pricing|
@@ -922,5 +916,11 @@ module ExcelTools
       "rate" => vals[0].to_i,
       "rate_basis" => basis
     }
+  end
+
+  def rate_key(cargo_class)
+    base_str = cargo_class.clone
+    base_str[cargo_class.rindex("f")] = ""
+    "#{base_str}_rate".to_sym
   end
 end
