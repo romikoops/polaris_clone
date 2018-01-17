@@ -20,7 +20,7 @@ export class BookingConfirmation extends Component {
         window.scrollTo(0, 0);
     }
     render() {
-        const { theme, shipmentData, tenant, user } = this.props;
+        const { theme, shipmentData, tenant, user, shipmentDispatch } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
 
         const {
@@ -191,7 +191,7 @@ export class BookingConfirmation extends Component {
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                   <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" />
+                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
                   </div>
                 </div>
             </div>

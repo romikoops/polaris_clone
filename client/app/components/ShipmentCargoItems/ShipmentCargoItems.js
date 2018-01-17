@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
 import defs from '../../styles/default_classes.scss';
+import Select from 'react-select';
+import '../../styles/select-css-custom.css';
+import styled from 'styled-components';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -13,6 +16,7 @@ export class ShipmentCargoItems extends Component {
         this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this);
         this.state = {firstRenderInputs: !this.props.nextStageAttempt};
         this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
+        this.handleCargoItemQ = this.handleCargoItemQ.bind(this);
     }
 
     handleCargoChange(event) {
@@ -30,7 +34,10 @@ export class ShipmentCargoItems extends Component {
         this.props.addCargoItem();
         this.setState({firstRenderInputs: true});
     }
-
+    handleCargoItemQ(ev) {
+        const ev1 = { target: { name: 'quantity', value: ev } };
+        this.props.handleDelta(ev1);
+    }
     toggleDangerousGoods() {
         const event = {
             target: {
@@ -49,6 +56,28 @@ export class ShipmentCargoItems extends Component {
         const { cargoItems, handleDelta } = this.props;
         const cargosAdded = [];
         const newCargoItem = cargoItems[0];
+        const StyledSelect = styled(Select)`
+            .Select-control {
+                background-color: #F9F9F9;
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2 !important;
+            }
+            .Select-menu-outer {
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2;
+            }
+            .Select-value {
+                background-color: #F9F9F9;
+                border: 1px solid #F2F2F2;
+            }
+            .Select-option {
+                background-color: #F9F9F9;
+            }
+        `;
+        const numbers = [];
+        for (let i = 1; i <= 20; i++) {
+            numbers.push({label: i, value: i});
+        }
         if (cargoItems) {
             cargoItems.forEach((cont, i) => {
                 if (i !== 0) {
@@ -92,7 +121,7 @@ export class ShipmentCargoItems extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Gross Weight </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
@@ -113,7 +142,7 @@ export class ShipmentCargoItems extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Height </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
@@ -134,7 +163,7 @@ export class ShipmentCargoItems extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Width </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
@@ -155,7 +184,7 @@ export class ShipmentCargoItems extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Length </p>
                             <div className={`flex-95 layout-row ${styles.input_box}`}>
                                 <ValidatedInput
@@ -176,7 +205,19 @@ export class ShipmentCargoItems extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
+                            <p className="flex-100"> No. of Cargo Items </p>
+                            <StyledSelect
+                                placeholder={newCargoItem.quantity}
+                                className={styles.select}
+                                name="container-quantity"
+                                value={newCargoItem.quantity}
+                                options={numbers}
+                                simpleValue
+                                onChange={this.handleCargoItemQ}
+                            />
+                        </div>
+                        <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
                             <p className="flex-100"> Dangerous Goods </p>
                             <Checkbox
                                 onChange={this.toggleDangerousGoods}

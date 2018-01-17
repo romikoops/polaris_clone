@@ -1,27 +1,27 @@
 {
     "theme": {
       "colors": {
-        "primary": "#0EAF50",
-        "secondary": "#008ACB",
-        "brightPrimary": "#06CA52",
-        "brightSecondary": "#0CA7F7"
+        "primary": "#1E5495",
+        "secondary": "#8FB4DC",
+        "brightPrimary": "#2588f9",
+        "brightSecondary": "#9FDAFC"
       },
-      "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
-      "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png"
+      "logoLarge": "https://assets.itsmycargo.com/assets/logos/nordiclogosmall.png",
+      "logoSmall": "https://assets.itsmycargo.com/assets/logos/nordiclogosmall.png"
     },
     "addresses": {
-      "main":"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+      "main":"Bataljonsgatan 12,553 05 Jönköping, Sweden"
     },
     "phones":{
-      "main":"+46 31-85 32 00",
+      "main":"+46 36 291 40 04",
       "support": "0173042031020"
     },
     "emails": {
-      "sales": "sales@greencarrier.com",
-      "support": "support@greencarrier.com"
+      "sales": "sales@nordicconsolidators.com",
+      "support": "info@nordicconsolidators.com"
     },
-    "subdomain": "greencarrier5",
-    "name": "Greencarrier",
+    "subdomain": "nordicconsolidators",
+    "name": "Nordic Consolidators",
     "scope": {
       "modes_of_transport": {
         "ocean": {

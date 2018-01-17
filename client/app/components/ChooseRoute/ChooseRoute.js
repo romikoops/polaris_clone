@@ -147,7 +147,7 @@ export class ChooseRoute extends Component {
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row">
-                            <BestRoutesBox moT={this.state.selectedMoT} user={user} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
+                            <BestRoutesBox moT={this.state.selectedMoT} user={user} chooseResult={this.chooseResult} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>

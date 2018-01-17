@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get "/health_check", to: "server_checks#health_check"
+  get "/", to: "server_checks#health_check"
 
 
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
@@ -101,6 +102,7 @@ Rails.application.routes.draw do
   get "/documents/download/:document_id", 
     to: "documents#download_redirect", as: :document_download
   get "/documents/delete/:document_id", to: "documents#delete", as: :document_delete
+  post "/admin/documents/action/:id", to: "admin/shipments#document_action"
 
   get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
     controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading

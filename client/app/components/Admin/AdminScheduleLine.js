@@ -88,7 +88,7 @@ export class AdminScheduleLine extends Component {
                                     {' '}
                                     {originHub.hub_code
                                         ? originHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>
@@ -108,7 +108,7 @@ export class AdminScheduleLine extends Component {
                                     {' '}
                                     {destHub.hub_code
                                         ? destHub.hub_code
-                                        : 'Code Unavailable'}{' '}
+                                        : ''}{' '}
                                 </p>
                             </div>
                         </div>

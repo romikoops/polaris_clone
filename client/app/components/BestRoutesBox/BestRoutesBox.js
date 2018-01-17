@@ -27,6 +27,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
+                onClick={() => this.props.chooseRoute(fastestFare)}
             >
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Fastest route</h4>
@@ -59,6 +60,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
+                onClick={() => this.props.chooseRoute(cheapestFare)}
             >
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Cheapest Route</h4>
@@ -104,6 +106,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
+                onClick={() => this.props.chooseRoute(bestFare)}
                 style={style}
             >
                 <div className="flex-100 layout-row">

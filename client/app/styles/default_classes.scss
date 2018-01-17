@@ -60,11 +60,21 @@
 
 }
 :global {
+  .content_width {
+    width: 1000px;
+    // box-shadow: 1px 1px 2px rgba(0,0,0,0.25);
+    @media screen and (min-width: 1920px) {
+      width: 1200px;
+    }
+  }
   .hundred {
     min-height: 100vh;
   }
   .pointy {
     cursor: pointer;
+  }
+  .letter_2 {
+    letter-spacing: 2px;
   }
   .sub_header_text {
     margin: 0;

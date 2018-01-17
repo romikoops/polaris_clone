@@ -12,8 +12,9 @@ class OfferCalculator
     @destination_hubs = []
 
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
-    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false   
-    
+    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
+
+    @shipment.incoterm = params[:shipment][:incoterm]
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
@@ -43,11 +44,11 @@ class OfferCalculator
   end
 
   def calc_offer!
-    determine_route!
-    determine_hubs!    
-    determine_longest_trucking_time!
-    determine_schedules!
-    add_schedules_charges!
+    determine_route! 
+    determine_hubs!     
+    determine_longest_trucking_time! 
+    determine_schedules! 
+    add_schedules_charges! 
     
     convert_currencies!
   end

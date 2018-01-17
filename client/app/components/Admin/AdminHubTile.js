@@ -27,7 +27,7 @@ export class AdminHubTile extends Component {
         if (!hub) {
             return '';
         }
-        const bg1 = { backgroundImage: 'url(' + hub.location.photo + ')' };
+        const bg1 = hub && hub.location && hub.location.photo  ? { backgroundImage: 'url(' + hub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/aerial_port_sm.jpg")'};
         const gradientStyle = {
             background:
                 theme && theme.colors

@@ -4,17 +4,20 @@ import GmapsLoader from '../../hocs/GmapsLoader';
 import styles from './ShipmentDetails.scss';
 import errorStyles from '../../styles/errors.scss';
 import defaults from '../../styles/default_classes.scss';
-import { moment } from '../../constants';
+import { moment, incoterms } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
-import { RouteSelector } from '../RouteSelector/RouteSelector';
+// import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { isEmpty } from '../../helpers/isEmpty.js';
 import * as Scroll from 'react-scroll';
+import Select from 'react-select';
+import '../../styles/select-css-custom.css';
+import styled from 'styled-components';
 
 export class ShipmentDetails extends Component {
     constructor(props) {
@@ -76,6 +79,7 @@ export class ShipmentDetails extends Component {
         this.handleContainerChange = this.handleContainerChange.bind(this);
         this.deleteCargo = this.deleteCargo.bind(this);
         this.scrollTo = this.scrollTo.bind(this);
+        this.setIncoTerm = this.setIncoTerm.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -286,6 +290,7 @@ export class ShipmentDetails extends Component {
         data.shipment.has_on_carriage = this.state.has_on_carriage;
         data.shipment.has_pre_carriage = this.state.has_pre_carriage;
         data.shipment.planned_pickup_date = this.state.selectedDay;
+        data.shipment.incoterm = this.state.incoterm;
         this.props.setShipmentDetails(data);
     }
 
@@ -300,9 +305,12 @@ export class ShipmentDetails extends Component {
     toggleCarriage(target, value) {
         this.setState({ [target]: value });
     }
+    setIncoTerm(opt) {
+        this.setState({incoterm: opt.value});
+    }
 
     render() {
-        const { theme, messages, shipmentData } = this.props;
+        const { theme, messages, shipmentData, shipmentDispatch } = this.props;
         let cargoDetails;
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
@@ -333,13 +341,13 @@ export class ShipmentDetails extends Component {
             // cargoDetails = this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
 
-        const rSelect = (
-            <RouteSelector
-                theme={theme}
-                setRoute={this.selectRoute}
-                routes={shipmentData.routes}
-            />
-        );
+        // const rSelect = (
+        //     <RouteSelector
+        //         theme={theme}
+        //         setRoute={this.selectRoute}
+        //         routes={shipmentData.routes}
+        //     />
+        // );
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -363,16 +371,34 @@ export class ShipmentDetails extends Component {
         };
 
         const showDayPickerErrors = this.state.nextStageAttempt && !this.state.selectedDay;
+        const StyledSelect = styled(Select)`
+            .Select-control {
+                background-color: #F9F9F9;
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2 !important;
+            }
+            .Select-menu-outer {
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2;
+            }
+            .Select-value {
+                background-color: #F9F9F9;
+                border: 1px solid #F2F2F2;
+            }
+            .Select-option {
+                background-color: #F9F9F9;
+            }
+        `;
         const dayPickerSection = (
             <div
                 className={`${
                     styles.date_sec
                 } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
             >
-                <div className="layout-row flex-none layout-wrap">
-                    <p className="flex-100">
+                <div className="layout-row flex-50 layout-align-start-center layout-wrap">
+                    <p className="flex-100 letter_2">
                         {' '}
-                        {'Approximate Pickup Date:'}
+                        {this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}
                         {' '}
                     </p>
                     <div className={'flex-none layout-row ' + styles.dpb}>
@@ -394,23 +420,43 @@ export class ShipmentDetails extends Component {
                     </div>
 
                 </div>
+                <div className="flex-50 layout-row layout-wrap layout-align-end-center">
+                    <div className="flex-100 layout-row layout-align-end-center">
+                        <p className="flex-none letter_2">
+                        {' '}
+                        {'Select Incoterm:'}
+                        {' '}
+                        </p>
+                    </div>
+                    <StyledSelect
+                        name="incoterms"
+                        className={`${styles.select} flex-80`}
+                        value={this.state.incoterm}
+                        options={incoterms}
+                        onChange={this.setIncoTerm}
+                    />
+                </div>
             </div>
         );
+        // {this.state.routeSet ? mapBox : rSelect}
+        // {this.state.routeSet ? dayPickerSection : '' }
+        // {this.state.routeSet ? cargoDetails : ''}
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                    {this.state.routeSet ? dayPickerSection : '' }
+                    { dayPickerSection }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
-                    {this.state.routeSet ? mapBox : rSelect}
+
+                    {mapBox}
                 </div>
                 <div
                     className={`layout-row flex-100 layout-wrap ${
                         styles.cargo_sec
                     }`}
                 >
-                    {this.state.routeSet ? cargoDetails : ''}
+                    {cargoDetails}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div
@@ -419,7 +465,7 @@ export class ShipmentDetails extends Component {
                         } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
                     >
                         <RoundButton
-                            text="Choose from haulage options"
+                            text="Get Offers"
                             handleNext={this.handleNextStage}
                             theme={theme}
                             active
@@ -438,6 +484,7 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
+                            handleNext={() => shipmentDispatch.goTo('/account')}
                         />
                     </div>
                 </div>

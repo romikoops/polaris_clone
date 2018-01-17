@@ -124,11 +124,6 @@ module MongoTools
   private
 
   def init
-    if Rails.env == 'development'
-      client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => 'development')
-    else
-      client = Mongo::Client.new('mongodb://imcdbadmin:DZYKIdOZk3vP6erN@staging-shard-00-00-sco92.mongodb.net:27017,staging-shard-00-01-sco92.mongodb.net:27017,staging-shard-00-02-sco92.mongodb.net:27017/test?ssl=true&replicaSet=Staging-shard-0&authSource=admin')
-    end
-    return client
+    return $db
   end
 end

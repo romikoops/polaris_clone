@@ -2,7 +2,37 @@ module MultiTenantTools
   include ExcelTools
   def test
     tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    newSiteFn(tenant)
+    new_site(tenant, false)
+  end
+  def update_indexes
+    Tenant.all.each do |tenant|
+        title = tenant.name + " | ItsMyCargo"
+        favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
+        # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
+        indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+        titles = indexHtml.xpath("//title")
+        titles[0].content = title
+        links = indexHtml.xpath("//link")
+
+        links.each do |lnk|
+          if lnk.attributes && lnk.attributes["href"] && lnk.attributes["href"].value == "https://assets.itsmycargo.com/assets/favicon.ico"
+            lnk.content = favicon
+          end
+        end
+          
+          s3 = Aws::S3::Client.new(
+            access_key_id: ENV['AWS_KEY'],
+            secret_access_key: ENV['AWS_SECRET'],
+            region: "us-east-1"
+          )
+          objKey = tenant["subdomain"] + ".html"
+          newHtml = indexHtml.to_html
+         File.open("blank.html", 'w') { |file|
+          file.write(newHtml)
+           }
+        upFile = open("blank.html")
+        s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+      end
   end
   def new_site(tenant, is_demo)
         # new_tenant = Tenant.create(tenant)
