@@ -86,6 +86,7 @@ export class ShipmentLocationBox extends Component {
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
+        // TO DO: AllNexuses changed to object with origin and dest arrays
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
@@ -469,13 +470,10 @@ export class ShipmentLocationBox extends Component {
     }
 
     render() {
-        const nexuses = [];
+        const { allNexuses } = this.props;
+        const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+        const destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
 
-        if (this.props.allNexuses) {
-            this.props.allNexuses.forEach(nex => {
-                nexuses.push({ value: nex, label: nex.name });
-            });
-        }
         const StyledSelect = styled(Select)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -503,7 +501,7 @@ export class ShipmentLocationBox extends Component {
                 name="origin-hub"
                 className={`${styles.select}`}
                 value={this.state.oSelect}
-                options={nexuses}
+                options={originOptions}
                 onChange={this.setOriginHub}
             />
         );
@@ -513,7 +511,7 @@ export class ShipmentLocationBox extends Component {
                 name="destination-hub"
                 className={`${styles.select}`}
                 value={this.state.dSelect}
-                options={nexuses}
+                options={destinationOptions}
                 onChange={this.setDestHub}
             />
         );

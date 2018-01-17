@@ -18,14 +18,17 @@ module ShippingTools
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
-
+    origins = []
+    destinations = []
     routes.map! do |route|
+      origins << {value: route["origin_nexus_id"], label: route["origin_nexus"]}
+      destinations << {value: route["destination_nexus_id"], label: route["destination_nexus"]}
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
     return {
       shipment:    shipment,
-      all_nexuses: Location.nexuses,
+      all_nexuses: {origins: origins.uniq, destinations: destinations.uniq},
       routes:      routes
     }
   end 
