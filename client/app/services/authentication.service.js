@@ -1,10 +1,11 @@
 import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
-import { authHeader } from '../helpers';
-
+import { authHeader, getSubdomain } from '../helpers';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
 function logout() {
     // remove user from local storage to log user out
-    localStorage.removeItem('user');
+    localStorage.removeItem(cookieKey);
 }
 
 function login(data) {
@@ -39,7 +40,7 @@ function login(data) {
             // login successful if there's a jwt token in the response
             if (user) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem(cookieKey, JSON.stringify(user));
             }
 
             return user;
@@ -47,7 +48,7 @@ function login(data) {
 }
 
 function getStoredUser() {
-    const sortedUser = JSON.parse(localStorage.getItem('user'));
+    const sortedUser = JSON.parse(localStorage.getItem(cookieKey));
     return sortedUser ? sortedUser : {};
 }
 
@@ -84,8 +85,8 @@ function register(user) {
             // login successful if there's a jwt token in the response
             if (data) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(data));
-                const user2 = localStorage.getItem('user');
+                localStorage.setItem(cookieKey, JSON.stringify(data));
+                const user2 = localStorage.getItem(cookieKey);
                 console.log(user2);
             }
             return data;
@@ -115,7 +116,7 @@ function updateUser(user, req) {
                 }
                 resp = {data: data.data.user};
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(resp));
+                localStorage.setItem(cookieKey, JSON.stringify(resp));
             }
             return resp;
         });

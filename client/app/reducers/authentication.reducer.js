@@ -1,6 +1,8 @@
 import { authenticationConstants } from '../constants';
-
-const user = JSON.parse(localStorage.getItem('user'));
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+const user = JSON.parse(localStorage.getItem(cookieKey));
 const initialState = user ? { loggedIn: true, user } : {};
 
 export function authentication(state = initialState, action) {

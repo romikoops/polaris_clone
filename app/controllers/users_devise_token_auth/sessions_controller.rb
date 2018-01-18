@@ -8,7 +8,7 @@ module UsersDeviseTokenAuth
     #   render json: {data: @resource.errors}
     # end
     def create
-      # 
+      # user request.headers['origin'] to determine tenant
       super
     end
     def render_create_error_not_confirmed

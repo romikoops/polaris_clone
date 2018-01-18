@@ -69,7 +69,7 @@ class OfferCalculator
   private
 
   def determine_route!
-    @shipment.route = Route.for_locations(@shipment.origin, @shipment.destination)
+    @shipment.route = Route.for_locations(@shipment)
   end
 
   def determine_hubs!

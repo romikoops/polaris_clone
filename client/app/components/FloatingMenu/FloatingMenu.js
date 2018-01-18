@@ -49,8 +49,9 @@ export class FloatingMenu extends Component {
             ${Title}:hover & {animation: ${rotateIcon} 1.5s linear;}
         `;
         const currentStyle = this.state.expand ? styles.open : styles.closed;
+        const wrapperStyle = this.state.expand ? styles.wrapper_max : styles.wrapper_min;
         return (
-            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.wrapper}`}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.wrapper} ${wrapperStyle}`}>
                 <Title className="flex-100 layout-row layout-align-start-center pointy" onClick={this.toggleMenu}>
                     <AnimIcon className={`flex-none layout-row layout-align-center-center ${styles.icon_circle}`}>
                         <i className="fa fa-bars flex-none clip" style={textStyle}/>

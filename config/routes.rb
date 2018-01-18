@@ -3,14 +3,14 @@ Rails.application.routes.draw do
   get "/", to: "server_checks#health_check"
 
 
-  mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+  mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
     registrations: 'users_devise_token_auth/registrations'
   }
   
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
-
+resources :subdomain, only: [:show] do
   namespace :admin do
     resources :shipments do
       collection do
@@ -113,4 +113,5 @@ Rails.application.routes.draw do
 
   get "search/hscodes/:query" => "search#search_hs_codes"
   post 'super_admins/new_demo' => "super_admins#new_demo_site"
+end
 end
