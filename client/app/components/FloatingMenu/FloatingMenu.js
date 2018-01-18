@@ -7,7 +7,7 @@ export class FloatingMenu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            expand: false
+            expand: true
         };
         this.toggleMenu = this.toggleMenu.bind(this);
     }

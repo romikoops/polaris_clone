@@ -9,7 +9,7 @@ export class BestRoutesBox extends Component {
     }
     calcFastest(schedules, fees) {
         let fastestTime;
-        // let fastestSchedule;
+        let fastestSchedule;
         let fastestFare;
         schedules.forEach(sched => {
             if (sched.mode_of_transport === this.props.moT) {
@@ -17,7 +17,7 @@ export class BestRoutesBox extends Component {
                 const schedKey = sched.hub_route_key;
                 if (!fastestTime || travelTime < fastestTime) {
                     fastestTime = travelTime;
-                    // fastestSchedule = sched;
+                    fastestSchedule = sched;
                     fastestFare = fees[schedKey].total;
                 }
             }
@@ -27,7 +27,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
-                onClick={() => this.props.chooseRoute(fastestFare)}
+                onClick={() => this.props.chooseResult(fastestSchedule)}
             >
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Fastest route</h4>
@@ -41,7 +41,7 @@ export class BestRoutesBox extends Component {
 
     calcCheapest(schedules, fees) {
         let cheapestFare;
-        // let cheapestSchedule;
+        let cheapestSchedule;
         schedules.forEach(sched => {
             if (sched.mode_of_transport === this.props.moT) {
                 const schedKey = sched.hub_route_key;
@@ -51,7 +51,7 @@ export class BestRoutesBox extends Component {
                 const fare = fees[schedKey].total;
                 if (!cheapestFare || fare < cheapestFare) {
                     cheapestFare = fare;
-                    // cheapestSchedule = sched;
+                    cheapestSchedule = sched;
                 }
             }
         });
@@ -60,7 +60,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
-                onClick={() => this.props.chooseRoute(cheapestFare)}
+                onClick={() => this.props.chooseResult(cheapestSchedule)}
             >
                 <div className="flex-100 layout-row">
                     <h4 className="flex-none">Cheapest Route</h4>
@@ -85,7 +85,7 @@ export class BestRoutesBox extends Component {
         });
         let lowScore = 100;
         let bestFare;
-        // let bestOption;
+        let bestOption;
         schedules.forEach(sched => {
             if (sched.mode_of_transport === this.props.moT) {
                 const timeScore = timeArray.indexOf(sched);
@@ -96,7 +96,7 @@ export class BestRoutesBox extends Component {
                 const totalScore = timeScore + fareScore + depScore;
                 if (totalScore < lowScore) {
                     lowScore = totalScore;
-                    // bestOption = sched;
+                    bestOption = sched;
                     bestFare = fare;
                 }
             }
@@ -106,7 +106,7 @@ export class BestRoutesBox extends Component {
                 className={`flex-none layout-row layout-wrap ${
                     styles.best_card
                 }`}
-                onClick={() => this.props.chooseRoute(bestFare)}
+                onClick={() => this.props.chooseResult(bestOption)}
                 style={style}
             >
                 <div className="flex-100 layout-row">
@@ -151,30 +151,6 @@ export class BestRoutesBox extends Component {
                     ? this.calcCheapest(schedules, fees)
                     : ''}
                 {shipmentData.shipment ? this.calcFastest(schedules, fees) : ''}
-                {/* <div className="flex-30 layout-row layout-wrap" style={activeBtnStyle}>
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Best Deal</h4>
-            </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">{}</p>
-            </div>
-          </div>
-          <div className="flex-30 layout-row layout-wrap">
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Cheapest Route</h4>
-            </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">500 EUR</p>
-            </div>
-          </div>
-          <div className="flex-30 layout-row layout-wrap">
-            <div className="flex-100 layout-row">
-              <h4 className="flex-none">Fastest route</h4>
-            </div>
-            <div className="flex-100 layout-row">
-              <p className="flex-none">500 EUR</p>
-            </div>
-          </div>*/}
             </div>
         );
     }

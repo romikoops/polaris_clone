@@ -77,11 +77,19 @@ export class AdminDashboard extends Component {
         const filteredClients = clients ? clients.filter(x => !x.guest) : [];
         const schedArr = [];
         console.log(shipments);
-        const mergedRequestedShipments = shipments ? shipments.map((sh) => {
+        const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
+            return this.prepShipment(sh, clientHash, hubHash);
+        }) : false;
+        const mergedFinishedShipments = shipments && shipments.finished ? shipments.finished.map((sh) => {
+            return this.prepShipment(sh, clientHash, hubHash);
+        }) : false;
+        const mergedRequestedShipments = shipments && shipments.requested ? shipments.requested.map((sh) => {
             return this.prepShipment(sh, clientHash, hubHash);
         }) : false;
         // const mergedRequestedShipments = false;
-        const openShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const openShipments = mergedOpenShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const finishedShipments = mergedFinishedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const requestedShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
@@ -94,13 +102,6 @@ export class AdminDashboard extends Component {
         }
         const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5);
 
-        // const requestedShipments = shipments.requested.shipments.map((ship) => {
-        //     return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
-        // });
-
-        // const finishedShipments = shipments.finished.shipments.map((ship) => {
-        //     return <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={handleShipmentAction} client={clientHash[ship.shipper_id]}/>;
-        // });
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -110,7 +111,9 @@ export class AdminDashboard extends Component {
                     <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                    { requestedShipments }
                     { openShipments }
+                    { finishedShipments }
                 </div>
                 <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">

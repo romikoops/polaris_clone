@@ -8,12 +8,14 @@ import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
+import { Checkbox } from '../Checkbox/Checkbox';
 
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
             addressBook: false,
+            acceptTerms: false,
             consignee: {
                 firstName: '',
                 lastName: '',
@@ -79,6 +81,7 @@ export class BookingDetails extends Component {
         this.calcInsurance = this.calcInsurance.bind(this);
         this.setHsCode = this.setHsCode.bind(this);
         this.deleteCode = this.deleteCode.bind(this);
+        this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage, hideRegistration} = this.props;
@@ -98,6 +101,10 @@ export class BookingDetails extends Component {
             totalGoodsValue: obj.totalGoodsValue,
             cargoNotes: obj.cargoNotes
         });
+    }
+    toggleAcceptTerms() {
+        this.setState({ acceptTerms: !this.state.acceptTerms });
+        // this.props.handleInsurance();
     }
     setHsCode(id, codes) {
         let exCodes;
@@ -272,7 +279,7 @@ export class BookingDetails extends Component {
             userLocations,
             schedules
         } = shipmentData;
-        const { consignee, shipper, notifyees } = this.state;
+        const { consignee, shipper, notifyees, acceptTerms } = this.state;
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -294,6 +301,20 @@ export class BookingDetails extends Component {
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );
+        const acceptedBtn = (<div className="flex-none layout-row">
+            <RoundButton
+                active
+                handleNext={this.toNextStage}
+                theme={theme}
+                text="Finish Booking"
+            />
+        </div>);
+        const nonAcceptedBtn = (<div className="flex-none layout-row">
+            <RoundButton
+                theme={theme}
+                text="Finish Booking"
+            />
+        </div>);
         const addrView = this.state.addressBook ? aBook : cForm;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -321,23 +342,20 @@ export class BookingDetails extends Component {
                     currencies={currencies}
                     user={user}
                 />
-               <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        <div className="flex-none layout-row">
-                            <RoundButton
-                                active
-                                handleNext={this.toNextStage}
-                                theme={theme}
-                                text="Finish Booking"
-                            />
+                        <div className="flex-15 layout-row layout-align-center-center">
+                            <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
                         </div>
-                       {/* <div className="flex-none offset-5 layout-row">
-                            <RoundButton
-                                handleNext={this.saveDraft}
-                                text="Save as Draft"
-                                iconClass="fa-floppy-o"
-                            />
-                        </div> */}
+                        <div className="flex layout-row layout-align-start-center">
+                            <div className="flex-5"></div>
+                            <p className="flex-none">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
+                        { acceptTerms ? acceptedBtn : nonAcceptedBtn}
                     </div>
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>
