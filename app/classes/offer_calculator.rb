@@ -15,6 +15,7 @@ class OfferCalculator
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
 
     @shipment.incoterm = params[:shipment][:incoterm]
+    
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 

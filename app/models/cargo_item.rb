@@ -18,7 +18,7 @@ class CargoItem < ApplicationRecord
       quantity = value["quantity"].to_i
       unless value["_destroy"] == "1"
         quantity.times do
-          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z)
+          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z, cargo_item_type_id: value["cargo_item_type_id"])
         end
       end
     end

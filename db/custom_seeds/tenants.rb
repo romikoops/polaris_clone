@@ -108,7 +108,7 @@ tenant_data = [
       sales: "sales@nordicconsolidators.com",
       support: "info@nordicconsolidators.com"
     },
-    subdomain: "nordicconsolidators1",
+    subdomain: "nordicconsolidators",
     name: "Nordic Consolidators",
     scope: {
       modes_of_transport: {

@@ -458,14 +458,22 @@ export class ShipmentLocationBox extends Component {
 
         this.setState({ [target]: tmpAddress });
         this.props.setTargetAddress(target, tmpAddress);
-        this.setState({
-            autocomplete: { ...this.state.autocomplete, [target]: true }
-        });
+        // this.setState({
+        //     autocomplete: { ...this.state.autocomplete, [target]: true }
+        // });
     }
     resetAuto(target) {
-        // this.state.autoListener[target].clearListeners();
+        const tmpAddress = {
+            number: '',
+            street: '',
+            zipCode: '',
+            city: '',
+            country: '',
+            fullAddress: ''
+        };
         this.setState({
-            autocomplete: { ...this.state.autocomplete, [target]: false }
+            autoText: { ...this.state.autoText, [target]: '' },
+            [target]: tmpAddress
         });
     }
 
@@ -745,7 +753,7 @@ export class ShipmentLocationBox extends Component {
                         <div className="flex"></div>
                     </div>
                 </div>
-                <style dangerouslySetInnerHTML={{__html: `
+                { theme ? <style dangerouslySetInnerHTML={{__html: `
                     .react-toggle--checked .react-toggle-track {
                         background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
                         border: none;
@@ -754,7 +762,7 @@ export class ShipmentLocationBox extends Component {
                         background: rgba(255, 255, 255, 0.33);
                         border: none;
                     }
-                `}} />
+                `}} /> : ''}
             </div>
         );
     }

@@ -205,3 +205,15 @@ export const incoterms = [
     { value: 'CFR', label: 'CFR - Cost and Freight (named port of destination)'},
     { value: 'CIF', label: 'CIF - Cost, Insurance and Freight (named port of destination)'}
 ];
+
+export const colliTypes = [
+    {x: 1016, y: 1219, key: '1016 × 1219', label: '1016 × 1219 Pallet: North America'},
+    {x: 1000, y: 1200, key: '1000 × 1200', label: '1000 × 1200 Pallet: Europe, Asia'},
+    {x: 1165, y: 1165, key: '1165 × 1165', label: '1165 × 1165 Pallet: Australia'},
+    {x: 1067, y: 1067, key: '1067 × 1067', label: '1067 × 1067 Pallet: North America, Europe, Asia'},
+    {x: 1100, y: 1100, key: '1100 × 1100', label: '1100 × 1100 Pallet: Asia'},
+    {x: 800,  y: 1200, key: '800 × 1200', label: '800 × 1200 Pallet: Europe'},
+    {key: 'Cartons', label: 'Cartons'},
+    {key: 'Crates', label: 'Crates'},
+    {key: 'Rolls', label: 'Rolls'}
+];
