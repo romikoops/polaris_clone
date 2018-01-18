@@ -249,6 +249,12 @@ export class ShipmentDetails extends Component {
             this.scrollTo('dayPicker');
             return;
         }
+
+        if (!this.state.incoterm) {
+            this.setState({ nextStageAttempt: true });
+            this.scrollTo('incoterms');
+            return;
+        }
         if (isEmpty(this.state.origin) || isEmpty(this.state.destination)) {
             this.setState({ nextStageAttempt: true });
             this.scrollTo('map');
@@ -263,7 +269,6 @@ export class ShipmentDetails extends Component {
             this.errorsExist(this.state.cargoItemErrors) &&
             this.errorsExist(this.state.containerErrors)
         ) {
-            console.log('(!) Errors exist (!)');
             this.setState({ nextStageAttempt: true });
             return;
         }
@@ -337,17 +342,8 @@ export class ShipmentDetails extends Component {
                     />
                 );
             }
-
-            // cargoDetails = this.state.shipment && this.state.shipment.load_type.includes('fcl') ? <ShipmentContainers containers={this.state.containers} addContainer={this.addNewContainer}/> : <ShipmentCargoItems cargoItems={this.state.cargoItems} addCargoItem={this.addNewCargoItem}/>;
         }
 
-        // const rSelect = (
-        //     <RouteSelector
-        //         theme={theme}
-        //         setRoute={this.selectRoute}
-        //         routes={shipmentData.routes}
-        //     />
-        // );
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -362,7 +358,7 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
             />
         );
-        const value = this.state.selectedDay
+        const formattedSelectedDay = this.state.selectedDay
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
@@ -370,31 +366,42 @@ export class ShipmentDetails extends Component {
             after: new Date(),
         };
 
-        const showDayPickerErrors = this.state.nextStageAttempt && !this.state.selectedDay;
+        const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;
+        const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm;
+
+        const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
+        const placeholderColorOverwrite = value => (
+            !value && this.props.nextStageAttempt ?
+                'color: rgb(211, 104, 80);' :
+                ''
+        );
         const StyledSelect = styled(Select)`
             .Select-control {
-                background-color: #F9F9F9;
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                background-color: ${props => backgroundColor(props.value)};
+                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
                 border: 1px solid #F2F2F2 !important;
             }
             .Select-menu-outer {
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
                 border: 1px solid #F2F2F2;
             }
             .Select-value {
-                background-color: #F9F9F9;
+                background-color: ${props => backgroundColor(props.value)};
                 border: 1px solid #F2F2F2;
+            }
+            .Select-placeholder {
+                background-color: ${props => backgroundColor(props.value)};
+                ${props => placeholderColorOverwrite(props.value)}
             }
             .Select-option {
                 background-color: #F9F9F9;
             }
         `;
         const dayPickerSection = (
-            <div
-                className={`${
-                    styles.date_sec
-                } layout-row flex-none ${defaults.content_width} layout-align-start-center`}
-            >
+            <div className={`
+                ${styles.date_sec} ${defaults.content_width}
+                layout-row flex-none layout-align-start-center
+            `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <p className="flex-100 letter_2">
                         {' '}
@@ -409,38 +416,42 @@ export class ShipmentDetails extends Component {
                             name="dayPicker"
                             placeholder="DD/MM/YYYY"
                             format="DD/MM/YYYY"
-                            value={value}
-                            className={`${styles.dpb_picker} ${showDayPickerErrors ? styles.with_errors : ''}`}
+                            value={formattedSelectedDay}
+                            className={`${styles.dpb_picker} ${showDayPickerError ? styles.with_errors : ''}`}
                             onDayChange={this.handleDayChange}
                             modifiers={future}
                         />
                         <span className={errorStyles.error_message}>
-                            {showDayPickerErrors ? 'Must not be blank' : ''}
+                            {showDayPickerError ? 'Must not be blank' : ''}
                         </span>
                     </div>
 
                 </div>
+
                 <div className="flex-50 layout-row layout-wrap layout-align-end-center">
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
-                        {' '}
-                        {'Select Incoterm:'}
-                        {' '}
+                            {' '}
+                            {'Select Incoterm:'}
+                            {' '}
                         </p>
                     </div>
-                    <StyledSelect
-                        name="incoterms"
-                        className={`${styles.select} flex-80`}
-                        value={this.state.incoterm}
-                        options={incoterms}
-                        onChange={this.setIncoTerm}
-                    />
+                    <div className="flex-80" name="incoterms" style={{position: 'relative'}}>
+                        <StyledSelect
+                            name="incoterms"
+                            className={styles.select}
+                            value={this.state.incoterm}
+                            options={incoterms}
+                            onChange={this.setIncoTerm}
+                        />
+                        <span className={errorStyles.error_message}>
+                            {showIncotermError ? 'Must not be blank' : ''}
+                        </span>
+                    </div>
                 </div>
             </div>
         );
-        // {this.state.routeSet ? mapBox : rSelect}
-        // {this.state.routeSet ? dayPickerSection : '' }
-        // {this.state.routeSet ? cargoDetails : ''}
+
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
@@ -448,22 +459,16 @@ export class ShipmentDetails extends Component {
                     { dayPickerSection }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
-
                     {mapBox}
                 </div>
-                <div
-                    className={`layout-row flex-100 layout-wrap ${
-                        styles.cargo_sec
-                    }`}
-                >
+                <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
                     {cargoDetails}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div
-                        className={`${
-                            styles.btn_sec
-                        } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
-                    >
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width}
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Get Offers"
                             handleNext={this.handleNextStage}
@@ -473,11 +478,10 @@ export class ShipmentDetails extends Component {
                     </div>
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div
-                        className={`${
-                            styles.btn_sec
-                        } layout-row ${defaults.content_width}  flex-none layout-wrap layout-align-start-start`}
-                    >
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width} 
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Back to Dashboard"
                             handleNext={this.returnToDashboard}
