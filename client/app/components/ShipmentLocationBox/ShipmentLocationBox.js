@@ -313,7 +313,6 @@ export class ShipmentLocationBox extends Component {
 
     handleTrucking(event) {
         const { name, checked } = event.target;
-        console.log(name, checked);
         this.setState({
             shipment: { ...this.state.shipment, [name]: checked }
         });
@@ -346,7 +345,6 @@ export class ShipmentLocationBox extends Component {
                 [key2]: val
             }
         });
-        // console.log(this.state[key1]);
     }
     setOriginHub(event) {
         if (event) {
@@ -383,7 +381,6 @@ export class ShipmentLocationBox extends Component {
         }
     }
     handleAuto(event) {
-        console.log(event.target);
         const {name, value} = event.target;
         this.setState({autoText: {[name]: value}});
     }
@@ -514,7 +511,7 @@ export class ShipmentLocationBox extends Component {
 
         const showOriginError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
-            <div style={{position: 'relative'}}>
+            <div style={{position: 'relative', margin: 'auto'}}>
                 <StyledSelect
                     name="origin-hub"
                     className={`${styles.select}`}
@@ -530,7 +527,7 @@ export class ShipmentLocationBox extends Component {
 
         const showDestinationError = !this.state.dSelect && this.props.nextStageAttempt;
         const destinationHubSelect = (
-            <div style={{position: 'relative'}}>
+            <div style={{position: 'relative', margin: 'auto'}}>
                 <StyledSelect
                     name="destination-hub"
                     className={`${styles.select}`}
@@ -545,8 +542,9 @@ export class ShipmentLocationBox extends Component {
             </div>
         );
 
+        let toggleLogic = this.state.shipment.has_pre_carriage ? styles.visible : '';
         const originFields = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
                 <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-none">Enter Pickup Address</p>
                 </div>
@@ -592,7 +590,10 @@ export class ShipmentLocationBox extends Component {
                     placeholder="Country"
                 />
                 <div className="flex-100 layout-row layout-align-start-center">
-                    <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('origin')}>
+                    <div
+                        className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                        onClick={() => this.resetAuto('origin')}
+                    >
                         <i className="fa fa-times flex-none"></i>
                         <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
                     </div>
@@ -614,8 +615,9 @@ export class ShipmentLocationBox extends Component {
             </div>
         );
 
+        toggleLogic = this.state.shipment.has_on_carriage ? styles.visible : '';
         const destFields = (
-            <div className="flex-100 layout-row layout-wrap">
+            <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
                 <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-none">Enter Delivery Address</p>
                 </div>
@@ -685,29 +687,9 @@ export class ShipmentLocationBox extends Component {
             if (target === 'origin' && !this.state.shipment.has_pre_carriage) {
                 return originHubSelect;
             }
-            // else if (
-            //     target === 'origin' &&
-            //     this.state.shipment.has_pre_carriage
-            // ) {
-            //     return this.state.autocomplete.origin
-            //         ? originFields
-            //         : '';
-            // }
-
-            if (
-                target === 'destination' &&
-                !this.state.shipment.has_on_carriage
-            ) {
+            if (target === 'destination' && !this.state.shipment.has_on_carriage) {
                 return destinationHubSelect;
             }
-            // else if (
-            //     target === 'destination' &&
-            //     this.state.shipment.has_on_carriage
-            // ) {
-            //     return this.state.autocomplete.destination
-            //         ? destFields
-            //         : '';
-            // }
             return '';
         };
         const { theme } = this.props;
@@ -729,12 +711,11 @@ export class ShipmentLocationBox extends Component {
                                 <label htmlFor="pre-carriage">Pre-Carriage</label>
                             </div>
                             <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                {/* <p className="flex-100"> Origin Address </p>*/}
                                 { this.state.shipment.has_pre_carriage ? originAuto : '' }
                                 { displayLocationOptions('origin') }
+                                { originFields }
                             </div>
                         </div>
-                        {/* <div ref="map" id="map" style={mapStyle} />*/}
                         <div className="flex-50 layout-row layout-wrap layout-align-end-start">
                             <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
                                 <Toggle
@@ -748,29 +729,14 @@ export class ShipmentLocationBox extends Component {
                                 <label htmlFor="on-carriage">On-Carriage</label>
                             </div>
                             <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                {/* <p className="flex-100">
-                                    {' '}
-                                    Destination Address{' '}
-                                </p>*/}
                                 { this.state.shipment.has_on_carriage ? destAuto : '' }
-                                {displayLocationOptions('destination')}
+                                { displayLocationOptions('destination') }
+                                { destFields }
                             </div>
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                         <div ref="map" id="map" style={mapStyle} />
-                    </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <div className="flex-none content_width layout-row layout-align-space-between-start">
-                        <div className="flex-10"></div>
-                        <div className="flex-33 layout-row layout-wrap layout-align-center-start">
-                            {this.state.shipment.has_pre_carriage ? originFields : ''}
-                        </div>
-                        <div className="flex-33 layout-row layout-wrap layout-align-center-start">
-                            {this.state.shipment.has_on_carriage ? destFields : ''}
-                        </div>
-                        <div className="flex-10"></div>
                     </div>
                 </div>
                 <style dangerouslySetInnerHTML={{__html: `

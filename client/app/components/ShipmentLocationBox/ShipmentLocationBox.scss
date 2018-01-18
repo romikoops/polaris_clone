@@ -15,15 +15,15 @@
   .input_box.with_errors {
     height: 87px;
   }
-  
   .select {
     width: 195px;
+    margin: 3px 0;
   }
   .input {
     height: 36px;
     width: 195px;
     border: 1px solid #F2F2F2;
-    margin: 2px;
+    margin: 3px auto;
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
@@ -46,6 +46,32 @@
     font-weight: 500;
   }
   .search_box {
-    padding: 10px 5px;
+    margin: 10px auto;
+  }
+  .address_form {
+    background: rgba(30, 30, 30, 0.5);
+    margin-top: 20px;
+    border-radius: 3px;
+    color: whitesmoke;
+    letter-spacing: 2px;
+    font-weight: 500;
+    p {
+      margin: 10px auto;
+    }
+    .clear_sec {
+      margin-left: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0.8;  
+      &:hover {
+        opacity: 1;
+      }
+    }
+    overflow: hidden;
+    height: 0;
+    transition: all 0.5s linear;
+  }
+  .address_form.visible {
+    height: 288px;
   }
 }
