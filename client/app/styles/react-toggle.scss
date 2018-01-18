@@ -150,16 +150,16 @@
   .react-toggle-track {
     width: 40px;
     height: 19px;
-    background: rgba($grey, 0.02);
-    border: 1px solid rgba($grey, 0.1);
+    background: rgba(33, 33, 33, 0.4);
+    border: 0.5px solid rgba(black, 0);
     opacity: 0.8;
   }
   .react-toggle-thumb {
     left: 0;
     top: 0;
-    height: 21px;
-    width: 21px;
-    border: 1px solid rgba($grey, 0.4);
+    height: 20px;
+    width: 20px;
+    border: none;
     background: white;
     transition: all 0.2s ease;
   }
@@ -172,10 +172,10 @@
   .react-toggle--checked .react-toggle-thumb {
     left: 23px;
     background: white;
-    border: 1px solid rgba($grey, 0.4);
+    border: none;
   }
   .react-toggle--checked .react-toggle-track {
-    border: 1px solid $light-grey;
+    border: 0.5px solid $light-grey;
   }
   .react-toggle--focus .react-toggle-thumb {
     -webkit-box-shadow: 0px 0px 1px 0.5px #0099E0;
@@ -184,7 +184,7 @@
     border: 1px solid rgba($grey, 0.1);
   }
   .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
-    background-color: rgba($grey, 0.04);
+    background-color: rgba($grey, 0.3);
     opacity: 1;
   }
 }

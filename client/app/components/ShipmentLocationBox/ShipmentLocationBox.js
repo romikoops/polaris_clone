@@ -595,7 +595,7 @@ export class ShipmentLocationBox extends Component {
                         onClick={() => this.resetAuto('origin')}
                     >
                         <i className="fa fa-times flex-none"></i>
-                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}} >Clear</p>
+                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
                     </div>
                 </div>
             </div>
@@ -661,10 +661,13 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.destination.country}
                     placeholder="Country"
                 />
-                <div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-none layout-row layout-align-end-center" onClick={() => this.resetAuto('destination')}>
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <div
+                        className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                        onClick={() => this.resetAuto('destination')}
+                    >
                         <i className="fa fa-times flex-none"></i>
-                        <p className="flex-none offset-5" style={{paddingRight: '10px'}}>Clear</p>
+                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
                     </div>
                 </div>
             </div>
@@ -742,7 +745,7 @@ export class ShipmentLocationBox extends Component {
                 <style dangerouslySetInnerHTML={{__html: `
                     .react-toggle--checked .react-toggle-track {
                         background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
-                        border: none;
+                        border: 0.5px solid rgba(0, 0, 0, 0);
                     }
                 `}} />
             </div>
