@@ -182,6 +182,7 @@
 
 .DayPickerInput-OverlayWrapper {
   position: relative;
+  z-index: 20;
 }
 
 .DayPickerInput-Overlay {

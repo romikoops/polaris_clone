@@ -5,3 +5,9 @@ subdomains =  [
   {cloudfront: "E2VR366CPGNLTC", subdomain: "easyshipping"},
   {cloudfront: "E1WJTKUIV6CYP3", subdomain: "integrail"}
 ];
+
+subdomains.each do |s|
+  tenant = Tenant.find_by_subdomain(s[:subdomain])
+  tenant.web = s
+  tenant.save!
+end

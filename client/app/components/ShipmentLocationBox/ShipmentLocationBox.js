@@ -455,7 +455,6 @@ export class ShipmentLocationBox extends Component {
             }
         });
         tmpAddress.fullAddress = place.formatted_address;
-
         this.setState({ [target]: tmpAddress });
         this.props.setTargetAddress(target, tmpAddress);
         // this.setState({
