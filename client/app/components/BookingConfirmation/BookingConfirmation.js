@@ -53,9 +53,8 @@ export class BookingConfirmation extends Component {
           );
         });
       };
-      if (shipment.load_type.includes('lcl') && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
-      if (shipment.load_type.includes('fcl') && containers) pushToCargo(containers, ContainerDetails);
-
+      if (shipment.load_type === 'cargo_item' && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
+      if (shipment.load_type === 'container' && containers) pushToCargo(containers, ContainerDetails);
       const nArray = [];
       if (notifyees) {
         notifyees.forEach(n => {
@@ -67,10 +66,7 @@ export class BookingConfirmation extends Component {
                 <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                   <p className="flex-100">Notifyee</p>
                   <p className={` ${styles.address} flex-100`}>
-                    {n.firstName} {n.lastName} <br/>
-                    {n.street} {n.street_number} <br/>
-                    {n.zipCode} {n.city} <br/>
-                    {n.country}
+                    {n.first_name} {n.last_name} <br/>
                   </p>
                 </div>
               </div>

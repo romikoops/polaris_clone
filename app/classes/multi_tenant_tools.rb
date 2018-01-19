@@ -1,8 +1,42 @@
 module MultiTenantTools
   include ExcelTools
   def test
-    tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    new_site(tenant, false)
+    # tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
+    tenant = {
+    "theme" => {
+      "colors" => {
+        "primary" => "#4E9095",
+        "secondary" => "#DDDDDD",
+        "brightPrimary" => "#5bb8bf",
+        "brightSecondary" => "#FFFFFF"
+      },
+      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
+      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
+      "logoWide" => "https://assets.itsmycargo.com/assets/logos/integrail_wide.png"
+    },
+    "addresses" => {
+      "main" =>"Révész utca 27. (575.11 mi)Budapest, Hungary 1138"
+    },
+    "phones" =>{
+      "main" => "+36 1 270 9330",
+      "support" => "+36 1 270 9330"
+    },
+    "emails" => {
+      "sales" => "sales@integrail.hu",
+      "support" => "info@tantumshipping.com"
+    },
+    "subdomain" => "integrail",
+    "name" => "Integrail",
+    "scope" => {
+      "modes_of_transport" => {
+        "rail" => {
+          "container" => true,
+          "cargo_item" => true
+        },
+      }
+    }
+  }
+    new_site(tenant.to_h, false)
   end
   def update_indexes
     Tenant.all.each do |tenant|
@@ -32,6 +66,9 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+        if tenant.web
+          invalidate(tenant.web["cloudfront"], tenant.subdomain)
+        end
       end
   end
   def new_site(tenant, is_demo)
@@ -366,13 +403,12 @@ module MultiTenantTools
         tenant.update_route_details()
     end
     def invalidate(cfId, subdomain)
-      creds = YAML.load(File.read('./config/application.yml'))
       cloudfront = Aws::CloudFront::Client.new(
           access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
         region: ENV['AWS_REGION']
         )
-      invalArray = ["#{subdomain}.html"];
+      invalArray = ["/#{subdomain}.html"];
       invalStr = Time.now.to_i
        resp = cloudfront.create_invalidation({
           distribution_id: cfId, # required

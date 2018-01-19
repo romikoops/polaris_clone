@@ -6,7 +6,7 @@ import errorStyles from '../../styles/errors.scss';
 import defaults from '../../styles/default_classes.scss';
 import { moment, incoterms } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import '../../styles/day-picker-custom.css';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
@@ -30,6 +30,7 @@ export class ShipmentDetails extends Component {
                     payload_in_kg: 0,
                     sizeClass: '',
                     tareWeight: 0,
+                    quantity: 1,
                     dangerousGoods: false
                 }
             ],
@@ -39,6 +40,7 @@ export class ShipmentDetails extends Component {
                     dimension_x: 0,
                     dimension_y: 0,
                     dimension_z: 0,
+                    quantity: 1,
                     dangerousGoods: false
                 }
             ],
@@ -192,6 +194,7 @@ export class ShipmentDetails extends Component {
             dimension_x: 0,
             dimension_y: 0,
             dimension_z: 0,
+            quantity: 1,
             dangerousGoods: false
         };
         const newErrors = {
@@ -339,6 +342,7 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
                         theme={theme}
+                        cargoItemTypes={shipmentData.cargoItemTypes}
                     />
                 );
             }

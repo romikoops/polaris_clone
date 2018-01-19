@@ -1,4 +1,6 @@
 let url;
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
 if (process.env.NODE_ENV === 'production') {
     url = 'https://api.itsmycargo.com';
 } else {
@@ -6,4 +8,5 @@ if (process.env.NODE_ENV === 'production') {
     // url = 'https://api.itsmycargo.com';
     // url = 'http://imcr-dev.us-east-1.elasticbeanstalk.com';
 }
-export const BASE_URL = url;
+export const BASE_URL = url + '/subdomain/' + subdomainKey;
+// export const BASE_URL = url;

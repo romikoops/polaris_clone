@@ -15,7 +15,7 @@ import { capitalize } from '../../helpers/stringTools';
 
 const mapStyle = {
     width: '100%',
-    height: '400px',
+    height: '450px',
     borderRadius: '3px',
     boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
@@ -89,6 +89,7 @@ export class ShipmentLocationBox extends Component {
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
+        // TO DO: AllNexuses changed to object with origin and dest arrays
         this.props.allNexuses.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
@@ -468,25 +469,28 @@ export class ShipmentLocationBox extends Component {
         this.setState({ [target]: tmpAddress });
         this.props.setTargetAddress(target, tmpAddress);
         this.setState({
-            autocomplete: { ...this.state.autocomplete, [target]: true },
             autoText: {[target]: place.name}
         });
     }
     resetAuto(target) {
-        // this.state.autoListener[target].clearListeners();
+        const tmpAddress = {
+            number: '',
+            street: '',
+            zipCode: '',
+            city: '',
+            country: '',
+            fullAddress: ''
+        };
         this.setState({
-            autocomplete: { ...this.state.autocomplete, [target]: false }
+            autoText: { ...this.state.autoText, [target]: '' },
+            [target]: tmpAddress
         });
     }
 
     render() {
-        const nexuses = [];
-
-        if (this.props.allNexuses) {
-            this.props.allNexuses.forEach(nex => {
-                nexuses.push({ value: nex, label: nex.name });
-            });
-        }
+        const { allNexuses } = this.props;
+        const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+        const destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
 
         const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
         const placeholderColorOverwrite = value => (
@@ -525,7 +529,7 @@ export class ShipmentLocationBox extends Component {
                     name="origin-hub"
                     className={`${styles.select}`}
                     value={this.state.oSelect}
-                    options={nexuses}
+                    options={originOptions}
                     onChange={this.setOriginHub}
                 />
                 <span className={errorStyles.error_message} style={{color: 'white'}}>
@@ -541,7 +545,7 @@ export class ShipmentLocationBox extends Component {
                     name="destination-hub"
                     className={`${styles.select}`}
                     value={this.state.dSelect}
-                    options={nexuses}
+                    options={destinationOptions}
                     onChange={this.setDestHub}
                     backgroundColor={backgroundColor}
                 />
@@ -648,7 +652,6 @@ export class ShipmentLocationBox extends Component {
                     <i className={`${styles.down} fa fa-angle-double-down`}></i>
                     <i className={`${styles.up} fa fa-angle-double-up`}></i>
                 </div>
-
                 <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
                     <div className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}>
                         <p className="flex-none">Enter Delivery Address</p>
@@ -775,12 +778,18 @@ export class ShipmentLocationBox extends Component {
                         <div ref="map" id="map" style={mapStyle} />
                     </div>
                 </div>
-                <style dangerouslySetInnerHTML={{__html: `
-                    .react-toggle--checked .react-toggle-track {
-                        background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
-                        border: 0.5px solid rgba(0, 0, 0, 0);
-                    }
-                `}} />
+                { theme ? (
+                    <style dangerouslySetInnerHTML={{__html: `
+                        .react-toggle--checked .react-toggle-track {
+                            background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                            border: 0.5px solid rgba(0, 0, 0, 0);
+                        }
+                        .react-toggle-track {
+                            background: rgba(255, 255, 255, 0.33);
+                            border: none;
+                        }
+                    `}} /> 
+                ) : '' }
             </div>
         );
     }
