@@ -784,11 +784,7 @@ export class ShipmentLocationBox extends Component {
                             background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
                             border: 0.5px solid rgba(0, 0, 0, 0);
                         }
-                        .react-toggle-track {
-                            background: rgba(255, 255, 255, 0.33);
-                            border: none;
-                        }
-                    `}} />
+                `}} />
                 ) : '' }
             </div>
         );

@@ -150,9 +150,10 @@
   .react-toggle-track {
     width: 40px;
     height: 19px;
-    background: rgba(33, 33, 33, 0.4);
+    background: rgba(white, 0.33);
     border: 0.5px solid rgba(black, 0);
     opacity: 0.8;
+    transition: all 0.2s ease;
   }
   .react-toggle-thumb {
     left: 0;
@@ -184,7 +185,7 @@
     border: 1px solid rgba($grey, 0.1);
   }
   .react-toggle:hover:not(.react-toggle--disabled) .react-toggle-track {
-    background-color: rgba($grey, 0.3);
+    background-color: rgba(white, 0.2);
     opacity: 1;
   }
 }
