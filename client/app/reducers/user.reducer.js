@@ -1,8 +1,11 @@
 import { userConstants } from '../constants';
 
 import merge from 'lodash/merge';
-
-const userData = JSON.parse(localStorage.getItem('user'));
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+const userData = JSON.parse(localStorage.getItem(cookieKey));
+// const userData = JSON.parse(localStorage.getItem('user'));
 const initialState = userData ? { loggedIn: true, userData } : {};
 
 export function users(state = initialState, action) {

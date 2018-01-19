@@ -20,16 +20,18 @@ module ShippingTools
     routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
     origins = []
     destinations = []
+    cargo_item_types = CargoItemType.all
     routes.map! do |route|
-      origins << {value: route["origin_nexus_id"], label: route["origin_nexus"]}
-      destinations << {value: route["destination_nexus_id"], label: route["destination_nexus"]}
+      origins << {value: Location.find(route["origin_nexus_id"]), label: route["origin_nexus"]}
+      destinations << {value: Location.find(route["destination_nexus_id"]), label: route["destination_nexus"]}
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
     return {
       shipment:    shipment,
       all_nexuses: {origins: origins.uniq, destinations: destinations.uniq},
-      routes:      routes
+      routes:      routes,
+      cargoItemTypes: cargo_item_types
     }
   end 
 
@@ -37,11 +39,11 @@ module ShippingTools
     @shipment = Shipment.find(params[:shipment_id])
     offer_calculation = OfferCalculator.new(@shipment, params, current_user)
 
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    # rescue
+    #   raise ApplicationError::NoRoutes
+    # end
 
     if offer_calculation.shipment.save
       return {

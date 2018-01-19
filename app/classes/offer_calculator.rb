@@ -15,6 +15,7 @@ class OfferCalculator
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
 
     @shipment.incoterm = params[:shipment][:incoterm]
+    
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
@@ -68,7 +69,7 @@ class OfferCalculator
   private
 
   def determine_route!
-    @shipment.route = Route.for_locations(@shipment.origin, @shipment.destination)
+    @shipment.route = Route.for_locations(@shipment)
   end
 
   def determine_hubs!

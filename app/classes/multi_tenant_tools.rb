@@ -66,6 +66,9 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
+        if tenant.web
+          invalidate(tenant.web["cloudfront"], tenant.subdomain)
+        end
       end
   end
   def new_site(tenant, is_demo)
@@ -400,13 +403,12 @@ module MultiTenantTools
         tenant.update_route_details()
     end
     def invalidate(cfId, subdomain)
-      creds = YAML.load(File.read('./config/application.yml'))
       cloudfront = Aws::CloudFront::Client.new(
           access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
         region: ENV['AWS_REGION']
         )
-      invalArray = ["#{subdomain}.html"];
+      invalArray = ["/#{subdomain}.html"];
       invalStr = Time.now.to_i
        resp = cloudfront.create_invalidation({
           distribution_id: cfId, # required

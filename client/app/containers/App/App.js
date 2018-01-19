@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import './App.scss';
 import Landing from '../Landing/Landing';
@@ -41,6 +41,7 @@ class App extends Component {
         return (
             <div className="layout-fill layout-column scroll layout-align-end hundred">
                 {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
+                { user && user.data && tenant && tenant.data && user.data.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
                 <Switch className="flex">
                     <Route
                         exact

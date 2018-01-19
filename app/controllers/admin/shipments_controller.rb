@@ -5,11 +5,11 @@ class Admin::ShipmentsController < ApplicationController
 
   def index
     @documents = {}
-    @requested_shipments = Shipment.where(status: "requested")
+    @requested_shipments = Shipment.where(status: "requested", tenant_id: current_user.tenant_id)
     @documents['requested_shipments'] = Document.get_documents_for_array(@requested_shipments)
-    @open_shipments = Shipment.where(status: ["accepted", "in_progress"])
+    @open_shipments = Shipment.where(status: ["accepted", "in_progress"], tenant_id: current_user.tenant_id)
     @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
-    @finished_shipments = Shipment.where(status: ["declined", "finished"])
+    @finished_shipments = Shipment.where(status: ["declined", "finished"], tenant_id: current_user.tenant_id)
     @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
     resp = {
       requested: @requested_shipments,
@@ -138,7 +138,7 @@ class Admin::ShipmentsController < ApplicationController
   private
 
   def require_login_and_role_is_admin
-    unless user_signed_in? && current_user.role.name.include?("admin")
+    unless user_signed_in? && current_user.role.name.include?("admin") && current_user.tenant_id === Tenant.find_by_subdomain(params[:subdomain_id]).id
       flash[:error] = "You are not authorized to access this section."
       redirect_to root_path
     end

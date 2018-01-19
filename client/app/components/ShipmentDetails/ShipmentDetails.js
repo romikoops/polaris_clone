@@ -4,7 +4,7 @@ import GmapsLoader from '../../hocs/GmapsLoader';
 import styles from './ShipmentDetails.scss';
 import { moment, incoterms } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import '../../styles/day-picker-custom.css';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
@@ -324,6 +324,7 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
                         theme={theme}
+                        cargoItemTypes={shipmentData.cargoItemTypes}
                     />
                 );
             }

@@ -97,15 +97,15 @@ class Route < ApplicationRecord
     return nrt
   end
 
-  def self.for_locations(origin, destination, radius = 200)
-    start_city, start_city_dist = origin.closest_location_with_distance
-    end_city, end_city_dist = destination.closest_location_with_distance
+  def self.for_locations(shipment, radius = 200)
+    start_city, start_city_dist = shipment.origin.closest_location_with_distance
+    end_city, end_city_dist = shipment.destination.closest_location_with_distance
     # 
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end
     
-    find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id)
+    find_by(origin_nexus_id: start_city.id, destination_nexus_id: end_city.id, tenant_id: shipment.tenant_id)
   end
 
   def next_departure

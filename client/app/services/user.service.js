@@ -1,7 +1,10 @@
 import { authHeader } from '../helpers';
 import { Promise } from 'es6-promise-promise';
 import { BASE_URL } from '../constants';
-
+import { getSubdomain } from '../helpers';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+console.log(cookieKey);
 function handleResponse(response) {
     if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -58,7 +61,7 @@ function getShipments() {
 
 
 function getStoredUser() {
-    const sortedUser = JSON.parse(localStorage.getItem('user'));
+    const sortedUser = JSON.parse(localStorage.getItem(cookieKey));
     return sortedUser ? sortedUser : {};
 }
 

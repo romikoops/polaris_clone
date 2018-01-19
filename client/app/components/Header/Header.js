@@ -103,6 +103,9 @@ class Header extends Component {
                     styles.header
                 } layout-row flex-100 layout-wrap layout-align-center`}
             >
+                <div className="flex layout-row layout-align-start-center">
+                    {this.props.menu}
+                </div>
                 <div className={`${defs.content_width} layout-row flex-none`}>
                     <div className="layout-row flex-50 layout-align-start-center">
                         <img
@@ -115,6 +118,8 @@ class Header extends Component {
                     <div className="layout-row flex-50 layout-align-end-center">
                         {rightCorner}
                     </div>
+                </div>
+                 <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
             </div>

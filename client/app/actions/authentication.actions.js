@@ -3,7 +3,10 @@ import { authenticationService } from '../services';
 import { shipmentActions } from './';
 import { alertActions } from './';
 import { push } from 'react-router-redux';
-
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+console.log(cookieKey);
 function logout() {
     authenticationService.logout();
     return { type: authenticationConstants.LOGOUT };
@@ -77,7 +80,7 @@ function register(user, redirect) {
     };
 }
 function setUser(user) {
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem(cookieKey, JSON.stringify(user));
     return {type: authenticationConstants.SET_USER, user};
 }
 
