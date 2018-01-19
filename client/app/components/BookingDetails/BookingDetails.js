@@ -287,9 +287,14 @@ export class BookingDetails extends Component {
             hubs,
             contacts,
             userLocations,
-            schedules
+            schedules,
+            containers,
+            cargoItems
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -355,6 +360,20 @@ export class BookingDetails extends Component {
                     user={user}
                 />
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-center-center'}>
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <h3 className="flex-none clip" style={textStyle}>Summary: </h3>
+                        </div>
+                        <div className="flex-90 layout-row layout-align-start-center">
+                            {shipment && theme && hubs ? (
+                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} cargoItems={cargoItems} containers={containers} />
+                            ) : (
+                                ''
+                            )}
+                        </div>
+                    </div>
+                </div>
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         <div className="flex-50 layout-row layout-align-start-center">
                             <div className="flex-15 layout-row layout-align-center-center">
@@ -365,24 +384,9 @@ export class BookingDetails extends Component {
                                 <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
                             </div>
                         </div>
-                        <div className="flex-50 layout-row layout-align-start-center">
-                             {shipment && theme && hubs ? (
-                                <ShipmentSummaryBox hubs={hubs} route={schedules} theme={theme} />
-                            ) : (
-                                ''
-                            )}
+                        <div className="flex-50 layout-row layout-align-end-center">
+                            { acceptTerms ? acceptedBtn : nonAcceptedBtn}
                         </div>
-                    </div>
-                </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        { acceptTerms ? acceptedBtn : nonAcceptedBtn}
-                    </div>
-                </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-space-between-center'}>
-                        <p className="flex-none">Order Total</p>
-                        <p className="flex-none">{this.orderTotal()} {user.currency}</p>
                     </div>
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>

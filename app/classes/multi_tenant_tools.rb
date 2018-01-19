@@ -39,14 +39,14 @@ module MultiTenantTools
       }
     }
 }
-    new_site(tenant.to_h, true)
+    new_site(tenant.to_h, false)
   end
   def update_indexes
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
         favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
-        indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
-        # indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+        # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
+        indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
         titles = indexHtml.xpath("//title")
         titles[0].content = title
         links = indexHtml.xpath("//link")
@@ -103,8 +103,8 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
-        uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
-        uploader.upload!
+        # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+        # uploader.upload!
 
         if is_demo
           seed_demo_site(tenant)
