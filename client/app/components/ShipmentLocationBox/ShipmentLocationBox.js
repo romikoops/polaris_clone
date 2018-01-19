@@ -560,7 +560,7 @@ export class ShipmentLocationBox extends Component {
             <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
                 <div
                     className={`${styles.btn_address_form} ${
-                      this.state.shipment.has_pre_carriage ? '' : styles.hidden
+                        this.state.shipment.has_pre_carriage ? '' : styles.hidden
                     }`}
                     onClick={() => this.changeAddressFormVisibility('origin')}
                 >
@@ -645,7 +645,7 @@ export class ShipmentLocationBox extends Component {
             <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
                 <div
                     className={`${styles.btn_address_form} ${
-                      this.state.shipment.has_on_carriage ? '' : styles.hidden
+                        this.state.shipment.has_on_carriage ? '' : styles.hidden
                     }`}
                     onClick={() => this.changeAddressFormVisibility('destination')}
                 >
@@ -788,7 +788,7 @@ export class ShipmentLocationBox extends Component {
                             background: rgba(255, 255, 255, 0.33);
                             border: none;
                         }
-                    `}} /> 
+                    `}} />
                 ) : '' }
             </div>
         );

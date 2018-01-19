@@ -36,6 +36,10 @@ en:
       code: 1000
       message: "No routes found. Please check your inputs and try again."
     not_authenticated:
-      http_code: 500
+      http_code: 401
       code: 1050
       message: "You are not signed in."
+    bad_credentials:
+      http_code: 401
+      code: 1100
+      message: "Invalid email or password."
