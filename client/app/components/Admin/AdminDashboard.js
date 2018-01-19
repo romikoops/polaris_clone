@@ -87,9 +87,9 @@ export class AdminDashboard extends Component {
             return this.prepShipment(sh, clientHash, hubHash);
         }) : false;
         // const mergedRequestedShipments = false;
-        const openShipments = mergedOpenShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const openShipments = mergedOpenShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
         const finishedShipments = mergedFinishedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
-        const requestedShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const requestedShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedFinishedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);

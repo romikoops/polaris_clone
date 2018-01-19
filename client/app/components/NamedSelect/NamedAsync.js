@@ -21,9 +21,7 @@ export class NamedAsync extends Component {
 
     render() {
         const {value, classes, ref, name, autoload, multi, loadOptions} = this.props;
-        console.log(value, multi, name, ref, autoload);
         const StyledSelect = styled(Async)`
-            z-index: 10;
             .Select-control {
                 background-color: #F9F9F9;
                 /*background-color: #000;*/
@@ -33,8 +31,8 @@ export class NamedAsync extends Component {
             .Select-menu-outer {
                 box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
                 border: 1px solid #F2F2F2;
-                background-color: #000;
-                z-index: 25;
+                /*background-color: #000;*/
+                z-index: 25 !important;
             }
             .Select-value {
                 background-color: #F9F9F9;
@@ -51,7 +49,8 @@ export class NamedAsync extends Component {
                name={name}
                multi={multi}
                className={classes}
-               value={''}
+               value={value}
+               ref={ref}
                autoload={autoload}
                loadOptions={loadOptions}
                onChange={this.onChangeFunc}

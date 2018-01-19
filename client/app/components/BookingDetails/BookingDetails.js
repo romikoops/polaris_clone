@@ -82,6 +82,7 @@ export class BookingDetails extends Component {
         this.setHsCode = this.setHsCode.bind(this);
         this.deleteCode = this.deleteCode.bind(this);
         this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
+        this.setCustomsFee = this.setCustomsFee.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage, hideRegistration} = this.props;
@@ -230,6 +231,14 @@ export class BookingDetails extends Component {
             notifyees: notifyees
         });
     }
+    orderTotal() {
+        const { shipmentData } = this.props;
+        const { customs, insurance } = this.state;
+        return (parseFloat(shipmentData.shipment.total_price, 10) + customs.val + insurance.val);
+    }
+    setCustomsFee(fee) {
+        this.setState({customs: fee});
+    }
 
     pushUpData() {}
 
@@ -279,7 +288,7 @@ export class BookingDetails extends Component {
             userLocations,
             schedules
         } = shipmentData;
-        const { consignee, shipper, notifyees, acceptTerms } = this.state;
+        const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -340,22 +349,34 @@ export class BookingDetails extends Component {
                     insurance={this.state.insurance}
                     shipmentDispatch={shipmentDispatch}
                     currencies={currencies}
+                    customsData={customs}
+                    setCustomsFee={this.setCustomsFee}
                     user={user}
                 />
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        <div className="flex-15 layout-row layout-align-center-center">
-                            <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                        <div className="flex-50 layout-row layout-align-start-center">
+                            <div className="flex-15 layout-row layout-align-center-center">
+                                <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                            </div>
+                            <div className="flex layout-row layout-align-start-center">
+                                <div className="flex-5"></div>
+                                <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                            </div>
                         </div>
-                        <div className="flex layout-row layout-align-start-center">
-                            <div className="flex-5"></div>
-                            <p className="flex-none">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
-                        </div>
+                        <div className="flex-50 layout-row layout-align-start-center">
+</div>
                     </div>
                 </div>
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                    </div>
+                </div>
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-space-between-center'}>
+                        <p className="flex-none">Order Total</p>
+                        <p className="flex-none">{this.orderTotal()} {user.currency}</p>
                     </div>
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>

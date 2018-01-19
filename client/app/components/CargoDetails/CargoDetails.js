@@ -28,9 +28,15 @@ export class CargoDetails extends Component {
         // this.props.handleInsurance();
     }
     toggleCustoms() {
+        const { setCustomsFee, customsData } = this.props;
         this.setState({ customsView: !this.state.customsView });
         // this.timeoutId = setTimeout(function() {
         this.setState({ showNoCustoms: this.state.customsView });
+        const converted = this.calcCustomsFee();
+        const resp = converted === 0 ? {bool: false, val: 0} : {bool: true, val: converted};
+        if (customsData && customsData.val && customsData.val !== converted) {
+            setCustomsFee(resp);
+        }
         // }.bind(this), 1000);
     }
     deleteDoc(key) {
@@ -65,7 +71,8 @@ export class CargoDetails extends Component {
             const diff = hsCount - customs.limit;
             return customs.fee + (diff * customs.extra);
         }
-        return converter(customs.fee, customs.currency, currencies).toFixed(2);
+        const converted = converter(customs.fee, customs.currency, currencies).toFixed(2);
+        return converted;
     }
     handleChange(event) {
         this.props.handleChange(event);

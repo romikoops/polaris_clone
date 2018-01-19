@@ -1,62 +1,20 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import styles from './RouteResult.scss';
-import { moment } from '../../constants';
-import { RoundButton } from '../RoundButton/RoundButton';
-import { Price } from '../Price/Price';
-export class RouteResult extends Component {
+
+export class NamedAsync extends Component {
     constructor(props) {
         super(props);
-        this.selectRoute = this.selectRoute.bind(this);
+        this.state = {
+            working: true
+        };
+        this.onChangeFunc = this.onChangeFunc.bind(this);
     }
-    switchIcon(sched) {
-        let icon;
-        switch (sched.mode_of_transport) {
-            case 'ocean':
-                icon = <i className="fa fa-ship" />;
-                break;
-            case 'air':
-                icon = <i className="fa fa-plane" />;
-                break;
-            case 'train':
-                icon = <i className="fa fa-train" />;
-                break;
-            default:
-                icon = <i className="fa fa-ship" />;
-                break;
-        }
-        return icon;
+    onChangeFunc(optionsSelected) {
+        const nameKey = this.props.name;
+        this.props.onChange(nameKey, optionsSelected);
     }
-    selectRoute() {
-        const { schedule, fees } = this.props;
-        const schedKey = schedule.hub_route_key;
-        const totalFees = fees[schedKey].total;
-        this.props.selectResult({ schedule: schedule, total: totalFees });
-    }
-    dashedGradient(color1, color2) {
-        return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`;
-    }
-    format2Digit(n) {
-        return ('0' + n).slice(-2);
-    }
+
     render() {
-        const { theme, schedule, user } = this.props;
-        const schedKey = schedule.hub_route_key;
-        const hubKeyArr = schedKey.split('-');
-        let originHub = {};
-        let destHub = {};
-        if (this.props.originHubs) {
-            this.props.originHubs.forEach(hub => {
-                if (String(hub.id) === hubKeyArr[0]) {
-                    originHub = hub;
-                }
-            });
-            this.props.destinationHubs.forEach(hub => {
-                if (String(hub.id) === hubKeyArr[1]) {
-                    destHub = hub;
-                }
-            });
-        }
+        const { theme, shipment } = this.props;
         const gradientFontStyle = {
             background:
                 theme && theme.colors
@@ -78,12 +36,10 @@ export class RouteResult extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-        return (
-            <div
-                key={schedule.id}
-                className={`flex-100 layout-row ${styles.route_result}`}
-            >
-                <div className="flex-75 layout-row layout-wrap">
+
+        return(
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div className="flex-100 layout-row layout-wrap">
                     <div
                         className={`flex-100 layout-row layout-align-start-center ${
                             styles.top_row
@@ -215,31 +171,7 @@ export class RouteResult extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="flex-25 layout-row layout-wrap">
-                    <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-                        <p className="flex-none">Total price: </p>
-                        <Price value={this.props.fees[schedKey].total} user={user}/>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
-                        <RoundButton
-                            text={'Choose'}
-                            size="full"
-                            handleNext={this.selectRoute}
-                            theme={theme}
-                            active
-                        />
-                    </div>
-                </div>
             </div>
         );
     }
 }
-RouteResult.propTypes = {
-    theme: PropTypes.object,
-    schedule: PropTypes.object,
-    selectResult: PropTypes.func,
-    pickupDate: PropTypes.string,
-    fees: PropTypes.object,
-    originHubs: PropTypes.array,
-    destinationHubs: PropTypes.array
-};

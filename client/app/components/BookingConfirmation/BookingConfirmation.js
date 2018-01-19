@@ -155,6 +155,7 @@ export class BookingConfirmation extends Component {
                                         className={`${
                                             styles.tot_price
                                         } flex-none layout-row layout-align-space-between`}
+                                        style={textStyle}
                                     >
                                         <p>Total Price:</p>{' '}
                                         <Price value={shipment.total_price} user={user}/>
