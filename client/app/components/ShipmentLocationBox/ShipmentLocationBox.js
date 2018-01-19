@@ -11,6 +11,7 @@ import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers';
 import { mapStyling } from '../../constants/map.constants';
 import styled from 'styled-components';
+import { capitalize } from '../../helpers/stringTools';
 
 const mapStyle = {
     width: '100%',
@@ -75,6 +76,7 @@ export class ShipmentLocationBox extends Component {
         this.resetAuto = this.resetAuto.bind(this);
         this.setMarker = this.setMarker.bind(this);
         this.handleAuto = this.handleAuto.bind(this);
+        this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this);
     }
 
     componentDidMount() {
@@ -205,7 +207,6 @@ export class ShipmentLocationBox extends Component {
     }
 
     initAutocomplete(map, target) {
-        // const targetId = target + '-gmac';
         const input = document.getElementById(target);
         const autocomplete = new this.props.gMaps.places.Autocomplete(input);
         autocomplete.bindTo('bounds', map);
@@ -235,6 +236,12 @@ export class ShipmentLocationBox extends Component {
         }
     }
 
+    changeAddressFormVisibility(target, visibility) {
+        const key = `show${capitalize(target)}Fields`;
+        const value = visibility ? visibility : !this.state[key];
+        this.setState({ [key]: value });
+    }
+
     autocompleteListener(aMap, autocomplete, target) {
         const infowindow = new this.props.gMaps.InfoWindow();
         const infowindowContent = document.getElementById('infowindow-content');
@@ -246,6 +253,8 @@ export class ShipmentLocationBox extends Component {
         });
 
         autocomplete.addListener('place_changed', () => {
+            this.changeAddressFormVisibility(target, true);
+
             infowindow.close();
             marker.setVisible(false);
             const place = autocomplete.getPlace();
@@ -452,11 +461,15 @@ export class ShipmentLocationBox extends Component {
             }
         });
         tmpAddress.fullAddress = place.formatted_address;
+        setTimeout( () => {
+            this.changeAddressFormVisibility(target, false);
+        }, 3000);
 
         this.setState({ [target]: tmpAddress });
         this.props.setTargetAddress(target, tmpAddress);
         this.setState({
-            autocomplete: { ...this.state.autocomplete, [target]: true }
+            autocomplete: { ...this.state.autocomplete, [target]: true },
+            autoText: {[target]: place.name}
         });
     }
     resetAuto(target) {
@@ -504,10 +517,6 @@ export class ShipmentLocationBox extends Component {
                 background-color: #F9F9F9;
             }
         `;
-        const autoHide = {
-            height: '0px',
-            display: 'none'
-        };
 
         const showOriginError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
@@ -542,67 +551,79 @@ export class ShipmentLocationBox extends Component {
             </div>
         );
 
-        let toggleLogic = this.state.shipment.has_pre_carriage ? styles.visible : '';
+        let toggleLogic = this.state.shipment.has_pre_carriage && this.state.showOriginFields ? styles.visible : '';
         const originFields = (
-            <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <p className="flex-none">Enter Pickup Address</p>
+            <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
+                <div
+                    className={`${styles.btn_address_form} ${
+                      this.state.shipment.has_pre_carriage ? '' : styles.hidden
+                    }`}
+                    onClick={() => this.changeAddressFormVisibility('origin')}
+                >
+
+                    <i className={`${styles.down} fa fa-angle-double-down`}></i>
+                    <i className={`${styles.up} fa fa-angle-double-up`}></i>
                 </div>
-                <input
-                    id="not-auto"
-                    name="origin-number"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.props.origin.number}
-                    placeholder="Number"
-                />
-                <input
-                    name="origin-street"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.street}
-                    placeholder="Street"
-                />
-                <input
-                    name="origin-zipCode"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.zipCode}
-                    placeholder="Zip Code"
-                />
-                <input
-                    name="origin-city"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.city}
-                    placeholder="City"
-                />
-                <input
-                    name="origin-country"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.origin.country}
-                    placeholder="Country"
-                />
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <div
-                        className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-                        onClick={() => this.resetAuto('origin')}
-                    >
-                        <i className="fa fa-times flex-none"></i>
-                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
+                <div className={`${styles.address_form} flex-100 layout-row layout-wrap`}>
+                    <div className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}>
+                        <p className="flex-none">Enter Pickup Address</p>
+                    </div>
+                    <input
+                        id="not-auto"
+                        name="origin-number"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.props.origin.number}
+                        placeholder="Number"
+                    />
+                    <input
+                        name="origin-street"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.origin.street}
+                        placeholder="Street"
+                    />
+                    <input
+                        name="origin-zipCode"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.origin.zipCode}
+                        placeholder="Zip Code"
+                    />
+                    <input
+                        name="origin-city"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.origin.city}
+                        placeholder="City"
+                    />
+                    <input
+                        name="origin-country"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.origin.country}
+                        placeholder="Country"
+                    />
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <div
+                            className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                            onClick={() => this.resetAuto('origin')}
+                        >
+                            <i className="fa fa-times flex-none"></i>
+                            <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
+                        </div>
                     </div>
                 </div>
             </div>
         );
 
         const originAuto = (
-            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.origin ? autoHide : {}}>
+            <div className="flex-100 layout-row layout-wrap">
                 <input
                     id="origin"
                     name="origin"
@@ -615,66 +636,78 @@ export class ShipmentLocationBox extends Component {
             </div>
         );
 
-        toggleLogic = this.state.shipment.has_on_carriage ? styles.visible : '';
+        toggleLogic = this.state.shipment.has_on_carriage && this.state.showDestinationFields ? styles.visible : '';
         const destFields = (
-            <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <p className="flex-none">Enter Delivery Address</p>
+            <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
+                <div
+                    className={`${styles.btn_address_form} ${
+                      this.state.shipment.has_on_carriage ? '' : styles.hidden
+                    }`}
+                    onClick={() => this.changeAddressFormVisibility('destination')}
+                >
+                    <i className={`${styles.down} fa fa-angle-double-down`}></i>
+                    <i className={`${styles.up} fa fa-angle-double-up`}></i>
                 </div>
-                <input
-                    name="destination-number"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.number}
-                    placeholder="Number"
-                />
-                <input
-                    name="destination-street"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.street}
-                    placeholder="Street"
-                />
-                <input
-                    name="destination-zipCode"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.zipCode}
-                    placeholder="Zip Code"
-                />
-                <input
-                    name="destination-city"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.city}
-                    placeholder="City"
-                />
-                <input
-                    name="destination-country"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAddressChange}
-                    value={this.state.destination.country}
-                    placeholder="Country"
-                />
-                <div className="flex-100 layout-row layout-align-start-center">
-                    <div
-                        className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
-                        onClick={() => this.resetAuto('destination')}
-                    >
-                        <i className="fa fa-times flex-none"></i>
-                        <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
+
+                <div className={`${styles.address_form} ${toggleLogic} flex-100 layout-row layout-wrap`}>
+                    <div className={`${styles.address_form_title} flex-100 layout-row layout-align-start-center`}>
+                        <p className="flex-none">Enter Delivery Address</p>
+                    </div>
+                    <input
+                        name="destination-number"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.destination.number}
+                        placeholder="Number"
+                    />
+                    <input
+                        name="destination-street"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.destination.street}
+                        placeholder="Street"
+                    />
+                    <input
+                        name="destination-zipCode"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.destination.zipCode}
+                        placeholder="Zip Code"
+                    />
+                    <input
+                        name="destination-city"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.destination.city}
+                        placeholder="City"
+                    />
+                    <input
+                        name="destination-country"
+                        className={`flex-none ${styles.input}`}
+                        type="string"
+                        onChange={this.handleAddressChange}
+                        value={this.state.destination.country}
+                        placeholder="Country"
+                    />
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <div
+                            className={`${styles.clear_sec} flex-none layout-row layout-align-end-center`}
+                            onClick={() => this.resetAuto('destination')}
+                        >
+                            <i className="fa fa-times flex-none"></i>
+                            <p className="offset-5 flex-none" style={{paddingRight: '10px'}}>Clear</p>
+                        </div>
                     </div>
                 </div>
             </div>
         );
 
         const destAuto = (
-            <div className="flex-100 layout-row layout-wrap" style={this.state.autocomplete.destination ? autoHide : {}}>
+            <div className="flex-100 layout-row layout-wrap">
                 <input
                     id="destination"
                     name="destination"
