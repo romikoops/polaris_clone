@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export class NamedAsync extends Component {
+export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
         this.state = {

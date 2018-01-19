@@ -45,8 +45,8 @@ module MultiTenantTools
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
         favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
-        # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
-        indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
+        indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
+        # indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
         titles = indexHtml.xpath("//title")
         titles[0].content = title
         links = indexHtml.xpath("//link")

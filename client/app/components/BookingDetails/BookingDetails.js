@@ -4,6 +4,7 @@ import styles from './BookingDetails.scss';
 import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { AddressBook } from '../AddressBook/AddressBook';
+import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
@@ -365,7 +366,12 @@ export class BookingDetails extends Component {
                             </div>
                         </div>
                         <div className="flex-50 layout-row layout-align-start-center">
-</div>
+                             {shipment && theme && hubs ? (
+                                <ShipmentSummaryBox hubs={hubs} route={schedules} theme={theme} />
+                            ) : (
+                                ''
+                            )}
+                        </div>
                     </div>
                 </div>
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
