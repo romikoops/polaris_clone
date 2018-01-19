@@ -18,6 +18,8 @@ import {
 } from '../../components/UserAccount';
 import UserContacts from '../../components/UserAccount/UserContacts';
 import { userActions, authenticationActions } from '../../actions';
+import { Modal } from '../../components/Modal/Modal';
+import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
 import './UserAccount.scss';
 import { Loading } from '../../components/Loading/Loading';
@@ -28,7 +30,8 @@ export class UserAccount extends Component {
         super(props);
 
         this.state = {
-            activeLink: 'profile'
+            activeLink: 'profile',
+            showModal: false
         };
 
         this.toggleActiveClass = this.toggleActiveClass.bind(this);
@@ -37,6 +40,7 @@ export class UserAccount extends Component {
         this.makePrimary = this.makePrimary.bind(this);
         this.setUrl = this.setUrl.bind(this);
         this.setNavLink = this.setNavLink.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
     componentDidMount() {
         const {userDispatch, users, user} = this.props;
@@ -54,6 +58,7 @@ export class UserAccount extends Component {
             userDispatch.getDashboard(user.data.id, false);
         }
     }
+
     toggleActiveClass(key) {
         this.setState({ activeLink: key });
     }
@@ -72,12 +77,21 @@ export class UserAccount extends Component {
         const { userDispatch, user } = this.props;
         userDispatch.makePrimary(user.data.id, locationId);
     }
+
+    toggleModal() {
+        this.setState({ showModal: !this.state.showModal });
+    }
+
     setUrl(target) {
         const {userDispatch, user} = this.props;
         switch(target) {
             case 'pricing':
                 this.setState({activeLink: target});
                 userDispatch.getPricings(user.data.id, true);
+                break;
+            case 'chooseRoutes':
+                this.toggleModal();
+                console.log('shitfarming ! ... is ' + this.state.showModal);
                 break;
             case 'shipments':
                 this.setState({activeLink: target});
@@ -106,7 +120,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch } = this.props;
+        const { user, theme, users, userDispatch, authDispatch, loggedIn } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -127,6 +141,12 @@ export class UserAccount extends Component {
                 text: 'Dashboard',
                 url: '/account/dashboard',
                 target: 'dashboard'
+            },
+            {
+                icon: 'fa-ship',
+                text: 'Avail. Routes',
+                url: '/chooseroute/chooseroute',
+                target: 'chooseRoutes'
             },
             {
                 icon: 'fa-ship',
@@ -157,18 +177,41 @@ export class UserAccount extends Component {
                 hubHash[hub.data.id] = hub;
             });
         }
-        const nav = (<NavSidebar
-                                    theme={theme}
-                                    navHeadlineInfo={navHeadlineInfo}
-                                    navLinkInfo={navLinkInfo}
-                                    toggleActiveClass={this.setUrl}
-                                    activeLink={this.state.activeLink}
-                                />);
-
+        const nav = (
+            <NavSidebar
+                theme={theme}
+                navHeadlineInfo={navHeadlineInfo}
+                navLinkInfo={navLinkInfo}
+                toggleActiveClass={this.setUrl}
+                activeLink={this.state.activeLink}
+            />
+        );
+/**
+ *  tenant: PropTypes.object,
+    theme: PropTypes.object,
+    user: PropTypes.object,
+    loggedIn: PropTypes.bool,
+    dispatch: PropTypes.func,
+    history: PropTypes.object,
+    match: PropTypes.object
+*/
+        const routeModal = (
+            <Modal
+                component={
+                    <AvailableRoutes
+                        props={{theme, user, loggedIn, userDispatch, dashboard, 
+                            routes: dashboard.routes}}
+                        initialCompName="UserAccount"
+                    />
+                }
+                parentToggle={this.toggleModal}
+            />
+        );
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center">
                 <Header theme={theme} />
                 {loadingScreen}
+                {this.state.showModal ? routeModal : ''}
                 <div
                     className={`${defs.content_width} layout-row flex-none ${
                         defs.spacing_md_top
@@ -177,11 +220,19 @@ export class UserAccount extends Component {
                     <FloatingMenu Comp={nav} theme={theme}/>
 
                     <div className="layout-row flex-100 ">
+
                         <Switch className="flex">
                             <Route
                                 exact
                                 path="/account"
                                 render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} dashboard={dashboard}/>}
+                            />
+                            <Route
+                                path="/account/routesavailable"
+                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} locations={users.dashboard.locations}
+                                    getLocations={this.getLocations}
+                                    destroyLocation={this.destroyLocation}
+                                    makePrimary={this.makePrimary} />}
                             />
                             <Route
                                 path="/account/locations"

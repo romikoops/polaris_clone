@@ -18,6 +18,14 @@ class UsersController < ApplicationController
     user_locs.each do |ul|
       @locations.push({user: ul, location: ul.location})
     end
+    route_ids_dedicated = Route.ids_dedicated(current_user)
+    mot_scope_args = {}
+    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
+    routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
+    routes.map! do |route|
+      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
+      route
+    end
     resp = {
       shipments:{
         requested: @requested_shipments,
@@ -27,7 +35,8 @@ class UsersController < ApplicationController
       pricings: @pricings,
       contacts: @contacts,
       aliases: @aliases,
-      locations: @locations
+      locations: @locations,
+      routes: routes
     }
     response_handler(resp)
   end

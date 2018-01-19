@@ -52,7 +52,7 @@ export class UserDashboard extends Component {
         } else {
             prop = property;
         }
-        return function(a, b) {
+        return (a, b) => {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;
@@ -93,10 +93,11 @@ export class UserDashboard extends Component {
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
                 </div>
-
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
-                        <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
+                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-center-center">
+                        <div className="flex-100 layout-row layout-align-center" >
+                            <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
+                        </div>
                     </div>
                     <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
                         <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1}/>
