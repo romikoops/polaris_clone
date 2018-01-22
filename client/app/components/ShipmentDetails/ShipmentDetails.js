@@ -163,10 +163,13 @@ export class ShipmentDetails extends Component {
 
     handleCargoItemChange(event, hasError) {
         const { name, value } = event.target;
+        const nameKeys = name.split('-');
+        const index = parseInt(nameKeys[0], 10);
+        const target = nameKeys[1];
         const itemArr = this.state.cargoItems;
-        itemArr[0][name] = value;
-        const cargoItemErrors = this.state.cargoItemErrors;
-        cargoItemErrors[name] = hasError;
+        itemArr[index][target] = value;
+        const cargoItemErrors = this.state.cargoItemErrors[index];
+        cargoItemErrors[target] = hasError;
         this.setState({
             cargoItems: itemArr,
             cargoItemErrors: cargoItemErrors
