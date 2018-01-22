@@ -50,8 +50,8 @@ class ValidatedInputFormsy extends Component {
             height: '100%',
             boxSizing: 'border-box'
         };
-        const ErrorVisible = this.state.firstRender && !this.props.nextStageAttempt;
-        if (!ErrorVisible && !this.props.isValid()) {
+        const ErrorHidden = this.state.firstRender && !this.props.nextStageAttempt;
+        if (!ErrorHidden && !this.props.isValid()) {
             inputStyles.background = 'rgba(232, 114, 88, 0.3)';
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
@@ -65,7 +65,7 @@ class ValidatedInputFormsy extends Component {
                     value={(this.props.getValue() && this.props.getValue().toString()) || ''}
                     name={this.props.name}
                 />
-                <span className={errorStyles.error_message}>{ErrorVisible ? '' : errorMessage}</span>
+                <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
             </div>
         );
     }

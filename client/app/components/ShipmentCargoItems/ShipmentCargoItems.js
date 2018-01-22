@@ -13,7 +13,7 @@ export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            cargoItemType: [{}],
+            cargoItemTypes: [{}],
             firstRenderInputs: !this.props.nextStageAttempt
         };
         this.handleCargoChange = this.handleCargoChange.bind(this);
@@ -39,24 +39,21 @@ export class ShipmentCargoItems extends Component {
         this.props.addCargoItem();
         this.setState({firstRenderInputs: true});
     }
-    handleCargoItemQ(ev) {
-        const nameKeys = ev.nameKey.split('-');
-        const ev1 = { target: { name: nameKeys[0] + 'quantity', value: ev.label } };
-        this.props.handleDelta(ev1);
+    handleCargoItemQ(event) {
+        const modifiedEvent = {
+            target: { name: event.nameKey, value: event.label }
+        };
+        this.props.handleDelta(modifiedEvent);
     }
-    handleCargoItemType(ev) {
-        const nameKeys = ev.nameKey.split('-');
-        if (ev.dimension_x) {
-            const evX = { target: { name: nameKeys[0] + 'dimension_x', value: ev.dimension_x } };
-            const evY = { target: { name: nameKeys[0] + 'dimension_y', value: ev.dimension_y } };
-            this.props.handleDelta(evX);
-            this.props.handleDelta(evY);
-        }
-        const ev1 = { target: { name: nameKeys[0] + 'cargo_item_type_id', value: ev.key } };
-        const cargoItemTypes = this.state.cargoItemTypes;
-        cargoItemTypes[parseInt(nameKeys[0], 10)] = ev;
-        this.setState({cargoItemType: cargoItemTypes});
-        this.props.handleDelta(ev1);
+    handleCargoItemType(event) {
+        const index = event.nameKey.split('-')[0];
+        const modifiedEvent = {
+            target: { name: event.nameKey, value: event.key }
+        };
+        const newCargoItemTypes = this.state.cargoItemTypes;
+        newCargoItemTypes[index] = event;
+        this.setState({cargoItemTypes: newCargoItemTypes});
+        this.props.handleDelta(modifiedEvent);
     }
     toggleDangerousGoods() {
         const event = {
@@ -73,10 +70,9 @@ export class ShipmentCargoItems extends Component {
     }
 
     render() {
-        const { cargoItems, handleDelta, theme, cargoItemTypes } = this.props;
-        const { cargoItemType } = this.state;
+        const { cargoItems, handleDelta, theme } = this.props;
+        const { cargoItemTypes } = this.state;
         const cargosAdded = [];
-        // const newCargoItem = cargoItems[0];
         const StyledSelect = styled(NamedSelect)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -95,9 +91,16 @@ export class ShipmentCargoItems extends Component {
                 background-color: #F9F9F9;
             }
         `;
-        const colliTypes = cargoItemTypes ? cargoItemTypes.map((ct) => {
-            return {label: ct.description, key: ct.id, dimension_x: ct.dimension_x, dimension_y: ct.dimension_y};
-        }) : [];
+        const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
+            this.props.availableCargoItemTypes.map(cargoItemType => (
+                {
+                    label: cargoItemType.description,
+                    key: cargoItemType.id,
+                    dimension_x: cargoItemType.dimension_x,
+                    dimension_y: cargoItemType.dimension_y
+                }
+            ))
+        ) : [];
         const numbers = [];
         for (let i = 1; i <= 20; i++) {
             numbers.push({label: i, value: i});
@@ -107,141 +110,141 @@ export class ShipmentCargoItems extends Component {
         };
         if (cargoItems) {
             cargoItems.forEach((cont, i) => {
-                    const tmpCont = (
-                        <div key={i} className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <div className="layout-row flex-90 layout-wrap layout-align-start-center" >
-                                <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Gross Weight </p>
-                                        <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                            <ValidatedInput
-                                                className="flex-80"
-                                                name={`${i}-payload_in_kg`}
-                                                value={cont.payload_in_kg}
-                                                type="number"
-                                                onChange={() => handleDelta}
-                                                firstRenderInputs={() => this.state.firstRenderInputs}
-                                                setFirstRenderInputs={() => this.setFirstRenderInputs}
-                                                nextStageAttempt={() => this.props.nextStageAttempt}
-                                                validations={ {matchRegexp: /[^0]/} }
-                                                validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
-                                                required
-                                            />
-                                            <div className="flex-20 layout-row layout-align-center-center">
-                                                kg
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Height </p>
-                                        <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                            <ValidatedInput
-                                                className="flex-80"
-                                                name={`${i}-dimension_z`}
-                                                value={cont.dimension_z}
-                                                type="number"
-                                                min="0"
-                                                step="any"
-                                                onChange={() => handleDelta}
-                                                firstRenderInputs={() => this.state.firstRenderInputs}
-                                                setFirstRenderInputs={() => this.setFirstRenderInputs}
-                                                nextStageAttempt={() => this.props.nextStageAttempt}
-                                                validations={ {matchRegexp: /[^0]/} }
-                                                validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
-                                                required
-                                            />
-                                            <div className="flex-20 layout-row layout-align-center-center">
-                                                cm
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Length </p>
-                                        <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                            <ValidatedInput
-                                                className="flex-80"
-                                                name={`${i}-dimension_x`}
-                                                value={cont.dimension_x}
-                                                type="number"
-                                                min="0"
-                                                step="any"
-                                                onChange={() => handleDelta}
-                                                firstRenderInputs={() => this.state.firstRenderInputs}
-                                                setFirstRenderInputs={() => this.setFirstRenderInputs}
-                                                nextStageAttempt={() => this.props.nextStageAttempt}
-                                                validations={ {matchRegexp: /[^0]/} }
-                                                validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
-                                                required
-                                            />
-                                            <div className="flex-20 layout-row layout-align-center-center">
-                                                cm
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Width </p>
-                                        <div className={`flex-95 layout-row ${styles.input_box}`}>
-                                            <ValidatedInput
-                                                className="flex-80"
-                                                name={`${i}-dimension_y`}
-                                                value={cont.dimension_y}
-                                                type="number"
-                                                min="0"
-                                                step="any"
-                                                onChange={() => handleDelta}
-                                                firstRenderInputs={() => this.state.firstRenderInputs}
-                                                setFirstRenderInputs={() => this.setFirstRenderInputs}
-                                                nextStageAttempt={() => this.props.nextStageAttempt}
-                                                validations={ {matchRegexp: /[^0]/} }
-                                                validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
-                                                required
-                                            />
-                                            <div className="flex-20 layout-row layout-align-center-center">
-                                                cm
-                                            </div>
+                const tmpCont = (
+                    <div key={i} className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                        <div className="layout-row flex-90 layout-wrap layout-align-start-center" >
+                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Gross Weight </p>
+                                    <div className={`flex-95 layout-row ${styles.input_box}`}>
+                                        <ValidatedInput
+                                            className="flex-80"
+                                            name={`${i}-payload_in_kg`}
+                                            value={cont.payload_in_kg}
+                                            type="number"
+                                            onChange={handleDelta}
+                                            firstRenderInputs={this.state.firstRenderInputs}
+                                            setFirstRenderInputs={this.setFirstRenderInputs}
+                                            nextStageAttempt={this.props.nextStageAttempt}
+                                            validations={ {matchRegexp: /[^0]/} }
+                                            validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                            required
+                                        />
+                                        <div className="flex-20 layout-row layout-align-center-center">
+                                            kg
                                         </div>
                                     </div>
                                 </div>
-                                <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> No. of Cargo Items </p>
-                                        <StyledSelect
-                                            placeholder={cont.quantity}
-                                            classes={styles.select}
-                                            name={`${i}-cargo_item_quantity`}
-                                            value={cont.quantity}
-                                            options={numbers}
-                                            onChange={() => this.handleCargoItemQ}
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Height </p>
+                                    <div className={`flex-95 layout-row ${styles.input_box}`}>
+                                        <ValidatedInput
+                                            className="flex-80"
+                                            name={`${i}-dimension_z`}
+                                            value={cont.dimension_z}
+                                            type="number"
+                                            min="0"
+                                            step="any"
+                                            onChange={handleDelta}
+                                            firstRenderInputs={this.state.firstRenderInputs}
+                                            setFirstRenderInputs={this.setFirstRenderInputs}
+                                            nextStageAttempt={this.props.nextStageAttempt}
+                                            validations={ {matchRegexp: /[^0]/} }
+                                            validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                            required
                                         />
+                                        <div className="flex-20 layout-row layout-align-center-center">
+                                            cm
+                                        </div>
                                     </div>
-                                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Dangerous Goods </p>
-                                        <Checkbox
-                                            onChange={() => this.toggleDangerousGoods}
-                                            checked={cont.dangerousGoods}
-                                            theme={() => this.props.theme}
+                                </div>
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Length </p>
+                                    <div className={`flex-95 layout-row ${styles.input_box}`}>
+                                        <ValidatedInput
+                                            className="flex-80"
+                                            name={`${i}-dimension_x`}
+                                            value={cont.dimension_x}
+                                            type="number"
+                                            min="0"
+                                            step="any"
+                                            onChange={handleDelta}
+                                            firstRenderInputs={this.state.firstRenderInputs}
+                                            setFirstRenderInputs={this.setFirstRenderInputs}
+                                            nextStageAttempt={this.props.nextStageAttempt}
+                                            validations={ {matchRegexp: /[^0]/} }
+                                            validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                            required
                                         />
+                                        <div className="flex-20 layout-row layout-align-center-center">
+                                            cm
+                                        </div>
                                     </div>
-                                    <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
-                                        <p className="flex-100 letter_1"> Colli Type </p>
-                                        <StyledSelect
-                                            placeholder="Colli Type"
-                                            classes={styles.select_100}
-                                            name={`${i}-cargo_item_quantity`}
-                                            value={cargoItemType[i]}
-                                            options={colliTypes}
-                                            onChange={() => this.handleCargoItemType}
+                                </div>
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Width </p>
+                                    <div className={`flex-95 layout-row ${styles.input_box}`}>
+                                        <ValidatedInput
+                                            className="flex-80"
+                                            name={`${i}-dimension_y`}
+                                            value={cont.dimension_y}
+                                            type="number"
+                                            min="0"
+                                            step="any"
+                                            onChange={handleDelta}
+                                            firstRenderInputs={this.state.firstRenderInputs}
+                                            setFirstRenderInputs={this.setFirstRenderInputs}
+                                            nextStageAttempt={this.props.nextStageAttempt}
+                                            validations={ {matchRegexp: /[^0]/} }
+                                            validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                            required
                                         />
+                                        <div className="flex-20 layout-row layout-align-center-center">
+                                            cm
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
-                            <div className="flex-10 layout-row layout-align-center-center">
-                                <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
+                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> No. of Cargo Items </p>
+                                    <StyledSelect
+                                        placeholder={cont.quantity}
+                                        classes={styles.select}
+                                        name={`${i}-quantity`}
+                                        value={cont.quantity}
+                                        options={numbers}
+                                        onChange={this.handleCargoItemQ}
+                                    />
+                                </div>
+                                <div className="layout-row flex layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Dangerous Goods </p>
+                                    <Checkbox
+                                        onChange={this.toggleDangerousGoods}
+                                        checked={cont.dangerousGoods}
+                                        theme={this.props.theme}
+                                    />
+                                </div>
+                                <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
+                                    <p className="flex-100 letter_1"> Colli Type </p>
+                                    <StyledSelect
+                                        placeholder="Colli Type"
+                                        classes={styles.select_100}
+                                        name={`${i}-colliType`}
+                                        value={cargoItemTypes[i]}
+                                        options={availableCargoItemTypes}
+                                        onChange={this.handleCargoItemType}
+                                    />
+                                </div>
+
                             </div>
                         </div>
-                    );
-                    cargosAdded.push(tmpCont);
+                        <div className="flex-10 layout-row layout-align-center-center">
+                            <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
+                        </div>
+                    </div>
+                );
+                cargosAdded.push(tmpCont);
             });
         }
 
@@ -253,7 +256,7 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row layout-align-start-center flex-100" >
                             <div className={`layout-row flex-none ${styles.add_unit} layout-wrap layout-align-center-center`} onClick={this.addNewCargo}>
                                 <i className="fa fa-plus-square-o clip" style={textStyle}/>
-                                <p classNme="flex-100"> Add another </p>
+                                <p> Add another </p>
                             </div>
                         </div>
                     </div>

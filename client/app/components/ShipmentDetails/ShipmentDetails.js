@@ -41,6 +41,7 @@ export class ShipmentDetails extends Component {
                     dimension_y: 0,
                     dimension_z: 0,
                     quantity: 1,
+                    colliType: '',
                     dangerousGoods: false
                 }
             ],
@@ -48,14 +49,15 @@ export class ShipmentDetails extends Component {
             containerErrors: {
                 payload_in_kg: true,
             },
-            cargoItemErrors: {
-                payload_in_kg: true,
-                dimension_x: true,
-                dimension_y: true,
-                dimension_z: true
-            },
+            cargoItemsErrors: [
+                {
+                    payload_in_kg: true,
+                    dimension_x: true,
+                    dimension_y: true,
+                    dimension_z: true
+                }
+            ],
             nextStageAttempt: false,
-            addUnitAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
             shipment: this.props.shipmentData.shipment,
@@ -135,9 +137,12 @@ export class ShipmentDetails extends Component {
         this.setState({ selectedDay });
     }
     deleteCargo(target, index) {
-        const arr = this.state[target];
-        arr.splice(index, 1);
-        this.setState({[target]: arr});
+        const cargoArr = this.state[target];
+        const errorsArr = this.state[target + 'Errors'];
+        cargoArr.splice(index, 1);
+        errorsArr.splice(index, 1);
+        this.setState({[target]: cargoArr});
+        this.setState({[target + 'Errors']: errorsArr});
     }
     handleSelectLocation(bool) {
         this.setState({
@@ -163,17 +168,12 @@ export class ShipmentDetails extends Component {
 
     handleCargoItemChange(event, hasError) {
         const { name, value } = event.target;
-        const nameKeys = name.split('-');
-        const index = parseInt(nameKeys[0], 10);
-        const target = nameKeys[1];
-        const itemArr = this.state.cargoItems;
-        itemArr[index][target] = value;
-        const cargoItemErrors = this.state.cargoItemErrors[index];
-        cargoItemErrors[target] = hasError;
-        this.setState({
-            cargoItems: itemArr,
-            cargoItemErrors: cargoItemErrors
-        });
+        const [ index, suffixName ] = name.split('-');
+        const cargoItems = this.state.cargoItems;
+        cargoItems[index][suffixName] = value;
+        const cargoItemsErrors = this.state.cargoItemsErrors;
+        cargoItemsErrors[index][suffixName] = hasError;
+        this.setState({ cargoItems, cargoItemsErrors });
     }
 
     handleContainerChange(event, hasError) {
@@ -190,14 +190,7 @@ export class ShipmentDetails extends Component {
     }
 
     addNewCargoItem() {
-        if (this.errorsExist(this.state.cargoItemErrors)) {
-            console.log('(!) Errors exist (!)');
-            this.setState({addUnitAttempt: true});
-            return;
-        }
-        this.setState({addUnitAttempt: false});
-
-        const newCI = {
+        const newCargoItem = {
             payload_in_kg: 0,
             dimension_x: 0,
             dimension_y: 0,
@@ -211,21 +204,19 @@ export class ShipmentDetails extends Component {
             dimension_y: true,
             dimension_z: true
         };
-        const currArray = this.state.cargoItems;
-        currArray.unshift(newCI);
-        this.setState({
-            cargoItems: currArray,
-            cargoItemErrors: newErrors
-        });
+        const { cargoItems, cargoItemsErrors } = this.state;
+        cargoItems.push(newCargoItem);
+        cargoItemsErrors.push(newErrors);
+        this.setState({ cargoItems, cargoItemsErrors });
     }
 
     addNewContainer() {
-        if (this.errorsExist(this.state.containerErrors)) {
-            console.log('(!) Errors exist (!)');
-            this.setState({addUnitAttempt: true});
-            return;
-        }
-        this.setState({addUnitAttempt: false});
+        // if (this.errorsExist(this.state.containerErrors)) {
+        //     console.log('(!) Errors exist (!)');
+        //     this.setState({addUnitAttempt: true});
+        //     return;
+        // }
+        // this.setState({addUnitAttempt: false});
 
         const newCont = {
             payload_in_kg: 0,
@@ -250,8 +241,12 @@ export class ShipmentDetails extends Component {
     setTargetAddress(target, address) {
         this.setState({ [target]: address });
     }
-    errorsExist(errorsObj) {
-        return Object.values(errorsObj).indexOf(true) > -1;
+    errorsExist(errorsObjects) {
+        let returnBool = false;
+        errorsObjects.forEach(errorsObj => {
+            if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true;
+        });
+        return returnBool;
     }
 
     handleNextStage() {
@@ -281,8 +276,8 @@ export class ShipmentDetails extends Component {
         // So it will break out of the function and set nextStage attempt to true,
         // in case one of them returns false
         if (
-            this.errorsExist(this.state.cargoItemErrors) &&
-            this.errorsExist(this.state.containerErrors)
+            this.errorsExist(this.state.cargoItemsErrors) &&
+            this.errorsExist(this.state.containersErrors)
         ) {
             this.setState({ nextStageAttempt: true });
             return;
@@ -340,7 +335,7 @@ export class ShipmentDetails extends Component {
                         addContainer={this.addNewContainer}
                         handleDelta={this.handleContainerChange}
                         deleteItem={this.deleteCargo}
-                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
                     />
                 );
@@ -352,14 +347,14 @@ export class ShipmentDetails extends Component {
                         addCargoItem={this.addNewCargoItem}
                         handleDelta={this.handleCargoItemChange}
                         deleteItem={this.deleteCargo}
-                        nextStageAttempt={this.state.nextStageAttempt || this.state.addUnitAttempt}
+                        nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
-                        cargoItemTypes={shipmentData.cargoItemTypes}
+                        availableCargoItemTypes={shipmentData.cargoItemTypes}
                     />
                 );
             }
         }
-        const routeIds = shipmentData.routes.map(route => route.id);
+        const routeIds = shipmentData.routes ? shipmentData.routes.map(route => route.id) : [];
         const mapBox = (
             <GmapsLoader
                 theme={theme}
