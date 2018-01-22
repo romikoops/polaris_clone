@@ -31,6 +31,10 @@ export default class GmapsLoader extends Component {
                             destination={this.props.destination}
                             nextStageAttempt={this.props.nextStageAttempt}
                             handleAddressChange={this.props.handleAddressChange}
+                            routeIds={this.props.routeIds}
+                            nexusDispatch={this.props.nexusDispatch}
+                            availableDestinations={this.props.availableDestinations}
+                            handleSelectLocation={this.props.handleSelectLocation}
                         />
                     )
                 }

@@ -13,11 +13,23 @@
     transition: all 0.3s ease;
   }
   .input_box.with_errors {
-    height: 87px;
+    height: 120px;
+    .btn_address_form {
+      top: 33px;
+    }
+    .address_form {
+      margin-top: 33px;
+    }
   }
   .select {
     width: 195px;
     margin: 3px 0;
+  }
+  .input_wrapper {
+    position: relative;
+    width: 195px;
+    height: 100%;
+    margin: auto;
   }
   .input {
     height: 36px;
@@ -28,6 +40,13 @@
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
+  }
+  .input.with_errors {
+    background-color: #FAD1CA;
+    color: rgb(211, 104, 80);
+    &::placeholder {
+      color: rgb(211, 104, 80);
+    }
   }
   .slbox {
     min-height: 550px;

@@ -93,6 +93,10 @@ Rails.application.routes.draw do
       post "finish_booking",     as: :finish_booking
       post "update",             as: :update_booking
     end
+
+    resources :nexuses, only: [:index]
+    get 'find_nexus', to: 'nexuses#find_nexus'
+
     resources :contacts, only: [:index, :show, :create, :update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
     post 'contacts/new_alias', to: 'contacts#new_alias'

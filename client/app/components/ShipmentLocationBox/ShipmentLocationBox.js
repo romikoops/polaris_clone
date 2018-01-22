@@ -12,10 +12,13 @@ import { colorSVG } from '../../helpers';
 import { mapStyling } from '../../constants/map.constants';
 import styled from 'styled-components';
 import { capitalize } from '../../helpers/stringTools';
+import axios from 'axios';
+import { BASE_URL } from '../../constants';
+import { authHeader } from '../../helpers';
 
 const mapStyle = {
     width: '100%',
-    height: '450px',
+    height: '600px',
     borderRadius: '3px',
     boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 };
@@ -369,6 +372,8 @@ export class ShipmentLocationBox extends Component {
                 }
             });
 
+            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
+
             this.props.setTargetAddress('origin', {
                 ...this.state.origin,
                 hub_id: event.value.id,
@@ -382,6 +387,7 @@ export class ShipmentLocationBox extends Component {
                 event.value.name, 'origin'
             );
         } else {
+            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds);
             this.setState({
                 oSelect: '',
                 origin: {}
@@ -466,6 +472,50 @@ export class ShipmentLocationBox extends Component {
             this.changeAddressFormVisibility(target, false);
         }, 3000);
 
+        const { allNexuses } = this.props;
+        if (target === 'origin') {
+            axios({
+              method: 'get',
+              headers: authHeader(),
+              url: `${BASE_URL}/find_nexus?address=${place.name}`
+            }).then(response => {
+                const nexusName = response.data.data.nexus.name;
+
+                const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+                const originOptionNames = originOptions.map(originOption => originOption.label);
+
+                this.setState({
+                    originFieldsHaveErrors: !originOptionNames.includes(nexusName)
+                });
+                this.props.handleSelectLocation(
+                    !originOptionNames.includes(nexusName) ||
+                    this.state.destinationFieldsHaveErrors
+                );
+            });
+
+            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
+        } else if (target === 'destination') {
+            axios({
+              method: 'get',
+              headers: authHeader(),
+              url: `${BASE_URL}/find_nexus?address=${place.name}`
+            }).then(response => {
+                const nexusName = response.data.data.nexus ? response.data.data.nexus.name : '';
+
+                let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
+                if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
+                const destinationOptionNames = destinationOptions.map(destinationOption => destinationOption.label);
+
+                this.setState({
+                    destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
+                });
+                this.props.handleSelectLocation(
+                    this.state.originFieldsHaveErrors ||
+                    !destinationOptionNames.includes(nexusName)
+                );
+            });
+        }
+
         this.setState({ [target]: tmpAddress });
         this.props.setTargetAddress(target, tmpAddress);
         this.setState({
@@ -490,13 +540,15 @@ export class ShipmentLocationBox extends Component {
     render() {
         const { allNexuses } = this.props;
         const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
-        const destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
+
+        let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
+        if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
+
+        const { originFieldsHaveErrors, destinationFieldsHaveErrors } = this.state;
 
         const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
         const placeholderColorOverwrite = value => (
-            !value && this.props.nextStageAttempt ?
-                'color: rgb(211, 104, 80);' :
-                ''
+            !value && this.props.nextStageAttempt ? 'color: rgb(211, 104, 80);' : ''
         );
 
         const StyledSelect = styled(Select)`
@@ -579,6 +631,7 @@ export class ShipmentLocationBox extends Component {
                         type="string"
                         onChange={this.handleAddressChange}
                         value={this.props.origin.number}
+                        nextStageAttempt={this.props.nextStageAttempt}
                         placeholder="Number"
                     />
                     <input
@@ -628,15 +681,20 @@ export class ShipmentLocationBox extends Component {
 
         const originAuto = (
             <div className="flex-100 layout-row layout-wrap">
-                <input
-                    id="origin"
-                    name="origin"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAuto}
-                    value={this.state.autoText.origin}
-                    placeholder="Search for address"
-                />
+                <div className={styles.input_wrapper}>
+                    <input
+                        id="origin"
+                        name="origin"
+                        className={`flex-none ${styles.input} ${originFieldsHaveErrors ? styles.with_errors : '' }`}
+                        type="string"
+                        onChange={this.handleAuto}
+                        value={this.state.autoText.origin}
+                        placeholder="Search for address"
+                    />
+                    <span className={errorStyles.error_message} style={{color: 'white'}}>
+                        {originFieldsHaveErrors ? 'No routes from this address' : ''}
+                    </span>
+                </div>
             </div>
         );
 
@@ -711,15 +769,20 @@ export class ShipmentLocationBox extends Component {
 
         const destAuto = (
             <div className="flex-100 layout-row layout-wrap">
-                <input
-                    id="destination"
-                    name="destination"
-                    className={`flex-none ${styles.input}`}
-                    type="string"
-                    onChange={this.handleAuto}
-                    value={this.state.autoText.destination}
-                    placeholder="Search for address"
-                />
+                <div className={styles.input_wrapper}>
+                    <input
+                        id="destination"
+                        name="destination"
+                        className={`flex-none ${styles.input} ${destinationFieldsHaveErrors ? styles.with_errors : '' }`}
+                        type="string"
+                        onChange={this.handleAuto}
+                        value={this.state.autoText.destination}
+                        placeholder="Search for address"
+                    />
+                    <span className={errorStyles.error_message} style={{color: 'white'}}>
+                        {destinationFieldsHaveErrors ? 'No routes to this address' : ''}
+                    </span>
+                </div>
             </div>
         );
         const displayLocationOptions = target => {
@@ -732,7 +795,11 @@ export class ShipmentLocationBox extends Component {
             return '';
         };
         const { theme } = this.props;
-        const errorClass = showOriginError || showDestinationError ? styles.with_errors : '';
+        const errorClass = (
+            originFieldsHaveErrors || destinationFieldsHaveErrors ?
+            styles.with_errors :
+            ''
+        );
         return (
             <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
                 <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >

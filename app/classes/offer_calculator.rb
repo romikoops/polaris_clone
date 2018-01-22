@@ -164,7 +164,7 @@ class OfferCalculator
     km = google_directions.distance_in_km
 
     price_results = @cargo_units.map do |cargo_unit|
-      calc_trucking_price(origin, container, km, hub, @mongo)
+      calc_trucking_price(origin, cargo_unit, km, hub, @mongo)
     end
 
     trucking_total = { value: 0, currency: "" }

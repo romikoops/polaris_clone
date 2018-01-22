@@ -82,6 +82,7 @@ export class ShipmentDetails extends Component {
         this.deleteCargo = this.deleteCargo.bind(this);
         this.scrollTo = this.scrollTo.bind(this);
         this.setIncoTerm = this.setIncoTerm.bind(this);
+        this.handleSelectLocation = this.handleSelectLocation.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -138,7 +139,11 @@ export class ShipmentDetails extends Component {
         arr.splice(index, 1);
         this.setState({[target]: arr});
     }
-
+    handleSelectLocation(bool) {
+        this.setState({
+            AddressFormsHaveErrors: bool
+        });
+    }
     handleAddressChange(event) {
         const eventKeys = event.target.name.split('-');
         const key1 = eventKeys[0];
@@ -258,7 +263,11 @@ export class ShipmentDetails extends Component {
             this.scrollTo('incoterms');
             return;
         }
-        if (isEmpty(this.state.origin) || isEmpty(this.state.destination)) {
+        if (
+            isEmpty(this.state.origin) ||
+            isEmpty(this.state.destination) ||
+            this.state.AddressFormsHaveErrors
+        ) {
             this.setState({ nextStageAttempt: true });
             this.scrollTo('map');
             return;
@@ -347,7 +356,7 @@ export class ShipmentDetails extends Component {
                 );
             }
         }
-
+        const routeIds = shipmentData.routes.map(route => route.id);
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -360,6 +369,10 @@ export class ShipmentDetails extends Component {
                 destination={this.state.destination}
                 nextStageAttempt={this.state.nextStageAttempt}
                 handleAddressChange={this.handleAddressChange}
+                routeIds={routeIds}
+                nexusDispatch={this.props.nexusDispatch}
+                availableDestinations={this.props.availableDestinations}
+                handleSelectLocation={this.handleSelectLocation}
             />
         );
         const formattedSelectedDay = this.state.selectedDay
@@ -373,9 +386,9 @@ export class ShipmentDetails extends Component {
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;
         const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm;
 
-        const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
+        const backgroundColor = value => !value && this.state.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
         const placeholderColorOverwrite = value => (
-            !value && this.props.nextStageAttempt ?
+            !value && this.state.nextStageAttempt ?
                 'color: rgb(211, 104, 80);' :
                 ''
         );
