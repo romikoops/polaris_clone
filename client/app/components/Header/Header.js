@@ -38,7 +38,7 @@ class Header extends Component {
         const accountLinks = [
             {
                 url: '/account',
-                text: 'Settings',
+                text: 'Account',
                 fontAwesomeIcon: 'fa-cog',
                 key: 'settings'
             },

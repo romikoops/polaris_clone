@@ -50,7 +50,12 @@ class Location < ApplicationRecord
     return nl
   end
 
-  def self.create_and_geocode(location_params)
+  def self.create_and_geocode(input)
+    if input.first[0].is_a? String
+      location_params = input.symbolize_keys
+    else
+      location_params = input
+    end
     if !location_params[:geocoded_address]
       str = location_params[:street_address].to_s + " " + location_params[:city].to_s + " " + location_params[:zip_code].to_s + " " + location_params[:country].to_s
       location_params[:geocoded_address] = str

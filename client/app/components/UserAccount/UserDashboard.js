@@ -7,7 +7,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 // import {v4} from 'node-uuid';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
-import { AdminSearchableClients, AdminSearchableShipments } from '../Admin/AdminSearchables';
+import { AdminSearchableClients } from '../Admin/AdminSearchables';
 const actRoutesData = activeRoutesData;
 
 export class UserDashboard extends Component {
@@ -34,8 +34,8 @@ export class UserDashboard extends Component {
         shipment.clientName = user ? `${user.first_name} ${user.last_name}` : '';
         shipment.companyName = user ? `${user.company_name}` : '';
         const hubKeys = shipment.schedule_set[0].hub_route_key.split('-');
-        shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : '';
-        shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : '';
+        shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].data.name : '';
+        shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].data.name : '';
         return shipment;
     }
 
@@ -64,11 +64,14 @@ export class UserDashboard extends Component {
     }
 
     render() {
-        const { theme, hubs, dashboard, user, userDispatch, navFn } = this.props;
+        const { theme, hubs, dashboard, user, userDispatch } = this.props;
         // ;
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         const { shipments, pricings, contacts, locations} = dashboard;
         console.log(pricings);
         const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
@@ -81,97 +84,153 @@ export class UserDashboard extends Component {
             return this.prepShipment(sh, user, hubs);
         }) : false;
 
-        const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-        const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-        const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
-        const links = [
-            {
-                icon: 'fa-tachometer',
-                text: 'Dashboard',
-                url: '/account/dashboard',
-                target: 'dashboard'
-            },
-            {
-                icon: 'fa-ship',
-                text: 'Shipments',
-                url: '/account/shipments',
-                target: 'shipments'
-            },
-            {
-                icon: 'fa-user',
-                text: 'Profile',
-                url: '/account/profile',
-                target: 'profile'
-            },
-            {
-                icon: 'fa-address-card',
-                text: 'Contacts',
-                url: '/account/contacts',
-                target: 'contacts'
-            }
-        ];
-        const linkTiles = links.map((li) => {
+        // const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
+        // const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
+        // const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
+        const newReqShips = mergedRequestedShipments.length > 0 ? mergedRequestedShipments.map((ship) => {
             return (
-                <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-center'} onClick={() => navFn(li.url)}>
-                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.nav_card}`} >
-                        <div className="flex layout-row layout-align-center-center">
-                            <i className={`fa ${li.icon} clip`} style={textStyle}></i>
-                        </div>
-                        <div className="flex-75 layout-row layout-align-center-center">
-                            <h3 className="flex-none letter_3">{li.text}</h3>
-                        </div>
+                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`}>
+                    <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.imc_reference}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.status}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.incoterm}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none"> Yes </p>
                     </div>
                 </div>
             );
-        });
+        }) :
+            (<div className="flex-100 layout-row layout-align-start-center">
+                <p className="flex-none" > No Shipments requested.</p>
+            </div>);
+        const newOpenShips = mergedOpenShipments.length > 0 ? mergedOpenShipments.map((ship) => {
+            return (
+                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`}>
+                    <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.imc_reference}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.status}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none">{ship.incoterm}</p>
+                    </div>
+                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
+                        <p className="flex-none"> Yes </p>
+                    </div>
+                </div>
+            );
+        }) :
+            (<div className="flex-100 layout-row layout-align-start-center">
+                <p className="flex-none" > No Shipments in process.</p>
+            </div>);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
-                </div>
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_main}`}>
+                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_top}`}>
 
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
-                        <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
-                    </div>
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-align-center-center button_padding">
-                        <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1}/>
-                    </div>
-                </div>
-                { false ? (
-                    <div>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
-                            {linkTiles}
+                        <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
+                            <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
+                                <h2 className="flex-none">Welcome back, {user.first_name}</h2>
+                            </div>
+
+                            <div className={`flex-none layout-row layout-align-center-center ${ustyles.carousel}`}>
+                                <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1} fade/>
+                            </div>
+                            <div className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}>
+                                <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
+                            </div>
+                            {/* </div>*/}
+                            <div className={`flex-50 layout-row ${ustyles.right} layout-wrap layout-align-space-between-space-between`}>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Total Shipments</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedRequestedShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Requested Shipments</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedOpenShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Shipments in Progress</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{ mergedFinishedShipments.length }</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Completed Shipments</h3>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                ) : ''}
-                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Shipments</p>
-                    </div>
-                    { openShipments }
-                    { reqShipments }
-                    { finishedShipments }
-                    { mergedOpenShipments.length === 0 && mergedRequestedShipments.length === 0 && mergedFinishedShipments.length === 0 ?
-                        <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-                                <p className={` ${styles.sec_subheader_text} flex-none`}  > No Shipments yet</p>
+                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <h3 className="flex-none clip" style={textStyle}>Shipments</h3>
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <div className="flex-40 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Requested Shipments </h3>
                             </div>
-                            <p className="flex-none"  > Click 'Make a Booking' to begin!</p>
-                        </div> :
-                        ''
-                    }
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none"> Reference </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Status </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Incoterm </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Requires Action </h3>
+                            </div>
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                            {newReqShips}
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <div className="flex-40 layout-row layout-align-start-center">
+                                <h3 className="flex-none">In Process </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none"> Reference </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Status </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Incoterm </h3>
+                            </div>
+                            <div className="flex-15 layout-row layout-align-start-center">
+                                <h3 className="flex-none">Requires Action </h3>
+                            </div>
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                            {newOpenShips}
+                        </div>
+                    </div>
                 </div>
                 <AdminSearchableClients theme={theme} clients={contacts} title="Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
 
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Saved Locations </p>
+                        <p className={` ${styles.sec_header_text} flex-none`}  > My Shipment Addresses </p>
                     </div>
                     <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                 </div>

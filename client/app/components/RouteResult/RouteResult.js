@@ -139,7 +139,6 @@ export class RouteResult extends Component {
                             }`}
                         >
                             {/* <p className="flex-none no_m">{loadType}</p>*/}
-                            <p className="flex-none no_m">{schedule.id}</p>
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">

@@ -78,8 +78,8 @@ export class LandingTop extends Component {
                         <Header user={user} theme={theme} invert={true}/>
                     </div>
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
-                        <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>
-                        { user ? myAccount : '' }
+                        { !user || (user && user.role_id === 2) ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : ''}
+                        { user && user.role_id === 2 ? myAccount : '' }
                         { user && user.role_id === 1 ? toAdmin : '' }
                     </div>
 

@@ -7,7 +7,7 @@ import defs from '../../styles/default_classes.scss';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styled from 'styled-components';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 export class ShipmentCargoItems extends Component {
     constructor(props) {
         super(props);
@@ -143,7 +143,10 @@ export class ShipmentCargoItems extends Component {
                         <div className="layout-row flex-90 layout-wrap layout-align-start-center" >
                             <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Gross Weight </p>
+                                    <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                                        <p className="flex-none letter_1"> Gross Weight </p>
+                                        <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+                                    </div>
                                     <div className={`flex-95 layout-row ${styles.input_box}`}>
                                         <ValidatedInput
                                             className="flex-80"
@@ -253,6 +256,7 @@ export class ShipmentCargoItems extends Component {
                                         checked={newCargoItem.dangerousGoods}
                                         theme={this.props.theme}
                                     />
+                                    <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                                 </div>
                                 <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
                                     <p className="flex-100 letter_1"> Colli Type </p>

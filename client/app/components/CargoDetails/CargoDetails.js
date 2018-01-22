@@ -7,6 +7,7 @@ import { HSCodeRow } from '../HSCodeRow/HSCodeRow';
 import defaults from '../../styles/default_classes.scss';
 import Truncate from 'react-truncate';
 import { converter } from '../../helpers';
+import { Tooltip } from '../Tooltip/Tooltip';
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -358,6 +359,7 @@ export class CargoDetails extends Component {
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <h4 className="flex-none">Insurance</h4>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
                             <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} theme={theme} />
                         </div>
                         {insuranceBox}
@@ -368,6 +370,7 @@ export class CargoDetails extends Component {
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <h4 className="flex-none">Customs</h4>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                             <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} theme={theme} />
                         </div>
                         {customsBox}

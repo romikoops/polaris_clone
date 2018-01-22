@@ -22,7 +22,7 @@ resources :subdomain, only: [:show] do
     post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
     post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
     
-    resources :hubs, only: [:index, :show] do
+    resources :hubs, only: [:index, :show, :create] do
       patch "set_status"
     end
     post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite

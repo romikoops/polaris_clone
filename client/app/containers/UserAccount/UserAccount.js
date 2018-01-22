@@ -19,7 +19,7 @@ import {
 import UserContacts from '../../components/UserAccount/UserContacts';
 import { userActions, authenticationActions } from '../../actions';
 
-import './UserAccount.scss';
+import styles from '../../components/UserAccount/UserAccount.scss';
 import { Loading } from '../../components/Loading/Loading';
 
 
@@ -172,7 +172,7 @@ export class UserAccount extends Component {
                 <div
                     className={`${defs.content_width} layout-row flex-none ${
                         defs.spacing_md_top
-                    } ${defs.spacing_md_bottom}`}
+                    } ${defs.spacing_md_bottom} ${styles.content_drop}`}
                 >
                     <FloatingMenu Comp={nav} theme={theme}/>
 

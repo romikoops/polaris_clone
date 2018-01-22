@@ -10,7 +10,7 @@ import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers';
 import {mapStyling} from '../../constants/map.constants';
 import styled from 'styled-components';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 const mapStyle = {
     width: '100%',
     height: '450px',
@@ -705,6 +705,7 @@ export class ShipmentLocationBox extends Component {
                                     onChange={this.handleTrucking}
                                 />
                                 <label htmlFor="pre-carriage">Pre-Carriage</label>
+                                <Tooltip theme={theme} icon="fa-info-circle" color="white" text="has_pre_carriage" />
                             </div>
                             <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
                                 {/* <p className="flex-100"> Origin Address </p>*/}
@@ -724,6 +725,7 @@ export class ShipmentLocationBox extends Component {
                                     onChange={this.handleTrucking}
                                 />
                                 <label htmlFor="on-carriage">On-Carriage</label>
+                                <Tooltip theme={theme} icon="fa-info-circle" color="white" text="has_on_carriage" />
                             </div>
                             <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
                                 {/* <p className="flex-100">

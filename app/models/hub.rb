@@ -1,7 +1,8 @@
 class Hub < ApplicationRecord
 
   belongs_to :tenant
-  belongs_to :nexus, class_name: "Location", foreign_key: "location_id"
+  belongs_to :nexus, class_name: "Location"
+  belongs_to :location
   has_many :hub_routes
   has_many :schedules, through: :hub_routes
   has_many :routes, through: :hub_routes
@@ -15,11 +16,18 @@ class Hub < ApplicationRecord
       "rail" => "Railway Station"
     }
     
-    hub = nexus.hubs.find_or_create_by( location_id: nexus.id, tenant_id: tenant_id, hub_type: mot, latitude: nexus.latitude, longitude: nexus.longitude, name: "#{nexus.name} #{hub_type_name[mot]}", photo: nexus.photo)
+    hub = nexus.hubs.find_or_create_by( nexus_id: nexus.id, tenant_id: tenant_id, hub_type: mot, latitude: nexus.latitude, longitude: nexus.longitude, name: "#{nexus.name} #{hub_type_name[mot]}", photo: nexus.photo)
     p tenant_id
     return hub
   end
-
+  def self.update
+    hubs = Hub.all
+    hubs.each do |h|
+      h.nexus_id = h.location_id
+      h.location_id = nil
+      h.save!
+    end
+  end
   def generate_hub_code!(tenant_id)
     existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type, tenant_id: tenant_id)
     num = existing_hubs.length

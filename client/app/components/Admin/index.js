@@ -5,6 +5,7 @@ export * from './AdminHubs';
 export * from './AdminHubsIndex';
 export * from './AdminHubTile';
 export * from './AdminHubView';
+export * from './AdminHubForm';
 
 export * from './AdminNav';
 export * from './AdminNavItem';

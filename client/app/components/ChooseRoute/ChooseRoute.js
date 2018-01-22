@@ -60,83 +60,157 @@ export class ChooseRoute extends Component {
     }
     render() {
         const { shipmentData, messages, user } = this.props;
-        const focusRoutes = [];
-        const altRoutes = [];
-        let closestRoute;
         let smallestDiff = 100;
         if (!shipmentData) {
             return '';
         }
-            const {
-                shipment,
-                originHubs,
-                destinationHubs,
-                schedules
-            } = shipmentData;
-            const depDay = shipment ? shipment.planned_pickup_date : new Date();
-                schedules.sort(this.dynamicSort('etd'));
-                schedules.forEach(sched => {
-                    if (
-                        Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <=
+        const {
+            shipment,
+            originHubs,
+            destinationHubs,
+            schedules
+        } = shipmentData;
+        const depDay = shipment ? shipment.planned_pickup_date : new Date();
+        schedules.sort(this.dynamicSort('etd'));
+        const idArrays = {
+            closest: '',
+            focus: [],
+            alternative: []
+        };
+        const closestRoute = [];
+        const focusRoutes = [];
+        const altRoutes = [];
+        schedules.forEach(sched => {
+            console.log(sched.id);
+            if (
+                Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <=
                         this.state.durationFilter
-                    ) {
-                        if (
-                            Math.abs(moment(sched.etd).diff(depDay, 'days')) <
+            ) {
+                if (
+                    Math.abs(moment(sched.etd).diff(depDay, 'days')) <
                             smallestDiff && sched.mode_of_transport === this.state.selectedMoT
-                        ) {
-                            smallestDiff = Math.abs(
-                                moment(sched.etd).diff(depDay, 'days')
-                            );
-                            closestRoute = (
-                                <RouteResult
-                                    key={v4()}
-                                    selectResult={this.chooseResult}
-                                    theme={this.props.theme}
-                                    originHubs={originHubs}
-                                    destinationHubs={destinationHubs}
-                                    fees={shipment.schedules_charges}
-                                    schedule={sched}
-                                    user={user}
-                                    loadType={shipment.load_type}
-                                    pickupDate={shipment.planned_pickup_date}
-                                />
-                            );
-                        }
-                        if (
-                            sched.mode_of_transport === this.state.selectedMoT
-                        ) {
-                            focusRoutes.push(
-                                <RouteResult
-                                    key={v4()}
-                                    selectResult={this.chooseResult}
-                                    theme={this.props.theme}
-                                    originHubs={originHubs}
-                                    destinationHubs={destinationHubs}
-                                    fees={shipment.schedules_charges}
-                                    schedule={sched}
-                                    user={user}
-                                    loadType={shipment.load_type}
-                                    pickupDate={shipment.planned_pickup_date}
-                                />
-                            );
-                        } else {
-                            altRoutes.push(
-                                <RouteResult
-                                    key={v4()}
-                                    selectResult={this.chooseResult}
-                                    theme={this.props.theme}
-                                    originHubs={originHubs}
-                                    destinationHubs={destinationHubs}
-                                    fees={shipment.schedules_charges}
-                                    schedule={sched}
-                                    user={user}
-                                    loadType={shipment.load_type}
-                                    pickupDate={shipment.planned_pickup_date}
-                                />
-                            );
-                        }
-                    }
-                });
+                ) {
+                    smallestDiff = Math.abs(
+                        moment(sched.etd).diff(depDay, 'days')
+                    );
+                    idArrays.closest = sched.id;
+                    closestRoute.push(
+                        <RouteResult
+                            key={v4()}
+                            selectResult={this.chooseResult}
+                            theme={this.props.theme}
+                            originHubs={originHubs}
+                            destinationHubs={destinationHubs}
+                            fees={shipment.schedules_charges}
+                            schedule={sched}
+                            user={user}
+                            loadType={shipment.load_type}
+                            pickupDate={shipment.planned_pickup_date}
+                        />
+                    );
+                }
+                if (
+                    sched.mode_of_transport === this.state.selectedMoT &&
+                            !idArrays.focus.includes(sched.id) && sched.id !== idArrays.closest
+                ) {
+                    idArrays.focus.push(sched.id);
+                    focusRoutes.push(
+                        <RouteResult
+                            key={v4()}
+                            selectResult={this.chooseResult}
+                            theme={this.props.theme}
+                            originHubs={originHubs}
+                            destinationHubs={destinationHubs}
+                            fees={shipment.schedules_charges}
+                            schedule={sched}
+                            user={user}
+                            loadType={shipment.load_type}
+                            pickupDate={shipment.planned_pickup_date}
+                        />
+                    );
+                } else if (
+                    sched.mode_of_transport !== this.state.selectedMoT &&
+                            !idArrays.alternative.includes(sched.id)
+                ) {
+                    idArrays.alternative.push(sched.id);
+                    altRoutes.push(
+                        <RouteResult
+                            key={v4()}
+                            selectResult={this.chooseResult}
+                            theme={this.props.theme}
+                            originHubs={originHubs}
+                            destinationHubs={destinationHubs}
+                            fees={shipment.schedules_charges}
+                            schedule={sched}
+                            user={user}
+                            loadType={shipment.load_type}
+                            pickupDate={shipment.planned_pickup_date}
+                        />
+                    );
+                }
+            }
+        });
+        // debugger;
+        // const closestRoute = schedules.map((sr) => {
+        //     if (sr.id === idArrays.closest) {
+        //         return (
+        //             <RouteResult
+        //                 key={v4()}
+        //                 selectResult={this.chooseResult}
+        //                 theme={this.props.theme}
+        //                 originHubs={originHubs}
+        //                 destinationHubs={destinationHubs}
+        //                 fees={shipment.schedules_charges}
+        //                 schedule={sr}
+        //                 user={user}
+        //                 loadType={shipment.load_type}
+        //                 pickupDate={shipment.planned_pickup_date}
+        //             />
+        //         );
+        //     }
+        //     return '';
+        // });
+        // const focusRoutes = schedules.map((fr) => {
+        //     console.log(fr);
+        //     console.log(idArrays.closest);
+        //     console.log(fr.id !== idArrays.closest && idArrays.focus.includes(fr.id));
+        //     if (fr.id !== idArrays.closest && idArrays.focus.includes(fr.id)) {
+        //         return (
+        //             <RouteResult
+        //                 key={v4()}
+        //                 selectResult={this.chooseResult}
+        //                 theme={this.props.theme}
+        //                 originHubs={originHubs}
+        //                 destinationHubs={destinationHubs}
+        //                 fees={shipment.schedules_charges}
+        //                 schedule={fr}
+        //                 user={user}
+        //                 loadType={shipment.load_type}
+        //                 pickupDate={shipment.planned_pickup_date}
+        //             />
+        //         );
+        //     }
+        //     return '';
+        // });
+        // const altRoutes = schedules.map((ar) => {
+        //     if (ar.id !== idArrays.closest && idArrays.alternative.includes(ar.id)) {
+        //         return (
+        //             <RouteResult
+        //                 key={v4()}
+        //                 selectResult={this.chooseResult}
+        //                 theme={this.props.theme}
+        //                 originHubs={originHubs}
+        //                 destinationHubs={destinationHubs}
+        //                 fees={shipment.schedules_charges}
+        //                 schedule={ar}
+        //                 user={user}
+        //                 loadType={shipment.load_type}
+        //                 pickupDate={shipment.planned_pickup_date}
+        //             />
+        //         );
+        //     }
+        //     return '';
+        // });
         // altRoutes.sort(this.dynamicSort('etd'));
         // focusRoutes.sort(this.dynamicSort('etd'));
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
@@ -172,7 +246,7 @@ export class ChooseRoute extends Component {
                                 }`}
                             >
                                 <p className="flex-none">
-                                    Other modes of transport
+                                    Alternative modes of transport
                                 </p>
                             </div>
                             {altRoutes}

@@ -5,7 +5,7 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow';
 import { LOAD_TYPES } from '../../constants';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 export class ChooseShipment extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +22,7 @@ export class ChooseShipment extends Component {
     render() {
         const { theme, messages } = this.props;
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+
         return (
             <div
                 className={`${
@@ -36,6 +37,7 @@ export class ChooseShipment extends Component {
                         } flex-100 layout-row layout-align-start-center`}
                     >
                         <p className="flex-none"> Choose your shipment type</p>
+                        <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
                     </div>
                     <CardLinkRow theme={theme} cardArray={this.state.cards} />
                 </div>
