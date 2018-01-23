@@ -46,9 +46,11 @@ export class ShipmentDetails extends Component {
                 }
             ],
             routes: {},
-            containerErrors: {
-                payload_in_kg: true,
-            },
+            containersErrors: [
+                {
+                    payload_in_kg: true
+                }
+            ],
             cargoItemsErrors: [
                 {
                     payload_in_kg: true,
@@ -169,24 +171,20 @@ export class ShipmentDetails extends Component {
     handleCargoItemChange(event, hasError) {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
-        const cargoItems = this.state.cargoItems;
+        const { cargoItems, cargoItemsErrors } = this.state;
         cargoItems[index][suffixName] = value;
-        const cargoItemsErrors = this.state.cargoItemsErrors;
-        cargoItemsErrors[index][suffixName] = hasError;
+        if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError;
         this.setState({ cargoItems, cargoItemsErrors });
     }
 
     handleContainerChange(event, hasError) {
         const { name, value } = event.target;
-        const itemArr = this.state.containers;
-        itemArr[0][name] = value;
-        const containerErrors = this.state.containerErrors;
-        containerErrors[name] = hasError;
+        const [ index, suffixName ] = name.split('-');
+        const { containers, containersErrors } = this.state;
+        containers[index][suffixName] = value;
+        if (hasError !== undefined) containersErrors[index][suffixName] = hasError;
 
-        this.setState({
-            containers: itemArr,
-            containerErrors: containerErrors
-        });
+        this.setState({ containers, containersErrors });
     }
 
     addNewCargoItem() {
@@ -211,31 +209,22 @@ export class ShipmentDetails extends Component {
     }
 
     addNewContainer() {
-        // if (this.errorsExist(this.state.containerErrors)) {
-        //     console.log('(!) Errors exist (!)');
-        //     this.setState({addUnitAttempt: true});
-        //     return;
-        // }
-        // this.setState({addUnitAttempt: false});
-
-        const newCont = {
+        const newContainer = {
             payload_in_kg: 0,
             sizeClass: '',
             tareWeight: 0,
-            dangerousGoods: false,
-            quantity: 1
+            quantity: 1,
+            dangerousGoods: false
         };
 
         const newErrors = {
             payload_in_kg: true,
         };
 
-        const currArray = this.state.containers;
-        currArray.unshift(newCont);
-        this.setState({
-            containers: currArray,
-            containerErrors: newErrors
-        });
+        const { containers, containersErrors } = this.state;
+        containers.push(newContainer);
+        containersErrors.push(newErrors);
+        this.setState({ containers, containersErrors });
     }
 
     setTargetAddress(target, address) {
@@ -271,8 +260,8 @@ export class ShipmentDetails extends Component {
             return;
         }
         // This was implemented under the assuption that in the initial state the following return values apply:
-        //      (1) this.errorsExist(this.state.cargoItemErrors) #=> true
-        //      (2) this.errorsExist(this.state.containerErrors) #=> true
+        //      (1) this.errorsExist(this.state.cargoItemsErrors) #=> true
+        //      (2) this.errorsExist(this.state.containersErrors) #=> true
         // So it will break out of the function and set nextStage attempt to true,
         // in case one of them returns false
         if (

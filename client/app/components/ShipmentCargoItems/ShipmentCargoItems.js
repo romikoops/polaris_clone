@@ -7,7 +7,6 @@ import defs from '../../styles/default_classes.scss';
 // import Select from 'react-select';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
-import styled from 'styled-components';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -40,15 +39,13 @@ export class ShipmentCargoItems extends Component {
         this.setState({firstRenderInputs: true});
     }
     handleCargoItemQ(event) {
-        const modifiedEvent = {
-            target: { name: event.nameKey, value: event.label }
-        };
+        const modifiedEvent = { target: event };
         this.props.handleDelta(modifiedEvent);
     }
     handleCargoItemType(event) {
-        const index = event.nameKey.split('-')[0];
+        const index = event.name.split('-')[0];
         const modifiedEvent = {
-            target: { name: event.nameKey, value: event.key }
+            target: { name: event.name, value: event.key }
         };
         const newCargoItemTypes = this.state.cargoItemTypes;
         newCargoItemTypes[index] = event;
@@ -73,24 +70,6 @@ export class ShipmentCargoItems extends Component {
         const { cargoItems, handleDelta, theme } = this.props;
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
-        const StyledSelect = styled(NamedSelect)`
-            .Select-control {
-                background-color: #F9F9F9;
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-                border: 1px solid #F2F2F2 !important;
-            }
-            .Select-menu-outer {
-                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-                border: 1px solid #F2F2F2;
-            }
-            .Select-value {
-                background-color: #F9F9F9;
-                border: 1px solid #F2F2F2;
-            }
-            .Select-option {
-                background-color: #F9F9F9;
-            }
-        `;
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
             this.props.availableCargoItemTypes.map(cargoItemType => (
                 {
@@ -101,9 +80,9 @@ export class ShipmentCargoItems extends Component {
                 }
             ))
         ) : [];
-        const numbers = [];
+        const numberOptions = [];
         for (let i = 1; i <= 20; i++) {
-            numbers.push({label: i, value: i});
+            numberOptions.push({label: i, value: i});
         }
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -111,7 +90,11 @@ export class ShipmentCargoItems extends Component {
         if (cargoItems) {
             cargoItems.forEach((cont, i) => {
                 const tmpCont = (
-                    <div key={i} className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                    <div
+                        key={i}
+                        className="layout-row flex-100 layout-wrap layout-align-start-center"
+                        style={{zIndex: 100 - i}}
+                    >
                         <div className="layout-row flex-90 layout-wrap layout-align-start-center" >
                             <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
@@ -208,12 +191,12 @@ export class ShipmentCargoItems extends Component {
                             <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
                                     <p className="flex-100 letter_1"> No. of Cargo Items </p>
-                                    <StyledSelect
+                                    <NamedSelect
                                         placeholder={cont.quantity}
-                                        classes={styles.select}
+                                        className={styles.select}
                                         name={`${i}-quantity`}
                                         value={cont.quantity}
-                                        options={numbers}
+                                        options={numberOptions}
                                         onChange={this.handleCargoItemQ}
                                     />
                                 </div>
@@ -227,9 +210,9 @@ export class ShipmentCargoItems extends Component {
                                 </div>
                                 <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
                                     <p className="flex-100 letter_1"> Colli Type </p>
-                                    <StyledSelect
+                                    <NamedSelect
                                         placeholder="Colli Type"
-                                        classes={styles.select_100}
+                                        className={styles.select_100}
                                         name={`${i}-colliType`}
                                         value={cargoItemTypes[i]}
                                         options={availableCargoItemTypes}

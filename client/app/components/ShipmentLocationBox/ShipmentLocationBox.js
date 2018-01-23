@@ -12,7 +12,6 @@ import { colorSVG } from '../../helpers';
 import { mapStyling } from '../../constants/map.constants';
 import styled from 'styled-components';
 import { capitalize } from '../../helpers/stringTools';
-import axios from 'axios';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 
@@ -474,7 +473,7 @@ export class ShipmentLocationBox extends Component {
 
         const { allNexuses } = this.props;
         if (target === 'origin') {
-            axios({
+            fetch({
               method: 'get',
               headers: authHeader(),
               url: `${BASE_URL}/find_nexus?address=${place.name}`
@@ -495,7 +494,7 @@ export class ShipmentLocationBox extends Component {
 
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
         } else if (target === 'destination') {
-            axios({
+            fetch({
               method: 'get',
               headers: authHeader(),
               url: `${BASE_URL}/find_nexus?address=${place.name}`
@@ -631,7 +630,6 @@ export class ShipmentLocationBox extends Component {
                         type="string"
                         onChange={this.handleAddressChange}
                         value={this.props.origin.number}
-                        nextStageAttempt={this.props.nextStageAttempt}
                         placeholder="Number"
                     />
                     <input
