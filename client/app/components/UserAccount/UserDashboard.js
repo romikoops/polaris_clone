@@ -89,7 +89,7 @@ export class UserDashboard extends Component {
         // const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
         const newReqShips = mergedRequestedShipments.length > 0 ? mergedRequestedShipments.map((ship) => {
             return (
-                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`}>
+                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`} onClick={() => this.viewShipment(ship)}>
                     <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
                         <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
                     </div>
@@ -113,7 +113,7 @@ export class UserDashboard extends Component {
             </div>);
         const newOpenShips = mergedOpenShipments.length > 0 ? mergedOpenShipments.map((ship) => {
             return (
-                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`}>
+                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`} onClick={() => this.viewShipment(ship)}>
                     <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
                         <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
                     </div>
