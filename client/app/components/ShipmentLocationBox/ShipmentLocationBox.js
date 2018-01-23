@@ -473,45 +473,49 @@ export class ShipmentLocationBox extends Component {
 
         const { allNexuses } = this.props;
         if (target === 'origin') {
-            fetch({
-              method: 'get',
-              headers: authHeader(),
-              url: `${BASE_URL}/find_nexus?address=${place.name}`
-            }).then(response => {
-                const nexusName = response.data.data.nexus.name;
+            fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
+              method: 'GET',
+              headers: authHeader()
+            }).then(promise => {
+                promise.json().then(response => {
+                    const nexus = response.data.nexus;
+                    const nexusName = nexus ? nexus.name : '';
 
-                const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
-                const originOptionNames = originOptions.map(originOption => originOption.label);
+                    const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+                    const originOptionNames = originOptions.map(originOption => originOption.label);
 
-                this.setState({
-                    originFieldsHaveErrors: !originOptionNames.includes(nexusName)
+                    this.setState({
+                        originFieldsHaveErrors: !originOptionNames.includes(nexusName)
+                    });
+                    this.props.handleSelectLocation(
+                        !originOptionNames.includes(nexusName) ||
+                        this.state.destinationFieldsHaveErrors
+                    );
                 });
-                this.props.handleSelectLocation(
-                    !originOptionNames.includes(nexusName) ||
-                    this.state.destinationFieldsHaveErrors
-                );
             });
 
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
         } else if (target === 'destination') {
-            fetch({
-              method: 'get',
-              headers: authHeader(),
-              url: `${BASE_URL}/find_nexus?address=${place.name}`
-            }).then(response => {
-                const nexusName = response.data.data.nexus ? response.data.data.nexus.name : '';
+            fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
+              method: 'GET',
+              headers: authHeader()
+            }).then(promise => {
+                promise.json().then(response => {
+                    const nexus = response.data.nexus;
+                    const nexusName = nexus ? nexus.name : '';
 
-                let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
-                if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
-                const destinationOptionNames = destinationOptions.map(destinationOption => destinationOption.label);
+                    let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
+                    if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
+                    const destinationOptionNames = destinationOptions.map(destinationOption => destinationOption.label);
 
-                this.setState({
-                    destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
+                    this.setState({
+                        destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
+                    });
+                    this.props.handleSelectLocation(
+                        this.state.originFieldsHaveErrors ||
+                        !destinationOptionNames.includes(nexusName)
+                    );
                 });
-                this.props.handleSelectLocation(
-                    this.state.originFieldsHaveErrors ||
-                    !destinationOptionNames.includes(nexusName)
-                );
             });
         }
 

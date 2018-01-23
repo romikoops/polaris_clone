@@ -7,6 +7,7 @@ import defs from '../../styles/default_classes.scss';
 // import Select from 'react-select';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
+import { v4 } from 'node-uuid';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -87,18 +88,23 @@ export class ShipmentCargoItems extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const generateSeparator = () => (
+            <div key={v4()} className={`${styles.separator} flex-100`}>
+                <hr/>
+            </div>
+        );
         if (cargoItems) {
             cargoItems.forEach((cont, i) => {
+                if (i > 0) cargosAdded.push(generateSeparator());
                 const tmpCont = (
                     <div
                         key={i}
                         className="layout-row flex-100 layout-wrap layout-align-start-center"
-                        style={{zIndex: 100 - i}}
                     >
                         <div className="layout-row flex-90 layout-wrap layout-align-start-center" >
                             <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Gross Weight </p>
+                                    <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
                                     <div className={`flex-95 layout-row ${styles.input_box}`}>
                                         <ValidatedInput
                                             className="flex-80"
@@ -119,7 +125,7 @@ export class ShipmentCargoItems extends Component {
                                     </div>
                                 </div>
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Height </p>
+                                    <p className={`${styles.input_label} flex-100`}> Height </p>
                                     <div className={`flex-95 layout-row ${styles.input_box}`}>
                                         <ValidatedInput
                                             className="flex-80"
@@ -141,8 +147,21 @@ export class ShipmentCargoItems extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
+                                    <p className={`${styles.input_label} flex-100`}> Colli Type </p>
+                                    <NamedSelect
+                                        placeholder="Colli Type"
+                                        className={styles.select_100}
+                                        name={`${i}-colliType`}
+                                        value={cargoItemTypes[i]}
+                                        options={availableCargoItemTypes}
+                                        onChange={this.handleCargoItemType}
+                                    />
+                                </div>
+                            </div>
+                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Length </p>
+                                    <p className={`${styles.input_label} flex-100`}> Length </p>
                                     <div className={`flex-95 layout-row ${styles.input_box}`}>
                                         <ValidatedInput
                                             className="flex-80"
@@ -165,7 +184,7 @@ export class ShipmentCargoItems extends Component {
                                     </div>
                                 </div>
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Width </p>
+                                    <p className={`${styles.input_label} flex-100`}> Width </p>
                                     <div className={`flex-95 layout-row ${styles.input_box}`}>
                                         <ValidatedInput
                                             className="flex-80"
@@ -187,10 +206,8 @@ export class ShipmentCargoItems extends Component {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> No. of Cargo Items </p>
+                                    <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
                                     <NamedSelect
                                         placeholder={cont.quantity}
                                         className={styles.select}
@@ -201,25 +218,14 @@ export class ShipmentCargoItems extends Component {
                                     />
                                 </div>
                                 <div className="layout-row flex layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Dangerous Goods </p>
+                                    <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
                                     <Checkbox
                                         onChange={this.toggleDangerousGoods}
                                         checked={cont.dangerousGoods}
                                         theme={this.props.theme}
+                                        size="34px"
                                     />
                                 </div>
-                                <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
-                                    <p className="flex-100 letter_1"> Colli Type </p>
-                                    <NamedSelect
-                                        placeholder="Colli Type"
-                                        className={styles.select_100}
-                                        name={`${i}-colliType`}
-                                        value={cargoItemTypes[i]}
-                                        options={availableCargoItemTypes}
-                                        onChange={this.handleCargoItemType}
-                                    />
-                                </div>
-
                             </div>
                         </div>
                         <div className="flex-10 layout-row layout-align-center-center">

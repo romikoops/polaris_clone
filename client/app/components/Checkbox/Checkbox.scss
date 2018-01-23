@@ -12,7 +12,6 @@
 
   .checkbox {
     border: 1px solid rgb(240, 240, 240);
-    margin-left: 5px;
     border-radius: 3px;
     input {
       display: none;
@@ -20,7 +19,6 @@
 
     input {
       + span {
-        color: red;
         display: flex;
         width: $checkboxSize;
         height: $checkboxSize;
