@@ -7,14 +7,14 @@ module NotificationTools
     return resp.to_a
   end
 
-  def add_message_to_convo(user, message)
+  def add_message_to_convo(user, message, ref)
     data = message
     data["tenant_id"] = user.tenant_id
     data["user_id"] = user.id
     data["timestamp"] = Time.now.to_i
     data["read"] = false
     convo_id = "#{user.tenant_id}_#{user.id}"
-    $db["messages"].update_one({_id: convo_id}, {"$push" => {messages: data}}, {upsert: true})
+    $db["messages"].update_one({_id: convo_id}, {"$push" => {"#{ref}" => {messages: data}}}, {upsert: true})
     return data
   end
 end

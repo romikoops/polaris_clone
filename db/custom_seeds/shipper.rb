@@ -1,6 +1,6 @@
 Tenant.all.each do |tenant|
   # Create shipper
-  tld = tenant.web["tld"] ? tenant.web["tld"] : 'com'
+  tld = tenant.web && tenant.web["tld"] ? tenant.web["tld"] : 'com'
   shipper = tenant.users.new(
     role: Role.find_by_name('shipper'),
 

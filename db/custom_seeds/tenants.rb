@@ -150,6 +150,9 @@ tenant_data = [
       sales: "sales@easyshipping.dk",
       support: "support@easyshipping.dk"
     },
+    web: {
+      tld: "dk"
+    },
     subdomain: "easyshipping",
     name: "Easyshipping",
     scope: {
