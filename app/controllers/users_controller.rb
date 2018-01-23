@@ -49,6 +49,7 @@ class UsersController < ApplicationController
     response_handler({user: @user, headers: headers})
   end
   def currencies
+    currency = current_user ? current_user.currency : "EUR"
     results = get_currency_array(current_user.currency)
     response_handler(results)
   end

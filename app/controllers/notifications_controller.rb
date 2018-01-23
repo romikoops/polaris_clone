@@ -2,8 +2,13 @@ class NotificationsController < ApplicationController
   include NotificationTools
   include Response
   def index
-    messages = get_messages_for_user(current_user)
-    response_handler(messages)
+    if current_user
+      messages = get_messages_for_user(current_user)
+      response_handler(messages)
+    else
+      response_handler(true)
+    end
+   
   end
 
   def send_message
