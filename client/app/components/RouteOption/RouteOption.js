@@ -5,10 +5,10 @@ import styles from './RouteOption.scss';
 export class RouteOption extends Component {
     constructor(props) {
         super(props);
-        this.choose = this.choose.bind(this);
+        this.routeSelected = this.routeSelected.bind(this);
     }
-    choose() {
-        this.props.selectOption(this.props.route);
+    routeSelected() {
+        this.props.routeSelected(this.props.route);
     }
     faIcon(modeOfTransport) {
         const faKeywords = {
@@ -24,6 +24,7 @@ export class RouteOption extends Component {
     }
     render() {
         const { theme, route } = this.props;
+        (!route || !theme) ? 'NO DATA' : '';
         const originNexus       = route.origin_nexus;
         const destinationNexus  = route.destination_nexus;
         const modesOfTransport  = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot]);
@@ -44,15 +45,16 @@ export class RouteOption extends Component {
         };
         const icons = modesOfTransport.map(mot => this.faIcon(mot));
         const dedicatedDecoratorStyles = {
-            borderTop: route.dedicated ? `28px solid ${theme.colors.primary}66` : '',
+            borderTop: route.dedicated ? `28px solid ${theme.colors.primary}66` : '28px solid transparent',
             borderLeft: '55px solid transparent'
         };
         const dedicatedDecoratorIconStyles = {
             WebkitTextFillColor: 'transparent',
-            WebkitTextStroke: '2px white',
+            WebkitTextStroke: route.dedicated ? '2px white' : '0px transparent',
         };
+
         return (
-            <div className={styles.route_option} onClick={this.choose} >
+            <div className={`${styles.route_option} flex-30`} onClick={this.routeSelected} >
                 <div
                     className={`flex-100 layout-row layout-align-space-between ${
                         styles.top_row

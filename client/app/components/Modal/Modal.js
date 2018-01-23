@@ -51,8 +51,12 @@ export class Modal extends Component {
             top: Math.min(this.state.windowHeight * 0.5 - this.state.height / 2, 100) + 'px',
             minHeight: this.state.windowHeight * 0.5,
             maxHeight: this.state.windowHeight * 0.9,
+            width: this.props.width,
+            left: `calc(50vw - ${this.props.width}/2)`,
+            padding: `${this.props.horizontalPadding} ${this.props.verticalPadding}`,
             overflowY: 'auto'
         };
+        debugger;
         return (
             <div>
 		    	<div className={`${styles.modal_background} ${styles.full_size}`} onClick={this.hide}></div>

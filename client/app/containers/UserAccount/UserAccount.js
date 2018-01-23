@@ -91,7 +91,7 @@ export class UserAccount extends Component {
                 break;
             case 'chooseRoutes':
                 this.toggleModal();
-                console.log('shitfarming ! ... is ' + this.state.showModal);
+                console.log(this.props);
                 break;
             case 'shipments':
                 this.setState({activeLink: target});
@@ -120,7 +120,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch, loggedIn } = this.props;
+        const { user, theme, users, userDispatch, authDispatch, } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -186,7 +186,7 @@ export class UserAccount extends Component {
                 activeLink={this.state.activeLink}
             />
         );
-/**
+        /**
  *  tenant: PropTypes.object,
     theme: PropTypes.object,
     user: PropTypes.object,
@@ -194,16 +194,20 @@ export class UserAccount extends Component {
     dispatch: PropTypes.func,
     history: PropTypes.object,
     match: PropTypes.object
-*/
+*/      const userDetails = { user, theme };
         const routeModal = (
             <Modal
                 component={
                     <AvailableRoutes
-                        props={{theme, user, loggedIn, userDispatch, dashboard, 
-                            routes: dashboard.routes}}
+                        user={ userDetails }
+                        theme={ theme }
+                        routes={ dashboard.routes }
                         initialCompName="UserAccount"
                     />
                 }
+                width="48vw"
+                verticalPadding="30px"
+                horizontalPadding="15px"
                 parentToggle={this.toggleModal}
             />
         );

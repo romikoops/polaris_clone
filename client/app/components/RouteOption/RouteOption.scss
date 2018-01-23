@@ -9,7 +9,7 @@
     margin: $v_margin $h_margin;
     padding: 8px 15px 13px 15px;
     position: relative;
-    width: 212px;
+    min-width: 212px;
     cursor: pointer;
     transition: margin 0.1s ease, box-shadow 0.2s ease;
     h4, p {
