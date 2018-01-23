@@ -10,7 +10,7 @@
     "start": "node server",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint .",
-    "deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'"
+    "deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'"
   },
   "keywords": [
     "es6",

@@ -156,6 +156,10 @@ module MultiTenantTools
           enabled: true }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
+      tenant = Tenant.find_by_subdomain(subd)
+      tenant.web["cloudfront"] = @distribution_id
+      tenant.web["cloudfront_name"] = @distribution_domain_name
+      tenant.save!
       new_record(domain, resp[:distribution][:domain_name])
   end
   def new_record(domain, cf_name)

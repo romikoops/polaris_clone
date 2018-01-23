@@ -202,6 +202,46 @@ tenant_data = [
         },
       }
     }
+  },
+  {
+    theme: {
+      colors: {
+        primary: "#252D5C",
+        secondary: "#C42D35",
+        brightPrimary: "#4655aa",
+        brightSecondary: "#fc353e"
+      },
+      logoLarge: "",
+      logoSmall: ""
+    },
+    addresses: {
+      main: "Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark"
+    },
+    phones:{
+      main:"0045 32 51 60 22",
+      support: "0045 32 51 60 22"
+    },
+    emails: {
+      sales: "info@isa.dk",
+      support: "info@isa.dk"
+    },
+    web: {
+      tld: "dk"
+    },
+    subdomain: "isa",
+    name: "Inter-Scan Sea & Air",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        }
+      }
+    }
   }
 ]
 
