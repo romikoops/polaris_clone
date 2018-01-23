@@ -24,7 +24,7 @@ class Hub < ApplicationRecord
     hubs = Hub.all
     hubs.each do |h|
       h.nexus_id = h.location_id
-      h.location_id = nil
+      # h.location_id = nil
       h.save!
     end
   end
