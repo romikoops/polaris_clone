@@ -268,11 +268,12 @@ export class ShipmentCargoItems extends Component {
 
                             </div>
                         </div>
-                        <div className="layout-row layout-align-start-center flex-10" >
-                            <div className={`layout-row flex-none ${styles.add_unit} layout-wrap layout-align-center-center`} onClick={this.addNewCargo}>
-                                <i className="fa fa-plus-square-o clip" style={textStyle}/>
-                                <p classNme="flex-100"> Add another </p>
-                            </div>
+
+                    </div>
+                    <div className="layout-row layout-align-start-center flex-100" >
+                        <div className={`layout-row flex-none ${styles.add_unit} layout-wrap layout-align-center-center`} onClick={this.addNewCargo}>
+                            <i className="fa fa-plus-square-o clip" style={textStyle}/>
+                            <p classNme="flex-100"> Add another </p>
                         </div>
                     </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >

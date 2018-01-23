@@ -89,43 +89,57 @@ export class RouteResult extends Component {
                             styles.top_row
                         }`}
                     >
-                        <div className={`${styles.header_hub}`}>
-                            <i
-                                className={`fa fa-map-marker ${
-                                    styles.map_marker
-                                }`}
-                            />
-                            <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {originHub.name} </h4>
+                        <div
+                            className={`flex-80 layout-row layout-align-start-center ${
+                                styles.hubs_row
+                            }`}
+                        >
+                            <div className={`${styles.header_hub}`}>
+                                <i
+                                    className={`fa fa-map-marker ${
+                                        styles.map_marker
+                                    }`}
+                                />
+                                <div className="flex-100 layout-row">
+                                    <h4 className="flex-100"> {originHub.name} </h4>
+                                </div>
+                                {originHub.hub_code ?
+                                    <div className="flex-100">
+                                        <p className="flex-100">
+                                            {' '}
+                                             {originHub.hub_code}
+                                        </p>
+                                    </div> :
+                                    '' }
                             </div>
-                            {originHub.hub_code ?
+                            <div className={`${styles.connection_graphics}`}>
+                                <div className="flex-none layout-row layout-align-center-center">
+                                    {this.switchIcon(schedule)}
+                                </div>
+                                <div style={dashedLineStyles} />
+                            </div>
+                            <div className={`${styles.header_hub}`}>
+                                <i className={`fa fa-flag-o ${styles.flag}`} />
+                                <div className="flex-100 layout-row">
+                                    <h4 className="flex-100"> {destHub.name} </h4>
+                                </div>
                                 <div className="flex-100">
                                     <p className="flex-100">
                                         {' '}
-                                         {originHub.hub_code}
+                                        {destHub.hub_code
+                                            ? destHub.hub_code
+                                            : ''}{' '}
                                     </p>
-                                </div> :
-                                '' }
+                                </div>
+                            </div>
                         </div>
-                        <div className={`${styles.connection_graphics}`}>
-                            <div className="flex-none layout-row layout-align-center-center">
-                                {this.switchIcon(schedule)}
-                            </div>
-                            <div style={dashedLineStyles} />
-                        </div>
-                        <div className={`${styles.header_hub}`}>
-                            <i className={`fa fa-flag-o ${styles.flag}`} />
-                            <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {destHub.name} </h4>
-                            </div>
-                            <div className="flex-100">
-                                <p className="flex-100">
-                                    {' '}
-                                    {destHub.hub_code
-                                        ? destHub.hub_code
-                                        : ''}{' '}
-                                </p>
-                            </div>
+                        <div
+                            className={`flex-20 layout-row layout-align-start-center ${
+                                styles.load_type
+                            }`}
+                        >
+                            {/* <p className="flex-none no_m">{loadType}</p>*/}
+                            <p className="flex-none no_m">{schedule.id}</p>
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">

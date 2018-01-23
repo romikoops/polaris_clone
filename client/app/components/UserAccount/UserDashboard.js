@@ -64,7 +64,7 @@ export class UserDashboard extends Component {
     }
 
     render() {
-        const { theme, hubs, dashboard, user, userDispatch } = this.props;
+        const { theme, hubs, dashboard, user, userDispatch, navFn } = this.props;
         // ;
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
@@ -88,6 +88,46 @@ export class UserDashboard extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const links = [
+            {
+                icon: 'fa-tachometer',
+                text: 'Dashboard',
+                url: '/account/dashboard',
+                target: 'dashboard'
+            },
+            {
+                icon: 'fa-ship',
+                text: 'Shipments',
+                url: '/account/shipments',
+                target: 'shipments'
+            },
+            {
+                icon: 'fa-user',
+                text: 'Profile',
+                url: '/account/profile',
+                target: 'profile'
+            },
+            {
+                icon: 'fa-address-card',
+                text: 'Contacts',
+                url: '/account/contacts',
+                target: 'contacts'
+            }
+        ];
+        const linkTiles = links.map((li) => {
+            return (
+                <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-center'} onClick={() => navFn(li.url)}>
+                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.nav_card}`} >
+                        <div className="flex layout-row layout-align-center-center">
+                            <i className={`fa ${li.icon} clip`} style={textStyle}></i>
+                        </div>
+                        <div className="flex-75 layout-row layout-align-center-center">
+                            <h3 className="flex-none letter_3">{li.text}</h3>
+                        </div>
+                    </div>
+                </div>
+            );
+        });
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
@@ -103,6 +143,14 @@ export class UserDashboard extends Component {
                         <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1}/>
                     </div>
                 </div>
+                { false ? (
+                    <div>
+                        <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
+                            {linkTiles}
+                        </div>
+                    </div>
+
+                ) : ''}
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${ustyles.section}`}>
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Shipments</p>
@@ -128,6 +176,7 @@ export class UserDashboard extends Component {
                     </div>
                     <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                 </div>
+
 
             </div>
         );

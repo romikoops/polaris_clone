@@ -125,7 +125,23 @@
     }
 
   }
-
+  .nav_card {
+    margin: 15px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    width: calc(100% - 30px);
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      margin: -1px 1px 1px -1px;
+      box-shadow: 1px 1px 1px rgba(black, 0.3);
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
   .input {
     height: 36px;
     width: 195px;

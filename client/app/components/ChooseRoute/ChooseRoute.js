@@ -97,6 +97,7 @@ export class ChooseRoute extends Component {
                                     fees={shipment.schedules_charges}
                                     schedule={sched}
                                     user={user}
+                                    loadType={shipment.load_type}
                                     pickupDate={shipment.planned_pickup_date}
                                 />
                             );
@@ -114,6 +115,7 @@ export class ChooseRoute extends Component {
                                     fees={shipment.schedules_charges}
                                     schedule={sched}
                                     user={user}
+                                    loadType={shipment.load_type}
                                     pickupDate={shipment.planned_pickup_date}
                                 />
                             );
@@ -128,6 +130,7 @@ export class ChooseRoute extends Component {
                                     fees={shipment.schedules_charges}
                                     schedule={sched}
                                     user={user}
+                                    loadType={shipment.load_type}
                                     pickupDate={shipment.planned_pickup_date}
                                 />
                             );
