@@ -11,23 +11,8 @@ class Tenant < ApplicationRecord
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
     
-  def test
-    # str =  Rails.root + '/app/assets/images/cityimages/Hanoi.jpg'
-    # p str
-    # Dir.glob(Rails.root.to_s + '/app/assets/images/cityimages/*.jpg') do |image|
-    #   p image
-    #   
-    #   # resp = reduce_and_upload('Hanoi', str)
-    #   # p resp[:sm]
-    # end
-    # Dir.foreach(Rails.root.to_s + '/app/assets/welcome') do |image|
-    #   next if image == '.' or image == '..'
-    #   filename
-    #   path = Rails.root.to_s + '/app/assets/welcome/' + image
-    #   resp = reduce_and_upload(image, path)
-    #   p resp[:sm]
-    # end
-    load_city_images
+  def get_admin
+    return self.users.where(role_id: 1).first
   end
   # Generates the static info for the choose route page
   def update_route_details

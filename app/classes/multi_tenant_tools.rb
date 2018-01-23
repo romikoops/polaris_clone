@@ -2,30 +2,34 @@ module MultiTenantTools
   include ExcelTools
   def test
     # tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    tenant = {
+    tenant =   {
     "theme" => {
       "colors" => {
         "primary" => "#252D5C",
-        "secondary" => "##C42D35",
+        "secondary" => "#C42D35",
         "brightPrimary" => "#4655aa",
         "brightSecondary" => "#fc353e"
       },
-      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/belglobe.png",
-      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/belglobe.png"
+      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_isa.jpg"
     },
     "addresses" => {
-      "main" => "Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
+      "main" => "Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark"
     },
     "phones" =>{
-      "main" => "+41 (0)26 409 76 80",
-      "support" => "0173042031020"
+      "main" =>"0045 32 51 60 22",
+      "support" => "0045 32 51 60 22"
     },
     "emails" => {
-      "sales" => "info@belglobe.com",
-      "support" => "info@belglobe.com"
+      "sales" => "info@isa.dk",
+      "support" => "info@isa.dk"
     },
-    "subdomain" => "belglobe",
-    "name" => "Belglobe",
+    "web" => {
+      "tld" => "dk"
+    },
+    "subdomain" => "isa",
+    "name" => "Inter-Scan Sea & Air",
     "scope" => {
       "modes_of_transport" => {
         "ocean" => {
@@ -33,12 +37,12 @@ module MultiTenantTools
           "cargo_item" => true
         },
         "air" => {
-          "container" => true,
+          "container" => false,
           "cargo_item" => true
         }
       }
     }
-}
+  }
     new_site(tenant.to_h, false)
   end
   def update_indexes

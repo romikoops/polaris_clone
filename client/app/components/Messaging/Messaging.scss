@@ -1,0 +1,57 @@
+:local {
+  .message_inner {
+    border-radius: 2px;
+    // box-shadow: 0 2px 2px 1px rgba(12,13,14,0.25);
+    // position: absolute;
+    padding: 5px;
+    width: 95%;
+  }
+  .message_wrapper {
+    padding: 5px;
+    position: relative;
+    margin-top: 15px;
+
+  }
+  .message_text {
+    font-size: 12px;
+  }
+  .convo_tile_wrapper {
+    padding: 3px;
+  }
+  .convo_tile {
+    border-radius: 2px;
+    box-shadow: 0 1px 1px 0 rgba(12,13,14,0.75);
+  }
+  .timestamp {
+    font-size: 10px;
+  }
+  .send_button {
+    width: 95%;
+    height: 112px;
+    border-radius: 30px;
+    i {
+      color: white;
+    }
+  }
+  .text_area {
+    height: 112px;
+    width: calc(100% - 10px);
+    border: 1px solid #F2F2F2;
+    border-radius: 3px;
+    background-color: #F9F9F9;
+    box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
+  }
+  .convo_wrapper {
+    height: 100%;
+  }
+  .message_scroll {
+    overflow-y: scroll;
+    position: relative;
+  }
+  .user_style {
+    right: 5px;
+  }
+  .tenant_style {
+    left: 5px;
+  }
+}

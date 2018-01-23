@@ -53,7 +53,7 @@ tenant_data = [
       logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
       logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
       logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
-      background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
     },
     addresses: {
       main:"Brooktorkai 7, 20457 Hamburg, Germany"
@@ -214,8 +214,9 @@ tenant_data = [
         brightPrimary: "#4655aa",
         brightSecondary: "#fc353e"
       },
-      logoLarge: "",
-      logoSmall: ""
+      logoLarge: "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_isa.jpg"
     },
     addresses: {
       main: "Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark"
@@ -250,5 +251,5 @@ tenant_data = [
 
 # Create tenants
 tenant_data.each do |tenant_attr|
-  Tenant.create(tenant_attr)
+  Tenant.find_or_create_by(tenant_attr)
 end

@@ -113,5 +113,7 @@ resources :subdomain, only: [:show] do
 
   get "search/hscodes/:query" => "search#search_hs_codes"
   post 'super_admins/new_demo' => "super_admins#new_demo_site"
+  get 'messaging/get' => "notifications#index"
+  post 'messaging/send' => "notifications#send_message"
 end
 end
