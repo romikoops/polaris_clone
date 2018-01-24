@@ -42,6 +42,7 @@ module ShippingTools
     begin
       offer_calculation.calc_offer!
     rescue
+      Rails.logger.debug offer_calculation.inspect
       raise ApplicationError::NoRoutes
     end
     
