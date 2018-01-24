@@ -6,7 +6,7 @@ class NotificationsController < ApplicationController
       messages = get_messages_for_user(current_user)
       response_handler(messages)
     else
-      response_handler(true)
+      response_handler({conversations: {}})
     end
    
   end

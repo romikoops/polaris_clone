@@ -3,48 +3,51 @@ module MultiTenantTools
   def test
     # tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
     tenant =   {
-    "theme" => {
-      "colors" => {
-        "primary" => "#252D5C",
-        "secondary" => "#C42D35",
-        "brightPrimary" => "#4655aa",
-        "brightSecondary" => "#fc353e"
-      },
-      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
-      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
-      "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_isa.jpg"
-    },
-    "addresses" => {
-      "main" => "Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark"
-    },
-    "phones" =>{
-      "main" =>"0045 32 51 60 22",
-      "support" => "0045 32 51 60 22"
-    },
-    "emails" => {
-      "sales" => "info@isa.dk",
-      "support" => "info@isa.dk"
-    },
-    "web" => {
-      "tld" => "dk"
-    },
-    "subdomain" => "isa",
-    "name" => "Inter-Scan Sea & Air",
-    "scope" => {
-      "modes_of_transport" => {
-        "ocean" => {
-          "container" => true,
-          "cargo_item" => true
+      "theme" => {
+        "colors" => {
+          "primary" => "#006bc2",
+          "secondary" => "#174b90",
+          "brightPrimary" => "#006bc2",
+          "brightSecondary" => "#174b90"
         },
-        "air" => {
-          "container" => false,
-          "cargo_item" => true
+        "logoLarge" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoSmall" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoWide" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip.png",
+        "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+      },
+      "addresses" => {
+        "main" => "Korngardar 2, 104 Reykjavík, Iceland"
+      },
+      "phones" =>{
+        "main" =>"+354 525 - 7000",
+        "support" => "+354 525 - 7000"
+      },
+      "emails" => {
+        "sales" => "service@eimskip.is",
+        "support" => "service@eimskip.is"
+      },
+      "subdomain" => "eimskip",
+      "name" => "Eimskip",
+      "web" => {
+        "tld" => "is"
+      },
+      "scope" => {
+        "modes_of_transport" => {
+          "ocean" => {
+            "container" => true,
+            "cargo_item" => true
+          },
+          "air" => {
+            "container" => false,
+            "cargo_item" => false
+          }
         }
       }
     }
-  }
-    new_site(tenant.to_h, false)
+    # new_site(tenant.to_h, true)
+    seed_demo_site(tenant)
   end
+
   def update_indexes
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
@@ -161,6 +164,9 @@ module MultiTenantTools
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
       tenant = Tenant.find_by_subdomain(subd)
+      if !tenant.web
+        tenant.web = {}
+      end
       tenant.web["cloudfront"] = @distribution_id
       tenant.web["cloudfront_name"] = @distribution_domain_name
       tenant.save!
@@ -219,7 +225,7 @@ module MultiTenantTools
 
     end
     def seed_demo_site(tenant_data)
-      tld = tenant_data["emails"]["support"].split('.')[1]
+        tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
         tenant = Tenant.find_or_create_by!(tenant_data)
         tenant.users.destroy_all
         admin = tenant.users.new(
