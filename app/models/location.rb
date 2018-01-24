@@ -55,7 +55,6 @@ class Location < ApplicationRecord
     location = Location.new(geocoded_address: input)
     location.geocode
     location.reverse_geocode
-    location.name = newname
     self.latitude = location.latitude
     self.longitude = location.longitude
     self.save!
