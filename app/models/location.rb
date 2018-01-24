@@ -60,7 +60,7 @@ class Location < ApplicationRecord
     self.save!
   end
 
-  def update_all_nexuses
+  def self.update_all_nexuses
     nexuses = Location.where(location_type: "nexus")
     nexuses.each do |nx|
       nx.update_from_short_name
