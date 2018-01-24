@@ -50,6 +50,24 @@ class Location < ApplicationRecord
     return nl
   end
 
+  def update_from_short_name
+    input  = "#{self.city} ,#{self.country}"
+    location = Location.new(geocoded_address: input)
+    location.geocode
+    location.reverse_geocode
+    location.name = newname
+    self.latitude = location.latitude
+    self.longitude = location.longitude
+    self.save!
+  end
+
+  def update_all_nexuses
+    nexuses = Location.where(location_type: "nexus")
+    nexuses.each do |nx|
+      nx.update_from_short_name
+    end
+  end
+
   def self.create_and_geocode(input)
     if input.first[0].is_a? String
       location_params = input.symbolize_keys
