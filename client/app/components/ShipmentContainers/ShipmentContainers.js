@@ -213,10 +213,6 @@ export class ShipmentContainers extends Component {
         if (containers) {
             containers.forEach((container, i) => {
                 if (i > 0) containersAdded.push(generateSeparator());
-                console.log('selectors');
-                console.log(selectors);
-                console.log(i);
-                console.log(container);
                 if (!selectors[i].sizeClass) {
                     this.handleContainerSelect(optionsWithIndex(containerOptions, i)[0]);
                 }
