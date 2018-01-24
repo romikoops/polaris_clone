@@ -23,7 +23,7 @@ module NotificationTools
 
   def add_message_to_convo(user, message, admin)
     data = message
-    ref = message["shipmentRef"]
+    ref = message["shipmentRef"] ? message["shipmentRef"] : message[:shipmentRef]
     data["sender_id"] = admin ? user.tenant.get_admin.id : user.id
     data["tenant_id"] = user.tenant_id
     data["user_id"] = user.id
