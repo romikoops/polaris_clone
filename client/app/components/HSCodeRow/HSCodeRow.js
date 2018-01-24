@@ -8,7 +8,7 @@ import {
     // CONTAINER_TARE_WEIGHTS,
     BASE_URL
 } from '../../constants';
-import defs from '../../styles/default_classes.scss';
+// import defs from '../../styles/default_classes.scss';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 export class HSCodeRow extends Component {
     constructor(props) {
@@ -79,9 +79,9 @@ export class HSCodeRow extends Component {
         };
 
         if (containers) {
-            containers.forEach((cont) => {
+            containers.forEach((cont, i) => {
                     const tmpCont = (
-                        <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`}>
+                        <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
                             <div className="flex-15 layout-row layout-align-start-center layout-wrap">
                                 <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
                                 <p className="flex-100">{containerDescriptions[cont.size_class]}</p>
@@ -121,9 +121,8 @@ export class HSCodeRow extends Component {
         }
         if (cargoItems) {
             cargoItems.forEach((cont, i) => {
-                console.log(hsCodes[cont.id]);
                 const tmpCont = (
-                    <div key={i} className={`flex-100 layout-row layout-wrap ${styles.container_row}`}>
+                    <div key={i} className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
                         <div className="flex-10 layout-row layout-align-center-center layout-wrap">
                             <p className={`flex-100 ${styles.cell_header}`}>Unit</p>
                             <p className="flex-100">{i}</p>
@@ -170,7 +169,7 @@ export class HSCodeRow extends Component {
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-                <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`} >
+                <div className={'layout-row flex-none layout-wrap layout-align-start-center'} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className="layout-row flex-100 layout-wrap">
                             <h4 className="flex-none clip" style={textStyle}> HS Codes</h4>

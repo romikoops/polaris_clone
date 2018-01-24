@@ -5,44 +5,47 @@ module MultiTenantTools
     tenant = {
     "theme" => {
       "colors" => {
-        "primary" => "#4E9095",
-        "secondary" => "#DDDDDD",
-        "brightPrimary" => "#5bb8bf",
-        "brightSecondary" => "#FFFFFF"
+        "primary" => "#252D5C",
+        "secondary" => "##C42D35",
+        "brightPrimary" => "#4655aa",
+        "brightSecondary" => "#fc353e"
       },
-      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
-      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
-      "logoWide" => "https://assets.itsmycargo.com/assets/logos/integrail_wide.png"
+      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/belglobe.png",
+      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/belglobe.png"
     },
     "addresses" => {
-      "main" =>"Révész utca 27. (575.11 mi)Budapest, Hungary 1138"
+      "main" => "Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
     },
     "phones" =>{
-      "main" => "+36 1 270 9330",
-      "support" => "+36 1 270 9330"
+      "main" => "+41 (0)26 409 76 80",
+      "support" => "0173042031020"
     },
     "emails" => {
-      "sales" => "sales@integrail.hu",
-      "support" => "info@tantumshipping.com"
+      "sales" => "info@belglobe.com",
+      "support" => "info@belglobe.com"
     },
-    "subdomain" => "integrail",
-    "name" => "Integrail",
+    "subdomain" => "belglobe",
+    "name" => "Belglobe",
     "scope" => {
       "modes_of_transport" => {
-        "rail" => {
+        "ocean" => {
           "container" => true,
           "cargo_item" => true
         },
+        "air" => {
+          "container" => true,
+          "cargo_item" => true
+        }
       }
     }
-  }
+}
     new_site(tenant.to_h, false)
   end
   def update_indexes
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
         favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
-        # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
+        # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
         indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
         titles = indexHtml.xpath("//title")
         titles[0].content = title
@@ -72,7 +75,7 @@ module MultiTenantTools
       end
   end
   def new_site(tenant, is_demo)
-        # new_tenant = Tenant.create(tenant)
+        new_tenant = Tenant.create(tenant)
         title = tenant["name"] + " | ItsMyCargo"
         meta = tenant["meta"]
         favicon = tenant["favicon"] ? tenant["favicon"] : "https://assets.itsmycargo.com/assets/favicon.ico"
@@ -100,11 +103,11 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
-        uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
-        uploader.upload!
+        # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+        # uploader.upload!
 
         if is_demo
-          # seed_demo_site(tenant)
+          seed_demo_site(tenant)
         end
         create_distribution(tenant["subdomain"])
     end
@@ -409,7 +412,7 @@ module MultiTenantTools
         region: ENV['AWS_REGION']
         )
       invalArray = ["/#{subdomain}.html"];
-      invalStr = Time.now.to_i
+      invalStr = Time.now.to_i.to_s + "_subdomain"
        resp = cloudfront.create_invalidation({
           distribution_id: cfId, # required
           invalidation_batch: { # required

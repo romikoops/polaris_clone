@@ -56,12 +56,10 @@ export class AdminShipmentRow extends Component {
     render() {
         const { theme, shipment, hubs} = this.props;
         if (shipment.schedule_set.length < 1) {
-            debugger;
             return '';
         }
         const hubKeys = shipment.schedule_set[0].hub_route_key.split('-');
         if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-            debugger;
             // ;
             return '';
         }

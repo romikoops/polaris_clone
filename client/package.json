@@ -33,7 +33,6 @@
   "dependencies": {
     "@babel/core": "^7.0.0-beta.32",
     "@babel/polyfill": "^7.0.0-beta.32",
-    "axios": "^0.17.1",
     "babel-preset-stage-2": "^6.24.1",
     "es6-promise-promise": "^1.0.0",
     "formsy-react": "^1.1.1",

@@ -39,8 +39,9 @@ export class Checkbox extends Component {
             background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
         };
         const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {};
+        const border = { border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`};
         return (
-            <div className={`${styles.checkbox} flex-none`}>
+            <div className={`${styles.checkbox} flex-none`} style={border}>
                 <label>
                     <input
                         type="checkbox"

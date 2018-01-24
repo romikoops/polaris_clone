@@ -181,7 +181,7 @@ export class UserAccount extends Component {
                             <Route
                                 exact
                                 path="/account"
-                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} dashboard={dashboard}/>}
+                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} navFn={this.setUrl} userDispatch={userDispatch} dashboard={dashboard}/>}
                             />
                             <Route
                                 path="/account/locations"

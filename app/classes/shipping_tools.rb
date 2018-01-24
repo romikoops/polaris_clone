@@ -221,7 +221,6 @@ module ShippingTools
     transportKey = @schedules.first.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first.hub_route_id}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
-
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
