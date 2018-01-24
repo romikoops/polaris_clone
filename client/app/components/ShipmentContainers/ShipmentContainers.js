@@ -95,10 +95,10 @@ export class ShipmentContainers extends Component {
         }
 
         const optionsWithIndex = (options, index) => {
-            const returnArr = Object.assign([], options);
-            return returnArr.map(option => {
-                option.index = index;
-                return option;
+            return options.map(option => {
+                const optionCopy = Object.assign([], option);
+                optionCopy.index = index;
+                return optionCopy;
             });
         };
         const generateSeparator = () => (
@@ -106,44 +106,39 @@ export class ShipmentContainers extends Component {
                 <hr/>
             </div>
         );
-        const containersAdded = [];
-        if (containers) {
-            containers.forEach((container, i) => {
-                if (i > 0) containersAdded.push(generateSeparator());
-
-                const grossWeight = (
-                    parseInt(container.payload_in_kg, 10) +
-                    parseInt(container.tareWeight, 10)
-                );
-                if (!selectors[i].sizeClass) {
-                    this.handleContainerSelect(optionsWithIndex(containerOptions, i)[0]);
-                }
-                const tmpCont = (
-                    <div
-                        key={i}
-                        className="layout-row flex-100 layout-wrap layout-align-start-center"
-                    >
-                        <div className="layout-row flex-95 layout-wrap layout-align-start-center" >
-                            <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                                <p className={`${styles.input_label} flex-100`}> Container Size </p>
-                                <NamedSelect
-                                    placeholder={container.sizeClass}
-                                    className={styles.select}
-                                    name={`${i}-container_size`}
-                                    value={selectors[i].sizeClass}
-                                    options={optionsWithIndex(containerOptions, i)}
-                                    onChange={this.handleContainerSelect}
-                                />
-                            </div>
-                            <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                                <p className={`${styles.input_label} flex-100`}> Net Weight </p>
-                                <div
-                                    className={`flex-95 layout-row ${styles.input_box}`}
-                                >
+        const generateContainer = (container, i) => {
+            const grossWeight = container ? (
+                parseInt(container.payload_in_kg, 10) +
+                parseInt(container.tareWeight, 10)
+            ) : '';
+            return (
+                <div
+                    key={i}
+                    className="layout-row flex-100 layout-wrap layout-align-start-center"
+                    style={{ position: 'relative' }}
+                >
+                    <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <p className={`${styles.input_label} flex-100`}> Container Size </p>
+                        <NamedSelect
+                            placeholder={container ? container.sizeClass : ''}
+                            className="flex-95"
+                            name={`${i}-container_size`}
+                            value={container ? selectors[i].sizeClass : ''}
+                            options={container ? optionsWithIndex(containerOptions, i) : []}
+                            onChange={this.handleContainerSelect}
+                        />
+                    </div>
+                    <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                        <p className={`${styles.input_label} flex-100`}> Net Weight </p>
+                        <div
+                            className={`flex-95 layout-row ${styles.input_box}`}
+                        >
+                            {
+                                container ? (
                                     <ValidatedInput
                                         className="flex-80"
                                         name={`${i}-payload_in_kg`}
-                                        value={container.payload_in_kg}
+                                        value={container ? container.payload_in_kg : ''}
                                         type="number"
                                         onChange={handleDelta}
                                         firstRenderInputs={this.state.firstRenderInputs}
@@ -151,75 +146,103 @@ export class ShipmentContainers extends Component {
                                         nextStageAttempt={this.props.nextStageAttempt}
                                         validations={ {matchRegexp: /[^0]/} }
                                         validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
-                                        required
+                                        required={!!container}
                                     />
-                                    <div className="flex-20 layout-row layout-align-center-center">
-                                        kg
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                                <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
-                                <div
-                                    className={`flex-95 layout-row ${
-                                        styles.input_box
-                                    }`}
-                                >
+                                ) : (
                                     <input
                                         className="flex-80"
-                                        name={`${i}-payload_in_kg`}
-                                        value={grossWeight}
                                         type="number"
-                                        disabled
                                     />
-                                    <div className="flex-20 layout-row layout-align-center-center">
-                                        kg
-                                    </div>
-                                </div>
+                                )
+                            }
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                kg
                             </div>
-                            <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                                <p className={`${styles.input_label} flex-100`}> No. of Containers </p>
-                                <NamedSelect
-                                    placeholder={container.quantity}
-                                    className={styles.select}
-                                    name={`${i}-quantity`}
-                                    value={container.quantity}
-                                    options={numberOptions}
-                                    onChange={this.handleContainerQ}
-                                />
-                            </div>
-                            <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                                <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
-                                <Checkbox
-                                    onChange={this.toggleDangerousGoods}
-                                    checked={container.dangerousGoods}
-                                    theme={this.props.theme}
-                                    size="34px"
-                                />
-                            </div>
-
-                        </div>
-                        <div className="flex-5 layout-row layout-align-center-center">
-                            <i className="fa fa-trash flex-none" onClick={() => this.deleteCargo(i)}></i>
                         </div>
                     </div>
-                );
-                containersAdded.push(tmpCont);
+                    <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                        <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                        <div
+                            className={`flex-95 layout-row ${styles.input_box}`}
+                        >
+                            <input
+                                className="flex-80"
+                                name={`${i}-payload_in_kg`}
+                                value={grossWeight}
+                                type="number"
+                                disabled
+                            />
+                            <div className="flex-20 layout-row layout-align-center-center">
+                                kg
+                            </div>
+                        </div>
+                    </div>
+                    <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
+                        <p className={`${styles.input_label} flex-100`}> No. of Containers </p>
+                        <NamedSelect
+                            placeholder={container ? container.quantity : ''}
+                            className="flex-95"
+                            name={`${i}-quantity`}
+                            value={container ? container.quantity : ''}
+                            options={numberOptions}
+                            onChange={this.handleContainerQ}
+                        />
+                    </div>
+                    <div className="layout-row flex-20 layout-wrap layout-align-start-center">
+                        <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
+                        <Checkbox
+                            onChange={this.toggleDangerousGoods}
+                            checked={container ? container.dangerousGoods : false}
+                            theme={this.props.theme}
+                            size="34px"
+                        />
+                    </div>
+
+                    {
+                        container ? (
+                            <i
+                                className={`fa fa-trash ${styles.delete_icon}`}
+                                onClick={() => this.deleteCargo(i)}
+                            ></i>
+                        ) : ''
+                    }
+                </div>
+            );
+        };
+        const containersAdded = [];
+        if (containers) {
+            containers.forEach((container, i) => {
+                if (i > 0) containersAdded.push(generateSeparator());
+                console.log('selectors');
+                console.log(selectors);
+                console.log(i);
+                console.log(container);
+                if (!selectors[i].sizeClass) {
+                    this.handleContainerSelect(optionsWithIndex(containerOptions, i)[0]);
+                }
+                containersAdded.push(generateContainer(container, i));
             });
         }
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-                <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`} >
+            <div className="layout-row flex-100 layout-wrap layout-align-center-start" >
+                <div
+                    className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`}
+                    style={{ margin: '30px 0 70px 0' }}
+                >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                        <div className="layout-row flex-100 layout-wrap">
-                            {containersAdded}
-                        </div>
+                        {containersAdded}
                     </div>
 
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addContainer}>
-                            <i className="fa fa-plus-square-o" />
                             <p> Add unit </p>
+                            <i className="fa fa-plus-square-o" />
+                        </div>
+                        <div
+                            className={styles.new_container_placeholder}
+                        >
+                            { generateSeparator(null, -1) }
+                            { generateContainer(null, -1) }
                         </div>
                     </div>
                 </div>

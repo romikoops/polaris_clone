@@ -12,7 +12,6 @@
   }
   .input_box {
     height: 36px;
-    width: 170px;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
     background-color: #F9F9F9;
@@ -28,15 +27,28 @@
       outline: none;
     }
   }
-  .select{
-    width: 195px;
-  }
   .add_unit {
-    margin-top: 20px;
+    position: absolute;
+    left: 188.2px;
+    margin-top: 42px;
     cursor: pointer;
     i {
-      margin-right: 15px;
+      opacity: 0.8;
+      margin-left: 15px;
+      transition: all 0.3s ease;
+      &:hover {
+        opacity: 1;
+      }
     }
+    &:hover + .new_container_placeholder {
+      opacity: 0.2;
+      visibility: visible;
+    }
+  }
+  .new_container_placeholder {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
   .input_label {
     letter-spacing: 1px;
@@ -44,8 +56,19 @@
   }
   .separator {
     hr {
-      margin: 22px 0 15px 0;
+      margin: 32px 0 25px 0;
       border: 1px solid rgba(200, 200, 200, 0.2);
+    }
+  }
+  i.delete_icon {
+    position: absolute;
+    left: -30px;
+    top: 37px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    &:hover {
+      opacity: 1;
     }
   }
 }
