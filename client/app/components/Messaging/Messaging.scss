@@ -27,8 +27,8 @@
   }
   .send_button {
     width: 95%;
-    height: 112px;
-    border-radius: 30px;
+    height: 150px;
+    border-radius: 10px;
     i {
       color: white;
     }
@@ -53,5 +53,17 @@
   }
   .tenant_style {
     left: 5px;
+  }
+  .show_details {
+    width: 100%;
+    position: absolute;
+    z-index: 40;
+    height: 400px;
+    opacity: 1;
+  }
+  .hide_details {
+    height: 0px;
+    z-index: -1;
+    opacity: 0;
   }
 }

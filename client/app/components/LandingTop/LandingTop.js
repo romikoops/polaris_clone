@@ -88,6 +88,11 @@ export class LandingTop extends Component {
                         <div className={styles.sign_up}>
                             <h2>Never spend precious time on transportation again, shipping made simple</h2>
                             <h3>Enjoy the most advanced and easy to use booking system in the market</h3>
+                            <div className="flex-none layout-row layout-align-start-center">
+                                <p className="flex-none">powered by</p>
+                                <div className="flex-5"></div>
+                                <img src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png" alt="" className={`flex-none ${styles.powered_by_logo}`}/>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,6 @@ module ShippingTools
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
-    Rails.logger.debug routes
     return {
       shipment:    shipment,
       all_nexuses: {origins: origins.uniq, destinations: destinations.uniq},
@@ -41,12 +40,12 @@ module ShippingTools
     @shipment = Shipment.find(params[:shipment_id])
     offer_calculation = OfferCalculator.new(@shipment, params, current_user)
 
-    begin
+    # begin
       offer_calculation.calc_offer!
-    rescue
-      Rails.logger.debug offer_calculation.inspect
-      raise ApplicationError::NoRoutes
-    end
+    # rescue
+    #   Rails.logger.debug offer_calculation.inspect
+    #   raise ApplicationError::NoRoutes
+    # end
     
     if offer_calculation.shipment.save
       return {
