@@ -60,7 +60,7 @@ export class ChooseRoute extends Component {
         };
     }
     render() {
-        const { shipmentData, messages, user, shipmentDispatch } = this.props;
+        const { shipmentData, messages, user, shipmentDispatch, theme } = this.props;
         let smallestDiff = 100;
         if (!shipmentData) {
             return '';
@@ -256,7 +256,7 @@ export class ChooseRoute extends Component {
 
                 </div>
                  <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                  <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                  <div className="content_width flex-none content-width layout-row layout-align-start-center">
                     <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
                   </div>
                 </div>
