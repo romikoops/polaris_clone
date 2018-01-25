@@ -32,6 +32,7 @@ export class AdminSearchableShipments extends Component {
         }
     }
     handleSearchChange(event) {
+        console.log(event.target.value);
         if (event.target.value === '') {
             this.setState({
                 shipments: this.props.shipments
@@ -55,7 +56,7 @@ export class AdminSearchableShipments extends Component {
         };
 
         const filteredShipments = search(['clientName', 'imc_reference', 'companyName', 'originHub', 'destinationHub']);
-
+        console.log(filteredShipments);
         this.setState({
             shipments: filteredShipments
         });
@@ -64,7 +65,7 @@ export class AdminSearchableShipments extends Component {
         const { hubs, theme, handleShipmentAction, title, userView, seeAll } = this.props;
         const { shipments } = this.state;
         let shipmentsArr;
-        if (shipments) {
+        if (shipments.length) {
             shipmentsArr = shipments.map((ship) => {
                 return  userView ?
                     <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
@@ -105,10 +106,10 @@ export class AdminSearchableShipments extends Component {
                 </div>
                 {viewType}
                 { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">
-                                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
-                                        <p className="flex-none">See all</p>
-                                    </div>
-                                </div>) : ''}
+                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+                        <p className="flex-none">See all</p>
+                    </div>
+                </div>) : ''}
             </div>
         );
     }

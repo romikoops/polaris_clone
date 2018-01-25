@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from '../Admin/Admin.scss';
 import ustyles from './UserAccount.scss';
+import defaults from '../../styles/default_classes.scss';
 import { UserLocations } from './';
 import { RoundButton } from '../RoundButton/RoundButton';
 // import {v4} from 'node-uuid';
@@ -183,62 +183,65 @@ export class UserDashboard extends Component {
                         </div>
 
                     </div>
-                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <h3 className="flex-none clip" style={textStyle}>Shipments</h3>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <div className="flex-40 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Requested Shipments </h3>
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <h2 className="flex-none clip" style={textStyle}>Shipments</h2>
                             </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none"> Reference </h3>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <div className="flex-40 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Requested Shipments </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none"> Reference </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Status </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Incoterm </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Requires Action </h3>
+                                </div>
                             </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Status </h3>
+                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                                {newReqShips}
                             </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Incoterm </h3>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <div className="flex-40 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">In Process </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none"> Reference </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Status </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Incoterm </h3>
+                                </div>
+                                <div className="flex-15 layout-row layout-align-start-center">
+                                    <h3 className="flex-none">Requires Action </h3>
+                                </div>
                             </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Requires Action </h3>
+                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                                {newOpenShips}
                             </div>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                            {newReqShips}
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <div className="flex-40 layout-row layout-align-start-center">
-                                <h3 className="flex-none">In Process </h3>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none"> Reference </h3>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Status </h3>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Incoterm </h3>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center">
-                                <h3 className="flex-none">Requires Action </h3>
-                            </div>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                            {newOpenShips}
                         </div>
                     </div>
                 </div>
-                <AdminSearchableClients theme={theme} clients={contacts} title="Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
-
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > My Shipment Addresses </p>
+                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+                        <AdminSearchableClients theme={theme} clients={contacts} title="Most used Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
                     </div>
-                    <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                 </div>
-
-
+                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                    <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                        <h2 className="flex-none clip" style={textStyle}>My Shipment Addresses</h2>
+                        <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
+                    </div>
+                </div>
             </div>
         );
     }

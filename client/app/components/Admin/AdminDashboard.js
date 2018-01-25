@@ -53,7 +53,7 @@ export class AdminDashboard extends Component {
         } else {
             prop = property;
         }
-        return function(a, b) {
+        return (a, b) => {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;
@@ -68,7 +68,9 @@ export class AdminDashboard extends Component {
         }
         const { routes, shipments, air, ocean} = dashData;
         const clientHash = {};
+
         console.log(hubHash);
+
         if (clients) {
             clients.forEach(cl => {
                 clientHash[cl.id] = cl;
@@ -76,20 +78,56 @@ export class AdminDashboard extends Component {
         }
         const filteredClients = clients ? clients.filter(x => !x.guest) : [];
         const schedArr = [];
+
         console.log(shipments);
-        const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
-            return this.prepShipment(sh, clientHash, hubHash);
-        }) : false;
-        const mergedFinishedShipments = shipments && shipments.finished ? shipments.finished.map((sh) => {
-            return this.prepShipment(sh, clientHash, hubHash);
-        }) : false;
-        const mergedRequestedShipments = shipments && shipments.requested ? shipments.requested.map((sh) => {
-            return this.prepShipment(sh, clientHash, hubHash);
-        }) : false;
+
+        const mergedOpenShipments = shipments && shipments.open ?
+            shipments.open.map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
+        const mergedFinishedShipments = shipments && shipments.finished ?
+            shipments.finished.map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
+        const mergedRequestedShipments = shipments && shipments.requested ?
+            shipments.requested.map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
         // const mergedRequestedShipments = false;
-        const openShipments = mergedOpenShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
-        const finishedShipments = mergedFinishedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
-        const requestedShipments = mergedRequestedShipments ? <AdminSearchableShipments hubs={hubHash} shipments={mergedFinishedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} handleShipmentAction={this.handleShipmentAction}/> : '';
+        const requestedShipments = mergedRequestedShipments ?
+            <AdminSearchableShipments
+                title="Requested Shipments"
+                hubs={hubHash}
+                shipments={mergedRequestedShipments}
+                adminDispatch={adminDispatch}
+                theme={theme}
+                handleClick={this.viewShipment}
+                handleShipmentAction={this.handleShipmentAction}
+            /> : '';
+        const openShipments = mergedOpenShipments ?
+            <AdminSearchableShipments
+                title="Open Shipments"
+                hubs={hubHash}
+                shipments={mergedOpenShipments}
+                adminDispatch={adminDispatch}
+                theme={theme}
+                handleClick={this.viewShipment}
+                handleShipmentAction={this.handleShipmentAction}
+            /> : '';
+        const finishedShipments = mergedFinishedShipments ?
+            <AdminSearchableShipments
+                title="Finished Shipments"
+                hubs={hubHash}
+                shipments={mergedFinishedShipments}
+                adminDispatch={adminDispatch}
+                theme={theme}
+                handleClick={this.viewShipment}
+                handleShipmentAction={this.handleShipmentAction}
+            /> : '';
+
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
@@ -115,16 +153,15 @@ export class AdminDashboard extends Component {
                     { openShipments }
                     { finishedShipments }
                 </div>
-                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
+                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
                     </div>
                     { shortSchedArr }
                 </div>
-                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={true}/>
+                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
                 <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
-
             </div>
         );
     }
