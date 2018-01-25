@@ -153,8 +153,7 @@ export class ChooseRoute extends Component {
         });
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
-
-            <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-20 layout-row layout-wrap">
@@ -197,7 +196,6 @@ export class ChooseRoute extends Component {
                     <div className={'content_width flex-none content-width layout-row layout-align-start-center'}>
                         <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
                     </div>
-
                 </div>
             </div>
         );
