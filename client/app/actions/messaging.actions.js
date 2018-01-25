@@ -62,8 +62,68 @@ function sendUserMessage(message) {
     };
 }
 
+function getShipment(ref) {
+    function request(shipData) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_REQUEST, payload: shipData };
+    }
+    function success(shipData) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_SUCCESS, payload: shipData.data };
+    }
+    function failure(error) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        messagingService.getShipmentData(ref).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Data successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function markAsRead(ref) {
+    function request(convoData) {
+        return { type: messagingConstants.MARK_AS_READ_REQUEST, payload: convoData };
+    }
+    function success(convoData) {
+        return { type: messagingConstants.MARK_AS_READ_SUCCESS, payload: convoData.data };
+    }
+    function failure(error) {
+        return { type: messagingConstants.MARK_AS_READ_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        messagingService.markAsRead(ref).then(
+            data => {
+                dispatch(
+                    alertActions.success('Mark As Read successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 
 export const messagingActions = {
     getUserConversations,
-    sendUserMessage
+    sendUserMessage,
+    getShipment,
+    markAsRead
 };

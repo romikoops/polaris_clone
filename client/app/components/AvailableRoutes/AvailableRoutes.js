@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import {v4} from 'node-uuid';
-// import { activeRoutesData } from '../../constants';
-
+import { RouteSelector } from '../RouteSelector/RouteSelector';
 export class AvailableRoutes extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +9,7 @@ export class AvailableRoutes extends Component {
         this.viewShipment = this.viewShipment.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
         this.startBooking = this.startBooking.bind(this);
+        this.routeSelected = this.routeSelected.bind(this);
     }
     componentDidMount() {
     }
@@ -50,25 +49,19 @@ export class AvailableRoutes extends Component {
         const { userDispatch, user } = this.props;
         userDispatch.makePrimary(user.id, locationId);
     }
-
+    routeSelected(route) {
+        this.props.routeSelected(route);
+    }
     render() {
-        const { user, shipments, routes } = this.props;
-
-        if (!user) {
-            return (<div>
-                <h1>Gone smoking '()___)_))__________)</h1>
-                {JSON.stringify(routes)}
-            </div>
-            );
-        }
-
-        console.log(routes);
+        const { user, theme, routes } = this.props;
 
         return(
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-               {JSON.stringify(routes, 2)}
-               {JSON.stringify(shipments, 2)}
-            </div>
+            <RouteSelector
+                user={ user }
+                theme={ theme }
+                routes={ routes }
+                routeSelected={this.routeSelected}
+            />
         );
     }
 }

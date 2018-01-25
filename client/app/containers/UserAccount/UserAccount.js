@@ -21,7 +21,7 @@ import { userActions, authenticationActions } from '../../actions';
 import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
-import styles from '../../components/UserAccount/UserAccount.scss';
+// import styles from '../../components/UserAccount/UserAccount.scss';
 import { Loading } from '../../components/Loading/Loading';
 
 
@@ -91,7 +91,6 @@ export class UserAccount extends Component {
                 break;
             case 'chooseRoutes':
                 this.toggleModal();
-                console.log('shitfarming ! ... is ' + this.state.showModal);
                 break;
             case 'shipments':
                 this.setState({activeLink: target});
@@ -120,7 +119,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch, loggedIn } = this.props;
+        const { user, theme, users, userDispatch, authDispatch } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -131,11 +130,7 @@ export class UserAccount extends Component {
         const loadingScreen =  loading ? <Loading theme={theme} /> : '';
         const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
-            // { key: 'dashboard', text: 'Dashboard' },
-            // { key: 'profile', text: 'Profile' },
-            // // { key: 'locations', text: 'Locations' },
-            // // { key: 'billing', text: 'Billing' },
-            // { key: 'shipments', text: 'Shipments' }
+
             {
                 icon: 'fa-tachometer',
                 text: 'Dashboard',
@@ -167,9 +162,6 @@ export class UserAccount extends Component {
                 target: 'contacts'
             }
         ];
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
 
         const hubHash = {};
         if (hubs) {
@@ -186,24 +178,20 @@ export class UserAccount extends Component {
                 activeLink={this.state.activeLink}
             />
         );
-        /**
- *  tenant: PropTypes.object,
-    theme: PropTypes.object,
-    user: PropTypes.object,
-    loggedIn: PropTypes.bool,
-    dispatch: PropTypes.func,
-    history: PropTypes.object,
-    match: PropTypes.object
-*/
+
         const routeModal = (
             <Modal
                 component={
                     <AvailableRoutes
-                        props={{theme, user, loggedIn, userDispatch, dashboard,
-                            routes: dashboard.routes}}
+                        user={ user }
+                        theme={ theme }
+                        routes={ dashboard.routes }
                         initialCompName="UserAccount"
                     />
                 }
+                width="48vw"
+                verticalPadding="30px"
+                horizontalPadding="15px"
                 parentToggle={this.toggleModal}
             />
         );
@@ -215,7 +203,7 @@ export class UserAccount extends Component {
                 <div
                     className={`${defs.content_width} layout-row flex-none ${
                         defs.spacing_md_top
-                    } ${defs.spacing_md_bottom} ${styles.content_drop}`}
+                    } ${defs.spacing_md_bottom}`}
                 >
                     <FloatingMenu Comp={nav} theme={theme}/>
 

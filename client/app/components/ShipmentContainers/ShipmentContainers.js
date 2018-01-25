@@ -124,7 +124,7 @@ export class ShipmentContainers extends Component {
                 >
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <p className={`${styles.input_label} flex-100`}> Container Size </p>
+                            <p className={`${styles.input_label} flex-none`}> Container Size </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
                         </div>
                         <NamedSelect
@@ -137,7 +137,7 @@ export class ShipmentContainers extends Component {
                         />
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                        <p className={`${styles.input_label} flex-100`}> Net Weight </p>
+                        <p className={`${styles.input_label} flex-none`}> Net Weight </p>
                         <div
                             className={`flex-95 layout-row ${styles.input_box}`}
                         >
@@ -170,7 +170,7 @@ export class ShipmentContainers extends Component {
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center">
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                            <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="gross_weight" />
                         </div>
                         <div
@@ -189,7 +189,7 @@ export class ShipmentContainers extends Component {
                         </div>
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> No. of Containers </p>
+                        <p className={`${styles.input_label} flex-none`}> No. of Containers </p>
                         <NamedSelect
                             placeholder={container ? container.quantity : ''}
                             className="flex-95"
@@ -200,7 +200,7 @@ export class ShipmentContainers extends Component {
                         />
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                        <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
+                        <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
                         <Checkbox
                             onChange={this.toggleDangerousGoods}
                             checked={container ? container.dangerousGoods : false}

@@ -11,13 +11,13 @@ export class RouteSelector extends Component {
         this.state = {
             routes: this.props.routes,
         };
-        this.selectRoute = this.selectRoute.bind(this);
+        this.routeSelected = this.routeSelected.bind(this);
         this.togglePublic = this.togglePublic.bind(this);
         this.handleSearchChange = this.handleSearchChange.bind(this);
     }
 
-    selectRoute(route) {
-        this.props.setRoute(route);
+    routeSelected(route) {
+        this.props.routeSelected(route);
     }
     togglePublic() {
         this.setState({ viewPublic: !this.state.viewPublic });
@@ -78,7 +78,7 @@ export class RouteSelector extends Component {
                 key={v4()}
                 theme={theme}
                 route={route}
-                selectOption={this.selectRoute}
+                routeSelected={this.routeSelected}
             />
         ));
         return(
@@ -98,7 +98,7 @@ export class RouteSelector extends Component {
                                 />
                             </div>
                         </div>
-                        <div className="flex-100 layout-row layout-wrap">
+                        <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
                             {routesOptions}
                         </div>
                     </div>

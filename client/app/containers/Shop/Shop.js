@@ -118,7 +118,7 @@ class Shop extends Component {
     render() {
         const {
             bookingData, match, loading, tenant, user,
-            shipmentDispatch, nexusDispatch, currencies
+            shipmentDispatch, nexusDispatch, currencies, dashboard
         } = this.props;
         const { theme, scope } = tenant.data;
         const { request, response, error } = bookingData;
@@ -185,6 +185,8 @@ class Shop extends Component {
                             {...props}
                             theme={theme}
                             scope={scope}
+                            user={user}
+                            dashboard={dashboard}
                             shipmentData={response ? response.stage1 : {}}
                             prevRequest={
                                 request && request.stage2 ? request.stage2 : {}

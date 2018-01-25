@@ -123,13 +123,13 @@ export class ShipmentLocationBox extends Component {
         let tmpDest = {};
         // TO DO: AllNexuses changed to object with origin and dest arrays
         this.props.allNexuses.origins.forEach(nx => {
-            if (nx.id === route.origin_nexus_id) {
-                tmpOrigin = nx;
+            if (nx.value.id === route.origin_nexus_id) {
+                tmpOrigin = nx.value;
             }
         });
         this.props.allNexuses.destinations.forEach(nx => {
-            if (nx.id === route.destination_nexus_id) {
-                tmpDest = nx;
+            if (nx.value.id === route.destination_nexus_id) {
+                tmpDest = nx.value;
             }
         });
 
@@ -850,8 +850,9 @@ export class ShipmentLocationBox extends Component {
                 parentToggle={this.toggleModal}
             />
         );
+        console.log(routeModal);
         return (
-            <div className="layout-row flex-100 layout-wrap">
+            <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                     <div className="layout-row flex-none layout-align-start content_width">
                         <RoundButton
@@ -860,7 +861,6 @@ export class ShipmentLocationBox extends Component {
                             theme={theme}
                             active
                         />
-
                     </div>
                 </div>
                 <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
@@ -903,23 +903,20 @@ export class ShipmentLocationBox extends Component {
                                     { destFields }
                                 </div>
                             </div>
-                            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                                <div ref="map" id="map" style={mapStyle} />
-                            </div>
                         </div>
                         <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                             <div ref="map" id="map" style={mapStyle} />
                         </div>
                     </div>
+                    { theme ? (
+                        <style dangerouslySetInnerHTML={{__html: `
+                            .react-toggle--checked .react-toggle-track {
+                                background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
+                                border: 0.5px solid rgba(0, 0, 0, 0);
+                            }
+                    `}} />
+                    ) : '' }
                 </div>
-                { theme ? (
-                    <style dangerouslySetInnerHTML={{__html: `
-                        .react-toggle--checked .react-toggle-track {
-                            background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
-                            border: 0.5px solid rgba(0, 0, 0, 0);
-                        }
-                `}} />
-                ) : '' }
             </div>
         );
     }

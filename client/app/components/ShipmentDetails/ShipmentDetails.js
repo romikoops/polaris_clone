@@ -65,7 +65,7 @@ export class ShipmentDetails extends Component {
             has_pre_carriage: false,
             shipment: this.props.shipmentData.shipment,
             allNexuses: this.props.shipmentData.all_nexuses,
-            routeSet: false
+            routeSet: false,
         };
 
         if (this.props.shipmentData.shipment) {
@@ -80,7 +80,6 @@ export class ShipmentDetails extends Component {
         this.addNewCargoItem = this.addNewCargoItem.bind(this);
         this.addNewContainer = this.addNewContainer.bind(this);
         this.setTargetAddress = this.setTargetAddress.bind(this);
-        this.selectRoute = this.selectRoute.bind(this);
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
@@ -303,10 +302,6 @@ export class ShipmentDetails extends Component {
         this.props.shipmentDispatch.goTo('/dashboard');
     }
 
-    selectRoute(route) {
-        this.setState({ selectedRoute: route, routeSet: true });
-    }
-
     toggleCarriage(target, value) {
         this.setState({ [target]: value });
     }
@@ -346,19 +341,21 @@ export class ShipmentDetails extends Component {
                 );
             }
         }
+
         const routeIds = shipmentData.routes ? shipmentData.routes.map(route => route.id) : [];
+
         const mapBox = (
             <GmapsLoader
                 theme={theme}
                 setTargetAddress={this.setTargetAddress}
                 allNexuses={shipmentData.all_nexuses}
                 component={ShipmentLocationBox}
-                selectedRoute={this.state.selectedRoute}
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
                 nextStageAttempt={this.state.nextStageAttempt}
                 handleAddressChange={this.handleAddressChange}
+                shipment={shipmentData}
                 routeIds={routeIds}
                 nexusDispatch={this.props.nexusDispatch}
                 availableDestinations={this.props.availableDestinations}

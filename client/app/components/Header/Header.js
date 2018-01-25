@@ -115,6 +115,9 @@ class Header extends Component {
                         initialCompName="LoginPage"
                     />
                 }
+                width="40vw"
+                verticalPadding="60px"
+                horizontalPadding="40px"
                 parentToggle={this.toggleShowLogin}
             />
         );

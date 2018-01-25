@@ -7,13 +7,13 @@ import { browserHistory } from 'react-router';
 export class SignIn extends Component {
     render() {
         return (
-          <div>
-            <PageHeader>Sign In First</PageHeader>
-            <p>Unauthenticated users can't access the account page.</p>
-            <EmailSignInForm next={() => browserHistory.push('/account')} />
-          </div>
+            <div>
+                <PageHeader>Sign In First</PageHeader>
+                <p>Unauthenticated users can't access the account page.</p>
+                <EmailSignInForm next={() => browserHistory.push('/account')} />
+            </div>
         );
     }
 }
 
- 
+
