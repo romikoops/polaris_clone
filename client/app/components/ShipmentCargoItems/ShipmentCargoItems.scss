@@ -17,10 +17,17 @@
       outline: none;
     }
   }
+  .add_unit_wrapper {
+    position: relative;
+    &:hover + .new_container_placeholder {
+      opacity: 0.2;
+      visibility: visible;
+    }
+  }
   .add_unit {
     position: absolute;
-    left: 188.2px;
-    margin-top: -3px;
+    left: -104px;
+    margin-top: 75px;
     cursor: pointer;
     i {
       opacity: 0.8;
@@ -29,10 +36,6 @@
       &:hover {
         opacity: 1;
       }
-    }
-    &:hover + .new_container_placeholder {
-      opacity: 0.2;
-      visibility: visible;
     }
   }
   .new_container_placeholder {

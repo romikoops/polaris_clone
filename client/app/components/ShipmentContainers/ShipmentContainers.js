@@ -77,8 +77,13 @@ export class ShipmentContainers extends Component {
     }
 
     render() {
-        const { containers, handleDelta } = this.props;
+        const { containers, handleDelta, theme } = this.props;
         const { selectors } = this.state;
+
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
+
         const containerOptions = [];
         Object.keys(containerDescriptions).forEach(key => {
             if (key !== 'lcl') {
@@ -230,9 +235,11 @@ export class ShipmentContainers extends Component {
                     </div>
 
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                        <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addContainer}>
-                            <p> Add unit </p>
-                            <i className="fa fa-plus-square-o" />
+                        <div className={`${styles.add_unit_wrapper} content_width`}>
+                            <div className={`layout-row flex-none ${styles.add_unit} layout-align-start-center`} onClick={this.addContainer}>
+                                <p> Add unit </p>
+                                <i className="fa fa-plus-square-o clip" style={textStyle}/>
+                            </div>
                         </div>
                         <div
                             className={styles.new_container_placeholder}

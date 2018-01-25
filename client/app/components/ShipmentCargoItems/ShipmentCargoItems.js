@@ -52,6 +52,17 @@ export class ShipmentCargoItems extends Component {
         newCargoItemTypes[index] = event;
         this.setState({cargoItemTypes: newCargoItemTypes});
         this.props.handleDelta(modifiedEvent);
+
+        if (!event.dimension_x) return;
+
+        const modifiedEventDimentionX = {
+            target: { name: index + '-dimension_x', value: event.dimension_x }
+        };
+        const modifiedEventDimentionY = {
+            target: { name: index + '-dimension_y', value: event.dimension_y }
+        };
+        this.props.handleDelta(modifiedEventDimentionX);
+        this.props.handleDelta(modifiedEventDimentionY);
     }
     toggleDangerousGoods() {
         const event = {
@@ -190,6 +201,7 @@ export class ShipmentCargoItems extends Component {
                                         validations={ {matchRegexp: /[^0]/} }
                                         validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
                                         required
+                                        disabled={!!cargoItemTypes[i].dimension_x}
                                     />
                                 ) : placeholderInput
                             }
@@ -216,6 +228,7 @@ export class ShipmentCargoItems extends Component {
                                         nextStageAttempt={this.props.nextStageAttempt}
                                         validations={ {matchRegexp: /[^0]/} }
                                         validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                        disabled={!!cargoItemTypes[i].dimension_y}
                                         required
                                     />
                                 ) : placeholderInput
@@ -281,17 +294,20 @@ export class ShipmentCargoItems extends Component {
                 >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         { cargosAdded }
-                        <div className="layout-row layout-align-start-center flex-100" >
+                    </div>
+
+                    <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div className={`${styles.add_unit_wrapper} content_width`}>
                             <div className={`layout-row flex-none ${styles.add_unit} layout-wrap layout-align-center-center`} onClick={this.addNewCargo}>
                                 <p> Add unit</p>
                                 <i className="fa fa-plus-square-o clip" style={textStyle}/>
                             </div>
-                            <div
-                                className={styles.new_container_placeholder}
-                            >
-                                { generateSeparator(null, -1) }
-                                { generateCargoItem(null, -1) }
-                            </div>
+                        </div>
+                        <div
+                            className={styles.new_container_placeholder}
+                        >
+                            { generateSeparator(null, -1) }
+                            { generateCargoItem(null, -1) }
                         </div>
                     </div>
                 </div>

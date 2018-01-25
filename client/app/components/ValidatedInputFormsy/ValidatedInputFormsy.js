@@ -64,6 +64,7 @@ class ValidatedInputFormsy extends Component {
                     type={this.props.type}
                     value={(this.props.getValue() && this.props.getValue().toString()) || ''}
                     name={this.props.name}
+                    disabled={this.props.disabled}
                 />
                 <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
             </div>
