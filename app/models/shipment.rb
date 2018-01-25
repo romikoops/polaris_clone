@@ -14,13 +14,13 @@ class Shipment < ApplicationRecord
   validates :status, 
     inclusion: { 
       in: STATUSES, 
-      message: "must be included in [#{STATUSES.join(', ')}]" 
+      message: "must be included in #{STATUSES.log_format}" 
     },
     allow_nil: true
   validates :load_type, 
     inclusion: { 
       in: LOAD_TYPES, 
-      message: "must be included in [#{LOAD_TYPES.join(', ')}]" 
+      message: "must be included in #{LOAD_TYPES.log_format}" 
     },
     allow_nil: true
   validate :planned_pickup_date_is_a_datetime?
