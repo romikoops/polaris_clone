@@ -17,7 +17,7 @@ export class RouteSelector extends Component {
     }
 
     routeSelected(route) {
-        this.props.setRoute(route);
+        this.props.routeSelected(route);
     }
     togglePublic() {
         this.setState({ viewPublic: !this.state.viewPublic });

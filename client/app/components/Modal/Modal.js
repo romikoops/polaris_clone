@@ -56,7 +56,7 @@ export class Modal extends Component {
             padding: `${this.props.horizontalPadding} ${this.props.verticalPadding}`,
             overflowY: 'auto'
         };
-        debugger;
+
         return (
             <div>
 		    	<div className={`${styles.modal_background} ${styles.full_size}`} onClick={this.hide}></div>

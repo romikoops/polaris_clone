@@ -69,7 +69,7 @@ export class ShipmentDetails extends Component {
             has_pre_carriage: false,
             shipment: this.props.shipmentData.shipment,
             allNexuses: this.props.shipmentData.all_nexuses,
-            routeSet: false
+            routeSet: false,
         };
 
         if (this.props.shipmentData.shipment) {
@@ -84,7 +84,6 @@ export class ShipmentDetails extends Component {
         this.addNewCargoItem = this.addNewCargoItem.bind(this);
         this.addNewContainer = this.addNewContainer.bind(this);
         this.setTargetLocation = this.setTargetLocation.bind(this);
-        this.selectRoute = this.selectRoute.bind(this);
         this.toggleCarriage = this.toggleCarriage.bind(this);
         this.handleCargoItemChange = this.handleCargoItemChange.bind(this);
         this.handleContainerChange = this.handleContainerChange.bind(this);
@@ -103,7 +102,6 @@ export class ShipmentDetails extends Component {
     componentDidUpdate() {
         console.log('######### UPDATED ###########');
     }
-
     loadPrevReq(obj) {
         this.setState({
             cargoItems: obj.cargo_items_attributes,
@@ -288,10 +286,6 @@ export class ShipmentDetails extends Component {
         this.props.shipmentDispatch.goTo('/dashboard');
     }
 
-    selectRoute(route) {
-        this.setState({ selectedRoute: route, routeSet: true });
-    }
-
     toggleCarriage(target, value) {
         this.setState({ [target]: value });
     }
@@ -339,17 +333,18 @@ export class ShipmentDetails extends Component {
         //         routes={shipmentData.routes}
         //     />
         // );
+
         const mapBox = (
             <GmapsLoader
                 theme={theme}
                 selectLocation={this.setTargetLocation}
                 allNexuses={shipmentData.all_nexuses}
                 component={ShipmentLocationBox}
-                selectedRoute={this.state.selectedRoute}
                 toggleCarriage={this.toggleCarriage}
                 origin={this.state.origin}
                 destination={this.state.destination}
                 handleAddressChange={this.handleAddressChange}
+                shipment={shipmentData}
             />
         );
         const value = this.state.selectedDay
@@ -408,9 +403,9 @@ export class ShipmentDetails extends Component {
                 <div className="flex-50 layout-row layout-wrap layout-align-end-center">
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
-                        {' '}
-                        {'Select Incoterm:'}
-                        {' '}
+                            {' '}
+                            {'Select Incoterm:'}
+                            {' '}
                         </p>
                     </div>
                     <StyledSelect
@@ -426,6 +421,7 @@ export class ShipmentDetails extends Component {
         // {this.state.routeSet ? mapBox : rSelect}
         // {this.state.routeSet ? dayPickerSection : '' }
         // {this.state.routeSet ? cargoDetails : ''}
+
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
@@ -433,7 +429,6 @@ export class ShipmentDetails extends Component {
                     { dayPickerSection }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
-
                     {mapBox}
                 </div>
                 <div

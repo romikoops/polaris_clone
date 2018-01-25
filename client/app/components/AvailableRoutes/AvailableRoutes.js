@@ -49,18 +49,12 @@ export class AvailableRoutes extends Component {
         const { userDispatch, user } = this.props;
         userDispatch.makePrimary(user.id, locationId);
     }
-    routeSelected() {
-
+    routeSelected(route) {
+        this.props.routeSelected(route);
     }
     render() {
-        const { user, theme, routes  } = this.props;
-        if (!user) {
-            return (
-                <div>
-                    <h1>Gone smoking '()___)_))__________)</h1>
-                </div>
-            );
-        }
+        const { user, theme, routes } = this.props;
+
         return(
             <RouteSelector
                 user={ user }

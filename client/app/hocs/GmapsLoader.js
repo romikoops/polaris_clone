@@ -15,6 +15,8 @@ export default class GmapsLoader extends Component {
             libraries: 'places' // To request multiple libraries, separate them with a comma
         };
         const ParamComponent = this.props.component;
+        console.log('Gmap');
+        console.log(this.props);
         return (
             <ReactGoogleMapLoader
                 params={params}
@@ -25,10 +27,10 @@ export default class GmapsLoader extends Component {
                             setTargetAddress={this.props.selectLocation}
                             theme={this.props.theme}
                             gMaps={googleMaps}
-                            selectedRoute={this.props.selectedRoute}
                             setCarriage={this.props.toggleCarriage}
                             origin={this.props.origin}
                             destination={this.props.destination}
+                            shipment={this.props.shipment}
                             handleAddressChange={this.props.handleAddressChange}
                         />
                     )

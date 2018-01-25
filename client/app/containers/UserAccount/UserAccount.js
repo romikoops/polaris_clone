@@ -120,7 +120,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch, } = this.props;
+        const { user, theme, users, userDispatch, authDispatch } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -194,12 +194,12 @@ export class UserAccount extends Component {
     dispatch: PropTypes.func,
     history: PropTypes.object,
     match: PropTypes.object
-*/      const userDetails = { user, theme };
+*/
         const routeModal = (
             <Modal
                 component={
                     <AvailableRoutes
-                        user={ userDetails }
+                        user={ user }
                         theme={ theme }
                         routes={ dashboard.routes }
                         initialCompName="UserAccount"
