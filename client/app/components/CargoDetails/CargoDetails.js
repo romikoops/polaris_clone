@@ -7,6 +7,7 @@ import { HSCodeRow } from '../HSCodeRow/HSCodeRow';
 import defaults from '../../styles/default_classes.scss';
 import Truncate from 'react-truncate';
 import { converter } from '../../helpers';
+import { Tooltip } from '../Tooltip/Tooltip';
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -94,7 +95,7 @@ export class CargoDetails extends Component {
         };
         const insuranceBox = (
 
-            <div className={`flex-100 layout-row ${defaults.padd_top} ${styles.box_content} ${this.state.insuranceView ? styles.show : ''}`}>
+            <div className={`flex-100 layout-row  ${styles.box_content} ${this.state.insuranceView ? styles.show : ''}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> Sign an insurance for the replacement of the goods shipped in case of total or partial loss or damage. The price of the insurance will be determined by the goods value and the transport charges.
@@ -111,7 +112,7 @@ export class CargoDetails extends Component {
             </div>
         );
         const customsBox = (
-            <div className={`flex-100 layout-row layout-wrap ${defaults.padd_top} ${styles.box_content} ${this.state.customsView ? styles.show : styles.hidden}`}>
+            <div className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${this.state.customsView ? styles.show : styles.hidden}`}>
                 <div className="flex-80 layout-row layout-wrap">
                     <p className="flex-90">
                         <strong> {' '} Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country o to exported goods so that they can leave the country.
@@ -194,7 +195,7 @@ export class CargoDetails extends Component {
                 <div className="flex-100 layout-row layout-align-center">
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row">
-                            <p className={`flex-none ${styles.f_header}`}> Cargo Details</p>
+                            <h3 className={'flex-none letter_3'}> Cargo Details</h3>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
@@ -355,9 +356,10 @@ export class CargoDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-center padd_top">
 
-                    <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
+                    <div className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}>
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <h4 className="flex-none">Insurance</h4>
+                            <h3 className="flex-none letter_3">Insurance</h3>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
                             <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} theme={theme} />
                         </div>
                         {insuranceBox}
@@ -365,9 +367,10 @@ export class CargoDetails extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-align-center padd_top">
 
-                    <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
+                    <div className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}>
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <h4 className="flex-none">Customs</h4>
+                            <h3 className="flex-none letter_3">Customs</h3>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                             <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} theme={theme} />
                         </div>
                         {customsBox}

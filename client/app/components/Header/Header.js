@@ -8,7 +8,8 @@ import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
-import { appActions } from '../../actions';
+import MessageCenter from '../../containers/MessageCenter/MessageCenter';
+import { appActions, messagingActions } from '../../actions';
 import { accountIconColor } from '../../helpers';
 import { bindActionCreators } from 'redux';
 const iconColourer = accountIconColor;
@@ -17,10 +18,18 @@ class Header extends Component {
         super(props);
         this.state = {
             redirect: false,
-            showLogin: false
+            showLogin: false,
+            showMessages: false
         };
         this.goHome = this.goHome.bind(this);
         this.toggleShowLogin = this.toggleShowLogin.bind(this);
+        this.toggleShowMessages = this.toggleShowMessages.bind(this);
+    }
+    componentDidMount() {
+        const { messageDispatch, messages } = this.props;
+        if (!messages) {
+            messageDispatch.getUserConversations();
+        }
     }
     goHome() {
         this.setState({redirect: true});
@@ -30,15 +39,20 @@ class Header extends Component {
             showLogin: !this.state.showLogin
         });
     }
+    toggleShowMessages() {
+        this.setState({
+            showMessages: !this.state.showMessages
+        });
+    }
     render() {
-        const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
+        const { user, theme, tenant, currencies, appDispatch, invert, unread } = this.props;
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
         const accountLinks = [
             {
                 url: '/account',
-                text: 'Settings',
+                text: 'Account',
                 fontAwesomeIcon: 'fa-cog',
                 key: 'settings'
             },
@@ -58,19 +72,26 @@ class Header extends Component {
             return <Redirect push to="/" />;
         }
         const dropDown = (
-                <NavDropdown
-                    dropDownText={dropDownText}
-                    dropDownImage={adjIcon}
-                    linkOptions={accountLinks}
-                    invert={invert}
-                />
-            );
+            <NavDropdown
+                dropDownText={dropDownText}
+                dropDownImage={adjIcon}
+                linkOptions={accountLinks}
+                invert={invert}
+            />
+        );
         const currDropDown = (
             <NavDropdown
                 dropDownText={user && user.data ? user.data.currency : ''}
                 linkOptions={currLinks}
                 invert={invert}
             />
+        );
+        const alertStyle = unread > 0 ? styles.unread : styles.all_read;
+        const mail = (
+            <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
+                <span className={`${alertStyle} flex-none`}>{unread}</span>
+                <i className="fa fa-envelope-o"></i>
+            </div>
         );
         let logoUrl = '';
         let logoStyle;
@@ -82,7 +103,7 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
-        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}</div>;
+        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}{mail}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -122,6 +143,7 @@ class Header extends Component {
                  <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
+                { this.state.showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }
             </div>
         );
     }
@@ -139,20 +161,24 @@ Header.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { authentication, tenant, shipment, app } = state;
+    const { authentication, tenant, shipment, app, messaging } = state;
     const { user, loggedIn } = authentication;
+    const { unread, messages } = messaging;
     const { currencies } = app;
     return {
         user,
         tenant,
         loggedIn,
         shipment,
-        currencies
+        currencies,
+        unread,
+        messages
     };
 }
 function mapDispatchToProps(dispatch) {
     return {
-        appDispatch: bindActionCreators(appActions, dispatch)
+        appDispatch: bindActionCreators(appActions, dispatch),
+        messageDispatch: bindActionCreators(messagingActions, dispatch)
     };
 }
 

@@ -11,7 +11,7 @@ import defs from '../../styles/default_classes.scss';
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import { v4 } from 'node-uuid';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const containerTareWeights = CONTAINER_TARE_WEIGHTS;
 
@@ -123,7 +123,10 @@ export class ShipmentContainers extends Component {
                     style={{ position: 'relative' }}
                 >
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> Container Size </p>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                            <p className={`${styles.input_label} flex-100`}> Container Size </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
+                        </div>
                         <NamedSelect
                             placeholder={container ? container.sizeClass : ''}
                             className="flex-95"
@@ -166,7 +169,10 @@ export class ShipmentContainers extends Component {
                         </div>
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                        <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                            <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="gross_weight" />
+                        </div>
                         <div
                             className={`flex-95 layout-row ${styles.input_box}`}
                         >
@@ -201,6 +207,7 @@ export class ShipmentContainers extends Component {
                             theme={this.props.theme}
                             size="34px"
                         />
+                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
 
                     {

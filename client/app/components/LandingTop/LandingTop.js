@@ -78,15 +78,21 @@ export class LandingTop extends Component {
                         <Header user={user} theme={theme} invert={true}/>
                     </div>
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
-                        <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/>
-                        { user ? myAccount : '' }
-                        { user && user.role_id === 1 ? toAdmin : '' }
+                        { user && user.data && user.data.role_id === 2 ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                        { !user ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                        { user && user.data && user.data.role_id === 2 ? myAccount : '' }
+                        { user && user.data && user.data.role_id === 1 ? toAdmin : '' }
                     </div>
 
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>
                         <div className={styles.sign_up}>
                             <h2>Never spend precious time on transportation again, shipping made simple</h2>
                             <h3>Enjoy the most advanced and easy to use booking system in the market</h3>
+                            <div className="flex-none layout-row layout-align-start-center">
+                                <p className="flex-none">powered by</p>
+                                <div className="flex-5"></div>
+                                <img src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png" alt="" className={`flex-none ${styles.powered_by_logo}`}/>
+                            </div>
                         </div>
                     </div>
                 </div>

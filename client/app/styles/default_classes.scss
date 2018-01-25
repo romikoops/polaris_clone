@@ -92,7 +92,7 @@
     z-index: -1;
     position: absolute;
   }
-  .letter_spacing {
+  .letter_3 {
     letter-spacing: 3px;
   }
   .rotate_45{
@@ -145,7 +145,6 @@
   .sec_title_text_normal {
     margin: 0;
     font-size: 30px;
-
   }
   .sec_header_text {
     margin: 0;
@@ -157,6 +156,15 @@
   .sec_subheader_text {
     margin: 0;
     font-size: 18px;
+  }
+  .height_100 {
+    height: 100%;
+  }
+  .width_100 {
+    width: 100%;
+  }
+  .margin_1{
+    margin: 1%;
   }
     .input_box {
     // height: 38px;
@@ -186,5 +194,9 @@
     &:focus {
       outline: none;
     }
+  }
+  .tooltip {
+    height: 20px;
+    width: 20px;
   }
 }

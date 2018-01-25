@@ -402,4 +402,15 @@
     opacity: 0;
     z-index: -1;
   }
+  .hub_form {
+    width: 800px;
+    height: 700px;
+    z-index: 52;
+    background: #FFFFFF;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
+
+  }
+  .form_padding {
+    padding: 0 15px;
+  }
 }

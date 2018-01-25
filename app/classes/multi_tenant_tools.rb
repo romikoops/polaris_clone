@@ -2,45 +2,52 @@ module MultiTenantTools
   include ExcelTools
   def test
     # tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    tenant = {
-    "theme" => {
-      "colors" => {
-        "primary" => "#252D5C",
-        "secondary" => "##C42D35",
-        "brightPrimary" => "#4655aa",
-        "brightSecondary" => "#fc353e"
-      },
-      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/belglobe.png",
-      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/belglobe.png"
-    },
-    "addresses" => {
-      "main" => "Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
-    },
-    "phones" =>{
-      "main" => "+41 (0)26 409 76 80",
-      "support" => "0173042031020"
-    },
-    "emails" => {
-      "sales" => "info@belglobe.com",
-      "support" => "info@belglobe.com"
-    },
-    "subdomain" => "belglobe",
-    "name" => "Belglobe",
-    "scope" => {
-      "modes_of_transport" => {
-        "ocean" => {
-          "container" => true,
-          "cargo_item" => true
+    tenant =   {
+      "theme" => {
+        "colors" => {
+          "primary" => "#006bc2",
+          "secondary" => "#174b90",
+          "brightPrimary" => "#006bc2",
+          "brightSecondary" => "#174b90"
         },
-        "air" => {
-          "container" => true,
-          "cargo_item" => true
+        "logoLarge" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoSmall" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoWide" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip.png",
+        "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+      },
+      "addresses" => {
+        "main" => "Korngardar 2, 104 Reykjavík, Iceland"
+      },
+      "phones" =>{
+        "main" =>"+354 525 - 7000",
+        "support" => "+354 525 - 7000"
+      },
+      "emails" => {
+        "sales" => "service@eimskip.is",
+        "support" => "service@eimskip.is"
+      },
+      "subdomain" => "eimskip",
+      "name" => "Eimskip",
+      "web" => {
+        "tld" => "is"
+      },
+      "scope" => {
+        "modes_of_transport" => {
+          "ocean" => {
+            "container" => true,
+            "cargo_item" => true
+          },
+          "air" => {
+            "container" => false,
+            "cargo_item" => false
+          }
         }
       }
     }
-}
-    new_site(tenant.to_h, false)
+    # new_site(tenant.to_h, true)
+    seed_demo_site(tenant)
   end
+
   def update_indexes
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
@@ -156,6 +163,13 @@ module MultiTenantTools
           enabled: true }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
+      tenant = Tenant.find_by_subdomain(subd)
+      if !tenant.web
+        tenant.web = {}
+      end
+      tenant.web["cloudfront"] = @distribution_id
+      tenant.web["cloudfront_name"] = @distribution_domain_name
+      tenant.save!
       new_record(domain, resp[:distribution][:domain_name])
   end
   def new_record(domain, cf_name)
@@ -211,7 +225,7 @@ module MultiTenantTools
 
     end
     def seed_demo_site(tenant_data)
-      tld = tenant_data["emails"]["support"].split('.')[1]
+        tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
         tenant = Tenant.find_or_create_by!(tenant_data)
         tenant.users.destroy_all
         admin = tenant.users.new(

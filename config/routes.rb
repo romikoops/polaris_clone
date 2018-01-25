@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       
-      resources :hubs, only: [:index, :show] do
+      resources :hubs, only: [:index, :show, :create] do
         patch "set_status"
       end
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
-    post "search/hscodes" => "search#search_hs_codes"
+    post "search/hscodes", to: "search#search_hs_codes"
     get "/documents/download/:document_id", 
       to: "documents#download_redirect", as: :document_download
     get "/documents/delete/:document_id", to: "documents#delete", as: :document_delete
@@ -117,5 +117,7 @@ Rails.application.routes.draw do
 
     get "search/hscodes/:query" => "search#search_hs_codes"
     post 'super_admins/new_demo' => "super_admins#new_demo_site"
+    get 'messaging/get' => "notifications#index"
+    post 'messaging/send' => "notifications#send_message"
   end
 end

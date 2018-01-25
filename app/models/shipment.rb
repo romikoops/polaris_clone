@@ -1,4 +1,5 @@
 class Shipment < ApplicationRecord
+  extend ShippingTools
   STATUSES = %w(
     requested
     booking_process_started
@@ -223,6 +224,14 @@ class Shipment < ApplicationRecord
     schedule_set.reduce(0) do |insurance_value, schedule|
       insurance_value += schedules_charges[schedule["hub_route_key"]]["insurance"].to_f
     end
+  end
+
+  def self.test_email
+    user = User.find_by_email("demo@demo.com")
+    shipment = user.shipments.find_by(status: "requested")
+    ShipmentMailer.tenant_notification(user, shipment)
+    ShipmentMailer.shipper_notification(user, shipment)
+    shipper_confirmation_email(user, shipment)
   end
 
   private

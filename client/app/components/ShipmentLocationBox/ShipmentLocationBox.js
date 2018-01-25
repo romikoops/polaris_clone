@@ -10,6 +10,9 @@ import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers';
 import { mapStyling } from '../../constants/map.constants';
+import { Modal } from '../Modal/Modal';
+import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes';
+import { RoundButton } from '../RoundButton/RoundButton';
 import styled from 'styled-components';
 import { capitalize } from '../../helpers/stringTools';
 import { BASE_URL } from '../../constants';
@@ -64,7 +67,9 @@ export class ShipmentLocationBox extends Component {
             markers: {
                 origin: {},
                 destination: {}
-            }
+            },
+            showModal: false,
+            locationFromModal: false,
         };
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -79,6 +84,8 @@ export class ShipmentLocationBox extends Component {
         this.setMarker = this.setMarker.bind(this);
         this.handleAuto = this.handleAuto.bind(this);
         this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.selectedRoute = this.selectedRoute.bind(this);
     }
 
     componentDidMount() {
@@ -87,16 +94,40 @@ export class ShipmentLocationBox extends Component {
             this.setHubsFromRoute(this.props.selectedRoute);
         }
     }
-
+    toggleModal() {
+        this.setState({showModal: !this.state.showModal});
+    }
+    selectedRoute(route) {
+        console.log(route);
+        const origin = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        const destination = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        this.setState({origin, destination});
+        this.setState({showModal: !this.state.showModal});
+        this.setState({locationFromModal: !this.state.locationFromModal});
+        this.setHubsFromRoute(route);
+    }
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
         // TO DO: AllNexuses changed to object with origin and dest arrays
-        this.props.allNexuses.forEach(nx => {
+        this.props.allNexuses.origins.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
             }
-
+        });
+        this.props.allNexuses.destinations.forEach(nx => {
             if (nx.id === route.destination_nexus_id) {
                 tmpDest = nx;
             }
@@ -474,8 +505,8 @@ export class ShipmentLocationBox extends Component {
         const { allNexuses } = this.props;
         if (target === 'origin') {
             fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
-              method: 'GET',
-              headers: authHeader()
+                method: 'GET',
+                headers: authHeader()
             }).then(promise => {
                 promise.json().then(response => {
                     const nexus = response.data.nexus;
@@ -497,8 +528,8 @@ export class ShipmentLocationBox extends Component {
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
         } else if (target === 'destination') {
             fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
-              method: 'GET',
-              headers: authHeader()
+                method: 'GET',
+                headers: authHeader()
             }).then(promise => {
                 promise.json().then(response => {
                     const nexus = response.data.nexus;
@@ -796,55 +827,89 @@ export class ShipmentLocationBox extends Component {
             }
             return '';
         };
-        const { theme } = this.props;
+        const { theme, user, shipment} = this.props;
         const errorClass = (
             originFieldsHaveErrors || destinationFieldsHaveErrors ?
-            styles.with_errors :
-            ''
+                styles.with_errors :
+                ''
+        );
+        const routeModal = (
+            <Modal
+                component={
+                    <AvailableRoutes
+                        user={ user }
+                        theme={ theme }
+                        routes={ shipment.routes}
+                        routeSelected={ this.selectedRoute }
+                        initialCompName="UserAccount"
+                    />
+                }
+                width="48vw"
+                verticalPadding="30px"
+                horizontalPadding="15px"
+                parentToggle={this.toggleModal}
+            />
         );
         return (
-            <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
-                <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
-                    <div className={`flex-none layout-row layout-wrap ${styles.input_box} ${errorClass}`}>
-                        <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
-                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
-                                <Toggle
-                                    className="flex-none"
-                                    id="has_pre_carriage"
-                                    name="has_pre_carriage"
-                                    value={String(this.state.shipment.has_pre_carriage)}
-                                    defaultChecked={this.state.shipment.has_pre_carriage}
-                                    onChange={this.handleTrucking}
-                                />
-                                <label htmlFor="pre-carriage">Pre-Carriage</label>
-                            </div>
-                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                { this.state.shipment.has_pre_carriage ? originAuto : '' }
-                                { displayLocationOptions('origin') }
-                                { originFields }
-                            </div>
-                        </div>
-                        <div className="flex-50 layout-row layout-wrap layout-align-end-start">
-                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
-                                <Toggle
-                                    className="flex-none"
-                                    id="has_on_carriage"
-                                    name="has_on_carriage"
-                                    value={String(this.state.shipment.has_on_carriage)}
-                                    defaultChecked={this.state.shipment.has_on_carriage}
-                                    onChange={this.handleTrucking}
-                                />
-                                <label htmlFor="on-carriage">On-Carriage</label>
-                            </div>
-                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                { this.state.shipment.has_on_carriage ? destAuto : '' }
-                                { displayLocationOptions('destination') }
-                                { destFields }
-                            </div>
-                        </div>
+            <div className="layout-row flex-100 layout-wrap">
+                <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+                    <div className="layout-row flex-none layout-align-start content_width">
+                        <RoundButton
+                            text="Show All Routes"
+                            handleNext={this.toggleModal}
+                            theme={theme}
+                            active
+                        />
+
                     </div>
-                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                        <div ref="map" id="map" style={mapStyle} />
+                </div>
+                <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
+                    <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
+                        {this.state.showModal ? routeModal : ''}
+                        <div className={`flex-none layout-row layout-wrap ${styles.input_box} ${errorClass}`}>
+                            <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
+                                <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
+                                    <Toggle
+                                        className="flex-none"
+                                        id="has_pre_carriage"
+                                        name="has_pre_carriage"
+                                        value={String(this.state.shipment.has_pre_carriage)}
+                                        defaultChecked={this.state.shipment.has_pre_carriage}
+                                        onChange={this.handleTrucking}
+                                    />
+                                    <label htmlFor="pre-carriage">Pre-Carriage</label>
+                                </div>
+                                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
+                                    { this.state.shipment.has_pre_carriage ? originAuto : '' }
+                                    { displayLocationOptions('origin') }
+                                    { originFields }
+                                </div>
+                            </div>
+                            <div className="flex-50 layout-row layout-wrap layout-align-end-start">
+                                <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
+                                    <Toggle
+                                        className="flex-none"
+                                        id="has_on_carriage"
+                                        name="has_on_carriage"
+                                        value={String(this.state.shipment.has_on_carriage)}
+                                        defaultChecked={this.state.shipment.has_on_carriage}
+                                        onChange={this.handleTrucking}
+                                    />
+                                    <label htmlFor="on-carriage">On-Carriage</label>
+                                </div>
+                                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
+                                    { this.state.shipment.has_on_carriage ? destAuto : '' }
+                                    { displayLocationOptions('destination') }
+                                    { destFields }
+                                </div>
+                            </div>
+                            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                                <div ref="map" id="map" style={mapStyle} />
+                            </div>
+                        </div>
+                        <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                            <div ref="map" id="map" style={mapStyle} />
+                        </div>
                     </div>
                 </div>
                 { theme ? (

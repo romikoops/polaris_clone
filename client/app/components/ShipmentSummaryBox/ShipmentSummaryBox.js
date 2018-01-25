@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './ShipmentSummaryBox.scss';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +62,6 @@ export class ShipmentSummaryBox extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-        console.log(shipment);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-wrap">
@@ -113,10 +112,11 @@ export class ShipmentSummaryBox extends Component {
                             <div
                                 className={`${
                                     styles.tot_price
-                                } flex-none layout-row layout-align-space-between`}
+                                } flex-none layout-row layout-align-space-between-center`}
                                 style={gradientFontStyle}
                             >
                                 <p>Total Price:</p>{' '}
+                                <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
                                 <Price value={total} user={user}/>
                             </div>
                         </div>

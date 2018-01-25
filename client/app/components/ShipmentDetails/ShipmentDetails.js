@@ -8,6 +8,7 @@ import { moment, incoterms } from '../../constants';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import '../../styles/day-picker-custom.css';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
@@ -407,11 +408,12 @@ export class ShipmentDetails extends Component {
                 layout-row flex-none layout-align-start-center
             `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-                    <p className="flex-100 letter_2">
+                    <div className="flex-100 layout-row layout-align-start-center">
                         {' '}
-                        {this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}
+                        <p className="flex-none letter_2">{this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}</p>
+                        <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                         {' '}
-                    </p>
+                    </div>
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>

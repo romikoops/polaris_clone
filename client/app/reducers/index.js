@@ -10,6 +10,7 @@ import { alert } from './alert.reducer';
 import { admin } from './admin.reducer';
 import { app } from './app.reducer';
 import { nexus } from './nexus.reducer';
+import { messaging } from './messaging.reducer';
 import { tenant, selectedSubdomain } from './tenant.reducer';
 
 const filter = (state = '', action) => {
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
     admin,
     app,
     routing,
-    nexus
+    nexus,
+    messaging
 });
 
 export default rootReducer;

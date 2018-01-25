@@ -8,6 +8,7 @@ import defs from '../../styles/default_classes.scss';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
 import { v4 } from 'node-uuid';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -118,7 +119,10 @@ export class ShipmentCargoItems extends Component {
             >
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                            <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
+                        </div>
                         <div className={`flex-95 layout-row ${styles.input_box}`}>
                             {
                                 cargoItem ? (
@@ -257,6 +261,7 @@ export class ShipmentCargoItems extends Component {
                             theme={this.props.theme}
                             size="34px"
                         />
+                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
                 </div>
 

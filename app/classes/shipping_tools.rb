@@ -30,6 +30,7 @@ module ShippingTools
         value: Location.find(route["destination_nexus_id"]), 
         label: route["destination_nexus"] 
       }
+
       route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
       route
     end
@@ -158,7 +159,7 @@ module ShippingTools
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
 
     message = {title: 'Booking Received', message: "Thank you for making your booking through #{current_user.tenant.name}. You will be notified upon confirmation of the order.", shipmentRef: @shipment.imc_reference}
-    add_message_to_convo(current_user, message)
+    add_message_to_convo(current_user, message, true)
     return {
       shipment: @shipment,
       schedules: @schedules,

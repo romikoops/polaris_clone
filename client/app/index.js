@@ -6,7 +6,6 @@ import { configureStore, history } from './store/configureStore';
 import Root from './containers/Root';
 import './index.scss';
 
-
 const store = configureStore();
 
 render(

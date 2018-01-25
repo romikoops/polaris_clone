@@ -295,16 +295,24 @@ module ExcelTools
       nexus = Location.find_or_create_by(
         name:          hub_row[:hub_name], 
         location_type: "nexus", 
-        latitude:      hub_row[:latitude], 
-        longitude:     hub_row[:longitude], 
         photo:         hub_row[:photo], 
         country:       hub_row[:country], 
         city:          hub_row[:hub_name]
       )
+      location = Location.find_or_create_by(
+        name:          hub_row[:hub_name], 
+        latitude:      hub_row[:latitude], 
+        longitude:     hub_row[:longitude], 
+        photo:         hub_row[:photo], 
+        country:       hub_row[:country], 
+        city:          hub_row[:hub_name],
+        geocoded_address: hub_row[:geocoded_address]
+      )
       hub_code = hub_row[:hub_code] unless hub_row[:hub_code].blank?
       
       hub = nexus.hubs.find_or_create_by(
-        location_id:   nexus.id, 
+        nexus_id:      nexus.id, 
+        location_id:   location.id, 
         tenant_id:     user.tenant_id, 
         hub_type:      hub_row[:hub_type], 
         trucking_type: hub_row[:trucking_type], 

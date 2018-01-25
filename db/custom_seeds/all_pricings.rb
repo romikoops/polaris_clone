@@ -3,7 +3,7 @@ include MongoTools
 
 Tenant.all.each do |tenant|
   shipper = tenant.users.second
-
+  
   # Overwrite hubs from excel sheet
   puts "# Overwrite hubs from excel sheet"
   hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")

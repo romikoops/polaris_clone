@@ -18,6 +18,14 @@ class UsersController < ApplicationController
     user_locs.each do |ul|
       @locations.push({user: ul, location: ul.location})
     end
+    route_ids_dedicated = Route.ids_dedicated(current_user)
+    mot_scope_args = {}
+    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
+    routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
+    routes.map! do |route|
+      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
+      route
+    end
     resp = {
       shipments:{
         requested: @requested_shipments,
@@ -27,7 +35,8 @@ class UsersController < ApplicationController
       pricings: @pricings,
       contacts: @contacts,
       aliases: @aliases,
-      locations: @locations
+      locations: @locations,
+      routes: routes
     }
     response_handler(resp)
   end
@@ -41,14 +50,12 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    Rails.logger.debug @user
     @user.update_attributes(update_params)
-    Rails.logger.debug @user
     headers = @user.create_new_auth_token
-    Rails.logger.debug headers
     response_handler({user: @user, headers: headers})
   end
   def currencies
+    currency = current_user ? current_user.currency : "EUR"
     results = get_currency_array(current_user.currency)
     response_handler(results)
   end

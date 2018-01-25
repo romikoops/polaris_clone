@@ -1,5 +1,6 @@
 Tenant.all.each do |tenant|
   # Create shipper
+  tld = tenant.web && tenant.web["tld"] ? tenant.web["tld"] : 'com'
   shipper = tenant.users.new(
     role: Role.find_by_name('shipper'),
 
@@ -8,7 +9,7 @@ Tenant.all.each do |tenant|
     last_name: "Smith",
     phone: "123456789",
 
-    email: "demo@#{tenant.subdomain}.com",
+    email: "demo@#{tenant.subdomain}.#{tld}",
     password: "demo123456789",
     password_confirmation: "demo123456789",
 

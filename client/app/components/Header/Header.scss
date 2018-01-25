@@ -21,5 +21,33 @@
     font-size: 16px;  
     line-height: 18px;
   }
+  .alert_bubble {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+  }
+  .unread {
+    @extend .alert_bubble;
+    color: white;
+    font-size: 8px;
+    background-color: red;
+  }
+  .all_read {
+    @extend .alert_bubble;
+    font-size: 8px;
+    color: black;
+    background-color: white;
+  }
+  .mail_box {
+    position: relative;
+    height: 22px;
+    width: 22px;
+    i {
+      font-size: 18px;
+    }
+  }
 
 }

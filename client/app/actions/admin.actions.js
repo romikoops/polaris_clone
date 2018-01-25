@@ -907,6 +907,34 @@ function documentAction(docId, action) {
     };
 }
 
+function saveNewHub(hub, location) {
+    function request(hubData) {
+        return { type: adminConstants.NEW_HUB_REQUEST, payload: hubData };
+    }
+    function success(hubData) {
+        return { type: adminConstants.NEW_HUB_SUCCESS, payload: hubData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_HUB_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.saveNewHub(hub, location).then(
+            data => {
+                dispatch(
+                    alertActions.success('Hew Hub successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -954,5 +982,6 @@ export const adminActions = {
     wizardTrucking,
     viewTrucking,
     newClient,
-    activateHub
+    activateHub,
+    saveNewHub
 };

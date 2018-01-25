@@ -50,7 +50,29 @@ class Location < ApplicationRecord
     return nl
   end
 
-  def self.create_and_geocode(location_params)
+  def update_from_short_name
+    input  = "#{self.city} ,#{self.country}"
+    location = Location.new(geocoded_address: input)
+    location.geocode
+    location.reverse_geocode
+    self.latitude = location.latitude
+    self.longitude = location.longitude
+    self.save!
+  end
+
+  def self.update_all_nexuses
+    nexuses = Location.where(location_type: "nexus")
+    nexuses.each do |nx|
+      nx.update_from_short_name
+    end
+  end
+
+  def self.create_and_geocode(input)
+    if input.first[0].is_a? String
+      location_params = input.symbolize_keys
+    else
+      location_params = input
+    end
     if !location_params[:geocoded_address]
       str = location_params[:street_address].to_s + " " + location_params[:city].to_s + " " + location_params[:zip_code].to_s + " " + location_params[:country].to_s
       location_params[:geocoded_address] = str
@@ -181,15 +203,13 @@ class Location < ApplicationRecord
 
   def closest_location_with_distance
     locations = Location.where(location_type: "nexus")
-
     distances = locations.map do |location|
       Geocoder::Calculations.distance_between(
         [self.latitude, self.longitude], 
         [location.latitude, location.longitude]
       )
-    end.reject(&:nan?)
-
-    lowest_distance = distances.min
+    end
+    lowest_distance = distances.reject(&:nan?).min
     return locations[distances.find_index(lowest_distance)], lowest_distance
   end
 

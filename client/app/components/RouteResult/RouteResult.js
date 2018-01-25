@@ -57,14 +57,14 @@ export class RouteResult extends Component {
                 }
             });
         }
-        const gradientFontStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'black'
-        };
+        // const gradientFontStyle = {
+        //     background:
+        //         theme && theme.colors
+        //             ? `-webkit-linear-gradient(left, ${
+        //                 theme.colors.brightPrimary
+        //             }, ${theme.colors.brightSecondary})`
+        //             : 'black'
+        // };
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -139,7 +139,6 @@ export class RouteResult extends Component {
                             }`}
                         >
                             {/* <p className="flex-none no_m">{loadType}</p>*/}
-                            <p className="flex-none no_m">{schedule.id}</p>
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">
@@ -147,7 +146,6 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <h4
                                     className={styles.date_title}
-                                    style={gradientFontStyle}
                                 >
                                     Pickup Date
                                 </h4>
@@ -156,7 +154,7 @@ export class RouteResult extends Component {
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
                                     {moment(this.props.pickupDate).format(
-                                        'YYYY-MM-DD'
+                                        'DD-MM-YYYY'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -171,7 +169,6 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <h4
                                     className={styles.date_title}
-                                    style={gradientFontStyle}
                                 >
                                     {' '}
                                     Date of Departure
@@ -181,7 +178,7 @@ export class RouteResult extends Component {
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
                                     {moment(schedule.etd).format(
-                                        'YYYY-MM-DD'
+                                        'DD-MM-YYYY'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -194,7 +191,6 @@ export class RouteResult extends Component {
                             <div className="flex-100 layout-row">
                                 <h4
                                     className={styles.date_title}
-                                    style={gradientFontStyle}
                                 >
                                     {' '}
                                     ETA terminal
@@ -204,7 +200,7 @@ export class RouteResult extends Component {
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
                                     {moment(schedule.eta).format(
-                                        'YYYY-MM-DD'
+                                        'DD-MM-YYYY'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>

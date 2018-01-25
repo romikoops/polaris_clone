@@ -100,7 +100,7 @@ class OfferCalculator
   def determine_schedules!
     @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
       .where("transport_categories.name = 'any'")
-      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd)
+      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
   end
 
   def add_schedules_charges!
