@@ -11,6 +11,9 @@
       color: white;
       font-size: 16px;
     }
+    .buttons p{
+      color: white;
+    }
     .copyright {
       height: 20%;
       color: white;
@@ -35,5 +38,9 @@
     a.contact_elem:-webkit-any-link {
       color: black !important;
       text-decoration: none !important;
+    }
+    .powered_by_logo {
+      width: 200px;
+      height: auto;
     }
   }
