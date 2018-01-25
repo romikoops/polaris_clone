@@ -315,7 +315,7 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        const { theme, messages, shipmentData, shipmentDispatch } = this.props;
+        const { theme, scope, messages, shipmentData, shipmentDispatch } = this.props;
         let cargoDetails;
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
@@ -327,6 +327,7 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
                     />
                 );
             }
@@ -339,6 +340,7 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
                         availableCargoItemTypes={shipmentData.cargoItemTypes}
                     />
                 );

@@ -206,6 +206,7 @@ export class ShipmentContainers extends Component {
                             checked={container ? container.dangerousGoods : false}
                             theme={this.props.theme}
                             size="34px"
+                            disabled={!this.props.scope.dangerous_goods}
                         />
                         <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>

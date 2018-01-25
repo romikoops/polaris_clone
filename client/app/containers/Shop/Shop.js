@@ -116,16 +116,11 @@ class Shop extends Component {
     }
 
     render() {
-        // const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
-        // const theme = this.props.tenant.theme;
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
-
         const {
-            bookingData, theme, match, loading, tenant,
-            user, shipmentDispatch, nexusDispatch, currencies
+            bookingData, match, loading, tenant, user,
+            shipmentDispatch, nexusDispatch, currencies
         } = this.props;
+        const { theme, scope } = tenant.data;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -142,14 +137,6 @@ class Shop extends Component {
         } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
             shipmentId = response.stage4.shipment.id;
         }
-        // const loginModal = (
-        //     <Modal
-        //         component={
-        //             <RegistrationPage theme={theme} req={this.state.req} user={this.props.user} tenant={this.props.tenant} />
-        //         }
-        //         parentToggle={this.toggleShowRegistration}
-        //     />
-        // );
         const { req } = this.state;
         const loginModal = (
             <Modal
@@ -197,6 +184,7 @@ class Shop extends Component {
                         <ShipmentDetails
                             {...props}
                             theme={theme}
+                            scope={scope}
                             shipmentData={response ? response.stage1 : {}}
                             prevRequest={
                                 request && request.stage2 ? request.stage2 : {}
