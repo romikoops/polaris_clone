@@ -14,10 +14,17 @@ class MessageCenter extends Component {
         this.selectConvo = this.selectConvo.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
     }
+    componentDidUpdate() {
+        if (!this.state.selectedConvo) {
+            this.selectConvo(this.props.converstations[Object.keys(this.props.converstations)[0]]);
+        }
+    }
     selectConvo(conv) {
+        conv.shipmentRef = conv.messages[0].shipmentRef;
         this.setState({selectedConvo: conv});
         const { messageDispatch } = this.props;
         messageDispatch.markConvoAsRead(conv);
+        messageDispatch.fetchShipment(conv.shipmentRef);
     }
     sendMessage(msg) {
         const { messageDispatch } = this.props;

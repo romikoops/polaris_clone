@@ -488,6 +488,34 @@ function getShipments(redirect) {
         );
     };
 }
+function getDashShipments() {
+    function request(shipmentData) {
+        return { type: adminConstants.GET_DASH_SHIPMENTS_REQUEST, payload: shipmentData };
+    }
+    function success(shipmentData) {
+        return { type: adminConstants.GET_DASH_SHIPMENTS_SUCCESS, payload: shipmentData };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_DASH_SHIPMENTS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getShipments().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Shipments successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 
 function getShipment(id, redirect) {
     function request(shipmentData) {
@@ -707,6 +735,7 @@ function confirmShipment(id, action, redirect) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
+                dispatch(getDashShipments(false));
                 if (redirect) {
                     dispatch(
                         push('/admin/shipments/' + id)

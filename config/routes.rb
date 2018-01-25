@@ -115,5 +115,6 @@ resources :subdomain, only: [:show] do
   post 'super_admins/new_demo' => "super_admins#new_demo_site"
   get 'messaging/get' => "notifications#index"
   post 'messaging/send' => "notifications#send_message"
+  post 'messaging/data' => "notifications#shipment_data"
 end
 end

@@ -62,8 +62,38 @@ function sendUserMessage(message) {
     };
 }
 
+function getShipment(ref) {
+    function request(shipData) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_REQUEST, payload: shipData };
+    }
+    function success(shipData) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_SUCCESS, payload: shipData.data };
+    }
+    function failure(error) {
+        return { type: messagingConstants.GET_SHIPMENT_DATA_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        messagingService.getShipmentData(ref).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Data successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 
 export const messagingActions = {
     getUserConversations,
-    sendUserMessage
+    sendUserMessage,
+    getShipment
 };

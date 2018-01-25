@@ -1,10 +1,10 @@
 export const getSubdomain = () => {
   const host = window.location.host;
     if (host.indexOf('.') < 0) {
-        return 'isa';
+        return 'greencarrier';
     }
     if (host.split('.')[0] === 'www' || host.split('.')[0] === 'react' || host.includes('localhost')) {
-        return 'isa';
+        return 'greencarrier';
     }
     return host.split('.')[0];
     // return 'demo';

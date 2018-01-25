@@ -44,7 +44,7 @@ export class Conversation extends Component {
         return (
             <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
                 <div className="flex-10 layout-row layout-align-start-center">
-                    <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-100 layout-row layout-align-space-between-center">
                         <p className="flex-none">Shipment: {conversation.shipmentRef}</p>
                         <div className="flex-none layout-row layout-align-center-center" onClick={this.toggleDetails}>
                             <i className="fa fa-info clip" style={btnStyle}></i>

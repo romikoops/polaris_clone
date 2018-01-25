@@ -10,14 +10,16 @@ module NotificationTools
     key = "#{user.tenant_id}_#{user.id}"
     resp = get_item('messages', "_id", key)
     unread = 0
-    resp["conversations"].each do |kc, vc|
-      vc["messages"].each do |msg|
-        if !msg["read"]
-          unread += 1
+    if resp["conversations"]
+      resp["conversations"].each do |kc, vc|
+        vc["messages"].each do |msg|
+          if !msg["read"]
+            unread += 1
+          end
         end
       end
+      resp["unread"] = unread
     end
-    resp["unread"] = unread
     return resp
   end
 

@@ -31,7 +31,18 @@ function sendUserMessage(message) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
+function getShipmentData(ref) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref })
+    };
+    const url = BASE_URL + '/messaging/data';
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 export const messagingService = {
     getUserConversations,
-    sendUserMessage
+    sendUserMessage,
+    getShipmentData
 };

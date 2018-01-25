@@ -15,12 +15,17 @@ export class ChooseRoute extends Component {
         this.state = {
             selectedMoT: 'ocean',
             durationFilter: 40,
-            pickupDate: this.props.selectedDay
+            pickupDate: this.props.selectedDay,
+            limits: {
+                focus: true,
+                alt: true
+            }
         };
         this.chooseResult = this.chooseResult.bind(this);
         this.setDuration = this.setDuration.bind(this);
         this.setMoT = this.setMoT.bind(this);
         this.setDepDate = this.setDepDate.bind(this);
+        this.toggleLimits = this.toggleLimits.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -39,6 +44,9 @@ export class ChooseRoute extends Component {
     }
     setDepDate(val) {
         this.setState({ pickupDate: val });
+    }
+    toggleLimits(target) {
+        this.setState({limits: {...this.state.limits, [target]: !this.state.limits[target]}});
     }
 
     chooseResult(obj) {
@@ -61,6 +69,7 @@ export class ChooseRoute extends Component {
     }
     render() {
         const { shipmentData, messages, user, shipmentDispatch, theme } = this.props;
+        const { limits } = this.state;
         let smallestDiff = 100;
         if (!shipmentData) {
             return '';
@@ -151,73 +160,12 @@ export class ChooseRoute extends Component {
                 }
             }
         });
-        // debugger;
-        // const closestRoute = schedules.map((sr) => {
-        //     if (sr.id === idArrays.closest) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={sr}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // const focusRoutes = schedules.map((fr) => {
-        //     console.log(fr);
-        //     console.log(idArrays.closest);
-        //     console.log(fr.id !== idArrays.closest && idArrays.focus.includes(fr.id));
-        //     if (fr.id !== idArrays.closest && idArrays.focus.includes(fr.id)) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={fr}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // const altRoutes = schedules.map((ar) => {
-        //     if (ar.id !== idArrays.closest && idArrays.alternative.includes(ar.id)) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={ar}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // altRoutes.sort(this.dynamicSort('etd'));
-        // focusRoutes.sort(this.dynamicSort('etd'));
+        const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes;
+        const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes;
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
-            <div className="flex-100 layout-row layout-align-center-start" style={{marginTop: '62px', marginBottom: '166px'}}>
+            <div className="flex-100 layout-row layout-align-center-start layout-wrap" style={{marginTop: '62px', marginBottom: '166px'}}>
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-20 layout-row layout-wrap">
@@ -238,7 +186,18 @@ export class ChooseRoute extends Component {
                                 <p className="flex-none">Alternative departures</p>
 
                             </div>
-                            {focusRoutes}
+                            {limitedFocus}
+                            { limitedFocus.length !== focusRoutes.length ?
+                                <div className="flex-100 layout-row layout-align-center-center">
+                                    <div className="flex-33 layout-row layout-align-space-around-center" onClick={() => this.toggleLimits('focus')}>
+                                        {limits.focus ? <i className="flex-none fa fa-angle-double-down"></i> : <i className="flex-none fa fa-angle-double-up"></i> }
+                                        <div className="flex-5"></div>
+                                        {limits.focus ? <p className="flex-none">More</p> : <p className="flex-none">Less</p> }
+                                        <div className="flex-5"></div>
+                                        {limits.focus ? <i className="flex-none fa fa-angle-double-down"></i> : <i className="flex-none fa fa-angle-double-up"></i> }
+                                    </div>
+                                </div>
+                                : '' }
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div
@@ -250,15 +209,26 @@ export class ChooseRoute extends Component {
                                     Alternative modes of transport
                                 </p>
                             </div>
-                            {altRoutes}
+                            {limitedAlts}
+                            { limitedAlts.length !== altRoutes.length ?
+                                <div className="flex-100 layout-row layout-align-center-center">
+                                    <div className="flex-33 layout-row layout-align-space-around-center" onClick={() => this.toggleLimits('alt')}>
+                                        {limits.alt ? <i className="flex-none fa fa-angle-double-down"></i> : <i className="flex-none fa fa-angle-double-up"></i> }
+                                        <div className="flex-5"></div>
+                                        {limits.alt ? <p className="flex-none">More</p> : <p className="flex-none">Less</p> }
+                                        <div className="flex-5"></div>
+                                        {limits.alt ? <i className="flex-none fa fa-angle-double-down"></i> : <i className="flex-none fa fa-angle-double-up"></i> }
+                                    </div>
+                                </div> : ''
+                            }
                         </div>
                     </div>
 
                 </div>
-                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                  <div className="content_width flex-none content-width layout-row layout-align-start-center">
-                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
-                  </div>
+                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    <div className="content_width flex-none content-width layout-row layout-align-start-center">
+                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
+                    </div>
                 </div>
             </div>
         );

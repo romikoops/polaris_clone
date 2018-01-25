@@ -41,10 +41,10 @@ export class ShipmentContactsBox extends Component {
                         key={'notifyee' + i}
                         className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
                     >
-                        <p className={` ${styles.contact_header} flex-100`}>
+                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
                             {' '}
-                            Notifyee {i + 1}
-                        </p>
+                            <p className="flex-none">Notifyee {i + 1}</p>
+                        </div>
                         <input
                             className={styles.input_100}
                             type="text"
@@ -82,24 +82,24 @@ export class ShipmentContactsBox extends Component {
             });
         }
         return (
-        <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-          <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-              <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                <i className="fa fa-user flex-none" style={textStyle}></i>
-                <p className="flex-none">Shipper</p>
-              </div>
-              <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
-              <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
-              <input className={styles.input_50} type="text" value={shipper.lastName} name="shipper-lastName" placeholder="Last Name" onChange={this.handleFormChange} />
-              <input className={styles.input_50} type="text" value={shipper.email} name="shipper-email" placeholder="Email" onChange={this.handleFormChange} />
-              <input className={styles.input_50} type="text" value={shipper.phone} name="shipper-phone" placeholder="Phone" onChange={this.handleFormChange} />
-              <input className={styles.input_street} type="text" value={shipper.street} name="shipper-street" placeholder="Street" onChange={this.handleFormChange} />
-              <input className={styles.input_no} type="text" value={shipper.number} name="shipper-number" placeholder="Number" onChange={this.handleFormChange} />
-              <input className={styles.input_zip} type="text" value={shipper.zipCode} name="shipper-zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-              <input className={styles.input_cc} type="text" value={shipper.city} name="shipper-city" placeholder="City" onChange={this.handleFormChange} />
-              <input className={styles.input_cc} type="text" value={shipper.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
-            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
+                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                            <i className="fa fa-user flex-none" style={textStyle}></i>
+                            <p className="flex-none">Shipper</p>
+                        </div>
+                        <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
+                        <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
+                        <input className={styles.input_50} type="text" value={shipper.lastName} name="shipper-lastName" placeholder="Last Name" onChange={this.handleFormChange} />
+                        <input className={styles.input_50} type="text" value={shipper.email} name="shipper-email" placeholder="Email" onChange={this.handleFormChange} />
+                        <input className={styles.input_50} type="text" value={shipper.phone} name="shipper-phone" placeholder="Phone" onChange={this.handleFormChange} />
+                        <input className={styles.input_street} type="text" value={shipper.street} name="shipper-street" placeholder="Street" onChange={this.handleFormChange} />
+                        <input className={styles.input_no} type="text" value={shipper.number} name="shipper-number" placeholder="Number" onChange={this.handleFormChange} />
+                        <input className={styles.input_zip} type="text" value={shipper.zipCode} name="shipper-zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
+                        <input className={styles.input_cc} type="text" value={shipper.city} name="shipper-city" placeholder="City" onChange={this.handleFormChange} />
+                        <input className={styles.input_cc} type="text" value={shipper.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
+                    </div>
 
 
                     <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
