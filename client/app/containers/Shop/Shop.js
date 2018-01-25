@@ -12,6 +12,7 @@ import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 import { connect } from 'react-redux';
 import { shipmentActions } from '../../actions/shipment.actions';
+import { nexusActions } from '../../actions/nexus.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
@@ -121,7 +122,11 @@ class Shop extends Component {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
 
-        const { bookingData, theme, match, loading, tenant, user, shipmentDispatch, currencies, dashboard } = this.props;
+
+        const {
+            bookingData, theme, match, loading, tenant,
+            user, shipmentDispatch, nexusDispatch, currencies, dashboard
+        } = this.props;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -138,14 +143,7 @@ class Shop extends Component {
         } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
             shipmentId = response.stage4.shipment.id;
         }
-        // const loginModal = (
-        //     <Modal
-        //         component={
-        //             <RegistrationPage theme={theme} req={this.state.req} user={this.props.user} tenant={this.props.tenant} />
-        //         }
-        //         parentToggle={this.toggleShowRegistration}
-        //     />
-        // );
+
         const { req } = this.state;
         const loginModal = (
             <Modal
@@ -206,6 +204,8 @@ class Shop extends Component {
                             setStage={this.selectShipmentStage}
                             messages={error ? error.stage2 : []}
                             shipmentDispatch={shipmentDispatch}
+                            nexusDispatch={nexusDispatch}
+                            availableDestinations={this.props.availableDestinations}
                         />
                     )}
                 />
@@ -304,10 +304,13 @@ Shop.defaultProps = {
 };
 
 function mapStateToProps(state) {
-    const { users, authentication, tenant, bookingData, app } = state;
+    const { users, authentication, tenant, bookingData, nexus, app } = state;
     const { user, loggedIn, loggingIn, registering } = authentication;
     const { currencies } = app;
     const loading = bookingData.loading;
+    const availableDestinations = nexus.availableDestinations;
+    console.log('availableDestinations');
+    console.log(nexus);
     return {
         user,
         users,
@@ -317,13 +320,15 @@ function mapStateToProps(state) {
         loggingIn,
         registering,
         loading,
-        currencies
+        currencies,
+        availableDestinations
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
+        shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
+        nexusDispatch: bindActionCreators(nexusActions, dispatch)
     };
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Shop));

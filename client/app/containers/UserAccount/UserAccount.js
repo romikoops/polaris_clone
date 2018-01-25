@@ -130,11 +130,7 @@ export class UserAccount extends Component {
         const loadingScreen =  loading ? <Loading theme={theme} /> : '';
         const navHeadlineInfo = 'Account Settings';
         const navLinkInfo = [
-            // { key: 'dashboard', text: 'Dashboard' },
-            // { key: 'profile', text: 'Profile' },
-            // // { key: 'locations', text: 'Locations' },
-            // // { key: 'billing', text: 'Billing' },
-            // { key: 'shipments', text: 'Shipments' }
+
             {
                 icon: 'fa-tachometer',
                 text: 'Dashboard',
@@ -166,9 +162,6 @@ export class UserAccount extends Component {
                 target: 'contacts'
             }
         ];
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
 
         const hubHash = {};
         if (hubs) {
@@ -185,15 +178,7 @@ export class UserAccount extends Component {
                 activeLink={this.state.activeLink}
             />
         );
-        /**
- *  tenant: PropTypes.object,
-    theme: PropTypes.object,
-    user: PropTypes.object,
-    loggedIn: PropTypes.bool,
-    dispatch: PropTypes.func,
-    history: PropTypes.object,
-    match: PropTypes.object
-*/
+
         const routeModal = (
             <Modal
                 component={

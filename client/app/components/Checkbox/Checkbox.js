@@ -38,6 +38,7 @@ export class Checkbox extends Component {
         const checkGradient = {
             background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
         };
+        const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {};
         const border = { border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`};
         return (
             <div className={`${styles.checkbox} flex-none`} style={border}>
@@ -48,7 +49,7 @@ export class Checkbox extends Component {
                         disabled={disabled}
                         onChange={this.handleChange}
                     />
-                    <span>
+                    <span style={sizeStyles}>
                         <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />
                     </span>
                 </label>

@@ -5,6 +5,7 @@ export * from './authentication.actions';
 export * from './shipment.actions';
 export * from './admin.actions';
 export * from './app.actions';
+export * from './nexus.actions';
 export * from './messaging.actions';
 
 export function filterTable(filter) {
