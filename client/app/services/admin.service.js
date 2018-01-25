@@ -288,6 +288,15 @@ function documentAction(docId, action) {
     return fetch(BASE_URL + '/admin/documents/action/' + docId, requestOptions).then(handleResponse);
 }
 
+function saveNewHub(hub, location) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({hub, location})
+    };
+    return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
+}
+
 export const adminService = {
     getHubs,
     getHub,
@@ -316,5 +325,6 @@ export const adminService = {
     updateServiceCharge,
     newClient,
     activateHub,
-    documentAction
+    documentAction,
+    saveNewHub
 };

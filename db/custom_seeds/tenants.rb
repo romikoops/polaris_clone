@@ -53,7 +53,7 @@ tenant_data = [
       logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
       logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
       logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
-      background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
     },
     addresses: {
       main:"Brooktorkai 7, 20457 Hamburg, Germany"
@@ -150,6 +150,9 @@ tenant_data = [
       sales: "sales@easyshipping.dk",
       support: "support@easyshipping.dk"
     },
+    web: {
+      tld: "dk"
+    },
     subdomain: "easyshipping",
     name: "Easyshipping",
     scope: {
@@ -202,10 +205,90 @@ tenant_data = [
         },
       }
     }
+  },
+  {
+    theme: {
+      colors: {
+        primary: "#252D5C",
+        secondary: "#C42D35",
+        brightPrimary: "#4655aa",
+        brightSecondary: "#fc353e"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/interscan-freight-logo.png",
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_isa.jpg"
+    },
+    addresses: {
+      main: "Kirstinehøj 8 / Copenhagen Airport, Post Office Box 134, DK-2770 Kastrup, Denmark"
+    },
+    phones:{
+      main:"0045 32 51 60 22",
+      support: "0045 32 51 60 22"
+    },
+    emails: {
+      sales: "info@isa.dk",
+      support: "info@isa.dk"
+    },
+    web: {
+      tld: "dk"
+    },
+    subdomain: "isa",
+    name: "Inter-Scan Sea & Air",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        }
+      }
+    }
+  },
+  {
+    theme: {
+      colors: {
+        primary: "#006bc2",
+        secondary: "#174b90",
+        brightPrimary: "#006bc2",
+        brightSecondary: "#174b90"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+      logoWide: "https://assets.itsmycargo.com/assets/logos/logo_eimskip.png",
+      background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+    },
+    addresses: {
+      main: "Korngardar 2, 104 Reykjavík, Iceland"
+    },
+    phones:{
+      main:"+354 525 - 7000",
+      support: "+354 525 - 7000"
+    },
+    emails: {
+      sales: "service@eimskip.is",
+      support: "service@eimskip.is"
+    },
+    subdomain: "eimskip",
+    name: "Eimskip",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      }
+    }
   }
 ]
 
 # Create tenants
 tenant_data.each do |tenant_attr|
-  Tenant.create(tenant_attr)
+  Tenant.find_or_create_by(tenant_attr)
 end

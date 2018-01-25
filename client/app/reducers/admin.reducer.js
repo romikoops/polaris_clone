@@ -480,6 +480,23 @@ export function admin(state = {}, action) {
             });
             return errDocAction;
 
+        case adminConstants.NEW_HUB_REQUEST:
+
+            return merge({}, state, {
+                loading: true
+            });
+        case adminConstants.NEW_HUB_SUCCESS:
+            const newHubs = state.hubs;
+            newHubs.push(action.payload);
+            return merge({}, state, {
+                loading: false,
+                hubs: newHubs
+            });
+        case adminConstants.NEW_HUB_FAILURE:
+            return merge({}, state, {
+                error: { documents: action.error }
+            });
+
         case adminConstants.VIEW_TRUCKING:
             const newTrucking = merge({}, state, {
                 truckingDetail: action.payload

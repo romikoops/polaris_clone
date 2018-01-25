@@ -2,47 +2,57 @@ module MultiTenantTools
   include ExcelTools
   def test
     # tenant = JSON.parse(File.read("#{Rails.root}/test.json"))
-    tenant = {
-    "theme" => {
-      "colors" => {
-        "primary" => "#4E9095",
-        "secondary" => "#DDDDDD",
-        "brightPrimary" => "#5bb8bf",
-        "brightSecondary" => "#FFFFFF"
-      },
-      "logoLarge" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
-      "logoSmall" => "https://assets.itsmycargo.com/assets/logos/integrail.png",
-      "logoWide" => "https://assets.itsmycargo.com/assets/logos/integrail_wide.png"
-    },
-    "addresses" => {
-      "main" =>"Révész utca 27. (575.11 mi)Budapest, Hungary 1138"
-    },
-    "phones" =>{
-      "main" => "+36 1 270 9330",
-      "support" => "+36 1 270 9330"
-    },
-    "emails" => {
-      "sales" => "sales@integrail.hu",
-      "support" => "info@tantumshipping.com"
-    },
-    "subdomain" => "integrail",
-    "name" => "Integrail",
-    "scope" => {
-      "modes_of_transport" => {
-        "rail" => {
-          "container" => true,
-          "cargo_item" => true
+    tenant =   {
+      "theme" => {
+        "colors" => {
+          "primary" => "#006bc2",
+          "secondary" => "#174b90",
+          "brightPrimary" => "#006bc2",
+          "brightSecondary" => "#174b90"
         },
+        "logoLarge" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoSmall" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
+        "logoWide" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip.png",
+        "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+      },
+      "addresses" => {
+        "main" => "Korngardar 2, 104 Reykjavík, Iceland"
+      },
+      "phones" =>{
+        "main" =>"+354 525 - 7000",
+        "support" => "+354 525 - 7000"
+      },
+      "emails" => {
+        "sales" => "service@eimskip.is",
+        "support" => "service@eimskip.is"
+      },
+      "subdomain" => "eimskip",
+      "name" => "Eimskip",
+      "web" => {
+        "tld" => "is"
+      },
+      "scope" => {
+        "modes_of_transport" => {
+          "ocean" => {
+            "container" => true,
+            "cargo_item" => true
+          },
+          "air" => {
+            "container" => false,
+            "cargo_item" => false
+          }
+        }
       }
     }
-  }
-    new_site(tenant.to_h, false)
+    # new_site(tenant.to_h, true)
+    seed_demo_site(tenant)
   end
+
   def update_indexes
     Tenant.all.each do |tenant|
         title = tenant.name + " | ItsMyCargo"
         favicon = "https://assets.itsmycargo.com/assets/favicon.ico"
-        # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
+        # indexHtml = Nokogiri::HTML(open("https://demo.itsmycargo.com/index.html"))
         indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
         titles = indexHtml.xpath("//title")
         titles[0].content = title
@@ -72,7 +82,7 @@ module MultiTenantTools
       end
   end
   def new_site(tenant, is_demo)
-        # new_tenant = Tenant.create(tenant)
+        new_tenant = Tenant.create(tenant)
         title = tenant["name"] + " | ItsMyCargo"
         meta = tenant["meta"]
         favicon = tenant["favicon"] ? tenant["favicon"] : "https://assets.itsmycargo.com/assets/favicon.ico"
@@ -100,11 +110,11 @@ module MultiTenantTools
            }
         upFile = open("blank.html")
         s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
-        uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
-        uploader.upload!
+        # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
+        # uploader.upload!
 
         if is_demo
-          # seed_demo_site(tenant)
+          seed_demo_site(tenant)
         end
         create_distribution(tenant["subdomain"])
     end
@@ -153,6 +163,13 @@ module MultiTenantTools
           enabled: true }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
+      tenant = Tenant.find_by_subdomain(subd)
+      if !tenant.web
+        tenant.web = {}
+      end
+      tenant.web["cloudfront"] = @distribution_id
+      tenant.web["cloudfront_name"] = @distribution_domain_name
+      tenant.save!
       new_record(domain, resp[:distribution][:domain_name])
   end
   def new_record(domain, cf_name)
@@ -208,7 +225,7 @@ module MultiTenantTools
 
     end
     def seed_demo_site(tenant_data)
-      tld = tenant_data["emails"]["support"].split('.')[1]
+        tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
         tenant = Tenant.find_or_create_by!(tenant_data)
         tenant.users.destroy_all
         admin = tenant.users.new(
@@ -409,7 +426,7 @@ module MultiTenantTools
         region: ENV['AWS_REGION']
         )
       invalArray = ["/#{subdomain}.html"];
-      invalStr = Time.now.to_i
+      invalStr = Time.now.to_i.to_s + "_subdomain"
        resp = cloudfront.create_invalidation({
           distribution_id: cfId, # required
           invalidation_batch: { # required

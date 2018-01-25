@@ -148,6 +148,9 @@ export class BookingConfirmation extends Component {
                                         styles.wrapper_cargo
                                     } flex-100 layout-row layout-wrap`}
                                 >
+                                    <div className="flex-100 layout-row layout-align-start-center">
+                                        <h3 className="flex-none clip" style={textStyle}>Cargo Details</h3>
+                                    </div>
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
@@ -155,6 +158,7 @@ export class BookingConfirmation extends Component {
                                         className={`${
                                             styles.tot_price
                                         } flex-none layout-row layout-align-space-between`}
+                                        style={textStyle}
                                     >
                                         <p>Total Price:</p>{' '}
                                         <Price value={shipment.total_price} user={user}/>

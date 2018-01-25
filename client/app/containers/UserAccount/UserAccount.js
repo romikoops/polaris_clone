@@ -21,7 +21,7 @@ import { userActions, authenticationActions } from '../../actions';
 import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
-import './UserAccount.scss';
+import styles from '../../components/UserAccount/UserAccount.scss';
 import { Loading } from '../../components/Loading/Loading';
 
 
@@ -215,7 +215,7 @@ export class UserAccount extends Component {
                 <div
                     className={`${defs.content_width} layout-row flex-none ${
                         defs.spacing_md_top
-                    } ${defs.spacing_md_bottom}`}
+                    } ${defs.spacing_md_bottom} ${styles.content_drop}`}
                 >
                     <FloatingMenu Comp={nav} theme={theme}/>
 
@@ -225,7 +225,7 @@ export class UserAccount extends Component {
                             <Route
                                 exact
                                 path="/account"
-                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} userDispatch={userDispatch} dashboard={dashboard}/>}
+                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} navFn={this.setUrl} userDispatch={userDispatch} dashboard={dashboard}/>}
                             />
                             <Route
                                 path="/account/routesavailable"

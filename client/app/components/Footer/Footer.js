@@ -34,6 +34,14 @@ export class Footer extends Component {
                 </div>
                 <div className={`${styles.footer} layout-row flex-100 layout-wrap`}>
                     <div className={`flex-100 ${styles.button_row} layout-row layout-align-end-center`}>
+                        <div className={`flex-50 ${styles.buttons} layout-row layout-align-center-center`}>
+                            <div className="flex-50 layout-row layout-align-start-center">
+                                <div className="flex-5"></div>
+                                <p className="flex-none">powered by</p>
+                                <div className="flex-5"></div>
+                                <img src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png" alt="" className={`flex-none ${styles.powered_by_logo}`}/>
+                            </div>
+                        </div>
                         <div className={`flex-50 ${styles.buttons} layout-row layout-align-end-center`}>
                             <div className="flex-25 layout-row layout-align-center-center">
                                 <a target="_blank" href="https://www.itsmycargo.com/en/ourstory">About Us</a>

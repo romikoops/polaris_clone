@@ -1,34 +1,30 @@
 {
     "theme": {
       "colors": {
-        "primary": "#427FAF",
-        "secondary": "#FF9B0A",
-        "brightPrimary": "#539ED7",
-        "brightSecondary": "#FFAC36"
+        "primary": "#252D5C",
+        "secondary": "##C42D35",
+        "brightPrimary": "#4655aa",
+        "brightSecondary": "#fc353e"
       },
-      "logoLarge": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png",
-      "logoSmall": "https://assets.itsmycargo.com/assets/images/logos/logo_easy_shipping.png"
+      "logoLarge": "https://assets.itsmycargo.com/assets/logos/belglobe.png",
+      "logoSmall": "https://assets.itsmycargo.com/assets/logos/belglobe.png"
     },
     "addresses": {
-      "main":"Industrivej 2 DK-7860 Spøttrup Denmark"
+      "main":"Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
     },
     "phones":{
-      "main":"+45 5353 0300",
-      "support": "+45 5353 0300"
+      "main":"+41 (0)26 409 76 80",
+      "support": "0173042031020"
     },
     "emails": {
-      "sales": "sales@easyshipping.dk",
-      "support": "support@easyshipping.dk"
+      "sales": "info@belglobe.com",
+      "support": "info@belglobe.com"
     },
-    "subdomain": "easyshipping",
-    "name": "Easyshipping",
+    "subdomain": "belglobe",
+    "name": "Belglobe",
     "scope": {
       "modes_of_transport": {
         "ocean": {
-          "container": true,
-          "cargo_item": true
-        },
-        "rail": {
           "container": true,
           "cargo_item": true
         },
@@ -38,4 +34,4 @@
         }
       }
     }
-  }
+}

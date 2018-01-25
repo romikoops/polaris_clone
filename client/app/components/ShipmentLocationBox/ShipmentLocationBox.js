@@ -8,7 +8,10 @@ import styles from './ShipmentLocationBox.scss';
 import defaults from '../../styles/default_classes.scss';
 import { isEmpty } from '../../helpers/isEmpty';
 import { colorSVG } from '../../helpers';
-import {mapStyling} from '../../constants/map.constants';
+import { mapStyling } from '../../constants/map.constants';
+import { Modal } from '../Modal/Modal';
+import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes';
+import { RoundButton } from '../RoundButton/RoundButton';
 import styled from 'styled-components';
 
 const mapStyle = {
@@ -60,7 +63,9 @@ export class ShipmentLocationBox extends Component {
             markers: {
                 origin: {},
                 destination: {}
-            }
+            },
+            showModal: false,
+            locationFromModal: false,
         };
 
         this.handleAddressChange = this.handleAddressChange.bind(this);
@@ -74,6 +79,8 @@ export class ShipmentLocationBox extends Component {
         this.resetAuto = this.resetAuto.bind(this);
         this.setMarker = this.setMarker.bind(this);
         this.handleAuto = this.handleAuto.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.selectedRoute = this.selectedRoute.bind(this);
     }
 
     componentDidMount() {
@@ -82,16 +89,40 @@ export class ShipmentLocationBox extends Component {
             this.setHubsFromRoute(this.props.selectedRoute);
         }
     }
-
+    toggleModal() {
+        this.setState({showModal: !this.state.showModal});
+    }
+    selectedRoute(route) {
+        console.log(route);
+        const origin = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        const destination = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        this.setState({origin, destination});
+        this.setState({showModal: !this.state.showModal});
+        this.setState({locationFromModal: !this.state.locationFromModal});
+        this.setHubsFromRoute(route);
+    }   
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};
         // TO DO: AllNexuses changed to object with origin and dest arrays
-        this.props.allNexuses.forEach(nx => {
+        this.props.allNexuses.origins.forEach(nx => {
             if (nx.id === route.origin_nexus_id) {
                 tmpOrigin = nx;
             }
-
+        });
+        this.props.allNexuses.destinations.forEach(nx => {
             if (nx.id === route.destination_nexus_id) {
                 tmpDest = nx;
             }
@@ -688,71 +719,103 @@ export class ShipmentLocationBox extends Component {
             // }
             return '';
         };
-        const { theme } = this.props;
 
+        const { theme, user, shipment} = this.props;
+        //   const { shipmentData } = this.state;
+        const routeModal = (
+            <Modal
+                component={
+                    <AvailableRoutes
+                        user={ user }
+                        theme={ theme }
+                        routes={ shipment.routes}
+                        routeSelected={ this.selectedRoute }
+                        initialCompName="UserAccount"
+                    />
+                }
+                width="48vw"
+                verticalPadding="30px"
+                horizontalPadding="15px"
+                parentToggle={this.toggleModal}
+            />
+        );
         return (
-            <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
-                <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
-                    <div className={`flex-none layout-row layout-wrap ${styles.input_box}`}>
-                        <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
-                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
-                                <Toggle
-                                    className="flex-none"
-                                    id="has_pre_carriage"
-                                    name="has_pre_carriage"
-                                    value={String(this.state.shipment.has_pre_carriage)}
-                                    defaultChecked={this.state.shipment.has_pre_carriage}
-                                    onChange={this.handleTrucking}
-                                />
-                                <label htmlFor="pre-carriage">Pre-Carriage</label>
+            <div className="layout-row flex-100 layout-wrap">
+                <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+                    <div className="layout-row flex-none layout-align-start content_width">
+                        <RoundButton
+                            text="Show All Routes"
+                            handleNext={this.toggleModal}
+                            theme={theme}
+                            active
+                        />
+
+                    </div>
+                </div>
+                <div className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`} >
+                    <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
+                        {this.state.showModal ? routeModal : ''}
+                        <div className={`flex-none layout-row layout-wrap ${styles.input_box}`}>
+
+                            <div className="flex-50 layout-row layout-wrap layout-align-start-start mc">
+                                <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
+                                    <Toggle
+                                        className="flex-none"
+                                        id="has_pre_carriage"
+                                        name="has_pre_carriage"
+                                        value={String(this.state.shipment.has_pre_carriage)}
+                                        defaultChecked={this.state.shipment.has_pre_carriage}
+                                        onChange={this.handleTrucking}
+                                    />
+                                    <label htmlFor="pre-carriage">Pre-Carriage</label>
+                                </div>
+                                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
+                                    {/* <p className="flex-100"> Origin Address </p>*/}
+                                    { this.state.shipment.has_pre_carriage ? originAuto : '' }
+                                    { displayLocationOptions('origin') }
+                                </div>
                             </div>
-                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                {/* <p className="flex-100"> Origin Address </p>*/}
-                                { this.state.shipment.has_pre_carriage ? originAuto : '' }
-                                { displayLocationOptions('origin') }
-                            </div>
-                        </div>
-                        {/* <div ref="map" id="map" style={mapStyle} />*/}
-                        <div className="flex-50 layout-row layout-wrap layout-align-end-start">
-                            <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
-                                <Toggle
-                                    className="flex-none"
-                                    id="has_on_carriage"
-                                    name="has_on_carriage"
-                                    value={String(this.state.shipment.has_on_carriage)}
-                                    defaultChecked={this.state.shipment.has_on_carriage}
-                                    onChange={this.handleTrucking}
-                                />
-                                <label htmlFor="on-carriage">On-Carriage</label>
-                            </div>
-                            <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                                {/* <p className="flex-100">
+                            {/* <div ref="map" id="map" style={mapStyle} />*/}
+                            <div className="flex-50 layout-row layout-wrap layout-align-end-start">
+                                <div className={'flex-50 layout-row layout-align-center-center ' + styles.toggle_box}>
+                                    <Toggle
+                                        className="flex-none"
+                                        id="has_on_carriage"
+                                        name="has_on_carriage"
+                                        value={String(this.state.shipment.has_on_carriage)}
+                                        defaultChecked={this.state.shipment.has_on_carriage}
+                                        onChange={this.handleTrucking}
+                                    />
+                                    <label htmlFor="on-carriage">On-Carriage</label>
+                                </div>
+                                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
+                                    {/* <p className="flex-100">
                                     {' '}
                                     Destination Address{' '}
                                 </p>*/}
-                                { this.state.shipment.has_on_carriage ? destAuto : '' }
-                                {displayLocationOptions('destination')}
+                                    { this.state.shipment.has_on_carriage ? destAuto : '' }
+                                    {displayLocationOptions('destination')}
+                                </div>
                             </div>
+                        </div>
+                        <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                            <div ref="map" id="map" style={mapStyle} />
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                        <div ref="map" id="map" style={mapStyle} />
-                    </div>
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-                    <div className="flex-none content_width layout-row layout-align-space-between-start">
-                        <div className="flex"></div>
-                        <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-                            {this.state.shipment.has_pre_carriage ? originFields : ''}
+                        <div className="flex-none content_width layout-row layout-align-space-between-start">
+                            <div className="flex"></div>
+                            <div className="flex-40 layout-row layout-wrap layout-align-center-start">
+                                {this.state.shipment.has_pre_carriage ? originFields : ''}
+                            </div>
+                            <div className="flex"></div>
+                            <div className="flex-40 layout-row layout-wrap layout-align-center-start">
+                                {this.state.shipment.has_on_carriage ? destFields : ''}
+                            </div>
+                            <div className="flex"></div>
                         </div>
-                        <div className="flex"></div>
-                        <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-                            {this.state.shipment.has_on_carriage ? destFields : ''}
-                        </div>
-                        <div className="flex"></div>
                     </div>
-                </div>
-                { theme ? <style dangerouslySetInnerHTML={{__html: `
+                    { theme ? <style dangerouslySetInnerHTML={{__html: `
                     .react-toggle--checked .react-toggle-track {
                         background: linear-gradient(90deg, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%);
                         border: none;
@@ -762,6 +825,7 @@ export class ShipmentLocationBox extends Component {
                         border: none;
                     }
                 `}} /> : ''}
+                </div>
             </div>
         );
     }
