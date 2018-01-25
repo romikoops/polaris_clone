@@ -22,7 +22,7 @@ resources :subdomain, only: [:show] do
     post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
     post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
     
-    resources :hubs, only: [:index, :show] do
+    resources :hubs, only: [:index, :show, :create] do
       patch "set_status"
     end
     post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
@@ -113,5 +113,7 @@ resources :subdomain, only: [:show] do
 
   get "search/hscodes/:query" => "search#search_hs_codes"
   post 'super_admins/new_demo' => "super_admins#new_demo_site"
+  get 'messaging/get' => "notifications#index"
+  post 'messaging/send' => "notifications#send_message"
 end
 end

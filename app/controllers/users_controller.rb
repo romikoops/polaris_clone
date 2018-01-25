@@ -50,14 +50,12 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    Rails.logger.debug @user
     @user.update_attributes(update_params)
-    Rails.logger.debug @user
     headers = @user.create_new_auth_token
-    Rails.logger.debug headers
     response_handler({user: @user, headers: headers})
   end
   def currencies
+    currency = current_user ? current_user.currency : "EUR"
     results = get_currency_array(current_user.currency)
     response_handler(results)
   end

@@ -10,6 +10,16 @@ class Admin::HubsController < ApplicationController
     
     response_handler(@hubs)
   end
+  def create
+    new_loc = Location.create_and_geocode(params[:location].as_json)
+    new_nexus = Location.from_short_name("#{params[:location][:city]}, #{params[:location][:country]}")
+    hub = params[:hub].as_json
+    hub["tenant_id"] = current_user.tenant_id
+    hub["location_id"] = new_loc.id
+    hub["nexus_id"] = new_nexus.id
+    new_hub = Hub.create!(hub)
+    response_handler({data: new_hub, location: new_loc})
+  end
   def show
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
@@ -43,7 +53,7 @@ class Admin::HubsController < ApplicationController
       hubs = overwrite_hubs(req)
       resp = []
       hubs.each do |po|
-        resp << {data: po, location: po.nexus}
+        resp << {data: po, location: po.location}
       end
       response_handler(resp)
     else

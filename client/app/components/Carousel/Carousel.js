@@ -23,6 +23,7 @@ export class Carousel extends Component {
             };
             return (
                 <div key={v4()} className={styles.slick_slide + ' flex-none layout-row layout-align-center-center'} style={divStyle}>
+                    {this.props.fade ? <div className={`flex-none ${styles.fade}`}></div> : ''}
                     <div className={`flex-none layout-column layout-align-center-center ${styles.slick_content}`}>
                         <h2 className={styles.slick_city + ' flex-none'}> {route.header} </h2>
                         <h5 className={styles.slick_country + ' flex-none'}> {route.subheader} </h5>

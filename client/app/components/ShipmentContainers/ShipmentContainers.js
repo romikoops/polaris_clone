@@ -11,7 +11,7 @@ import { Checkbox } from '../Checkbox/Checkbox';
 import defs from '../../styles/default_classes.scss';
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
 import styled from 'styled-components';
-
+import { Tooltip } from '../Tooltip/Tooltip';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const containerTareWeights = CONTAINER_TARE_WEIGHTS;
 
@@ -66,7 +66,7 @@ export class ShipmentContainers extends Component {
     }
 
     render() {
-        const { containers, handleDelta } = this.props;
+        const { containers, handleDelta, theme } = this.props;
         const { selectors } = this.state;
         const newContainer = containers[0];
         const containerOptions = [];
@@ -150,7 +150,10 @@ export class ShipmentContainers extends Component {
                 <div className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-start-center`} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center" >
-                            <p className="flex-100"> Container Size </p>
+                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                                <p className="flex-none letter_1"> Container Size </p>
+                                <Tooltip theme={theme} icon="fa-info-circle" text="size_class" />
+                            </div>
                             <StyledSelect
                                 placeholder={newContainer.sizeClass}
                                 className={styles.select}
@@ -186,7 +189,10 @@ export class ShipmentContainers extends Component {
                             </div>
                         </div>
                         <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                            <p className="flex-100"> Gross Weight </p>
+                            <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                                <p className="flex-none letter_1"> Gross Weight </p>
+                                <Tooltip theme={theme} icon="fa-info-circle" text="gross_weight" />
+                            </div>
                             <div
                                 className={`flex-95 layout-row ${
                                     styles.input_box
@@ -223,6 +229,7 @@ export class ShipmentContainers extends Component {
                                 checked={newContainer.dangerousGoods}
                                 theme={this.props.theme}
                             />
+                             <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                         </div>
 
                     </div>

@@ -93,10 +93,27 @@ export class ShipmentLocationBox extends Component {
         this.setState({showModal: !this.state.showModal});
     }
     selectedRoute(route) {
+        console.log(route);
+        const origin = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        const destination = {
+            city: '',
+            country: '',
+            fullAddress: '',
+            hub_id: route.origin_id,
+            hub_name: route.origin_nexus,
+        };
+        this.setState({origin, destination});
         this.setState({showModal: !this.state.showModal});
         this.setState({locationFromModal: !this.state.locationFromModal});
         this.setHubsFromRoute(route);
     }
+
     setHubsFromRoute(route) {
         let tmpOrigin = {};
         let tmpDest = {};

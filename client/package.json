@@ -10,7 +10,7 @@
     "start": "node server",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint .",
-    "deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && echo '🚀  Deployed!'"
+    "deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'"
   },
   "keywords": [
     "es6",
@@ -109,6 +109,7 @@
     "react-addons-test-utils": "^15.0.2",
     "react-json-tree": "^0.11.0",
     "react-test-renderer": "^16.2.0",
+    "react-tooltip": "^3.4.0",
     "redux-devtools": "^3.4.1",
     "redux-devtools-dock-monitor": "^1.1.2",
     "redux-devtools-log-monitor": "^1.4.0",

@@ -12,7 +12,7 @@ import '../../styles/select-css-custom.css';
 import styled from 'styled-components';
 import FileUploader from '../FileUploader/FileUploader';
 import FileTile from '../FileTile/FileTile';
-// import { RoundButton } from '../RoundButton/RoundButton';
+import { RoundButton } from '../RoundButton/RoundButton';
 export class UserShipmentView extends Component {
     constructor(props) {
         super(props);
@@ -21,6 +21,7 @@ export class UserShipmentView extends Component {
             upUrl: this.props.shipmentData ? '/shipments/' + this.props.shipmentData.shipment.id + '/upload/packing_sheet' : ''
         };
         this.setFileType = this.setFileType.bind(this);
+        this.back = this.back.bind(this);
     }
     componentDidMount() {
         const { shipmentData, loading, userDispatch, user, match} = this.props;
@@ -33,6 +34,10 @@ export class UserShipmentView extends Component {
         const shipmentId = this.props.shipmentData.shipment.id;
         const url = '/shipments/' + shipmentId + '/upload/' + ev.value;
         this.setState({fileType: ev, upUrl: url});
+    }
+    back() {
+        const { userDispatch } = this.props;
+        userDispatch.goBack();
     }
 
     render() {
@@ -188,9 +193,12 @@ export class UserShipmentView extends Component {
         }
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                <div className={`flex-100 layout-row layout-align-end-center ${styles.sec_title}`}>
+                     <RoundButton theme={theme} text="Back" size="small" back iconClass="fa-angle-left" handleNext={this.back}/>
+                </div>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-                        <p className={` ${styles.sec_title_text_normal} flex-none`} >Shipment status:</p>
+                        <p className={` ${styles.sec_title_text_normal} flex-none letter_3`} >Shipment status:</p>
                         <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle} >{ shipment.status }</p>
                     </div>
                 </div>
@@ -198,7 +206,7 @@ export class UserShipmentView extends Component {
                     Booking Reference: {shipment.imc_reference}
                 </div>
                 <RouteHubBox hubs={hubsObj} route={schedules} theme={theme}/>
-                <div className={`${styles.b_summ} flex-100`}>
+                <div className={`${styles.b_summ} flex-100 section_padding`}>
                     <div className={`${styles.b_summ_top} flex-100 layout-row`}>
                         { shipperContact }
                         { consigneeContact }
@@ -208,9 +216,9 @@ export class UserShipmentView extends Component {
                     </div>
                     <div className="flex-100 layout-row"> {nArray} </div>
                 </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  >Cargo</p>
+                        <p className={` ${styles.sec_header_text} flex-none letter_3`}  >Cargo</p>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                         { cargoView }
@@ -218,7 +226,7 @@ export class UserShipmentView extends Component {
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  >Documents</p>
+                        <p className={` ${styles.sec_header_text} flex-none letter_3`}  >Documents</p>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                         <div className="flex-100 layout-row layout-wrap layout-align-start-center">

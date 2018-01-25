@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminHubsIndex, AdminHubView} from './';
+import {AdminHubsIndex, AdminHubView, AdminHubForm} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,10 +14,14 @@ class AdminHubs extends Component {
         super(props);
         this.state = {
             selectedHub: false,
-            currentView: 'open'
+            currentView: 'open',
+            newHub: false
         };
         this.viewHub = this.viewHub.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
+        this.toggleNewHub = this.toggleNewHub.bind(this);
+        this.saveNewHub = this.saveNewHub.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     }
     componentDidMount() {
         const {hubs, adminDispatch, loading} = this.props;
@@ -31,10 +35,21 @@ class AdminHubs extends Component {
         this.setState({selectedHub: true});
     }
 
+
     backToIndex() {
         const { dispatch, history } = this.props;
         this.setState({selectedHub: false});
         dispatch(history.push('/admin/hubs'));
+    }
+    toggleNewHub() {
+        this.setState({newHub: !this.state.newhub});
+    }
+    closeModal() {
+        this.setState({newHub: false});
+    }
+    saveNewHub(hub, location) {
+        const { adminDispatch } = this.props;
+        adminDispatch.saveNewHub(hub, location);
     }
 
     render() {
@@ -53,16 +68,28 @@ class AdminHubs extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+        const newButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="New Hub"
+                    handleNext={this.toggleNewHub}
+                    iconClass="fa-plus"
+                />
+            </div>);
         const title = selectedHub ?
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                 <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hub Overview</p>
                 {selectedHub ? backButton : ''}
-            </div> :
-            '';
+
+            </div> : '';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 {title}
+                {newButton}
+                { this.state.newHub ? <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub}/> : ''}
                 <Switch className="flex">
                     <Route
                         exact
