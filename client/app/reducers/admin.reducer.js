@@ -137,11 +137,11 @@ export function admin(state = {}, action) {
             });
             return reqDash;
         case adminConstants.GET_DASHBOARD_SUCCESS:
-            const succDash = merge({}, state, {
+            return {
+                ...state,
                 dashboard: action.payload.data,
                 loading: false
-            });
-            return succDash;
+            };
         case adminConstants.GET_DASHBOARD_FAILURE:
             const errDash = merge({}, state, {
                 error: { hubs: action.error }
@@ -166,6 +166,24 @@ export function admin(state = {}, action) {
             });
             return errShips;
 
+        case adminConstants.GET_DASH_SHIPMENTS_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
+        case adminConstants.GET_DASH_SHIPMENTS_SUCCESS:
+            return {
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    shipments: action.payload.data
+                },
+                loading: false
+            };
+        case adminConstants.GET_DASH_SHIPMENTS_FAILURE:
+            return merge({}, state, {
+                error: { shipments: action.error }
+            });
+
         case adminConstants.ADMIN_GET_SHIPMENT_REQUEST:
             const reqShip = merge({}, state, {
                 loading: true
@@ -189,24 +207,11 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
-            const shipments = state.shipments.open.filter(x => x.status !== 'ignored');
-            // const succConfShip = merge({}, state, {
-            //     shipment: action.payload.data,
-            //     shipments: {
-            //         open: shipments
-            //     },
-            //     loading: false
-            // });
-            const succConfShip = {
+            return {
                 ...state,
-                shipments: {
-                    open: shipments,
-                    ...state.shipments
-                },
+                shipment: action.payload.data,
                 loading: false
             };
-            console.log(action.payload.data);
-            return succConfShip;
         case adminConstants.CONFIRM_SHIPMENT_FAILURE:
             const errConfShip = merge({}, state, {
                 error: { shipments: action.error }

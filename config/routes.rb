@@ -119,5 +119,9 @@ Rails.application.routes.draw do
     post 'super_admins/new_demo' => "super_admins#new_demo_site"
     get 'messaging/get' => "notifications#index"
     post 'messaging/send' => "notifications#send_message"
-  end
+
+    post 'messaging/data' => "notifications#shipment_data"
+    post 'messaging/mark' => "notifications#mark_as_read"
+end
+
 end

@@ -222,7 +222,7 @@ class Shipment < ApplicationRecord
 
   def insurance
     schedule_set.reduce(0) do |insurance_value, schedule|
-      insurance_value += schedules_charges[schedule["hub_route_key"]]["insurance"].to_f
+      insurance_value += schedules_charges[schedule["hub_route_key"]].dig("insurance", "val").to_f
     end
   end
 
