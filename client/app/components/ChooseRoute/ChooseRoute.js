@@ -151,69 +151,6 @@ export class ChooseRoute extends Component {
                 }
             }
         });
-        // debugger;
-        // const closestRoute = schedules.map((sr) => {
-        //     if (sr.id === idArrays.closest) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={sr}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // const focusRoutes = schedules.map((fr) => {
-        //     console.log(fr);
-        //     console.log(idArrays.closest);
-        //     console.log(fr.id !== idArrays.closest && idArrays.focus.includes(fr.id));
-        //     if (fr.id !== idArrays.closest && idArrays.focus.includes(fr.id)) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={fr}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // const altRoutes = schedules.map((ar) => {
-        //     if (ar.id !== idArrays.closest && idArrays.alternative.includes(ar.id)) {
-        //         return (
-        //             <RouteResult
-        //                 key={v4()}
-        //                 selectResult={this.chooseResult}
-        //                 theme={this.props.theme}
-        //                 originHubs={originHubs}
-        //                 destinationHubs={destinationHubs}
-        //                 fees={shipment.schedules_charges}
-        //                 schedule={ar}
-        //                 user={user}
-        //                 loadType={shipment.load_type}
-        //                 pickupDate={shipment.planned_pickup_date}
-        //             />
-        //         );
-        //     }
-        //     return '';
-        // });
-        // altRoutes.sort(this.dynamicSort('etd'));
-        // focusRoutes.sort(this.dynamicSort('etd'));
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
@@ -255,10 +192,12 @@ export class ChooseRoute extends Component {
                     </div>
 
                 </div>
+
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={'content_width flex-none content-width layout-row layout-align-start-center'}>
-                        <RoundButton theme={this.props.theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
+                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
                     </div>
+
                 </div>
             </div>
         );

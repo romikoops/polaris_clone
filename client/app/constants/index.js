@@ -9,4 +9,5 @@ export * from './map.constants';
 export * from './container.constants';
 export * from './admin.constants';
 export * from './app.constants';
+export * from './nexus.constants';
 export * from './messaging.constants';
