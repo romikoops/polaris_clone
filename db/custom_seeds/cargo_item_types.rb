@@ -1,5 +1,5 @@
 CargoItemType.destroy_all
-colliTypes = [
+cargo_item_types = [
     {x: 101.6, y: 121.9, key: '1016 × 1219', label: '101.6cm × 121.9cm Pallet: North America', area: 'North America'},
     {x: 100.0, y: 120.0, key: '1000 × 1200', label: '100.0cm × 120.0cm Pallet: Europe, Asia', area: 'Europe, Asia'},
     {x: 116.5, y: 116.5, key: '1165 × 1165', label: '116.5cm × 116.5cm Pallet: Australia', area: 'Australia'},
@@ -11,6 +11,6 @@ colliTypes = [
     {key: 'Rolls', label: 'Rolls'}
 ];
 
-colliTypes.each do |ct|
+cargo_item_types.each do |ct|
   CargoItemType.create!(dimension_x: ct[:x], dimension_y: ct[:y], description: ct[:label], area: ct[:area])
 end

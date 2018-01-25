@@ -9,6 +9,7 @@ import { shipment } from './shipment.reducer';
 import { alert } from './alert.reducer';
 import { admin } from './admin.reducer';
 import { app } from './app.reducer';
+import { nexus } from './nexus.reducer';
 import { messaging } from './messaging.reducer';
 import { tenant, selectedSubdomain } from './tenant.reducer';
 
@@ -32,8 +33,9 @@ const rootReducer = combineReducers({
     tenant,
     admin,
     app,
-    messaging,
-    routing
+    routing,
+    nexus,
+    messaging
 });
 
 export default rootReducer;

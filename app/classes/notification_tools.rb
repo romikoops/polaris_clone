@@ -23,6 +23,11 @@ module NotificationTools
     return resp
   end
 
+  def update_convo(user, messages)
+    convo_id = "#{user.tenant_id}_#{user.id}"
+    $db["messages"].update_one({_id: convo_id}, messages)
+  end
+
   def add_message_to_convo(user, message, admin)
     data = message
     ref = message["shipmentRef"] ? message["shipmentRef"] : message[:shipmentRef]

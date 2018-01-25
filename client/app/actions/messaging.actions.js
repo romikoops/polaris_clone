@@ -91,9 +91,39 @@ function getShipment(ref) {
     };
 }
 
+function markAsRead(ref) {
+    function request(convoData) {
+        return { type: messagingConstants.MARK_AS_READ_REQUEST, payload: convoData };
+    }
+    function success(convoData) {
+        return { type: messagingConstants.MARK_AS_READ_SUCCESS, payload: convoData.data };
+    }
+    function failure(error) {
+        return { type: messagingConstants.MARK_AS_READ_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        messagingService.markAsRead(ref).then(
+            data => {
+                dispatch(
+                    alertActions.success('Mark As Read successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 
 export const messagingActions = {
     getUserConversations,
     sendUserMessage,
-    getShipment
+    getShipment,
+    markAsRead
 };

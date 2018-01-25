@@ -52,7 +52,7 @@ export class UserDashboard extends Component {
         } else {
             prop = property;
         }
-        return function(a, b) {
+        return (a, b) => {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;
@@ -106,6 +106,7 @@ export class UserDashboard extends Component {
                         <p className="flex-none"> Yes </p>
                     </div>
                 </div>
+
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
@@ -125,6 +126,7 @@ export class UserDashboard extends Component {
                     </div>
                     <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
                         <p className="flex-none">{ship.incoterm}</p>
+>>>>>>> origin/master
                     </div>
                     <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
                         <p className="flex-none"> Yes </p>

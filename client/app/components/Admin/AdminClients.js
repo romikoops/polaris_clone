@@ -139,7 +139,7 @@ AdminClients.propTypes = {
     clients: PropTypes.array
 };
 function mapStateToProps(state) {
-    const {authentication, tenant, admin } = state;
+    const { authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
     const { clients, shipment, shipments, hubs, client } = admin;
 

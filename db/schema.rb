@@ -158,6 +158,13 @@ ActiveRecord::Schema.define(version: 20180122141904) do
     t.boolean "dedicated"
   end
 
+  create_table "providers", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false

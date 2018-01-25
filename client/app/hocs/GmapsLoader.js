@@ -22,14 +22,19 @@ export default class GmapsLoader extends Component {
                     googleMaps && (
                         <ParamComponent
                             allNexuses={this.props.allNexuses}
-                            setTargetAddress={this.props.selectLocation}
+                            setTargetAddress={this.props.setTargetAddress}
                             theme={this.props.theme}
                             gMaps={googleMaps}
                             selectedRoute={this.props.selectedRoute}
                             setCarriage={this.props.toggleCarriage}
                             origin={this.props.origin}
                             destination={this.props.destination}
+                            nextStageAttempt={this.props.nextStageAttempt}
                             handleAddressChange={this.props.handleAddressChange}
+                            routeIds={this.props.routeIds}
+                            nexusDispatch={this.props.nexusDispatch}
+                            availableDestinations={this.props.availableDestinations}
+                            handleSelectLocation={this.props.handleSelectLocation}
                         />
                     )
                 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withFormsy } from 'formsy-react';
 import styles from './ValidatedInputFormsy.scss';
+import errorStyles from '../../styles/errors.scss';
 
 class ValidatedInputFormsy extends Component {
     constructor(props) {
@@ -49,8 +50,8 @@ class ValidatedInputFormsy extends Component {
             height: '100%',
             boxSizing: 'border-box'
         };
-        const ErrorVisible = this.state.firstRender && !this.props.nextStageAttempt;
-        if (!ErrorVisible && !this.props.isValid()) {
+        const ErrorHidden = this.state.firstRender && !this.props.nextStageAttempt;
+        if (!ErrorHidden && !this.props.isValid()) {
             inputStyles.background = 'rgba(232, 114, 88, 0.3)';
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
@@ -61,10 +62,11 @@ class ValidatedInputFormsy extends Component {
                 	style={inputStyles}
                     onChange={this.changeValue}
                     type={this.props.type}
-                    value={(this.props.getValue() || this.props.getValue().toString()) || ''}
+                    value={(this.props.getValue() && this.props.getValue().toString()) || ''}
                     name={this.props.name}
+                    disabled={this.props.disabled}
                 />
-                <span className={styles.error_message}>{ErrorVisible ? '' : errorMessage}</span>
+                <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
             </div>
         );
     }

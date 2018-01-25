@@ -72,13 +72,13 @@ class Header extends Component {
             return <Redirect push to="/" />;
         }
         const dropDown = (
-                <NavDropdown
-                    dropDownText={dropDownText}
-                    dropDownImage={adjIcon}
-                    linkOptions={accountLinks}
-                    invert={invert}
-                />
-            );
+            <NavDropdown
+                dropDownText={dropDownText}
+                dropDownImage={adjIcon}
+                linkOptions={accountLinks}
+                invert={invert}
+            />
+        );
         const currDropDown = (
             <NavDropdown
                 dropDownText={user && user.data ? user.data.currency : ''}

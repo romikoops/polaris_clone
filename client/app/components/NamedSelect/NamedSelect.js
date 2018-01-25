@@ -12,13 +12,15 @@ export class NamedSelect extends Component {
         this.onChangeFunc = this.onChangeFunc.bind(this);
     }
     onChangeFunc(optionSelected) {
-        const nameKey = this.props.name;
-        const value = optionSelected.value;
-        const label = optionSelected.label;
-        this.props.onChange({nameKey, value, label});
+        const modifiedOptionSelected = Object.assign({}, optionSelected);
+        modifiedOptionSelected.name = this.props.name;
+
+        this.props.onChange(modifiedOptionSelected);
     }
     render() {
-        const { options, value, classes, ref, name} = this.props;
+        const props = Object.assign({}, this.props);
+        delete props.onChange;
+
         const StyledSelect = styled(Select)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -39,11 +41,7 @@ export class NamedSelect extends Component {
         `;
         return(
             <StyledSelect
-                ref={ref}
-                name={name}
-                className={classes}
-                value={value ? value : ''}
-                options={options}
+                {...props}
                 onChange={this.onChangeFunc}
             />
         );

@@ -41,8 +41,19 @@ function getShipmentData(ref) {
     return fetch(url, requestOptions).then(handleResponse);
 }
 
+function markAsRead(shipmentRef) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shipmentRef })
+    };
+    const url = BASE_URL + '/messaging/mark';
+    return fetch(url, requestOptions).then(handleResponse);
+}
+
 export const messagingService = {
     getUserConversations,
     sendUserMessage,
-    getShipmentData
+    getShipmentData,
+    markAsRead
 };

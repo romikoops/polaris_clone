@@ -45,6 +45,20 @@ export function messaging(state = {}, action) {
             return merge({}, state, {
                 loading: true
             });
+        case messagingConstants.MARK_AS_READ_SUCCESS:
+            return merge({}, state, {
+                ...action.payload,
+                loading: false
+            });
+        case messagingConstants.MARK_AS_READ_ERROR:
+            return merge({}, state, {
+                error: action.payload,
+                loading: false
+            });
+        case messagingConstants.MARK_AS_READ_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
         default:
             return state;
     }

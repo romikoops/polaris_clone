@@ -69,7 +69,9 @@ export class ChooseRoute extends Component {
     }
     render() {
         const { shipmentData, messages, user, shipmentDispatch, theme } = this.props;
+
         const { limits } = this.state;
+
         let smallestDiff = 100;
         if (!shipmentData) {
             return '';
@@ -160,8 +162,10 @@ export class ChooseRoute extends Component {
                 }
             }
         });
+
         const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes;
         const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes;
+
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
 
@@ -225,10 +229,13 @@ export class ChooseRoute extends Component {
                     </div>
 
                 </div>
-                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className="content_width flex-none content-width layout-row layout-align-start-center">
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
-                    </div>
+
+
+                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                  <div className="content_width flex-none layout-row layout-align-start-center">
+                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
+                  </div>
+
                 </div>
             </div>
         );

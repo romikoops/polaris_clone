@@ -23,8 +23,8 @@ class MessageCenter extends Component {
         conv.shipmentRef = conv.messages[0].shipmentRef;
         this.setState({selectedConvo: conv});
         const { messageDispatch } = this.props;
-        messageDispatch.markConvoAsRead(conv);
-        messageDispatch.fetchShipment(conv.shipmentRef);
+        messageDispatch.markAsRead(conv.shipmentRef);
+        messageDispatch.getShipment(conv.shipmentRef);
     }
     sendMessage(msg) {
         const { messageDispatch } = this.props;
@@ -32,7 +32,7 @@ class MessageCenter extends Component {
     }
 
     render() {
-        const  { theme, close, messageDispatch, conversations } = this.props;
+        const  { theme, close, messageDispatch, conversations, user, shipment } = this.props;
         if (!conversations) {
             return '';
         }
@@ -40,20 +40,28 @@ class MessageCenter extends Component {
         const convos = convoKeys.map((ms) => {
             return <ConvoTile theme={theme} conversation={conversations[ms]} convoKey={ms} viewConvo={this.selectConvo} />;
         });
-        const selectedConvo = this.state.selectedConvo ? this.state.selectedConvo : conversations[convoKeys[0]];
+        const selectedConvo = this.state.selectedConvo;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        const messageView = selectedConvo ? <Conversation conversation={selectedConvo} theme={theme} messageDispatch={messageDispatch} sendMessage={this.sendMessage}/> : '';
+
+        const messageView = selectedConvo ?
+            <Conversation conversation={selectedConvo} theme={theme} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
+            <div className="flex-50 layout-row layout-align-center-center">
+                <h3 className="flex-none">Please select a conversation</h3>
+            </div>;
         return (
             <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.backdrop}`}>
                 <div className={`flex-none ${styles.fade}`} onClick={() => close()}></div>
-                <div className={`flex-none layout-column layout-align-start-start ${styles.message_center}`}>
-                    <div className="flex-10 width_100 layout-row layout-align-start-center">
+                <div className={`flex-none layout-column layout-align-start-start ${styles.message_center}`} >
+                    <div className="flex-10 width_100 layout-row layout-align-space-between-center">
                         <h3 className="flex-none clip letter_3" style={textStyle}>Message Center</h3>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => close()}>
+                            <i className="fa fa-times clip" style={textStyle} ></i>
+                        </div>
                     </div>
                     <div className="flex-90 width_100 layout-row layout-align-start-start">
-                        <div className={`flex-30 layout-row layout-wrap layout-align-center-start ${styles.convo_list}`}>
+                        <div className={`flex-30 layout-row layout-wrap layout-align-center-start ${styles.convo_list}`} >
                             {convos}
                         </div>
                         <div className={`flex-70 layout-column layout-align-start-start ${styles.message_list}`}>
@@ -69,7 +77,7 @@ class MessageCenter extends Component {
 function mapStateToProps(state) {
     const { users, authentication, tenant, messaging } = state;
     const { user, loggedIn } = authentication;
-    const { conversations, unread } = messaging;
+    const { conversations, unread, shipment } = messaging;
     return {
         user,
         users,
@@ -77,7 +85,8 @@ function mapStateToProps(state) {
         tenant,
         theme: tenant.data.theme,
         loggedIn,
-        unread
+        unread,
+        shipment
     };
 }
 function mapDispatchToProps(dispatch) {
