@@ -39,7 +39,7 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -83,7 +83,7 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -126,7 +126,7 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -172,7 +172,7 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -215,7 +215,7 @@ tenant_data = [
           cargo_item: false
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -261,7 +261,7 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -305,7 +305,7 @@ tenant_data = [
           cargo_item: false
         }
       },
-      dangerous_goods: true
+      dangerous_goods: false
     }
   },
   {
@@ -341,8 +341,13 @@ tenant_data = [
         air: {
           container: true,
           cargo_item: true
+        },
+        rail: {
+          container: false,
+          cargo_item: false
         }
-      }
+      },
+      dangerous_goods: false
     }
 }
 ]

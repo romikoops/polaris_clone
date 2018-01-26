@@ -44,6 +44,161 @@ class Tenant < ApplicationRecord
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
     end
   end
+  def self.update_scope
+    tdata = [
+{      name: "Greencarrier",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Demo",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Nordic Consolidators",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Easyshipping",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Integrail",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: false,
+          cargo_item: false
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Inter-Scan Sea & Air",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }
+  }, {name: "Eimskip",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      },
+      dangerous_goods: false
+    }
+    },
+    {name: "Belglobe",
+        scope: {
+      dangerous_goods: false,
+          modes_of_transport: {
+            ocean: {
+              container: true,
+              cargo_item: true
+            },
+            air: {
+              container: true,
+              cargo_item: true
+            },
+            rail: {
+              container: false,
+              cargo_item: false
+            }
+          }
+        }
+      }
+    ]
+    tdata.each do |t|
+      tenant = Tenant.find_by_name(t[:name])
+      tenant.scope = t[:scope]
+      tenant.save!
+    end
+  end
   
   def mot_scope_attributes(mot)
     # applies the following conversion in order to get the attributes which find the MotScope: 
