@@ -735,7 +735,8 @@ function confirmShipment(id, action, redirect) {
             resp => {
                 const shipmentData = resp.data;
                 dispatch(success(shipmentData));
-                dispatch(getDashShipments(false));
+                dispatch(getShipments(false));
+                dispatch(getDashboard(false));
                 if (redirect) {
                     dispatch(
                         push('/admin/shipments/' + id)
@@ -898,6 +899,7 @@ function activateHub(hubId) {
                 dispatch(
                     alertActions.success('Activating Hub successful')
                 );
+                dispatch(getClients(false));
                 dispatch(success(data));
             },
             error => {
@@ -954,6 +956,7 @@ function saveNewHub(hub, location) {
                 dispatch(
                     alertActions.success('Hew Hub successful')
                 );
+                dispatch(getHubs(false));
                 dispatch(success(data));
             },
             error => {
@@ -1012,5 +1015,6 @@ export const adminActions = {
     viewTrucking,
     newClient,
     activateHub,
-    saveNewHub
+    saveNewHub,
+    getDashShipments
 };

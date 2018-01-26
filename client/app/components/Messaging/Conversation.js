@@ -39,13 +39,14 @@ export class Conversation extends Component {
             return <Message message={msg} theme={theme} key={v4()}/>;
         });
         const summStyle = showDetails ? styles.show_details : styles.hide_details;
+        const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed;
         const btnStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
 
         return (
             <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
-                <div className={`flex-10 layout-row layout-wrap layout-align-start-center ${styles.summary_wrapper}`}>
+                <div className={`flex-10 layout-row layout-wrap layout-align-start-center ${summWrapStyle} ${styles.summary_wrapper}`}>
                     <div className="flex-100 layout-row layout-align-start-center" onClick={this.toggleDetails}>
                         <div className="flex-5"></div>
                         <p className="flex-none">Shipment: {conversation.shipmentRef}</p>
