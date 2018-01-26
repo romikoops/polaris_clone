@@ -50,7 +50,9 @@ export const documentTypes = {
     customs_value_declaration: 'Customs Value Declaration',
     eori: 'EORI',
     certificate_of_origin: 'Certificate Of Origin',
-    dangerous_goods: 'Dangerous Goods'
+    dangerous_goods: 'Dangerous Goods',
+    bill_of_lading: 'Bill of Lading',
+    invoice: 'Invoice'
 };
 
 export const shipmentConstants = {

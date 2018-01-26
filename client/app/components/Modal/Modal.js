@@ -47,12 +47,13 @@ export class Modal extends Component {
 
     render() {
         if (this.state.hidden) return '';
+        const width = this.props.width ? this.props.width : '40vw';
         const modalStyles = {
             top: Math.min(this.state.windowHeight * 0.5 - this.state.height / 2, 100) + 'px',
             minHeight: this.state.windowHeight * 0.5,
             maxHeight: this.state.windowHeight * 0.9,
-            width: this.props.width,
-            left: `calc(50vw - ${this.props.width}/2)`,
+            width: width,
+            left: `calc(50vw - ${width}/2)`,
             padding: `${this.props.horizontalPadding} ${this.props.verticalPadding}`,
             overflowY: 'auto'
         };

@@ -268,7 +268,7 @@ function newClient(data) {
         headers: authHeader(),
         body: formData
     };
-    return fetch(BASE_URL + '/admins/clients', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/clients', requestOptions).then(handleResponse);
 }
 
 function activateHub(hubId) {

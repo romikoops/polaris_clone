@@ -116,6 +116,7 @@ class Admin::ShipmentsController < ApplicationController
     case type
     when 'approve'
       @document.approved = 'approved'
+      @document.save!
       message = {
         title: 'Document Approved',
         message: "Your document #{@document.text} was approved",
@@ -123,15 +124,16 @@ class Admin::ShipmentsController < ApplicationController
       }
       add_message_to_convo(@user, message)
     when 'reject'
-      @document.approved = 'approved'
+      @document.approved = 'rejected'
+      @document.save!
       message = {
         title: 'Document Rejected',
         message: "Your document #{@document.text} was rejected: #{text}",
         shipmentRef: @document.shipment.imc_reference
       }
-      add_message_to_convo(@user, message)
+      add_message_to_convo(@user, message, true)
     end
-    response_handler(true)
+    response_handler(@document)
     
   end
 
