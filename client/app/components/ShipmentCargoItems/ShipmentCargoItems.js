@@ -120,7 +120,7 @@ export class ShipmentCargoItems extends Component {
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <p className={`${styles.input_label} flex-100`}> Gross Weight </p>
+                            <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
                         </div>
                         <div className={`flex-95 layout-row ${styles.input_box}`}>

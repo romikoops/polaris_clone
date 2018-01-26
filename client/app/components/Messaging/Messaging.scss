@@ -21,13 +21,14 @@
   .convo_tile {
     border-radius: 2px;
     box-shadow: 0 1px 1px 0 rgba(12,13,14,0.75);
+    background: #fff;
   }
   .timestamp {
     font-size: 10px;
   }
   .send_button {
     width: 95%;
-    height: 150px;
+    height: 125px;
     border-radius: 10px;
     i {
       color: white;
@@ -43,6 +44,7 @@
   }
   .convo_wrapper {
     height: 100%;
+    position: relative;
   }
   .message_scroll {
     overflow-y: scroll;
@@ -58,12 +60,83 @@
     width: 100%;
     position: absolute;
     z-index: 40;
-    height: 400px;
+    height: 450px;
     opacity: 1;
   }
   .hide_details {
     height: 0px;
     z-index: -1;
     opacity: 0;
+  }
+  .top_row {
+    margin-bottom: 20px;
+  }
+  .header_hub {
+    position: relative;
+    .map_marker {
+      margin: 10px;
+    }
+    .flag {
+      margin: 10px;
+      // position: absolute;
+      // left: -23px;
+      // top: -1px;
+    }
+  }
+  .connection_graphics {
+    margin: -41px 27px 0 10px;
+    width: 110px;
+  }
+
+  h4.date_title {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    text-shadow: 1px 1px rgba(black, .14);
+    opacity: .7;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  p.sched_elem {
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  .tot_price {
+    color: white;
+    padding: 0 15px;
+    height: 49px;
+    width: 296px;
+    border-radius: 50px;
+  }
+  .data_overlay {
+    position: absolute;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
+  }
+  .data_box {
+    background: #fff;
+  }
+  .summary {
+    position: absolute;
+    top:25px;
+    // height: 100%;
+    background: #fff;
+    border-radius: 10px;
+  }
+   .summary_wrapper {
+    // position: relative;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
+  }
+  .msg_form {
+    padding: 5px;
+  }
+  .wrapper_open{
+    height: 450px;
+  }
+  .wrapper_closed {
+    height: 75px;
   }
 }
