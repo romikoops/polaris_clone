@@ -8,3 +8,5 @@ export * from './gradient';
 export * from './isEmpty';
 export * from './currencyConverter';
 export * from './svgColourer';
+export * from './stringTools';
+export * from './dimentionToPx';

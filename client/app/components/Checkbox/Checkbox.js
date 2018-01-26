@@ -33,14 +33,17 @@ export class Checkbox extends Component {
         const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {};
         const border = { border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`};
         return (
-            <div className={`${styles.checkbox} flex-none`} style={border}>
+            <div
+                className={`${styles.checkbox} flex-none`}
+                style={border}
+                onClick={this.props.onClick}
+            >
                 <label>
                     <input
                         type="checkbox"
                         checked={checked}
                         disabled={disabled}
                         onChange={this.handleChange}
-                        onClick={this.props.onClick}
                     />
                     <span style={sizeStyles}>
                         <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />

@@ -23,7 +23,6 @@ export class ShipmentCargoItems extends Component {
         this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this);
         this.handleCargoItemQ = this.handleCargoItemQ.bind(this);
         this.handleCargoItemType = this.handleCargoItemType.bind(this);
-        this.showAlert = this.showAlert.bind(this);
     }
 
     handleCargoChange(event) {
@@ -78,12 +77,8 @@ export class ShipmentCargoItems extends Component {
     deleteCargo(index) {
         this.props.deleteItem('cargoItems', index);
     }
-    showAlert() {
-    }
     render() {
         const { cargoItems, handleDelta, theme, scope } = this.props;
-        console.log('scope');
-        console.log(scope);
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
@@ -258,17 +253,19 @@ export class ShipmentCargoItems extends Component {
                     </div>
                     <div
                         className="layout-row flex layout-wrap layout-align-start-center"
-                        onClick={scope.dangerous_goods ? '' : this.showAlert}
                     >
-                        <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                            <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+                        </div>
                         <Checkbox
                             onChange={this.toggleDangerousGoods}
                             checked={cargoItem ? cargoItem.dangerousGoods : false}
-                            theme={this.props.theme}
+                            theme={theme}
                             size="34px"
                             disabled={!scope.dangerous_goods}
+                            onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
                         />
-                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
                 </div>
 

@@ -77,7 +77,7 @@ export class ShipmentContainers extends Component {
     }
 
     render() {
-        const { containers, handleDelta, theme } = this.props;
+        const { containers, handleDelta, theme, scope } = this.props;
         const { selectors } = this.state;
 
         const textStyle = {
@@ -200,15 +200,18 @@ export class ShipmentContainers extends Component {
                         />
                     </div>
                     <div className="layout-row flex-20 layout-wrap layout-align-start-center">
-                        <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                            <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+                        </div>
                         <Checkbox
                             onChange={this.toggleDangerousGoods}
                             checked={container ? container.dangerousGoods : false}
-                            theme={this.props.theme}
+                            theme={theme}
                             size="34px"
-                            disabled={!this.props.scope.dangerous_goods}
+                            disabled={!scope.dangerous_goods}
+                            onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
                         />
-                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
 
                     {

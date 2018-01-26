@@ -120,7 +120,7 @@ class Shop extends Component {
             bookingData, match, loading, tenant, user,
             shipmentDispatch, nexusDispatch, currencies, dashboard
         } = this.props;
-        const { theme, scope } = tenant.data;
+        const { theme } = tenant.data;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -183,8 +183,7 @@ class Shop extends Component {
                     render={props => (
                         <ShipmentDetails
                             {...props}
-                            theme={theme}
-                            scope={scope}
+                            tenant={tenant}
                             user={user}
                             dashboard={dashboard}
                             shipmentData={response ? response.stage1 : {}}
