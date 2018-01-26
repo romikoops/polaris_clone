@@ -33,10 +33,17 @@ export class Conversation extends Component {
     }
 
     render() {
-        const  { conversation, theme, shipment, user, tenant } = this.props;
+        const  { conversation, theme, shipment, user, tenant, clients } = this.props;
         const { message, title, showDetails } = this.state;
-        const messages = conversation.messages.map((msg) => {
+        const isAdmin = user.data.role_id === 1;
+        const messages = isAdmin ? 
+        conversation.messages.map((msg) => {
             return <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()}/>;
+        }) :
+        conversation.messages.map((msg) => {
+            const client = clients.filter(c => c.id === msg.user_id);
+
+            return <Message tenant={tenant} user={user} message={msg} client={client} theme={theme} key={v4()}/>;
         });
         const summStyle = showDetails ? styles.show_details : styles.hide_details;
         const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed;

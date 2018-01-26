@@ -5,11 +5,27 @@ import styled from 'styled-components';
 export class Message extends Component {
     constructor(props) {
         super(props);
+        this.checkAdmin = this.checkAdmin.bind(this);
+    }
+    checkAdmin(User, Admin) {
+        const  { message, user, client } = this.props;
+        if (client && message.sender_id === client.id) {
+            return User;
+        }
+        if (client && message.sender_id !== client.id) {
+            return Admin;
+        }
+        if (!client && message.sender_id === user.data.id) {
+            return User;
+        }
+        if (!client && message.sender_id !== client.id) {
+            return User;
+        }
     }
 
     render() {
-        const  { message, theme, tenant, user } = this.props;
-        // const isAdmin = user.role_id === 1;
+        const  { message, theme, tenant, user, client } = this.props;
+        const isAdmin = user.data.role_id === 1;
         const messageStyle = message.sender_id === message.user_id ? styles.user_style : styles.tenant_style;
         const UserMessage = styled.div`
             background: #fff;
@@ -47,14 +63,18 @@ export class Message extends Component {
                 margin-left: -20px;
               }
         `;
-        const meta = message.sender_id === user.data.id ?
+        const adminMeta = client && message.sender_id == client.id ?
+            <p className={`flex-none ${styles.timestamp}`}>{client.first_name} {client.last_name} @ {moment.unix(message.timestamp).format('lll')}</p> :
+            <p className={`flex-none ${styles.timestamp}`}>You  @ {moment.unix(message.timestamp).format('lll')}</p>;
+        const userMeta = message.sender_id == user.data.id ?
             <p className={`flex-none ${styles.timestamp}`}>You @ {moment.unix(message.timestamp).format('lll')}</p> :
             <p className={`flex-none ${styles.timestamp}`}>{tenant.data.name} Admin @ {moment.unix(message.timestamp).format('lll')}</p>;
+        const meta = isAdmin ? adminMeta : userMeta;
         // const msgShadow = message.sender_id === message.user_id ? {boxShadow: `5px 4px 13px 0px ${theme.colors.primary}50`} : {boxShadow: `5px 4px 13px 0px ${theme.colors.secondary}50`};
         // const msgBg = message.sender_id === message.user_id ?
         //  {borderColor: `${theme.colors.secondary}`, borderLeftColor: `${theme.colors.secondary}`, color: 'white'} :
         //  {background: `${theme.colors.primary}`, borderRightColor: `${theme.colors.primary}`, color: 'white'};
-        const Comp = message.sender_id === user.data.id ? UserMessage : AdminMessage;
+        const Comp = this.checkAdmin(UserMessage, AdminMessage);
         return (
             <div className={`flex-100 layout-row ${styles.message_wrapper}`}>
                 {message.sender_id === message.user_id ? <div className="flex-10"></div> : <div className="flex-5"></div> }
