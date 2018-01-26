@@ -72,6 +72,7 @@ export class BookingDetails extends Component {
             cargoNotes: ''
         };
         this.addNotifyee = this.addNotifyee.bind(this);
+        this.removeNotifyee = this.removeNotifyee.bind(this);
         this.setFromBook = this.setFromBook.bind(this);
         this.handleInput = this.handleInput.bind(this);
         this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
@@ -195,9 +196,16 @@ export class BookingDetails extends Component {
     }
 
     addNotifyee() {
-        const prevArr = this.state.notifyees;
-        prevArr.unshift(this.state.default.notifyee);
+        const prevArr = Object.assign([], this.state.notifyees);
+        prevArr.push(Object.assign({}, this.state.default.notifyee));
         this.setState({ notifyees: prevArr });
+    }
+
+    removeNotifyee(not) {
+        const prevArr = this.state.notifyees;
+        const newArr = prevArr.filter(n => n !== not);
+        console.log(newArr);
+        this.setState({ notifyees: newArr });
     }
 
     handleInput(event) {
@@ -224,10 +232,14 @@ export class BookingDetails extends Component {
 
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
+        console.log(name, value);
         const targetKeys = name.split('-');
         const ind = parseInt(targetKeys[1], 10);
+        console.log(ind);
         const notifyees = this.state.notifyees;
+        console.log(notifyees);
         notifyees[ind][targetKeys[2]] = value;
+        console.log(notifyees);
         this.setState({
             notifyees: notifyees
         });
@@ -313,6 +325,7 @@ export class BookingDetails extends Component {
                 theme={theme}
                 toggleAddressBook={this.toggleAddressBook}
                 handleChange={this.handleInput}
+                removeNotifyee={this.removeNotifyee}
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );

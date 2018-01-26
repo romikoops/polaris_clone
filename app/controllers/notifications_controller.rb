@@ -16,7 +16,8 @@ class NotificationsController < ApplicationController
 
   def send_message
     message = params[:message].as_json
-    resp = add_message_to_convo(current_user, message, false)
+    isAdmin = current_user.role.name.include?("admin")
+    resp = add_message_to_convo(current_user, message, isAdmin)
     response_handler(resp)
   end
   def mark_as_read

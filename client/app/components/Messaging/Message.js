@@ -18,9 +18,10 @@ export class Message extends Component {
         if (!client && message.sender_id === user.data.id) {
             return User;
         }
-        if (!client && message.sender_id !== client.id) {
-            return User;
+        if (!client && message.sender_id !== user.data.id) {
+            return Admin;
         }
+        return '';
     }
 
     render() {
@@ -63,28 +64,24 @@ export class Message extends Component {
                 margin-left: -20px;
               }
         `;
-        const adminMeta = client && message.sender_id == client.id ?
+        const adminMeta = client && message.sender_id !== user.data.id ?
             <p className={`flex-none ${styles.timestamp}`}>{client.first_name} {client.last_name} @ {moment.unix(message.timestamp).format('lll')}</p> :
             <p className={`flex-none ${styles.timestamp}`}>You  @ {moment.unix(message.timestamp).format('lll')}</p>;
-        const userMeta = message.sender_id == user.data.id ?
+        const userMeta = message.sender_id === user.data.id ?
             <p className={`flex-none ${styles.timestamp}`}>You @ {moment.unix(message.timestamp).format('lll')}</p> :
             <p className={`flex-none ${styles.timestamp}`}>{tenant.data.name} Admin @ {moment.unix(message.timestamp).format('lll')}</p>;
         const meta = isAdmin ? adminMeta : userMeta;
-        // const msgShadow = message.sender_id === message.user_id ? {boxShadow: `5px 4px 13px 0px ${theme.colors.primary}50`} : {boxShadow: `5px 4px 13px 0px ${theme.colors.secondary}50`};
-        // const msgBg = message.sender_id === message.user_id ?
-        //  {borderColor: `${theme.colors.secondary}`, borderLeftColor: `${theme.colors.secondary}`, color: 'white'} :
-        //  {background: `${theme.colors.primary}`, borderRightColor: `${theme.colors.primary}`, color: 'white'};
         const Comp = this.checkAdmin(UserMessage, AdminMessage);
         return (
             <div className={`flex-100 layout-row ${styles.message_wrapper}`}>
-                {message.sender_id === message.user_id ? <div className="flex-10"></div> : <div className="flex-5"></div> }
+                {message.sender_id === message.user_id ? <div className="flex-25"></div> : <div className="flex-5"></div> }
                 <Comp className={`flex-none layout-row layout-align-start-center layout-wrap ${messageStyle} ${styles.message_inner}`}>
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.message_title}`}>
-                        <p className="flex-none">{message.title}</p>
+                    <div className="flex-100 layout-row layout-align-space-between-center">
+                        <h3 className={`flex-none ${styles.message_title}`}>{message.title}</h3>
                         {meta}
                     </div>
-                    <div className={`flex-100 layout-row layout-align-start-center ${styles.message_text}`}>
-                        <p className="flex-none">{message.message}</p>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <p className={`flex-none ${styles.message_text}`}>{message.message}</p>
                     </div>
                 </Comp>
             </div>

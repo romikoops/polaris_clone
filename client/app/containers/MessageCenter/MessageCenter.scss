@@ -10,8 +10,8 @@
     width: 75vw;
     height: 800px;
     position: relative;
-    background: whitesmoke;
-    border-radius: 5px;
+    background: darkslategrey;
+    border-radius: 15px;
     box-shadow: 1px, 2px, 2px, 1px, rgba(12,13,14,0.75);
     z-index: 62;
     padding: 10px;
@@ -26,10 +26,14 @@
   .convo_list {
     width: 30%;
     height: 100%;
-    background: whitesmoke;
+    border-radius: 10px 0 0 10px;
+    background: lightgrey;
   }
   .message_list {
     width: 70%;
     height: 100%;
+    background: white;
+    border-radius: 0 10px 10px 0;
+    // border-radius: 10px;
   }
 }
