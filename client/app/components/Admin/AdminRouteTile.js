@@ -29,7 +29,6 @@ export class AdminRouteTile extends Component {
         if (!route || !hubs) {
             return '';
         }
-
         let startHub;
         let endHub;
         hubs.forEach(hub => {

@@ -20,11 +20,10 @@ class Hub < ApplicationRecord
     p tenant_id
     return hub
   end
-  def self.update
+  def self.update_all!
     hubs = Hub.all
     hubs.each do |h|
       h.nexus_id = h.location_id
-      # h.location_id = nil
       h.save!
     end
   end

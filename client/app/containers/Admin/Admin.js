@@ -72,6 +72,7 @@ class Admin extends Component {
         console.log(this.props);
         const {theme, adminData, adminDispatch, user} = this.props;
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes, loading} = adminData;
+
         const hubHash = {};
         if (hubs) {
             hubs.forEach((hub) => {
