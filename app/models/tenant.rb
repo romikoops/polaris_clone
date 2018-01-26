@@ -11,10 +11,12 @@ class Tenant < ApplicationRecord
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
     
+  validates :scope, presence: true, scope: true
+
   def get_admin
-    return self.users.where(role_id: 1).first
+    self.users.where(role_id: 1).first
   end
-  # Generates the static info for the choose route page
+
   def update_route_details
     routes = Route.where(tenant_id: self.id)
     detailed_routes = routes.map do |route, h|

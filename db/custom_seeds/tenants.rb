@@ -1,4 +1,3 @@
-# Define data for two tenants
 tenant_data = [
   {
     theme: {
@@ -39,7 +38,8 @@ tenant_data = [
           container: true,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -82,7 +82,8 @@ tenant_data = [
           container: true,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -124,7 +125,8 @@ tenant_data = [
           container: true,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -169,7 +171,8 @@ tenant_data = [
           container: true,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -199,11 +202,20 @@ tenant_data = [
     name: "Integrail",
     scope: {
       modes_of_transport: {
+        ocean: {
+          container: false,
+          cargo_item: false
+        },
         rail: {
           container: true,
           cargo_item: true
         },
-      }
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -240,11 +252,16 @@ tenant_data = [
           container: true,
           cargo_item: true
         },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
         air: {
           container: false,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -279,11 +296,16 @@ tenant_data = [
           container: true,
           cargo_item: true
         },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
         air: {
           container: false,
           cargo_item: false
         }
-      }
+      },
+      dangerous_goods: true
     }
   },
   {
@@ -325,7 +347,6 @@ tenant_data = [
 }
 ]
 
-# Create tenants
 tenant_data.each do |tenant_attr|
   Tenant.find_or_create_by(tenant_attr)
 end
