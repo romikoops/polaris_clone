@@ -8,6 +8,7 @@ import styles from './FileTile.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { moment, documentTypes } from '../../constants';
 import {Link} from 'react-router-dom';
+import Truncate from 'react-truncate';
 const docTypes = documentTypes;
 class FileTile extends React.Component {
     constructor(props) {
@@ -98,6 +99,14 @@ class FileTile extends React.Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        let statusStyle;
+        if (doc.approved === 'approved') {
+            statusStyle = styles.approved;
+        } else if (doc.approved === 'rejected') {
+            statusStyle = styles.rejected;
+        } else if (doc.approved === null) {
+            statusStyle = styles.pending;
+        }
         const link = doc.signed_url ?
             (<Link to={doc.signed_url} className="flex-none layout-row layout-align-center-center" target="_blank">
                 <i className="clip fa fa-eye" style={textStyle}></i>
@@ -165,7 +174,7 @@ class FileTile extends React.Component {
         );
         const bottomRow = isAdmin ? adminRow : userRow;
         return (
-            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile}`}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} ${statusStyle}`}>
                 {showDenialDetails ? denyDetails : ''}
                 <div className="flex-100 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -173,7 +182,7 @@ class FileTile extends React.Component {
                             <p className="flex-100">Title</p>
                         </div>
                         <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.file_text}`}>
-                            <p className="flex-100">{doc.text}</p>
+                            <p className="flex-100"><Truncate lines={1} >{doc.text} </Truncate></p>
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">

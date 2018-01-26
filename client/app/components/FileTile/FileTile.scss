@@ -65,4 +65,13 @@
     padding: 15px;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
+  .approved {
+    box-shadow: 2px 4px 3px 1px rgba(32, 201, 32, 0.5);
+  }
+  .pending {
+    box-shadow: 2px 4px 3px 1px rgba(245, 126, 29, 0.5);
+  }
+  .rejected {
+    box-shadow: 2px 4px 3px 1px rgba(210, 13, 23, 0.5);
+  }
 }

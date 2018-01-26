@@ -915,7 +915,7 @@ function documentAction(docId, action) {
         return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData };
     }
     function success(docData) {
-        return { type: adminConstants.DOCUMENT_ACTION_SUCCESS, payload: docData };
+        return { type: adminConstants.DOCUMENT_ACTION_SUCCESS, payload: docData.data };
     }
     function failure(error) {
         return { type: adminConstants.DOCUMENT_ACTION_FAILURE, error };
