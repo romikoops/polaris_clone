@@ -14,6 +14,8 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 // import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import { Modal } from '../Modal/Modal';
+import { AlertModal } from '../AlertModal/AlertModal';
 import { isEmpty } from '../../helpers/isEmpty.js';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
@@ -87,6 +89,7 @@ export class ShipmentDetails extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.setIncoTerm = this.setIncoTerm.bind(this);
         this.handleSelectLocation = this.handleSelectLocation.bind(this);
+        this.showAlert = this.showAlert.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -308,10 +311,24 @@ export class ShipmentDetails extends Component {
     setIncoTerm(opt) {
         this.setState({incoterm: opt.value});
     }
+    showAlert(message) {
+        console.log(message);
+    }
 
     render() {
-        const { theme, scope, messages, shipmentData, shipmentDispatch } = this.props;
+        const { theme, scope, shipmentData, shipmentDispatch } = this.props;
+        const messages = this.props.messages;
         let cargoDetails;
+        const alertModal = (
+            <Modal
+                component={
+                    <AlertModal
+                        message="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod massa in augue volutpat feugiat. Sed suscipit, ante vel placerat pretium, massa nisi pulvinar neque, in vestibulum dui leo eleifend augue. Aenean mattis in est vitae consequat. Curabitur at lectus vitae felis pulvinar blandit. Donec sed neque et turpis egestas luctus. Suspendisse semper ex id metus commodo, id ultrices risus varius. Sed mattis, lacus in sodales semper, neque ligula eleifend lectus, vitae malesuada magna mi sit amet tellus. Sed et rutrum turpis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Vestibulum fringilla sem leo, a ullamcorper ante gravida id. Nunc elementum interdum quam ut vestibulum."
+                    />
+                }
+                width="60vw"
+            />
+        );
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
                 cargoDetails = (
@@ -337,6 +354,7 @@ export class ShipmentDetails extends Component {
                         theme={theme}
                         scope={scope}
                         availableCargoItemTypes={shipmentData.cargoItemTypes}
+                        showAlert={this.showAlert}
                     />
                 );
             }
@@ -460,6 +478,7 @@ export class ShipmentDetails extends Component {
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
+                {alertModal}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                     { dayPickerSection }
                 </div>

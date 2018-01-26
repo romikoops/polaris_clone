@@ -3,14 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './Checkbox.scss';
 
 export class Checkbox extends Component {
-    // static propTypes = {
-    //     checked: PropTypes.bool,
-    //     disabled: PropTypes.bool,
-    // };
-    // static defaultProps = {
-    //     checked: false,
-    //     disabled: false,
-    // };
     constructor(props) {
         super(props);
         this.state = {
@@ -48,6 +40,7 @@ export class Checkbox extends Component {
                         checked={checked}
                         disabled={disabled}
                         onChange={this.handleChange}
+                        onClick={this.props.onClick}
                     />
                     <span style={sizeStyles}>
                         <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />
