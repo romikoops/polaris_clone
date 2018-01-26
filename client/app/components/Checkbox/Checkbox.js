@@ -25,7 +25,7 @@ export class Checkbox extends Component {
         this.props.onChange(!this.state.checked);
     }
     render() {
-        const { disabled, theme } = this.props;
+        const { disabled, theme, name } = this.props;
         const { checked } = this.state;
         const checkGradient = {
             background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
@@ -43,6 +43,7 @@ export class Checkbox extends Component {
                         type="checkbox"
                         checked={checked}
                         disabled={disabled}
+                        name={name}
                         onChange={this.handleChange}
                     />
                     <span style={sizeStyles}>

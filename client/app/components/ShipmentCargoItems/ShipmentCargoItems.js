@@ -65,11 +65,11 @@ export class ShipmentCargoItems extends Component {
         this.props.handleDelta(modifiedEventDimentionX);
         this.props.handleDelta(modifiedEventDimentionY);
     }
-    toggleDangerousGoods() {
+    toggleDangerousGoods(i) {
         const event = {
             target: {
-                name: 'dangerousGoods',
-                value: !this.props.cargoItems[0].dangerousGoods
+                name: i + '-dangerousGoods',
+                value: !this.props.cargoItems[i].dangerousGoods
             }
         };
         this.props.handleDelta(event);
@@ -79,8 +79,6 @@ export class ShipmentCargoItems extends Component {
     }
     render() {
         const { cargoItems, handleDelta, theme, scope } = this.props;
-        console.log('scope');
-        console.log(scope);
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
@@ -261,7 +259,8 @@ export class ShipmentCargoItems extends Component {
                             <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                         </div>
                         <Checkbox
-                            onChange={this.toggleDangerousGoods}
+                            name={`${i}-dangerous_goods`}
+                            onChange={() => this.toggleDangerousGoods(i)}
                             checked={cargoItem ? cargoItem.dangerousGoods : false}
                             theme={theme}
                             size="34px"

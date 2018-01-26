@@ -53,11 +53,11 @@ export class ShipmentContainers extends Component {
         this.setState({firstRenderInputs: bool});
     }
 
-    toggleDangerousGoods() {
+    toggleDangerousGoods(i) {
         const event = {
             target: {
-                name: 'dangerousGoods',
-                value: !this.props.containers[0].dangerousGoods
+                name: i + '-dangerousGoods',
+                value: !this.props.containers[i].dangerousGoods
             }
         };
         this.props.handleDelta(event);
@@ -205,7 +205,7 @@ export class ShipmentContainers extends Component {
                             <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                         </div>
                         <Checkbox
-                            onChange={this.toggleDangerousGoods}
+                            onChange={() => this.toggleDangerousGoods(i)}
                             checked={container ? container.dangerousGoods : false}
                             theme={theme}
                             size="34px"
