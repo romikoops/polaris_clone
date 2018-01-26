@@ -24,6 +24,7 @@ module MultiTenantTools
         "sales": "info@belglobe.com",
         "support": "info@belglobe.com"
       },
+      "web": {},
       "subdomain": "belglobe",
       "name": "Belglobe",
       "scope": {
