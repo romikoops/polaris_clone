@@ -32,7 +32,7 @@ class MessageCenter extends Component {
     }
 
     render() {
-        const  { theme, close, messageDispatch, conversations, user, shipment } = this.props;
+        const  { theme, close, messageDispatch, conversations, user, shipment, tenant } = this.props;
         if (!conversations) {
             return '';
         }
@@ -46,7 +46,7 @@ class MessageCenter extends Component {
         };
 
         const messageView = selectedConvo ?
-            <Conversation conversation={selectedConvo} theme={theme} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
+            <Conversation conversation={selectedConvo} theme={theme} tenant={tenant} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
             <div className="flex-50 layout-row layout-align-center-center">
                 <h3 className="flex-none">Please select a conversation</h3>
             </div>;

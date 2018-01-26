@@ -285,7 +285,44 @@ tenant_data = [
         }
       }
     }
-  }
+  },
+  {
+    theme: {
+      colors: {
+        primary: "#252D5C",
+        secondary: "##C42D35",
+        brightPrimary: "#4655aa",
+        brightSecondary: "#fc353e"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/logos/belglobe.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/logos/belglobe.png"
+    },
+    addresses: {
+      main:"Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
+    },
+    phones:{
+      main:"+41 (0)26 409 76 80",
+      support: "0173042031020"
+    },
+    emails: {
+      sales: "info@belglobe.com",
+      support: "info@belglobe.com"
+    },
+    subdomain: "belglobe",
+    name: "Belglobe",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      }
+    }
+}
 ]
 
 # Create tenants

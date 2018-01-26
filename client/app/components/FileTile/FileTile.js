@@ -24,6 +24,7 @@ class FileTile extends React.Component {
         this.deleteFile = this.deleteFile.bind(this);
         this.toggleShowDenial = this.toggleShowDenial.bind(this);
         this.handleDeny = this.handleDeny.bind(this);
+        this.handleApprove = this.handleApprove.bind(this);
         this.handleDenialForm = this.handleDenialForm.bind(this);
     }
     handleResponse(response) {
@@ -84,7 +85,6 @@ class FileTile extends React.Component {
         const { denial } = this.state;
         denial.type = 'approve';
         adminDispatch.documentAction(doc.id, denial);
-        this.toggleShowDenial();
     }
     toggleShowDenial() {
         this.setState({showDenialDetails: !this.state.showDenialDetails});
@@ -114,6 +114,7 @@ class FileTile extends React.Component {
             '';
         const denyDetails = (
             <div className={`flex-none layout-row layout-align-center-center  ${styles.backdrop}`}>
+                <div className={`flex-none ${styles.fade}`} onClick={this.toggleShowDenial}></div>
                 <div className={`flex-none layout-row layout-wrap layout-align-center-start  ${styles.content}`}>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <h3 className="flex-none clip" style={textStyle}>Reject document</h3>
@@ -158,7 +159,7 @@ class FileTile extends React.Component {
         const adminRow = (
             <div className="flex-100 layout-row layout-align-center-end">
                     <div className={`${styles.upload_btn_wrapper} flex-33 layout-row layout-align-center-center`}>
-                       <div className="flex-none layout-row layout-align-center-center" onClick={this.acceptFile} >
+                       <div className="flex-none layout-row layout-align-center-center" onClick={this.handleApprove} >
                             <i className="clip fa fa-check" style={textStyle}></i>
                         </div>
                     </div>

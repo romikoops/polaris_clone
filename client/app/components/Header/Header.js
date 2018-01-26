@@ -45,7 +45,7 @@ class Header extends Component {
         });
     }
     render() {
-        const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
+        const { user, theme, tenant, currencies, appDispatch, invert, unread } = this.props;
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -86,13 +86,13 @@ class Header extends Component {
                 invert={invert}
             />
         );
-        // const alertStyle = unread > 0 ? styles.unread : styles.all_read;
-        // const mail = (
-        //     <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
-        //         <span className={`${alertStyle} flex-none`}>{unread}</span>
-        //         <i className="fa fa-envelope-o"></i>
-        //     </div>
-        // ); {mail}
+        const alertStyle = unread > 0 ? styles.unread : styles.all_read;
+        const mail = (
+            <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
+                <span className={`${alertStyle} flex-none`}>{unread}</span>
+                <i className="fa fa-envelope-o"></i>
+            </div>
+        );
         let logoUrl = '';
         let logoStyle;
         if (theme && theme.logoWide) {
@@ -103,7 +103,7 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
-        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}</div>;
+        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}{mail}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -143,7 +143,7 @@ class Header extends Component {
                         {rightCorner}
                     </div>
                 </div>
-                 <div className="flex layout-row layout-align-start-center">
+                <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
                 { this.state.showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }

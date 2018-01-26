@@ -122,7 +122,7 @@ class Admin::ShipmentsController < ApplicationController
         message: "Your document #{@document.text} was approved",
         shipmentRef: @document.shipment.imc_reference
       }
-      add_message_to_convo(@user, message)
+      add_message_to_convo(@user, message, true)
     when 'reject'
       @document.approved = 'rejected'
       @document.save!
@@ -133,7 +133,9 @@ class Admin::ShipmentsController < ApplicationController
       }
       add_message_to_convo(@user, message, true)
     end
-    response_handler(@document)
+    tmp = @document.as_json
+    tmp["signed_url"] =  @document.get_signed_url
+    response_handler(tmp)
     
   end
 

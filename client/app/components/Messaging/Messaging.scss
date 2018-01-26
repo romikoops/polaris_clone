@@ -1,10 +1,13 @@
 :local {
   .message_inner {
-    border-radius: 2px;
+    // border-radius: 10px;
     // box-shadow: 0 2px 2px 1px rgba(12,13,14,0.25);
     // position: absolute;
     padding: 5px;
-    width: 95%;
+    width: 85%;
+    position: relative;
+    background: #00aabb;
+    border-radius: .4em;
   }
   .message_wrapper {
     padding: 5px;
@@ -53,8 +56,36 @@
   .user_style {
     right: 5px;
   }
+  .user_style:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 75%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    // border-left-color: #00aabb;
+    border-right: 0;
+    border-bottom: 0;
+    margin-top: -10px;
+    margin-right: -20px;
+  }
   .tenant_style {
     left: 5px;
+  }
+  .tenant_style:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 75%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    // border-right-color: #00aabb;
+    border-left: 0;
+    border-bottom: 0;
+    margin-top: -10px;
+    margin-left: -20px;
   }
   .show_details {
     width: 100%;
