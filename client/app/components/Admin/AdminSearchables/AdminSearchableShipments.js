@@ -15,14 +15,6 @@ export class AdminSearchableShipments extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
-    seeAll() {
-        const {seeAll, adminDispatch} = this.props;
-        if (seeAll) {
-            seeAll();
-        } else {
-            adminDispatch.goTo('/admin/shipments');
-        }
-    }
     handleClick(shipment) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {
@@ -31,8 +23,15 @@ export class AdminSearchableShipments extends Component {
             adminDispatch.getShipment(shipment.id, true);
         }
     }
+    seeAll() {
+        const {seeAll, adminDispatch} = this.props;
+        if (seeAll) {
+            seeAll();
+        } else {
+            adminDispatch.goTo('/admin/shipments');
+        }
+    }
     handleSearchChange(event) {
-        console.log(event.target.value);
         if (event.target.value === '') {
             this.setState({
                 shipments: this.props.shipments
@@ -47,7 +46,7 @@ export class AdminSearchableShipments extends Component {
                 location: 0,
                 distance: 50,
                 maxPatternLength: 32,
-                minMatchCharLength: 2,
+                minMatchCharLength: 5,
                 keys: keys
             };
             const fuse = new Fuse(this.props.shipments, options);
@@ -55,24 +54,32 @@ export class AdminSearchableShipments extends Component {
             return fuse.search(event.target.value);
         };
 
-        const filteredShipments = search(['clientName', 'imc_reference', 'companyName', 'originHub', 'destinationHub']);
-        console.log(filteredShipments);
+        const filteredShipments = search(['imc_reference', 'companyName', 'originHub', 'destinationHub']);
+
         this.setState({
             shipments: filteredShipments
         });
     }
+    limitArray(shipments) {
+        const { limit } = this.props;
+        return limit ?
+            shipments.slice(0, limit)
+            : shipments;
+    }
     render() {
         const { hubs, theme, handleShipmentAction, title, userView, seeAll } = this.props;
         const { shipments } = this.state;
+
+
         let shipmentsArr;
         if (shipments.length) {
-            shipmentsArr = shipments.map((ship) => {
+            shipmentsArr = this.limitArray(shipments).map((ship) => {
                 return  userView ?
                     <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
                     : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
             });
         } else if (this.props.shipments) {
-            shipmentsArr = shipments.map((ship) => {
+            shipmentsArr = this.limitArray(this.props.shipments).map((ship) => {
                 return  userView ?
                     <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
                     : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;

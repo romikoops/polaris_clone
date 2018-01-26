@@ -31,6 +31,7 @@ export class AdminSearchableClients extends Component {
         }
     }
     handleSearchChange(event) {
+        console.log(this.props.clients);
         if (event.target.value === '') {
             this.setState({
                 clients: this.props.clients

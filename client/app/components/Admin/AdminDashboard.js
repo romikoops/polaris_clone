@@ -81,6 +81,11 @@ export class AdminDashboard extends Component {
 
         console.log(shipments);
 
+        const mergedRequestedShipments = shipments && shipments.requested ?
+            shipments.requested.map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
         const mergedOpenShipments = shipments && shipments.open ?
             shipments.open.map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
@@ -91,15 +96,10 @@ export class AdminDashboard extends Component {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
-        const mergedRequestedShipments = shipments && shipments.requested ?
-            shipments.requested.map((sh) => {
-                return this.prepShipment(sh, clientHash, hubHash);
-            }) : false;
-
-        // const mergedRequestedShipments = false;
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedRequestedShipments}
                 adminDispatch={adminDispatch}
@@ -107,9 +107,11 @@ export class AdminDashboard extends Component {
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
             /> : '';
+
         const openShipments = mergedOpenShipments ?
             <AdminSearchableShipments
                 title="Open Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedOpenShipments}
                 adminDispatch={adminDispatch}
@@ -117,9 +119,11 @@ export class AdminDashboard extends Component {
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
             /> : '';
+
         const finishedShipments = mergedFinishedShipments ?
             <AdminSearchableShipments
                 title="Finished Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedFinishedShipments}
                 adminDispatch={adminDispatch}
