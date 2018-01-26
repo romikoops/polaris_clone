@@ -316,20 +316,40 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        const { tenant, shipmentData, shipmentDispatch } = this.props;
-        const { theme, scope, emails } = tenant.data;
+        const { tenant, user, shipmentData, shipmentDispatch } = this.props;
+        const { theme, scope, emails, phones } = tenant.data;
         const messages = this.props.messages;
         let cargoDetails;
+        const alertModalMessage = (
+            <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
+                <span>
+                    Hi {user.data.first_name} {user.data.last_name},<br/>
+                    We currently do not offer freight rates for hazardous cargo in our Web Shop.
+                    Please contact our customer service department
+                    to place an order for your dangerous cargo:<br/>
+                </span><br/>
+
+                <span style={{marginRight: '10px'}}> Contact via phone:</span>
+                <span>{phones.support}</span><br/>
+
+                <span style={{marginRight: '20px'}}> Contact via mail: </span>
+                <span>
+                    <a href={`mailto:${emails.support}?subject=Dangerous Goods Request`}>
+                        {emails.support}
+                    </a>
+                </span>
+            </p>
+        );
         const alertModal = this.state.alertModalShowing ? (
             <Modal
                 component={
                     <AlertModalBody
-                        message="If you would like to ship dangerous goods, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod massa in augue volutpat feugiat. Sed suscipit, ante vel placerat pretium, massa nisi pulvinar neque, in vestibulum dui leo."
-                        email={emails.support}
+                        message={alertModalMessage}
+                        logo={theme.logoSmall}
                         toggleAlertModal={this.toggleAlertModal}
                     />
                 }
-                width="60vw"
+                width="50vw"
                 minHeight="1px"
                 parentToggle={this.toggleAlertModal}
             />

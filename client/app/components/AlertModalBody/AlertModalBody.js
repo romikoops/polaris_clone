@@ -15,19 +15,30 @@ export class AlertModalBody extends Component {
                     className={`${styles.exit_icon} fa fa-times`}
                     onClick={() => this.props.toggleAlertModal()}
                 ></i>
+
                 <div
                     className="flex-100"
-                    style={{textAlign: 'justify', padding: '30px'}}
+                    style={{padding: '20px'}}
                 >
-                    <div className="flex-100">
-                        {this.props.message}
+                    <div>
+                        <img
+                            src={this.props.logo}
+                            style={{height: '50px'}}
+                        />
                     </div>
-                    <hr/>
-                    <div className="flex-100">
-                        Please Contact: &nbsp;&nbsp;
-                        <a href={`mailto:${this.props.email}?subject=Dangerous Goods Request`}>
-                            {this.props.email}
-                        </a>
+
+                    {this.props.message}
+
+                    <div className="flex-100 layout-row layout-align-end">
+                        <div>
+                            <span style={{fontSize: '10px', marginRight: '2px'}}>
+                                Powered by
+                            </span>
+                            <img
+                                src="https://assets.itsmycargo.com/assets/logos/logo_box.png"
+                                style={{height: '20px', marginBottom: '-2px'}}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

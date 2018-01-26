@@ -79,6 +79,8 @@ export class ShipmentCargoItems extends Component {
     }
     render() {
         const { cargoItems, handleDelta, theme, scope } = this.props;
+        console.log('scope');
+        console.log(scope);
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
