@@ -1,7 +1,7 @@
 <spacer size="16"></spacer>
 
 <center>
-  <%= image_tag attachments['logo.png'].url %>
+  <%= image_tag attachments['logo.png'].url, height: 120 %>
 </center>
 
 <spacer size="16"></spacer>
@@ -28,7 +28,7 @@
 
 <row>
   <columns small='2'> 
-    <%= image_tag attachments['logo_small.png'].url %>
+    <%= image_tag attachments['logo_small.png'].url, height: 50 %>
   </columns>
 </row>
 

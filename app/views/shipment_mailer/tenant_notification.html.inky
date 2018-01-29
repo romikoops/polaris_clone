@@ -2,7 +2,7 @@
 <spacer size="16"></spacer>
 
 <center>
-  <%= image_tag attachments['logo.png'].url %>
+  <%= image_tag attachments['logo.png'].url, height: 120 %>
 </center>
 
 <spacer size="16"></spacer>
@@ -16,8 +16,10 @@
 <%= render "details_body" %>
 
 <row>
-  <% base_url = "#{@shipment.tenant.subdomain}.itsmycargo.com/" %>
+  <!-- <% base_url = "http://#{@shipment.tenant.subdomain}.itsmycargo.com/" %> -->
+  <% base_url = "http://localhost:8080/" %>
   <% redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action=" %>
+
   <columns small="2">
     <center>
       <button href="<%= redirects_base_url %>accept" class="success radius">Accept</button>
