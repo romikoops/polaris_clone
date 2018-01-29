@@ -207,13 +207,13 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
-            const req = state.shipments.requested.filter(x => x.id !== action.payload.id);
-            const dashReq = state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id);
-            const open = state.shipments.open;
-            const dashOpen = state.dashboard.shipments.open;
+            const req = state.shipments && state.shipments.requested ? state.shipments.requested.filter(x => x.id !== action.payload.id) : [];
+            const dashReq = state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id) : [];
+            const open = state.shipments && state.shipments.open ? state.shipments.open : [];
+            const dashOpen = state.dashboard && state.dashboard.shipments && state.dashboard.shipments.open ? state.dashboard.shipments.open : [];
             open.push(action.payload);
             dashOpen.push(action.payload);
-            const shipment = state.shipment.shipment;
+            const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {};
             if (shipment) {
                 shipment.status = 'confirmed';
             }
@@ -250,8 +250,8 @@ export function admin(state = {}, action) {
                 loading: true
             };
         case adminConstants.DENY_SHIPMENT_SUCCESS:
-            const denReq = state.shipments.requested.filter(x => x.id !== action.payload.id);
-            const denDashReq = state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id);
+            const denReq = state.shipments && state.shipments.requested ? state.shipments.requested.filter(x => x.id !== action.payload.id) : [];
+            const denDashReq = state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id) : [];
             return {
                 ...state,
                 dashboard: {

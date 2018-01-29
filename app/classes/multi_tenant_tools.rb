@@ -156,7 +156,24 @@ module MultiTenantTools
           default_root_object: path,
           price_class: price_class,
           viewer_certificate: viewer_certificate,
-          enabled: true }
+          enabled: true },
+        custom_error_responses: {
+          quantity: 2, # required
+          items: [
+            {
+              error_code: 403, # required
+              response_page_path: "/#{subd}.html",
+              response_code: "200",
+              error_caching_min_ttl: 1,
+            },
+            {
+              error_code: 404, # required
+              response_page_path: "/#{subd}.html",
+              response_code: "200",
+              error_caching_min_ttl: 1,
+            }
+          ],
+        }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
       tenant = Tenant.find_by_subdomain(subd)

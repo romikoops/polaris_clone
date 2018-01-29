@@ -44,160 +44,27 @@ class Tenant < ApplicationRecord
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
     end
   end
-  def self.update_scope
-    tdata = [
-{      name: "Greencarrier",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: true,
-          cargo_item: true
-        }
-      },
-      dangerous_goods: false
-    }},
-{name: "Demo",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: true,
-          cargo_item: true
-        }
-      },
-      dangerous_goods: false
-    }},
-{name: "Nordic Consolidators",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: true,
-          cargo_item: true
-        }
-      },
-      dangerous_goods: false
-    }},
-{name: "Easyshipping",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: true,
-          cargo_item: true
-        }
-      },
-      dangerous_goods: false
-    }},
-{name: "Integrail",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: false,
-          cargo_item: false
-        },
-        rail: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: false,
-          cargo_item: false
-        }
-      },
-      dangerous_goods: false
-    }},
-{name: "Inter-Scan Sea & Air",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: false,
-          cargo_item: false
-        },
-        air: {
-          container: false,
-          cargo_item: true
-        }
-      },
-      dangerous_goods: false
-    }
-  }, {name: "Eimskip",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        rail: {
-          container: false,
-          cargo_item: false
-        },
-        air: {
-          container: false,
-          cargo_item: false
-        }
-      },
-      dangerous_goods: false
-    }
-    },
-    {name: "Belglobe",
-        scope: {
-      dangerous_goods: false,
-          modes_of_transport: {
-            ocean: {
-              container: true,
-              cargo_item: true
-            },
-            air: {
-              container: true,
-              cargo_item: true
-            },
-            rail: {
-              container: false,
-              cargo_item: false
-            }
-          }
-        }
-      }
+  def self.update_web
+    web_data = [
+      {subdomain: "greencarrier", cloudfront: 'E1HIJBT7WVXAP3'},
+      {subdomain: "demo", cloudfront: 'E20JU5F52LP1AZ', index: 'index.html'},
+      {subdomain: "nordicconsolidators", cloudfront: 'E3P24SVVXVUTZO'},
+      {subdomain: "isa", cloudfront: 'E33QYEB8CF5AW0'},
+      {subdomain: "integrail", cloudfront: 'E1WJTKUIV6CYP3'},
+      {subdomain: "easyshipping", cloudfront: 'E2VR366CPGNLTC'},
+      {subdomain: "belglobe", cloudfront: 'E42GZPFHU0WZO'},
+      {subdomain: "eimskip", cloudfront: 'E1XPLYJA1HASN3'},
     ]
-    tdata.each do |t|
-      tenant = Tenant.find_by_name(t[:name])
-      tenant.scope = t[:scope]
-      tenant.save!
+    web_data.each do |wd|
+      t = Tenant.find_by_subdomain(wd[:subdomain])
+      if !t.web
+        t.web = {}
+      end
+      t.web[:sudomain] = wd[:subdomain]
+      t.web[:cloudfront] = wd[:cloudfront]
+      t.save!
     end
+    
   end
   
   def mot_scope_attributes(mot)
