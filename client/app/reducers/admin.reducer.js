@@ -475,10 +475,16 @@ export function admin(state = {}, action) {
             });
             return reqDocAction;
         case adminConstants.DOCUMENT_ACTION_SUCCESS:
-            const succDocAction = merge({}, state, {
+            const docs = state.shipment.documents.filter(x => x.id !== action.payload.id);
+            docs.push(action.payload);
+            return {
+                ...state,
+                shipment: {
+                    ...state.shipment,
+                    documents: docs
+                },
                 loading: false
-            });
-            return succDocAction;
+            };
         case adminConstants.DOCUMENT_ACTION_FAILURE:
             const errDocAction = merge({}, state, {
                 error: { documents: action.error }

@@ -38,7 +38,7 @@ export class AdminSearchableRoutes extends Component {
             });
             return;
         }
-        const search = (key) => {
+        const search = (keys) => {
             const options = {
                 shouldSort: true,
                 tokenize: true,
@@ -46,8 +46,8 @@ export class AdminSearchableRoutes extends Component {
                 location: 0,
                 distance: 50,
                 maxPatternLength: 32,
-                minMatchCharLength: 2,
-                keys: [key]
+                minMatchCharLength: 5,
+                keys: keys
             };
             const fuse = new Fuse(this.props.routes, options);
             console.log(fuse);

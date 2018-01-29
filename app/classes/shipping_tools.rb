@@ -53,6 +53,7 @@ module ShippingTools
     end
 
     if offer_calculation.shipment.save
+      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
       return {
         shipment:                   offer_calculation.shipment,
         total_price:                offer_calculation.total_price,
@@ -61,7 +62,8 @@ module ShippingTools
         schedules:                  offer_calculation.schedules,
         truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
         originHubs:                 offer_calculation.origin_hubs,
-        destinationHubs:            offer_calculation.destination_hubs
+        destinationHubs:            offer_calculation.destination_hubs,
+        cargoUnits:                 cargo_units
       }
     else
       raise ApplicationError::NoRoutes # TBD - Customize Errors
@@ -288,7 +290,7 @@ module ShippingTools
     File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
     doc_pdf = File.open("tmp/" + doc_name)
     
-    doc = Document.new_upload_backend(doc_pdf, args[:shipment], 'confirmation', current_user)
+    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
     doc_url = doc.get_signed_url
     
     { name: doc_name, url: doc_url }

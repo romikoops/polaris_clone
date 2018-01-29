@@ -80,7 +80,8 @@ export class ChooseRoute extends Component {
             shipment,
             originHubs,
             destinationHubs,
-            schedules
+            schedules,
+            cargoUnits
         } = shipmentData;
         const depDay = shipment ? shipment.planned_pickup_date : new Date();
         schedules.sort(this.dynamicSort('etd'));
@@ -165,16 +166,21 @@ export class ChooseRoute extends Component {
 
         const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes;
         const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes;
-
+        const cargoText = cargoUnits.length > 1 ? 'Cargo Items' : 'Cargo Item';
+        const containerText = cargoUnits.length > 1 ? 'Containers' : 'Container';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap" style={{marginTop: '62px', marginBottom: '166px'}}>
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
+
                     <div className="flex-20 layout-row layout-wrap">
-                        <RouteFilterBox theme={theme} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} departureDate={depDay} setDepartureDate={this.setDepDate}/>
+                        <RouteFilterBox theme={theme} pickup={shipment.has_pre_carriage} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} departureDate={depDay} setDepartureDate={this.setDepDate}/>
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <p className={`flex-none ${styles.one_line_summ}`}> Shipping {cargoUnits.length} x {shipment.load_type === 'cargo_item' ? cargoText : containerText} to {destinationHubs[0].name.split(' ')[0]}</p>
+                        </div>
                         <div className="flex-100 layout-row">
                             <BestRoutesBox moT={this.state.selectedMoT} user={user} chooseResult={this.chooseResult} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>

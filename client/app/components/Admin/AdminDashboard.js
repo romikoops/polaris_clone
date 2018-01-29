@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
+import defaults from '../../styles/default_classes.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
+import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import { Loading } from '../../components/Loading/Loading';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
-import { SubTextHeading } from '../TextHeadings/SubTextHeading';
-
+import {Carousel} from '../Carousel/Carousel';
+import { activeRoutesData } from '../../constants';
+import ustyles from '../UserAccount/UserAccount.scss';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -64,7 +66,7 @@ export class AdminDashboard extends Component {
     }
 
     render() {
-        const { theme, dashData, clients, hubs, hubHash, adminDispatch } = this.props;
+        const { theme, dashData, clients, hubs, hubHash, adminDispatch, activeRoutesData } = this.props;
         // ;
         if (!dashData) {
             return <Loading theme={theme} />;
@@ -84,6 +86,11 @@ export class AdminDashboard extends Component {
 
         console.log(shipments);
 
+        const mergedRequestedShipments = shipments && shipments.requested ?
+            shipments.requested.map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
         const mergedOpenShipments = shipments && shipments.open ?
             shipments.open.map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
@@ -94,14 +101,10 @@ export class AdminDashboard extends Component {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
-        const mergedRequestedShipments = shipments && shipments.requested ?
-            shipments.requested.map((sh) => {
-                return this.prepShipment(sh, clientHash, hubHash);
-            }) : false;
-
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedRequestedShipments}
                 adminDispatch={adminDispatch}
@@ -109,9 +112,11 @@ export class AdminDashboard extends Component {
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
             /> : '';
+
         const openShipments = mergedOpenShipments ?
             <AdminSearchableShipments
                 title="Open Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedOpenShipments}
                 adminDispatch={adminDispatch}
@@ -119,9 +124,11 @@ export class AdminDashboard extends Component {
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
             /> : '';
+
         const finishedShipments = mergedFinishedShipments ?
             <AdminSearchableShipments
                 title="Finished Shipments"
+                limit={3}
                 hubs={hubHash}
                 shipments={mergedFinishedShipments}
                 adminDispatch={adminDispatch}
@@ -142,25 +149,75 @@ export class AdminDashboard extends Component {
         }
         const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5);
         return(
+
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
-                    <MainTextHeading theme={theme} text="Dashboard" />
-                </div>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    { requestedShipments }
-                    { openShipments }
-                    { finishedShipments }
-                </div>
-                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
-                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <SubTextHeading theme={theme} text="Schedules" />
+
+                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+
+                        <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
+                            <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
+                                <h2 className="flex-none">Welcome back, Admin</h2>
+                            </div>
+
+                            <div className={`flex-none layout-row layout-align-center-center ${ustyles.carousel}`}>
+                                <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade/>
+                            </div>
+                            <div className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}>
+                                <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
+                            </div>
+                            {/* </div>*/}
+                            <div className={`flex-50 layout-row ${ustyles.right} layout-wrap layout-align-space-between-space-between`}>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Total Shipments</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedRequestedShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Requested Shipments</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{mergedOpenShipments.length}</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Shipments in Progress</h3>
+                                    </div>
+                                </div>
+                                <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
+                                    <h1 className="flex-none">{ mergedFinishedShipments.length }</h1>
+                                    <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
+                                        <h3 className="flex-none " >Completed Shipments</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    { shortSchedArr }
+                    <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
+                        <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
+                    </div>
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                        { requestedShipments }
+                        { openShipments }
+                        { finishedShipments }
+                    </div>
+                    <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                    <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                            <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
+                        </div>
+                        { shortSchedArr }
+                    </div>
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                        <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
+                    </div>
                 </div>
-                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
-                <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
             </div>
+
         );
     }
 }

@@ -5,7 +5,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    devtool: 'eval-source-map',
+    devtool: 'cheap-eval-source-map',
     entry: [
         // 'react-hot-loader/patch',
         '@babel/polyfill',
@@ -55,7 +55,7 @@ module.exports = {
                         presets: [
                             ["@babel/env", {
                                 "targets": {
-                                    'browsers': ['Chrome >=59']
+                                    'browsers': ['Chrome >=59', 'IE >= 9']
                                 },
                                 "modules":false,
                                 "loose":true

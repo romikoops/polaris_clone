@@ -30,11 +30,11 @@ export class RouteFilterBox extends Component {
         this.props.setDurationFilter(dur);
     }
     render() {
-        const { theme } = this.props;
+        const { theme, pickup } = this.props;
         return (
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
-                    <p> Closing Date </p>
+                    <p> { pickup ? 'Pickup Date' : 'Closing Date' } </p>
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
