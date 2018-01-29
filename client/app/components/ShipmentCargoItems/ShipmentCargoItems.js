@@ -75,7 +75,6 @@ export class ShipmentCargoItems extends Component {
                 value: !this.props.cargoItems[0].dangerousGoods
             }
         };
-        // this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
         this.props.handleDelta(event);
     }
     deleteCargo(index) {

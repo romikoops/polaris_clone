@@ -159,7 +159,7 @@ export class ShipmentDetails extends Component {
         const addObj = this.state[key1];
         addObj[key2] = val;
         let fullAddress = this.state[key1].fullAddress;
-        // ;
+
         if (fullAddress) {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }
@@ -172,6 +172,8 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { cargoItems, cargoItemsErrors } = this.state;
+        if (!cargoItems[index]) return;
+
         cargoItems[index][suffixName] = value;
         if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError;
         this.setState({ cargoItems, cargoItemsErrors });
