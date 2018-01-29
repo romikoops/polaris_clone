@@ -412,8 +412,11 @@ export class ShipmentDetails extends Component {
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
-        const future = {
-            after: new Date(),
+        // const future = {
+        //     after: new Date(moment().add(7, 'days').format('DD/MM/YYYY'))
+        // };
+        const dayPickerProps = {
+            disabledDays: {before: new Date(moment().add(7, 'days').format())}
         };
 
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;
@@ -459,7 +462,7 @@ export class ShipmentDetails extends Component {
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                         {' '}
                     </div>
-                    <div className={'flex-none layout-row ' + styles.dpb}>
+                    <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError ? styles.with_errors : ''}`}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
                         </div>
@@ -468,9 +471,8 @@ export class ShipmentDetails extends Component {
                             placeholder="DD/MM/YYYY"
                             format="DD/MM/YYYY"
                             value={formattedSelectedDay}
-                            className={`${styles.dpb_picker} ${showDayPickerError ? styles.with_errors : ''}`}
                             onDayChange={this.handleDayChange}
-                            modifiers={future}
+                            dayPickerProps={dayPickerProps}
                         />
                         <span className={errorStyles.error_message}>
                             {showDayPickerError ? 'Must not be blank' : ''}

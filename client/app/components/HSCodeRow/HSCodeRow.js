@@ -15,23 +15,21 @@ export class HSCodeRow extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hsCodes: {}
+            hsCodes: {},
+            clipboard: {}
         };
-        this.setHsCode = this.setHsCode.bind(this);
+        this.copyCodes = this.copyCodes.bind(this);
+        this.pasteCodes = this.pasteCodes.bind(this);
+        this.deleteCode = this.deleteCode.bind(this);
+        this.reduceCargos = this.reduceCargos.bind(this);
     }
-    setHsCode(id, codes) {
-        let exCodes;
-        if (this.state.hsCodes[id]) {
-            exCodes = [...this.state.hsCodes[id], ...codes];
-        } else {
-            exCodes = codes;
-        }
-        this.setState({
-            hsCodes: {
-                ...this.state.hsCodes,
-                [id]: exCodes
-            }
-        });
+
+    copyCodes(cgId) {
+        this.setState({clipboard: this.props.hsCodes[cgId], showPaste: true});
+        console.log(this.state.hsCodes[cgId]);
+    }
+    pasteCodes(cgId) {
+        this.props.setCode(cgId, this.state.clipboard);
     }
     deleteCode(cargoId, code) {
         const codes = this.state.hsCodes[cargoId];
@@ -57,7 +55,7 @@ export class HSCodeRow extends Component {
 
     render() {
         const { containers, cargoItems, hsCodes, theme } = this.props;
-        // const { hsCodes } = this.state;
+        const { showPaste } = this.state;
         const containersAdded = [];
         const cargoItemsAdded = [];
         const getOptions = (input) => {
@@ -113,6 +111,20 @@ export class HSCodeRow extends Component {
 
                             <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
                         </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste:{' '}</p>
+
+                            <div className="flex-100 layout-row" style={{margin: '1em 0'}}>
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.copyCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clone clip" style={textStyle}></i>
+                                </div>
+                                {showPaste ?
+                                    <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.pasteCodes(cont.cargo_group_id)}>
+                                        <i className="fa fa-clipboard clip" style={textStyle}></i>
+                                    </div> :
+                                    '' }
+                            </div>
+                        </div>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <NamedAsync
                                 classes="flex-50"
@@ -156,9 +168,22 @@ export class HSCodeRow extends Component {
                             <p className={`flex-100 ${styles.cell_header}`}>Height</p>
                             <p className="flex-100">{cont.dimension_z} cm</p>
                         </div>
-                        <div className="flex-20 layout-row layout-align-center-center layout-wrap">
+                        <div className="flex-15 layout-row layout-align-center-center layout-wrap">
                             <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
                             <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
+                        </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste:{' '}</p>
+
+                            <div className="flex-100 layout-row" style={{margin: '1em 0'}}>
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.copyCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clone clip" style={textStyle}></i>
+                                </div>
+
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.pasteCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clipboard clip" style={textStyle}></i>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <NamedAsync

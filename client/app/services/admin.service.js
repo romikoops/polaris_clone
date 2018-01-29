@@ -296,6 +296,14 @@ function saveNewHub(hub, location) {
     };
     return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
 }
+function newRoute(route) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({route})
+    };
+    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+}
 
 export const adminService = {
     getHubs,
@@ -326,5 +334,6 @@ export const adminService = {
     newClient,
     activateHub,
     documentAction,
-    saveNewHub
+    saveNewHub,
+    newRoute
 };
