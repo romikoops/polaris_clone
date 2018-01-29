@@ -11,10 +11,12 @@ class Tenant < ApplicationRecord
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
     
+  validates :scope, presence: true, scope: true
+
   def get_admin
-    return self.users.where(role_id: 1).first
+    self.users.where(role_id: 1).first
   end
-  # Generates the static info for the choose route page
+
   def update_route_details
     routes = Route.where(tenant_id: self.id)
     detailed_routes = routes.map do |route, h|
@@ -41,6 +43,28 @@ class Tenant < ApplicationRecord
     mot.each_with_object({}) do |(k, v), h|
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
     end
+  end
+  def self.update_web
+    web_data = [
+      {subdomain: "greencarrier", cloudfront: 'E1HIJBT7WVXAP3'},
+      {subdomain: "demo", cloudfront: 'E20JU5F52LP1AZ', index: 'index.html'},
+      {subdomain: "nordicconsolidators", cloudfront: 'E3P24SVVXVUTZO'},
+      {subdomain: "isa", cloudfront: 'E33QYEB8CF5AW0'},
+      {subdomain: "integrail", cloudfront: 'E1WJTKUIV6CYP3'},
+      {subdomain: "easyshipping", cloudfront: 'E2VR366CPGNLTC'},
+      {subdomain: "belglobe", cloudfront: 'E42GZPFHU0WZO'},
+      {subdomain: "eimskip", cloudfront: 'E1XPLYJA1HASN3'},
+    ]
+    web_data.each do |wd|
+      t = Tenant.find_by_subdomain(wd[:subdomain])
+      if !t.web
+        t.web = {}
+      end
+      t.web[:sudomain] = wd[:subdomain]
+      t.web[:cloudfront] = wd[:cloudfront]
+      t.save!
+    end
+    
   end
   
   def mot_scope_attributes(mot)

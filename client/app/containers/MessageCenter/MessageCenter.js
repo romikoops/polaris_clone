@@ -14,11 +14,6 @@ class MessageCenter extends Component {
         this.selectConvo = this.selectConvo.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
     }
-    componentDidUpdate() {
-        if (!this.state.selectedConvo) {
-            this.selectConvo(this.props.converstations[Object.keys(this.props.converstations)[0]]);
-        }
-    }
     selectConvo(conv) {
         conv.shipmentRef = conv.messages[0].shipmentRef;
         this.setState({selectedConvo: conv});
@@ -32,7 +27,7 @@ class MessageCenter extends Component {
     }
 
     render() {
-        const  { theme, close, messageDispatch, conversations, user, shipment } = this.props;
+        const  { theme, close, messageDispatch, conversations, user, shipment, tenant, clients } = this.props;
         if (!conversations) {
             return '';
         }
@@ -41,13 +36,16 @@ class MessageCenter extends Component {
             return <ConvoTile theme={theme} conversation={conversations[ms]} convoKey={ms} viewConvo={this.selectConvo} />;
         });
         const selectedConvo = this.state.selectedConvo;
+        // const textStyle = {
+        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        // };
         const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+            color: 'white'
         };
-
+        console.log(clients);
         const messageView = selectedConvo ?
-            <Conversation conversation={selectedConvo} theme={theme} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
-            <div className="flex-50 layout-row layout-align-center-center">
+            <Conversation conversation={selectedConvo} theme={theme} tenant={tenant} clients={clients} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
+            <div className="flex-50 layout-row width_100 layout-align-center-start">
                 <h3 className="flex-none">Please select a conversation</h3>
             </div>;
         return (
@@ -55,9 +53,10 @@ class MessageCenter extends Component {
                 <div className={`flex-none ${styles.fade}`} onClick={() => close()}></div>
                 <div className={`flex-none layout-column layout-align-start-start ${styles.message_center}`} >
                     <div className="flex-10 width_100 layout-row layout-align-space-between-center">
-                        <h3 className="flex-none clip letter_3" style={textStyle}>Message Center</h3>
+                        {/* <h3 className="flex-none clip letter_3" style={textStyle}>Message Center</h3>*/}
+                        <h3 className="flex-none letter_3" style={textStyle}>Message Center</h3>
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => close()}>
-                            <i className="fa fa-times clip" style={textStyle} ></i>
+                            <i className="fa fa-times" style={textStyle} ></i>
                         </div>
                     </div>
                     <div className="flex-90 width_100 layout-row layout-align-start-start">
@@ -75,9 +74,10 @@ class MessageCenter extends Component {
     }
 }
 function mapStateToProps(state) {
-    const { users, authentication, tenant, messaging } = state;
+    const { users, authentication, tenant, messaging, admin } = state;
     const { user, loggedIn } = authentication;
     const { conversations, unread, shipment } = messaging;
+    const { clients } = admin;
     return {
         user,
         users,
@@ -86,7 +86,8 @@ function mapStateToProps(state) {
         theme: tenant.data.theme,
         loggedIn,
         unread,
-        shipment
+        shipment,
+        clients
     };
 }
 function mapDispatchToProps(dispatch) {

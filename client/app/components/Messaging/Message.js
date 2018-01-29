@@ -1,28 +1,89 @@
 import React, { Component } from 'react';
 import styles from './Messaging.scss';
 import { moment } from '../../constants';
+import styled from 'styled-components';
 export class Message extends Component {
     constructor(props) {
         super(props);
+        this.checkAdmin = this.checkAdmin.bind(this);
+    }
+    checkAdmin(User, Admin) {
+        const  { message, user, client } = this.props;
+        if (client && message.sender_id === client.id) {
+            return User;
+        }
+        if (client && message.sender_id !== client.id) {
+            return Admin;
+        }
+        if (!client && message.sender_id === user.data.id) {
+            return User;
+        }
+        if (!client && message.sender_id !== user.data.id) {
+            return Admin;
+        }
+        return '';
     }
 
     render() {
-        const  { message, theme } = this.props;
+        const  { message, theme, tenant, user, client } = this.props;
+        const isAdmin = user.data.role_id === 1;
         const messageStyle = message.sender_id === message.user_id ? styles.user_style : styles.tenant_style;
-        // const msgShadow = message.sender_id === message.user_id ? {boxShadow: `5px 4px 13px 0px ${theme.colors.primary}50`} : {boxShadow: `5px 4px 13px 0px ${theme.colors.secondary}50`};
-        const msgBg = message.sender_id === message.user_id ? {background: `${theme.colors.primary}`, color: 'white'} : {background: `${theme.colors.secondary}`, color: 'white'};
+        const UserMessage = styled.div`
+            background: #fff;
+            border: 2px solid ${theme.colors.secondary};
+            :after {
+                content: '';
+                position: absolute;
+                right: 0;
+                top: 75%;
+                width: 0;
+                height: 0;
+                border: 20px solid transparent;
+                border-left-color: ${theme.colors.secondary};
+                border-right: 0;
+                border-bottom: 0;
+                margin-top: -10px;
+                margin-right: -20px;
+              }
+        `;
+        const AdminMessage = styled.div`
+            background-color: #fff;
+            border: 2px solid ${theme.colors.brightPrimary};
+            :after {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 75%;
+                width: 0;
+                height: 0;
+                border: 20px solid transparent;
+                border-right-color: ${theme.colors.brightPrimary};
+                border-left: 0;
+                border-bottom: 0;
+                margin-top: -10px;
+                margin-left: -20px;
+              }
+        `;
+        const adminMeta = client && message.sender_id !== user.data.id ?
+            <p className={`flex-none ${styles.timestamp}`}>{client.first_name} {client.last_name} @ {moment.unix(message.timestamp).format('lll')}</p> :
+            <p className={`flex-none ${styles.timestamp}`}>You  @ {moment.unix(message.timestamp).format('lll')}</p>;
+        const userMeta = message.sender_id === user.data.id ?
+            <p className={`flex-none ${styles.timestamp}`}>You @ {moment.unix(message.timestamp).format('lll')}</p> :
+            <p className={`flex-none ${styles.timestamp}`}>{tenant.data.name} Admin @ {moment.unix(message.timestamp).format('lll')}</p>;
+        const meta = isAdmin ? adminMeta : userMeta;
+        const Comp = this.checkAdmin(UserMessage, AdminMessage);
         return (
             <div className={`flex-100 layout-row ${styles.message_wrapper}`}>
-                {message.sender_id === message.user_id ? <div className="flex-5"></div> : ''}
-                <div className={`flex-none layout-row layout-align-start-center layout-wrap ${messageStyle} ${styles.message_inner}`} style={msgBg}>
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.message_title}`}>
-                        <p className="flex-none">{message.title}</p>
-                        <p className={`flex-none ${styles.timestamp}`}>{moment.unix(message.timestamp).format('lll')}</p>
+                {message.sender_id === message.user_id ? <div className="flex-25"></div> : <div className="flex-5"></div> }
+                <Comp className={`flex-none layout-row layout-align-start-center layout-wrap ${messageStyle} ${styles.message_inner}`}>
+                    <div className="flex-100 layout-row layout-align-space-between-center">
+                        <h3 className={`flex-none ${styles.message_title}`}>{message.title}</h3>
+                        {meta}
                     </div>
-                    <div className={`flex-100 layout-row layout-align-start-center ${styles.message_text}`}>
-                        <p className="flex-none">{message.message}</p>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <p className={`flex-none ${styles.message_text}`}>{message.message}</p>
                     </div>
-                </div>
+                </Comp>
             </div>
         );
     }

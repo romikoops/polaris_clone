@@ -9,6 +9,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
 import { v4 } from 'node-uuid';
 import { Tooltip } from '../Tooltip/Tooltip';
+import ReactTooltip from 'react-tooltip';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -54,6 +55,8 @@ export class ShipmentCargoItems extends Component {
         this.setState({cargoItemTypes: newCargoItemTypes});
         this.props.handleDelta(modifiedEvent);
 
+        console.log('event');
+        console.log(event);
         if (!event.dimension_x) return;
 
         const modifiedEventDimentionX = {
@@ -65,22 +68,24 @@ export class ShipmentCargoItems extends Component {
         this.props.handleDelta(modifiedEventDimentionX);
         this.props.handleDelta(modifiedEventDimentionY);
     }
-    toggleDangerousGoods() {
+    toggleDangerousGoods(i) {
         const event = {
             target: {
-                name: 'dangerousGoods',
-                value: !this.props.cargoItems[0].dangerousGoods
+                name: i + '-dangerousGoods',
+                value: !this.props.cargoItems[i].dangerousGoods
             }
         };
-        // this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
         this.props.handleDelta(event);
     }
     deleteCargo(index) {
+        const { cargoItemTypes } = this.state;
+        cargoItemTypes.splice(index, 1);
+        this.setState({ cargoItemTypes });
+
         this.props.deleteItem('cargoItems', index);
     }
-
     render() {
-        const { cargoItems, handleDelta, theme } = this.props;
+        const { cargoItems, handleDelta, theme, scope } = this.props;
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
@@ -118,6 +123,19 @@ export class ShipmentCargoItems extends Component {
                 style={{ position: 'relative' }}
             >
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+                    <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
+                        <div style={{ width: '97.75%' }}>
+                            <p className={`${styles.input_label} flex-100`}> Colli Type </p>
+                            <NamedSelect
+                                placeholder=""
+                                className={styles.select_100}
+                                name={`${i}-colliType`}
+                                value={cargoItemTypes[i]}
+                                options={availableCargoItemTypes}
+                                onChange={this.handleCargoItemType}
+                            />
+                        </div>
+                    </div>
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                             <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
@@ -173,22 +191,19 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="layout-row flex-50 layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> Colli Type </p>
-                        <NamedSelect
-                            placeholder=""
-                            className={styles.select_100}
-                            name={`${i}-colliType`}
-                            value={cargoItemTypes[i]}
-                            options={availableCargoItemTypes}
-                            onChange={this.handleCargoItemType}
-                        />
-                    </div>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
                         <p className={`${styles.input_label} flex-100`}> Length </p>
-                        <div className={`flex-95 layout-row ${styles.input_box}`}>
+                        <ReactTooltip />
+                        <div
+                            className={`flex-95 layout-row ${styles.input_box}`}
+                            data-tip={
+                                cargoItem && !!cargoItemTypes[i].dimension_x ? (
+                                    'Length is automatically set by \'Collie Type\''
+                                ) : ''
+                            }
+                        >
                             {
                                 cargoItem ? (
                                     <ValidatedInput
@@ -216,7 +231,15 @@ export class ShipmentCargoItems extends Component {
                     </div>
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
                         <p className={`${styles.input_label} flex-100`}> Width </p>
-                        <div className={`flex-95 layout-row ${styles.input_box}`}>
+                        <ReactTooltip />
+                        <div
+                            className={`flex-95 layout-row ${styles.input_box}`}
+                            data-tip={
+                                cargoItem && !!cargoItemTypes[i].dimension_y ? (
+                                    'Width is automatically set by \'Collie Type\''
+                                ) : ''
+                            }
+                        >
                             {
                                 cargoItem ? (
                                     <ValidatedInput
@@ -246,22 +269,29 @@ export class ShipmentCargoItems extends Component {
                         <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
                         <NamedSelect
                             placeholder={cargoItem ? cargoItem.quantity : ''}
-                            className={styles.select}
+                            className={`${styles.select} flex-95`}
                             name={`${i}-quantity`}
                             value={cargoItem ? cargoItem.quantity : ''}
                             options={cargoItem ? numberOptions : ''}
                             onChange={this.handleCargoItemQ}
                         />
                     </div>
-                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
+                    <div
+                        className="layout-row flex layout-wrap layout-align-start-center"
+                    >
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                            <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+                        </div>
                         <Checkbox
-                            onChange={this.toggleDangerousGoods}
+                            name={`${i}-dangerous_goods`}
+                            onChange={() => this.toggleDangerousGoods(i)}
                             checked={cargoItem ? cargoItem.dangerousGoods : false}
-                            theme={this.props.theme}
+                            theme={theme}
                             size="34px"
+                            disabled={!scope.dangerous_goods}
+                            onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
                         />
-                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
                 </div>
 

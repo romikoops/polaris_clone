@@ -3,14 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './Checkbox.scss';
 
 export class Checkbox extends Component {
-    // static propTypes = {
-    //     checked: PropTypes.bool,
-    //     disabled: PropTypes.bool,
-    // };
-    // static defaultProps = {
-    //     checked: false,
-    //     disabled: false,
-    // };
     constructor(props) {
         super(props);
         this.state = {
@@ -33,7 +25,7 @@ export class Checkbox extends Component {
         this.props.onChange(!this.state.checked);
     }
     render() {
-        const { disabled, theme } = this.props;
+        const { disabled, theme, name } = this.props;
         const { checked } = this.state;
         const checkGradient = {
             background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
@@ -41,12 +33,17 @@ export class Checkbox extends Component {
         const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {};
         const border = { border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`};
         return (
-            <div className={`${styles.checkbox} flex-none`} style={border}>
+            <div
+                className={`${styles.checkbox} flex-none`}
+                style={border}
+                onClick={this.props.onClick}
+            >
                 <label>
                     <input
                         type="checkbox"
                         checked={checked}
                         disabled={disabled}
+                        name={name}
                         onChange={this.handleChange}
                     />
                     <span style={sizeStyles}>

@@ -22,6 +22,21 @@ module NotificationTools
     end
     return resp
   end
+  def get_messages_for_admin(user)
+    resp = get_item('messages', "tenant_id", user.tenant_id)
+    unread = 0
+    if resp["conversations"]
+      resp["conversations"].each do |kc, vc|
+        vc["messages"].each do |msg|
+          if !msg["read"]
+            unread += 1
+          end
+        end
+      end
+      resp["unread"] = unread
+    end
+    return resp
+  end
 
   def update_convo(user, messages)
     convo_id = "#{user.tenant_id}_#{user.id}"
@@ -38,7 +53,7 @@ module NotificationTools
     data["shipmentRef"] = ref
     data["read"] = false
     convo_id = "#{user.tenant_id}_#{user.id}"
-    $db["messages"].update_one({_id: convo_id}, {"$push" => {"conversations.#{ref}.messages" =>  data}}, {upsert: true})
+    $db["messages"].update_one({_id: convo_id}, {"$push" => {"conversations.#{ref}.messages" =>  data}, "$set" => {"tenant_id" => user.tenant_id}}, {upsert: true})
     return data
   end
 end

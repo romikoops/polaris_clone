@@ -185,10 +185,11 @@ export class AdminShipmentView extends Component {
                         <p className={` ${styles.sec_title_text_normal} flex-none`} >Shipment status:</p>
                         <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle} >{ shipment.status }</p>
                     </div>
-                    {acceptDeny}
+
                 </div>
-                <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
-                    Booking Reference: {shipment.imc_reference}
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.b_ref}`}>
+                    <p className="flex-none">Booking Reference: {shipment.imc_reference}</p>
+                    {acceptDeny}
                 </div>
                 <RouteHubBox hubs={hubsObj} route={schedules} theme={theme}/>
                 <div className={`${styles.b_summ} flex-100`}>

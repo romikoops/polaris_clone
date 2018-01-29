@@ -720,9 +720,15 @@ function confirmShipment(id, action, redirect) {
             payload: shipmentData
         };
     }
-    function success(shipmentData) {
+    function successAccept(shipmentData) {
         return {
             type: adminConstants.CONFIRM_SHIPMENT_SUCCESS,
+            payload: shipmentData
+        };
+    }
+    function successDeny(shipmentData) {
+        return {
+            type: adminConstants.DENY_SHIPMENT_SUCCESS,
             payload: shipmentData
         };
     }
@@ -734,13 +740,14 @@ function confirmShipment(id, action, redirect) {
         adminService.confirmShipment(id, action).then(
             resp => {
                 const shipmentData = resp.data;
-                dispatch(success(shipmentData));
-                dispatch(getShipments(false));
-                dispatch(getDashboard(false));
+                if (action === 'accept') {
+                    dispatch(successAccept(shipmentData));
+                } else {
+                    dispatch(successDeny(shipmentData));
+                    dispatch(push('/admin/shipments'));
+                }
                 if (redirect) {
-                    dispatch(
-                        push('/admin/shipments/' + id)
-                    );
+                    dispatch(getShipment(id, true));
                 }
                 dispatch(
                     alertActions.success('Shipment Action Set successful')
@@ -858,7 +865,7 @@ function newClient(data) {
         return { type: adminConstants.NEW_CLIENT_REQUEST, payload: newClientData };
     }
     function success(newClientData) {
-        return { type: adminConstants.NEW_CLIENT_SUCCESS, payload: newClientData };
+        return { type: adminConstants.NEW_CLIENT_SUCCESS, payload: newClientData.data };
     }
     function failure(error) {
         return { type: adminConstants.NEW_CLIENT_FAILURE, error };

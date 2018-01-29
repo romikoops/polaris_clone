@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Messaging.scss';
+import styled from 'styled-components';
 // import { moment } from '../../constants';
 export class ConvoTile extends Component {
     constructor(props) {
@@ -8,17 +9,41 @@ export class ConvoTile extends Component {
 
     render() {
         const  { theme, conversation, viewConvo, convoKey } = this.props;
+        const ConvoTile = styled.div`
+            
+            box-shadow: 0 1px 1px 0 rgba(12,13,14,0.75);
+            background: #fff;
+    /*        border-width: 2px;
+            border-style: solid;
+            -webkit-border-image: 
+              -webkit-gradient(linear, 0 0, 0 100%, from(${theme.colors.primary}), to(${theme.colors.secondary})) 1 100%;
+            -webkit-border-image: 
+              -webkit-linear-gradient(${theme.colors.primary}, ${theme.colors.secondary}) 1 100%;
+            -moz-border-image:
+              -moz-linear-gradient(${theme.colors.primary}, ${theme.colors.secondary}) 1 100%;    
+            -o-border-image:
+              -o-linear-gradient(${theme.colors.primary}, ${theme.colors.secondary}) 1 100%;
+            border-image:
+              linear-gradient(to bottom, ${theme.colors.primary}, ${theme.colors.secondary}) 1 100%*/
+            border-radius: 10px;
+        `;
+        const iconStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         console.log(theme);
         return (
             <div className={`flex-100 layout-row layout-align-start-start  ${styles.convo_tile_wrapper}`} onClick={() => viewConvo(conversation)}>
-                <div className={`flex layout-row layout-align-center-start pointy layout-wrap  ${styles.convo_tile}`}>
+                <ConvoTile className={`flex layout-row layout-align-center-start pointy layout-wrap  ${styles.convo_tile}`}>
                     <div className="flex-95 layout-row layout-align-start-center">
+                        <div className="flex-15-layout-row-layout-align-cetner-center">
+                            <i className="flex-none clip fa fa-ship" style={iconStyle}></i>
+                        </div>
                         <p className="flex-none">Shipment: {convoKey}</p>
                     </div>
                     {/* <div className="flex-100 layout-row layout-align-start-center">
                         <p className="flex-none">Last Updated: {moment.unix(conversation.messages[0].timestamp).format('lll')}</p>
                     </div>*/}
-                 </div>
+                 </ConvoTile>
             </div>
         );
     }

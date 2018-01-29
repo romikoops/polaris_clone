@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {AdminClientsIndex, AdminClientView} from './';
 import styles from './Admin.scss';
 // import {v4} from 'node-uuid';
+import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
@@ -169,4 +170,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminClients);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminClients));

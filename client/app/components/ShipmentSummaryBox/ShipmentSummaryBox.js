@@ -39,7 +39,7 @@ export class ShipmentSummaryBox extends Component {
     }
 
     render() {
-        const { theme, shipment, hubs, route, user, total } = this.props;
+        const { theme, shipment, hubs, route, user, total, locations } = this.props;
         const { startHub, endHub } = hubs;
         const gradientFontStyle = {
             background:
@@ -62,6 +62,42 @@ export class ShipmentSummaryBox extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
+        const originAddress = (
+            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+                <div className="flex-100 layout-row">
+                    <h4
+                        className={styles.date_title}
+                        style={gradientFontStyle}
+                    >
+                        Pickup Address
+                    </h4>
+                </div>
+                <address className="flex-100 layout-row layout-wrap">
+                    {locations.origin.street_number}  {locations.origin.street}  <br/>
+                    {locations.origin.city}  <br/>
+                    {locations.origin.zip_code}  <br/>
+                    {locations.origin.country}  <br/>
+                </address>
+            </div>
+        );
+        const destinationAddress = (
+            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+                <div className="flex-100 layout-row">
+                    <h4
+                        className={styles.date_title}
+                        style={gradientFontStyle}
+                    >
+                        Delivery Address
+                    </h4>
+                </div>
+                <address className="flex-100 layout-row layout-wrap">
+                    {locations.destination.street_number}  {locations.destination.street}  <br/>
+                    {locations.destination.city}  <br/>
+                    {locations.destination.zip_code}  <br/>
+                    {locations.destination.country}  <br/>
+                </address>
+            </div>
+        );
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-wrap">
@@ -110,9 +146,7 @@ export class ShipmentSummaryBox extends Component {
                             }`}
                         >
                             <div
-                                className={`${
-                                    styles.tot_price
-                                } flex-none layout-row layout-align-space-between-center`}
+                                className={`${styles.tot_price} flex-none layout-row layout-align-space-between-center`}
                                 style={gradientFontStyle}
                             >
                                 <p>Total Price:</p>{' '}
@@ -250,6 +284,8 @@ export class ShipmentSummaryBox extends Component {
                             </div>
                             <p className="flex-none"> {shipment.has_on_carriage ? 'Yes' : 'No'}  </p>
                         </div>
+                        {shipment.has_pre_carriage ? originAddress : ''}
+                        {shipment.has_on_carriage ? destinationAddress : ''}
                     </div>
                 </div>
             </div>

@@ -16,6 +16,22 @@ export function messaging(state = {}, action) {
             return merge({}, state, {
                 loading: true
             });
+
+        case messagingConstants.GET_ADMIN_MESSAGES_SUCCESS:
+            return merge({}, state, {
+                ...action.payload,
+                loading: false
+            });
+        case messagingConstants.GET_ADMIN_MESSAGES_ERROR:
+            return merge({}, state, {
+                error: action.payload,
+                loading: false
+            });
+        case messagingConstants.GET_ADMIN_MESSAGES_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
+
         case messagingConstants.SEND_USER_MESSAGE_SUCCESS:
             return merge({}, state, {
                 ...action.payload,
