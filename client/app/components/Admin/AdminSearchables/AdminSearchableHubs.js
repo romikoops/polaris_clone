@@ -68,17 +68,17 @@ export class AdminSearchableHubs extends Component {
                 return  <AdminHubTile key={v4()} hub={hub} theme={theme}  handleClick={this.handleClick}/>;
             });
         }
-         const viewType = this.props.sideScroll ?
+        const viewType = this.props.sideScroll ?
             (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-                        {hubsArr}
-                    </div>
-                </div>) :
+                <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+                    {hubsArr}
+                </div>
+            </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                    <div className="layout-row flex-none layout-align-start-center layout-wrap">
-                        {hubsArr}
-                    </div>
-                </div>);
+                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                    {hubsArr}
+                </div>
+            </div>);
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
@@ -101,7 +101,7 @@ export class AdminSearchableHubs extends Component {
                             <p className="flex-none">See all</p>
                         </div>
                     </div> :
-                     ''}
+                    ''}
             </div>
         );
     }

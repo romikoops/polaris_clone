@@ -1,2 +1,2 @@
-export * from './MaintextHeading';
-export * from '.SubTextHeading';
+export { MainTextHeading } from './MaintextHeading';
+export { SubTextHeading } from '.SubTextHeading';

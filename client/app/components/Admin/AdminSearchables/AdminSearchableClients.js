@@ -4,6 +4,7 @@ import styles from '../Admin.scss';
 import { AdminClientTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
 export class AdminSearchableClients extends Component {
     constructor(props) {
         super(props);
@@ -60,9 +61,6 @@ export class AdminSearchableClients extends Component {
     }
     render() {
         const { theme, title, seeAll} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -85,7 +83,7 @@ export class AdminSearchableClients extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-50 layoput-row layout-align-start-center">
-                        <h2 className="flex-none clip" style={textStyle}>{title ? title : 'Clients'}</h2>
+                        <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
                     <div className={`${styles.input_box} flex-50 laypout-row layout-align-start`}>
                         <input

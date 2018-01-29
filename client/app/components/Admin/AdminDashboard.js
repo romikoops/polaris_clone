@@ -5,6 +5,7 @@ import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import {v4} from 'node-uuid';
 import { Loading } from '../../components/Loading/Loading';
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -139,14 +140,10 @@ export class AdminDashboard extends Component {
             });
         }
         const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5);
-
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
-                    <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
+                    <MainTextHeading theme={theme} text="Dashboard" />
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     { requestedShipments }

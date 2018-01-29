@@ -8,8 +8,9 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import { AdminSearchableClients } from '../Admin/AdminSearchables';
-// import MainTextHeading from '../TextHeadings';
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 const actRoutesData = activeRoutesData;
+
 export class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -69,9 +70,6 @@ export class UserDashboard extends Component {
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const { shipments, pricings, contacts, locations} = dashboard;
         console.log(pricings);
         const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
@@ -83,7 +81,6 @@ export class UserDashboard extends Component {
         const mergedFinishedShipments = shipments && shipments.finished ? shipments.finished.map((sh) => {
             return this.prepShipment(sh, user, hubs);
         }) : false;
-
         // const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
         // const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
         // const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
@@ -153,7 +150,6 @@ export class UserDashboard extends Component {
                             <div className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}>
                                 <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                             </div>
-                            {/* </div>*/}
                             <div className={`flex-50 layout-row ${ustyles.right} layout-wrap layout-align-space-between-space-between`}>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
                                     <h1 className="flex-none">{mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}</h1>
@@ -185,9 +181,9 @@ export class UserDashboard extends Component {
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <h2 className="flex-none clip" style={textStyle}>Shipments</h2>
-                            </div>
+
+                            <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
+
                             <div className="flex-100 layout-row layout-align-start-center">
                                 <div className="flex-40 layout-row layout-align-start-center">
                                     <h3 className="flex-none">Requested Shipments </h3>
@@ -238,7 +234,7 @@ export class UserDashboard extends Component {
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                        <h2 className="flex-none clip" style={textStyle}>My Shipment Addresses</h2>
+                        <MainTextHeading theme={theme} text="My Shipment Addresses" />
                         <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                     </div>
                 </div>
