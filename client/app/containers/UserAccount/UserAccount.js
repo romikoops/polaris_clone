@@ -48,7 +48,7 @@ export class UserAccount extends Component {
             userDispatch.getDashboard(user.data.id, false);
         }
         if (user && user.data && users && !users.loading && !users.hubs) {
-            userDispatch.getHubs(user.data.id);
+            userDispatch.getHubs(false);
         }
     }
     setNavLink(target) {
