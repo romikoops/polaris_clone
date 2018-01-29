@@ -8,8 +8,8 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import { AdminSearchableClients } from '../Admin/AdminSearchables';
+// import MainTextHeading from '../TextHeadings';
 const actRoutesData = activeRoutesData;
-
 export class UserDashboard extends Component {
     constructor(props) {
         super(props);
