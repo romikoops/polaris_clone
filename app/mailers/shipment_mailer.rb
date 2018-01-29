@@ -7,13 +7,19 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
+    base_url = case Rails.env
+      when 'production'  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'development' then "http://localhost:8080/"
+      when 'test'        then "http://localhost:8080/"
+      end
+
+    @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
     mail(
       # to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
-      # to: 'mailtests@itsmycargo.com',
-      to: 'sa_sa_surf_@hotmail.com',
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -28,8 +34,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      # to: 'mailtests@itsmycargo.com',
-      to: 'sa_sa_surf_@hotmail.com',
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -43,13 +48,12 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
     
     bill_of_lading = generate_and_upload_bill_of_lading
-    attachments[bill_of_lading.full_name] = open(bill_of_lading.path).read
+    attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read
     FileUtils.rm(bill_of_lading.path)
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      # to: 'mailtests@itsmycargo.com',
-      to: 'sa_sa_surf_@hotmail.com',
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end

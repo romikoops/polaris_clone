@@ -16,15 +16,12 @@
 <%= render "details_body" %>
 
 <row>
-  <!-- <% base_url = "http://#{@shipment.tenant.subdomain}.itsmycargo.com/" %> -->
-  <% base_url = "http://localhost:8080/" %>
-  <% redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action=" %>
 
   <columns small="1"></columns>
 
   <columns small="2">
     <center>
-      <button href="<%= redirects_base_url %>accept" class="success radius expanded">Accept</button>
+      <button href="<%= @redirects_base_url %>accept" class="success radius expanded">Accept</button>
     </center>
   </columns>
 
@@ -32,7 +29,7 @@
 
   <columns small="2">
     <center>
-      <button href="<%= redirects_base_url %>edit" class="primary radius expanded">Edit</button>
+      <button href="<%= @redirects_base_url %>edit" class="primary radius expanded">Edit</button>
     </center>
   </columns>
   
