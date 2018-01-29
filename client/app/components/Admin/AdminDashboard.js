@@ -10,6 +10,7 @@ import { Loading } from '../../components/Loading/Loading';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import ustyles from '../UserAccount/UserAccount.scss';
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -197,22 +198,26 @@ export class AdminDashboard extends Component {
 
                     </div>
                     <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
-                        <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Dashboard</h1>
+                        <MainTextHeading theme={theme} text="Dashboard" />
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         { requestedShipments }
                         { openShipments }
                         { finishedShipments }
                     </div>
-                    <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                        <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                    </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                            <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
+                        <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                            <MainTextHeading theme={theme} text="Schedules"  />
                         </div>
                         { shortSchedArr }
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                    </div>
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
                     </div>
                 </div>

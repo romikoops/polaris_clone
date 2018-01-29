@@ -100,9 +100,9 @@ export class AdminSearchableShipments extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-none layput-row layout-align-start-center">
-                        <p className="flex-none sub_header_text"> {title ? title : 'Shipments'}</p>
+                        <p className="flex-60 sub_header_text"> {title ? title : 'Shipments'}</p>
                     </div>
-                    <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
+                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"

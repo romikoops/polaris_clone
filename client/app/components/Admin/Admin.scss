@@ -135,6 +135,8 @@
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     padding: 0 10px;
+    min-width: 80%;
+    max-width: 80%;
     &:focus {
       outline: none;
     }

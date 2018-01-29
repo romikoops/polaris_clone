@@ -4,7 +4,7 @@ import styles from '../Admin.scss';
 import { AdminClientTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
-import { SubTextHeading } from '../../TextHeadings/SubTextHeading';
+import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
 export class AdminSearchableClients extends Component {
     constructor(props) {
         super(props);
@@ -83,10 +83,10 @@ export class AdminSearchableClients extends Component {
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-50 layoput-row layout-align-start-center">
-                        <SubTextHeading theme={theme} text={title ? title : 'Clients'} />
+                    <div className="flex-60 layoput-row layout-align-start-center">
+                        <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
-                    <div className={`${styles.input_box} flex-50 laypout-row layout-align-start`}>
+                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"
