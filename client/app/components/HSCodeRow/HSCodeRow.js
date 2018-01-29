@@ -137,8 +137,8 @@ export class HSCodeRow extends Component {
                 const tmpCont = (
                     <div key={i} className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
                         <div className="flex-10 layout-row layout-align-center-center layout-wrap">
-                            <p className={`flex-100 ${styles.cell_header}`}>Unit</p>
-                            <p className="flex-100">{i}</p>
+                            <p className={`flex-100 ${styles.cell_header}`}>Cargo Group</p>
+                            <p className="flex-100">{i + 1}</p>
                         </div>
                         <div className="flex-15 layout-row layout-align-center-center layout-wrap">
                             <p className={`flex-100 ${styles.cell_header}`}>Payload</p>
