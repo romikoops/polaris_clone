@@ -89,7 +89,7 @@ module.exports = {
                             presets: [
                                 ["@babel/env", {
                                     "targets": {
-                                        'browsers': ['Chrome >=59']
+                                        'browsers': ['Chrome >=59', 'IE >= 9']
                                     },
                                     "modules":false,
                                     "loose":true
