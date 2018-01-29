@@ -175,7 +175,7 @@ class FileTile extends React.Component {
         );
         const bottomRow = isAdmin ? adminRow : userRow;
         return (
-            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} ${statusStyle}`}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile}`}>
                 {showDenialDetails ? denyDetails : ''}
                 <div className="flex-100 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -200,6 +200,14 @@ class FileTile extends React.Component {
                         </div>
                         <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.file_text}`}>
                             <p className="flex-100">{moment(doc.created_at).format('lll')}</p>
+                        </div>
+                    </div>
+                    <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                        <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.file_header}`}>
+                            <p className="flex-100">Status</p>
+                        </div>
+                        <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.file_text} ${statusStyle}`}>
+                            <p className="flex-100">{doc.approved ? doc.approved : 'Pending'}</p>
                         </div>
                     </div>
                 </div>

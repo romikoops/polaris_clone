@@ -538,7 +538,7 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
-                            handleNext={() => shipmentDispatch.goTo('/account')}
+                            handleNext={() => shipmentDispatch.toDashboard()}
                         />
                     </div>
                 </div>

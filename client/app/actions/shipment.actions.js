@@ -1,9 +1,12 @@
 import { shipmentConstants } from '../constants';
 import { shipmentService } from '../services';
-import { alertActions } from './';
+import { alertActions, userActions } from './';
 import { Promise } from 'es6-promise-promise';
 import { push } from 'react-router-redux';
-
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+const userData = JSON.parse(localStorage.getItem(cookieKey));
 function newShipment(type) {
     function request(shipmentData) {
         return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData };
@@ -367,6 +370,12 @@ function deleteDocument(id) {
     };
 }
 
+function toDashboard() {
+    return dispatch => {
+        dispatch(userActions.getDashboard(userData.data.id, true));
+    };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -388,5 +397,6 @@ export const shipmentActions = {
     fetchShipmentIfNeeded,
     getAll,
     goTo,
+    toDashboard,
     delete: _delete
 };

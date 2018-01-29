@@ -3,7 +3,7 @@ class Admin::ClientsController < ApplicationController
 
   def index
     role = Role.find_by_name('shipper')
-    @clients = User.where(tenant_id: current_user.tenant_id, role_id: role.id)
+    @clients = User.where(tenant_id: current_user.tenant_id, role_id: role.id, guest: false)
     response_handler(@clients)
   end
 
@@ -25,7 +25,8 @@ class Admin::ClientsController < ApplicationController
       password: json["password"],
       password_confirmation: json["password_confirmation"]
     }
-    new_user = User.create(user_data)
+    new_user = current_user.tenant.users.create!(user_data)
+
     # if params[:new_client][:street] && params[:new_client][:country] && params[:new_client][:zipCode]
     #   new_user_loc = new-user.locations.create!(
     #     street: params[:new_client][:street],
