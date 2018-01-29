@@ -270,7 +270,7 @@ export class ShipmentCargoItems extends Component {
                         <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
                         <NamedSelect
                             placeholder={cargoItem ? cargoItem.quantity : ''}
-                            className={styles.select}
+                            className={`${styles.select} flex-95`}
                             name={`${i}-quantity`}
                             value={cargoItem ? cargoItem.quantity : ''}
                             options={cargoItem ? numberOptions : ''}
