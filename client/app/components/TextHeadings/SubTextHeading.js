@@ -12,9 +12,9 @@ export class SubTextHeading extends Component {
         const { text, theme } = this.props;
         return(
             <div className="flex-100 layout-row layout-align-start-center">
-                <h3>
+                <h2>
                     <p className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>{text}</p>
-                </h3>
+                </h2>
             </div>
         );
     }

@@ -4,6 +4,7 @@ import styles from '../Admin.scss';
 import { AdminRouteTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import { SubTextHeading } from '../../TextHeadings/SubTextHeading';
 export class AdminSearchableRoutes extends Component {
     constructor(props) {
         super(props);
@@ -95,7 +96,7 @@ export class AdminSearchableRoutes extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-none layput-row layout-align-start-center">
-                        <p className="flex-none sub_header_text"> Routes</p>
+                        <SubTextHeading theme={theme} text="Routes" />
                     </div>
                     <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                         <input

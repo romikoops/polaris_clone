@@ -6,6 +6,8 @@ import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, Adm
 import {v4} from 'node-uuid';
 import { Loading } from '../../components/Loading/Loading';
 import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { SubTextHeading } from '../TextHeadings/SubTextHeading';
+
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -97,7 +99,6 @@ export class AdminDashboard extends Component {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
-        // const mergedRequestedShipments = false;
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"
@@ -153,7 +154,7 @@ export class AdminDashboard extends Component {
                 <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
+                        <SubTextHeading theme={theme} text="Schedules" />
                     </div>
                     { shortSchedArr }
                 </div>

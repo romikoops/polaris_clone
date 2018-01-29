@@ -81,6 +81,7 @@ export class UserDashboard extends Component {
         const mergedFinishedShipments = shipments && shipments.finished ? shipments.finished.map((sh) => {
             return this.prepShipment(sh, user, hubs);
         }) : false;
+
         // const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
         // const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
         // const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
