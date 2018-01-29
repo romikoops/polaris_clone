@@ -9,7 +9,7 @@ import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 class AdminClients extends Component {
-     constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             selectedClient: false,
@@ -73,50 +73,59 @@ class AdminClients extends Component {
                     size="small"
                     text="New"
                     active
-                    handleNext={this.toggleNewContact}
+                    handleNext={this.toggleNewClient}
                     iconClass="fa-plus"
                 />
             </div>);
         const newClientBox = (
-                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
-                    <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
+                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+                </div>
+                <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
+                    <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                        <i className="fa fa-user flex-none clip" style={textStyle}></i>
+                        <p className="flex-none">New Client</p>
                     </div>
-                    <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
-                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <i className="fa fa-user flex-none" style={textStyle}></i>
-                            <p className="flex-none">New Client</p>
+                    <input className={styles.input_100} type="text" value={newClient.companyName} name={'companyName'} placeholder="Company Name *" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newClient.firstName} name="firstName" placeholder="First Name *" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newClient.lastName} name="lastName" placeholder="Last Name *" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newClient.email} name="email" placeholder="Email *" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newClient.phone} name="phone" placeholder="Phone *" onChange={this.handleFormChange} />
+                    <input className={styles.input_street} type="text" value={newClient.street} name="street" placeholder="Street" onChange={this.handleFormChange} />
+                    <input className={styles.input_no} type="text" value={newClient.number} name="number" placeholder="Number" onChange={this.handleFormChange} />
+                    <input className={styles.input_zip} type="text" value={newClient.zipCode} name="zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
+                    <input className={styles.input_cc} type="text" value={newClient.city} name="city" placeholder="City" onChange={this.handleFormChange} />
+                    <input className={styles.input_cc} type="text" value={newClient.country} name="country" placeholder="Country" onChange={this.handleFormChange} />
+
+                    <div className="flex-100 layout-row">
+                        <div className="flex-50 layout-row layout-wrap">
+                            <input className={styles.input_100} type="password" value={newClient.password} name={'password'} placeholder="Password *" onChange={this.handleFormChange} />
                         </div>
-                        <input className={styles.input_100} type="text" value={newClient.companyName} name={'companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newClient.firstName} name="firstName" placeholder="First Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newClient.lastName} name="lastName" placeholder="Last Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newClient.email} name="email" placeholder="Email" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newClient.phone} name="phone" placeholder="Phone" onChange={this.handleFormChange} />
-                        <input className={styles.input_street} type="text" value={newClient.street} name="street" placeholder="Street" onChange={this.handleFormChange} />
-                        <input className={styles.input_no} type="text" value={newClient.number} name="number" placeholder="Number" onChange={this.handleFormChange} />
-                        <input className={styles.input_zip} type="text" value={newClient.zipCode} name="zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={newClient.city} name="city" placeholder="City" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={newClient.country} name="country" placeholder="Country" onChange={this.handleFormChange} />
-                        <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
-                            <RoundButton
-                                theme={theme}
-                                size="small"
-                                active
-                                text="Save"
-                                handleNext={this.saveNewClient}
-                                iconClass="fa-floppy-o"
-                            />
+                        <div className="flex-50 layout-row layout-wrap">
+                            <input className={styles.input_100} type="password" value={newClient.password_confirmation} name={'password_confirmation'} placeholder="Password Confirmation *" onChange={this.handleFormChange} />
                         </div>
+                    </div>
+                    <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
+                        <RoundButton
+                            theme={theme}
+                            size="small"
+                            active
+                            text="Save"
+                            handleNext={this.saveNewClient}
+                            iconClass="fa-floppy-o"
+                        />
                     </div>
                 </div>
-            );
+            </div>
+        );
         return(
-             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Clients</p>
                     { newButton }
                 </div>
-                 { newClientBool ? newClientBox  : ''}
+                { newClientBool ? newClientBox  : ''}
                 <Switch className="flex">
                     <Route
                         exact

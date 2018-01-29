@@ -2,7 +2,7 @@ class Admin::DashboardController < ApplicationController
   before_action :require_login_and_role_is_admin
   def index
     @requested_shipments = Shipment.where(status: "requested", tenant_id: current_user.tenant_id)
-    @open_shipments = Shipment.where(status: ["accepted", "in_progress"], tenant_id: current_user.tenant_id)
+    @open_shipments = Shipment.where(status: ["accepted", "in_progress", "confirmed"], tenant_id: current_user.tenant_id)
     @finished_shipments = Shipment.where(status: ["declined", "finished"], tenant_id: current_user.tenant_id)
     routes = Route.where(tenant_id: current_user.tenant_id)
     @detailed_routes = routes.map do |route| 
