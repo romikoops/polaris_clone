@@ -33,6 +33,35 @@ function getUserConversations() {
     };
 }
 
+function getAdminConversations() {
+    function request(convoData) {
+        return { type: messagingConstants.GET_ADMIN_MESSAGES_REQUEST, payload: convoData };
+    }
+    function success(convoData) {
+        return { type: messagingConstants.GET_ADMIN_MESSAGES_SUCCESS, payload: convoData.data };
+    }
+    function failure(error) {
+        return { type: messagingConstants.GET_ADMIN_MESSAGES_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        messagingService.getAdminConversations().then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Messages successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function sendUserMessage(message) {
     function request(msgData) {
         return { type: messagingConstants.SEND_USER_MESSAGE_REQUEST, payload: msgData };
@@ -125,5 +154,6 @@ export const messagingActions = {
     getUserConversations,
     sendUserMessage,
     getShipment,
-    markAsRead
+    markAsRead,
+    getAdminConversations
 };

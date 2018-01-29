@@ -88,19 +88,19 @@ module ShippingTools
     
 
 
-    @consignee = @shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'consignee')
+    @consignee = @shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
     notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
       contacts_data.each do |value|
 
-        notifyee = current_user.contacts.find_or_create_by(first_name: value[:firstName],
+        notifyee = current_user.contacts.find_or_create_by!(first_name: value[:firstName],
                                                            last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
         notifyee_contacts << notifyee
-        @notifyees << @shipment.shipment_contacts.find_or_create_by(contact_id: notifyee.id, contact_type: 'notifyee')
+        @notifyees << @shipment.shipment_contacts.find_or_create_by!(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
 
@@ -129,8 +129,8 @@ module ShippingTools
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
       @shipment.cargo_items.map do |ci|
-        if hsCodes[ci.id.to_s]
-          hsCodes[ci.id.to_s].each do |hs|
+        if hsCodes[ci.cargo_group_id.to_s]
+          hsCodes[ci.cargo_group_id.to_s].each do |hs|
             ci.hs_codes << hs["value"]
           end
           ci.save!
@@ -140,8 +140,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
       @shipment.containers.map do |cn|
-        if hsCodes[cn.id.to_s]
-          hsCodes[cn.id.to_s].each do |hs|
+        if hsCodes[cn.cargo_group_id.to_s]
+          hsCodes[cn.cargo_group_id.to_s].each do |hs|
             cn.hs_codes << hs["value"]
           end
           cn.save!
@@ -226,7 +226,7 @@ module ShippingTools
     customs_fee = get_item('customsFees', '_id', priceKey)
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
+    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee, locations: {origin: @shipment.origin, destination: @shipment.destination}}
   end
 
   def get_shipment_pdf(params)

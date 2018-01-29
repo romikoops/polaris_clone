@@ -14,6 +14,8 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 // import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import { Modal } from '../Modal/Modal';
+import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
 import { isEmpty } from '../../helpers/isEmpty.js';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
@@ -87,6 +89,7 @@ export class ShipmentDetails extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.setIncoTerm = this.setIncoTerm.bind(this);
         this.handleSelectLocation = this.handleSelectLocation.bind(this);
+        this.toggleAlertModal = this.toggleAlertModal.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -308,10 +311,49 @@ export class ShipmentDetails extends Component {
     setIncoTerm(opt) {
         this.setState({incoterm: opt.value});
     }
+    toggleAlertModal() {
+        this.setState({ alertModalShowing: !this.state.alertModalShowing });
+    }
 
     render() {
-        const { theme, messages, shipmentData, shipmentDispatch } = this.props;
+        const { tenant, user, shipmentData, shipmentDispatch } = this.props;
+        const { theme, scope, emails, phones } = tenant.data;
+        const messages = this.props.messages;
         let cargoDetails;
+        const alertModalMessage = (
+            <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
+                <span>
+                    Hi {user.data.first_name} {user.data.last_name},<br/>
+                    We currently do not offer freight rates for hazardous cargo in our Web Shop.
+                    Please contact our customer service department
+                    to place an order for your dangerous cargo:<br/>
+                </span><br/>
+
+                <span style={{marginRight: '10px'}}> Contact via phone:</span>
+                <span>{phones.support}</span><br/>
+
+                <span style={{marginRight: '20px'}}> Contact via mail: </span>
+                <span>
+                    <a href={`mailto:${emails.support}?subject=Dangerous Goods Request`}>
+                        {emails.support}
+                    </a>
+                </span>
+            </p>
+        );
+        const alertModal = this.state.alertModalShowing ? (
+            <Modal
+                component={
+                    <AlertModalBody
+                        message={alertModalMessage}
+                        logo={theme.logoSmall}
+                        toggleAlertModal={this.toggleAlertModal}
+                    />
+                }
+                width="50vw"
+                minHeight="1px"
+                parentToggle={this.toggleAlertModal}
+            />
+        ) : '';
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
                 cargoDetails = (
@@ -322,6 +364,8 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
+                        showAlertModal={this.toggleAlertModal}
                     />
                 );
             }
@@ -334,7 +378,9 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
                         availableCargoItemTypes={shipmentData.cargoItemTypes}
+                        showAlertModal={this.toggleAlertModal}
                     />
                 );
             }
@@ -458,6 +504,7 @@ export class ShipmentDetails extends Component {
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
+                {alertModal}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                     { dayPickerSection }
                 </div>
@@ -491,7 +538,7 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
-                            handleNext={() => shipmentDispatch.goTo('/account')}
+                            handleNext={() => shipmentDispatch.toDashboard()}
                         />
                     </div>
                 </div>

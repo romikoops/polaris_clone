@@ -65,22 +65,20 @@ export class ShipmentCargoItems extends Component {
         this.props.handleDelta(modifiedEventDimentionX);
         this.props.handleDelta(modifiedEventDimentionY);
     }
-    toggleDangerousGoods() {
+    toggleDangerousGoods(i) {
         const event = {
             target: {
-                name: 'dangerousGoods',
-                value: !this.props.cargoItems[0].dangerousGoods
+                name: i + '-dangerousGoods',
+                value: !this.props.cargoItems[i].dangerousGoods
             }
         };
-        // this.setState({ newCargoItem: { ...this.state.newCargoItem, dangerousGoods: !this.state.newCargoItem.dangerousGoods } });
         this.props.handleDelta(event);
     }
     deleteCargo(index) {
         this.props.deleteItem('cargoItems', index);
     }
-
     render() {
-        const { cargoItems, handleDelta, theme } = this.props;
+        const { cargoItems, handleDelta, theme, scope } = this.props;
         const { cargoItemTypes } = this.state;
         const cargosAdded = [];
         const availableCargoItemTypes = this.props.availableCargoItemTypes ? (
@@ -253,15 +251,22 @@ export class ShipmentCargoItems extends Component {
                             onChange={this.handleCargoItemQ}
                         />
                     </div>
-                    <div className="layout-row flex layout-wrap layout-align-start-center" >
-                        <p className={`${styles.input_label} flex-100`}> Dangerous Goods </p>
+                    <div
+                        className="layout-row flex layout-wrap layout-align-start-center"
+                    >
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                            <p className={`${styles.input_label} flex-none`}> Dangerous Goods </p>
+                            <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+                        </div>
                         <Checkbox
-                            onChange={this.toggleDangerousGoods}
+                            name={`${i}-dangerous_goods`}
+                            onChange={() => this.toggleDangerousGoods(i)}
                             checked={cargoItem ? cargoItem.dangerousGoods : false}
-                            theme={this.props.theme}
+                            theme={theme}
                             size="34px"
+                            disabled={!scope.dangerous_goods}
+                            onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
                         />
-                        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
                     </div>
                 </div>
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
 // import {v4} from 'node-uuid';
-import { RoundButton } from '../RoundButton/RoundButton';
+// import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
 export class ShipmentContactsBox extends Component {
     constructor(props) {
@@ -10,6 +10,7 @@ export class ShipmentContactsBox extends Component {
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleNotifyeeChange = this.handleNotifyeeChange.bind(this);
         this.addNotifyee = this.addNotifyee.bind(this);
+        this.removeNotifyee = this.removeNotifyee.bind(this);
     }
 
     handleFormChange(event) {
@@ -21,9 +22,12 @@ export class ShipmentContactsBox extends Component {
     addNotifyee() {
         this.props.addNotifyee();
     }
+    removeNotifyee(not) {
+        this.props.removeNotifyee(not);
+    }
     render() {
         const { consignee, shipper, notifyees, theme } = this.props;
-        const notifyeesArray = [];
+        let notifyeesArray;
         const textStyle = {
             background:
                 theme && theme.colors
@@ -34,16 +38,26 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
+        const addressBtn = (
+            <div className={`flex-none layout-row layout-align-center-center ${styles.icon_btn}`} onClick={this.props.toggleAddressBook}>
+                <i className="flex-none fa fa-address-book clip" style={textStyle}></i>
+            </div>
+        );
         if (notifyees) {
-            notifyees.forEach((n, i) => {
-                notifyeesArray.push(
+            // debugger;
+            notifyeesArray = notifyees.map((n, i) => {
+                return (
                     <div
                         key={'notifyee' + i}
                         className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
                     >
-                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            {' '}
-                            <p className="flex-none">Notifyee {i + 1}</p>
+                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-space-between-center`}>
+                            <div className="flex-75 layout-row layout-align-start-center">
+                                <p className="flex-none">Notifyee {i + 1}</p>
+                            </div>
+                            <div className="flex-25 layout-row layout-align-center-center">
+                                { addressBtn }
+                            </div>
                         </div>
                         <input
                             className={styles.input_100}
@@ -51,7 +65,7 @@ export class ShipmentContactsBox extends Component {
                             value={n.companyName}
                             name={'notifyees-' + i + '-companyName'}
                             placeholder="Company Name"
-                            onChange={this.handleNotifyeeChange}
+                            onChange={(ev) => this.handleNotifyeeChange(ev)}
                         />
                         <input
                             className={styles.input_50}
@@ -59,7 +73,7 @@ export class ShipmentContactsBox extends Component {
                             value={n.firstName}
                             name={'notifyees-' + i + '-firstName'}
                             placeholder="First Name"
-                            onChange={this.handleNotifyeeChange}
+                            onChange={(ev) => this.handleNotifyeeChange(ev)}
                         />
                         <input
                             className={styles.input_50}
@@ -67,7 +81,7 @@ export class ShipmentContactsBox extends Component {
                             value={n.lastName}
                             name={'notifyees-' + i + '-lastName'}
                             placeholder="Last Name"
-                            onChange={this.handleNotifyeeChange}
+                            onChange={(ev) => this.handleNotifyeeChange(ev)}
                         />
                         <input
                             className={styles.input_50}
@@ -75,8 +89,13 @@ export class ShipmentContactsBox extends Component {
                             value={n.email}
                             name={'notifyees-' + i + '-email'}
                             placeholder="Email"
-                            onChange={this.handleNotifyeeChange}
+                            onChange={(ev) => this.handleNotifyeeChange(ev)}
                         />
+                        <div className="flex-50 layout-row layout-align-end-center" onClick={() => this.removeNotifyee(n)}>
+                            <p className="flex-none">Remove</p>
+                            <div className="flex-5"></div>
+                            <i className="flex-none fa fa-trash clip" style={textStyle}></i>
+                        </div>
                     </div>
                 );
             });
@@ -86,8 +105,13 @@ export class ShipmentContactsBox extends Component {
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
                     <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
                         <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <i className="fa fa-user flex-none" style={textStyle}></i>
-                            <p className="flex-none">Shipper</p>
+                            <div className="flex-75 layout-row layout-align-start-center">
+                                <i className="fa fa-user flex-none" style={textStyle}></i>
+                                <p className="flex-none">Shipper</p>
+                            </div>
+                            <div className="flex-25 layout-row layout-align-center-center">
+                                { addressBtn }
+                            </div>
                         </div>
                         <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
                         <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
@@ -108,20 +132,15 @@ export class ShipmentContactsBox extends Component {
                                 styles.contact_header
                             } flex-100 layout-row layout-align-space-between-center`}
                         >
-                            <div className="flex-none layout-row layout-align-end-center">
+                            <div className="flex-75 layout-row layout-align-start-center">
                                 <i
                                     className="fa fa-envelope-open-o flex-none"
                                     style={textStyle}
                                 />
                                 <p className="flex-none"> Consignee</p>
                             </div>
-                            <div className="flex-none layout-row layout-align-end-center">
-                                <RoundButton
-                                    size="small"
-                                    theme={theme}
-                                    text="Address Book"
-                                    handleNext={this.props.toggleAddressBook}
-                                />
+                            <div className="flex-25 layout-row layout-align-center-center">
+                                { addressBtn }
                             </div>
                         </div>
                         <input

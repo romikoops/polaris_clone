@@ -11,10 +11,12 @@ class Tenant < ApplicationRecord
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
     
+  validates :scope, presence: true, scope: true
+
   def get_admin
-    return self.users.where(role_id: 1).first
+    self.users.where(role_id: 1).first
   end
-  # Generates the static info for the choose route page
+
   def update_route_details
     routes = Route.where(tenant_id: self.id)
     detailed_routes = routes.map do |route, h|
@@ -40,6 +42,161 @@ class Tenant < ApplicationRecord
   def load_type_filter(load_type, mot)
     mot.each_with_object({}) do |(k, v), h|
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
+    end
+  end
+  def self.update_scope
+    tdata = [
+{      name: "Greencarrier",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Demo",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Nordic Consolidators",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Easyshipping",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: true,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Integrail",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: false,
+          cargo_item: false
+        },
+        rail: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      },
+      dangerous_goods: false
+    }},
+{name: "Inter-Scan Sea & Air",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false
+    }
+  }, {name: "Eimskip",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        rail: {
+          container: false,
+          cargo_item: false
+        },
+        air: {
+          container: false,
+          cargo_item: false
+        }
+      },
+      dangerous_goods: false
+    }
+    },
+    {name: "Belglobe",
+        scope: {
+      dangerous_goods: false,
+          modes_of_transport: {
+            ocean: {
+              container: true,
+              cargo_item: true
+            },
+            air: {
+              container: true,
+              cargo_item: true
+            },
+            rail: {
+              container: false,
+              cargo_item: false
+            }
+          }
+        }
+      }
+    ]
+    tdata.each do |t|
+      tenant = Tenant.find_by_name(t[:name])
+      tenant.scope = t[:scope]
+      tenant.save!
     end
   end
   

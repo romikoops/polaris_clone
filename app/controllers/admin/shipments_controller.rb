@@ -73,8 +73,20 @@ class Admin::ShipmentsController < ApplicationController
       when "accept"
         @shipment.accept!
         shipper_confirmation_email(@shipment.shipper, @shipment)
+        message = {
+          title: 'Booking Accepted',
+          message: "Your booking has been accepted! If you have any further questions or edis to your booking please contact the support department.",
+          shipmentRef: @shipment.imc_reference
+        }
+        add_message_to_convo(@shipment.shipper, message, true)
       when "decline"
         @shipment.decline!
+        message = {
+          title: 'Booking Declined',
+          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and gods type. For more info contact us through the support channels.",
+          shipmentRef: @shipment.imc_reference
+        }
+        add_message_to_convo(@shipment.shipper, message, true)
       when "ignore"
         @shipment.ignore!
       else
@@ -87,25 +99,7 @@ class Admin::ShipmentsController < ApplicationController
         # render 'edit'
       end
     end
-    @cargo_items = @shipment.cargo_items
-    @containers = @shipment.containers
-    @shipment_contacts = @shipment.shipment_contacts
-    @contacts = []
-    @shipment_contacts.each do |sc|
-      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
-    end
-    @schedules = []
-    @shipment.schedule_set.each do |ss|
-      @schedules.push(Schedule.find(ss['id']))
-    end
-     @documents = []
-    @shipment.documents.each do |doc|
-      tmp = doc.as_json
-      tmp["signed_url"] =  doc.get_signed_url
-      @documents << tmp
-    end
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
-    response_handler(resp)
+  response_handler(@shipment)
   end
 
   def document_action
@@ -122,7 +116,7 @@ class Admin::ShipmentsController < ApplicationController
         message: "Your document #{@document.text} was approved",
         shipmentRef: @document.shipment.imc_reference
       }
-      add_message_to_convo(@user, message)
+      add_message_to_convo(@user, message, true)
     when 'reject'
       @document.approved = 'rejected'
       @document.save!
@@ -133,7 +127,9 @@ class Admin::ShipmentsController < ApplicationController
       }
       add_message_to_convo(@user, message, true)
     end
-    response_handler(@document)
+    tmp = @document.as_json
+    tmp["signed_url"] =  @document.get_signed_url
+    response_handler(tmp)
     
   end
 

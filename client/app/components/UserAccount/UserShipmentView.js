@@ -24,10 +24,12 @@ export class UserShipmentView extends Component {
         this.back = this.back.bind(this);
     }
     componentDidMount() {
-        const { shipmentData, loading, userDispatch, user, match} = this.props;
+        const { shipmentData, loading, userDispatch, match} = this.props;
         this.props.setNav('shipments');
         if (!shipmentData && !loading) {
-            userDispatch.getShipment(user.data.id, match.params.id, false);
+            userDispatch.getShipment(parseInt(match.params.id, 10), false);
+        } else if (shipmentData && shipmentData.shipment && shipmentData.shipment.id !== match.params.id) {
+            userDispatch.getShipment(parseInt(match.params.id, 10), false);
         }
     }
     setFileType(ev) {
@@ -233,6 +235,9 @@ export class UserShipmentView extends Component {
                             { docView }
                         </div>
                         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                                <p className={` ${styles.sec_subheader_text} flex-none letter_3`}  >Upload New Document</p>
+                            </div>
                             <div className="flex-50 layout-align-start-center layout-row">
                                 <StyledSelect
                                     name="file-type"

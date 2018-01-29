@@ -207,9 +207,35 @@ export function admin(state = {}, action) {
             });
             return reqConfShip;
         case adminConstants.CONFIRM_SHIPMENT_SUCCESS:
+            const req = state.shipments.requested.filter(x => x.id !== action.payload.id);
+            const dashReq = state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id);
+            const open = state.shipments.open;
+            const dashOpen = state.dashboard.shipments.open;
+            open.push(action.payload);
+            dashOpen.push(action.payload);
+            const shipment = state.shipment.shipment;
+            if (shipment) {
+                shipment.status = 'confirmed';
+            }
             return {
                 ...state,
-                shipment: action.payload.data,
+                dashboard: {
+                    ...state.dashboard,
+                    shipments: {
+                        ...state.dashboard.shipments,
+                        open: dashOpen,
+                        requested: dashReq
+                    }
+                },
+                shipments: {
+                    ...state.shipments,
+                    open: open,
+                    requested: req
+                },
+                shipment: {
+                    ...state.shipment,
+                    shipment: shipment
+                },
                 loading: false
             };
         case adminConstants.CONFIRM_SHIPMENT_FAILURE:
@@ -217,6 +243,35 @@ export function admin(state = {}, action) {
                 error: { shipments: action.error }
             });
             return errConfShip;
+
+        case adminConstants.DENY_SHIPMENT_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case adminConstants.DENY_SHIPMENT_SUCCESS:
+            const denReq = state.shipments.requested.filter(x => x.id !== action.payload.id);
+            const denDashReq = state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id);
+            return {
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    shipments: {
+                        ...state.dashboard.shipments,
+                        requested: denDashReq
+                    }
+                },
+                shipments: {
+                    ...state.shipments,
+                    requested: denReq
+                },
+                loading: false
+            };
+        case adminConstants.DENY_SHIPMENT_FAILURE:
+            return {
+                ...state,
+                error: { shipments: action.error }
+            };
 
         case adminConstants.GET_SCHEDULES_REQUEST:
             const reqSched = merge({}, state, {
@@ -366,22 +421,40 @@ export function admin(state = {}, action) {
             return errRoutePric;
 
         case adminConstants.GET_CLIENTS_REQUEST:
-            const reqClients = merge({}, state, {
+            return {
+                ...state,
                 loading: true
-            });
-            return reqClients;
+            };
         case adminConstants.GET_CLIENTS_SUCCESS:
-            // ;
-            const succClients = merge({}, state, {
+            return {
+                ...state,
                 clients: action.payload.data,
                 loading: false
-            });
-            return succClients;
+            };
         case adminConstants.GET_CLIENTS_FAILURE:
             const errClients = merge({}, state, {
                 error: { clients: action.error }
             });
             return errClients;
+
+        case adminConstants.NEW_CLIENT_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case adminConstants.NEW_CLIENT_SUCCESS:
+            const clients = state.clients;
+            clients.push(action.payload);
+            return {
+                ...state,
+                clients: clients,
+                loading: false
+            };
+        case adminConstants.NEW_CLIENT_FAILURE:
+            return {
+                ...state,
+                error: { client: action.error }
+            };
 
         case adminConstants.GET_CLIENT_REQUEST:
             const reqClient = merge({}, state, {

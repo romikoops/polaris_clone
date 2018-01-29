@@ -72,6 +72,7 @@ export class BookingDetails extends Component {
             cargoNotes: ''
         };
         this.addNotifyee = this.addNotifyee.bind(this);
+        this.removeNotifyee = this.removeNotifyee.bind(this);
         this.setFromBook = this.setFromBook.bind(this);
         this.handleInput = this.handleInput.bind(this);
         this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
@@ -195,9 +196,16 @@ export class BookingDetails extends Component {
     }
 
     addNotifyee() {
-        const prevArr = this.state.notifyees;
-        prevArr.unshift(this.state.default.notifyee);
+        const prevArr = Object.assign([], this.state.notifyees);
+        prevArr.push(Object.assign({}, this.state.default.notifyee));
         this.setState({ notifyees: prevArr });
+    }
+
+    removeNotifyee(not) {
+        const prevArr = this.state.notifyees;
+        const newArr = prevArr.filter(n => n !== not);
+        console.log(newArr);
+        this.setState({ notifyees: newArr });
     }
 
     handleInput(event) {
@@ -224,10 +232,14 @@ export class BookingDetails extends Component {
 
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
+        console.log(name, value);
         const targetKeys = name.split('-');
         const ind = parseInt(targetKeys[1], 10);
+        console.log(ind);
         const notifyees = this.state.notifyees;
+        console.log(notifyees);
         notifyees[ind][targetKeys[2]] = value;
+        console.log(notifyees);
         this.setState({
             notifyees: notifyees
         });
@@ -289,7 +301,8 @@ export class BookingDetails extends Component {
             userLocations,
             schedules,
             containers,
-            cargoItems
+            cargoItems,
+            locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
         const textStyle = {
@@ -313,6 +326,7 @@ export class BookingDetails extends Component {
                 theme={theme}
                 toggleAddressBook={this.toggleAddressBook}
                 handleChange={this.handleInput}
+                removeNotifyee={this.removeNotifyee}
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );
@@ -366,7 +380,7 @@ export class BookingDetails extends Component {
                         </div>
                         <div className="flex-90 layout-row layout-align-start-center">
                             {shipment && theme && hubs ? (
-                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} cargoItems={cargoItems} containers={containers} />
+                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
                             ) : (
                                 ''
                             )}
@@ -392,7 +406,7 @@ export class BookingDetails extends Component {
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={() => shipmentDispatch.goTo('/account')}/>
+                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={() => shipmentDispatch.toDashboard()}/>
                     </div>
                 </div>
             </div>
