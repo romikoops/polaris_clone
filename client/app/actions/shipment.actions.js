@@ -74,7 +74,11 @@ function setShipmentDetails(data) {
             },
             error => {
                 error.then(data => {
-                    dispatch(failure({ type: 'error', text: data.message }));
+                    dispatch(failure({
+                        type: 'error',
+                        text: data.message || data.error
+                    }));
+                    if (data.error) console.error(data.exception);
                 });
             }
         );
