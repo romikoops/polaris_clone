@@ -19,7 +19,8 @@ class Header extends Component {
         this.state = {
             redirect: false,
             showLogin: false,
-            showMessages: false
+            showMessages: false,
+            isTop: true
         };
         this.goHome = this.goHome.bind(this);
         this.toggleShowLogin = this.toggleShowLogin.bind(this);
@@ -30,6 +31,12 @@ class Header extends Component {
         if (!messages) {
             messageDispatch.getUserConversations();
         }
+        document.addEventListener('scroll', () => {
+            const isTop = window.scrollY < 100;
+            if (isTop !== this.state.isTop) {
+                this.setState({ isTop });
+            }
+        });
     }
     goHome() {
         this.setState({redirect: true});
@@ -45,7 +52,7 @@ class Header extends Component {
         });
     }
     render() {
-        const { user, theme, tenant, currencies, appDispatch, invert } = this.props;
+        const { user, theme, tenant, currencies, appDispatch, invert, landingPage } = this.props;
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -121,12 +128,13 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
+        console.log(landingPage);
         return (
-            <div
-                className={`${
-                    styles.header
-                } layout-row flex-100 layout-wrap layout-align-center`}
-            >
+            <div className={landingPage && !this.state.isTop ?
+                `${styles.header_scrollable}
+                layout-row flex-100 layout-wrap layout-align-center`
+                : `${styles.header}
+                layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex layout-row layout-align-start-center">
                     {this.props.menu}
                 </div>
@@ -143,7 +151,7 @@ class Header extends Component {
                         {rightCorner}
                     </div>
                 </div>
-                 <div className="flex layout-row layout-align-start-center">
+                <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
                 { this.state.showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }

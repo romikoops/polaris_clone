@@ -2,16 +2,22 @@
   @import '../../styles/defaults';
 
   .header {
-    height: 100px;
+    height: 70px;
     background-color: transparent;
   }
+  
+  .header_scrollable {
+    height: 70px;
+    overflow-y: visible;
+    background-color: rgba(0,0,0,0.9);
+  }  
 
   img.logo {
-    height: 80px;
+    height: 50px;
   }
   img.wide_logo {
-    width: 200px;
-    height: auto
+    width: 170px;
+    height: auto;
   }
   .signin {
     height: 22px;

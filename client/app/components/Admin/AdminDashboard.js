@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Admin.scss';
 import defaults from '../../styles/default_classes.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
@@ -67,7 +66,7 @@ export class AdminDashboard extends Component {
     }
 
     render() {
-        const { theme, dashData, clients, hubs, hubHash, adminDispatch, activeRoutesData } = this.props;
+        const { theme, dashData, clients, hubs, hubHash, adminDispatch } = this.props;
         // ;
         if (!dashData) {
             return <Loading theme={theme} />;
@@ -150,11 +149,10 @@ export class AdminDashboard extends Component {
         }
         const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5);
         return(
-
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
 
-                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                    <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_main}`}>
+                    <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_top}`}>
 
                         <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
                             <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
@@ -167,7 +165,6 @@ export class AdminDashboard extends Component {
                             <div className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}>
                                 <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                             </div>
-                            {/* </div>*/}
                             <div className={`flex-50 layout-row ${ustyles.right} layout-wrap layout-align-space-between-space-between`}>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
                                     <h1 className="flex-none">{mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}</h1>
@@ -194,35 +191,35 @@ export class AdminDashboard extends Component {
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                    <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.sec_title}`}>
-                        <MainTextHeading theme={theme} text="Dashboard" />
-                    </div>
-                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        { requestedShipments }
-                        { openShipments }
-                        { finishedShipments }
-                    </div>
-                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
-                    </div>
-                    <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+
+                            <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                                    <MainTextHeading theme={theme} text="Dashboard" />
+                                    <div className="flex-100 layout-rowlayout-align-start-start">
+                                        { requestedShipments }
+                                        { openShipments }
+                                        { finishedShipments }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                            <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        </div>
                         <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                             <MainTextHeading theme={theme} text="Schedules"  />
                         </div>
                         { shortSchedArr }
-                    </div>
-                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
-                    </div>
-                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
+                        <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                            <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        </div>
+                        <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                            <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
+                        </div>
                     </div>
                 </div>
             </div>
-
         );
     }
 }

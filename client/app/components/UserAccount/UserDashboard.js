@@ -178,10 +178,10 @@ export class UserDashboard extends Component {
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                             <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
 
