@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminRoutesIndex, AdminRouteView} from './';
+import {AdminRoutesIndex, AdminRouteView, AdminRouteForm} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,10 +14,14 @@ class AdminRoutes extends Component {
         super(props);
         this.state = {
             selectedRoute: false,
-            currentView: 'open'
+            currentView: 'open',
+            newRoute: false
         };
         this.viewRoute = this.viewRoute.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
+        this.toggleNewRoute = this.toggleNewRoute.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.saveNewRoute = this.saveNewRoute.bind(this);
     }
 
     viewRoute(route) {
@@ -26,10 +30,21 @@ class AdminRoutes extends Component {
         this.setState({selectedRoute: true});
     }
 
+    toggleNewRoute() {
+        this.setState({newRoute: !this.state.newRoute});
+    }
+
     backToIndex() {
         const { dispatch, history } = this.props;
         this.setState({selectedRoute: false});
         dispatch(history.push('/admin/routes'));
+    }
+    closeModal() {
+        this.setState({newRoute: false});
+    }
+    saveNewRoute(route) {
+        const { adminDispatch } = this.props;
+        adminDispatch.newRoute(route);
     }
 
     render() {
@@ -48,6 +63,17 @@ class AdminRoutes extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+        const newButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="New Route"
+                    active
+                    handleNext={this.toggleNewRoute}
+                    iconClass="fa-plus"
+                />
+            </div>);
         const title = selectedRoute ? 'Route Overview' : 'Routes';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -56,6 +82,10 @@ class AdminRoutes extends Component {
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
                     {selectedRoute ? backButton : ''}
                 </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+                    {newButton}
+                </div>
+                 { this.state.newRoute ? <AdminRouteForm theme={theme} close={this.closeModal} hubs={hubs} saveRoute={this.saveNewRoute}/> : ''}
                 <Switch className="flex">
                     <Route
                         exact

@@ -28,7 +28,7 @@
       font-size: 20px;
     }
   }
-  .dpb_picker {
+  .dpb div input {
     height: 36px;
     width: 214px;
     border: 1px solid #F2F2F2;
@@ -39,7 +39,7 @@
     z-index: 20;
   }
 
-  .dpb_picker.with_errors {
+  .dpb.with_errors div input {
     background-color: rgba(232, 114, 88, 0.3);
     &::placeholder {
       color: rgb(211, 104, 80);

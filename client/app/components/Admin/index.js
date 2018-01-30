@@ -24,6 +24,7 @@ export * from './AdminTrucking';
 export * from './AdminTruckingView';
 export * from './AdminTruckingIndex';
 
+export * from './AdminRouteForm';
 export * from './AdminRouteTile';
 export * from './AdminRouteView';
 export * from './AdminRoutesIndex';

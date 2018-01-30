@@ -239,55 +239,10 @@ module ShippingTools
   end
 
   def shipper_confirmation_email(user, shipment)
-    bill_of_lading = build_and_upload_pdf(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      name:     'bill_of_lading'
-    )
-
-    invoice = build_and_upload_pdf(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/invoice.pdf.html.erb",
-      margin:   { top: 10, bottom: 5, left: 15, right: 15 },
-      shipment: shipment,
-      name:     'invoice'
-    )
-
-    files = {
-      bill_of_lading[:name] => bill_of_lading[:url],
-      invoice[:name]        => invoice[:url]
-    }
-
     ShipmentMailer.shipper_confirmation(
       user, 
-      shipment, 
-      files
+      shipment
     ).deliver_later
-  end
-
-  def build_and_upload_pdf(args)
-    doc_erb = ErbTemplate.new(
-      layout:   args[:layout],
-      template: args[:template],
-      locals:   { shipment: args[:shipment] }
-    )
-
-    doc_string = WickedPdf.new.pdf_from_string(
-      doc_erb.render,
-      margin: args[:margin]
-    )
-        
-    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
-    
-    File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
-    doc_pdf = File.open("tmp/" + doc_name)
-    
-    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
-    doc_url = doc.get_signed_url
-    
-    { name: doc_name, url: doc_url }
   end
 
   def send_booking_emails(shipment)

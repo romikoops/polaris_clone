@@ -456,6 +456,25 @@ export function admin(state = {}, action) {
                 error: { client: action.error }
             };
 
+        case adminConstants.NEW_ROUTE_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case adminConstants.NEW_ROUTE_SUCCESS:
+            const routes = state.routes.filter(x => x.id !== action.payload.id);
+            routes.push(action.payload);
+            return {
+                ...state,
+                routes: routes,
+                loading: false
+            };
+        case adminConstants.NEW_ROUTE_FAILURE:
+            return {
+                ...state,
+                error: { client: action.error }
+            };
+
         case adminConstants.GET_CLIENT_REQUEST:
             const reqClient = merge({}, state, {
                 loading: true

@@ -19,7 +19,6 @@ class Admin::DashboardController < ApplicationController
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @detailed_routes, hubs: @hubs, shipments: {requested: @requested_shipments, open: @open_shipments, finished: @finished_shipments}})
   end
 
-
   private
 
   def require_login_and_role_is_admin

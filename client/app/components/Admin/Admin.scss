@@ -409,7 +409,17 @@
     width: 800px;
     height: 700px;
     z-index: 52;
+    border-radius: 10px;
     background: #FFFFFF;
+    box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
+
+  }
+  .route_form {
+    width: 600px;
+    height: 400px;
+    z-index: 52;
+    background: #FFFFFF;
+    border-radius: 10px;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
 
   }

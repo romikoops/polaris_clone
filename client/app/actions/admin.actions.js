@@ -829,6 +829,35 @@ function getRoute(id, redirect) {
     };
 }
 
+function newRoute(data) {
+    function request(routeData) {
+        return { type: adminConstants.NEW_ROUTE_REQUEST, payload: routeData };
+    }
+    function success(routeData) {
+        return { type: adminConstants.NEW_ROUTE_SUCCESS, payload: routeData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_ROUTE_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.newRoute(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Creating Route successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function updateServiceCharge(id, req) {
     function request(prData) {
         return { type: adminConstants.UPDATE_SERVICE_CHARGES_REQUEST, payload: prData };
@@ -1023,5 +1052,6 @@ export const adminActions = {
     newClient,
     activateHub,
     saveNewHub,
-    getDashShipments
+    getDashShipments,
+    newRoute
 };
