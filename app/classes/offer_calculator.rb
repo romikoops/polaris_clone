@@ -37,11 +37,14 @@ class OfferCalculator
       params[:shipment][:origin_id],
       shipment.has_pre_carriage
     )
+    raise ApplicationError::NoOrigin unless @shipment.origin
+    
     @shipment.destination = Location.get_geocoded_location(
       params[:shipment][:destination_user_input],
       params[:shipment][:destination_id],
       shipment.has_on_carriage
     )
+    raise ApplicationError::NoDestination unless @shipment.destination
   end
 
   def calc_offer!
@@ -70,6 +73,8 @@ class OfferCalculator
 
   def determine_route!
     @shipment.route = Route.for_locations(@shipment)
+    
+    raise ApplicationError::NoRoute unless @shipment.route    
   end
 
   def determine_hubs!
@@ -83,24 +88,32 @@ class OfferCalculator
   end
 
   def determine_longest_trucking_time!
-    if shipment.has_pre_carriage
-      google_directions = GoogleDirections.new(
-        @shipment.origin.lat_lng_string,
-        @furthest_hub_from_origin.lat_lng_string,
-        @shipment.planned_pickup_date.to_i
-      )
-      driving_time = google_directions.driving_time_in_seconds
-      @longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
-    else
-      @longest_trucking_time = 0
+    begin
+      if shipment.has_pre_carriage
+        google_directions = GoogleDirections.new(
+          @shipment.origin.lat_lng_string,
+          @furthest_hub_from_origin.lat_lng_string,
+          @shipment.planned_pickup_date.to_i
+        )
+        driving_time = google_directions.driving_time_in_seconds
+        @longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
+      else
+        @longest_trucking_time = 0
+      end
+      @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
+    rescue
+      raise ApplicationError::NoTruckingTime
     end
-    @current_eta_in_search = @shipment.planned_pickup_date + @longest_trucking_time.seconds + 3.days
   end
 
   def determine_schedules!
-    @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
-      .where("transport_categories.name = 'any'")
-      .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
+    begin
+      @schedules = @shipment.route.schedules.joins(:vehicle).joins(:transport_categories)
+        .where("transport_categories.name = 'any'")
+        .where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
+    rescue
+      raise ApplicationError::NoSchedules
+    end
   end
 
   def add_schedules_charges!

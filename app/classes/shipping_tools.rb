@@ -43,31 +43,25 @@ module ShippingTools
   end 
 
   def get_shipment_offer(session, params, load_type)
-    @shipment = Shipment.find(params[:shipment_id])
-    offer_calculation = OfferCalculator.new(@shipment, params, current_user)
+    shipment = Shipment.find(params[:shipment_id])
+    offer_calculation = OfferCalculator.new(shipment, params, current_user)
 
-    begin
-      offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    offer_calculation.calc_offer!
 
-    if offer_calculation.shipment.save
-      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
-      return {
-        shipment:                   offer_calculation.shipment,
-        total_price:                offer_calculation.total_price,
-        has_pre_carriage:           offer_calculation.has_pre_carriage,
-        has_on_carriage:            offer_calculation.has_on_carriage,
-        schedules:                  offer_calculation.schedules,
-        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-        originHubs:                 offer_calculation.origin_hubs,
-        destinationHubs:            offer_calculation.destination_hubs,
-        cargoUnits:                 cargo_units
-      }
-    else
-      raise ApplicationError::NoRoutes # TBD - Customize Errors
-    end
+    offer_calculation.shipment.save!
+
+    cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
+    return {
+      shipment:                   offer_calculation.shipment,
+      total_price:                offer_calculation.total_price,
+      has_pre_carriage:           offer_calculation.has_pre_carriage,
+      has_on_carriage:            offer_calculation.has_on_carriage,
+      schedules:                  offer_calculation.schedules,
+      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculation.origin_hubs,
+      destinationHubs:            offer_calculation.destination_hubs,
+      cargoUnits:                 cargo_units
+    }
   end
 
   def create_document(file, shipment, type, user) 
