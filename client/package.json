@@ -20,18 +20,7 @@
     "react",
     "redux"
   ],
-  "jest": {
-    "setupFiles": [
-      "./test/jestsetup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
-    "moduleNameMapper": {
-      "^.+\\.(css|scss)$": "identity-obj-proxy"
-    }
-  },
-  "author": "Jean-Pierre Sierens",
+  "author": "Christopher König <criss@paars.de>",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.0.0-beta.32",
@@ -119,6 +108,7 @@
     "identity-obj-proxy": "^3.0.0",
     "image-webpack-loader": "^3.4.2",
     "jest": "^22.0.4",
+    "jest-enzyme": "^4.1.1",
     "json-loader": "^0.5.4",
     "node-env-webpack-plugin": "^1.1.0",
     "node-sass": "^4.7.2",
