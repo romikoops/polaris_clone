@@ -72,6 +72,11 @@ export class ShipmentLocationBox extends Component {
             locationFromModal: false,
         };
 
+        this.isOnFocus = {
+            origin: false,
+            destination: false
+        };
+
         this.handleAddressChange = this.handleAddressChange.bind(this);
         this.selectLocation = this.selectLocation.bind(this);
         this.handleTrucking = this.handleTrucking.bind(this);
@@ -87,6 +92,7 @@ export class ShipmentLocationBox extends Component {
         this.toggleModal = this.toggleModal.bind(this);
         this.selectedRoute = this.selectedRoute.bind(this);
         this.loadPrevReq = this.loadPrevReq.bind(this);
+        this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this);
     }
 
     componentDidMount() {
@@ -508,12 +514,14 @@ export class ShipmentLocationBox extends Component {
         });
         tmpAddress.fullAddress = place.formatted_address;
         setTimeout( () => {
-            this.changeAddressFormVisibility(target, false);
-        }, 3000);
+            this.changeAddressFormVisibility(target, this.isOnFocus[target]);
+        }, 6000);
 
         const { allNexuses } = this.props;
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
         if (target === 'origin') {
-            fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
+            fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
                 method: 'GET',
                 headers: authHeader()
             }).then(promise => {
@@ -536,7 +544,7 @@ export class ShipmentLocationBox extends Component {
 
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
         } else if (target === 'destination') {
-            fetch(`${BASE_URL}/find_nexus?address=${place.name}`, {
+            fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
                 method: 'GET',
                 headers: authHeader()
             }).then(promise => {
@@ -579,6 +587,10 @@ export class ShipmentLocationBox extends Component {
             [target]: tmpAddress
         });
     }
+    handleAddressFormFocus(event) {
+        const target = event.target.name.split('-')[0];
+        this.isOnFocus[target] = event.type === 'focus';
+    }
 
     render() {
         const { allNexuses } = this.props;
@@ -618,6 +630,7 @@ export class ShipmentLocationBox extends Component {
             }
         `;
 
+
         const showOriginError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
             <div style={{position: 'relative', margin: 'auto'}}>
@@ -650,7 +663,6 @@ export class ShipmentLocationBox extends Component {
                 </span>
             </div>
         );
-
         let toggleLogic = this.state.shipment.has_pre_carriage && this.state.showOriginFields ? styles.visible : '';
         const originFields = (
             <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
@@ -674,6 +686,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.props.origin.number}
                         placeholder="Number"
                     />
@@ -682,6 +696,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.origin.street}
                         placeholder="Street"
                     />
@@ -690,6 +706,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.origin.zipCode}
                         placeholder="Zip Code"
                     />
@@ -698,6 +716,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.origin.city}
                         placeholder="City"
                     />
@@ -706,6 +726,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.origin.country}
                         placeholder="Country"
                     />
@@ -762,6 +784,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.destination.number}
                         placeholder="Number"
                     />
@@ -770,6 +794,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.destination.street}
                         placeholder="Street"
                     />
@@ -778,6 +804,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.destination.zipCode}
                         placeholder="Zip Code"
                     />
@@ -786,6 +814,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.destination.city}
                         placeholder="City"
                     />
@@ -794,6 +824,8 @@ export class ShipmentLocationBox extends Component {
                         className={`flex-none ${styles.input}`}
                         type="string"
                         onChange={this.handleAddressChange}
+                        onFocus={this.handleAddressFormFocus}
+                        onBlur={this.handleAddressFormFocus}
                         value={this.state.destination.country}
                         placeholder="Country"
                     />
