@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
+import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
+
 class AdminClients extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +18,12 @@ class AdminClients extends Component {
             selectedClient: false,
             currentView: 'open',
             newClientBool: false,
-            newClient: {}
+            newClient: {},
+            errors: {
+                password: true,
+                password_confirmation: true
+            },
+            newClientAttempt: false
         };
         this.toggleNewClient = this.toggleNewClient.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
@@ -24,6 +31,7 @@ class AdminClients extends Component {
         this.viewClient = this.viewClient.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
         this.handleClientAction = this.handleClientAction.bind(this);
+        this.errorsExist = this.errorsExist.bind(this);
     }
     viewClient(client) {
         const { adminDispatch } = this.props;
@@ -41,25 +49,48 @@ class AdminClients extends Component {
         adminDispatch.confirmShipment(id, action);
     }
     toggleNewClient() {
-        this.setState({newClientBool: !this.state.newClientBool});
-        console.log(this.state.newClientBool);
+        this.setState({
+            newClientBool: !this.state.newClientBool,
+            newClientAttempt: false
+        });
     }
-    handleFormChange(event) {
+    handleFormChange(event, hasError) {
         const { name, value } = event.target;
+        const { errors } = this.state;
+        if (hasError !== undefined) errors[name] = hasError;
         this.setState({
             newClient: {
                 ...this.state.newClient,
                 [name]: value
-            }
+            },
+            errors
         });
+        if (name === 'password') {
+            const e = new Event('input', { bubbles: true });
+            // debugger;
+            this.passwordConfirmationInput.dispatchEvent(e);
+        }
+
+        console.log('changed');
     }
+
+    errorsExist(errorsObjects) {
+        let returnBool = false;
+        errorsObjects.forEach(errorsObj => {
+            if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true;
+        });
+        return returnBool;
+    }
+
     saveNewClient() {
+        this.setState({ newClientAttempt: true });
+        if (this.errorsExist([this.state.errors])) return;
+
         const { newClient } = this.state;
         const { adminDispatch } = this.props;
         adminDispatch.newClient(newClient);
         this.toggleNewClient();
     }
-
 
     render() {
         const { newClient, newClientBool } = this.state;
@@ -80,30 +111,201 @@ class AdminClients extends Component {
             </div>);
         const newClientBox = (
             <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
-                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewClient}>
                 </div>
                 <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
                     <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
                         <i className="fa fa-user flex-none clip" style={textStyle}></i>
                         <p className="flex-none">New Client</p>
                     </div>
-                    <input className={styles.input_100} type="text" value={newClient.companyName} name={'companyName'} placeholder="Company Name *" onChange={this.handleFormChange} />
-                    <input className={styles.input_50} type="text" value={newClient.firstName} name="firstName" placeholder="First Name *" onChange={this.handleFormChange} />
-                    <input className={styles.input_50} type="text" value={newClient.lastName} name="lastName" placeholder="Last Name *" onChange={this.handleFormChange} />
-                    <input className={styles.input_50} type="text" value={newClient.email} name="email" placeholder="Email *" onChange={this.handleFormChange} />
-                    <input className={styles.input_50} type="text" value={newClient.phone} name="phone" placeholder="Phone *" onChange={this.handleFormChange} />
-                    <input className={styles.input_street} type="text" value={newClient.street} name="street" placeholder="Street" onChange={this.handleFormChange} />
-                    <input className={styles.input_no} type="text" value={newClient.number} name="number" placeholder="Number" onChange={this.handleFormChange} />
-                    <input className={styles.input_zip} type="text" value={newClient.zipCode} name="zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-                    <input className={styles.input_cc} type="text" value={newClient.city} name="city" placeholder="City" onChange={this.handleFormChange} />
-                    <input className={styles.input_cc} type="text" value={newClient.country} name="country" placeholder="Country" onChange={this.handleFormChange} />
+                    <ValidatedInput
+                        className={styles.input_100}
+                        type="text"
+                        value={newClient.companyName}
+                        name={'companyName'}
+                        placeholder="Company Name *"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_50}
+                        type="text"
+                        value={newClient.firstName}
+                        name="firstName"
+                        placeholder="First Name *"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_50}
+                        type="text"
+                        value={newClient.lastName}
+                        name="lastName"
+                        placeholder="Last Name *"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_50}
+                        type="text"
+                        value={newClient.email}
+                        name="email"
+                        placeholder="Email *"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations={{
+                            minLength: 2,
+                            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+                        }}
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long',
+                            matchRegexp: 'Invalid email'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_50}
+                        type="text"
+                        value={newClient.phone}
+                        name="phone"
+                        placeholder="Phone *"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_street}
+                        type="text"
+                        value={newClient.street}
+                        name="street"
+                        placeholder="Street"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_no}
+                        type="text"
+                        value={newClient.number}
+                        name="number"
+                        placeholder="Number"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_zip}
+                        type="text"
+                        value={newClient.zipCode}
+                        name="zipCode"
+                        placeholder="Postal Code"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_cc}
+                        type="text"
+                        value={newClient.city}
+                        name="city"
+                        placeholder="City"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <ValidatedInput
+                        className={styles.input_cc}
+                        type="text"
+                        value={newClient.country}
+                        name="country"
+                        placeholder="Country"
+                        onChange={this.handleFormChange}
+                        firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
 
                     <div className="flex-100 layout-row">
                         <div className="flex-50 layout-row layout-wrap">
-                            <input className={styles.input_100} type="password" value={newClient.password} name={'password'} placeholder="Password *" onChange={this.handleFormChange} />
+                            <ValidatedInput
+                                className={styles.input_100}
+                                type="password"
+                                value={newClient.password}
+                                name={'password'}
+                                placeholder="Password *"
+                                onChange={this.handleFormChange}
+                                firstRenderInputs={!this.state.newClientAttempt}
+                                validations="minLength:8"
+                                validationErrors={{
+                                    isDefaultRequiredValue: 'Must not be blank',
+                                    minLength: 'Must be at least 8 characters long'
+                                }}
+                                required
+                            />
                         </div>
                         <div className="flex-50 layout-row layout-wrap">
-                            <input className={styles.input_100} type="password" value={newClient.password_confirmation} name={'password_confirmation'} placeholder="Password Confirmation *" onChange={this.handleFormChange} />
+                            <ValidatedInput
+                                inputRef={(input) => { this.passwordConfirmationInput = input; }}
+                                className={styles.input_100}
+                                type="password"
+                                value={newClient.password_confirmation}
+                                name={'password_confirmation'}
+                                placeholder="Password Confirmation *"
+                                onChange={this.handleFormChange}
+                                firstRenderInputs={!this.state.newClientAttempt}
+                                validations={{ matchesPassword: () => newClient.password === newClient.password_confirmation }}
+                                validationErrors={{
+                                    matchesPassword: 'Must match password',
+                                    isDefaultRequiredValue: 'Must not be blank'
+                                }}
+                                required
+                            />
                         </div>
                     </div>
                     <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>

@@ -25,6 +25,7 @@ class Admin::ClientsController < ApplicationController
       password: json["password"],
       password_confirmation: json["password_confirmation"]
     }
+    byebug
     new_user = current_user.tenant.users.create!(user_data)
 
     # if params[:new_client][:street] && params[:new_client][:country] && params[:new_client][:zipCode]
