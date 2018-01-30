@@ -180,13 +180,13 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(this.props.pickupDate).format(
+                                        {moment(shipment.planned_pickup_date).format(
                                             'YYYY-MM-DD'
                                         )}{' '}
                                     </p>
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(this.props.pickupDate).format(
+                                        {moment(shipment.planned_pickup_date).format(
                                             'HH:mm'
                                         )}{' '}
                                     </p>
@@ -205,13 +205,13 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format(
+                                        {moment(shipment.planned_etd).format(
                                             'YYYY-MM-DD'
                                         )}{' '}
                                     </p>
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format('HH:mm')}{' '}
+                                        {moment(shipment.planned_etd).format('HH:mm')}{' '}
                                     </p>
                                 </div>
                             </div>
@@ -228,13 +228,13 @@ export class AdminShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format(
+                                        {moment(shipment.planned_eta).format(
                                             'YYYY-MM-DD'
                                         )}{' '}
                                     </p>
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format('HH:mm')}{' '}
+                                        {moment(shipment.planned_eta).format('HH:mm')}{' '}
                                     </p>
                                 </div>
                             </div>

@@ -139,7 +139,7 @@
       outline: none;
     }
   }
-  .dpb_picker {
+  .dpb_picker div input{
     height: 36px;
     width: 214px;
     border: 1px solid #F2F2F2;
@@ -332,7 +332,9 @@
     background: rgba(0,0,0,0.25);
   }
   .editor_box {
-    width: 800px;
+    width: 75vw;
+    min-width: 800px;
+    max-width: 95%;
     height: 95%;
     z-index: 52;
     background: #FFFFFF;
@@ -407,7 +409,7 @@
   }
   .hub_form {
     width: 800px;
-    height: 700px;
+    height: 850px;
     z-index: 52;
     border-radius: 10px;
     background: #FFFFFF;

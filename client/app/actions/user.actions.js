@@ -141,7 +141,7 @@ function makePrimary(userId, locationId, redirect) {
                 response =>{
                     if (redirect) {
                         dispatch(
-                            push('/account/shipments')
+                            push('/account/dashboard')
                         );
                     }
                     dispatch(success(response));
@@ -402,7 +402,7 @@ function updateContact(data, redirect) {
                         push('/account/contacts/' + data.id)
                     );
                 }
-                dispatch(success(data));
+                dispatch(success(data.data));
             },
             error => {
                 dispatch(failure(error));
@@ -430,7 +430,7 @@ function newUserLocation(userId, data) {
                 dispatch(
                     alertActions.success('Saving User Location successful')
                 );
-                dispatch(success(data));
+                dispatch(success(data.data));
             },
             error => {
                 dispatch(failure(error));

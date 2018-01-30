@@ -27,8 +27,8 @@ class MessageCenter extends Component {
     }
 
     render() {
-        const  { theme, close, messageDispatch, conversations, user, shipment, tenant, clients } = this.props;
-        if (!conversations) {
+        const  { theme, close, messageDispatch, conversations, user, shipment, tenant, clients, loading } = this.props;
+        if (!conversations && !loading) {
             return '';
         }
         const convoKeys = Object.keys(conversations);
@@ -76,7 +76,7 @@ class MessageCenter extends Component {
 function mapStateToProps(state) {
     const { users, authentication, tenant, messaging, admin } = state;
     const { user, loggedIn } = authentication;
-    const { conversations, unread, shipment } = messaging;
+    const { conversations, unread, shipment, loading } = messaging;
     const { clients } = admin;
     return {
         user,
@@ -87,7 +87,8 @@ function mapStateToProps(state) {
         loggedIn,
         unread,
         shipment,
-        clients
+        clients,
+        loading
     };
 }
 function mapDispatchToProps(dispatch) {

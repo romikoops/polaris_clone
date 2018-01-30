@@ -168,6 +168,11 @@ export class ShipmentDetails extends Component {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }
         this.setState({
+            ...this.state,
+            [key1]: {...this.state[key1], [key2]: val, fullAddress }
+        });
+        console.log({
+            ...this.state,
             [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
     }
@@ -235,7 +240,7 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        this.setState({ [target]: address });
+        this.setState({ [target]: {...address, ...this.state[target]} });
     }
     errorsExist(errorsObjects) {
         let returnBool = false;
@@ -415,12 +420,9 @@ export class ShipmentDetails extends Component {
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
-        // const future = {
-        //     after: new Date(moment().add(7, 'days').format('DD/MM/YYYY'))
-        // };
         const dayPickerProps = {
             disabledDays: {before: new Date(moment().add(7, 'days').format())},
-            month: new Date(moment().add(7, 'days').format('YYYY'), moment().add(7, 'days').format('M'))
+            month: new Date(moment().add(7, 'days').format('YYYY'), (moment().add(7, 'days').format('M') - 1))
         };
 
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;

@@ -32,6 +32,7 @@ class OfferCalculator
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
     )
+    byebug
     @shipment.origin = Location.get_geocoded_location(
       params[:shipment][:origin_user_input],
       params[:shipment][:origin_id],

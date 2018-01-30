@@ -102,13 +102,39 @@ export function users(state = initialState, action) {
             };
         case userConstants.MAKEPRIMARY_SUCCESS:
             return {
-                items: action.payload
+                ...state,
+                loading: false,
+                dashboard: {
+                    ...state.dashboard,
+                    locations: action.payload
+                }
             };
         case userConstants.MAKEPRIMARY_FAILURE:
             return {
                 loading: false,
                 error: action.error
             };
+
+        case userConstants.NEW_USER_LOCATION_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case userConstants.NEW_USER_LOCATION_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                dashboard: {
+                    ...state.dashboard,
+                    locations: action.payload
+                }
+            };
+        case userConstants.NEW_USER_LOCATION_FAILURE:
+            return {
+                loading: false,
+                error: action.error
+            };
+
         case userConstants.GET_SHIPMENTS_REQUEST:
             const reqShips = merge({}, state, {
                 loading: true
@@ -300,11 +326,11 @@ export function users(state = initialState, action) {
         case userConstants.UPDATE_CONTACT_ADDRESS_REQUEST:
             return {...state, loading: true};
         case userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS:
-            const cData = state.contactData;
-            cData.location = action.payload;
+            const cLData = state.contactData;
+            cLData.location = action.payload;
             return {
                 ...state,
-                contactData: cData,
+                contactData: cLData,
                 loading: false
             };
         case userConstants.UPDATE_CONTACT_ADDRESS_FAILURE:
@@ -313,6 +339,24 @@ export function users(state = initialState, action) {
                 loading: false,
                 error: { hubs: action.error }
             };
+
+        case userConstants.UPDATE_CONTACT_REQUEST:
+            return {...state, loading: true};
+        case userConstants.UPDATE_CONTACT_SUCCESS:
+            const cData = state.contactData;
+            cData.contact = action.payload;
+            return {
+                ...state,
+                contactData: cData,
+                loading: false
+            };
+        case userConstants.UPDATE_CONTACT_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: { hubs: action.error }
+            };
+
         case userConstants.CLEAR_LOADING:
             return {
                 ...state,

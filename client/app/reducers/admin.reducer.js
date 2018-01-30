@@ -577,11 +577,14 @@ export function admin(state = {}, action) {
             });
             return reqHubActivate;
         case adminConstants.ACTIVATE_HUB_SUCCESS:
-            const succHubActivate = merge({}, state, {
-                hub: action.payload.data,
+            return {
+                ...state,
+                hub: {
+                    ...state.hub,
+                    hub: action.payload.data
+                },
                 loading: false
-            });
-            return succHubActivate;
+            };
         case adminConstants.ACTIVATE_HUB_FAILURE:
             const errHubActivate = merge({}, state, {
                 error: { hub: action.error },

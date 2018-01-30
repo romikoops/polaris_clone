@@ -224,7 +224,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/locations"
-                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} locations={users.dashboard.locations}
+                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} user={user.data} locations={users.dashboard.locations}
                                     getLocations={this.getLocations}
                                     destroyLocation={this.destroyLocation}
                                     makePrimary={this.makePrimary} />}

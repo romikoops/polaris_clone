@@ -149,11 +149,16 @@ function markAsRead(ref) {
     };
 }
 
+function showMessageCenter() {
+    return { type: messagingConstants.SHOW_MESSAGE_CENTER, payload: true };
+}
+
 
 export const messagingActions = {
     getUserConversations,
     sendUserMessage,
     getShipment,
     markAsRead,
-    getAdminConversations
+    getAdminConversations,
+    showMessageCenter
 };

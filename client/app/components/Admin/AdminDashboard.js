@@ -82,17 +82,17 @@ export class AdminDashboard extends Component {
         console.log(shipments);
 
         const mergedOpenShipments = shipments && shipments.open ?
-            shipments.open.map((sh) => {
+            shipments.open.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
         const mergedFinishedShipments = shipments && shipments.finished ?
-            shipments.finished.map((sh) => {
+            shipments.finished.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
         const mergedRequestedShipments = shipments && shipments.requested ?
-            shipments.requested.map((sh) => {
+            shipments.requested.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
