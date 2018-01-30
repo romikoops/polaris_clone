@@ -171,7 +171,7 @@ export class UserContactsView extends Component {
         this.closeEdit();
     }
     render() {
-        const {theme, contactData, hubs} = this.props;
+        const {theme, contactData, hubs, userDispatch} = this.props;
         if (!contactData) {
             return '';
         }
@@ -217,7 +217,7 @@ export class UserContactsView extends Component {
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Locations</p>
                     </div>
-                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact}/>
+                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact} saveEdit={userDispatch.saveAddressEdit}/>
                 </div>
             </div>
         );

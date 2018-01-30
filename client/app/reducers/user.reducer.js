@@ -16,16 +16,19 @@ export function users(state = initialState, action) {
             };
         case userConstants.GETALL_SUCCESS:
             return {
+                loading: false,
                 items: action.payload
             };
         case userConstants.GETALL_FAILURE:
             return {
+                loading: false,
                 error: action.error
             };
         case userConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {
                 ...state,
+                loading: false,
                 items: state.items.map(
                     userData =>
                         userData.id === action.id
@@ -42,6 +45,7 @@ export function users(state = initialState, action) {
             // remove 'deleting:true' property and add 'deleteError:[error]' property to user
             return {
                 ...state,
+                loading: false,
                 items: state.items.map(userData => {
                     if (userData.id === action.id) {
                         // make copy of user without 'deleting:true' property
@@ -65,6 +69,8 @@ export function users(state = initialState, action) {
             };
         case userConstants.GETLOCATIONS_FAILURE:
             return {
+                ...state,
+                loading: false,
                 error: action.error
             };
         case userConstants.DESTROYLOCATION_REQUEST:
@@ -85,6 +91,8 @@ export function users(state = initialState, action) {
             };
         case userConstants.DESTROYLOCATION_FAILURE:
             return {
+                ...state,
+                loading: false,
                 error: action.error
             };
         case userConstants.MAKEPRIMARY_REQUEST:
@@ -98,6 +106,7 @@ export function users(state = initialState, action) {
             };
         case userConstants.MAKEPRIMARY_FAILURE:
             return {
+                loading: false,
                 error: action.error
             };
         case userConstants.GET_SHIPMENTS_REQUEST:
@@ -113,6 +122,7 @@ export function users(state = initialState, action) {
             return succShips;
         case userConstants.GET_SHIPMENTS_FAILURE:
             const errShips = merge({}, state, {
+                loading: false,
                 error: { shipments: action.error }
             });
             return errShips;
@@ -129,6 +139,7 @@ export function users(state = initialState, action) {
             return succHubs;
         case userConstants.GET_HUBS_FAILURE:
             const errHubs = merge({}, state, {
+                loading: false,
                 error: { hubs: action.error }
             });
             return errHubs;
@@ -146,6 +157,7 @@ export function users(state = initialState, action) {
             return succShip;
         case userConstants.USER_GET_SHIPMENT_FAILURE:
             const errShip = merge({}, state, {
+                loading: false,
                 error: { shipments: action.error }
             });
             return errShip;
@@ -163,6 +175,7 @@ export function users(state = initialState, action) {
             return succDash;
         case userConstants.GET_DASHBOARD_FAILURE:
             const errDash = merge({}, state, {
+                loading: false,
                 error: { hubs: action.error }
             });
             return errDash;
@@ -180,6 +193,7 @@ export function users(state = initialState, action) {
             return succContact;
         case userConstants.GET_CONTACT_FAILURE:
             const errContact = merge({}, state, {
+                loading: false,
                 error: { contact: action.error }
             });
             return errContact;
@@ -197,6 +211,7 @@ export function users(state = initialState, action) {
             return succNewContact;
         case userConstants.NEW_CONTACT_FAILURE:
             const errNewContact = merge({}, state, {
+                loading: false,
                 error: { contactData: action.error }
             });
             return errNewContact;
@@ -216,6 +231,7 @@ export function users(state = initialState, action) {
             return succNewAlias;
         case userConstants.NEW_ALIAS_FAILURE:
             const errNewAlias = merge({}, state, {
+                loading: false,
                 error: { contactData: action.error }
             });
             return errNewAlias;
@@ -233,6 +249,7 @@ export function users(state = initialState, action) {
             return succDeleteAlias;
         case userConstants.DELETE_ALIAS_FAILURE:
             const errDeleteAlias = merge({}, state, {
+                loading: false,
                 error: { contactData: action.error }
             });
             return errDeleteAlias;
@@ -255,6 +272,7 @@ export function users(state = initialState, action) {
             return succDocUpload;
         case userConstants.UPLOAD_DOCUMENT_FAILURE:
             const errDocUpload = merge({}, state, {
+                loading: false,
                 error: { hubs: action.error }
             });
             return errDocUpload;
@@ -274,9 +292,32 @@ export function users(state = initialState, action) {
             return succDocDelete;
         case userConstants.DELETE_DOCUMENT_FAILURE:
             const errDocDelete = merge({}, state, {
+                loading: false,
                 error: { hubs: action.error }
             });
             return errDocDelete;
+
+        case userConstants.UPDATE_CONTACT_ADDRESS_REQUEST:
+            return {...state, loading: true};
+        case userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS:
+            const cData = state.contactData;
+            cData.location = action.payload;
+            return {
+                ...state,
+                contactData: cData,
+                loading: false
+            };
+        case userConstants.UPDATE_CONTACT_ADDRESS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: { hubs: action.error }
+            };
+        case userConstants.CLEAR_LOADING:
+            return {
+                ...state,
+                loading: false
+            };
 
         default:
             return state;

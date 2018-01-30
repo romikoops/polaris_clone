@@ -33,6 +33,8 @@ class UserLocationsController < ApplicationController
     response_handler(resp)
   end
 
+  
+
   def destroy
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.destroy

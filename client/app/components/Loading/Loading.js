@@ -3,9 +3,21 @@ import PropTypes from 'prop-types';
 import {v4} from 'node-uuid';
 import styled, { keyframes } from 'styled-components';
 import styles from './Loading.scss';
-export class Loading extends Component {
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { appActions } from '../../actions';
+
+class Loading extends Component {
     constructor(props) {
         super(props);
+        this.timer = setTimeout(() => {
+            this.props.appDispatch.clearLoading();
+        }, 20000);
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.timer);
     }
     render() {
         const { theme } = this.props;
@@ -83,3 +95,15 @@ Loading.propTypes = {
     theme: PropTypes.object,
     text: PropTypes.string
 };
+
+function mapStateToProps() {
+    return {};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        appDispatch: bindActionCreators(appActions, dispatch)
+    };
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Loading));

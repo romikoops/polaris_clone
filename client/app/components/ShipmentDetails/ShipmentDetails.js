@@ -129,6 +129,7 @@ export class ShipmentDetails extends Component {
             },
             has_on_carriage: obj.has_on_carriage,
             has_pre_carriage: obj.has_pre_carriage,
+            incoterm: obj.incoterm,
             routeSet: true
         });
     }
@@ -175,7 +176,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { cargoItems, cargoItemsErrors } = this.state;
-        if (!cargoItems[index]) return;
+        if (!cargoItems[index] || !cargoItemsErrors[index]) return;
 
         cargoItems[index][suffixName] = value;
         if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError;
@@ -186,6 +187,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { containers, containersErrors } = this.state;
+        if (!containers[index] || !containersErrors[index]) return;
         containers[index][suffixName] = value;
         if (hasError !== undefined) containersErrors[index][suffixName] = hasError;
 
@@ -403,6 +405,7 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
                 shipment={shipmentData}
                 routeIds={routeIds}
+                prevRequest={this.props.prevRequest}
                 nexusDispatch={this.props.nexusDispatch}
                 availableDestinations={this.props.availableDestinations}
                 handleSelectLocation={this.handleSelectLocation}
@@ -416,7 +419,8 @@ export class ShipmentDetails extends Component {
         //     after: new Date(moment().add(7, 'days').format('DD/MM/YYYY'))
         // };
         const dayPickerProps = {
-            disabledDays: {before: new Date(moment().add(7, 'days').format())}
+            disabledDays: {before: new Date(moment().add(7, 'days').format())},
+            month: new Date(moment().add(7, 'days').format('YYYY'), moment().add(7, 'days').format('M'))
         };
 
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;

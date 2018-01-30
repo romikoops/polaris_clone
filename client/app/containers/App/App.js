@@ -11,7 +11,7 @@ import UserAccount from '../UserAccount/UserAccount';
 import Admin from '../Admin/Admin';
 import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction';
 import { SignOut } from '../../components/SignOut/SignOut';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
 import { appActions } from '../../actions';
 import { bindActionCreators } from 'redux';

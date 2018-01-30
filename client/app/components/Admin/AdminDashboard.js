@@ -4,7 +4,7 @@ import styles from './Admin.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import {v4} from 'node-uuid';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);

@@ -22,7 +22,7 @@ import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
 // import styles from '../../components/UserAccount/UserAccount.scss';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 
 
 export class UserAccount extends Component {

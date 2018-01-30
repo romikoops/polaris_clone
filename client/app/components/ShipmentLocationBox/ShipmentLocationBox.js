@@ -86,6 +86,7 @@ export class ShipmentLocationBox extends Component {
         this.changeAddressFormVisibility = this.changeAddressFormVisibility.bind(this);
         this.toggleModal = this.toggleModal.bind(this);
         this.selectedRoute = this.selectedRoute.bind(this);
+        this.loadPrevReq = this.loadPrevReq.bind(this);
     }
 
     componentDidMount() {
@@ -93,6 +94,28 @@ export class ShipmentLocationBox extends Component {
         if (this.props.selectedRoute) {
             this.setHubsFromRoute(this.props.selectedRoute);
         }
+        if (this.props.prevRequest && this.props.prevRequest.shipment) {
+            this.loadPrevReq();
+        }
+    }
+    loadPrevReq() {
+        const { prevRequest, allNexuses } = this.props;
+        if (!prevRequest.shipment) {
+            return '';
+        }
+        const { shipment } = prevRequest;
+        const newData = {};
+        newData.originHub = shipment.origin_id ? allNexuses.origins.filter(o => o.value.id === shipment.origin_id)[0] : null;
+        newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : '';
+        newData.destinationHub = shipment.destination_id ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0] : null;
+        newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : '';
+        this.setState({
+            dSelect: newData.destinationHub,
+            oSelect: newData.originHub,
+            autoTextOrigin: newData.autoTextOrigin,
+            autoTextDest: newData.autoTextDest
+        });
+        return '';
     }
     toggleModal() {
         this.setState({showModal: !this.state.showModal});
@@ -209,20 +232,6 @@ export class ShipmentLocationBox extends Component {
             mapTypeId: this.props.gMaps.MapTypeId.ROADMAP,
             disableDefaultUI: true,
             styles: mapStyles
-            // [
-            //     {
-            //         featureType: 'water',
-            //         elementType: 'all',
-            //         stylers: [
-            //             {
-            //                 color: '#275b9b'
-            //             },
-            //             {
-            //                 invert_lightness: true
-            //             }
-            //         ]
-            //     }
-            // ]
         };
 
         const map = new this.props.gMaps.Map(
@@ -573,6 +582,7 @@ export class ShipmentLocationBox extends Component {
 
     render() {
         const { allNexuses } = this.props;
+
         const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
 
         let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];

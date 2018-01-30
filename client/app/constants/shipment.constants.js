@@ -56,6 +56,8 @@ export const documentTypes = {
 };
 
 export const shipmentConstants = {
+    CLEAR_LOADING: 'CLEAR_LOADING',
+
     NEW_SHIPMENT_REQUEST: 'NEW_SHIPMENT_REQUEST',
     NEW_SHIPMENT_SUCCESS: 'NEW_SHIPMENT_SUCCESS',
     NEW_SHIPMENT_FAILURE: 'NEW_SHIPMENT_FAILURE',

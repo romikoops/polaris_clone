@@ -14,7 +14,7 @@ import AdminPricings from '../../components/Admin/AdminPricings';
 import AdminTrucking from '../../components/Admin/AdminTrucking';
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
 import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
