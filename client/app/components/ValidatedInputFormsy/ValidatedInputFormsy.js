@@ -32,14 +32,7 @@ class ValidatedInputFormsy extends Component {
         this.errorsHaveUpdated = true;
     }
 
-    // updateErrors() {
-    //     const event = {target: {name: this.props.name, value: this.props.getValue()}};
-    //     const validationPassed = this.props.isValidValue(event.target.value);
-    //     this.props.onChange(event, !validationPassed);
-    // }
-
     changeValue(event) {
-        console.log('formsy');
         this.props.onChange(event, !this.props.isValidValue(event.target.value));
         if (this.props.setFirstRenderInputs) this.props.setFirstRenderInputs(false);
         this.setState({firstRender: false});

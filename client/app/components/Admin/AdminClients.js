@@ -10,6 +10,7 @@ import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
+import reactTriggerChange from 'react-trigger-change';
 
 class AdminClients extends Component {
     constructor(props) {
@@ -20,6 +21,16 @@ class AdminClients extends Component {
             newClientBool: false,
             newClient: {},
             errors: {
+                // companyName: true,
+                // firstName: true,
+                // lastName: true,
+                // email: true,
+                // phone: true,
+                // street: true,
+                // number: true,
+                // zipCode: true,
+                // city: true,
+                // country: true,
                 password: true,
                 password_confirmation: true
             },
@@ -57,21 +68,32 @@ class AdminClients extends Component {
     handleFormChange(event, hasError) {
         const { name, value } = event.target;
         const { errors } = this.state;
-        if (hasError !== undefined) errors[name] = hasError;
-        this.setState({
-            newClient: {
-                ...this.state.newClient,
-                [name]: value
-            },
-            errors
-        });
-        if (name === 'password') {
-            const e = new Event('input', { bubbles: true });
-            // debugger;
-            this.passwordConfirmationInput.dispatchEvent(e);
+
+        const newClient = this.state.newClient;
+        if (this.tmpNewClient) {
+            Object.assign(newClient, this.tmpNewClient);
+            Object.assign(errors, this.tmpErrors);
+            this.tmpNewClient = null;
         }
 
-        console.log('changed');
+        if (hasError !== undefined) errors[name] = hasError;
+
+        if (name === 'password' && this.passwordConfirmationInput) {
+            this.tmpNewClient = {
+                ...this.state.newClient,
+                [name]: value
+            };
+            this.tmpErrors = Object.assign({}, errors);
+            reactTriggerChange(this.passwordConfirmationInput);
+        } else {
+            this.setState({
+                newClient: {
+                    ...newClient,
+                    [name]: value
+                },
+                errors
+            });
+        }
     }
 
     errorsExist(errorsObjects) {
@@ -141,8 +163,10 @@ class AdminClients extends Component {
                         placeholder="First Name *"
                         onChange={this.handleFormChange}
                         firstRenderInputs={!this.state.newClientAttempt}
+                        validations="minLength:2"
                         validationErrors={{
-                            isDefaultRequiredValue: 'Must not be blank'
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
                         }}
                         required
                     />
@@ -299,7 +323,10 @@ class AdminClients extends Component {
                                 placeholder="Password Confirmation *"
                                 onChange={this.handleFormChange}
                                 firstRenderInputs={!this.state.newClientAttempt}
-                                validations={{ matchesPassword: () => newClient.password === newClient.password_confirmation }}
+                                validations={{ matchesPassword: (values, value) => {
+                                    const client = this.tmpNewClient || newClient;
+                                    return client.password === value;
+                                }}}
                                 validationErrors={{
                                     matchesPassword: 'Must match password',
                                     isDefaultRequiredValue: 'Must not be blank'
