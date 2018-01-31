@@ -66,11 +66,7 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-
         const { theme, title, seeAll, placeholder} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
 
         const { clients } = this.state;
         let clientsArr;

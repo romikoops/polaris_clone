@@ -44,7 +44,7 @@ export class AdminHubForm extends Component {
                 tmpAddress.street = ac.long_name;
             }
 
-            if (ac.types.includes('administrative_area_level_1') || ac.types.includes('locality')) {
+            if (ac.types.includes('locality')) {
                 tmpAddress.city = ac.long_name;
             }
 

@@ -86,7 +86,6 @@ export class AdminDashboard extends Component {
         console.log(shipments);
 
 
-
         const mergedOpenShipments = shipments && shipments.open ?
             shipments.open.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
