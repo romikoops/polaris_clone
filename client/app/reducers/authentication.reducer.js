@@ -51,10 +51,6 @@ export function authentication(state = initialState, action) {
             return {};
         case authenticationConstants.LOGOUT:
             return {};
-        case authentication.GETALL_REQUEST:
-            return {
-                loading: true
-            };
          case authenticationConstants.SET_USER:
             return {
                 ...state,

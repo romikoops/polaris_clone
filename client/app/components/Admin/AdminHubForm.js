@@ -56,6 +56,7 @@ export class AdminHubForm extends Component {
                 tmpAddress.country = ac.long_name;
             }
         });
+        debugger;
         tmpAddress.latitude = place.geometry.location.lat();
         tmpAddress.longitude = place.geometry.location.lng();
         tmpAddress.fullAddress = place.formatted_address;
@@ -163,6 +164,7 @@ export class AdminHubForm extends Component {
                     } layout-row flex-none layout-wrap layout-align-center`}
                 >
                     <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                        <div className="flex-5"></div>
                         <h2 className="flex-none clip letter_3" style={textStyle}>Add a New Hub</h2>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">

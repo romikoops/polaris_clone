@@ -627,10 +627,11 @@ export function admin(state = {}, action) {
         case adminConstants.NEW_HUB_SUCCESS:
             const newHubs = state.hubs;
             newHubs.push(action.payload);
-            return merge({}, state, {
+            return {
+                ...state,
                 loading: false,
                 hubs: newHubs
-            });
+            };
         case adminConstants.NEW_HUB_FAILURE:
             return merge({}, state, {
                 error: { documents: action.error },

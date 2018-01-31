@@ -60,7 +60,7 @@ class ContactsController < ApplicationController
     contact = Contact.find(params[:id])
     if contact.shipper_id == current_user.id
       contact.destroy
-      response_handler(true)
+      response_handler(params[:id])
       else
       response_handler(false)  
     end 

@@ -12,6 +12,7 @@ class Admin::HubsController < ApplicationController
   end
   def create
     new_loc = Location.create_and_geocode(params[:location].as_json)
+    byebug
     new_nexus = Location.from_short_name("#{params[:location][:city]}, #{params[:location][:country]}")
     hub = params[:hub].as_json
     hub["tenant_id"] = current_user.tenant_id
