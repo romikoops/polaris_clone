@@ -61,14 +61,7 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-<<<<<<< HEAD
-        const { theme, title, seeAll} = this.props;
-=======
         const { theme, title, seeAll, placeholder} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
->>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -93,11 +86,7 @@ export class AdminSearchableClients extends Component {
                     <div className="flex-60 layoput-row layout-align-start-center">
                         <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
-<<<<<<< HEAD
                     <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
-=======
-                    <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
->>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
                         <input
                             type="text"
                             name="search"

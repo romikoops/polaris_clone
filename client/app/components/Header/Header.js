@@ -47,15 +47,11 @@ class Header extends Component {
         });
     }
     toggleShowMessages() {
-         const { messageDispatch } = this.props;
-         messageDispatch.showMessageCenter();
+        const { messageDispatch } = this.props;
+        messageDispatch.showMessageCenter();
     }
     render() {
-<<<<<<< HEAD
-        const { user, theme, tenant, currencies, appDispatch, invert, landingPage } = this.props;
-=======
-        const { user, theme, tenant, invert, unread } = this.props;
->>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
+        const {  user, theme, tenant, invert, unread, landingPage } = this.props;
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -121,7 +117,6 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
-        console.log(landingPage);
         return (
             <div className={landingPage && !this.state.isTop ?
                 `${styles.header_scrollable}
