@@ -1,4 +1,15 @@
 {
-    "presets": ["@babel/preset-react", "@babel/preset-es2015", "@babel/preset-stage-0", "@babel/preset-stage-2"],
-    "plugins": [ "import", "@babel/proposal-class-properties", "transform-es2015-classes", "@babel/preset-env"]
-}
+    "presets": [
+      "@babel/preset-react",
+      "@babel/preset-es2015",
+      "@babel/preset-stage-0",
+      "@babel/preset-stage-2",
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties",
+      ["import", { "libraryName": "antd", "style": "css" }],
+      "transform-es2015-classes"
+    ]
+  }
+  

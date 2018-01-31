@@ -1,9 +1,11 @@
 {
   "plugins": [
-    "json"
+    "json",
+    "jest"
   ],
   "extends": [
     "airbnb", 
-    "standard"
+    "standard",
+    "plugin:jest/recommended"
   ]
 }
