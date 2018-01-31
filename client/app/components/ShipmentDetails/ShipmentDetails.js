@@ -15,6 +15,7 @@ import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 // import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { isEmpty } from '../../helpers/isEmpty.js';
+import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
@@ -407,9 +408,15 @@ export class ShipmentDetails extends Component {
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className="flex-100 layout-row layout-align-start-center">
                         {' '}
-                        <p className="flex-none letter_2">{this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}</p>
+                        <p className="flex-none letter_2">
+                            <BookingTextHeading
+                                theme={theme}
+                                text={this.state.has_pre_carriage
+                                    ? 'Approximate Pickup Date:'
+                                    : 'Approximate Departure Date:'}
+                            />
+                        </p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
-                        {' '}
                     </div>
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
@@ -435,8 +442,7 @@ export class ShipmentDetails extends Component {
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
                             {' '}
-                            {'Select Incoterm:'}
-                            {' '}
+                            <BookingTextHeading theme={theme} text="Select Incoterm:" />
                         </p>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>

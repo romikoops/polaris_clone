@@ -61,7 +61,7 @@ export class ChooseRoute extends Component {
         } else {
             prop = property;
         }
-        return function(a, b) {
+        return (a, b) => {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;

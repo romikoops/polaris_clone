@@ -12,9 +12,9 @@ export class BookingTextHeading extends Component {
         const { text, theme } = this.props;
         return(
             <div className="flex-100 layout-row layout-align-start-center">
-                <h2>
+                <h4>
                     <p className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>{text}</p>
-                </h2>
+                </h4>
             </div>
         );
     }
