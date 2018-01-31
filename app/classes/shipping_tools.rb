@@ -144,12 +144,14 @@ module ShippingTools
     end
 
     @shipment.shipper_location = new_loc
-    @shipment.save!
+    
     @schedules = []
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    
+    @shipment.planned_etd = @schedules.first.etd
+    @shipment.planned_eta = @schedules.last.eta
+    @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}

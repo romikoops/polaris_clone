@@ -226,6 +226,22 @@ class Shipment < ApplicationRecord
     end
   end
 
+  def eta_catchup
+    ships = Shipment.all
+    ships.each do |s|
+      scheds = []
+      s.schedule_set.each do |ss|
+        scheds.push(Schedule.find(ss['id']))
+      end
+      if scheds.first && scheds.first.etd && scheds.last && scheds.last.eta
+        s.planned_etd = scheds.first.etd
+        s.planned_eta = scheds.last.eta
+        s.save!
+      end
+      
+    end
+  end
+
   def self.test_email
     user = User.find_by_email("demo@demo.com")
     shipment = user.shipments.find_by(status: "requested")

@@ -1015,6 +1015,10 @@ function viewTrucking(truckingHub, pricing) {
     };
 }
 
+function clearLoading() {
+    return { type: adminConstants.CLEAR_LOADING, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -1053,5 +1057,6 @@ export const adminActions = {
     activateHub,
     saveNewHub,
     getDashShipments,
-    newRoute
+    newRoute,
+    clearLoading
 };

@@ -217,6 +217,17 @@ function deleteAlias(aliasId) {
     return fetch(BASE_URL + '/contacts/delete_alias/' + aliasId, requestOptions).then(handleResponse);
 }
 
+function saveAddressEdit(data) {
+    const formData = new FormData();
+    formData.append('address', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/contacts/update_contact_address/' + data.id, requestOptions).then(handleResponse);
+}
+
 export const userService = {
     getLocations,
     destroyLocation,
@@ -237,5 +248,6 @@ export const userService = {
     newContact,
     newAlias,
     deleteAlias,
+    saveAddressEdit,
     delete: _delete
 };

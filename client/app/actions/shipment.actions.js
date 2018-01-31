@@ -380,6 +380,10 @@ function toDashboard() {
     };
 }
 
+function clearLoading() {
+    return { type: shipmentConstants.CLEAR_LOADING, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -402,5 +406,6 @@ export const shipmentActions = {
     getAll,
     goTo,
     toDashboard,
+    clearLoading,
     delete: _delete
 };

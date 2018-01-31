@@ -106,9 +106,9 @@ class AdminScheduleGenerator extends Component {
             after: new Date(),
         };
         const vehicleTypeOptions = [];
-        if (vehicleTypes && mot) {
+        if (vehicleTypes && motKey) {
             vehicleTypes.forEach((vt) => {
-                if (vt.mode_of_transport === mot.value) {
+                if (vt.mode_of_transport === motKey) {
                     vehicleTypeOptions.push( {value: vt.id, label: vt.name ? vt.name : vt.mode_of_transport + '_default'});
                 }
                 if (vt.is_default && !vehicleType && vt.mode_of_transport === motKey) {
@@ -203,24 +203,22 @@ class AdminScheduleGenerator extends Component {
                             <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Effective Period and Duration</p>
                         </div>
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                            <div className="flex-33 layout-row layout-wrap layout-align-center-start">
+                            <div className={`flex-33 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
                                 <DayPickerInput
                                     name="startdate"
                                     placeholder="Start Date"
                                     format="DD/MM/YYYY"
                                     value={startDate}
-                                    className={styles.dpb_picker}
                                     onDayChange={this.handleDayChange}
                                     modifiers={future}
                                 />
                             </div>
-                            <div className="flex-33 layout-row layout-wrap layout-align-center-start">
+                            <div className={`flex-33 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
                                 <DayPickerInput
                                     name="enddate"
                                     placeholder="End Date"
                                     format="DD/MM/YYYY"
                                     value={endDate}
-                                    className={styles.dpb_picker}
                                     onDayChange={this.handleDayChange}
                                     modifiers={future}
                                 />

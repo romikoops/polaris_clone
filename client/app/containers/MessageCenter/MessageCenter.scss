@@ -2,6 +2,8 @@
   .backdrop {
     position: fixed;
     height: 100%;
+    top: 0;
+    right: 0;
     width: 100%;
     background: rgba(12,12,13,0.45);
     z-index: 60;

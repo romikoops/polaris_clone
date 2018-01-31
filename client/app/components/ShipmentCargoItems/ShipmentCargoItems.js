@@ -153,8 +153,11 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={ {matchRegexp: /[^0]/} }
-                                        validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validationErrors={{
+                                            nonNegative: 'Must be greater than 0',
+                                            isDefaultRequiredValue: 'Must not be blank'
+                                        }}
                                         required
                                     />
                                 ) : placeholderInput
@@ -180,8 +183,11 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={ {matchRegexp: /[^0]/} }
-                                        validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validationErrors={{
+                                            nonNegative: 'Must be greater than 0',
+                                            isDefaultRequiredValue: 'Must not be blank'
+                                        }}
                                         required
                                     />
                                 ) : placeholderInput
@@ -217,8 +223,11 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={ {matchRegexp: /[^0]/} }
-                                        validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validationErrors={{
+                                            nonNegative: 'Must be greater than 0',
+                                            isDefaultRequiredValue: 'Must not be blank'
+                                        }}
                                         required
                                         disabled={!!cargoItemTypes[i].dimension_x}
                                     />
@@ -253,8 +262,11 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={ {matchRegexp: /[^0]/} }
-                                        validationErrors={ {matchRegexp: 'Must not be 0', isDefaultRequiredValue: 'Must not be blank'} }
+                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validationErrors={{
+                                            nonNegative: 'Must be greater than 0',
+                                            isDefaultRequiredValue: 'Must not be blank'
+                                        }}
                                         disabled={!!cargoItemTypes[i].dimension_y}
                                         required
                                     />

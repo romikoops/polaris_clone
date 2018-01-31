@@ -59,7 +59,7 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-        const { theme, title, seeAll} = this.props;
+        const { theme, title, seeAll, placeholder} = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -87,11 +87,11 @@ export class AdminSearchableClients extends Component {
                     <div className="flex-50 layoput-row layout-align-start-center">
                         <h2 className="flex-none clip" style={textStyle}>{title ? title : 'Clients'}</h2>
                     </div>
-                    <div className={`${styles.input_box} flex-50 laypout-row layout-align-start`}>
+                    <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
                         <input
                             type="text"
                             name="search"
-                            placeholder="Search clients"
+                            placeholder={placeholder ? placeholder : 'Search clients'}
                             onChange={this.handleSearchChange}
                         />
                     </div>

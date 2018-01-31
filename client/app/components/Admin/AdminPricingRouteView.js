@@ -22,6 +22,7 @@ export class AdminPricingRouteView extends Component {
         this.closeEdit = this.closeEdit.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
         this.selectClient = this.selectClient.bind(this);
+        this.closeClientView = this.closeClientView.bind(this);
     }
     componentDidMount() {
         const { routePricings,  loading, adminActions, match } = this.props;
@@ -45,6 +46,9 @@ export class AdminPricingRouteView extends Component {
     selectClient(client) {
         console.log(client);
         this.setState({selectedClient: client});
+    }
+    closeClientView() {
+        this.setState({selectedClient: false});
     }
     render() {
         const {theme, pricingData, routePricings, hubs, clients, adminActions} = this.props;
@@ -193,6 +197,9 @@ export class AdminPricingRouteView extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                     <p className={` ${styles.sec_header_text} flex-none`}  > Dedicated Pricing </p>
+                    <div className="flex-none layout-row layout-align-center-center" onClick={this.closeClientView}>
+                        <i className="fa fa-times clip flex-none" style={textStyle}></i>
+                    </div>
                 </div>
                 <RoutePricingBox key={v4()} routeData={route} hrArr={relHR} pricingsObj={pricings} rPriceObj={routePricingData} transports={transportCategories} userId={selectedClient.id}/>
             </div>

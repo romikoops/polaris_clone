@@ -8,7 +8,7 @@ import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
-import MessageCenter from '../../containers/MessageCenter/MessageCenter';
+
 import { appActions, messagingActions } from '../../actions';
 import { accountIconColor } from '../../helpers';
 import { bindActionCreators } from 'redux';
@@ -40,12 +40,11 @@ class Header extends Component {
         });
     }
     toggleShowMessages() {
-        this.setState({
-            showMessages: !this.state.showMessages
-        });
+         const { messageDispatch } = this.props;
+         messageDispatch.showMessageCenter();
     }
     render() {
-        const { user, theme, tenant, currencies, appDispatch, invert, unread } = this.props;
+        const { user, theme, tenant, invert, unread } = this.props;
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -63,10 +62,7 @@ class Header extends Component {
                 key: 'signOut'
             }
         ];
-        const currLinks = currencies ? currencies.map((c) => {
-            c.select = () => appDispatch.setCurrency(c.key);
-            return c;
-        }) : [];
+
         const adjIcon = iconColourer(invert ? '#FFFFFF' : '#000000');
         if (this.state.redirect) {
             return <Redirect push to="/" />;
@@ -76,13 +72,6 @@ class Header extends Component {
                 dropDownText={dropDownText}
                 dropDownImage={adjIcon}
                 linkOptions={accountLinks}
-                invert={invert}
-            />
-        );
-        const currDropDown = (
-            <NavDropdown
-                dropDownText={user && user.data ? user.data.currency : ''}
-                linkOptions={currLinks}
                 invert={invert}
             />
         );
@@ -103,7 +92,7 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
-        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}{mail}</div>;
+        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -146,7 +135,6 @@ class Header extends Component {
                 <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
-                { this.state.showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }
             </div>
         );
     }

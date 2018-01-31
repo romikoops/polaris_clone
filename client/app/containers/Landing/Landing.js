@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import styles from './Landing.scss';
 // import defaults from '../../styles/default_classes.scss';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { userActions, adminActions, authenticationActions } from '../../actions';

@@ -23,6 +23,15 @@ class ContactsController < ApplicationController
 
   end
 
+  def update_contact_address
+    data = JSON.parse(params[:address])
+    loc = Location.find(data["id"])
+    data.delete("id")
+    loc.update_attributes(data)
+    loc.save!
+    response_handler(loc)
+  end
+
   def new_alias
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}

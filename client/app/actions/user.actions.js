@@ -141,7 +141,7 @@ function makePrimary(userId, locationId, redirect) {
                 response =>{
                     if (redirect) {
                         dispatch(
-                            push('/account/shipments')
+                            push('/account/dashboard')
                         );
                     }
                     dispatch(success(response));
@@ -402,7 +402,7 @@ function updateContact(data, redirect) {
                         push('/account/contacts/' + data.id)
                     );
                 }
-                dispatch(success(data));
+                dispatch(success(data.data));
             },
             error => {
                 dispatch(failure(error));
@@ -430,7 +430,7 @@ function newUserLocation(userId, data) {
                 dispatch(
                     alertActions.success('Saving User Location successful')
                 );
-                dispatch(success(data));
+                dispatch(success(data.data));
             },
             error => {
                 dispatch(failure(error));
@@ -524,6 +524,38 @@ function deleteAlias(aliasId) {
     };
 }
 
+function saveAddressEdit(address) {
+    function request(addressData) {
+        return { type: userConstants.UPDATE_CONTACT_ADDRESS_REQUEST, payload: addressData };
+    }
+    function success(addressData) {
+        return { type: userConstants.UPDATE_CONTACT_ADDRESS_SUCCESS, payload: addressData };
+    }
+    function failure(error) {
+        return { type: userConstants.UPDATE_CONTACT_ADDRESS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.saveAddressEdit(address).then(
+            data => {
+                dispatch(
+                    alertActions.success('Editing Address successful')
+                );
+                dispatch(success(data.data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function clearLoading() {
+    return { type: userConstants.CLEAR_LOADING, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -531,7 +563,7 @@ function goTo(path) {
 }
 function goBack() {
     return () => {
-       history.goBack();
+        history.goBack();
     };
 }
 
@@ -554,5 +586,7 @@ export const userActions = {
     newContact,
     newAlias,
     deleteAlias,
+    saveAddressEdit,
+    clearLoading,
     delete: _delete
 };

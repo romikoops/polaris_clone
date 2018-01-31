@@ -129,6 +129,7 @@ export class ShipmentDetails extends Component {
             },
             has_on_carriage: obj.has_on_carriage,
             has_pre_carriage: obj.has_pre_carriage,
+            incoterm: obj.incoterm,
             routeSet: true
         });
     }
@@ -167,6 +168,11 @@ export class ShipmentDetails extends Component {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }
         this.setState({
+            ...this.state,
+            [key1]: {...this.state[key1], [key2]: val, fullAddress }
+        });
+        console.log({
+            ...this.state,
             [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
     }
@@ -175,7 +181,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { cargoItems, cargoItemsErrors } = this.state;
-        if (!cargoItems[index]) return;
+        if (!cargoItems[index] || !cargoItemsErrors[index]) return;
 
         cargoItems[index][suffixName] = value;
         if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError;
@@ -186,6 +192,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { containers, containersErrors } = this.state;
+        if (!containers[index] || !containersErrors[index]) return;
         containers[index][suffixName] = value;
         if (hasError !== undefined) containersErrors[index][suffixName] = hasError;
 
@@ -233,7 +240,7 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        this.setState({ [target]: address });
+        this.setState({ [target]: {...address, ...this.state[target]} });
     }
     errorsExist(errorsObjects) {
         let returnBool = false;
@@ -403,6 +410,7 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
                 shipment={shipmentData}
                 routeIds={routeIds}
+                prevRequest={this.props.prevRequest}
                 nexusDispatch={this.props.nexusDispatch}
                 availableDestinations={this.props.availableDestinations}
                 handleSelectLocation={this.handleSelectLocation}
@@ -412,11 +420,9 @@ export class ShipmentDetails extends Component {
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
-        // const future = {
-        //     after: new Date(moment().add(7, 'days').format('DD/MM/YYYY'))
-        // };
         const dayPickerProps = {
-            disabledDays: {before: new Date(moment().add(7, 'days').format())}
+            disabledDays: {before: new Date(moment().add(7, 'days').format())},
+            month: new Date(moment().add(7, 'days').format('YYYY'), (moment().add(7, 'days').format('M') - 1))
         };
 
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;

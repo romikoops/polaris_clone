@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 import { connect } from 'react-redux';
@@ -97,6 +97,11 @@ class Shop extends Component {
             showRegistration: false,
         });
     }
+    toggleShowMessages() {
+        this.setState({
+            showMessages: !this.state.showMessages
+        });
+    }
 
     selectShipmentRoute(obj) {
         const { shipmentDispatch, bookingData } = this.props;
@@ -155,7 +160,7 @@ class Shop extends Component {
             <div className="layout-row flex-100 layout-wrap">
                 {loadingScreen}
                 { this.state.showRegistration && !loading ? loginModal : '' }
-                <Header theme={this.props.theme} />
+                <Header theme={this.props.theme} showMessages={this.toggleShowMessages}/>
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}

@@ -2,6 +2,11 @@ import { shipmentConstants } from '../constants';
 import merge from 'lodash/merge';
 export function shipment(state = {}, action) {
     switch (action.type) {
+        case shipmentConstants.CLEAR_LOADING:
+            return {
+               ...state,
+                loading: false
+            };
         case shipmentConstants.NEW_SHIPMENT_REQUEST:
             return {
                 request: {

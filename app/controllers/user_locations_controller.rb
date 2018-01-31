@@ -13,8 +13,12 @@ class UserLocationsController < ApplicationController
     user = User.find(params[:user_id])
     location = Location.create!(JSON.parse(params[:new_location]))
     new_user_loc = user.user_locations.create!(primary: false, location_id: location.id)
-    user_locations = user.user_locations
-    response_handler(user_locations)
+    resp = []
+    user_locs = user.user_locations
+    user_locs.each do |ul|
+      resp.push({user: ul, location: ul.location})
+    end
+    response_handler(resp)
 
   end
 
@@ -27,11 +31,15 @@ class UserLocationsController < ApplicationController
 
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
     ul.update_attribute(:primary, true)
-
-    resp = Location.all_with_primary_for(user)
-
+    resp = []
+    user_locs = user.user_locations
+    user_locs.each do |ul|
+      resp.push({user: ul, location: ul.location})
+    end
     response_handler(resp)
   end
+
+  
 
   def destroy
     ul = UserLocation.find_by(user_id: params[:user_id], location_id: params[:id])
