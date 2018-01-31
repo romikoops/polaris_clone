@@ -5,11 +5,15 @@ import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+<<<<<<< HEAD
 import { Loading } from '../../components/Loading/Loading';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import style from './AdminDashboard.scss';
 import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+=======
+import Loading from '../../components/Loading/Loading';
+>>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -92,15 +96,24 @@ export class AdminDashboard extends Component {
             }) : false;
 
         const mergedOpenShipments = shipments && shipments.open ?
-            shipments.open.map((sh) => {
+            shipments.open.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
         const mergedFinishedShipments = shipments && shipments.finished ?
-            shipments.finished.map((sh) => {
+            shipments.finished.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
+<<<<<<< HEAD
+=======
+        const mergedRequestedShipments = shipments && shipments.requested ?
+            shipments.requested.sort(this.dynamicSort('updated_at')).map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
+        // const mergedRequestedShipments = false;
+>>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"

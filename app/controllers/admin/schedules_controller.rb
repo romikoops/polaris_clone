@@ -16,8 +16,11 @@ class Admin::SchedulesController < ApplicationController
   end
   def auto_generate_schedules
     tenant = Tenant.find(current_user.tenant_id)
-    @hub_route = HubRoute.find_by(starthub_id: params[:startHubId], endhub_id: params[:endHubId])
     mot = params[:mot].split('_')[0]
+    @hub_route = HubRoute.find_by(starthub_id: params[:startHubId], endhub_id: params[:endHubId])
+    if !@hub_route
+      @hub_route = HubRoute.create_with_route(params[:startHubId], params[:endHubId], mot, current_user.tenant_id)
+    end
     @hub_route.generate_weekly_schedules(mot, params[:startDate], params[:endDate], params[:weekdays], params[:duration], params[:vehicleTypeId])
     @train_schedules = tenant.schedules.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
     @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)

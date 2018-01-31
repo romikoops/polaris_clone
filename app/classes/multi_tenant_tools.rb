@@ -5,32 +5,28 @@ module MultiTenantTools
     tenant =   {
       "theme" => {
         "colors" => {
-          "primary" => "#006bc2",
-          "secondary" => "#174b90",
-          "brightPrimary" => "#006bc2",
-          "brightSecondary" => "#174b90"
+          "primary" => "#252D5C",
+          "secondary" => "##C42D35",
+          "brightPrimary" => "#4655aa",
+          "brightSecondary" => "#fc353e"
         },
-        "logoLarge" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
-        "logoSmall" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip_2.png",
-        "logoWide" => "https://assets.itsmycargo.com/assets/logos/logo_eimskip.png",
-        "background" => "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+        "logoLarge" => "https://assets.itsmycargo.com/assets/logos/belglobe.png",
+        "logoSmall" => "https://assets.itsmycargo.com/assets/logos/belglobe.png"
       },
       "addresses" => {
-        "main" => "Korngardar 2, 104 Reykjavík, Iceland"
+        "main" => "Route de la Plaine 45, CH-1580 Avenches, SWITZERLAND"
       },
       "phones" =>{
-        "main" =>"+354 525 - 7000",
-        "support" => "+354 525 - 7000"
+        "main" => "+41 (0)26 409 76 80",
+        "support" => "0173042031020"
       },
       "emails" => {
-        "sales" => "service@eimskip.is",
-        "support" => "service@eimskip.is"
+        "sales" => "info@belglobe.com",
+        "support" => "info@belglobe.com"
       },
-      "subdomain" => "eimskip",
-      "name" => "Eimskip",
-      "web" => {
-        "tld" => "is"
-      },
+      "web" => {},
+      "subdomain" => "belglobe",
+      "name" => "Belglobe",
       "scope" => {
         "modes_of_transport" => {
           "ocean" => {
@@ -38,12 +34,12 @@ module MultiTenantTools
             "cargo_item" => true
           },
           "air" => {
-            "container" => false,
-            "cargo_item" => false
+            "container" => true,
+            "cargo_item" => true
           }
         }
       }
-    }
+  }
     # new_site(tenant.to_h, true)
     seed_demo_site(tenant)
   end
@@ -160,7 +156,24 @@ module MultiTenantTools
           default_root_object: path,
           price_class: price_class,
           viewer_certificate: viewer_certificate,
-          enabled: true }
+          enabled: true },
+        custom_error_responses: {
+          quantity: 2, # required
+          items: [
+            {
+              error_code: 403, # required
+              response_page_path: "/#{subd}.html",
+              response_code: "200",
+              error_caching_min_ttl: 1,
+            },
+            {
+              error_code: 404, # required
+              response_page_path: "/#{subd}.html",
+              response_code: "200",
+              error_caching_min_ttl: 1,
+            }
+          ],
+        }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
       tenant = Tenant.find_by_subdomain(subd)

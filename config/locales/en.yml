@@ -31,15 +31,35 @@
 
 en:
   error:
-    no_routes:
+    no_route:
       http_code: 400
       code: 1000
-      message: "No routes found. Please check your inputs and try again."
+      message: "No route matches the selected origin and destination."
+    no_origin:
+      http_code: 400
+      code: 1001
+      message: "Unable to find the geolocated address for the given origin."
+    no_destination:
+      http_code: 400
+      code: 1002
+      message: "Unable to find the geolocated address for the given destination."
+    no_trucking_time:
+      http_code: 400
+      code: 1003
+      message: "Unable to calculate trucking time with the given date"
+    no_schedules:
+      http_code: 400
+      code: 1004
+      message: "Unable to determine the schedule with the given date."
+    no_schedules_charges:
+      http_code: 400
+      code: 1005
+      message: "Unable to determine charges."
     not_authenticated:
       http_code: 401
       code: 1050
       message: "You are not signed in."
     bad_credentials:
       http_code: 401
-      code: 1100
+      code: 1051
       message: "Invalid email or password."

@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView';
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails';
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails';
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation';
 import { connect } from 'react-redux';
@@ -97,6 +97,11 @@ class Shop extends Component {
             showRegistration: false,
         });
     }
+    toggleShowMessages() {
+        this.setState({
+            showMessages: !this.state.showMessages
+        });
+    }
 
     selectShipmentRoute(obj) {
         const { shipmentDispatch, bookingData } = this.props;
@@ -116,17 +121,11 @@ class Shop extends Component {
     }
 
     render() {
-        // const loggedIn = this.props.loggedIn ? this.props.loggedIn : false;
-        // const theme = this.props.tenant.theme;
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
-
-
         const {
-            bookingData, theme, match, loading, tenant,
-            user, shipmentDispatch, nexusDispatch, currencies, dashboard
+            bookingData, match, loading, tenant, user,
+            shipmentDispatch, nexusDispatch, currencies, dashboard
         } = this.props;
+        const { theme } = tenant.data;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
         const route2 = match.url + '/:shipmentId/choose_route';
@@ -143,7 +142,6 @@ class Shop extends Component {
         } else if (response && response.stage1 && response.stage2 && response.stage3 && response.stage4) {
             shipmentId = response.stage4.shipment.id;
         }
-
         const { req } = this.state;
         const loginModal = (
             <Modal
@@ -162,7 +160,7 @@ class Shop extends Component {
             <div className="layout-row flex-100 layout-wrap">
                 {loadingScreen}
                 { this.state.showRegistration && !loading ? loginModal : '' }
-                <Header theme={this.props.theme} />
+                <Header theme={this.props.theme} showMessages={this.toggleShowMessages}/>
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}
@@ -190,7 +188,7 @@ class Shop extends Component {
                     render={props => (
                         <ShipmentDetails
                             {...props}
-                            theme={theme}
+                            tenant={tenant}
                             user={user}
                             dashboard={dashboard}
                             shipmentData={response ? response.stage1 : {}}

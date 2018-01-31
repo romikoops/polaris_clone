@@ -193,6 +193,7 @@ export class AdminPriceEditor extends Component {
                             classes={`${styles.select}`}
                             value={selectOptions ? selectOptions.data[key][chargeKey] : ''}
                             options={rateOpts}
+                            className="flex-100"
                             onChange={this.handleSelect}
                         />
                     </div>);
@@ -205,6 +206,7 @@ export class AdminPriceEditor extends Component {
                                 classes={`${styles.select}`}
                                 value={selectOptions ? selectOptions.data[key].currency : ''}
                                 options={currencyOpts}
+                                className="flex-100"
                                 onChange={this.handleSelect}
                             />
                         </div>
@@ -234,40 +236,6 @@ export class AdminPriceEditor extends Component {
                             <div className="flex-60 layout-row layout-align-start-center">
                                 <i className="fa fa-map-signs clip" style={textStyle}></i>
                                 <p className="flex-none offset-5">{hubRoute.name}</p>
-                            </div>
-                            {/* <div className="flex-40 layout-row layout-align-center-center" >
-                                <StyledSelect
-                                    name="hub-filter"
-                                    className={`${styles.select}`}
-                                    value={currency}
-                                    options={currencyOpts}
-                                    onChange={this.setCurrency}
-                                />
-                            </div>*/}
-                        </div>
-                        <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                            <div className="flex-50 layout-row layout-align-start-center">
-                                <p className="flex-none">MoT:</p>
-                            </div>
-                            <div className="flex-50 layout-row layout-align-end-center">
-                                <p className="flex-none">{moTOpts[this.props.transport.mode_of_transport]}</p>
-                            </div>
-                        </div>
-                        <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                            <div className="flex-50 layout-row layout-align-start-center">
-                                <p className="flex-none">Cargo Type: </p>
-                            </div>
-                            <div className="flex-50 layout-row layout-align-end-center">
-                                <p className="flex-none">{cargoOpts[this.props.transport.cargo_class]}</p>
-                            </div>
-                            {/* <p className="flex-none">{transport.name}</p> */}
-                        </div>
-                        <div className={`flex-95 layout-row layout-align-space-between-center ${styles.edit_row_detail}`}>
-                            <div className="flex-50 layout-row layout-align-start-center">
-                                <p className="flex-none">Cargo Class:</p>
-                            </div>
-                            <div className="flex-50 layout-row layout-align-end-center">
-                                <p className="flex-none">{cargoClassOpts[this.props.transport.name]}</p>
                             </div>
                         </div>
                         {panel}

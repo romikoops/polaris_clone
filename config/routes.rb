@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       end
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
-      resources :routes, only: [:index, :show]
+      resources :routes, only: [:index, :show, :create]
 
       resources :pricings, only: [:index]
       get  "client_pricings/:id", to: "pricings#client"
@@ -99,6 +99,7 @@ Rails.application.routes.draw do
 
     resources :contacts, only: [:index, :show, :create, :update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
+    post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'

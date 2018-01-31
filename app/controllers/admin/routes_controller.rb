@@ -1,6 +1,7 @@
 class Admin::RoutesController < ApplicationController
   before_action :require_login_and_role_is_admin
   include PricingTools
+  include RouteTools
 
   
 
@@ -12,6 +13,31 @@ class Admin::RoutesController < ApplicationController
       )
     end
     response_handler(@detailed_routes)
+  end
+  def create
+    new_route_data = params[:route].as_json
+    startHub = Hub.find_by(id: new_route_data["startHub"])
+    endHub = Hub.find_by(id: new_route_data["endHub"])
+    origin = startHub.nexus
+    destination = endHub.nexus
+    route = Route.find_by(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id)
+    if route
+      route.hub_routes.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_route_data["name"])
+      update_route_option(route)
+      resp = route.detailed_hash(
+        nexus_names: true
+      )
+      response_handler(resp)
+    else
+      route_name = "#{origin.name} - #{destination.name}"
+      new_route = current_user.tenant.routes.create!(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id, name: route_name)
+      new_route.hub_routes.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_route_data["name"])
+      update_route_option(new_route)
+      resp = new_route.detailed_hash(
+        nexus_names: true
+      )
+      response_handler(resp)
+    end
   end
 
   def show

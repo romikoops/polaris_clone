@@ -20,6 +20,14 @@ function getUserConversations() {
     return fetch(BASE_URL + '/messaging/get', requestOptions).then(handleResponse);
 }
 
+function getAdminConversations() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(BASE_URL + '/messaging/get_admin', requestOptions).then(handleResponse);
+}
+
 function sendUserMessage(message) {
     const requestOptions = {
         method: 'POST',
@@ -55,5 +63,6 @@ export const messagingService = {
     getUserConversations,
     sendUserMessage,
     getShipmentData,
-    markAsRead
+    markAsRead,
+    getAdminConversations
 };

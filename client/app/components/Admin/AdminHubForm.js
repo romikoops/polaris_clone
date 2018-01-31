@@ -44,7 +44,7 @@ export class AdminHubForm extends Component {
                 tmpAddress.street = ac.long_name;
             }
 
-            if (ac.types.includes('administrative_area_level_1')) {
+            if (ac.types.includes('administrative_area_level_1') || ac.types.includes('locality')) {
                 tmpAddress.city = ac.long_name;
             }
 
@@ -162,7 +162,7 @@ export class AdminHubForm extends Component {
                         styles.hub_form
                     } layout-row flex-none layout-wrap layout-align-center`}
                 >
-                    <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+                    <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                         <h2 className="flex-none clip letter_3" style={textStyle}>Add a New Hub</h2>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">

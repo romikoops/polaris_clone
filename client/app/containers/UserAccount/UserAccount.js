@@ -22,7 +22,7 @@ import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
 // import styles from '../../components/UserAccount/UserAccount.scss';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 
 
 export class UserAccount extends Component {
@@ -48,7 +48,7 @@ export class UserAccount extends Component {
             userDispatch.getDashboard(user.data.id, false);
         }
         if (user && user.data && users && !users.loading && !users.hubs) {
-            userDispatch.getHubs(user.data.id);
+            userDispatch.getHubs(false);
         }
     }
     setNavLink(target) {
@@ -224,7 +224,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/locations"
-                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} locations={users.dashboard.locations}
+                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} user={user.data} locations={users.dashboard.locations}
                                     getLocations={this.getLocations}
                                     destroyLocation={this.destroyLocation}
                                     makePrimary={this.makePrimary} />}

@@ -15,23 +15,21 @@ export class HSCodeRow extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hsCodes: {}
+            hsCodes: {},
+            clipboard: {}
         };
-        this.setHsCode = this.setHsCode.bind(this);
+        this.copyCodes = this.copyCodes.bind(this);
+        this.pasteCodes = this.pasteCodes.bind(this);
+        this.deleteCode = this.deleteCode.bind(this);
+        this.reduceCargos = this.reduceCargos.bind(this);
     }
-    setHsCode(id, codes) {
-        let exCodes;
-        if (this.state.hsCodes[id]) {
-            exCodes = [...this.state.hsCodes[id], ...codes];
-        } else {
-            exCodes = codes;
-        }
-        this.setState({
-            hsCodes: {
-                ...this.state.hsCodes,
-                [id]: exCodes
-            }
-        });
+
+    copyCodes(cgId) {
+        this.setState({clipboard: this.props.hsCodes[cgId], showPaste: true});
+        console.log(this.state.hsCodes[cgId]);
+    }
+    pasteCodes(cgId) {
+        this.props.setCode(cgId, this.state.clipboard);
     }
     deleteCode(cargoId, code) {
         const codes = this.state.hsCodes[cargoId];
@@ -43,10 +41,21 @@ export class HSCodeRow extends Component {
             }
         });
     }
+    reduceCargos(arr) {
+        const results = [];
+        const uuids = {};
+        arr.forEach((c) => {
+            if (!uuids[c.cargo_group_id]) {
+                uuids[c.cargo_group_id] = true;
+                results.push(c);
+            }
+        });
+        return results;
+    }
 
     render() {
         const { containers, cargoItems, hsCodes, theme } = this.props;
-        // const { hsCodes } = this.state;
+        const { showPaste } = this.state;
         const containersAdded = [];
         const cargoItemsAdded = [];
         const getOptions = (input) => {
@@ -78,55 +87,70 @@ export class HSCodeRow extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
+        const reducedContainers = containers ? this.reduceCargos(containers) : [];
+        const reducedCargoItems = cargoItems ? this.reduceCargos(cargoItems) : [];
+        if (reducedContainers) {
+            reducedContainers.forEach((cont, i) => {
+                const tmpCont = (
+                    <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
+                            <p className="flex-100">{containerDescriptions[cont.size_class]}</p>
+                        </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Net Weight</p>
+                            <p className="flex-100">{cont.payload_in_kg} kg</p>
+                        </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}> Gross Weight</p>
+                            <p className="flex-100">{parseInt(cont.payload_in_kg, 10) + parseInt(cont.tare_weight, 10)}{' '} kg</p>
 
-        if (containers) {
-            containers.forEach((cont, i) => {
-                    const tmpCont = (
-                        <div className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
-                            <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-                                <p className={`flex-100 ${styles.cell_header}`}> Container Size</p>
-                                <p className="flex-100">{containerDescriptions[cont.size_class]}</p>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-                                <p className={`flex-100 ${styles.cell_header}`}>Net Weight</p>
-                                <p className="flex-100">{cont.payload_in_kg} kg</p>
-                            </div>
-                            <div className="flex-15 layout-row layout-align-start-center layout-wrap">
-                                <p className={`flex-100 ${styles.cell_header}`}> Gross Weight</p>
-                                <p className="flex-100">{parseInt(cont.payload_in_kg, 10) + parseInt(cont.tare_weight, 10)}{' '} kg</p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
 
-                            </div>
-                            <div className="flex-10 layout-row layout-align-start-center layout-wrap">
-                                <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
+                            <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
+                        </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste:{' '}</p>
 
-                                <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <NamedAsync
-                                    classes="flex-50"
-                                    multi
-                                    name={cont.id}
-                                    value={hsCodes[cont.id] ? hsCodes[cont.id] : ''}
-                                    autoload={false}
-                                    loadOptions={getOptions}
-                                    onChange={this.props.setCode}
-                                />
-                                 <div className="flex-50 layout-row layout-wrap">
-                                    {hsCodes[cont.id] ? hsCodes[cont.id].map((hs) => {return <HSCell code={hs} cargoId={cont.id} />;}) : ''}
+                            <div className="flex-100 layout-row" style={{margin: '1em 0'}}>
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.copyCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clone clip" style={textStyle}></i>
                                 </div>
+                                {showPaste ?
+                                    <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.pasteCodes(cont.cargo_group_id)}>
+                                        <i className="fa fa-clipboard clip" style={textStyle}></i>
+                                    </div> :
+                                    '' }
                             </div>
                         </div>
-                    );
-                    containersAdded.push(tmpCont);
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <NamedAsync
+                                classes="flex-50"
+                                multi
+                                name={cont.cargo_group_id}
+                                value={''}
+                                autoload={false}
+                                loadOptions={getOptions}
+                                onChange={this.props.setCode}
+                            />
+                            <div className="flex-50 layout-row layout-wrap">
+                                {hsCodes[cont.cargo_group_id] ? hsCodes[cont.cargo_group_id].map((hs) => {return <HSCell code={hs} cargoId={cont.cargo_group_id} />;}) : ''}
+                            </div>
+                        </div>
+                    </div>
+                );
+                containersAdded.push(tmpCont);
             });
         }
-        if (cargoItems) {
-            cargoItems.forEach((cont, i) => {
+        if (reducedCargoItems) {
+            reducedCargoItems.forEach((cont, i) => {
                 const tmpCont = (
                     <div key={i} className={`flex-100 layout-row layout-wrap ${styles.container_row}`} style={{zIndex: `${200 - i}`}}>
                         <div className="flex-10 layout-row layout-align-center-center layout-wrap">
-                            <p className={`flex-100 ${styles.cell_header}`}>Unit</p>
-                            <p className="flex-100">{i}</p>
+                            <p className={`flex-100 ${styles.cell_header}`}>Cargo Group</p>
+                            <p className="flex-100">{i + 1}</p>
                         </div>
                         <div className="flex-15 layout-row layout-align-center-center layout-wrap">
                             <p className={`flex-100 ${styles.cell_header}`}>Payload</p>
@@ -144,22 +168,35 @@ export class HSCodeRow extends Component {
                             <p className={`flex-100 ${styles.cell_header}`}>Height</p>
                             <p className="flex-100">{cont.dimension_z} cm</p>
                         </div>
-                        <div className="flex-20 layout-row layout-align-center-center layout-wrap">
+                        <div className="flex-15 layout-row layout-align-center-center layout-wrap">
                             <p className={`flex-100 ${styles.cell_header}`}>Dangerous Goods:{' '}</p>
                             <p className="flex-100">{cont.dangerousGoods ? 'Yes' : 'No'}</p>
+                        </div>
+                        <div className="flex-15 layout-row layout-align-start-center layout-wrap">
+                            <p className={`flex-100 ${styles.cell_header}`}>Copy/Paste:{' '}</p>
+
+                            <div className="flex-100 layout-row" style={{margin: '1em 0'}}>
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.copyCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clone clip" style={textStyle}></i>
+                                </div>
+
+                                <div className="flex-50 layout-row layout-align-center-center" onClick={() => this.pasteCodes(cont.cargo_group_id)}>
+                                    <i className="fa fa-clipboard clip" style={textStyle}></i>
+                                </div>
+                            </div>
                         </div>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <NamedAsync
                                 classes="flex-50"
                                 multi
-                                name={cont.id}
-                                value={hsCodes[cont.id] ? hsCodes[cont.id] : ''}
+                                name={cont.cargo_group_id}
+                                value={''}
                                 autoload={false}
                                 loadOptions={getOptions}
                                 onChange={this.props.setCode}
                             />
                             <div className="flex-50 layout-row layout-wrap">
-                                {hsCodes[cont.id] ? hsCodes[cont.id].map((hs) => {return <HSCell code={hs} cargoId={cont.id} />;}) : ''}
+                                {hsCodes[cont.cargo_group_id] ? hsCodes[cont.cargo_group_id].map((hs) => {return <HSCell code={hs} cargoId={cont.cargo_group_id} />;}) : ''}
                             </div>
                         </div>
                     </div>

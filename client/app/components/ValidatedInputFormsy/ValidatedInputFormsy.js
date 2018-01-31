@@ -19,7 +19,6 @@ class ValidatedInputFormsy extends Component {
 
     componentDidUpdate() {
         if (this.errorsHaveUpdated) return; // Break the loop if erros have updated
-
         const event = {target: {name: this.props.name, value: this.props.getValue()}};
         const validationPassed = this.props.isValidValue(event.target.value);
 
@@ -56,13 +55,14 @@ class ValidatedInputFormsy extends Component {
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
         }
+        const value = this.props.getValue() !== undefined ? this.props.getValue().toString() : '';
         return (
             <div className={styles.wrapper_input}>
                 <input
                 	style={inputStyles}
                     onChange={this.changeValue}
                     type={this.props.type}
-                    value={(this.props.getValue() && this.props.getValue().toString()) || ''}
+                    value={value}
                     name={this.props.name}
                     disabled={this.props.disabled}
                 />

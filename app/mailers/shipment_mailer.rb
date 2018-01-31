@@ -7,12 +7,19 @@ class ShipmentMailer < ApplicationMailer
     @user = user
     tenant = user.tenant
     @shipment = shipment
+    base_url = case Rails.env
+      when 'production'  then "http://#{@shipment.tenant.subdomain}.itsmycargo.com/"
+      when 'development' then "http://localhost:8080/"
+      when 'test'        then "http://localhost:8080/"
+      end
+
+    @redirects_base_url = base_url + "redirects/shipments/#{@shipment.id}?action="
 
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
     mail(
-      to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
-      bcc: 'mailtests@itsmycargo.com',
+      # to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -26,52 +33,43 @@ class ShipmentMailer < ApplicationMailer
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
 
     mail(
-      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      bcc: 'mailtests@itsmycargo.com',
+      # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
 
-  def shipper_confirmation(user, shipment, files = {})
+  def shipper_confirmation(user, shipment)
     @user = user
     tenant = user.tenant
     @shipment = shipment
-
+    
     attachments.inline['logo.png']       = open(tenant.theme["logoLarge"]).read
     attachments.inline['logo_small.png'] = open(tenant.theme["logoSmall"]).read
     
-    files.each do |name, file|
-      attachments[name] = open(file).read
-    end
+    bill_of_lading = generate_and_upload_bill_of_lading
+    attachments[bill_of_lading.full_name] = bill_of_lading.pdf.read
+    FileUtils.rm(bill_of_lading.path)
 
     mail(
-      to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      bcc: 'mailtests@itsmycargo.com',
+      # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
+      to: 'mailtests@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
 
-  def summary_mail_shipper(shipment, filename, file)
-    @shipment = shipment
-    attachments[filename] = file
-    mail(to: shipment.shipper.email, subject: 'Your booking through ItsMyCargo')
-  end
+  private 
 
-  def summary_mail_trucker(shipment, filename, file)
-    @shipment = shipment
-    attachments[filename] = file
-    mail(to: shipment.trucker.email, subject: 'Your booking through ItsMyCargo')
-  end
+  def generate_and_upload_bill_of_lading
+    bill_of_lading = PdfHandler.new(
+      layout:   "pdfs/simple.pdf.html.erb",
+      template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
+      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
+      shipment: @shipment,
+      name:     'bill_of_lading'
+    )
 
-  def summary_mail_consolidator(shipment, filename, file)
-    @shipment = shipment
-    attachments[filename] = file
-    mail(to: shipment.consolidator.email, subject: 'Your booking through ItsMyCargo')
-  end
-
-  def summary_mail_receiver(shipment, filename, file)
-    @shipment = shipment
-    attachments[filename] = file
-    mail(to: shipment.receiver.email, subject: 'Your booking through ItsMyCargo')
+    bill_of_lading.generate
+    bill_of_lading.upload
   end
 end

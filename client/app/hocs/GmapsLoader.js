@@ -23,6 +23,7 @@ export default class GmapsLoader extends Component {
                 render={googleMaps =>
                     googleMaps && (
                         <ParamComponent
+                            prevRequest={this.props.prevRequest}
                             allNexuses={this.props.allNexuses}
                             setTargetAddress={this.props.setTargetAddress}
                             theme={this.props.theme}

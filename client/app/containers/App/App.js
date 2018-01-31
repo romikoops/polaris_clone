@@ -11,12 +11,14 @@ import UserAccount from '../UserAccount/UserAccount';
 import Admin from '../Admin/Admin';
 import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction';
 import { SignOut } from '../../components/SignOut/SignOut';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import { fetchTenantIfNeeded } from '../../actions/tenant';
 import { appActions } from '../../actions';
 import { bindActionCreators } from 'redux';
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index';
 import {getSubdomain} from '../../helpers';
+import MessageCenter from '../../containers/MessageCenter/MessageCenter';
+// import SideNav from '../../components/SideNav/SideNav';
 class App extends Component {
     constructor(props) {
         super(props);
@@ -36,50 +38,56 @@ class App extends Component {
         }
     }
     render() {
-        const { tenant, isFetching, user, loggedIn } = this.props;
+        const { tenant, isFetching, user, loggedIn, showMessages } = this.props;
         const theme = tenant.data.theme;
         return (
-            <div className="layout-fill layout-column scroll layout-align-end hundred">
-                {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
-                { user && user.data && tenant && tenant.data && user.data.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
-                <Switch className="flex">
-                    <Route
-                        exact
-                        path="/"
-                        render={props => <Landing theme={theme} {...props} />}
-                    />
-                    <PrivateRoute
-                        path="/booking"
-                        component={Shop}
-                        user={user}
-                        loggedIn={loggedIn}
-                        theme={theme}
-                    />
-                    <AdminPrivateRoute
-                        path="/admin"
-                        component={Admin}
-                        user={user}
-                        loggedIn={loggedIn}
-                        theme={theme}
-                    />
-                    <Route
-                        path="/signout"
-                        render={props => <SignOut theme={theme} {...props} />}
-                    />
-                     <Route
-                        path="/redirects/shipment/:uuid"
-                        render={props => <AdminShipmentAction theme={theme} {...props} />}
-                    />
-                    <PrivateRoute
-                        path="/account"
-                        component={UserAccount}
-                        user={user}
-                        loggedIn={loggedIn}
-                        theme={theme}
-                    />
+            <div className="layout-fill layout-column layout-align-end hundred">
+                <div className="flex-100 layout-row height_100">
+                    {/* <SideNav/>*/}
+                    <div className="flex layout-column scroll layout-align-end hundred">
+                        { showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }
+                        {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
+                        { user && user.data && tenant && tenant.data && user.data.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
+                        <Switch className="flex">
+                            <Route
+                                exact
+                                path="/"
+                                render={props => <Landing theme={theme} {...props} />}
+                            />
+                            <PrivateRoute
+                                path="/booking"
+                                component={Shop}
+                                user={user}
+                                loggedIn={loggedIn}
+                                theme={theme}
+                            />
+                            <AdminPrivateRoute
+                                path="/admin"
+                                component={Admin}
+                                user={user}
+                                loggedIn={loggedIn}
+                                theme={theme}
+                            />
+                            <Route
+                                path="/signout"
+                                render={props => <SignOut theme={theme} {...props} />}
+                            />
+                             <Route
+                                path="/redirects/shipment/:uuid"
+                                render={props => <AdminShipmentAction theme={theme} {...props} />}
+                            />
+                            <PrivateRoute
+                                path="/account"
+                                component={UserAccount}
+                                user={user}
+                                loggedIn={loggedIn}
+                                theme={theme}
+                            />
 
-                </Switch>
-                <Footer theme={theme} tenant={tenant.data}/>
+                        </Switch>
+                        <Footer theme={theme} tenant={tenant.data}/>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -94,7 +102,8 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-    const { selectedSubdomain, tenant, authentication } = state;
+    const { selectedSubdomain, tenant, authentication, messaging } = state;
+    const { showMessages } = messaging;
     const { user, loggedIn } = authentication;
     // const { currencies } = app;
     const { isFetching } = tenant || {
@@ -106,6 +115,7 @@ function mapStateToProps(state) {
         user,
         loggedIn,
         isFetching,
+        showMessages
         // currencies
     };
 }

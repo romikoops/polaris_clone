@@ -229,7 +229,7 @@ export class CargoDetails extends Component {
                                         >
                                             {' '}
                                             Number and kind of packages,
-                                            description of goods
+                                            description of goods (optional)
                                         </p>
                                     </div>
                                     <div className="flex-100">

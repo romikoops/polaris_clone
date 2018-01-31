@@ -1,7 +1,7 @@
 import { appConstants } from '../constants';
 import { appService } from '../services';
 import { authenticationActions } from '../actions';
-import { alertActions } from './';
+import { alertActions, shipmentActions, userActions, adminActions } from './';
 import { BASE_URL } from '../constants';
 import { Promise } from 'es6-promise-promise';
 // import { Promise } from 'es6-promise-promise';
@@ -134,11 +134,20 @@ function fetchTenantIfNeeded(subdomain) {
     };
 }
 
+function clearLoading() {
+    return dispatch => {
+        dispatch(shipmentActions.clearLoading());
+        dispatch(userActions.clearLoading());
+        dispatch(adminActions.clearLoading());
+    };
+}
+
 
 export const appActions = {
     fetchCurrencies,
     shouldFetchTenant,
     fetchTenantIfNeeded,
     invalidateSubdomain,
-    setCurrency
+    setCurrency,
+    clearLoading
 };

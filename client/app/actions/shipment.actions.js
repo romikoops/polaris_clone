@@ -1,9 +1,12 @@
 import { shipmentConstants } from '../constants';
 import { shipmentService } from '../services';
-import { alertActions } from './';
+import { alertActions, userActions } from './';
 import { Promise } from 'es6-promise-promise';
 import { push } from 'react-router-redux';
-
+import { getSubdomain } from '../helpers/subdomain';
+const subdomainKey = getSubdomain();
+const cookieKey = subdomainKey + '_user';
+const userData = JSON.parse(localStorage.getItem(cookieKey));
 function newShipment(type) {
     function request(shipmentData) {
         return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData };
@@ -71,7 +74,11 @@ function setShipmentDetails(data) {
             },
             error => {
                 error.then(data => {
-                    dispatch(failure({ type: 'error', text: data.message }));
+                    dispatch(failure({
+                        type: 'error',
+                        text: data.message || data.error
+                    }));
+                    if (data.error) console.error(data.exception);
                 });
             }
         );
@@ -367,6 +374,16 @@ function deleteDocument(id) {
     };
 }
 
+function toDashboard() {
+    return dispatch => {
+        dispatch(userActions.getDashboard(userData.data.id, true));
+    };
+}
+
+function clearLoading() {
+    return { type: shipmentConstants.CLEAR_LOADING, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -388,5 +405,7 @@ export const shipmentActions = {
     fetchShipmentIfNeeded,
     getAll,
     goTo,
+    toDashboard,
+    clearLoading,
     delete: _delete
 };

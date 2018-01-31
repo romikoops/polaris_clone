@@ -24,6 +24,7 @@ export class UserDashboard extends Component {
     }
     componentDidMount() {
         this.props.setNav('dashboard');
+        window.scrollTo(0, 0);
     }
     viewShipment(shipment) {
         const { userDispatch } = this.props;

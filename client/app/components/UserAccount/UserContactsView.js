@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { UserShipmentRow } from './';
+// import { UserShipmentRow } from './';
 import { AdminAddressTile } from '../Admin';
 import styles from './UserAccount.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
@@ -171,7 +171,7 @@ export class UserContactsView extends Component {
         this.closeEdit();
     }
     render() {
-        const {theme, contactData, hubs} = this.props;
+        const {theme, contactData, hubs, userDispatch} = this.props;
         if (!contactData) {
             return '';
         }
@@ -183,12 +183,12 @@ export class UserContactsView extends Component {
             editBool,
             editObj
         } = this.state;
-
-        const shipRows = [];
-        shipments.forEach((ship) => {
-            const preppedShipment = this.prepShipment(ship, contact, hubs);
-            shipRows.push( <UserShipmentRow key={v4()} shipment={preppedShipment} hubs={hubs} theme={theme} handleSelect={this.viewShipment} />);
-        });
+        console.log(shipments, hubs);
+        // const shipRows = [];
+        // shipments.forEach((ship) => {
+        //     const preppedShipment = this.prepShipment(ship, contact, hubs);
+        //     shipRows.push( <UserShipmentRow key={v4()} shipment={preppedShipment} hubs={hubs} theme={theme} handleSelect={this.viewShipment} />);
+        // });
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -207,17 +207,17 @@ export class UserContactsView extends Component {
                         <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
                       }
                 </div>
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Related Shipments</p>
                     </div>
                     {shipRows}
-                </div>
+                </div>*/}
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Locations</p>
                     </div>
-                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact}/>
+                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact} saveEdit={userDispatch.saveAddressEdit}/>
                 </div>
             </div>
         );

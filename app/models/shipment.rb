@@ -14,13 +14,13 @@ class Shipment < ApplicationRecord
   validates :status, 
     inclusion: { 
       in: STATUSES, 
-      message: "must be included in [#{STATUSES.join(', ')}]" 
+      message: "must be included in #{STATUSES.log_format}" 
     },
     allow_nil: true
   validates :load_type, 
     inclusion: { 
       in: LOAD_TYPES, 
-      message: "must be included in [#{LOAD_TYPES.join(', ')}]" 
+      message: "must be included in #{LOAD_TYPES.log_format}" 
     },
     allow_nil: true
   validate :planned_pickup_date_is_a_datetime?
@@ -223,6 +223,22 @@ class Shipment < ApplicationRecord
   def insurance
     schedule_set.reduce(0) do |insurance_value, schedule|
       insurance_value += schedules_charges[schedule["hub_route_key"]].dig("insurance", "val").to_f
+    end
+  end
+
+  def eta_catchup
+    ships = Shipment.all
+    ships.each do |s|
+      scheds = []
+      s.schedule_set.each do |ss|
+        scheds.push(Schedule.find(ss['id']))
+      end
+      if scheds.first && scheds.first.etd && scheds.last && scheds.last.eta
+        s.planned_etd = scheds.first.etd
+        s.planned_eta = scheds.last.eta
+        s.save!
+      end
+      
     end
   end
 

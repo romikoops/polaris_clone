@@ -32,9 +32,10 @@ class Container < ApplicationRecord
       gross_weight = tare_weight + payload_in_kg
       weight_class = get_weight_class(size_class, payload_in_kg)
       quantity = value["quantity"].to_i
+      cargo_group_id = SecureRandom.uuid
       unless value["_destroy"] == "1"
         quantity.times do
-          containers << Container.new(size_class: size_class, tare_weight: tare_weight, payload_in_kg: payload_in_kg, gross_weight: gross_weight, weight_class: weight_class)
+          containers << Container.new(size_class: size_class, tare_weight: tare_weight, payload_in_kg: payload_in_kg, gross_weight: gross_weight, weight_class: weight_class, cargo_group_id: cargo_group_id)
         end
       end
     end

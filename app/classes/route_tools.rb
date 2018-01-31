@@ -59,17 +59,17 @@ module RouteTools
   end
 
   def update_route_option(route)
-  # 	return if get_route_option(route).empty?
+  	return if get_route_option(route).empty?
 
-  # 	update = route.attributes.each_with_object({}) do |(k, v), h|
-  # 		h["data.$.#{k}"] = v
-  # 	end
+  	update = route.attributes.each_with_object({}) do |(k, v), h|
+  		h["data.$.#{k}"] = v
+  	end
 
-  # 	key = { "$and" => [
-	 #  		{ "id" => { "$eq" => route.tenant.id } },
-	 #  		{ "data.id" => { "$eq" => route.id } }
- 	# 		]
-  # 	}
-		# update_item('routeOptions', key, update)
+  	key = { "$and" => [
+	  		{ "id" => { "$eq" => route.tenant.id } },
+	  		{ "data.id" => { "$eq" => route.id } }
+ 			]
+  	}
+		update_item('routeOptions', key, update)
   end
 end

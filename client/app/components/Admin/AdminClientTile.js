@@ -78,8 +78,8 @@ export class AdminClientTile extends Component {
                 <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-none sec_subheader_text"> Are you sure</p>
                 </div>
-                <div className="flex-100 layout-row layout-align-center-space-between layout-wrap">
-                    <div className="flex-100 layout-row layout-align-center-center">
+                <div className="flex-100 layout-column layout-align-center-space-between">
+                    <div className="flex-50 width_100 layout-row layout-align-center-center">
                         <RoundButton
                             theme={theme}
                             size="small"
@@ -88,7 +88,7 @@ export class AdminClientTile extends Component {
                             iconClass="fa-ban"
                         />
                     </div>
-                    <div className="flex-100 layout-row layout-align-center-center">
+                    <div className="flex-50 width_100 layout-row layout-align-center-center">
                         <RoundButton
                             theme={theme}
                             size="small"

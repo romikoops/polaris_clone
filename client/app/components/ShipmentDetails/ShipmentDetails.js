@@ -14,6 +14,8 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
 // import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
+import { Modal } from '../Modal/Modal';
+import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
 import { isEmpty } from '../../helpers/isEmpty.js';
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 import * as Scroll from 'react-scroll';
@@ -88,6 +90,7 @@ export class ShipmentDetails extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.setIncoTerm = this.setIncoTerm.bind(this);
         this.handleSelectLocation = this.handleSelectLocation.bind(this);
+        this.toggleAlertModal = this.toggleAlertModal.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
@@ -127,6 +130,7 @@ export class ShipmentDetails extends Component {
             },
             has_on_carriage: obj.has_on_carriage,
             has_pre_carriage: obj.has_pre_carriage,
+            incoterm: obj.incoterm,
             routeSet: true
         });
     }
@@ -160,11 +164,16 @@ export class ShipmentDetails extends Component {
         const addObj = this.state[key1];
         addObj[key2] = val;
         let fullAddress = this.state[key1].fullAddress;
-        // ;
+
         if (fullAddress) {
             fullAddress = addObj.number + ' ' + addObj.street + ' ' + addObj.city + ' ' + addObj.zipCode + ' ' + addObj.country;
         }
         this.setState({
+            ...this.state,
+            [key1]: {...this.state[key1], [key2]: val, fullAddress }
+        });
+        console.log({
+            ...this.state,
             [key1]: {...this.state[key1], [key2]: val, fullAddress }
         });
     }
@@ -173,6 +182,8 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { cargoItems, cargoItemsErrors } = this.state;
+        if (!cargoItems[index] || !cargoItemsErrors[index]) return;
+
         cargoItems[index][suffixName] = value;
         if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError;
         this.setState({ cargoItems, cargoItemsErrors });
@@ -182,6 +193,7 @@ export class ShipmentDetails extends Component {
         const { name, value } = event.target;
         const [ index, suffixName ] = name.split('-');
         const { containers, containersErrors } = this.state;
+        if (!containers[index] || !containersErrors[index]) return;
         containers[index][suffixName] = value;
         if (hasError !== undefined) containersErrors[index][suffixName] = hasError;
 
@@ -229,7 +241,7 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        this.setState({ [target]: address });
+        this.setState({ [target]: {...address, ...this.state[target]} });
     }
     errorsExist(errorsObjects) {
         let returnBool = false;
@@ -309,10 +321,49 @@ export class ShipmentDetails extends Component {
     setIncoTerm(opt) {
         this.setState({incoterm: opt.value});
     }
+    toggleAlertModal() {
+        this.setState({ alertModalShowing: !this.state.alertModalShowing });
+    }
 
     render() {
-        const { theme, messages, shipmentData, shipmentDispatch } = this.props;
+        const { tenant, user, shipmentData, shipmentDispatch } = this.props;
+        const { theme, scope, emails, phones } = tenant.data;
+        const messages = this.props.messages;
         let cargoDetails;
+        const alertModalMessage = (
+            <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
+                <span>
+                    Hi {user.data.first_name} {user.data.last_name},<br/>
+                    We currently do not offer freight rates for hazardous cargo in our Web Shop.
+                    Please contact our customer service department
+                    to place an order for your dangerous cargo:<br/>
+                </span><br/>
+
+                <span style={{marginRight: '10px'}}> Contact via phone:</span>
+                <span>{phones.support}</span><br/>
+
+                <span style={{marginRight: '20px'}}> Contact via mail: </span>
+                <span>
+                    <a href={`mailto:${emails.support}?subject=Dangerous Goods Request`}>
+                        {emails.support}
+                    </a>
+                </span>
+            </p>
+        );
+        const alertModal = this.state.alertModalShowing ? (
+            <Modal
+                component={
+                    <AlertModalBody
+                        message={alertModalMessage}
+                        logo={theme.logoSmall}
+                        toggleAlertModal={this.toggleAlertModal}
+                    />
+                }
+                width="50vw"
+                minHeight="1px"
+                parentToggle={this.toggleAlertModal}
+            />
+        ) : '';
         if (shipmentData.shipment) {
             if (shipmentData.shipment.load_type === 'container') {
                 cargoDetails = (
@@ -323,6 +374,8 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
+                        showAlertModal={this.toggleAlertModal}
                     />
                 );
             }
@@ -335,7 +388,9 @@ export class ShipmentDetails extends Component {
                         deleteItem={this.deleteCargo}
                         nextStageAttempt={this.state.nextStageAttempt}
                         theme={theme}
+                        scope={scope}
                         availableCargoItemTypes={shipmentData.cargoItemTypes}
+                        showAlertModal={this.toggleAlertModal}
                     />
                 );
             }
@@ -356,6 +411,7 @@ export class ShipmentDetails extends Component {
                 handleAddressChange={this.handleAddressChange}
                 shipment={shipmentData}
                 routeIds={routeIds}
+                prevRequest={this.props.prevRequest}
                 nexusDispatch={this.props.nexusDispatch}
                 availableDestinations={this.props.availableDestinations}
                 handleSelectLocation={this.handleSelectLocation}
@@ -365,8 +421,9 @@ export class ShipmentDetails extends Component {
             ? moment(this.state.selectedDay).format('DD/MM/YYYY')
             : '';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
-        const future = {
-            after: new Date(),
+        const dayPickerProps = {
+            disabledDays: {before: new Date(moment().add(7, 'days').format())},
+            month: new Date(moment().add(7, 'days').format('YYYY'), (moment().add(7, 'days').format('M') - 1))
         };
 
         const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay;
@@ -418,7 +475,7 @@ export class ShipmentDetails extends Component {
                         </p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                     </div>
-                    <div className={'flex-none layout-row ' + styles.dpb}>
+                    <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError ? styles.with_errors : ''}`}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
                         </div>
@@ -427,9 +484,8 @@ export class ShipmentDetails extends Component {
                             placeholder="DD/MM/YYYY"
                             format="DD/MM/YYYY"
                             value={formattedSelectedDay}
-                            className={`${styles.dpb_picker} ${showDayPickerError ? styles.with_errors : ''}`}
                             onDayChange={this.handleDayChange}
-                            modifiers={future}
+                            dayPickerProps={dayPickerProps}
                         />
                         <span className={errorStyles.error_message}>
                             {showDayPickerError ? 'Must not be blank' : ''}
@@ -464,6 +520,7 @@ export class ShipmentDetails extends Component {
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {flash}
+                {alertModal}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                     { dayPickerSection }
                 </div>
@@ -497,7 +554,7 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
-                            handleNext={() => shipmentDispatch.goTo('/account')}
+                            handleNext={() => shipmentDispatch.toDashboard()}
                         />
                     </div>
                 </div>

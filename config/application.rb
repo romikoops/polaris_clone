@@ -38,6 +38,9 @@ module Imcr
       end
     end
 
+    # Autoloads the validators directory
+    config.autoload_paths += %W["#{config.root}/app/validators/"]
+
     config.active_job.queue_adapter = :sidekiq
   end
 end

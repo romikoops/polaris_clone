@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {AdminClientsIndex, AdminClientView} from './';
 import styles from './Admin.scss';
 // import {v4} from 'node-uuid';
+import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
@@ -79,12 +80,17 @@ class AdminClients extends Component {
             </div>);
         const newClientBox = (
             <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
-                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewClient}>
                 </div>
                 <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
-                    <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                        <i className="fa fa-user flex-none clip" style={textStyle}></i>
-                        <p className="flex-none">New Client</p>
+                    <div className={` ${styles.contact_header} flex-100 layout-row layout-align-space-between-center`}>
+                        <div className="flex-none layout-row layout-align-start-center">
+                            <i className="fa fa-user flex-none clip" style={textStyle}></i>
+                            <p className="flex-none">New Client</p>
+                        </div>
+                        <div className="flex-none layout-row layout-align-start-center" onClick={this.toggleNewClient}>
+                            <i className="fa fa-times flex-none clip pointy" style={textStyle}></i>
+                        </div>
                     </div>
                     <input className={styles.input_100} type="text" value={newClient.companyName} name={'companyName'} placeholder="Company Name *" onChange={this.handleFormChange} />
                     <input className={styles.input_50} type="text" value={newClient.firstName} name="firstName" placeholder="First Name *" onChange={this.handleFormChange} />
@@ -169,4 +175,4 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminClients);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminClients));

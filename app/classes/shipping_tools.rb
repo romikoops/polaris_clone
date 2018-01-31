@@ -43,31 +43,25 @@ module ShippingTools
   end 
 
   def get_shipment_offer(session, params, load_type)
-    @shipment = Shipment.find(params[:shipment_id])
-    offer_calculation = OfferCalculator.new(@shipment, params, current_user)
+    shipment = Shipment.find(params[:shipment_id])
+    offer_calculation = OfferCalculator.new(shipment, params, current_user)
 
-    begin
-      offer_calculation.calc_offer!
-    rescue
-      raise ApplicationError::NoRoutes
-    end
+    offer_calculation.calc_offer!
 
-    if offer_calculation.shipment.save
-      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
-      return {
-        shipment:                   offer_calculation.shipment,
-        total_price:                offer_calculation.total_price,
-        has_pre_carriage:           offer_calculation.has_pre_carriage,
-        has_on_carriage:            offer_calculation.has_on_carriage,
-        schedules:                  offer_calculation.schedules,
-        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-        originHubs:                 offer_calculation.origin_hubs,
-        destinationHubs:            offer_calculation.destination_hubs,
-        cargoUnits:                 cargo_units
-      }
-    else
-      raise ApplicationError::NoRoutes # TBD - Customize Errors
-    end
+    offer_calculation.shipment.save!
+
+    cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
+    return {
+      shipment:                   offer_calculation.shipment,
+      total_price:                offer_calculation.total_price,
+      has_pre_carriage:           offer_calculation.has_pre_carriage,
+      has_on_carriage:            offer_calculation.has_on_carriage,
+      schedules:                  offer_calculation.schedules,
+      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculation.origin_hubs,
+      destinationHubs:            offer_calculation.destination_hubs,
+      cargoUnits:                 cargo_units
+    }
   end
 
   def create_document(file, shipment, type, user) 
@@ -88,19 +82,19 @@ module ShippingTools
     
 
 
-    @consignee = @shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'consignee')
+    @consignee = @shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
     @notifyees = []
     notifyee_contacts = []
     # @shipment.consignee = consignee
     unless contacts_data.nil?
       contacts_data.each do |value|
 
-        notifyee = current_user.contacts.find_or_create_by(first_name: value[:firstName],
+        notifyee = current_user.contacts.find_or_create_by!(first_name: value[:firstName],
                                                            last_name: value[:lastName],
                                                            email: value[:email],
                                                            phone: value[:phone])
         notifyee_contacts << notifyee
-        @notifyees << @shipment.shipment_contacts.find_or_create_by(contact_id: notifyee.id, contact_type: 'notifyee')
+        @notifyees << @shipment.shipment_contacts.find_or_create_by!(contact_id: notifyee.id, contact_type: 'notifyee')
       end
     end
 
@@ -129,8 +123,8 @@ module ShippingTools
     if @shipment.cargo_items
       @cargos = @shipment.cargo_items
       @shipment.cargo_items.map do |ci|
-        if hsCodes[ci.id.to_s]
-          hsCodes[ci.id.to_s].each do |hs|
+        if hsCodes[ci.cargo_group_id.to_s]
+          hsCodes[ci.cargo_group_id.to_s].each do |hs|
             ci.hs_codes << hs["value"]
           end
           ci.save!
@@ -140,8 +134,8 @@ module ShippingTools
     if @shipment.containers
       @containers = @shipment.containers
       @shipment.containers.map do |cn|
-        if hsCodes[cn.id.to_s]
-          hsCodes[cn.id.to_s].each do |hs|
+        if hsCodes[cn.cargo_group_id.to_s]
+          hsCodes[cn.cargo_group_id.to_s].each do |hs|
             cn.hs_codes << hs["value"]
           end
           cn.save!
@@ -150,12 +144,14 @@ module ShippingTools
     end
 
     @shipment.shipper_location = new_loc
-    @shipment.save!
+    
     @schedules = []
     @shipment.schedule_set.each do |ss|
       @schedules.push(Schedule.find(ss['id']))
     end
-    
+    @shipment.planned_etd = @schedules.first.etd
+    @shipment.planned_eta = @schedules.last.eta
+    @shipment.save!
     @origin = @schedules.first.hub_route.starthub
     @destination =  @schedules.last.hub_route.endhub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
@@ -226,7 +222,7 @@ module ShippingTools
     customs_fee = get_item('customsFees', '_id', priceKey)
     @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee}
+    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee, locations: {origin: @shipment.origin, destination: @shipment.destination}}
   end
 
   def get_shipment_pdf(params)
@@ -245,55 +241,10 @@ module ShippingTools
   end
 
   def shipper_confirmation_email(user, shipment)
-    bill_of_lading = build_and_upload_pdf(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/bill_of_lading.pdf.html.erb",
-      margin:   { top: 10, bottom: 5, left: 8, right: 8 },
-      shipment: shipment,
-      name:     'bill_of_lading'
-    )
-
-    invoice = build_and_upload_pdf(
-      layout:   "pdfs/simple.pdf.html.erb",
-      template: "shipments/pdfs/invoice.pdf.html.erb",
-      margin:   { top: 10, bottom: 5, left: 15, right: 15 },
-      shipment: shipment,
-      name:     'invoice'
-    )
-
-    files = {
-      bill_of_lading[:name] => bill_of_lading[:url],
-      invoice[:name]        => invoice[:url]
-    }
-
     ShipmentMailer.shipper_confirmation(
       user, 
-      shipment, 
-      files
+      shipment
     ).deliver_later
-  end
-
-  def build_and_upload_pdf(args)
-    doc_erb = ErbTemplate.new(
-      layout:   args[:layout],
-      template: args[:template],
-      locals:   { shipment: args[:shipment] }
-    )
-
-    doc_string = WickedPdf.new.pdf_from_string(
-      doc_erb.render,
-      margin: args[:margin]
-    )
-        
-    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
-    
-    File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
-    doc_pdf = File.open("tmp/" + doc_name)
-    
-    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
-    doc_url = doc.get_signed_url
-    
-    { name: doc_name, url: doc_url }
   end
 
   def send_booking_emails(shipment)

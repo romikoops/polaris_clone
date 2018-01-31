@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @shipper = current_user
 
     @requested_shipments = @shipper.shipments.where(status: "requested")
-    @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
+    @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress", "confirmed"])
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false)

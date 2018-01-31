@@ -8,7 +8,7 @@ import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
-import MessageCenter from '../../containers/MessageCenter/MessageCenter';
+
 import { appActions, messagingActions } from '../../actions';
 import { accountIconColor } from '../../helpers';
 import { bindActionCreators } from 'redux';
@@ -47,12 +47,15 @@ class Header extends Component {
         });
     }
     toggleShowMessages() {
-        this.setState({
-            showMessages: !this.state.showMessages
-        });
+         const { messageDispatch } = this.props;
+         messageDispatch.showMessageCenter();
     }
     render() {
+<<<<<<< HEAD
         const { user, theme, tenant, currencies, appDispatch, invert, landingPage } = this.props;
+=======
+        const { user, theme, tenant, invert, unread } = this.props;
+>>>>>>> 361d5d3c8e7483be045653d2654533b87c06637d
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -70,10 +73,7 @@ class Header extends Component {
                 key: 'signOut'
             }
         ];
-        const currLinks = currencies ? currencies.map((c) => {
-            c.select = () => appDispatch.setCurrency(c.key);
-            return c;
-        }) : [];
+
         const adjIcon = iconColourer(invert ? '#FFFFFF' : '#000000');
         if (this.state.redirect) {
             return <Redirect push to="/" />;
@@ -86,20 +86,13 @@ class Header extends Component {
                 invert={invert}
             />
         );
-        const currDropDown = (
-            <NavDropdown
-                dropDownText={user && user.data ? user.data.currency : ''}
-                linkOptions={currLinks}
-                invert={invert}
-            />
+        const alertStyle = unread > 0 ? styles.unread : styles.all_read;
+        const mail = (
+            <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
+                <span className={`${alertStyle} flex-none`}>{unread}</span>
+                <i className="fa fa-envelope-o"></i>
+            </div>
         );
-        // const alertStyle = unread > 0 ? styles.unread : styles.all_read;
-        // const mail = (
-        //     <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
-        //         <span className={`${alertStyle} flex-none`}>{unread}</span>
-        //         <i className="fa fa-envelope-o"></i>
-        //     </div>
-        // ); {mail}
         let logoUrl = '';
         let logoStyle;
         if (theme && theme.logoWide) {
@@ -110,7 +103,7 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
-        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{currDropDown}</div>;
+        const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -154,7 +147,6 @@ class Header extends Component {
                 <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin ? loginModal : '' }
-                { this.state.showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }
             </div>
         );
     }

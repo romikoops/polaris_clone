@@ -14,7 +14,7 @@ import AdminPricings from '../../components/Admin/AdminPricings';
 import AdminTrucking from '../../components/Admin/AdminTrucking';
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard';
 import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
-import { Loading } from '../../components/Loading/Loading';
+import Loading from '../../components/Loading/Loading';
 import defs from '../../styles/default_classes.scss';
 import { adminActions } from '../../actions';
 class Admin extends Component {
@@ -71,7 +71,9 @@ class Admin extends Component {
     render() {
         console.log(this.props);
         const {theme, adminData, adminDispatch, user} = this.props;
-        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, routes, loading} = adminData;
+
+        const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, loading} = adminData;
+
         const hubHash = {};
         if (hubs) {
             hubs.forEach((hub) => {
@@ -123,12 +125,12 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/clients"
-                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} clients={clients} adminDispatch={adminDispatch}/>}
+                                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} />}
                             />
                             <Route
 
                                 path="/admin/routes"
-                                render={props => <AdminRoutes theme={theme} {...props} hubHash={hubHash} routes={routes} clients={clients}/>}
+                                render={props => <AdminRoutes theme={theme} {...props} hubHash={hubHash}  clients={clients}/>}
                             />
                             <Route
 

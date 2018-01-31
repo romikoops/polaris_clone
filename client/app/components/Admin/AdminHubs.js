@@ -42,7 +42,7 @@ class AdminHubs extends Component {
         dispatch(history.push('/admin/hubs'));
     }
     toggleNewHub() {
-        this.setState({newHub: !this.state.newhub});
+        this.setState({newHub: !this.state.newHub});
     }
     closeModal() {
         this.setState({newHub: false});
@@ -74,6 +74,7 @@ class AdminHubs extends Component {
                     theme={theme}
                     size="small"
                     text="New Hub"
+                    active
                     handleNext={this.toggleNewHub}
                     iconClass="fa-plus"
                 />
@@ -83,12 +84,15 @@ class AdminHubs extends Component {
                 <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hub Overview</p>
                 {selectedHub ? backButton : ''}
 
-            </div> : '';
+            </div> : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+                <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hubs</p>
+                {newButton}
+            </div>;
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-                {title}
-                {newButton}
+                <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+                    {title}
+                </div>
                 { this.state.newHub ? <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub}/> : ''}
                 <Switch className="flex">
                     <Route

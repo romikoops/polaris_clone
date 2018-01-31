@@ -13,7 +13,7 @@ export class UserContactsIndex extends Component {
         const {theme, contacts, viewContact } = this.props;
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-                <AdminSearchableClients theme={theme} clients={contacts} title="All Contacts" handleClick={viewContact} seeAll={false}/>
+                <AdminSearchableClients theme={theme} clients={contacts} title="All Contacts" handleClick={viewContact} seeAll={false} placeholder="Search Contacts" />
             </div>
         );
     }

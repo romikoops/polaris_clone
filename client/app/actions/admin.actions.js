@@ -720,9 +720,15 @@ function confirmShipment(id, action, redirect) {
             payload: shipmentData
         };
     }
-    function success(shipmentData) {
+    function successAccept(shipmentData) {
         return {
             type: adminConstants.CONFIRM_SHIPMENT_SUCCESS,
+            payload: shipmentData
+        };
+    }
+    function successDeny(shipmentData) {
+        return {
+            type: adminConstants.DENY_SHIPMENT_SUCCESS,
             payload: shipmentData
         };
     }
@@ -734,13 +740,14 @@ function confirmShipment(id, action, redirect) {
         adminService.confirmShipment(id, action).then(
             resp => {
                 const shipmentData = resp.data;
-                dispatch(success(shipmentData));
-                dispatch(getShipments(false));
-                dispatch(getDashboard(false));
+                if (action === 'accept') {
+                    dispatch(successAccept(shipmentData));
+                } else {
+                    dispatch(successDeny(shipmentData));
+                    dispatch(push('/admin/shipments'));
+                }
                 if (redirect) {
-                    dispatch(
-                        push('/admin/shipments/' + id)
-                    );
+                    dispatch(getShipment(id, true));
                 }
                 dispatch(
                     alertActions.success('Shipment Action Set successful')
@@ -822,6 +829,35 @@ function getRoute(id, redirect) {
     };
 }
 
+function newRoute(data) {
+    function request(routeData) {
+        return { type: adminConstants.NEW_ROUTE_REQUEST, payload: routeData };
+    }
+    function success(routeData) {
+        return { type: adminConstants.NEW_ROUTE_SUCCESS, payload: routeData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_ROUTE_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.newRoute(data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Creating Route successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function updateServiceCharge(id, req) {
     function request(prData) {
         return { type: adminConstants.UPDATE_SERVICE_CHARGES_REQUEST, payload: prData };
@@ -858,7 +894,7 @@ function newClient(data) {
         return { type: adminConstants.NEW_CLIENT_REQUEST, payload: newClientData };
     }
     function success(newClientData) {
-        return { type: adminConstants.NEW_CLIENT_SUCCESS, payload: newClientData };
+        return { type: adminConstants.NEW_CLIENT_SUCCESS, payload: newClientData.data };
     }
     function failure(error) {
         return { type: adminConstants.NEW_CLIENT_FAILURE, error };
@@ -979,6 +1015,10 @@ function viewTrucking(truckingHub, pricing) {
     };
 }
 
+function clearLoading() {
+    return { type: adminConstants.CLEAR_LOADING, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -1016,5 +1056,7 @@ export const adminActions = {
     newClient,
     activateHub,
     saveNewHub,
-    getDashShipments
+    getDashShipments,
+    newRoute,
+    clearLoading
 };

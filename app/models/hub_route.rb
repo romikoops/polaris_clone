@@ -22,6 +22,18 @@ class HubRoute < ApplicationRecord
     return route.hub_routes.find_or_create_by(starthub_id: o_hubs[0].id, endhub_id: d_hubs[0].id, name: newname)
   end
 
+  def self.create_with_route(starthub_id, endhub_id, mot, tenant_id)
+    o_hub = Hub.find(starthub_id)
+    d_hub = Hub.find(endhub_id)
+    o_nexus = o_hub.nexus
+    d_nexus = d_hub.nexus
+    route_name = "#{o_nexus.name} - #{d_nexus.name}"
+    hub_route_name = "#{o_hub.name} - #{d_hub.name}"
+    route = Route.find_or_create_by!(origin_nexus_id: o_nexus.id, destination_nexus_id: d_nexus.id, tenant_id: tenant_id, name: route_name)
+    hub_route = route.hub_routes.create!(starthub_id: starthub_id, endhub_id: endhub_id, name: hub_route_name)
+    return hub_route
+  end
+
   def generate_weekly_schedules(mot, start_date, end_date, ordinal_array, journey_length, vehicle_type_id)
     if start_date.kind_of? Date
       tmp_date = start_date

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './RouteFilterBox.scss';
@@ -9,7 +9,7 @@ export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedDay: props.departureDate ? moment(props.departureDate).format('DD-MM-YYYY') : moment().format('DD-MM-YYYY'),
+            selectedDay: props.departureDate ? moment(props.departureDate).format('DD/MM/YYYY') : moment().format('DD/MM/YYYY'),
             selectedOption: this.props.moT
         };
         this.editFilterDay = this.editFilterDay.bind(this);
@@ -31,6 +31,9 @@ export class RouteFilterBox extends Component {
     }
     render() {
         const { theme, pickup } = this.props;
+        const dayPickerProps = {
+            disabledDays: {before: new Date(moment().add(7, 'days').format())}
+        };
         return (
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
@@ -45,6 +48,7 @@ export class RouteFilterBox extends Component {
                             className={styles.dpb_picker}
                             value={this.state.selectedDay}
                             onDayChange={this.editFilterDay}
+                            dayPickerProps={dayPickerProps}
                         />
                     </div>
                 </div>

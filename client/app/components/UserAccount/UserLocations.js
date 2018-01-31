@@ -4,6 +4,7 @@ import styles from './UserAccount.scss';
 import defaults from '../../styles/default_classes.scss';
 import { EditLocation } from './EditLocation';
 import EditLocationWrapper from '../../hocs/EditLocationWrapper';
+import { v4 } from 'node-uuid';
 const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) => [
     <div
         key="addLocationButton"
@@ -26,7 +27,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) =
     </div>,
     locInfo.map(op => {
         return (
-            <div key={op.user.id} className={'flex-33'}>
+            <div key={v4()} className={'flex-33'}>
                 <div className={`${styles['location-box']}`}>
                     <div className={`${styles.header}`}>
                         {op.user.primary ? (
@@ -88,6 +89,7 @@ export class UserLocations extends Component {
         this.saveLocation = this.saveLocation.bind(this);
         this.toggleActiveView = this.toggleActiveView.bind(this);
         this.destroyLocation = this.destroyLocation.bind(this);
+        this.makePrimary = this.makePrimary.bind(this);
     }
 
     componentDidMount() {
@@ -110,6 +112,11 @@ export class UserLocations extends Component {
         this.toggleActiveView();
     }
 
+    makePrimary(locationId) {
+        const { userDispatch, user } = this.props;
+        userDispatch.makePrimary(user.id, locationId);
+    }
+
     render() {
         const locInfo = this.props.locations;
 
@@ -119,7 +126,7 @@ export class UserLocations extends Component {
                 activeView = locInfo
                     ? LocationView(
                         locInfo,
-                        this.props.makePrimary,
+                        this.makePrimary,
                         this.toggleActiveView,
                         this.destroyLocation
                     )
