@@ -27,7 +27,8 @@ class Tenant < ApplicationRecord
         modes_of_transport: true
       )
     end
-    put_item('routeOptions', {id: self.id, data: detailed_routes})
+    # put_item('routeOptions', {id: self.id, data: detailed_routes})
+    update_item('routeOptions', {id: self.id}, {data: detailed_routes})
   end
 
   def mot_scope(args)
