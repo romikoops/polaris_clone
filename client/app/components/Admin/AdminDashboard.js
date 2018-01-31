@@ -69,8 +69,6 @@ export class AdminDashboard extends Component {
         const { routes, shipments, air, ocean} = dashData;
         const clientHash = {};
 
-        console.log(hubHash);
-
         if (clients) {
             clients.forEach(cl => {
                 clientHash[cl.id] = cl;

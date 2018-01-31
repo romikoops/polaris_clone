@@ -15,6 +15,12 @@ export class AdminSearchableShipments extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.shipments !== this.props.shipments) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     seeAll() {
         const {seeAll, adminDispatch} = this.props;
         if (seeAll) {

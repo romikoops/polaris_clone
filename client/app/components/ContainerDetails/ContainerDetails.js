@@ -30,14 +30,17 @@ export class ContainerDetails extends Component {
                 <div className="flex-100 layout-row">
                     <h4>Unit {index + 1 }</h4>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p>Gross Weight</p>
                     <p>{item.payload_in_kg} kg</p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p>Container Class</p>
                     <p>{cDesc[item.size_class]} </p>
                 </div>
+                <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p>No. of Containers</p>
                     <p>{item.quantity} </p>

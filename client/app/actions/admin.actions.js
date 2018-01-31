@@ -744,7 +744,7 @@ function confirmShipment(id, action, redirect) {
                     dispatch(successAccept(shipmentData));
                 } else {
                     dispatch(successDeny(shipmentData));
-                    dispatch(push('/admin/shipments'));
+                    dispatch(getShipments(false));
                 }
                 if (redirect) {
                     dispatch(getShipment(id, true));

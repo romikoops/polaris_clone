@@ -14,6 +14,11 @@ export class AdminSearchableClients extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+    componentDidUpdate(prevProps) {
+        if (prevProps.clients !== this.props.clients) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     handleClick(client) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {
@@ -87,7 +92,7 @@ export class AdminSearchableClients extends Component {
                     <div className="flex-50 layoput-row layout-align-start-center">
                         <h2 className="flex-none clip" style={textStyle}>{title ? title : 'Clients'}</h2>
                     </div>
-                    <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
+                    <div className="flex-35 laypout-row layout-align-start input_box_full">
                         <input
                             type="text"
                             name="search"

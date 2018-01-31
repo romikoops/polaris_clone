@@ -80,11 +80,17 @@ export class BookingConfirmation extends Component {
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start'}>
                         <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
                             <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
-                    Thank you for booking with {tenantName}.<br/>
-                    Hope to see you again soon!
+                                <p className="flex-100">
+                                    Thank you for booking with {tenantName}.<br/>
+                                    Hope to see you again soon!
+                                </p>
                             </div>
                             <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
-                    Booking Reference: {shipment.imc_reference}
+                                <p className="flex-100">Booking Reference: {shipment.imc_reference}</p>
+                            </div>
+                            <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
+                                <p className="flex-100"> We have just sent your order confirmation with all the booking details to your account e-mail address. Now, our team will review your order and contact you with any further instructions or simply confirm the request via e-mail.</p>
+                                <p className="flex-100">Do not hesitate to contact us either through the message center or your account manager </p>
                             </div>
                         </div>
                         <RouteHubBox hubs={hubs} route={schedules} theme={theme}/>
@@ -133,11 +139,12 @@ export class BookingConfirmation extends Component {
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex-33 layout-row layout-align-end">
-                                    <p>{createdDate}</p>
+                                <div className="flex-33 layout-row layout-align-end layout-wrap">
+                                    <p className="flex-100">Booking placed at: {createdDate}</p>
+                                    <p className="flex-100">Booking placed by: {user.data.first_name} {user.data.last_name} </p>
                                 </div>
                             </div>
-                            <div className="flex-100 layout-row">{nArray}</div>
+                            <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
                             <div
                                 className={`${
                                     styles.b_summ_bottom

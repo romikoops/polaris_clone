@@ -163,11 +163,15 @@ export function admin(state = {}, action) {
             });
             return reqShips;
         case adminConstants.GET_SHIPMENTS_SUCCESS:
-            const succShips = merge({}, state, {
+            return {
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    shipments: action.payload.data
+                },
                 shipments: action.payload.data,
                 loading: false
-            });
-            return succShips;
+            };
         case adminConstants.GET_SHIPMENTS_FAILURE:
             const errShips = merge({}, state, {
                 error: { shipments: action.error },

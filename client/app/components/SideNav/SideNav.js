@@ -194,17 +194,18 @@ class SideNav extends Component {
         });
         return (
             <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
+                <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`}>
+                  { expanded ? <div className="flex-none layout-row layout-align-center-center">
+                    <i className="flex-none fa fa-angle-double-left"></i>
+                  </div> : <div className="flex-none layout-row layout-align-center-center"><i className="flex-none fa fa-angle-double-right"></i> </div> }
+                </div>
                 <div className="flex-15 layout-row layout-align-center-center">
 
                 </div>
                 <div className="flex layout-row layout-align-center-start layout-wrap">
                     {navLinks}
                 </div>
-                <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`}>
-                  { expanded ? <div className="flex-none layout-row layout-align-center-center">
-                    <i className="flex-none fa fa-angle-double-left"></i>
-                  </div> : <div className="flex-none layout-row layout-align-center-center"><i className="flex-none fa fa-angle-double-right"></i> </div> }
-                </div>
+                
             </div>
         );
     }

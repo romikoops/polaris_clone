@@ -14,6 +14,11 @@ export class AdminSearchableRoutes extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+    componentDidUpdate(prevProps) {
+        if (prevProps.routes !== this.props.routes) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     seeAll() {
         const {seeAll, adminDispatch} = this.props;
         if (seeAll) {
@@ -97,7 +102,7 @@ export class AdminSearchableRoutes extends Component {
                     <div className="flex-none layput-row layout-align-start-center">
                         <p className="flex-none sub_header_text"> Routes</p>
                     </div>
-                    <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
+                    <div className="flex-35 layput-row layout-align-start-center input_box_full">
                         <input
                             type="text"
                             name="search"
