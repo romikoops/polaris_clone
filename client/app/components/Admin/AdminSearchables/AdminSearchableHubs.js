@@ -15,6 +15,11 @@ export class AdminSearchableHubs extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+    componentDidUpdate(prevProps) {
+        if (prevProps.hubs !== this.props.hubs) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     handleClick(hub) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {

@@ -17,7 +17,7 @@ import {
     UserBilling
 } from '../../components/UserAccount';
 import UserContacts from '../../components/UserAccount/UserContacts';
-import { userActions, authenticationActions } from '../../actions';
+import { userActions, authenticationActions, appActions } from '../../actions';
 import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
 
@@ -119,7 +119,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch } = this.props;
+        const { user, theme, users, userDispatch, authDispatch, currencies, appDispatch } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -231,7 +231,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/profile"
-                                render={props => <UserProfile setNav={this.setNavLink} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/contacts"
@@ -271,19 +271,22 @@ UserAccount.propTypes = {
 
 
 function mapStateToProps(state) {
-    const { authentication, tenant, shipments, users } = state;
+    const { authentication, tenant, shipments, users, app } = state;
     const { user, loggedIn } = authentication;
+    const { currencies } = app;
     return {
         users,
         user,
         tenant,
         loggedIn,
-        shipments
+        shipments,
+        currencies
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return {
+        appDispatch: bindActionCreators(appActions, dispatch),
         userDispatch: bindActionCreators(userActions, dispatch),
         authDispatch: bindActionCreators(authenticationActions, dispatch)
     };

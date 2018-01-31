@@ -102,6 +102,7 @@ Rails.application.routes.draw do
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
+    post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
     post "shipments/:shipment_id/upload/:type", to: 'shipments#upload_document'
     post "search/hscodes", to: "search#search_hs_codes"
     get "/documents/download/:document_id", 

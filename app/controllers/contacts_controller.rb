@@ -32,6 +32,12 @@ class ContactsController < ApplicationController
     response_handler(loc)
   end
 
+  def delete_contact_address
+    loc = Location.find(params[:id])
+    loc.destroy!
+    response_handler({})
+  end
+
   def new_alias
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}

@@ -34,25 +34,29 @@ export function messaging(state = {}, action) {
         case messagingConstants.GET_ADMIN_MESSAGES_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                sending: true
             };
 
         case messagingConstants.SEND_USER_MESSAGE_SUCCESS:
             return {
                 ...state,
                 ...action.payload,
-                loading: false
+                loading: false,
+                sending: false
             };
         case messagingConstants.SEND_USER_MESSAGE_ERROR:
             return {
                 ...state,
                 error: action.payload,
-                loading: false
+                loading: false,
+                sending: false
             };
         case messagingConstants.SEND_USER_MESSAGE_REQUEST:
             return {
                 ...state,
-                loading: true
+                loading: true,
+                sending: true
             };
 
         case messagingConstants.GET_SHIPMENT_DATA_SUCCESS:

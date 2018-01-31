@@ -344,6 +344,23 @@ export function users(state = initialState, action) {
                 error: { hubs: action.error }
             };
 
+        case userConstants.DELETE_CONTACT_ADDRESS_REQUEST:
+            return {...state, loading: true};
+        case userConstants.DELETE_CONTACT_ADDRESS_SUCCESS:
+            const caData = state.contactData;
+            caData.location = false;
+            return {
+                ...state,
+                contactData: caData,
+                loading: false
+            };
+        case userConstants.DELETE_CONTACT_ADDRESS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: { hubs: action.error }
+            };
+
         case userConstants.UPDATE_CONTACT_REQUEST:
             return {...state, loading: true};
         case userConstants.UPDATE_CONTACT_SUCCESS:

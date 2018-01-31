@@ -4,6 +4,11 @@ import styles from './UserAccount.scss';
 import { UserLocations } from './';
 import { AdminClientTile } from '../Admin';
 import { RoundButton } from '../RoundButton/RoundButton';
+import styled from 'styled-components';
+import Select from 'react-select';
+import '../../styles/select-css-custom.css';
+import { currencyOptions } from '../../constants';
+
 const ProfileBox = ({user, style, edit}) => {
     return (
         <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
@@ -118,7 +123,8 @@ export class UserProfile extends Component {
             editBool: false,
             editObj: {},
             newAlias: {},
-            newAliasBool: false
+            newAliasBool: false,
+            currencySelect: {label: this.props.user.currency, value: this.props.user.currency}
         };
         this.doNothing = this.doNothing.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
@@ -130,6 +136,8 @@ export class UserProfile extends Component {
         this.handleFormChange = this.handleFormChange.bind(this);
         this.saveNewAlias = this.saveNewAlias.bind(this);
         this.deleteAlias = this.deleteAlias.bind(this);
+        this.setCurrency = this.setCurrency.bind(this);
+        this.saveCurrency = this.saveCurrency.bind(this);
     }
     componentDidMount() {
         this.props.setNav('profile');
@@ -191,6 +199,15 @@ export class UserProfile extends Component {
         userDispatch.newAlias(newAlias);
         this.toggleNewAlias();
     }
+
+    setCurrency(event) {
+        this.setState({currencySelect: event});
+    }
+    saveCurrency() {
+        const {appDispatch} = this.props;
+        appDispatch.setCurrency(this.state.currencySelect.value);
+    }
+
     render() {
         const {user, aliases, locations, theme} = this.props;
         if (!user) {
@@ -207,6 +224,25 @@ export class UserProfile extends Component {
                 <AdminClientTile client={cont} theme={theme} deleteable deleteFn={this.deleteAlias}/>
             );
         });
+        const StyledSelect = styled(Select)`
+            width: 50%;
+            .Select-control {
+                background-color: #F9F9F9;
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2 !important;
+            }
+            .Select-menu-outer {
+                box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+                border: 1px solid #F2F2F2;
+            }
+            .Select-value {
+                background-color: #F9F9F9;
+                border: 1px solid #F2F2F2;
+            }
+            .Select-option {
+                background-color: #F9F9F9;
+            }
+        `;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -270,6 +306,31 @@ export class UserProfile extends Component {
                                     <EditProfileBox user={editObj} style={textStyle} theme={theme}  handleChange={this.handleChange} onSave={this.saveEdit} close={this.closeEdit}/> :
                                     <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile}/>
                             }
+                        </div>
+                        <div className="flex-50 layout-row layout-align-center-center layout-wrap">
+                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                                <h3 className="flex-none"> Currency Settings:</h3>
+                                <p className="flex-100">Current Selection: {user.currency}</p>
+                            </div>
+                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                                <StyledSelect
+                                    name="currency"
+                                    className={`${styles.select}`}
+                                    value={this.state.currencySelect}
+                                    options={currencyOptions}
+                                    onChange={this.setCurrency}
+                                />
+                                <div className={`flex-50 layout-row layout-align-end-center ${styles.btn_row}`}>
+                                    <RoundButton
+                                        theme={theme}
+                                        size="small"
+                                        active
+                                        text="Save"
+                                        handleNext={this.saveCurrency}
+                                        iconClass="fa-floppy-o"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
