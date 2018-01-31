@@ -8,8 +8,9 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import { AdminSearchableClients } from '../Admin/AdminSearchables';
-const actRoutesData = activeRoutesData;
-
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { UserMergedShipment} from './UserMergedShipment';
+import { UserMergedShipHeaders} from './UserMergedShipHeaders';
 export class UserDashboard extends Component {
     constructor(props) {
         super(props);
@@ -18,6 +19,8 @@ export class UserDashboard extends Component {
         this.viewShipment = this.viewShipment.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
         this.startBooking = this.startBooking.bind(this);
+        this.limitArray = this.limitArray.bind(this);
+        this.seeAll = this.seeAll.bind(this);
     }
     componentDidMount() {
         this.props.setNav('dashboard');
@@ -39,10 +42,8 @@ export class UserDashboard extends Component {
         shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].data.name : '';
         return shipment;
     }
-
-
     doNothing() {
-        console.log('');
+        console.log('doing nothing');
     }
     dynamicSort(property) {
         let sortOrder = 1;
@@ -63,16 +64,30 @@ export class UserDashboard extends Component {
         const { userDispatch, user } = this.props;
         userDispatch.makePrimary(user.id, locationId);
     }
-
+    limitArray(shipments, limit) {
+        return limit ?
+            shipments.slice(0, limit)
+            : shipments;
+    }
+    // handleReqClick() {
+    //     this.seeAll('account/shipments');
+    // }
+    // handleOpClick() {
+    //    this.seeAll('account/shipments');
+    // }
+    seeAll() {
+        const { userDispatch, seeAll } = this.props;
+        if(seeAll) {
+            this.seeAll();
+        } else {
+            userDispatch.goTo('/account/shipments');
+        }
+    }
     render() {
-        const { theme, hubs, dashboard, user, userDispatch } = this.props;
-        // ;
+        const { theme, hubs, dashboard, user, userDispatch, seeAll} = this.props;
         if (!user || !dashboard) {
             return <h1>NO DATA</h1>;
         }
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const { shipments, pricings, contacts, locations} = dashboard;
         console.log(pricings);
         const mergedOpenShipments = shipments && shipments.open ? shipments.open.map((sh) => {
@@ -84,150 +99,105 @@ export class UserDashboard extends Component {
         const mergedFinishedShipments = shipments && shipments.finished ? shipments.finished.map((sh) => {
             return this.prepShipment(sh, user, hubs);
         }) : false;
-
-        // const openShipments = mergedOpenShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Open Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-        // const reqShipments = mergedRequestedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Requested Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-        // const finishedShipments = mergedFinishedShipments.length > 0 ? <AdminSearchableShipments hubs={hubs} shipments={mergedRequestedShipments} title="Finished Shipments" theme={theme} handleClick={this.viewShipment} userView handleShipmentAction={this.handleShipmentAction} seeAll={() => userDispatch.getShipments(true)}/> : '';
-        const newReqShips = mergedRequestedShipments.length > 0 ? mergedRequestedShipments.map((ship) => {
+        const newReqShips = mergedRequestedShipments.length > 0 ? this.limitArray(mergedRequestedShipments, 3).map((ship) => {
             return (
-                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`} onClick={() => this.viewShipment(ship)}>
-                    <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.imc_reference}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.status}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.incoterm}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none"> Yes </p>
-                    </div>
-                </div>
-
+                <UserMergedShipment ship={ship} />
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
                 <p className="flex-none" > No Shipments requested.</p>
             </div>);
-        const newOpenShips = mergedOpenShipments.length > 0 ? mergedOpenShipments.map((ship) => {
+        const newOpenShips = mergedOpenShipments.length > 0 ? this.limitArray(mergedOpenShipments, 3).map((ship) => {
             return (
-                <div className={`flex-100 layout-row layout-align-start-center ${ustyles.ship_row}`} onClick={() => this.viewShipment(ship)}>
-                    <div className={`flex-40 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.imc_reference}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.status}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none">{ship.incoterm}</p>
-                    </div>
-                    <div className={`flex-15 layout-row layout-align-start-center ${ustyles.ship_row_cell}`}>
-                        <p className="flex-none"> Yes </p>
-                    </div>
-                </div>
+                <UserMergedShipment ship={ship} />
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
                 <p className="flex-none" > No Shipments in process.</p>
             </div>);
+
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
 
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_main}`}>
                     <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_top}`}>
-
                         <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
                             <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
                                 <h2 className="flex-none">Welcome back, {user.first_name}</h2>
                             </div>
-
                             <div className={`flex-none layout-row layout-align-center-center ${ustyles.carousel}`}>
-                                <Carousel theme={this.props.theme} slides={actRoutesData} noSlides={1} fade/>
+                                <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade/>
                             </div>
                             <div className={`flex-none layout-row layout-align-center-center ${ustyles.dash_btn}`}>
                                 <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                             </div>
-                            {/* </div>*/}
                             <div className={`flex-50 layout-row ${ustyles.right} layout-wrap layout-align-space-between-space-between`}>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
-                                    <h1 className="flex-none">{mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}</h1>
+                                    <h1 className="flex-none">
+                                        {mergedOpenShipments.length + mergedFinishedShipments.length + mergedRequestedShipments.length}
+                                    </h1>
                                     <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
-                                        <h3 className="flex-none " >Total Shipments</h3>
+                                        <h3 className="flex-none">
+                                            Total Shipments
+                                        </h3>
                                     </div>
                                 </div>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
-                                    <h1 className="flex-none">{mergedRequestedShipments.length}</h1>
+                                    <h1 className="flex-none">
+                                        {mergedRequestedShipments.length}
+                                    </h1>
                                     <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
-                                        <h3 className="flex-none " >Requested Shipments</h3>
+                                        <h3 className="flex-none">
+                                            Requested Shipments
+                                        </h3>
                                     </div>
                                 </div>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
-                                    <h1 className="flex-none">{mergedOpenShipments.length}</h1>
+                                    <h1 className="flex-none">
+                                        {mergedOpenShipments.length}
+                                    </h1>
                                     <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
-                                        <h3 className="flex-none " >Shipments in Progress</h3>
+                                        <h3 className="flex-none">
+                                            Shipments in Progress
+                                        </h3>
                                     </div>
                                 </div>
                                 <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box}`}>
-                                    <h1 className="flex-none">{ mergedFinishedShipments.length }</h1>
+                                    <h1 className="flex-none">
+                                        { mergedFinishedShipments.length }
+                                    </h1>
                                     <div className={`flex-none layout-row layout-align-center-center ${ustyles.stat_box_title}`}>
-                                        <h3 className="flex-none " >Completed Shipments</h3>
+                                        <h3 className="flex-none">
+                                            Completed Shipments
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
+
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_shipments}`}>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <h2 className="flex-none clip" style={textStyle}>Shipments</h2>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <div className="flex-40 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Requested Shipments </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none"> Reference </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Status </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Incoterm </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Requires Action </h3>
-                                </div>
-                            </div>
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+
+                            <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
+                            <UserMergedShipHeaders title="Requested Shipments" />
+
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
                                 {newReqShips}
+                                { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">
+                                    <div className="flex-none layout-row layout-align-center-center" value="1" onClick={this.seeAll}>
+                                        <p className="flex-none">See all</p>
+                                    </div>
+                                </div>) : ''}
                             </div>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <div className="flex-40 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">In Process </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none"> Reference </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Status </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Incoterm </h3>
-                                </div>
-                                <div className="flex-15 layout-row layout-align-start-center">
-                                    <h3 className="flex-none">Requires Action </h3>
-                                </div>
-                            </div>
+                            <UserMergedShipHeaders title="In Process" />
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
                                 {newOpenShips}
+                                { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">
+                                    <div className="flex-none layout-row layout-align-center-center" value="2" onClick={this.seeAll}>
+                                        <p className="flex-none">See all</p>
+                                    </div>
+                                </div>) : ''}
                             </div>
                         </div>
                     </div>
@@ -239,7 +209,7 @@ export class UserDashboard extends Component {
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                     <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                        <h2 className="flex-none clip" style={textStyle}>My Shipment Addresses</h2>
+                        <MainTextHeading theme={theme} text="My Shipment Addresses" />
                         <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                     </div>
                 </div>

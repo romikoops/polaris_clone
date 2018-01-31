@@ -111,6 +111,7 @@ class AdminClients extends Component {
                             <input className={styles.input_100} type="password" value={newClient.password_confirmation} name={'password_confirmation'} placeholder="Password Confirmation *" onChange={this.handleFormChange} />
                         </div>
                     </div>
+
                     <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
                         <RoundButton
                             theme={theme}

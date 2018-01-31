@@ -56,7 +56,6 @@ export class AdminHubForm extends Component {
                 tmpAddress.country = ac.long_name;
             }
         });
-        debugger;
         tmpAddress.latitude = place.geometry.location.lat();
         tmpAddress.longitude = place.geometry.location.lng();
         tmpAddress.fullAddress = place.formatted_address;

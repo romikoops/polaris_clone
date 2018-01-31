@@ -130,9 +130,11 @@ class Admin::ShipmentsController < ApplicationController
       }
       add_message_to_convo(@user, message, true)
     end
+
     tmp = @document.as_json
     tmp["signed_url"] =  @document.get_signed_url
     response_handler(tmp)
+
     
   end
 

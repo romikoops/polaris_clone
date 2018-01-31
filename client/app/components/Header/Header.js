@@ -19,7 +19,8 @@ class Header extends Component {
         this.state = {
             redirect: false,
             showLogin: false,
-            showMessages: false
+            showMessages: false,
+            isTop: true
         };
         this.goHome = this.goHome.bind(this);
         this.toggleShowLogin = this.toggleShowLogin.bind(this);
@@ -30,6 +31,12 @@ class Header extends Component {
         if (!messages) {
             messageDispatch.getUserConversations();
         }
+        document.addEventListener('scroll', () => {
+            const isTop = window.scrollY < 100;
+            if (isTop !== this.state.isTop) {
+                this.setState({ isTop });
+            }
+        });
     }
     goHome() {
         this.setState({redirect: true});
@@ -44,7 +51,11 @@ class Header extends Component {
          messageDispatch.showMessageCenter();
     }
     render() {
+<<<<<<< HEAD
         const { user, theme, tenant, invert, unread } = this.props;
+=======
+        const { user, theme, tenant, currencies, appDispatch, invert, landingPage } = this.props;
+>>>>>>> 254020e3bd7fb5369047488da799b6a262a66e7e
 
         const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
@@ -75,6 +86,7 @@ class Header extends Component {
                 invert={invert}
             />
         );
+
         const alertStyle = unread > 0 ? styles.unread : styles.all_read;
         const mail = (
             <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
@@ -82,6 +94,7 @@ class Header extends Component {
                 <i className="fa fa-envelope-o"></i>
             </div>
         );
+
         let logoUrl = '';
         let logoStyle;
         if (theme && theme.logoWide) {
@@ -92,7 +105,9 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
+
         const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
+
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -110,12 +125,13 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
+        console.log(landingPage);
         return (
-            <div
-                className={`${
-                    styles.header
-                } layout-row flex-100 layout-wrap layout-align-center`}
-            >
+            <div className={landingPage && !this.state.isTop ?
+                `${styles.header_scrollable}
+                layout-row flex-100 layout-wrap layout-align-center`
+                : `${styles.header}
+                layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex layout-row layout-align-start-center">
                     {this.props.menu}
                 </div>

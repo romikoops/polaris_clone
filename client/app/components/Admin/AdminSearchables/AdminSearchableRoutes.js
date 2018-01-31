@@ -4,6 +4,7 @@ import styles from '../Admin.scss';
 import { AdminRouteTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
 export class AdminSearchableRoutes extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +43,7 @@ export class AdminSearchableRoutes extends Component {
             });
             return;
         }
-        const search = (key) => {
+        const search = (keys) => {
             const options = {
                 shouldSort: true,
                 tokenize: true,
@@ -50,8 +51,8 @@ export class AdminSearchableRoutes extends Component {
                 location: 0,
                 distance: 50,
                 maxPatternLength: 32,
-                minMatchCharLength: 2,
-                keys: [key]
+                minMatchCharLength: 5,
+                keys: keys
             };
             const fuse = new Fuse(this.props.routes, options);
             console.log(fuse);
@@ -99,8 +100,8 @@ export class AdminSearchableRoutes extends Component {
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-none layput-row layout-align-start-center">
-                        <p className="flex-none sub_header_text"> Routes</p>
+                    <div className="flex-60 layput-row layout-align-start-center">
+                        <MainTextHeading theme={theme} text="Routes" />
                     </div>
                     <div className="flex-35 layput-row layout-align-start-center input_box_full">
                         <input
