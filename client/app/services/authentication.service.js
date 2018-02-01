@@ -17,7 +17,7 @@ function login(data) {
     return fetch(BASE_URL + '/auth/sign_in', requestOptions)
         .then(response => {
             if (!response.ok) {
-                return Promise.reject(response.statusText);
+                return Promise.reject(response.json());
             }
             if (response.headers.get('access-token')) {
                 const accessToken = response.headers.get('access-token');

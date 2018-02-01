@@ -15,8 +15,6 @@ import { shipmentActions } from '../../actions/shipment.actions';
 import { nexusActions } from '../../actions/nexus.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
-import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
-import { Modal } from '../../components/Modal/Modal';
 
 import './Shop.scss';
 
@@ -116,7 +114,7 @@ class Shop extends Component {
             this.toggleShowRegistration(req);
             return;
         }
-        console.log('Not Guest');
+        this.hideRegistration();
         shipmentDispatch.setShipmentRoute(req);
     }
 
@@ -143,24 +141,16 @@ class Shop extends Component {
             shipmentId = response.stage4.shipment.id;
         }
         const { req } = this.state;
-        const loginModal = (
-            <Modal
-                component={
-                    <LoginRegistrationWrapper
-                        LoginPageProps={{theme, req}}
-                        RegistrationPageProps={{theme, tenant, req, user}}
-                        initialCompName="RegistrationPage"
-                    />
-                }
-                parentToggle={this.toggleShowRegistration}
-            />
-        );
 
         return (
             <div className="layout-row flex-100 layout-wrap">
                 {loadingScreen}
-                { this.state.showRegistration && !loading ? loginModal : '' }
-                <Header theme={this.props.theme} showMessages={this.toggleShowMessages}/>
+                <Header
+                    theme={this.props.theme}
+                    showMessages={this.toggleShowMessages}
+                    showRegistration={this.state.showRegistration}
+                    req={req}
+                />
                 <ShopStageView
                     shopType={this.state.shopType}
                     match={match}
@@ -307,8 +297,6 @@ function mapStateToProps(state) {
     const { currencies } = app;
     const loading = bookingData.loading;
     const availableDestinations = nexus.availableDestinations;
-    console.log('availableDestinations');
-    console.log(nexus);
     return {
         user,
         users,

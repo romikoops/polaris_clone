@@ -55,7 +55,6 @@ export class LandingTop extends Component {
         );
         const backgroundImage = theme && theme.background ? theme.background : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg';
         const StyledTop = styled.div`
-            color: #83BC45;
             background-image: linear-gradient(
               rgba(black, 0.3),
               rgba(black, 0.3)

@@ -19,13 +19,11 @@ function login(data) {
     function success(user) {
         return { type: authenticationConstants.LOGIN_SUCCESS, user };
     }
-    function failure(error) {
-        return { type: authenticationConstants.LOGIN_FAILURE, error };
+    function failure(loginFailure) {
+        return { type: authenticationConstants.LOGIN_FAILURE, loginFailure };
     }
     return dispatch => {
-        if (data.shipmentReq) logout();
-
-        dispatch(request({ username: data.username }));
+        dispatch(request({ email: data.email, password: data.password }));
         authenticationService.login(data).then(
             user => {
                 dispatch(success(user));
@@ -39,8 +37,14 @@ function login(data) {
                 }
             },
             error => {
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
+                error.then(errorData => {
+                    dispatch(failure({
+                        error: errorData,
+                        loginAttempt: true,
+                        loggingIn: false
+                    }));
+                });
+                // dispatch(alertActions.error(error));
             }
         );
     };
