@@ -127,7 +127,6 @@ export class ShipmentLocationBox extends Component {
         this.setState({showModal: !this.state.showModal});
     }
     selectedRoute(route) {
-        console.log(route);
         const origin = {
             city: '',
             country: '',
@@ -148,6 +147,9 @@ export class ShipmentLocationBox extends Component {
         this.setHubsFromRoute(route);
     }
     setHubsFromRoute(route) {
+        console.log('hubs');
+        console.log(route);
+        console.log( this.props.allNexuses.destinations);
         let tmpOrigin = {};
         let tmpDest = {};
         // TO DO: AllNexuses changed to object with origin and dest arrays

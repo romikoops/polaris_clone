@@ -77,11 +77,15 @@ export class LandingTop extends Component {
                     <div className={styles.top_row + ' flex-100 layout-row'}>
                         <Header user={user} theme={theme} landingPage invert/>
                     </div>
-                    <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
-                        { user && user.data && user.data.role_id === 2 ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
-                        { !user ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
-                        { user && user.data && user.data.role_id === 2 ? myAccount : '' }
-                        { user && user.data && user.data.role_id === 1 ? toAdmin : '' }
+                    <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-center-center ' + styles.layout_elem}>
+                        <div className={`${styles.btn_margin} flex-none layout-row layout-align-center-center`}>
+                            { user && user.data && user.data.role_id === 2 ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                            { !user ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                        </div>
+                        <div className={`${styles.btn_margin} flex-none layout-row layout-align-center-center`}>
+                            { user && user.data && user.data.role_id === 2 ? myAccount : '' }
+                            { user && user.data && user.data.role_id === 1 ? toAdmin : '' }
+                        </div>
                     </div>
 
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>

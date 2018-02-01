@@ -169,6 +169,7 @@ export class ChooseRoute extends Component {
         const cargoText = cargoUnits.length > 1 ? 'Cargo Items' : 'Cargo Item';
         const containerText = cargoUnits.length > 1 ? 'Containers' : 'Container';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap" style={{marginTop: '62px', marginBottom: '166px'}}>
                 {flash}
