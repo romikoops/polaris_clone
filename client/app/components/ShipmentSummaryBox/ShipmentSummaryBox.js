@@ -3,6 +3,7 @@ import styles from './ShipmentSummaryBox.scss';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
@@ -65,12 +66,7 @@ export class ShipmentSummaryBox extends Component {
         const originAddress = (
             <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
                 <div className="flex-100 layout-row">
-                    <h4
-                        className={styles.date_title}
-                        style={gradientFontStyle}
-                    >
-                        Pickup Address
-                    </h4>
+                    <BookingTextHeading theme={theme} size={4} text="Pickup Address :" />
                 </div>
                 <address className="flex-100 layout-row layout-wrap">
                     {locations.origin.street_number}  {locations.origin.street}  <br/>
@@ -83,12 +79,7 @@ export class ShipmentSummaryBox extends Component {
         const destinationAddress = (
             <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
                 <div className="flex-100 layout-row">
-                    <h4
-                        className={styles.date_title}
-                        style={gradientFontStyle}
-                    >
-                        Delivery Address
-                    </h4>
+                    <BookingTextHeading theme={theme} size={4} text="Delivery Address :" />
                 </div>
                 <address className="flex-100 layout-row layout-wrap">
                     {locations.destination.street_number}  {locations.destination.street}  <br/>
@@ -102,22 +93,13 @@ export class ShipmentSummaryBox extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-wrap">
                     <div
-                        className={`flex-100 layout-row layout-align-start-center ${
-                            styles.top_row
-                        }`}
-                    >
+                        className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
                         <div
-                            className={`flex-65 layout-row layout-align-start-center ${
-                                styles.hubs_row
-                            }`}
-                        >
+                            className={`flex-65 layout-row layout-align-start-center ${styles.hubs_row}`}>
                             <div className={`${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
-                                        <i
-                                            className={`fa fa-map-marker clip ${
-                                                styles.map_marker
-                                            }`}
+                                        <i className={`fa fa-map-marker clip ${styles.map_marker}`}
                                             style={gradientFontStyle}
                                         />
                                     </div>
@@ -158,12 +140,7 @@ export class ShipmentSummaryBox extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    Pickup Date
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="Picup Date :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -182,13 +159,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    {' '}
-                                    Date of Departure
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="Date of Departure :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -205,13 +176,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    {' '}
-                                    ETA terminal
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="ETA terminal :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -228,12 +193,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    Shipment Type:
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="Shipment Type :" />
                             </div>
                             <p className="flex-none"> {shipment.load_type === 'cargo_item' ? 'LCL' : 'FCL'} </p>
                         </div>
@@ -242,45 +202,25 @@ export class ShipmentSummaryBox extends Component {
 
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    IncoTerm:
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="IncoTerm :" />
                             </div>
                             <p className="flex-none"> {shipment.incoterm} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                   MoT:
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="MoT :" />
                             </div>
                             <p className="flex-none"> {route[0].mode_of_transport} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    Pre-carrage:
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="Pre-carriage :" />
                             </div>
                             <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    On-carriage:
-                                </h4>
+                                <BookingTextHeading theme={theme} size={4} text="On-carriage :" />
                             </div>
                             <p className="flex-none"> {shipment.has_on_carriage ? 'Yes' : 'No'}  </p>
                         </div>

@@ -9,6 +9,7 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -169,6 +170,7 @@ export class ChooseRoute extends Component {
         const cargoText = cargoUnits.length > 1 ? 'Cargo Items' : 'Cargo Item';
         const containerText = cargoUnits.length > 1 ? 'Containers' : 'Container';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
+        const shipmentHeadline = 'Shipping ' + cargoUnits.length + ' x ' + ( shipment.load_type === 'cargo_item' ? cargoText : containerText + ' to ' + destinationHubs[0].name.split(' ')[0] );
 
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap" style={{marginTop: '62px', marginBottom: '166px'}}>
@@ -180,20 +182,26 @@ export class ChooseRoute extends Component {
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <p className={`flex-none ${styles.one_line_summ}`}> Shipping {cargoUnits.length} x {shipment.load_type === 'cargo_item' ? cargoText : containerText} to {destinationHubs[0].name.split(' ')[0]}</p>
+                            <p className={`flex-none ${styles.one_line_summ}`}>
+                                <BookingTextHeading theme={theme} size={2} text={shipmentHeadline} />
+                            </p>
                         </div>
                         <div className="flex-100 layout-row">
                             <BestRoutesBox moT={this.state.selectedMoT} user={user} chooseResult={this.chooseResult} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">This is the closest departure to the specified pickup date</p>
+                                <p className="flex-none">
+                                    <BookingTextHeading theme={theme} size={3} text="This is the closest departure to the specified pickup date" />
+                                </p>
                             </div>
                             {closestRoute}
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">Alternative departures</p>
+                                <p className="flex-none">
+                                    <BookingTextHeading theme={theme} size={3} text="Alternative departures" />
+                                </p>
 
                             </div>
                             {limitedFocus}
@@ -210,13 +218,9 @@ export class ChooseRoute extends Component {
                                 : '' }
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
-                            <div
-                                className={`flex-100 layout-row layout-align-start ${
-                                    styles.route_header
-                                }`}
-                            >
+                            <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                                 <p className="flex-none">
-                                    Alternative modes of transport
+                                    <BookingTextHeading theme={theme} size={3} text="Alternative modes of transport" />
                                 </p>
                             </div>
                             {limitedAlts}

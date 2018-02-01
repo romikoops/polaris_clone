@@ -5,6 +5,7 @@ import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './RouteFilterBox.scss';
+import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +38,9 @@ export class RouteFilterBox extends Component {
         return (
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
-                    <p> { pickup ? 'Pickup Date' : 'Closing Date' } </p>
+                    <p>
+                        <BookingTextHeading theme={theme} size={4} text={ pickup ? 'Pickup Date' : 'Closing Date' } />
+                    </p>
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
@@ -53,7 +56,9 @@ export class RouteFilterBox extends Component {
                     </div>
                 </div>
                 <div className={styles.mode_of_transport}>
-                    <p>Mode of transport</p>
+                    <p>
+                        <BookingTextHeading theme={theme} size={4} text="Mode of transport" />
+                    </p>
                     <div className="radio">
                         <label>
                             <input
@@ -84,7 +89,7 @@ export class RouteFilterBox extends Component {
                     </div>
                 </div>
                 <div className={styles.transit_time}>
-                    <p>Transit time</p>
+                    <p><BookingTextHeading theme={theme} size={4} text="Transit Time" /></p>
                     <input
                         type="range"
                         value={this.props.durationFilter}

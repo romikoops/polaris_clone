@@ -466,9 +466,9 @@ export class ShipmentDetails extends Component {
                             <BookingTextHeading
                                 theme={theme}
                                 text={this.state.has_pre_carriage
-                                    ? 'Approximate Pickup Date:'
-                                    : 'Approximate Departure Date:'}
-                                size={4}
+                                    ? 'Approximate Pickup Date :'
+                                    : 'Approximate Departure Date :'}
+                                size={3}
                             />
                         </p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
@@ -498,7 +498,7 @@ export class ShipmentDetails extends Component {
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
                             {' '}
-                            <BookingTextHeading theme={theme} text="Select Incoterm:" size={4}/>
+                            <BookingTextHeading theme={theme} text="Select Incoterm :" size={3}/>
                         </p>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>

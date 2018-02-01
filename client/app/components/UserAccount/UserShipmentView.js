@@ -7,12 +7,12 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import {v4} from 'node-uuid';
 import { moment } from '../../constants';
 import Select from 'react-select';
-
 import '../../styles/select-css-custom.css';
 import styled from 'styled-components';
 import FileUploader from '../FileUploader/FileUploader';
 import FileTile from '../FileTile/FileTile';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class UserShipmentView extends Component {
     constructor(props) {
         super(props);
@@ -106,7 +106,9 @@ export class UserShipmentView extends Component {
                                 <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">Notifyee</p>
+                                <p className="flex-100">
+                                    <BookingTextHeading theme={theme} size={3}  text="Notifyee" />
+                                </p>
                                 <p className={` ${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
                                     {n.location.street} {n.location.street_number} <br/>
@@ -124,7 +126,9 @@ export class UserShipmentView extends Component {
                                 <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">Shipper</p>
+                                <p className="flex-100">
+                                    <BookingTextHeading theme={theme} size={3}  text="Shipper" />
+                                </p>
                                 <p className={`${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
                                     {n.location.street} {n.location.street_number} <br/>
@@ -147,7 +151,9 @@ export class UserShipmentView extends Component {
                                 />
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">Consignee</p>
+                                <p className="flex-100">
+                                    <BookingTextHeading theme={theme} size={3}  text="Consignee" />
+                                </p>
                                 <p
                                     className={` ${
                                         styles.address
@@ -196,7 +202,7 @@ export class UserShipmentView extends Component {
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-end-center ${styles.sec_title}`}>
-                     <RoundButton theme={theme} text="Back" size="small" back iconClass="fa-angle-left" handleNext={this.back}/>
+                    <RoundButton theme={theme} text="Back" size="small" back iconClass="fa-angle-left" handleNext={this.back}/>
                 </div>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
