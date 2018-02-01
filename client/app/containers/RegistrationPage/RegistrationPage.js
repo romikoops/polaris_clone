@@ -91,7 +91,7 @@ class RegistrationPage extends React.Component {
                         validations="minLength:2"
                         validationErrors={{
                             isDefaultRequiredValue: 'Must not be blank',
-                            minLength: 'Must have at least 2 characters'
+                            minLength: 'Must be at least two characters long'
                         }}
                         required
                     />
@@ -109,14 +109,14 @@ class RegistrationPage extends React.Component {
                         validations="minLength:2"
                         validationErrors={{
                             isDefaultRequiredValue: 'Must not be blank',
-                            minLength: 'Must have at least 2 characters'
+                            minLength: 'Must be at least two characters long'
                         }}
                         required
                     />
                     <hr style={this.state.focus.last_name ? focusStyles : {}}/>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="email">Username</label>
+                    <label htmlFor="email">Email</label>
                     <FormsyInput
                         type="text"
                         className={styles.form_control}
@@ -124,10 +124,14 @@ class RegistrationPage extends React.Component {
                         onBlur={this.handleFocus}
                         name="email"
                         submitAttempted={this.state.submitAttempted}
-                        validations="minLength:2"
+                        validations={{
+                            minLength: 2,
+                            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+                        }}
                         validationErrors={{
                             isDefaultRequiredValue: 'Must not be blank',
-                            minLength: 'Must have at least 2 characters'
+                            minLength: 'Must be at least two characters long',
+                            matchRegexp: 'Invalid email'
                         }}
                         required
                     />
