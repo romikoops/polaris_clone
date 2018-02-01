@@ -116,6 +116,11 @@ module PricingTools
     return resp.to_a
   end
 
+  def get_itinerary_pricings(itinerary_id)
+    resp = get_items('itineraryPricings', 'itinerary_id', itinerary_id)
+    return resp.to_a
+  end
+
   def get_route_pricings(route_id)
     resp = get_items('hubRoutePricings', 'route_id', route_id)
     return resp.to_a
@@ -143,6 +148,10 @@ module PricingTools
 
   def update_hub_route_pricing(key, data)
     update_item('hubRoutePricings', {_id: key }, data)
+  end
+
+  def update_itinerary_pricing(key, data)
+    update_item('itineraryPricings', {_id: key }, data)
   end
 end
 

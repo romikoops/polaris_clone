@@ -10,6 +10,8 @@ class Tenant < ApplicationRecord
   has_many :users
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
+  has_many :itineraries
+  has_many :stops, through: :itineraries
     
   validates :scope, presence: true, scope: true
 
@@ -18,17 +20,18 @@ class Tenant < ApplicationRecord
   end
 
   def update_route_details
-    routes = Route.where(tenant_id: self.id)
-    detailed_routes = routes.map do |route, h|
-      route.set_scope!
+    itineraries = Itinerary.where(tenant_id: self.id)
+    detailed_itineraries = itineraries.map do |itinerary, h|
+      itinerary.set_scope!
 
-      route.detailed_hash(
-        nexus_names: true, 
+      itinerary.detailed_hash(
+        nexus_names: true,
+        nexus_ids: true, 
         modes_of_transport: true
       )
     end
-    # put_item('routeOptions', {id: self.id, data: detailed_routes})
-    update_item('routeOptions', {id: self.id}, {data: detailed_routes})
+    # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
+    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries})
   end
 
   def mot_scope(args)

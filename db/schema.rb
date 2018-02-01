@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180130141939) do
+ActiveRecord::Schema.define(version: 20180201144441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,21 @@ ActiveRecord::Schema.define(version: 20180130141939) do
   create_table "itineraries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "mode_of_transport"
+    t.integer "vehicle_id"
+    t.integer "tenant_id"
+    t.integer "mot_scope_id"
+  end
+
+  create_table "layovers", force: :cascade do |t|
+    t.integer "stop_id"
+    t.datetime "eta"
+    t.datetime "etd"
+    t.integer "stop_index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "itinerary_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -158,13 +173,6 @@ ActiveRecord::Schema.define(version: 20180130141939) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "dedicated"
-  end
-
-  create_table "providers", force: :cascade do |t|
-    t.string "name"
-    t.string "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -264,6 +272,14 @@ ActiveRecord::Schema.define(version: 20180130141939) do
     t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
+  end
+
+  create_table "stops", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "itinerary_id"
+    t.integer "index"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|

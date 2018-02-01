@@ -13,31 +13,32 @@ module ShippingTools
 
     shipment.send("#{load_type}s").create if shipment.send("#{load_type}s").empty?
 
-    route_ids_dedicated = Route.ids_dedicated(current_user)
+    itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
 
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
-    routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
+    itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
     origins = []
     destinations = []
+    byebug
     cargo_item_types = CargoItemType.all
-    routes.map! do |route|
+    itineraries.map! do |itinerary|
       origins << { 
-        value: Location.find(route["origin_nexus_id"]), 
-        label: route["origin_nexus"] 
+        value: Location.find(itinerary["origin_nexus_id"]), 
+        label: itinerary["origin_nexus"] 
       }
       destinations << { 
-        value: Location.find(route["destination_nexus_id"]), 
-        label: route["destination_nexus"] 
+        value: Location.find(itinerary["destination_nexus_id"]), 
+        label: itinerary["destination_nexus"] 
       }
 
-      route["dedicated"] = true if route_ids_dedicated.include?(route["id"])
-      route
+      itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
+      itinerary
     end
     return {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
-      routes:         routes,
+      itineraries:    itineraries,
       cargoItemTypes: cargo_item_types
     }
   end 

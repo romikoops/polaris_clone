@@ -9,6 +9,8 @@ class Hub < ApplicationRecord
   
   has_one :service_charge
 
+  has_many :stops
+
   def self.create_from_nexus(nexus, mot, tenant_id)
     hub_type_name = {
       "ocean" => "Port",

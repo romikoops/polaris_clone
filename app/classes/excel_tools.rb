@@ -546,35 +546,31 @@ module ExcelTools
       cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
     )
     new_pricings = []
-    new_hub_route_pricings = {}
+    new_itinerary_pricings = {}
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
-      
+      tenant = user.tenant
       origin      = Location.find_by(name: row[:origin], location_type: 'nexus')
       destination = Location.find_by(name: row[:destination], location_type: 'nexus')
-      route       = Route.find_or_create_by!(
-        name: "#{origin.name} - #{destination.name}", 
-        tenant_id: user.tenant_id, 
-        origin_nexus_id: origin.id, 
-        destination_nexus_id: destination.id
-      )
-      hubroute    = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+      origin_hub_ids = origin.hubs_by_type(row[:mot], user.tenant_id).ids
+      destination_hub_ids = destination.hubs_by_type(row[:mot], user.tenant_id).ids
+      hub_ids = origin_hub_ids + destination_hub_ids
 
       vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
       vehicle      = Vehicle.find_by(name: vehicle_name)
-
+      # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
+      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], vehicle_id: vehicle.id, name: "#{origin.name} - #{destination.name}")
+      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
       cargo_classes = [
         'lcl'
       ]
-
-      hubroute.generate_weekly_schedules(
-        row[:mot], 
+      itinerary.generate_weekly_schedules(
+        stops_in_order,
+        [30],
         row[:effective_date], 
         row[:expiration_date], 
-        [1, 5], 
-        30, 
-        vehicle.id
+        [1, 5]
       )
 
       lcl_obj = {
@@ -663,8 +659,8 @@ module ExcelTools
             cargo_class: cargo_class
           )
           
-          pathKey  = "#{hubroute.id}_#{transport_category.id}"
-          priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          pathKey  = "#{itinerary.id}_#{transport_category.id}"
+          priceKey = "#{itinerary.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
           
           pricing = { 
             data:      price_obj[cargo_class], 
@@ -679,8 +675,8 @@ module ExcelTools
           update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
-          new_hub_route_pricings[pathKey] ||= {}
-          new_hub_route_pricings[pathKey]["#{user.id}"] = priceKey
+          new_itinerary_pricings[pathKey] ||= {}
+          new_itinerary_pricings[pathKey]["#{user.id}"] = priceKey
         end
       else
         cargo_classes.each do |cargo_class|
@@ -692,32 +688,30 @@ module ExcelTools
             cargo_class: cargo_class
           )
 
-          pathKey = "#{hubroute.id}_#{transport_category.id}"
-          priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          pathKey = "#{itinerary.id}_#{transport_category.id}"
+          priceKey = "#{itinerary.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
 
           pricing = { 
             data:         price_obj[cargo_class], 
             _id:          priceKey,
-            route_id:     route.id,
-            hub_route_id: hubroute.id,
+            itinerary_id: itinerary.id,
             tenant_id:    user.tenant_id
           }
 
           update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
           update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
 
-          new_hub_route_pricings[pathKey] ||= {}
-          new_hub_route_pricings[pathKey]["open"]                  = priceKey
-          new_hub_route_pricings[pathKey]["hub_route_id"]          = hubroute.id
-          new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
-          new_hub_route_pricings[pathKey]["route_id"]              = route.id
-          new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
+          new_itinerary_pricings[pathKey] ||= {}
+          new_itinerary_pricings[pathKey]["open"]                  = priceKey
+          new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_itinerary_pricings[pathKey]["itinerary_id"]          = itinerary.id
+          new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
     end
 
-    new_hub_route_pricings.each do |key, value|
-      update_hub_route_pricing(key, value)
+    new_itinerary_pricings.each do |key, value|
+      update_itinerary_pricing(key, value)
     end
   end
 

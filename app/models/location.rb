@@ -6,7 +6,7 @@ class Location < ApplicationRecord
 
   has_many :routes
   has_many :hubs
-
+  has_many :stops, through: :hubs
   # Geocoding
   geocoded_by :geocoded_address
   # geocoded_by :full_address

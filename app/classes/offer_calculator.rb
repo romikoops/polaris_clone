@@ -48,7 +48,8 @@ class OfferCalculator
   end
 
   def calc_offer!
-    determine_route! 
+    determine_itinerary!
+    # determine_route! 
     determine_hubs!     
     determine_longest_trucking_time! 
     determine_schedules! 
@@ -73,6 +74,12 @@ class OfferCalculator
 
   def determine_route!
     @shipment.route = Route.for_locations(@shipment)
+    
+    raise ApplicationError::NoRoute unless @shipment.route    
+  end
+
+  def determine_itinerary!
+    @shipment.intinerary = Itinerary.for_locations(@shipment)
     
     raise ApplicationError::NoRoute unless @shipment.route    
   end
