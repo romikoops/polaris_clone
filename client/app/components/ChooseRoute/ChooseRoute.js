@@ -36,6 +36,10 @@ export class ChooseRoute extends Component {
         setStage(3);
         console.log('######### MOUNTED ###########');
     }
+    componentDidUpdate() {
+        const { setStage } = this.props;
+        setStage(3);
+    }
     setDuration(val) {
         this.setState({ durationFilter: val });
     }
