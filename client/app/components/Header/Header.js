@@ -116,7 +116,7 @@ class Header extends Component {
                 component={
                     <LoginRegistrationWrapper
                         LoginPageProps={{theme, req}}
-                        RegistrationPageProps={{theme, tenant, req}}
+                        RegistrationPageProps={{theme, tenant, req, user}}
                         initialCompName={
                             this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'
                         }

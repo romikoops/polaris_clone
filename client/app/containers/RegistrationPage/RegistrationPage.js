@@ -36,6 +36,7 @@ class RegistrationPage extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
+        console.log(event);
         this.setState({ submitted: true });
 
         const { user } = this.state;
