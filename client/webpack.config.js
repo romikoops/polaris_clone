@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
@@ -6,17 +7,26 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const StatsPlugin = require('stats-webpack-plugin')
 const NodeEnvPlugin = require('node-env-webpack-plugin')
 const BabiliPlugin = require('babili-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+
+// we need to use fs.readFileSync, as require parses the file as js instead of json
+const babelrc = Object.assign({}, JSON.parse(fs.readFileSync('./.babelrc', 'utf-8')), {
+  cacheDirectory: true,
+  babelrc: false
+})
+
+babelrc.plugins.push('react-hot-loader/babel')
 
 module.exports = {
   devtool: NodeEnvPlugin.isProduction ? 'none' : 'cheap-module-eval-source-map',
   entry: NodeEnvPlugin.isProduction
-    ? ['@babel/polyfill', path.join(__dirname, 'app/index.js')]
+    ? ['@babel/polyfill', path.join(__dirname, 'app/index.jsx')]
     : [
       // 'react-hot-loader/patch',
       '@babel/polyfill',
       'webpack-dev-server/client?http://localhost:8080',
       'webpack/hot/only-dev-server',
-      path.join(__dirname, 'app/index.js')
+      path.join(__dirname, 'app/index.jsx')
     ],
 
   output: {
@@ -39,14 +49,16 @@ module.exports = {
       allChunks: true,
       disable: !NodeEnvPlugin.isProduction
     }),
+    new NodeEnvPlugin(),
+    new FriendlyErrorsWebpackPlugin(),
     NodeEnvPlugin.isProduction ? null : new webpack.HotModuleReplacementPlugin(),
+    NodeEnvPlugin.isProduction ? null : new webpack.NoEmitOnErrorsPlugin(),
     NodeEnvPlugin.isProduction
       ? new StatsPlugin('webpack.stats.json', {
         source: false,
         modules: false
       })
-      : new webpack.NoEmitOnErrorsPlugin(),
-    new NodeEnvPlugin(),
+      : null,
     NodeEnvPlugin.isProduction
       ? new BabiliPlugin()
       : new BrowserSyncPlugin({
@@ -55,6 +67,9 @@ module.exports = {
         proxy: 'http://localhost:8080/'
       })
   ].filter(Boolean),
+  resolve: {
+    extensions: ['.jsx', '.js', '.json']
+  },
   module: {
     rules: [
       {
@@ -69,29 +84,7 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: {
-              cacheDirectory: true,
-              babelrc: false,
-              presets: [
-                [
-                  '@babel/env',
-                  {
-                    targets: {
-                      browsers: ['Chrome >=59', 'IE >= 9']
-                    },
-                    modules: false,
-                    loose: true
-                  }
-                ],
-                '@babel/react'
-              ],
-
-              plugins: [
-                'react-hot-loader/babel',
-                ['import', { libraryName: 'antd', style: 'css' }],
-                '@babel/proposal-object-rest-spread'
-              ]
-            }
+            options: babelrc
           }
         ]
       },
