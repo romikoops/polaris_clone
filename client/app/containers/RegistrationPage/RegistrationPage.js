@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { authenticationActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
+import { Alert } from '../../components/Alert/Alert';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import styles from './RegistrationPage.scss';
 import Formsy from 'formsy-react';
 import FormsyInput from '../../components/FormsyInput/FormsyInput';
@@ -10,32 +12,30 @@ class RegistrationPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {
-                first_name: '',
-                last_name: '',
-                email: '',
-                password: '',
-                tenant_id: '',
-                guest: false
-            },
-            focus: {}
+            focus: {},
+            alertVisible: false
         };
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleFocus = this.handleFocus.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
+        this.hideAlert = this.hideAlert.bind(this);
     }
 
-    handleChange(event) {
-        const { name, value } = event.target;
-        const { user } = this.state;
-        this.setState({
-            user: {
-                ...user,
-                [name]: value
-            }
-        });
+    componentWillMount() {
+        if (this.props.registrationAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.registrationAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
+        }
+    }
+
+    hideAlert() {
+        this.setState({ alertVisible: false });
     }
 
     handleFocus(e) {
@@ -60,18 +60,25 @@ class RegistrationPage extends React.Component {
     }
 
     handleInvalidSubmit() {
-        console.log('invalid');
         if (!this.state.submitAttempted) this.setState({ submitAttempted: true });
     }
 
     render() {
         const { registering, theme } = this.props;
+        registering;
         const focusStyles = {
             borderColor: theme && theme.colors ? theme.colors.primary : 'black',
             borderWidth: '1.5px',
             borderRadius: '2px',
             margin: '-0.75px 0 29px 0'
         };
+        const alert = this.state.alertVisible ? (
+            <Alert
+                message={{ type: 'error', text: 'Email has already been taken' }}
+                onClose={this.hideAlert}
+                timeout={10000}
+            />
+        ) : '';
         return (
             <Formsy
                 className={styles.registration_form}
@@ -79,6 +86,7 @@ class RegistrationPage extends React.Component {
                 onValidSubmit={this.handleSubmit}
                 onInvalidSubmit={this.handleInvalidSubmit}
             >
+                { alert }
                 <div className="form-group">
                     <label htmlFor="first_name">First Name</label>
                     <FormsyInput
@@ -175,10 +183,9 @@ class RegistrationPage extends React.Component {
                 </div>
                 <div className={`form-group ${styles.form_group_submit_btn}`}>
                     <RoundButton text="register" theme={theme} active/>
-
-                    {registering &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
+                    <div className={styles.spinner}>
+                        { registering && <LoadingSpinner /> }
+                    </div>
                 </div>
             </Formsy>
         );
@@ -186,9 +193,10 @@ class RegistrationPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { registering } = state.authentication;
+    const { registering, registrationAttempt } = state.authentication;
     return {
-        registering
+        registering,
+        registrationAttempt
     };
 }
 

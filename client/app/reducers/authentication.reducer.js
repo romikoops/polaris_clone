@@ -43,7 +43,6 @@ export function authentication(state = initialState, action) {
 
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
-                loading: true,
                 registering: true,
                 user: action.user
             };
@@ -54,7 +53,9 @@ export function authentication(state = initialState, action) {
                 user: action.user
             };
         case authenticationConstants.REGISTRATION_FAILURE:
-            return {};
+            return {
+                registrationAttempt: true
+            };
         case authenticationConstants.LOGOUT:
             return {};
         case authentication.GETALL_REQUEST:

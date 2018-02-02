@@ -13,8 +13,6 @@ class LoginPage extends React.Component {
         super(props);
 
         this.state = {
-            username: '',
-            password: '',
             submitAttempted: false,
             focus: {},
             alertVisible: false

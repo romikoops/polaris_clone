@@ -28,6 +28,15 @@
 		}
 		.form_group_submit_btn {
 			padding-top: 25px;
+			position: relative;
+			.spinner {
+				opacity: 0.6;
+		    position: absolute;
+		    top: 31px;
+		    right: 7px;
+		    transform: scale(0.25);
+		    transform-origin: top right;
+			}
 		}
 		label {
 			text-transform: uppercase;
