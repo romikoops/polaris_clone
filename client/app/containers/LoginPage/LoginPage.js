@@ -41,16 +41,9 @@ class LoginPage extends React.Component {
     }
 
     handleSubmit(model) {
-        const { username, password } = model;
+        const { email, password } = model;
         const { dispatch, req, noRedirect } = this.props;
-        if (username && password) {
-            dispatch(authenticationActions.login({
-                email: username,
-                password: password,
-                shipmentReq: req,
-                noRedirect
-            }));
-        }
+        dispatch(authenticationActions.login({ email, password, req, noRedirect }));
     }
     handleInvalidSubmit() {
         if (!this.state.submitAttempted) this.setState({ submitAttempted: true });
@@ -75,7 +68,7 @@ class LoginPage extends React.Component {
         };
         const alert = this.state.alertVisible ? (
             <Alert
-                message={{ type: 'error', text: 'Wrong username or password' }}
+                message={{ type: 'error', text: 'Wrong email or password' }}
                 onClose={this.hideAlert}
                 timeout={10000}
             />
@@ -89,20 +82,20 @@ class LoginPage extends React.Component {
             >
                 { alert }
                 <div className="form-group">
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="email">Email</label>
                     <FormsyInput
                         type="text"
                         value={this.props.user ? this.props.user.email : ''}
                         className={styles.form_control}
                         onFocus={this.handleFocus}
                         onBlur={this.handleFocus}
-                        name="username"
-                        placeholder="enter your username"
+                        name="email"
+                        placeholder="enter your email"
                         submitAttempted={this.state.submitAttempted}
                         validationErrors={{isDefaultRequiredValue: 'Must not be blank'}}
                         required
                     />
-                    <hr style={this.state.focus.username ? focusStyles : {}}/>
+                    <hr style={this.state.focus.email ? focusStyles : {}}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
