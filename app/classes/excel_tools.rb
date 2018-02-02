@@ -788,22 +788,27 @@ module ExcelTools
             "fcl_45f_hq" => {}
           }
         }
+        tenant = user.tenant
         origin = Location.from_short_name(row[:origin])
         sleep(1)
         destination = Location.from_short_name(row[:destination])
         sleep(1)
-        route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
-        hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
+        origin_hub_ids = origin.hubs_by_type(row[:mot], user.tenant_id).ids
+        destination_hub_ids = destination.hubs_by_type(row[:mot], user.tenant_id).ids
+        hub_ids = origin_hub_ids + destination_hub_ids
 
-
-
+        vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
+        vehicle      = Vehicle.find_by(name: vehicle_name)
+        # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], vehicle_id: vehicle.id, name: "#{origin.name} - #{destination.name}")
+        
+      
         new_pricings_aux_data[pricing_key] = {
-          route:       route,
-          hubroute:    hubroute
+          itinerary:       itinerary,
+          hub_ids:         hub_ids
         }
         new_pricings[pricing_key]["data"] = {
-          "route_id"            => route.id,
-          "hub_route_id"        => hubroute.id,
+          "itinerary_id"            => itinerary.id,
           "service_code"        => row[:service_code],
           "inclusive_surcharge" => row[:inclusive_surcharge]
         }
@@ -814,14 +819,13 @@ module ExcelTools
         'fcl_40f',
         'fcl_40f_hq'
       ]
-
-      new_pricings_aux_data[pricing_key][:hubroute].generate_weekly_schedules(
-        row[:mot], 
+      stops_in_order = new_pricings_aux_data[pricing_key][:hub_ids].map.with_index { |h, i| new_pricings_aux_data[pricing_key][:itinerary].stops.find_or_create_by!(hub_id: h, index: i)  }
+      new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
+        stops_in_order,
+        [30],
         row[:effective_date], 
         row[:expiration_date], 
-        [1,5], 
-        30, 
-        vehicle.id
+        [1, 5]
       )
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
@@ -850,7 +854,7 @@ module ExcelTools
         pricing_data[:_id] = uuid;
         pricing_data[:tenant_id] = user.tenant_id;
 
-        pathKey = "#{new_pricings_aux_data[pricing_key][:hubroute].id}_#{transport_category.id}"
+        pathKey = "#{new_pricings_aux_data[pricing_key][:itinerary].id}_#{transport_category.id}"
         
         if dedicated
           
@@ -867,15 +871,14 @@ module ExcelTools
 
           new_hub_route_pricings[pathKey] ||= {}
           new_hub_route_pricings[pathKey]["open"]                  = uuid
-          new_hub_route_pricings[pathKey]["hub_route_id"]          = new_pricings_aux_data[pricing_key][:hubroute].id
+          new_hub_route_pricings[pathKey]["itinerary_id"]          = new_pricings_aux_data[pricing_key][:itinerary].id
           new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
-          new_hub_route_pricings[pathKey]["route_id"]              = new_pricings_aux_data[pricing_key][:route].id
           new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
     end
     new_hub_route_pricings.each do |key, value|
-      update_hub_route_pricing(key, value)
+      update_itinerary_pricing(key, value)
     end
   end
 

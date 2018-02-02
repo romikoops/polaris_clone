@@ -59,7 +59,7 @@ class OfferCalculator
     # determine_schedules! 
     # add_schedules_charges!
     add_trip_charges! 
-    
+    prep_schedules!
     convert_currencies!
   end
 
@@ -187,9 +187,25 @@ class OfferCalculator
     end
   end
 
-  def prep_schedules
+  def prep_schedules!
     schedules = []
-    
+    @trips.each do |iKey, iValue|
+      iValue.each do |tKey, tValue|
+        if tValue.length > 1
+          schedules.push({
+            itinerary_id: iKey,
+            eta: tValue[1].eta, 
+            etd: tValue[0].etd, 
+            mode_of_transport: tValue[0].itinerary.mode_of_transport, 
+            hub_route_key: "#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}", 
+            tenant_id: @shipment.tenant_id, 
+            trip_id: tKey, 
+            origin_layover_id: tValue[0].id,
+            destination_layover_id: tValue[1].id})
+        end
+      end
+    end
+    @schedules = schedules
   end
 
   def set_cargo_charges!(charges, trip, sched_key)

@@ -18,9 +18,9 @@ module ShippingTools
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
+    byebug
     origins = []
     destinations = []
-    byebug
     cargo_item_types = CargoItemType.all
     itineraries.map! do |itinerary|
       origins << { 
@@ -151,13 +151,13 @@ module ShippingTools
     
     @schedules = []
     @shipment.schedule_set.each do |ss|
-      @schedules.push(Schedule.find(ss['id']))
+      @schedules.push(ss)
     end
-    @shipment.planned_etd = @schedules.first.etd
-    @shipment.planned_eta = @schedules.last.eta
+    @shipment.planned_etd = @schedules.first["etd"]
+    @shipment.planned_eta = @schedules.last["eta"]
     @shipment.save!
-    @origin = @schedules.first.hub_route.starthub
-    @destination =  @schedules.last.hub_route.endhub
+    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
+    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
 
     message = {title: 'Booking Received', message: "Thank you for making your booking through #{current_user.tenant.name}. You will be notified upon confirmation of the order.", shipmentRef: @shipment.imc_reference}
@@ -186,11 +186,10 @@ module ShippingTools
     @shipment = Shipment.find(params[:shipment_id])
     @shipment.shipper_id = params[:shipment][:shipper_id]
     @shipment.total_price = params[:total]
-    @schedules = []
+    @schedules = params[:schedules].as_json
+    # byebug
     params[:schedules].each do |sched|
-      schedule = Schedule.find(sched[:id])
-      @shipment.schedule_set << {id: schedule.id, hub_route_key: schedule.hub_route_key}
-      @schedules << schedule
+      @shipment.schedule_set << sched
     end
     case @shipment.load_type
       when 'lcl'
@@ -207,13 +206,13 @@ module ShippingTools
         end
     end
     @shipment.save!
-    @origin = @schedules.first.hub_route.starthub
-    @destination =  @schedules.last.hub_route.endhub
+    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
+    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     documents = {}
     @shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
     end
-    hub_route = @schedules.first.hub_route_id
+    hub_route = @schedules.first["hub_route_id"]
     cargo_items = @shipment.cargo_items
     containers = @shipment.containers
     if containers.length > 0
@@ -221,10 +220,10 @@ module ShippingTools
     else
       cargoKey = 'lcl'
     end
-    transportKey = @schedules.first.vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
-    priceKey = "#{@schedules.first.hub_route_id}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
+    transportKey = Itinerary.find(@schedules.first["itinerary_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
+    priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
-    @schedules = params[:schedules]
+    # @schedules = params[:schedules]
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
     return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee, locations: {origin: @shipment.origin, destination: @shipment.destination}}
   end
