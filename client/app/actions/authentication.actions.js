@@ -25,14 +25,15 @@ function login(data) {
     return dispatch => {
         dispatch(request({ email: data.email, password: data.password }));
         authenticationService.login(data).then(
-            user => {
-                dispatch(success(user));
-                if (data.shipmentReq) {
-                    data.shipmentReq.shipment.shipper_id = user.data.id;
-                    dispatch(shipmentActions.setShipmentRoute(data.shipmentReq));
-                } else if (user.data.role_id === 1 && !data.noRedirect) {
+            response => {
+                const shipmentReq = data.req;
+                dispatch(success(response.data));
+                if (shipmentReq) {
+                    shipmentReq.shipment.shipper_id = response.data.id;
+                    dispatch(shipmentActions.setShipmentRoute(shipmentReq));
+                } else if (response.data.role_id === 1 && !data.noRedirect) {
                     dispatch(push('/admin/dashboard'));
-                } else if (user.data.role_id === 2 && !data.noRedirect) {
+                } else if (response.data.role_id === 2 && !data.noRedirect) {
                     dispatch(push('/account'));
                 }
             },
@@ -40,8 +41,7 @@ function login(data) {
                 error.then(errorData => {
                     dispatch(failure({
                         error: errorData,
-                        loginAttempt: true,
-                        loggingIn: false
+                        persistState: !!data.req
                     }));
                 });
                 // dispatch(alertActions.error(error));
@@ -51,11 +51,11 @@ function login(data) {
 }
 
 function register(user, redirect) {
-    function request(response) {
-        return { type: authenticationConstants.REGISTRATION_REQUEST, user: response };
+    function request(user) {
+        return { type: authenticationConstants.REGISTRATION_REQUEST, user };
     }
     function success(response) {
-        return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response };
+        return { type: authenticationConstants.REGISTRATION_SUCCESS, user: response.data };
     }
     function failure(error) {
         return { type: authenticationConstants.REGISTRATION_FAILURE, error };
@@ -90,10 +90,10 @@ function setUser(user) {
 
 function updateUser(user, req, shipmentReq) {
     function request(response) {
-        return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response };
+        return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response.data };
     }
     function success(response) {
-        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response };
+        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data };
     }
     function failure(error) {
         return { type: authenticationConstants.UPDATE_USER_FAILURE, error };

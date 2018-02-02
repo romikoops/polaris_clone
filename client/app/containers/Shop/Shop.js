@@ -110,9 +110,8 @@ class Shop extends Component {
             total,
             shipment: shipmentData.shipment
         };
-        console.log('choose');
 
-        if (this.props.user.data.guest) {
+        if (this.props.user.guest) {
             this.toggleShowRegistration(req);
             return;
         }

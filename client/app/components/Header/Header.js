@@ -48,6 +48,7 @@ class Header extends Component {
             });
         }
     }
+
     goHome() {
         this.setState({redirect: true});
     }
@@ -62,7 +63,7 @@ class Header extends Component {
     }
     render() {
         const { user, theme, tenant, invert, unread, req } = this.props;
-        const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
+        const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
         // const dropDownImage = accountIcon;
         const accountLinks = [
             {
@@ -110,7 +111,7 @@ class Header extends Component {
         const textColour = invert ? 'white' : 'black';
         const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
-        const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
+        const rightCorner = user && !user.guest ? dropDowns : loginPrompt;
         const loginModal = (
             <Modal
                 component={
@@ -152,7 +153,7 @@ class Header extends Component {
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                 </div>
-                { this.state.showLogin || this.props.loggingIn ? loginModal : '' }
+                { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
             </div>
         );
     }
@@ -171,7 +172,7 @@ Header.propTypes = {
 
 function mapStateToProps(state) {
     const { authentication, tenant, shipment, app, messaging } = state;
-    const { user, loggedIn, loggingIn, loginAttempt } = authentication;
+    const { user, loggedIn, loggingIn, registering, loginAttempt } = authentication;
     const { unread, messages } = messaging;
     const { currencies } = app;
     return {
@@ -179,6 +180,7 @@ function mapStateToProps(state) {
         tenant,
         loggedIn,
         loggingIn,
+        registering,
         loginAttempt,
         shipment,
         currencies,

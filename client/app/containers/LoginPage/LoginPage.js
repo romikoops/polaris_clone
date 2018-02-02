@@ -85,7 +85,6 @@ class LoginPage extends React.Component {
                     <label htmlFor="email">Email</label>
                     <FormsyInput
                         type="text"
-                        value={this.props.user ? this.props.user.email : ''}
                         className={styles.form_control}
                         onFocus={this.handleFocus}
                         onBlur={this.handleFocus}
@@ -101,7 +100,6 @@ class LoginPage extends React.Component {
                     <label htmlFor="password">Password</label>
                     <FormsyInput
                         type="password"
-                        value={this.props.user ? this.props.user.password : ''}
                         className={styles.form_control}
                         name="password"
                         placeholder="enter your password"

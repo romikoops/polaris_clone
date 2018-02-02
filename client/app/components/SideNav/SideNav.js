@@ -214,7 +214,7 @@ function mapStateToProps(state) {
     const { users, authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
     return {
-        user: user.data,
+        user,
         users,
         tenant,
         theme: tenant.data.theme,

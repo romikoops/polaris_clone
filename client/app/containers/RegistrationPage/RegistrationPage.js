@@ -54,7 +54,7 @@ class RegistrationPage extends React.Component {
 
         const { dispatch, req } = this.props;
         if (req) {
-            dispatch(authenticationActions.updateUser(this.props.user.data, user, req));
+            dispatch(authenticationActions.updateUser(this.props.user, user, req));
         } else {
             dispatch(authenticationActions.register(user));
         }
@@ -66,7 +66,6 @@ class RegistrationPage extends React.Component {
 
     render() {
         const { registering, theme } = this.props;
-        registering;
         const focusStyles = {
             borderColor: theme && theme.colors ? theme.colors.primary : 'black',
             borderWidth: '1.5px',
