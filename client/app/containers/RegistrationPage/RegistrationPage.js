@@ -50,6 +50,7 @@ class RegistrationPage extends React.Component {
     handleSubmit(model) {
         const user = Object.assign({}, model);
         user.tenant_id = this.props.tenant.data.id;
+        user.guest = false;
 
         const { dispatch, req } = this.props;
         if (req) {
