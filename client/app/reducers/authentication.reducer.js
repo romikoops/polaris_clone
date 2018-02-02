@@ -29,9 +29,9 @@ export function authentication(state = initialState, action) {
 
         case authenticationConstants.UPDATE_USER_REQUEST:
             return {
+                ...state,
                 loggedIn: true,
-                registering: true,
-                user: action.user
+                registering: true
             };
         case authenticationConstants.UPDATE_USER_SUCCESS:
             return {
@@ -40,13 +40,16 @@ export function authentication(state = initialState, action) {
                 user: action.user
             };
         case authenticationConstants.UPDATE_USER_FAILURE:
-            return {};
+            return {
+                ...state,
+                registering: false,
+                registrationAttempt: true
+            };
 
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
                 loading: action.user.guest,
-                registering: true,
-                user: action.user
+                registering: true
             };
         case authenticationConstants.REGISTRATION_SUCCESS:
             return {

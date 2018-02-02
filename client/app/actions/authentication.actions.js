@@ -89,11 +89,11 @@ function setUser(user) {
 }
 
 function updateUser(user, req, shipmentReq) {
-    function request(response) {
-        return { type: authenticationConstants.UPDATE_USER_REQUEST, user: response.data };
+    function request(user) {
+        return { type: authenticationConstants.UPDATE_USER_REQUEST, user };
     }
     function success(response) {
-        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data };
+        return { type: authenticationConstants.UPDATE_USER_SUCCESS, user: response.data.user };
     }
     function failure(error) {
         return { type: authenticationConstants.UPDATE_USER_FAILURE, error };
