@@ -1,5 +1,5 @@
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :trips
   include CurrencyTools
   include PricingTools
   include MongoTools
@@ -10,6 +10,8 @@ class OfferCalculator
     @shipment         = shipment
     @origin_hubs      = []
     @destination_hubs = []
+    @itineraries      = []
+    @trips         = {}
 
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
@@ -50,10 +52,13 @@ class OfferCalculator
   def calc_offer!
     determine_itinerary!
     # determine_route! 
-    determine_hubs!     
-    determine_longest_trucking_time! 
-    determine_schedules! 
-    add_schedules_charges! 
+    # determine_hubs! 
+       
+    determine_longest_trucking_time!
+    determine_layovers!  
+    # determine_schedules! 
+    # add_schedules_charges!
+    add_trip_charges! 
     
     convert_currencies!
   end
@@ -79,17 +84,15 @@ class OfferCalculator
   end
 
   def determine_itinerary!
-    @shipment.intinerary = Itinerary.for_locations(@shipment)
+    data  = Itinerary.for_locations(@shipment)
+    @itineraries = data[:itineraries]
+    @origin_hubs = data[:origin_hubs]
+    @destination_hubs = data[:destination_hubs]
     
-    raise ApplicationError::NoRoute unless @shipment.route    
+    raise ApplicationError::NoRoute unless @itineraries
   end
 
   def determine_hubs!
-    @shipment.route.hub_routes.each do |hub_route|
-      @origin_hubs      << hub_route.starthub
-      @destination_hubs << hub_route.endhub
-    end
-
     @furthest_hub_from_origin    = @shipment.origin.furthest_hub(@origin_hubs)
     @furthest_hub_to_destination = @shipment.destination.furthest_hub(@destination_hubs)
   end
@@ -123,6 +126,17 @@ class OfferCalculator
     end
   end
 
+  def determine_layovers!
+    schedule_obj = {}
+    @itineraries.each do |itin|
+      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
+      destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
+      layovers = origin_layovers + destination_layovers
+      schedule_obj[itin.id] = layovers.group_by(&:trip_id)
+    end
+    @trips = schedule_obj
+  end
+
   def add_schedules_charges!
     charges = {}
     @total_price[:cargo] = { value: 0, currency: '' }
@@ -139,25 +153,48 @@ class OfferCalculator
     @shipment.schedules_charges = charges
   end
 
-  def set_trucking_charges!(charges, sched, sched_key)
+  def add_trip_charges!
+    charges = {}
+    @total_price[:cargo] = { value: 0, currency: '' }
+    # byebug
+    @trips.each do |itinerary_id, trips|
+      trip = trips.first[1]
+      sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
+      
+      next if charges[sched_key]
+
+      charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+      
+      set_trucking_charges!(charges, trip, sched_key)
+      set_cargo_charges!(charges, trip, sched_key)
+    end
+    @shipment.schedules_charges = charges
+  end
+
+  def set_trucking_charges!(charges, trip, sched_key)
     if @shipment.has_pre_carriage
       charges[sched_key][:trucking_pre] = determine_trucking_options(
         @shipment.origin, 
-        sched.hub_route.starthub
+        trip[0].stop.hub
       )
     end
     
     if @shipment.has_on_carriage
       charges[sched_key][:trucking_on] = determine_trucking_options(
         @shipment.destination, 
-        sched.hub_route.endhub
+        trip[1].stop.hub
       )
     end
   end
 
-  def set_cargo_charges!(charges, sched, sched_key)
+  def prep_schedules
+    schedules = []
+    
+  end
+
+  def set_cargo_charges!(charges, trip, sched_key)
     @cargo_units.each do |cargo_unit|
-      path_key = path_key(cargo_unit, sched)
+      path_key = path_key(cargo_unit, trip)
 
       charges[sched_key][:cargo][cargo_unit.id] = send("determine_#{@shipment.load_type}_price",
         @mongo, 
@@ -169,14 +206,14 @@ class OfferCalculator
     end
   end
 
-  def path_key(cargo_unit, sched)
+  def path_key(cargo_unit, trip)
     transport_category_name = cargo_unit.cargo_class ? cargo_unit.cargo_class : 'any'
-    transport_category = sched.vehicle.transport_categories.find_by(
+    transport_category = trip[0].itinerary.vehicle.transport_categories.find_by(
       name: transport_category_name, 
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
 
-    "#{sched.hub_route_id}_#{transport_category.id}"
+    "#{trip[0].itinerary_id}_#{transport_category.id}"
   end
 
   def determine_trucking_options(origin, hub)

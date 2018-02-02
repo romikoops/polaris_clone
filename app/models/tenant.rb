@@ -12,6 +12,8 @@ class Tenant < ApplicationRecord
   has_many :vehicles, through: :tenant_vehicles
   has_many :itineraries
   has_many :stops, through: :itineraries
+  has_many :trips, through: :itineraries
+  has_many :layovers, through: :stops
     
   validates :scope, presence: true, scope: true
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201144441) do
+ActiveRecord::Schema.define(version: 20180202095300) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,7 @@ ActiveRecord::Schema.define(version: 20180201144441) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "itinerary_id"
+    t.integer "trip_id"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -272,6 +273,7 @@ ActiveRecord::Schema.define(version: 20180201144441) do
     t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
+    t.integer "itinerary_id"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -314,6 +316,14 @@ ActiveRecord::Schema.define(version: 20180201144441) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "load_type"
+  end
+
+  create_table "trips", force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "trucking_pricings", force: :cascade do |t|

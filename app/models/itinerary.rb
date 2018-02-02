@@ -1,6 +1,9 @@
 class Itinerary < ApplicationRecord
   has_many :stops
   has_many :layovers
+  has_many :shipments
+  has_many :trips
+  belongs_to :vehicle
   belongs_to :mot_scope, optional: true
   extend ItineraryTools
   include ItineraryTools
@@ -37,13 +40,16 @@ class Itinerary < ApplicationRecord
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
+        journey_end = journey_start + steps_in_order.sum
+        trip = self.trips.create!(start_date: journey_start, end_date: journey_end)
         stops_in_order.each do |stop|
           if stop.index == 0
             data = {
               eta: nil,
               etd: journey_start,
               stop_index: stop.index,
-              itinerary_id: stop.itinerary_id
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
             }
           else 
             journey_start += steps_in_order[stop.index - 1]
@@ -51,10 +57,11 @@ class Itinerary < ApplicationRecord
               eta: journey_start,
               etd: journey_start + 1.day,
               stop_index: stop.index,
-              itinerary_id: stop.itinerary_id
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
             }
           end
-          stop.layovers.create!(data)
+          trip.layovers.create!(data)
         end
       end
       tmp_date += 1.day
@@ -74,22 +81,31 @@ class Itinerary < ApplicationRecord
     }
   end
   def first_stop
-    self.stops.find_by(index: 0).hub.nexus
+    self.stops.order(index: :asc).first
   end
 
   def last_stop
+    self.stops.order(index: :desc).first
+  end
+
+  def first_nexus
+    self.stops.find_by(index: 0).hub.nexus
+  end
+
+  def last_nexus
     self.stops.order(index: :desc)[0].hub.nexus
   end
+
   def self.mot_scoped(tenant_id, mot_scope_ids)
     get_scoped_itineraries(tenant_id, mot_scope_ids)
   end
 
   def detailed_hash(options = {})
     return_h = attributes
-    return_h[:origin_nexus]       = first_stop.name                      if options[:nexus_names] 
-    return_h[:destination_nexus]  = last_stop.name                       if options[:nexus_names]
-    return_h[:origin_nexus_id]       = first_stop.id                   if options[:nexus_ids] 
-    return_h[:destination_nexus_id]  = last_stop.id                    if options[:nexus_ids]
+    return_h[:origin_nexus]       = first_nexus.name                      if options[:nexus_names] 
+    return_h[:destination_nexus]  = last_nexus.name                       if options[:nexus_names]
+    return_h[:origin_nexus_id]       = first_nexus.id                   if options[:nexus_ids] 
+    return_h[:destination_nexus_id]  = last_nexus.id                    if options[:nexus_ids]
     return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
     return_h[:next_departure]     = next_departure                       if options[:next_departure]
     return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
@@ -108,25 +124,28 @@ class Itinerary < ApplicationRecord
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end
-    o_stops = start_city.stops.pluck(:id)
-    d_stops = end_city.stops.pluck(:id)
+    o_stops = start_city.stops
+    d_stops = end_city.stops
+    o_ids = []
+    d_ids = []
+    o_hubs = []
+    d_hubs = []
     o_stops.each do |ost|
       d_stops.each do |dst|
-        if dst.hub_id == ost.hub_id && dst.index < ost.index
-          d_stops.delete(dst)
-          o_stops.delete(ost)
+        
+        if dst.itinerary_id == ost.itinerary_id && dst.index > ost.index
+          d_ids.push(dst.id)
+          o_ids.push(ost.id)
+          d_hubs.push(dst.hub)
+          o_hubs.push(ost.hub)
         end
       end
     end
-    o_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", o_stops)
-    d_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", d_stops)
-    results = o_results & d_results
-    # o_layovers = Layover.where("etd > ?", shipment.planned_pickup_date + 3.days).where("etd < ?", shipment.planned_pickup_date + 15.days).where(stop_id: o_stops.pluck(:id)).where(itinerary_id: o_stops.pluck(:itinerary_id))
-    byebug
-    o_layovers.each do |lay|
-
-    end
+    o_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", o_ids)
+    d_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", d_ids)
     
+    results = o_results.to_a & d_results.to_a
+    return {itineraries: results, origin_hubs: o_hubs, destination_hubs: d_hubs}
   end
 
   def set_scope!

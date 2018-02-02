@@ -5,8 +5,8 @@ module PricingTools
     return client
   end
   def get_user_price(client, path_key, user)
-    path_pricing = get_item_fn(client, 'hubRoutePricings', '_id', path_key)
-
+    path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
+    byebug
     raise ApplicationError::NoRoutes if path_pricing.nil?
 
     path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"

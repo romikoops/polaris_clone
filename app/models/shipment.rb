@@ -43,6 +43,7 @@ class Shipment < ApplicationRecord
   belongs_to :origin, class_name: "Location", optional: true
   belongs_to :destination, class_name: "Location", optional: true
   belongs_to :route, optional: true
+  belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
   belongs_to :shipper_location, class_name: "Location", optional: true
