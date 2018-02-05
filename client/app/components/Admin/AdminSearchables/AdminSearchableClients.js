@@ -67,10 +67,6 @@ export class AdminSearchableClients extends Component {
     }
     render() {
         const { theme, title, seeAll, placeholder} = this.props;
-<<<<<<< HEAD
-=======
-
->>>>>>> master
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -96,14 +92,6 @@ export class AdminSearchableClients extends Component {
                         <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
                     <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
-<<<<<<< HEAD
-                        <input
-                            type="text"
-                            name="search"
-                            placeholder={placeholder ? placeholder : 'Search clients'}
-                            onChange={this.handleSearchChange}
-                        />
-=======
                         <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
                             <div className="flex-35 laypout-row layout-align-start input_box_full">
                                 <input
@@ -124,7 +112,6 @@ export class AdminSearchableClients extends Component {
                                 </div>
                             </div>)
                             : ''}
->>>>>>> master
                     </div>
                 </div>
             </div>

@@ -69,12 +69,8 @@ class Header extends Component {
         messageDispatch.showMessageCenter();
     }
     render() {
-<<<<<<< HEAD
-        const {  user, theme, tenant, invert, unread, landingPage } = this.props;
-=======
         const { user, theme, tenant, invert,  unread, req, landingPage } = this.props;
         const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
->>>>>>> master
 
         // const dropDownImage = accountIcon;
         const accountLinks = [

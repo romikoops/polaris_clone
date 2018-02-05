@@ -3,11 +3,8 @@ import styles from './ShipmentSummaryBox.scss';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import { Tooltip } from '../Tooltip/Tooltip';
-<<<<<<< HEAD
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
-=======
 import { capitalize } from '../../helpers';
->>>>>>> master
 export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
@@ -111,11 +108,14 @@ export class ShipmentSummaryBox extends Component {
                                     <h4 className="flex-85"> {startHub.data.name} </h4>
                                 </div>
                             </div>
-                            <div className={`${styles.connection_graphics}`}>
+                            <div className={`${styles.connection_graphics} ${styles.grapics_top_margin}`}>
                                 <div className="flex-none layout-row layout-align-center-center">
                                     {this.switchIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
+                                <div className={`${styles.transport_time} flex-none layout-row layout-align-center-center`} >
+                                    {moment(this.props.pickupDate).diff(route.etd, 'days')} days
+                                </div>
                             </div>
                             <div className={`${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
@@ -144,7 +144,7 @@ export class ShipmentSummaryBox extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="Picup Date :" />
+                                <BookingTextHeading theme={theme} size={4} text="Pickup Date :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -212,16 +212,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-<<<<<<< HEAD
                                 <BookingTextHeading theme={theme} size={4} text="MoT :" />
-=======
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                   Mode of Transport:
-                                </h4>
->>>>>>> master
                             </div>
                             <p className="flex-none"> {capitalize(route[0].mode_of_transport)} </p>
                         </div>

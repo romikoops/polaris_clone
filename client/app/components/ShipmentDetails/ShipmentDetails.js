@@ -324,9 +324,7 @@ export class ShipmentDetails extends Component {
     render() {
         const { tenant, user, shipmentData, shipmentDispatch } = this.props;
         const { theme, scope, emails, phones } = tenant.data;
-        console.log('ship');
-        console.log(shipmentData)
-        ;        const messages = this.props.messages;
+                const messages = this.props.messages;
         let cargoDetails;
         const alertModalMessage = (
             <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
@@ -472,13 +470,9 @@ export class ShipmentDetails extends Component {
                         </p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                     </div>
-<<<<<<< HEAD
                     <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError
                         ? styles.with_errors
                         : ''}`}>
-=======
-                    <div name="dayPicker" className={`flex-none layout-row ${styles.dpb} ${showDayPickerError ? styles.with_errors : ''}`}>
->>>>>>> master
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
                         </div>

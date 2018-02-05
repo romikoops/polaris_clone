@@ -4,12 +4,9 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import styles from './RouteFilterBox.scss';
-<<<<<<< HEAD
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
-=======
 import styled from 'styled-components';
 
->>>>>>> master
 export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
@@ -102,13 +99,8 @@ export class RouteFilterBox extends Component {
                         </label>
                     </div>
                 </div>
-<<<<<<< HEAD
-                <div className={styles.transit_time}>
-                    <p><BookingTextHeading theme={theme} size={4} text="Transit Time" /></p>
-=======
                 <StyledRange className={styles.transit_time}>
-                    <p>Transit time</p>
->>>>>>> master
+                    <p><BookingTextHeading theme={theme} size={4} text="Transit Time" /></p>
                     <input
                         type="range"
                         value={this.props.durationFilter}
@@ -118,17 +110,7 @@ export class RouteFilterBox extends Component {
                         <p>{fastestTime} days</p>
                         <p>{longestTime} days</p>
                     </div>
-<<<<<<< HEAD
-                </div>
-=======
                 </StyledRange>
-                <RoundButton
-                    size="full"
-                    text="save filter"
-                    theme={theme}
-                    active
-                />
->>>>>>> master
             </div>
         );
     }

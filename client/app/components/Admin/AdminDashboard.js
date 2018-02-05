@@ -5,14 +5,6 @@ import {v4} from 'node-uuid';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables'; 7;
 import { AdminScheduleLine } from './';
 import { RoundButton } from '../RoundButton/RoundButton';
-<<<<<<< HEAD
-import {v4} from 'node-uuid';
-import { Loading } from '../../components/Loading/Loading';
-import {Carousel} from '../Carousel/Carousel';
-import { activeRoutesData } from '../../constants';
-import style from './AdminDashboard.scss';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
-=======
 import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 import { Carousel } from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
@@ -20,7 +12,6 @@ import style from './AdminDashboard.scss';
 import defaults from '../../styles/default_classes.scss';
 
 
->>>>>>> master
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -106,15 +97,12 @@ export class AdminDashboard extends Component {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
-<<<<<<< HEAD
-=======
 
         const mergedRequestedShipments = shipments && shipments.requested ?
             shipments.requested.sort(this.dynamicSort('updated_at')).map((sh) => {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
->>>>>>> master
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"
