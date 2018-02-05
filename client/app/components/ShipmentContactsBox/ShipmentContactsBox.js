@@ -4,13 +4,27 @@ import styles from './ShipmentContactsBox.scss';
 // import {v4} from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
+import GmapsWrapper from '../../hocs/GmapsWrapper';
+import { PlaceSearch } from '../Maps/PlaceSearch';
+
 export class ShipmentContactsBox extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            location: {
+                number: '',
+                street: '',
+                zipCode: '',
+                city: '',
+                country: '',
+                fullAddress: ''
+            }
+        };
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handleNotifyeeChange = this.handleNotifyeeChange.bind(this);
         this.addNotifyee = this.addNotifyee.bind(this);
         this.removeNotifyee = this.removeNotifyee.bind(this);
+        this.handlePlaceChange = this.handlePlaceChange.bind(this);
     }
 
     handleFormChange(event) {
@@ -24,6 +38,46 @@ export class ShipmentContactsBox extends Component {
     }
     removeNotifyee(not) {
         this.props.removeNotifyee(not);
+    }
+    handlePlaceChange(place) {
+        const tmpAddress = {
+            number: '',
+            street: '',
+            zipCode: '',
+            city: '',
+            country: '',
+            fullAddress: ''
+        };
+        // ;
+        place.address_components.forEach(ac => {
+            if (ac.types.includes('street_number')) {
+                tmpAddress.number = ac.long_name;
+            }
+
+            if (ac.types.includes('route') || ac.types.includes('premise')) {
+                tmpAddress.street = ac.long_name;
+            }
+
+            if (ac.types.includes('administrative_area_level_1') || ac.types.includes('locality')) {
+                tmpAddress.city = ac.long_name;
+            }
+
+            if (ac.types.includes('postal_code')) {
+                tmpAddress.zipCode = ac.long_name;
+            }
+
+            if (ac.types.includes('country')) {
+                tmpAddress.country = ac.long_name;
+            }
+        });
+        tmpAddress.latitude = place.geometry.location.lat();
+        tmpAddress.longitude = place.geometry.location.lng();
+        tmpAddress.fullAddress = place.formatted_address;
+        tmpAddress.geocoded_address = place.formatted_address;
+        this.setState({ location: tmpAddress });
+        this.setState({
+            autocomplete: { ...this.state.autocomplete, location: true }
+        });
     }
     render() {
         const { consignee, shipper, notifyees, theme } = this.props;
@@ -100,6 +154,9 @@ export class ShipmentContactsBox extends Component {
                 );
             });
         }
+        const { location } = this.state;
+        console.log('location');
+        console.log(location);
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
@@ -113,16 +170,22 @@ export class ShipmentContactsBox extends Component {
                                 { addressBtn }
                             </div>
                         </div>
+                        <GmapsWrapper
+                            theme={theme}
+                            component={PlaceSearch}
+                            handlePlaceChange={this.handlePlaceChange}
+                            hideMap={true}
+                        />
                         <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
                         <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
                         <input className={styles.input_50} type="text" value={shipper.lastName} name="shipper-lastName" placeholder="Last Name" onChange={this.handleFormChange} />
                         <input className={styles.input_50} type="text" value={shipper.email} name="shipper-email" placeholder="Email" onChange={this.handleFormChange} />
                         <input className={styles.input_50} type="text" value={shipper.phone} name="shipper-phone" placeholder="Phone" onChange={this.handleFormChange} />
-                        <input className={styles.input_street} type="text" value={shipper.street} name="shipper-street" placeholder="Street" onChange={this.handleFormChange} />
-                        <input className={styles.input_no} type="text" value={shipper.number} name="shipper-number" placeholder="Number" onChange={this.handleFormChange} />
-                        <input className={styles.input_zip} type="text" value={shipper.zipCode} name="shipper-zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={shipper.city} name="shipper-city" placeholder="City" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={shipper.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
+                        <input className={styles.input_street} type="text" value={location.street} name="shipper-street" placeholder="Street" onChange={this.handleFormChange} />
+                        <input className={styles.input_no} type="text" value={location.number} name="shipper-number" placeholder="Number" onChange={this.handleFormChange} />
+                        <input className={styles.input_zip} type="text" value={location.zipCode} name="shipper-zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
+                        <input className={styles.input_cc} type="text" value={location.city} name="shipper-city" placeholder="City" onChange={this.handleFormChange} />
+                        <input className={styles.input_cc} type="text" value={location.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
                     </div>
 
 

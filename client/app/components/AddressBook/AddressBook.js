@@ -6,17 +6,22 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { ContactCard } from '../ContactCard/ContactCard';
 import defs from '../../styles/default_classes.scss';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { capitalize } from '../../helpers/stringTools';
+import { ShipmentContactBox } from '../ShipmentContactBox/ShipmentContactBox';
 
 export class AddressBook extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            contactType: 'shipper',
+            contact: {},
             setShipper: true,
             setConsignee: false,
             setNotifyees: false,
             notifyees: []
         };
+        this.contactTypes = ['shipper', 'consignee', 'notifyee'];
         this.setContact = this.setContact.bind(this);
         this.toggleNotifyees = this.toggleNotifyees.bind(this);
     }
@@ -32,36 +37,42 @@ export class AddressBook extends Component {
 
     setContact(type, val) {
         this.props.setDetails(type, val);
-
+        let newState;
         switch (type) {
             case 'shipper':
-                this.setState({
+                newState = {
                     setShipper: false,
-                    shipper: val,
-                    setConsignee: true
-                });
+                    contact: val,
+                    setConsignee: true,
+                };
                 break;
             case 'consignee':
-                this.setState({
+                newState = {
                     setShipper: false,
-                    consignee: val,
+                    contact: val,
                     setConsignee: false,
                     setNotifyees: true
-                });
+                };
                 break;
             case 'notifyee':
                 const notifyees = this.state.notifyees;
                 notifyees.push(val);
-                this.setState({
+                newState = {
                     setShipper: false,
                     notifyees: notifyees,
                     setConsignee: false,
                     setNotifyees: true
-                });
+                };
                 break;
             default:
                 break;
         }
+        const contactTypeIndex = Math.min(
+            this.contactTypes.indexOf(type) + 1,
+            this.contactTypes.length - 1
+        );
+        newState.contactType = this.contactTypes[contactTypeIndex];
+        this.setState(newState);
     }
 
     availableContacts(contacts) {
@@ -75,7 +86,7 @@ export class AddressBook extends Component {
 
     render() {
         const { contacts, userLocations, theme } = this.props;
-        const { notifyees, shipper, consignee } = this.state;
+        const { notifyees, contact, contactType } = this.state;
         const shipperOptions = [...userLocations, ...contacts];
         const contactsArray = [];
         const shipperArray = [];
@@ -165,178 +176,17 @@ export class AddressBook extends Component {
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div
-                    className={`flex-none ${
-                        defs.content_width
-                    } layout-row layout-wrap`}
+                    className={`flex-none ${defs.content_width} layout-row layout-wrap`}
                 >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                        <h1> Set {capitalize(contactType)} Details</h1>
+                        <Tooltip theme={theme} icon="fa-info-circle" text={contactType} />
+                    </div>
                     <div className="flex-50">
-                        <div
-                            className={`${
-                                styles.summary
-                            } flex-90 layout-row layout-wrap layout-align-start-start`}
-                        >
-                            <div
-                                className={`${
-                                    styles.prompt
-                                } flex-100 layout-row layout-align-start-center`}
-                            >
-                                {this.state.setShipper ? (
-                                    <div className="flex-100 layout-row layout-align-start-center">
-                                        <h1> Set Shipper Details</h1>
-                                        <Tooltip theme={theme} icon="fa-info-circle" text="shipper" />
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                                {this.state.setConsignee ? (
-                                    <div className="flex-100 layout-row layout-align-start-center">
-                                        <h1> Set Consignee Details</h1>
-                                        <Tooltip theme={theme} icon="fa-info-circle" text="consignee" />
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                                {this.state.setNotifyees ? (
-                                    <div className="flex-100 layout-row layout-align-start-center">
-                                        <h1> Set Notifyees Details</h1>
-                                        <Tooltip theme={theme} icon="fa-info-circle" text="notify_party" />
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                                {shipper ? (
-                                    <div
-                                        className={`${
-                                            styles.results
-                                        } flex-100 layout-row layout-wrap`}
-                                    >
-                                        <div className="flex-100">
-                                            <h4 className="title">
-                                                {' '}
-                                                Shipping from:
-                                            </h4>
-                                        </div>
-                                        <div
-                                            className={`${
-                                                styles.result_content
-                                            } flex-100 layout-row`}
-                                        >
-                                            <p className="flex-60 offset-5">
-                                                {' '}
-                                                {
-                                                    shipper.contact.first_name
-                                                }{' '}
-                                                {shipper.contact.last_name}{' '}
-                                            </p>
-                                            <p className="flex-100 ">
-                                                {' '}
-                                                {
-                                                    shipper.location
-                                                        .geocoded_address
-                                                }{' '}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={`${
-                                            styles.results
-                                        } flex-100 layout-row layout-wrap`}
-                                    >
-                                        <div className="flex-100">
-                                            <h4 className="title">
-                                                {' '}
-                                                Shipping from:
-                                            </h4>
-                                        </div>
-                                        <div
-                                            className={`${
-                                                styles.result_content
-                                            } flex-100 layout-row`}
-                                        >
-                                            <p className="flex-60 offset-5">
-                                                {' '}
-                                            </p>
-                                            <p className="flex-100 "> </p>
-                                        </div>
-                                    </div>
-                                )}
-                                {consignee ? (
-                                    <div
-                                        className={`${
-                                            styles.results
-                                        } flex-100 layout-row layout-wrap`}
-                                    >
-                                        <div className="flex-100">
-                                            <h4 className="title">
-                                                {' '}
-                                                Consigned by:
-                                            </h4>
-                                        </div>
-                                        <div
-                                            className={`${
-                                                styles.result_content
-                                            } flex-100 layout-row`}
-                                        >
-                                            <p className="flex-60 offset-5">
-                                                {' '}
-                                                {
-                                                    consignee.contact.first_name
-                                                }{' '}
-                                                {consignee.contact.last_name}{' '}
-                                            </p>
-                                            <p className="flex-100 ">
-                                                {' '}
-                                                {
-                                                    consignee.location
-                                                        .geocoded_address
-                                                }{' '}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div
-                                        className={`${
-                                            styles.results
-                                        } flex-100 layout-row layout-wrap`}
-                                    >
-                                        <div className="flex-100">
-                                            <h4 className="title">
-                                                {' '}
-                                                Consigned by:
-                                            </h4>
-                                        </div>
-                                        <div
-                                            className={`${
-                                                styles.result_content
-                                            } flex-100 layout-row`}
-                                        >
-                                            <p className="flex-60 offset-5">
-                                                {' '}
-                                            </p>
-                                            <p className="flex-100 "> </p>
-                                        </div>
-                                    </div>
-                                )}
-                                {
-                                    <div
-                                        className={`${
-                                            styles.results
-                                        } flex-100 layout-row layout-wrap`}
-                                    >
-                                        <div className="flex-100">
-                                            <h4 className="title">
-                                                {' '}
-                                                Notifying:
-                                            </h4>
-                                        </div>
-                                        {noteArr}
-                                    </div>
-                                }
-                            </div>
-                        </div>
+                        <ShipmentContactBox
+                            contact={contact}
+                            theme={theme}
+                        />
                     </div>
 
                     <div

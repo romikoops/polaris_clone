@@ -33,7 +33,7 @@ export const tooltips = {
     'total_price': 'Total Price includes all associated costs incl. service charges.',
     'shipper': 'Shipper (or Consignor) is the person or company who is usually the supplier or owner of commodities shipped.',
     'consignee': "Consignee is the party shown on the bill of lading or air waybill to whom the shipment is consigned. Need not always be the buyer, and in some countries will be the buyer's bank.",
-    'notify_party': 'Notify Party is the person or company to be advised by the carrier upon arrival of the goods at the destination port.',
+    'notifyee': 'Notifyee is the person or company to be advised by the carrier upon arrival of the goods at the destination port.',
     'hs_code': 'The Harmonized System (HS) is an internationally standardized system of names and numbers to classify traded products.',
     'total_goods_value': 'The total value of goods is necessary to determine matters of insurance.',
     'cargo_notes': 'Information is needed on the amount of packages that are being shipped, and what kind of packages are being dealt with. Include a description of the goods. Alternatively, if you have a packing list, you can upload it below and leave this field blank.',
