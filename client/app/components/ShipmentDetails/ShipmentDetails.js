@@ -328,7 +328,7 @@ export class ShipmentDetails extends Component {
         const alertModalMessage = (
             <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
                 <span>
-                    Hi {user.data.first_name} {user.data.last_name},<br/>
+                    Hi {user.first_name} {user.last_name},<br/>
                     We currently do not offer freight rates for hazardous cargo in our Web Shop.
                     Please contact our customer service department
                     to place an order for your dangerous cargo:<br/>

@@ -17,9 +17,9 @@ class AdminShipmentAction extends Component {
     }
     componentDidMount() {
         const { user, loggedIn, adminDispatch } = this.props;
-        if (!user || !loggedIn || user.data.guest) {
+        if (!user || !loggedIn || user.guest) {
             this.toggleShowLogin();
-        } else if (user && user.data.role_id === 2) {
+        } else if (user && user.role_id === 2) {
             adminDispatch.goTo('/');
         } else {
             this.handleAction();
@@ -27,7 +27,7 @@ class AdminShipmentAction extends Component {
     }
     componentDidUpdate() {
         const { user, loggedIn } = this.props;
-        if (user && loggedIn && user.data.role_id === 1) {
+        if (user && loggedIn && user.role_id === 1) {
             this.handleAction();
         }
     }

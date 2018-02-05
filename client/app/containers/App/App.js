@@ -47,7 +47,7 @@ class App extends Component {
                     <div className="flex layout-column scroll layout-align-end hundred">
                         { showMessages || sending ? <MessageCenter /> : '' }
                         {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
-                        { user && user.data && tenant && tenant.data && user.data.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
+                        { user && user.id && tenant && tenant.data && user.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
                         <Switch className="flex">
                             <Route
                                 exact

@@ -14,7 +14,7 @@ export class UserShipments extends Component {
     }
     viewShipment(shipment) {
         const { userDispatch, user } = this.props;
-        userDispatch.getShipment(user.data.id, shipment.id, true);
+        userDispatch.getShipment(user.id, shipment.id, true);
         this.setState({selectedShipment: true});
     }
 

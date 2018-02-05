@@ -17,7 +17,7 @@ function login(data) {
     return fetch(BASE_URL + '/auth/sign_in', requestOptions)
         .then(response => {
             if (!response.ok) {
-                return Promise.reject(response.statusText);
+                return Promise.reject(response.json());
             }
             if (response.headers.get('access-token')) {
                 const accessToken = response.headers.get('access-token');
@@ -36,14 +36,14 @@ function login(data) {
             }
             return response.json();
         })
-        .then(user => {
+        .then(response => {
             // login successful if there's a jwt token in the response
-            if (user) {
+            if (response) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem(cookieKey, JSON.stringify(user));
+                localStorage.setItem(cookieKey, JSON.stringify(response.data));
             }
 
-            return user;
+            return response;
         });
 }
 
@@ -81,15 +81,15 @@ function register(user) {
             }
             return response.json();
         })
-        .then(data => {
+        .then(response => {
             // login successful if there's a jwt token in the response
-            if (data) {
+            if (response) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem(cookieKey, JSON.stringify(data));
+                localStorage.setItem(cookieKey, JSON.stringify(response.data));
                 const user2 = localStorage.getItem(cookieKey);
                 console.log(user2);
             }
-            return data;
+            return response;
         });
 }
 
@@ -107,18 +107,16 @@ function updateUser(user, req) {
             }
             return response.json();
         })
-        .then(data => {
+        .then(response => {
             // login successful if there's a jwt token in the response
-            let resp;
-            if (data) {
-                if (data.data.headers) {
-                    localStorage.setItem('authHeader', JSON.stringify(data.data.headers));
+            if (response) {
+                if (response.data.headers) {
+                    localStorage.setItem('authHeader', JSON.stringify(response.data.headers));
                 }
-                resp = {data: data.data.user};
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem(cookieKey, JSON.stringify(resp));
+                localStorage.setItem(cookieKey, JSON.stringify(response.data));
             }
-            return resp;
+            return response;
         });
 }
 
