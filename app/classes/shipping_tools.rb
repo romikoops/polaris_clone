@@ -18,7 +18,7 @@ module ShippingTools
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
-    byebug
+    # byebug
     origins = []
     destinations = []
     cargo_item_types = CargoItemType.all
