@@ -40,7 +40,7 @@ export class RouteResult extends Component {
         return ('0' + n).slice(-2);
     }
     render() {
-        const { theme, schedule, user } = this.props;
+        const { theme, schedule, user, pickup } = this.props;
         const schedKey = schedule.hub_route_key;
         const hubKeyArr = schedKey.split('-');
         let originHub = {};
@@ -147,7 +147,7 @@ export class RouteResult extends Component {
                                 <h4
                                     className={styles.date_title}
                                 >
-                                    Pickup Date
+                                { pickup ? 'Pickup Date' : 'Closing Date' }
                                 </h4>
                             </div>
                             <div className="flex-100 layout-row">

@@ -12,15 +12,16 @@ export class BestRoutesBox extends Component {
         let fastestSchedule;
         let fastestFare;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
+            // if (sched.mode_of_transport === this.props.moT) {
                 const travelTime = moment(sched.eta).diff(sched.etd);
                 const schedKey = sched.hub_route_key;
+                const fare = fees[schedKey].total;
                 if (!fastestTime || travelTime < fastestTime) {
                     fastestTime = travelTime;
-                    fastestSchedule = sched;
+                    fastestSchedule = { schedule: sched, total: fare };
                     fastestFare = fees[schedKey].total;
                 }
-            }
+            // }
         });
         return (
             <div
@@ -43,7 +44,7 @@ export class BestRoutesBox extends Component {
         let cheapestFare;
         let cheapestSchedule;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
+            // if (sched.mode_of_transport === this.props.moT) {
                 const schedKey = sched.hub_route_key;
                 if (!fees[schedKey]) {
                     console.log('err');
@@ -51,9 +52,9 @@ export class BestRoutesBox extends Component {
                 const fare = fees[schedKey].total;
                 if (!cheapestFare || fare < cheapestFare) {
                     cheapestFare = fare;
-                    cheapestSchedule = sched;
+                    cheapestSchedule = { schedule: sched, total: cheapestFare };
                 }
-            }
+            // }
         });
         return (
             <div
@@ -87,7 +88,7 @@ export class BestRoutesBox extends Component {
         let bestFare;
         let bestOption;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
+            // if (sched.mode_of_transport === this.props.moT) {
                 const timeScore = timeArray.indexOf(sched);
                 const fareScore = fareArray.indexOf(sched);
                 const depScore = depArray.indexOf(sched);
@@ -96,10 +97,10 @@ export class BestRoutesBox extends Component {
                 const totalScore = timeScore + fareScore + depScore;
                 if (totalScore < lowScore) {
                     lowScore = totalScore;
-                    bestOption = sched;
+                    bestOption = { schedule: sched, total: fare };
                     bestFare = fare;
                 }
-            }
+            // }
         });
         return (
             <div

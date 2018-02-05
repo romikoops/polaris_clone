@@ -86,14 +86,15 @@ export class RouteHubBox extends Component {
                     >
                         <div className="flex-100 layout-row layout-align-center-center">
                             <div className="flex-75 height_100 layout-column layout-align-end-center" style={{marginTop: '100px'}}>
-                                <div className="flex-none layout-row layout-align-center-center">
+                                <div className="flex-none width_100 layout-row layout-align-center-center">
                                     {this.faIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
-                                <div className="flex-65 layout-row layout-wrap layout-align-center-center" style={{marginTop: '25px'}}>
+                                {route ?  <div className="flex-65 layout-row layout-wrap layout-align-center-center" style={{marginTop: '25px'}}>
                                     <h4 className="flex-100 no_m center" style={{marginBottom: '10px'}}> Transit Time</h4>
                                     <p className="flex-100 no_m center"> {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days </p>
                                 </div>
+                                    : ''}
                             </div>
                         </div>
                     </div>

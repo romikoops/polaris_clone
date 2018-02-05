@@ -49,11 +49,11 @@ export class AdminClientTile extends Component {
             <div className="flex-95 layout-row layout-wrap layout-align-start-start" onClick={this.clickEv}>
                 <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                     <i className="flex-none fa fa-user clip" style={gradientStyle}/>
-                    <p className="flex-90">Name</p>
+                    <h4 className="flex-90 flex-offset-10 no_m"> {client.first_name} {client.last_name} </h4>
                 </div>
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
+                {/* <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
                     <h4 className="flex-90 flex-offset-10"> {client.first_name} {client.last_name} </h4>
-                </div>
+                </div>*/}
                 <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                     <i className="flex-none fa fa-envelope clip" style={gradientStyle}/>
                     <p className="flex-90">Email</p>

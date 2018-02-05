@@ -26,7 +26,7 @@ export class AdminSearchableShipments extends Component {
         if (seeAll) {
             seeAll();
         } else {
-            adminDispatch.goTo('/admin/shipments');
+            adminDispatch.getShipments(true);
         }
     }
 
