@@ -81,7 +81,7 @@ class Admin extends Component {
             });
         }
         const loadingScreen = loading ? <Loading theme={theme} /> : '';
-        const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user.data}/>);
+        const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user}/>);
         const menu = <FloatingMenu Comp={nav} theme={theme}/>;
         // ;
         return (

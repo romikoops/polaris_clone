@@ -368,7 +368,12 @@ export class ShipmentLocationBox extends Component {
             bounds.extend(newMarkers[i].getPosition());
         }
 
-        map.fitBounds(bounds);
+        if (newMarkers.length > 1) {
+            map.fitBounds(bounds);
+        } else if (newMarkers.length === 1) {
+            map.setCenter(bounds.getCenter());
+            map.setZoom(14);
+        }
     }
 
     handleTrucking(event) {

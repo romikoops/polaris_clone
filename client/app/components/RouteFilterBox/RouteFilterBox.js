@@ -4,7 +4,12 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import styles from './RouteFilterBox.scss';
+<<<<<<< HEAD
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+=======
+import styled from 'styled-components';
+
+>>>>>>> master
 export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +39,16 @@ export class RouteFilterBox extends Component {
         const dayPickerProps = {
             disabledDays: {before: new Date(moment().add(7, 'days').format())}
         };
+        const StyledRange = styled.div`
+            input[type=range]::-webkit-slider-runnable-track {
+              width: 100%;
+              height: 12px;
+              cursor: pointer;
+                background: -webkit-linear-gradient(left, ${theme.colors.primary}, ${theme.colors.secondary}) !important;
+              border-radius: 1.3px;
+              opacity: 0.9;
+            }
+        `;
         return (
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
@@ -87,8 +102,13 @@ export class RouteFilterBox extends Component {
                         </label>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div className={styles.transit_time}>
                     <p><BookingTextHeading theme={theme} size={4} text="Transit Time" /></p>
+=======
+                <StyledRange className={styles.transit_time}>
+                    <p>Transit time</p>
+>>>>>>> master
                     <input
                         type="range"
                         value={this.props.durationFilter}
@@ -98,7 +118,17 @@ export class RouteFilterBox extends Component {
                         <p>{fastestTime} days</p>
                         <p>{longestTime} days</p>
                     </div>
+<<<<<<< HEAD
                 </div>
+=======
+                </StyledRange>
+                <RoundButton
+                    size="full"
+                    text="save filter"
+                    theme={theme}
+                    active
+                />
+>>>>>>> master
             </div>
         );
     }

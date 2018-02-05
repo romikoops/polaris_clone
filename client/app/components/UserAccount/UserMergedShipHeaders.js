@@ -6,11 +6,12 @@ export class UserMergedShipHeaders extends Component  {
         super(props);
     }
     render() {
-        const { title } = this.props;
+        const { title, total } = this.props;
         return (
             <div className="flex-100 layout-row layout-align-start-center">
                 <div className="flex-40 layout-row layout-align-start-center">
-                    <h3 className="flex-none">{title}</h3>
+                    <h3 className="flex-none" style={{paddingRight: '10px'}}>{title}</h3>
+                    <h3 className="flex-none">({total})</h3>
                 </div>
                 <div className="flex-15 layout-row layout-align-start-center">
                     <h3 className="flex-none"> Reference </h3>

@@ -368,7 +368,7 @@ export class BookingDetails extends Component {
                     user={user}
                 />
                 <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-center-center'}>
+                    <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <div className="flex-100 layout-row">
                                 <p className="flex-none">

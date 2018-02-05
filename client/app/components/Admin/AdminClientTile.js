@@ -49,11 +49,11 @@ export class AdminClientTile extends Component {
             <div className="flex-95 layout-row layout-wrap layout-align-start-start" onClick={this.clickEv}>
                 <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                     <i className="flex-none fa fa-user clip" style={gradientStyle}/>
-                    <p className="flex-90">Name</p>
+                    <h4 className="flex-90 flex-offset-10 no_m"> {client.first_name} {client.last_name} </h4>
                 </div>
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
+                {/* <div className={`flex-100 layout-row layout-align-start-center ${styles.client_text}`}>
                     <h4 className="flex-90 flex-offset-10"> {client.first_name} {client.last_name} </h4>
-                </div>
+                </div>*/}
                 <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>
                     <i className="flex-none fa fa-envelope clip" style={gradientStyle}/>
                     <p className="flex-90">Email</p>
@@ -71,14 +71,14 @@ export class AdminClientTile extends Component {
             </div>
         );
         const deleter = (
-            <div className="flex-95 layout-row layout-wrap layout-align-start-start" >
+            <div className="flex-95 layout-row layout-wrap layout-align-start-start height_100" >
                 <div className="flex-100 layout-row layout-align-start-center">
                     <h3 className="flex-none sec_header_text"> Delete Alias?</h3>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-none sec_subheader_text"> Are you sure</p>
                 </div>
-                <div className="flex-100 layout-column layout-align-center-space-between">
+                <div className="flex-100 layout-column layout-align-center-space-between" style={{height: '65%'}}>
                     <div className="flex-50 width_100 layout-row layout-align-center-center">
                         <RoundButton
                             theme={theme}

@@ -8,7 +8,21 @@ import Header from '../Header/Header';
 import { moment } from '../../constants';
 import styled from 'styled-components';
 
-// import SignIn from '../SignIn/SignIn';  default LandingTop;
+const StyledTop = styled.div`
+    background-image: linear-gradient(
+      rgba(black, 0.3),
+      rgba(black, 0.3)
+    );
+    background-image: url(${props => props.bg});
+
+    height: 65vh;
+    background-size: cover;
+    background-position: center;
+    padding-bottom: 120px;
+    box-shadow: 0px 1px 15px rgba(black, 0.7);
+    position: relative;
+`;
+
 export class LandingTop extends Component {
     constructor(props) {
         super(props);
@@ -54,21 +68,6 @@ export class LandingTop extends Component {
             <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active/>
         );
         const backgroundImage = theme && theme.background ? theme.background : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg';
-        const StyledTop = styled.div`
-            color: #83BC45;
-            background-image: linear-gradient(
-              rgba(black, 0.3),
-              rgba(black, 0.3)
-            );
-            background-image: url(${props => props.bg});
-
-            height: 65vh;
-            background-size: cover;
-            background-position: center;
-            padding-bottom: 120px;
-            box-shadow: 0px 1px 15px rgba(black, 0.7);
-            position: relative;
-        `;
         return (
             <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
                 <div className={styles.top_shade}> </div>
@@ -77,6 +76,7 @@ export class LandingTop extends Component {
                     <div className={styles.top_row + ' flex-100 layout-row'}>
                         <Header user={user} theme={theme} landingPage invert/>
                     </div>
+<<<<<<< HEAD
                     <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-center-center ' + styles.layout_elem}>
                         <div className={`${styles.btn_margin} flex-none layout-row layout-align-center-center`}>
                             { user && user.data && user.data.role_id === 2 ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
@@ -86,6 +86,13 @@ export class LandingTop extends Component {
                             { user && user.data && user.data.role_id === 2 ? myAccount : '' }
                             { user && user.data && user.data.role_id === 1 ? toAdmin : '' }
                         </div>
+=======
+                    <div className={'flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ' + styles.layout_elem}>
+                        { user && user.role_id === 2 ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                        { !user ? <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active/> : '' }
+                        { user && !user.guest && user.role_id === 2 ? myAccount : '' }
+                        { user && user.role_id === 1 ? toAdmin : '' }
+>>>>>>> master
                     </div>
 
                     <div className={'flex-100 flex-gt-sm-50 layout-row layout-align-center-end ' + styles.layout_elem}>

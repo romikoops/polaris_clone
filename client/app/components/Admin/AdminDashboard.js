@@ -1,15 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import defaults from '../../styles/default_classes.scss';
+import Loading from '../../components/Loading/Loading';
+import {v4} from 'node-uuid';
+import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables'; 7;
 import { AdminScheduleLine } from './';
-import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import { RoundButton } from '../RoundButton/RoundButton';
+<<<<<<< HEAD
 import {v4} from 'node-uuid';
 import { Loading } from '../../components/Loading/Loading';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import style from './AdminDashboard.scss';
 import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+=======
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { Carousel } from '../Carousel/Carousel';
+import { activeRoutesData } from '../../constants';
+import style from './AdminDashboard.scss';
+import defaults from '../../styles/default_classes.scss';
+
+
+>>>>>>> master
 export class AdminDashboard extends Component {
     constructor(props) {
         super(props);
@@ -74,8 +85,6 @@ export class AdminDashboard extends Component {
         const { routes, shipments, air, ocean} = dashData;
         const clientHash = {};
 
-        console.log(hubHash);
-
         if (clients) {
             clients.forEach(cl => {
                 clientHash[cl.id] = cl;
@@ -86,10 +95,6 @@ export class AdminDashboard extends Component {
 
         console.log(shipments);
 
-        const mergedRequestedShipments = shipments && shipments.requested ?
-            shipments.requested.map((sh) => {
-                return this.prepShipment(sh, clientHash, hubHash);
-            }) : false;
 
         const mergedOpenShipments = shipments && shipments.open ?
             shipments.open.sort(this.dynamicSort('updated_at')).map((sh) => {
@@ -101,6 +106,15 @@ export class AdminDashboard extends Component {
                 return this.prepShipment(sh, clientHash, hubHash);
             }) : false;
 
+<<<<<<< HEAD
+=======
+
+        const mergedRequestedShipments = shipments && shipments.requested ?
+            shipments.requested.sort(this.dynamicSort('updated_at')).map((sh) => {
+                return this.prepShipment(sh, clientHash, hubHash);
+            }) : false;
+
+>>>>>>> master
         const requestedShipments = mergedRequestedShipments ?
             <AdminSearchableShipments
                 title="Requested Shipments"

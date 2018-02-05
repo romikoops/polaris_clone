@@ -3,7 +3,11 @@ import styles from './ShipmentSummaryBox.scss';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import { Tooltip } from '../Tooltip/Tooltip';
+<<<<<<< HEAD
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+=======
+import { capitalize } from '../../helpers';
+>>>>>>> master
 export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
@@ -90,7 +94,7 @@ export class ShipmentSummaryBox extends Component {
             </div>
         );
         return(
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.summary_container}`}>
                 <div className="flex-100 layout-row layout-wrap">
                     <div
                         className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
@@ -208,9 +212,18 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
+<<<<<<< HEAD
                                 <BookingTextHeading theme={theme} size={4} text="MoT :" />
+=======
+                                <h4
+                                    className={styles.date_title}
+                                    style={gradientFontStyle}
+                                >
+                                   Mode of Transport:
+                                </h4>
+>>>>>>> master
                             </div>
-                            <p className="flex-none"> {route[0].mode_of_transport} </p>
+                            <p className="flex-none"> {capitalize(route[0].mode_of_transport)} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">

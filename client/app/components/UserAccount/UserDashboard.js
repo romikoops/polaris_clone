@@ -101,7 +101,7 @@ export class UserDashboard extends Component {
         }) : false;
         const newReqShips = mergedRequestedShipments.length > 0 ? this.limitArray(mergedRequestedShipments, 3).map((ship) => {
             return (
-                <UserMergedShipment ship={ship} />
+                <UserMergedShipment ship={ship} viewShipment={this.viewShipment}/>
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
@@ -109,7 +109,7 @@ export class UserDashboard extends Component {
             </div>);
         const newOpenShips = mergedOpenShipments.length > 0 ? this.limitArray(mergedOpenShipments, 3).map((ship) => {
             return (
-                <UserMergedShipment ship={ship} />
+                <UserMergedShipment ship={ship} viewShipment={this.viewShipment}/>
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
@@ -180,7 +180,7 @@ export class UserDashboard extends Component {
                         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                             <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
-                            <UserMergedShipHeaders title="Requested Shipments" />
+                            <UserMergedShipHeaders title="Requested Shipments" total={mergedRequestedShipments.length}/>
 
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
                                 {newReqShips}
@@ -190,7 +190,7 @@ export class UserDashboard extends Component {
                                     </div>
                                 </div>) : ''}
                             </div>
-                            <UserMergedShipHeaders title="In Process" />
+                            <UserMergedShipHeaders title="In Process" total={mergedOpenShipments.length}/>
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
                                 {newOpenShips}
                                 { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">

@@ -10,6 +10,7 @@ export class AdminShipmentRow extends Component {
         this.handleDeny = this.handleDeny.bind(this);
         this.handleAccept = this.handleAccept.bind(this);
         this.handleIgnore = this.handleIgnore.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
     switchIcon(sched) {
         let icon;
@@ -53,6 +54,12 @@ export class AdminShipmentRow extends Component {
         const {shipment, handleAction} = this.props;
         handleAction(shipment.id, 'ignore');
     }
+
+    handleEdit() {
+        const {shipment, handleSelect} = this.props;
+        handleSelect(shipment);
+    }
+
     render() {
         const { theme, shipment, hubs} = this.props;
         if (shipment.schedule_set.length < 1) {

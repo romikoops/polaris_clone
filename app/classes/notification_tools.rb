@@ -27,7 +27,7 @@ module NotificationTools
   def get_messages_for_admin(user)
     resp = get_item('messages', "tenant_id", user.tenant_id)
     unread = 0
-    if resp["conversations"]
+    if resp && resp["conversations"]
       resp["conversations"].each do |kc, vc|
         vc["messages"].each do |msg|
           if !msg["read"]

@@ -40,7 +40,11 @@ export class RouteResult extends Component {
         return ('0' + n).slice(-2);
     }
     render() {
+<<<<<<< HEAD
         const { theme, schedule, user, transportTime } = this.props;
+=======
+        const { theme, schedule, user, pickup } = this.props;
+>>>>>>> master
         const schedKey = schedule.hub_route_key;
         const hubKeyArr = schedKey.split('-');
         let originHub = {};
@@ -132,8 +136,15 @@ export class RouteResult extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
+<<<<<<< HEAD
                                 <h4 className={styles.date_title}>
                                     Pickup Date
+=======
+                                <h4
+                                    className={styles.date_title}
+                                >
+                                { pickup ? 'Pickup Date' : 'Closing Date' }
+>>>>>>> master
                                 </h4>
                             </div>
                             <div className="flex-100 layout-row">

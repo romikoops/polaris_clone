@@ -163,11 +163,15 @@ export function admin(state = {}, action) {
             });
             return reqShips;
         case adminConstants.GET_SHIPMENTS_SUCCESS:
-            const succShips = merge({}, state, {
+            return {
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    shipments: action.payload.data
+                },
                 shipments: action.payload.data,
                 loading: false
-            });
-            return succShips;
+            };
         case adminConstants.GET_SHIPMENTS_FAILURE:
             const errShips = merge({}, state, {
                 error: { shipments: action.error },
@@ -623,10 +627,11 @@ export function admin(state = {}, action) {
         case adminConstants.NEW_HUB_SUCCESS:
             const newHubs = state.hubs;
             newHubs.push(action.payload);
-            return merge({}, state, {
+            return {
+                ...state,
                 loading: false,
                 hubs: newHubs
-            });
+            };
         case adminConstants.NEW_HUB_FAILURE:
             return merge({}, state, {
                 error: { documents: action.error },

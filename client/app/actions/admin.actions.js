@@ -740,12 +740,20 @@ function confirmShipment(id, action, redirect) {
         adminService.confirmShipment(id, action).then(
             resp => {
                 const shipmentData = resp.data;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 177394a263ed62f440d95fdb5d796277d3da1eb5
                 if (action === 'accept') {
                     dispatch(successAccept(shipmentData));
                 } else {
                     dispatch(successDeny(shipmentData));
-                    dispatch(push('/admin/shipments'));
+                    dispatch(getShipments(false));
                 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 177394a263ed62f440d95fdb5d796277d3da1eb5
                 if (redirect) {
                     dispatch(getShipment(id, true));
                 }
@@ -1059,4 +1067,8 @@ export const adminActions = {
     getDashShipments,
     newRoute,
     clearLoading
+<<<<<<< HEAD
+=======
+
+>>>>>>> 177394a263ed62f440d95fdb5d796277d3da1eb5
 };

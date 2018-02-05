@@ -38,16 +38,16 @@ class App extends Component {
         }
     }
     render() {
-        const { tenant, isFetching, user, loggedIn, showMessages } = this.props;
+        const { tenant, isFetching, user, loggedIn, showMessages, sending } = this.props;
         const theme = tenant.data.theme;
         return (
             <div className="layout-fill layout-column layout-align-end hundred">
                 <div className="flex-100 layout-row height_100">
                     {/* <SideNav/>*/}
                     <div className="flex layout-column scroll layout-align-end hundred">
-                        { showMessages ? <MessageCenter close={this.toggleShowMessages}/> : '' }
+                        { showMessages || sending ? <MessageCenter /> : '' }
                         {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
-                        { user && user.data && tenant && tenant.data && user.data.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
+                        { user && user.id && tenant && tenant.data && user.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }
                         <Switch className="flex">
                             <Route
                                 exact
@@ -103,7 +103,7 @@ App.propTypes = {
 
 function mapStateToProps(state) {
     const { selectedSubdomain, tenant, authentication, messaging } = state;
-    const { showMessages } = messaging;
+    const { showMessages, sending } = messaging;
     const { user, loggedIn } = authentication;
     // const { currencies } = app;
     const { isFetching } = tenant || {
@@ -115,7 +115,8 @@ function mapStateToProps(state) {
         user,
         loggedIn,
         isFetching,
-        showMessages
+        showMessages,
+        sending
         // currencies
     };
 }

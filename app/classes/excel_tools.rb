@@ -377,8 +377,8 @@ module ExcelTools
 
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
-      origin = Location.find_by(name: row[:origin])
-      destination = Location.find_by(name: row[:destination])
+      origin      = Location.find_by(name: row[:origin], location_type: 'nexus')
+      destination = Location.find_by(name: row[:destination], location_type: 'nexus')
       route = Route.find_or_create_by!(name: "#{origin.name} - #{destination.name}", tenant_id: user.tenant_id, origin_nexus_id: origin.id, destination_nexus_id: destination.id)
       hubroute = HubRoute.create_from_route(route, row[:mot], user.tenant_id)
 
@@ -551,8 +551,8 @@ module ExcelTools
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
       
-      origin      = Location.find_by(name: row[:origin])
-      destination = Location.find_by(name: row[:destination])
+      origin      = Location.find_by(name: row[:origin], location_type: 'nexus')
+      destination = Location.find_by(name: row[:destination], location_type: 'nexus')
       route       = Route.find_or_create_by!(
         name: "#{origin.name} - #{destination.name}", 
         tenant_id: user.tenant_id, 

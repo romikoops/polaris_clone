@@ -15,6 +15,11 @@ export class AdminSearchableRoutes extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+    componentDidUpdate(prevProps) {
+        if (prevProps.routes !== this.props.routes) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     seeAll() {
         const {seeAll, adminDispatch} = this.props;
         if (seeAll) {
@@ -98,7 +103,7 @@ export class AdminSearchableRoutes extends Component {
                     <div className="flex-60 layput-row layout-align-start-center">
                         <MainTextHeading theme={theme} text="Routes" />
                     </div>
-                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
+                    <div className="flex-35 layput-row layout-align-start-center input_box_full">
                         <input
                             type="text"
                             name="search"

@@ -1,4 +1,6 @@
 class NexusesController < ApplicationController
+	skip_before_action :require_authentication!
+  skip_before_action :require_non_guest_authentication!
 	def index
 		@available_destinations = find_available_destinations
 

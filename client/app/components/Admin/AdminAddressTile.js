@@ -13,6 +13,7 @@ export class AdminAddressTile extends Component {
         this.toggleEdit = this.toggleEdit.bind(this);
         this.saveEdit = this.saveEdit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.deleteAddress = this.deleteAddress.bind(this);
     }
 
     toggleEdit() {
@@ -30,6 +31,9 @@ export class AdminAddressTile extends Component {
     }
     saveEdit() {
         this.props.saveEdit(this.state.editor);
+    }
+    deleteAddress() {
+        this.props.deleteAddress(this.props.address.id);
     }
 
     render() {
@@ -89,6 +93,13 @@ export class AdminAddressTile extends Component {
                         theme={theme}
                         active
                         handleNext={this.saveEdit}
+                    />
+                    <hr className="flex-100"></hr>
+                    <RoundButton
+                        size="full"
+                        text="Delete"
+                        theme={theme}
+                        handleNext={this.deleteAddress}
                     />
                 </div>
             </div>

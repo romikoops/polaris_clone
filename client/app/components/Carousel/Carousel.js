@@ -15,6 +15,7 @@ export class Carousel extends Component {
             autoplay: true,
             infinite: true,
             slidesToShow: slideNumber,
+            speed: 2000,
             arrows: true
         };
         const slides = this.props.slides.map((route) => {

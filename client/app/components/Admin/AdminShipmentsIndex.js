@@ -51,10 +51,8 @@ export class AdminShipmentsIndex extends Component {
 
         const listView = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-                <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                 <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedReqShipments} title="Requested Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
-
+                <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedOpenShipments} title="Open Shipments" theme={theme} handleShipmentAction={handleShipmentAction}/>
                 <AdminSearchableShipments handleClick={this.viewShipment} hubs={hubHash} shipments={mergedFinishedShipments} title="Finished Shipments" theme={theme} handleAction={handleShipmentAction}/>
                 { mergedOpenShipments.length === 0 && mergedReqShipments.length === 0 && mergedFinishedShipments.length === 0 ?
                     <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">

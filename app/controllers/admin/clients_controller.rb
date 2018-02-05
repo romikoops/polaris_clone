@@ -14,6 +14,7 @@ class Admin::ClientsController < ApplicationController
     resp = {client: @client, locations: @locations, shipments: @shipments}
     response_handler(resp)
   end
+
   def create
     json = JSON.parse(params[:new_client])
     user_data = {
@@ -27,18 +28,8 @@ class Admin::ClientsController < ApplicationController
     }
     new_user = current_user.tenant.users.create!(user_data)
 
-    # if params[:new_client][:street] && params[:new_client][:country] && params[:new_client][:zipCode]
-    #   new_user_loc = new-user.locations.create!(
-    #     street: params[:new_client][:street],
-    #     streparams[:new_client][:country]
-    #     country: params[:new_client][:country]
-    #     )
-      
-    # end
     response_handler(new_user)
   end
-
-  
 
   private
 

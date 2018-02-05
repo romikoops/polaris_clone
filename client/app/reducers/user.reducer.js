@@ -268,11 +268,15 @@ export function users(state = initialState, action) {
             });
             return reqDeleteAlias;
         case userConstants.DELETE_ALIAS_SUCCESS:
-            const succDeleteAlias = merge({}, state, {
-                contactData: action.payload.data,
+            const aliasless = state.dashboard.aliases.filter(x => x.id !== parseInt(action.payload.data, 10));
+            return {
+                ...state,
+                dashboard: {
+                    ...state.dashboard,
+                    aliases: aliasless
+                },
                 loading: false
-            });
-            return succDeleteAlias;
+            };
         case userConstants.DELETE_ALIAS_FAILURE:
             const errDeleteAlias = merge({}, state, {
                 loading: false,
@@ -334,6 +338,23 @@ export function users(state = initialState, action) {
                 loading: false
             };
         case userConstants.UPDATE_CONTACT_ADDRESS_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                error: { hubs: action.error }
+            };
+
+        case userConstants.DELETE_CONTACT_ADDRESS_REQUEST:
+            return {...state, loading: true};
+        case userConstants.DELETE_CONTACT_ADDRESS_SUCCESS:
+            const caData = state.contactData;
+            caData.location = false;
+            return {
+                ...state,
+                contactData: caData,
+                loading: false
+            };
+        case userConstants.DELETE_CONTACT_ADDRESS_FAILURE:
             return {
                 ...state,
                 loading: false,

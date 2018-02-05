@@ -17,7 +17,7 @@ export class Price extends Component {
             <p className={`flex-none ${styles.price}`} style={scaleTransformation}>
                 {priceUnits}
                 <sup>.{priceCents}</sup>{' '}
-                <span className={styles.price_currency}>{user.data.currency}</span>
+                <span className={styles.price_currency}>{user.currency}</span>
             </p>
         );
     }
