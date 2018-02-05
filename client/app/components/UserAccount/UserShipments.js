@@ -13,8 +13,8 @@ export class UserShipments extends Component {
         this.props.setNav('shipments');
     }
     viewShipment(shipment) {
-        const { userDispatch, user } = this.props;
-        userDispatch.getShipment(user.data.id, shipment.id, true);
+        const { userDispatch } = this.props;
+        userDispatch.getShipment(shipment.id, true);
         this.setState({selectedShipment: true});
     }
 

@@ -1,4 +1,5 @@
 class NotificationsController < ApplicationController
+  skip_before_action :require_non_guest_authentication!
   include NotificationTools
   include Response
   def index

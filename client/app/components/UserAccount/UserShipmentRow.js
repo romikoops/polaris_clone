@@ -115,6 +115,10 @@ export class UserShipmentRow extends Component {
                 </div>
             </div>
         );
+        const nadaRow = (
+            <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+            </div>
+        );
         let statusRow;
         switch(shipment.status) {
             case 'pending':
@@ -136,7 +140,7 @@ export class UserShipmentRow extends Component {
                 statusRow = acceptedRow;
                 break;
             default:
-                statusRow = '';
+                statusRow = nadaRow;
                 break;
         }
         return (
@@ -209,13 +213,13 @@ export class UserShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format(
+                                        {moment(shipment.planned_etd).format(
                                             'YYYY-MM-DD'
                                         )}{' '}
                                     </p>
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format('HH:mm')}{' '}
+                                        {moment(shipment.planned_etd).format('HH:mm')}{' '}
                                     </p>
                                 </div>
                             </div>
@@ -231,13 +235,13 @@ export class UserShipmentRow extends Component {
                                 <div className="flex-100 layout-row">
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format(
+                                        {moment(shipment.planned_eta).format(
                                             'YYYY-MM-DD'
                                         )}{' '}
                                     </p>
                                     <p className={`flex-none ${styles.sched_elem}`}>
                                         {' '}
-                                        {moment(schedule.eta).format('HH:mm')}{' '}
+                                        {moment(shipment.planned_eta).format('HH:mm')}{' '}
                                     </p>
                                 </div>
                             </div>

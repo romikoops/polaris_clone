@@ -107,7 +107,7 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {insurance.val.toFixed(2)} {user.data.currency}</h6>
+                    <h6 className="flex-100"> {insurance.val.toFixed(2)} {user.currency}</h6>
                 </div>
             </div>
         );
@@ -124,7 +124,7 @@ export class CargoDetails extends Component {
                 </div>
                 <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
                     <h5 className="flex-100"> Price </h5>
-                    <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} {user.data.currency}</h6>
+                    <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} {user.currency}</h6>
                 </div>
                 <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
             </div>

@@ -25,9 +25,13 @@ class MessageCenter extends Component {
         const { messageDispatch } = this.props;
         messageDispatch.sendUserMessage(msg);
     }
+    close() {
+        const { messageDispatch } = this.props;
+        messageDispatch.showMessageCenter();
+    }
 
     render() {
-        const  { theme, close, messageDispatch, conversations, user, shipment, tenant, clients, loading } = this.props;
+        const  { theme, messageDispatch, conversations, user, shipment, tenant, clients, loading } = this.props;
         if (!conversations && !loading) {
             return '';
         }
@@ -50,17 +54,17 @@ class MessageCenter extends Component {
             </div>;
         return (
             <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.backdrop}`}>
-                <div className={`flex-none ${styles.fade}`} onClick={() => close()}></div>
+                <div className={`flex-none ${styles.fade}`} onClick={() => this.close()}></div>
                 <div className={`flex-none layout-column layout-align-start-start ${styles.message_center}`} >
                     <div className="flex-10 width_100 layout-row layout-align-space-between-center">
                         {/* <h3 className="flex-none clip letter_3" style={textStyle}>Message Center</h3>*/}
                         <h3 className="flex-none letter_3" style={textStyle}>Message Center</h3>
-                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => close()}>
+                        <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.close()}>
                             <i className="fa fa-times" style={textStyle} ></i>
                         </div>
                     </div>
                     <div className="flex-90 width_100 layout-row layout-align-start-start">
-                        <div className={`flex-30 layout-row layout-wrap layout-align-center-start ${styles.convo_list}`} >
+                        <div className={`flex-30 layout-row layout-wrap layout-align-center-start scroll ${styles.convo_list}`} >
                             {convos}
                         </div>
                         <div className={`flex-70 layout-column layout-align-start-start ${styles.message_list}`}>

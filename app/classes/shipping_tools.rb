@@ -48,20 +48,23 @@ module ShippingTools
 
     offer_calculation.calc_offer!
 
-    offer_calculation.shipment.save!
+    if offer_calculation.shipment.save
+      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
+      return {
+        shipment:                   offer_calculation.shipment,
+        total_price:                offer_calculation.total_price,
+        has_pre_carriage:           offer_calculation.has_pre_carriage,
+        has_on_carriage:            offer_calculation.has_on_carriage,
+        schedules:                  offer_calculation.schedules,
+        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+        originHubs:                 offer_calculation.origin_hubs,
+        destinationHubs:            offer_calculation.destination_hubs,
+        cargoUnits:                 cargo_units
+      }
+    else
+      raise ApplicationError::NoRoutes # TBD - Customize Errors
+    end
 
-    cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
-    return {
-      shipment:                   offer_calculation.shipment,
-      total_price:                offer_calculation.total_price,
-      has_pre_carriage:           offer_calculation.has_pre_carriage,
-      has_on_carriage:            offer_calculation.has_on_carriage,
-      schedules:                  offer_calculation.schedules,
-      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-      originHubs:                 offer_calculation.origin_hubs,
-      destinationHubs:            offer_calculation.destination_hubs,
-      cargoUnits:                 cargo_units
-    }
   end
 
   def create_document(file, shipment, type, user) 
@@ -246,6 +249,30 @@ module ShippingTools
       shipment
     ).deliver_later
   end
+
+  def build_and_upload_pdf(args)
+    doc_erb = ErbTemplate.new(
+      layout:   args[:layout],
+      template: args[:template],
+      locals:   { shipment: args[:shipment] }
+    )
+
+    doc_string = WickedPdf.new.pdf_from_string(
+      doc_erb.render,
+      margin: args[:margin]
+    )
+        
+    doc_name = "#{args[:name]}_#{args[:shipment].imc_reference}.pdf"
+    
+    File.open("tmp/" + doc_name, 'wb') { |file| file.write(doc_string) }
+    doc_pdf = File.open("tmp/" + doc_name)
+    
+    doc = Document.new_upload_backend(doc_pdf, args[:shipment], args[:name], current_user)
+    doc_url = doc.get_signed_url
+    
+    { name: doc_name, url: doc_url }
+  end
+
 
   def send_booking_emails(shipment)
     shipper_pdf = WickedPdf.new.pdf_from_string(render_to_string(layout: 'pdfs/booking.pdf', template: 'shipments/pdfs/booking_shipper.pdf', locals: { shipment: shipment }), :margin => {:top=> 10, :bottom => 5, :left=> 20, :right => 20})

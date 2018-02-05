@@ -35,7 +35,6 @@ function sendUserMessage(message) {
         body: JSON.stringify({ message })
     };
     const url = BASE_URL + '/messaging/send';
-    console.log(url);
     return fetch(url, requestOptions).then(handleResponse);
 }
 

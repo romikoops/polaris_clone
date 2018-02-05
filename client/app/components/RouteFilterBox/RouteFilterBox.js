@@ -5,6 +5,8 @@ import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './RouteFilterBox.scss';
+import styled from 'styled-components';
+
 export class RouteFilterBox extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +36,16 @@ export class RouteFilterBox extends Component {
         const dayPickerProps = {
             disabledDays: {before: new Date(moment().add(7, 'days').format())}
         };
+        const StyledRange = styled.div`
+            input[type=range]::-webkit-slider-runnable-track {
+              width: 100%;
+              height: 12px;
+              cursor: pointer;
+                background: -webkit-linear-gradient(left, ${theme.colors.primary}, ${theme.colors.secondary}) !important;
+              border-radius: 1.3px;
+              opacity: 0.9;
+            }
+        `;
         return (
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
@@ -83,7 +95,7 @@ export class RouteFilterBox extends Component {
                         </label>
                     </div>
                 </div>
-                <div className={styles.transit_time}>
+                <StyledRange className={styles.transit_time}>
                     <p>Transit time</p>
                     <input
                         type="range"
@@ -94,7 +106,7 @@ export class RouteFilterBox extends Component {
                         <p>20 days</p>
                         <p>100 days</p>
                     </div>
-                </div>
+                </StyledRange>
                 <RoundButton
                     size="full"
                     text="save filter"

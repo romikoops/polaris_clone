@@ -5,6 +5,7 @@ import { AdminAddressTile } from '../Admin';
 import styles from './UserAccount.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+import { AdminSearchableShipments } from '../Admin/AdminSearchables';
 const EditProfileBox = ({user, handleChange, onSave, close, style, theme}) => {
     return (
         <div className="flex-60 layout-row layout-align-start-start layout-wrap">
@@ -184,11 +185,14 @@ export class UserContactsView extends Component {
             editObj
         } = this.state;
         console.log(shipments, hubs);
-        // const shipRows = [];
+        const shipArr = [];
         // shipments.forEach((ship) => {
         //     const preppedShipment = this.prepShipment(ship, contact, hubs);
         //     shipRows.push( <UserShipmentRow key={v4()} shipment={preppedShipment} hubs={hubs} theme={theme} handleSelect={this.viewShipment} />);
         // });
+        shipments.forEach((ship) => {
+            shipArr.push(this.prepShipment(ship, contact, hubs));
+        });
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -207,18 +211,27 @@ export class UserContactsView extends Component {
                         <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
                       }
                 </div>
-                {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
+                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    <AdminSearchableShipments
+                        title="Related Shipments"
+                        limit={5}
+                        hubs={hubs}
+                        shipments={shipArr}
+                        theme={theme}
+                        handleClick={this.viewShipment}
+                        handleShipmentAction={this.handleShipmentAction}
+                    />
+                    {/* <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Related Shipments</p>
                     </div>
-                    {shipRows}
-                </div>*/}
-                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    {shipRows}*/}
+                </div>
+                {location ? <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Locations</p>
                     </div>
-                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact} saveEdit={userDispatch.saveAddressEdit}/>
-                </div>
+                    <AdminAddressTile key={v4()} address={location} theme={theme} client={contact} saveEdit={userDispatch.saveAddressEdit} deleteAddress={userDispatch.deleteContactAddress}/>
+                </div> : '' }
             </div>
         );
     }
