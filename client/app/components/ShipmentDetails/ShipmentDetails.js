@@ -99,10 +99,6 @@ export class ShipmentDetails extends Component {
         window.scrollTo(0, 0);
         setStage(2);
     }
-    componentDidUpdate() {
-        const { setStage } = this.props;
-        setStage(2);
-    }
 
     scrollTo(target) {
         Scroll.scroller.scrollTo(target, {

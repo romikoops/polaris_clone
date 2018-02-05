@@ -81,8 +81,7 @@ export class BookingConfirmation extends Component {
                         <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
                             <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                                 <p className="flex-100">
-                                    Thank you for booking with {tenantName}.<br/>
-                                    Hope to see you again soon!
+                                    Thank you for booking with {tenantName}.
                                 </p>
                             </div>
                             <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
