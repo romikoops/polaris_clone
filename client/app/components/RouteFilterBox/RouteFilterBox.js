@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
-import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './RouteFilterBox.scss';
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class RouteFilterBox extends Component {
@@ -31,7 +30,7 @@ export class RouteFilterBox extends Component {
         this.props.setDurationFilter(dur);
     }
     render() {
-        const { theme, pickup } = this.props;
+        const { theme, pickup, longestTime, fastestTime } = this.props;
         const dayPickerProps = {
             disabledDays: {before: new Date(moment().add(7, 'days').format())}
         };
@@ -96,16 +95,10 @@ export class RouteFilterBox extends Component {
                         onChange={this.setFilterDuration}
                     />
                     <div className={styles.transit_time_labels}>
-                        <p>20 days</p>
-                        <p>100 days</p>
+                        <p>{fastestTime} days</p>
+                        <p>{longestTime} days</p>
                     </div>
                 </div>
-                <RoundButton
-                    size="full"
-                    text="save filter"
-                    theme={theme}
-                    active
-                />
             </div>
         );
     }

@@ -307,8 +307,6 @@ function mapStateToProps(state) {
     const { currencies } = app;
     const loading = bookingData.loading;
     const availableDestinations = nexus.availableDestinations;
-    console.log('availableDestinations');
-    console.log(nexus);
     return {
         user,
         users,

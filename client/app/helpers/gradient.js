@@ -1,6 +1,4 @@
 export const gradientGenerator = (colour1, colour2) => {
-    console.log(colour1);
-    console.log(colour2);
     if((navigator.userAgent.indexOf('Opera') || navigator.userAgent.indexOf('OPR')) !== -1 ) {
         return {background: '-o-linear-gradient(left, ' + colour1 + ',' + colour2 + ')'};
     } else if(navigator.userAgent.indexOf('Chrome') !== -1 ) {

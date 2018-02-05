@@ -40,7 +40,7 @@ export class RouteResult extends Component {
         return ('0' + n).slice(-2);
     }
     render() {
-        const { theme, schedule, user } = this.props;
+        const { theme, schedule, user, transportTime } = this.props;
         const schedKey = schedule.hub_route_key;
         const hubKeyArr = schedKey.split('-');
         let originHub = {};
@@ -84,22 +84,10 @@ export class RouteResult extends Component {
                 className={`flex-100 layout-row ${styles.route_result}`}
             >
                 <div className="flex-75 layout-row layout-wrap">
-                    <div
-                        className={`flex-100 layout-row layout-align-start-center ${
-                            styles.top_row
-                        }`}
-                    >
-                        <div
-                            className={`flex-80 layout-row layout-align-start-center ${
-                                styles.hubs_row
-                            }`}
-                        >
+                    <div className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
+                        <div className={`flex-80 layout-row layout-align-start-center ${styles.hubs_row}`}>
                             <div className={`${styles.header_hub}`}>
-                                <i
-                                    className={`fa fa-map-marker ${
-                                        styles.map_marker
-                                    }`}
-                                />
+                                <i className={`fa fa-map-marker ${styles.map_marker}`}/>
                                 <div className="flex-100 layout-row">
                                     <h4 className="flex-100"> {originHub.name} </h4>
                                 </div>
@@ -107,16 +95,19 @@ export class RouteResult extends Component {
                                     <div className="flex-100">
                                         <p className="flex-100">
                                             {' '}
-                                             {originHub.hub_code}
+                                            {originHub.hub_code}
                                         </p>
                                     </div> :
                                     '' }
                             </div>
-                            <div className={`${styles.connection_graphics}`}>
+                            <div className={`${styles.connection_graphics} ${styles.grapics_top_margin} layout-align-center-center`}>
                                 <div className="flex-none layout-row layout-align-center-center">
                                     {this.switchIcon(schedule)}
                                 </div>
                                 <div style={dashedLineStyles} />
+                                <div className={`${styles.transport_time} flex-none layout-row layout-align-center-center`} >
+                                    {transportTime} days
+                                </div>
                             </div>
                             <div className={`${styles.header_hub}`}>
                                 <i className={`fa fa-flag-o ${styles.flag}`} />
@@ -128,25 +119,20 @@ export class RouteResult extends Component {
                                         {' '}
                                         {destHub.hub_code
                                             ? destHub.hub_code
-                                            : ''}{' '}
+                                            : ''}
+                                        {' '}
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div
-                            className={`flex-20 layout-row layout-align-start-center ${
-                                styles.load_type
-                            }`}
-                        >
+                        <div className={`flex-20 layout-row layout-align-start-center ${styles.load_type}`}>
                             {/* <p className="flex-none no_m">{loadType}</p>*/}
                         </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                >
+                                <h4 className={styles.date_title}>
                                     Pickup Date
                                 </h4>
                             </div>
@@ -167,9 +153,7 @@ export class RouteResult extends Component {
                         </div>
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                >
+                                <h4 className={styles.date_title}>
                                     {' '}
                                     Date of Departure
                                 </h4>
@@ -189,9 +173,7 @@ export class RouteResult extends Component {
                         </div>
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                >
+                                <h4 className={styles.date_title}>
                                     {' '}
                                     ETA terminal
                                 </h4>

@@ -16,7 +16,7 @@ export default class GmapsLoader extends Component {
         };
         const ParamComponent = this.props.component;
         console.log('Gmap');
-        console.log(this.props);
+        console.log(this.props.allNexuses);
         return (
             <ReactGoogleMapLoader
                 params={params}
@@ -49,7 +49,7 @@ GmapsLoader.propTypes = {
     theme: PropTypes.object,
     selectLocation: PropTypes.func,
     component: PropTypes.func,
-    allNexuses: PropTypes.array,
+    allNexuses: PropTypes.object,
     origin: PropTypes.object,
     destination: PropTypes.object,
     toggleCarraige: PropTypes.func
