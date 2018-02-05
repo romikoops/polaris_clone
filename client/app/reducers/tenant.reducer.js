@@ -1,43 +1,44 @@
-import * as tenantActions from '../actions/tenant';
+import * as tenantActions from '../actions/tenant'
+
 export const tenant = (
-    state = {
+  state = {
+    isFetching: false,
+    didInvalidate: false,
+    data: {}
+  },
+  action
+) => {
+  switch (action.type) {
+    case tenantActions.INVALIDATE_SUBDOMAIN:
+      return Object.assign({}, state, {
+        didInvalidate: true
+      })
+    case tenantActions.REQUEST_TENANT:
+      return Object.assign({}, state, {
+        isFetching: true,
+        didInvalidate: false
+      })
+    case tenantActions.RECEIVE_TENANT:
+      return Object.assign({}, state, {
         isFetching: false,
         didInvalidate: false,
-        data: {}
-    },
-    action
-) => {
-    switch (action.type) {
-        case tenantActions.INVALIDATE_SUBDOMAIN:
-            return Object.assign({}, state, {
-                didInvalidate: true
-            });
-        case tenantActions.REQUEST_TENANT:
-            return Object.assign({}, state, {
-                isFetching: true,
-                didInvalidate: false
-            });
-        case tenantActions.RECEIVE_TENANT:
-            return Object.assign({}, state, {
-                isFetching: false,
-                didInvalidate: false,
-                data: action.data,
-                lastUpdated: action.receivedAt
-            });
-        case tenantActions.RECEIVE_TENANT_ERROR:
-            return Object.assign({}, state, {
-                isFetching: false
-            });
-        default:
-            return state;
-    }
-};
+        data: action.data,
+        lastUpdated: action.receivedAt
+      })
+    case tenantActions.RECEIVE_TENANT_ERROR:
+      return Object.assign({}, state, {
+        isFetching: false
+      })
+    default:
+      return state
+  }
+}
 
 export const selectedSubdomain = (state = 'greencarrier', action) => {
-    switch (action.type) {
-        case tenantActions.SELECT_SUBDOMAIN:
-            return action.subdomain;
-        default:
-            return state;
-    }
-};
+  switch (action.type) {
+    case tenantActions.SELECT_SUBDOMAIN:
+      return action.subdomain
+    default:
+      return state
+  }
+}
