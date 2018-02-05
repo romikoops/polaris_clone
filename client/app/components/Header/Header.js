@@ -65,11 +65,10 @@ class Header extends Component {
         });
     }
     toggleShowMessages() {
-         const { messageDispatch } = this.props;
-         messageDispatch.showMessageCenter();
+        const { messageDispatch } = this.props;
+        messageDispatch.showMessageCenter();
     }
     render() {
-
         const { user, theme, tenant, invert, unread, req, landingPage } = this.props;
         const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
 

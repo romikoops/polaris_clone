@@ -115,6 +115,10 @@ export class UserShipmentRow extends Component {
                 </div>
             </div>
         );
+        const nadaRow = (
+            <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+            </div>
+        );
         let statusRow;
         switch(shipment.status) {
             case 'pending':
@@ -136,7 +140,7 @@ export class UserShipmentRow extends Component {
                 statusRow = acceptedRow;
                 break;
             default:
-                statusRow = '';
+                statusRow = nadaRow;
                 break;
         }
         return (

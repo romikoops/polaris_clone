@@ -157,7 +157,7 @@ export class AdminRouteForm extends Component {
                             <RoundButton
                                 theme={theme}
                                 size="small"
-                                text="Save Hub"
+                                text="Save Route"
                                 active
                                 handleNext={this.saveNewRoute}
                                 iconClass="fa-floppy"
