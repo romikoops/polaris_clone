@@ -9,22 +9,29 @@ export function authentication(state = initialState, action) {
     switch (action.type) {
         case authenticationConstants.LOGIN_REQUEST:
             return {
+                ...state,
+                loginAttempt: false,
                 loggingIn: true,
-                user: action.user
             };
         case authenticationConstants.LOGIN_SUCCESS:
             return {
-                loggedIn: true,
-                user: action.user
+                user: action.user,
+                loggedIn: true
             };
         case authenticationConstants.LOGIN_FAILURE:
-            return {};
+            const newState = action.loginFailure.persistState ? state : {};
+            return {
+                ...newState,
+                error: action.loginFailure.error,
+                loginAttempt: true,
+                loggingIn: false
+            };
 
         case authenticationConstants.UPDATE_USER_REQUEST:
             return {
+                ...state,
                 loggedIn: true,
-                registering: true,
-                user: action.user
+                registering: true
             };
         case authenticationConstants.UPDATE_USER_SUCCESS:
             return {
@@ -33,13 +40,16 @@ export function authentication(state = initialState, action) {
                 user: action.user
             };
         case authenticationConstants.UPDATE_USER_FAILURE:
-            return {};
+            return {
+                ...state,
+                registering: false,
+                registrationAttempt: true
+            };
 
         case authenticationConstants.REGISTRATION_REQUEST:
             return {
-                loading: true,
-                registering: true,
-                user: action.user
+                loading: action.user.guest,
+                registering: true
             };
         case authenticationConstants.REGISTRATION_SUCCESS:
             return {
@@ -48,13 +58,11 @@ export function authentication(state = initialState, action) {
                 user: action.user
             };
         case authenticationConstants.REGISTRATION_FAILURE:
-            return {};
+            return {
+                registrationAttempt: true
+            };
         case authenticationConstants.LOGOUT:
             return {};
-        case authentication.GETALL_REQUEST:
-            return {
-                loading: true
-            };
          case authenticationConstants.SET_USER:
             return {
                 ...state,

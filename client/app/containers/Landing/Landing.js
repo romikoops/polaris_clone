@@ -30,7 +30,6 @@ class Landing extends Component {
     }
     shouldComponentUpdate(nextProps) {
         const { loggingIn, registering, loading } = nextProps;
-        // ;
         return loading || !(loggingIn || registering);
     }
 

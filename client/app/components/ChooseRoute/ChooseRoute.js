@@ -36,6 +36,7 @@ export class ChooseRoute extends Component {
         setStage(3);
         console.log('######### MOUNTED ###########');
     }
+
     setDuration(val) {
         this.setState({ durationFilter: val });
     }
@@ -117,6 +118,7 @@ export class ChooseRoute extends Component {
                             fees={shipment.schedules_charges}
                             schedule={sched}
                             user={user}
+                            pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
                         />
@@ -137,6 +139,7 @@ export class ChooseRoute extends Component {
                             fees={shipment.schedules_charges}
                             schedule={sched}
                             user={user}
+                            pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
                         />
@@ -156,6 +159,7 @@ export class ChooseRoute extends Component {
                             fees={shipment.schedules_charges}
                             schedule={sched}
                             user={user}
+                            pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
                         />

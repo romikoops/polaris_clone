@@ -524,6 +524,34 @@ function deleteAlias(aliasId) {
     };
 }
 
+function deleteContactAddress(addressId) {
+    function request(delAddress) {
+        return { type: userConstants.DELETE_CONTACT_ADDRESS_REQUEST, payload: delAddress };
+    }
+    function success(delAddress) {
+        return { type: userConstants.DELETE_CONTACT_ADDRESS_SUCCESS, payload: delAddress };
+    }
+    function failure(error) {
+        return { type: userConstants.DELETE_CONTACT_ADDRESS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.deleteContactAddress(addressId).then(
+            data => {
+                dispatch(
+                    alertActions.success('Deleting Contact Address successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function saveAddressEdit(address) {
     function request(addressData) {
         return { type: userConstants.UPDATE_CONTACT_ADDRESS_REQUEST, payload: addressData };
@@ -588,5 +616,6 @@ export const userActions = {
     deleteAlias,
     saveAddressEdit,
     clearLoading,
+    deleteContactAddress,
     delete: _delete
 };

@@ -15,10 +15,10 @@ export class Message extends Component {
         if (client && message.sender_id !== client.id) {
             return Admin;
         }
-        if (!client && message.sender_id === user.data.id) {
+        if (!client && message.sender_id === user.id) {
             return User;
         }
-        if (!client && message.sender_id !== user.data.id) {
+        if (!client && message.sender_id !== user.id) {
             return Admin;
         }
         return '';
@@ -26,7 +26,7 @@ export class Message extends Component {
 
     render() {
         const  { message, theme, tenant, user, client } = this.props;
-        const isAdmin = user.data.role_id === 1;
+        const isAdmin = user.role_id === 1;
         const messageStyle = message.sender_id === message.user_id ? styles.user_style : styles.tenant_style;
         const UserMessage = styled.div`
             background: #fff;
@@ -64,10 +64,10 @@ export class Message extends Component {
                 margin-left: -20px;
               }
         `;
-        const adminMeta = client && message.sender_id !== user.data.id ?
+        const adminMeta = client && message.sender_id !== user.id ?
             <p className={`flex-none ${styles.timestamp}`}>{client.first_name} {client.last_name} @ {moment.unix(message.timestamp).format('lll')}</p> :
             <p className={`flex-none ${styles.timestamp}`}>You  @ {moment.unix(message.timestamp).format('lll')}</p>;
-        const userMeta = message.sender_id === user.data.id ?
+        const userMeta = message.sender_id === user.id ?
             <p className={`flex-none ${styles.timestamp}`}>You @ {moment.unix(message.timestamp).format('lll')}</p> :
             <p className={`flex-none ${styles.timestamp}`}>{tenant.data.name} Admin @ {moment.unix(message.timestamp).format('lll')}</p>;
         const meta = isAdmin ? adminMeta : userMeta;

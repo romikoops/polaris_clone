@@ -32,6 +32,12 @@ class ContactsController < ApplicationController
     response_handler(loc)
   end
 
+  def delete_contact_address
+    loc = Location.find(params[:id])
+    loc.destroy!
+    response_handler({})
+  end
+
   def new_alias
     contact_data = JSON.parse(params[:new_contact])
     ncd = {}
@@ -60,7 +66,7 @@ class ContactsController < ApplicationController
     contact = Contact.find(params[:id])
     if contact.shipper_id == current_user.id
       contact.destroy
-      response_handler(true)
+      response_handler(params[:id])
       else
       response_handler(false)  
     end 

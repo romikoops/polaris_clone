@@ -19,18 +19,43 @@ class Header extends Component {
         this.state = {
             redirect: false,
             showLogin: false,
-            showMessages: false
+            showMessages: false,
+            isTop: true
         };
         this.goHome = this.goHome.bind(this);
         this.toggleShowLogin = this.toggleShowLogin.bind(this);
         this.toggleShowMessages = this.toggleShowMessages.bind(this);
+    }
+    componentWillMount() {
+        if (this.props.loginAttempt && !this.state.showLogin) {
+            this.setState({ showLogin: true });
+        }
     }
     componentDidMount() {
         const { messageDispatch, messages } = this.props;
         if (!messages) {
             messageDispatch.getUserConversations();
         }
+        document.addEventListener('scroll', () => {
+            const isTop = window.scrollY < 100;
+            if (isTop !== this.state.isTop) {
+                this.setState({ isTop });
+            }
+        });
     }
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.showRegistration) {
+            this.setState({
+                showLogin: true
+            });
+        }
+        if (this.props.showRegistration && !nextProps.showRegistration) {
+            this.setState({
+                showLogin: false
+            });
+        }
+    }
+
     goHome() {
         this.setState({redirect: true});
     }
@@ -40,13 +65,13 @@ class Header extends Component {
         });
     }
     toggleShowMessages() {
-         const { messageDispatch } = this.props;
-         messageDispatch.showMessageCenter();
+        const { messageDispatch } = this.props;
+        messageDispatch.showMessageCenter();
     }
     render() {
-        const { user, theme, tenant, invert, unread } = this.props;
+        const { user, theme, tenant, invert, unread, req, landingPage } = this.props;
+        const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
 
-        const dropDownText = user && user.data  ? user.data.first_name + ' ' + user.data.last_name : '';
         // const dropDownImage = accountIcon;
         const accountLinks = [
             {
@@ -75,6 +100,7 @@ class Header extends Component {
                 invert={invert}
             />
         );
+
         const alertStyle = unread > 0 ? styles.unread : styles.all_read;
         const mail = (
             <div className={`flex-none layout-row layout-align-center-center ${styles.mail_box}`} onClick={this.toggleShowMessages}>
@@ -82,6 +108,7 @@ class Header extends Component {
                 <i className="fa fa-envelope-o"></i>
             </div>
         );
+
         let logoUrl = '';
         let logoStyle;
         if (theme && theme.logoWide) {
@@ -92,16 +119,20 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
+
         const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
+
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
-        const rightCorner = user && user.data && !user.data.guest ? dropDowns : loginPrompt;
+        const rightCorner = user && !user.guest ? dropDowns : loginPrompt;
         const loginModal = (
             <Modal
                 component={
                     <LoginRegistrationWrapper
-                        LoginPageProps={{theme}}
-                        RegistrationPageProps={{theme, tenant}}
-                        initialCompName="LoginPage"
+                        LoginPageProps={{theme, req}}
+                        RegistrationPageProps={{theme, tenant, req, user}}
+                        initialCompName={
+                            this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'
+                        }
                     />
                 }
                 width="40vw"
@@ -110,12 +141,13 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
+        console.log(landingPage);
         return (
-            <div
-                className={`${
-                    styles.header
-                } layout-row flex-100 layout-wrap layout-align-center`}
-            >
+            <div className={landingPage && !this.state.isTop ?
+                `${styles.header_scrollable}
+                layout-row flex-100 layout-wrap layout-align-center`
+                : `${styles.header}
+                layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex layout-row layout-align-start-center">
                     {this.props.menu}
                 </div>
@@ -134,7 +166,7 @@ class Header extends Component {
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                 </div>
-                { this.state.showLogin ? loginModal : '' }
+                { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
             </div>
         );
     }
@@ -153,13 +185,16 @@ Header.propTypes = {
 
 function mapStateToProps(state) {
     const { authentication, tenant, shipment, app, messaging } = state;
-    const { user, loggedIn } = authentication;
+    const { user, loggedIn, loggingIn, registering, loginAttempt } = authentication;
     const { unread, messages } = messaging;
     const { currencies } = app;
     return {
         user,
         tenant,
         loggedIn,
+        loggingIn,
+        registering,
+        loginAttempt,
         shipment,
         currencies,
         unread,

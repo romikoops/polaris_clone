@@ -4,6 +4,7 @@ import styles from '../Admin.scss';
 import { AdminHubTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
 export class AdminSearchableHubs extends Component {
     constructor(props) {
         super(props);
@@ -13,6 +14,11 @@ export class AdminSearchableHubs extends Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
+    }
+    componentDidUpdate(prevProps) {
+        if (prevProps.hubs !== this.props.hubs) {
+            this.handleSearchChange({target: {value: ''}});
+        }
     }
     handleClick(hub) {
         const {handleClick, adminDispatch} = this.props;
@@ -68,24 +74,24 @@ export class AdminSearchableHubs extends Component {
                 return  <AdminHubTile key={v4()} hub={hub} theme={theme}  handleClick={this.handleClick}/>;
             });
         }
-         const viewType = this.props.sideScroll ?
+        const viewType = this.props.sideScroll ?
             (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-                    <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-                        {hubsArr}
-                    </div>
-                </div>) :
+                <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+                    {hubsArr}
+                </div>
+            </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                    <div className="layout-row flex-none layout-align-start-center layout-wrap">
-                        {hubsArr}
-                    </div>
-                </div>);
+                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                    {hubsArr}
+                </div>
+            </div>);
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-none layput-row layout-align-start-center">
-                        <p className="flex-none sub_header_text"> Hubs</p>
+                    <div className="flex-60 layput-row layout-align-start-center">
+                        <MainTextHeading theme={theme} text="Hubs" />
                     </div>
-                    <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
+                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"
@@ -101,7 +107,7 @@ export class AdminSearchableHubs extends Component {
                             <p className="flex-none">See all</p>
                         </div>
                     </div> :
-                     ''}
+                    ''}
             </div>
         );
     }

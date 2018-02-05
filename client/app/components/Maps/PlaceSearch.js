@@ -134,8 +134,14 @@ export class PlaceSearch extends Component {
         for (let i = 0; i < newMarkers.length; i++) {
             bounds.extend(newMarkers[i].getPosition());
         }
+        if (newMarkers.length > 1) {
+            map.fitBounds(bounds);
+        } else if (newMarkers.length === 1) {
+            map.setCenter(bounds.getCenter());
+            map.setZoom(14);
+        }
 
-        map.fitBounds(bounds);
+        // map.fitBounds(bounds);
     }
 
 

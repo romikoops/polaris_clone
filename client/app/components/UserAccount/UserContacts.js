@@ -77,42 +77,41 @@ class UserContacts extends Component {
                 />
             </div>);
         const newContactBox = (
-                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
-                    <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact}`}>
+                <div className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.new_contact_backdrop}`} onClick={this.toggleNewContact}>
+                </div>
+                <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
+                    <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                        <i className="fa fa-user flex-none" style={textStyle}></i>
+                        <p className="flex-none">New Contact</p>
                     </div>
-                    <div className={`flex-none layout-row layout-wrap layout-align-start-start ${styles.new_contact_content}`}>
-                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <i className="fa fa-user flex-none" style={textStyle}></i>
-                            <p className="flex-none">New Contact</p>
-                        </div>
-                        <input className={styles.input_100} type="text" value={newContact.companyName} name={'companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newContact.firstName} name="firstName" placeholder="First Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newContact.lastName} name="lastName" placeholder="Last Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newContact.email} name="email" placeholder="Email" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={newContact.phone} name="phone" placeholder="Phone" onChange={this.handleFormChange} />
-                        <input className={styles.input_street} type="text" value={newContact.street} name="street" placeholder="Street" onChange={this.handleFormChange} />
-                        <input className={styles.input_no} type="text" value={newContact.number} name="number" placeholder="Number" onChange={this.handleFormChange} />
-                        <input className={styles.input_zip} type="text" value={newContact.zipCode} name="zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={newContact.city} name="city" placeholder="City" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={newContact.country} name="country" placeholder="Country" onChange={this.handleFormChange} />
-                        <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
-                            <RoundButton
-                                theme={theme}
-                                size="small"
-                                active
-                                text="Save"
-                                handleNext={this.saveNewContact}
-                                iconClass="fa-floppy-o"
-                            />
-                        </div>
+                    <input className={styles.input_100} type="text" value={newContact.companyName} name={'companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newContact.firstName} name="firstName" placeholder="First Name" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newContact.lastName} name="lastName" placeholder="Last Name" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newContact.email} name="email" placeholder="Email" onChange={this.handleFormChange} />
+                    <input className={styles.input_50} type="text" value={newContact.phone} name="phone" placeholder="Phone" onChange={this.handleFormChange} />
+                    <input className={styles.input_street} type="text" value={newContact.street} name="street" placeholder="Street" onChange={this.handleFormChange} />
+                    <input className={styles.input_no} type="text" value={newContact.number} name="number" placeholder="Number" onChange={this.handleFormChange} />
+                    <input className={styles.input_zip} type="text" value={newContact.zipCode} name="zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
+                    <input className={styles.input_cc} type="text" value={newContact.city} name="city" placeholder="City" onChange={this.handleFormChange} />
+                    <input className={styles.input_cc} type="text" value={newContact.country} name="country" placeholder="Country" onChange={this.handleFormChange} />
+                    <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
+                        <RoundButton
+                            theme={theme}
+                            size="small"
+                            active
+                            text="Save"
+                            handleNext={this.saveNewContact}
+                            iconClass="fa-floppy-o"
+                        />
                     </div>
                 </div>
-            );
+            </div>
+        );
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 { newContactBool ? newContactBox  : ''}
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <h3 className={` ${styles.sec_title_text} flex-none clip`} style={textStyle} >Contacts</h3>
                     {newButton}
                 </div>
                 <Switch className="flex">

@@ -12,8 +12,8 @@ class ValidatedInputFormsy extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.firstRenderInputs) {
-            this.setState({firstRender: true});
+        if(nextProps.firstRenderInputs || nextProps.nextStageAttempt === undefined) {
+            this.setState({firstRender: nextProps.firstRenderInputs});
         }
     }
 
@@ -23,7 +23,7 @@ class ValidatedInputFormsy extends Component {
         const validationPassed = this.props.isValidValue(event.target.value);
 
         // break out of function if validation did not pass. This assumes default state in
-        // shipmentDetails has errors set to true
+        // parent has errors set to true
         if (!validationPassed) return;
 
         // Trigger onChange event, and flag errorsHaveUpdated as true, in order to avoid an infinite loop.
@@ -33,7 +33,7 @@ class ValidatedInputFormsy extends Component {
 
     changeValue(event) {
         this.props.onChange(event, !this.props.isValidValue(event.target.value));
-        this.props.setFirstRenderInputs(false);
+        if (this.props.setFirstRenderInputs) this.props.setFirstRenderInputs(false);
         this.setState({firstRender: false});
         // setValue() will set the value of the component, which in
         // turn will validate it and the rest of the form
@@ -42,6 +42,7 @@ class ValidatedInputFormsy extends Component {
         this.props.setValue(event.currentTarget.value);
     }
     render() {
+        // debugger;
         // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
         const inputStyles = {
@@ -59,12 +60,15 @@ class ValidatedInputFormsy extends Component {
         return (
             <div className={styles.wrapper_input}>
                 <input
-                	style={inputStyles}
+                    ref={this.props.inputRef}
+                    style={inputStyles}
                     onChange={this.changeValue}
+                    placeholder={this.props.placeholder}
                     type={this.props.type}
                     value={value}
                     name={this.props.name}
                     disabled={this.props.disabled}
+                    className={this.props.className}
                 />
                 <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
             </div>

@@ -15,14 +15,21 @@ export class AdminSearchableShipments extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.shipments !== this.props.shipments) {
+            this.handleSearchChange({target: {value: ''}});
+        }
+    }
     seeAll() {
         const {seeAll, adminDispatch} = this.props;
         if (seeAll) {
             seeAll();
         } else {
-            adminDispatch.goTo('/admin/shipments');
+            adminDispatch.getShipments(true);
         }
     }
+
     handleClick(shipment) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {
@@ -31,8 +38,15 @@ export class AdminSearchableShipments extends Component {
             adminDispatch.getShipment(shipment.id, true);
         }
     }
+    seeAll() {
+        const {seeAll, adminDispatch} = this.props;
+        if (seeAll) {
+            seeAll();
+        } else {
+            adminDispatch.goTo('/admin/shipments');
+        }
+    }
     handleSearchChange(event) {
-        console.log(event.target.value);
         if (event.target.value === '') {
             this.setState({
                 shipments: this.props.shipments
@@ -47,7 +61,7 @@ export class AdminSearchableShipments extends Component {
                 location: 0,
                 distance: 50,
                 maxPatternLength: 32,
-                minMatchCharLength: 2,
+                minMatchCharLength: 5,
                 keys: keys
             };
             const fuse = new Fuse(this.props.shipments, options);
@@ -55,24 +69,32 @@ export class AdminSearchableShipments extends Component {
             return fuse.search(event.target.value);
         };
 
-        const filteredShipments = search(['clientName', 'imc_reference', 'companyName', 'originHub', 'destinationHub']);
-        console.log(filteredShipments);
+        const filteredShipments = search(['imc_reference', 'companyName', 'originHub', 'destinationHub']);
+
         this.setState({
             shipments: filteredShipments
         });
     }
+    limitArray(shipments) {
+        const { limit } = this.props;
+        return limit ?
+            shipments.slice(0, limit)
+            : shipments;
+    }
     render() {
         const { hubs, theme, handleShipmentAction, title, userView, seeAll } = this.props;
         const { shipments } = this.state;
+
+
         let shipmentsArr;
         if (shipments.length) {
-            shipmentsArr = shipments.map((ship) => {
+            shipmentsArr = this.limitArray(shipments).map((ship) => {
                 return  userView ?
                     <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
                     : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
             });
         } else if (this.props.shipments) {
-            shipmentsArr = shipments.map((ship) => {
+            shipmentsArr = this.limitArray(this.props.shipments).map((ship) => {
                 return  userView ?
                     <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
                     : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
@@ -92,10 +114,10 @@ export class AdminSearchableShipments extends Component {
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-none layput-row layout-align-start-center">
-                        <p className="flex-none sub_header_text"> {title ? title : 'Shipments'}</p>
+                    <div className="flex-60 layput-row layout-align-start-center">
+                        <b><p className="flex sub_header_text"> {title ? title : 'Shipments'}</p></b>
                     </div>
-                    <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
+                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"

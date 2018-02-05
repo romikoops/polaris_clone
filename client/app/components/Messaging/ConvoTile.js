@@ -30,7 +30,6 @@ export class ConvoTile extends Component {
         const iconStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        console.log(theme);
         return (
             <div className={`flex-100 layout-row layout-align-start-start  ${styles.convo_tile_wrapper}`} onClick={() => viewConvo(conversation)}>
                 <ConvoTile className={`flex layout-row layout-align-center-start pointy layout-wrap  ${styles.convo_tile}`}>
