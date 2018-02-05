@@ -52,7 +52,7 @@ class Itinerary < ApplicationRecord
               stop_id: stop.id
             }
           else 
-            journey_start += steps_in_order[stop.index - 1]
+            journey_start += steps_in_order[stop.index - 1].days
             data = {
               eta: journey_start,
               etd: journey_start + 1.day,

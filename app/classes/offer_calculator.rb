@@ -130,10 +130,11 @@ class OfferCalculator
     schedule_obj = {}
     @itineraries.each do |itin|
       origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
-      destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
+      destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).limit(20).order(:etd).uniq
       layovers = origin_layovers + destination_layovers
       schedule_obj[itin.id] = layovers.group_by(&:trip_id)
     end
+    byebug
     @trips = schedule_obj
   end
 
@@ -205,6 +206,7 @@ class OfferCalculator
         end
       end
     end
+    byebug
     @schedules = schedules
   end
 
