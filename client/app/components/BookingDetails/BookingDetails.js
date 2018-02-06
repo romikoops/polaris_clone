@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './BookingDetails.scss';
 import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
-import { AddressBook } from '../AddressBook/AddressBook';
+import { ContactSetter } from '../ContactSetter/ContactSetter';
 import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
@@ -309,7 +309,7 @@ export class BookingDetails extends Component {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
         const aBook = (
-            <AddressBook
+            <ContactSetter
                 contacts={contacts}
                 userLocations={userLocations}
                 theme={theme}

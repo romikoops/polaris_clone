@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactBox.scss';
 // import {v4} from 'node-uuid';
-// import { RoundButton } from '../RoundButton/RoundButton';
+import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
 import GmapsWrapper from '../../hocs/GmapsWrapper';
 import { PlaceSearch } from '../Maps/PlaceSearch';
@@ -13,26 +13,25 @@ export class ShipmentContactBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            contact: {
-                location: {
-                    number: '',
-                    street: '',
-                    zipCode: '',
-                    city: '',
-                    country: '',
-                    fullAddress: ''
-                }
-            }
+            contactData: props.contactData
         };
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handlePlaceChange = this.handlePlaceChange.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            contactData: nextProps.contactData
+        });
     }
 
     handleFormChange(event) {
         this.props.handleChange(event);
     }
     handlePlaceChange(place) {
-        const tmpAddress = {
+        const newLocation = {
             number: '',
             street: '',
             zipCode: '',
@@ -42,43 +41,61 @@ export class ShipmentContactBox extends Component {
         };
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
-                tmpAddress.number = ac.long_name;
+                newLocation.number = ac.long_name;
             }
 
             if (ac.types.includes('route') || ac.types.includes('premise')) {
-                tmpAddress.street = ac.long_name;
+                newLocation.street = ac.long_name;
             }
 
             if (ac.types.includes('administrative_area_level_1') || ac.types.includes('locality')) {
-                tmpAddress.city = ac.long_name;
+                newLocation.city = ac.long_name;
             }
 
             if (ac.types.includes('postal_code')) {
-                tmpAddress.zipCode = ac.long_name;
+                newLocation.zipCode = ac.long_name;
             }
 
             if (ac.types.includes('country')) {
-                tmpAddress.country = ac.long_name;
+                newLocation.country = ac.long_name;
             }
         });
-        tmpAddress.latitude = place.geometry.location.lat();
-        tmpAddress.longitude = place.geometry.location.lng();
-        tmpAddress.fullAddress = place.formatted_address;
-        tmpAddress.geocoded_address = place.formatted_address;
-        this.setState({ contact: {
-            location: tmpAddress
-        }});
+        newLocation.latitude = place.geometry.location.lat();
+        newLocation.longitude = place.geometry.location.lng();
+        newLocation.fullAddress = place.formatted_address;
+        newLocation.geocoded_address = place.formatted_address;
+        this.setState({
+            contactData: { ...this.state.contactData, location: newLocation }
+        });
         this.setState({
             autocomplete: { ...this.state.autocomplete, location: true }
         });
     }
+    handleSubmit(contactData) {
+        this.props.setContact(contactData);
+        this.refs.contactForm.reset();
+    }
+    handleInvalidSubmit() {
+        console.log('invalid');
+    }
+    mapInputs(inputs) {
+        const location = {};
+        const contact = {};
+
+        for(const k of Object.keys(inputs)) {
+            if (k.split('-')[0] === 'location') {
+                location[k.split('-')[1]] = inputs[k];
+            } else {
+                contact[k] = inputs[k];
+            }
+        }
+
+        return { location, contact };
+    }
     render() {
         const { theme } = this.props;
-        const { contact } = this.state;
+        const { contactData } = this.state;
 
-        const { location } = this.state;
-        console.log('location');
-        console.log(location);
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
@@ -88,6 +105,8 @@ export class ShipmentContactBox extends Component {
                             name="form"
                             onValidSubmit={this.handleSubmit}
                             onInvalidSubmit={this.handleInvalidSubmit}
+                            mapping={this.mapInputs}
+                            ref="contactForm"
                         >
                             <GmapsWrapper
                                 theme={theme}
@@ -97,82 +116,78 @@ export class ShipmentContactBox extends Component {
                             />
                             <FormsyInput className={styles.input_100}
                                 type="text"
-                                value={contact.companyName}
+                                value={contactData.contact.companyName}
                                 name="companyName"
                                 placeholder="Company Name"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_50}
                                 type="text"
-                                value={contact.firstName}
+                                value={contactData.firstName}
                                 name="firstName"
                                 placeholder="First Name"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_50}
                                 type="text"
-                                value={contact.lastName}
+                                value={contactData.contact.lastName}
                                 name="lastName"
                                 placeholder="Last Name"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_50}
                                 type="text"
-                                value={contact.email}
+                                value={contactData.contact.email}
                                 name="email"
                                 placeholder="Email"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_50}
                                 type="text"
-                                value={contact.phone}
+                                value={contactData.contact.phone}
                                 name="phone"
                                 placeholder="Phone"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_street}
                                 type="text"
-                                value={contact.location.street}
-                                name="street"
+                                value={contactData.location.street}
+                                name="location-street"
                                 placeholder="Street"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_no}
                                 type="text"
-                                value={contact.location.number}
-                                name="number"
+                                value={contactData.location.number}
+                                name="location-number"
                                 placeholder="Number"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_zip}
                                 type="text"
-                                value={contact.location.zipCode}
-                                name="zipCode"
+                                value={contactData.location.zipCode}
+                                name="location-zipCode"
                                 placeholder="Postal Code"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_cc}
                                 type="text"
-                                value={contact.location.city}
-                                name="city"
+                                value={contactData.location.city}
+                                name="location-city"
                                 placeholder="City"
-                                onChange={this.handleFormChange}
                             />
                             <FormsyInput
                                 className={styles.input_cc}
                                 type="text"
-                                value={contact.location.country}
-                                name="country"
+                                value={contactData.location.country}
+                                name="location-country"
                                 placeholder="Country"
-                                onChange={this.handleFormChange}
+                            />
+                            <RoundButton
+                                text={`Set ${contactData.type}`}
+                                theme={theme}
+                                size="small"
+                                active
                             />
                         </Formsy>
                     </div>

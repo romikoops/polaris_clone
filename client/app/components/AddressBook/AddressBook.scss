@@ -1,82 +1,9 @@
 :local {
-  .contact_header{
-    margin: 0;
-    color: #212121; 
-    font-size: 16px;  
-    line-height: 18px;
-  }
-
-  .contact_details {
-    margin: 0;
-    color: #212121; 
-    font-size: 14px;  
-    line-height: 16px;
-  }
-  .contact_card {
-    margin: 5px 0;
-  }
   .contact_scroll {
-    height: 50vh;
+    height: 40vh;
     padding: 10px;
     overflow-y: scroll;
     overflow-x: none;
     box-shadow: 0 0 7px rgba(black, 0.08);
   }
-  .summary {
-    min-height: 50vh;
-    box-shadow: 0 0 7px rgba(black, 0.08);
-    padding: 20px 30px;
-  }
-  .prompt h1{
-    color: #2C2C2C;
-    font-size: 20px;
-    line-height: 45px;
-  }
-  .result_content {
-    padding: 3px;
-    border-radius: 3px;
-    border: 0.5px solid rgba(black, 0.08);
-    background-color: #FCFCFC;  
-    height: 20px;
-  }
-  .n_arr_elem {
-    margin-bottom: 3px;
-  }
-  .results {
-    padding: 5px 0;
-    border-radius: 0.5px;
-    h4 {
-      font-weight: normal;
-      font-size: 14px;
-      margin: 0 0 8px 0;
-    }
-  }
-  .results, .n_results {
-    margin: 0;
-  }
-  .results p{
-    margin: 0;
-    color: #212121; 
-    font-size: 12px;  
-    line-height: 14px;
-  }
-  .n_results p{
-    margin: 0;
-    color: #212121; 
-    font-size: 10px;  
-    line-height: 12px;
-  }
-  .results p.title {
-    margin: 0;
-    color: #212121; 
-    font-size: 16px;  
-    line-height: 18px;
-  }
-  .n_results p.title {
-    margin: 0;
-    color: #212121; 
-    font-size: 14px;  
-    line-height: 16px;
-  }
-
 }
