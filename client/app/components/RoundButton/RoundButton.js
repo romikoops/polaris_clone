@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './RoundButton.scss';
-
+import { gradientGenerator } from '../../helpers';
 export class RoundButton extends Component {
     render() {
         const { text, theme, active, back, icon, iconClass, size } = this.props;
 
-        const activeBtnStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(95.41deg, ' +
-                      theme.colors.primary +
-                      ' 0%,' +
-                      theme.colors.secondary +
-                      ' 100%)'
-                    : 'black'
-        };
-
+        const activeBtnStyle = theme && theme.colors ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        console.log(activeBtnStyle);
         const btnStyle = this.props.active ? activeBtnStyle : {};
 
         let bStyle;
