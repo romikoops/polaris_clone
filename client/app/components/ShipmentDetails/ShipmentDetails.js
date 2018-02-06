@@ -324,7 +324,7 @@ export class ShipmentDetails extends Component {
     render() {
         const { tenant, user, shipmentData, shipmentDispatch } = this.props;
         const { theme, scope, emails, phones } = tenant.data;
-                const messages = this.props.messages;
+        const messages = this.props.messages;
         let cargoDetails;
         const alertModalMessage = (
             <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
