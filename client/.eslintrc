@@ -1,11 +1,8 @@
 {
-  "plugins": [
-    "json",
-    "jest"
-  ],
-  "extends": [
-    "airbnb", 
-    "standard",
-    "plugin:jest/recommended"
-  ]
+  "plugins": ["json", "jest"],
+  "extends": ["airbnb", "standard", "plugin:jest/recommended"],
+  "rules": {
+    // https://github.com/yannickcr/eslint-plugin-react/issues/1389
+    "react/no-typos": ["warn"]
+  }
 }
