@@ -36,7 +36,7 @@ export class BookingDetails extends Component {
             acceptTerms: false,
             consignee: Object.assign({}, this.newContactData),
             shipper: Object.assign({}, this.newContactData),
-            notifyees: [Object.assign({}, this.newContactData)],
+            notifyees: [],
             insurance: {
                 bool: false,
                 val: 0

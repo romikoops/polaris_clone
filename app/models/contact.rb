@@ -1,7 +1,7 @@
 class Contact < ApplicationRecord
   belongs_to :shipper, class_name: "User"
   has_many :shipment_contacts
-  belongs_to :location
+  belongs_to :location, optional: true
 
   # Validations
   # validates :company_name, presence: true, length: { in: 2..50 }

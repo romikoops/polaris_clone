@@ -140,7 +140,7 @@ export class BookingConfirmation extends Component {
                                 </div>
                                 <div className="flex-33 layout-row layout-align-end layout-wrap">
                                     <p className="flex-100">Booking placed at: {createdDate}</p>
-                                    <p className="flex-100">Booking placed by: {user.data.first_name} {user.data.last_name} </p>
+                                    <p className="flex-100">Booking placed by: {user.first_name} {user.last_name} </p>
                                 </div>
                             </div>
                             <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
