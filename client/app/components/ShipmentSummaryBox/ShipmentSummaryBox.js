@@ -4,6 +4,7 @@ import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { capitalize } from '../../helpers';
+import { gradientCSSGenerator, gradientGenerator, gradientTextGenerator } from '../../helpers';
 export class ShipmentSummaryBox extends Component {
     constructor(props) {
         super(props);
@@ -42,21 +43,25 @@ export class ShipmentSummaryBox extends Component {
     render() {
         const { theme, shipment, hubs, route, user, total, locations } = this.props;
         const { startHub, endHub } = hubs;
-        const gradientFontStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${
+        const gradientFontStyle = theme && theme.colors
+                    ? gradientTextGenerator(
+                        theme.colors.primary,
                         theme.colors.secondary
-                    })`
-                    : 'black'
-        };
+                    )
+                    : {color: 'black'};
+        const gradientStyle = theme && theme.colors
+                    ? gradientGenerator(
+                        theme.colors.primary,
+                        theme.colors.secondary
+                    )
+                    : {background: 'black'};
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
             width: '100%',
             background:
                 theme && theme.colors
-                    ? this.dashedGradient(
+                    ? gradientCSSGenerator(
                         theme.colors.primary,
                         theme.colors.secondary
                     )
@@ -112,7 +117,7 @@ export class ShipmentSummaryBox extends Component {
                                 styles.hubs_row
                             }`}
                         >
-                            <div className={`${styles.header_hub}`}>
+                            <div className={`flex ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
                                         <i
@@ -126,13 +131,13 @@ export class ShipmentSummaryBox extends Component {
                                     <h4 className="flex-85"> {startHub.data.name} </h4>
                                 </div>
                             </div>
-                            <div className={`${styles.connection_graphics}`}>
+                            <div className={`flex-none ${styles.connection_graphics}`}>
                                 <div className="flex-none layout-row layout-align-center-center">
                                     {this.switchIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
                             </div>
-                            <div className={`${styles.header_hub}`}>
+                            <div className={`flex ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
                                         <i className={`fa fa-flag-o clip ${styles.flag}`} style={gradientFontStyle}/>
@@ -148,7 +153,7 @@ export class ShipmentSummaryBox extends Component {
                         >
                             <div
                                 className={`${styles.tot_price} flex-none layout-row layout-align-space-between-center`}
-                                style={gradientFontStyle}
+                                style={gradientStyle}
                             >
                                 <p>Total Price:</p>{' '}
                                 <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />

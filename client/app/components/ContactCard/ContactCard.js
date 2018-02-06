@@ -4,7 +4,7 @@ import styles from './ContactCard.scss';
 import { v4 } from 'node-uuid';
 import { Checkbox } from '../Checkbox/Checkbox';
 import Truncate from 'react-truncate';
-
+import { gradientTextGenerator } from '../../helpers';
 export class ContactCard extends Component {
     constructor(props) {
         super(props);
@@ -27,14 +27,7 @@ export class ContactCard extends Component {
         const { contactData, list, theme } = this.props;
         const { contact, location } = contactData;
         const iconStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(left, ' +
-                      theme.colors.primary +
-                      ',' +
-                      theme.colors.secondary +
-                      ')'
-                    : 'black',
+            ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary),
             paddingRight: '5px'
         };
         return (

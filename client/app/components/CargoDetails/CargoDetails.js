@@ -126,12 +126,12 @@ export class CargoDetails extends Component {
                     <h5 className="flex-100"> Price </h5>
                     <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} {user.currency}</h6>
                 </div>
-                <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
+                <HSCodeRow className="flex-100" containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
             </div>
         );
         const noCustomsBox = (
             <div className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${this.state.showNoCustoms ? styles.show : ''}`}>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     <div className="flex-90 layout-row layout-wrap">
                         <div className="flex-100">
                             <p className={`flex-none ${styles.f_header}`}>
@@ -151,7 +151,7 @@ export class CargoDetails extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     {this.props.totalGoodsValue > 20000 ? (
                         <div className="flex-90 layout-row layout-wrap">
                             <div className="flex-100">
@@ -175,7 +175,7 @@ export class CargoDetails extends Component {
                         ''
                     )}
                 </div>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     <div className="flex-90 layout-row layout-wrap">
                         <div className="flex-100">
                             <p className={`flex-none ${styles.f_header}`}> EORI</p>

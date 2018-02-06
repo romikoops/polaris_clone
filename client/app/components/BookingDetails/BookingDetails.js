@@ -10,7 +10,7 @@ import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
-
+import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
@@ -305,9 +305,7 @@ export class BookingDetails extends Component {
             locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.brightPrimary;
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -346,7 +344,7 @@ export class BookingDetails extends Component {
         </div>);
         const addrView = this.state.addressBook ? aBook : cForm;
         return (
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start no_max" style={{height: '3000px'}}>
 
                 {shipment && theme && hubs ? (
                     <RouteHubBox hubs={hubs} route={schedules} theme={theme} />

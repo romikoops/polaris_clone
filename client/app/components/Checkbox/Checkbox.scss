@@ -42,7 +42,12 @@
         i.show {
           visibility: visible;
           opacity: 1;
+          z-index: 5;
           transform: scale(1);
+          @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+            position: relative;
+            right: 8px;
+          }
         }
       }
       &:checked {

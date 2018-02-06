@@ -351,7 +351,7 @@ export class ShipmentCargoItems extends Component {
                             </div>
                         </div>
                         <div
-                            className={styles.new_container_placeholder}
+                            className={`flex-100 ${styles.new_container_placeholder}`}
                         >
                             { generateSeparator(null, -1) }
                             { generateCargoItem(null, -1) }

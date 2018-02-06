@@ -9,6 +9,7 @@ import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
+import { gradientTextGenerator, gradientGenerator } from '../../helpers';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -38,9 +39,13 @@ export class BookingConfirmation extends Component {
 
       const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
       const cargo = [];
-      const textStyle = {
-          background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-      };
+      const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+      const gradientStyle = theme && theme.colors
+                    ? gradientGenerator(
+                        theme.colors.primary,
+                        theme.colors.secondary
+                    )
+                    : {background: 'black'};
       const tenantName = tenant ? tenant.name : '';
 
       const pushToCargo = (array, Comp) => {
@@ -140,7 +145,7 @@ export class BookingConfirmation extends Component {
                                 </div>
                                 <div className="flex-33 layout-row layout-align-end layout-wrap">
                                     <p className="flex-100">Booking placed at: {createdDate}</p>
-                                    <p className="flex-100">Booking placed by: {user.data.first_name} {user.data.last_name} </p>
+                                    <p className="flex-100">Booking placed by: {user.first_name} {user.last_name} </p>
                                 </div>
                             </div>
                             <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
@@ -164,7 +169,7 @@ export class BookingConfirmation extends Component {
                                         className={`${
                                             styles.tot_price
                                         } flex-none layout-row layout-align-space-between`}
-                                        style={textStyle}
+                                        style={gradientStyle}
                                     >
                                         <p>Total Price:</p>{' '}
                                         <Price value={shipment.total_price} user={user}/>

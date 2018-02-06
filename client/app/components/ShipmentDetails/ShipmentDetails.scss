@@ -1,6 +1,6 @@
 :local {
   .btn_sec{
-    height: 227px;
+    height: 157px;
     padding-top: 48px;
     // border-top: 1px solid #EDEDED;
   }
@@ -9,8 +9,12 @@
     border-top: 1px solid #EDEDED;
   }
   .date_sec {
-    min-height: 187px;
-    border-top: 1px solid #EDEDED;
+    min-height: 140px;
+    border-bottom: 1px solid #EDEDED;
+  }
+  .date_section {
+    height: 160px;
+    // border-bottom: 1px solid #EDEDED;
   }
   .dpb {
     position: relative;
@@ -44,5 +48,8 @@
     &::placeholder {
       color: rgb(211, 104, 80);
     }
+  }
+  .map_cont {
+    min-height: 550px;
   }
 }

@@ -27,7 +27,7 @@ export class ChooseShipment extends Component {
             <div
                 className={`${
                     styles.card_link_row
-                } layout-row flex-100 layout-align-center`}
+                } layout-row flex-100 layout-align-center-start`}
             >
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`}>

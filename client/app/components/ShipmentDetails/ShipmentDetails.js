@@ -456,7 +456,7 @@ export class ShipmentDetails extends Component {
         const dayPickerSection = (
             <div className={`
                 ${styles.date_sec} ${defaults.content_width}
-                layout-row flex-none layout-align-start-center
+                layout-row flex-none layout-align-start-center 
             `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className="flex-100 layout-row layout-align-start-center">
@@ -509,13 +509,13 @@ export class ShipmentDetails extends Component {
         );
 
         return (
-            <div className="layout-row flex-100 layout-wrap">
+            <div className="layout-row flex-100 layout-wrap  SHIP_DETAILS layout-align-start-start">
                 {flash}
                 {alertModal}
-                <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+                <div className={`layout-row flex-100 layout-wrap layout-align-center-center ${styles.date_section}`}>
                     { dayPickerSection }
                 </div>
-                <div className="layout-row flex-100 layout-wrap">
+                <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>
                     {mapBox}
                 </div>
                 <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
