@@ -14,51 +14,29 @@ import { Checkbox } from '../Checkbox/Checkbox';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
+        this.newContactData = {
+            contact: {
+                companyName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: ''
+            },
+            location: {
+                street: '',
+                streetNumber: '',
+                zipCode: '',
+                city: '',
+                country: ''
+            }
+        };
+
         this.state = {
             addressBook: false,
             acceptTerms: false,
-            consignee: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                street: '',
-                number: '',
-                zipCode: '',
-                city: '',
-                country: ''
-            },
-            shipper: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                street: '',
-                number: '',
-                zipCode: '',
-                city: '',
-                country: ''
-            },
-            notifyees: [],
-            default: {
-                contact: {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: '',
-                    street: '',
-                    number: '',
-                    zipCode: '',
-                    city: '',
-                    country: ''
-                },
-                notifyee: {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: ''
-                }
-            },
+            consignee: Object.assign({}, this.newContactData),
+            shipper: Object.assign({}, this.newContactData),
+            notifyees: [Object.assign({}, this.newContactData)],
             insurance: {
                 bool: false,
                 val: 0
@@ -71,11 +49,7 @@ export class BookingDetails extends Component {
             totalGoodsValue: 0,
             cargoNotes: ''
         };
-        this.addNotifyee = this.addNotifyee.bind(this);
         this.removeNotifyee = this.removeNotifyee.bind(this);
-        this.setFromBook = this.setFromBook.bind(this);
-        this.handleInput = this.handleInput.bind(this);
-        this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
         this.toggleAddressBook = this.toggleAddressBook.bind(this);
         this.toNextStage = this.toNextStage.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
@@ -85,6 +59,7 @@ export class BookingDetails extends Component {
         this.deleteCode = this.deleteCode.bind(this);
         this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
         this.setCustomsFee = this.setCustomsFee.bind(this);
+        this.setContact = this.setContact.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage, hideRegistration} = this.props;
@@ -133,26 +108,6 @@ export class BookingDetails extends Component {
             }
         });
     }
-    setFromBook(target, value) {
-        if (target === 'notifyee') {
-            this.setNotifyeesFromBook(target, value);
-        } else {
-            this.setState({
-                [target]: {
-                    firstName: value.contact.first_name,
-                    companyName: value.contact.company_name,
-                    lastName: value.contact.last_name,
-                    email: value.contact.email,
-                    phone: value.contact.phone,
-                    street: value.location.street,
-                    number: value.location.street_number,
-                    zipCode: value.location.zip_code,
-                    city: value.location.city,
-                    country: value.location.country
-                }
-            });
-        }
-    }
     handleInsurance() {
         const {insurance} = this.state;
 
@@ -173,32 +128,9 @@ export class BookingDetails extends Component {
         }
     }
 
-    setNotifyeesFromBook(target, value) {
-        const tmpAdd = {
-            firstName: value.contact.first_name,
-            lastName: value.contact.last_name,
-            email: value.contact.email,
-            phone: value.contact.phone
-        };
-        const notifyees = this.state.notifyees;
-        if (notifyees.indexOf(tmpAdd) > -1) {
-            notifyees.slice(notifyees.indexOf(tmpAdd), 1);
-            this.setState({notifyees});
-        } else {
-            notifyees.push(tmpAdd);
-            this.setState({notifyees});
-        }
-    }
-
     toggleAddressBook() {
         const addressBool = this.state.addressBook;
         this.setState({ addressBook: !addressBool });
-    }
-
-    addNotifyee() {
-        const prevArr = Object.assign([], this.state.notifyees);
-        prevArr.push(Object.assign({}, this.state.default.notifyee));
-        this.setState({ notifyees: prevArr });
     }
 
     removeNotifyee(not) {
@@ -206,17 +138,6 @@ export class BookingDetails extends Component {
         const newArr = prevArr.filter(n => n !== not);
         console.log(newArr);
         this.setState({ notifyees: newArr });
-    }
-
-    handleInput(event) {
-        const { name, value } = event.target;
-        const targetKeys = name.split('-');
-        this.setState({
-            [targetKeys[0]]: {
-                ...this.state[targetKeys[0]],
-                [targetKeys[1]]: value
-            }
-        });
     }
 
     handleCargoInput(event) {
@@ -230,20 +151,6 @@ export class BookingDetails extends Component {
         }
     }
 
-    handleNotifyeeInput(event) {
-        const { name, value } = event.target;
-        console.log(name, value);
-        const targetKeys = name.split('-');
-        const ind = parseInt(targetKeys[1], 10);
-        console.log(ind);
-        const notifyees = this.state.notifyees;
-        console.log(notifyees);
-        notifyees[ind][targetKeys[2]] = value;
-        console.log(notifyees);
-        this.setState({
-            notifyees: notifyees
-        });
-    }
     orderTotal() {
         const { shipmentData } = this.props;
         const { customs, insurance } = this.state;
@@ -287,6 +194,15 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
+    setContact(contactData, type) {
+        if (type === 'notifyee') {
+            const notifyees = this.state.notifyees;
+            notifyees.push(contactData);
+            this.setState({ notifyees });
+        } else {
+            this.setState({ [type]: contactData });
+        }
+    }
 
     closeBook() {
         this.setState({ addressBook: false });
@@ -312,8 +228,11 @@ export class BookingDetails extends Component {
             <ContactSetter
                 contacts={contacts}
                 userLocations={userLocations}
+                shipper={shipper}
+                consignee={consignee}
+                notifyees={notifyees}
+                setContact={this.setContact}
                 theme={theme}
-                setDetails={this.setFromBook}
                 closeAddressBook={this.toggleAddressBook}
             />
         );
@@ -321,13 +240,9 @@ export class BookingDetails extends Component {
             <ShipmentContactsBox
                 consignee={consignee}
                 shipper={shipper}
-                addNotifyee={this.addNotifyee}
                 notifyees={notifyees}
                 theme={theme}
-                toggleAddressBook={this.toggleAddressBook}
-                handleChange={this.handleInput}
                 removeNotifyee={this.removeNotifyee}
-                handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );
         const acceptedBtn = (<div className="flex-none layout-row">
@@ -353,6 +268,7 @@ export class BookingDetails extends Component {
                 ) : (
                     ''
                 )}
+                <RoundButton handleNext={this.toggleAddressBook} text="toggle" active />
                 <div className={` ${styles.contacts_border} flex-100 layout-row`}>
                     {addrView}
                 </div>

@@ -5,7 +5,8 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { capitalize } from '../../helpers/stringTools';
-import { ShipmentContactBox } from '../ShipmentContactBox/ShipmentContactBox';
+import { camelizeKeys } from '../../helpers/objectTools';
+import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm';
 import { AddressBook } from '../AddressBook/AddressBook';
 
 export class ContactSetter extends Component {
@@ -32,48 +33,29 @@ export class ContactSetter extends Component {
 
     this.state = {
     	contactData: this.newContactData,
-      shipper: {},
-      consignee: {},
-      notifyees: []
     };
     this.contactTypes = ['shipper', 'consignee', 'notifyee'];
     this.autofillContact = this.autofillContact.bind(this);
     this.setContact = this.setContact.bind(this);
-    this.toggleNotifyees = this.toggleNotifyees.bind(this);
   }
 
-  toggleNotifyees(id) {
-    this.setState({
-      selectedNotifyees: {
-        ...this.state.selectedNotifyees,
-        [id]: !this.state.selectedNotifyees[id]
-	    }
-    });
-  }
   autofillContact(contactData) {
   	this.setState({
   		contactData: {
-	  		...this.state.contactData,
-	  		...contactData
+  			type: this.state.contactData.type,
+	  		contact: camelizeKeys(contactData.contact),
+	  		location: camelizeKeys(contactData.location)
   		}
   	});
   }
 
   setContact(contactData) {
   	const type = this.state.contactData.type;
-    // this.props.setDetails(type, val);
 
     const newState = {
       contactData: Object.assign({}, this.newContactData)
     };
-
-		if (type === 'notifyee') {
-      const notifyees = this.state.notifyees;
-      notifyees.push(contactData);
-      newState.notifyees = notifyees;
-		} else {
-      newState[type] = contactData;
-		}
+    this.props.setContact(contactData, type);
 
     const contactTypeIndex = Math.min(
         this.contactTypes.indexOf(type) + 1,
@@ -85,9 +67,9 @@ export class ContactSetter extends Component {
   }
 
   availableContacts() {
-  	const { shipper, consignee, notifyees, contactData } = this.state;
+  	const { contactData } = this.state;
 
-  	const { userLocations } = this.props;
+  	const { userLocations, shipper, consignee, notifyees } = this.props;
   	let { contacts } = this.props;
   	if (contactData.type === 'shipper') contacts = [...userLocations, ...contacts];
 
@@ -114,7 +96,7 @@ export class ContactSetter extends Component {
             <Tooltip theme={theme} icon="fa-info-circle" text={contactData.type} />
           </div>
           <div className="flex-50">
-            <ShipmentContactBox
+            <ShipmentContactForm
               contactData={contactData}
               theme={theme}
               setContact={this.setContact}
@@ -135,7 +117,7 @@ export class ContactSetter extends Component {
            	`}>
               <RoundButton
                 active
-                handlxtSetter={this.props.SetCloseAddressBook}
+                handleNext={this.props.closeAddressBook}
                 theme={theme}
                 text="Done"
               />

@@ -30,9 +30,7 @@ class FormsyInput extends Component {
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
         }
-        console.log(this.props.getValue());
         const value = this.props.getValue() !== undefined ? this.props.getValue().toString() : '';
-        console.log(this.props.value);
         return (
             <div className={styles.wrapper_input}>
                 <input

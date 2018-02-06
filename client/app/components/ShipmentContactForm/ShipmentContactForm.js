@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './ShipmentContactBox.scss';
+import styles from './ShipmentContactForm.scss';
 // import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
@@ -9,7 +9,7 @@ import { PlaceSearch } from '../Maps/PlaceSearch';
 import Formsy from 'formsy-react';
 import FormsyInput from '../FormsyInput/FormsyInput';
 
-export class ShipmentContactBox extends Component {
+export class ShipmentContactForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,7 +32,7 @@ export class ShipmentContactBox extends Component {
     }
     handlePlaceChange(place) {
         const newLocation = {
-            number: '',
+            streetNumber: '',
             street: '',
             zipCode: '',
             city: '',
@@ -41,7 +41,7 @@ export class ShipmentContactBox extends Component {
         };
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
-                newLocation.number = ac.long_name;
+                newLocation.streetNumber = ac.long_name;
             }
 
             if (ac.types.includes('route') || ac.types.includes('premise')) {
@@ -123,7 +123,7 @@ export class ShipmentContactBox extends Component {
                             <FormsyInput
                                 className={styles.input_50}
                                 type="text"
-                                value={contactData.firstName}
+                                value={contactData.contact.firstName}
                                 name="firstName"
                                 placeholder="First Name"
                             />
@@ -158,8 +158,8 @@ export class ShipmentContactBox extends Component {
                             <FormsyInput
                                 className={styles.input_no}
                                 type="text"
-                                value={contactData.location.number}
-                                name="location-number"
+                                value={contactData.location.streetNumber}
+                                name="location-streetNumber"
                                 placeholder="Number"
                             />
                             <FormsyInput
@@ -196,7 +196,7 @@ export class ShipmentContactBox extends Component {
         );
     }
 }
-ShipmentContactBox.propTypes = {
+ShipmentContactForm.propTypes = {
     theme: PropTypes.object,
     shipmentData: PropTypes.object,
     user: PropTypes.object,
