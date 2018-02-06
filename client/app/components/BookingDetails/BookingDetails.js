@@ -249,7 +249,7 @@ export class BookingDetails extends Component {
                 ) : (
                     ''
                 )}
-                <div className={`${styles.contacts_border} flex-100 layout-row`}>
+                <div className={`${styles.wrapper_contact_setter} flex-100 layout-row`}>
                     <ContactSetter
                         contacts={contacts}
                         userLocations={userLocations}
