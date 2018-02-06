@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './ContactSetter.scss';
-import { RoundButton } from '../RoundButton/RoundButton';
+// import styles from './ContactSetter.scss';
 import defs from '../../styles/default_classes.scss';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { capitalize } from '../../helpers/stringTools';
 import { camelizeKeys } from '../../helpers/objectTools';
 import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm';
 import { AddressBook } from '../AddressBook/AddressBook';
+import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
+
 
 export class ContactSetter extends Component {
   constructor(props) {
@@ -81,13 +82,11 @@ export class ContactSetter extends Component {
   }
 
   render() {
-    const { theme } = this.props;
+    const { theme, shipper, consignee, notifyees } = this.props;
     const { contactData } = this.state;
 
     return (
-      <div className={`
-      	${styles.contact_setter} flex-100 layout-row layout-wrap layout-align-center-start
-      `}>
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`
         	flex-none ${defs.content_width} layout-row layout-wrap
         `}>
@@ -110,18 +109,14 @@ export class ContactSetter extends Component {
 							theme={theme}
 						/>
           </div>
-
           <div className="flex-100 layout-row layout-align-center-center">
-            <div className={`
-              ${defs.content_width} layout-row layout-align-end-center ${defs.button_padding}
-           	`}>
-              <RoundButton
-                active
-                handleNext={this.props.closeAddressBook}
-                theme={theme}
-                text="Done"
-              />
-            </div>
+	          <ShipmentContactsBox
+              consignee={consignee}
+              shipper={shipper}
+              notifyees={notifyees}
+              theme={theme}
+              removeNotifyee={this.props.removeNotifyee}
+	          />
           </div>
         </div>
       </div>
@@ -134,5 +129,4 @@ ContactSetter.propTypes = {
     userLocations: PropTypes.array,
     theme: PropTypes.object,
     setDetails: PropTypes.func,
-    SetCloseAddressBook: PropTypes.func
 };

@@ -5,7 +5,6 @@ import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { ContactSetter } from '../ContactSetter/ContactSetter';
 import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
-import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
@@ -224,42 +223,24 @@ export class BookingDetails extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        const aBook = (
-            <ContactSetter
-                contacts={contacts}
-                userLocations={userLocations}
-                shipper={shipper}
-                consignee={consignee}
-                notifyees={notifyees}
-                setContact={this.setContact}
-                theme={theme}
-                closeAddressBook={this.toggleAddressBook}
-            />
+        const acceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    handleNext={this.toNextStage}
+                    theme={theme}
+                    text="Finish Booking"
+                    active
+                />
+            </div>
         );
-        const cForm = (
-            <ShipmentContactsBox
-                consignee={consignee}
-                shipper={shipper}
-                notifyees={notifyees}
-                theme={theme}
-                removeNotifyee={this.removeNotifyee}
-            />
+        const nonAcceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    text="Finish Booking"
+                />
+            </div>
         );
-        const acceptedBtn = (<div className="flex-none layout-row">
-            <RoundButton
-                active
-                handleNext={this.toNextStage}
-                theme={theme}
-                text="Finish Booking"
-            />
-        </div>);
-        const nonAcceptedBtn = (<div className="flex-none layout-row">
-            <RoundButton
-                theme={theme}
-                text="Finish Booking"
-            />
-        </div>);
-        const addrView = this.state.addressBook ? aBook : cForm;
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
 
@@ -268,9 +249,17 @@ export class BookingDetails extends Component {
                 ) : (
                     ''
                 )}
-                <RoundButton handleNext={this.toggleAddressBook} text="toggle" active />
-                <div className={` ${styles.contacts_border} flex-100 layout-row`}>
-                    {addrView}
+                <div className={`${styles.contacts_border} flex-100 layout-row`}>
+                    <ContactSetter
+                        contacts={contacts}
+                        userLocations={userLocations}
+                        shipper={shipper}
+                        consignee={consignee}
+                        notifyees={notifyees}
+                        setContact={this.setContact}
+                        theme={theme}
+                        removeNotifyee={this.removeNotifyee}
+                    />
                 </div>
                 <CargoDetails
                     theme={theme}
