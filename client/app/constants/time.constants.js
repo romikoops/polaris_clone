@@ -1,3 +1,5 @@
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-export const moment = extendMoment(Moment);
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+
+export const moment = extendMoment(Moment)
+export default moment

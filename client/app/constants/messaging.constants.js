@@ -19,4 +19,6 @@ export const messagingConstants = {
   MARK_AS_READ_SUCCESS: 'MARK_AS_READ_SUCCESS',
   MARK_AS_READ_FAILURE: 'MARK_AS_READ_FAILURE',
   SHOW_MESSAGE_CENTER: 'SHOW_MESSAGE_CENTER'
-};
+}
+
+export default messagingConstants
