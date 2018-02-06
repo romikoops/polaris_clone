@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import FileUploader from '../FileUploader/FileUploader';
 import FileTile from '../FileTile/FileTile';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { gradientTextGenerator } from '../../helpers';
 export class UserShipmentView extends Component {
     constructor(props) {
         super(props);
@@ -89,9 +90,7 @@ export class UserShipmentView extends Component {
             }
         `;
         const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const nArray = [];
         const cargoView = [];
         const docView = [];

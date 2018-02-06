@@ -44,7 +44,7 @@ class App extends Component {
             <div className="layout-fill layout-row layout-wrap layout-align-start hundred">
                 {/* <div className="flex-100 layout-row height_100">*/}
                 {/* <SideNav/>*/}
-                <div className="flex-100 mc layout-row  layout-align-start ie_frame">
+                <div className="flex-100 mc layout-row  layout-align-start">
                     { showMessages || sending ? <MessageCenter /> : '' }
                     {isFetching ? <Loading theme={theme} text="loading..." /> : ''}
                     { user && user.id && tenant && tenant.data && user.tenant_id !== tenant.data.id ? <Redirect to="/signout" /> : '' }

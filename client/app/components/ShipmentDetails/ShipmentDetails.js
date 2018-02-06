@@ -307,7 +307,7 @@ export class ShipmentDetails extends Component {
     }
 
     returnToDashboard() {
-        this.props.shipmentDispatch.goTo('/dashboard');
+        this.props.shipmentDispatch.getDashboard(true);
     }
 
     toggleCarriage(target, value) {
@@ -321,7 +321,7 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        const { tenant, user, shipmentData, shipmentDispatch } = this.props;
+        const { tenant, user, shipmentData } = this.props;
         const { theme, scope, emails, phones } = tenant.data;
         const messages = this.props.messages;
         let cargoDetails;
@@ -509,7 +509,7 @@ export class ShipmentDetails extends Component {
         );
 
         return (
-            <div className="layout-row flex-100 layout-wrap  SHIP_DETAILS layout-align-start-start">
+            <div className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start" style={{height: '1800px'}}>
                 {flash}
                 {alertModal}
                 <div className={`layout-row flex-100 layout-wrap layout-align-center-center ${styles.date_section}`}>
@@ -545,7 +545,6 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
-                            handleNext={() => shipmentDispatch.toDashboard()}
                         />
                     </div>
                 </div>

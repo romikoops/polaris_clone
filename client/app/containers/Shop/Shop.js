@@ -145,7 +145,7 @@ class Shop extends Component {
         const { req } = this.state;
 
         return (
-            <div className="layout-row flex-100 layout-wrap SHOP ">
+            <div className="layout-row flex-100 layout-wrap SHOP layout-align-center-start">
                 {loadingScreen}
                 <Header
                     theme={this.props.theme}

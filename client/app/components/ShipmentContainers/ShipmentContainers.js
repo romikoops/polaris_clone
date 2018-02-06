@@ -256,7 +256,7 @@ export class ShipmentContainers extends Component {
                             </div>
                         </div>
                         <div
-                            className={styles.new_container_placeholder}
+                            className={`${styles.new_container_placeholder} flex-100`}
                         >
                             { generateSeparator(null, -1) }
                             { generateContainer(null, -1) }
