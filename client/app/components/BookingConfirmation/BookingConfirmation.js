@@ -9,7 +9,6 @@ import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -37,45 +36,43 @@ export class BookingConfirmation extends Component {
         if (!shipment) return <h1> Loading</h1>;
 
 
-        const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
-        const cargo = [];
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
-        const tenantName = tenant ? tenant.name : '';
+      const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
+      const cargo = [];
+      const textStyle = {
+          background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+      };
+      const tenantName = tenant ? tenant.name : '';
 
-        const pushToCargo = (array, Comp) => {
-            array.forEach((ci, i) => {
-                const offset = i % 3 !== 0 ? 'offset-5' : '';
-                cargo.push(
-                    <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-                        <Comp item={ci} index={i} theme={theme} viewHSCodes={false}/>
-                    </div>
-                );
-            });
-        };
-        if (shipment.load_type === 'cargo_item' && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
-        if (shipment.load_type === 'container' && containers) pushToCargo(containers, ContainerDetails);
-        const nArray = [];
-        if (notifyees) {
-            notifyees.forEach(n => {
-                nArray.push(
-                    <div key={v4()} className="flex-33 layout-row">
-                        <div className="flex-15 layout-column layout-align-start-center">
-                            <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
-                        </div>
-                        <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                            <p className="flex-100">
-                                <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                            </p>
-                            <p className={` ${styles.address} flex-100`}>
-                                {n.first_name} {n.last_name} <br/>
-                            </p>
-                        </div>
-                    </div>
-                );
-            });
-        }
+      const pushToCargo = (array, Comp) => {
+        array.forEach((ci, i) => {
+          const offset = i % 3 !== 0 ? 'offset-5' : '';
+          cargo.push(
+            <div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
+              <Comp item={ci} index={i} theme={theme} viewHSCodes={false}/>
+            </div>
+          );
+        });
+      };
+      if (shipment.load_type === 'cargo_item' && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
+      if (shipment.load_type === 'container' && containers) pushToCargo(containers, ContainerDetails);
+      const nArray = [];
+      if (notifyees) {
+        notifyees.forEach(n => {
+            nArray.push(
+              <div key={v4()} className="flex-33 layout-row">
+                <div className="flex-15 layout-column layout-align-start-center">
+                  <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
+                </div>
+                <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+                  <p className="flex-100">Notifyee</p>
+                  <p className={` ${styles.address} flex-100`}>
+                    {n.first_name} {n.last_name} <br/>
+                  </p>
+                </div>
+              </div>
+            );
+         });
+      }
 
         return (
             <div className="flex-100 layout-row layout-wrap">
@@ -103,9 +100,7 @@ export class BookingConfirmation extends Component {
                                         <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <p className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Shipper" />
-                                        </p>
+                                        <p className="flex-100">Shipper</p>
                                         <p className={`${styles.address} flex-100`}>
                                             {shipper.data.first_name} {shipper.data.last_name} <br/>
                                             {shipper.location.street} {shipper.location.street_number} <br/>
@@ -126,9 +121,7 @@ export class BookingConfirmation extends Component {
                                         />
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <p className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                                        </p>
+                                        <p className="flex-100">Consignee</p>
                                         <p
                                             className={` ${
                                                 styles.address
@@ -162,18 +155,18 @@ export class BookingConfirmation extends Component {
                                     } flex-100 layout-row layout-wrap`}
                                 >
                                     <div className="flex-100 layout-row layout-align-start-center">
-                                        <p className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Cargo Details" />
-                                        </p>
+                                        <h3 className="flex-none clip" style={textStyle}>Cargo Details</h3>
                                     </div>
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
-                                    <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
-                                        <p className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Total Price:" />
-                                        </p>
-                                        {' '}
+                                    <div
+                                        className={`${
+                                            styles.tot_price
+                                        } flex-none layout-row layout-align-space-between`}
+                                        style={textStyle}
+                                    >
+                                        <p>Total Price:</p>{' '}
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>
                                 </div>
@@ -184,9 +177,9 @@ export class BookingConfirmation extends Component {
                 </div>
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.toDashboard()}/>
-                    </div>
+                  <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                    <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.toDashboard()}/>
+                  </div>
                 </div>
             </div>
         );

@@ -9,7 +9,6 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -20,9 +19,7 @@ export class ChooseRoute extends Component {
             limits: {
                 focus: true,
                 alt: true
-            },
-            fastestTime: '',
-            longestTime: ''
+            }
         };
         this.chooseResult = this.chooseResult.bind(this);
         this.setDuration = this.setDuration.bind(this);
@@ -65,7 +62,7 @@ export class ChooseRoute extends Component {
         } else {
             prop = property;
         }
-        return (a, b) => {
+        return function(a, b) {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;
@@ -94,18 +91,11 @@ export class ChooseRoute extends Component {
             focus: [],
             alternative: []
         };
-        schedules.forEach(sched => {
-            const newTime = moment(sched.eta).diff(depDay, 'days');
-            !this.state.fastestTime || ( this.state.fastestTime > newTime ) ? this.setState({fastestTime: newTime})
-                : '';
-            !this.state.longestTime || ( this.state.longestTime < newTime ) ? this.setState({longestTime: newTime})
-                : '';
-        });
         const closestRoute = [];
         const focusRoutes = [];
         const altRoutes = [];
         schedules.forEach(sched => {
-            const transportTime = moment(sched.eta).diff(depDay, 'days');
+            console.log(sched.id);
             if (
                 Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <=
                         this.state.durationFilter
@@ -131,7 +121,6 @@ export class ChooseRoute extends Component {
                             pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
-                            transportTime={transportTime}
                         />
                     );
                 }
@@ -153,7 +142,6 @@ export class ChooseRoute extends Component {
                             pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
-                            transportTime={transportTime}
                         />
                     );
                 } else if (
@@ -174,63 +162,41 @@ export class ChooseRoute extends Component {
                             pickup={shipment.has_pre_carriage}
                             loadType={shipment.load_type}
                             pickupDate={shipment.planned_pickup_date}
-                            transportTime={transportTime}
                         />
                     );
                 }
             }
         });
 
-
-        const filterBox = (
-            <RouteFilterBox theme={theme}
-                pickup={shipment.has_pre_carriage}
-                setDurationFilter={this.setDuration}
-                durationFilter={this.state.durationFilter}
-                setMoT={this.setMoT} moT={this.state.selectedMoT}
-                departureDate={depDay}
-                setDepartureDate={this.setDepDate}
-                fastestTime={this.state.fastestTime ? this.state.fastestTime : 1 }
-                longestTime={this.state.longestTime ? this.state.longestTime : 90 }
-            />
-        );
-
         const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes;
         const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes;
         const cargoText = cargoUnits.length > 1 ? 'Cargo Items' : 'Cargo Item';
         const containerText = cargoUnits.length > 1 ? 'Containers' : 'Container';
         const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : '';
-        const shipmentHeadline = 'Shipping ' + cargoUnits.length + ' x ' + ( shipment.load_type === 'cargo_item' ? cargoText : containerText + ' to ' + destinationHubs[0].name.split(' ')[0] );
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap" style={{marginTop: '62px', marginBottom: '166px'}}>
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
 
                     <div className="flex-20 layout-row layout-wrap">
-                        {filterBox}
+                        <RouteFilterBox theme={theme} pickup={shipment.has_pre_carriage} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} departureDate={depDay} setDepartureDate={this.setDepDate}/>
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <p className={`flex-none ${styles.one_line_summ}`}>
-                                <BookingTextHeading theme={theme} size={2} text={shipmentHeadline} />
-                            </p>
+                            <p className={`flex-none ${styles.one_line_summ}`}> Shipping {cargoUnits.length} x {shipment.load_type === 'cargo_item' ? cargoText : containerText} to {destinationHubs[0].name.split(' ')[0]}</p>
                         </div>
                         <div className="flex-100 layout-row">
                             <BestRoutesBox moT={this.state.selectedMoT} user={user} chooseResult={this.chooseResult} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="This is the closest departure to the specified pickup date" />
-                                </p>
+                                <p className="flex-none">This is the closest departure to the specified pickup date</p>
                             </div>
                             {closestRoute}
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="Alternative departures" />
-                                </p>
+                                <p className="flex-none">Alternative departures</p>
 
                             </div>
                             {limitedFocus}
@@ -243,13 +209,17 @@ export class ChooseRoute extends Component {
                                         <div className="flex-5"></div>
                                         {limits.focus ? <i className="flex-none fa fa-angle-double-down"></i> : <i className="flex-none fa fa-angle-double-up"></i> }
                                     </div>
-                1                </div>
+                                </div>
                                 : '' }
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
-                            <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
+                            <div
+                                className={`flex-100 layout-row layout-align-start ${
+                                    styles.route_header
+                                }`}
+                            >
                                 <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="Alternative modes of transport" />
+                                    Alternative modes of transport
                                 </p>
                             </div>
                             {limitedAlts}
