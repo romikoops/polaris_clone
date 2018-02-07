@@ -11,7 +11,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { BookingTextHeading }  from '../TextHeadings/BookingTextHeading';
-import { gradientTextGenerator } from '../../helpers';
+// import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);

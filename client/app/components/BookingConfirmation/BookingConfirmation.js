@@ -10,7 +10,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
 import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
-import { gradientTextGenerator, gradientGenerator } from '../../helpers';
+import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -38,16 +38,16 @@ export class BookingConfirmation extends Component {
         if (!shipment) return <h1> Loading</h1>;
 
 
-      const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
-      const cargo = [];
-      const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
-      const gradientStyle = theme && theme.colors
-                    ? gradientGenerator(
-                        theme.colors.primary,
-                        theme.colors.secondary
-                    )
-                    : {background: 'black'};
-      const tenantName = tenant ? tenant.name : '';
+        const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
+        const cargo = [];
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        //      const gradientStyle = theme && theme.colors
+        //                    ? gradientGenerator(
+        //                        theme.colors.primary,
+        //                        theme.colors.secondary
+        //                    )
+        //                    : {background: 'black'};
+        const tenantName = tenant ? tenant.name : '';
 
         const pushToCargo = (array, Comp) => {
             array.forEach((ci, i) => {
@@ -174,21 +174,11 @@ export class BookingConfirmation extends Component {
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
-<<<<<<< HEAD
                                     <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
                                         <p className="flex-none clip">
                                             <BookingTextHeading theme={theme} size={3}  text="Total Price:" />
                                         </p>
                                         {' '}
-=======
-                                    <div
-                                        className={`${
-                                            styles.tot_price
-                                        } flex-none layout-row layout-align-space-between`}
-                                        style={gradientStyle}
-                                    >
-                                        <p>Total Price:</p>{' '}
->>>>>>> 8a67ba20db18fddb2b2ef6ece05d5a2b674d4d23
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>
                                 </div>
