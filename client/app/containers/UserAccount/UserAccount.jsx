@@ -23,7 +23,7 @@ import { Footer } from '../../components/Footer/Footer';
 // import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading'
 
-export class UserAccount extends Component {
+class UserAccount extends Component {
   constructor (props) {
     super(props)
 

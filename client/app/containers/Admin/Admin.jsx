@@ -217,7 +217,6 @@ Admin.propTypes = {
     loading: PropTypes.bool
   }).isRequired,
 
-  // eslint-disable-next-line react/forbid-prop-types
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     getServiceCharges: PropTypes.func,
