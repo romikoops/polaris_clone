@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropsTypes from 'prop-types';
 import { gradientGenerator } from '../../helpers/gradient';
 
-export class SubTextHeading extends Component {
+export class BookingTextHeading extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -20,7 +20,7 @@ export class SubTextHeading extends Component {
     }
 }
 
-SubTextHeading.PropsTypes = {
+BookingTextHeading.PropsTypes = {
     text: PropsTypes.string,
     theme: PropsTypes.object
 };

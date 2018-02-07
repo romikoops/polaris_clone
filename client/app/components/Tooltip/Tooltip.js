@@ -18,9 +18,11 @@ export class Tooltip extends Component {
         const tipText = tooltips[text];
         const clipClass = color ? '' : 'clip';
         return(
-            <div className="flex-none layout-row layout-align-center-center tooltip">
-                <i className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText}></i>
-                <ReactTooltip />
+            <div className="flex-none layout-row layout-align-center-center">
+                <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText}  />
+                <div className="flex-30">
+                    <ReactTooltip className="flex-20"/>
+                </div>
             </div>
         );
     }

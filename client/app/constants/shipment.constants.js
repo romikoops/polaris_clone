@@ -32,7 +32,7 @@ export const SHIPMENT_STAGES = [
     },
     {
         step: 4,
-        text: 'Booking overview & details',
+        text: 'Overview & Details',
         header: 'Booking Details',
         url: '/booking_details'
     },
