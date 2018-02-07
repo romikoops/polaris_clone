@@ -7,7 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "start": "node server",
+    "dev": "webpack-dev-server --progress --colors",
+    "start": "webpack && npm run dev",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint .",
     "deploy": "npm run build && s3cmd sync dist/* s3://imc-react-dev -P && s3cmd sync dist/* s3://multi.itsmycargo.com -P && echo '🚀  Deployed!'"
@@ -92,6 +93,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.5.0",
     "babili-webpack-plugin": "^0.1.2",
+    "browser-sync": "^2.23.6",
+    "browser-sync-webpack-plugin": "^2.0.1",
     "css-loader": "^0.23.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",

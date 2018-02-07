@@ -93,12 +93,12 @@ export class AdminSearchableRoutes extends Component {
                 </div>
             </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                <div className="layout-row flex-100 layout-align-start-center layout-wrap">
                     {routesArr}
                 </div>
             </div>);
         return(
-            <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
+            <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layput-row layout-align-start-center">
                         <MainTextHeading theme={theme} text="Routes" />

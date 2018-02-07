@@ -4,12 +4,17 @@ import PropTypes from 'prop-types';
 import { UserShipmentRow } from './';
 import {v4} from 'node-uuid';
 import styles from '../Admin/Admin.scss';
+import { gradientTextGenerator } from '../../helpers';
 export class UserShipments extends Component {
     constructor(props) {
         super(props);
         this.viewShipment = this.viewShipment.bind(this);
     }
     componentDidMount() {
+        const { shipments, loading, userDispatch } = this.props;
+        if (!shipments && !loading) {
+            userDispatch.getShipments(false);
+        }
         this.props.setNav('shipments');
     }
     viewShipment(shipment) {
@@ -26,18 +31,16 @@ export class UserShipments extends Component {
         }
 
         const openShipments = shipments && shipments.open ? shipments.open.map((ship) => {
-            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} user={user}/>;
         }) : '';
         const reqShipments = shipments && shipments.requested ? shipments.requested.map((ship) => {
-            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} user={user}/>;
         }) : '';
         const finishedShipments = shipments && shipments.finished ? shipments.finished.map((ship) => {
-            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} client={user}/>;
+            return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} user={user}/>;
         }) : '';
 
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return (
              <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">

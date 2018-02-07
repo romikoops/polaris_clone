@@ -39,6 +39,7 @@
   }
   .shop_stage_yet h3, .shop_stage_current h3 {
     font-size: 30px;
+    margin: 0;
   }
   .wrapper_shop_stage_current {
     position: relative;    
@@ -54,6 +55,7 @@
     border-radius: 50% !important;
     background: white;
     h3 {
+      margin: 0;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;      
     }
@@ -67,6 +69,7 @@
     content: '';
     z-index: -1;
     width: auto;
+    border: 2px solid;
     border-radius: 50%;
   }
   .stage_text  {
@@ -137,6 +140,9 @@
     height: 130px;
     box-shadow: 0 2px 4px 0 rgba(black, 0.1);
   }
+  .ss_view {
+    height: 260px;
+  }
   .line_box {
     position: relative;
     transform: scale(0.8);
@@ -148,5 +154,9 @@
     width: 739px;
     border-top: 3px solid #4A4A4A;
     margin-top: 70.5px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-left: 50px;
+    }
+    
   }
 }

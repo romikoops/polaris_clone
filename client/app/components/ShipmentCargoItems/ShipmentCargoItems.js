@@ -351,7 +351,9 @@ export class ShipmentCargoItems extends Component {
                                 <i className="fa fa-plus-square-o clip" style={textStyle}/>
                             </div>
                         </div>
-                        <div className={styles.new_container_placeholder}>
+                        <div
+                            className={`flex-100 ${styles.new_container_placeholder}`}
+                        >
                             { generateSeparator(null, -1) }
                             { generateCargoItem(null, -1) }
                         </div>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import styles from './BestRoutesBox.scss';
+import { gradientGenerator } from '../../helpers';
 export class BestRoutesBox extends Component {
     constructor(props) {
         super(props);
@@ -129,15 +130,7 @@ export class BestRoutesBox extends Component {
         const depDate = shipmentData.shipment
             ? shipmentData.shipment.planned_pickup_date
             : '';
-        const activeBtnStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'floralwhite',
-            color: theme && theme.colors ? 'white' : 'black'
-        };
+        const activeBtnStyle = theme && theme.colors ? {...gradientGenerator(theme.colors.primary, theme.colors.secondary), color: 'white'} : {background: 'black'};
         return (
             <div className="flex-100 layout-row layout-align-space-between-center">
                 {shipmentData.shipment

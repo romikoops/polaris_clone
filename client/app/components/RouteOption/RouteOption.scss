@@ -47,9 +47,12 @@
     position: relative;
     margin-top: 40px;
   }
+  .header_hub h4 {
+    text-align: center;
+  }
   .connection_graphics {
     position: absolute;
-    left: calc((242px - 76px) / 2);
+    left: calc((50% - 38px));
     top: 10px;
     width: 76px;
     i {

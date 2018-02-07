@@ -47,8 +47,13 @@
 }
 .service i {
    // background: -webkit-linear-gradient(#00E503, #00ACE5);
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  // @media screen { 
+  //   @media (min-width: 0px) {
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+  //   } 
+  // }
+
   font-size: 40px !important;
 }
 .mc {
@@ -69,6 +74,9 @@
     font-size: 18px;
   }
 }
+.btm_promo_text > div {
+  height: 100%;
+}
 
 .btm_promo_btn_wrapper {
   margin: 20px 0;
@@ -77,6 +85,7 @@
 .btm_promo {
   margin-bottom: 120px;
   background: white;
+  min-height: 500px;
   box-shadow: 0 1.5px 8px rgba(black, .12);
   i {
     color: $green;

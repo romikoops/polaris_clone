@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminClientTile.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { gradientTextGenerator } from '../../helpers';
 export class AdminClientTile extends Component {
     constructor(props) {
         super(props);
@@ -37,14 +38,7 @@ export class AdminClientTile extends Component {
         if (!client) {
             return '';
         }
-        const gradientStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${
-                        theme.colors.secondary
-                    })`
-                    : 'black'
-        };
+        const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const content = (
             <div className="flex-95 layout-row layout-wrap layout-align-start-start" onClick={this.clickEv}>
                 <div className={`flex-100 layout-row layout-align-space-around-center ${styles.client_subheader}`}>

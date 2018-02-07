@@ -15,6 +15,7 @@ import { shipmentActions } from '../../actions/shipment.actions';
 import { nexusActions } from '../../actions/nexus.actions';
 import { Route } from 'react-router';
 import { withRouter } from 'react-router-dom';
+import { Footer } from '../../components/Footer/Footer';
 
 import './Shop.scss';
 
@@ -144,7 +145,7 @@ class Shop extends Component {
         const { req } = this.state;
 
         return (
-            <div className="layout-row flex-100 layout-wrap">
+            <div className="layout-row flex-100 layout-wrap SHOP layout-align-center-start">
                 {loadingScreen}
                 <Header
                     theme={this.props.theme}
@@ -153,6 +154,7 @@ class Shop extends Component {
                     req={req}
                 />
                 <ShopStageView
+                    className="flex-100"
                     shopType={this.state.shopType}
                     match={match}
                     theme={theme}
@@ -269,6 +271,7 @@ class Shop extends Component {
                     )}
                 />
                 <div className={`${styles.pre_footer_break} flex-100`}></div>
+                <Footer className="flex-100" theme={theme} tenant={tenant.data}/>
             </div>
         );
     }

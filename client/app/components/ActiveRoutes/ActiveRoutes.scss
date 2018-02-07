@@ -47,11 +47,16 @@
     }
     .slick_slide {
       height: 350px;
-      width: 450px;
+      width: 450px !important;
+      max-width: 450px !important;
       position: relative;
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
+    }
+    .one_slide .slick_slide {
+      // width: 1200px !important;
+      // max-width: 1200px !important;
     }
     .slick_content {
       position: absolute;
@@ -85,7 +90,7 @@
 
       // .slick-slider .slick-list *{
       //   height: 100%;
-        *:not(.slick-dots) {
+        *:not(.slick-list) {
           min-height: 0;
           min-width: 0;
           height: 100%;

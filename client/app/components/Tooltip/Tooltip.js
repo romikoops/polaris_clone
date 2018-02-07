@@ -13,7 +13,8 @@ export class Tooltip extends Component {
             color
         } = this.props;
         const textStyle = color ? {color: color} : {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : theme.colors.primary,
+            color: theme.colors.primary
         };
         const tipText = tooltips[text];
         const clipClass = color ? '' : 'clip';
