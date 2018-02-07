@@ -4,6 +4,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import styles from '../ActiveRoutes/ActiveRoutes.scss';
 import {v4} from 'node-uuid';
+import styled from 'styled-components';
+
 export class Carousel extends Component {
     render() {
       if (!this.props.slides) {
@@ -18,6 +20,12 @@ export class Carousel extends Component {
             speed: 2000,
             arrows: true
         };
+        const slideCountStyle = this.props.noSlides === 1 ? styles.one_slide : '';
+        const StyledSlider = styled.div`
+            .slick_slide {
+                width: 1200px !important;
+            }
+        `;
         const slides = this.props.slides.map((route) => {
             const divStyle = {
                 backgroundImage: 'url(' + route.image + ')'
@@ -33,11 +41,11 @@ export class Carousel extends Component {
             );
         });
         return (
-            <div className={`flex-100 layout-row ${styles.slider_container}`}>
+            <StyledSlider className={`flex-100 layout-row ${styles.slider_container} ${slideCountStyle}`}>
                 <Slider {...settings}>
                     {slides}
                 </Slider>
-            </div>
+            </StyledSlider>
         );
     }
 }

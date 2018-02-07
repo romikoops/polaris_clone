@@ -6,6 +6,7 @@ import styles from './UserAccount.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import { AdminSearchableShipments } from '../Admin/AdminSearchables';
+import { gradientTextGenerator } from '../../helpers';
 const EditProfileBox = ({user, handleChange, onSave, close, style, theme}) => {
     return (
         <div className="flex-60 layout-row layout-align-start-start layout-wrap">
@@ -177,9 +178,7 @@ export class UserContactsView extends Component {
             return '';
         }
         const { contact, shipments, location} = contactData;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const  {
             editBool,
             editObj
