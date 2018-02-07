@@ -59,7 +59,6 @@ export class Conversation extends Component {
             conversation.messages.map((msg) => {
                 return <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()}/>;
             });
-
         const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed;
         const btnStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'

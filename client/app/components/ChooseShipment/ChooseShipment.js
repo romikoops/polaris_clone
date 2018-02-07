@@ -6,6 +6,7 @@ import defs from '../../styles/default_classes.scss';
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow';
 import { LOAD_TYPES } from '../../constants';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 export class ChooseShipment extends Component {
     constructor(props) {
         super(props);
@@ -25,18 +26,13 @@ export class ChooseShipment extends Component {
 
         return (
             <div
-                className={`${
-                    styles.card_link_row
-                } layout-row flex-100 layout-align-center`}
-            >
+                className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
                 {flash}
                 <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`}>
-                    <div
-                        className={` ${
-                            styles.header
-                        } flex-100 layout-row layout-align-start-center`}
-                    >
-                        <p className="flex-none"> Choose your shipment type</p>
+                    <div className={` ${styles.header} flex-100 layout-row layout-align-start-center`}>
+                        <p className="flex-none">
+                            <MainTextHeading theme={theme} text="Choose your shipment type:   " />
+                        </p>
                         <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
                     </div>
                     <CardLinkRow theme={theme} cardArray={this.state.cards} />

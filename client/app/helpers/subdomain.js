@@ -8,6 +8,7 @@ export const getSubdomain = () => {
     if (host.split('.')[0] === 'www' || host.split('.')[0] === 'react' || host.includes('localhost')) {
         return 'greencarrier';
         // return 'isa';
+        // return 'demo';
     }
     return host.split('.')[0];
 };

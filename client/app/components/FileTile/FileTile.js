@@ -175,7 +175,7 @@ class FileTile extends React.Component {
         );
         const bottomRow = isAdmin ? adminRow : userRow;
         return (
-            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile} ${statusStyle}`}>
+            <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.tile}`}>
                 {showDenialDetails ? denyDetails : ''}
                 <div className="flex-100 layout-row layout-wrap layout-align-center-center">
                     <div className="flex-100 layout-row layout-wrap layout-align-center-start">

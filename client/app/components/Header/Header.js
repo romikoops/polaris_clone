@@ -69,7 +69,7 @@ class Header extends Component {
         messageDispatch.showMessageCenter();
     }
     render() {
-        const { user, theme, tenant, invert, unread, req, landingPage } = this.props;
+        const { user, theme, tenant, invert,  unread, req, landingPage } = this.props;
         const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
 
         // const dropDownImage = accountIcon;
@@ -119,9 +119,7 @@ class Header extends Component {
             logoStyle = styles.logo;
         }
         const textColour = invert ? 'white' : 'black';
-
         const dropDowns = <div className="layout-row layout-align-space-around-center">{dropDown}{mail}</div>;
-
         const loginPrompt = <a className={defs.pointy} style={{color: textColour}} onClick={this.toggleShowLogin}>Log in</a>;
         const rightCorner = user && !user.guest ? dropDowns : loginPrompt;
         const loginModal = (
@@ -141,7 +139,6 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
-        console.log(landingPage);
         return (
             <div className={landingPage && !this.state.isTop ?
                 `${styles.header_scrollable}

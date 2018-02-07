@@ -740,14 +740,12 @@ function confirmShipment(id, action, redirect) {
         adminService.confirmShipment(id, action).then(
             resp => {
                 const shipmentData = resp.data;
-
                 if (action === 'accept') {
                     dispatch(successAccept(shipmentData));
                 } else {
                     dispatch(successDeny(shipmentData));
                     dispatch(getShipments(false));
                 }
-
                 if (redirect) {
                     dispatch(getShipment(id, true));
                 }
@@ -1061,5 +1059,4 @@ export const adminActions = {
     getDashShipments,
     newRoute,
     clearLoading
-
 };
