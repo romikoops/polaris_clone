@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import styles from './ContactSetter.scss';
 import defs from '../../styles/default_classes.scss';
-import { Tooltip } from '../Tooltip/Tooltip';
-import { capitalize } from '../../helpers/stringTools';
 import { camelizeKeys } from '../../helpers/objectTools';
 import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
+import { StageTimeline } from '../StageTimeline/StageTimeline';
 
 
 export class ContactSetter extends Component {
@@ -84,15 +83,24 @@ export class ContactSetter extends Component {
   render() {
     const { theme, shipper, consignee, notifyees } = this.props;
     const { contactData } = this.state;
+    const stageIndex = this.contactTypes.indexOf(contactData.type);
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`
         	flex-none ${defs.content_width} layout-row layout-wrap
         `}>
+	        <div className="flex-100 layout-row layout-align-center-center">
+	          <h1> Set Contact Details</h1>
+	        </div>
+
           <div className="flex-100 layout-row layout-align-center-center">
-            <h1> Set {capitalize(contactData.type)} Details</h1>
-            <Tooltip theme={theme} icon="fa-info-circle" text={contactData.type} />
+	          <StageTimeline
+              theme={theme}
+              currentStageIndex={stageIndex}
+              stages={this.contactTypes}
+              // setStage={}
+	          />
           </div>
           <div className="flex-50">
             <ShipmentContactForm
