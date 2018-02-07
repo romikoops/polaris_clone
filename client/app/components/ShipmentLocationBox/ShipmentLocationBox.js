@@ -606,17 +606,9 @@ export class ShipmentLocationBox extends Component {
         }
         autoText.destination = destination.hub_name;
         autoTextDest = this.state.autoTextOrigin;
-        this.setMarker(
-            {lng: destination.lng, lat: destination.lat},
-            destination.hub_name, 'destination'
-        );
 
         autoText.origin = origin.hub_name;
         autoTextOrigin = this.state.autoTextDest;
-        this.setMarker(
-            {lng: origin.lng, lat: origin.lat},
-            origin.hub_name, 'origin'
-        );
         console.log('swapping origin', origin.hub_name);
         console.log('swapping destination', destination.hub_name);
 

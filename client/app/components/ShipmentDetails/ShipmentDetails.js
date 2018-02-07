@@ -239,7 +239,6 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        console.log('setting', target, address.hub_name);
         this.setState({ [target]: {...this.state[target], ...address} });
     }
     errorsExist(errorsObjects) {
