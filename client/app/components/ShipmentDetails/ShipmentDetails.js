@@ -17,7 +17,6 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { Modal } from '../Modal/Modal';
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
 import { isEmpty } from '../../helpers/isEmpty.js';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
@@ -455,24 +454,18 @@ export class ShipmentDetails extends Component {
             }
         `;
         const dayPickerSection = (
-            <div className={`${styles.date_sec} ${defaults.content_width}
-                layout-row flex-none layout-align-start-center`}>
+            <div className={`
+                ${styles.date_sec} ${defaults.content_width}
+                layout-row flex-none layout-align-start-center
+            `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-                    <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-                        <p className="flex-none letter_2 layout-align-space-between-end">
-                            <BookingTextHeading
-                                theme={theme}
-                                text={this.state.has_pre_carriage
-                                    ? 'Approximate Pickup Date :'
-                                    : 'Approximate Departure Date :'}
-                                size={3}
-                            />
-                        </p>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        {' '}
+                        <p className="flex-none letter_2">{this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}</p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
+                        {' '}
                     </div>
-                    <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError
-                        ? styles.with_errors
-                        : ''}`}>
+                    <div name="dayPicker" className={`flex-none layout-row ${styles.dpb} ${showDayPickerError ? styles.with_errors : ''}`}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
                         </div>
@@ -495,7 +488,8 @@ export class ShipmentDetails extends Component {
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
                             {' '}
-                            <BookingTextHeading theme={theme} text="Select Incoterm :" size={3}/>
+                            {'Select Incoterm:'}
+                            {' '}
                         </p>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>
@@ -519,7 +513,7 @@ export class ShipmentDetails extends Component {
                 {flash}
                 {alertModal}
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                    {dayPickerSection}
+                    { dayPickerSection }
                 </div>
                 <div className="layout-row flex-100 layout-wrap">
                     {mapBox}
@@ -528,8 +522,10 @@ export class ShipmentDetails extends Component {
                     {cargoDetails}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className={`${styles.btn_sec} ${defaults.content_width}
-                        layout-row flex-none layout-wrap layout-align-start-start`}>
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width}
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Get Offers"
                             handleNext={this.handleNextStage}
@@ -539,8 +535,10 @@ export class ShipmentDetails extends Component {
                     </div>
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className={`${styles.btn_sec} ${defaults.content_width} 
-                        layout-row flex-none layout-wrap layout-align-start-start`}>
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width} 
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Back to Dashboard"
                             handleNext={this.returnToDashboard}

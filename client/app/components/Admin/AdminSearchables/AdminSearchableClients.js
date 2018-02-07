@@ -67,6 +67,7 @@ export class AdminSearchableClients extends Component {
     }
     render() {
         const { theme, title, seeAll, placeholder} = this.props;
+
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
@@ -91,34 +92,29 @@ export class AdminSearchableClients extends Component {
                     <div className="flex-60 layoput-row layout-align-start-center">
                         <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
-                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
-                        <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
-                            <div className="flex-35 laypout-row layout-align-start input_box_full">
-                                <input
-                                    type="text"
-                                    name="search"
-                                    placeholder={placeholder ? placeholder : 'Search clients'}
-                                    onChange={this.handleSearchChange}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-center layout-align-space-between">
-                            {viewType}
-                        </div>
-                        { seeAll !== false ? (
-                            <div className="flex-100 layout-row layout-align-end-center">
-                                <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
-                                    <p className="flex-none">See all</p>
-                                </div>
-                            </div>)
-                            : ''}
+
+                    <div className="flex-35 laypout-row layout-align-start input_box_full">
+
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder={placeholder ? placeholder : 'Search clients'}
+                            onChange={this.handleSearchChange}
+                        />
                     </div>
                 </div>
+                <div className="flex-100 layout-row layout-align-center layout-align-space-between">
+                    {viewType}
+                </div>
+                { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+                        <p className="flex-none">See all</p>
+                    </div>
+                </div>) : ''}
             </div>
         );
     }
 }
-
 AdminSearchableClients.propTypes = {
     tenant: PropTypes.object,
     theme: PropTypes.object,
