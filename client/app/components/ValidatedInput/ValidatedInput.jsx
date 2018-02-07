@@ -1,0 +1,22 @@
+import React from 'react'
+import Formsy from 'formsy-react'
+import PropTypes from 'prop-types'
+import ValidatedInputFormsy from '../ValidatedInputFormsy/ValidatedInputFormsy'
+
+export function ValidatedInput (props) {
+  return (
+    <Formsy className={props.className || props.wrapperClöassName}>
+      <ValidatedInputFormsy {...props} />
+    </Formsy>
+  )
+}
+
+export default ValidatedInput
+
+ValidatedInput.propTypes = {
+  className: PropTypes.string
+}
+
+ValidatedInput.defaultProps = {
+  className: ''
+}
