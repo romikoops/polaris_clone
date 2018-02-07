@@ -7,7 +7,6 @@ export class RoundButton extends Component {
         const { text, theme, active, back, icon, iconClass, size } = this.props;
 
         const activeBtnStyle = theme && theme.colors ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
-        console.log(activeBtnStyle);
         const btnStyle = this.props.active ? activeBtnStyle : {};
 
         let bStyle;

@@ -116,9 +116,13 @@ export class ShipmentLocationBox extends Component {
         newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : '';
         newData.destinationHub = shipment.destination_id ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0] : null;
         newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : '';
+        if (shipment.origin_id) {
+            this.state.map ? this.setOriginHub(newData.originHub) : setTimeout(() => {this.setOriginHub(newData.originHub);}, 500);
+        }
+        if (shipment.origin_id) {
+            this.state.map ? this.setDestHub(newData.destinationHub) : setTimeout(() => {this.setDestHub(newData.destinationHub);}, 500);
+        }
         this.setState({
-            dSelect: newData.destinationHub,
-            oSelect: newData.originHub,
             autoTextOrigin: newData.autoTextOrigin,
             autoTextDest: newData.autoTextDest
         });
@@ -393,28 +397,26 @@ export class ShipmentLocationBox extends Component {
             }
         });
     }
-    setOriginHub(event, swapping) {
+    setOriginHub(event) {
         if (event) {
-            const origin = !swapping ? {
+            const origin = {
                 ...this.state.origin,
                 hub_id: event.value.id,
                 hub_name: event.label,
                 lat: event.value.latitude,
                 lng: event.value.longitude
-            } : { ...event };
-            const lat = !swapping ? event.value.latitude : event.lat;
-            const lng = !swapping ? event.value.longitude : event.lng;
+            };
+            const lat = event.value.latitude;
+            const lng = event.value.longitude;
             const oSelect = event;
 
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
             this.props.setTargetAddress('origin', origin );
-            if(!swapping) {
-                this.setMarker(
-                    { lat: lat, lng: lng },
-                    origin.hub_name, 'origin'
-                );
-                this.setState({ oSelect, origin });
-            }
+            this.setMarker(
+                { lat: lat, lng: lng },
+                origin.hub_name, 'origin'
+            );
+            this.setState({ oSelect, origin });
         } else {
             this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds);
             this.setState({
@@ -430,28 +432,26 @@ export class ShipmentLocationBox extends Component {
         this.setState({autoText: {[name]: value}});
     }
 
-    setDestHub(event, swapping) {
+    setDestHub(event) {
         if(event) {
-            const destination = !swapping ? {
+            const destination = {
                 ...this.state.destination,
                 hub_id: event.value.id,
                 hub_name: event.label,
                 lat: event.value.latitude,
                 lng: event.value.longitude
-            } : { ...event };
-            const lat = !swapping ? event.value.latitude : event.lat;
-            const lng = !swapping ? event.value.longitude : event.lng;
+            };
+            const lat = event.value.latitude;
+            const lng = event.value.longitude;
             const dSelect = event;
 
-            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
+            // this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
             this.props.setTargetAddress('destination', destination );
-            if(!swapping) {
-                this.setMarker(
-                    { lat: lat, lng: lng },
-                    destination.hub_name, 'destination'
-                );
-                this.setState({ dSelect, destination });
-            }
+            this.setMarker(
+                { lat: lat, lng: lng },
+                destination.hub_name, 'destination'
+            );
+            this.setState({ dSelect, destination });
         } else {
             this.setState({
                 dSelect: '',
@@ -598,34 +598,31 @@ export class ShipmentLocationBox extends Component {
         const autoText = {...this.state.autoText};
         const pre = this.state.shipment.has_pre_carriage;
         const on = this.state.shipment.has_on_carriage;
-
-        let oSelect = this.state.oSelect ? this.state.oSelect : '';
-        let dSelect = this.state.dSelect ? this.state.dSelect : '';
         let autoTextDest = this.state.autoTextDest ? this.state.autoTextDest : '';
         let autoTextOrigin = this.state.autoTextOrigin ? this.state.autoTextOrigin : '';
         if((pre && !on) || (!pre && on)) {
             () => this.changeAddressFormVisibility('origin');
             () => this.changeAddressFormVisibility('destination');
         }
-
-        this.setDestHub(destination, true);
         autoText.destination = destination.hub_name;
-        dSelect = this.state.oSelect;
         autoTextDest = this.state.autoTextOrigin;
         this.setMarker(
             {lng: destination.lng, lat: destination.lat},
             destination.hub_name, 'destination'
         );
-        this.setOriginHub(origin, true);
+
         autoText.origin = origin.hub_name;
         autoTextOrigin = this.state.autoTextDest;
-        oSelect = this.state.dSelect;
         this.setMarker(
             {lng: origin.lng, lat: origin.lat},
             origin.hub_name, 'origin'
         );
+        console.log('swapping origin', origin.hub_name);
+        console.log('swapping destination', destination.hub_name);
 
-        this.setState({origin, destination, autoText, oSelect, dSelect, autoTextOrigin, autoTextDest});
+        this.setState({origin, destination, autoText, autoTextOrigin, autoTextDest});
+        this.setDestHub(this.state.oSelect);
+        this.setOriginHub(this.state.dSelect);
     }
 
 
@@ -643,6 +640,8 @@ export class ShipmentLocationBox extends Component {
         const placeholderColorOverwrite = value => (
             !value && this.props.nextStageAttempt ? 'color: rgb(211, 104, 80);' : ''
         );
+        console.log('origin', this.state.origin);
+        console.log('destination', this.state.destination);
 
         const StyledSelect = styled(Select)`
             .Select-control {
@@ -945,7 +944,7 @@ export class ShipmentLocationBox extends Component {
                     <div className={defaults.content_width + ' layout-row flex-none layout-align-start-start ' + styles.map_container} >
                         {this.state.showModal ? routeModal : ''}
                         <div className={`flex-none layout-row layout-wrap ${styles.input_box} ${errorClass}`}>
-                            <div className="flex-40 layout-row layout-wrap layout-align-start-start mc">
+                            <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                                 <div className={'flex-40 layout-row layout-align-center-center ' + styles.toggle_box}>
                                     <Toggle
                                         className="flex-none"
@@ -964,10 +963,10 @@ export class ShipmentLocationBox extends Component {
                                 </div>
                             </div>
 
-                            <div className={'flex-20 layout-row layout-align-center-center '} onClick={this.handleSwap}>
+                            <div className={'flex-10 layout-row layout-align-center-center '} onClick={this.handleSwap}>
                                 <i className={`${styles.fa_exchange_style} fa fa-exchange `}></i>
                             </div>
-                            <div className="flex-40 layout-row layout-wrap layout-align-end-start">
+                            <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                                 <div className={'flex-40 layout-row layout-align-center-center ' + styles.toggle_box}>
                                     <Toggle
                                         className="flex-none"

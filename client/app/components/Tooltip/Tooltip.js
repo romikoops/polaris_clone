@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { tooltips } from '../../constants';
+import { v4 } from 'node-uuid';
 export class Tooltip extends Component {
     constructor(props) {
         super(props);
@@ -17,11 +18,12 @@ export class Tooltip extends Component {
         };
         const tipText = tooltips[text];
         const clipClass = color ? '' : 'clip';
+        const id = v4();
         return(
             <div className="flex-none layout-row layout-align-center-center">
-                <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText}  />
+                <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText} data-for={id} />
                 <div className="flex-30">
-                    <ReactTooltip className="flex-20"/>
+                    <ReactTooltip id={id} className="flex-20"/>
                 </div>
             </div>
         );

@@ -65,9 +65,9 @@ export class BookingConfirmation extends Component {
                             <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                         </div>
                         <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                            <p className="flex-100">
+                            <div className="flex-100">
                                 <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                            </p>
+                            </div>
                             <p className={` ${styles.address} flex-100`}>
                                 {n.first_name} {n.last_name} <br/>
                             </p>
@@ -103,9 +103,9 @@ export class BookingConfirmation extends Component {
                                         <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <p className="flex-100">
+                                        <div className="flex-100">
                                             <BookingTextHeading theme={theme} size={4}  text="Shipper" />
-                                        </p>
+                                        </div>
                                         <p className={`${styles.address} flex-100`}>
                                             {shipper.data.first_name} {shipper.data.last_name} <br/>
                                             {shipper.location.street} {shipper.location.street_number} <br/>
@@ -126,9 +126,9 @@ export class BookingConfirmation extends Component {
                                         />
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <p className="flex-100">
+                                        <div className="flex-100">
                                             <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                                        </p>
+                                        </div>
                                         <p
                                             className={` ${
                                                 styles.address
@@ -162,17 +162,17 @@ export class BookingConfirmation extends Component {
                                     } flex-100 layout-row layout-wrap`}
                                 >
                                     <div className="flex-100 layout-row layout-align-start-center">
-                                        <p className="flex-none clip">
+                                        <div className="flex-none clip">
                                             <BookingTextHeading theme={theme} size={3}  text="Cargo Details" />
-                                        </p>
+                                        </div>
                                     </div>
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
                                     <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
-                                        <p className="flex-none clip">
+                                        <div className="flex-none clip">
                                             <BookingTextHeading theme={theme} size={3}  text="Total Price:" />
-                                        </p>
+                                        </div>
                                         {' '}
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>

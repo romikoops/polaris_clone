@@ -91,9 +91,11 @@ export class ShipmentDetails extends Component {
         this.setIncoTerm = this.setIncoTerm.bind(this);
         this.handleSelectLocation = this.handleSelectLocation.bind(this);
         this.toggleAlertModal = this.toggleAlertModal.bind(this);
+        this.loadPrevReq = this.loadPrevReq.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
+        console.log('!!!!!!!! MOUNTING!!!!!!!');
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
@@ -237,7 +239,8 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        this.setState({ [target]: {...address, ...this.state[target]} });
+        console.log('setting', target, address.hub_name);
+        this.setState({ [target]: {...this.state[target], ...address} });
     }
     errorsExist(errorsObjects) {
         let returnBool = false;
@@ -289,6 +292,7 @@ export class ShipmentDetails extends Component {
                 ? this.state.shipment
                 : this.props.shipmentData.shipment
         };
+        console.log(this.state.shipment ? 'stateful shipment' : 'prop shipment');
         data.shipment.origin_user_input = this.state.origin.fullAddress
             ? this.state.origin.fullAddress
             : '';
@@ -393,7 +397,8 @@ export class ShipmentDetails extends Component {
         }
 
         const routeIds = shipmentData.routes ? shipmentData.routes.map(route => route.id) : [];
-
+        console.log(this.state.origin, 'upper origin');
+        console.log(this.state.destination, 'upper destination');
         const mapBox = (
             <GmapsLoader
                 theme={theme}
@@ -459,7 +464,7 @@ export class ShipmentDetails extends Component {
                 layout-row flex-none layout-align-start-center`}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-                        <p className="flex-none letter_2 layout-align-space-between-end">
+                        <div className="flex-none letter_2 layout-align-space-between-end">
                             <BookingTextHeading
                                 theme={theme}
                                 text={this.state.has_pre_carriage
@@ -467,7 +472,7 @@ export class ShipmentDetails extends Component {
                                     : 'Approximate Departure Date :'}
                                 size={3}
                             />
-                        </p>
+                        </div>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                     </div>
                     <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError
@@ -493,10 +498,10 @@ export class ShipmentDetails extends Component {
 
                 <div className="flex-50 layout-row layout-wrap layout-align-end-center">
                     <div className="flex-100 layout-row layout-align-end-center">
-                        <p className="flex-none letter_2">
+                        <div className="flex-none letter_2">
                             {' '}
                             <BookingTextHeading theme={theme} text="Select Incoterm :" size={3}/>
-                        </p>
+                        </div>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>
                         <StyledSelect

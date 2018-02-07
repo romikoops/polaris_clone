@@ -211,26 +211,26 @@ export class ChooseRoute extends Component {
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <p className={`flex-none ${styles.one_line_summ}`}>
+                            <div className={`flex-none ${styles.one_line_summ}`}>
                                 <BookingTextHeading theme={theme} size={2} text={shipmentHeadline} />
-                            </p>
+                            </div>
                         </div>
                         <div className="flex-100 layout-row">
                             <BestRoutesBox moT={this.state.selectedMoT} user={user} chooseResult={this.chooseResult} theme={this.props.theme} shipmentData={this.props.shipmentData}/>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">
+                                <div className="flex-none">
                                     <BookingTextHeading theme={theme} size={3} text="This is the closest departure to the specified pickup date" />
-                                </p>
+                                </div>
                             </div>
                             {closestRoute}
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">
+                                <div className="flex-none">
                                     <BookingTextHeading theme={theme} size={3} text="Alternative departures" />
-                                </p>
+                                </div>
 
                             </div>
                             {limitedFocus}
@@ -248,9 +248,9 @@ export class ChooseRoute extends Component {
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
-                                <p className="flex-none">
+                                <div className="flex-none">
                                     <BookingTextHeading theme={theme} size={3} text="Alternative modes of transport" />
-                                </p>
+                                </div>
                             </div>
                             {limitedAlts}
                             { limitedAlts.length !== altRoutes.length ?
