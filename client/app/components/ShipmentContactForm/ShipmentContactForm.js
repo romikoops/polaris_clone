@@ -107,12 +107,6 @@ export class ShipmentContactForm extends Component {
                         mapping={this.mapInputs}
                         ref="contactForm"
                     >
-                        <GmapsWrapper
-                            theme={theme}
-                            component={PlaceSearch}
-                            handlePlaceChange={this.handlePlaceChange}
-                            hideMap={true}
-                        />
                         <FormsyInput
                             wrapperClassName="flex-95"
                             className={styles.input}
@@ -152,6 +146,16 @@ export class ShipmentContactForm extends Component {
                             value={contactData.contact.phone}
                             name="phone"
                             placeholder="Phone"
+                        />
+                        <GmapsWrapper
+                            theme={theme}
+                            component={PlaceSearch}
+                            inputStyles={{
+                                width: '97.5%',
+                                marginBottom: '30px'
+                            }}
+                            handlePlaceChange={this.handlePlaceChange}
+                            hideMap={true}
                         />
                         <FormsyInput
                             wrapperClassName="flex-75"

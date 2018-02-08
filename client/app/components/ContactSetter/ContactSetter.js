@@ -125,20 +125,25 @@ export class ContactSetter extends Component {
               setStage={this.setStage}
 	          />
           </div>
-          <div className="flex-50">
-            <ShipmentContactForm
-              contactData={contactData}
-              theme={theme}
-              setContact={this.setContact}
-            />
-          </div>
+          <div
+          	className="flex-100 layout-row layout-align-center-center"
+          	style={{ marginBottom: '50px', height: '430px' }}
+          >
+	          <div className="flex-50" style={{height: '100%'}}>
+	            <ShipmentContactForm
+	              contactData={contactData}
+	              theme={theme}
+	              setContact={this.setContact}
+	            />
+	          </div>
 
-          <div className="flex-50">
-						<AddressBook
-							contacts={this.availableContacts()}
-							autofillContact={this.autofillContact}
-							theme={theme}
-						/>
+	          <div className="flex-50" style={{ height: '100%' }}>
+							<AddressBook
+								contacts={this.availableContacts()}
+								autofillContact={this.autofillContact}
+								theme={theme}
+							/>
+	          </div>
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
 	          <ShipmentContactsBox

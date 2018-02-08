@@ -176,6 +176,7 @@ export class PlaceSearch extends Component {
                     onChange={this.handleAuto}
                     value={this.state.autoText.location}
                     placeholder="Search for address"
+                    style={this.props.inputStyles}
                 />
             </div>
         );
@@ -194,5 +195,10 @@ export class PlaceSearch extends Component {
 
 PlaceSearch.propTypes = {
     component: PropTypes.object,
-    parentToggle: PropTypes.func
+    parentToggle: PropTypes.func,
+    inputStyles: PropTypes.objectOf(PropTypes.string)
+};
+
+PlaceSearch.defaultProps = {
+    inputStyles: {}
 };
