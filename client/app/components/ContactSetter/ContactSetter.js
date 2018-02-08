@@ -127,7 +127,7 @@ export class ContactSetter extends Component {
           </div>
           <div
           	className="flex-100 layout-row layout-align-center-center"
-          	style={{ marginBottom: '50px', height: '430px' }}
+          	style={{ marginBottom: '50px', height: '532px', boxShadow: 'rgba(0, 0, 0, 0.05) 2px 2px 1px' }}
           >
 	          <div className="flex-50" style={{height: '100%'}}>
 	            <ShipmentContactForm

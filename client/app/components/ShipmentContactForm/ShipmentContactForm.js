@@ -106,7 +106,9 @@ export class ShipmentContactForm extends Component {
                         onInvalidSubmit={this.handleInvalidSubmit}
                         mapping={this.mapInputs}
                         ref="contactForm"
+                        style={{ padding: '8px 20px' }}
                     >
+                        <h3>Basic Details</h3>
                         <FormsyInput
                             wrapperClassName="flex-95"
                             className={styles.input}
@@ -147,16 +149,22 @@ export class ShipmentContactForm extends Component {
                             name="phone"
                             placeholder="Phone"
                         />
-                        <GmapsWrapper
-                            theme={theme}
-                            component={PlaceSearch}
-                            inputStyles={{
-                                width: '97.5%',
-                                marginBottom: '30px'
-                            }}
-                            handlePlaceChange={this.handlePlaceChange}
-                            hideMap={true}
-                        />
+                        <div className="flex-100 layout-row layout-wrap">
+                            <h3 className="flex-40">Address Details</h3>
+                            <div className="offset-5 flex-55">
+                                <GmapsWrapper
+                                    theme={theme}
+                                    component={PlaceSearch}
+                                    inputStyles={{
+                                        width: '96%',
+                                        marginTop: '9px',
+                                        background: 'white'
+                                    }}
+                                    handlePlaceChange={this.handlePlaceChange}
+                                    hideMap={true}
+                                />
+                            </div>
+                        </div>
                         <FormsyInput
                             wrapperClassName="flex-75"
                             className={styles.input}
