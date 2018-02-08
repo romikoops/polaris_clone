@@ -7,6 +7,8 @@
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
     width: 100%;
+    padding: 0 10px;
+    width: calc(100% - 10px);
   }
   .icon_btn {
     height: 25px;

@@ -19,10 +19,7 @@ class FormsyInput extends Component {
     render() {
         // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
-        const inputStyles = {
-            padding: '0 10px',
-            width: 'calc(100% - 10px)'
-        };
+        const inputStyles = {};
         const errorHidden = !this.props.submitAttempted;
         if (!errorHidden && !this.props.isValid()) {
             inputStyles.background = 'rgba(232, 114, 88, 0.3)';
