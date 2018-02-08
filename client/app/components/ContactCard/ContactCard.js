@@ -10,7 +10,7 @@ export class ContactCard extends Component {
         this.selectContact = this.selectContact.bind(this);
     }
     selectContact() {
-        this.props.select(this.props.contactData);
+        this.props.select(this.props.contactData, this.props.contactType);
     }
     render() {
         const { contactData, theme } = this.props;
@@ -106,4 +106,9 @@ ContactCard.propTypes = {
     contactData: PropTypes.object,
     theme: PropTypes.object,
     select: PropTypes.func,
+    contactType: PropTypes.string
+};
+
+ContactCard.defaultProps = {
+    contactType: ''
 };

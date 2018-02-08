@@ -12,10 +12,17 @@ export class ShipmentContactsBox extends Component {
         super(props);
         this.state = {};
         this.removeNotifyee = this.removeNotifyee.bind(this);
+        this.setContactForEdit = this.setContactForEdit.bind(this);
     }
 
     removeNotifyee(not) {
         this.props.removeNotifyee(not);
+    }
+    setContactForEdit(contactData, contactType) {
+        this.props.setContactForEdit({
+            ...contactData,
+            type: contactType
+        });
     }
     render() {
         const { shipper, consignee, notifyees, theme } = this.props;
@@ -35,9 +42,9 @@ export class ShipmentContactsBox extends Component {
                     <ContactCard
                         contactData={notifyee}
                         theme={theme}
-                        select={this.props.setContactForEdit}
+                        select={this.setContactForEdit}
                         key={v4()}
-                        target={''}
+                        contactType="notifyee"
                     />
                 </div>
             </div>
@@ -46,18 +53,18 @@ export class ShipmentContactsBox extends Component {
             <ContactCard
                 contactData={shipper}
                 theme={theme}
-                select={this.props.setContactForEdit}
+                select={this.setContactForEdit}
                 key={v4()}
-                target={''}
+                contactType="shipper"
             />
         ) : '';
         const consigneeContact = consignee.contact ? (
             <ContactCard
                 contactData={consignee}
                 theme={theme}
-                select={this.props.setContactForEdit}
+                select={() => this.props.setContactForEdit(consignee)}
                 key={v4()}
-                target={''}
+                contactType="consignee"
             />
         ) : '';
         return (
