@@ -82,6 +82,7 @@ Rails.application.routes.draw do
       put "update",  as: :update
 
       resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
+      post "locations/:location_id/edit", to: "user_locations#edit"
     end
 
     resources :shipments, only: [:index, :new, :show, :create] do
@@ -100,6 +101,7 @@ Rails.application.routes.draw do
     resources :contacts, only: [:index, :show, :create, :update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
     post 'contacts/update_contact_address/:id', to: 'contacts#update_contact_address'
+
     post 'contacts/new_alias', to: 'contacts#new_alias'
     post 'contacts/delete_alias/:id', to: 'contacts#delete_alias'
     post 'contacts/delete_contact_address/:id', to: 'contacts#delete_contact_address'
