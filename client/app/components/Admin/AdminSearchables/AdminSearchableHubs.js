@@ -75,12 +75,12 @@ export class AdminSearchableHubs extends Component {
             });
         }
         const viewType = this.props.sideScroll ?
-            (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
+            (<div className={`layout-row flex-100 layout-align-start-start ${styles.slider_container}`}>
                 <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
                     {hubsArr}
                 </div>
             </div>) :
-            (<div className="layout-row flex-100 layout-align-start-center ">
+            (<div className="layout-row flex-100 layout-align-start-start ">
                 <div className="layout-row flex-none layout-align-start-center layout-wrap">
                     {hubsArr}
                 </div>
@@ -88,10 +88,10 @@ export class AdminSearchableHubs extends Component {
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-60 layput-row layout-align-start-center">
+                    <div className="flex-60 layout-row layout-align-start-center">
                         <MainTextHeading theme={theme} text="Hubs" />
                     </div>
-                    <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
+                    <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"

@@ -37,7 +37,6 @@ export class AdminSearchableClients extends Component {
         }
     }
     handleSearchChange(event) {
-        console.log(this.props.clients);
         if (event.target.value === '') {
             this.setState({
                 clients: this.props.clients
@@ -56,7 +55,6 @@ export class AdminSearchableClients extends Component {
                 keys: keys
             };
             const fuse = new Fuse(this.props.clients, options);
-            console.log(fuse);
             return fuse.search(event.target.value);
         };
         const filteredClients = search(['first_name', 'last_name', 'company_name', 'phone', 'email']);
@@ -87,33 +85,29 @@ export class AdminSearchableClients extends Component {
             </div>);
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
-                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-60 layoput-row layout-align-start-center">
+                <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+                    <div className="flex-60 layout-row layout-align-start-center">
                         <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
                     </div>
                     <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
-                        <div className={`${styles.input_box} flex-35 laypout-row layout-align-start`}>
-                            <div className="flex-35 laypout-row layout-align-start input_box_full">
-                                <input
-                                    type="text"
-                                    name="search"
-                                    placeholder={placeholder ? placeholder : 'Search clients'}
-                                    onChange={this.handleSearchChange}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-center layout-align-space-between">
-                            {viewType}
-                        </div>
-                        { seeAll !== false ? (
-                            <div className="flex-100 layout-row layout-align-end-center">
-                                <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
-                                    <p className="flex-none">See all</p>
-                                </div>
-                            </div>)
-                            : ''}
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder={placeholder ? placeholder : 'Search clients'}
+                            onChange={this.handleSearchChange}
+                        />
                     </div>
                 </div>
+                <div className="flex-100 layout-row layout-align-center layout-align-space-between">
+                    {viewType}
+                </div>
+                { seeAll !== false ? (
+                    <div className="flex-100 layout-row layout-align-end-center">
+                        <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+                            <p className="flex-none">See all</p>
+                        </div>
+                    </div>)
+                    : ''}
             </div>
         );
     }
