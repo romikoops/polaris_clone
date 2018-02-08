@@ -41,6 +41,11 @@ export class ContactSetter extends Component {
     this.autofillContact = this.autofillContact.bind(this);
     this.setContact = this.setContact.bind(this);
     this.setStage = this.setStage.bind(this);
+    this.setContactForEdit = this.setContactForEdit.bind(this);
+  }
+
+  setContactForEdit(contactData) {
+  	this.setState({ contactData });
   }
 
   autofillContact(contactData) {
@@ -152,6 +157,7 @@ export class ContactSetter extends Component {
               notifyees={notifyees}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
+              setContactForEdit={this.setContactForEdit}
 	          />
           </div>
         </div>

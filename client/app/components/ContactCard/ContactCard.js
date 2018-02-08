@@ -41,8 +41,7 @@ export class ContactCard extends Component {
                                     style={iconStyle}
                                 />
                                 <p className={`flex ${styles.contact_header}`}>
-                                    {' '}
-                                    {contact.first_name} {contact.last_name}{' '}
+                                    {contact.firstName} {contact.lastName}
                                 </p>
                             </div>
                         </div>
@@ -69,7 +68,7 @@ export class ContactCard extends Component {
                                 />
                                 <p className={`flex ${styles.contact_header}`}>
                                     {' '}
-                                    <Truncate lines={1} >{contact.company_name} </Truncate>{}{' '}
+                                    <Truncate lines={1} >{contact.companyName} </Truncate>{}{' '}
                                 </p>
                             </div>
                         </div>

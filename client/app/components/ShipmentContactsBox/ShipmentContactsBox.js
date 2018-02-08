@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
-// import {v4} from 'node-uuid';
+import { v4 } from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
+import { ContactCard } from '../ContactCard/ContactCard';
+
 
 export class ShipmentContactsBox extends Component {
     constructor(props) {
@@ -30,8 +32,24 @@ export class ShipmentContactsBox extends Component {
         const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
             (notifyee + i).toString()
         ));
-        const shipperContact = shipper.toString();
-        const consigneeContact = consignee.toString();
+        const shipperContact = (
+            <ContactCard
+                contactData={shipper}
+                theme={theme}
+                select={this.props.setContactForEdit}
+                key={v4()}
+                target={''}
+            />
+        );
+        const consigneeContact = (
+            <ContactCard
+                contactData={consignee}
+                theme={theme}
+                select={this.props.setContactForEdit}
+                key={v4()}
+                target={''}
+            />
+        );
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
