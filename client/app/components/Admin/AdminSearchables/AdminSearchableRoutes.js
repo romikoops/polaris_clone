@@ -4,7 +4,7 @@ import styles from '../Admin.scss';
 import { AdminRouteTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
-import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
+import { TextHeading } from '../../TextHeading/TextHeading';
 export class AdminSearchableRoutes extends Component {
     constructor(props) {
         super(props);
@@ -101,7 +101,7 @@ export class AdminSearchableRoutes extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layput-row layout-align-start-center">
-                        <MainTextHeading theme={theme} text="Routes" />
+                        <TextHeading theme={theme} size={1} text="Routes" />
                     </div>
                     <div className="flex-35 layput-row layout-align-start-center input_box_full">
                         <input

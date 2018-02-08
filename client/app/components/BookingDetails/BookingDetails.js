@@ -10,7 +10,7 @@ import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
-import { BookingTextHeading }  from '../TextHeadings/BookingTextHeading';
+import { TextHeading }  from '../TextHeading/TextHeading';
 // import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
@@ -374,7 +374,7 @@ export class BookingDetails extends Component {
                             <div className="flex-100 layout-row">
                                 <p className="flex-none">
                                     {' '}
-                                    <BookingTextHeading theme={theme} size={2} text="Summary" />
+                                    <TextHeading theme={theme} size={2} text="Summary" />
                                 </p>
                             </div>
                         </div>

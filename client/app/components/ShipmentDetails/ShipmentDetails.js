@@ -17,7 +17,7 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { Modal } from '../Modal/Modal';
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
 import { isEmpty } from '../../helpers/isEmpty.js';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
@@ -460,7 +460,7 @@ export class ShipmentDetails extends Component {
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
                         <p className="flex-none letter_2 layout-align-space-between-end">
-                            <BookingTextHeading
+                            <TextHeading
                                 theme={theme}
                                 text={this.state.has_pre_carriage
                                     ? 'Approximate Pickup Date :'
@@ -495,7 +495,7 @@ export class ShipmentDetails extends Component {
                     <div className="flex-100 layout-row layout-align-end-center">
                         <p className="flex-none letter_2">
                             {' '}
-                            <BookingTextHeading theme={theme} text="Select Incoterm :" size={3}/>
+                            <TextHeading theme={theme} text="Select Incoterm :" size={3}/>
                         </p>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>

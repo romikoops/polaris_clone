@@ -5,7 +5,7 @@ import { UserShipmentRow } from './';
 import {v4} from 'node-uuid';
 import styles from '../Admin/Admin.scss';
 import defaults from '../../styles/default_classes.scss';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 export class UserShipments extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +42,7 @@ export class UserShipments extends Component {
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <MainTextHeading theme={theme} text="Shipments" />
+                    <TextHeading theme={theme} size={1} text="Shipments" />
                 </div>
                 <div className={'flex-100 layout-row layout-wrap layout-align-start-center ' + defaults.border_divider}>
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>

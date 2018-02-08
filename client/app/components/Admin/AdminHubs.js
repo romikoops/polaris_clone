@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
+import { TextHeading } from '../TextHeading/TextHeading';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminHubs extends Component {
@@ -34,8 +35,6 @@ class AdminHubs extends Component {
         adminDispatch.getHub(hub.id, true);
         this.setState({selectedHub: true});
     }
-
-
     backToIndex() {
         const { dispatch, history } = this.props;
         this.setState({selectedHub: false});
@@ -55,9 +54,6 @@ class AdminHubs extends Component {
     render() {
         const {selectedHub} = this.state;
         const {theme, hubs, hub, hubHash, adminDispatch} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -81,11 +77,11 @@ class AdminHubs extends Component {
             </div>);
         const title = selectedHub ?
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hub Overview</p>
+                <TextHeading theme={theme} size={1} text="Hub Overview" />
                 {selectedHub ? backButton : ''}
 
             </div> : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Hubs</p>
+                <TextHeading theme={theme} size={1} text="Hubs" />
                 {newButton}
             </div>;
         return(

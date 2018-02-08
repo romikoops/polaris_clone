@@ -6,7 +6,7 @@ import defs from '../../styles/default_classes.scss';
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow';
 import { LOAD_TYPES } from '../../constants';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 export class ChooseShipment extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +31,7 @@ export class ChooseShipment extends Component {
                 <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center layout-wrap`}>
                     <div className={` ${styles.header} flex-100 layout-row layout-align-start-center`}>
                         <p className="flex-none">
-                            <MainTextHeading theme={theme} text="Choose your shipment type:   " />
+                            <TextHeading theme={theme} size={1} text="Choose your shipment type:   " />
                         </p>
                         <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
                     </div>

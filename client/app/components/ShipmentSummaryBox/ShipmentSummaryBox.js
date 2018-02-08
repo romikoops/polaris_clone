@@ -3,7 +3,7 @@ import styles from './ShipmentSummaryBox.scss';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import { Tooltip } from '../Tooltip/Tooltip';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import { capitalize } from '../../helpers';
 import { gradientCSSGenerator, gradientGenerator, gradientTextGenerator } from '../../helpers';
 export class ShipmentSummaryBox extends Component {
@@ -72,7 +72,7 @@ export class ShipmentSummaryBox extends Component {
         const originAddress = (
             <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
                 <div className="flex-100 layout-row">
-                    <BookingTextHeading theme={theme} size={4} text="Pickup Address :" />
+                    <TextHeading theme={theme} size={4} text="Pickup Address :" />
                 </div>
                 <address className="flex-100 layout-row layout-wrap">
                     {locations.origin.street_number}  {locations.origin.street}  <br/>
@@ -85,7 +85,7 @@ export class ShipmentSummaryBox extends Component {
         const destinationAddress = (
             <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
                 <div className="flex-100 layout-row">
-                    <BookingTextHeading theme={theme} size={4} text="Delivery Address :" />
+                    <TextHeading theme={theme} size={4} text="Delivery Address :" />
                 </div>
                 <address className="flex-100 layout-row layout-wrap">
                     {locations.destination.street_number}  {locations.destination.street}  <br/>
@@ -149,7 +149,7 @@ export class ShipmentSummaryBox extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="Pickup Date :" />
+                                <TextHeading theme={theme} size={4} text="Pickup Date :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -168,7 +168,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="Date of Departure :" />
+                                <TextHeading theme={theme} size={4} text="Date of Departure :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -185,7 +185,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-25 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="ETA terminal :" />
+                                <TextHeading theme={theme} size={4} text="ETA terminal :" />
                             </div>
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -202,7 +202,7 @@ export class ShipmentSummaryBox extends Component {
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="Shipment Type :" />
+                                <TextHeading theme={theme} size={4} text="Shipment Type :" />
                             </div>
                             <p className="flex-none"> {shipment.load_type === 'cargo_item' ? 'LCL' : 'FCL'} </p>
                         </div>
@@ -211,25 +211,25 @@ export class ShipmentSummaryBox extends Component {
 
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="IncoTerm :" />
+                                <TextHeading theme={theme} size={4} text="IncoTerm :" />
                             </div>
                             <p className="flex-none"> {shipment.incoterm} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="MoT :" />
+                                <TextHeading theme={theme} size={4} text="MoT :" />
                             </div>
                             <p className="flex-none"> {capitalize(route[0].mode_of_transport)} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="Pre-carriage :" />
+                                <TextHeading theme={theme} size={4} text="Pre-carriage :" />
                             </div>
                             <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
                         </div>
                         <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
                             <div className="flex-100 layout-row">
-                                <BookingTextHeading theme={theme} size={4} text="On-carriage :" />
+                                <TextHeading theme={theme} size={4} text="On-carriage :" />
                             </div>
                             <p className="flex-none"> {shipment.has_on_carriage ? 'Yes' : 'No'}  </p>
                         </div>

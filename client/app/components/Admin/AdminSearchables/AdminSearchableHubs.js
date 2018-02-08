@@ -4,7 +4,7 @@ import styles from '../Admin.scss';
 import { AdminHubTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
-import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
+import { TextHeading } from '../../TextHeading/TextHeading';
 export class AdminSearchableHubs extends Component {
     constructor(props) {
         super(props);
@@ -89,7 +89,7 @@ export class AdminSearchableHubs extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layout-row layout-align-start-center">
-                        <MainTextHeading theme={theme} text="Hubs" />
+                        <TextHeading theme={theme} size={1} text="Hubs" />
                     </div>
                     <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
                         <input

@@ -8,7 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import { AdminSearchableClients } from '../Admin/AdminSearchables';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import { UserMergedShipment} from './UserMergedShipment';
 import { UserMergedShipHeaders} from './UserMergedShipHeaders';
 export class UserDashboard extends Component {
@@ -181,7 +181,7 @@ export class UserDashboard extends Component {
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
-                            <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
+                            <TextHeading className="flex-non clip" size={1} theme={theme} text="Shipments" />
                             <UserMergedShipHeaders title="Requested Shipments" total={mergedRequestedShipments.length}/>
 
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -208,7 +208,7 @@ export class UserDashboard extends Component {
                         <AdminSearchableClients theme={theme} clients={contacts} title="Most used Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <MainTextHeading theme={theme} text="My Shipment Addresses" />
+                        <TextHeading theme={theme} size={1} text="My Shipment Addresses" />
                         <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                     </div>
                 </div>

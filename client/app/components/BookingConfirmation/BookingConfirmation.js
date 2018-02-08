@@ -9,7 +9,7 @@ import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
 
 export class BookingConfirmation extends Component {
@@ -71,7 +71,7 @@ export class BookingConfirmation extends Component {
                         </div>
                         <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                             <p className="flex-100">
-                                <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
+                                <TextHeading theme={theme} size={4}  text="Notifyee" />
                             </p>
                             <p className={` ${styles.address} flex-100`}>
                                 {n.first_name} {n.last_name} <br/>
@@ -109,7 +109,7 @@ export class BookingConfirmation extends Component {
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                         <p className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Shipper" />
+                                            <TextHeading theme={theme} size={4}  text="Shipper" />
                                         </p>
                                         <p className={`${styles.address} flex-100`}>
                                             {shipper.data.first_name} {shipper.data.last_name} <br/>
@@ -132,7 +132,7 @@ export class BookingConfirmation extends Component {
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                         <p className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
+                                            <TextHeading theme={theme} size={4}  text="Notifyee" />
                                         </p>
                                         <p
                                             className={` ${
@@ -168,7 +168,7 @@ export class BookingConfirmation extends Component {
                                 >
                                     <div className="flex-100 layout-row layout-align-start-center">
                                         <p className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Cargo Details" />
+                                            <TextHeading theme={theme} size={3}  text="Cargo Details" />
                                         </p>
                                     </div>
                                     {cargo}
@@ -176,7 +176,7 @@ export class BookingConfirmation extends Component {
                                 <div className="flex-100 layout-row layout-align-end-end">
                                     <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
                                         <p className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Total Price:" />
+                                            <TextHeading theme={theme} size={3}  text="Total Price:" />
                                         </p>
                                         {' '}
                                         <Price value={shipment.total_price} user={user}/>

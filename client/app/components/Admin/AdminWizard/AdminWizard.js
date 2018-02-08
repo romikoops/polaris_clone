@@ -7,6 +7,7 @@ import { AdminWizardHubs, AdminWizardServiceCharges, AdminWizardPricings, AdminW
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../../RoundButton/RoundButton';
 import { adminActions } from '../../../actions';
+import { TextHeading } from '../../TextHeading/TextHeading';
 
 // import {v4} from 'node-uuid';
 
@@ -39,10 +40,6 @@ class AdminWizard extends Component {
             newHubs = wizard.newHubs;
             newScs = wizard.newScs;
         }
-        // const { newHubs } = wizard;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const StartView = ({theme}) => {
             return ( <div className="layout-fill layout-row layout-align-center-center">
                 <RoundButton
@@ -59,10 +56,12 @@ class AdminWizard extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                     <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-                        <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>Set Up Wizard</p>
+                        <TextHeading theme={theme} size={1} text="Set Up Wizard" />
                     </div>
                     <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-                        <p className={` ${styles.warning_text} flex-none clip`} style={textStyle}>WARNING: Your existing data might be overwritten!</p>
+                        <p>
+                            <TextHeading theme={theme} size={3} text="WARNING: Your existing data might be overwritten!" warning />
+                        </p>
                     </div>
                     <Switch className="flex">
                         <Route

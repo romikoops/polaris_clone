@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { RouteOption } from '../RouteOption/RouteOption';
 import styles from './RouteSelector.scss';
 import {v4} from 'node-uuid';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import defs from '../../styles/default_classes.scss';
 import Fuse from 'fuse.js';
 export class RouteSelector extends Component {
@@ -88,7 +88,7 @@ export class RouteSelector extends Component {
                     <div className="flex-100 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-space-between-center">
                             <div className="flex-none layput-row layout-align-start-center">
-                                <BookingTextHeading theme={theme} size={2} text="Available Routes" />
+                                <TextHeading theme={theme} size={2} text="Available Routes" />
                             </div>
                             <div className={`${styles.input_box} flex-none layput-row layout-align-start-center`}>
                                 <input

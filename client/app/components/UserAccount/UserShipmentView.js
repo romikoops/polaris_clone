@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import FileUploader from '../FileUploader/FileUploader';
 import FileTile from '../FileTile/FileTile';
 import { RoundButton } from '../RoundButton/RoundButton';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import { gradientTextGenerator } from '../../helpers';
 export class UserShipmentView extends Component {
     constructor(props) {
@@ -106,7 +106,7 @@ export class UserShipmentView extends Component {
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                 <p className="flex-100">
-                                    <BookingTextHeading theme={theme} size={3}  text="Notifyee" />
+                                    <TextHeading theme={theme} size={3}  text="Notifyee" />
                                 </p>
                                 <p className={` ${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
@@ -126,7 +126,7 @@ export class UserShipmentView extends Component {
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                 <p className="flex-100">
-                                    <BookingTextHeading theme={theme} size={3}  text="Shipper" />
+                                    <TextHeading theme={theme} size={3}  text="Shipper" />
                                 </p>
                                 <p className={`${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
@@ -151,7 +151,7 @@ export class UserShipmentView extends Component {
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                 <p className="flex-100">
-                                    <BookingTextHeading theme={theme} size={3}  text="Consignee" />
+                                    <TextHeading theme={theme} size={3}  text="Consignee" />
                                 </p>
                                 <p
                                     className={` ${

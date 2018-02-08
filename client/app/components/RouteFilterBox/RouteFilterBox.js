@@ -4,7 +4,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import '../../styles/day-picker-custom.css';
 import { moment } from '../../constants';
 import styles from './RouteFilterBox.scss';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import styled from 'styled-components';
 
 export class RouteFilterBox extends Component {
@@ -50,7 +50,7 @@ export class RouteFilterBox extends Component {
             <div className={styles.filterbox}>
                 <div className={styles.pickup_date}>
                     <p>
-                        <BookingTextHeading theme={theme} size={4} text={ pickup ? 'Pickup Date' : 'Closing Date' } />
+                        <TextHeading theme={theme} size={4} text={ pickup ? 'Pickup Date' : 'Closing Date' } />
                     </p>
                     <div className={'flex-none layout-row ' + styles.dpb}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
@@ -68,7 +68,7 @@ export class RouteFilterBox extends Component {
                 </div>
                 <div className={styles.mode_of_transport}>
                     <p>
-                        <BookingTextHeading theme={theme} size={4} text="Mode of transport" />
+                        <TextHeading theme={theme} size={4} text="Mode of transport" />
                     </p>
                     <div className="radio">
                         <label>
@@ -100,7 +100,7 @@ export class RouteFilterBox extends Component {
                     </div>
                 </div>
                 <StyledRange className={styles.transit_time}>
-                    <p><BookingTextHeading theme={theme} size={4} text="Transit Time" /></p>
+                    <p><TextHeading theme={theme} size={4} text="Transit Time" /></p>
                     <input
                         type="range"
                         value={this.props.durationFilter}

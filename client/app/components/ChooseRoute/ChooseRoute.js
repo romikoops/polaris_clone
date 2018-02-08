@@ -9,7 +9,7 @@ import { FlashMessages } from '../FlashMessages/FlashMessages';
 import defs from '../../styles/default_classes.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 export class ChooseRoute extends Component {
     constructor(props) {
         super(props);
@@ -212,7 +212,7 @@ export class ChooseRoute extends Component {
                     <div className="flex-75 offset-5 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
                             <p className={`flex-none ${styles.one_line_summ}`}>
-                                <BookingTextHeading theme={theme} size={2} text={shipmentHeadline} />
+                                <TextHeading theme={theme} size={2} text={shipmentHeadline} />
                             </p>
                         </div>
                         <div className="flex-100 layout-row">
@@ -221,7 +221,7 @@ export class ChooseRoute extends Component {
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                                 <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="This is the closest departure to the specified pickup date" />
+                                    <TextHeading theme={theme} size={3} text="This is the closest departure to the specified pickup date" />
                                 </p>
                             </div>
                             {closestRoute}
@@ -229,7 +229,7 @@ export class ChooseRoute extends Component {
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                                 <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="Alternative departures" />
+                                    <TextHeading theme={theme} size={3} text="Alternative departures" />
                                 </p>
 
                             </div>
@@ -249,7 +249,7 @@ export class ChooseRoute extends Component {
                         <div className="flex-100 layout-row layout-wrap">
                             <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                                 <p className="flex-none">
-                                    <BookingTextHeading theme={theme} size={3} text="Alternative modes of transport" />
+                                    <TextHeading theme={theme} size={3} text="Alternative modes of transport" />
                                 </p>
                             </div>
                             {limitedAlts}
