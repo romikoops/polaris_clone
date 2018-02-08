@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux';
 import { userActions, adminActions, authenticationActions } from '../../actions';
 import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../../components/Modal/Modal';
-import { gradientGenerator } from '../../helpers';
+import { gradientTextGenerator } from '../../helpers';
 
 class Landing extends Component {
     constructor(props) {
@@ -50,7 +50,8 @@ class Landing extends Component {
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : ''
         // };
-        const textStyle = theme && theme.colors ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        const textStyle1 = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        const textStyle2 = theme && theme.colors ? gradientTextGenerator(theme.colors.secondary, theme.colors.primary) : {color: 'black'};
         // console.log(builtGradient);
         const loadingScreen = this.props.loading ? <Loading theme={theme} /> : '';
         // const loadingScreen = <Loading theme={theme} />;
@@ -82,19 +83,19 @@ class Landing extends Component {
                     <div className={styles.services_row + ' flex-100 layout-row layout-align-center'}>
                         <div className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center">
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
-                                <i className="fa fa-bolt" aria-hidden="true" style={textStyle}></i>
+                                <i className="fa fa-bolt" aria-hidden="true" style={textStyle1}></i>
                                 <h3> Instant Booking </h3>
                             </div>
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
-                                <i className="fa fa-edit" aria-hidden="true" style={textStyle}></i>
+                                <i className="fa fa-edit" aria-hidden="true" style={textStyle2}></i>
                                 <h3> Real Time Quotes </h3>
                             </div>
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
-                                <i className="fa fa-binoculars" aria-hidden="true" style={textStyle}></i>
+                                <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1}></i>
                                 <h3>Transparent </h3>
                             </div>
                             <div className={'flex-none layout-column layout-align-center-center ' + styles.service}>
-                                <i className="fa fa-clock-o" aria-hidden="true" style={textStyle}></i>
+                                <i className="fa fa-clock-o" aria-hidden="true" style={textStyle2}></i>
                                 <h3>Updates in Real Time </h3>
                             </div>
                         </div>

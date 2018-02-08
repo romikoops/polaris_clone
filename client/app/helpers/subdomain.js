@@ -1,6 +1,6 @@
 export const getSubdomain = () => {
-    const host = window.location.host;
-    if (host.indexOf('.') < 0) {
+    // const host = window.location.host;
+    /* if (host.indexOf('.') < 0) {
         return 'greencarrier';
         // return 'isa';
         // return 'demo';
@@ -10,6 +10,7 @@ export const getSubdomain = () => {
         // return 'isa';
         // return 'demo';
     }
-    // return host.split('.')[0];
+    // return host.split('.')[0];**/
     return 'greencarrier';
+    // return 'isa';
 };

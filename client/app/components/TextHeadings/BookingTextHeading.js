@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import PropsTypes from 'prop-types';
-import { gradientGenerator } from '../../helpers/gradient';
+import { gradientTextGenerator } from '../../helpers/gradient';
 
 export class BookingTextHeading extends Component {
     constructor(props) {
@@ -15,28 +15,28 @@ export class BookingTextHeading extends Component {
             switch(size) {
                 case 1:
                     returnVal = (
-                        <h4 className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>
+                        <h4 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
                             {text}
                         </h4>
                     );
                     break;
                 case 2:
                     returnVal = (
-                        <h2 className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>
+                        <h2 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
                             {text}
                         </h2>
                     );
                     break;
                 case 3:
                     returnVal = (
-                        <h3 className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>
+                        <h3 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
                             {text}
                         </h3>
                     );
                     break;
                 case 4:
                     returnVal = (
-                        <h4 className="flex-none clip" style={gradientGenerator(theme.colors.primary, theme.colors.secondary)}>
+                        <h4 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
                             {text}
                         </h4>
                     );

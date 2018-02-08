@@ -45,14 +45,26 @@
       right:0;
       background: rgba(1,12,13,0.45);
     }
-    .slick_slide {
+    .slick_slide_ie11 {
       height: 350px;
-      width: 450px !important;
-      max-width: 450px !important;
+      width: 450px;
+      max-width: 100%;
       position: relative;
       background-position: center;
       background-size: cover;
       background-repeat: no-repeat;
+      overflow-y: hidden; 
+      overflow-x: hidden;
+      padding-right: 20px;
+    }
+    .slick_slide {
+      height: 350px;
+      width: 450px;
+      position: relative;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+
     }
     .one_slide .slick_slide {
       // width: 1200px !important;

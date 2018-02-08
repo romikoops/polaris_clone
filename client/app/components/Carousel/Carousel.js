@@ -8,10 +8,10 @@ import styled from 'styled-components';
 
 export class Carousel extends Component {
     render() {
-      if (!this.props.slides) {
-        return '';
-      }
-      const slideNumber = this.props.noSlides ? this.props.noSlides : 4;
+        if (!this.props.slides) {
+            return '';
+        }
+        const slideNumber = this.props.noSlides ? this.props.noSlides : 4;
         const settings = {
             dots: true,
             autoplay: true,
@@ -30,8 +30,12 @@ export class Carousel extends Component {
             const divStyle = {
                 backgroundImage: 'url(' + route.image + ')'
             };
+            const slickSlide = (navigator.userAgent.indexOf('MSIE') !== -1 ) || (!!document.documentMode === true )
+                ? styles.slick_slide_ie11
+                : styles.slick_slide
+            ;
             return (
-                <div key={v4()} className={styles.slick_slide + ' flex-none layout-row layout-align-center-center'} style={divStyle}>
+                <div key={v4()} className={`${slickSlide} flex-none layout-row layout-align-center-center`} style={divStyle}>
                     {this.props.fade ? <div className={`flex-none ${styles.fade}`}></div> : ''}
                     <div className={`flex-none layout-column layout-align-center-center ${styles.slick_content}`}>
                         <h2 className={styles.slick_city + ' flex-none'}> {route.header} </h2>
