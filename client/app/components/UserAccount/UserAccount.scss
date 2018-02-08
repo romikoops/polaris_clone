@@ -253,7 +253,11 @@
   .dashboard_main {
     min-height: 100vh;
   }
-  .dashboard_main .dashboard_top {
+  .dashboard_top {
+    height: 400px;
+    overflow: hidden;
+  }
+  .dashboard_main {
     height: 400px;
   }
   .dashboard_fade{
