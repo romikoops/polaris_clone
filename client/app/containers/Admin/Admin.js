@@ -85,10 +85,10 @@ class Admin extends Component {
         const menu = <FloatingMenu Comp={nav} theme={theme}/>;
         // ;
         return (
-            <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+            <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
                 <Header theme={theme} />
                 {loadingScreen}
-                <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start `}>
+                <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`}>
                     {menu}
                     <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                         <Switch className="flex">
@@ -151,7 +151,6 @@ class Admin extends Component {
                     </div>
                 </div>
                 <Footer />
-
             </div>
         );
     }
