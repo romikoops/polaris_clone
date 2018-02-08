@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import PropsTypes from 'prop-types';
-import { gradientTextGenerator } from '../../helpers';
+import { gradientTextGenerator } from '../../helpers/gradient';
 export class MainTextHeading extends Component {
     constructor(props) {
         super(props);
@@ -9,11 +9,10 @@ export class MainTextHeading extends Component {
     }
     render() {
         const { text, theme } = this.props;
-        const headerStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return(
             <div className="flex-100 layout-row layout-align-start-center">
-                <h1>
-                    <p className="flex-none clip" style={headerStyle}>{text}</p>
+                <h1 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
+                    {text}
                 </h1>
             </div>
         );

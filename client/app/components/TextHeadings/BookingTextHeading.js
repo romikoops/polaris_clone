@@ -15,9 +15,9 @@ export class BookingTextHeading extends Component {
             switch(size) {
                 case 1:
                     returnVal = (
-                        <h4 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
+                        <h1 className="flex-none clip" style={gradientTextGenerator(theme.colors.primary, theme.colors.secondary)}>
                             {text}
-                        </h4>
+                        </h1>
                     );
                     break;
                 case 2:

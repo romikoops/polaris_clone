@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { UserShipmentRow } from './';
 import {v4} from 'node-uuid';
 import styles from '../Admin/Admin.scss';
-import { gradientTextGenerator } from '../../helpers';
+import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 export class UserShipments extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +24,7 @@ export class UserShipments extends Component {
     }
 
     render() {
-      const { theme, hubs, shipments, user } = this.props;
+        const { theme, hubs, shipments, user } = this.props;
         // ;
         if (!user) {
             return <h1>NO DATA</h1>;
@@ -39,12 +39,10 @@ export class UserShipments extends Component {
         const finishedShipments = shipments && shipments.finished ? shipments.finished.map((ship) => {
             return <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment} handleAction={this.handleShipmentAction} user={user}/>;
         }) : '';
-
-        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return (
-             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                    <h1 className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Shipments</h1>
+                    <MainTextHeading theme={theme} text="Shipments" />
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
