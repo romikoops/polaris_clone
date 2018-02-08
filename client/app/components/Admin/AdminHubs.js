@@ -79,8 +79,8 @@ class AdminHubs extends Component {
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                 <TextHeading theme={theme} size={1} text="Hub Overview" />
                 {selectedHub ? backButton : ''}
-
-            </div> : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+            </div>
+            : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                 <TextHeading theme={theme} size={1} text="Hubs" />
                 {newButton}
             </div>;

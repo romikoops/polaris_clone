@@ -302,7 +302,6 @@
     }
     border-bottom: 1px solid rgba(0,0,0,0.25);
   }
-
   .price_row_detail {
     margin: 5px 0;
     padding: 10px;
@@ -350,7 +349,6 @@
     border-radius: 3px;
     background-color: #F9F9F9;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-
   }
   .expand_panel {
     transition: all 2s bounce;
@@ -447,8 +445,6 @@
     &:focus {
       outline: none;
     }
-  }
-  .input {
   }
   .input_50 {
     @extend .input;
