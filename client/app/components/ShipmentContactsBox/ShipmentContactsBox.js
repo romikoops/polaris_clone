@@ -29,8 +29,18 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
-        const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
-            (notifyee + i).toString()
+        const notifyeeContacts = notifyees && notifyees.map(notifyee => (
+            <div className="flex-50">
+                <div className={styles.contact_wrapper}>
+                    <ContactCard
+                        contactData={notifyee}
+                        theme={theme}
+                        select={this.props.setContactForEdit}
+                        key={v4()}
+                        target={''}
+                    />
+                </div>
+            </div>
         ));
         const shipperContact = shipper.contact ? (
             <ContactCard
