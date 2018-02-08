@@ -12,20 +12,20 @@ export class AdminRoutesIndex extends Component {
         };
     }
     componentDidMount() {
-        const { routes, loading, adminDispatch } = this.props;
-        if (!routes && !loading) {
-            adminDispatch.getRoutes(false);
+        const { itineraries, loading, adminDispatch } = this.props;
+        if (!itineraries && !loading) {
+            adminDispatch.getItineraries(false);
         }
     }
     render() {
-        const {theme, viewRoute, hubs, routes, adminDispatch} = this.props;
-        if (!routes) {
+        const {theme, viewItinerary, hubs, itineraries, adminDispatch} = this.props;
+        if (!itineraries) {
             return '';
         }
 
-        // const routesArr = routes.map((rt) => <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={viewRoute}/>);
+        // const routesArr = routes.map((rt) => <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={viewItinerary}/>);
 
-        const hubUrl = '/admin/routes/process_csv';
+        const hubUrl = '/admin/itineraries/process_csv';
         // const textStyle = {
         //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         // };
@@ -35,7 +35,7 @@ export class AdminRoutesIndex extends Component {
                     <p className="flex-none">Upload Routes Sheet</p>
                     <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Routes .xlsx"/>
                 </div>
-                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewRoute}/>
+                <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewItinerary}/>
             </div>
         );
     }

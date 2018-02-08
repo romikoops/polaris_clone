@@ -129,12 +129,12 @@ class OfferCalculator
   def determine_layovers!
     schedule_obj = {}
     @itineraries.each do |itin|
-      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).limit(20).order(:etd).uniq
-      destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).limit(20).order(:etd).uniq
+      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).order(:etd).uniq
+      destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).order(:etd).uniq
       layovers = origin_layovers + destination_layovers
       schedule_obj[itin.id] = layovers.group_by(&:trip_id)
     end
-    byebug
+    # byebugs
     @trips = schedule_obj
   end
 
@@ -160,14 +160,18 @@ class OfferCalculator
     # byebug
     @trips.each do |itinerary_id, trips|
       trip = trips.first[1]
-      sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
-      
-      next if charges[sched_key]
+      if trip.length > 1
+        sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
+        
+        next if charges[sched_key]
 
-      charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-      
-      set_trucking_charges!(charges, trip, sched_key)
-      set_cargo_charges!(charges, trip, sched_key)
+        charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
+        
+        set_trucking_charges!(charges, trip, sched_key)
+        set_cargo_charges!(charges, trip, sched_key)
+      else
+        byebug
+      end
     end
     @shipment.schedules_charges = charges
   end
@@ -206,7 +210,7 @@ class OfferCalculator
         end
       end
     end
-    byebug
+    
     @schedules = schedules
   end
 

@@ -17,7 +17,7 @@ function getAvailableDestinations(routeIds, origin) {
         method: 'GET',
         headers: authHeader()
     };
-    let queryString = routeIds ? `?route_ids=${routeIds}` : '';
+    let queryString = routeIds ? `?itinerary_ids=${routeIds}` : '';
     queryString += origin ? `&origin=${origin}` : '';
 
     return fetch(BASE_URL + '/nexuses' + queryString, requestOptions).then(handleResponse);

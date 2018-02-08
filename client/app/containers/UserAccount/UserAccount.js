@@ -44,17 +44,17 @@ export class UserAccount extends Component {
     }
     componentDidMount() {
         const {userDispatch, users, user} = this.props;
-        if (user && user.data && users && !users.loading && !users.dashboard) {
+        if (user && users && !users.loading && !users.dashboard) {
             userDispatch.getDashboard(user.data.id, false);
         }
-        if (user && user.data && users && !users.loading && !users.hubs) {
+        if (user && users && !users.loading && !users.hubs) {
             userDispatch.getHubs(false);
         }
     }
     setNavLink(target) {
         const {userDispatch, users, user} = this.props;
         this.setState({activeLink: target});
-        if (user && user.data && users && !users.loading && !users.dashboard) {
+        if (user && users && !users.loading && !users.dashboard) {
             userDispatch.getDashboard(user.data.id, false);
         }
     }

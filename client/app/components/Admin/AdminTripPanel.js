@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './AdminScheduleLine.scss';
+import styles from './AdminTripPanel.scss';
 import { moment } from '../../constants';
-export class AdminScheduleLine extends Component {
+import { AdminLayoverTile } from './';
+import { gradientTextGenerator } from '../../helpers';
+export class AdminTripPanel extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            showPanel: false
+        };
+        this.showPanel = this.showPanel.bind(this);
     }
-    switchIcon(sched) {
+    showPanel() {
+        const { trip, toggleShowPanel } = this.props;
+        toggleShowPanel(trip.id);
+    }
+    switchIcon(itinerary) {
         let icon;
-        switch (sched.mode_of_transport) {
+        switch (itinerary.mode_of_transport) {
             case 'ocean':
                 icon = <i className="fa fa-ship" />;
                 break;
@@ -31,25 +41,16 @@ export class AdminScheduleLine extends Component {
         }, ${color2})`;
     }
     render() {
-        const { theme, schedule, hubs } = this.props;
-        if (!schedule || !schedule.hub_route_key) {
+        const { theme, trip, itinerary, layovers, showPanel } = this.props;
+        if (!trip || !itinerary) {
             return '';
         }
-        const hubKeys = schedule.hub_route_key.split('-');
-        if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-            // ;
-            return '';
-        }
-        const originHub = hubs[hubKeys[0]].data;
-        const destHub = hubs[hubKeys[1]].data;
-        const gradientFontStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'black'
-        };
+        const hubNames = itinerary.name.split(' - ');
+        // const originHub = hubs[hubKeys[0]].data;
+        // const destHub = hubs[hubKeys[1]].data;
+        const gradientFontStyle = theme && theme.colors
+                    ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+                    : {color: 'black'};
         const dashedLineStyles = {
             marginTop: '6px',
             height: '2px',
@@ -63,14 +64,18 @@ export class AdminScheduleLine extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
-        const startTime = schedule.eta ? schedule.eta : schedule.start_date;
-        const endTime = schedule.eta ? schedule.eta : schedule.end_date;
+        const startTime = trip.eta ? trip.eta : trip.start_date;
+        const endTime = trip.eta ? trip.eta : trip.end_date;
+        const panelStyle = showPanel ? styles.panel_open : '';
+        const layoverArray = layovers && layovers[trip.id] ? layovers[trip.id].map((l) => {
+            return <AdminLayoverTile layoverData={l} theme={theme} />;
+        }) : [];
         return (
             <div
-                key={schedule.id}
-                className={`flex-100 layout-row ${styles.route_result}`}
+                key={trip.id}
+                className={`flex-100 layout-row layout-wrap ${styles.route_result}`}
             >
-                <div className="flex-100 layout-row layout-wrap">
+                <div className="flex-100 layout-row layout-wrap" onClick={this.showPanel}>
                     <div
                         className={`flex-40 layout-row layout-align-start-center ${
                             styles.top_row
@@ -83,35 +88,19 @@ export class AdminScheduleLine extends Component {
                                 }`}
                             />
                             <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {originHub.name} </h4>
-                            </div>
-                            <div className="flex-100">
-                                <p className="flex-100">
-                                    {' '}
-                                    {originHub.hub_code
-                                        ? originHub.hub_code
-                                        : ''}{' '}
-                                </p>
+                                <h4 className="flex-100"> {hubNames[0]} </h4>
                             </div>
                         </div>
                         <div className={`${styles.connection_graphics}`}>
                             <div className="flex-none layout-row layout-align-center-center">
-                                {this.switchIcon(schedule)}
+                                {this.switchIcon(itinerary)}
                             </div>
                             <div style={dashedLineStyles} />
                         </div>
                         <div className={`${styles.header_hub}`}>
                             <i className={`fa fa-flag-o ${styles.flag}`} />
                             <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {destHub.name} </h4>
-                            </div>
-                            <div className="flex-100">
-                                <p className="flex-100">
-                                    {' '}
-                                    {destHub.hub_code
-                                        ? destHub.hub_code
-                                        : ''}{' '}
-                                </p>
+                                <h4 className="flex-100"> {hubNames[1]} </h4>
                             </div>
                         </div>
                     </div>
@@ -166,13 +155,19 @@ export class AdminScheduleLine extends Component {
                         </div>
                     </div>
                 </div>
+                <div className={`flex-100 layout-row layout-wrap ${panelStyle} ${styles.layover_panel}`}>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <h4 className="flex-none clip" style={gradientFontStyle}>Stops</h4>
+                    </div>
+                    {layoverArray}
+                </div>
             </div>
         );
     }
 }
-AdminScheduleLine.propTypes = {
+AdminTripPanel.propTypes = {
     theme: PropTypes.object,
-    schedule: PropTypes.object,
+    trip: PropTypes.object,
     selectResult: PropTypes.func,
     hubs: PropTypes.object,
 };

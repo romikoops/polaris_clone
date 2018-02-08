@@ -101,7 +101,7 @@ export class UserDashboard extends Component {
         }) : false;
         const newReqShips = mergedRequestedShipments.length > 0 ? this.limitArray(mergedRequestedShipments, 3).map((ship) => {
             return (
-                <UserMergedShipment ship={ship} />
+                <UserMergedShipment ship={ship} viewShipment={this.viewShipment}/>
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">
@@ -109,7 +109,7 @@ export class UserDashboard extends Component {
             </div>);
         const newOpenShips = mergedOpenShipments.length > 0 ? this.limitArray(mergedOpenShipments, 3).map((ship) => {
             return (
-                <UserMergedShipment ship={ship} />
+                <UserMergedShipment ship={ship} viewShipment={this.viewShipment}/>
             );
         }) :
             (<div className="flex-100 layout-row layout-align-start-center">

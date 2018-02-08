@@ -68,6 +68,31 @@ class Itinerary < ApplicationRecord
     end
   end
 
+  def prep_schedules(limit)
+    schedules = []
+    layovers = self.trips.map { |t| t.layovers  }
+    if limit
+      layovers = layovers[0...limit]
+    end
+    layovers.each do |l_arr|
+      if l_arr.length > 1
+        schedules.push({
+          itinerary_id: self.id,
+          eta: l_arr[1].eta, 
+          etd: l_arr[0].etd, 
+          mode_of_transport: l_arr[0].itinerary.mode_of_transport, 
+          hub_route_key: "#{l_arr[0].stop.hub_id}-#{l_arr[1].stop.hub_id}", 
+          tenant_id: self.tenant_id, 
+          trip_id: l_arr[0].trip_id, 
+          origin_layover_id: l_arr[0].id,
+          destination_layover_id: l_arr[1].id
+          })
+      end
+    end
+    
+    schedules
+  end
+
   def self.ids_dedicated(user = nil)
     get_itineraries_with_dedicated_pricings(user.id, user.tenant_id)
   end
@@ -79,6 +104,9 @@ class Itinerary < ApplicationRecord
       air:   exists.('air'),
       rails: exists.('rails')
     }
+  end
+  def hubs
+    self.stops.flat_map { |s| s.hub }
   end
   def first_stop
     self.stops.order(index: :asc).first
@@ -100,12 +128,25 @@ class Itinerary < ApplicationRecord
     get_scoped_itineraries(tenant_id, mot_scope_ids)
   end
 
-  def detailed_hash(options = {})
+  def routes
+    stops = self.stops.order(:index).to_a.combination(2).to_a
+    return stops.map { |s| self.detailed_hash(
+        s,
+        {
+          nexus_names: true,
+          nexus_ids: true, 
+          modes_of_transport: true
+        }
+      ) }
+  end
+  def detailed_hash(stop_array, options = {})
+    origin = stop_array[0]
+    destination = stop_array[1]
     return_h = attributes
-    return_h[:origin_nexus]       = first_nexus.name                      if options[:nexus_names] 
-    return_h[:destination_nexus]  = last_nexus.name                       if options[:nexus_names]
-    return_h[:origin_nexus_id]       = first_nexus.id                   if options[:nexus_ids] 
-    return_h[:destination_nexus_id]  = last_nexus.id                    if options[:nexus_ids]
+    return_h[:origin_nexus]       = origin.hub.nexus.name                      if options[:nexus_names] 
+    return_h[:destination_nexus]  = destination.hub.nexus.name                       if options[:nexus_names]
+    return_h[:origin_nexus_id]       = origin.hub.nexus.id                   if options[:nexus_ids] 
+    return_h[:destination_nexus_id]  = destination.hub.nexus.id                    if options[:nexus_ids]
     return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
     return_h[:next_departure]     = next_departure                       if options[:next_departure]
     return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
@@ -120,32 +161,34 @@ class Itinerary < ApplicationRecord
 
   def self.for_locations(shipment, radius = 200)
     start_city, start_city_dist = shipment.origin.closest_location_with_distance
+
     end_city, end_city_dist = shipment.destination.closest_location_with_distance
     if start_city_dist > radius || end_city_dist > radius
       start_city = end_city = nil
     end
-    o_stops = start_city.stops
-    d_stops = end_city.stops
-    o_ids = []
-    d_ids = []
-    o_hubs = []
-    d_hubs = []
-    o_stops.each do |ost|
-      d_stops.each do |dst|
-        
-        if dst.itinerary_id == ost.itinerary_id && dst.index > ost.index
-          d_ids.push(dst.id)
-          o_ids.push(ost.id)
-          d_hubs.push(dst.hub)
-          o_hubs.push(ost.hub)
-        end
-      end
-    end
-    o_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", o_ids)
-    d_results = Itinerary.joins(:stops).group("itineraries.id, stops.id").having("stops.id IN (?)", d_ids)
-    
-    results = o_results.to_a & d_results.to_a
-    return {itineraries: results, origin_hubs: o_hubs, destination_hubs: d_hubs}
+    start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
+    end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
+    start_hub_ids = start_hubs.ids
+    end_hub_ids = end_hubs.ids
+    query = "SELECT *
+      FROM itineraries
+      WHERE tenant_id = #{shipment.tenant_id} AND id IN (
+        SELECT d_stops.itinerary_id
+        FROM (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN #{start_hub_ids.sql_format}
+        ) as o_stops
+        JOIN (
+          SELECT id, itinerary_id, index
+          FROM stops
+          WHERE hub_id IN #{end_hub_ids.sql_format}
+        ) as d_stops
+        ON o_stops.itinerary_id = d_stops.itinerary_id
+        WHERE o_stops.index < d_stops.index
+      )"
+    results = Itinerary.find_by_sql(query)
+    return {itineraries: results, origin_hubs: start_hubs, destination_hubs: end_hubs}
   end
 
   def set_scope!
@@ -157,5 +200,17 @@ class Itinerary < ApplicationRecord
     end
     self.mot_scope = MotScope.find_by(scope_attributes)
     save!
+  end
+
+  def self.update_hubs
+    its = Itinerary.all
+    its.each do |it|
+      hub_arr = []
+      hubs = it.stops.order(:index).each do |s|
+        hub_arr << {hub_id: s.hub_id, index: s.index}
+      end
+      it.hubs = hub_arr
+      it.save!
+    end
   end
 end

@@ -204,11 +204,11 @@ export function admin(state = {}, action) {
             });
             return reqShip;
         case adminConstants.ADMIN_GET_SHIPMENT_SUCCESS:
-            const succShip = merge({}, state, {
+            return {
+                ...state,
                 shipment: action.payload.data,
                 loading: false
-            });
-            return succShip;
+            };
         case adminConstants.ADMIN_GET_SHIPMENT_FAILURE:
             const errShip = merge({}, state, {
                 error: { shipments: action.error },
@@ -291,16 +291,16 @@ export function admin(state = {}, action) {
             };
 
         case adminConstants.GET_SCHEDULES_REQUEST:
-            const reqSched = merge({}, state, {
+            return {
+                ...state,
                 loading: true
-            });
-            return reqSched;
+            };
         case adminConstants.GET_SCHEDULES_SUCCESS:
-            const succSched = merge({}, state, {
+           return {
+            ...state,
                 schedules: action.payload.data,
                 loading: false
-            });
-            return succSched;
+            };
         case adminConstants.GET_SCHEDULES_FAILURE:
             const errSched = merge({}, state, {
                 error: { schedules: action.error },
@@ -546,7 +546,7 @@ export function admin(state = {}, action) {
             return reqRoutes;
         case adminConstants.GET_ROUTES_SUCCESS:
             const succRoutes = merge({}, state, {
-                routes: action.payload.data,
+                itineraries: action.payload.data,
                 loading: false
             });
             return succRoutes;
@@ -564,7 +564,7 @@ export function admin(state = {}, action) {
             return reqRoute;
         case adminConstants.GET_ROUTE_SUCCESS:
             const succRoute = merge({}, state, {
-                route: action.payload.data,
+                itinerary: action.payload.data,
                 loading: false
             });
             return succRoute;
@@ -644,12 +644,32 @@ export function admin(state = {}, action) {
             });
             return newTrucking;
 
+        case adminConstants.GET_LAYOVERS_REQUEST:
+            return state;
+        case adminConstants.GET_LAYOVERS_SUCCESS:
+            return {
+                ...state,
+                schedules: {
+                    ...state.schedules,
+                    itineraryLayovers: {
+                        [action.payload.data[0].layover.trip_id]: action.payload.data
+                    }
+                },
+                loading: false
+            };
+        case adminConstants.GET_LAYOVERS_FAILURE:
+            return {
+                ...state,
+                error: { route: action.error },
+                loading: false
+            };
         case adminConstants.CLEAR_LOADING:
             return {
                 ...state,
                 loading: false
             };
-
+        case adminConstants.ADMIN_LOG_OUT:
+            return {};
         default:
             return state;
     }

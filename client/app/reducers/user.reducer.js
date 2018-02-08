@@ -383,6 +383,8 @@ export function users(state = initialState, action) {
                 ...state,
                 loading: false
             };
+        case userConstants.USER_LOG_OUT:
+            return {};
 
         default:
             return state;

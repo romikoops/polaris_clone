@@ -21,7 +21,7 @@ module ItineraryTools
   def get_itinerary_option(itinerary)
     query = [
       { 
-        "$match" => { "id" => itinerary.tenant.id } 
+        "$match" => { "id" => itinerary.tenant_id } 
       },
       { 
         "$project" => {
@@ -36,6 +36,31 @@ module ItineraryTools
       }
     ]
     return get_items_aggregate("itineraryOptions", query)
+  end
+
+  def get_itinerary_options(itinerary)
+    query = [
+      { 
+        "$match" => { "id" => itinerary.tenant_id } 
+      },
+      { 
+        "$project" => {
+          "data" => { 
+            "$filter" => {
+              "input" => "$data",
+              "as"    => "itinerary",
+              "cond"  => { "$eq" => ["$$itinerary.id", itinerary.id]},
+            }
+          }
+        }
+      }
+    ]
+    return get_items_aggregate("itineraryOptions", query)
+  end
+
+  def get_itineraries(tenant_id)
+    resp = get_item("itineraryOptions", "id", tenant_id)
+    return resp["data"]
   end
 
   def get_scoped_itineraries(tenant_id, mot_scope_ids)
@@ -71,5 +96,23 @@ module ItineraryTools
       ]
     }
     update_item('itineraryOptions', key, update)
+  end
+
+  def retrieve_route_options(tenant_id, ids)
+    client = init
+    resp = client["itineraryOptions"].aggregate([
+      { "$match" => { "id" => tenant_id }},
+      {"$project" => {
+          data: {"$filter" => {
+              input: '$data',
+              as: 'ro',
+              cond: {"$in" => ["$$ro.id", ids]}
+          }},
+          _id: 0
+        }
+      }
+    ])
+    p "resp achieved"
+    return resp.to_a.first["data"]
   end
 end

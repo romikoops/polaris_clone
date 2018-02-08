@@ -94,22 +94,30 @@ function wizardOpenPricings(file) {
     return fetch(uploadUrl, requestOptions).then(handleResponse);
 }
 
-function getRoutes() {
+function getItineraries() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries', requestOptions).then(handleResponse);
 }
 
-function getRoute(id) {
+function getItinerary(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/admin/routes/' + id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries/' + id, requestOptions).then(handleResponse);
+}
+function getLayovers(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/itineraries/' + id + '/layovers', requestOptions).then(handleResponse);
 }
 
 function getServiceCharges() {
@@ -305,11 +313,12 @@ function newRoute(route) {
     return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
 }
 
+
 export const adminService = {
     getHubs,
     getHub,
-    getRoutes,
-    getRoute,
+    getItineraries,
+    getItinerary,
     getClient,
     updatePricing,
     getServiceCharges,
@@ -335,5 +344,6 @@ export const adminService = {
     activateHub,
     documentAction,
     saveNewHub,
-    newRoute
+    newRoute,
+    getLayovers
 };

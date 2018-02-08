@@ -26,14 +26,10 @@ class Tenant < ApplicationRecord
     detailed_itineraries = itineraries.map do |itinerary, h|
       itinerary.set_scope!
 
-      itinerary.detailed_hash(
-        nexus_names: true,
-        nexus_ids: true, 
-        modes_of_transport: true
-      )
+      itinerary.routes
     end
     # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
-    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries})
+    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end
 
   def mot_scope(args)

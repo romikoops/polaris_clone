@@ -9,7 +9,7 @@ export class UserMergedShipment extends Component  {
     render() {
         const { ship } = this.props;
         return (
-            <div className={`flex-100 layout-row layout-align-start-center ${styles.ship_row}`} onClick={() => this.viewShipment(ship)}>
+            <div className={`flex-100 layout-row layout-align-start-center ${styles.ship_row}`} onClick={() => this.props.viewShipment(ship)}>
                 <div className={`flex-40 layout-row layout-align-start-center ${styles.ship_row_cell}`}>
                     <p className="flex-none">{ship.originHub} - {ship.destinationHub}</p>
                 </div>

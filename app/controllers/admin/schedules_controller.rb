@@ -7,12 +7,12 @@ class Admin::SchedulesController < ApplicationController
 
   def index
     tenant = Tenant.find(current_user.tenant_id)
-    @train_schedules = tenant.schedules.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
-    @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
-    @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
-    @routes = Route.where(tenant_id: current_user.tenant_id)
+    @train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    @ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    @air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    @itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     # 
-    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
+    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, itineraries: @itineraries})
   end
   def auto_generate_schedules
     tenant = Tenant.find(current_user.tenant_id)
@@ -27,6 +27,11 @@ class Admin::SchedulesController < ApplicationController
     @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
     @routes = Route.where(tenant_id: current_user.tenant_id)
     response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
+  end
+  def layovers
+    trip = Trip.find(params[:id])
+    layovers = trip.layovers.order(:stop_index).map { |l| {layover: l, stop: l.stop, hub: l.stop.hub}  }
+    response_handler(layovers)
   end
 
   def overwrite_trains

@@ -72,7 +72,7 @@ export class AdminDashboard extends Component {
         if (!dashData) {
             return <Loading theme={theme} />;
         }
-        const { routes, shipments, air, ocean} = dashData;
+        const { itineraries, shipments, air, ocean} = dashData;
         const clientHash = {};
 
         if (clients) {
@@ -224,7 +224,7 @@ export class AdminDashboard extends Component {
                     </div>
 
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <MainTextHeading theme={theme} text="Schedules"  />

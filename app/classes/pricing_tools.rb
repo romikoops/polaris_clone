@@ -91,6 +91,13 @@ module PricingTools
     return resp
   end
 
+  def get_itinerary_pricings_array(itinerary_id, tenant_id)
+    client = get_client
+    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"itinerary" => {"$eq" => itinerary_id.to_i}}]
+    resp = get_items_query_fn(client, 'pricings', query).to_a
+    return resp
+  end
+
   def get_user_pricings(user_id)
     resp = get_items('userPricings', '_id', "#{user_id}")
     return resp.first

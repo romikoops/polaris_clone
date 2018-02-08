@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180202095300) do
+ActiveRecord::Schema.define(version: 20180208094339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20180202095300) do
     t.integer "vehicle_id"
     t.integer "tenant_id"
     t.integer "mot_scope_id"
+    t.jsonb "hubs", default: [], array: true
   end
 
   create_table "layovers", force: :cascade do |t|
