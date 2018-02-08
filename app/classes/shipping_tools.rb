@@ -187,13 +187,18 @@ module ShippingTools
   end
 
   def finish_shipment_booking(params)
-    @user_locations = []
-    current_user.user_locations.each do |uloc|
-      @user_locations.push({location: uloc.location, contact: current_user})
+    @user_locations = current_user.user_locations.map do |uloc|
+      { 
+        location: uloc.location.attributes, 
+        contact: current_user.attributes
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-    @contacts = []
-    current_user.contacts.each do |c|
-      @contacts.push({location: c.location, contact: c})
+
+    @contacts = current_user.contacts.map do |contact|
+      { 
+        location: contact.location.try(:attributes), 
+        contact: contact.attributes
+      }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
     @shipment = Shipment.find(params[:shipment_id])
     @shipment.shipper_id = params[:shipment][:shipper_id]
