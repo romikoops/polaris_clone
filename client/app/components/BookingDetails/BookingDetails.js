@@ -219,6 +219,8 @@ export class BookingDetails extends Component {
             cargoItems,
             locations
         } = shipmentData;
+        console.log('contacts');
+        console.log(contacts);
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
