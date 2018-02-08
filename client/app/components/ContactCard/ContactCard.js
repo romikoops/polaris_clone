@@ -92,7 +92,7 @@ export class ContactCard extends Component {
                                 className="fa fa-globe flex-none"
                                 style={iconStyle}
                             />
-                            <p className="flex-100"> {location.geocodedAddress}</p>
+                            <p className="flex-100"> {location.geocodedAddress || location.fullAddress}</p>
                         </div> :
                         <div className="flex-100" style={{height: '15px'}}></div>
                     }

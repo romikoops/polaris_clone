@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // import styles from './ContactSetter.scss';
 import defs from '../../styles/default_classes.scss';
-import { camelizeKeys } from '../../helpers/objectTools';
 import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm';
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
@@ -52,8 +51,8 @@ export class ContactSetter extends Component {
   	this.setState({
   		contactData: {
   			type: this.state.contactData.type,
-	  		contact: camelizeKeys(contactData.contact),
-	  		location: camelizeKeys(contactData.location)
+	  		contact: contactData.contact,
+	  		location: contactData.location
   		}
   	});
   }

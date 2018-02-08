@@ -32,7 +32,7 @@ export class ShipmentContactsBox extends Component {
         const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
             (notifyee + i).toString()
         ));
-        const shipperContact = (
+        const shipperContact = shipper.contact ? (
             <ContactCard
                 contactData={shipper}
                 theme={theme}
@@ -40,8 +40,8 @@ export class ShipmentContactsBox extends Component {
                 key={v4()}
                 target={''}
             />
-        );
-        const consigneeContact = (
+        ) : '';
+        const consigneeContact = consignee.contact ? (
             <ContactCard
                 contactData={consignee}
                 theme={theme}
@@ -49,27 +49,36 @@ export class ShipmentContactsBox extends Component {
                 key={v4()}
                 target={''}
             />
-        );
+        ) : '';
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-                        <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <div className="flex-75 layout-row layout-align-start-center">
-                                <i className="fa fa-user flex-none" style={textStyle}></i>
-                                <p className="flex-none">Shipper</p>
+                    <div
+                        className="flex-100 layout-row layout-wrap"
+                        style={{ height: '185px' }}
+                    >
+                        <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                            <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                                <div className="flex-75 layout-row layout-align-start-center">
+                                    <i className="fa fa-user flex-none" style={textStyle}></i>
+                                    <p className="flex-none">Shipper</p>
+                                </div>
+                            </div>
+                            <div className={styles.contact_wrapper}>
+                                {shipperContact}
                             </div>
                         </div>
-                        {shipperContact}
-                    </div>
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-                        <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <div className="flex-75 layout-row layout-align-start-center">
-                                <i className="fa fa-user flex-none" style={textStyle}></i>
-                                <p className="flex-none">Consignee</p>
+                        <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                            <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                                <div className="flex-75 layout-row layout-align-start-center">
+                                    <i className="fa fa-user flex-none" style={textStyle}></i>
+                                    <p className="flex-none">Consignee</p>
+                                </div>
+                            </div>
+                            <div className={styles.contact_wrapper}>
+                                {consigneeContact}
                             </div>
                         </div>
-                        {consigneeContact}
                     </div>
                     <div className="flex-100 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">

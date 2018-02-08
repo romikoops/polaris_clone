@@ -63,7 +63,7 @@ export class ShipmentContactForm extends Component {
         newLocation.latitude = place.geometry.location.lat();
         newLocation.longitude = place.geometry.location.lng();
         newLocation.fullAddress = place.formatted_address;
-        newLocation.geocoded_address = place.formatted_address;
+        newLocation.geocodedAddress = place.formatted_address;
         this.setState({
             contactData: { ...this.state.contactData, location: newLocation }
         });
@@ -204,6 +204,14 @@ export class ShipmentContactForm extends Component {
                             value={contactData.location.country}
                             name="location-country"
                             placeholder="Country"
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-100"
+                            className={styles.hide}
+                            type="text"
+                            value={contactData.location.geocodedAddress}
+                            name="location-geocodedAddress"
+                            placeholder=""
                         />
                         <RoundButton
                             text={`Set ${contactData.type}`}
