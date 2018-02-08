@@ -106,8 +106,7 @@ export class AdminSchedules extends Component {
     }
 
     getItinerariesForHub(hub) {
-        const { itineraries } = this.props;
-        const filteredItineraries = itineraries.filter(x => x.hubs.includes(hub));
+        const filteredItineraries = this.props.scheduleData.itineraries.filter(x => x.hubs.indexOf(hub) > -1);
         return filteredItineraries.map(x => x.id);
     }
 
