@@ -20,9 +20,8 @@ class FormsyInput extends Component {
         // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
         const inputStyles = {
-            width: '100%',
-            height: '100%',
-            boxSizing: 'border-box'
+            padding: '0 10px',
+            width: 'calc(100% - 10px)'
         };
         const errorHidden = !this.props.submitAttempted;
         if (!errorHidden && !this.props.isValid()) {
@@ -32,7 +31,7 @@ class FormsyInput extends Component {
         }
         const value = this.props.getValue() !== undefined ? this.props.getValue().toString() : '';
         return (
-            <div className={styles.wrapper_input}>
+            <div className={`${styles.wrapper_input} ${this.props.wrapperClassName}`}>
                 <input
                 	style={inputStyles}
                     onChange={this.changeValue}
@@ -43,6 +42,7 @@ class FormsyInput extends Component {
                     className={this.props.className}
                     onFocus={this.props.onFocus}
                     onBlur={this.props.onBlur}
+                    placeholder={this.props.placeholder}
                 />
                 <span className={errorStyles.error_message}>{errorHidden ? '' : errorMessage}</span>
 		            <style>

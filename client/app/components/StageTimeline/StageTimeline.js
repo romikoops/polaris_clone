@@ -19,16 +19,7 @@ export class StageTimeline extends Component {
         };
 
         let stageBox;
-        if (index < this.props.currentStageIndex) {
-            stageBox = (
-                <div
-                    className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`}
-                    onClick={() => this.props.setStage(index)}
-                >
-                    <i className="fa fa-check flex-none" style={gradientStyle} />
-                </div>
-            );
-        } else if (index === this.props.currentStageIndex) {
+        if (index === this.props.currentStageIndex) {
             stageBox = (
                 <div className={styles.wrapper_shop_stage_current} >
                     <div
@@ -60,11 +51,16 @@ export class StageTimeline extends Component {
             <div
                 key={i}
                 className="layout-column layout-align-start-center"
+                onClick={() => this.props.setStage(i)}
             >
                 { this.generateStageBox(i) }
                 <p className={`flex-none ${styles.stage_text} ${currentStage(i) ? styles.current : ''}`}>
-                    {capitalize(stage)}
-                    <Tooltip theme={theme} icon="fa-info-circle" text={stage} />
+                    { capitalize(stage) }
+                    <Tooltip
+                        theme={theme}
+                        icon="fa-info-circle"
+                        text={stage === 'notifyees' ? 'notifyee' : stage}
+                    />
                 </p>
             </div>
         ));

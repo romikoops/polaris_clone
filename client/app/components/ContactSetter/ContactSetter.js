@@ -14,7 +14,6 @@ export class ContactSetter extends Component {
     super(props);
 
     this.newContactData = {
-      type: 'shipper',
       contact: {
         companyName: '',
         firstName: '',
@@ -32,11 +31,16 @@ export class ContactSetter extends Component {
     };
 
     this.state = {
-    	contactData: this.newContactData,
+    	contactData: {
+      	type: 'shipper',
+    		...this.newContactData
+    	}
     };
     this.contactTypes = ['shipper', 'consignee', 'notifyee'];
+    this.stages = ['shipper', 'consignee', 'notifyees'];
     this.autofillContact = this.autofillContact.bind(this);
     this.setContact = this.setContact.bind(this);
+    this.setStage = this.setStage.bind(this);
   }
 
   autofillContact(contactData) {
@@ -64,6 +68,25 @@ export class ContactSetter extends Component {
     newState.contactData.type = this.contactTypes[contactTypeIndex];
 
     this.setState(newState);
+  }
+
+  setStage(i) {
+  	const contactType = this.contactTypes[i];
+  	if (contactType === 'notifyee') {
+			this.setState({
+	  		contactData: {
+	  			type: this.contactTypes[i],
+	  			...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
+	  		}
+			});
+  	} else {
+			this.setState({
+	  		contactData: {
+	  			type: this.contactTypes[i],
+	  			...this.props[this.contactTypes[i]]
+	  		}
+			});
+  	}
   }
 
   availableContacts() {
@@ -98,8 +121,8 @@ export class ContactSetter extends Component {
 	          <StageTimeline
               theme={theme}
               currentStageIndex={stageIndex}
-              stages={this.contactTypes}
-              // setStage={}
+              stages={this.stages}
+              setStage={this.setStage}
 	          />
           </div>
           <div className="flex-50">

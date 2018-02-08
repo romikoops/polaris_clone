@@ -99,98 +99,107 @@ export class ShipmentContactForm extends Component {
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-                        <Formsy
-                            className={styles.login_form}
-                            name="form"
-                            onValidSubmit={this.handleSubmit}
-                            onInvalidSubmit={this.handleInvalidSubmit}
-                            mapping={this.mapInputs}
-                            ref="contactForm"
-                        >
-                            <GmapsWrapper
-                                theme={theme}
-                                component={PlaceSearch}
-                                handlePlaceChange={this.handlePlaceChange}
-                                hideMap={true}
-                            />
-                            <FormsyInput className={styles.input_100}
-                                type="text"
-                                value={contactData.contact.companyName}
-                                name="companyName"
-                                placeholder="Company Name"
-                            />
-                            <FormsyInput
-                                className={styles.input_50}
-                                type="text"
-                                value={contactData.contact.firstName}
-                                name="firstName"
-                                placeholder="First Name"
-                            />
-                            <FormsyInput
-                                className={styles.input_50}
-                                type="text"
-                                value={contactData.contact.lastName}
-                                name="lastName"
-                                placeholder="Last Name"
-                            />
-                            <FormsyInput
-                                className={styles.input_50}
-                                type="text"
-                                value={contactData.contact.email}
-                                name="email"
-                                placeholder="Email"
-                            />
-                            <FormsyInput
-                                className={styles.input_50}
-                                type="text"
-                                value={contactData.contact.phone}
-                                name="phone"
-                                placeholder="Phone"
-                            />
-                            <FormsyInput
-                                className={styles.input_street}
-                                type="text"
-                                value={contactData.location.street}
-                                name="location-street"
-                                placeholder="Street"
-                            />
-                            <FormsyInput
-                                className={styles.input_no}
-                                type="text"
-                                value={contactData.location.streetNumber}
-                                name="location-streetNumber"
-                                placeholder="Number"
-                            />
-                            <FormsyInput
-                                className={styles.input_zip}
-                                type="text"
-                                value={contactData.location.zipCode}
-                                name="location-zipCode"
-                                placeholder="Postal Code"
-                            />
-                            <FormsyInput
-                                className={styles.input_cc}
-                                type="text"
-                                value={contactData.location.city}
-                                name="location-city"
-                                placeholder="City"
-                            />
-                            <FormsyInput
-                                className={styles.input_cc}
-                                type="text"
-                                value={contactData.location.country}
-                                name="location-country"
-                                placeholder="Country"
-                            />
-                            <RoundButton
-                                text={`Set ${contactData.type}`}
-                                theme={theme}
-                                size="small"
-                                active
-                            />
-                        </Formsy>
-                    </div>
+                    <Formsy
+                        className="flex-100 layout-row layout-wrap layout-align-start-start"
+                        name="form"
+                        onValidSubmit={this.handleSubmit}
+                        onInvalidSubmit={this.handleInvalidSubmit}
+                        mapping={this.mapInputs}
+                        ref="contactForm"
+                    >
+                        <GmapsWrapper
+                            theme={theme}
+                            component={PlaceSearch}
+                            handlePlaceChange={this.handlePlaceChange}
+                            hideMap={true}
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-95"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.contact.companyName}
+                            name="companyName"
+                            placeholder="Company Name"
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-45"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.contact.firstName}
+                            name="firstName"
+                            placeholder="First Name"
+                        />
+                        <FormsyInput
+                            wrapperClassName="offset-5 flex-45"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.contact.lastName}
+                            name="lastName"
+                            placeholder="Last Name"
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-45"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.contact.email}
+                            name="email"
+                            placeholder="Email"
+                        />
+                        <FormsyInput
+                            wrapperClassName="offset-5 flex-45"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.contact.phone}
+                            name="phone"
+                            placeholder="Phone"
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-75"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.location.street}
+                            name="location-street"
+                            placeholder="Street"
+                        />
+                        <FormsyInput
+                            wrapperClassName="offset-5 flex-15"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.location.streetNumber}
+                            name="location-streetNumber"
+                            placeholder="Number"
+                        />
+                        <FormsyInput
+                            wrapperClassName="flex-25"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.location.zipCode}
+                            name="location-zipCode"
+                            placeholder="Postal Code"
+                        />
+                        <FormsyInput
+                            wrapperClassName="offset-5 flex-30"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.location.city}
+                            name="location-city"
+                            placeholder="City"
+                        />
+                        <FormsyInput
+                            wrapperClassName="offset-5 flex-30"
+                            className={styles.input}
+                            type="text"
+                            value={contactData.location.country}
+                            name="location-country"
+                            placeholder="Country"
+                        />
+                        <RoundButton
+                            text={`Set ${contactData.type}`}
+                            theme={theme}
+                            size="small"
+                            active
+                        />
+                    </Formsy>
                 </div>
             </div>
         );
