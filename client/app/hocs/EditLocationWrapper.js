@@ -23,8 +23,7 @@ export default class EditLocationWrapper extends Component {
                         <ParamComponent
                             theme={this.props.theme}
                             gMaps={googleMaps}
-                            handleAddressChange={this.props.handleAddressChange}
-                            saveLocation={this.props.saveLocation}
+                            {...this.props}
                         />
                     )
                 }

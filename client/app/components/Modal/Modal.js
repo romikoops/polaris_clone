@@ -53,12 +53,14 @@ export class Modal extends Component {
     render() {
         if (this.state.hidden) return '';
         const width = this.props.width ? this.props.width : '40vw';
+
         const propsMinHeight = dimentionToPx({
             value: this.props.minHeight,
             windowHeight: this.state.windowHeight }
         );
         const minHeight = propsMinHeight || this.state.windowHeight * 0.5;
         const minTop = Math.max(this.state.windowHeight / 2 - minHeight, 100);
+
         const modalStyles = {
             top: Math.min(this.state.windowHeight * 0.5 - this.state.height / 2, minTop) + 'px',
             minHeight: minHeight,

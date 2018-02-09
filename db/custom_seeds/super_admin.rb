@@ -37,7 +37,8 @@ super_tenant_data = {
           container: true,
           cargo_item: true
         }
-      }
+      },
+      dangerous_goods: false
     }
   }
 super_tenant = Tenant.create!(super_tenant_data)

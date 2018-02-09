@@ -14,15 +14,15 @@ class SearchController < ApplicationController
             tmp["label"] = r["text"]
             tmp["value"] = r["_id"]
             results << tmp
-          }
-        elsif tenant.scope.dangerous_goods && r["dangerous"]
+          
+        elsif tenant.scope["dangerous_goods"] && r["dangerous"]
           tmp = {}
             tmp["label"] = r["text"]
             tmp["value"] = r["_id"]
             results << tmp
-          }
+          
         end
-      end
+      }
       response_handler(results)
   end
 

@@ -9,7 +9,6 @@ import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
-import { BookingTextHeading } from '../TextHeadings/BookingTextHeading';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -76,7 +75,6 @@ export class BookingConfirmation extends Component {
                 );
             });
         }
-
         return (
             <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-wrap layout-align-center">
@@ -106,6 +104,7 @@ export class BookingConfirmation extends Component {
                                         <div className="flex-100">
                                             <BookingTextHeading theme={theme} size={4}  text="Shipper" />
                                         </div>
+
                                         <p className={`${styles.address} flex-100`}>
                                             {shipper.data.first_name} {shipper.data.last_name} <br/>
                                             {shipper.location.street} {shipper.location.street_number} <br/>
@@ -129,6 +128,7 @@ export class BookingConfirmation extends Component {
                                         <div className="flex-100">
                                             <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
                                         </div>
+
                                         <p
                                             className={` ${
                                                 styles.address
@@ -147,7 +147,7 @@ export class BookingConfirmation extends Component {
                                 </div>
                                 <div className="flex-33 layout-row layout-align-end layout-wrap">
                                     <p className="flex-100">Booking placed at: {createdDate}</p>
-                                    <p className="flex-100">Booking placed by: {user.data.first_name} {user.data.last_name} </p>
+                                    <p className="flex-100">Booking placed by: {user.first_name} {user.last_name} </p>
                                 </div>
                             </div>
                             <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
@@ -165,6 +165,7 @@ export class BookingConfirmation extends Component {
                                         <div className="flex-none clip">
                                             <BookingTextHeading theme={theme} size={3}  text="Cargo Details" />
                                         </div>
+
                                     </div>
                                     {cargo}
                                 </div>

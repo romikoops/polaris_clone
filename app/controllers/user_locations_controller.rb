@@ -39,6 +39,21 @@ class UserLocationsController < ApplicationController
     response_handler(resp)
   end
 
+  def edit
+    user = User.find(params[:user_id])
+    location_data = JSON.parse(params[:edit_location])
+    location_data.delete("id")
+    user_loc = Location.find(params[:location_id])
+    user_loc.update_attributes(location_data)
+    user_loc.save!
+    resp = []
+    user_locs = user.user_locations
+    user_locs.each do |ul|
+      resp.push({user: ul, location: ul.location})
+    end
+    response_handler(resp)
+  end
+
   
 
   def destroy

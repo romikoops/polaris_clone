@@ -10,7 +10,6 @@ import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
-import { BookingTextHeading }  from '../TextHeadings/BookingTextHeading';
 
 export class BookingDetails extends Component {
     constructor(props) {
@@ -306,6 +305,9 @@ export class BookingDetails extends Component {
             locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
+        const textStyle = {
+            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
+        };
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -346,7 +348,11 @@ export class BookingDetails extends Component {
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
 
-                {shipment && theme && hubs ? <RouteHubBox hubs={hubs} route={schedules} theme={theme} /> : '' }
+                {shipment && theme && hubs ? (
+                    <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
+                ) : (
+                    ''
+                )}
                 <div className={` ${styles.contacts_border} flex-100 layout-row`}>
                     {addrView}
                 </div>
@@ -379,8 +385,10 @@ export class BookingDetails extends Component {
                         </div>
                         <div className="flex-90 layout-row layout-align-start-center">
                             {shipment && theme && hubs ? (
-                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />)
-                                : ( '' )}
+                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
+                            ) : (
+                                ''
+                            )}
                         </div>
                     </div>
                 </div>
