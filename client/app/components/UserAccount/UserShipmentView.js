@@ -106,9 +106,9 @@ export class UserShipmentView extends Component {
                                 <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">
+                                <div className="flex-100">
                                     <TextHeading theme={theme} size={3}  text="Notifyee" />
-                                </p>
+                                </div>
                                 <p className={` ${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
                                     {n.location.street} {n.location.street_number} <br/>
@@ -126,9 +126,9 @@ export class UserShipmentView extends Component {
                                 <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">
+                                <div className="flex-100">
                                     <TextHeading theme={theme} size={3}  text="Shipper" />
-                                </p>
+                                </div>
                                 <p className={`${styles.address} flex-100`}>
                                     {n.contact.first_name} {n.contact.last_name} <br/>
                                     {n.location.street} {n.location.street_number} <br/>
@@ -151,9 +151,9 @@ export class UserShipmentView extends Component {
                                 />
                             </div>
                             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <p className="flex-100">
+                                <div className="flex-100">
                                     <TextHeading theme={theme} size={3}  text="Consignee" />
-                                </p>
+                                </div>
                                 <p
                                     className={` ${
                                         styles.address

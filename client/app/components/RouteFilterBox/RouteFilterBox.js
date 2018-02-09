@@ -68,9 +68,9 @@ export class RouteFilterBox extends Component {
                     </div>
                 </div>
                 <div className={styles.mode_of_transport}>
-                    <p>
+                    <div>
                         <TextHeading theme={theme} size={4} text="Mode of transport" />
-                    </p>
+                    </div>
                     <div className="radio">
                         <label>
                             <input

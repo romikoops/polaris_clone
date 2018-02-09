@@ -211,9 +211,9 @@ export class HSCodeRow extends Component {
                 <div className={'layout-row flex-90 layout-wrap layout-align-start-center'} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className="layout-row flex-100 layout-align-start-center">
-                            <p className="flex-none">
+                            <div className="flex-none">
                                 <TextHeading theme={theme} size={2} text="HS Codes" />
-                            </p>
+                            </div>
                             <Tooltip theme={theme} icon="fa-info-circle" text="hs_code" />
                         </div>
                         <div className="layout-row flex-100 layout-wrap">
