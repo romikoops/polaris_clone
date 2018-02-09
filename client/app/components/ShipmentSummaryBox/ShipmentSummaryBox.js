@@ -128,7 +128,7 @@ export class ShipmentSummaryBox extends Component {
                             </div>
                             <div className={`${styles.connection_graphics}`}>
                                 <div className="flex-none layout-row layout-align-center-center">
-                                    {this.switchIcon(route)}
+                                    {this.switchIcon(route[0])}
                                 </div>
                                 <div style={dashedLineStyles} />
                             </div>

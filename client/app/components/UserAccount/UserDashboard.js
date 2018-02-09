@@ -17,6 +17,7 @@ export class UserDashboard extends Component {
         this.state = {
         };
         this.viewShipment = this.viewShipment.bind(this);
+        this.viewClient = this.viewClient.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
         this.startBooking = this.startBooking.bind(this);
         this.limitArray = this.limitArray.bind(this);
@@ -30,6 +31,11 @@ export class UserDashboard extends Component {
         const { userDispatch } = this.props;
         userDispatch.getShipment(shipment.id, true);
         this.setState({selectedShipment: true});
+    }
+    viewClient(client) {
+        const { userDispatch } = this.props;
+        userDispatch.getContact(client.id, true);
+        this.setState({selectedClient: true});
     }
     startBooking() {
         this.props.userDispatch.goTo('/booking');

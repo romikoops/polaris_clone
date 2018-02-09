@@ -308,7 +308,12 @@ export class EditLocation extends Component {
                     type="string"
                     placeholder="Geocoded address"
                 />*/}
-
+                <div className="flex-100 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-center-center"  onClick={() => this.props.toggleActiveView('allLocations')}>
+                        <i className="flex-none fa fa-checvron-left"></i>
+                        <p className="flex-none">Back</p>
+                    </div>
+                </div>
                 <div className={`flex-65 layout-row layout-wrap layout-align-center-start ${styles.map_box}`}>
                     {autoInput}
                     <div ref="map" id="map" className={styles.loc_map} style={mapStyle} />
