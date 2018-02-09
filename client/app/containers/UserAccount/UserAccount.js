@@ -231,7 +231,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/profile"
-                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/contacts"
