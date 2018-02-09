@@ -87,16 +87,17 @@ export class AdminSearchableRoutes extends Component {
             });
         }
         const viewType = this.props.sideScroll ?
-            (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
+            (<div className={`layout-row flex-100 layout-align-center-center ${styles.slider_container}`}>
                 <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
                     {routesArr}
                 </div>
             </div>) :
-            (<div className="layout-row flex-100 layout-align-start-center ">
-                <div className="layout-row flex-100 layout-align-start-center layout-wrap">
+            (<div className="layout-row flex-100 layout-align-center-center layout-wrap">
+                <div className="layout-row flex-none layout-align-start-center layout-wrap">
                     {routesArr}
                 </div>
             </div>);
+
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>

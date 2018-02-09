@@ -38,7 +38,7 @@ export class AdminHubTile extends Component {
         };
 
         return(
-            <div className={`flex-none ${styles.hub_card} layout-row pointy`} style={bg1} onClick={this.clickEv}>
+            <div className={`something flex-none ${styles.hub_card} layout-row pointy`} style={bg1} onClick={this.clickEv}>
                 <div className={styles.fade}></div>
                 <div className={`${styles.content} layout-row`}>
                     <div className="flex-15 layout-column layout-align-start-center">

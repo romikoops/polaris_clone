@@ -236,6 +236,7 @@
   }
   .content_top, .content_bottom {
     width: 100%;
+    overflow: hidden;
   }
   .icon_box {
     height: 100%;
@@ -475,5 +476,8 @@
     @extend .input;
     // width: 385px;
     width: calc(78% - 20px);
+  }
+  .overflow_hidden {
+    overflow: hidden;
   }
 }

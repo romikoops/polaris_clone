@@ -12,7 +12,7 @@ export class TextHeading extends Component {
         const { text, theme, size, warning} = this.props;
         let returnVal;
         const styling = !warning ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-            : {background: '#DE2A2A'};
+            : {color: '#DE2A2A'};
         if(size) {
             switch(size) {
                 case 1:
