@@ -124,7 +124,7 @@ export class UserProfile extends Component {
             editObj: {},
             newAlias: {},
             newAliasBool: false,
-            currencySelect: {label: this.props.user.currency, value: this.props.user.currency}
+            currencySelect: {label: this.props.user ? this.props.user.currency : 'EUR', value: this.props.user ? this.props.user.currency : 'EUR'}
         };
         this.doNothing = this.doNothing.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
