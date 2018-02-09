@@ -10,7 +10,8 @@ import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
-
+import { TextHeading }  from '../TextHeading/TextHeading';
+// import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
@@ -172,7 +173,6 @@ export class BookingDetails extends Component {
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }
-
     setNotifyeesFromBook(target, value) {
         const tmpAdd = {
             firstName: value.contact.first_name,
@@ -189,25 +189,21 @@ export class BookingDetails extends Component {
             this.setState({notifyees});
         }
     }
-
     toggleAddressBook() {
         const addressBool = this.state.addressBook;
         this.setState({ addressBook: !addressBool });
     }
-
     addNotifyee() {
         const prevArr = Object.assign([], this.state.notifyees);
         prevArr.push(Object.assign({}, this.state.default.notifyee));
         this.setState({ notifyees: prevArr });
     }
-
     removeNotifyee(not) {
         const prevArr = this.state.notifyees;
         const newArr = prevArr.filter(n => n !== not);
         console.log(newArr);
         this.setState({ notifyees: newArr });
     }
-
     handleInput(event) {
         const { name, value } = event.target;
         const targetKeys = name.split('-');
@@ -218,7 +214,6 @@ export class BookingDetails extends Component {
             }
         });
     }
-
     handleCargoInput(event) {
         const { name, value } = event.target;
         if (name === 'totalGoodsValue') {
@@ -229,7 +224,6 @@ export class BookingDetails extends Component {
             this.setState({ [name]: value });
         }
     }
-
     handleNotifyeeInput(event) {
         const { name, value } = event.target;
         console.log(name, value);
@@ -252,7 +246,6 @@ export class BookingDetails extends Component {
     setCustomsFee(fee) {
         this.setState({customs: fee});
     }
-
     pushUpData() {}
 
     saveDraft() {}
@@ -260,7 +253,6 @@ export class BookingDetails extends Component {
     toDashboard() {
         history.push('/dashboard');
     }
-
     toNextStage() {
         const {
             consignee,
@@ -287,11 +279,9 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
-
     closeBook() {
         this.setState({ addressBook: false });
     }
-
     render() {
         const { theme, shipmentData, shipmentDispatch, currencies, user } = this.props;
         const {
@@ -305,9 +295,6 @@ export class BookingDetails extends Component {
             locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const aBook = (
             <AddressBook
                 contacts={contacts}
@@ -330,29 +317,36 @@ export class BookingDetails extends Component {
                 handleNotifyeeChange={this.handleNotifyeeInput}
             />
         );
-        const acceptedBtn = (<div className="flex-none layout-row">
-            <RoundButton
-                active
-                handleNext={this.toNextStage}
-                theme={theme}
-                text="Finish Booking"
-            />
-        </div>);
-        const nonAcceptedBtn = (<div className="flex-none layout-row">
-            <RoundButton
-                theme={theme}
-                text="Finish Booking"
-            />
-        </div>);
+        const acceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    active
+                    handleNext={this.toNextStage}
+                    theme={theme}
+                    text="Finish Booking"
+                />
+            </div>
+        );
+        const nonAcceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    text="Finish Booking"
+                />
+            </div>
+        );
         const addrView = this.state.addressBook ? aBook : cForm;
         return (
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start no_max" style={{height: '3000px'}}>
 
-                {shipment && theme && hubs ? (
-                    <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
-                ) : (
-                    ''
-                )}
+                {shipment && theme && hubs
+                    ? (<RouteHubBox
+                        hubs={hubs}
+                        route={schedules}
+                        theme={theme}
+                    />)
+                    : ('')
+                }
                 <div className={` ${styles.contacts_border} flex-100 layout-row`}>
                     {addrView}
                 </div>
@@ -377,18 +371,27 @@ export class BookingDetails extends Component {
                     <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <div className="flex-100 layout-row">
-                                <div className="flex-none">
+                                <p className="flex-none">
                                     {' '}
-                                    <BookingTextHeading theme={theme} size={2} text="Summary" />
-                                </div>
+                                    <TextHeading theme={theme} size={2} text="Summary" />
+                                </p>
                             </div>
                         </div>
                         <div className="flex-90 layout-row layout-align-start-center">
-                            {shipment && theme && hubs ? (
-                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
-                            ) : (
-                                ''
-                            )}
+                            {shipment && theme && hubs
+                                ? (<ShipmentSummaryBox
+                                    total={this.orderTotal()}
+                                    user={user}
+                                    hubs={hubs}
+                                    route={schedules}
+                                    theme={theme}
+                                    shipment={shipment}
+                                    locations={locations}
+                                    cargoItems={cargoItems}
+                                    containers={containers}
+                                />)
+                                : ('')
+                            }
                         </div>
                     </div>
                 </div>
@@ -396,7 +399,10 @@ export class BookingDetails extends Component {
                     <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                         <div className="flex-50 layout-row layout-align-start-center">
                             <div className="flex-15 layout-row layout-align-center-center">
-                                <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                                <Checkbox
+                                    onChange={this.toggleAcceptTerms}
+                                    checked={this.state.insuranceView}
+                                    theme={theme} />
                             </div>
                             <div className="flex layout-row layout-align-start-center">
                                 <div className="flex-5"></div>
@@ -411,7 +417,12 @@ export class BookingDetails extends Component {
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={() => shipmentDispatch.toDashboard()}/>
+                        <RoundButton
+                            theme={theme}
+                            text="Back to dashboard"
+                            back iconClass="fa-angle-left"
+                            handleNext={() => shipmentDispatch.toDashboard()}
+                        />
                     </div>
                 </div>
             </div>

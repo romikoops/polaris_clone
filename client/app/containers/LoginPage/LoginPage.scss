@@ -1,7 +1,15 @@
 @import "../../styles/defaults";
 :local {
+	form.login_ie_11 {
+		margin-top: calc(100vh/6);
+		min-height: 200px;
+		min-width: 300px;
+		max-height: 500px;
+		max-width: 600px;
+		font-weight: 900;
+	}
 	form.login_form {
-		width: 317px;
+		width: 400px;
 
 		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 			color: $grey;

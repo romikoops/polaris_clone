@@ -73,9 +73,13 @@ class LoginPage extends React.Component {
                 timeout={10000}
             />
         ) : '';
+        const formPosition = (navigator.userAgent.indexOf('MSIE') !== -1 ) || (!!document.documentMode === true )
+            ? `${styles.login_form} ${styles.login_ie_11}`
+            : styles.login_form
+    ;
         return (
             <Formsy
-                className={styles.login_form}
+                className={formPosition}
                 name="form"
                 onValidSubmit={this.handleSubmit}
                 onInvalidSubmit={this.handleInvalidSubmit}

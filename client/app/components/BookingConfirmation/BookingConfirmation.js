@@ -9,6 +9,8 @@ import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
+import { TextHeading } from '../TextHeading/TextHeading';
+import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -22,7 +24,6 @@ export class BookingConfirmation extends Component {
     render() {
         const { theme, shipmentData, tenant, user, shipmentDispatch } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
-
         const {
             shipment,
             schedules,
@@ -34,15 +35,10 @@ export class BookingConfirmation extends Component {
             containers
         } = shipmentData;
         if (!shipment) return <h1> Loading</h1>;
-
-
         const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
         const cargo = [];
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const tenantName = tenant ? tenant.name : '';
-
         const pushToCargo = (array, Comp) => {
             array.forEach((ci, i) => {
                 const offset = i % 3 !== 0 ? 'offset-5' : '';
@@ -64,9 +60,9 @@ export class BookingConfirmation extends Component {
                             <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                         </div>
                         <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                            <div className="flex-100">
-                                <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                            </div>
+                            <p className="flex-100">
+                                <TextHeading theme={theme} size={4}  text="Notifyee" />
+                            </p>
                             <p className={` ${styles.address} flex-100`}>
                                 {n.first_name} {n.last_name} <br/>
                             </p>
@@ -101,10 +97,9 @@ export class BookingConfirmation extends Component {
                                         <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <div className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Shipper" />
-                                        </div>
-
+                                        <p className="flex-100">
+                                            <TextHeading theme={theme} size={4}  text="Shipper" />
+                                        </p>
                                         <p className={`${styles.address} flex-100`}>
                                             {shipper.data.first_name} {shipper.data.last_name} <br/>
                                             {shipper.location.street} {shipper.location.street_number} <br/>
@@ -112,28 +107,17 @@ export class BookingConfirmation extends Component {
                                             {shipper.location.country}
                                         </p>
                                     </div>
-
-
                                 </div>
                                 <div className="flex-33 layout-row">
                                     <div className="flex-15 layout-column layout-align-start-center">
-                                        <i
-                                            className={` ${
-                                                styles.icon
-                                            } fa fa-envelope-open-o flex-none`}
-                                            style={textStyle}
-                                        />
+                                        <i className={`${styles.icon} fa fa-envelope-open-o flex-none`}
+                                            style={textStyle} />
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                        <div className="flex-100">
-                                            <BookingTextHeading theme={theme} size={4}  text="Notifyee" />
-                                        </div>
-
-                                        <p
-                                            className={` ${
-                                                styles.address
-                                            } flex-100`}
-                                        >
+                                        <p className="flex-100">
+                                            <TextHeading theme={theme} size={4}  text="Notifyee" />
+                                        </p>
+                                        <p className={`${styles.address} flex-100`}>
                                             {consignee.data.first_name}{' '}
                                             {consignee.data.last_name} <br />
                                             {consignee.location.street}{' '}
@@ -152,28 +136,20 @@ export class BookingConfirmation extends Component {
                             </div>
                             <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
                             <div
-                                className={`${
-                                    styles.b_summ_bottom
-                                } flex-100 layout-row layout-wrap`}
-                            >
-                                <div
-                                    className={`${
-                                        styles.wrapper_cargo
-                                    } flex-100 layout-row layout-wrap`}
-                                >
+                                className={`${styles.b_summ_bottom} flex-100 layout-row layout-wrap`}>
+                                <div className={`${styles.wrapper_cargo} flex-100 layout-row layout-wrap`}>
                                     <div className="flex-100 layout-row layout-align-start-center">
-                                        <div className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Cargo Details" />
-                                        </div>
-
+                                        <p className="flex-none clip">
+                                            <TextHeading theme={theme} size={3}  text="Cargo Details" />
+                                        </p>
                                     </div>
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
                                     <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
-                                        <div className="flex-none clip">
-                                            <BookingTextHeading theme={theme} size={3}  text="Total Price:" />
-                                        </div>
+                                        <p className="flex-none clip">
+                                            <TextHeading theme={theme} size={3}  text="Total Price:" />
+                                        </p>
                                         {' '}
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>
@@ -186,7 +162,10 @@ export class BookingConfirmation extends Component {
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle0-left" handleNext={() => shipmentDispatch.toDashboard()}/>
+                        <RoundButton theme={theme}
+                            text="Back to dashboard"
+                            back iconClass="fa-angle0-left"
+                            handleNext={() => shipmentDispatch.toDashboard()}/>
                     </div>
                 </div>
             </div>

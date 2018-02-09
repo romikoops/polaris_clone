@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
 import defs from '../../styles/default_classes.scss';
-// import Select from 'react-select';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
 import { v4 } from 'node-uuid';
 import { Tooltip } from '../Tooltip/Tooltip';
 import ReactTooltip from 'react-tooltip';
+import { TextHeading } from '../TextHeading/TextHeading';
 
 export class ShipmentCargoItems extends Component {
     constructor(props) {
@@ -339,6 +339,7 @@ export class ShipmentCargoItems extends Component {
                     className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center section_padding`}
                     style={{ margin: '0 0 70px 0' }}
                 >
+                    <TextHeading theme={theme} text="Cargo Units" size={3}/>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
                         { cargosAdded }
                     </div>
@@ -350,9 +351,7 @@ export class ShipmentCargoItems extends Component {
                                 <i className="fa fa-plus-square-o clip" style={textStyle}/>
                             </div>
                         </div>
-                        <div
-                            className={styles.new_container_placeholder}
-                        >
+                        <div className={`flex-100 ${styles.new_container_placeholder}`} >
                             { generateSeparator(null, -1) }
                             { generateCargoItem(null, -1) }
                         </div>

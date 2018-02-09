@@ -20,7 +20,7 @@ import UserContacts from '../../components/UserAccount/UserContacts';
 import { userActions, authenticationActions, appActions } from '../../actions';
 import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
-
+import { Footer } from '../../components/Footer/Footer';
 // import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading';
 
@@ -119,7 +119,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch, currencies, appDispatch } = this.props;
+        const { user, theme, users, userDispatch, authDispatch, currencies, appDispatch, tenant } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -196,7 +196,7 @@ export class UserAccount extends Component {
             />
         );
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center">
+            <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
                 <Header theme={theme} />
                 {loadingScreen}
                 {this.state.showModal ? routeModal : ''}
@@ -231,7 +231,7 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/profile"
-                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/contacts"
@@ -253,6 +253,7 @@ export class UserAccount extends Component {
                         </Switch>
                     </div>
                 </div>
+                <Footer className="flex-100" theme={theme} tenant={tenant.data}/>
             </div>
         );
     }

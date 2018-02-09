@@ -9,6 +9,7 @@ import {
     BASE_URL
 } from '../../constants';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { TextHeading } from '../TextHeading/TextHeading';
 // import defs from '../../styles/default_classes.scss';
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 export class HSCodeRow extends Component {
@@ -207,10 +208,12 @@ export class HSCodeRow extends Component {
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                <div className={'layout-row flex-none layout-wrap layout-align-start-center'} >
+                <div className={'layout-row flex-90 layout-wrap layout-align-start-center'} >
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className="layout-row flex-100 layout-align-start-center">
-                            <h4 className="flex-none clip" style={textStyle}> HS Codes</h4>
+                            <p className="flex-none">
+                                <TextHeading theme={theme} size={2} text="HS Codes" />
+                            </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="hs_code" />
                         </div>
                         <div className="layout-row flex-100 layout-wrap">

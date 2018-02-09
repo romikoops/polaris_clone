@@ -3,7 +3,8 @@ import styles from './ShopStageView.scss';
 import PropTypes from 'prop-types';
 import defs from '../../styles/default_classes.scss';
 import { SHIPMENT_STAGES } from '../../constants';
-
+import { gradientCSSGenerator, gradientTextGenerator } from '../../helpers';
+import styled from 'styled-components';
 export class ShopStageView extends Component {
     constructor(props) {
         super(props);
@@ -17,10 +18,17 @@ export class ShopStageView extends Component {
     }
     stageFunction(stage) {
         const { theme } = this.props;
-        const gradientStyle = {
-            background: theme ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary} 0%, ${theme.colors.brightSecondary} 100%)` : 'black'
-        };
-
+        const gradientStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.brightPrimary;
+        // const borderStyle = {
+        //     borderColor: theme ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.brightPrimary
+        // };
+        const activeBtnStyle = theme && theme.colors ? gradientCSSGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.primary;
+        console.log(activeBtnStyle);
+        const StyledCircle = styled.div`
+            background: ${activeBtnStyle};
+           color: ${theme.colors.primary};
+           
+        `;
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
@@ -30,7 +38,7 @@ export class ShopStageView extends Component {
                     } flex-none layout-column layout-align-center-center`}
                     onClick={() => this.props.setStage(stage)}
                 >
-                    <i className="fa fa-check flex-none" style={gradientStyle} />
+                    <i className="fa fa-check flex-none clip" style={gradientStyle} />
                 </div>
             );
         } else if (stage.step === this.props.currentStage) {
@@ -46,7 +54,7 @@ export class ShopStageView extends Component {
                             {stage.step}{' '}
                         </h3>
                     </div>
-                    <div className={styles.shop_stage_current_border} style={gradientStyle}></div>
+                    <StyledCircle className={styles.shop_stage_current_border} />
                 </div>
             );
         } else {
@@ -88,7 +96,7 @@ export class ShopStageView extends Component {
             );
         });
         return (
-            <div className="layout-row flex-100 layout-align-center layout-wrap">
+            <div className={`layout-row flex-100 layout-align-center layout-wrap ${styles.ss_view}`}>
                 <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
                     <div className={styles.fade}></div>
                     <div className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${styles.banner_content}`}>

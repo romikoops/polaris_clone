@@ -72,7 +72,7 @@ export class AdminRouteView extends Component {
                     </div>
 
                 </div>
-               {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Service Charges </p>
                     </div>

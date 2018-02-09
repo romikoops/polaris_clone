@@ -4,6 +4,7 @@
       }
     .dashboard_top {
         height: 400px;
+        overflow: hidden;
     }
     .dashboard_mid {
         margin-top: 400px;
@@ -27,9 +28,6 @@
         top: 0;
         right: 0;
         z-index: 5;
-    }
-    .dashboard_main .dashboard_top .left .overlay{
-        // position: absolute;
     }
     .welcome {
         position: absolute;

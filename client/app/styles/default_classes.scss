@@ -69,6 +69,12 @@
       width: 1200px;
     }
   }
+  .ie_frame {
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      min-height: 2000px;
+    }
+    // ppheight: auto;
+  }
   .no_max {
     max-height: none !important;
   }
@@ -164,7 +170,7 @@
     font-size: 18px;
   }
   .height_100 {
-    height: 100%;
+    min-height: 100%;
   }
   .width_100 {
     width: 100%;
