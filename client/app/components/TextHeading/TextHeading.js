@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropsTypes from 'prop-types';
 import { gradientTextGenerator } from '../../helpers/gradient';
+import styles from './TextHeading.scss';
 
 export class TextHeading extends Component {
     constructor(props) {
@@ -13,32 +14,33 @@ export class TextHeading extends Component {
         let returnVal;
         const styling = !warning ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
             : {color: '#DE2A2A'};
+        const generalStyle = `${styles.text_style} flex-none clip`;
         if(size) {
             switch(size) {
                 case 1:
                     returnVal = (
-                        <h1 className="flex-none clip" style={styling}>
+                        <h1 className={generalStyle} style={styling}>
                             {text}
                         </h1>
                     );
                     break;
                 case 2:
                     returnVal = (
-                        <h2 className="flex-none clip" style={styling}>
+                        <h2 className={generalStyle} style={styling}>
                             {text}
                         </h2>
                     );
                     break;
                 case 3:
                     returnVal = (
-                        <h3 className="flex-none clip" style={styling}>
+                        <h3 className={generalStyle} style={styling}>
                             {text}
                         </h3>
                     );
                     break;
                 case 4:
                     returnVal = (
-                        <h4 className="flex-none clip" style={styling}>
+                        <h4 className={generalStyle} style={styling}>
                             {text}
                         </h4>
                     );
