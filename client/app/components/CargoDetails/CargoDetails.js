@@ -221,11 +221,14 @@ export class CargoDetails extends Component {
                                 </div>
                                 <div className="flex-100 layout-row layout-wrap">
                                     <div className="flex-100">
-                                        <p className="flex-none">
+                                        <p
+                                            className={`flex-none ${
+                                                styles.f_header
+                                            }`}
+                                        >
                                             {' '}
                                             <TextHeading theme={theme} size={3} text="Number and kind of packages, description of goods (optional)" />
                                         </p>
-
                                     </div>
                                     <div className="flex-100">
                                         <textarea
@@ -240,14 +243,24 @@ export class CargoDetails extends Component {
                             </div>
                             <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap alyout-align-start-start">
                                 <div className="flex-100 layout-row">
-                                    <p className="flex-none">
+
+                                    <p
+                                        className={`flex-none ${
+                                            styles.f_header
+                                        }`}
+                                    >
                                         {' '}
                                         <TextHeading theme={theme} size={3} text="Required Documents" />
                                     </p>
                                 </div>
+
                                 <div className="flex-50 layout-row layout-wrap">
-                                    <div className="flex-100 layout-row">
-                                        <p className="flex-none">
+                                    <div className="flex-100">
+                                        <p
+                                            className={`flex-none ${
+                                                styles.f_header
+                                            }`}
+                                        >
                                             {' '}
                                             <TextHeading theme={theme} size={3} text="Packing Sheet" />
                                         </p>
@@ -266,8 +279,8 @@ export class CargoDetails extends Component {
                                 </div>
 
                                 <div className="flex-50 layout-row layout-wrap">
-                                    <div className="flex-100 layout-row">
-                                        <p className="flex-none">
+                                    <div className="flex-100">
+                                        <p className={`flex-none ${styles.f_header}`}>
                                             {' '}
                                             <TextHeading theme={theme} size={3} text="Commercial Invoice" />
                                         </p>
@@ -302,28 +315,29 @@ export class CargoDetails extends Component {
                                             />}
                                     </div>
                                 </div>
-                                {dangerousGoods ? (
-                                    <div className="flex-50 layout-row layout-wrap">
-                                        <div className="flex-100 layout-row">
-                                            <p className="flex-none">
-                                                {' '}
-                                                <TextHeading theme={theme} size={3} text="Dangerouus Goods Declaration" />
-                                            </p>
+                                {dangerousGoods
+                                    ? (
+                                        <div className="flex-50 layout-row layout-wrap">
+                                            <div className="flex-100">
+                                                <p className={`flex-none ${styles.f_header}`}>
+                                                    {' '}
+                                                    <TextHeading theme={theme} size={3} text="Dangerouus Goods Declaration" />
+                                                </p>
+                                            </div>
+                                            <div className="flex-100">
+                                                { documents.dangerous_goods ?
+                                                    <DocViewer doc={documents.dangerous_goods} /> :
+                                                    <FileUploader
+                                                        theme={theme}
+                                                        type="dangerous_goods"
+                                                        dispatchFn={this.fileFn}
+                                                        text="Dangerous Goods Declaration"
+                                                    />}
+                                            </div>
                                         </div>
-                                        <div className="flex-100">
-                                            { documents.dangerous_goods ?
-                                                <DocViewer doc={documents.dangerous_goods} /> :
-                                                <FileUploader
-                                                    theme={theme}
-                                                    type="dangerous_goods"
-                                                    dispatchFn={this.fileFn}
-                                                    text="Dangerous Goods Declaration"
-                                                />}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
+                                    ) : (
+                                        ''
+                                    )}
                             </div>
                         </div>
                     </div>

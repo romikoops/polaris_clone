@@ -99,13 +99,19 @@ export class ShipmentSummaryBox extends Component {
             <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.summary_container}`}>
                 <div className="flex-100 layout-row layout-wrap">
                     <div
-                        className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
+                        className={`flex-100 layout-row layout-align-start-center ${
+                            styles.top_row
+                        }`}
+                    >
                         <div
                             className={`flex-65 layout-row layout-align-start-center ${styles.hubs_row}`}>
                             <div className={`flex ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
-                                        <i className={`fa fa-map-marker clip ${styles.map_marker}`}
+                                        <i
+                                            className={`fa fa-map-marker clip ${
+                                                styles.map_marker
+                                            }`}
                                             style={gradientFontStyle}
                                         />
                                     </div>
@@ -113,14 +119,11 @@ export class ShipmentSummaryBox extends Component {
                                     <h4 className="flex-85"> {startHub.data.name} </h4>
                                 </div>
                             </div>
-                            <div className={`${styles.connection_graphics} ${styles.grapics_top_margin}`}>
+                            <div className={`${styles.connection_graphics}`}>
                                 <div className="flex-none layout-row layout-align-center-center">
                                     {this.switchIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
-                                <div className={`${styles.transport_time} flex-none layout-row layout-align-center-center`} >
-                                    {moment(this.props.pickupDate).diff(route.etd, 'days')} days
-                                </div>
                             </div>
                             <div className={`flex ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">

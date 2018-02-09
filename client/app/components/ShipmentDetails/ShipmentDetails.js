@@ -12,7 +12,6 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
-// import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { Modal } from '../Modal/Modal';
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
@@ -455,8 +454,10 @@ export class ShipmentDetails extends Component {
             }
         `;
         const dayPickerSection = (
-            <div className={`${styles.date_sec} ${defaults.content_width}
-                layout-row flex-none layout-align-start-center`}>
+            <div className={`
+                ${styles.date_sec} ${defaults.content_width}
+                layout-row flex-none layout-align-start-center
+            `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
                         <p className="flex-none letter_2 layout-align-space-between-end">
@@ -469,10 +470,9 @@ export class ShipmentDetails extends Component {
                             />
                         </p>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
+                        {' '}
                     </div>
-                    <div className={`flex-none layout-row ${styles.dpb} ${showDayPickerError
-                        ? styles.with_errors
-                        : ''}`}>
+                    <div name="dayPicker" className={`flex-none layout-row ${styles.dpb} ${showDayPickerError ? styles.with_errors : ''}`}>
                         <div className={'flex-none layout-row layout-align-center-center ' + styles.dpb_icon}>
                             <i className="flex-none fa fa-calendar"></i>
                         </div>
@@ -528,8 +528,10 @@ export class ShipmentDetails extends Component {
                     {cargoDetails}
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className={`${styles.btn_sec} ${defaults.content_width}
-                        layout-row flex-none layout-wrap layout-align-start-start`}>
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width}
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Get Offers"
                             handleNext={this.handleNextStage}
@@ -539,8 +541,10 @@ export class ShipmentDetails extends Component {
                     </div>
                 </div>
                 <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className={`${styles.btn_sec} ${defaults.content_width} 
-                        layout-row flex-none layout-wrap layout-align-start-start`}>
+                    <div className={`
+                        ${styles.btn_sec} ${defaults.content_width} 
+                        layout-row flex-none layout-wrap layout-align-start-start
+                    `}>
                         <RoundButton
                             text="Back to Dashboard"
                             handleNext={this.returnToDashboard}

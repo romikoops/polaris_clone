@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { Checkbox } from '../Checkbox/Checkbox';
 import styles from './ShipmentCargoItems.scss';
 import defs from '../../styles/default_classes.scss';
-// import Select from 'react-select';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
 import { v4 } from 'node-uuid';
@@ -139,7 +138,7 @@ export class ShipmentCargoItems extends Component {
                     </div>
                     <div className="layout-row flex layout-wrap layout-align-start-center" >
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-                            <p className={`${styles.input_label} letter_2 flex-none`}> Gross Weight </p>
+                            <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
                         </div>
                         <div className={`flex-95 layout-row ${styles.input_box}`}>
@@ -336,7 +335,8 @@ export class ShipmentCargoItems extends Component {
 
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center-center" >
-                <div className={`${defs.content_width} layout-row flex-none layout-wrap layout-align-center-center section_padding`}
+                <div
+                    className={`layout-row flex-none ${defs.content_width} layout-wrap layout-align-center-center section_padding`}
                     style={{ margin: '0 0 70px 0' }}
                 >
                     <TextHeading theme={theme} text="Cargo Units" size={3}/>
@@ -344,16 +344,14 @@ export class ShipmentCargoItems extends Component {
                         { cargosAdded }
                     </div>
 
-                    <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-                        <div className={`${styles.add_unit_wrapper} content_width layout-row`}>
+                    <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div className={`${styles.add_unit_wrapper} content_width`}>
                             <div className={`layout-row flex-none ${styles.add_unit} layout-wrap layout-align-center-center`} onClick={this.addNewCargo}>
                                 <p> Add unit</p>
                                 <i className="fa fa-plus-square-o clip" style={textStyle}/>
                             </div>
                         </div>
-                        <div
-                            className={`flex-100 ${styles.new_container_placeholder}`}
-                        >
+                        <div className={`flex-100 ${styles.new_container_placeholder}`} >
                             { generateSeparator(null, -1) }
                             { generateCargoItem(null, -1) }
                         </div>

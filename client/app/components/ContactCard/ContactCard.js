@@ -91,49 +91,7 @@ export class ContactCard extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="flex-60 layout-row layout-align-start-start layout-wrap">
-                        <div className="flex-100 layout-row alyout-align-start-center">
-                            <i
-                                className="fa fa-user-circle-o flex-none"
-                                style={iconStyle}
-                            />
-                            <p className={`flex ${styles.contact_header}`}>
-                                {' '}
-                                {contact.first_name} {contact.last_name}{' '}
-                            </p>
-                        </div>
-                        <div className="flex-100 layout-row alyout-align-start-center">
-                            <i
-                                className="fa fa-building-o flex-none"
-                                style={iconStyle}
-                            />
-                            <p className={`flex ${styles.contact_header}`}>
-                                {' '}
-                                <Truncate lines={1} >{contact.company_name} </Truncate>{}{' '}
-                            </p>
-                        </div>
-                    </div>
-                    <div
-                        className={`flex-40 layout-row layout-wrap layout-align-start-center ${
-                            styles.contact_details
-                        }`}
-                    >
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <i
-                                className="fa fa-envelope flex-none"
-                                style={iconStyle}
-                            />
-                            <p className="flex-none"> {contact.email} </p>
-                        </div>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <i
-                                className="fa fa-phone flex-none"
-                                style={iconStyle}
-                            />
-                            <p className="flex-none"> {contact.phone} </p>
-                        </div>
-                    </div>*/}
-                    { location.geocoded_address ?
+                    { location && location.geocoded_address ?
                         <div className="flex-100 layout-row layout-align-start-center">
                             <i
                                 className="fa fa-globe flex-none"

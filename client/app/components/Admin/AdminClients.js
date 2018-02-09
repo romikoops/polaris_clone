@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {AdminClientsIndex, AdminClientView} from './';
 import styles from './Admin.scss';
+// import {v4} from 'node-uuid';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -340,6 +341,7 @@ class AdminClients extends Component {
                             />
                         </div>
                     </div>
+
                     <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row}`}>
                         <RoundButton
                             theme={theme}
