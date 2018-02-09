@@ -220,7 +220,7 @@ module ShippingTools
     else
       cargoKey = 'lcl'
     end
-    transportKey = Itinerary.find(@schedules.first["itinerary_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
+    transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
     # @schedules = params[:schedules]

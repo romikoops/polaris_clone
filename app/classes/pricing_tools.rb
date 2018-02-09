@@ -138,8 +138,8 @@ module PricingTools
     return resp
   end
 
-  def get_route_pricings_hash(route_id)
-    resp = get_items('hubRoutePricings', 'route_id', route_id).to_a
+  def get_itinerary_pricings_hash(itinerary_id)
+    resp = get_items('itineraryPricings', 'itinerary_id', itinerary_id).to_a
     result = {}
     resp.each do |pr|
       result[pr["_id"]] = pr

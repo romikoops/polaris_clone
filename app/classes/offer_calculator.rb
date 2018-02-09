@@ -230,7 +230,7 @@ class OfferCalculator
 
   def path_key(cargo_unit, trip)
     transport_category_name = cargo_unit.cargo_class ? cargo_unit.cargo_class : 'any'
-    transport_category = trip[0].itinerary.vehicle.transport_categories.find_by(
+    transport_category = trip[0].trip.vehicle.transport_categories.find_by(
       name: transport_category_name, 
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )

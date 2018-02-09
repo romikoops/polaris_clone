@@ -6,33 +6,21 @@ class Admin::ItinerariesController < ApplicationController
   
 
   def index
-    @detailed_itineraries = get_itineraries(current_user.tenant_id)
-    response_handler(@detailed_itineraries)
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
+    response_handler(itineraries)
   end
   def create
     new_itinerary_data = params[:itinerary].as_json
-    startHub = Hub.find_by(id: new_itinerary_data["startHub"])
-    endHub = Hub.find_by(id: new_itinerary_data["endHub"])
-    origin = startHub.nexus
-    destination = endHub.nexus
-    itinerary = Itinerary.find_by(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id)
-    if itinerary
-      itinerary.hub_itineraries.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_itinerary_data["name"])
-      update_itinerary_option(itinerary)
-      resp = itinerary.detailed_hash(
-        nexus_names: true
-      )
-      response_handler(resp)
-    else
-      itinerary_name = "#{origin.name} - #{destination.name}"
-      new_itinerary = current_user.tenant.itineraries.create!(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id, name: itinerary_name)
-      new_itinerary.hub_itineraries.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_itinerary_data["name"])
-      update_itinerary_option(new_itinerary)
-      resp = new_itinerary.detailed_hash(
-        nexus_names: true
-      )
-      response_handler(resp)
-    end
+    itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
+    new_itinerary_data["stops"].each_with_index { |h, i|  itinerary.stops.create(hub_id: h, index: i)}
+    itinerary.set_scope!
+    response_handler(itinerary)
+  end
+
+  def stops
+    itinerary = Itinerary.find(params[:id])
+    stops = itinerary.stops.order(:index)
+    response_handler(stops)
   end
 
   def show
@@ -40,6 +28,7 @@ class Admin::ItinerariesController < ApplicationController
     pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id)
     hubs = itinerary.hubs
     detailed_itineraries = get_itinerary_options(itinerary)
+
     schedules = itinerary.prep_schedules(20)
      
     resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules}

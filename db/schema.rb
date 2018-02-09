@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180208094339) do
+ActiveRecord::Schema.define(version: 20180209093548) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,7 +117,6 @@ ActiveRecord::Schema.define(version: 20180208094339) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.string "mode_of_transport"
-    t.integer "vehicle_id"
     t.integer "tenant_id"
     t.integer "mot_scope_id"
     t.jsonb "hubs", default: [], array: true
@@ -325,6 +324,7 @@ ActiveRecord::Schema.define(version: 20180208094339) do
     t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "vehicle_id"
   end
 
   create_table "trucking_pricings", force: :cascade do |t|

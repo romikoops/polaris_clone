@@ -267,7 +267,7 @@ export class AdminSchedules extends Component {
                         <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx"/>
                     </div>
                 </div>
-                <AdminScheduleGenerator theme={theme} itineraries={itineraries} hubs={hubList} />
+                <AdminScheduleGenerator theme={theme} itineraries={itineraries} hubs={hubs} />
             </div>
         );
 

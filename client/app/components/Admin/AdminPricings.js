@@ -39,7 +39,7 @@ class AdminPricings extends Component {
 
     render() {
         const {selectedPricing} = this.state;
-        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
+        const {theme, hubs, pricingData, itineraries, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
         const filteredClients = clients.filter(x => !x.guest);
         console.log(filteredClients);
         const textStyle = {
@@ -67,7 +67,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={filteredClients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch}  />}
+                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={filteredClients} pricingData={pricingData} itineraries={itineraries} {...props} adminTools={adminDispatch}  />}
                     />
                     <Route
                         exact
@@ -77,7 +77,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings/routes"
-                        render={props => <AdminPricingsRouteIndex theme={theme} hubs={hubs}  routes={routes ? routes : pricingData.routes}  adminTools={adminDispatch} {...props}  />}
+                        render={props => <AdminPricingsRouteIndex theme={theme} hubs={hubs}  routes={itineraries ? itineraries : pricingData.itineraries}  adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact

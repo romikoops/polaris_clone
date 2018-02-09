@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       
       post "itineraries/process_csv", to: "itineraries#overwrite", as: :itineraries_overwrite
       get "itineraries/:id/layovers", to: "schedules#layovers"
+      get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
       resources :clients, only: [:index, :show, :create]
 

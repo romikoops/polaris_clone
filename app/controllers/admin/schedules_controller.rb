@@ -16,17 +16,17 @@ class Admin::SchedulesController < ApplicationController
   end
   def auto_generate_schedules
     tenant = Tenant.find(current_user.tenant_id)
-    mot = params[:mot].split('_')[0]
-    @hub_route = HubRoute.find_by(starthub_id: params[:startHubId], endhub_id: params[:endHubId])
-    if !@hub_route
-      @hub_route = HubRoute.create_with_route(params[:startHubId], params[:endHubId], mot, current_user.tenant_id)
-    end
-    @hub_route.generate_weekly_schedules(mot, params[:startDate], params[:endDate], params[:weekdays], params[:duration], params[:vehicleTypeId])
-    @train_schedules = tenant.schedules.where(mode_of_transport: 'train').paginate(:page => params[:page], :per_page => 100)
-    @ocean_schedules = tenant.schedules.where(mode_of_transport: 'ocean').paginate(:page => params[:page], :per_page => 100)
-    @air_schedules = tenant.schedules.where(mode_of_transport: 'air').paginate(:page => params[:page], :per_page => 100)
-    @routes = Route.where(tenant_id: current_user.tenant_id)
-    response_handler({air: @air_schedules, train: @train_schedules, ocean: @ocean_schedules, routes: @routes})
+    mot = params[:mot]
+    itinerary = Itinerary.find(params[:itinerary])
+    stops = itinerary.stops.order(:index)
+    byebug
+    itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], params[:vehicleTypeId])
+    train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
+    # 
+    response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries})
   end
   def layovers
     trip = Trip.find(params[:id])

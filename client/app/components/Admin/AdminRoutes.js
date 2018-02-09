@@ -35,9 +35,9 @@ class AdminRoutes extends Component {
     }
 
     backToIndex() {
-        const { dispatch, history } = this.props;
+        const { adminDispatch } = this.props;
         this.setState({selectedRoute: false});
-        dispatch(history.push('/admin/routes'));
+        adminDispatch.goTo('/admin/routes');
     }
     closeModal() {
         this.setState({newRoute: false});

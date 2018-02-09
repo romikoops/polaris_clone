@@ -3,7 +3,6 @@ class Itinerary < ApplicationRecord
   has_many :layovers
   has_many :shipments
   has_many :trips
-  belongs_to :vehicle
   belongs_to :mot_scope, optional: true
   extend ItineraryTools
   include ItineraryTools
@@ -25,7 +24,7 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array)
+  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id)
     if start_date.kind_of? Date
       tmp_date = start_date
     else
@@ -36,12 +35,12 @@ class Itinerary < ApplicationRecord
     else
       end_date_parsed = DateTime.parse(end_date)
     end
-    
+    steps_in_order = steps_in_order.map { |e| e.to_i }
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
-        journey_end = journey_start + steps_in_order.sum
-        trip = self.trips.create!(start_date: journey_start, end_date: journey_end)
+        journey_end = journey_start + steps_in_order.sum.days
+        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         stops_in_order.each do |stop|
           if stop.index == 0
             data = {
@@ -70,23 +69,30 @@ class Itinerary < ApplicationRecord
 
   def prep_schedules(limit)
     schedules = []
-    layovers = self.trips.map { |t| t.layovers  }
+    trip_layovers = self.trips.map { |t| t.layovers  }
     if limit
-      layovers = layovers[0...limit]
+      trip_layovers = trip_layovers[0...limit]
     end
-    layovers.each do |l_arr|
+    trip_layovers.each do |l_arr|
       if l_arr.length > 1
-        schedules.push({
-          itinerary_id: self.id,
-          eta: l_arr[1].eta, 
-          etd: l_arr[0].etd, 
-          mode_of_transport: l_arr[0].itinerary.mode_of_transport, 
-          hub_route_key: "#{l_arr[0].stop.hub_id}-#{l_arr[1].stop.hub_id}", 
-          tenant_id: self.tenant_id, 
-          trip_id: l_arr[0].trip_id, 
-          origin_layover_id: l_arr[0].id,
-          destination_layover_id: l_arr[1].id
-          })
+        layovers_combinations = l_arr.map.with_index { |l, i| 
+          if l_arr[i + 1]
+            return [l, l_arr[i + 1]]
+          end  
+        }
+        layovers_combinations.each do |lc|
+          schedules.push({
+            itinerary_id: self.id,
+            eta: lc[1].eta, 
+            etd: lc[0].etd, 
+            mode_of_transport: lc[0].itinerary.mode_of_transport, 
+            hub_route_key: "#{lc[0].stop.hub_id}-#{lc[1].stop.hub_id}", 
+            tenant_id: self.tenant_id, 
+            trip_id: lc[0].trip_id, 
+            origin_layover_id: lc[0].id,
+            destination_layover_id: lc[1].id
+            })
+        end
       end
     end
     

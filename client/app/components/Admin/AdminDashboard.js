@@ -21,11 +21,14 @@ export class AdminDashboard extends Component {
     }
 
     componentDidMount() {
-        const { dashData, loading, adminDispatch } = this.props;
+        const { dashData, loading, adminDispatch, hubs } = this.props;
         if (!dashData && !loading) {
             adminDispatch.getDashboard(false);
         } else if (dashData && !dashData.schedules) {
             adminDispatch.getDashboard(false);
+        }
+        if (!hubs && !loading) {
+            adminDispatch.getHubs(false);
         }
     }
     viewShipment(shipment) {

@@ -10,6 +10,7 @@ export * from './AdminHubForm';
 export * from './AdminNav';
 export * from './AdminNavItem';
 
+export * from './AdminItineraryRow';
 export * from './AdminTripPanel';
 export * from './AdminLayoverTile';
 

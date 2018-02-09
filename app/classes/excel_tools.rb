@@ -560,7 +560,7 @@ module ExcelTools
       vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
       vehicle      = Vehicle.find_by(name: vehicle_name)
       # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
-      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], vehicle_id: vehicle.id, name: "#{origin.name} - #{destination.name}")
+      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
       stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
       cargo_classes = [
         'lcl'
@@ -570,7 +570,8 @@ module ExcelTools
         [30],
         row[:effective_date], 
         row[:expiration_date], 
-        [1, 5]
+        [1, 5],
+        vehicle.id
       )
 
       lcl_obj = {
@@ -660,7 +661,7 @@ module ExcelTools
           )
           
           pathKey  = "#{itinerary.id}_#{transport_category.id}"
-          priceKey = "#{itinerary.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
           
           pricing = { 
             data:      price_obj[cargo_class], 
@@ -689,7 +690,7 @@ module ExcelTools
           )
 
           pathKey = "#{itinerary.id}_#{transport_category.id}"
-          priceKey = "#{itinerary.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
 
           pricing = { 
             data:         price_obj[cargo_class], 
@@ -800,7 +801,7 @@ module ExcelTools
         vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
         vehicle      = Vehicle.find_by(name: vehicle_name)
         # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
-        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], vehicle_id: vehicle.id, name: "#{origin.name} - #{destination.name}")
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
         
       
         new_pricings_aux_data[pricing_key] = {
@@ -825,7 +826,8 @@ module ExcelTools
         [30],
         row[:effective_date], 
         row[:expiration_date], 
-        [1, 5]
+        [1, 5],
+        vehicle.id
       )
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
@@ -851,14 +853,15 @@ module ExcelTools
         
         uuid = SecureRandom.uuid
        
-        pricing_data[:_id] = uuid;
-        pricing_data[:tenant_id] = user.tenant_id;
+        
 
         pathKey = "#{new_pricings_aux_data[pricing_key][:itinerary].id}_#{transport_category.id}"
-        
+        priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+        pricing_data[:_id] = priceKey;
+        pricing_data[:tenant_id] = user.tenant_id;
         if dedicated
           
-          user_pricing = { pathKey => uuid }
+          user_pricing = { pathKey => priceKey }
 
           put_item_fn(mongo, 'pricings', pricing_data)
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)

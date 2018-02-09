@@ -488,11 +488,11 @@ export function admin(state = {}, action) {
                 loading: true
             };
         case adminConstants.NEW_ROUTE_SUCCESS:
-            const routes = state.routes.filter(x => x.id !== action.payload.id);
-            routes.push(action.payload);
+            const itineraries = state.itineraries.filter(x => x.id !== action.payload.id);
+            itineraries.push(action.payload);
             return {
                 ...state,
-                routes: routes,
+                itineraries: itineraries,
                 loading: false
             };
         case adminConstants.NEW_ROUTE_FAILURE:

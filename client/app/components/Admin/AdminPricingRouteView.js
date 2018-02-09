@@ -51,28 +51,23 @@ export class AdminPricingRouteView extends Component {
         this.setState({selectedClient: false});
     }
     render() {
-        const {theme, pricingData, routePricings, hubs, clients, adminActions} = this.props;
+        const {theme, pricingData, itineraryPricings, clients, adminActions} = this.props;
         const { editorBool, editTransport, editPricing, editHubRoute } = this.state;
         const {selectedClient} = this.state;
         console.log(this.props);
-        if (!pricingData || !routePricings) {
+        if (!pricingData || !itineraryPricings) {
             return '';
         }
         const routeBoxHubs = {startHub: {}, endHub: {}};
-        console.log(routePricings);
-        const { pricings, hubRoutes, transportCategories } = pricingData;
-        const {route, routePricingData} = routePricings;
-        if (!route || !routePricingData) {
+        console.log(itineraryPricings);
+        const { pricings, transportCategories } = pricingData;
+        const {itinerary, itineraryPricingData, stops} = itineraryPricings;
+        if (!itinerary || !itineraryPricingData) {
             return '';
         }
-        hubs.forEach(hub => {
-            if (hub.location.id === route.origin_nexus_id) {
-                routeBoxHubs.startHub = hub;
-            }
-            if (hub.location.id === route.destination_nexus_id) {
-                routeBoxHubs.endHub = hub;
-            }
-        });
+        routeBoxHubs.startHub = stops[0].hub;
+        routeBoxHubs.endHub = stops[stops.length - 1].hub;
+
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -149,11 +144,6 @@ export class AdminPricingRouteView extends Component {
             );
         };
         const relHR = [];
-        hubRoutes.forEach(hr => {
-            if (hr.route_id === route.id) {
-                relHR.push(hr);
-            }
-        });
         const RoutePricingBox = ({routeData, hrArr, rPriceObj, pricingsObj, transports, userId}) => {
             const inner = hrArr.map((hr) => {
                 const innerInner = [];
@@ -201,7 +191,7 @@ export class AdminPricingRouteView extends Component {
                         <i className="fa fa-times clip flex-none" style={textStyle}></i>
                     </div>
                 </div>
-                <RoutePricingBox key={v4()} routeData={route} hrArr={relHR} pricingsObj={pricings} rPriceObj={routePricingData} transports={transportCategories} userId={selectedClient.id}/>
+                <RoutePricingBox key={v4()} routeData={itinerary} hrArr={relHR} pricingsObj={pricings} rPriceObj={itineraryPricingData} transports={transportCategories} userId={selectedClient.id}/>
             </div>
         );
         // let routeBoxes;
@@ -217,7 +207,7 @@ export class AdminPricingRouteView extends Component {
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{route.name}</p>
+                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{itinerary.name}</p>
                     {backButton}
                 </div>
                 <RouteHubBox hubs={routeBoxHubs} theme={theme}/>
@@ -226,7 +216,7 @@ export class AdminPricingRouteView extends Component {
                         <p className={` ${styles.sec_header_text} flex-none`}  > Open Pricing </p>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-                        <RoutePricingBox key={v4()} routeData={route} hrArr={relHR} pricingsObj={pricings} rPriceObj={routePricingData} transports={transportCategories} userId="open"/>
+                        <RoutePricingBox key={v4()} routeData={itinerary} hrArr={relHR} pricingsObj={pricings} rPriceObj={itineraryPricingData} transports={transportCategories} userId="open"/>
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">

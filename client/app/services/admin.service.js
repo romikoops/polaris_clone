@@ -184,7 +184,7 @@ function getClientPricings(id) {
     return fetch(BASE_URL + '/admin/client_pricings/' + id, requestOptions).then(handleResponse);
 }
 
-function getRoutePricings(id) {
+function getItineraryPricings(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -304,13 +304,13 @@ function saveNewHub(hub, location) {
     };
     return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
 }
-function newRoute(route) {
+function newRoute(itinerary) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({route})
+        body: JSON.stringify({itinerary})
     };
-    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries', requestOptions).then(handleResponse);
 }
 
 
@@ -333,7 +333,7 @@ export const adminService = {
     getVehicleTypes,
     getShipments,
     getClients,
-    getRoutePricings,
+    getItineraryPricings,
     wizardHubs,
     wizardSCharge,
     wizardPricings,

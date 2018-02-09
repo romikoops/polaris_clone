@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Admin.scss';
-import { AdminRouteTile } from '../';
+import { AdminItineraryRow } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
@@ -59,8 +59,8 @@ export class AdminSearchableRoutes extends Component {
             return fuse.search(event.target.value);
         };
 
-        const filteredRoutesOrigin = search('origin_nexus');
-        const filteredRoutesDestination = search('destination_nexus');
+        const filteredRoutesOrigin = search('name');
+        const filteredRoutesDestination = search('mode_of_transport');
 
         let TopRoutes = filteredRoutesDestination.filter(itinerary => (
             filteredRoutesOrigin.includes(itinerary)
@@ -74,16 +74,23 @@ export class AdminSearchableRoutes extends Component {
         });
     }
     render() {
-        const { hubs, theme, seeAll } = this.props;
+        const { hubs, theme, seeAll, limit } = this.props;
         const { itineraries } = this.state;
         let itinerariesArr;
+        const viewLimit = limit ? limit : 15;
         if (itineraries) {
-            itinerariesArr = itineraries.map((rt) => {
-                return  <AdminRouteTile key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+            itinerariesArr = itineraries.map((rt, i) => {
+                if (i <= viewLimit) {
+                    return  <AdminItineraryRow key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+                }
+                return '';
             });
         } else if (this.props.itineraries) {
-            itinerariesArr = itineraries.map((rt) => {
-                return  <AdminRouteTile key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+            itinerariesArr = itineraries.map((rt, i) => {
+                if (i <= viewLimit) {
+                    return  <AdminItineraryRow key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+                }
+                return '';
             });
         }
         const viewType = this.props.sideScroll ?

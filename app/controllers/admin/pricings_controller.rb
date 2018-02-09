@@ -1,6 +1,7 @@
 class Admin::PricingsController < ApplicationController
   include ExcelTools
   include PricingTools
+  include ItineraryTools
 
   before_action :require_login_and_role_is_admin
 
@@ -10,14 +11,10 @@ class Admin::PricingsController < ApplicationController
     @pricings = get_tenant_pricings_hash(current_user.tenant_id)
     @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
     @transports = TransportCategory.all
-    @routes = Route.where(tenant_id: current_user.tenant_id)
-    @hub_routes = @routes.flat_map(&:hub_routes)
-    detailed_routes = @routes.map do |route| 
-      route.detailed_hash(
-        nexus_names: true
-      )
-    end
-    response_handler({routes: detailed_routes, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports, hubRoutes: @hub_routes })
+    itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
+    detailed_itineraries = itineraries.flat_map{ |i| get_itinerary_options(i)}
+    
+    response_handler({itineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
 
   def client
@@ -27,9 +24,10 @@ class Admin::PricingsController < ApplicationController
   end
 
   def route
-    @pricings = get_route_pricings_hash(params[:id].to_i)
-    @route = Route.find(params[:id])
-    response_handler({routePricingData: @pricings, route: @route})
+    pricings = get_itinerary_pricings_hash(params[:id].to_i)
+    itinerary = Itinerary.find(params[:id])
+    stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
+    response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops})
   end
 
   def update_price

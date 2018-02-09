@@ -34,7 +34,7 @@ export class AdminPricingsIndex extends Component {
     }
     viewRoute(route) {
         const {adminTools} = this.props;
-        adminTools.getRoutePricings(route.id, true);
+        adminTools.getItineraryPricings(route.id, true);
     }
     render() {
         const {theme, hubs, pricingData, clients, adminTools } = this.props;
@@ -49,7 +49,7 @@ export class AdminPricingsIndex extends Component {
         if (this.state.redirectClients) {
             return <Redirect push to="/admin/pricings/clients" />;
         }
-        const {routes} = pricingData;
+        const {itineraries} = pricingData;
         const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv';
         const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv';
         return(
@@ -64,7 +64,7 @@ export class AdminPricingsIndex extends Component {
                         <FileUploader theme={theme} url={fclUrl} type="xlsx" text="Open Pricings .xlsx"/>
                     </div>
                 </div>
-                <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} handleClick={this.viewRoute} sideScroll={true} seeAll={() => adminTools.goTo('/admin/pricings/routes')}/>
+                <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} handleClick={this.viewRoute} seeAll={() => adminTools.goTo('/admin/pricings/routes')}/>
                 <AdminSearchableClients theme={theme} clients={clients} handleClick={this.viewClient} seeAll={() => adminTools.goTo('/admin/pricings/clients')}/>
             </div>
         );
