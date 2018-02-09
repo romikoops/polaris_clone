@@ -13,7 +13,8 @@ export class ShipmentContactForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            contactData: props.contactData
+            contactData: props.contactData,
+            setContactAttempted: false
         };
         this.handleFormChange = this.handleFormChange.bind(this);
         this.handlePlaceChange = this.handlePlaceChange.bind(this);
@@ -74,7 +75,7 @@ export class ShipmentContactForm extends Component {
         this.refs.contactForm.reset();
     }
     handleInvalidSubmit() {
-        console.log('invalid');
+        this.setState({ setContactAttempted: true });
     }
     mapInputs(inputs) {
         const location = {};
@@ -108,44 +109,101 @@ export class ShipmentContactForm extends Component {
                     >
                         <h3>Basic Details</h3>
                         <FormsyInput
-                            wrapperClassName="flex-95"
+                            wrapperClassName={`${styles.wrapper_input} flex-95`}
                             className={styles.input}
                             type="text"
                             value={contactData.contact.companyName}
                             name="companyName"
                             placeholder="Company Name"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:2"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 2 characters',
+                                minLength: 'Minimum 2 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="flex-45"
+                            wrapperClassName={`${styles.wrapper_input} flex-45`}
                             className={styles.input}
                             type="text"
                             value={contactData.contact.firstName}
                             name="firstName"
                             placeholder="First Name"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:2"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 2 characters',
+                                minLength: 'Minimum 2 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="offset-5 flex-45"
+                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-45`}
                             className={styles.input}
                             type="text"
                             value={contactData.contact.lastName}
                             name="lastName"
                             placeholder="Last Name"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:2"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 2 characters',
+                                minLength: 'Minimum 2 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="flex-45"
+                            wrapperClassName={`${styles.wrapper_input} flex-45`}
                             className={styles.input}
                             type="text"
                             value={contactData.contact.email}
                             name="email"
                             placeholder="Email"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations={{
+                               matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+                            }}
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Must not be blank',
+                                matchRegexp: 'Invalid email'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="offset-5 flex-45"
+                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-45`}
                             className={styles.input}
                             type="text"
                             value={contactData.contact.phone}
                             name="phone"
                             placeholder="Phone"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:4"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 4 characters',
+                                minLength: 'Minimum 4 characters'
+                            }}
+                            required
                         />
                         <div className="flex-100 layout-row layout-wrap">
                             <h3 className="flex-40">Address Details</h3>
@@ -164,44 +222,97 @@ export class ShipmentContactForm extends Component {
                             </div>
                         </div>
                         <FormsyInput
-                            wrapperClassName="flex-75"
+                            wrapperClassName={`${styles.wrapper_input} flex-75`}
                             className={styles.input}
                             type="text"
                             value={contactData.location.street}
                             name="location-street"
                             placeholder="Street"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:2"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 2 characters',
+                                minLength: 'Minimum 2 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="offset-5 flex-15"
+                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-15`}
                             className={styles.input}
                             type="text"
                             value={contactData.location.streetNumber}
                             name="location-streetNumber"
                             placeholder="Number"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Must not be blank',
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="flex-25"
+                            wrapperClassName={`${styles.wrapper_input} flex-25`}
                             className={styles.input}
                             type="text"
                             value={contactData.location.zipCode}
                             name="location-zipCode"
                             placeholder="Postal Code"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:4"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 4 characters',
+                                minLength: 'Minimum 4 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="offset-5 flex-30"
+                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
                             className={styles.input}
                             type="text"
                             value={contactData.location.city}
                             name="location-city"
                             placeholder="City"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:2"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 2 characters',
+                                minLength: 'Minimum 2 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
-                            wrapperClassName="offset-5 flex-30"
+                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
                             className={styles.input}
                             type="text"
                             value={contactData.location.country}
                             name="location-country"
                             placeholder="Country"
+                            submitAttempted={this.state.setContactAttempted}
+                            errorMessageStyles={{
+                                fontSize: '12px',
+                                bottom: '-19px'
+                            }}
+                            validations="minLength:4"
+                            validationErrors={{
+                                isDefaultRequiredValue: 'Minimum 4 characters',
+                                minLength: 'Minimum 4 characters'
+                            }}
+                            required
                         />
                         <FormsyInput
                             wrapperClassName="flex-100"

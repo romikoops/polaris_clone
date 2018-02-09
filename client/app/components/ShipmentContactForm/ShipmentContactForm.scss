@@ -1,6 +1,5 @@
 :local {
   .input {
-    margin-bottom: 30px;
     height: 36px;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
@@ -9,6 +8,9 @@
     width: 100%;
     padding: 0 10px;
     width: calc(100% - 10px);
+  }
+  .wrapper_input {
+    margin-bottom: 30px;
   }
   .icon_btn {
     height: 25px;

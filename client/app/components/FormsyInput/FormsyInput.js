@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withFormsy } from 'formsy-react';
 import styles from './FormsyInput.scss';
 import errorStyles from '../../styles/errors.scss';
@@ -42,10 +43,24 @@ class FormsyInput extends Component {
                     onBlur={this.props.onBlur}
                     placeholder={this.props.placeholder}
                 />
-                <span className={errorStyles.error_message}>{errorHidden ? '' : errorMessage}</span>
+                <span
+                    className={errorStyles.error_message}
+                    style={this.props.errorMessageStyles}
+                >
+                    {errorHidden ? '' : errorMessage}
+                </span>
             </div>
         );
     }
 }
 
 export default withFormsy(FormsyInput);
+
+
+FormsyInput.propTypes = {
+    errorMessageStyles: PropTypes.objectOf(PropTypes.string)
+};
+
+FormsyInput.defaultProps = {
+    errorMessageStyles: {}
+};
