@@ -464,7 +464,7 @@ export class ShipmentDetails extends Component {
             `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
                     <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
-                        <p className="flex-none letter_2 layout-align-space-between-end">
+                        <div className="flex-none letter_2 layout-align-space-between-end">
                             <TextHeading
                                 theme={theme}
                                 text={this.state.has_pre_carriage
@@ -472,7 +472,7 @@ export class ShipmentDetails extends Component {
                                     : 'Approximate Departure Date :'}
                                 size={3}
                             />
-                        </p>
+                        </div>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                         {' '}
                     </div>
@@ -500,7 +500,7 @@ export class ShipmentDetails extends Component {
                         <div className="flex-none letter_2">
                             {' '}
                             <TextHeading theme={theme} text="Select Incoterm :" size={3}/>
-                        </p>
+                        </div>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>
                         <StyledSelect
