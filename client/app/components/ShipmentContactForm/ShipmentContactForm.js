@@ -73,6 +73,7 @@ export class ShipmentContactForm extends Component {
     handleSubmit(contactData) {
         this.props.setContact(contactData);
         this.refs.contactForm.reset();
+        this.setState({ setContactAttempted: false });
     }
     handleInvalidSubmit() {
         this.setState({ setContactAttempted: true });
