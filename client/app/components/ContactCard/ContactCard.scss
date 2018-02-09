@@ -21,6 +21,7 @@
     border-radius: 2px;
     transition: margin 0.2s ease;
     transition: box-shadow 0.2s ease;
+    cursor: pointer;
     &:hover {
       margin: 4.2px 5.1px 5.8px 4.9px;
       box-shadow: 1.3px 2.6px 4px 0 rgba(0,0,0,0.2);
