@@ -107,7 +107,7 @@ export class AdminSearchableShipments extends Component {
                 </div>
             </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                <div className="layout-row flex-100 layout-align-start-center layout-wrap">
                     {shipmentsArr}
                 </div>
             </div>);

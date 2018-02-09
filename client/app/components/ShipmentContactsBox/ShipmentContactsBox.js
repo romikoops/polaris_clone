@@ -4,6 +4,7 @@ import styles from './ShipmentContactsBox.scss';
 // import {v4} from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
+import { gradientTextGenerator } from '../../helpers';
 export class ShipmentContactsBox extends Component {
     constructor(props) {
         super(props);
@@ -28,16 +29,7 @@ export class ShipmentContactsBox extends Component {
     render() {
         const { consignee, shipper, notifyees, theme } = this.props;
         let notifyeesArray;
-        const textStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(left, ' +
-                      theme.colors.primary +
-                      ',' +
-                      theme.colors.secondary +
-                      ')'
-                    : 'black'
-        };
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const addressBtn = (
             <div className={`flex-none layout-row layout-align-center-center ${styles.icon_btn}`} onClick={this.props.toggleAddressBook}>
                 <i className="flex-none fa fa-address-book clip" style={textStyle}></i>

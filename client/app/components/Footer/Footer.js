@@ -14,7 +14,7 @@ export class Footer extends Component {
         const supportEmail = tenant && tenant.emails ? tenant.emails.support : '';
         const tenantName = tenant ? tenant.name : '';
         return (
-            <div>
+            <div className="flex-100 layout-row layout-wrap">
                 <div className={`${styles.contact_bar} flex-100 layout-row layout-align-center-center`}>
                     <div className={`flex-none ${defs.content_width} layout-row`}>
                         <div className="flex-50 layout-row layout-align-start-center">

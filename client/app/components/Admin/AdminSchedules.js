@@ -10,10 +10,10 @@ import styled from 'styled-components';
 import FileUploader from '../FileUploader/FileUploader';
 import {RoundButton} from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
+import { TextHeading } from '../TextHeading/TextHeading';
 export class AdminSchedules extends Component {
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {
             showList: false,
             filters: {
@@ -100,7 +100,7 @@ export class AdminSchedules extends Component {
         } else {
             prop = property;
         }
-        return function(a, b) {
+        return (a, b) => {
             const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop];
             const result2 = result1 ? 1 : 0;
             return result2 * sortOrder;
@@ -202,12 +202,6 @@ export class AdminSchedules extends Component {
                 {schedArr}
             </div>
         );
-
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
-
-
         const genView = (
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -234,15 +228,13 @@ export class AdminSchedules extends Component {
                 <AdminScheduleGenerator theme={theme} routes={routes} hubs={hubList} />
             </div>
         );
-
         const currView = showList ? listView : genView;
-
         const backButton = (<RoundButton theme={theme} text="Back to list" size="small" back iconClass="fa-th-list" handleNext={this.toggleView} />);
         const newButton = (<RoundButton theme={theme} text="New Upload" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Schedules</p>
+                    <TextHeading theme={theme} size={1} text="Schedules" />
                     { showList ? newButton : backButton }
                 </div>
                 {currView}

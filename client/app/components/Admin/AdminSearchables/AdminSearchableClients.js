@@ -4,7 +4,7 @@ import styles from '../Admin.scss';
 import { AdminClientTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
-import { MainTextHeading } from '../../TextHeadings/MainTextHeading';
+import { TextHeading } from '../../TextHeading/TextHeading';
 export class AdminSearchableClients extends Component {
     constructor(props) {
         super(props);
@@ -37,7 +37,6 @@ export class AdminSearchableClients extends Component {
         }
     }
     handleSearchChange(event) {
-        console.log(this.props.clients);
         if (event.target.value === '') {
             this.setState({
                 clients: this.props.clients
@@ -56,7 +55,6 @@ export class AdminSearchableClients extends Component {
                 keys: keys
             };
             const fuse = new Fuse(this.props.clients, options);
-            console.log(fuse);
             return fuse.search(event.target.value);
         };
         const filteredClients = search(['first_name', 'last_name', 'company_name', 'phone', 'email']);
@@ -82,19 +80,17 @@ export class AdminSearchableClients extends Component {
                 </div>
             </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                <div className="layout-row flex-100 layout-align-start-center layout-wrap">
                     {clientsArr}
                 </div>
             </div>);
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
-                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-60 layoput-row layout-align-start-center">
-                        <MainTextHeading theme={theme} text={title ? title : 'Clients'} />
+                <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+                    <div className="flex-60 layout-row layout-align-start-center">
+                        <TextHeading theme={theme} size={1} text={title ? title : 'Clients'} />
                     </div>
-
-                    <div className="flex-35 laypout-row layout-align-start input_box_full">
-
+                    <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
                         <input
                             type="text"
                             name="search"
@@ -106,11 +102,13 @@ export class AdminSearchableClients extends Component {
                 <div className="flex-100 layout-row layout-align-center layout-align-space-between">
                     {viewType}
                 </div>
-                { seeAll !== false ? (<div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
-                        <p className="flex-none">See all</p>
-                    </div>
-                </div>) : ''}
+                { seeAll !== false ? (
+                    <div className="flex-100 layout-row layout-align-end-center">
+                        <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+                            <p className="flex-none">See all</p>
+                        </div>
+                    </div>)
+                    : ''}
             </div>
         );
     }

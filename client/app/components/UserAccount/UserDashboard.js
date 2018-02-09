@@ -8,7 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {Carousel} from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import { AdminSearchableClients } from '../Admin/AdminSearchables';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
+import { TextHeading } from '../TextHeading/TextHeading';
 import { UserMergedShipment} from './UserMergedShipment';
 import { UserMergedShipHeaders} from './UserMergedShipHeaders';
 export class UserDashboard extends Component {
@@ -129,7 +129,9 @@ export class UserDashboard extends Component {
                     <div className={`flex-100 layout-row layout-wrap layout-align-start-start ${ustyles.dashboard_top}`}>
                         <div className={`flex-100 layout-row ${ustyles.left} layout-align-center-center`}>
                             <div className={`flex-100 layout-row layout-align-start-center ${ustyles.welcome}`}>
-                                <h2 className="flex-none">Welcome back, {user.first_name}</h2>
+                                <h2 className="flex-none">
+                                Welcome back, {user.first_name}
+                                </h2>
                             </div>
                             <div className={`flex-none layout-row layout-align-center-center ${ustyles.carousel}`}>
                                 <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade/>
@@ -185,7 +187,7 @@ export class UserDashboard extends Component {
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
-                            <MainTextHeading className="flex-non clip" theme={theme} text="Shipments" />
+                            <TextHeading className="flex-non clip" size={1} theme={theme} text="Shipments" />
                             <UserMergedShipHeaders title="Requested Shipments" total={mergedRequestedShipments.length}/>
 
                             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -207,15 +209,12 @@ export class UserDashboard extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <AdminSearchableClients theme={theme} clients={contacts} title="Most used Contacts" handleClick={this.viewClient} seeAll={() => userDispatch.goTo('/account/contacts')}/>
                     </div>
-                </div>
-                <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                    <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                        <MainTextHeading theme={theme} text="My Shipment Addresses" />
+                    <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
+                        <TextHeading theme={theme} size={1} text="My Shipment Addresses" />
                         <UserLocations setNav={this.doNothing} userDispatch={userDispatch} locations={locations} makePrimary={this.makePrimary} theme={theme} user={user}/>
                     </div>
                 </div>

@@ -37,7 +37,7 @@ class Header extends Component {
             messageDispatch.getUserConversations();
         }
         document.addEventListener('scroll', () => {
-            const isTop = window.scrollY < 100;
+            const isTop = window.pageYOffset < 100;
             if (isTop !== this.state.isTop) {
                 this.setState({ isTop });
             }
@@ -137,7 +137,7 @@ class Header extends Component {
                 }
                 width="40vw"
                 verticalPadding="60px"
-                horizontalPadding="40px"
+                horizontalPadding="0px"
                 parentToggle={this.toggleShowLogin}
             />
         );
@@ -145,7 +145,7 @@ class Header extends Component {
         return (
             <div className={landingPage && !this.state.isTop ?
                 `${styles.header_scrollable}
-                layout-row flex-100 layout-wrap layout-align-center`
+                layout-row flex-100 layout-wrap layout-align-center header`
                 : `${styles.header}
                 layout-row flex-100 layout-wrap layout-align-center`}>
                 <div className="flex layout-row layout-align-start-center">

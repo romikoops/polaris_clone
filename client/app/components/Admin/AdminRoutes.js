@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
+import { TextHeading } from '../TextHeading/TextHeading';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminRoutes extends Component {
@@ -50,9 +51,6 @@ class AdminRoutes extends Component {
     render() {
         const {selectedRoute} = this.state;
         const {theme, hubs, route, routes, hubHash, adminDispatch, loading} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -77,15 +75,14 @@ class AdminRoutes extends Component {
         const title = selectedRoute ? 'Route Overview' : 'Routes';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
+                    <TextHeading theme={theme} size={1} text={title} />
                     {selectedRoute ? backButton : ''}
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-end-center">
                     {newButton}
                 </div>
-                 { this.state.newRoute ? <AdminRouteForm theme={theme} close={this.closeModal} hubs={hubs} saveRoute={this.saveNewRoute}/> : ''}
+                { this.state.newRoute ? <AdminRouteForm theme={theme} close={this.closeModal} hubs={hubs} saveRoute={this.saveNewRoute}/> : ''}
                 <Switch className="flex">
                     <Route
                         exact

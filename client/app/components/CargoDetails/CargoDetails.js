@@ -8,6 +8,7 @@ import defaults from '../../styles/default_classes.scss';
 import Truncate from 'react-truncate';
 import { converter } from '../../helpers';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { TextHeading } from '../TextHeading/TextHeading';
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -126,12 +127,12 @@ export class CargoDetails extends Component {
                     <h5 className="flex-100"> Price </h5>
                     <h6 className="flex-100"> {customs ? this.calcCustomsFee() : '18.50'} {user.currency}</h6>
                 </div>
-                <HSCodeRow containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
+                <HSCodeRow className="flex-100" containers={containers} cargoItems={cargoItems} theme={theme} setCode={setHsCode} deleteCode={deleteCode} hsCodes={hsCodes} />
             </div>
         );
         const noCustomsBox = (
             <div className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${this.state.showNoCustoms ? styles.show : ''}`}>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     <div className="flex-90 layout-row layout-wrap">
                         <div className="flex-100">
                             <p className={`flex-none ${styles.f_header}`}>
@@ -151,7 +152,7 @@ export class CargoDetails extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     {this.props.totalGoodsValue > 20000 ? (
                         <div className="flex-90 layout-row layout-wrap">
                             <div className="flex-100">
@@ -175,7 +176,7 @@ export class CargoDetails extends Component {
                         ''
                     )}
                 </div>
-                <div className="flex-33-layout-row layout-align-center-center">
+                <div className="flex-33 no_max layout-row layout-align-center-center">
                     <div className="flex-90 layout-row layout-wrap">
                         <div className="flex-100">
                             <p className={`flex-none ${styles.f_header}`}> EORI</p>
@@ -195,19 +196,17 @@ export class CargoDetails extends Component {
                 <div className="flex-100 layout-row layout-align-center">
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
                         <div className="flex-100 layout-row">
-                            <h3 className={'flex-none letter_3'}> Cargo Details</h3>
+                            <p className="flex-none">
+                                <TextHeading theme={theme} size={2} text="Cargo Details" />
+                            </p>
                         </div>
                         <div className="flex-100 layout-row layout-wrap">
                             <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
                                 <div className="flex-100 layout-row layout-wrap">
                                     <div className="flex-100">
-                                        <p
-                                            className={`flex-none ${
-                                                styles.f_header
-                                            }`}
-                                        >
-                                            {' '}
-                                            Total Value of Goods
+                                        {' '}
+                                        <p className="flex-none">
+                                            <TextHeading theme={theme} size={3} text="Total valued goods" />
                                         </p>
                                     </div>
                                     <div className="flex-100">
@@ -228,8 +227,7 @@ export class CargoDetails extends Component {
                                             }`}
                                         >
                                             {' '}
-                                            Number and kind of packages,
-                                            description of goods (optional)
+                                            <TextHeading theme={theme} size={3} text="Number and kind of packages, description of goods (optional)" />
                                         </p>
                                     </div>
                                     <div className="flex-100">
@@ -252,7 +250,7 @@ export class CargoDetails extends Component {
                                         }`}
                                     >
                                         {' '}
-                                        Required Documents
+                                        <TextHeading theme={theme} size={3} text="Required Documents" />
                                     </p>
                                 </div>
 
@@ -264,7 +262,7 @@ export class CargoDetails extends Component {
                                             }`}
                                         >
                                             {' '}
-                                                Packing Sheet
+                                            <TextHeading theme={theme} size={3} text="Packing Sheet" />
                                         </p>
                                     </div>
                                     <div className="flex-100">
@@ -282,13 +280,9 @@ export class CargoDetails extends Component {
 
                                 <div className="flex-50 layout-row layout-wrap">
                                     <div className="flex-100">
-                                        <p
-                                            className={`flex-none ${
-                                                styles.f_header
-                                            }`}
-                                        >
+                                        <p className={`flex-none ${styles.f_header}`}>
                                             {' '}
-                                                Commercial Invoice
+                                            <TextHeading theme={theme} size={3} text="Commercial Invoice" />
                                         </p>
                                     </div>
                                     <div className="flex-100">
@@ -304,13 +298,10 @@ export class CargoDetails extends Component {
                                 </div>
 
                                 <div className="flex-50 layout-row layout-wrap">
-                                    <div className="flex-100">
-                                        <p
-                                            className={`flex-none ${
-                                                styles.f_header
-                                            }`}
-                                        >
-                                                Certificate of Origin
+                                    <div className="flex-100 layout-row">
+                                        <p className="flex-none">
+                                            {' '}
+                                            <TextHeading theme={theme} size={3} text="Certificate of Origin" />
                                         </p>
                                     </div>
                                     <div className="flex-100">
@@ -324,32 +315,29 @@ export class CargoDetails extends Component {
                                             />}
                                     </div>
                                 </div>
-                                {dangerousGoods ? (
-                                    <div className="flex-50 layout-row layout-wrap">
-                                        <div className="flex-100">
-                                            <p
-                                                className={`flex-none ${
-                                                    styles.f_header
-                                                }`}
-                                            >
-                                                {' '}
-                                                Dangerous Goods Declaration
-                                            </p>
+                                {dangerousGoods
+                                    ? (
+                                        <div className="flex-50 layout-row layout-wrap">
+                                            <div className="flex-100">
+                                                <p className={`flex-none ${styles.f_header}`}>
+                                                    {' '}
+                                                    <TextHeading theme={theme} size={3} text="Dangerouus Goods Declaration" />
+                                                </p>
+                                            </div>
+                                            <div className="flex-100">
+                                                { documents.dangerous_goods ?
+                                                    <DocViewer doc={documents.dangerous_goods} /> :
+                                                    <FileUploader
+                                                        theme={theme}
+                                                        type="dangerous_goods"
+                                                        dispatchFn={this.fileFn}
+                                                        text="Dangerous Goods Declaration"
+                                                    />}
+                                            </div>
                                         </div>
-                                        <div className="flex-100">
-                                            { documents.dangerous_goods ?
-                                                <DocViewer doc={documents.dangerous_goods} /> :
-                                                <FileUploader
-                                                    theme={theme}
-                                                    type="dangerous_goods"
-                                                    dispatchFn={this.fileFn}
-                                                    text="Dangerous Goods Declaration"
-                                                />}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    ''
-                                )}
+                                    ) : (
+                                        ''
+                                    )}
                             </div>
                         </div>
                     </div>
@@ -358,7 +346,9 @@ export class CargoDetails extends Component {
 
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}>
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <h3 className="flex-none letter_3">Insurance</h3>
+                            <p className="flex-none">
+                                <TextHeading theme={theme} size={2} text="Insurance" />
+                            </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
                             <Checkbox onChange={this.toggleInsurance} checked={this.state.insuranceView} theme={theme} />
                         </div>
@@ -369,7 +359,9 @@ export class CargoDetails extends Component {
 
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}>
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <h3 className="flex-none letter_3">Customs</h3>
+                            <p className="flex-none">
+                                <TextHeading theme={theme} size={2} text="Costums" />
+                            </p>
                             <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                             <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} theme={theme} />
                         </div>
