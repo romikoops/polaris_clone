@@ -65,7 +65,7 @@ export class AdminTripPanel extends Component {
             backgroundSize: '16px 2px, 100% 2px'
         };
         const startTime = trip.eta ? trip.eta : trip.start_date;
-        const endTime = trip.eta ? trip.eta : trip.end_date;
+        const endTime = trip.etd ? trip.etd : trip.end_date;
         const panelStyle = showPanel ? styles.panel_open : '';
         const layoverArray = layovers && layovers[trip.id] ? layovers[trip.id].map((l) => {
             return <AdminLayoverTile layoverData={l} theme={theme} />;
