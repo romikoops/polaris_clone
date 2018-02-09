@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled, { keyframes } from 'styled-components';
 import styles from './FloatingMenu.scss';
-import { gradientGenerator } from '../../helpers';
+import { gradientTextGenerator } from '../../helpers';
 export class FloatingMenu extends Component {
     constructor(props) {
         super(props);
@@ -38,7 +38,7 @@ export class FloatingMenu extends Component {
 
                 }*/
         `;
-        const textStyle = theme && theme.colors ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const Title = styled.div`
             letter-spacing: 3px;
         `;

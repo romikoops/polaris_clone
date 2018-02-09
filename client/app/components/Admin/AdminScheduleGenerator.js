@@ -99,9 +99,6 @@ class AdminScheduleGenerator extends Component {
         const {theme, hubs, vehicleTypes } = this.props;
         const {weekdays, startDate, endDate, duration, mot, vehicleType} = this.state;
         const motKey = mot && mot.value ? mot.value.split('_')[0] : '';
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        // };
         const future = {
             after: new Date(),
         };
@@ -141,12 +138,12 @@ class AdminScheduleGenerator extends Component {
             }
         `;
         const vehicleSelect = mot && mot.value ? (<StyledSelect
-                                    name="mot-type"
-                                    className={`${styles.select}`}
-                                    value={this.state.vehicleType}
-                                    options={vehicleTypeOptions}
-                                    onChange={this.setVehicleType}
-                                />) : '';
+            name="mot-type"
+            className={`${styles.select}`}
+            value={this.state.vehicleType}
+            options={vehicleTypeOptions}
+            onChange={this.setVehicleType}
+        />) : '';
         return(
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
 

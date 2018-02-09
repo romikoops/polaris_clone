@@ -47,14 +47,9 @@ class Landing extends Component {
     render() {
         const { loggedIn, theme, user, tenant, userDispatch, authDispatch, adminDispatch } = this.props;
         const { showCarousel } = this.state;
-        // const textStyle = {
-        //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : ''
-        // };
         const textStyle1 = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const textStyle2 = theme && theme.colors ? gradientTextGenerator(theme.colors.secondary, theme.colors.primary) : {color: 'black'};
-        // console.log(builtGradient);
         const loadingScreen = this.props.loading ? <Loading theme={theme} /> : '';
-        // const loadingScreen = <Loading theme={theme} />;
         const loginModal = (
             <Modal
                 component={
