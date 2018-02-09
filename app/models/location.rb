@@ -9,19 +9,22 @@ class Location < ApplicationRecord
 
   # Geocoding
   geocoded_by :geocoded_address
-  # geocoded_by :full_address
-  # reverse_geocoded_by :latitude, :longitude, :address => :geocoded_address
-  reverse_geocoded_by :latitude, :longitude do |obj, results|
+  reverse_geocoded_by :latitude, :longitude do |location, results|
     if geo = results.first
-      obj.street_number = geo.street_number
-      obj.street = geo.route
-      obj.street_address = geo.street_number.to_s + " " + geo.route.to_s
-      obj.geocoded_address = geo.address
-      obj.country = geo.country
-      obj.city = geo.city
-      
-      obj.zip_code = geo.postal_code
+      premise_data = geo.address_components.find do |address_component|
+        address_component["types"] == ["premise"]
+      end
+
+      location.premise          = premise_data["long_name"]
+      location.street_number    = geo.street_number
+      location.street           = geo.route
+      location.street_address   = geo.street_number.to_s + " " + geo.route.to_s
+      location.geocoded_address = geo.address
+      location.country          = geo.country
+      location.city             = geo.city
+      location.zip_code         = geo.postal_code
     end
+    location
   end
 
   # Class methods
@@ -50,81 +53,53 @@ class Location < ApplicationRecord
     return nl
   end
 
-  def update_from_short_name
-    input  = "#{self.city} ,#{self.country}"
-    location = Location.new(geocoded_address: input)
-    location.geocode
-    location.reverse_geocode
-    self.latitude = location.latitude
-    self.longitude = location.longitude
+  def set_geocoded_address_from_fields!
+    rawAddress = "#{street} #{street_number}, #{premise}, #{zip_code} #{city}, #{country}"
+    self.geocoded_address = rawAddress.remove_extra_spaces
+  end
+
+  def geocode_from_address_fields!
+    self.set_geocoded_address_from_fields!
+    self.geocode
+    self.reverse_geocode
     self.save!
+    self
   end
 
-  def self.update_all_nexuses
-    nexuses = Location.where(location_type: "nexus")
-    nexuses.each do |nx|
-      nx.update_from_short_name
-    end
+  def self.geocode_all_from_address_fields!(options = {})
+    # Example Usage:
+    #   1. Location.geocode_all_from_address_fields
+    #         Updates locations with nil geocoded_address
+    #         Return Array of updated locations 
+    #   2. Location.geocode_all_from_address_fields(force: true)
+    #         Updates all locations
+    #         Return Array of all locations 
+
+    filter = options[:force] ? nil : { geocoded_address: nil } 
+    Location.where(filter).map(&:geocode_from_address_fields!)
   end
 
-  def self.create_and_geocode(input)
-    if input.first[0].is_a? String
-      location_params = input.symbolize_keys
-    else
-      location_params = input
-    end
-    if !location_params[:geocoded_address]
-      str = location_params[:street_address].to_s + " " + location_params[:city].to_s + " " + location_params[:zip_code].to_s + " " + location_params[:country].to_s
-      location_params[:geocoded_address] = str
-    end
-    loc = Location.find_or_create_by(
-    latitude: location_params[:latitude],
-    longitude: location_params[:longitude],
-    # geocoded_address: location_params[:geocoded_address],
-    street: location_params[:street],
-    street_address: location_params[:street_address],
-    street_number: location_params[:street_number],
-    zip_code: location_params[:zip_code],
-    city: location_params[:city],
-    country: location_params[:country])
-    loc.geocode
-    loc.reverse_geocode
-    
-    return loc
+  def self.create_and_geocode(raw_location_params)
+    location_params = location_params(raw_location_params)
+    location = Location.find_or_initialize_by!(location_params)
+    location.geocode_from_address_fields! if location.geocoded_address.nil?
+    location
   end
+
   def self.geocoded_location(user_input)
-
     location = Location.new(geocoded_address: user_input)
     location.geocode
     location.reverse_geocode
     
-    return location
-  end
-
-  def get_zip_code
-    if self.zip_code
-      return self.zip_code
-    else
-      self.geocoded_address
-      self.reverse_geocode
-      return self.zip_code
-    end
+    location
   end
 
   def self.end_ports
     Location.where("location_type = ?", "end_port")
   end
 
-  def self.new_from_params(location_params)
-    Location.new(
-    latitude: location_params[:latitude],
-    longitude: location_params[:longitude],
-    geocoded_address: location_params[:geocoded_address],
-    street: location_params[:street],
-    street_number: location_params[:street_number],
-    zip_code: location_params[:zip_code],
-    city: location_params[:city],
-    country: location_params[:country])
+  def self.new_from_raw_params(raw_location_params)
+    Location.new(location_params(raw_location_params))
   end
 
   def self.nexuses
@@ -234,4 +209,25 @@ class Location < ApplicationRecord
       hub_x.distance_to(self) <=> hub_y.distance_to(self)
     end
   end
+
+  def get_zip_code
+    if self.zip_code
+      return self.zip_code
+    else
+      self.geocoded_address
+      self.reverse_geocode
+      return self.zip_code
+    end
+  end
+
+  private
+
+  def location_params(raw_location_params)
+    return if raw_location_params.try(:permit,
+      :latitude, :longitude, :geocoded_address, :street,
+      :street_number, :zip_code, :city, :country
+    )
+
+    raw_location_params.try(:symbolize_keys)
+  end  
 end

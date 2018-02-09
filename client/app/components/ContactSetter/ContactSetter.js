@@ -25,7 +25,8 @@ export class ContactSetter extends Component {
         number: '',
         zipCode: '',
         city: '',
-        country: ''
+        country: '',
+        gecodedAddress: ''
       }
     };
 

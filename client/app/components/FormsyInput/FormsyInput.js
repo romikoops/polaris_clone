@@ -26,7 +26,8 @@ class FormsyInput extends Component {
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
         }
-        const value = this.props.getValue() !== undefined ? this.props.getValue().toString() : '';
+        const rawValue = this.props.getValue();
+        const value = [undefined, null].includes(rawValue) ? '' : this.props.getValue().toString();
         return (
             <div className={`${styles.wrapper_input} ${this.props.wrapperClassName}`}>
                 <input
@@ -42,13 +43,6 @@ class FormsyInput extends Component {
                     placeholder={this.props.placeholder}
                 />
                 <span className={errorStyles.error_message}>{errorHidden ? '' : errorMessage}</span>
-		            <style>
-		                {`
-		                    .has-error .help-block {
-		                        display: none;
-		                    }
-		                `}
-		            </style>
             </div>
         );
     }

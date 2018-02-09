@@ -37,7 +37,6 @@ export class ShipmentContactForm extends Component {
             zipCode: '',
             city: '',
             country: '',
-            fullAddress: ''
         };
         place.address_components.forEach(ac => {
             if (ac.types.includes('street_number')) {
@@ -62,7 +61,6 @@ export class ShipmentContactForm extends Component {
         });
         newLocation.latitude = place.geometry.location.lat();
         newLocation.longitude = place.geometry.location.lng();
-        newLocation.fullAddress = place.formatted_address;
         newLocation.geocodedAddress = place.formatted_address;
         this.setState({
             contactData: { ...this.state.contactData, location: newLocation }
@@ -207,8 +205,7 @@ export class ShipmentContactForm extends Component {
                         />
                         <FormsyInput
                             wrapperClassName="flex-100"
-                            className={styles.hide}
-                            type="text"
+                            type="hidden"
                             value={contactData.location.geocodedAddress}
                             name="location-geocodedAddress"
                             placeholder=""

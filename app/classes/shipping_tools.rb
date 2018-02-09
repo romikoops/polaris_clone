@@ -196,7 +196,7 @@ module ShippingTools
 
     @contacts = current_user.contacts.map do |contact|
       { 
-        location: contact.location.try(:attributes), 
+        location: contact.location.try(:attributes) || {},
         contact: contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
