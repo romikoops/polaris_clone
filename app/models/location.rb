@@ -81,7 +81,7 @@ class Location < ApplicationRecord
 
   def self.create_and_geocode(raw_location_params)
     location_params = location_params(raw_location_params)
-    location = Location.find_or_initialize_by!(location_params)
+    location = Location.find_or_initialize_by(location_params)
     location.geocode_from_address_fields! if location.geocoded_address.nil?
     location
   end
@@ -222,7 +222,7 @@ class Location < ApplicationRecord
 
   private
 
-  def location_params(raw_location_params)
+  def self.location_params(raw_location_params)
     return if raw_location_params.try(:permit,
       :latitude, :longitude, :geocoded_address, :street,
       :street_number, :zip_code, :city, :country

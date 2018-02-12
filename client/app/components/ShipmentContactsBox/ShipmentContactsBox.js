@@ -40,7 +40,7 @@ export class ShipmentContactsBox extends Component {
         });
     }
     render() {
-        const { shipper, consignee, notifyees, theme } = this.props;
+        const { shipper, consignee, notifyees, theme, finishBookingAttempted } = this.props;
         const textStyle = {
             background:
                 theme && theme.colors
@@ -53,7 +53,10 @@ export class ShipmentContactsBox extends Component {
         };
         const placeholderCard = (type, i) => (
             <div
-                className={`layout-column flex-align-center-center ${styles.placeholder_card}`}
+                className={`
+                    layout-column flex-align-center-center ${styles.placeholder_card}
+                    ${finishBookingAttempted && type !== 'notifyee' ? styles.with_errors : ''}
+                `}
                 onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
             >
                 <h1>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h1>
@@ -153,5 +156,6 @@ ShipmentContactsBox.propTypes = {
     theme: PropTypes.object,
     shipper: PropTypes.object,
     consignee: PropTypes.object,
-    notifyees: PropTypes.object
+    notifyees: PropTypes.object,
+    finishBookingAttempted: PropTypes.bool
 };

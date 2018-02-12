@@ -9,6 +9,8 @@ import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
+import { isEmpty } from '../../helpers/objectTools';
+import * as Scroll from 'react-scroll';
 
 export class BookingDetails extends Component {
     constructor(props) {
@@ -46,7 +48,8 @@ export class BookingDetails extends Component {
             },
             hsCodes: {},
             totalGoodsValue: 0,
-            cargoNotes: ''
+            cargoNotes: '',
+            finishBookingAttempted: false
         };
         this.removeNotifyee = this.removeNotifyee.bind(this);
         this.toggleAddressBook = this.toggleAddressBook.bind(this);
@@ -68,6 +71,12 @@ export class BookingDetails extends Component {
         hideRegistration();
         setStage(4);
         window.scrollTo(0, 0);
+    }
+    scrollTo(target) {
+        Scroll.scroller.scrollTo(target, {
+            duration: 2000,
+            smooth: true
+        });
     }
     loadPrevReq(obj) {
         this.setState({
@@ -177,6 +186,13 @@ export class BookingDetails extends Component {
             insurance,
             customs
         } = this.state;
+
+        if ([shipper, consignee].some(isEmpty)) {
+            this.scrollTo('contact_setter');
+            this.setState({ finishBookingAttempted: true });
+            return;
+        }
+
         const data = {
             shipment: {
                 id: this.props.shipmentData.shipment.id,
@@ -260,6 +276,7 @@ export class BookingDetails extends Component {
                         setContact={this.setContact}
                         theme={theme}
                         removeNotifyee={this.removeNotifyee}
+                        finishBookingAttempted={this.state.finishBookingAttempted}
                     />
                 </div>
                 <CargoDetails

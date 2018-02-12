@@ -131,7 +131,7 @@ export class ContactSetter extends Component {
     if (showBody) showBodyIconStyles.transform = 'rotate(90deg)';
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div name="contact_setter" className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`
         	flex-none ${defs.content_width} layout-row layout-wrap
         `}>
@@ -183,6 +183,7 @@ export class ContactSetter extends Component {
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
               setContactForEdit={this.setContactForEdit}
+              finishBookingAttempted={this.props.finishBookingAttempted}
 	          />
           </div>
         </div>
@@ -196,4 +197,5 @@ ContactSetter.propTypes = {
     userLocations: PropTypes.array,
     theme: PropTypes.object,
     setDetails: PropTypes.func,
+    finishBookingAttempted: PropTypes.bool
 };
