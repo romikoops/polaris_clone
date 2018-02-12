@@ -8,6 +8,8 @@ import defaults from '../../styles/default_classes.scss';
 import Truncate from 'react-truncate';
 import { converter } from '../../helpers';
 import { Tooltip } from '../Tooltip/Tooltip';
+import FormsyInput from '../FormsyInput/FormsyInput';
+
 export class CargoDetails extends Component {
     constructor(props) {
         super(props);
@@ -211,12 +213,24 @@ export class CargoDetails extends Component {
                                         </p>
                                     </div>
                                     <div className="flex-100">
-                                        <input
+                                        <FormsyInput
                                             className={styles.cargo_input}
+                                            wrapperClassName={styles.wrapper_cargo_input}
+                                            errorMessageStyles={{
+                                                fontSize: '13px',
+                                                bottom: '-17px'
+                                            }}
                                             type="number"
                                             name="totalGoodsValue"
                                             value={this.props.totalGoodsValue}
                                             onChange={this.handleChange}
+                                            submitAttempted={this.props.finishBookingAttempted}
+                                            validations={{ nonNegative: (values, value) => value > 0 }}
+                                            validationErrors={{
+                                                nonNegative: 'Must be greater than 0',
+                                                isDefaultRequiredValue: 'Must be greater than 0'
+                                            }}
+                                            required
                                         />
                                     </div>
                                 </div>

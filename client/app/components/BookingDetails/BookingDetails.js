@@ -11,6 +11,7 @@ import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
 import { isEmpty } from '../../helpers/objectTools';
 import * as Scroll from 'react-scroll';
+import Formsy from 'formsy-react';
 
 export class BookingDetails extends Component {
     constructor(props) {
@@ -52,8 +53,8 @@ export class BookingDetails extends Component {
             finishBookingAttempted: false
         };
         this.removeNotifyee = this.removeNotifyee.bind(this);
-        this.toggleAddressBook = this.toggleAddressBook.bind(this);
         this.toNextStage = this.toNextStage.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
         this.handleInsurance = this.handleInsurance.bind(this);
         this.calcInsurance = this.calcInsurance.bind(this);
@@ -72,10 +73,11 @@ export class BookingDetails extends Component {
         setStage(4);
         window.scrollTo(0, 0);
     }
-    scrollTo(target) {
+    scrollTo(target, offset) {
         Scroll.scroller.scrollTo(target, {
             duration: 2000,
-            smooth: true
+            smooth: true,
+            offset: offset || 0
         });
     }
     loadPrevReq(obj) {
@@ -136,11 +138,6 @@ export class BookingDetails extends Component {
         }
     }
 
-    toggleAddressBook() {
-        const addressBool = this.state.addressBook;
-        this.setState({ addressBook: !addressBool });
-    }
-
     removeNotifyee(i) {
         const { notifyees } = this.state;
         notifyees.splice(i, 1);
@@ -192,7 +189,6 @@ export class BookingDetails extends Component {
             this.setState({ finishBookingAttempted: true });
             return;
         }
-
         const data = {
             shipment: {
                 id: this.props.shipmentData.shipment.id,
@@ -208,6 +204,16 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
+    handleInvalidSubmit() {
+        this.setState({ finishBookingAttempted: true });
+
+        const { shipper, consignee } = this.state;
+        if ([shipper, consignee].some(isEmpty)) {
+            this.scrollTo('contact_setter');
+            return;
+        }
+        this.scrollTo('totalGoodsValue', -50);
+    }
     setContact(contactData, type, index) {
         if (type === 'notifyee') {
             const notifyees = this.state.notifyees;
@@ -218,8 +224,9 @@ export class BookingDetails extends Component {
         }
     }
 
-    closeBook() {
-        this.setState({ addressBook: false });
+    backToDashboard(e) {
+        e.preventDefault();
+        this.props.shipmentDispatch.toDashboard();
     }
 
     render() {
@@ -234,8 +241,6 @@ export class BookingDetails extends Component {
             cargoItems,
             locations
         } = shipmentData;
-        console.log('contacts');
-        console.log(contacts);
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
@@ -243,7 +248,6 @@ export class BookingDetails extends Component {
         const acceptedBtn = (
             <div className="flex-none layout-row">
                 <RoundButton
-                    handleNext={this.toNextStage}
                     theme={theme}
                     text="Finish Booking"
                     active
@@ -255,12 +259,13 @@ export class BookingDetails extends Component {
                 <RoundButton
                     theme={theme}
                     text="Finish Booking"
+                    handleNext={e => e.preventDefault()}
                 />
             </div>
         );
         return (
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
 
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 {shipment && theme && hubs ? (
                     <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
                 ) : (
@@ -279,59 +284,65 @@ export class BookingDetails extends Component {
                         finishBookingAttempted={this.state.finishBookingAttempted}
                     />
                 </div>
-                <CargoDetails
-                    theme={theme}
-                    handleChange={this.handleCargoInput}
-                    shipmentData={shipmentData}
-                    hsCodes={this.state.hsCodes}
-                    setHsCode={this.setHsCode}
-                    deleteCode={this.deleteCode}
-                    cargoNotes={this.state.cargoNotes}
-                    totalGoodsValue={this.state.totalGoodsValue}
-                    handleInsurance={this.handleInsurance}
-                    insurance={this.state.insurance}
-                    shipmentDispatch={shipmentDispatch}
-                    currencies={currencies}
-                    customsData={customs}
-                    setCustomsFee={this.setCustomsFee}
-                    user={user}
-                />
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <h3 className="flex-none clip" style={textStyle}>Summary: </h3>
-                        </div>
-                        <div className="flex-90 layout-row layout-align-start-center">
-                            {shipment && theme && hubs ? (
-                                <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
-                            ) : (
-                                ''
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        <div className="flex-50 layout-row layout-align-start-center">
-                            <div className="flex-15 layout-row layout-align-center-center">
-                                <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                <Formsy
+                    onValidSubmit={this.toNextStage}
+                    onInvalidSubmit={this.handleInvalidSubmit}
+                >
+                    <CargoDetails
+                        theme={theme}
+                        handleChange={this.handleCargoInput}
+                        shipmentData={shipmentData}
+                        hsCodes={this.state.hsCodes}
+                        setHsCode={this.setHsCode}
+                        deleteCode={this.deleteCode}
+                        cargoNotes={this.state.cargoNotes}
+                        totalGoodsValue={this.state.totalGoodsValue}
+                        handleInsurance={this.handleInsurance}
+                        insurance={this.state.insurance}
+                        shipmentDispatch={shipmentDispatch}
+                        currencies={currencies}
+                        customsData={customs}
+                        setCustomsFee={this.setCustomsFee}
+                        user={user}
+                        finishBookingAttempted={this.state.finishBookingAttempted}
+                    />
+                    <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <h3 className="flex-none clip" style={textStyle}>Summary: </h3>
                             </div>
-                            <div className="flex layout-row layout-align-start-center">
-                                <div className="flex-5"></div>
-                                <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                            <div className="flex-90 layout-row layout-align-start-center">
+                                {shipment && theme && hubs ? (
+                                    <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
+                                ) : (
+                                    ''
+                                )}
                             </div>
                         </div>
-                        <div className="flex-50 layout-row layout-align-end-center">
-                            { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                    </div>
+                    <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
+                            <div className="flex-50 layout-row layout-align-start-center">
+                                <div className="flex-15 layout-row layout-align-center-center">
+                                    <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                                </div>
+                                <div className="flex layout-row layout-align-start-center">
+                                    <div className="flex-5"></div>
+                                    <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex-50 layout-row layout-align-end-center">
+                                { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr className={`${styles.sec_break} flex-100`}/>
-                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={() => shipmentDispatch.toDashboard()}/>
+                    <hr className={`${styles.sec_break} flex-100`}/>
+                    <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                            <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={this.backToDashboard}/>
+                        </div>
                     </div>
-                </div>
+                </Formsy>
             </div>
         );
     }
