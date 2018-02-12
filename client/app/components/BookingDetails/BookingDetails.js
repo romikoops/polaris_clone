@@ -132,11 +132,10 @@ export class BookingDetails extends Component {
         this.setState({ addressBook: !addressBool });
     }
 
-    removeNotifyee(not) {
-        const prevArr = this.state.notifyees;
-        const newArr = prevArr.filter(n => n !== not);
-        console.log(newArr);
-        this.setState({ notifyees: newArr });
+    removeNotifyee(i) {
+        const { notifyees } = this.state;
+        notifyees.splice(i, 1);
+        this.setState({ notifyees });
     }
 
     handleCargoInput(event) {

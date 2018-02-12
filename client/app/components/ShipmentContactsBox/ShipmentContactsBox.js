@@ -29,13 +29,9 @@ export class ShipmentContactsBox extends Component {
                 gecodedAddress: ''
             }
         };
-        this.removeNotifyee = this.removeNotifyee.bind(this);
         this.setContactForEdit = this.setContactForEdit.bind(this);
     }
 
-    removeNotifyee(not) {
-        this.props.removeNotifyee(not);
-    }
     setContactForEdit(contactData, contactType, contactIndex) {
         this.props.setContactForEdit({
             ...contactData,
@@ -72,6 +68,7 @@ export class ShipmentContactsBox extends Component {
                         select={() => this.setContactForEdit(notifyee, 'notifyee', i)}
                         key={v4()}
                         contactType="notifyee"
+                        removeFunc={() => this.props.removeNotifyee(i)}
                     />
                 </div>
             </div>

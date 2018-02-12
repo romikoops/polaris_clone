@@ -13,7 +13,7 @@ export class ContactCard extends Component {
         this.props.select(this.props.contactData, this.props.contactType);
     }
     render() {
-        const { contactData, theme } = this.props;
+        const { contactData, theme, removeFunc } = this.props;
         const { contact, location } = contactData;
         const iconStyle = {
             background:
@@ -27,12 +27,17 @@ export class ContactCard extends Component {
             width: '28px',
             padding: '3px 0'
         };
+
+        const removeIcon = typeof removeFunc === 'function' ? (
+            <i className={`${styles.remove_icon} fa fa-times`} onClick={removeFunc}></i>
+        ) : '';
         return (
             <div
                 key={v4()}
                 className={`flex-100 layout-row ${styles.contact_card}`}
                 onClick={this.selectContact}
             >
+                {removeIcon}
                 <div className="flex layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-align-space-between-center">
                         <div className="flex-60 layout-row layout-align-start-start layout-wrap">
