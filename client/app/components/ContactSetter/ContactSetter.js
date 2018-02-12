@@ -6,6 +6,7 @@ import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 import { AddressBook } from '../AddressBook/AddressBook';
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { StageTimeline } from '../StageTimeline/StageTimeline';
+import { isEmpty } from '../../helpers/objectTools';
 
 
 export class ContactSetter extends Component {
@@ -44,6 +45,7 @@ export class ContactSetter extends Component {
     this.setStage = this.setStage.bind(this);
     this.setContactForEdit = this.setContactForEdit.bind(this);
     this.toggleShowBody = this.toggleShowBody.bind(this);
+    this.nextUnsetContactType = this.nextUnsetContactType.bind(this);
   }
 
   setContactForEdit(contactData) {
@@ -59,6 +61,12 @@ export class ContactSetter extends Component {
   		}
   	});
   }
+  nextUnsetContactType(thisType) {
+    for(const t of ['shipper', 'consignee']) {
+      if(isEmpty(this.props[t]) && t !== thisType) return t;
+    }
+    return 'notifyee';
+  }
 
   setContact(contactData) {
   	const { type, index } = this.state.contactData;
@@ -66,18 +74,15 @@ export class ContactSetter extends Component {
     const newState = {
       contactData: Object.assign({}, this.newContactData)
     };
-
-    let contactTypeIndex = this.contactTypes.indexOf(type) + 1;
-    if (contactTypeIndex === 2) {
-      newState.contactData.index = 0;
-    } else if (contactTypeIndex > 2) {
-      contactTypeIndex = 2;
-      newState.contactData.index = index + 1;
-    }
+    const nextType = this.nextUnsetContactType(type);
 
     this.props.setContact(contactData, type, index);
 
-    newState.contactData.type = this.contactTypes[contactTypeIndex];
+    newState.contactData.type = nextType;
+    if (nextType === 'notifyee') {
+      newState.contactData.index = this.props.notifyees.length;
+    }
+
     this.setState(newState);
   }
 
