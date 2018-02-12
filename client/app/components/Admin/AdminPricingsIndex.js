@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { Redirect } from 'react-router';
-// import { AdminRouteTile, AdminClientTile } from './';
+import { AdminPriceCreator } from './';
+import { RoundButton } from '../RoundButton/RoundButton';
 import { AdminSearchableRoutes, AdminSearchableClients } from './AdminSearchables';
 // import { pricingNames } from '../../constants/admin.constants';
 // import {v4} from 'node-uuid';
@@ -20,8 +21,11 @@ export class AdminPricingsIndex extends Component {
         this.viewAllClients = this.viewAllClients.bind(this);
         this.viewClient = this.viewClient.bind(this);
         this.viewRoute = this.viewRoute.bind(this);
+        this.toggleCreator = this.toggleCreator.bind(this);
     }
-
+    toggleCreator() {
+        this.setState({newPricing: !this.state.newPricing});
+    }
     viewAllRoutes() {
         this.setState({redirectRoutes: true});
     }
@@ -38,7 +42,7 @@ export class AdminPricingsIndex extends Component {
     }
     render() {
         const {theme, hubs, pricingData, clients, adminTools } = this.props;
-        // const { selectedPricing } = this.state;
+        const { newPricing } = this.state;
         if (!pricingData) {
             return '';
         }
@@ -49,23 +53,39 @@ export class AdminPricingsIndex extends Component {
         if (this.state.redirectClients) {
             return <Redirect push to="/admin/pricings/clients" />;
         }
-        const {itineraries} = pricingData;
+        const newButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="New Pricing"
+                    active
+                    handleNext={this.toggleCreator}
+                    iconClass="fa-plus-circle-o"
+                />
+            </div>);
+        const {itineraries, detailedItineraries, transportCategories} = pricingData;
         const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv';
         const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    <div className={`flex-50 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
                         <p className="flex-100">Upload LCL Pricings Sheet</p>
                         <FileUploader theme={theme} url={lclUrl} type="xlsx" text="Dedicated Pricings .xlsx"/>
                     </div>
-                    <div className={`flex-50 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+                    <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
                         <p className="flex-100">Upload FCL Pricings Sheet</p>
                         <FileUploader theme={theme} url={fclUrl} type="xlsx" text="Open Pricings .xlsx"/>
                     </div>
+                    <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+                        <p className="flex-100">New Pricing Creator</p>
+                        {newButton}
+                    </div>
                 </div>
-                <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} handleClick={this.viewRoute} seeAll={() => adminTools.goTo('/admin/pricings/routes')}/>
+                <AdminSearchableRoutes itineraries={detailedItineraries} theme={theme} hubs={hubs} handleClick={this.viewRoute} seeAll={() => adminTools.goTo('/admin/pricings/routes')}/>
                 <AdminSearchableClients theme={theme} clients={clients} handleClick={this.viewClient} seeAll={() => adminTools.goTo('/admin/pricings/clients')}/>
+                {newPricing ? <AdminPriceCreator theme={theme} itineraries={itineraries} detailedItineraries={detailedItineraries} transportCategories={transportCategories} closeForm={this.toggleCreator}/> : ''}
             </div>
         );
     }

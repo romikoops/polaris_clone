@@ -17,6 +17,7 @@ export * from './AdminLayoverTile';
 export * from './AdminPricePanel';
 export * from './AdminPricings';
 export * from './AdminPriceEditor';
+export * from './AdminPriceCreator';
 export * from './AdminPricingView';
 export * from './AdminPricingsIndex';
 export * from './AdminPricingsRouteIndex';

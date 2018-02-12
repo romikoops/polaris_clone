@@ -14,7 +14,7 @@ class Admin::PricingsController < ApplicationController
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     detailed_itineraries = itineraries.flat_map{ |i| get_itinerary_options(i)}
     
-    response_handler({itineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
+    response_handler({itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
 
   def client
