@@ -58,8 +58,8 @@ export class AdminPricingClientView extends Component {
             return '';
         }
         console.log(clientPricings);
-        const { routes, pricings, hubRoutes, transportCategories } = pricingData;
-        const {client, userPricings} = clientPricings;
+        const { itineraries, pricings, transportCategories } = pricingData;
+        const {client, userPricings, detailedItineraries} = clientPricings;
         if (!client || !userPricings) {
             return '';
         }
@@ -130,19 +130,22 @@ export class AdminPricingClientView extends Component {
                             <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
                         </div>
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.viewThis(pricing._id)}>
-                           {expandIcon}
+                            {expandIcon}
                         </div>
                     </div>
-                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
-                        <p className="flex-none">MoT:</p>
+                    <div className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}>
+                        <p className="flex-none">Mode of Transport:</p>
+                        <div className="flex-5"></div>
                         <p className="flex-none">  {transport.mode_of_transport}</p>
                     </div>
-                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Type: </p>
+                        <div className="flex-5"></div>
                         <p className="flex-none">{transport.name}</p>
                     </div>
-                    <div className={`flex-33 layout-row layout-align-space-between-center ${styles.price_row_detail}`}>
+                    <div className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}>
                         <p className="flex-none">Cargo Class:</p>
+                        <div className="flex-5"></div>
                         <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
                     </div>
                     {panel}
@@ -157,7 +160,7 @@ export class AdminPricingClientView extends Component {
             const inner = hrArr.map((hr) => {
                 const innerInner = [];
                 transports.forEach(tr => {
-                    const gKey = hr.id + '_' + tr.id;
+                    const gKey = `${hr.origin_stop_id}_${hr.destination_stop_id}_${tr.id}`;
                     const pricing = pricingsObj[uPriceObj[gKey]];
                     if (pricing) {
                         innerInner.push(
@@ -179,15 +182,15 @@ export class AdminPricingClientView extends Component {
                 </div>
             );
         };
-        const routeBoxes = routes.map((rt) => {
-            const relHR = [];
-            hubRoutes.forEach(hr => {
-                if (hr.route_id === rt.id) {
-                    relHR.push(hr);
+        const routeBoxes = itineraries.map((rt) => {
+            const diArr = [];
+            detailedItineraries.forEach((di) => {
+                if (rt.id === di.id) {
+                    diArr.push(di);
                 }
             });
             return (
-                <RoutePricingBox key={v4()} route={rt} hrArr={relHR} pricingsObj={pricings} uPriceObj={userPricings} transports={transportCategories} />
+                <RoutePricingBox key={v4()} route={rt} hrArr={diArr} pricingsObj={pricings} uPriceObj={userPricings} transports={transportCategories} />
             );
         });
 

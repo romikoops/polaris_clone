@@ -384,7 +384,15 @@ export function admin(state = {}, action) {
         case adminConstants.UPDATE_PRICING_REQUEST:
             return state;
         case adminConstants.UPDATE_PRICING_SUCCESS:
-            return state;
+            const exPricings = state.pricingData.pricings;
+            exPricings[action.payload.id] = action.payload;
+            return {
+                ...state,
+                pricingData: {
+                    ...state.pricingData,
+                    pricings: exPricings
+                }
+            };
         case adminConstants.UPDATE_PRICING_FAILURE:
             return state;
 
@@ -412,12 +420,11 @@ export function admin(state = {}, action) {
             });
             return reqClientPric;
         case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
-            // ;
-            const succClientPric = merge({}, state, {
+            return {
+                ...state,
                 clientPricings: action.payload.data,
                 loading: false
-            });
-            return succClientPric;
+            };
         case adminConstants.GET_CLIENT_PRICINGS_FAILURE:
             const errClientPric = merge({}, state, {
                 error: { pricings: action.error },
@@ -431,12 +438,11 @@ export function admin(state = {}, action) {
             });
             return reqRoutePric;
         case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
-            // ;
-            const succRoutePric = merge({}, state, {
-                routePricings: action.payload.data,
+            return {
+                ...state,
+                itineraryPricings: action.payload.data,
                 loading: false
-            });
-            return succRoutePric;
+            };
         case adminConstants.GET_ROUTE_PRICINGS_FAILURE:
             const errRoutePric = merge({}, state, {
                 error: { pricings: action.error },

@@ -20,18 +20,23 @@ class Admin::PricingsController < ApplicationController
   def client
     @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
-    response_handler({userPricings: @pricings, client: @client})
+    detailed_itineraries = get_itineraries(current_user.tenant_id)
+    itineraries = eliminate_user_pricings(@pricings, detailed_itineraries)
+    response_handler({userPricings: @pricings, client: @client, detailedItineraries: itineraries})
   end
 
   def route
     pricings = get_itinerary_pricings_hash(params[:id].to_i)
     itinerary = Itinerary.find(params[:id])
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
-    response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops})
+    detailed_itineraries = get_itinerary_options(itinerary)
+    response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
   end
 
   def update_price
     resp = update_pricing(params[:id], params.as_json)
+    new_pricing = get_item("pricings", "_id", params[:id])
+    response_handler(new_pricing)
   end
 
   # def overwrite_main_carriage
@@ -71,7 +76,20 @@ class Admin::PricingsController < ApplicationController
 
     redirect_to admin_pricings_path
   end
-
+  def eliminate_user_pricings(prices, itineraries)
+    results = []
+    itineraries.each do |itin|
+      prices.each do |k, v|
+        splits = v.split('_')
+        hub1 = splits[0].to_i
+        hub2 = splits[1].to_i
+        if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+          results.push(itin)
+        end
+      end
+    end
+    return results
+  end
   private
 
   def require_login_and_role_is_admin

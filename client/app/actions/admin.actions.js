@@ -361,7 +361,7 @@ function updatePricing(id, req) {
     }
     function success(prData) {
         // ;
-        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData };
+        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData.data };
     }
     function failure(error) {
         return { type: adminConstants.UPDATE_PRICING_FAILURE, error };

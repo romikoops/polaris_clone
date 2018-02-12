@@ -466,8 +466,8 @@ module ExcelTools
           cargo_class: cargo_class
         )
 
-        pathKey = "#{hubroute.id}_#{transport_category.id}"
-        priceKey = "#{hubroute.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+        pathKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
+        priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
         
         pricing = { 
           data: price_obj[cargo_class], 
@@ -660,8 +660,8 @@ module ExcelTools
             cargo_class: cargo_class
           )
           
-          pathKey  = "#{itinerary.id}_#{transport_category.id}"
-          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          pathKey  = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
+          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}_#{user.id}"
           
           pricing = { 
             data:      price_obj[cargo_class], 
@@ -689,7 +689,7 @@ module ExcelTools
             cargo_class: cargo_class
           )
 
-          pathKey = "#{itinerary.id}_#{transport_category.id}"
+          pathKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
           priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
 
           pricing = { 
@@ -820,9 +820,9 @@ module ExcelTools
         'fcl_40f',
         'fcl_40f_hq'
       ]
-      stops_in_order = new_pricings_aux_data[pricing_key][:hub_ids].map.with_index { |h, i| new_pricings_aux_data[pricing_key][:itinerary].stops.find_or_create_by!(hub_id: h, index: i)  }
+      new_pricings_aux_data[pricing_key][:stops_in_order] = new_pricings_aux_data[pricing_key][:hub_ids].map.with_index { |h, i| new_pricings_aux_data[pricing_key][:itinerary].stops.find_or_create_by!(hub_id: h, index: i)  }
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
-        stops_in_order,
+        new_pricings_aux_data[pricing_key][:stops_in_order],
         [30],
         row[:effective_date], 
         row[:expiration_date], 
@@ -855,25 +855,25 @@ module ExcelTools
        
         
 
-        pathKey = "#{new_pricings_aux_data[pricing_key][:itinerary].id}_#{transport_category.id}"
-        priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+        pathKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}"
+        priceKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
         pricing_data[:_id] = priceKey;
         pricing_data[:tenant_id] = user.tenant_id;
         if dedicated
-          
+          priceKey += "_#{user.id}"
           user_pricing = { pathKey => priceKey }
 
           put_item_fn(mongo, 'pricings', pricing_data)
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_hub_route_pricings[pathKey] ||= {}
-          new_hub_route_pricings[pathKey]["#{user.id}"] = uuid
+          new_hub_route_pricings[pathKey]["#{user.id}"] = priceKey
         else
           
           put_item_fn(mongo, 'pricings', pricing_data)
 
           new_hub_route_pricings[pathKey] ||= {}
-          new_hub_route_pricings[pathKey]["open"]                  = uuid
+          new_hub_route_pricings[pathKey]["open"]                  = priceKey
           new_hub_route_pricings[pathKey]["itinerary_id"]          = new_pricings_aux_data[pricing_key][:itinerary].id
           new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
           new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id

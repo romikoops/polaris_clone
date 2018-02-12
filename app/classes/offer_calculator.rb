@@ -235,7 +235,7 @@ class OfferCalculator
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
 
-    "#{trip[0].itinerary_id}_#{transport_category.id}"
+    "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
   end
 
   def determine_trucking_options(origin, hub)

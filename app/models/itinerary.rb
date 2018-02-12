@@ -141,6 +141,7 @@ class Itinerary < ApplicationRecord
         {
           nexus_names: true,
           nexus_ids: true, 
+          stop_ids: true, 
           modes_of_transport: true
         }
       ) }
@@ -149,10 +150,14 @@ class Itinerary < ApplicationRecord
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
-    return_h[:origin_nexus]       = origin.hub.nexus.name                      if options[:nexus_names] 
-    return_h[:destination_nexus]  = destination.hub.nexus.name                       if options[:nexus_names]
-    return_h[:origin_nexus_id]       = origin.hub.nexus.id                   if options[:nexus_ids] 
-    return_h[:destination_nexus_id]  = destination.hub.nexus.id                    if options[:nexus_ids]
+    return_h[:origin_nexus]       = origin.hub.nexus.name                if options[:nexus_names] 
+    return_h[:destination_nexus]  = destination.hub.nexus.name           if options[:nexus_names]
+    return_h[:origin_nexus_id]       = origin.hub.nexus.id               if options[:nexus_ids] 
+    return_h[:destination_nexus_id]  = destination.hub.nexus.id          if options[:nexus_ids]
+    return_h[:origin_hub_id]       = origin.hub.id                       if options[:hub_ids] 
+    return_h[:destination_hub_id]  = destination.hub.id                  if options[:hub_ids]
+    return_h[:origin_stop_id]       = origin.id                          if options[:stop_ids] 
+    return_h[:destination_stop_id]  = destination.id                     if options[:stop_ids]
     return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
     return_h[:next_departure]     = next_departure                       if options[:next_departure]
     return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
