@@ -13,7 +13,7 @@ export class ContactCard extends Component {
         this.props.select(this.props.contactData, this.props.contactType);
     }
     render() {
-        const { contactData, theme, removeFunc } = this.props;
+        const { contactData, theme, removeFunc, popOutHover } = this.props;
         const { contact, location } = contactData;
         const iconStyle = {
             background:
@@ -34,7 +34,7 @@ export class ContactCard extends Component {
         return (
             <div
                 key={v4()}
-                className={`flex-100 layout-row ${styles.contact_card}`}
+                className={`flex-100 layout-row ${styles.contact_card} ${popOutHover ? styles.pop_out_hover : ''}`}
                 onClick={this.selectContact}
             >
                 {removeIcon}
@@ -110,9 +110,13 @@ ContactCard.propTypes = {
     contactData: PropTypes.object,
     theme: PropTypes.object,
     select: PropTypes.func,
-    contactType: PropTypes.string
+    contactType: PropTypes.string,
+    removeFunc: PropTypes.func,
+    popOutHover: PropTypes.bool
 };
 
 ContactCard.defaultProps = {
-    contactType: ''
+    contactType: '',
+    removeFunc: null,
+    popOutHover: false
 };

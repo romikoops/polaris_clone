@@ -18,6 +18,7 @@ export class AddressBook extends Component {
                 theme={theme}
                 select={autofillContact}
                 key={v4()}
+                popOutHover={true}
             />
         ));
 
