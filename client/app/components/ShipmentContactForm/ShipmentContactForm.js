@@ -20,12 +20,17 @@ export class ShipmentContactForm extends Component {
         this.handlePlaceChange = this.handlePlaceChange.bind(this);
         this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.close = this.close.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
             contactData: nextProps.contactData
         });
+    }
+    close(e) {
+        e.preventDefault();
+        this.props.close();
     }
 
     handleFormChange(event) {
@@ -322,12 +327,20 @@ export class ShipmentContactForm extends Component {
                             name="location-geocodedAddress"
                             placeholder=""
                         />
-                        <RoundButton
-                            text={`Set ${contactData.type}`}
-                            theme={theme}
-                            size="small"
-                            active
-                        />
+                        <div className="layout-row layout-align-space-between" style={{ width: '97.5%' }}>
+                            <RoundButton
+                                text={`${contactData.type === 'notifyee' ? 'Add' : 'Set'} ${contactData.type}`}
+                                theme={theme}
+                                size="small"
+                                active
+                            />
+                            <RoundButton
+                                text="Done"
+                                theme={theme}
+                                size="small"
+                                handleNext={this.close}
+                            />
+                        </div>
                     </Formsy>
                 </div>
             </div>

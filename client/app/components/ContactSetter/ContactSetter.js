@@ -162,14 +162,15 @@ export class ContactSetter extends Component {
   	              contactData={contactData}
   	              theme={theme}
   	              setContact={this.setContact}
-  	            />
-  	          </div>
+                  close={this.toggleShowBody}
+                />
+              </div>
 
-  	          <div className="flex-50" style={{ height: '100%' }}>
-  							<AddressBook
-  								contacts={this.availableContacts()}
-  								autofillContact={this.autofillContact}
-  								theme={theme}
+              <div className="flex-50" style={{ height: '100%' }}>
+                <AddressBook
+                  contacts={this.availableContacts()}
+                  autofillContact={this.autofillContact}
+                  theme={theme}
   							/>
   	          </div>
             </div>
