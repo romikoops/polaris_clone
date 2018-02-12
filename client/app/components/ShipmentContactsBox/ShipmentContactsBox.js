@@ -51,10 +51,10 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
-        const placeholderCard = type => (
+        const placeholderCard = (type, i) => (
             <div
                 className={`layout-column flex-align-center-center ${styles.placeholder_card}`}
-                onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type)}
+                onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
             >
                 <h1>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h1>
             </div>
@@ -76,7 +76,7 @@ export class ShipmentContactsBox extends Component {
         notifyeeContacts.push(
             <div className="flex-50">
                 <div className={styles.contact_wrapper}>
-                    {placeholderCard('notifyee')}
+                    {placeholderCard('notifyee', notifyeeContacts.length)}
                 </div>
             </div>
         );
