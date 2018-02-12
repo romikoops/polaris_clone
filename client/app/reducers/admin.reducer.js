@@ -108,11 +108,11 @@ export function admin(state = {}, action) {
             });
             return reqHubs;
         case adminConstants.GET_HUBS_SUCCESS:
-            const succHubs = merge({}, state, {
+            return {
+                ...state,
                 hubs: action.payload.data,
                 loading: false
-            });
-            return succHubs;
+            };
         case adminConstants.GET_HUBS_FAILURE:
             const errHubs = merge({}, state, {
                 error: { hubs: action.error },
@@ -126,11 +126,11 @@ export function admin(state = {}, action) {
             });
             return reqHub;
         case adminConstants.GET_HUB_SUCCESS:
-            const succHub = merge({}, state, {
+            return {
+                ...state,
                 hub: action.payload.data,
                 loading: false
-            });
-            return succHub;
+            };
         case adminConstants.GET_HUB_FAILURE:
             const errHub = merge({}, state, {
                 error: { hub: action.error },
@@ -296,8 +296,8 @@ export function admin(state = {}, action) {
                 loading: true
             };
         case adminConstants.GET_SCHEDULES_SUCCESS:
-           return {
-            ...state,
+            return {
+                ...state,
                 schedules: action.payload.data,
                 loading: false
             };

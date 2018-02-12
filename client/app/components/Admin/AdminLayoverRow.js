@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminScheduleLine.scss';
 import { moment } from '../../constants';
-export class AdminScheduleLine extends Component {
+export class AdminLayoverRow extends Component {
     constructor(props) {
         super(props);
     }
@@ -31,17 +31,10 @@ export class AdminScheduleLine extends Component {
         }, ${color2})`;
     }
     render() {
-        const { theme, schedule, hubs } = this.props;
-        if (!schedule || !schedule.hub_route_key || !hubs) {
+        const { theme, schedule, hub, itinerary } = this.props;
+        if (!schedule || !hub) {
             return '';
         }
-        const hubKeys = schedule.hub_route_key.split('-');
-        if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-            // ;
-            return '';
-        }
-        const originHub = hubs[hubKeys[0]].data;
-        const destHub = hubs[hubKeys[1]].data;
         const gradientFontStyle = {
             background:
                 theme && theme.colors
@@ -50,21 +43,8 @@ export class AdminScheduleLine extends Component {
                     }, ${theme.colors.brightSecondary})`
                     : 'black'
         };
-        const dashedLineStyles = {
-            marginTop: '6px',
-            height: '2px',
-            width: '100%',
-            background:
-                theme && theme.colors
-                    ? this.dashedGradient(
-                        theme.colors.primary,
-                        theme.colors.secondary
-                    )
-                    : 'black',
-            backgroundSize: '16px 2px, 100% 2px'
-        };
-        const startTime = schedule.etd ? schedule.etd : schedule.start_date;
-        const endTime = schedule.eta ? schedule.eta : schedule.end_date;
+        const startTime = schedule.eta ? schedule.eta : schedule.start_date;
+        const endTime = schedule.etd ? schedule.etd : schedule.end_date;
         return (
             <div
                 key={schedule.id}
@@ -76,40 +56,18 @@ export class AdminScheduleLine extends Component {
                             styles.top_row
                         }`}
                     >
-                        <div className={`${styles.header_hub}`}>
-                            <i
-                                className={`fa fa-map-marker ${
-                                    styles.map_marker
-                                }`}
-                            />
+                        <div className="flex-20 layout-row layout-align-center-center">
+                            {this.switchIcon(schedule)}
+                        </div>
+                        <div className={`flex-80 ${styles.header_hub}`}>
                             <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {originHub.name} </h4>
+                                <h4 className="flex-100"> {itinerary.name} </h4>
                             </div>
                             <div className="flex-100">
                                 <p className="flex-100">
                                     {' '}
-                                    {originHub.hub_code
-                                        ? originHub.hub_code
-                                        : ''}{' '}
-                                </p>
-                            </div>
-                        </div>
-                        <div className={`${styles.connection_graphics}`}>
-                            <div className="flex-none layout-row layout-align-center-center">
-                                {this.switchIcon(schedule)}
-                            </div>
-                            <div style={dashedLineStyles} />
-                        </div>
-                        <div className={`${styles.header_hub}`}>
-                            <i className={`fa fa-flag-o ${styles.flag}`} />
-                            <div className="flex-100 layout-row">
-                                <h4 className="flex-100"> {destHub.name} </h4>
-                            </div>
-                            <div className="flex-100">
-                                <p className="flex-100">
-                                    {' '}
-                                    {destHub.hub_code
-                                        ? destHub.hub_code
+                                    {hub.hub_code
+                                        ? hub.hub_code
                                         : ''}{' '}
                                 </p>
                             </div>
@@ -125,7 +83,7 @@ export class AdminScheduleLine extends Component {
                                     style={gradientFontStyle}
                                 >
                                     {' '}
-                                    Date of Departure
+                                    Date of Arrival
                                 </h4>
                             </div>
                             <div className="flex-100 layout-row">
@@ -148,7 +106,7 @@ export class AdminScheduleLine extends Component {
                                     style={gradientFontStyle}
                                 >
                                     {' '}
-                                    ETA terminal
+                                    Date of Departure
                                 </h4>
                             </div>
                             <div className="flex-100 layout-row">
@@ -170,7 +128,7 @@ export class AdminScheduleLine extends Component {
         );
     }
 }
-AdminScheduleLine.propTypes = {
+AdminLayoverRow.propTypes = {
     theme: PropTypes.object,
     schedule: PropTypes.object,
     selectResult: PropTypes.func,

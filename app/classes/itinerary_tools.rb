@@ -38,6 +38,26 @@ module ItineraryTools
     return get_items_aggregate("itineraryOptions", query)
   end
 
+  def get_itineraries_for_hub(hub)
+    query = [
+      { 
+        "$match" => { "id" => hub.tenant_id } 
+      },
+      { 
+        "$project" => {
+          "data" => { 
+            "$filter" => {
+              "input" => "$data",
+              "as"    => "itinerary",
+              "cond"  => { "$or" => [{"$eq" => ["$$itinerary.origin_hub_id", hub.id]}, {"$eq" => ["$$itinerary.destination_hub_id", hub.id]} ]},
+            }
+          }
+        }
+      }
+    ]
+    return get_items_aggregate("itineraryOptions", query)
+  end
+
   def get_itinerary_options(itinerary)
     query = [
       { 

@@ -13,6 +13,7 @@ export * from './AdminNavItem';
 export * from './AdminItineraryRow';
 export * from './AdminTripPanel';
 export * from './AdminLayoverTile';
+export * from './AdminLayoverRow';
 
 export * from './AdminPricePanel';
 export * from './AdminPricings';

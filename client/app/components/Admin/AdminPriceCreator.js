@@ -6,7 +6,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect';
 // import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
-import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema} from '../../constants';
+import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema, cargoGlossary} from '../../constants';
 
 const fclChargeGloss = fclChargeGlossary;
 const lclChargeGloss = lclChargeGlossary;
@@ -19,6 +19,7 @@ const cargoClassOpts = cargoClassOptions;
 const moTOpts = moTOptions;
 const lclSchema = lclPricingSchema;
 const fclSchema = fclPricingSchema;
+const cargoGloss = cargoGlossary;
 const test = '123';
 export class AdminPriceCreator extends Component {
     constructor(props) {
@@ -33,12 +34,14 @@ export class AdminPriceCreator extends Component {
             route: false,
             hubRoute: false,
             transportCategory: false,
+            client: false,
             steps: {
                 cargoClass: false,
                 route: false,
                 hubRoute: false,
                 transportCategory: false,
-                pricing: false
+                pricing: false,
+                client: false
             }
         };
         this.editPricing = lclSchema;
@@ -178,23 +181,24 @@ export class AdminPriceCreator extends Component {
         this.editPricing = schema;
     }
     saveEdit() {
-        const { hubRoute, transportCategory, route, cargoClass, pricing } = this.state;
-        const pricingId = `${hubRoute.value.id}_${transportCategory.value.id}_${route.value.tenant_id}_${cargoClass.value}`;
+        const { hubRoute, transportCategory, route, cargoClass, pricing, client } = this.state;
+        const clientTag = client !== 'open' ? '_' + client.value.id : '';
+        const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${transportCategory.value.id}_${route.value.tenant_id}_${cargoClass.value}${clientTag}`;
         pricing.hub_route_id = hubRoute.value.id;
         pricing.route_id = route.value.id;
         pricing.tenant_id = route.value.tenant_id;
         this.props.adminDispatch.updatePricing(pricingId, pricing);
         this.props.closeForm();
     }
-    prepForSelect(arr, labelKey, valueKey) {
+    prepForSelect(arr, labelKey, valueKey, glossary) {
         return arr.map((a) => {
-            return {value: valueKey ? a[valueKey] : a, label: a[labelKey]};
+            return {value: valueKey ? a[valueKey] : a, label: glossary ? glossary[a[labelKey]] : a[labelKey] };
         });
     }
 
     render() {
-        const {theme, routes, hubRoutes, transportCategories } = this.props;
-        const {route, hubRoute, cargoClass, steps, transportCategory } = this.state;
+        const {theme, itineraries, detailedItineraries, transportCategories, clients } = this.props;
+        const {route, hubRoute, cargoClass, steps, transportCategory, client } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -207,9 +211,15 @@ export class AdminPriceCreator extends Component {
         } else {
             gloss = fclChargeGloss;
         }
-        const routeOpts = this.prepForSelect(routes, 'name', false);
-        const hubRouteOpts = this.prepForSelect(hubRoutes, 'name', false);
-        const transportCategoryOpts = cargoClass ? this.prepForSelect(transportCategories.filter(x => x.cargo_class === cargoClass.value), 'name', false) : [];
+        const routeOpts = this.prepForSelect(itineraries, 'name', false, false);
+        const clientOpts = clients.map((a) => {
+            return {value: a, label: `${a.first_name} ${a.last_name}`};
+        });
+        clientOpts.push({value: 'OPEN', label: 'Open'});
+        const hubRouteOpts = route ? detailedItineraries.filter(di => di.id === route.value.id).map((a) => {
+            return {value: a, label: `${a.origin_hub_name} - ${a.destination_hub_name}`};
+        }) : [];
+        const transportCategoryOpts = cargoClass ? this.prepForSelect(transportCategories.filter(x => x.cargo_class === cargoClass.value), 'name', false, cargoGloss) : [];
 
         Object.keys(pricing.data).forEach((key) => {
             const cells = [];
@@ -297,13 +307,30 @@ export class AdminPriceCreator extends Component {
         const selectHubRoute = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center">
-                    <h4 className="flex-100 letter_3">Select a specific combination fo Hubs</h4>
+                    <h4 className="flex-100 letter_3">Select a specific combination of Hubs</h4>
                     <div className="flex-75 layout-row">
                         <NamedSelect
                             name="hubRoute"
                             classes={`${styles.select}`}
                             value={hubRoute}
                             options={hubRouteOpts}
+                            className="flex-100"
+                            onChange={this.handleTopLevelSelect}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+        const selectClient = (
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <h4 className="flex-100 letter_3">Select users this pricing applies to</h4>
+                    <div className="flex-75 layout-row">
+                        <NamedSelect
+                            name="client"
+                            classes={`${styles.select}`}
+                            value={client}
+                            options={clientOpts}
                             className="flex-100"
                             onChange={this.handleTopLevelSelect}
                         />
@@ -352,6 +379,12 @@ export class AdminPriceCreator extends Component {
                 <h4 className="flex-none letter_3">{transportCategory.label}</h4>
             </div>
         );
+        const clientResult = (
+            <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
+                <h4 className="flex-none letter_3">Client:  </h4>
+                <h4 className="flex-none letter_3">{client.label}</h4>
+            </div>
+        );
         const contextPanel = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center layout-wrap">
@@ -359,6 +392,7 @@ export class AdminPriceCreator extends Component {
                     {steps.cargoClass === true && steps.transportCategory === false ? selectTransportCategory : transportCategoryResult}
                     {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult }
                     {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult }
+                    {steps.hubRoute === true && steps.client === false ? selectClient : clientResult }
                 </div>
             </div>
 
@@ -379,7 +413,7 @@ export class AdminPriceCreator extends Component {
                                 <p className="flex-none offset-5">{hubRoute ? hubRoute.label : ''}</p>
                             </div>
                         </div>
-                        {hubRoute ? panel : contextPanel}
+                        {client ? panel : contextPanel}
                         <div className="flex-100 layout-align-end-center layout-row" style={{margin: '15px'}}>
                             <RoundButton
                                 theme={theme}

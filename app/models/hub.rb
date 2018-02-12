@@ -6,10 +6,11 @@ class Hub < ApplicationRecord
   has_many :hub_routes
   has_many :schedules, through: :hub_routes
   has_many :routes, through: :hub_routes
-  
+  has_many :stops
+  has_many :layovers, through: :stops
   has_one :service_charge
 
-  has_many :stops
+ 
 
   def self.create_from_nexus(nexus, mot, tenant_id)
     hub_type_name = {

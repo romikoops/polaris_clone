@@ -85,7 +85,7 @@ export class AdminPricingsIndex extends Component {
                 </div>
                 <AdminSearchableRoutes itineraries={detailedItineraries} theme={theme} hubs={hubs} handleClick={this.viewRoute} seeAll={() => adminTools.goTo('/admin/pricings/routes')}/>
                 <AdminSearchableClients theme={theme} clients={clients} handleClick={this.viewClient} seeAll={() => adminTools.goTo('/admin/pricings/clients')}/>
-                {newPricing ? <AdminPriceCreator theme={theme} itineraries={itineraries} detailedItineraries={detailedItineraries} transportCategories={transportCategories} closeForm={this.toggleCreator}/> : ''}
+                {newPricing ? <AdminPriceCreator theme={theme} itineraries={itineraries} clients={clients} adminDispatch={adminTools} detailedItineraries={detailedItineraries} transportCategories={transportCategories} closeForm={this.toggleCreator}/> : ''}
             </div>
         );
     }

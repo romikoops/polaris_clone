@@ -50,7 +50,7 @@ export class AdminItineraryRow extends Component {
                 <div className="flex-none layout-row layout-align-end-center">
                   <div className="flex-none layout-row layout-align-center-center">
                       {this.switchIcon(itinerary)}
-                      <p className="flex-none">{capitalize(itinerary.mode_of_transport)}</p>
+                      <p className="flex-none">{itinerary.mode_of_transport ? capitalize(itinerary.mode_of_transport) : ''}</p>
                   </div>
                 </div>
             </div>

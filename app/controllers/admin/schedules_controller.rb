@@ -19,7 +19,6 @@ class Admin::SchedulesController < ApplicationController
     mot = params[:mot]
     itinerary = Itinerary.find(params[:itinerary])
     stops = itinerary.stops.order(:index)
-    byebug
     itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], params[:vehicleTypeId])
     train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map{ |it| it.trips.limit(10).order(:start_date)}

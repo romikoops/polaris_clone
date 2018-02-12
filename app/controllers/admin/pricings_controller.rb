@@ -10,9 +10,9 @@ class Admin::PricingsController < ApplicationController
     # @open_pricings = Pricing.where(customer_id: nil)
     @pricings = get_tenant_pricings_hash(current_user.tenant_id)
     @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
-    @transports = TransportCategory.all
+    @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = itineraries.flat_map{ |i| get_itinerary_options(i)}
+    detailed_itineraries = get_itineraries(current_user.tenant_id)
     
     response_handler({itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
@@ -34,7 +34,11 @@ class Admin::PricingsController < ApplicationController
   end
 
   def update_price
-    resp = update_pricing(params[:id], params.as_json)
+    data = params.as_json
+    data.delete("controller")
+    data.delete("subdomain_id")
+    data.delete("action")
+    resp = update_pricing(params[:id], data)
     new_pricing = get_item("pricings", "_id", params[:id])
     response_handler(new_pricing)
   end
