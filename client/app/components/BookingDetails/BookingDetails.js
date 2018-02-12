@@ -33,9 +33,9 @@ export class BookingDetails extends Component {
         this.state = {
             addressBook: false,
             acceptTerms: false,
-            consignee: Object.assign({}, this.newContactData),
-            shipper: Object.assign({}, this.newContactData),
-            notifyees: [Object.assign({ index: 0 }, this.newContactData)],
+            consignee: {},
+            shipper: {},
+            notifyees: [],
             insurance: {
                 bool: false,
                 val: 0

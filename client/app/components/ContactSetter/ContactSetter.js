@@ -47,7 +47,7 @@ export class ContactSetter extends Component {
   }
 
   setContactForEdit(contactData) {
-  	this.setState({ contactData });
+  	this.setState({ contactData, showBody: true });
   }
 
   autofillContact(contactData) {
@@ -68,7 +68,6 @@ export class ContactSetter extends Component {
     };
 
     let contactTypeIndex = this.contactTypes.indexOf(type) + 1;
-
     if (contactTypeIndex === 2) {
       newState.contactData.index = 0;
     } else if (contactTypeIndex > 2) {

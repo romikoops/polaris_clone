@@ -5,12 +5,30 @@ import { v4 } from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
 import { ContactCard } from '../ContactCard/ContactCard';
+import { capitalize } from '../../helpers/stringTools';
 
 
 export class ShipmentContactsBox extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.newContactData = {
+            contact: {
+                companyName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: ''
+            },
+            location: {
+                street: '',
+                number: '',
+                zipCode: '',
+                city: '',
+                country: '',
+                gecodedAddress: ''
+            }
+        };
         this.removeNotifyee = this.removeNotifyee.bind(this);
         this.setContactForEdit = this.setContactForEdit.bind(this);
     }
@@ -37,6 +55,14 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
+        const placeholderCard = type => (
+            <div
+                className={`layout-column flex-align-center-center ${styles.placeholder_card}`}
+                onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type)}
+            >
+                <h1>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h1>
+            </div>
+        );
         const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
             <div className="flex-50">
                 <div className={styles.contact_wrapper}>
@@ -50,6 +76,13 @@ export class ShipmentContactsBox extends Component {
                 </div>
             </div>
         ));
+        notifyeeContacts.push(
+            <div className="flex-50">
+                <div className={styles.contact_wrapper}>
+                    {placeholderCard('notifyee')}
+                </div>
+            </div>
+        );
         const shipperContact = shipper.contact ? (
             <ContactCard
                 contactData={shipper}
@@ -58,7 +91,7 @@ export class ShipmentContactsBox extends Component {
                 key={v4()}
                 contactType="shipper"
             />
-        ) : '';
+        ) : placeholderCard('shipper');
         const consigneeContact = consignee.contact ? (
             <ContactCard
                 contactData={consignee}
@@ -67,7 +100,7 @@ export class ShipmentContactsBox extends Component {
                 key={v4()}
                 contactType="consignee"
             />
-        ) : '';
+        ) : placeholderCard('consignee');
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
