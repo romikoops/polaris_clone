@@ -18,10 +18,11 @@ export class ShipmentContactsBox extends Component {
     removeNotifyee(not) {
         this.props.removeNotifyee(not);
     }
-    setContactForEdit(contactData, contactType) {
+    setContactForEdit(contactData, contactType, contactIndex) {
         this.props.setContactForEdit({
             ...contactData,
-            type: contactType
+            type: contactType,
+            index: contactIndex
         });
     }
     render() {
@@ -36,13 +37,13 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
-        const notifyeeContacts = notifyees && notifyees.map(notifyee => (
+        const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
             <div className="flex-50">
                 <div className={styles.contact_wrapper}>
                     <ContactCard
                         contactData={notifyee}
                         theme={theme}
-                        select={this.setContactForEdit}
+                        select={() => this.setContactForEdit(notifyee, 'notifyee', i)}
                         key={v4()}
                         contactType="notifyee"
                     />
@@ -62,7 +63,7 @@ export class ShipmentContactsBox extends Component {
             <ContactCard
                 contactData={consignee}
                 theme={theme}
-                select={() => this.props.setContactForEdit(consignee)}
+                select={this.setContactForEdit}
                 key={v4()}
                 contactType="consignee"
             />
@@ -99,11 +100,10 @@ export class ShipmentContactsBox extends Component {
                     </div>
                     <div className="flex-100 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <div
-                                className={` ${
-                                    styles.contact_header
-                                } flex-50 layout-row layout-align-start-center`}
-                            >
+                            <div className={`
+                                ${styles.contact_header} flex-50
+                                layout-row layout-align-start-center
+                            `}>
                                 <i
                                     className="fa fa-users flex-none"
                                     style={textStyle}

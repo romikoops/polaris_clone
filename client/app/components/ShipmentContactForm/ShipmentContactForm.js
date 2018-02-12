@@ -308,10 +308,10 @@ export class ShipmentContactForm extends Component {
                                 fontSize: '12px',
                                 bottom: '-19px'
                             }}
-                            validations="minLength:4"
+                            validations="minLength:3"
                             validationErrors={{
-                                isDefaultRequiredValue: 'Minimum 4 characters',
-                                minLength: 'Minimum 4 characters'
+                                isDefaultRequiredValue: 'Minimum 3 characters',
+                                minLength: 'Minimum 3 characters'
                             }}
                             required
                         />

@@ -51,7 +51,7 @@ export class ContactSetter extends Component {
   autofillContact(contactData) {
   	this.setState({
   		contactData: {
-  			type: this.state.contactData.type,
+        ...this.state.contactData,
 	  		contact: contactData.contact,
 	  		location: contactData.location
   		}
@@ -59,19 +59,24 @@ export class ContactSetter extends Component {
   }
 
   setContact(contactData) {
-  	const type = this.state.contactData.type;
+  	const { type, index } = this.state.contactData;
 
     const newState = {
       contactData: Object.assign({}, this.newContactData)
     };
-    this.props.setContact(contactData, type);
 
-    const contactTypeIndex = Math.min(
-        this.contactTypes.indexOf(type) + 1,
-        this.contactTypes.length - 1
-    );
+    let contactTypeIndex = this.contactTypes.indexOf(type) + 1;
+
+    if (contactTypeIndex === 2) {
+      newState.contactData.index = 0;
+    } else if (contactTypeIndex > 2) {
+      contactTypeIndex = 2;
+      newState.contactData.index = index + 1;
+    }
+
+    this.props.setContact(contactData, type, index);
+
     newState.contactData.type = this.contactTypes[contactTypeIndex];
-
     this.setState(newState);
   }
 
@@ -80,6 +85,7 @@ export class ContactSetter extends Component {
   	if (contactType === 'notifyee') {
 			this.setState({
 	  		contactData: {
+          index: 0,
 	  			type: this.contactTypes[i],
 	  			...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
 	  		}
@@ -112,7 +118,7 @@ export class ContactSetter extends Component {
     const { theme, shipper, consignee, notifyees } = this.props;
     const { contactData } = this.state;
     const stageIndex = this.contactTypes.indexOf(contactData.type);
-
+    console.log('!!', contactData);
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`

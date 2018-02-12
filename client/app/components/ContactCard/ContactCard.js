@@ -24,7 +24,8 @@ export class ContactCard extends Component {
                       theme.colors.secondary +
                       ')'
                     : 'black',
-            paddingRight: '5px'
+            width: '28px',
+            padding: '3px 0'
         };
         return (
             <div
@@ -67,8 +68,7 @@ export class ContactCard extends Component {
                                     style={iconStyle}
                                 />
                                 <p className={`flex ${styles.contact_header}`}>
-                                    {' '}
-                                    <Truncate lines={1} >{contact.companyName} </Truncate>{}{' '}
+                                    <Truncate lines={1} >{contact.companyName} </Truncate>
                                 </p>
                             </div>
                         </div>
@@ -86,16 +86,15 @@ export class ContactCard extends Component {
                             </div>
                         </div>
                     </div>
-                    { location && location.geocodedAddress ?
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <i
-                                className="fa fa-globe flex-none"
-                                style={iconStyle}
-                            />
-                            <p className="flex-100"> {location.geocodedAddress || location.fullAddress}</p>
-                        </div> :
-                        <div className="flex-100" style={{height: '15px'}}></div>
-                    }
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <i
+                            className="fa fa-globe flex-none"
+                            style={iconStyle}
+                        />
+                        <p className="flex-100">
+                            { location && location.geocodedAddress || location.fullAddress}
+                        </p>
+                    </div>
                 </div>
             </div>
         );

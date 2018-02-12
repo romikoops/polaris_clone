@@ -33,9 +33,9 @@ export class BookingDetails extends Component {
         this.state = {
             addressBook: false,
             acceptTerms: false,
-            consignee: {},
-            shipper: {},
-            notifyees: [],
+            consignee: Object.assign({}, this.newContactData),
+            shipper: Object.assign({}, this.newContactData),
+            notifyees: [Object.assign({ index: 0 }, this.newContactData)],
             insurance: {
                 bool: false,
                 val: 0
@@ -193,10 +193,10 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
-    setContact(contactData, type) {
+    setContact(contactData, type, index) {
         if (type === 'notifyee') {
             const notifyees = this.state.notifyees;
-            notifyees.push(contactData);
+            notifyees[index] = contactData;
             this.setState({ notifyees });
         } else {
             this.setState({ [type]: contactData });
