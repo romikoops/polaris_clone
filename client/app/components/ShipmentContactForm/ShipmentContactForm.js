@@ -100,6 +100,127 @@ export class ShipmentContactForm extends Component {
     render() {
         const { theme } = this.props;
         const { contactData } = this.state;
+        const locationSection = (
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                <div className="flex-100 layout-row layout-wrap">
+                    <h3 className="flex-40">Address Details</h3>
+                    <div className="offset-5 flex-55">
+                        <GmapsWrapper
+                            theme={theme}
+                            component={PlaceSearch}
+                            inputStyles={{
+                                width: '96%',
+                                marginTop: '9px',
+                                background: 'white'
+                            }}
+                            handlePlaceChange={this.handlePlaceChange}
+                            hideMap={true}
+                        />
+                    </div>
+                </div>
+                <FormsyInput
+                    wrapperClassName={`${styles.wrapper_input} flex-75`}
+                    className={styles.input}
+                    type="text"
+                    value={contactData.location.street}
+                    name="location-street"
+                    placeholder="Street"
+                    submitAttempted={this.state.setContactAttempted}
+                    errorMessageStyles={{
+                        fontSize: '12px',
+                        bottom: '-19px'
+                    }}
+                    validations="minLength:2"
+                    validationErrors={{
+                        isDefaultRequiredValue: 'Minimum 2 characters',
+                        minLength: 'Minimum 2 characters'
+                    }}
+                    required
+                />
+                <FormsyInput
+                    wrapperClassName={`${styles.wrapper_input} offset-5 flex-15`}
+                    className={styles.input}
+                    type="text"
+                    value={contactData.location.streetNumber}
+                    name="location-streetNumber"
+                    placeholder="Number"
+                    submitAttempted={this.state.setContactAttempted}
+                    errorMessageStyles={{
+                        fontSize: '12px',
+                        bottom: '-19px'
+                    }}
+                    validationErrors={{
+                        isDefaultRequiredValue: 'Must not be blank',
+                    }}
+                    required
+                />
+                <FormsyInput
+                    wrapperClassName={`${styles.wrapper_input} flex-25`}
+                    className={styles.input}
+                    type="text"
+                    value={contactData.location.zipCode}
+                    name="location-zipCode"
+                    placeholder="Postal Code"
+                    submitAttempted={this.state.setContactAttempted}
+                    errorMessageStyles={{
+                        fontSize: '12px',
+                        bottom: '-19px'
+                    }}
+                    validations="minLength:4"
+                    validationErrors={{
+                        isDefaultRequiredValue: 'Minimum 4 characters',
+                        minLength: 'Minimum 4 characters'
+                    }}
+                    required
+                />
+                <FormsyInput
+                    wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
+                    className={styles.input}
+                    type="text"
+                    value={contactData.location.city}
+                    name="location-city"
+                    placeholder="City"
+                    submitAttempted={this.state.setContactAttempted}
+                    errorMessageStyles={{
+                        fontSize: '12px',
+                        bottom: '-19px'
+                    }}
+                    validations="minLength:2"
+                    validationErrors={{
+                        isDefaultRequiredValue: 'Minimum 2 characters',
+                        minLength: 'Minimum 2 characters'
+                    }}
+                    required
+                />
+                <FormsyInput
+                    wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
+                    className={styles.input}
+                    type="text"
+                    value={contactData.location.country}
+                    name="location-country"
+                    placeholder="Country"
+                    submitAttempted={this.state.setContactAttempted}
+                    errorMessageStyles={{
+                        fontSize: '12px',
+                        bottom: '-19px'
+                    }}
+                    validations="minLength:3"
+                    validationErrors={{
+                        isDefaultRequiredValue: 'Minimum 3 characters',
+                        minLength: 'Minimum 3 characters'
+                    }}
+                    required
+                />
+                <FormsyInput
+                    wrapperClassName="flex-100"
+                    type="hidden"
+                    value={contactData.location.geocodedAddress}
+                    name="location-geocodedAddress"
+                    placeholder=""
+                />
+            </div>
+        );
+        const pusherPlaceholder = <div style={{height: '248px'}}></div>;
 
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -211,122 +332,7 @@ export class ShipmentContactForm extends Component {
                             }}
                             required
                         />
-                        <div className="flex-100 layout-row layout-wrap">
-                            <h3 className="flex-40">Address Details</h3>
-                            <div className="offset-5 flex-55">
-                                <GmapsWrapper
-                                    theme={theme}
-                                    component={PlaceSearch}
-                                    inputStyles={{
-                                        width: '96%',
-                                        marginTop: '9px',
-                                        background: 'white'
-                                    }}
-                                    handlePlaceChange={this.handlePlaceChange}
-                                    hideMap={true}
-                                />
-                            </div>
-                        </div>
-                        <FormsyInput
-                            wrapperClassName={`${styles.wrapper_input} flex-75`}
-                            className={styles.input}
-                            type="text"
-                            value={contactData.location.street}
-                            name="location-street"
-                            placeholder="Street"
-                            submitAttempted={this.state.setContactAttempted}
-                            errorMessageStyles={{
-                                fontSize: '12px',
-                                bottom: '-19px'
-                            }}
-                            validations="minLength:2"
-                            validationErrors={{
-                                isDefaultRequiredValue: 'Minimum 2 characters',
-                                minLength: 'Minimum 2 characters'
-                            }}
-                            required
-                        />
-                        <FormsyInput
-                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-15`}
-                            className={styles.input}
-                            type="text"
-                            value={contactData.location.streetNumber}
-                            name="location-streetNumber"
-                            placeholder="Number"
-                            submitAttempted={this.state.setContactAttempted}
-                            errorMessageStyles={{
-                                fontSize: '12px',
-                                bottom: '-19px'
-                            }}
-                            validationErrors={{
-                                isDefaultRequiredValue: 'Must not be blank',
-                            }}
-                            required
-                        />
-                        <FormsyInput
-                            wrapperClassName={`${styles.wrapper_input} flex-25`}
-                            className={styles.input}
-                            type="text"
-                            value={contactData.location.zipCode}
-                            name="location-zipCode"
-                            placeholder="Postal Code"
-                            submitAttempted={this.state.setContactAttempted}
-                            errorMessageStyles={{
-                                fontSize: '12px',
-                                bottom: '-19px'
-                            }}
-                            validations="minLength:4"
-                            validationErrors={{
-                                isDefaultRequiredValue: 'Minimum 4 characters',
-                                minLength: 'Minimum 4 characters'
-                            }}
-                            required
-                        />
-                        <FormsyInput
-                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
-                            className={styles.input}
-                            type="text"
-                            value={contactData.location.city}
-                            name="location-city"
-                            placeholder="City"
-                            submitAttempted={this.state.setContactAttempted}
-                            errorMessageStyles={{
-                                fontSize: '12px',
-                                bottom: '-19px'
-                            }}
-                            validations="minLength:2"
-                            validationErrors={{
-                                isDefaultRequiredValue: 'Minimum 2 characters',
-                                minLength: 'Minimum 2 characters'
-                            }}
-                            required
-                        />
-                        <FormsyInput
-                            wrapperClassName={`${styles.wrapper_input} offset-5 flex-30`}
-                            className={styles.input}
-                            type="text"
-                            value={contactData.location.country}
-                            name="location-country"
-                            placeholder="Country"
-                            submitAttempted={this.state.setContactAttempted}
-                            errorMessageStyles={{
-                                fontSize: '12px',
-                                bottom: '-19px'
-                            }}
-                            validations="minLength:3"
-                            validationErrors={{
-                                isDefaultRequiredValue: 'Minimum 3 characters',
-                                minLength: 'Minimum 3 characters'
-                            }}
-                            required
-                        />
-                        <FormsyInput
-                            wrapperClassName="flex-100"
-                            type="hidden"
-                            value={contactData.location.geocodedAddress}
-                            name="location-geocodedAddress"
-                            placeholder=""
-                        />
+                        { contactData.type !== 'notifyee' ? locationSection : pusherPlaceholder }
                         <div className="layout-row layout-align-space-between" style={{ width: '97.5%' }}>
                             <RoundButton
                                 text={`${contactData.type === 'notifyee' ? 'Add' : 'Set'} ${contactData.type}`}
