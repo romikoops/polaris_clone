@@ -4,6 +4,7 @@ import styles from './ShipmentContactsBox.scss';
 import { v4 } from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
+import errors from '../../styles/errors.scss';
 import { ContactCard } from '../ContactCard/ContactCard';
 import { capitalize } from '../../helpers/stringTools';
 
@@ -51,17 +52,35 @@ export class ShipmentContactsBox extends Component {
                       ')'
                     : 'black'
         };
-        const placeholderCard = (type, i) => (
-            <div
-                className={`
-                    layout-column flex-align-center-center ${styles.placeholder_card}
-                    ${finishBookingAttempted && type !== 'notifyee' ? styles.with_errors : ''}
-                `}
-                onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
-            >
-                <h1>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h1>
-            </div>
-        );
+        const placeholderCard = (type, i) => {
+            const errorMessage = (
+                <span
+                    className={errors.error_message}
+                    style={{ left: '15px', top: '14px', fontSize: '17px' }}
+                >
+                    * Required
+                </span>
+            );
+            const showError = finishBookingAttempted && type !== 'notifyee';
+            return (
+                <div
+                    className={`
+                        layout-column flex-align-center-center ${styles.placeholder_card}
+                        ${showError ? styles.with_errors : ''}
+                    `}
+                    onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
+                >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                        <i
+                            className={`fa fa-${type === 'notifyee' ? 'plus' : 'mouse-pointer'}`}
+                            style={{ fontSize: '30px' }}
+                        ></i>
+                    </div>
+                    <h3>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h3>
+                    { showError ? errorMessage : '' }
+                </div>
+            );
+        };
         const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
             <div className="flex-50">
                 <div className={styles.contact_wrapper}>
