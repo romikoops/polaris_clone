@@ -875,6 +875,8 @@ module ExcelTools
           "service_code"        => row[:service_code],
           "inclusive_surcharge" => row[:inclusive_surcharge]
         }
+
+        byebug
       end 
 
       cargo_classes = [
@@ -915,8 +917,6 @@ module ExcelTools
         
         uuid = SecureRandom.uuid
        
-        
-
         pathKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}"
         priceKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
         pricing_data[:_id] = priceKey;
