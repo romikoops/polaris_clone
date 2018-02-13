@@ -312,6 +312,14 @@ function newRoute(itinerary) {
     };
     return fetch(BASE_URL + '/admin/itineraries', requestOptions).then(handleResponse);
 }
+function saveNewTrucking(obj) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({obj})
+    };
+    return fetch(BASE_URL + '/admin/trucking', requestOptions).then(handleResponse);
+}
 
 
 export const adminService = {
@@ -345,5 +353,6 @@ export const adminService = {
     documentAction,
     saveNewHub,
     newRoute,
-    getLayovers
+    getLayovers,
+    saveNewTrucking
 };

@@ -3,7 +3,70 @@ module ExcelTools
   include MongoTools
   include PricingTools
 
-  def overwrite_trucking_rates(params, user = current_user)
+  def overwrite_zipcode_weight_trucking_rates(params, user = current_user)
+    # old_trucking_ids = nil
+    # new_trucking_ids = []
+    mongo = get_client
+    defaults = []
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      nexus = Location.find_by(name: sheet_name, location_type: "nexus")
+      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
+
+      currency_row = first_sheet.row(1)
+      hubs = nexus.hubs
+      header_row = first_sheet.row(2)
+      header_row.shift
+      header_row.shift
+      weight_min_row = first_sheet.row(3)
+      weight_min_row.shift
+      weight_min_row.shift
+      num_rows = first_sheet.last_row
+      header_row.each do |cell|
+        min_max_arr = cell.split(" - ")
+        defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
+      end
+      results = []
+      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
+      (4..num_rows).each do |line|
+        row_data = first_sheet.row(line)
+        zip_code_range_array = row_data.shift.split(" - ")
+        # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
+        row_min_value = row_data.shift
+        # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
+        row_data.each_with_index do |val, index|
+          tmp = defaults[index]
+          if row_min_value < weight_min_row[index]
+            min_value = weight_min_row[index]
+          else
+            min_value = row_min_value
+          end
+          tmp[:min_value] = min_value
+          tmp[:value] = val
+          ntp[:rate_table].push(tmp)
+
+          
+
+          # new_trucking_ids << ntp.id
+        end
+        # p ntp
+        results << ntp
+        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
+      end
+      # 
+      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+      hubs.each do |h|
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
+      end
+    end
+
+    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+  end
+
+  def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
     # old_trucking_ids = nil
     # new_trucking_ids = []
     mongo = get_client

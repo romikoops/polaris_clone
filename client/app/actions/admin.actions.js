@@ -1034,6 +1034,34 @@ function saveNewHub(hub, location) {
     };
 }
 
+function saveNewTrucking(obj) {
+    function request(truckingData) {
+        return { type: adminConstants.NEW_TRUCKING_REQUEST, payload: truckingData };
+    }
+    function success(truckingData) {
+        return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_TRUCKING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.saveNewTrucking(obj).then(
+            data => {
+                dispatch(
+                    alertActions.success('New Trucking successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -1095,6 +1123,7 @@ export const adminActions = {
     newRoute,
     clearLoading,
     logOut,
-    getLayovers
+    getLayovers,
+    saveNewTrucking
 
 };

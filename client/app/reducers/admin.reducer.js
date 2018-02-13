@@ -640,7 +640,22 @@ export function admin(state = {}, action) {
             };
         case adminConstants.NEW_HUB_FAILURE:
             return merge({}, state, {
-                error: { documents: action.error },
+                error: { hubs: action.error },
+                loading: false
+            });
+
+        case adminConstants.NEW_TRUCKING_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
+        case adminConstants.NEW_TRUCKING_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            };
+        case adminConstants.NEW_TRUCKING_FAILURE:
+            return merge({}, state, {
+                error: { trucking: action.error },
                 loading: false
             });
 

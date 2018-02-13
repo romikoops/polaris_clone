@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209093548) do
+ActiveRecord::Schema.define(version: 20180213115524) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,6 +347,14 @@ ActiveRecord::Schema.define(version: 20180209093548) do
     t.integer "location_id"
     t.string "category"
     t.boolean "primary", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_managers", force: :cascade do |t|
+    t.integer "manager_id"
+    t.integer "user_id"
+    t.string "section"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

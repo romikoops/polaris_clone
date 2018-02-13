@@ -53,6 +53,7 @@ export class AdminPriceCreator extends Component {
         this.setCargoClass = this.setCargoClass.bind(this);
         this.setAllFromOptions = this.setAllFromOptions.bind(this);
         this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this);
+        this.deleteFee = this.deleteFee.bind(this);
     }
     componentWillMount() {
         console.log(test);
@@ -109,6 +110,11 @@ export class AdminPriceCreator extends Component {
                 }
             }
         });
+    }
+    deleteFee(key) {
+        const {pricing} = this.state;
+        delete pricing.data[key];
+        this.setState({pricing});
     }
     handleSelect(selection) {
         console.log(selection);
@@ -262,8 +268,11 @@ export class AdminPriceCreator extends Component {
                 }
             });
             panel.push( <div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.price_subheader}`}>
                     <p className="flex-none">{key} - {gloss[key]}</p>
+                    <div className="flex-none layout-row layout-align-center-center" onClick={() => this.deleteFee(key)}>
+                        <i className="fa fa-trash clip" style={textStyle}></i>
+                    </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center">
                     { cells }

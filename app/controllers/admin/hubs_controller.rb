@@ -25,8 +25,7 @@ class Admin::HubsController < ApplicationController
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
     layovers = hub.layovers.limit(20)
-    routes = get_itineraries_for_hub(hub)
-    byebug  
+    routes = get_itineraries_for_hub(hub)  
     resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers}
     response_handler(resp)
   end

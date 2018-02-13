@@ -18,7 +18,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :trucking, only: [:index]
+      resources :trucking, only: [:index, :create]
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       

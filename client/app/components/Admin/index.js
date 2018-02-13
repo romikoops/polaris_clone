@@ -27,6 +27,7 @@ export * from './AdminPricingClientView';
 export * from './AdminPricingRouteView';
 
 export * from './AdminTrucking';
+export * from './AdminTruckingCreator';
 export * from './AdminTruckingView';
 export * from './AdminTruckingIndex';
 
