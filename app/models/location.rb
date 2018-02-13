@@ -37,20 +37,23 @@ class Location < ApplicationRecord
   end
 
   def self.from_short_name(input)
-    newname = input.split(" ,")[0]
-    location = Location.new(geocoded_address: input)
-    location.geocode
-    location.reverse_geocode
-    location.name = newname
+    city, country = *input.split(", ")
+    location = Location.find_by(city: city, country: country) 
+    return location unless location.nil?
+
+    temp_location = Location.new(geocoded_address: input)
+    temp_location.geocode
+    temp_location.reverse_geocode
+    
+    location = Location.find_by(city: temp_location.city, country: temp_location.country) 
+    return location unless location.nil?
+
+    location = temp_location
+
+    location.name = city
     location.location_type = 'nexus'
-    hl = location.as_json
-    hl.each do |k, v|
-      if !v
-        hl.delete(k)        
-      end
-    end
-    nl = Location.find_or_create_by!(hl)
-    return nl
+    location.save!
+    location
   end
 
   def set_geocoded_address_from_fields!

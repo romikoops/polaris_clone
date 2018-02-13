@@ -875,8 +875,6 @@ module ExcelTools
           "service_code"        => row[:service_code],
           "inclusive_surcharge" => row[:inclusive_surcharge]
         }
-
-        byebug
       end 
 
       cargo_classes = [
