@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import defaults from '../../styles/default_classes.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
-import { RoundButton } from '../RoundButton/RoundButton';
 import { TextHeading } from '../TextHeading/TextHeading';
 import {v4} from 'node-uuid';
 import Loading from '../../components/Loading/Loading';
@@ -166,9 +165,6 @@ export class AdminDashboard extends Component {
                             </div>
                             <div className={`flex-none layout-row layout-align-center-center ${style.carousel}`}>
                                 <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade/>
-                            </div>
-                            <div className={`flex-none layout-row layout-align-center-center ${style.dash_btn}`}>
-                                <RoundButton theme={theme} handleNext={this.startBooking} active size="large" text="Make a Booking" iconClass="fa-archive"/>
                             </div>
                             <div className={`flex-50 layout-row ${style.right} layout-wrap layout-align-space-between-space-between`}>
                                 <div className={`flex-none layout-row layout-align-center-center ${style.stat_box}`}>
