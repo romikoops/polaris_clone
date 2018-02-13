@@ -61,7 +61,29 @@ export class AdminPriceEditor extends Component {
             pricing.data[key] = fclPricingSchema.data[key];
         }
         console.log('pricing', pricing);
-        this.setState({pricing});
+        const newObj = {data: {}};
+        const tmpObj = {};
+
+        Object.keys(pricing.data).forEach((key) => {
+            if (!newObj.data[key]) {
+                newObj.data[key] = {};
+            }
+            if (!tmpObj[key]) {
+                tmpObj[key] = {};
+            }
+            let opts;
+            Object.keys(pricing.data[key]).forEach(chargeKey => {
+                if (chargeKey === 'currency') {
+                    opts = currencyOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                } else if (chargeKey === 'rate_basis') {
+                    opts = rateOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                }
+                newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey]);
+            });
+        });
+        this.setState({selectOptions: newObj, options: tmpObj, pricing});
     }
     setAllFromOptions() {
         const { pricing } = this.props;
