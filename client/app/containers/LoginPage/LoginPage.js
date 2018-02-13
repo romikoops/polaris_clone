@@ -64,7 +64,7 @@ class LoginPage extends React.Component {
             borderColor: theme && theme.colors ? theme.colors.primary : 'black',
             borderWidth: '1.5px',
             borderRadius: '2px',
-            margin: '-0.75px 0 28.25px 0'
+            margin: '-1px 0 29px 0'
         };
         const alert = this.state.alertVisible ? (
             <Alert
