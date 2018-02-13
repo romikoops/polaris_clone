@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
-import { AdminScheduleLine } from './';
+import { AdminTripPanel } from './';
 import AdminScheduleGenerator from './AdminScheduleGenerator';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
@@ -15,7 +15,7 @@ export class AdminSchedules extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            showList: false,
+            showList: true,
             filters: {
                 hub: false,
                 mot: false,
@@ -24,11 +24,13 @@ export class AdminSchedules extends Component {
             motFilter: {value: false, label: false},
             sortFilter: {value: false, label: false},
             hubFilter: {value: false, label: false},
+            panelViewer: {}
         };
         this.toggleView = this.toggleView.bind(this);
         this.setMoTFilter = this.setMoTFilter.bind(this);
         this.setSortFilter = this.setSortFilter.bind(this);
         this.setHubFilter = this.setHubFilter.bind(this);
+        this.toggleShowPanel = this.toggleShowPanel.bind(this);
     }
     toggleView() {
         this.setState({showList: !this.state.showList});
@@ -90,6 +92,23 @@ export class AdminSchedules extends Component {
             });
         }
     }
+    getItinerary(sched) {
+        return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0];
+    }
+    toggleShowPanel(id) {
+        if (!this.state.panelViewer[id]) {
+            this.props.adminDispatch.getLayovers(id);
+        }
+        this.setState({panelViewer: {
+            ...this.state.panelViewer,
+            [id]: !this.state.panelViewer[id]
+        }});
+    }
+
+    getItinerariesForHub(hub) {
+        const filteredItineraries = this.props.scheduleData.itineraries.filter(x => x.hubs.indexOf(hub) > -1);
+        return filteredItineraries.map(x => x.id);
+    }
 
     dynamicSort(property) {
         let sortOrder = 1;
@@ -107,8 +126,8 @@ export class AdminSchedules extends Component {
         };
     }
     render() {
-        const {theme, hubs, scheduleData} = this.props;
-        const {filters, hubFilter, motFilter, sortFilter} = this.state;
+        const {theme, hubs, scheduleData, adminDispatch, limit} = this.props;
+        const {filters, hubFilter, sortFilter, panelViewer} = this.state;
         if (!scheduleData || !hubs) {
             return '';
         }
@@ -121,30 +140,47 @@ export class AdminSchedules extends Component {
             {value: 'eta', label: 'ETA'},
             {value: 'etd', label: 'ETD'}
         ];
-        const {routes, air, train, ocean} = scheduleData;
+        const { itineraries, air, train, ocean, itineraryLayovers} = scheduleData;
         const { showList } = this.state;
         const trainUrl = '/admin/train_schedules/process_csv';
         const vesUrl = '/admin/vessel_schedules/process_csv';
         const airUrl = '/admin/air_schedules/process_csv';
         const truckUrl = '/admin/truck_schedules/process_csv';
-        const schedArr = [];
-        const allSchedules = [...air, ...ocean, ...train];
-        allSchedules.forEach(sched => {
-            if (!filters.hub && filters.mot && sched.mode_of_transport === motFilter.value) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
+        const tripArr = [];
+        const slimit = limit ? limit : 10;
+        let allTrips;
+        switch (filters.mot) {
+            case 'ocean':
+            allTrips = ocean;
+            break;
+            case 'air':
+            allTrips = air;
+            break;
+            case 'rail':
+            allTrips = train;
+            break;
+            case false:
+            allTrips =  [...air, ...ocean, ...train];
+            break;
+            default:
+            allTrips =  [...air, ...ocean, ...train];
+            break;
+        }
+        let itineraryIds;
+        if (filters.hub) {
+            itineraryIds = this.getItinerariesForHub(hubFilter.value);
+        }
+        allTrips.forEach((trip, i) => {
+            if (filters.hub && itineraryIds.includes(trip.itinerary_id) && i < slimit) {
+                tripArr.push(<AdminTripPanel key={v4()} trip={trip} showPanel={panelViewer[trip.id]} toggleShowPanel={this.toggleShowPanel} layovers={itineraryLayovers} adminDispatch={adminDispatch} itinerary={this.getItinerary(trip)} hubs={hubs} theme={theme}/>);
             }
-            if (filters.hub && !filters.mot && sched.hub_route_key.includes(hubFilter.value)) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
-            }
-            if (filters.hub && filters.mot && sched.mode_of_transport === motFilter.value && sched.hub_route_key.includes(hubFilter.value)) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
-            }
-            if (!filters.hub && !filters.mot) {
-                schedArr.push(<AdminScheduleLine key={v4()} schedule={sched} hubs={hubs} theme={theme}/>);
+            if (!filters.hub && i < slimit) {
+                tripArr.push(<AdminTripPanel key={v4()} trip={trip} showPanel={panelViewer[trip.id]} toggleShowPanel={this.toggleShowPanel} layovers={itineraryLayovers} adminDispatch={adminDispatch} itinerary={this.getItinerary(trip)} hubs={hubs} theme={theme}/>);
             }
         });
+
         if (filters.sort) {
-            schedArr.sort(this.dynamicSort(sortFilter.value));
+            tripArr.sort(this.dynamicSort(sortFilter.value));
         }
         const StyledSelect = styled(Select)`
             .Select-control {
@@ -199,7 +235,7 @@ export class AdminSchedules extends Component {
                         />
                     </div>
                 </div>
-                {schedArr}
+                {tripArr}
             </div>
         );
         const genView = (
@@ -225,7 +261,7 @@ export class AdminSchedules extends Component {
                         <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx"/>
                     </div>
                 </div>
-                <AdminScheduleGenerator theme={theme} routes={routes} hubs={hubList} />
+                <AdminScheduleGenerator theme={theme} itineraries={itineraries} hubs={hubs} />
             </div>
         );
         const currView = showList ? listView : genView;

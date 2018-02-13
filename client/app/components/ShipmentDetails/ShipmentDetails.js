@@ -394,9 +394,10 @@ export class ShipmentDetails extends Component {
             }
         }
 
-        const routeIds = shipmentData.routes ? shipmentData.routes.map(route => route.id) : [];
-        console.log(this.state.origin, 'upper origin');
-        console.log(this.state.destination, 'upper destination');
+
+        const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : [];
+
+
         const mapBox = (
             <GmapsLoader
                 theme={theme}

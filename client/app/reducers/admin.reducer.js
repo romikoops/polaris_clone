@@ -108,11 +108,11 @@ export function admin(state = {}, action) {
             });
             return reqHubs;
         case adminConstants.GET_HUBS_SUCCESS:
-            const succHubs = merge({}, state, {
+            return {
+                ...state,
                 hubs: action.payload.data,
                 loading: false
-            });
-            return succHubs;
+            };
         case adminConstants.GET_HUBS_FAILURE:
             const errHubs = merge({}, state, {
                 error: { hubs: action.error },
@@ -126,11 +126,11 @@ export function admin(state = {}, action) {
             });
             return reqHub;
         case adminConstants.GET_HUB_SUCCESS:
-            const succHub = merge({}, state, {
+            return {
+                ...state,
                 hub: action.payload.data,
                 loading: false
-            });
-            return succHub;
+            };
         case adminConstants.GET_HUB_FAILURE:
             const errHub = merge({}, state, {
                 error: { hub: action.error },
@@ -204,11 +204,11 @@ export function admin(state = {}, action) {
             });
             return reqShip;
         case adminConstants.ADMIN_GET_SHIPMENT_SUCCESS:
-            const succShip = merge({}, state, {
+            return {
+                ...state,
                 shipment: action.payload.data,
                 loading: false
-            });
-            return succShip;
+            };
         case adminConstants.ADMIN_GET_SHIPMENT_FAILURE:
             const errShip = merge({}, state, {
                 error: { shipments: action.error },
@@ -291,16 +291,16 @@ export function admin(state = {}, action) {
             };
 
         case adminConstants.GET_SCHEDULES_REQUEST:
-            const reqSched = merge({}, state, {
+            return {
+                ...state,
                 loading: true
-            });
-            return reqSched;
+            };
         case adminConstants.GET_SCHEDULES_SUCCESS:
-            const succSched = merge({}, state, {
+            return {
+                ...state,
                 schedules: action.payload.data,
                 loading: false
-            });
-            return succSched;
+            };
         case adminConstants.GET_SCHEDULES_FAILURE:
             const errSched = merge({}, state, {
                 error: { schedules: action.error },
@@ -384,7 +384,15 @@ export function admin(state = {}, action) {
         case adminConstants.UPDATE_PRICING_REQUEST:
             return state;
         case adminConstants.UPDATE_PRICING_SUCCESS:
-            return state;
+            const exPricings = state.pricingData.pricings;
+            exPricings[action.payload.id] = action.payload;
+            return {
+                ...state,
+                pricingData: {
+                    ...state.pricingData,
+                    pricings: exPricings
+                }
+            };
         case adminConstants.UPDATE_PRICING_FAILURE:
             return state;
 
@@ -412,12 +420,11 @@ export function admin(state = {}, action) {
             });
             return reqClientPric;
         case adminConstants.GET_CLIENT_PRICINGS_SUCCESS:
-            // ;
-            const succClientPric = merge({}, state, {
+            return {
+                ...state,
                 clientPricings: action.payload.data,
                 loading: false
-            });
-            return succClientPric;
+            };
         case adminConstants.GET_CLIENT_PRICINGS_FAILURE:
             const errClientPric = merge({}, state, {
                 error: { pricings: action.error },
@@ -431,12 +438,11 @@ export function admin(state = {}, action) {
             });
             return reqRoutePric;
         case adminConstants.GET_ROUTE_PRICINGS_SUCCESS:
-            // ;
-            const succRoutePric = merge({}, state, {
-                routePricings: action.payload.data,
+            return {
+                ...state,
+                itineraryPricings: action.payload.data,
                 loading: false
-            });
-            return succRoutePric;
+            };
         case adminConstants.GET_ROUTE_PRICINGS_FAILURE:
             const errRoutePric = merge({}, state, {
                 error: { pricings: action.error },
@@ -488,11 +494,11 @@ export function admin(state = {}, action) {
                 loading: true
             };
         case adminConstants.NEW_ROUTE_SUCCESS:
-            const routes = state.routes.filter(x => x.id !== action.payload.id);
-            routes.push(action.payload);
+            const itineraries = state.itineraries.filter(x => x.id !== action.payload.id);
+            itineraries.push(action.payload);
             return {
                 ...state,
-                routes: routes,
+                itineraries: itineraries,
                 loading: false
             };
         case adminConstants.NEW_ROUTE_FAILURE:
@@ -546,7 +552,7 @@ export function admin(state = {}, action) {
             return reqRoutes;
         case adminConstants.GET_ROUTES_SUCCESS:
             const succRoutes = merge({}, state, {
-                routes: action.payload.data,
+                itineraries: action.payload.data,
                 loading: false
             });
             return succRoutes;
@@ -564,7 +570,7 @@ export function admin(state = {}, action) {
             return reqRoute;
         case adminConstants.GET_ROUTE_SUCCESS:
             const succRoute = merge({}, state, {
-                route: action.payload.data,
+                itinerary: action.payload.data,
                 loading: false
             });
             return succRoute;
@@ -634,7 +640,22 @@ export function admin(state = {}, action) {
             };
         case adminConstants.NEW_HUB_FAILURE:
             return merge({}, state, {
-                error: { documents: action.error },
+                error: { hubs: action.error },
+                loading: false
+            });
+
+        case adminConstants.NEW_TRUCKING_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
+        case adminConstants.NEW_TRUCKING_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            };
+        case adminConstants.NEW_TRUCKING_FAILURE:
+            return merge({}, state, {
+                error: { trucking: action.error },
                 loading: false
             });
 
@@ -644,12 +665,32 @@ export function admin(state = {}, action) {
             });
             return newTrucking;
 
+        case adminConstants.GET_LAYOVERS_REQUEST:
+            return state;
+        case adminConstants.GET_LAYOVERS_SUCCESS:
+            return {
+                ...state,
+                schedules: {
+                    ...state.schedules,
+                    itineraryLayovers: {
+                        [action.payload.data[0].layover.trip_id]: action.payload.data
+                    }
+                },
+                loading: false
+            };
+        case adminConstants.GET_LAYOVERS_FAILURE:
+            return {
+                ...state,
+                error: { route: action.error },
+                loading: false
+            };
         case adminConstants.CLEAR_LOADING:
             return {
                 ...state,
                 loading: false
             };
-
+        case adminConstants.ADMIN_LOG_OUT:
+            return {};
         default:
             return state;
     }

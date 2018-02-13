@@ -37,7 +37,6 @@ export class ChooseRoute extends Component {
         setStage(3);
         console.log('######### MOUNTED ###########');
     }
-
     setDuration(val) {
         this.setState({ durationFilter: val });
     }
@@ -99,11 +98,11 @@ export class ChooseRoute extends Component {
             console.log(sched.id);
             if (
                 Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <=
-                        this.state.durationFilter
+                    this.state.durationFilter
             ) {
                 if (
                     Math.abs(moment(sched.etd).diff(depDay, 'days')) <
-                            smallestDiff && sched.mode_of_transport === this.state.selectedMoT
+                        smallestDiff && sched.mode_of_transport === this.state.selectedMoT
                 ) {
                     smallestDiff = Math.abs(
                         moment(sched.etd).diff(depDay, 'days')

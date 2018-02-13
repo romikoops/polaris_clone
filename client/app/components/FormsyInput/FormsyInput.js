@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withFormsy } from 'formsy-react';
 import styles from './FormsyInput.scss';
 import errorStyles from '../../styles/errors.scss';
@@ -19,20 +20,17 @@ class FormsyInput extends Component {
     render() {
         // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
-        const inputStyles = {
-            width: '100%',
-            height: '100%',
-            boxSizing: 'border-box'
-        };
+        const inputStyles = {};
         const errorHidden = !this.props.submitAttempted;
         if (!errorHidden && !this.props.isValid()) {
             inputStyles.background = 'rgba(232, 114, 88, 0.3)';
             inputStyles.borderColor = 'rgba(232, 114, 88, 0.01)';
             inputStyles.color = 'rgba(211, 104, 80, 1)';
         }
-        const value = this.props.getValue() !== undefined ? this.props.getValue().toString() : '';
+        const rawValue = this.props.getValue();
+        const value = [undefined, null].includes(rawValue) ? '' : this.props.getValue().toString();
         return (
-            <div className={styles.wrapper_input}>
+            <div className={`${styles.wrapper_input} ${this.props.wrapperClassName}`}>
                 <input
                 	style={inputStyles}
                     onChange={this.changeValue}
@@ -43,18 +41,26 @@ class FormsyInput extends Component {
                     className={this.props.className}
                     onFocus={this.props.onFocus}
                     onBlur={this.props.onBlur}
+                    placeholder={this.props.placeholder}
                 />
-                <span className={errorStyles.error_message}>{errorHidden ? '' : errorMessage}</span>
-		            <style>
-		                {`
-		                    .has-error .help-block {
-		                        display: none;
-		                    }
-		                `}
-		            </style>
+                <span
+                    className={errorStyles.error_message}
+                    style={this.props.errorMessageStyles}
+                >
+                    {errorHidden ? '' : errorMessage}
+                </span>
             </div>
         );
     }
 }
 
 export default withFormsy(FormsyInput);
+
+
+FormsyInput.propTypes = {
+    errorMessageStyles: PropTypes.objectOf(PropTypes.string)
+};
+
+FormsyInput.defaultProps = {
+    errorMessageStyles: {}
+};

@@ -18,16 +18,16 @@ class AdminRoutes extends Component {
             currentView: 'open',
             newRoute: false
         };
-        this.viewRoute = this.viewRoute.bind(this);
+        this.viewItinerary = this.viewItinerary.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
         this.toggleNewRoute = this.toggleNewRoute.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.saveNewRoute = this.saveNewRoute.bind(this);
     }
 
-    viewRoute(route) {
+    viewItinerary(itinerary) {
         const { adminDispatch } = this.props;
-        adminDispatch.getRoute(route.id, true);
+        adminDispatch.getItinerary(itinerary.id, true);
         this.setState({selectedRoute: true});
     }
 
@@ -36,9 +36,9 @@ class AdminRoutes extends Component {
     }
 
     backToIndex() {
-        const { dispatch, history } = this.props;
+        const { adminDispatch } = this.props;
         this.setState({selectedRoute: false});
-        dispatch(history.push('/admin/routes'));
+        adminDispatch.goTo('/admin/routes');
     }
     closeModal() {
         this.setState({newRoute: false});
@@ -50,7 +50,7 @@ class AdminRoutes extends Component {
 
     render() {
         const {selectedRoute} = this.state;
-        const {theme, hubs, route, routes, hubHash, adminDispatch, loading} = this.props;
+        const {theme, hubs, itinerary, itineraries, hubHash, adminDispatch, loading} = this.props;
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -87,12 +87,12 @@ class AdminRoutes extends Component {
                     <Route
                         exact
                         path="/admin/routes"
-                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} routes={routes} adminDispatch={adminDispatch} {...props} viewRoute={this.viewRoute} loading={loading} />}
+                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} itineraries={itineraries} adminDispatch={adminDispatch} {...props} viewItinerary={this.viewItinerary} loading={loading} />}
                     />
                     <Route
                         exact
                         path="/admin/routes/:id"
-                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} routeData={route} adminActions={adminDispatch} {...props} loading={loading} />}
+                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} itineraryData={itinerary} adminActions={adminDispatch} {...props} loading={loading} />}
                     />
                 </Switch>
             </div>
@@ -107,15 +107,15 @@ AdminRoutes.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, route, routes, loading } = admin;
+    const { clients, hubs, itinerary, itineraries, loading } = admin;
 
     return {
         user,
         tenant,
         loggedIn,
         hubs,
-        route,
-        routes,
+        itinerary,
+        itineraries,
         clients,
         loading
     };

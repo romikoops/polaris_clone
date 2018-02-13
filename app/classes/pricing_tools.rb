@@ -5,8 +5,8 @@ module PricingTools
     return client
   end
   def get_user_price(client, path_key, user)
-    path_pricing = get_item_fn(client, 'hubRoutePricings', '_id', path_key)
-
+    path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
+    
     raise ApplicationError::NoRoutes if path_pricing.nil?
 
     path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"
@@ -91,6 +91,13 @@ module PricingTools
     return resp
   end
 
+  def get_itinerary_pricings_array(itinerary_id, tenant_id)
+    client = get_client
+    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"itinerary" => {"$eq" => itinerary_id.to_i}}]
+    resp = get_items_query_fn(client, 'pricings', query).to_a
+    return resp
+  end
+
   def get_user_pricings(user_id)
     resp = get_items('userPricings', '_id', "#{user_id}")
     return resp.first
@@ -116,6 +123,11 @@ module PricingTools
     return resp.to_a
   end
 
+  def get_itinerary_pricings(itinerary_id)
+    resp = get_items('itineraryPricings', 'itinerary_id', itinerary_id)
+    return resp.to_a
+  end
+
   def get_route_pricings(route_id)
     resp = get_items('hubRoutePricings', 'route_id', route_id)
     return resp.to_a
@@ -126,8 +138,8 @@ module PricingTools
     return resp
   end
 
-  def get_route_pricings_hash(route_id)
-    resp = get_items('hubRoutePricings', 'route_id', route_id).to_a
+  def get_itinerary_pricings_hash(itinerary_id)
+    resp = get_items('itineraryPricings', 'itinerary_id', itinerary_id).to_a
     result = {}
     resp.each do |pr|
       result[pr["_id"]] = pr
@@ -143,6 +155,10 @@ module PricingTools
 
   def update_hub_route_pricing(key, data)
     update_item('hubRoutePricings', {_id: key }, data)
+  end
+
+  def update_itinerary_pricing(key, data)
+    update_item('itineraryPricings', {_id: key }, data)
   end
 end
 

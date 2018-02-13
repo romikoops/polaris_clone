@@ -162,10 +162,14 @@ export const fclChargeGlossary = {
     EMPTY: 'Empty Container',
     CY: 'Container Yard',
     SD: 'Store Door',
+    VGM: 'Verified Gross Mass',
     '20DRY': '20 Dry container',
     '40DRY': '40 Dry container',
     '40HDRY': '40 High Cube Dry Container',
-    '45HDRY': '45 High Cube Dry Container'
+    '45HDRY': '45 High Cube Dry Container',
+    ENS: 'Entry Summary Declaration',
+    STF: 'Stuffing Fee',
+    HBD: 'Harbour Duties'
 };
 
 export const lclChargeGlossary = {
@@ -180,7 +184,10 @@ export const lclChargeGlossary = {
     ISPS: 'ISPS Fee',
     DDF: 'Destination Document Fee',
     ODF: 'Origin Document Fee',
-    EXP: 'Export Fee'
+    EXP: 'Export Fee',
+    VGM: 'Verified Gross Mass',
+    ENS: 'Entry Summary Declaration',
+    TRF: 'Telex Release Fee'
 };
 export const chargeGlossary = {
     rate_basis: 'Rate Basis',

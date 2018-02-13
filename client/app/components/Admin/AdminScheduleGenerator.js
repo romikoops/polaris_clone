@@ -8,13 +8,14 @@ import Select from 'react-select';
 import '../../styles/select-css-custom.css';
 import styled from 'styled-components';
 import { adminActions } from '../../actions';
-import { moTOptions } from '../../constants';
+// import { moTOptions } from '../../constants';
 // import { dispatch } from 'react-redux';
 import { Checkbox } from '../Checkbox/Checkbox';
 import {RoundButton} from '../RoundButton/RoundButton';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-const filterMoTOptions = moTOptions;
+import { BASE_URL } from '../../constants';
+import { authHeader } from '../../helpers';
 
 class AdminScheduleGenerator extends Component {
     constructor(props) {
@@ -32,15 +33,17 @@ class AdminScheduleGenerator extends Component {
                 '6': false,
                 '7': false
             },
-            duration: 30
+            duration: 30,
+            stopIntervals: []
         };
         this.handleDayChange = this.handleDayChange.bind(this);
-        this.setStartHub = this.setStartHub.bind(this);
-        this.setEndHub = this.setEndHub.bind(this);
+        this.setItinerary = this.setItinerary.bind(this);
         this.setMoT = this.setMoT.bind(this);
         this.setVehicleType = this.setVehicleType.bind(this);
         this.handleDuration = this.handleDuration.bind(this);
         this.genSchedules = this.genSchedules.bind(this);
+        this.getStopsForItinerary = this.getStopsForItinerary.bind(this);
+        this.handleIntervalChange = this.handleIntervalChange.bind(this);
     }
     componentDidMount() {
         const { hubs, vehicleTypes, adminDispatch} = this.props;
@@ -51,18 +54,23 @@ class AdminScheduleGenerator extends Component {
             adminDispatch.getHubs(false);
         }
     }
+    handleIntervalChange(ev) {
+        const {name, value} = ev.target;
+        const stops = this.state.stopIntervals;
+        stops[name] = value;
+        this.setState({stopIntervals: stops});
+    }
     toggleWeekdays(ord) {
         this.setState({weekdays: {...this.state.weekdays, [ord]: !this.state.weekdays[ord]}});
     }
     handleDayChange(ev) {
-        this.setState({startHub: ev.format('DD/MM/YYYY')});
+        this.setState({startHub: moment(ev).format('DD/MM/YYYY')});
     }
-    setStartHub(ev) {
-        this.setState({startHub: ev});
+    setItinerary(ev) {
+        this.getStopsForItinerary(ev.value);
+        this.setState({itinerary: ev, mot: ev.mot});
     }
-    setEndHub(ev) {
-        this.setState({endHub: ev});
-    }
+
     setMoT(ev) {
         this.setState({mot: ev});
     }
@@ -73,22 +81,33 @@ class AdminScheduleGenerator extends Component {
         const {name, value} = ev.target;
         this.setState({[name]: value});
     }
+    getStopsForItinerary(itineraryId) {
+        fetch(`${BASE_URL}/admin/itineraries/${itineraryId}/stops`, {
+            method: 'GET',
+            headers: authHeader()
+        }).then(promise => {
+            promise.json().then(response => {
+                console.log(response.data);
+                const stops = response.data;
+                this.setState({stops});
+            });
+        });
+    }
     genSchedules() {
         const {adminDispatch} = this.props;
-        const {startHub, endHub, startDate, endDate, weekdays, duration, mot, vehicleType} = this.state;
+        const {itinerary, startDate, endDate, weekdays, stopIntervals, vehicleType} = this.state;
         const  ordinalArray = [];
         Object.keys(weekdays).forEach(key => {
             if (weekdays[key]) {
                 ordinalArray.push(parseInt(key, 10));
             }
         });
+        debugger;
         const req = {
-            startHubId: startHub.value,
-            endHubId: endHub.value,
+            itinerary: itinerary.value,
+            steps: stopIntervals,
             startDate,
             endDate,
-            duration,
-            mot: mot.value,
             weekdays: ordinalArray,
             vehicleTypeId: vehicleType.value
         };
@@ -96,27 +115,28 @@ class AdminScheduleGenerator extends Component {
         adminDispatch.autoGenSchedules(req);
     }
     render() {
-        const {theme, hubs, vehicleTypes } = this.props;
-        const {weekdays, startDate, endDate, duration, mot, vehicleType} = this.state;
-        const motKey = mot && mot.value ? mot.value.split('_')[0] : '';
+        const {theme, hubs, vehicleTypes, itineraries } = this.props;
+        const {weekdays, startDate, endDate, mot, vehicleType, stops, stopIntervals} = this.state;
+
         const future = {
             after: new Date(),
         };
+        console.log('mot', mot);
         const vehicleTypeOptions = [];
-        if (vehicleTypes && motKey) {
+        if (vehicleTypes && mot) {
             vehicleTypes.forEach((vt) => {
-                if (vt.mode_of_transport === motKey) {
+                if (vt.mode_of_transport === mot) {
                     vehicleTypeOptions.push( {value: vt.id, label: vt.name ? vt.name : vt.mode_of_transport + '_default'});
                 }
-                if (vt.is_default && !vehicleType && vt.mode_of_transport === motKey) {
+                if (vt.is_default && !vehicleType && vt.mode_of_transport === mot) {
                     this.setState({vehicleType: {value: vt.id, label: vt.name ? vt.name : vt.mode_of_transport + '_default'}});
                 }
             });
         }
-        const hubList = [];
-        if (hubs) {
-            Object.keys(hubs).forEach(key => {
-                hubList.push({value: hubs[key].data.id, label: hubs[key].data.name});
+        const itineraryList = [];
+        if (itineraries) {
+            itineraries.forEach(itin => {
+                itineraryList.push({value: itin.id, label: `${itin.name} (${itin.mode_of_transport})`, mot: itin.mode_of_transport});
             });
         }
         const StyledSelect = styled(Select)`
@@ -137,13 +157,31 @@ class AdminScheduleGenerator extends Component {
                 background-color: #F9F9F9;
             }
         `;
-        const vehicleSelect = mot && mot.value ? (<StyledSelect
+
+        const vehicleSelect = mot ? (<StyledSelect
+
             name="mot-type"
             className={`${styles.select}`}
             value={this.state.vehicleType}
             options={vehicleTypeOptions}
             onChange={this.setVehicleType}
         />) : '';
+
+        const stopIntervalInputs = stops ? stops.map((s, i) =>  {
+            return stops[i + 1] ? (
+                <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <p className="flex-none">{hubs[s.hub_id].data.name}</p>
+                        <p className="flex-none">-></p>
+                        <p className="flex-none">{hubs[stops[i + 1].hub_id].data.name}</p>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-start-center input_box_full">
+                        <input type="number" min="1" value={stopIntervals[i]} name={i} placeholder="Days" onChange={this.handleIntervalChange}/>
+                    </div>
+                </div>
+            ) : '';
+        }) : '';
+
         return(
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
 
@@ -156,43 +194,34 @@ class AdminScheduleGenerator extends Component {
                             <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Route</p>
                         </div>
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                            <div className="flex-33 layout-row layout-align-start-center">
+                            <div className="flex-60 layout-row layout-align-start-center">
                                 <StyledSelect
                                     name="starthub"
                                     className={`${styles.select}`}
-                                    value={this.state.startHub}
-                                    options={hubList}
-                                    onChange={this.setStartHub}
-                                />
-                            </div>
-                            <div className="flex-33 layout-row layout-align-start-center">
-                                <StyledSelect
-                                    name="endhub"
-                                    className={`${styles.select}`}
-                                    value={this.state.endHub}
-                                    options={hubList}
-                                    onChange={this.setEndHub}
+                                    value={this.state.itinerary}
+                                    options={itineraryList}
+                                    onChange={this.setItinerary}
                                 />
                             </div>
                         </div>
                     </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
-                            <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Mode of Transport</p>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Vehicle Type</p>
                         </div>
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                            <div className="flex-33 layout-row layout-align-start-center">
-                                <StyledSelect
-                                    name="mot"
-                                    className={`${styles.select}`}
-                                    value={this.state.mot}
-                                    options={filterMoTOptions}
-                                    onChange={this.setMoT}
-                                />
-                            </div>
-                            <div className="flex-33 layout-row layout-align-start-center">
+
+                            <div className="flex-60 layout-row layout-align-start-center">
                                 {vehicleSelect}
                             </div>
+                        </div>
+                    </div>
+                    <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+                            <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Journey Times</p>
+                        </div>
+                        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                            {stopIntervalInputs}
                         </div>
                     </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -200,29 +229,25 @@ class AdminScheduleGenerator extends Component {
                             <p className={` ${styles.sec_subheader_text} flex-none`}  >Set Effective Period and Duration</p>
                         </div>
                         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                            <div className={`flex-33 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
+                            <div className={`flex-40 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
                                 <DayPickerInput
                                     name="startdate"
                                     placeholder="Start Date"
-                                    format="DD/MM/YYYY"
+                                    datePickerProps={{format: 'DD/MM/YYYY'}}
                                     value={startDate}
                                     onDayChange={this.handleDayChange}
                                     modifiers={future}
                                 />
                             </div>
-                            <div className={`flex-33 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
+                            <div className={`flex-40 layout-row layout-wrap layout-align-center-start ${styles.dpb_picker}`}>
                                 <DayPickerInput
                                     name="enddate"
                                     placeholder="End Date"
-                                    format="DD/MM/YYYY"
+                                    datePickerProps={{format: 'DD/MM/YYYY'}}
                                     value={endDate}
                                     onDayChange={this.handleDayChange}
                                     modifiers={future}
                                 />
-                            </div>
-
-                            <div className={`flex-33 layout-row layout-align-start-center ${styles.input_box}`}>
-                                <input type="number" name="duration" value={duration} onChange={this.handleDuration}/>
                             </div>
                         </div>
 
@@ -298,9 +323,8 @@ function mapDispatchToProps(dispatch) {
 }
 function mapStateToProps(state) {
     const { admin } = state;
-    const { hubs, vehicleTypes} = admin;
+    const { vehicleTypes} = admin;
     return {
-        hubs,
         vehicleTypes
     };
 }

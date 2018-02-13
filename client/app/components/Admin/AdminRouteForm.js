@@ -4,6 +4,7 @@ import styles from './Admin.scss';
 import {NamedSelect} from '../NamedSelect/NamedSelect';
 import '../../styles/select-css-custom.css';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { moTOptions } from '../../constants';
 import styled from 'styled-components';
 export class AdminRouteForm extends Component {
     constructor(props) {
@@ -12,18 +13,22 @@ export class AdminRouteForm extends Component {
             location: {},
             route: {
                 name: '',
-                startHub: '',
-                endHub: ''
+                stops: [
+                    {id: null, value: null},
+                    {id: null, value: null}
+                ]
             },
-            selectValues: {
-                startHub: '',
-                endHub: ''
-            }
+            selectValues: [
+                {id: null, value: null},
+                {id: null, value: null}
+            ]
         };
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleHubChange = this.handleHubChange.bind(this);
         this.saveNewRoute = this.saveNewRoute.bind(this);
         this.excludeHubs = this.excludeHubs.bind(this);
+        this.handleMotChange = this.handleMotChange.bind(this);
+        this.addStop = this.addStop.bind(this);
     }
 
     handleNameChange(event) {
@@ -36,24 +41,47 @@ export class AdminRouteForm extends Component {
             }
         });
     }
+    handleMotChange(event) {
+        this.setState({
+            route: {
+                ...this.state.route,
+                mot: event.value.split('_')[0]
+            },
+            selectValues: {
+                ...this.state.selectValues,
+                mot: event
+            }
+        });
+    }
     handleHubChange(event) {
         const { value, name, label } = event;
-        const nameKey = name + 'Name';
+        const {selectValues, route} = this.state;
+        const {stops} = route;
         let inputName;
-        if (name === 'endHub') {
-            inputName = this.state.startHubName + ' - ' + label;
+
+        if (name === stops.length - 1) {
+            inputName = selectValues[0].label + ' - ' + label;
         }
+
+        stops[name] = value;
+        selectValues[name] = event;
         this.setState({
             ...this.state,
             route: {
-                ...this.state.route,
-                [name]: value,
+                ...route,
+                stops,
                 name: inputName
             },
-            [nameKey]: label,
-            selectValues: {
-                ...this.state.selectValues,
-                [name]: event
+            selectValues
+        });
+    }
+    addStop() {
+        const { stops } = this.state.route;
+        stops.push({id: null, name: null});
+        this.setState({
+            route: {
+                ...this.state.route,
+                stops
             }
         });
     }
@@ -63,11 +91,28 @@ export class AdminRouteForm extends Component {
         this.props.saveRoute(route);
         this.props.close();
     }
-    excludeHubs(hubs, target) {
+    excludeHubs(hubs) {
         const { route } = this.state;
-        const check = route[target];
-        const filteredHubs = hubs.filter(x => x.data.id !== check);
-        return filteredHubs.map((h) => {
+        const filteredHubs = hubs.filter(x => route.stops.indexOf(x.id) < 0);
+        let results;
+        switch(route.mot) {
+            case 'air':
+                results = filteredHubs.filter(h => h.data.name.includes('Airport'));
+                break;
+            case 'ocean':
+                results = filteredHubs.filter(h => h.data.name.includes('Port'));
+                break;
+            case 'rail':
+                results = filteredHubs.filter(h => h.data.name.includes('Depot'));
+                break;
+            case (false || undefined):
+                results = filteredHubs;
+                break;
+            default:
+                results = filteredHubs;
+                break;
+        }
+        return results.map((h) => {
             return {label: h.data.name, value: h.data.id};
         });
     }
@@ -75,8 +120,7 @@ export class AdminRouteForm extends Component {
     render() {
         const  { theme, close, hubs } = this.props;
         const { route, selectValues } = this.state;
-        const originHubs = hubs ? this.excludeHubs(hubs, 'startHub') : [];
-        const destinationHubs = hubs ? this.excludeHubs(hubs, 'endHub') : [];
+        const filteredHubs = hubs ? this.excludeHubs(hubs) : [];
         const StyledSelect = styled(NamedSelect)`
             width: 100%;
             .Select-control {
@@ -99,7 +143,25 @@ export class AdminRouteForm extends Component {
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-        // debugger;
+        const hubInputs = route.stops.map((st, i) => {
+            return (
+                <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.form_row}`}>
+                    <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
+                        <p className="flex-none">Stop {i}</p>
+                    </div>
+                    <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
+                        <StyledSelect
+                            placeholder="Origin"
+                            className={styles.select}
+                            name={i}
+                            value={selectValues[i]}
+                            options={filteredHubs}
+                            onChange={this.handleHubChange}
+                        />
+                    </div>
+                </div>
+            );
+        });
         return (
             <div className={`flex-none layout-align-center-center layout-row ${styles.editor_backdrop}`}>
                 <div className={`flex-none ${styles.editor_fade}`} onClick={() => close()}></div>
@@ -115,32 +177,24 @@ export class AdminRouteForm extends Component {
                         </div>
                         <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.form_row}`}>
                             <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-                                <p className="flex-none">Origin</p>
+                                <p className="flex-none">Mode of Transport</p>
                             </div>
                             <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
                                 <StyledSelect
-                                    placeholder="Origin"
+                                    placeholder="Mode of Transport"
                                     className={styles.select}
-                                    name="startHub"
-                                    value={selectValues.startHub}
-                                    options={originHubs}
-                                    onChange={this.handleHubChange}
+                                    name="mot"
+                                    value={selectValues.mot}
+                                    options={moTOptions}
+                                    onChange={this.handleMotChange}
                                 />
                             </div>
                         </div>
-                        <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.form_row}`}>
-                            <div className="flex-100 flex-gt-sm-50 layout-align-start-center">
-                                <p className="flex-none">Destination</p>
-                            </div>
-                            <div className="flex-100 flex-gt-sm-50 layout-align-end-center">
-                                <StyledSelect
-                                    placeholder="Destination"
-                                    className={styles.select}
-                                    name="endHub"
-                                    value={selectValues.endHub}
-                                    options={destinationHubs}
-                                    onChange={this.handleHubChange}
-                                />
+                        {hubInputs}
+                        <div className="flex-100 layout-align-end-center layout-row">
+                            <div className="flex-none layout-row layout-align-cetner-center" onClick={this.addStop}>
+                                <i className="fa fa-plus-cicle-o"></i>
+                                <p className="flex-none no_m">Add Stop</p>
                             </div>
                         </div>
                         <div className={`flex-100 layout-row layout-wrap layout-align-start-center ${styles.form_row}`}>

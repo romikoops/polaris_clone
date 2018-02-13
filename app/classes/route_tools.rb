@@ -18,6 +18,15 @@ module RouteTools
     return hub_route_pricings.to_a
   end
 
+  def get_itinerary_pricings(itinerary_id, transport_category_ids)
+    query = [ 
+      { "itinerary_id" => { "$eq" => itinerary_id } }, 
+      { "transport_category_id" => { "$in" => transport_category_ids } }
+    ]
+    itinerary_pricings = get_items_query('itineraryPricings', query)
+    return itinerary_pricings.to_a
+  end
+
   def get_route_option(route)
 		query = [
       { 

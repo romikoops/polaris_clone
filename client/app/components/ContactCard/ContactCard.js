@@ -2,40 +2,35 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ContactCard.scss';
 import { v4 } from 'node-uuid';
-import { Checkbox } from '../Checkbox/Checkbox';
 import Truncate from 'react-truncate';
 import { gradientTextGenerator } from '../../helpers';
 export class ContactCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            selected: false
-        };
-        this.toggleSelected = this.toggleSelected.bind(this);
         this.selectContact = this.selectContact.bind(this);
     }
-    toggleSelected() {
-        const { contactData, toggleSelect } = this.props;
-        this.setState({ selected: !this.state.selected });
-        toggleSelect(contactData);
-    }
     selectContact() {
-        const { contactData, select, target, list } = this.props;
-        list ? '' : select(target, contactData);
+        this.props.select(this.props.contactData, this.props.contactType);
     }
     render() {
-        const { contactData, list, theme } = this.props;
+        const { contactData, theme, removeFunc, popOutHover } = this.props;
         const { contact, location } = contactData;
         const iconStyle = {
             ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary),
-            paddingRight: '5px'
+            width: '28px',
+            padding: '3px 0'
         };
+
+        const removeIcon = typeof removeFunc === 'function' ? (
+            <i className={`${styles.remove_icon} fa fa-times`} onClick={removeFunc}></i>
+        ) : '';
         return (
             <div
                 key={v4()}
-                className={`flex-100 layout-row ${styles.contact_card}`}
+                className={`flex-100 layout-row ${styles.contact_card} ${popOutHover ? styles.pop_out_hover : ''}`}
                 onClick={this.selectContact}
             >
+                {removeIcon}
                 <div className="flex layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-align-space-between-center">
                         <div className="flex-60 layout-row layout-align-start-start layout-wrap">
@@ -45,8 +40,7 @@ export class ContactCard extends Component {
                                     style={iconStyle}
                                 />
                                 <p className={`flex ${styles.contact_header}`}>
-                                    {' '}
-                                    {contact.first_name} {contact.last_name}{' '}
+                                    {contact.firstName} {contact.lastName}
                                 </p>
                             </div>
                         </div>
@@ -72,8 +66,7 @@ export class ContactCard extends Component {
                                     style={iconStyle}
                                 />
                                 <p className={`flex ${styles.contact_header}`}>
-                                    {' '}
-                                    <Truncate lines={1} >{contact.company_name} </Truncate>{}{' '}
+                                    <Truncate lines={1} >{contact.companyName} </Truncate>
                                 </p>
                             </div>
                         </div>
@@ -91,37 +84,32 @@ export class ContactCard extends Component {
                             </div>
                         </div>
                     </div>
-                    { location && location.geocoded_address ?
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <i
-                                className="fa fa-globe flex-none"
-                                style={iconStyle}
-                            />
-                            <p className="flex-100"> {location.geocoded_address}</p>
-                        </div> :
-                        <div className="flex-100" style={{height: '15px'}}></div>
-                    }
-                </div>
-                {list ? (
-                    <div className="flex-15 layout-row layout-align-center-center">
-                        <Checkbox
-                            onChange={this.toggleSelected}
-                            checked={this.state.selected}
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <i
+                            className="fa fa-globe flex-none"
+                            style={iconStyle}
                         />
+                        <p className="flex-100">
+                            { location && location.geocodedAddress || location.fullAddress}
+                        </p>
                     </div>
-                ) : (
-                    ''
-                )}
+                </div>
             </div>
         );
     }
 }
 
 ContactCard.propTypes = {
-    contactData: PropTypes.array,
+    contactData: PropTypes.object,
     theme: PropTypes.object,
     select: PropTypes.func,
-    list: PropTypes.bool,
-    toggleSelect: PropTypes.func,
-    target: PropTypes.string
+    contactType: PropTypes.string,
+    removeFunc: PropTypes.func,
+    popOutHover: PropTypes.bool
+};
+
+ContactCard.defaultProps = {
+    contactType: '',
+    removeFunc: null,
+    popOutHover: false
 };

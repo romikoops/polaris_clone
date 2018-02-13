@@ -2,7 +2,19 @@
   .searchable {
     margin: 15px 0;
   }
- 
+  .itinerary_row {
+    background-color: #FCFCFC;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
+    margin: 10px 0;
+    padding: 18px 36px;
+    position: relative;
+    h4, p {
+      margin: 0;
+    }
+    h4 {
+      font-weight: normal;
+    }
+  }
   .searchable_header{
     padding: 15px 0;
   }
@@ -31,6 +43,9 @@
     -webkit-text-fill-color: transparent !important;
     font-size: 30px;
 
+  }
+  .icon_buffer {
+    padding: 0 10px;
   }
   .super{
     font-size: 8px;
@@ -419,7 +434,7 @@
   }
   .route_form {
     width: 600px;
-    height: 400px;
+    height: 700px;
     z-index: 52;
     background: #FFFFFF;
     border-radius: 10px;

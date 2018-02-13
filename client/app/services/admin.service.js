@@ -94,22 +94,30 @@ function wizardOpenPricings(file) {
     return fetch(uploadUrl, requestOptions).then(handleResponse);
 }
 
-function getRoutes() {
+function getItineraries() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries', requestOptions).then(handleResponse);
 }
 
-function getRoute(id) {
+function getItinerary(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(BASE_URL + '/admin/routes/' + id, requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries/' + id, requestOptions).then(handleResponse);
+}
+function getLayovers(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(BASE_URL + '/admin/itineraries/' + id + '/layovers', requestOptions).then(handleResponse);
 }
 
 function getServiceCharges() {
@@ -176,7 +184,7 @@ function getClientPricings(id) {
     return fetch(BASE_URL + '/admin/client_pricings/' + id, requestOptions).then(handleResponse);
 }
 
-function getRoutePricings(id) {
+function getItineraryPricings(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -296,20 +304,29 @@ function saveNewHub(hub, location) {
     };
     return fetch(BASE_URL + '/admin/hubs', requestOptions).then(handleResponse);
 }
-function newRoute(route) {
+function newRoute(itinerary) {
     const requestOptions = {
         method: 'POST',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify({route})
+        body: JSON.stringify({itinerary})
     };
-    return fetch(BASE_URL + '/admin/routes', requestOptions).then(handleResponse);
+    return fetch(BASE_URL + '/admin/itineraries', requestOptions).then(handleResponse);
 }
+function saveNewTrucking(obj) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({obj})
+    };
+    return fetch(BASE_URL + '/admin/trucking', requestOptions).then(handleResponse);
+}
+
 
 export const adminService = {
     getHubs,
     getHub,
-    getRoutes,
-    getRoute,
+    getItineraries,
+    getItinerary,
     getClient,
     updatePricing,
     getServiceCharges,
@@ -324,7 +341,7 @@ export const adminService = {
     getVehicleTypes,
     getShipments,
     getClients,
-    getRoutePricings,
+    getItineraryPricings,
     wizardHubs,
     wizardSCharge,
     wizardPricings,
@@ -335,5 +352,7 @@ export const adminService = {
     activateHub,
     documentAction,
     saveNewHub,
-    newRoute
+    newRoute,
+    getLayovers,
+    saveNewTrucking
 };

@@ -13,9 +13,17 @@ class Admin::TruckingController < ApplicationController
       tp = get_item_fn(client, 'truckingTables', "_id", th["table"])
       all_trucking_prices[th["_id"]] = tp
     end
-    response_handler({truckingHubs: all_trucking_hubs, truckingPrices: all_trucking_prices})
+    nexuses = Location.where(location_type: 'nexus')
+    response_handler({truckingHubs: all_trucking_hubs, truckingPrices: all_trucking_prices, nexuses: nexuses})
   end
-   def overwrite_zip_trucking
+  def create
+    data = params[:obj][:data].as_json
+    meta = params[:obj][:meta].as_json
+    truckingTable = "#{meta["nexus_id"]}_#{current_user.tenant_id}" 
+    update_array('truckingTables', {_id: truckingTable}, data)
+    update_item('truckingHubs', {_id: "#{meta["nexus_id"]}"}, {type: "#{meta["type"]}", modifier: "#{meta["modifier"]}", table: truckingTable, tenant_id: current_user.tenant_id})
+  end
+  def overwrite_zip_trucking
      if params[:file]
       req = {'xlsx' => params[:file]}
       overwrite_trucking_rates(req)
