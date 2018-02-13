@@ -28,7 +28,7 @@ export class BlogPostHighlights extends Component {
             const divStyle = {
                 backgroundImage: 'url(' + dp.image + ')'
             };
-            const dbp = (<div key={i} className={styles.blog_post + ' layout-column'}>
+            const dbp = (<div key={i} className={styles.blog_post + ' layout-column no_max'}>
                 <div className={styles.bp_image + ' flex-33'} style={divStyle}></div>
                 <div className="flex-66 layout-column layout-align-center-start">
                     <div className={'flex-66 layout-column layout-align-start-center ' + styles.bp_text}>

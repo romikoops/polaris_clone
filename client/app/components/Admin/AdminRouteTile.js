@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
+import {gradientTextGenerator} from '../../helpers';
 export class AdminRouteTile extends Component {
     constructor(props) {
         super(props);
@@ -44,14 +45,7 @@ export class AdminRouteTile extends Component {
         if (!endHub || !startHub) {
             // ;
         }
-        const gradientStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${
-                        theme.colors.secondary
-                    })`
-                    : 'black'
-        };
+        const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const dashedLineStyles = {
             marginTop: '6px',
             height: '100%',
@@ -80,12 +74,12 @@ export class AdminRouteTile extends Component {
                     </div>
                     <div className="flex-85 layout-column layout-wrap layout-align-start-start">
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
-                            <h4 className="flex-100" > { itinerary.origin_nexus } </h4>
-                            { startHub && startHub.location.geocoded_address ? <p className="flex-100">{ startHub.location.geocoded_address }</p> : '' }
+                            <h4 className="flex-100" > { route.origin_nexus } </h4>
+                            { startHub && startHub.location.geocoded_address ? <p className={`${styles.overflow_hidden} flex-100`} >{ startHub.location.geocoded_address }</p> : '' }
                         </div>
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
-                            <h4 className="flex-100" > { itinerary.destination_nexus } </h4>
-                            { endHub && endHub.location.geocoded_address ? <p className="flex-100">{ endHub.location.geocoded_address }</p> : '' }
+                            <h4 className="flex-100" > { route.destination_nexus } </h4>
+                            { endHub && endHub.location.geocoded_address ? <p className={`${styles.overflow_hidden} flex-100`}>{ endHub.location.geocoded_address }</p> : '' }
                         </div>
                     </div>
                 </div>

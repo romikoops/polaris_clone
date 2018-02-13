@@ -20,7 +20,7 @@ import UserContacts from '../../components/UserAccount/UserContacts';
 import { userActions, authenticationActions, appActions } from '../../actions';
 import { Modal } from '../../components/Modal/Modal';
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes';
-
+import { Footer } from '../../components/Footer/Footer';
 // import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading';
 
@@ -45,7 +45,7 @@ export class UserAccount extends Component {
     componentDidMount() {
         const {userDispatch, users, user} = this.props;
         if (user && users && !users.loading && !users.dashboard) {
-            userDispatch.getDashboard(user.data.id, false);
+            userDispatch.getDashboard(user.id, false);
         }
         if (user && users && !users.loading && !users.hubs) {
             userDispatch.getHubs(false);
@@ -55,7 +55,7 @@ export class UserAccount extends Component {
         const {userDispatch, users, user} = this.props;
         this.setState({activeLink: target});
         if (user && users && !users.loading && !users.dashboard) {
-            userDispatch.getDashboard(user.data.id, false);
+            userDispatch.getDashboard(user.id, false);
         }
     }
 
@@ -65,17 +65,17 @@ export class UserAccount extends Component {
 
     getLocations() {
         const { userDispatch, user } = this.props;
-        userDispatch.getLocations(user.data.id);
+        userDispatch.getLocations(user.id);
     }
 
     destroyLocation(locationId) {
         const { userDispatch, user } = this.props;
-        userDispatch.destroyLocation(user.data.id, locationId);
+        userDispatch.destroyLocation(user.id, locationId);
     }
 
     makePrimary(locationId) {
         const { userDispatch, user } = this.props;
-        userDispatch.makePrimary(user.data.id, locationId);
+        userDispatch.makePrimary(user.id, locationId);
     }
 
     toggleModal() {
@@ -87,7 +87,7 @@ export class UserAccount extends Component {
         switch(target) {
             case 'pricing':
                 this.setState({activeLink: target});
-                userDispatch.getPricings(user.data.id, true);
+                userDispatch.getPricings(user.id, true);
                 break;
             case 'chooseRoutes':
                 this.toggleModal();
@@ -102,11 +102,11 @@ export class UserAccount extends Component {
                 break;
             case 'dashboard':
                 this.setState({activeLink: target});
-                userDispatch.getDashboard(user.data.id, true);
+                userDispatch.getDashboard(user.id, true);
                 break;
             case 'locations':
                 this.setState({activeLink: target});
-                userDispatch.getLocations(user.data.id, true);
+                userDispatch.getLocations(user.id, true);
                 break;
             case 'profile':
                 this.setState({activeLink: target});
@@ -119,7 +119,7 @@ export class UserAccount extends Component {
 
 
     render() {
-        const { user, theme, users, userDispatch, authDispatch, currencies, appDispatch } = this.props;
+        const { user, theme, users, userDispatch, authDispatch, currencies, appDispatch, tenant } = this.props;
         if (!users || !user) {
             return '';
         }
@@ -196,7 +196,7 @@ export class UserAccount extends Component {
             />
         );
         return (
-            <div className="layout-row flex-100 layout-wrap layout-align-center">
+            <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
                 <Header theme={theme} />
                 {loadingScreen}
                 {this.state.showModal ? routeModal : ''}
@@ -213,7 +213,7 @@ export class UserAccount extends Component {
                             <Route
                                 exact
                                 path="/account"
-                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user.data} hubs={hubHash} navFn={this.setUrl} userDispatch={userDispatch} dashboard={dashboard}/>}
+                                render={props => <UserDashboard setNav={this.setNavLink} theme={theme} {...props} user={user} hubs={hubHash} navFn={this.setUrl} userDispatch={userDispatch} dashboard={dashboard}/>}
                             />
                             <Route
                                 path="/account/routesavailable"
@@ -224,18 +224,18 @@ export class UserAccount extends Component {
                             />
                             <Route
                                 path="/account/locations"
-                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} user={user.data} locations={users.dashboard.locations}
+                                render={props => <UserLocations setNav={this.setNavLink} theme={theme} {...props} user={user} locations={users.dashboard.locations}
                                     getLocations={this.getLocations}
                                     destroyLocation={this.destroyLocation}
                                     makePrimary={this.makePrimary} />}
                             />
                             <Route
                                 path="/account/profile"
-                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                                render={props => <UserProfile appDispatch={appDispatch} setNav={this.setNavLink} currencies={currencies} theme={theme} user={user} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/contacts"
-                                render={props => <UserContacts setNav={this.setNavLink} theme={theme} user={user.data} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
+                                render={props => <UserContacts setNav={this.setNavLink} theme={theme} user={user} aliases={dashboard.aliases} {...props} locations={dashboard.locations} userDispatch={userDispatch} authDispatch={authDispatch}/>}
                             />
                             <Route
                                 path="/account/billing"
@@ -253,6 +253,7 @@ export class UserAccount extends Component {
                         </Switch>
                     </div>
                 </div>
+                <Footer className="flex-100" theme={theme} tenant={tenant.data}/>
             </div>
         );
     }

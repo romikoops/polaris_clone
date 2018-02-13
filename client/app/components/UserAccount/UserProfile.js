@@ -124,7 +124,7 @@ export class UserProfile extends Component {
             editObj: {},
             newAlias: {},
             newAliasBool: false,
-            currencySelect: {label: this.props.user.currency, value: this.props.user.currency}
+            currencySelect: {label: this.props.user ? this.props.user.currency : 'EUR', value: this.props.user ? this.props.user.currency : 'EUR'}
         };
         this.doNothing = this.doNothing.bind(this);
         this.makePrimary = this.makePrimary.bind(this);
@@ -210,6 +210,7 @@ export class UserProfile extends Component {
 
     render() {
         const {user, aliases, locations, theme} = this.props;
+        console.log('user', user);
         if (!user) {
             return '';
         }
@@ -335,7 +336,7 @@ export class UserProfile extends Component {
                     </div>
                 </div>
                 <div className={`flex-100 layout-row layout-wrap layout-align-start-center section_padding ${styles.section} `}>
-                    <div className="flex-100 layout-row layout-align-space-between-center sec_header">
+                    <div className="flex-100 layout-row layout-align-space-between-center sec_header button-padding">
                         <p className="sec_header_text flex-none"  > Aliases </p>
                         {newButton}
                     </div>

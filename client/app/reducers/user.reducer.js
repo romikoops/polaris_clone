@@ -84,7 +84,7 @@ export function users(state = initialState, action) {
                 dashboard: {
                     ...state.dashboard,
                     locations: state.dashboard.locations.filter(
-                        item => item.id !== parseInt(action.payload.id, 10)
+                        item => item.location.id !== parseInt(action.payload.id, 10)
                     )
                 },
                 loading: false
@@ -130,6 +130,26 @@ export function users(state = initialState, action) {
                 }
             };
         case userConstants.NEW_USER_LOCATION_FAILURE:
+            return {
+                loading: false,
+                error: action.error
+            };
+
+        case userConstants.EDIT_USER_LOCATION_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case userConstants.EDIT_USER_LOCATION_SUCCESS:
+            return {
+               ...state,
+                loading: false,
+                dashboard: {
+                    ...state.dashboard,
+                    locations: action.payload
+                }
+            };
+        case userConstants.EDIT_USER_LOCATION_FAILURE:
             return {
                 loading: false,
                 error: action.error

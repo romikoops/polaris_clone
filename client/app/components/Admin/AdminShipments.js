@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { Switch, Route } from 'react-router-dom';
 import { adminActions } from '../../actions';
+import { TextHeading } from '../TextHeading/TextHeading';
 class AdminShipments extends Component {
     constructor(props) {
         super(props);
@@ -49,9 +50,6 @@ class AdminShipments extends Component {
         if (!shipments || !hubs || !clients) {
             return <h1>NO SHIPMENTS DATA</h1>;
         }
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const backButton = (<div className="flex-none layout-row">
             <RoundButton
                 theme={theme}
@@ -66,7 +64,7 @@ class AdminShipments extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Shipments</p>
+                    <TextHeading theme={theme} size={1} text="Shipments" />
                     {selectedShipment ? backButton : ''}
                 </div>
                 <Switch className="flex">

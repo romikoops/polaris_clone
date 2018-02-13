@@ -376,7 +376,7 @@ function deleteDocument(id) {
 
 function toDashboard() {
     return dispatch => {
-        dispatch(userActions.getDashboard(userData.data.id, true));
+        dispatch(userActions.getDashboard(userData.id, true));
     };
 }
 

@@ -2,109 +2,201 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { authenticationActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
+import { Alert } from '../../components/Alert/Alert';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import styles from './RegistrationPage.scss';
+import Formsy from 'formsy-react';
+import FormsyInput from '../../components/FormsyInput/FormsyInput';
 
 class RegistrationPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {
-                first_name: '',
-                last_name: '',
-                email: '',
-                password: '',
-                tenant_id: '',
-                guest: false
-            },
-            submitted: false
+            focus: {},
+            alertVisible: false
         };
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
+        this.hideAlert = this.hideAlert.bind(this);
     }
 
-    handleChange(event) {
-        const { name, value } = event.target;
-        const { user } = this.state;
+    componentWillMount() {
+        if (this.props.registrationAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.registrationAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
+        }
+    }
+
+    hideAlert() {
+        this.setState({ alertVisible: false });
+    }
+
+    handleFocus(e) {
         this.setState({
-            user: {
-                ...user,
-                [name]: value
+            focus: {
+                ...this.state.focus,
+                [e.target.name]: e.type === 'focus'
             }
         });
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
-        this.setState({ submitted: true });
-
-        const { user } = this.state;
-        if (!(user.first_name && user.last_name && user.email && user.password)) {
-            return;
-        }
+    handleSubmit(model) {
+        const user = Object.assign({}, model);
         user.tenant_id = this.props.tenant.data.id;
+        user.guest = false;
 
         const { dispatch, req } = this.props;
         if (req) {
-            dispatch(authenticationActions.updateUser(this.props.user.data, user, req));
+            dispatch(authenticationActions.updateUser(this.props.user, user, req));
         } else {
             dispatch(authenticationActions.register(user));
         }
     }
 
+    handleInvalidSubmit() {
+        if (!this.state.submitAttempted) this.setState({ submitAttempted: true });
+    }
+
     render() {
         const { registering, theme } = this.props;
-        const { user, submitted } = this.state;
+        const focusStyles = {
+            borderColor: theme && theme.colors ? theme.colors.primary : 'black',
+            borderWidth: '1.5px',
+            borderRadius: '2px',
+            margin: '-1px 0 29px 0'
+        };
+        const alert = this.state.alertVisible ? (
+            <Alert
+                message={{ type: 'error', text: 'Email has already been taken' }}
+                onClose={this.hideAlert}
+                timeout={10000}
+            />
+        ) : '';
         return (
-            <form className={styles.registration_form} name="form" onSubmit={this.handleSubmit}>
-                <div className={'form-group' + (submitted && !user.first_name ? ' has-error' : '')}>
+            <Formsy
+                className={styles.registration_form}
+                name="form"
+                onValidSubmit={this.handleSubmit}
+                onInvalidSubmit={this.handleInvalidSubmit}
+            >
+                { alert }
+                <div className="form-group">
                     <label htmlFor="first_name">First Name</label>
-                    <input type="text" className={styles.form_control} name="first_name" value={user.first_name} onChange={this.handleChange} />
-                    {submitted && !user.first_name &&
-                        <div className="help-block">First Name is required</div>
-                    }
-                    <hr/>
+                    <FormsyInput
+                        type="text"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="first_name"
+                        submitAttempted={this.state.submitAttempted}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <hr style={this.state.focus.first_name ? focusStyles : {}}/>
                 </div>
-                <div className={'form-group' + (submitted && !user.last_name ? ' has-error' : '')}>
+                <div className="form-group">
                     <label htmlFor="last_name">Last Name</label>
-                    <input type="text" className={styles.form_control} name="last_name" value={user.last_name} onChange={this.handleChange} />
-                    {submitted && !user.last_name &&
-                        <div className="help-block">Last Name is required</div>
-                    }
-                    <hr/>
+                    <FormsyInput
+                        type="text"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="last_name"
+                        submitAttempted={this.state.submitAttempted}
+                        validations="minLength:2"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long'
+                        }}
+                        required
+                    />
+                    <hr style={this.state.focus.last_name ? focusStyles : {}}/>
                 </div>
-                <div className={'form-group' + (submitted && !user.email ? ' has-error' : '')}>
-                    <label htmlFor="email">Username</label>
-                    <input type="text" className={styles.form_control} name="email" value={user.email} onChange={this.handleChange} />
-                    {submitted && !user.email &&
-                        <div className="help-block">Username is required</div>
-                    }
-                    <hr/>
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <FormsyInput
+                        type="text"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="email"
+                        submitAttempted={this.state.submitAttempted}
+                        validations={{
+                            minLength: 2,
+                            matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+                        }}
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must be at least two characters long',
+                            matchRegexp: 'Invalid email'
+                        }}
+                        required
+                    />
+                    <hr style={this.state.focus.email ? focusStyles : {}}/>
                 </div>
-                <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
+                <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" className={styles.form_control} name="password" value={user.password} onChange={this.handleChange} />
-                    {submitted && !user.password &&
-                        <div className="help-block">Password is required</div>
-                    }
-                    <hr/>
+                    <FormsyInput
+                        type="password"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="password"
+                        submitAttempted={this.state.submitAttempted}
+                        validations="minLength:8"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            minLength: 'Must have at least 8 characters'
+                        }}
+                        required
+                    />
+                    <hr style={this.state.focus.password ? focusStyles : {}}/>
+                </div>
+                <div className="form-group">
+                    <label htmlFor="password">Confirm Password</label>
+                    <FormsyInput
+                        type="password"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="confirm_password"
+                        submitAttempted={this.state.submitAttempted}
+                        validations="equalsField:password"
+                        validationErrors={{
+                            isDefaultRequiredValue: 'Must not be blank',
+                            equalsField: 'Must match password'
+                        }}
+                        required
+                    />
+                    <hr style={this.state.focus.confirm_password ? focusStyles : {}}/>
                 </div>
                 <div className={`form-group ${styles.form_group_submit_btn}`}>
                     <RoundButton text="register" theme={theme} active/>
-
-                    {registering &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
+                    <div className={styles.spinner}>
+                        { registering && <LoadingSpinner /> }
+                    </div>
                 </div>
-            </form>
+            </Formsy>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { registering } = state.authentication;
+    const { registering, registrationAttempt } = state.authentication;
     return {
-        registering
+        registering,
+        registrationAttempt
     };
 }
 

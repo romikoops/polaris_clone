@@ -6,13 +6,22 @@ class SearchController < ApplicationController
   def search_hs_codes
     text = params[:query] != "" ? params[:query] : 'plastics'
     resp = text_search_fn(false, 'hsCodes', text)
-    # 
+    tenant = Tenant.find_by_subdomain(params[:subdomain_id])
     results = []
     resp.each { |r| 
-        tmp = {}
-        tmp["label"] = r["text"]
-        tmp["value"] = r["_id"]
-        results << tmp
+        if !tenant.scope["dangerous_goods"] && !r["dangerous"]
+          tmp = {}
+            tmp["label"] = r["text"]
+            tmp["value"] = r["_id"]
+            results << tmp
+          
+        elsif tenant.scope["dangerous_goods"] && r["dangerous"]
+          tmp = {}
+            tmp["label"] = r["text"]
+            tmp["value"] = r["_id"]
+            results << tmp
+          
+        end
       }
       response_handler(results)
   end

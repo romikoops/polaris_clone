@@ -4,12 +4,12 @@ import defaults from '../../styles/default_classes.scss';
 import { AdminScheduleLine } from './';
 import { AdminSearchableRoutes, AdminSearchableHubs, AdminSearchableClients, AdminSearchableShipments } from './AdminSearchables';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { TextHeading } from '../TextHeading/TextHeading';
 import {v4} from 'node-uuid';
 import Loading from '../../components/Loading/Loading';
 import { Carousel } from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import style from './AdminDashboard.scss';
-import { MainTextHeading } from '../TextHeadings/MainTextHeading';
 
 export class AdminDashboard extends Component {
     constructor(props) {
@@ -214,7 +214,7 @@ export class AdminDashboard extends Component {
                         </div>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <MainTextHeading theme={theme} text="Dashboard" />
+                        <TextHeading theme={theme} size={1} text="Dashboard" />
                         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                             { requestedShipments }
                         </div>
@@ -230,7 +230,7 @@ export class AdminDashboard extends Component {
                         <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} limit={10}/>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <MainTextHeading theme={theme} text="Schedules"  />
+                        <TextHeading theme={theme} size={1} text="Schedules"  />
                     </div>
                     { shortSchedArr }
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>

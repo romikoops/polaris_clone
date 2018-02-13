@@ -12,11 +12,11 @@ import { Tooltip } from '../Tooltip/Tooltip';
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox';
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers';
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems';
-// import { RouteSelector } from '../RouteSelector/RouteSelector';
 import { FlashMessages } from '../FlashMessages/FlashMessages';
 import { Modal } from '../Modal/Modal';
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody';
 import { isEmpty } from '../../helpers/isEmpty.js';
+import { TextHeading } from '../TextHeading/TextHeading';
 import * as Scroll from 'react-scroll';
 import Select from 'react-select';
 import '../../styles/select-css-custom.css';
@@ -90,9 +90,11 @@ export class ShipmentDetails extends Component {
         this.setIncoTerm = this.setIncoTerm.bind(this);
         this.handleSelectLocation = this.handleSelectLocation.bind(this);
         this.toggleAlertModal = this.toggleAlertModal.bind(this);
+        this.loadPrevReq = this.loadPrevReq.bind(this);
     }
     componentDidMount() {
         const { prevRequest, setStage } = this.props;
+        console.log('!!!!!!!! MOUNTING!!!!!!!');
         if (prevRequest && prevRequest.shipment) {
             this.loadPrevReq(prevRequest.shipment);
         }
@@ -236,7 +238,7 @@ export class ShipmentDetails extends Component {
     }
 
     setTargetAddress(target, address) {
-        this.setState({ [target]: {...address, ...this.state[target]} });
+        this.setState({ [target]: {...this.state[target], ...address} });
     }
     errorsExist(errorsObjects) {
         let returnBool = false;
@@ -288,6 +290,7 @@ export class ShipmentDetails extends Component {
                 ? this.state.shipment
                 : this.props.shipmentData.shipment
         };
+        console.log(this.state.shipment ? 'stateful shipment' : 'prop shipment');
         data.shipment.origin_user_input = this.state.origin.fullAddress
             ? this.state.origin.fullAddress
             : '';
@@ -307,7 +310,7 @@ export class ShipmentDetails extends Component {
     }
 
     returnToDashboard() {
-        this.props.shipmentDispatch.goTo('/dashboard');
+        this.props.shipmentDispatch.getDashboard(true);
     }
 
     toggleCarriage(target, value) {
@@ -321,14 +324,14 @@ export class ShipmentDetails extends Component {
     }
 
     render() {
-        const { tenant, user, shipmentData, shipmentDispatch } = this.props;
+        const { tenant, user, shipmentData } = this.props;
         const { theme, scope, emails, phones } = tenant.data;
         const messages = this.props.messages;
         let cargoDetails;
         const alertModalMessage = (
             <p style={{textAlign: 'justify', lineHeight: '1.5'}}>
                 <span>
-                    Hi {user.data.first_name} {user.data.last_name},<br/>
+                    Hi {user.first_name} {user.last_name},<br/>
                     We currently do not offer freight rates for hazardous cargo in our Web Shop.
                     Please contact our customer service department
                     to place an order for your dangerous cargo:<br/>
@@ -391,7 +394,9 @@ export class ShipmentDetails extends Component {
             }
         }
 
+
         const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : [];
+
 
         const mapBox = (
             <GmapsLoader
@@ -459,9 +464,16 @@ export class ShipmentDetails extends Component {
                 layout-row flex-none layout-align-start-center
             `}>
                 <div className="layout-row flex-50 layout-align-start-center layout-wrap">
-                    <div className="flex-100 layout-row layout-align-start-center">
-                        {' '}
-                        <p className="flex-none letter_2">{this.state.has_pre_carriage ? 'Approximate Pickup Date:' : 'Approximate Departure Date:'}</p>
+                    <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
+                        <div className="flex-none letter_2 layout-align-space-between-end">
+                            <TextHeading
+                                theme={theme}
+                                text={this.state.has_pre_carriage
+                                    ? 'Approximate Pickup Date :'
+                                    : 'Approximate Departure Date :'}
+                                size={3}
+                            />
+                        </div>
                         <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
                         {' '}
                     </div>
@@ -486,11 +498,10 @@ export class ShipmentDetails extends Component {
 
                 <div className="flex-50 layout-row layout-wrap layout-align-end-center">
                     <div className="flex-100 layout-row layout-align-end-center">
-                        <p className="flex-none letter_2">
+                        <div className="flex-none letter_2">
                             {' '}
-                            {'Select Incoterm:'}
-                            {' '}
-                        </p>
+                            <TextHeading theme={theme} text="Select Incoterm :" size={3}/>
+                        </div>
                     </div>
                     <div className="flex-80" name="incoterms" style={{position: 'relative'}}>
                         <StyledSelect
@@ -509,13 +520,13 @@ export class ShipmentDetails extends Component {
         );
 
         return (
-            <div className="layout-row flex-100 layout-wrap">
+            <div className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start" style={{height: '1800px'}}>
                 {flash}
                 {alertModal}
-                <div className="layout-row flex-100 layout-wrap layout-align-center-center">
+                <div className={`layout-row flex-100 layout-wrap layout-align-center-center ${styles.date_section}`}>
                     { dayPickerSection }
                 </div>
-                <div className="layout-row flex-100 layout-wrap">
+                <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>
                     {mapBox}
                 </div>
                 <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
@@ -545,7 +556,6 @@ export class ShipmentDetails extends Component {
                             iconClass="fa-angle-left"
                             theme={theme}
                             back
-                            handleNext={() => shipmentDispatch.toDashboard()}
                         />
                     </div>
                 </div>

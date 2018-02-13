@@ -1,0 +1,10 @@
+:local {
+	.body {
+		overflow: hidden;
+		height: 655px;
+		transition: all 1s ease;
+		&.hidden {
+			height: 0;
+		}
+	}
+}

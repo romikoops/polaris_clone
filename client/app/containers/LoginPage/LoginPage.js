@@ -1,93 +1,136 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { authenticationActions } from '../../actions';
 import { RoundButton } from '../../components/RoundButton/RoundButton';
+import { Alert } from '../../components/Alert/Alert';
+import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
 import styles from './LoginPage.scss';
-// import styled from 'styled-components';
+import Formsy from 'formsy-react';
+import FormsyInput from '../../components/FormsyInput/FormsyInput';
 
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
 
-        // reset login status
-        // this.props.dispatch(authenticationActions.logout());
-
         this.state = {
-            username: '',
-            password: '',
-            submitted: false
+            submitAttempted: false,
+            focus: {},
+            alertVisible: false
         };
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
+        this.hideAlert = this.hideAlert.bind(this);
     }
-
-    handleChange(e) {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-
-        this.setState({ submitted: true });
-        const { username, password } = this.state;
-        const { dispatch, req, noRedirect } = this.props;
-        if (username && password) {
-            dispatch(authenticationActions.login({
-                email: username,
-                password: password,
-                shipmentReq: req,
-                noRedirect
-            }));
+    componentWillMount() {
+        if (this.props.loginAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
         }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.loginAttempt && !this.state.alertVisible) {
+            this.setState({ alertVisible: true });
+        }
+    }
+
+    hideAlert() {
+        this.setState({ alertVisible: false });
+    }
+
+    handleSubmit(model) {
+        const { email, password } = model;
+        const { dispatch, req, noRedirect } = this.props;
+        dispatch(authenticationActions.login({ email, password, req, noRedirect }));
+    }
+    handleInvalidSubmit() {
+        if (!this.state.submitAttempted) this.setState({ submitAttempted: true });
+    }
+
+    handleFocus(e) {
+        this.setState({
+            focus: {
+                ...this.state.focus,
+                [e.target.name]: e.type === 'focus'
+            }
+        });
     }
 
     render() {
         const { loggingIn, theme } = this.props;
-        const { username, password, submitted } = this.state;
-        // const StyledInput = styled.input`
-        //     &:focus + hr {
-        //         border-color: ${theme && theme.colors ? theme.colors.primary : 'black'};
-        //     }
-        // `;
+        const focusStyles = {
+            borderColor: theme && theme.colors ? theme.colors.primary : 'black',
+            borderWidth: '1.5px',
+            borderRadius: '2px',
+            margin: '-1px 0 29px 0'
+        };
+        const alert = this.state.alertVisible ? (
+            <Alert
+                message={{ type: 'error', text: 'Wrong email or password' }}
+                onClose={this.hideAlert}
+                timeout={10000}
+            />
+        ) : '';
+        const formPosition = (navigator.userAgent.indexOf('MSIE') !== -1 ) || (!!document.documentMode === true )
+            ? `${styles.login_form} ${styles.login_ie_11}`
+            : styles.login_form
+    ;
         return (
-            <form className={styles.login_form} name="form" onSubmit={this.handleSubmit}>
-                <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" className={styles.form_control} name="username" value={username} placeholder="enter your username" onChange={this.handleChange} />
-                    {submitted && !username &&
-                        <div className="help-block">Username is required</div>
-                    }
-                    <hr/>
+            <Formsy
+                className={formPosition}
+                name="form"
+                onValidSubmit={this.handleSubmit}
+                onInvalidSubmit={this.handleInvalidSubmit}
+            >
+                { alert }
+                <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <FormsyInput
+                        type="text"
+                        className={styles.form_control}
+                        onFocus={this.handleFocus}
+                        onBlur={this.handleFocus}
+                        name="email"
+                        placeholder="enter your email"
+                        submitAttempted={this.state.submitAttempted}
+                        validationErrors={{isDefaultRequiredValue: 'Must not be blank'}}
+                        required
+                    />
+                    <hr style={this.state.focus.email ? focusStyles : {}}/>
                 </div>
-                <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
+                <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" className={styles.form_control} name="password" value={password} placeholder="enter your password" onChange={this.handleChange} />
-                    {submitted && !password &&
-                        <div className="help-block">Password is required</div>
-                    }
-                    <hr/>
+                    <FormsyInput
+                        type="password"
+                        className={styles.form_control}
+                        name="password"
+                        placeholder="enter your password"
+                        submitAttempted={this.state.submitAttempted}
+                        validationErrors={{isDefaultRequiredValue: 'Must not be blank'}}
+                        required
+                    />
+                    <hr style={this.state.focus.password ? focusStyles : {}}/>
                     <a href="#" className={styles.forget_password_link}>forgot password?</a>
                 </div>
                 <div className={`form-group ${styles.form_group_submit_btn}`}>
                     <RoundButton text="Sign In" theme={theme} active/>
-
-                    {loggingIn &&
-                        <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    }
+                    <div className={styles.spinner}>
+                        { loggingIn && <LoadingSpinner /> }
+                    </div>
                 </div>
-            </form>
+            </Formsy>
         );
     }
 }
 
 function mapStateToProps(state) {
-    const { loggingIn } = state.authentication;
+    const { loggingIn, loginAttempt, user } = state.authentication;
     return {
-        loggingIn
+        loggingIn,
+        loginAttempt,
+        user
     };
 }
 

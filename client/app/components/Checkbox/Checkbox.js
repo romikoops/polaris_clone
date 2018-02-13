@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styles from './Checkbox.scss';
-
+import { gradientTextGenerator } from '../../helpers';
 export class Checkbox extends Component {
     constructor(props) {
         super(props);
@@ -27,9 +27,10 @@ export class Checkbox extends Component {
     render() {
         const { disabled, theme, name } = this.props;
         const { checked } = this.state;
-        const checkGradient = {
-            background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
-        };
+        const checkGradient = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        // const checkGradient = {
+        //     background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary} 0%, ${theme.colors.secondary} 100%)` : 'black',
+        // };
         const sizeStyles = this.props.size ? { height: this.props.size, width: this.props.size } : {};
         const border = { border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`};
         return (

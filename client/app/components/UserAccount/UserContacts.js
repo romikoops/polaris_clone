@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { userActions } from '../../actions';
+import { gradientTextGenerator } from '../../helpers';
 class UserContacts extends Component {
     constructor(props) {
         super(props);
@@ -62,9 +63,7 @@ class UserContacts extends Component {
     render() {
         const { newContact, newContactBool} = this.state;
         const {theme, contacts, hubs, contactData, userDispatch, loading} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const newButton = (
             <div className="flex-none layout-row">
                 <RoundButton

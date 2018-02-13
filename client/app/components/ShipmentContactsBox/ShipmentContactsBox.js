@@ -1,265 +1,171 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ShipmentContactsBox.scss';
-// import {v4} from 'node-uuid';
+import { v4 } from 'node-uuid';
 // import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss';
+import errors from '../../styles/errors.scss';
+import { ContactCard } from '../ContactCard/ContactCard';
+import { capitalize } from '../../helpers/stringTools';
+import { gradientTextGenerator } from '../../helpers';
+
 export class ShipmentContactsBox extends Component {
     constructor(props) {
         super(props);
-        this.handleFormChange = this.handleFormChange.bind(this);
-        this.handleNotifyeeChange = this.handleNotifyeeChange.bind(this);
-        this.addNotifyee = this.addNotifyee.bind(this);
-        this.removeNotifyee = this.removeNotifyee.bind(this);
+        this.state = {};
+        this.newContactData = {
+            contact: {
+                companyName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: ''
+            },
+            location: {
+                street: '',
+                number: '',
+                zipCode: '',
+                city: '',
+                country: '',
+                gecodedAddress: ''
+            }
+        };
+        this.setContactForEdit = this.setContactForEdit.bind(this);
     }
 
-    handleFormChange(event) {
-        this.props.handleChange(event);
-    }
-    handleNotifyeeChange(event) {
-        this.props.handleNotifyeeChange(event);
-    }
-    addNotifyee() {
-        this.props.addNotifyee();
-    }
-    removeNotifyee(not) {
-        this.props.removeNotifyee(not);
+    setContactForEdit(contactData, contactType, contactIndex) {
+        this.props.setContactForEdit({
+            ...contactData,
+            type: contactType,
+            index: contactIndex
+        });
     }
     render() {
-        const { consignee, shipper, notifyees, theme } = this.props;
-        let notifyeesArray;
-        const textStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(left, ' +
-                      theme.colors.primary +
-                      ',' +
-                      theme.colors.secondary +
-                      ')'
-                    : 'black'
+        const { shipper, consignee, notifyees, theme, finishBookingAttempted } = this.props;
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        const placeholderCard = (type, i) => {
+            const errorMessage = (
+                <span
+                    className={errors.error_message}
+                    style={{ left: '15px', top: '14px', fontSize: '17px' }}
+                >
+                    * Required
+                </span>
+            );
+            const showError = finishBookingAttempted && type !== 'notifyee';
+            return (
+                <div
+                    className={`
+                        layout-column flex-align-center-center ${styles.placeholder_card}
+                        ${showError ? styles.with_errors : ''}
+                    `}
+                    onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
+                >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                        <i
+                            className={`fa fa-${type === 'notifyee' ? 'plus' : 'mouse-pointer'}`}
+                            style={{ fontSize: '30px' }}
+                        ></i>
+                    </div>
+                    <h3>{ type === 'notifyee' ? 'Add' : 'Set' } { capitalize(type) }</h3>
+                    { showError ? errorMessage : '' }
+                </div>
+            );
         };
-        const addressBtn = (
-            <div className={`flex-none layout-row layout-align-center-center ${styles.icon_btn}`} onClick={this.props.toggleAddressBook}>
-                <i className="flex-none fa fa-address-book clip" style={textStyle}></i>
+        const notifyeeContacts = notifyees && notifyees.map((notifyee, i) => (
+            <div className="flex-50">
+                <div className={styles.contact_wrapper}>
+                    <ContactCard
+                        contactData={notifyee}
+                        theme={theme}
+                        select={() => this.setContactForEdit(notifyee, 'notifyee', i)}
+                        key={v4()}
+                        contactType="notifyee"
+                        removeFunc={() => this.props.removeNotifyee(i)}
+                    />
+                </div>
+            </div>
+        ));
+        notifyeeContacts.push(
+            <div className="flex-50">
+                <div className={styles.contact_wrapper}>
+                    {placeholderCard('notifyee', notifyeeContacts.length)}
+                </div>
             </div>
         );
-        if (notifyees) {
-            // debugger;
-            notifyeesArray = notifyees.map((n, i) => {
-                return (
-                    <div
-                        key={'notifyee' + i}
-                        className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
-                    >
-                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-space-between-center`}>
-                            <div className="flex-75 layout-row layout-align-start-center">
-                                <p className="flex-none">Notifyee {i + 1}</p>
-                            </div>
-                            <div className="flex-25 layout-row layout-align-center-center">
-                                { addressBtn }
-                            </div>
-                        </div>
-                        <input
-                            className={styles.input_100}
-                            type="text"
-                            value={n.companyName}
-                            name={'notifyees-' + i + '-companyName'}
-                            placeholder="Company Name"
-                            onChange={(ev) => this.handleNotifyeeChange(ev)}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={n.firstName}
-                            name={'notifyees-' + i + '-firstName'}
-                            placeholder="First Name"
-                            onChange={(ev) => this.handleNotifyeeChange(ev)}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={n.lastName}
-                            name={'notifyees-' + i + '-lastName'}
-                            placeholder="Last Name"
-                            onChange={(ev) => this.handleNotifyeeChange(ev)}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={n.email}
-                            name={'notifyees-' + i + '-email'}
-                            placeholder="Email"
-                            onChange={(ev) => this.handleNotifyeeChange(ev)}
-                        />
-                        <div className="flex-50 layout-row layout-align-end-center" onClick={() => this.removeNotifyee(n)}>
-                            <p className="flex-none">Remove</p>
-                            <div className="flex-5"></div>
-                            <i className="flex-none fa fa-trash clip" style={textStyle}></i>
-                        </div>
-                    </div>
-                );
-            });
-        }
+        const shipperContact = shipper.contact ? (
+            <ContactCard
+                contactData={shipper}
+                theme={theme}
+                select={this.setContactForEdit}
+                key={v4()}
+                contactType="shipper"
+            />
+        ) : placeholderCard('shipper');
+        const consigneeContact = consignee.contact ? (
+            <ContactCard
+                contactData={consignee}
+                theme={theme}
+                select={this.setContactForEdit}
+                key={v4()}
+                contactType="consignee"
+            />
+        ) : placeholderCard('consignee');
         return (
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-                        <div className={` ${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
-                            <div className="flex-75 layout-row layout-align-start-center">
-                                <i className="fa fa-user flex-none" style={textStyle}></i>
-                                <p className="flex-none">Shipper</p>
+                    <div
+                        className="flex-100 layout-row layout-wrap"
+                        style={{ height: '185px' }}
+                    >
+                        <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                            <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                                <div className="flex-75 layout-row layout-align-start-center">
+                                    <i className="fa fa-user flex-none" style={textStyle}></i>
+                                    <p className="flex-none">Shipper</p>
+                                </div>
                             </div>
-                            <div className="flex-25 layout-row layout-align-center-center">
-                                { addressBtn }
-                            </div>
-                        </div>
-                        <input className={styles.input_100} type="text" value={shipper.companyName} name={'shipper-companyName'} placeholder="Company Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={shipper.firstName} name="shipper-firstName" placeholder="First Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={shipper.lastName} name="shipper-lastName" placeholder="Last Name" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={shipper.email} name="shipper-email" placeholder="Email" onChange={this.handleFormChange} />
-                        <input className={styles.input_50} type="text" value={shipper.phone} name="shipper-phone" placeholder="Phone" onChange={this.handleFormChange} />
-                        <input className={styles.input_street} type="text" value={shipper.street} name="shipper-street" placeholder="Street" onChange={this.handleFormChange} />
-                        <input className={styles.input_no} type="text" value={shipper.number} name="shipper-number" placeholder="Number" onChange={this.handleFormChange} />
-                        <input className={styles.input_zip} type="text" value={shipper.zipCode} name="shipper-zipCode" placeholder="Postal Code" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={shipper.city} name="shipper-city" placeholder="City" onChange={this.handleFormChange} />
-                        <input className={styles.input_cc} type="text" value={shipper.country} name="shipper-country" placeholder="Country" onChange={this.handleFormChange} />
-                    </div>
-
-
-                    <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-                        <div
-                            className={` ${
-                                styles.contact_header
-                            } flex-100 layout-row layout-align-space-between-center`}
-                        >
-                            <div className="flex-75 layout-row layout-align-start-center">
-                                <i
-                                    className="fa fa-envelope-open-o flex-none"
-                                    style={textStyle}
-                                />
-                                <p className="flex-none"> Consignee</p>
-                            </div>
-                            <div className="flex-25 layout-row layout-align-center-center">
-                                { addressBtn }
+                            <div className={styles.contact_wrapper}>
+                                {shipperContact}
                             </div>
                         </div>
-                        <input
-                            className={styles.input_100}
-                            type="text"
-                            value={consignee.companyName}
-                            name={'consignee-companyName'}
-                            placeholder="Company Name"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={consignee.firstName}
-                            name="consignee-firstName"
-                            placeholder="First Name"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={consignee.lastName}
-                            name="consignee-lastName"
-                            placeholder="Last Name"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={consignee.email}
-                            name="consignee-email"
-                            placeholder="Email"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_50}
-                            type="text"
-                            value={consignee.phone}
-                            name="consignee-phone"
-                            placeholder="Phone"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_street}
-                            type="text"
-                            value={consignee.street}
-                            name="consignee-street"
-                            placeholder="Street"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_no}
-                            type="text"
-                            value={consignee.number}
-                            name="consignee-number"
-                            placeholder="Number"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_zip}
-                            type="text"
-                            value={consignee.zipCode}
-                            name="consignee-zipCode"
-                            placeholder="Postal Code"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_cc}
-                            type="text"
-                            value={consignee.city}
-                            name="consignee-city"
-                            placeholder="City"
-                            onChange={this.handleFormChange}
-                        />
-                        <input
-                            className={styles.input_cc}
-                            type="text"
-                            value={consignee.country}
-                            name="consignee-country"
-                            placeholder="Country"
-                            onChange={this.handleFormChange}
-                        />
+                        <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+                            <div className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}>
+                                <div className="flex-75 layout-row layout-align-start-center">
+                                    <i className="fa fa-user flex-none" style={textStyle}></i>
+                                    <p className="flex-none">Consignee</p>
+                                </div>
+                            </div>
+                            <div className={styles.contact_wrapper}>
+                                {consigneeContact}
+                            </div>
+                        </div>
                     </div>
                     <div className="flex-100 layout-row layout-wrap">
                         <div className="flex-100 layout-row layout-align-start-center">
-                            <div
-                                className={` ${
-                                    styles.contact_header
-                                } flex-50 layout-row layout-align-start-center`}
-                            >
+                            <div className={`
+                                ${styles.contact_header} flex-50
+                                layout-row layout-align-start-center
+                            `}>
                                 <i
                                     className="fa fa-users flex-none"
                                     style={textStyle}
                                 />
                                 <p className="flex-none"> Notifyees</p>
                             </div>
-                            <div className="flex-50 layout-row layout-align-start-center">
-                                <div
-                                    className="flex-50 layout-row layout-align-start-center"
-                                    onClick={this.addNotifyee}
-                                >
-                                    <i className="fa fa-plus flex-none" />
-                                    <p className="flex-none">Add Notifyees</p>
-                                </div>
-                            </div>
                         </div>
-                        {notifyeesArray}
+                        {notifyeeContacts}
                     </div>
                 </div>
             </div>
         );
     }
 }
+
 ShipmentContactsBox.propTypes = {
     theme: PropTypes.object,
-    shipmentData: PropTypes.object,
-    user: PropTypes.object,
-    handleChange: PropTypes.func,
-    handleNotifyeeChange: PropTypes.func,
-    addNotifyee: PropTypes.func,
-    toggleAddressBook: PropTypes.func
+    shipper: PropTypes.object,
+    consignee: PropTypes.object,
+    notifyees: PropTypes.object,
+    finishBookingAttempted: PropTypes.bool
 };

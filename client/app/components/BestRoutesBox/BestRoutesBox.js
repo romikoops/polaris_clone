@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { moment } from '../../constants';
 import { Price } from '../Price/Price';
 import styles from './BestRoutesBox.scss';
+import { gradientGenerator } from '../../helpers';
 export class BestRoutesBox extends Component {
     constructor(props) {
         super(props);
@@ -12,15 +13,16 @@ export class BestRoutesBox extends Component {
         let fastestSchedule;
         let fastestFare;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
-                const travelTime = moment(sched.eta).diff(sched.etd);
-                const schedKey = sched.hub_route_key;
-                if (!fastestTime || travelTime < fastestTime) {
-                    fastestTime = travelTime;
-                    fastestSchedule = sched;
-                    fastestFare = fees[schedKey].total;
-                }
+            // if (sched.mode_of_transport === this.props.moT) {
+            const travelTime = moment(sched.eta).diff(sched.etd);
+            const schedKey = sched.hub_route_key;
+            const fare = fees[schedKey].total;
+            if (!fastestTime || travelTime < fastestTime) {
+                fastestTime = travelTime;
+                fastestSchedule = { schedule: sched, total: fare };
+                fastestFare = fees[schedKey].total;
             }
+            // }
         });
         return (
             <div
@@ -43,17 +45,17 @@ export class BestRoutesBox extends Component {
         let cheapestFare;
         let cheapestSchedule;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
-                const schedKey = sched.hub_route_key;
-                if (!fees[schedKey]) {
-                    console.log('err');
-                }
-                const fare = fees[schedKey].total;
-                if (!cheapestFare || fare < cheapestFare) {
-                    cheapestFare = fare;
-                    cheapestSchedule = sched;
-                }
+            // if (sched.mode_of_transport === this.props.moT) {
+            const schedKey = sched.hub_route_key;
+            if (!fees[schedKey]) {
+                console.log('err');
             }
+            const fare = fees[schedKey].total;
+            if (!cheapestFare || fare < cheapestFare) {
+                cheapestFare = fare;
+                cheapestSchedule = { schedule: sched, total: cheapestFare };
+            }
+            // }
         });
         return (
             <div
@@ -87,19 +89,19 @@ export class BestRoutesBox extends Component {
         let bestFare;
         let bestOption;
         schedules.forEach(sched => {
-            if (sched.mode_of_transport === this.props.moT) {
-                const timeScore = timeArray.indexOf(sched);
-                const fareScore = fareArray.indexOf(sched);
-                const depScore = depArray.indexOf(sched);
-                const schedKey = sched.hub_route_key;
-                const fare = fees[schedKey] ? fees[schedKey].total : 0;
-                const totalScore = timeScore + fareScore + depScore;
-                if (totalScore < lowScore) {
-                    lowScore = totalScore;
-                    bestOption = sched;
-                    bestFare = fare;
-                }
+            // if (sched.mode_of_transport === this.props.moT) {
+            const timeScore = timeArray.indexOf(sched);
+            const fareScore = fareArray.indexOf(sched);
+            const depScore = depArray.indexOf(sched);
+            const schedKey = sched.hub_route_key;
+            const fare = fees[schedKey] ? fees[schedKey].total : 0;
+            const totalScore = timeScore + fareScore + depScore;
+            if (totalScore < lowScore) {
+                lowScore = totalScore;
+                bestOption = { schedule: sched, total: fare };
+                bestFare = fare;
             }
+            // }
         });
         return (
             <div
@@ -128,15 +130,7 @@ export class BestRoutesBox extends Component {
         const depDate = shipmentData.shipment
             ? shipmentData.shipment.planned_pickup_date
             : '';
-        const activeBtnStyle = {
-            background:
-                theme && theme.colors
-                    ? `-webkit-linear-gradient(left, ${
-                        theme.colors.brightPrimary
-                    }, ${theme.colors.brightSecondary})`
-                    : 'floralwhite',
-            color: theme && theme.colors ? 'white' : 'black'
-        };
+        const activeBtnStyle = theme && theme.colors ? {...gradientGenerator(theme.colors.primary, theme.colors.secondary), color: 'white'} : {background: 'black'};
         return (
             <div className="flex-100 layout-row layout-align-space-between-center">
                 {shipmentData.shipment

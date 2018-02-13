@@ -439,6 +439,33 @@ function newUserLocation(userId, data) {
         );
     };
 }
+function editUserLocation(userId, data) {
+    function request(userlocData) {
+        return { type: userConstants.EDIT_USER_LOCATION_REQUEST, payload: userlocData };
+    }
+    function success(userlocData) {
+        return { type: userConstants.EDIT_USER_LOCATION_SUCCESS, payload: userlocData };
+    }
+    function failure(error) {
+        return { type: userConstants.EDIT_USER_LOCATION_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        userService.editUserLocation(userId, data).then(
+            data => {
+                dispatch(
+                    alertActions.success('Saving User Location successful')
+                );
+                dispatch(success(data.data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 
 function newContact(data) {
     function request(newContactData) {
@@ -621,5 +648,7 @@ export const userActions = {
     clearLoading,
     deleteContactAddress,
     delete: _delete,
-    logOut
+    logOut,
+    editUserLocation,
+
 };

@@ -1,4 +1,7 @@
 :local {
+  .wrapper_cargo_input {
+    margin-bottom: 10px;
+  }
   .cargo_input {
     height: 36px; 
     width: calc(100% - 10px);
@@ -53,5 +56,8 @@
     visibility: visible;
     opacity: 1;
     height: 87.83px;
+  }
+  .show {
+    height: 250px;
   }
 }

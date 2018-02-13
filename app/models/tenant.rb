@@ -1,6 +1,6 @@
 class Tenant < ApplicationRecord
   include ImageTools
-  include MongoTools
+  extend MongoTools
 
   has_many :routes
   has_many :hubs
@@ -37,6 +37,16 @@ class Tenant < ApplicationRecord
     mot = load_type_filter("container", mot)  if args[:only_container]
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
+  end
+  def self.update_hs_codes
+    data = get_all_items('hsCodes')
+    data.each do |datum|
+      code_ref = datum["_id"].slice(0,2).to_i
+      if  code_ref >= 28 && code_ref <= 38
+        datum["dangerous"] = true
+        update_item('hsCodes', {_id: datum["_id"]}, datum)
+      end
+    end
   end
 
   private

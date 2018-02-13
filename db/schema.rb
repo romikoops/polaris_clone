@@ -149,6 +149,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.datetime "updated_at", null: false
     t.string "province"
     t.string "photo"
+    t.string "premise"
   end
 
   create_table "mot_scopes", force: :cascade do |t|

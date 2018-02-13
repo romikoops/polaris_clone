@@ -19,11 +19,12 @@ export class EditLocation extends Component {
         this.state = {
             geocodedAddress: this.props.geocodedAddress,
             location: {
-                street: '',
-                zipCode: '',
-                city: '',
-                country: '',
-                fullAddress: ''
+                street: this.props.location ? this.props.location.street : '',
+                number: this.props.location ? this.props.location.street_number : '',
+                zipCode: this.props.location ? this.props.location.zip_code : '',
+                city: this.props.location ? this.props.location.city : '',
+                country: this.props.location ? this.props.location.country : '',
+                fullAddress: this.props.location ? this.props.location.geocoded_address : ''
             },
             autoText: {
                 location: ''
@@ -41,8 +42,20 @@ export class EditLocation extends Component {
         this.saveLocation = this.saveLocation.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
     }
-    componentDidMount() {
+    componentDidReceiveProps() {
         this.initMap();
+        if (!this.state.location.street && this.props.location) {
+            this.setState({
+                location: {
+                    street: this.props.location.street,
+                    number: this.props.location.street_number,
+                    zipCode: this.props.location.zip_code,
+                    city: this.props.location.city,
+                    country: this.props.location.country,
+                    fullAddress: this.props.location.geocoded_address
+                }
+            });
+        }
     }
     handleInputChange(event) {
         const val = event.target.value;
@@ -202,6 +215,7 @@ export class EditLocation extends Component {
     saveLocation() {
         const { location } = this.state;
         const preppedLocation = {};
+        preppedLocation.id = this.props.location.id;
         preppedLocation.street_number = location.number;
         preppedLocation.street = location.street;
         preppedLocation.zip_code = location.zipCode;
@@ -294,7 +308,12 @@ export class EditLocation extends Component {
                     type="string"
                     placeholder="Geocoded address"
                 />*/}
-
+                <div className="flex-100 layout-row layout-align-end-center">
+                    <div className="flex-none layout-row layout-align-center-center"  onClick={() => this.props.toggleActiveView('allLocations')}>
+                        <i className="flex-none fa fa-checvron-left"></i>
+                        <p className="flex-none">Back</p>
+                    </div>
+                </div>
                 <div className={`flex-65 layout-row layout-wrap layout-align-center-start ${styles.map_box}`}>
                     {autoInput}
                     <div ref="map" id="map" className={styles.loc_map} style={mapStyle} />

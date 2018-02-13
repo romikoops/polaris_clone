@@ -56,19 +56,15 @@ export class RouteOption extends Component {
         return (
             <div className={`${styles.route_option} flex-30`} onClick={this.routeSelected} >
                 <div
-                    className={`flex-100 layout-row layout-align-space-between ${
+                    className={`flex-100 layout-row layout-align-center ${
                         styles.top_row
                     }`}
                 >
                     <div className={styles.dedicated_decorator} style={dedicatedDecoratorStyles}>
                         <i className="fa fa-star" style={dedicatedDecoratorIconStyles}></i>
                     </div>
-                    <div className={`${styles.header_hub}`}>
-                        <div className="flex-100 layout-row">
-                            <h4 className="flex-100"> {originNexus} </h4>
-                        </div>
-                    </div>
-                    <div className={`${styles.connection_graphics}`}>
+
+                    <div className={` flex-none ${styles.connection_graphics}`}>
                         <i className={`fa fa-map-marker ${styles.map_marker}`} />
                         <i className={`fa fa-flag-o ${styles.flag}`} />
                         <div className="flex-none layout-row layout-align-center-center">
@@ -76,10 +72,22 @@ export class RouteOption extends Component {
                         </div>
                         <div style={dashedLineStyles} />
                     </div>
-                    <div className={`${styles.header_hub}`}>
-                        <div className="flex-100 layout-row">
-                            <h4 className="flex-100"> {destinationNexus} </h4>
-                        </div>
+
+                </div>
+                <div
+                    className={`flex-100 layout-row layout-align-space-between ${
+                        styles.top_row
+                    }`}
+                >
+                    <div className={` flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
+                        {/* <div className="flex-100 layout-row">*/}
+                        <h4 className="flex-100"> {originNexus} </h4>
+                        {/* </div>*/}
+                    </div>
+                    <div className={` flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
+                        {/* <div className="flex-100 layout-row">*/}
+                        <h4 className="flex-100"> {destinationNexus} </h4>
+                        {/* </div>*/}
                     </div>
                 </div>
             </div>

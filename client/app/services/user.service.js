@@ -187,6 +187,17 @@ function newUserLocation(userId, data) {
     return fetch(BASE_URL + '/users/' + userId + '/locations', requestOptions).then(handleResponse);
 }
 
+function editUserLocation(userId, data) {
+    const formData = new FormData();
+    formData.append('edit_location', JSON.stringify(data));
+    const requestOptions = {
+        method: 'POST',
+        headers: authHeader(),
+        body: formData
+    };
+    return fetch(BASE_URL + '/users/' + userId + '/locations/' + data.id + '/edit', requestOptions).then(handleResponse);
+}
+
 function newContact(data) {
     const formData = new FormData();
     formData.append('new_contact', JSON.stringify(data));
@@ -258,5 +269,6 @@ export const userService = {
     deleteAlias,
     saveAddressEdit,
     deleteContactAddress,
+    editUserLocation,
     delete: _delete
 };

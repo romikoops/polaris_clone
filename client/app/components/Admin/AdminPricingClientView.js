@@ -54,19 +54,24 @@ export class AdminPricingClientView extends Component {
         const {theme, pricingData, clientPricings, adminActions} = this.props;
         const { editorBool, editTransport, editPricing, editHubRoute } = this.state;
         console.log(this.props);
+
         if (!pricingData || !clientPricings) {
             return '';
         }
         console.log(clientPricings);
+<<<<<<< HEAD
         const { itineraries, pricings, transportCategories } = pricingData;
         const {client, userPricings, detailedItineraries} = clientPricings;
         if (!client || !userPricings) {
             return '';
         }
+=======
+        const { routes, pricings, hubRoutes, transportCategories } = pricingData;
+        const {client, userPricings} = clientPricings;
+>>>>>>> 3126a69baa6245b953cbf9d49c1ec6865db62601
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
-
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -77,6 +82,23 @@ export class AdminPricingClientView extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+
+        const noPricing = (
+            <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{client.first_name} {client.last_name}</p>
+                    {backButton}
+                </div>
+
+                <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+                    <h4 className="flex-none"> No dedicated pricings available</h4>
+
+                </div>
+            </div>
+        );
+        if (!userPricings) {
+            return noPricing;
+        }
 
         const RPBInner = ({hubRoute, pricing, transport}) => {
             const panel = [];

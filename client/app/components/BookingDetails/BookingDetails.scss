@@ -1,6 +1,9 @@
 :local {
-  .contacts_border {
-    margin: 80px 0;
+  .wrapper_contact_setter {
+    background: rgba(200, 200, 200, .05);
+    box-shadow: 0 0 10px rgba(200, 200, 200, .3);
+    padding: 30px 0 50px 0;
+    margin: 80px 0 30px 0;
   }
   .sec_break {
     border-color: rgba(black, 0.03);
@@ -10,5 +13,10 @@
   }
   .back_to_dash_sec {
     padding: 50px 0 100px 0;
+  }
+   .summary_container {
+    padding: 25px;
+    box-shadow: 5px 4px 8px 4px rgba(12,13,14,0.25);
+    // background: lightgrey;
   }
 }

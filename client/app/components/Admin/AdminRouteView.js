@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { AdminScheduleLine, AdminHubTile } from './';
 import styles from './Admin.scss';
 import {v4} from 'node-uuid';
+import {gradientTextGenerator} from '../../helpers';
 export class AdminRouteView extends Component {
     constructor(props) {
         super(props);
@@ -17,9 +18,7 @@ export class AdminRouteView extends Component {
             return '';
         }
         const { itinerary, hubs, schedules} = itineraryData;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
 
         const hubArr = hubs.map((hubObj) => {
             return (<AdminHubTile key={v4()} hub={hubHash[hubObj.id]} theme={theme} handleClick={() => adminActions.getHub(hubObj.id, true)} />);
@@ -47,7 +46,6 @@ export class AdminRouteView extends Component {
                     </div>
 
                 </div>
-
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Schedules </p>
