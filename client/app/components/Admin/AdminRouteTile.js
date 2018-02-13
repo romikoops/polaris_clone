@@ -74,11 +74,11 @@ export class AdminRouteTile extends Component {
                     </div>
                     <div className="flex-85 layout-column layout-wrap layout-align-start-start">
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_top}`}>
-                            <h4 className="flex-100" > { route.origin_nexus } </h4>
+                            <h4 className="flex-100" > { itinerary.origin_nexus } </h4>
                             { startHub && startHub.location.geocoded_address ? <p className={`${styles.overflow_hidden} flex-100`} >{ startHub.location.geocoded_address }</p> : '' }
                         </div>
                         <div className={`flex-50 layout-row layout-wrap layout-align-start-start ${styles.content_bottom}`}>
-                            <h4 className="flex-100" > { route.destination_nexus } </h4>
+                            <h4 className="flex-100" > { itinerary.destination_nexus } </h4>
                             { endHub && endHub.location.geocoded_address ? <p className={`${styles.overflow_hidden} flex-100`}>{ endHub.location.geocoded_address }</p> : '' }
                         </div>
                     </div>

@@ -5,7 +5,8 @@ import styles from './Admin.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import {CONTAINER_DESCRIPTIONS, fclChargeGlossary, lclChargeGlossary, chargeGlossary} from '../../constants';
-import { history } from '../../helpers';
+import { history, gradientTextGenerator } from '../../helpers';
+
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const fclChargeGloss = fclChargeGlossary;
 const lclChargeGloss = lclChargeGlossary;
@@ -58,20 +59,14 @@ export class AdminPricingClientView extends Component {
         if (!pricingData || !clientPricings) {
             return '';
         }
-        console.log(clientPricings);
-<<<<<<< HEAD
+
         const { itineraries, pricings, transportCategories } = pricingData;
         const {client, userPricings, detailedItineraries} = clientPricings;
         if (!client || !userPricings) {
             return '';
         }
-=======
-        const { routes, pricings, hubRoutes, transportCategories } = pricingData;
-        const {client, userPricings} = clientPricings;
->>>>>>> 3126a69baa6245b953cbf9d49c1ec6865db62601
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton

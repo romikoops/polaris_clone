@@ -115,15 +115,9 @@ class AdminScheduleGenerator extends Component {
         adminDispatch.autoGenSchedules(req);
     }
     render() {
-<<<<<<< HEAD
         const {theme, hubs, vehicleTypes, itineraries } = this.props;
         const {weekdays, startDate, endDate, mot, vehicleType, stops, stopIntervals} = this.state;
 
-=======
-        const {theme, hubs, vehicleTypes } = this.props;
-        const {weekdays, startDate, endDate, duration, mot, vehicleType} = this.state;
-        const motKey = mot && mot.value ? mot.value.split('_')[0] : '';
->>>>>>> 3126a69baa6245b953cbf9d49c1ec6865db62601
         const future = {
             after: new Date(),
         };
@@ -163,18 +157,16 @@ class AdminScheduleGenerator extends Component {
                 background-color: #F9F9F9;
             }
         `;
-<<<<<<< HEAD
+
         const vehicleSelect = mot ? (<StyledSelect
-=======
-        const vehicleSelect = mot && mot.value ? (<StyledSelect
->>>>>>> 3126a69baa6245b953cbf9d49c1ec6865db62601
+
             name="mot-type"
             className={`${styles.select}`}
             value={this.state.vehicleType}
             options={vehicleTypeOptions}
             onChange={this.setVehicleType}
         />) : '';
-<<<<<<< HEAD
+
         const stopIntervalInputs = stops ? stops.map((s, i) =>  {
             return stops[i + 1] ? (
                 <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
@@ -189,9 +181,7 @@ class AdminScheduleGenerator extends Component {
                 </div>
             ) : '';
         }) : '';
-        console.log('hubs', hubs);
-=======
->>>>>>> 3126a69baa6245b953cbf9d49c1ec6865db62601
+
         return(
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
 
