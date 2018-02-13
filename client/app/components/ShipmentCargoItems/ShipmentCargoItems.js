@@ -153,10 +153,12 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validations={{
+                                            nonNegative: (values, value) => value > 0
+                                        }}
                                         validationErrors={{
                                             nonNegative: 'Must be greater than 0',
-                                            isDefaultRequiredValue: 'Must not be blank'
+                                            isDefaultRequiredValue: 'Must be greater than 0'
                                         }}
                                         required
                                     />
@@ -183,10 +185,14 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validations={{
+                                            nonNegative: (values, value) => value > 0,
+                                            maxDimention: (values, value) => value < 1000
+                                        }}
                                         validationErrors={{
+                                            isDefaultRequiredValue: 'Must be greater than 0',
                                             nonNegative: 'Must be greater than 0',
-                                            isDefaultRequiredValue: 'Must not be blank'
+                                            maxDimention: 'Maximum height is 1000'
                                         }}
                                         required
                                     />
@@ -223,10 +229,14 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validations={{
+                                            nonNegative: (values, value) => value > 0,
+                                            maxDimention: (values, value) => value < 1000
+                                        }}
                                         validationErrors={{
+                                            isDefaultRequiredValue: 'Must be greater than 0',
                                             nonNegative: 'Must be greater than 0',
-                                            isDefaultRequiredValue: 'Must not be blank'
+                                            maxDimention: 'Maximum length is 1000'
                                         }}
                                         required
                                         disabled={!!cargoItemTypes[i].dimension_x}
@@ -262,10 +272,14 @@ export class ShipmentCargoItems extends Component {
                                         firstRenderInputs={this.state.firstRenderInputs}
                                         setFirstRenderInputs={this.setFirstRenderInputs}
                                         nextStageAttempt={this.props.nextStageAttempt}
-                                        validations={{ nonNegative: (values, value) => value > 0 }}
+                                        validations={{
+                                            nonNegative: (values, value) => value > 0,
+                                            maxDimention: (values, value) => value < 1000
+                                        }}
                                         validationErrors={{
+                                            isDefaultRequiredValue: 'Must be greater than 0',
                                             nonNegative: 'Must be greater than 0',
-                                            isDefaultRequiredValue: 'Must not be blank'
+                                            maxDimention: 'Maximum width is 1000'
                                         }}
                                         disabled={!!cargoItemTypes[i].dimension_y}
                                         required
