@@ -3,63 +3,43 @@ import PropTypes from 'prop-types';
 import styles from './BookingDetails.scss';
 import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
-import { AddressBook } from '../AddressBook/AddressBook';
+import { ContactSetter } from '../ContactSetter/ContactSetter';
 import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
-import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
 import { Checkbox } from '../Checkbox/Checkbox';
+import { isEmpty } from '../../helpers/objectTools';
+import * as Scroll from 'react-scroll';
+import Formsy from 'formsy-react';
 import { TextHeading }  from '../TextHeading/TextHeading';
 // import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
+        this.newContactData = {
+            contact: {
+                companyName: '',
+                firstName: '',
+                lastName: '',
+                email: '',
+                phone: ''
+            },
+            location: {
+                street: '',
+                streetNumber: '',
+                zipCode: '',
+                city: '',
+                country: ''
+            }
+        };
+
         this.state = {
             addressBook: false,
             acceptTerms: false,
-            consignee: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                street: '',
-                number: '',
-                zipCode: '',
-                city: '',
-                country: ''
-            },
-            shipper: {
-                firstName: '',
-                lastName: '',
-                email: '',
-                phone: '',
-                street: '',
-                number: '',
-                zipCode: '',
-                city: '',
-                country: ''
-            },
+            consignee: {},
+            shipper: {},
             notifyees: [],
-            default: {
-                contact: {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: '',
-                    street: '',
-                    number: '',
-                    zipCode: '',
-                    city: '',
-                    country: ''
-                },
-                notifyee: {
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    phone: ''
-                }
-            },
             insurance: {
                 bool: false,
                 val: 0
@@ -70,15 +50,12 @@ export class BookingDetails extends Component {
             },
             hsCodes: {},
             totalGoodsValue: 0,
-            cargoNotes: ''
+            cargoNotes: '',
+            finishBookingAttempted: false
         };
-        this.addNotifyee = this.addNotifyee.bind(this);
         this.removeNotifyee = this.removeNotifyee.bind(this);
-        this.setFromBook = this.setFromBook.bind(this);
-        this.handleInput = this.handleInput.bind(this);
-        this.handleNotifyeeInput = this.handleNotifyeeInput.bind(this);
-        this.toggleAddressBook = this.toggleAddressBook.bind(this);
         this.toNextStage = this.toNextStage.bind(this);
+        this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this);
         this.handleCargoInput = this.handleCargoInput.bind(this);
         this.handleInsurance = this.handleInsurance.bind(this);
         this.calcInsurance = this.calcInsurance.bind(this);
@@ -86,6 +63,7 @@ export class BookingDetails extends Component {
         this.deleteCode = this.deleteCode.bind(this);
         this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
         this.setCustomsFee = this.setCustomsFee.bind(this);
+        this.setContact = this.setContact.bind(this);
     }
     componentDidMount() {
         const {prevRequest, setStage, hideRegistration} = this.props;
@@ -95,6 +73,13 @@ export class BookingDetails extends Component {
         hideRegistration();
         setStage(4);
         window.scrollTo(0, 0);
+    }
+    scrollTo(target, offset) {
+        Scroll.scroller.scrollTo(target, {
+            duration: 2000,
+            smooth: true,
+            offset: offset || 0
+        });
     }
     loadPrevReq(obj) {
         this.setState({
@@ -134,26 +119,6 @@ export class BookingDetails extends Component {
             }
         });
     }
-    setFromBook(target, value) {
-        if (target === 'notifyee') {
-            this.setNotifyeesFromBook(target, value);
-        } else {
-            this.setState({
-                [target]: {
-                    firstName: value.contact.first_name,
-                    companyName: value.contact.company_name,
-                    lastName: value.contact.last_name,
-                    email: value.contact.email,
-                    phone: value.contact.phone,
-                    street: value.location.street,
-                    number: value.location.street_number,
-                    zipCode: value.location.zip_code,
-                    city: value.location.city,
-                    country: value.location.country
-                }
-            });
-        }
-    }
     handleInsurance() {
         const {insurance} = this.state;
 
@@ -173,46 +138,10 @@ export class BookingDetails extends Component {
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }
-    setNotifyeesFromBook(target, value) {
-        const tmpAdd = {
-            firstName: value.contact.first_name,
-            lastName: value.contact.last_name,
-            email: value.contact.email,
-            phone: value.contact.phone
-        };
-        const notifyees = this.state.notifyees;
-        if (notifyees.indexOf(tmpAdd) > -1) {
-            notifyees.slice(notifyees.indexOf(tmpAdd), 1);
-            this.setState({notifyees});
-        } else {
-            notifyees.push(tmpAdd);
-            this.setState({notifyees});
-        }
-    }
-    toggleAddressBook() {
-        const addressBool = this.state.addressBook;
-        this.setState({ addressBook: !addressBool });
-    }
-    addNotifyee() {
-        const prevArr = Object.assign([], this.state.notifyees);
-        prevArr.push(Object.assign({}, this.state.default.notifyee));
-        this.setState({ notifyees: prevArr });
-    }
-    removeNotifyee(not) {
-        const prevArr = this.state.notifyees;
-        const newArr = prevArr.filter(n => n !== not);
-        console.log(newArr);
-        this.setState({ notifyees: newArr });
-    }
-    handleInput(event) {
-        const { name, value } = event.target;
-        const targetKeys = name.split('-');
-        this.setState({
-            [targetKeys[0]]: {
-                ...this.state[targetKeys[0]],
-                [targetKeys[1]]: value
-            }
-        });
+    removeNotifyee(i) {
+        const { notifyees } = this.state;
+        notifyees.splice(i, 1);
+        this.setState({ notifyees });
     }
     handleCargoInput(event) {
         const { name, value } = event.target;
@@ -223,20 +152,6 @@ export class BookingDetails extends Component {
         } else {
             this.setState({ [name]: value });
         }
-    }
-    handleNotifyeeInput(event) {
-        const { name, value } = event.target;
-        console.log(name, value);
-        const targetKeys = name.split('-');
-        const ind = parseInt(targetKeys[1], 10);
-        console.log(ind);
-        const notifyees = this.state.notifyees;
-        console.log(notifyees);
-        notifyees[ind][targetKeys[2]] = value;
-        console.log(notifyees);
-        this.setState({
-            notifyees: notifyees
-        });
     }
     orderTotal() {
         const { shipmentData } = this.props;
@@ -264,6 +179,12 @@ export class BookingDetails extends Component {
             insurance,
             customs
         } = this.state;
+
+        if ([shipper, consignee].some(isEmpty)) {
+            this.scrollTo('contact_setter');
+            this.setState({ finishBookingAttempted: true });
+            return;
+        }
         const data = {
             shipment: {
                 id: this.props.shipmentData.shipment.id,
@@ -279,8 +200,29 @@ export class BookingDetails extends Component {
         };
         this.props.nextStage(data);
     }
-    closeBook() {
-        this.setState({ addressBook: false });
+    handleInvalidSubmit() {
+        this.setState({ finishBookingAttempted: true });
+
+        const { shipper, consignee } = this.state;
+        if ([shipper, consignee].some(isEmpty)) {
+            this.scrollTo('contact_setter');
+            return;
+        }
+        this.scrollTo('totalGoodsValue', -50);
+    }
+    setContact(contactData, type, index) {
+        if (type === 'notifyee') {
+            const notifyees = this.state.notifyees;
+            notifyees[index] = contactData;
+            this.setState({ notifyees });
+        } else {
+            this.setState({ [type]: contactData });
+        }
+    }
+
+    backToDashboard(e) {
+        e.preventDefault();
+        this.props.shipmentDispatch.toDashboard();
     }
     render() {
         const { theme, shipmentData, shipmentDispatch, currencies, user } = this.props;
@@ -295,35 +237,12 @@ export class BookingDetails extends Component {
             locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
-        const aBook = (
-            <AddressBook
-                contacts={contacts}
-                userLocations={userLocations}
-                theme={theme}
-                setDetails={this.setFromBook}
-                closeAddressBook={this.toggleAddressBook}
-            />
-        );
-        const cForm = (
-            <ShipmentContactsBox
-                consignee={consignee}
-                shipper={shipper}
-                addNotifyee={this.addNotifyee}
-                notifyees={notifyees}
-                theme={theme}
-                toggleAddressBook={this.toggleAddressBook}
-                handleChange={this.handleInput}
-                removeNotifyee={this.removeNotifyee}
-                handleNotifyeeChange={this.handleNotifyeeInput}
-            />
-        );
         const acceptedBtn = (
             <div className="flex-none layout-row">
                 <RoundButton
-                    active
-                    handleNext={this.toNextStage}
                     theme={theme}
                     text="Finish Booking"
+                    active
                 />
             </div>
         );
@@ -332,99 +251,108 @@ export class BookingDetails extends Component {
                 <RoundButton
                     theme={theme}
                     text="Finish Booking"
+                    handleNext={e => e.preventDefault()}
                 />
             </div>
         );
-        const addrView = this.state.addressBook ? aBook : cForm;
         return (
-            <div className="flex-100 layout-row layout-wrap layout-align-center-start no_max" style={{height: '3000px'}}>
 
-                {shipment && theme && hubs
-                    ? (<RouteHubBox
-                        hubs={hubs}
-                        route={schedules}
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                {shipment && theme && hubs ? (
+                    <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
+                ) : (
+                    ''
+                )}
+                <div className={`${styles.wrapper_contact_setter} flex-100 layout-row`}>
+                    <ContactSetter
+                        contacts={contacts}
+                        userLocations={userLocations}
+                        shipper={shipper}
+                        consignee={consignee}
+                        notifyees={notifyees}
+                        setContact={this.setContact}
                         theme={theme}
-                    />)
-                    : ('')
-                }
-                <div className={` ${styles.contacts_border} flex-100 layout-row`}>
-                    {addrView}
+                        removeNotifyee={this.removeNotifyee}
+                        finishBookingAttempted={this.state.finishBookingAttempted}
+                    />
                 </div>
-                <CargoDetails
-                    theme={theme}
-                    handleChange={this.handleCargoInput}
-                    shipmentData={shipmentData}
-                    hsCodes={this.state.hsCodes}
-                    setHsCode={this.setHsCode}
-                    deleteCode={this.deleteCode}
-                    cargoNotes={this.state.cargoNotes}
-                    totalGoodsValue={this.state.totalGoodsValue}
-                    handleInsurance={this.handleInsurance}
-                    insurance={this.state.insurance}
-                    shipmentDispatch={shipmentDispatch}
-                    currencies={currencies}
-                    customsData={customs}
-                    setCustomsFee={this.setCustomsFee}
-                    user={user}
-                />
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <div className="flex-100 layout-row">
-                                <div className="flex-none">
-                                    {' '}
-                                    <TextHeading theme={theme} size={2} text="Summary" />
+                <Formsy
+                    onValidSubmit={this.toNextStage}
+                    onInvalidSubmit={this.handleInvalidSubmit}
+                >
+                    <CargoDetails
+                        theme={theme}
+                        handleChange={this.handleCargoInput}
+                        shipmentData={shipmentData}
+                        hsCodes={this.state.hsCodes}
+                        setHsCode={this.setHsCode}
+                        deleteCode={this.deleteCode}
+                        cargoNotes={this.state.cargoNotes}
+                        totalGoodsValue={this.state.totalGoodsValue}
+                        handleInsurance={this.handleInsurance}
+                        insurance={this.state.insurance}
+                        shipmentDispatch={shipmentDispatch}
+                        currencies={currencies}
+                        customsData={customs}
+                        setCustomsFee={this.setCustomsFee}
+                        user={user}
+                        finishBookingAttempted={this.state.finishBookingAttempted}
+                    />
+                    <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
+                            <div className="flex-100 layout-row layout-align-start-center">
+                                <div className="flex-100 layout-row">
+                                    <div className="flex-none">
+                                        {' '}
+                                        <TextHeading theme={theme} size={2} text="Summary" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex-90 layout-row layout-align-start-center">
-                            {shipment && theme && hubs
-                                ? (<ShipmentSummaryBox
-                                    total={this.orderTotal()}
-                                    user={user}
-                                    hubs={hubs}
-                                    route={schedules}
-                                    theme={theme}
-                                    shipment={shipment}
-                                    locations={locations}
-                                    cargoItems={cargoItems}
-                                    containers={containers}
-                                />)
-                                : ('')
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
-                        <div className="flex-50 layout-row layout-align-start-center">
-                            <div className="flex-15 layout-row layout-align-center-center">
-                                <Checkbox
-                                    onChange={this.toggleAcceptTerms}
-                                    checked={this.state.insuranceView}
-                                    theme={theme} />
-                            </div>
-                            <div className="flex layout-row layout-align-start-center">
-                                <div className="flex-5"></div>
-                                <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                            <div className="flex-90 layout-row layout-align-start-center">
+                                {shipment && theme && hubs
+                                    ? (<ShipmentSummaryBox
+                                        total={this.orderTotal()}
+                                        user={user}
+                                        hubs={hubs}
+                                        route={schedules}
+                                        theme={theme}
+                                        shipment={shipment}
+                                        locations={locations}
+                                        cargoItems={cargoItems}
+                                        containers={containers}
+                                    />)
+                                    : ('')
+                                }
                             </div>
                         </div>
-                        <div className="flex-50 layout-row layout-align-end-center">
-                            { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                    </div>
+                    <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
+                            <div className="flex-50 layout-row layout-align-start-center">
+                                <div className="flex-15 layout-row layout-align-center-center">
+                                    <Checkbox
+                                        onChange={this.toggleAcceptTerms}
+                                        checked={this.state.insuranceView}
+                                        theme={theme}
+                                    />
+                                </div>
+                                <div className="flex layout-row layout-align-start-center">
+                                    <div className="flex-5"></div>
+                                    <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex-50 layout-row layout-align-end-center">
+                                { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <hr className={`${styles.sec_break} flex-100`}/>
-                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton
-                            theme={theme}
-                            text="Back to dashboard"
-                            back iconClass="fa-angle-left"
-                            handleNext={() => shipmentDispatch.toDashboard()}
-                        />
+                    <hr className={`${styles.sec_break} flex-100`}/>
+                    <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                            <RoundButton theme={theme} text="Back to dashboard" back iconClass="fa-angle-left" handleNext={this.backToDashboard}/>
+                        </div>
                     </div>
-                </div>
+                </Formsy>
             </div>
         );
     }
