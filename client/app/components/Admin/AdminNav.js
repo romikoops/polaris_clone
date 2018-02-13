@@ -77,7 +77,7 @@ export class AdminNav extends Component {
                     text: 'Set Up',
                     url: '/admin/wizard',
                     target: 'wizard',
-                    tooltip: tooltip.wizard
+                    tooltip: tooltip.setup
                 }
             ]
         };
