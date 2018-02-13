@@ -4,15 +4,15 @@ include MongoTools
 # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain("demo")
   shipper = tenant.users.second
-  # Stop.destroy_all
-  # Layover.destroy_all
-  # tenant.itineraries.destroy_all
-  # Trip.destroy_all
-  # # Overwrite hubs from excel sheet
-  # puts "# Overwrite hubs from excel sheet"
-  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  # req = {"xlsx" => hubs}
-  # overwrite_hubs(req, shipper)
+  Stop.destroy_all
+  Layover.destroy_all
+  tenant.itineraries.destroy_all
+  Trip.destroy_all
+  # Overwrite hubs from excel sheet
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
   # # # Overwrite service charges from excel sheet
   # puts "# Overwrite service charges from excel sheet"
@@ -21,22 +21,22 @@ include MongoTools
   # overwrite_service_charges(req, shipper)
 
   # Overwrite dedicated pricings from excel sheet.
-   # If dedicated == true, shipper.id is automatically inserted.
-  # puts "# Overwrite dedicated pricings from excel sheet."
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
+  # If dedicated == true, shipper.id is automatically inserted.
+  puts "# Overwrite dedicated pricings from excel sheet."
+  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
 
-  # # # Overwrite public pricings from excel sheet
-  # puts "# Overwrite public pricings from excel sheet"
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
+  # # Overwrite public pricings from excel sheet
+  puts "# Overwrite public pricings from excel sheet"
+  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
 
-  # puts "# Overwrite MAERSK pricings from excel sheet"
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
+  puts "# Overwrite MAERSK pricings from excel sheet"
+  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
   # OLD, SQL DB method (!): Overwrite public pricings from excel sheet
   # public_pricings = File.open("#{Rails.root}/db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")

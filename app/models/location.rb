@@ -13,7 +13,7 @@ class Location < ApplicationRecord
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
         address_component["types"] == ["premise"]
-      end
+      end || {}
 
       location.premise          = premise_data["long_name"]
       location.street_number    = geo.street_number
@@ -61,7 +61,6 @@ class Location < ApplicationRecord
   def geocode_from_address_fields!
     self.set_geocoded_address_from_fields!
     self.geocode
-    self.reverse_geocode
     self.save!
     self
   end
@@ -81,8 +80,9 @@ class Location < ApplicationRecord
 
   def self.create_and_geocode(raw_location_params)
     location_params = location_params(raw_location_params)
-    location = Location.find_or_initialize_by(location_params)
+    location = Location.find_or_create_by(location_params)
     location.geocode_from_address_fields! if location.geocoded_address.nil?
+    
     location
   end
 

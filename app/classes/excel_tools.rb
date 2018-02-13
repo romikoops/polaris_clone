@@ -866,7 +866,7 @@ module ExcelTools
         # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
         
-      
+        byebug
         new_pricings_aux_data[pricing_key] = {
           itinerary:       itinerary,
           hub_ids:         hub_ids
