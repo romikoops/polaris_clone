@@ -5,6 +5,7 @@ import { AdminShipmentRow } from '../';
 import { UserShipmentRow } from '../../UserAccount';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import ReactTooltip from 'react-tooltip';
 export class AdminSearchableShipments extends Component {
     constructor(props) {
         super(props);
@@ -82,7 +83,7 @@ export class AdminSearchableShipments extends Component {
             : shipments;
     }
     render() {
-        const { hubs, theme, handleShipmentAction, title, userView, seeAll } = this.props;
+        const { hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip } = this.props;
         const { shipments } = this.state;
 
 
@@ -111,11 +112,14 @@ export class AdminSearchableShipments extends Component {
                     {shipmentsArr}
                 </div>
             </div>);
+        const id = v4();
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layput-row layout-align-start-center">
-                        <b><p className="flex sub_header_text"> {title ? title : 'Shipments'}</p></b>
+                        <b><p className="flex sub_header_text" data-tip={tooltip} data-for={id} > {title ? title : 'Shipments'}</p>
+                            <ReactTooltip id={id} />
+                        </b>
                     </div>
                     <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input

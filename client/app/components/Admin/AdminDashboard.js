@@ -10,6 +10,7 @@ import Loading from '../../components/Loading/Loading';
 import { Carousel } from '../Carousel/Carousel';
 import { activeRoutesData } from '../../constants';
 import style from './AdminDashboard.scss';
+import { adminDashboard as dTip } from '../../constants';
 
 export class AdminDashboard extends Component {
     constructor(props) {
@@ -112,6 +113,7 @@ export class AdminDashboard extends Component {
                 theme={theme}
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
+                tooltip={dTip.requested}
             /> : '';
 
         const openShipments = mergedOpenShipments ?
@@ -124,6 +126,7 @@ export class AdminDashboard extends Component {
                 theme={theme}
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
+                tooltip={dTip.open}
             /> : '';
 
         const finishedShipments = mergedFinishedShipments ?
@@ -136,6 +139,7 @@ export class AdminDashboard extends Component {
                 theme={theme}
                 handleClick={this.viewShipment}
                 handleShipmentAction={this.handleShipmentAction}
+                tooltip={dTip.finished}
             /> : '';
 
         if (air) {
