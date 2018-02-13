@@ -354,6 +354,7 @@
     max-width: 95%;
     height: 95%;
     z-index: 52;
+    position: relative;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
     overflow-y: scroll;
@@ -444,6 +445,7 @@
   .form_padding {
     padding: 0 15px;
   }
+
   .input {
     margin: 0 15px 30px 15px;
     height: 36.91px;
@@ -494,5 +496,23 @@
   }
   .overflow_hidden {
     overflow: hidden;
+  }
+  .fee_panel_open {
+    height: 300px !important;
+    opacity: 1 !important;
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 100%;
+  }
+  .fee_panel_closed {
+    height: 0px !important;
+    opacity: 0 !important;
+  }
+  .add_fee_panel {
+    transition: all 1.2s ease-in-out;
+    border-radius: 10px 10px 0 0;
+    background: whitesmoke;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
   }
 }
