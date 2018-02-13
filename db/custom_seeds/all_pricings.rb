@@ -20,23 +20,23 @@ include MongoTools
   # req = {"xlsx" => service_charges}
   # overwrite_service_charges(req, shipper)
 
-  # Overwrite dedicated pricings from excel sheet.
-   # If dedicated == true, shipper.id is automatically inserted.
+  ### Overwrite dedicated pricings from excel sheet.
+   ### If dedicated == true, shipper.id is automatically inserted.
   # puts "# Overwrite dedicated pricings from excel sheet."
   # public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
   # req = {"xlsx" => public_pricings}
   # overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
 
-  # # # Overwrite public pricings from excel sheet
+  # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
   # public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
   # req = {"xlsx" => public_pricings}
   # overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
 
-  # puts "# Overwrite MAERSK pricings from excel sheet"
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
+  puts "# Overwrite MAERSK pricings from excel sheet"
+  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
   # OLD, SQL DB method (!): Overwrite public pricings from excel sheet
   # public_pricings = File.open("#{Rails.root}/db/dummydata/3_PUBLIC_ocean_ptp_rates.xlsx")

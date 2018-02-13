@@ -13,7 +13,7 @@ class Location < ApplicationRecord
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
         address_component["types"] == ["premise"]
-      end
+      end || {}
 
       location.premise          = premise_data["long_name"]
       location.street_number    = geo.street_number

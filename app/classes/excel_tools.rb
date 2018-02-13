@@ -62,8 +62,6 @@ module ExcelTools
       end
     end
 
-    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
   def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
@@ -551,6 +549,7 @@ module ExcelTools
           new_hub_route_pricings[pathKey]["hub_route_id"]          = hubroute.id
           new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
           new_hub_route_pricings[pathKey]["route_id"]              = route.id
+          new_hub_route_pricings[pathKey]["load_type"]              = cargo_class
           new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
@@ -729,7 +728,8 @@ module ExcelTools
           pricing = { 
             data:      price_obj[cargo_class], 
             _id:       priceKey,
-            tenant_id: user.tenant_id
+            tenant_id: user.tenant_id,
+            load_type: cargo_class
           }
           
           update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
@@ -865,7 +865,6 @@ module ExcelTools
         vehicle      = Vehicle.find_by(name: vehicle_name)
         # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
-        
       
         new_pricings_aux_data[pricing_key] = {
           itinerary:       itinerary,
@@ -922,6 +921,7 @@ module ExcelTools
         priceKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
         pricing_data[:_id] = priceKey;
         pricing_data[:tenant_id] = user.tenant_id;
+        pricing_data[:load_type] = cargo_class
         if dedicated
           priceKey += "_#{user.id}"
           user_pricing = { pathKey => priceKey }
