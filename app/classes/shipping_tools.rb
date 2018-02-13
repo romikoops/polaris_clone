@@ -4,11 +4,13 @@ module ShippingTools
   include NotificationTools
 
   def new_shipment(load_type)
+    tenant = current_user.tenant
+
     shipment = Shipment.create(
       shipper_id: current_user.id, 
       status: "booking_process_started", 
       load_type: load_type, 
-      tenant_id: current_user.tenant_id
+      tenant_id: tenant.id
     )
 
     shipment.send("#{load_type}s").create if shipment.send("#{load_type}s").empty?
@@ -16,11 +18,10 @@ module ShippingTools
     route_ids_dedicated = Route.ids_dedicated(current_user)
 
     mot_scope_args = { ("only_" + load_type).to_sym => true }
-    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
-    routes = Route.mot_scoped(current_user.tenant_id, mot_scope_ids)
+    mot_scope_ids  = tenant.mot_scope(mot_scope_args).intercepting_scope_ids
+    routes = Route.mot_scoped(tenant.id, mot_scope_ids)
     origins = []
     destinations = []
-    cargo_item_types = CargoItemType.all
     routes.map! do |route|
       origins << { 
         value: Location.find(route["origin_nexus_id"]), 
@@ -38,7 +39,7 @@ module ShippingTools
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       routes:         routes,
-      cargoItemTypes: cargo_item_types
+      cargoItemTypes: tenant.cargo_item_types
     }
   end 
 
