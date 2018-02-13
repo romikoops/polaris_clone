@@ -7,7 +7,7 @@ import defs from '../../styles/default_classes.scss';
 import errors from '../../styles/errors.scss';
 import { ContactCard } from '../ContactCard/ContactCard';
 import { capitalize } from '../../helpers/stringTools';
-
+import { gradientTextGenerator } from '../../helpers';
 
 export class ShipmentContactsBox extends Component {
     constructor(props) {
@@ -42,16 +42,7 @@ export class ShipmentContactsBox extends Component {
     }
     render() {
         const { shipper, consignee, notifyees, theme, finishBookingAttempted } = this.props;
-        const textStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(left, ' +
-                      theme.colors.primary +
-                      ',' +
-                      theme.colors.secondary +
-                      ')'
-                    : 'black'
-        };
+        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const placeholderCard = (type, i) => {
             const errorMessage = (
                 <span

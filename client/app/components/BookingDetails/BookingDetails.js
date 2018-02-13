@@ -12,7 +12,8 @@ import { Checkbox } from '../Checkbox/Checkbox';
 import { isEmpty } from '../../helpers/objectTools';
 import * as Scroll from 'react-scroll';
 import Formsy from 'formsy-react';
-
+import { TextHeading }  from '../TextHeading/TextHeading';
+// import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
         super(props);
@@ -137,13 +138,11 @@ export class BookingDetails extends Component {
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }
-
     removeNotifyee(i) {
         const { notifyees } = this.state;
         notifyees.splice(i, 1);
         this.setState({ notifyees });
     }
-
     handleCargoInput(event) {
         const { name, value } = event.target;
         if (name === 'totalGoodsValue') {
@@ -154,7 +153,6 @@ export class BookingDetails extends Component {
             this.setState({ [name]: value });
         }
     }
-
     orderTotal() {
         const { shipmentData } = this.props;
         const { customs, insurance } = this.state;
@@ -163,7 +161,6 @@ export class BookingDetails extends Component {
     setCustomsFee(fee) {
         this.setState({customs: fee});
     }
-
     pushUpData() {}
 
     saveDraft() {}
@@ -171,7 +168,6 @@ export class BookingDetails extends Component {
     toDashboard() {
         history.push('/dashboard');
     }
-
     toNextStage() {
         const {
             consignee,
@@ -228,7 +224,6 @@ export class BookingDetails extends Component {
         e.preventDefault();
         this.props.shipmentDispatch.toDashboard();
     }
-
     render() {
         const { theme, shipmentData, shipmentDispatch, currencies, user } = this.props;
         const {
@@ -242,9 +237,6 @@ export class BookingDetails extends Component {
             locations
         } = shipmentData;
         const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const acceptedBtn = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -309,14 +301,28 @@ export class BookingDetails extends Component {
                     <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                         <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
                             <div className="flex-100 layout-row layout-align-start-center">
-                                <h3 className="flex-none clip" style={textStyle}>Summary: </h3>
+                                <div className="flex-100 layout-row">
+                                    <div className="flex-none">
+                                        {' '}
+                                        <TextHeading theme={theme} size={2} text="Summary" />
+                                    </div>
+                                </div>
                             </div>
                             <div className="flex-90 layout-row layout-align-start-center">
-                                {shipment && theme && hubs ? (
-                                    <ShipmentSummaryBox total={this.orderTotal()} user={user} hubs={hubs} route={schedules} theme={theme} shipment={shipment} locations={locations} cargoItems={cargoItems} containers={containers} />
-                                ) : (
-                                    ''
-                                )}
+                                {shipment && theme && hubs
+                                    ? (<ShipmentSummaryBox
+                                        total={this.orderTotal()}
+                                        user={user}
+                                        hubs={hubs}
+                                        route={schedules}
+                                        theme={theme}
+                                        shipment={shipment}
+                                        locations={locations}
+                                        cargoItems={cargoItems}
+                                        containers={containers}
+                                    />)
+                                    : ('')
+                                }
                             </div>
                         </div>
                     </div>
@@ -324,7 +330,11 @@ export class BookingDetails extends Component {
                         <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                             <div className="flex-50 layout-row layout-align-start-center">
                                 <div className="flex-15 layout-row layout-align-center-center">
-                                    <Checkbox onChange={this.toggleAcceptTerms} checked={this.state.insuranceView} theme={theme} />
+                                    <Checkbox
+                                        onChange={this.toggleAcceptTerms}
+                                        checked={this.state.insuranceView}
+                                        theme={theme}
+                                    />
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
                                     <div className="flex-5"></div>

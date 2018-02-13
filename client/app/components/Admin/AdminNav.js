@@ -76,12 +76,11 @@ export class AdminNav extends Component {
         const linkItems = links.map((li) =>
             <AdminNavItem key={v4()} url={li.url} target={li.target} text={li.text} iconClass={li.icon} theme={theme} navFn={navLink}/>
         );
-        console.log(user);
         if (user.role_id === 3) {
             linkItems.push(<AdminNavItem key={v4()} url={'/super_admin/upload'} target={'super_admin'} text={'Super Admin'} iconClass={'fa-star'} theme={theme} navFn={navLink}/>);
         }
         const navStyle = {height: `${linkItems.length * 55}px`};
-        console.log(linkItems);
+
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={navStyle}>
                 {linkItems}

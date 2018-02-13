@@ -14,5 +14,8 @@ export const colorSVG = (icon, theme) => {
 export const accountIconColor = (color) => {
     const xml = icons.account;
     const newIconStr = xml.replace('###fill###', color);
+    if((navigator.userAgent.indexOf('MSIE') !== -1 ) || (!!document.documentMode === true )) {
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(newIconStr);
+    }
     return 'data:image/svg+xml;utf-8,' + newIconStr;
 };

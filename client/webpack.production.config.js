@@ -128,15 +128,15 @@ module.exports = {
                 use: 'url-loader?limit=25000'
             },
             {
-            test: /\.scss$/,
-            // we extract the styles into their own .css file instead of having
-            // them inside the js.
-            loader: ExtractTextPlugin.extract({
-                fallback:'style-loader', 
-                use: 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]!sass-loader',
-                publicPath: '/dist'
-            })
-        }
+                test: /\.scss$/,
+                // we extract the styles into their own .css file instead of having
+                // them inside the js.
+                loader: ExtractTextPlugin.extract({
+                    fallback:'style-loader', 
+                    use: 'css-loader?modules&localIdentName=[name]---[local]---[hash:base64:5]!sass-loader',
+                    publicPath: '/dist'
+                })
+            }
         ]
     }
 };

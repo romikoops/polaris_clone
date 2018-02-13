@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminNavItem.scss';
+import { gradientTextGenerator } from '../../helpers';
 export class AdminNavItem extends Component {
     constructor(props) {
         super(props);
@@ -13,9 +14,7 @@ export class AdminNavItem extends Component {
     }
     render() {
         const { iconClass, theme, text} = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center pointy ${styles.nav_item}`} onClick={this.handleLink}>
                 <div className="flex-15 layout-row layout-align-center-center nav_icon">

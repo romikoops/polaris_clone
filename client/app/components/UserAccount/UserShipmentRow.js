@@ -48,7 +48,7 @@ export class UserShipmentRow extends Component {
         handleAction(shipment.id, 'accept');
     }
     render() {
-        const { theme, shipment, hubs } = this.props;
+        const { theme, shipment, hubs, user } = this.props;
         if (shipment.schedule_set.length < 1) {
             return '';
         }
@@ -57,7 +57,7 @@ export class UserShipmentRow extends Component {
             // ;
             return '';
         }
-        // ;
+        console.log(user);
         const schedule = {};
         const originHub = hubs[hubKeys[0]].data;
         const destHub = hubs[hubKeys[1]].data;
@@ -156,7 +156,7 @@ export class UserShipmentRow extends Component {
                         }`}
 
                     >
-                        <div className={`${styles.header_hub}`}>
+                        <div className={`flex ${styles.header_hub}`}>
                             <i
                                 className={`fa fa-map-marker ${
                                     styles.map_marker
@@ -174,13 +174,13 @@ export class UserShipmentRow extends Component {
                                 </p>
                             </div>
                         </div>
-                        <div className={`${styles.connection_graphics}`}>
+                        <div className={`flex-none ${styles.connection_graphics}`}>
                             <div className="flex-none layout-row layout-align-center-center">
                                 {this.switchIcon(schedule)}
                             </div>
                             <div style={dashedLineStyles} />
                         </div>
-                        <div className={`${styles.header_hub}`}>
+                        <div className={`flex ${styles.header_hub}`}>
                             <i className={`fa fa-flag-o ${styles.flag}`} />
                             <div className="flex-100 layout-row">
                                 <h4 className="flex-100"> {destHub.name} </h4>
@@ -199,7 +199,7 @@ export class UserShipmentRow extends Component {
                         <div className={`flex-100 layout-row layout-align-start-center ${styles.action_bar}`}>
                             <div className={`flex-33 layout-row layout-align-start-start layout-wrap ${styles.user_info}`}  onClick={this.selectShipment}>
                                 <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle}></i>
-                                <p className="flex-none"> {shipment.clientName} </p>
+                                <p className="flex-none"> {`${user.first_name} ${user.last_name}`} </p>
                             </div>
                             <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                                 <div className="flex-100 layout-row">

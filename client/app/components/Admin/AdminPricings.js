@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminPricingsIndex, AdminPricingClientView, AdminPricingRouteView, AdminPricingsClientIndex, AdminPricingsRouteIndex} from './';
+import {AdminPricingsIndex,
+    AdminPricingClientView,
+    AdminPricingRouteView,
+    AdminPricingsClientIndex,
+    AdminPricingsRouteIndex} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
+import { TextHeading } from '../TextHeading/TextHeading';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminPricings extends Component {
@@ -41,10 +46,6 @@ class AdminPricings extends Component {
         const {selectedPricing} = this.state;
         const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
         const filteredClients = clients.filter(x => !x.guest);
-        console.log(filteredClients);
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -60,34 +61,64 @@ class AdminPricings extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
+                    <TextHeading theme={theme} size={1} text={title} />
                     {selectedPricing ? backButton : ''}
                 </div>
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={filteredClients} pricingData={pricingData} routes={routes} {...props} adminTools={adminDispatch}  />}
+                        render={props =>
+                            <AdminPricingsIndex
+                                theme={theme}
+                                hubs={hubs}
+                                hubHash={hubHash}
+                                clients={filteredClients}
+                                pricingData={pricingData}
+                                routes={routes} {...props}
+                                adminTools={adminDispatch}  />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/clients"
-                        render={props => <AdminPricingsClientIndex theme={theme} clients={filteredClients} adminTools={adminDispatch} {...props}  />}
+                        render={props =>
+                            <AdminPricingsClientIndex
+                                theme={theme}
+                                clients={filteredClients}
+                                adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/routes"
-                        render={props => <AdminPricingsRouteIndex theme={theme} hubs={hubs}  routes={routes ? routes : pricingData.routes}  adminTools={adminDispatch} {...props}  />}
+                        render={props =>
+                            <AdminPricingsRouteIndex
+                                theme={theme} hubs={hubs}
+                                routes={routes ? routes : pricingData.routes}
+                                adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/clients/:id"
-                        render={props => <AdminPricingClientView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clientPricings={clientPricings} adminActions={adminDispatch} {...props} />}
+                        render={props =>
+                            <AdminPricingClientView
+                                theme={theme} hubs={hubs}
+                                hubHash={hubHash}
+                                pricingData={pricingData}
+                                clientPricings={clientPricings}
+                                adminActions={adminDispatch} {...props} />}
                     />
                     <Route
                         exact
                         path="/admin/pricings/routes/:id"
-                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={filteredClients} routePricings={routePricings} adminActions={adminDispatch} {...props} />}
+                        render={props =>
+                            <AdminPricingRouteView
+                                theme={theme}
+                                hubs={hubs}
+                                hubHash={hubHash}
+                                pricingData={pricingData}
+                                clients={filteredClients}
+                                routePricings={routePricings}
+                                adminActions={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>
@@ -102,7 +133,14 @@ AdminPricings.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, hubs, pricingData, routes, transportCategories, clientPricings, routePricings, loading } = admin;
+    const { clients,
+        hubs,
+        pricingData,
+        routes,
+        transportCategories,
+        clientPricings,
+        routePricings,
+        loading } = admin;
 
     return {
         user,

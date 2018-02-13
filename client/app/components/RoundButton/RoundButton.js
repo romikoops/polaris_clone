@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './RoundButton.scss';
-
+import { gradientCSSGenerator } from '../../helpers';
+import styled from 'styled-components';
 export class RoundButton extends Component {
     render() {
         const { text, theme, active, back, icon, iconClass, size } = this.props;
 
-        const activeBtnStyle = {
-            background:
-                theme && theme.colors
-                    ? '-webkit-linear-gradient(95.41deg, ' +
-                      theme.colors.primary +
-                      ' 0%,' +
-                      theme.colors.secondary +
-                      ' 100%)'
-                    : 'black'
-        };
+        const activeBtnStyle = theme && theme.colors ? gradientCSSGenerator(theme.colors.primary, theme.colors.secondary) : 'black';
 
         const btnStyle = this.props.active ? activeBtnStyle : {};
 
         let bStyle;
+        const StyledButton = styled.button`
+            background: ${btnStyle};
+           
+        `;
 
         if (active) {
             bStyle = styles.active;
@@ -50,17 +46,27 @@ export class RoundButton extends Component {
             case 'full':
                 sizeClass = styles.full;
                 break;
-
             default:
                 sizeClass = styles.large;
                 break;
         }
-
-        return (
+        const activeButton = (
+            <StyledButton
+                className={styles.round_btn + ' ' + bStyle + ' ' + sizeClass}
+                onClick={this.props.handleNext}
+            >
+                <div className="layout-fill layout-row layout-align-space-around-center">
+                    <p className={styles.content}>
+                        <span className={styles.icon}>{iconC}</span>
+                        {text}
+                    </p>
+                </div>
+            </StyledButton>
+        );
+        const inactiveButton = (
             <button
                 className={styles.round_btn + ' ' + bStyle + ' ' + sizeClass}
                 onClick={this.props.handleNext}
-                style={btnStyle}
             >
                 <div className="layout-fill layout-row layout-align-space-around-center">
                     <p className={styles.content}>
@@ -69,6 +75,10 @@ export class RoundButton extends Component {
                     </p>
                 </div>
             </button>
+        );
+
+        return (
+            active ? activeButton : inactiveButton
         );
     }
 }
