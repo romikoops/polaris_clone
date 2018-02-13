@@ -349,9 +349,11 @@ tenant_data = [
       },
       dangerous_goods: false
     }
-}
+  }
 ]
 
+CARGO_ITEM_TYPES = CargoItemTypes.all
 tenant_data.each do |tenant_attr|
-  Tenant.find_or_create_by(tenant_attr)
+  tenant = Tenant.find_or_initialize_by(tenant_attr)
+  tenant.cargo_item_types << CARGO_ITEM_TYPES
 end
