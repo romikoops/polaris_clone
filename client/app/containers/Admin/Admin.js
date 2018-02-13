@@ -57,7 +57,7 @@ class Admin extends Component {
                 adminDispatch.getDashboard(true);
                 break;
             case 'routes':
-                adminDispatch.getRoutes(true);
+                adminDispatch.getItineraries(true);
                 break;
             case 'wizard':
                 adminDispatch.goTo('/admin/wizard');
@@ -110,7 +110,7 @@ class Admin extends Component {
                             <Route
 
                                 path="/admin/schedules"
-                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} scheduleData={schedules} />}
+                                render={props => <AdminSchedules theme={theme} {...props} hubs={hubHash} adminDispatch={adminDispatch} scheduleData={schedules} />}
                             />
                             <Route
 

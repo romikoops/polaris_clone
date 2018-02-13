@@ -320,7 +320,7 @@ function getClientPricings(id, redirect) {
     };
 }
 
-function getRoutePricings(id, redirect) {
+function getItineraryPricings(id, redirect) {
     function request(prData) {
         return { type: adminConstants.GET_ROUTE_PRICINGS_REQUEST, payload: prData };
     }
@@ -334,7 +334,7 @@ function getRoutePricings(id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        adminService.getRoutePricings(id).then(
+        adminService.getItineraryPricings(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Route Prices successful')
@@ -361,7 +361,7 @@ function updatePricing(id, req) {
     }
     function success(prData) {
         // ;
-        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData };
+        return { type: adminConstants.UPDATE_PRICING_SUCCESS, payload: prData.data };
     }
     function failure(error) {
         return { type: adminConstants.UPDATE_PRICING_FAILURE, error };
@@ -763,7 +763,7 @@ function confirmShipment(id, action, redirect) {
         );
     };
 }
-function getRoutes(redirect) {
+function getItineraries(redirect) {
     function request(routeData) {
         return { type: adminConstants.GET_ROUTES_REQUEST, payload: routeData };
     }
@@ -776,7 +776,7 @@ function getRoutes(redirect) {
     return dispatch => {
         dispatch(request());
 
-        adminService.getRoutes().then(
+        adminService.getItineraries().then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Routes successful')
@@ -797,7 +797,36 @@ function getRoutes(redirect) {
     };
 }
 
-function getRoute(id, redirect) {
+function getLayovers(itineraryId) {
+    function request(layovers) {
+        return { type: adminConstants.GET_LAYOVERS_REQUEST, payload: layovers };
+    }
+    function success(layovers) {
+        return { type: adminConstants.GET_LAYOVERS_SUCCESS, payload: layovers };
+    }
+    function failure(error) {
+        return { type: adminConstants.GET_LAYOVERS_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.getLayovers(itineraryId).then(
+            data => {
+                dispatch(
+                    alertActions.success('Fetching Layovers successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                // ;
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
+function getItinerary(id, redirect) {
     function request(routeData) {
         return { type: adminConstants.GET_ROUTE_REQUEST, payload: routeData };
     }
@@ -810,7 +839,7 @@ function getRoute(id, redirect) {
     return dispatch => {
         dispatch(request());
 
-        adminService.getRoute(id).then(
+        adminService.getItinerary(id).then(
             data => {
                 dispatch(
                     alertActions.success('Fetching Route successful')
@@ -1005,6 +1034,34 @@ function saveNewHub(hub, location) {
     };
 }
 
+function saveNewTrucking(obj) {
+    function request(truckingData) {
+        return { type: adminConstants.NEW_TRUCKING_REQUEST, payload: truckingData };
+    }
+    function success(truckingData) {
+        return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.NEW_TRUCKING_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.saveNewTrucking(obj).then(
+            data => {
+                dispatch(
+                    alertActions.success('New Trucking successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -1021,6 +1078,10 @@ function clearLoading() {
     return { type: adminConstants.CLEAR_LOADING, payload: null };
 }
 
+function logOut() {
+    return { type: adminConstants.ADMIN_LOG_OUT, payload: null };
+}
+
 function goTo(path) {
     return dispatch => {
         dispatch(push(path));
@@ -1028,11 +1089,11 @@ function goTo(path) {
 }
 export const adminActions = {
     getHubs,
-    getRoutes,
+    getItineraries,
     updateServiceCharge,
     updatePricing,
     getClientPricings,
-    getRoute,
+    getItinerary,
     getServiceCharges,
     getPricings,
     getTrucking,
@@ -1048,7 +1109,7 @@ export const adminActions = {
     getClients,
     confirmShipment,
     getHub,
-    getRoutePricings,
+    getItineraryPricings,
     wizardHubs,
     wizardSCharge,
     wizardPricings,
@@ -1060,6 +1121,9 @@ export const adminActions = {
     saveNewHub,
     getDashShipments,
     newRoute,
-    clearLoading
+    clearLoading,
+    logOut,
+    getLayovers,
+    saveNewTrucking
 
 };

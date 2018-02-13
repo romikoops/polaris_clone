@@ -18,7 +18,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :trucking, only: [:index]
+      resources :trucking, only: [:index, :create]
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
       end
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
-      resources :routes, only: [:index, :show, :create]
+      resources :itineraries, only: [:index, :show, :create]
 
       resources :pricings, only: [:index]
       get  "client_pricings/:id", to: "pricings#client"
@@ -36,8 +36,9 @@ Rails.application.routes.draw do
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
       
-      post "routes/process_csv", to: "routes#overwrite", as: :routes_overwrite
-    
+      post "itineraries/process_csv", to: "itineraries#overwrite", as: :itineraries_overwrite
+      get "itineraries/:id/layovers", to: "schedules#layovers"
+      get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
       resources :clients, only: [:index, :show, :create]
 
@@ -55,7 +56,7 @@ Rails.application.routes.draw do
         to: "service_charges#overwrite", as: :service_charges_overwrite
 
       resources :discounts, only: [:index]
-      get  "discounts/users/:user_id", to: "discounts#user_routes", as: :discounts_user_routes
+      get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
 
       resources :schedules, only: [:index]

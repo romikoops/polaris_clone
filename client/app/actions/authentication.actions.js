@@ -1,6 +1,6 @@
 import { authenticationConstants } from '../constants';
 import { authenticationService } from '../services';
-import { shipmentActions } from './';
+import { shipmentActions, adminActions, userActions } from './';
 import { alertActions } from './';
 import { push } from 'react-router-redux';
 import { getSubdomain } from '../helpers/subdomain';
@@ -8,8 +8,15 @@ const subdomainKey = getSubdomain();
 const cookieKey = subdomainKey + '_user';
 console.log(cookieKey);
 function logout() {
-    authenticationService.logout();
-    return { type: authenticationConstants.LOGOUT };
+    function lo() {
+        return { type: authenticationConstants.LOGOUT };
+    }
+    return dispatch => {
+        dispatch(adminActions.logOut());
+        dispatch(userActions.logOut());
+        authenticationService.logout();
+        dispatch(lo());
+    };
 }
 
 function login(data) {

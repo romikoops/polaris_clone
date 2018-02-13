@@ -32,7 +32,7 @@ export class AdminScheduleLine extends Component {
     }
     render() {
         const { theme, schedule, hubs } = this.props;
-        if (!schedule || !schedule.hub_route_key) {
+        if (!schedule || !schedule.hub_route_key || !hubs) {
             return '';
         }
         const hubKeys = schedule.hub_route_key.split('-');
@@ -63,6 +63,8 @@ export class AdminScheduleLine extends Component {
                     : 'black',
             backgroundSize: '16px 2px, 100% 2px'
         };
+        const startTime = schedule.etd ? schedule.etd : schedule.start_date;
+        const endTime = schedule.eta ? schedule.eta : schedule.end_date;
         return (
             <div
                 key={schedule.id}
@@ -115,28 +117,6 @@ export class AdminScheduleLine extends Component {
                     </div>
                     <div className="flex-60 layout-row layout-align-start-center">
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-                            <div className="flex-100 layout-row">
-                                <h4
-                                    className={styles.date_title}
-                                    style={gradientFontStyle}
-                                >
-                                    Pickup Date
-                                </h4>
-                            </div>
-                            <div className="flex-100 layout-row">
-                                <p className={`flex-none ${styles.sched_elem}`}>
-                                    {' '}
-                                    {moment(this.props.pickupDate).format(
-                                        'YYYY-MM-DD'
-                                    )}{' '}
-                                </p>
-                                <p className={`flex-none ${styles.sched_elem}`}>
-                                    {' '}
-                                    {moment(this.props.pickupDate).format(
-                                        'HH:mm'
-                                    )}{' '}
-                                </p>
-                            </div>
                         </div>
                         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
                             <div className="flex-100 layout-row">
@@ -151,13 +131,13 @@ export class AdminScheduleLine extends Component {
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format(
+                                    {moment(startTime).format(
                                         'YYYY-MM-DD'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format('HH:mm')}{' '}
+                                    {moment(startTime).format('HH:mm')}{' '}
                                 </p>
                             </div>
                         </div>
@@ -174,13 +154,13 @@ export class AdminScheduleLine extends Component {
                             <div className="flex-100 layout-row">
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format(
+                                    {moment(endTime).format(
                                         'YYYY-MM-DD'
                                     )}{' '}
                                 </p>
                                 <p className={`flex-none ${styles.sched_elem}`}>
                                     {' '}
-                                    {moment(schedule.eta).format('HH:mm')}{' '}
+                                    {moment(endTime).format('HH:mm')}{' '}
                                 </p>
                             </div>
                         </div>

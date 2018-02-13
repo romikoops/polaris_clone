@@ -14,7 +14,7 @@ export class RouteHubBox extends Component {
                 air: 'plane',
                 train: 'train'
             };
-            const faClass = `flex-none fa fa-${faKeywords[sched[0].mode_of_transport]}`;
+            const faClass = `flex-none fa fa-${faKeywords[sched.mode_of_transport]}`;
             return <div className="flex-33 layout-row layout-align-center"><i className={faClass} /></div>;
         }
         return [
@@ -61,6 +61,10 @@ export class RouteHubBox extends Component {
         const bg1 = startHub && startHub.location && startHub.location.photo  ? { backgroundImage: 'url(' + startHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/crane_sm.jpg")'};
         const bg2 = endHub && endHub.location && endHub.location.photo  ? { backgroundImage: 'url(' + endHub.location.photo + ')' } : { backgroundImage: 'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'};
         // ;
+        const timeDiff = route ? <div className="flex-65 layout-row layout-wrap layout-align-center-center" style={{marginTop: '25px'}}>
+                                    <h4 className="flex-100 no_m center" style={{marginBottom: '10px'}}> Transit Time</h4>
+                                    <p className="flex-100 no_m center"> {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days </p>
+                                </div> : '';
         return (
             <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
                 <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center`}>
@@ -85,16 +89,12 @@ export class RouteHubBox extends Component {
                         } flex-25 layout-row layout-align-center-start`}
                     >
                         <div className="flex-100 layout-row layout-align-center-center">
-                            <div className="flex-75 height_100 layout-row layout-wrap layout-align-end-center" style={{marginTop: '100px'}}>
-                                <div className="flex-100 width_100 layout-row layout-align-center-center">
+                            <div className="flex-75 height_100 layout-column layout-align-end-center" style={{marginTop: '100px'}}>
+                                <div className="flex-none width_100 layout-row layout-align-center-center">
                                     {this.faIcon(route)}
                                 </div>
                                 <div style={dashedLineStyles} />
-                                {route ?  <div className="flex-100 layout-row layout-wrap layout-align-center-center" style={{marginTop: '25px'}}>
-                                    <h4 className="flex-100 no_m center" style={{marginBottom: '10px'}}> Transit Time</h4>
-                                    <p className="flex-100 no_m center"> {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days </p>
-                                </div>
-                                    : ''}
+                                {timeDiff}
                             </div>
                         </div>
                     </div>

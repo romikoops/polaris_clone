@@ -1,5 +1,6 @@
 class Admin::HubsController < ApplicationController
   include ExcelTools
+  include ItineraryTools
   include Response
   before_action :require_login_and_role_is_admin
 
@@ -23,22 +24,9 @@ class Admin::HubsController < ApplicationController
   def show
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
-    # schedules = hub.schedules.limit(10)
-    hub_routes = HubRoute.where('endhub_id = ? OR starthub_id = ?', hub.id, hub.id)
-    
-    routes = []
-    schedules = []
-    hub_routes.each do |hr|
-      routes.push(Route.find(hr.route_id))
-      schedules += hr.schedules.limit(5).to_a
-    end
-    detailed_routes = routes.map do |route| 
-      route.detailed_hash(
-        nexus_names: true
-      )
-    end
-    
-    resp = {hub: hub, routes: detailed_routes, relatedHubs: related_hubs, schedules: schedules, hubRoutes: hub_routes}
+    layovers = hub.layovers.limit(20)
+    routes = get_itineraries_for_hub(hub)  
+    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers}
     response_handler(resp)
   end
   def set_status

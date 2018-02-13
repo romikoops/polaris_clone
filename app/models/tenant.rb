@@ -12,6 +12,10 @@ class Tenant < ApplicationRecord
   has_many :vehicles, through: :tenant_vehicles
   has_many :tenant_cargo_item_types
   has_many :cargo_item_types, through: :tenant_cargo_item_types
+  has_many :itineraries
+  has_many :stops, through: :itineraries
+  has_many :trips, through: :itineraries
+  has_many :layovers, through: :stops
     
   validates :scope, presence: true, scope: true
 
@@ -20,17 +24,14 @@ class Tenant < ApplicationRecord
   end
 
   def update_route_details
-    routes = Route.where(tenant_id: self.id)
-    detailed_routes = routes.map do |route, h|
-      route.set_scope!
+    itineraries = Itinerary.where(tenant_id: self.id)
+    detailed_itineraries = itineraries.map do |itinerary, h|
+      itinerary.set_scope!
 
-      route.detailed_hash(
-        nexus_names: true, 
-        modes_of_transport: true
-      )
+      itinerary.routes
     end
-    # put_item('routeOptions', {id: self.id, data: detailed_routes})
-    update_item('routeOptions', {id: self.id}, {data: detailed_routes})
+    # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
+    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end
 
   def mot_scope(args)

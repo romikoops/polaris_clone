@@ -44,7 +44,7 @@ class AdminPricings extends Component {
 
     render() {
         const {selectedPricing} = this.state;
-        const {theme, hubs, pricingData, routes, hubHash, adminDispatch, clients, clientPricings, routePricings } = this.props;
+        const {theme, hubs, pricingData, itineraries, hubHash, adminDispatch, clients, clientPricings, itineraryPricings } = this.props;
         const filteredClients = clients.filter(x => !x.guest);
         const backButton = (
             <div className="flex-none layout-row">
@@ -68,15 +68,8 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings"
-                        render={props =>
-                            <AdminPricingsIndex
-                                theme={theme}
-                                hubs={hubs}
-                                hubHash={hubHash}
-                                clients={filteredClients}
-                                pricingData={pricingData}
-                                routes={routes} {...props}
-                                adminTools={adminDispatch}  />}
+                        render={props => <AdminPricingsIndex theme={theme} hubs={hubs} hubHash={hubHash} clients={filteredClients} pricingData={pricingData} itineraries={itineraries} {...props} adminTools={adminDispatch}  />}
+
                     />
                     <Route
                         exact
@@ -90,11 +83,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings/routes"
-                        render={props =>
-                            <AdminPricingsRouteIndex
-                                theme={theme} hubs={hubs}
-                                routes={routes ? routes : pricingData.routes}
-                                adminTools={adminDispatch} {...props}  />}
+                        render={props => <AdminPricingsRouteIndex theme={theme} hubs={hubs}  routes={itineraries ? itineraries : pricingData.itineraries}  adminTools={adminDispatch} {...props}  />}
                     />
                     <Route
                         exact
@@ -110,15 +99,7 @@ class AdminPricings extends Component {
                     <Route
                         exact
                         path="/admin/pricings/routes/:id"
-                        render={props =>
-                            <AdminPricingRouteView
-                                theme={theme}
-                                hubs={hubs}
-                                hubHash={hubHash}
-                                pricingData={pricingData}
-                                clients={filteredClients}
-                                routePricings={routePricings}
-                                adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminPricingRouteView theme={theme} hubs={hubs} hubHash={hubHash} pricingData={pricingData} clients={filteredClients} itineraryPricings={itineraryPricings} adminActions={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>
@@ -133,14 +114,8 @@ AdminPricings.propTypes = {
 function mapStateToProps(state) {
     const {authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients,
-        hubs,
-        pricingData,
-        routes,
-        transportCategories,
-        clientPricings,
-        routePricings,
-        loading } = admin;
+    const { clients, hubs, pricingData, routes, transportCategories, clientPricings, itineraryPricings, loading } = admin;
+
 
     return {
         user,
@@ -152,7 +127,7 @@ function mapStateToProps(state) {
         clientPricings,
         routes,
         clients,
-        routePricings,
+        itineraryPricings,
         loading
     };
 }

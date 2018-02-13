@@ -5,12 +5,6 @@ import { colorSVG } from '../../helpers';
 import {mapStyling} from '../../constants/map.constants';
 const colourSVG = colorSVG;
 const mapStyles = mapStyling;
-const mapStyle = {
-    width: '100%',
-    height: '300px',
-    borderRadius: '3px',
-    boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
-};
 export class PlaceSearch extends Component {
     constructor(props) {
         super(props);
@@ -152,8 +146,28 @@ export class PlaceSearch extends Component {
 
 
     render() {
+        const mapStyle = {
+            width: '100%',
+            height: '300px',
+            borderRadius: '3px',
+            boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
+        };
+        const autoInputStyles = {};
+        if(this.props.hideMap) {
+            Object.assign(mapStyle, {
+                display: 'none'
+            });
+        } else {
+            Object.assign(autoInputStyles, {
+                position: 'absolute',
+                zIndex: '25',
+                top: '50px',
+                left: '40px',
+                boxShadow: '1px 2px 1px rgba(0,1,2,0.5)'
+            });
+        }
         const autoInput = (
-            <div className={`flex-100 layout-row layout-wrap ${styles.overlay_auto}`} >
+            <div className="flex-100 layout-row layout-wrap" style={autoInputStyles}>
                 <input
                     id="location"
                     name="location"
@@ -162,14 +176,17 @@ export class PlaceSearch extends Component {
                     onChange={this.handleAuto}
                     value={this.state.autoText.location}
                     placeholder="Search for address"
+                    style={this.props.inputStyles}
                 />
             </div>
         );
         return (
             <div className={`flex-100 layout-row layout-wrap ${styles.map_box}`}>
-                <div id="map" className={`flex-100 layout-row ${styles.place_map}`} style={mapStyle}>
-
-                </div>
+                <div
+                    id="map"
+                    className={`flex-100 layout-row ${styles.place_map}`}
+                    style={mapStyle}
+                ></div>
                 {autoInput}
             </div>
         );
@@ -178,5 +195,10 @@ export class PlaceSearch extends Component {
 
 PlaceSearch.propTypes = {
     component: PropTypes.object,
-    parentToggle: PropTypes.func
+    parentToggle: PropTypes.func,
+    inputStyles: PropTypes.objectOf(PropTypes.string)
+};
+
+PlaceSearch.defaultProps = {
+    inputStyles: {}
 };

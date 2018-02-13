@@ -52,6 +52,7 @@ export const adminConstants = {
     GET_SCHEDULES_SUCCESS: 'GET_SCHEDULES_SUCCESS',
     GET_SCHEDULES_FAILURE: 'GET_SCHEDULES_FAILURE',
 
+
     GENERATE_SCHEDULES_REQUEST: 'GENERATE_SCHEDULES_REQUEST',
     GENERATE_SCHEDULES_SUCCESS: 'GENERATE_SCHEDULES_SUCCESS',
     GENERATE_SCHEDULES_FAILURE: 'GENERATE_SCHEDULES_FAILURE',
@@ -132,8 +133,17 @@ export const adminConstants = {
     NEW_HUB_SUCCESS: 'NEW_HUB_SUCCESS',
     NEW_HUB_FAILURE: 'NEW_HUB_FAILURE',
 
+    GET_LAYOVERS_REQUEST: 'GET_LAYOVERS_REQUEST',
+    GET_LAYOVERS_SUCCESS: 'GET_LAYOVERS_SUCCESS',
+    GET_LAYOVERS_FAILURE: 'GET_LAYOVERS_FAILURE',
+
+    NEW_TRUCKING_REQUEST: 'NEW_TRUCKING_REQUEST',
+    NEW_TRUCKING_SUCCESS: 'NEW_TRUCKING_SUCCESS',
+    NEW_TRUCKING_FAILURE: 'NEW_TRUCKING_FAILURE',
+
     VIEW_TRUCKING: 'VIEW_TRUCKING',
-    CLEAR_LOADING: 'CLEAR_LOADING'
+    CLEAR_LOADING: 'CLEAR_LOADING',
+    ADMIN_LOG_OUT: 'ADMIN_LOG_OUT'
 
 };
 
@@ -193,6 +203,13 @@ export const cargoOptions = [
     {value: 'liquid_bulk', label: 'Liquid Bulk'},
     {value: 'gas_bulk', label: 'Gas Bulk'}
 ];
+
+export const cargoGlossary = {
+    any: 'Any',
+    dry_goods: 'Dry Goods',
+    liquid_bulk: 'Liquid Bulk',
+    gas_bulk: 'Gas Bulk'
+};
 export const currencyOptions = [
     {value: 'EUR', label: 'EUR'}, {value: 'AUD', label: 'AUD'}, {value: 'BGN', label: 'BGN'}, {value: 'BRL', label: 'BRL'}, {value: 'CAD', label: 'CAD'}, {value: 'CHF', label: 'CHF'}, {value: 'CNY', label: 'CNY'},
     {value: 'CZK', label: 'CZK'}, {value: 'DKK', label: 'DKK'}, {value: 'GBP', label: 'GBP'}, {value: 'HKD', label: 'HKD'}, {value: 'HRK', label: 'HRK'}, {value: 'HUF', label: 'HUF'}, {value: 'IDR', label: 'IDR'},
@@ -209,3 +226,107 @@ export const rateBasises = [
     {value: 'PER_CBM', label: 'Per cbm'}
 ];
 
+export const lclPricingSchema = {
+    data: {
+        BAS: {
+            currency: 'USD', rate: 20, min: 1.5, rate_basis: 'PER_CBM'
+        },
+        HAS: {
+            currency: 'USD', rate: 5, min: 4, rate_basis: 'PER_CBM'
+        },
+        OHC: {
+            currency: 'USD', cbm: 165, ton: 395, min: 395, rate_basis: 'PER_CBM_TON'
+        },
+        DHC: {
+            currency: 'USD', rate: 50, rate_basis: 'PER_ITEM'
+        },
+        CUSTOMS: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_SHIPMENT'
+        },
+        CFS: {
+            currency: 'USD', rate: 22, rate_basis: 'PER_CBM'
+        },
+        LS: {
+            currency: 'USD', rate: 675, rate_basis: 'PER_ITEM'
+        },
+        LCLS: {
+            currency: 'USD', cbm: 50, ton: 50, min: 50, rate_basis: 'PER_CBM_TON'
+        },
+        ISPS: {
+            currency: 'EUR', rate: 5, rate_basis: 'PER_SHIPMENT'
+        },
+        DDF: {
+            currency: 'USD', rate: 5, rate_basis: 'PER_SHIPMENT'
+        },
+        ODF: {
+            currency: 'USD', rate: 625, rate_basis: 'PER_SHIPMENT'
+        },
+        VGM: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_SHIPMENT'
+        },
+        ENS: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_SHIPMENT'
+        }
+    },
+    tenant_id: null,
+    route_id: null,
+    hub_route_id: null
+};
+
+export const fclPricingSchema = {
+    route_id: null,
+    hub_route_id: null,
+    service_code: 'CY / CY',
+    inclusive_surcharge: 'DPA,OPA,PSS,',
+    data: {
+        BAS: {
+            currency: 'USD', rate: 1100, rate_basis: 'PER_CONTAINER'
+        },
+        CFD: {
+            currency: 'USD', rate: 0, rate_basis: 'PER_CONTAINER'
+        },
+        DDF: {
+            currency: 'EUR', rate: 50, rate_basis: 'PER_DOC'
+        },
+        DHC: {
+            currency: 'NOK', rate: 1350, rate_basis: 'PER_CONTAINER'
+        },
+        ERS: {
+            currency: 'USD', rate: 0, rate_basis: 'PER_CONTAINER'
+        },
+        EXP: {
+            currency: 'CNY', rate: 100, rate_basis: 'PER_CONTAINER'
+        },
+        IMP: {
+            currency: 'NOK', rate: 0, rate_basis: 'PER_CONTAINER'
+        },
+        ODF: {
+            currency: 'CNY', rate: 450, rate_basis: 'PER_DOC'
+        },
+        SBF: {
+            currency: 'USD', rate: 1120, rate_basis: 'PER_CONTAINER'
+        },
+        LSS: {
+            currency: 'USD', rate: 30, rate_basis: 'PER_CONTAINER'
+        },
+        OHC: {
+            currency: 'CNY', rate: 980, rate_basis: 'PER_CONTAINER'
+        },
+        CFO: {
+            currency: 'USD', rate: 0, rate_basis: 'PER_CONTAINER'
+        },
+        VGM: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_DOC'
+        },
+        ENS: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_DOC'
+        },
+        STF: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_CONTAINER'
+        },
+        TRF: {
+            currency: 'USD', rate: 25, rate_basis: 'PER_DOC'
+        }
+    },
+    'tenant_id': null
+};

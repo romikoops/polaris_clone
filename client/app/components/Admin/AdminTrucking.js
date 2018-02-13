@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {AdminTruckingIndex, AdminTruckingView} from './';
+import {AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator} from './';
 import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -14,10 +14,12 @@ class AdminTrucking extends Component {
         super(props);
         this.state = {
             selectedRoute: false,
-            currentView: 'open'
+            currentView: 'open',
+            creatorView: true
         };
         this.viewTrucking = this.viewTrucking.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
+        this.toggleCreator = this.toggleCreator.bind(this);
     }
     viewTrucking(hub) {
         const { adminDispatch, trucking } = this.props;
@@ -27,7 +29,9 @@ class AdminTrucking extends Component {
         adminDispatch.viewTrucking(hubTable, pricing);
         this.setState({selectedRoute: true});
     }
-
+    toggleCreator() {
+        this.setState({creatorView: !this.state.creatorView});
+    }
     backToIndex() {
         const { dispatch, history } = this.props;
         this.setState({selectedRoute: false});
@@ -35,12 +39,12 @@ class AdminTrucking extends Component {
     }
 
     render() {
-        const {selectedRoute} = this.state;
+        const {selectedRoute, creatorView} = this.state;
         const {theme, adminDispatch, trucking, hubHash, loading, truckingDetail} = this.props;
         if (!trucking) {
             return '';
         }
-        const { truckingHubs } = trucking;
+        const { truckingHubs, nexuses } = trucking;
         const relHubs = truckingHubs.map(th => {
             return hubHash[parseInt(th._id, 10)];
         });
@@ -57,19 +61,30 @@ class AdminTrucking extends Component {
                     iconClass="fa-chevron-left"
                 />
             </div>);
+        const newButton = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="New"
+                    active
+                    handleNext={this.toggleCreator}
+                    iconClass="fa-plus-circle-o"
+                />
+            </div>);
         const title = selectedRoute ? 'Trucking Overview' : 'Trucking';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
-                    {selectedRoute ? backButton : ''}
+                    {selectedRoute ? backButton : newButton}
                 </div>
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/trucking"
-                        render={props => <AdminTruckingIndex theme={theme} truckingHubs={truckingHubs} hubs={relHubs} {...props} adminDispatch={adminDispatch} loading={loading} viewTrucking={this.viewTrucking} />}
+                        render={props => <AdminTruckingIndex theme={theme} nexuses={nexuses} truckingHubs={truckingHubs} hubs={relHubs} {...props} adminDispatch={adminDispatch} loading={loading} viewTrucking={this.viewTrucking} />}
                     />
                     <Route
                         exact
@@ -77,6 +92,7 @@ class AdminTrucking extends Component {
                         render={props => <AdminTruckingView theme={theme} hubs={relHubs} hubHash={hubHash} truckingDetail={truckingDetail} loading={loading} adminDispatch={adminDispatch} {...props} />}
                     />
                 </Switch>
+                {creatorView ? <AdminTruckingCreator theme={theme} nexuses={nexuses} adminDispatch={adminDispatch} closeForm={this.toggleCreator} /> : '' }
             </div>
         );
     }

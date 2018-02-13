@@ -621,6 +621,9 @@ function goBack() {
         history.goBack();
     };
 }
+function logOut() {
+    return { type: userConstants.USER_LOG_OUT, payload: null };
+}
 
 export const userActions = {
     getLocations,
@@ -644,6 +647,8 @@ export const userActions = {
     saveAddressEdit,
     clearLoading,
     deleteContactAddress,
+    delete: _delete,
+    logOut,
     editUserLocation,
-    delete: _delete
+
 };

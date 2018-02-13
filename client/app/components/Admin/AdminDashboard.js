@@ -21,11 +21,14 @@ export class AdminDashboard extends Component {
     }
 
     componentDidMount() {
-        const { dashData, loading, adminDispatch } = this.props;
+        const { dashData, loading, adminDispatch, hubs } = this.props;
         if (!dashData && !loading) {
             adminDispatch.getDashboard(false);
         } else if (dashData && !dashData.schedules) {
             adminDispatch.getDashboard(false);
+        }
+        if (!hubs && !loading) {
+            adminDispatch.getHubs(false);
         }
     }
     viewShipment(shipment) {
@@ -72,7 +75,7 @@ export class AdminDashboard extends Component {
         if (!dashData) {
             return <Loading theme={theme} />;
         }
-        const { routes, shipments, air, ocean} = dashData;
+        const { itineraries, shipments, air, ocean} = dashData;
         const clientHash = {};
 
         if (clients) {
@@ -224,7 +227,7 @@ export class AdminDashboard extends Component {
                     </div>
 
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableRoutes routes={routes} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} limit={10}/>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
                         <TextHeading theme={theme} size={1} text="Schedules"  />

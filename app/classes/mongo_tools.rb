@@ -109,6 +109,14 @@ module MongoTools
     p updateArr
     client[table.to_sym].update_one(key, {'$push' => updateArr}, {upsert: true})
   end
+  def update_array(table, key, updates)
+    client = init
+    updateArr = {}
+    updateArr = {data: {'$each' => updates}}
+    # updateArr = {'$each' => updates}
+    p updateArr
+    client[table.to_sym].update_one(key, {'$push' => updateArr}, {upsert: true})
+  end
   
   def get_items_aggregate(table, query)
     client = init

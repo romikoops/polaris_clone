@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from '../Admin.scss';
-import { AdminRouteTile } from '../';
+import { AdminItineraryRow } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { TextHeading } from '../../TextHeading/TextHeading';
@@ -9,14 +9,14 @@ export class AdminSearchableRoutes extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            routes: props.routes
+            itineraries: props.itineraries
         };
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.seeAll = this.seeAll.bind(this);
     }
     componentDidUpdate(prevProps) {
-        if (prevProps.routes !== this.props.routes) {
+        if (prevProps.itineraries !== this.props.itineraries) {
             this.handleSearchChange({target: {value: ''}});
         }
     }
@@ -28,18 +28,18 @@ export class AdminSearchableRoutes extends Component {
             adminDispatch.goTo('/clients');
         }
     }
-    handleClick(route) {
+    handleClick(itinerary) {
         const {handleClick, adminDispatch} = this.props;
         if (handleClick) {
-            handleClick(route);
+            handleClick(itinerary);
         } else {
-            adminDispatch.getRoute(route.id, true);
+            adminDispatch.getItinerary(itinerary.id, true);
         }
     }
     handleSearchChange(event) {
         if (event.target.value === '') {
             this.setState({
-                routes: this.props.routes
+                itineraries: this.props.itineraries
             });
             return;
         }
@@ -54,47 +54,54 @@ export class AdminSearchableRoutes extends Component {
                 minMatchCharLength: 5,
                 keys: keys
             };
-            const fuse = new Fuse(this.props.routes, options);
+            const fuse = new Fuse(this.props.itineraries, options);
             console.log(fuse);
             return fuse.search(event.target.value);
         };
 
-        const filteredRoutesOrigin = search('origin_nexus');
-        const filteredRoutesDestination = search('destination_nexus');
+        const filteredRoutesOrigin = search('name');
+        const filteredRoutesDestination = search('mode_of_transport');
 
-        let TopRoutes = filteredRoutesDestination.filter(route => (
-            filteredRoutesOrigin.includes(route)
+        let TopRoutes = filteredRoutesDestination.filter(itinerary => (
+            filteredRoutesOrigin.includes(itinerary)
         ));
 
         if(TopRoutes.length === 0) {
             TopRoutes = filteredRoutesDestination.concat(filteredRoutesOrigin);
         }
         this.setState({
-            routes: TopRoutes
+            itineraries: TopRoutes
         });
     }
     render() {
-        const { hubs, theme, seeAll } = this.props;
-        const { routes } = this.state;
-        let routesArr;
-        if (routes) {
-            routesArr = routes.map((rt) => {
-                return  <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={this.handleClick}/>;
+        const { hubs, theme, seeAll, limit } = this.props;
+        const { itineraries } = this.state;
+        let itinerariesArr;
+        const viewLimit = limit ? limit : 15;
+        if (itineraries) {
+            itinerariesArr = itineraries.map((rt, i) => {
+                if (i <= viewLimit) {
+                    return  <AdminItineraryRow key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+                }
+                return '';
             });
-        } else if (this.props.routes) {
-            routesArr = routes.map((rt) => {
-                return  <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={this.handleClick}/>;
+        } else if (this.props.itineraries) {
+            itinerariesArr = itineraries.map((rt, i) => {
+                if (i <= viewLimit) {
+                    return  <AdminItineraryRow key={v4()} hubs={hubs} itinerary={rt} theme={theme} handleClick={this.handleClick}/>;
+                }
+                return '';
             });
         }
         const viewType = this.props.sideScroll ?
             (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
                 <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-                    {routesArr}
+                    {itinerariesArr}
                 </div>
             </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
                 <div className="layout-row flex-none layout-align-start-center layout-wrap">
-                    {routesArr}
+                    {itinerariesArr}
                 </div>
             </div>);
 
@@ -109,7 +116,7 @@ export class AdminSearchableRoutes extends Component {
                         <input
                             type="text"
                             name="search"
-                            placeholder="Search route"
+                            placeholder="Search routes"
                             onChange={this.handleSearchChange}
                         />
                     </div>

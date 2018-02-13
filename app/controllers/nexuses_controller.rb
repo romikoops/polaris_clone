@@ -1,4 +1,5 @@
 class NexusesController < ApplicationController
+	include ItineraryTools
 	skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
 	def index
@@ -20,14 +21,16 @@ class NexusesController < ApplicationController
 	private
 
 	def find_available_destinations 
-		routes = Route.where(id: params[:route_ids].split(","))
-
-		return routes.map(&:destination_nexus) if params[:origin].nil?
+		# itineraries = Itinerary.where(id: params[:itinerary_ids].split(","))
+		ids = params[:itinerary_ids].split(",").map { |e| e.to_i }
+		itineraries = retrieve_route_options(current_user.tenant_id, ids)
+		# byebug
+		return itineraries.map{ |i| Location.find(i["destination_nexus_id"])} if params[:origin].nil?
 
 		origin = Location.geocoded_location params[:origin]
 		origin_nexus_data = origin.closest_location_with_distance
 		origin_nexus = origin_nexus_data.first if origin_nexus_data.last <= 200
-		routes.where(origin_nexus: origin_nexus).map(&:destination_nexus).uniq
+		itineraries.reject {|i| i["origin_nexus_id"] != origin_nexus.id}.map { |i2| Location.find(i2["destination_nexus_id"])  }.uniq
 	end
 
 	def format_available_destinations_for_select_box!

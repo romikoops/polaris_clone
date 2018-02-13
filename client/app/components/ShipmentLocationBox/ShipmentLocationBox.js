@@ -922,7 +922,7 @@ export class ShipmentLocationBox extends Component {
                     <AvailableRoutes
                         user={ user }
                         theme={ theme }
-                        routes={ shipment.routes}
+                        routes={ shipment.itineraries}
                         routeSelected={ this.selectedRoute }
                         initialCompName="UserAccount"
                     />
@@ -933,7 +933,7 @@ export class ShipmentLocationBox extends Component {
                 parentToggle={this.toggleModal}
             />
         );
-        console.log(routeModal);
+
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center-center">
                 <div className="layout-row flex-100 layout-wrap layout-align-center-center">

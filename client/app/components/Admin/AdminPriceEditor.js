@@ -7,7 +7,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
 import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises} from '../../constants';
-
+import { gradientTextGenerator } from '../../helpers';
 const fclChargeGloss = fclChargeGlossary;
 const lclChargeGloss = lclChargeGlossary;
 const chargeGloss = chargeGlossary;
@@ -37,6 +37,7 @@ export class AdminPriceEditor extends Component {
         this.saveEdit = this.saveEdit.bind(this);
         this.setCargoClass = this.setCargoClass.bind(this);
         this.setAllFromOptions = this.setAllFromOptions.bind(this);
+        this.deleteFee = this.deleteFee.bind(this);
     }
     componentWillMount() {
         console.log(test);
@@ -98,7 +99,7 @@ export class AdminPriceEditor extends Component {
         console.log(selection);
 
         console.log(this.state.pricing.data);
-        const nameKeys = selection.nameKey.split('-');
+        const nameKeys = selection.name.split('-');
         this.setState({
             pricing: {
                 ...this.state.pricing,
@@ -153,6 +154,11 @@ export class AdminPriceEditor extends Component {
     setCargoClass(value) {
         this.setState({cargoClass: value});
     }
+    deleteFee(key) {
+        const {pricing} = this.state;
+        delete pricing.data[key];
+        this.setState({pricing});
+    }
     saveEdit() {
         const req = this.state.pricing;
 
@@ -161,9 +167,7 @@ export class AdminPriceEditor extends Component {
     }
     render() {
         const {theme, hubRoute } = this.props;
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const { pricing, selectOptions } = this.state;
         const panel = [];
         let gloss;
@@ -214,15 +218,19 @@ export class AdminPriceEditor extends Component {
                 }
             });
             panel.push( <div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.price_subheader}`}>
                     <p className="flex-none">{key} - {gloss[key]}</p>
+                    <div className="flex-none layout-row layout-align-center-center" onClick={() => this.deleteFee(key)}>
+                        <i className="fa fa-trash clip" style={textStyle}></i>
+                    </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center">
                     { cells }
                 </div>
             </div>);
         });
-
+        const showPanel = false;
+        const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed;
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
                 <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeEdit}>
@@ -243,11 +251,23 @@ export class AdminPriceEditor extends Component {
                             <RoundButton
                                 theme={theme}
                                 size="small"
+                                text="Add Fee"
+                                active
+                                handleNext={this.showAddFee}
+                                iconClass="fa-plus"
+                            />
+                        </div>
+                        <div className="flex-100 layout-align-end-center layout-row" style={{margin: '15px'}}>
+                            <RoundButton
+                                theme={theme}
+                                size="small"
                                 text="Save"
                                 active
                                 handleNext={this.saveEdit}
                                 iconClass="fa-floppy-o"
                             />
+                        </div>
+                        <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
                         </div>
                     </div>
                 </div>

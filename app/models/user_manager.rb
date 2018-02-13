@@ -1,0 +1,2 @@
+class UserManager < ApplicationRecord
+end

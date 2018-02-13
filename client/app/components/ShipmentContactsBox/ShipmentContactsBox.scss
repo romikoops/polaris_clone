@@ -1,45 +1,11 @@
 :local {
-  .input {
-    margin: 5px;
-    height: 36.91px;
-    border: 1px solid #F2F2F2;
-    border-radius: 3px;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-  }
-  .input_50 {
-    @extend .input;
-    // width: 250px;
-    width: calc(50% - 14px);
-  }
-  .input_100 {
-    @extend .input;
-    // width: 5 14px;
-    width: calc(100% - 14px);
-  }
-  .input_zip {
-    @extend .input;
-    // width: 141px;
-    width: calc(30% - 14px);
-  }
-  .input_cc{
-    @extend .input;
-    // width: 174px;
-    width: calc(35% - 14px);
-  }
-  .input_no {
-    @extend .input;
-    // width: 115px;
-    width: calc(20% - 14px);
-  }
-  .input_street {
-    @extend .input;
-    // width: 385px;
-    width: calc(80% - 14px);
+  .contact_wrapper {  
+    transform: scale(0.85);
+    transform-origin: left;
+    width: 100%;
   }
   .contact_header, .contact_header p {
     color: #212121;
-    // font-family: ".SF NS Display";
     font-size: 16px;
     line-height: 18px;
     
@@ -52,8 +18,30 @@
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
-  .icon_btn {
-    height: 25px;
-    width: 25px;
+  .placeholder_card {
+    height: 113px !important;
+    margin: 5px;
+    background-color: transparent;
+    color: grey;
+    border: 2px dashed rgba(grey, 0.8);
+    padding: 15px;
+    opacity: 0.6;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.9;
+    }
+    h3 {
+      text-align: center;
+      margin: 10px 0;
+    }
+    &.with_errors {
+      border-color: rgb(232, 114, 88);
+    }
+    
+    // This is needed to fix a bug in Chrome related to changes in opacity on hover.
+    // Source: https://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
+    -webkit-backface-visibility: hidden;
   }
 }

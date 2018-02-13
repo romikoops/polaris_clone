@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { Redirect } from 'react-router';
-// import { AdminClientTile } from './';
 import { history } from '../../helpers';
-// import { pricingNames } from '../../constants/admin.constants';
 import { AdminSearchableClients } from './AdminSearchables';
-// import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
-
+import {gradientTextGenerator} from '../../helpers';
 export class AdminPricingsClientIndex extends Component {
     constructor(props) {
         super(props);
@@ -50,13 +47,8 @@ export class AdminPricingsClientIndex extends Component {
                 />
             </div>
         );
-        // let clientsArr;
-        // if (clients) {
-        //     clientsArr = clients.map((c) => <AdminClientTile key={v4()} client={c} theme={theme} handleClick={() => this.viewClient(c)}/>);
-        // }
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+
+        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -64,11 +56,7 @@ export class AdminPricingsClientIndex extends Component {
                     {backButton}
                 </div>
                 <AdminSearchableClients theme={theme} clients={clients} handleClick={this.viewClient} seeAll={() => adminTools.goTo('/admin/pricings/clients')}/>
-               {/* <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                    <div className="layout-row flex-100 layout-align-start-center">
-                        {clientsArr}
-                    </div>
-                </div>*/}
+
             </div>
         );
     }
