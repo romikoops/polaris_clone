@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180130141939) do
+ActiveRecord::Schema.define(version: 20180213140231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20180130141939) do
     t.datetime "updated_at", null: false
     t.string "province"
     t.string "photo"
+    t.string "premise"
   end
 
   create_table "mot_scopes", force: :cascade do |t|
@@ -158,6 +159,13 @@ ActiveRecord::Schema.define(version: 20180130141939) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "dedicated"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -257,6 +265,15 @@ ActiveRecord::Schema.define(version: 20180130141939) do
     t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
+  end
+
+  create_table "tenant_cargo_item_types", force: :cascade do |t|
+    t.bigint "tenant_id"
+    t.bigint "cargo_item_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
+    t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|
@@ -362,5 +379,7 @@ ActiveRecord::Schema.define(version: 20180130141939) do
   end
 
   add_foreign_key "routes", "mot_scopes"
+  add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
+  add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"
 end
