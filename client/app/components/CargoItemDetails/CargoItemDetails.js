@@ -55,6 +55,11 @@ export class CargoItemDetails extends Component {
                     <p>{((item.dimension_y * item.dimension_x * item.dimension_y) / 1000000).toFixed(2)} m<sup>3</sup></p>
                 </div>
                 <hr className="flex-100"/>
+                <div className="flex-100 layout-row layout-align-space-between">
+                    <p>CBM</p>
+                    <p>{(1).toFixed(2) /* TBD */} m<sup>3</sup></p>
+                </div>
+                <hr className="flex-100"/>
                 {viewHSCodes ?
                     <div className="flex-100 layout-row layout-wrap" onClick={this.viewHsCodes}>
                         <i className="fa fa-eye clip flex-none" style={textStyle} />
