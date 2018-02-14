@@ -8,7 +8,12 @@ PropTypes.theme = PropTypes.shape({
 })
 
 PropTypes.user = PropTypes.shape({
-  guest: PropTypes.bool
+  guest: PropTypes.bool,
+  company_name: PropTypes.string,
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  email: PropTypes.string,
+  phone: PropTypes.string
 })
 
 PropTypes.history = PropTypes.shape({
