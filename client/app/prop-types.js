@@ -42,4 +42,10 @@ PropTypes.match = PropTypes.shape({
   params: PropTypes.object
 })
 
+PropTypes.shipments = PropTypes.shape({
+  open: PropTypes.array,
+  requested: PropTypes.array,
+  finished: PropTypes.array
+})
+
 export default PropTypes
