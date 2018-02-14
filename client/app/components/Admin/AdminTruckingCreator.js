@@ -150,6 +150,30 @@ export class AdminTruckingCreator extends Component {
             return {value: valueKey ? a[valueKey] : a, label: glossary ? glossary[a[labelKey]] : a[labelKey] };
         });
     }
+    grammaratize(label) {
+        let result;
+        switch(label) {
+            case 'Per Container':
+                result = 'containers';
+                break;
+            case 'Per Item':
+                result = 'items';
+                break;
+            case 'Per cbm':
+                result = 'cbms';
+                break;
+            case 'Per cbm/ton':
+                result = 'cbms/tons';
+                break;
+            case 'Per Shipment':
+                result = 'shipments';
+                break;
+            default:
+                result = '';
+                break;
+        }
+        return result;
+    }
 
     render() {
         const {theme, nexuses} = this.props;
@@ -163,7 +187,7 @@ export class AdminTruckingCreator extends Component {
         const selectNexus = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center">
-                    <h4 className="flex-100 letter_3">Select a Cargo Type</h4>
+                    <h4 className="flex-100 letter_3">Select a City</h4>
                     <div className="flex-75 layout-row">
                         <NamedSelect
                             name="nexus"
@@ -187,6 +211,7 @@ export class AdminTruckingCreator extends Component {
                             classes={`${styles.select}`}
                             value={rateBasis}
                             options={rateBasises}
+                            disabled={!steps.nexus}
                             className="flex-100"
                             onChange={this.handleTopLevelSelect}
                         />
@@ -220,6 +245,7 @@ export class AdminTruckingCreator extends Component {
                             name="currency"
                             classes={`${styles.select}`}
                             value={currency}
+                            disabled={!steps.rateBasis}
                             options={currencyOptions}
                             className="flex-100"
                             onChange={this.handleTopLevelSelect}
@@ -228,34 +254,7 @@ export class AdminTruckingCreator extends Component {
                 </div>
             </div>
         );
-        const nexusResult = (
-            <div className="flex-50 layout-row layout-wrap layout-align-start-center">
-                <h4 className="flex-none letter_3">Location: </h4>
-                <div className="flex-10"></div>
-                <h4 className="flex-none letter_3">{nexus.label}</h4>
-            </div>
-        );
-        const currencyResult = (
-            <div className="flex-50 layout-row layout-wrap layout-align-start-center">
-                <h4 className="flex-none letter_3">Currency: </h4>
-                <div className="flex-10"></div>
-                <h4 className="flex-none letter_3">{currency.label}</h4>
-            </div>
-        );
-        const rateBasisResult = (
-            <div className="flex-50 layout-row layout-wrap layout-align-start-center">
-                <h4 className="flex-none letter_3">Rate Basis: </h4>
-                <div className="flex-10"></div>
-                <h4 className="flex-none letter_3">{rateBasis.label}</h4>
-            </div>
-        );
-        const truckingBasisResult = (
-            <div className="flex-50 layout-row layout-wrap layout-align-start-center">
-                <h4 className="flex-none letter_3">Trucking Zone Basis: </h4>
-                <div className="flex-10"></div>
-                <h4 className="flex-none letter_3">{truckingBasis.label}</h4>
-            </div>
-        );
+
         console.log(cells);
         const panel = cells.map((s, i) => {
             const wsInputs = [];
@@ -319,7 +318,7 @@ export class AdminTruckingCreator extends Component {
             </div>
         );
         const rateView = (
-            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
                 {addNewPrice}
                 {panel}
             </div>
@@ -331,7 +330,7 @@ export class AdminTruckingCreator extends Component {
                         return (
                             <div key={`ows_${i}`} className="flex-33 layout-row layout-wrap layout-align-center-start">
                                 <div className="flex-100 layout-row">
-                                    <p className="flex-none">{`Weight Range:  ${ws.min} ${ws.max} ${rateBasis.label}`}</p>
+                                    <p className="flex-none">{`Weight Range:  ${ws.min} - ${ws.max} ${this.grammaratize(rateBasis.label)}`}</p>
                                 </div>
                             </div>
                         );
@@ -340,16 +339,16 @@ export class AdminTruckingCreator extends Component {
             </div>
         );
         const setWeightSteps = (
-            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
 
                 <div className="flex-100 layout-row layout-align-start-center">
-                    <p className="flex-none no_m">{`Set pricing weight steps. Values ${rateBasis.label} and inclusive`}</p>
+                    <p className="flex-none">{`Set pricing weight steps. Values ${rateBasis.label} and inclusive`}</p>
                 </div>
                 <Formsy onValidSubmit={this.addWeightStep} className="flex-100 layout-row layout-align-start-center" >
-                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box">
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box">
                         <FormsyInput type="number" name="min" value={newStep.min} validations="isNumeric" placeholder="Lower Limit"  />
                     </div>
-                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box">
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box">
                         <FormsyInput type="number" name="max" value={newStep.max} validations="isNumeric" placeholder="Upper Limit"  />
                     </div>
                     <div className="flex-33 layout-row layout-align-center-center">
@@ -364,7 +363,7 @@ export class AdminTruckingCreator extends Component {
                 <div className="flex-100 layout-row layout-align-start-center">
                     {weightStepsArr}
                 </div>
-                <div className="flex-100 layout-row layout-align-end-center">
+                <div className="flex-100 layout-row layout-align-end-center button_padding">
                     <RoundButton
                         theme={theme}
                         size="small"
@@ -378,7 +377,7 @@ export class AdminTruckingCreator extends Component {
             </div>
         );
         const saveBtn = (
-            <div className="flex-100 layout-align-end-center layout-row" style={{margin: '15px'}}>
+            <div className="flex-100 layout-align-end-center layout-row button_padding" style={{margin: '15px'}}>
                 <RoundButton
                     theme={theme}
                     size="small"
@@ -392,10 +391,11 @@ export class AdminTruckingCreator extends Component {
         const contextPanel = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                    {steps.nexus === false ? selectNexus :  nexusResult}
-                    {steps.nexus === true && steps.rateBasis === false ? selectRateBasis : rateBasisResult}
-                    {steps.rateBasis === true && steps.currency === false ? selectCurrency : currencyResult }
-                    {steps.currency === true && steps.truckingBasis === false ? selectTruckingBasis : truckingBasisResult }
+
+                    {selectNexus}
+                    {selectRateBasis}
+                    {selectCurrency}
+                    {selectTruckingBasis}
                     {steps.truckingBasis === true && steps.weightSteps === false ? setWeightSteps : weightStepsArr }
                 </div>
             </div>
@@ -405,7 +405,7 @@ export class AdminTruckingCreator extends Component {
                 <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeForm}>
                 </div>
                 <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
-                    <div className="flex-95 layout-row layout-wrap layout-align-center-start">
+                    <div className="flex-95 layout-row layout-wrap layout-align-center-start height_100">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >New Trucking Pricing</p>
                         </div>

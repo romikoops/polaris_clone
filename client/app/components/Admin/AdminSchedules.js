@@ -106,7 +106,7 @@ export class AdminSchedules extends Component {
     }
 
     getItinerariesForHub(hub) {
-        const filteredItineraries = this.props.scheduleData.itineraries.filter(x => x.hubs.indexOf(hub) > -1);
+        const filteredItineraries = this.props.scheduleData.detailedItineraries.filter(x => x.origin_hub_id === hub.id || x.destination_hub_id === hub.id);
         return filteredItineraries.map(x => x.id);
     }
 
@@ -127,7 +127,7 @@ export class AdminSchedules extends Component {
     }
     render() {
         const {theme, hubs, scheduleData, adminDispatch, limit} = this.props;
-        const {filters, hubFilter, sortFilter, panelViewer} = this.state;
+        const {filters, hubFilter, sortFilter, panelViewer, motFilter} = this.state;
         if (!scheduleData || !hubs) {
             return '';
         }
@@ -137,8 +137,8 @@ export class AdminSchedules extends Component {
             {value: 'ocean', label: 'Ocean'}
         ];
         const filterSortOptions = [
-            {value: 'eta', label: 'ETA'},
-            {value: 'etd', label: 'ETD'}
+            {value: 'start_date', label: 'ETA'},
+            {value: 'end_date', label: 'ETD'}
         ];
         const { itineraries, air, train, ocean, itineraryLayovers} = scheduleData;
         const { showList } = this.state;
@@ -149,7 +149,7 @@ export class AdminSchedules extends Component {
         const tripArr = [];
         const slimit = limit ? limit : 10;
         let allTrips;
-        switch (filters.mot) {
+        switch (motFilter.value) {
             case 'ocean':
             allTrips = ocean;
             break;
@@ -170,7 +170,13 @@ export class AdminSchedules extends Component {
         if (filters.hub) {
             itineraryIds = this.getItinerariesForHub(hubFilter.value);
         }
+        if (filters.sort) {
+            allTrips.sort(this.dynamicSort(sortFilter.value));
+        }
         allTrips.forEach((trip, i) => {
+            console.log('itin_id', trip.itinerary_id);
+            itineraryIds ? console.log('itin_match', itineraryIds.includes(trip.itinerary_id)) : '';
+            console.log(itineraryIds);
             if (filters.hub && itineraryIds.includes(trip.itinerary_id) && i < slimit) {
                 tripArr.push(<AdminTripPanel key={v4()} trip={trip} showPanel={panelViewer[trip.id]} toggleShowPanel={this.toggleShowPanel} layovers={itineraryLayovers} adminDispatch={adminDispatch} itinerary={this.getItinerary(trip)} hubs={hubs} theme={theme}/>);
             }
@@ -179,9 +185,7 @@ export class AdminSchedules extends Component {
             }
         });
 
-        if (filters.sort) {
-            tripArr.sort(this.dynamicSort(sortFilter.value));
-        }
+
         const StyledSelect = styled(Select)`
             .Select-control {
                 background-color: #F9F9F9;
@@ -202,7 +206,7 @@ export class AdminSchedules extends Component {
         `;
         const hubList = [];
         Object.keys(hubs).forEach(key => {
-            hubList.push({value: key, label: hubs[key].data.name});
+            hubList.push({value: hubs[key].data, label: hubs[key].data.name});
         });
         const listView = (
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
