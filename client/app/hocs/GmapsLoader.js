@@ -9,14 +9,11 @@ export default class GmapsLoader extends Component {
     }
     render() {
         const apiKey = API_KEY;
-        console.log(apiKey);
         const params = {
             key: apiKey, // Define your api key here
             libraries: 'places' // To request multiple libraries, separate them with a comma
         };
         const ParamComponent = this.props.component;
-        console.log('Gmap');
-        console.log(this.props);
         return (
             <ReactGoogleMapLoader
                 params={params}

@@ -131,7 +131,6 @@ export class ShipmentLocationBox extends Component {
         this.setState({showModal: !this.state.showModal});
     }
     selectedRoute(route) {
-        console.log(route);
         const origin = {
             city: '',
             country: '',
@@ -624,8 +623,6 @@ export class ShipmentLocationBox extends Component {
 
         autoText.origin = origin.hub_name;
         autoTextOrigin = this.state.autoTextDest;
-        console.log('swapping origin', origin.hub_name);
-        console.log('swapping destination', destination.hub_name);
 
         this.setState({origin, destination, autoText, autoTextOrigin, autoTextDest});
         this.setDestHub(this.state.oSelect);
@@ -645,8 +642,6 @@ export class ShipmentLocationBox extends Component {
         const placeholderColorOverwrite = value => (
             !value && this.props.nextStageAttempt ? 'color: rgb(211, 104, 80);' : ''
         );
-        console.log('origin', this.state.origin);
-        console.log('destination', this.state.destination);
 
         const StyledSelect = styled(Select)`
             .Select-control {

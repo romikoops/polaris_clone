@@ -336,11 +336,28 @@ export class ShipmentCargoItems extends Component {
             cargoItems.forEach((cargoItem, i) => {
                 if (i > 0) cargosAdded.push(generateSeparator());
                 if (!cargoItemTypes[i]) {
+                    // Set a default cargo item type as the select box value
+
+                    // Define labels of the default cargo item types in order of priority
+                    const defaultTypeLabels = [
+                        'Pallet',
+                        '100.0cm × 120.0cm Pallet: Europe, Asia'
+                    ];
+
+                    // Try to find one of the labels in the available cargo item types
+                    let defaultType;
+                    defaultTypeLabels.find(defaultTypeLabel => (
+                        defaultType = availableCargoItemTypes.find(cargoItemType => (
+                            cargoItemType.label === defaultTypeLabel
+                        ))
+                    ));
+
+                    // In case none of the defaultTypeLabels match the available
+                    // cargo item types, set the default to the first available.
+                    defaultType = defaultType || availableCargoItemTypes[0];
+
                     this.handleCargoItemType(
-                        Object.assign(
-                            { name: i + '-colliType'},
-                            availableCargoItemTypes[1]
-                        )
+                        Object.assign({ name: i + '-colliType'}, defaultType )
                     );
                 }
                 cargosAdded.push(generateCargoItem(cargoItem, i));
