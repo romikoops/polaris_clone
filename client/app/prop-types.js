@@ -56,7 +56,7 @@ PropTypes.shipments = PropTypes.shape({
 PropTypes.shipment = PropTypes.shape({
   id: PropTypes.number,
   status: PropTypes.string,
-  clientNmae: PropTypes.string,
+  clientName: PropTypes.string,
   planned_etd: PropTypes.number,
   imc_reference: PropTypes.string
 })
