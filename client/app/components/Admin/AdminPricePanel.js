@@ -55,13 +55,13 @@ export class AdminPricePanel extends Component {
 
         const PriceSection = ({pkey}) => {
             return (<div key={v4()} className={`flex-none layout-row layout-wrap ${styles.price_card}`}>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <p className={`flex-none ${styles.title}`} style={textStyle}> {pricingNamesHash[pkey]}</p>
-                            </div>
-                            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                                {sections[pkey]}
-                            </div>
-                        </div>);
+                <div className="flex-100 layout-row layout-align-start-center">
+                    <p className={`flex-none ${styles.title}`} style={textStyle}> {pricingNamesHash[pkey]}</p>
+                </div>
+                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                    {sections[pkey]}
+                </div>
+            </div>);
         };
         Object.keys(pricing).forEach(key => {
             priceTiles.push(<PriceSection  pkey={key} />);

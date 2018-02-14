@@ -4,6 +4,8 @@ import styles from './AdminClientTile.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { gradientTextGenerator } from '../../helpers';
 import defaults from '../../styles/default_classes.scss';
+import { v4 } from 'node-uuid';
+import ReactTooltip from 'react-tooltip';
 export class AdminClientTile extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +36,7 @@ export class AdminClientTile extends Component {
         }
     }
     render() {
-        const { theme, client, deleteable} = this.props;
+        const { theme, client, deleteable, showTooltip, tooltip} = this.props;
         const { showDelete } = this.state;
         if (!client) {
             return '';
@@ -98,14 +100,16 @@ export class AdminClientTile extends Component {
         );
         const switchView = showDelete ? deleter : content;
         const contentView = deleteable ? switchView : content;
+        const tooltipId = v4();
         return(
             <div className={`flex-none ${styles.client_card} layout-row pointy`} >
                 { deleteable && !showDelete ?
                     <div className={`flex-none layout-row layout-align-center-center ${styles.delete_x}`} onClick={this.toggleShowDelete}>
                         <i className="fa fa-trash"></i>
                     </div> : ''}
-                <div className={`${styles.content} flex-100 layout-row layout-align-center-start`}>
+                <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
                     {contentView}
+                    {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId}/> : ''}
                 </div>
             </div>
         );

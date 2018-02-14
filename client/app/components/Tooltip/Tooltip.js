@@ -14,7 +14,8 @@ export class Tooltip extends Component {
             color,
             toolText
         } = this.props;
-        let textStyle = {background: 'black'};
+
+        let textStyle = {color: 'black'};
         if(theme) {
             textStyle = color ? {color: color} : {
                 background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : theme.colors.primary,

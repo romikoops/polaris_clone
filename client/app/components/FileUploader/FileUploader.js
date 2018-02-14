@@ -6,6 +6,8 @@ import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
 import styles from './FileUploader.scss';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { v4 } from 'node-uuid';
+import ReactTooltip from 'react-tooltip';
 
 class FileUploader extends React.Component {
     constructor(props) {
@@ -64,11 +66,15 @@ class FileUploader extends React.Component {
         const clickUploaderInput = () => {
             this.uploaderInput.click();
         };
-        const {theme, type} = this.props;
+        const {theme, type, tooltip} = this.props;
+        const tooltipId = v4();
         return (
             <div className={styles.upload_btn_wrapper}>
                 <form onSubmit={this.onFormSubmit}>
-                    <RoundButton text="Upload" theme={theme} size="small" handleNext={clickUploaderInput} active />
+                    <p data-tip={tooltip} data-for={tooltipId}>
+                        <RoundButton text="Upload" theme={theme} size="small" handleNext={clickUploaderInput} active />
+                    </p>
+                    <ReactTooltip id={tooltipId} className={`${styles.tooltip} `} />
                     <input type="file" onChange={this.onChange} name={type} ref={input => { this.uploaderInput = input; }}/>
                 </form>
             </div>

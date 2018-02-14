@@ -5,6 +5,7 @@ import { AdminItineraryRow } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { TextHeading } from '../../TextHeading/TextHeading';
+import ReactTooltip from 'react-tooltip';
 export class AdminSearchableRoutes extends Component {
     constructor(props) {
         super(props);
@@ -55,7 +56,6 @@ export class AdminSearchableRoutes extends Component {
                 keys: keys
             };
             const fuse = new Fuse(this.props.itineraries, options);
-            console.log(fuse);
             return fuse.search(event.target.value);
         };
 
@@ -74,7 +74,7 @@ export class AdminSearchableRoutes extends Component {
         });
     }
     render() {
-        const { hubs, theme, seeAll, limit } = this.props;
+        const { hubs, theme, seeAll, limit, showTooltip, tooltip } = this.props;
         const { itineraries } = this.state;
         let itinerariesArr;
         const viewLimit = limit ? limit : 15;
@@ -104,11 +104,11 @@ export class AdminSearchableRoutes extends Component {
                     {itinerariesArr}
                 </div>
             </div>);
-
+        const tooltipId = v4();
 
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
-                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}` }>
                     <div className="flex-60 layput-row layout-align-start-center">
                         <TextHeading theme={theme} size={1} text="Routes" />
                     </div>
@@ -121,7 +121,10 @@ export class AdminSearchableRoutes extends Component {
                         />
                     </div>
                 </div>
-                {viewType}
+                <div  data-for={tooltipId} data-tip={tooltip}>
+                    {viewType}
+                    {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId}/> : ''}
+                </div>
                 { seeAll !== false ?
                     <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>

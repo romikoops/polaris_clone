@@ -64,13 +64,20 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-        const { theme, title, seeAll, placeholder} = this.props;
+        const { theme, title, seeAll, placeholder, tooltip, showTooltip} = this.props;
 
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
             clientsArr = clients.map((client) => {
-                return  <AdminClientTile key={v4()} client={client} theme={theme}  handleClick={this.handleClick} />;
+                return  (<AdminClientTile
+                    key={v4()}
+                    client={client}
+                    theme={theme}
+                    handleClick={this.handleClick}
+                    tooltip={tooltip}
+                    showTooltip={showTooltip}
+                />);
             });
         }
         const viewType = this.props.sideScroll ?

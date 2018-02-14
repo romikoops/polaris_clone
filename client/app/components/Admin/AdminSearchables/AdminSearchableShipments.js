@@ -91,14 +91,40 @@ export class AdminSearchableShipments extends Component {
         if (shipments.length) {
             shipmentsArr = this.limitArray(shipments).map((ship) => {
                 return  userView ?
-                    <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
-                    : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
+                    <UserShipmentRow
+                        key={v4()}
+                        shipment={ship}
+                        hubs={hubs}
+                        theme={theme}
+                        handleSelect={this.handleClick}
+                        handleAction={handleShipmentAction}
+                    />
+                    : <AdminShipmentRow
+                        key={v4()}
+                        shipment={ship}
+                        hubs={hubs}
+                        theme={theme}
+                        handleSelect={this.handleClick}
+                        handleAction={handleShipmentAction}
+                    />;
             });
         } else if (this.props.shipments) {
             shipmentsArr = this.limitArray(this.props.shipments).map((ship) => {
                 return  userView ?
-                    <UserShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />
-                    : <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.handleClick} handleAction={handleShipmentAction} />;
+                    <UserShipmentRow
+                        key={v4()} shipment={ship}
+                        hubs={hubs}
+                        theme={theme}
+                        handleSelect={this.handleClick}
+                        handleAction={handleShipmentAction}
+                    />
+                    : <AdminShipmentRow
+                        key={v4()} shipment={ship}
+                        hubs={hubs}
+                        theme={theme}
+                        handleSelect={this.handleClick}
+                        handleAction={handleShipmentAction}
+                    />;
             });
         }
         const viewType = this.props.sideScroll ?

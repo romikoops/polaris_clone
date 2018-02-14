@@ -57,7 +57,7 @@ export class RoundButton extends Component {
             >
                 <div className="layout-fill layout-row layout-align-space-around-center">
                     <p className={styles.content}>
-                        <span className={styles.icon}>{iconC}</span>
+                        <span className={`${styles.icon} ${styles.icon_margin}`}>{iconC}</span>
                         {text}
                     </p>
                 </div>
@@ -70,7 +70,7 @@ export class RoundButton extends Component {
             >
                 <div className="layout-fill layout-row layout-align-space-around-center">
                     <p className={styles.content}>
-                        <span className={styles.icon}>{iconC}</span>
+                        <span className={`${styles.icon} ${styles.icon_margin}`}>{iconC}</span>
                         {text}
                     </p>
                 </div>

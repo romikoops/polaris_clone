@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminHubTile.scss';
+import ReactTooltip from 'react-tooltip';
+import { v4 } from 'node-uuid';
 
 export class AdminHubTile extends Component {
     constructor(props) {
@@ -23,7 +25,8 @@ export class AdminHubTile extends Component {
         }
     }
     render() {
-        const { theme, hub} = this.props;
+        const { theme, hub, tooltip, showTooltip } = this.props;
+        debugger;
         if (!hub) {
             return '';
         }
@@ -36,9 +39,9 @@ export class AdminHubTile extends Component {
                     })`
                     : 'black'
         };
-
+        const tooltipId = v4();
         return(
-            <div className={`something flex-none ${styles.hub_card} layout-row pointy`} style={bg1} onClick={this.clickEv}>
+            <div className={`something flex-none ${styles.hub_card} layout-row pointy`} style={bg1} onClick={this.clickEv} data-for={tooltipId} data-tip={tooltip}>
                 <div className={styles.fade}></div>
                 <div className={`${styles.content} layout-row`}>
                     <div className="flex-15 layout-column layout-align-start-center">
@@ -49,6 +52,7 @@ export class AdminHubTile extends Component {
                         <p className="flex-100">{ hub.location.geocoded_address }</p>
                     </div>
                 </div>
+                {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId}/> : ''}
             </div>
         );
     }

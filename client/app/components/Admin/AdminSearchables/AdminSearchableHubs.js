@@ -5,6 +5,7 @@ import { AdminHubTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { TextHeading } from '../../TextHeading/TextHeading';
+import { adminClicked as clickTool } from '../../../constants';
 export class AdminSearchableHubs extends Component {
     constructor(props) {
         super(props);
@@ -60,7 +61,6 @@ export class AdminSearchableHubs extends Component {
         };
 
         const filteredHubNames = search('data.name');
-        // ;
         this.setState({
             hubs: filteredHubNames
         });
@@ -71,7 +71,14 @@ export class AdminSearchableHubs extends Component {
         let hubsArr;
         if (hubs) {
             hubsArr = hubs.map((hub) => {
-                return  <AdminHubTile key={v4()} hub={hub} theme={theme}  handleClick={this.handleClick}/>;
+                return  (<AdminHubTile
+                    key={v4()}
+                    hub={hub}
+                    theme={theme}
+                    handleClick={this.handleClick}
+                    tooltip={clickTool.related}
+                    showTooltip
+                />);
             });
         }
         const viewType = this.props.sideScroll ?

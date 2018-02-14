@@ -6,6 +6,8 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import {CONTAINER_DESCRIPTIONS, fclChargeGlossary, lclChargeGlossary, chargeGlossary} from '../../constants';
 import { history, gradientTextGenerator } from '../../helpers';
+import ReactTooltip from 'react-tooltip';
+import { adminPricing as priceTip } from '../../constants';
 
 const containerDescriptions = CONTAINER_DESCRIPTIONS;
 const fclChargeGloss = fclChargeGlossary;
@@ -52,7 +54,7 @@ export class AdminPricingClientView extends Component {
         history.goBack();
     }
     render() {
-        const {theme, pricingData, clientPricings, adminActions} = this.props;
+        const { theme, pricingData, clientPricings, adminActions } = this.props;
         const { editorBool, editTransport, editPricing, editHubRoute } = this.state;
         console.log(this.props);
 
@@ -135,7 +137,7 @@ export class AdminPricingClientView extends Component {
                     </div>
                 </div>);
             });
-
+            const tooltipId = v4();
             return (
                 <div key={v4()} className={` ${styles.hub_route_price} flex-100 layout-row layout-wrap layout-align-center-start`}>
                     <div className="flex-100 layout-row layout-align-start-center">
@@ -144,7 +146,8 @@ export class AdminPricingClientView extends Component {
                             <p className="flex-none offset-5">{hubRoute.name}</p>
                         </div>
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.editThis(pricing, hubRoute, transport)}>
-                            <i className="flex-none fa fa-pencil clip" style={textStyle}></i>
+                            <i className="flex-none fa fa-pencil clip" style={textStyle} data-for={tooltipId} data-tip={priceTip.manage}></i>
+                            <ReactTooltip className={styles.tooltip} id={tooltipId} />
                         </div>
                         <div className="flex-10 layout-row layout-align-center-center" onClick={() => this.viewThis(pricing._id)}>
                             {expandIcon}

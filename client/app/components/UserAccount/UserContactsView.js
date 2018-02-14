@@ -117,8 +117,8 @@ export class UserContactsView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          editBool: false,
-          editObj: {}
+            editBool: false,
+            editObj: {}
         };
         this.editProfile = this.editProfile.bind(this);
         this.closeEdit = this.closeEdit.bind(this);
@@ -133,8 +133,8 @@ export class UserContactsView extends Component {
         }
     }
     goBack() {
-      const { userDispatch } = this.props;
-      userDispatch.goBack();
+        const { userDispatch } = this.props;
+        userDispatch.goBack();
     }
     editProfile() {
         const { contactData } = this.props;
@@ -150,13 +150,13 @@ export class UserContactsView extends Component {
         });
     }
     handleChange(ev) {
-      const { name, value } = ev.target;
-      this.setState({
-        editObj: {
-          ...this.state.editObj,
-          [name]: value
-        }
-      });
+        const { name, value } = ev.target;
+        this.setState({
+            editObj: {
+                ...this.state.editObj,
+                [name]: value
+            }
+        });
     }
     prepShipment(shipment, user, hubsObj) {
         shipment.clientName = user ? `${user.first_name} ${user.last_name}` : '';
@@ -197,18 +197,18 @@ export class UserContactsView extends Component {
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                     <p className={` ${styles.sec_title_text} flex-none clip`} style={textStyle}>Overview</p>
                     <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
-                      <RoundButton theme={theme} handleNext={this.goBack} active size="small" text="Back" iconClass="fa-chevron-left"/>
+                        <RoundButton theme={theme} handleNext={this.goBack} active size="small" text="Back" iconClass="fa-chevron-left"/>
                     </div>
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Details </p>
                     </div>
-                      {
+                    {
                         editBool ?
-                        <EditProfileBox user={editObj} style={textStyle} theme={theme}  handleChange={this.handleChange} onSave={this.saveEdit} close={this.closeEdit}/> :
-                        <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
-                      }
+                            <EditProfileBox user={editObj} style={textStyle} theme={theme}  handleChange={this.handleChange} onSave={this.saveEdit} close={this.closeEdit}/> :
+                            <ProfileBox user={contact} style={textStyle} theme={theme} edit={this.editProfile}/>
+                    }
                 </div>
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <AdminSearchableShipments

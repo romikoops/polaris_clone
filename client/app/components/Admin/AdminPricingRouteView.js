@@ -173,7 +173,12 @@ export class AdminPricingRouteView extends Component {
             );
         };
         const clientTiles = clients.map((cl) => {
-            return <AdminClientTile key={v4()} client={cl} theme={theme} handleClick={() => this.selectClient(cl)} />;
+            return (<AdminClientTile
+                key={v4()}
+                client={cl}
+                theme={theme}
+                handleClick={() => this.selectClient(cl)}
+            />);
         });
         const clientsView = (
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
@@ -210,13 +215,25 @@ export class AdminPricingRouteView extends Component {
                     <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>{itinerary.name}</p>
                     {backButton}
                 </div>
-                <RouteHubBox hubs={routeBoxHubs} itinerary={itinerary} theme={theme}/>
+                <RouteHubBox
+                    hubs={routeBoxHubs}
+                    itinerary={itinerary}
+                    theme={theme}
+                />
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
                         <p className={` ${styles.sec_header_text} flex-none`}  > Open Pricing </p>
                     </div>
                     <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-                        <RoutePricingBox key={v4()} routeData={itinerary} hrArr={detailedItineraries} pricingsObj={pricings} rPriceObj={itineraryPricingData} transports={transportCategories} userId="open"/>
+                        <RoutePricingBox
+                            key={v4()}
+                            routeData={itinerary}
+                            hrArr={detailedItineraries}
+                            pricingsObj={pricings}
+                            rPriceObj={itineraryPricingData}
+                            transports={transportCategories}
+                            userId="open"
+                        />
                     </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
@@ -227,7 +244,16 @@ export class AdminPricingRouteView extends Component {
                         {selectedClient ? clientPriceView : clientsView }
                     </div>
                 </div>
-                { editorBool ? <AdminPriceEditor closeEdit={this.closeEdit} theme={theme} hubRoute={editHubRoute} transport={editTransport} userId={selectedClient.id} isNew={false} pricing={editPricing} adminTools={adminActions} /> : '' }
+                { editorBool ? <AdminPriceEditor
+                    closeEdit={this.closeEdit}
+                    theme={theme}
+                    hubRoute={editHubRoute}
+                    transport={editTransport}
+                    userId={selectedClient.id}
+                    isNew={false}
+                    pricing={editPricing}
+                    adminTools={adminActions}
+                /> : '' }
             </div>
         );
     }

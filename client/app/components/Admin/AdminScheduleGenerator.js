@@ -16,6 +16,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BASE_URL } from '../../constants';
 import { authHeader } from '../../helpers';
+import ReactTooltip from 'react-tooltip';
+import { adminSchedules as schedTip } from '../../constants';
 
 class AdminScheduleGenerator extends Component {
     constructor(props) {
@@ -187,7 +189,11 @@ class AdminScheduleGenerator extends Component {
 
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  >Auto Generate</p>
+                        <p className={` ${styles.sec_header_text} flex-none`} >
+                        Auto Generate
+                            <i className="fa fa-info-circle" data-for="autoGenTooltip" data-tip={schedTip.auto_generate} />
+                            <ReactTooltip className={styles.tooltip} id="autoGenTooltip" />
+                        </p>
                     </div>
                     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>

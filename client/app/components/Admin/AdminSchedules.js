@@ -11,6 +11,8 @@ import FileUploader from '../FileUploader/FileUploader';
 import {RoundButton} from '../RoundButton/RoundButton';
 import {v4} from 'node-uuid';
 import { TextHeading } from '../TextHeading/TextHeading';
+import ReactTooltip from 'react-tooltip';
+import { adminSchedules as schedTip } from '../../constants';
 export class AdminSchedules extends Component {
     constructor(props) {
         super(props);
@@ -151,20 +153,20 @@ export class AdminSchedules extends Component {
         let allTrips;
         switch (filters.mot) {
             case 'ocean':
-            allTrips = ocean;
-            break;
+                allTrips = ocean;
+                break;
             case 'air':
-            allTrips = air;
-            break;
+                allTrips = air;
+                break;
             case 'rail':
-            allTrips = train;
-            break;
+                allTrips = train;
+                break;
             case false:
-            allTrips =  [...air, ...ocean, ...train];
-            break;
+                allTrips =  [...air, ...ocean, ...train];
+                break;
             default:
-            allTrips =  [...air, ...ocean, ...train];
-            break;
+                allTrips =  [...air, ...ocean, ...train];
+                break;
         }
         let itineraryIds;
         if (filters.hub) {
@@ -242,7 +244,7 @@ export class AdminSchedules extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                 <div className="layout-row flex-100 layout-wrap layout-align-start-center">
                     <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}>
-                        <p className={` ${styles.sec_header_text} flex-none`}  >Excel Uploads</p>
+                        <p className={` ${styles.sec_header_text} flex-none`} >Excel Uploads</p>
                     </div>
                     <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`}>
                         <p className="flex-80">Upload Train Schedules Sheet</p>
@@ -265,8 +267,27 @@ export class AdminSchedules extends Component {
             </div>
         );
         const currView = showList ? listView : genView;
-        const backButton = (<RoundButton theme={theme} text="Back to list" size="small" back iconClass="fa-th-list" handleNext={this.toggleView} />);
-        const newButton = (<RoundButton theme={theme} text="New Upload" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
+        const backButton = (
+            <RoundButton
+                theme={theme}
+                text="Back to list"
+                size="small"
+                iconClass="fa-th-list"
+                handleNext={this.toggleView}
+                back
+            />
+        );
+        const newButton = (
+            <div data-for="tooltipId" data-tip={schedTip.upload_excel} >
+                <RoundButton
+                    theme={theme}
+                    text="New Upload"
+                    active size="small"
+                    iconClass="fa-plus"
+                    handleNext={this.toggleView}
+                />
+                <ReactTooltip id="tooltipId" className={`${styles.tooltip}`} />
+            </div>);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>

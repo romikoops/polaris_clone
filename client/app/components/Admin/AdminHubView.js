@@ -5,6 +5,7 @@ import { AdminSearchableRoutes } from './AdminSearchables';
 import styles from './Admin.scss';
 import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton';
+import { adminClicked as clickTool } from '../../constants';
 export class AdminHubView extends Component {
     constructor(props) {
         super(props);
@@ -41,7 +42,13 @@ export class AdminHubView extends Component {
         const relHubs = [];
         relatedHubs.forEach((hubObj) => {
             if (hubObj.id !== hub.id) {
-                relHubs.push( <AdminHubTile key={v4()} hub={hubHash[hubObj.id]} theme={theme} handleClick={() => adminActions.getHub(hubObj.id, true)} />);
+                relHubs.push( <AdminHubTile
+                    key={v4()}
+                    hub={hubHash[hubObj.id]}
+                    theme={theme}
+                    handleClick={() => adminActions.getHub(hubObj.id, true)}
+                    tooltip={clickTool.related}
+                />);
             }
         });
         const activate = (
@@ -70,7 +77,6 @@ export class AdminHubView extends Component {
             const tmpItin = this.getItineraryFromLayover(sched.itinerary_id);
             return <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin}/>;
         });
-        console.log(routes);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>

@@ -9,8 +9,8 @@ export class AdminItineraryRow extends Component {
         this.selectItinerary = this.selectItinerary.bind(this);
     }
     switchIcon(itinerary) {
-      const theme = this.props.theme;
-      const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary);
+        const theme = this.props.theme;
+        const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary);
         let icon;
         switch (itinerary.mode_of_transport) {
             case 'ocean':
@@ -43,15 +43,15 @@ export class AdminItineraryRow extends Component {
                 onClick={this.selectItinerary}
             >
                 <div className="flex-none layout-row layout-align-start-center">
-                  <i style={iconStyle} className={`clip fa fa-flag ${styles.icon_buffer}`} />
-                  <div className="flex-5"></div>
-                  <p className="flex-none">{itinerary.name}</p>
+                    <i style={iconStyle} className={`clip fa fa-flag ${styles.icon_buffer}`} />
+                    <div className="flex-5"></div>
+                    <p className="flex-none">{itinerary.name}</p>
                 </div>
                 <div className="flex-none layout-row layout-align-end-center">
-                  <div className="flex-none layout-row layout-align-center-center">
-                      {this.switchIcon(itinerary)}
-                      <p className="flex-none">{itinerary.mode_of_transport ? capitalize(itinerary.mode_of_transport) : ''}</p>
-                  </div>
+                    <div className="flex-none layout-row layout-align-center-center">
+                        {this.switchIcon(itinerary)}
+                        <p className="flex-none">{itinerary.mode_of_transport ? capitalize(itinerary.mode_of_transport) : ''}</p>
+                    </div>
                 </div>
             </div>
         );

@@ -10,6 +10,8 @@ import { adminActions } from '../../actions';
 import { TextHeading } from '../TextHeading/TextHeading';
 import { adminHubs as tooltip } from '../../constants';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { adminHubs as hubTip } from '../../constants';
+import ReactTooltip from 'react-tooltip';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminHubs extends Component {
@@ -56,6 +58,20 @@ class AdminHubs extends Component {
     render() {
         const {selectedHub} = this.state;
         const {theme, hubs, hub, hubHash, adminDispatch} = this.props;
+        const newButton = (
+            <div className="flex-none layout-row">
+                <p data-tip={hubTip.new} data-for="newHub" >
+                    <RoundButton
+                        theme={theme}
+                        size="small"
+                        text="New Hub"
+                        active
+                        handleNext={this.toggleNewHub}
+                        iconClass="fa-plus"
+                    />
+                </p>
+                <ReactTooltip id="newHub" className={`${styles.nav_tooltip} `} />
+            </div>);
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -64,17 +80,6 @@ class AdminHubs extends Component {
                     text="Back"
                     handleNext={this.backToIndex}
                     iconClass="fa-chevron-left"
-                />
-            </div>);
-        const newButton = (
-            <div className="flex-none layout-row">
-                <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="New Hub"
-                    active
-                    handleNext={this.toggleNewHub}
-                    iconClass="fa-plus"
                 />
             </div>);
         const title = selectedHub ?

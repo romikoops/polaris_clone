@@ -71,12 +71,28 @@ class AdminShipments extends Component {
                     <Route
                         exact
                         path="/admin/shipments"
-                        render={props => <AdminShipmentsIndex theme={theme} handleShipmentAction={this.handleShipmentAction} clients={clients} hubs={hubs} hubHash={hubHash} shipments={shipments} viewShipment={this.viewShipment} {...props} />}
+                        render={props => <AdminShipmentsIndex
+                            theme={theme}
+                            handleShipmentAction={this.handleShipmentAction}
+                            clients={clients}
+                            hubs={hubs}
+                            hubHash={hubHash}
+                            shipments={shipments}
+                            viewShipment={this.viewShipment} {...props}
+                        />}
                     />
                     <Route
                         exact
                         path="/admin/shipments/:id"
-                        render={props => <AdminShipmentView theme={theme} adminDispatch={adminDispatch} loading={loading} hubs={hubs} handleShipmentAction={this.handleShipmentAction} shipmentData={shipment} clients={clients} {...props} />}
+                        render={props => <AdminShipmentView
+                            theme={theme}
+                            adminDispatch={adminDispatch}
+                            loading={loading}
+                            hubs={hubs}
+                            handleShipmentAction={this.handleShipmentAction}
+                            shipmentData={shipment}
+                            clients={clients} {...props}
+                        />}
                     />
                 </Switch>
             </div>
