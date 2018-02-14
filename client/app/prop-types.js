@@ -85,4 +85,11 @@ PropTypes.hub = {
   name: PropTypes.string
 }
 
+PropTypes.client = {
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  email: PropTypes.string,
+  company_name: PropTypes.string
+}
+
 export default PropTypes
