@@ -58,7 +58,8 @@ PropTypes.shipment = PropTypes.shape({
   status: PropTypes.string,
   clientName: PropTypes.string,
   planned_etd: PropTypes.number,
-  imc_reference: PropTypes.string
+  imc_reference: PropTypes.string,
+  schedule_set: PropTypes.array
 })
 
 PropTypes.location = PropTypes.shape({
