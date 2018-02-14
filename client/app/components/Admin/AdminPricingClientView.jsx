@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
+import { AdminPriceEditor } from './'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import {
@@ -9,17 +10,17 @@ import {
   lclChargeGlossary,
   chargeGlossary
 } from '../../constants'
-import { history, gradientTextGenerator } from '../../helpers'
-import { AdminPriceEditor } from './'
+import { history } from '../../helpers'
 
 const containerDescriptions = CONTAINER_DESCRIPTIONS
 const fclChargeGloss = fclChargeGlossary
 const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
-export class AdminPricePanel extends Component {
+export class AdminPricingClientView extends Component {
   static backToIndex () {
     history.goBack()
   }
+
   constructor (props) {
     super(props)
     this.state = {
@@ -32,7 +33,6 @@ export class AdminPricePanel extends Component {
     this.editThis = this.editThis.bind(this)
     this.viewThis = this.viewThis.bind(this)
     this.closeEdit = this.closeEdit.bind(this)
-    this.backToIndex = this.backToIndex.bind(this)
   }
   componentDidMount () {
     const {
@@ -70,29 +70,27 @@ export class AdminPricePanel extends Component {
     const {
       editorBool, editTransport, editPricing, editHubRoute
     } = this.state
-    console.log(this.props)
 
     if (!pricingData || !clientPricings) {
       return ''
     }
-
-    const { itineraries, pricings, transportCategories } = pricingData
-    const { client, userPricings, detailedItineraries } = clientPricings
-    if (!client || !userPricings) {
-      return ''
+    const {
+      routes, pricings, hubRoutes, transportCategories
+    } = pricingData
+    const { client, userPricings } = clientPricings
+    const textStyle = {
+      background:
+        theme && theme.colors
+          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
+          : 'black'
     }
-
-    const textStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-        : { color: 'black' }
     const backButton = (
       <div className="flex-none layout-row">
         <RoundButton
           theme={theme}
           size="small"
           text="Back"
-          handleNext={AdminPricePanel.backToIndex}
+          handleNext={AdminPricingClientView.backToIndex}
           iconClass="fa-chevron-left"
         />
       </div>
@@ -122,7 +120,6 @@ export class AdminPricePanel extends Component {
       const panel = []
       let gloss
       let toggleStyle
-      // ;
       // eslint-disable-next-line no-underscore-dangle
       if (pricing._id.includes('lcl')) {
         gloss = lclChargeGloss
@@ -209,24 +206,27 @@ export class AdminPricePanel extends Component {
             </div>
           </div>
           <div
-            className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
+            className={`flex-33 layout-row layout-align-space-between-center ${
+              styles.price_row_detail
+            }`}
           >
-            <p className="flex-none">Mode of Transport:</p>
-            <div className="flex-5" />
+            <p className="flex-none">MoT:</p>
             <p className="flex-none"> {transport.mode_of_transport}</p>
           </div>
           <div
-            className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
+            className={`flex-33 layout-row layout-align-space-between-center ${
+              styles.price_row_detail
+            }`}
           >
             <p className="flex-none">Cargo Type: </p>
-            <div className="flex-5" />
             <p className="flex-none">{transport.name}</p>
           </div>
           <div
-            className={`flex-33 layout-row layout-align-start-center ${styles.price_row_detail}`}
+            className={`flex-33 layout-row layout-align-space-between-center ${
+              styles.price_row_detail
+            }`}
           >
             <p className="flex-none">Cargo Class:</p>
-            <div className="flex-5" />
             <p className="flex-none"> {containerDescriptions[transport.cargo_class]}</p>
           </div>
           {panel}
@@ -242,10 +242,16 @@ export class AdminPricePanel extends Component {
       const inner = hrArr.map((hr) => {
         const innerInner = []
         transports.forEach((tr) => {
-          const gKey = `${hr.origin_stop_id}_${hr.destination_stop_id}_${tr.id}`
+          const gKey = `${hr.id}_${tr.id}`
           const pricing = pricingsObj[uPriceObj[gKey]]
           if (pricing) {
-            innerInner.push(<RPBInner key={v4()} hubRoute={hr} transport={tr} pricing={pricing} them={theme} />)
+            innerInner.push(<RPBInner
+              key={v4()}
+              hubRoute={hr}
+              transport={tr}
+              pricing={pricing}
+              them={theme}
+            />)
           }
         })
         return innerInner
@@ -266,18 +272,18 @@ export class AdminPricePanel extends Component {
         </div>
       )
     }
-    const routeBoxes = itineraries.map((rt) => {
-      const diArr = []
-      detailedItineraries.forEach((di) => {
-        if (rt.id === di.id) {
-          diArr.push(di)
+    const routeBoxes = routes.map((rt) => {
+      const relHR = []
+      hubRoutes.forEach((hr) => {
+        if (hr.route_id === rt.id) {
+          relHR.push(hr)
         }
       })
       return (
         <RoutePricingBox
           key={v4()}
           route={rt}
-          hrArr={diArr}
+          hrArr={relHR}
           pricingsObj={pricings}
           uPriceObj={userPricings}
           transports={transportCategories}
@@ -317,18 +323,28 @@ export class AdminPricePanel extends Component {
     )
   }
 }
-AdminPricePanel.propTypes = {
+AdminPricingClientView.propTypes = {
   theme: PropTypes.theme,
-  pricing: PropTypes.shape({
-    customer_id: PropTypes.number
-  }),
-  navFn: PropTypes.func.isRequired,
-  target: PropTypes.string.isRequired
+  adminActions: PropTypes.shape({
+    getClientPricings: PropTypes.func
+  }).isRequired,
+  clientPricings: PropTypes.shape({
+    client: PropTypes.client,
+    userPricings: PropTypes.object
+  }).isRequired,
+  loading: PropTypes.bool,
+  match: PropTypes.match.isRequired,
+  pricingData: PropTypes.shape({
+    routes: PropTypes.array,
+    pricings: PropTypes.array,
+    hubRoutes: PropTypes.array,
+    transportCategories: PropTypes.array
+  }).isRequired
 }
 
-AdminPricePanel.defaultProps = {
+AdminPricingClientView.defaultProps = {
   theme: null,
-  pricing: []
+  loading: false
 }
 
-export default AdminPricePanel
+export default AdminPricingClientView
