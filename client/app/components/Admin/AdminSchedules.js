@@ -210,7 +210,7 @@ export class AdminSchedules extends Component {
         });
         const listView = (
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-                <div className="flex-100 layout-row layout-align-start-center">
+                <div className="flex-100 layout-row layout-align-start-center" style={{marginBottom: '25px'}}>
                     <div className="flex-33 layout-row layout-align-start-center">
                         <StyledSelect
                             name="mot-filter"
@@ -218,11 +218,13 @@ export class AdminSchedules extends Component {
                             value={this.state.motFilter}
                             options={filterMoTOptions}
                             onChange={this.setMoTFilter}
+                            placeholder="Filter by: MoT"
                         />
                     </div>
                     <div className="flex-33 layout-row layout-align-start-center">
                         <StyledSelect
                             name="sort-filter"
+                            placeholder="Sort by: Time"
                             className={`${styles.select}`}
                             value={this.state.sortFilter}
                             options={filterSortOptions}
@@ -232,6 +234,7 @@ export class AdminSchedules extends Component {
                     <div className="flex-33 layout-row layout-align-start-center">
                         <StyledSelect
                             name="hub-filter"
+                            placeholder="Filter by: Hub"
                             className={`${styles.select}`}
                             value={this.state.hubFilter}
                             options={hubList}
@@ -270,7 +273,7 @@ export class AdminSchedules extends Component {
         );
         const currView = showList ? listView : genView;
         const backButton = (<RoundButton theme={theme} text="Back to list" size="small" back iconClass="fa-th-list" handleNext={this.toggleView} />);
-        const newButton = (<RoundButton theme={theme} text="New Upload" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
+        const newButton = (<RoundButton theme={theme} text="New" active size="small" iconClass="fa-plus" handleNext={this.toggleView} />);
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>

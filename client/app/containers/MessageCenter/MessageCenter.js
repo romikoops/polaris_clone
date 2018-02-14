@@ -16,7 +16,7 @@ class MessageCenter extends Component {
     }
     selectConvo(conv) {
         conv.shipmentRef = conv.messages[0].shipmentRef;
-        this.setState({selectedConvo: conv});
+        this.setState({selectedConvo: conv.shipmentRef});
         const { messageDispatch } = this.props;
         messageDispatch.markAsRead(conv.shipmentRef);
         messageDispatch.getShipment(conv.shipmentRef);
@@ -48,7 +48,7 @@ class MessageCenter extends Component {
         };
         console.log(clients);
         const messageView = selectedConvo ?
-            <Conversation conversation={selectedConvo} theme={theme} tenant={tenant} clients={clients} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
+            <Conversation conversation={conversations[selectedConvo]} theme={theme} tenant={tenant} clients={clients} messageDispatch={messageDispatch} sendMessage={this.sendMessage} shipment={shipment} user={user}/> :
             <div className="flex-50 layout-row width_100 layout-align-center-start">
                 <h3 className="flex-none">Please select a conversation</h3>
             </div>;

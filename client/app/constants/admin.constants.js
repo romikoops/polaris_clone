@@ -141,6 +141,10 @@ export const adminConstants = {
     NEW_TRUCKING_SUCCESS: 'NEW_TRUCKING_SUCCESS',
     NEW_TRUCKING_FAILURE: 'NEW_TRUCKING_FAILURE',
 
+    ASSIGN_MANAGER_REQUEST: 'ASSIGN_MANAGER_REQUEST',
+    ASSIGN_MANAGER_SUCCESS: 'ASSIGN_MANAGER_SUCCESS',
+    ASSIGN_MANAGER_FAILURE: 'ASSIGN_MANAGER_FAILURE',
+
     VIEW_TRUCKING: 'VIEW_TRUCKING',
     CLEAR_LOADING: 'CLEAR_LOADING',
     ADMIN_LOG_OUT: 'ADMIN_LOG_OUT'
@@ -330,3 +334,10 @@ export const fclPricingSchema = {
     },
     'tenant_id': null
 };
+
+export const managerRoles = [
+    {label: 'LCL', value: 'lcl'},
+    {label: 'FCL', value: 'fcl'},
+    {label: 'Air', value: 'air'},
+    {label: 'Rail', value: 'rail'}
+];

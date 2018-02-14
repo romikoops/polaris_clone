@@ -1,5 +1,5 @@
 import { shipmentConstants } from '../constants';
-import merge from 'lodash/merge';
+
 export function shipment(state = {}, action) {
     switch (action.type) {
         case shipmentConstants.CLEAR_LOADING:
@@ -15,20 +15,20 @@ export function shipment(state = {}, action) {
                 loading: true
             };
         case shipmentConstants.NEW_SHIPMENT_SUCCESS:
-            const resp1 = merge({}, state, {
+            return {
+                ..state,
                 response: {
                     stage1: action.shipmentData
                 },
                 activeShipment: action.shipmentData.shipment.id,
                 loading: false
-            });
-            return resp1;
+            };
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
-            const err1 = merge({}, state, {
+            return {
+                ...state,
                 error: { stage1: [ action.error ] },
                 loading: false
-            });
-            return err1;
+            };
 
         case shipmentConstants.GET_SHIPMENT_REQUEST:
             return {
@@ -37,62 +37,63 @@ export function shipment(state = {}, action) {
         case shipmentConstants.GET_SHIPMENT_SUCCESS:
             return action.shipmentData;
         case shipmentConstants.GET_SHIPMENT_FAILURE:
-            const errG = merge({}, state, {
+            return {
+                ...state,
                 error: { get: [ action.error ] },
                 loading: false
-            });
-            return errG;
+            }
 
         case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
-            const req2 = merge({}, state, {
+            return {
+                ...state,
                 request: { stage2: action.shipmentData },
                 loading: true
-            });
-            return req2;
+            };
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
-            const resp2 = merge({}, state, {
+            return {
+                ...state,
                 response: { stage2: action.shipmentData },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
-            });
-            return resp2;
+            };
         // return {
         //    response: { ...state.response, stage2: action.shipmentData}
         // };
         // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
-            const err2 = merge({}, state, {
+            return {
+                ...state,
                 error: { stage2: [ action.error ] },
                 loading: false
-            });
-            return err2;
+            };
         case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
-            const req3 = merge({}, state, {
+            return {
+                ...state,
                 request: { stage3: action.shipmentData },
                 loading: true
-            });
-            return req3;
+            };
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
-            const resp3 = merge({}, state, {
+            return {
+                ...state,
                 response: { stage3: action.shipmentData },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
-            });
-            return resp3;
+            };
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
-            const err3 = merge({}, state, {
+            return {
+                ...state,
                 error: { stage3: [ action.error ] },
                 loading: false
-            });
-            return err3;
+            };
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
-            const req4 = merge({}, state, {
+            return {
+                ...state,
                 request: { stage4: action.shipmentData },
                 loading: true
-            });
-            return req4;
+            };
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
-            const resp4 = merge({}, state, {
+            return {
+                ...state,
                 response: {
                     stage1: {},
                     stage2: {},
@@ -101,42 +102,37 @@ export function shipment(state = {}, action) {
                 },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
-            });
-            return resp4;
+            };
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
-            const err4 = merge({}, state, {
+            return {
+                ...state,
                 error: { stage3: [ action.error ] },
                 loading: false
-            });
-            return err4;
+            };
 
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
-            const reqDocUpload = merge({}, state, {
-            });
-            return reqDocUpload;
+            return state;
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS:
             const docs = state.response.stage3.documents;
             docs[action.payload.doc_type] = action.payload;
-            const succDocUpload = merge({}, state, {
+            return {
+                ...state,
                 response: {
                     stage3: {
                         documents: docs
                     }
                 },
                 loading: false
-            });
-            return succDocUpload;
+            };
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE:
-            const errDocUpload = merge({}, state, {
+            return {
+                ...state,
                 error: { hubs: action.error }
-            });
-            return errDocUpload;
+            };
 
 
         case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
-            const reqDocDelete = merge({}, state, {
-            });
-            return reqDocDelete;
+            return state;
         case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS:
             const docObj = {};
             Object.keys(state.response.stage3.documents).forEach((key) => {
@@ -144,15 +140,7 @@ export function shipment(state = {}, action) {
                     docObj[key] = state.response.stage3.documents[key];
                 }
             });
-            // const succDocDelete = merge({}, state, {
-            //     response: {
-            //         stage3: {
-            //             documents: docObj
-            //         }
-            //     },
-            //     loading: false
-            // });
-            const succDocDelete = {
+            return {
                 ...state,
                 response: {
                     ...state.response,
@@ -163,13 +151,11 @@ export function shipment(state = {}, action) {
                 },
                 loading: false
             };
-            return succDocDelete;
         case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE:
-            const errDocDelete = merge({}, state, {
+            return {
+                ...state,
                 error: { hubs: action.error }
-            });
-            return errDocDelete;
-
+            }
 
         case shipmentConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted

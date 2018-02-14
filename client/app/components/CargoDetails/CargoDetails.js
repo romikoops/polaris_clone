@@ -373,7 +373,7 @@ export class CargoDetails extends Component {
                     <div className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}>
                         <div className="flex-100 layout-row layout-align-start-center">
                             <div className="flex-none">
-                                <TextHeading theme={theme} size={2} text="Costums" />
+                                <TextHeading theme={theme} size={2} text="Customs" />
                             </div>
                             <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                             <Checkbox onChange={this.toggleCustoms} checked={this.state.customsView} theme={theme} />

@@ -45,10 +45,7 @@ class ShipmentsController < ApplicationController
     @shipment_contacts.each do |sc|
       @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
     end
-    @schedules = []
-    @shipment.schedule_set.each do |ss|
-      @schedules.push(Schedule.find(ss['id']))
-    end
+    @schedules = @shipment.schedule_set
     @documents = []
     @shipment.documents.each do |doc|
       tmp = doc.as_json
