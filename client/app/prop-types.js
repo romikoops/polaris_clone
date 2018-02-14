@@ -61,4 +61,14 @@ PropTypes.shipment = PropTypes.shape({
   imc_reference: PropTypes.string
 })
 
+PropTypes.location = PropTypes.shape({
+  primary: PropTypes.bool,
+  id: PropTypes.number,
+  street_number: PropTypes.string,
+  street: PropTypes.string,
+  city: PropTypes.string,
+  zip_code: PropTypes.string,
+  country: PropTypes.string
+})
+
 export default PropTypes
