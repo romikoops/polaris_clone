@@ -185,7 +185,8 @@ class Itinerary < ApplicationRecord
     end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
     start_hub_ids = start_hubs.ids
     end_hub_ids = end_hubs.ids
-    query = "SELECT *
+    query = ("
+      SELECT *
       FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id} AND id IN (
         SELECT d_stops.itinerary_id
@@ -193,15 +194,17 @@ class Itinerary < ApplicationRecord
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN #{start_hub_ids.sql_format}
-        ) as o_stops
+        ) AS o_stops
         JOIN (
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN #{end_hub_ids.sql_format}
-        ) as d_stops
+        ) AS d_stops
         ON o_stops.itinerary_id = d_stops.itinerary_id
         WHERE o_stops.index < d_stops.index
-      )"
+      )
+    ")
+
     results = Itinerary.find_by_sql(query)
     return {itineraries: results, origin_hubs: start_hubs, destination_hubs: end_hubs}
   end
