@@ -48,4 +48,12 @@ PropTypes.shipments = PropTypes.shape({
   finished: PropTypes.array
 })
 
+PropTypes.shipment = PropTypes.shape({
+  id: PropTypes.number,
+  status: PropTypes.string,
+  clientNmae: PropTypes.string,
+  planned_etd: PropTypes.number,
+  imc_reference: PropTypes.string
+})
+
 export default PropTypes
