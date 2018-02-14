@@ -354,10 +354,12 @@
     max-width: 95%;
     height: 95%;
     z-index: 52;
+    padding: 25px;
+    border-radius: 10px;
     position: relative;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
   .editor_input input{
     height: 34px !important;
@@ -514,5 +516,14 @@
     border-radius: 10px 10px 0 0;
     background: whitesmoke;
     box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .editor_scroll {
+    height: 100%;
+    overflow-y: scroll;
+  }
+  .panel_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
   }
 }

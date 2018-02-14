@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
-// import 'react-select/dist/react-select.css';
-// import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
 import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema} from '../../constants';
@@ -12,7 +10,6 @@ const fclChargeGloss = fclChargeGlossary;
 const lclChargeGloss = lclChargeGlossary;
 const chargeGloss = chargeGlossary;
 const rateOpts = rateBasises;
-// import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions;
 const cargoOpts = cargoOptions;
 const cargoClassOpts = cargoClassOptions;
@@ -181,7 +178,7 @@ export class AdminPriceEditor extends Component {
         const { pricing, selectOptions, showPanel } = this.state;
         const panel = [];
         let gloss;
-        if (pricing._id.includes('lcl')) {
+        if (pricing.load_type === 'lcl') {
             gloss = lclChargeGloss;
         } else {
             gloss = fclChargeGloss;
@@ -244,6 +241,8 @@ export class AdminPriceEditor extends Component {
             if (!pricing.data[key]) {
                 return (
                     <div key={key} className="flex-33 layout-row layout-align-start-center" onClick={() => this.addFeeToPricing(key)}>
+                        <i className="fa fa-plus clip flex-none" style={textStyle}></i>
+                        <div className="flex-5"></div>
                         <p className="flex-none">{key} - {gloss[key]} </p>
                     </div>
                 );
@@ -255,8 +254,8 @@ export class AdminPriceEditor extends Component {
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
                 <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeEdit}>
                 </div>
-                <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start scroll`}>
-                    <div className="flex-95 layout-row layout-wrap layout-align-center-start">
+                <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
+                    <div className={`flex-95 layout-row layout-wrap layout-align-center-start ${styles.editor_scroll}`}>
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Edit Pricing</p>
                         </div>
@@ -287,7 +286,13 @@ export class AdminPriceEditor extends Component {
                                 iconClass="fa-floppy-o"
                             />
                         </div>
-                        <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+
+                    </div>
+                    <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+                        <div className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`} onClick={this.showAddFeePanel}>
+                            <i className="fa fa-times clip" style={textStyle}></i>
+                        </div>
+                        <div className="flex-90 layout-row layout-wrap layout-align-start-start">
                             {feesToAdd}
                         </div>
                     </div>

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
+import FormsyInput from '../FormsyInput/FormsyInput';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { gradientTextGenerator } from '../../helpers';
 import { currencyOptions, rateBasises } from '../../constants/admin.constants';
-
+import Formsy from 'formsy-react';
 export class AdminTruckingCreator extends Component {
     constructor(props) {
         super(props);
@@ -50,27 +51,32 @@ export class AdminTruckingCreator extends Component {
             }
         });
     }
-    addNewCell() {
-        const {cells, newCell, weightSteps} = this.state;
-        const tmpCell = Object.assign({}, newCell);
-        tmpCell.table = Object.assign([], weightSteps);
-        cells.push(Object.assign({}, tmpCell));
+    addNewCell(model) {
+        const {cells, weightSteps} = this.state;
+        const tmpCell = {...model};
+        tmpCell.table = weightSteps.map(s => Object.assign({}, s));
+        cells.push(tmpCell);
         this.setState({
             cells,
             newCell: {
+                upper_zip: '',
+                lower_zip: '',
                 table: []
             }
         });
-        console.log(this.state.weightSteps);
     }
-    addWeightStep() {
-        const {newStep, weightSteps} = this.state;
-        weightSteps.push(Object.assign({}, newStep));
+    addWeightStep(model) {
+        const {weightSteps} = this.state;
+        weightSteps.push({...model});
         this.setState({
-            newStep: {},
+            newStep: {
+                min: parseInt(model.max, 10) + 1,
+                max: parseInt(model.max, 10) + 4
+            },
             weightSteps
         });
     }
+
     handleStepChange(event) {
         const { name, value } = event.target;
         this.setState({
@@ -84,7 +90,8 @@ export class AdminTruckingCreator extends Component {
     handleRateChange(event) {
         const { name, value } = event.target;
         const nameKeys = name.split('-').map(i => parseInt(i, 10));
-        const cells = Object.assign([], this.state.cells);
+        const cells = [...this.state.cells];
+        // debugger;
         cells[nameKeys[0]].table[nameKeys[1]].value = parseInt(value, 10);
         this.setState({
             cells: cells
@@ -136,7 +143,7 @@ export class AdminTruckingCreator extends Component {
             nexus_id: nexus.value.id
         };
         this.props.adminDispatch.saveNewTrucking({meta, data});
-        // this.props.closeForm();
+        this.props.closeForm();
     }
     prepForSelect(arr, labelKey, valueKey, glossary) {
         return arr.map((a) => {
@@ -249,8 +256,19 @@ export class AdminTruckingCreator extends Component {
                 <h4 className="flex-none letter_3">{truckingBasis.label}</h4>
             </div>
         );
-
+        console.log(cells);
         const panel = cells.map((s, i) => {
+            const wsInputs = [];
+            weightSteps.forEach((ws, iw) => {
+                wsInputs.push(<div key={`ws_${iw}`} className="flex-25 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-100 layout-row layout-align-start-center">
+                        <p className="flex-none sup">{`${ws.min} - ${ws.max} ${currency.label} ${rateBasis.label}`}</p>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-start-center input_box">
+                        <input type="number" value={cells[i].table[iw].value} onChange={this.handleRateChange} name={`${i}-${iw}`}/>
+                    </div>
+                </div>);
+            });
             return (
                 <div key={`cell_${i}`} className="flex-100 layout-row layout-align-start-center layout-wrap">
                     <div className="flex-50 layout-row layout-row layout-wrap layout-align-start-start">
@@ -265,45 +283,39 @@ export class AdminTruckingCreator extends Component {
                                 <input type="number" value={s.min_value} onChange={this.handleMinimumChange} name={`${i}-minimum`}/>
                             </div>
                         </div>
-                        {
-                            weightSteps.map((ws, iw) => {
-                                return (<div key={`ws_${iw}`} className="flex-25 layout-row layout-wrap layout-align-start-start">
-                                    <div className="flex-100 layout-row layout-align-start-center">
-                                        <p className="flex-none sup">{`${ws.min} - ${ws.max} ${currency.label} ${rateBasis.label}`}</p>
-                                    </div>
-                                    <div className="flex-100 layout-row layout-align-start-center input_box">
-                                        <input type="number" value={s.table[iw].value} onChange={this.handleRateChange} name={`${i}-${iw}`}/>
-                                    </div>
-                                </div>);
-                            })
-
-                        }
+                        { wsInputs }
                     </div>
                 </div>
             );
         });
         const addNewPrice = (
             <div className="flex-100 layout-row layout-align-start-center">
-                <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
-                    <div className="flex-100 layout-row layout-align-start-center">
-                        <p className="flex-none sup_l">Lower limit zipcode</p>
+                <Formsy onValidSubmit={this.addNewCell} className="flex-100 layout-row layout-align-start-center" >
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <p className="flex-none sup_l">Lower limit zipcode</p>
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center input_box">
+                            <FormsyInput type="number" name="lower_zip" value={newCell.lower_zip} placeholder="Lower Zip" />
+                        </div>
                     </div>
-                    <div className="flex-100 layout-row layout-align-start-center input_box">
-                        <input type="number" name="lower_zip" value={newCell.lower_zip} placeholder="Lower Zip" onChange={this.handleChange}/>
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+                        <div className="flex-100 layout-row layout-align-start-center">
+                            <p className="flex-none sup_l">Upper limit zipcode</p>
+                        </div>
+                        <div className="flex-100 layout-row layout-align-start-center input_box">
+                            <FormsyInput type="number" name="upper_zip" value={newCell.upper_zip} placeholder="Upper Zip" />
+                        </div>
                     </div>
-                </div>
-                <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
-                    <div className="flex-100 layout-row layout-align-start-center">
-                        <p className="flex-none sup_l">Upper limit zipcode</p>
+                    <div className="flex-33 layout-row layout-align-center-center" >
+                        <RoundButton
+                            theme={theme}
+                            size="small"
+                            text="Add another"
+                            iconClass="fa-plus-square-o"
+                        />
                     </div>
-                    <div className="flex-100 layout-row layout-align-start-center input_box">
-                        <input type="number" name="upper_zip" value={newCell.upper_zip} placeholder="Upper Zip" onChange={this.handleChange}/>
-                    </div>
-                </div>
-                <div className="flex-10 layout-row layout-align-center-center" onClick={this.addNewCell}>
-                    <p className="flex-none">Add another zip code</p>
-                    <i className="fa fa-plus-square-o clip" style={textStyle}></i>
-                </div>
+                </Formsy>
             </div>
         );
         const rateView = (
@@ -329,19 +341,26 @@ export class AdminTruckingCreator extends Component {
         );
         const setWeightSteps = (
             <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+
                 <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-none no_m">{`Set pricing weight steps. Values ${rateBasis.label} and inclusive`}</p>
                 </div>
-                <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box_full">
-                    <input type="number" name="min" value={newStep.min} placeholder="Lower Limit" onChange={this.handleStepChange}/>
-                </div>
-                <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box_full">
-                    <input type="number" name="max" value={newStep.max} placeholder="Upper Limit" onChange={this.handleStepChange}/>
-                </div>
-                <div className="flex-33 layout-row layout-align-center-center" onClick={this.addWeightStep}>
-                    <p className="flex-none">Add another weight step</p>
-                    <i className="fa fa-plus-square-o clip" style={textStyle}></i>
-                </div>
+                <Formsy onValidSubmit={this.addWeightStep} className="flex-100 layout-row layout-align-start-center" >
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box">
+                        <FormsyInput type="number" name="min" value={newStep.min} validations="isNumeric" placeholder="Lower Limit"  />
+                    </div>
+                    <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start input_box">
+                        <FormsyInput type="number" name="max" value={newStep.max} validations="isNumeric" placeholder="Upper Limit"  />
+                    </div>
+                    <div className="flex-33 layout-row layout-align-center-center">
+                        <RoundButton
+                            theme={theme}
+                            size="small"
+                            text="Add another"
+                            iconClass="fa-plus-square-o"
+                        />
+                    </div>
+                </Formsy>
                 <div className="flex-100 layout-row layout-align-start-center">
                     {weightStepsArr}
                 </div>
@@ -355,6 +374,7 @@ export class AdminTruckingCreator extends Component {
                         iconClass="fa-chevron-right"
                     />
                 </div>
+
             </div>
         );
         const saveBtn = (
