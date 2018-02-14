@@ -3,7 +3,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+// var BrowserSyncPlugin = require('browser-sync-webpack-plugin')
 module.exports = {
     devtool: 'cheap-eval-source-map',
     entry: [
@@ -35,11 +35,11 @@ module.exports = {
         new webpack.ProvidePlugin({
             Promise: 'es6-promise-promise', // works as expected
         }),
-        new BrowserSyncPlugin({
-            host: 'localhost',
-            port: 3001,
-            proxy: 'http://localhost:8080/'
-        })
+        // new BrowserSyncPlugin({
+        //     host: 'localhost',
+        //     port: 3001,
+        //     proxy: 'http://localhost:8080/'
+        // })
     ],
     module: {
         rules: [
