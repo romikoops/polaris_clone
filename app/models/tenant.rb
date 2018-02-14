@@ -40,6 +40,7 @@ class Tenant < ApplicationRecord
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
   end
+
   def self.update_hs_codes
     data = get_all_items('hsCodes')
     data.each do |datum|
@@ -58,6 +59,7 @@ class Tenant < ApplicationRecord
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
     end
   end
+  
   def self.update_web
     web_data = [
       {subdomain: "greencarrier", cloudfront: 'E1HIJBT7WVXAP3'},
