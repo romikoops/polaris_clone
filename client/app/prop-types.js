@@ -97,4 +97,10 @@ PropTypes.route = PropTypes.shape({
   id: PropTypes.number
 })
 
+PropTypes.vehicleType = PropTypes.shape({
+  id: PropTypes.number,
+  name: PropTypes.string,
+  mode_of_transport: PropTypes.string
+})
+
 export default PropTypes
