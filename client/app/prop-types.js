@@ -103,4 +103,10 @@ PropTypes.vehicleType = PropTypes.shape({
   mode_of_transport: PropTypes.string
 })
 
+PropTypes.schedule = PropTypes.shape({
+  hub_route_key: PropTypes.string,
+  id: PropTypes.number,
+  eta: PropTypes.number
+})
+
 export default PropTypes
