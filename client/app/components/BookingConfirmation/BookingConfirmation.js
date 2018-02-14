@@ -51,26 +51,42 @@ export class BookingConfirmation extends Component {
         };
         if (shipment.load_type === 'cargo_item' && cargoItems) pushToCargo(cargoItems, CargoItemDetails);
         if (shipment.load_type === 'container' && containers) pushToCargo(containers, ContainerDetails);
-        const nArray = [];
-        if (notifyees) {
-            notifyees.forEach(n => {
-                nArray.push(
-                    <div key={v4()} className="flex-33 layout-row">
-                        <div className="flex-15 layout-column layout-align-start-center">
-                            <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
-                        </div>
-                        <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                            <div className="flex-100">
-                                <TextHeading theme={theme} size={4}  text="Notifyee" />
-                            </div>
-                            <p className={` ${styles.address} flex-100`}>
-                                {n.first_name} {n.last_name} <br/>
-                            </p>
-                        </div>
+        let notifyeesJSX = notifyees && notifyees.map(notifyee => (
+            <div key={v4()} className="flex-33 layout-row">
+                <div className="flex-15 layout-column layout-align-start-center">
+                    <i className={`${styles.icon} fa fa-user flex-none`} style={textStyle}></i>
+                </div>
+                <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-100">
+                        <TextHeading theme={theme} size={4}  text="Notifyee" />
                     </div>
-                );
-            });
+                    <p className={`${styles.address} flex-100`}>
+                        {notifyee.first_name} {notifyee.last_name} <br/>
+                    </p>
+                </div>
+            </div>
+        )) || [];
+        if (notifyeesJSX.length === 0) {
+            notifyeesJSX = (
+                <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+                    <div className="flex-5 layout-column layout-align-start-center">
+                        <i
+                            className={`${styles.icon} fa fa-users flex-none`}
+                            style={textStyle}
+                        />
+                    </div>
+                    <div className="flex-95 layout-row layout-wrap layout-align-start-start">
+                        <div className="flex-100">
+                            <TextHeading theme={theme} size={4}  text="Notifyees" />
+                        </div>
+                        <p className={`${styles.address} flex-100`}>
+                            No notifyees added
+                        </p>
+                    </div>
+                </div>
+            );
         }
+
         return (
             <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-wrap layout-align-center">
@@ -94,7 +110,10 @@ export class BookingConfirmation extends Component {
                             <div className={`${styles.b_summ_top} flex-100 layout-row`}>
                                 <div className="flex-33 layout-row">
                                     <div className="flex-15 layout-column layout-align-start-center">
-                                        <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle}></i>
+                                        <i
+                                            className={`${styles.icon} fa fa-user flex-none`}
+                                            style={textStyle}
+                                        />
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                         <div className="flex-100">
@@ -110,20 +129,21 @@ export class BookingConfirmation extends Component {
                                 </div>
                                 <div className="flex-33 layout-row">
                                     <div className="flex-15 layout-column layout-align-start-center">
-                                        <i className={`${styles.icon} fa fa-envelope-open-o flex-none`}
-                                            style={textStyle} />
+                                        <i
+                                            className={`${styles.icon} fa fa-user flex-none`}
+                                            style={textStyle}
+                                        />
                                     </div>
                                     <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                                         <div className="flex-100">
-                                            <TextHeading theme={theme} size={4}  text="Notifyee" />
+                                            <TextHeading theme={theme} size={4}  text="Consignee" />
                                         </div>
                                         <p className={`${styles.address} flex-100`}>
-                                            {consignee.data.first_name}{' '}
+                                            {consignee.data.first_name}
                                             {consignee.data.last_name} <br />
-                                            {consignee.location.street}{' '}
-                                            {consignee.location.street_number}{' '}
-                                            <br />
-                                            {consignee.location.zip_code}{' '}
+                                            {consignee.location.street}
+                                            {consignee.location.street_number} <br />
+                                            {consignee.location.zip_code}
                                             {consignee.location.city} <br />
                                             {consignee.location.country}
                                         </p>
@@ -134,7 +154,9 @@ export class BookingConfirmation extends Component {
                                     <p className="flex-100">Booking placed by: {user.first_name} {user.last_name} </p>
                                 </div>
                             </div>
-                            <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>{nArray}</div>
+                            <div className={`${styles.b_summ_top} flex-100 layout-row layout-wrap`}>
+                                {notifyeesJSX}
+                            </div>
                             <div
                                 className={`${styles.b_summ_bottom} flex-100 layout-row layout-wrap`}>
                                 <div className={`${styles.wrapper_cargo} flex-100 layout-row layout-wrap`}>
@@ -150,7 +172,6 @@ export class BookingConfirmation extends Component {
                                         <div className="flex-none clip">
                                             <TextHeading theme={theme} size={3}  text="Total Price:" />
                                         </div>
-                                        {' '}
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>
                                 </div>
