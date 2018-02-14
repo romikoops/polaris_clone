@@ -29,4 +29,17 @@ PropTypes.req = PropTypes.shape({
   shipment: PropTypes.object
 })
 
+PropTypes.shipmentData = PropTypes.shape({
+  contacts: PropTypes.array,
+  shipment: PropTypes.object,
+  documents: PropTypes.array,
+  cargoItems: PropTypes.array,
+  containers: PropTypes.array,
+  schedules: PropTypes.array
+})
+
+PropTypes.match = PropTypes.shape({
+  params: PropTypes.object
+})
+
 export default PropTypes
