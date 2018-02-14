@@ -353,7 +353,14 @@ tenant_data = [
 ]
 
 CARGO_ITEM_TYPES = CargoItemType.all
+CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
+
 tenant_data.each do |tenant_attr|
   tenant = Tenant.find_or_create_by(tenant_attr)
-  tenant.cargo_item_types << CARGO_ITEM_TYPES
+  
+  if ["demo", "greencarrier"].include? tenant.subdomain 
+    tenant.cargo_item_types << CARGO_ITEM_TYPES_NO_DIMENSIONS
+  else
+    tenant.cargo_item_types << CARGO_ITEM_TYPES
+  end
 end

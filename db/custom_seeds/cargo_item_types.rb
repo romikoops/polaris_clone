@@ -1,6 +1,6 @@
 TenantCargoItemType.destroy_all
 CargoItemType.destroy_all
-cargo_item_types_params = [
+cargo_item_types_data = [
     { 
         category: 'Pallet',
         dimension_x: 101.6, 
@@ -43,4 +43,4 @@ cargo_item_types_params = [
     { category: 'Pallet'}
 ];
 
-CargoItemType.create!(cargo_item_types_params)
+CargoItemType.create!(cargo_item_types_data)
