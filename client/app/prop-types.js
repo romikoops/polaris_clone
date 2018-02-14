@@ -109,4 +109,8 @@ PropTypes.schedule = PropTypes.shape({
   eta: PropTypes.number
 })
 
+PropTypes.charge = PropTypes.shape({
+  id: PropTypes.number
+})
+
 export default PropTypes
