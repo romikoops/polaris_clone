@@ -10,18 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213140231) do
+ActiveRecord::Schema.define(version: 20180214102958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cargo_item_types", force: :cascade do |t|
-    t.integer "dimension_x"
-    t.integer "dimension_y"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
     t.string "description"
     t.string "area"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category"
   end
 
   create_table "cargo_items", force: :cascade do |t|
