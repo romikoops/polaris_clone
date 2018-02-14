@@ -114,4 +114,9 @@ PropTypes.charge = PropTypes.shape({
   id: PropTypes.number
 })
 
+PropTypes.locations = PropTypes.shape({
+  origin: PropTypes.object,
+  destination: PropTypes.object
+})
+
 export default PropTypes
