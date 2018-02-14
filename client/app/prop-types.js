@@ -71,4 +71,13 @@ PropTypes.location = PropTypes.shape({
   country: PropTypes.string
 })
 
+PropTypes.address = {
+  id: PropTypes.number,
+  street_number: PropTypes.string,
+  street: PropTypes.string,
+  city: PropTypes.string,
+  zip_code: PropTypes.string,
+  country: PropTypes.country
+}
+
 export default PropTypes
