@@ -119,4 +119,15 @@ PropTypes.locations = PropTypes.shape({
   destination: PropTypes.object
 })
 
+PropTypes.gMaps = PropTypes.shape({
+  Point: PropTypes.func,
+  Size: PropTypes.func,
+  Marker: PropTypes.func,
+  LatLngBounds: PropTypes.func,
+  MapTypeId: PropTypes.objectOf(PropTypes.string),
+  Map: PropTypes.func,
+  places: PropTypes.object,
+  InfoWindow: PropTypes.func
+})
+
 export default PropTypes
