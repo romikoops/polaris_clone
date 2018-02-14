@@ -80,4 +80,9 @@ PropTypes.address = {
   country: PropTypes.country
 }
 
+PropTypes.hub = {
+  location: PropTypes.location,
+  name: PropTypes.string
+}
+
 export default PropTypes
