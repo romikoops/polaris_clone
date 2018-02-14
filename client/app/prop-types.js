@@ -71,26 +71,30 @@ PropTypes.location = PropTypes.shape({
   country: PropTypes.string
 })
 
-PropTypes.address = {
+PropTypes.address = PropTypes.shape({
   id: PropTypes.number,
   street_number: PropTypes.string,
   street: PropTypes.string,
   city: PropTypes.string,
   zip_code: PropTypes.string,
   country: PropTypes.country
-}
+})
 
-PropTypes.hub = {
+PropTypes.hub = PropTypes.shape({
   location: PropTypes.location,
   name: PropTypes.string
-}
+})
 
-PropTypes.client = {
+PropTypes.client = PropTypes.shape({
   first_name: PropTypes.string,
   last_name: PropTypes.string,
   email: PropTypes.string,
   company_name: PropTypes.string,
   password: PropTypes.string
-}
+})
+
+PropTypes.route = PropTypes.shape({
+  id: PropTypes.number
+})
 
 export default PropTypes
