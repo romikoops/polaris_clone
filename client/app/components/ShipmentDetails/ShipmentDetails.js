@@ -65,12 +65,12 @@ export class ShipmentDetails extends Component {
             nextStageAttempt: false,
             has_on_carriage: false,
             has_pre_carriage: false,
-            shipment: this.props.shipmentData.shipment,
-            allNexuses: this.props.shipmentData.all_nexuses,
+            shipment: this.props.shipmentData ? this.props.shipmentData.shipment : {},
+            allNexuses: this.props.shipmentData ? this.props.shipmentData.all_nexuses : {},
             routeSet: false,
         };
 
-        if (this.props.shipmentData.shipment) {
+        if (this.props.shipmentData && this.props.shipmentData.shipment) {
             this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date;
             this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage;
             this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage;
@@ -325,6 +325,9 @@ export class ShipmentDetails extends Component {
 
     render() {
         const { tenant, user, shipmentData } = this.props;
+        if (!shipmentData) {
+            return '';
+        }
         const { theme, scope, emails, phones } = tenant.data;
         const messages = this.props.messages;
         let cargoDetails;

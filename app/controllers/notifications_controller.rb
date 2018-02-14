@@ -35,7 +35,6 @@ class NotificationsController < ApplicationController
     else
       response_handler({conversations: {}})
     end
-    byebug
     messages["conversations"][params[:shipmentRef]]["messages"].each do |msg|
       msg["read"] = true
     end

@@ -4,7 +4,7 @@ export function shipment(state = {}, action) {
     switch (action.type) {
         case shipmentConstants.CLEAR_LOADING:
             return {
-               ...state,
+                ...state,
                 loading: false
             };
         case shipmentConstants.NEW_SHIPMENT_REQUEST:
@@ -16,8 +16,9 @@ export function shipment(state = {}, action) {
             };
         case shipmentConstants.NEW_SHIPMENT_SUCCESS:
             return {
-                ..state,
+                ...state,
                 response: {
+                    ...state.response,
                     stage1: action.shipmentData
                 },
                 activeShipment: action.shipmentData.shipment.id,
@@ -26,12 +27,16 @@ export function shipment(state = {}, action) {
         case shipmentConstants.NEW_SHIPMENT_FAILURE:
             return {
                 ...state,
-                error: { stage1: [ action.error ] },
+                error: {
+                    ...state.errors,
+                    stage1: [ action.error ]
+                },
                 loading: false
             };
 
         case shipmentConstants.GET_SHIPMENT_REQUEST:
             return {
+                ...state,
                 loading: true
             };
         case shipmentConstants.GET_SHIPMENT_SUCCESS:
@@ -39,65 +44,81 @@ export function shipment(state = {}, action) {
         case shipmentConstants.GET_SHIPMENT_FAILURE:
             return {
                 ...state,
-                error: { get: [ action.error ] },
+                error: {
+                    ...state.errors,
+                    get: [ action.error ]
+                },
                 loading: false
-            }
+            };
 
         case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
             return {
                 ...state,
-                request: { stage2: action.shipmentData },
+                request: {
+                    ...state.request,
+                    stage2: action.shipmentData
+                },
                 loading: true
             };
         case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
             return {
                 ...state,
-                response: { stage2: action.shipmentData },
+                response: {
+                    ...state.response,
+                    stage2: action.shipmentData
+                },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
             };
-        // return {
-        //    response: { ...state.response, stage2: action.shipmentData}
-        // };
-        // return  Object.assign({}, state.shipment, action.shipmentData);
         case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
             return {
                 ...state,
-                error: { stage2: [ action.error ] },
+                error: {
+                    ...state.error,
+                    stage2: [ action.error ] },
                 loading: false
             };
         case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
             return {
                 ...state,
-                request: { stage3: action.shipmentData },
+                request: {
+                    ...state.request,
+                    stage3: action.shipmentData
+                },
                 loading: true
             };
         case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
             return {
                 ...state,
-                response: { stage3: action.shipmentData },
+                response: {
+                    ...state.response,
+                    stage3: action.shipmentData
+                },
                 loading: false,
                 activeShipment: action.shipmentData.shipment.id
             };
         case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
             return {
                 ...state,
-                error: { stage3: [ action.error ] },
+                error: {
+                    ...state.error,
+                    stage3: [ action.error ] },
                 loading: false
             };
         case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
             return {
                 ...state,
-                request: { stage4: action.shipmentData },
+                request: {
+                    ...state.request,
+                    stage4: action.shipmentData
+                },
                 loading: true
             };
         case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
             return {
                 ...state,
                 response: {
-                    stage1: {},
-                    stage2: {},
-                    stage3: {},
+                    ...state.response,
                     stage4: action.shipmentData
                 },
                 loading: false,
@@ -106,7 +127,9 @@ export function shipment(state = {}, action) {
         case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
             return {
                 ...state,
-                error: { stage3: [ action.error ] },
+                error: {
+                    ...state.error,
+                    stage3: [ action.error ] },
                 loading: false
             };
 
@@ -127,7 +150,9 @@ export function shipment(state = {}, action) {
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE:
             return {
                 ...state,
-                error: { hubs: action.error }
+                error: {
+                    ...state.error,
+                    hubs: action.error }
             };
 
 
@@ -155,7 +180,7 @@ export function shipment(state = {}, action) {
             return {
                 ...state,
                 error: { hubs: action.error }
-            }
+            };
 
         case shipmentConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted

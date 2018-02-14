@@ -19,7 +19,7 @@ export class Tooltip extends Component {
         const clipClass = color ? '' : 'clip';
         const id = v4();
         return(
-            <div className="flex-none layout-row layout-align-center-center" style={{padding: '10px 0'}}>
+            <div className="flex-none layout-row layout-align-center-center" style={{margin: '0px 10px'}}>
                 <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText} data-for={id} />
                 <div className="flex-30">
                     <ReactTooltip id={id} className="flex-20"/>
