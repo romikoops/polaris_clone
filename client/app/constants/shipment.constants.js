@@ -26,9 +26,9 @@ export const SHIPMENT_STAGES = [
     },
     {
         step: 3,
-        text: 'Choose Route',
-        header: 'Choose Route',
-        url: '/choose_route'
+        text: 'Choose Offer',
+        header: 'Choose Offer',
+        url: '/choose_offer'
     },
     {
         step: 4,

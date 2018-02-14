@@ -182,10 +182,8 @@ export class ChooseRoute extends Component {
                         <RouteFilterBox theme={theme} pickup={shipment.has_pre_carriage} setDurationFilter={this.setDuration} durationFilter={this.state.durationFilter} setMoT={this.setMoT} moT={this.state.selectedMoT} departureDate={depDay} setDepartureDate={this.setDepDate}/>
                     </div>
                     <div className="flex-75 offset-5 layout-row layout-wrap">
-                        <div className="flex-100 layout-row layout-align-start-center">
-                            <div className={`flex-none ${styles.one_line_summ}`}>
-                                <TextHeading theme={theme} size={2} text="Shipment Headline" />
-                            </div>
+                        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                            <TextHeading theme={theme} size={2} text="Choose Offer" />
                             <p className={`flex-none ${styles.one_line_summ}`}> Shipping {cargoUnits.length} x {shipment.load_type === 'cargo_item' ? cargoText : containerText} to {destinationHubs[0].name.split(' ')[0]}</p>
                         </div>
                         <div className="flex-100 layout-row">

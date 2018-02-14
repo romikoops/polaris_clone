@@ -65,7 +65,7 @@ function setShipmentDetails(data) {
                 dispatch(success(shipmentData));
                 dispatch(
                     push(
-                        '/booking/' + shipmentData.shipment.id + '/choose_route'
+                        '/booking/' + shipmentData.shipment.id + '/choose_offer'
                     )
                 );
                 dispatch(
