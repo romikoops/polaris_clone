@@ -63,7 +63,7 @@ export default function getInputs(
 	            {
 	                cargoItem ? (
 	                    <ValidatedInput
-	                        className="flex-80"
+	                        wrapperClassName="flex-80"
 	                        name={`${i}-payload_in_kg`}
 	                        value={cargoItem.payload_in_kg}
 	                        type="number"
@@ -95,7 +95,7 @@ export default function getInputs(
 	            {
 	                cargoItem ? (
 	                    <ValidatedInput
-	                        className="flex-80"
+	                        wrapperClassName="flex-80"
 	                        name={`${i}-dimension_z`}
 	                        value={cargoItem.dimension_z}
 	                        type="number"
@@ -139,7 +139,7 @@ export default function getInputs(
 	            {
 	                cargoItem ? (
 	                    <ValidatedInput
-	                        className="flex-80"
+	                        wrapperClassName="flex-80"
 	                        name={`${i}-dimension_x`}
 	                        value={cargoItem.dimension_x}
 	                        type="number"
@@ -184,7 +184,7 @@ export default function getInputs(
 	            {
 	                cargoItem ? (
 	                    <ValidatedInput
-	                        className="flex-80"
+	                        wrapperClassName="flex-80"
 	                        name={`${i}-dimension_y`}
 	                        value={cargoItem.dimension_y}
 	                        type="number"

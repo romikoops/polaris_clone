@@ -5,7 +5,7 @@ import Formsy from 'formsy-react';
 export class ValidatedInput extends Component {
     render() {
         return (
-            <Formsy className={this.props.className}>
+            <Formsy className={this.props.wrapperClassName}>
                 <ValidatedInputFormsy {...this.props} />
             </Formsy>
         );
