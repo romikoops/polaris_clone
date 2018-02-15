@@ -47,7 +47,7 @@ export class UserAccount extends Component {
         if (user && users && !users.loading && !users.dashboard) {
             userDispatch.getDashboard(user.id, false);
         }
-        if (user && users && !users.loading && !users.hubs) {
+        if (user && users && !users.hubs) {
             userDispatch.getHubs(false);
         }
     }
