@@ -3,35 +3,11 @@
     width: 150px;
     height: max-content;
     min-height: 500px;
-    position: fixed;
-    top: 100px;
+    position: relative;
+    top: 20px;
     left: 50px;
     z-index: 50;
   }
-  // .wrapper {
-  //   width: 150px;
-  //   // height: max-content;s
-  //   // min-height: 500px;
-  //   position: relative;
-  //   // top: 100px;
-  //   // left: 50px;
-  // }
-  // .wrapper_min {
-  //   width: 150px;
-  //   height: max-content;
-  //   min-height: 50px;
-  //   position: relative;
-  //   top: 100px;
-  //   left: 50px;
-  // }
-  // .wrapper_max {
-  //   width: 150px;
-  //   height: max-content;
-  //   min-height: 500px;
-  //   position: fixed;
-  //   top: 15px;
-  //   left: 25px;
-  // }
   .icon_circle {
     width: 30px;
     height: 30px;
@@ -68,7 +44,7 @@
     }
   }
   .closed {
-    // height: 0px !important;
+     height: 0px !important;
     .nav_icon {
       width: 20px !important;
     }
@@ -83,9 +59,5 @@
       width: 0;
       overflow: hidden;
     }
-    // i:hover + h3 {
-    //   width: 150px;   
-    //   opacity: 1 !important;
-    // }
   }
 }

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
+import { SideNav } from '../../components/SideNav/SideNav';
 import { adminActions } from '../../actions';
 import { Footer } from '../../components/Footer/Footer';
 import { AdminNav, AdminDashboard, AdminSchedules, AdminServiceCharges, SuperAdmin } from '../../components/Admin';
@@ -70,7 +70,7 @@ class Admin extends Component {
         }
     }
     render() {
-        const {theme, adminData, adminDispatch, user} = this.props;
+        const {theme, adminData, adminDispatch, user } = this.props;
 
         const {hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, loading} = adminData;
 
@@ -81,15 +81,15 @@ class Admin extends Component {
             });
         }
         const loadingScreen = loading ? <Loading theme={theme} /> : '';
-        const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user}/>);
-        const menu = <FloatingMenu Comp={nav} theme={theme}/>;
+        const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user} />);
+        const menu = <SideNav Comp={nav} theme={theme}/>;
         // ;
         return (
             <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
-                <Header theme={theme} />
                 {loadingScreen}
+                <Header user={user} theme={theme} nav={menu} dashboard scrollable />
                 <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`}>
-                    {menu}
+
                     <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                         <Switch className="flex">
                             <Route

@@ -30,13 +30,6 @@ export class AdminNav extends Component {
                     target: 'hubs',
                     tooltip: tooltip.hubs
                 },
-                // {
-                //     icon: 'fa-calculator',
-                //     text: 'Service Charges',
-                //     url: '/admin/service_charges',
-                //     target: 'serviceCharges',
-                //     tooltip: tooltip.dashboard
-                // },
                 {
                     icon: 'fa-area-chart',
                     text: 'Pricing',

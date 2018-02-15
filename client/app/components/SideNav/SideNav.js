@@ -4,15 +4,18 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { adminActions, userActions } from '../../actions';
+import { adminMenutooltip as menuTip } from '../../constants';
+import ReactTooltip from 'react-tooltip';
+import { v4 } from 'node-uuid';
+
 class SideNav extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            expanded: false
+            expanded: true
         };
     }
     setAdminUrl(target) {
-        console.log(target);
         const {adminDispatch} = this.props;
         switch(target) {
             case 'hubs':
@@ -115,63 +118,72 @@ class SideNav extends Component {
                 target: 'contacts'
             }
         ];
-        const adminLinks = [
+        const adminLinks =  [
             {
                 icon: 'fa-tachometer',
                 text: 'Dashboard',
                 url: '/admin/dashboard',
-                target: 'dashboard'
+                target: 'dashboard',
+                tooltip: menuTip.dashboard
             },
             {
                 icon: 'fa-ship',
                 text: 'Shipments',
                 url: '/admin/shipments',
-                target: 'shipments'
+                target: 'shipments',
+                tooltip: menuTip.shipments
             },
             {
                 icon: 'fa-building-o',
                 text: 'Hubs',
                 url: '/admin/hubs',
-                target: 'hubs'
+                target: 'hubs',
+                tooltip: menuTip.hubs
             },
             {
                 icon: 'fa-area-chart',
                 text: 'Pricing',
                 url: '/admin/pricing',
-                target: 'pricing'
+                target: 'pricing',
+                tooltip: menuTip.pricing
             },
             {
                 icon: 'fa-list',
                 text: 'Schedules',
                 url: '/admin/schedules',
-                target: 'schedules'
+                target: 'schedules',
+                tooltip: menuTip.schedules
             },
             {
                 icon: 'fa-truck',
                 text: 'Trucking',
                 url: '/admin/trucking',
-                target: 'trucking'
+                target: 'trucking',
+                tooltip: menuTip.trucking
             },
             {
                 icon: 'fa-users',
                 text: 'Client',
                 url: '/admin/clients',
-                target: 'clients'
+                target: 'clients',
+                tooltip: menuTip.clients
             },
             {
                 icon: 'fa-map-signs',
                 text: 'Routes',
                 url: '/admin/routes',
-                target: 'routes'
+                target: 'routes',
+                tooltip: menuTip.routes
             },
             {
                 icon: 'fa-magic',
                 text: 'Set Up',
                 url: '/admin/wizard',
-                target: 'wizard'
+                target: 'wizard',
+                tooltip: menuTip.setup
             }
         ];
-        const isAdmin = user.role_id === 1 || user.role_id === 3;
+        const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4;
         const links = isAdmin ? adminLinks : userLinks;
         const expandNavClass = expanded ? styles.expanded : styles.collapsed;
         const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link;
@@ -181,31 +193,27 @@ class SideNav extends Component {
         };
         const navLinks = links.map((li) => {
             li.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target);
+            const toolId = v4();
             return (
-                <div className="flex-100 layout-row layout-align-start-center" onClick={li.action}>
-                    <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
-                        <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle}></i>
+                <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={li.action}>
+                    <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : '' }>
+                        <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
+                            <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle}></i>
+                        </div>
+                        <div className={`flex-none layout-row-layout-align-center-center ${styles.link_text} ${expandLinkClass}`}>
+                            <p className={`${styles.text} flex-none`}>{li.text}</p>
+                        </div>
                     </div>
-                    <div className={`flex-none layout-row-layout-align-center-center ${styles.link_text} ${expandLinkClass}`}>
-                        <p className="flex-none">{li.text}</p>
-                    </div>
+                    { isAdmin ? <ReactTooltip className={styles.tooltip} id={toolId} /> : '' }
                 </div>
             );
         });
         return (
             <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
-                <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`}>
-                  { expanded ? <div className="flex-none layout-row layout-align-center-center">
-                    <i className="flex-none fa fa-angle-double-left"></i>
-                  </div> : <div className="flex-none layout-row layout-align-center-center"><i className="flex-none fa fa-angle-double-right"></i> </div> }
-                </div>
-                <div className="flex-15 layout-row layout-align-center-center">
-
-                </div>
+                <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
                 <div className="flex layout-row layout-align-center-start layout-wrap">
                     {navLinks}
                 </div>
-                
             </div>
         );
     }

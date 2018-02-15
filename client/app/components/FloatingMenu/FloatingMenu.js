@@ -17,7 +17,7 @@ export class FloatingMenu extends Component {
 
     render() {
         const {
-            Comp,
+            comp,
             theme
         } = this.props;
         const rotateIcon = keyframes` 
@@ -59,7 +59,7 @@ export class FloatingMenu extends Component {
                     </div>
                 </Title>
                 <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>
-                    {Comp}
+                    {comp}
                 </div>
 
             </div>

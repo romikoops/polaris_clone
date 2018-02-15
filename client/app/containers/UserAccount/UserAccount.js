@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Header from '../../components/Header/Header';
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar';
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu';
+import { SideNav } from '../../components/SideNav/SideNav';
 import { bindActionCreators } from 'redux';
 import { Switch, Route } from 'react-router-dom';
 import {
@@ -195,17 +195,13 @@ export class UserAccount extends Component {
                 parentToggle={this.toggleModal}
             />
         );
+        const menu = <SideNav Comp={nav} theme={theme}/>;
         return (
             <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
-                <Header theme={theme} />
                 {loadingScreen}
                 {this.state.showModal ? routeModal : ''}
-                <div
-                    className={`${defs.content_width} layout-row flex-none ${
-                        defs.spacing_md_top
-                    } ${defs.spacing_md_bottom}`}
-                >
-                    <FloatingMenu Comp={nav} theme={theme}/>
+                <Header theme={theme} nav={menu} dashboard scrollable />
+                <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
 
                     <div className="layout-row flex-100 ">
 

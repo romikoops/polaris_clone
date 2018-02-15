@@ -8,10 +8,11 @@ import defs from '../../styles/default_classes.scss';
 import { Redirect } from 'react-router';
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper';
 import { Modal } from '../Modal/Modal';
-
 import { appActions, messagingActions } from '../../actions';
 import { accountIconColor } from '../../helpers';
 import { bindActionCreators } from 'redux';
+import SideNav from '../SideNav/SideNav';
+import { FloatingMenu } from '../FloatingMenu/FloatingMenu';
 const iconColourer = accountIconColor;
 class Header extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class Header extends Component {
             messageDispatch.getUserConversations();
         }
         document.addEventListener('scroll', () => {
-            const isTop = window.pageYOffset < 100;
+            const isTop = window.pageYOffset < 0;
             if (isTop !== this.state.isTop) {
                 this.setState({ isTop });
             }
@@ -69,9 +70,9 @@ class Header extends Component {
         messageDispatch.showMessageCenter();
     }
     render() {
-        const { user, theme, tenant, invert, unread, req, landingPage } = this.props;
+        const { user, theme, tenant, invert, unread, req, scrollable, dashboard } = this.props;
         const dropDownText = user ? user.first_name + ' ' + user.last_name : '';
-
+        const { isTop } = this.state;
         // const dropDownImage = accountIcon;
         const accountLinks = [
             {
@@ -141,18 +142,32 @@ class Header extends Component {
                 parentToggle={this.toggleShowLogin}
             />
         );
-        console.log(landingPage);
+        const classProps = scrollable && !isTop
+            ? `${styles.header_scrollable} 
+        layout-row flex-100 layout-wrap layout-align-center`
+            : `${styles.header}
+        layout-row flex-100 layout-wrap layout-align-center`;
+
+        const sideNav = (
+            <SideNav
+                theme={theme}
+                user={user}
+            />);
+        const dashboardMenu = (
+            <FloatingMenu
+                theme={theme}
+                comp={sideNav}
+            />);
         return (
-            <div className={landingPage && !this.state.isTop ?
-                `${styles.header_scrollable}
-                layout-row flex-100 layout-wrap layout-align-center header`
-                : `${styles.header}
-                layout-row flex-100 layout-wrap layout-align-center`}>
+            <div className={classProps} >
+                <div className="flex layout-row layout-align-start">
+                    { dashboard ? dashboardMenu : '' }
+                </div>
                 <div className="flex layout-row layout-align-start-center">
                     {this.props.menu}
                 </div>
                 <div className={`${defs.content_width} layout-row flex-none`}>
-                    <div className="layout-row flex-50 layout-align-start-center">
+                    <div className={`${styles.infront} layout-row flex-50 layout-align-start-center`}>
                         <img
                             src={logoUrl}
                             className={logoStyle}
@@ -167,6 +182,7 @@ class Header extends Component {
                 <div className="flex layout-row layout-align-start-center">
                 </div>
                 { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+
             </div>
         );
     }
