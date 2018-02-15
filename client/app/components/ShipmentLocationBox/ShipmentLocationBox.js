@@ -426,7 +426,24 @@ export class ShipmentLocationBox extends Component {
             const lng = event.value.longitude;
             const oSelect = event;
 
-            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
+            fetch(
+                (`
+                    ${BASE_URL}/nexuses?
+                    itinerary_ids=${this.props.routeIds}&
+                    target=${'destination'}&
+                    user_input=${event.label}
+                `),
+                {
+                    method: 'GET',
+                    headers: authHeader()
+                }
+            ).then(promise => {
+                promise.json().then(response => {
+                    console.log(response);
+                    debugger;
+                });
+            });
+
             this.props.setTargetAddress('origin', origin );
             this.setMarker(
                 { lat: lat, lng: lng },
