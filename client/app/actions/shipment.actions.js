@@ -357,7 +357,7 @@ function deleteDocument(id) {
         dispatch(request());
 
         shipmentService.deleteDocument(id).then(
-            data => {
+            () => {
                 dispatch(
                     alertActions.success('Deleting Document successful')
                 );

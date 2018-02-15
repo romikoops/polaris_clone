@@ -23,6 +23,7 @@ export class AdminTruckingCreator extends Component {
             newCell: {
                 table: []
             },
+            cities: [],
             newStep: {},
             weightSteps: [],
             steps: {
@@ -86,6 +87,44 @@ export class AdminTruckingCreator extends Component {
                 ...this.state.newStep,
                 [name]: parseInt(value, 10)
             }
+        });
+    }
+
+    handlePlaceChange(place) {
+        const { cities } = this.state;
+        const newLocation = {
+            streetNumber: '',
+            street: '',
+            zipCode: '',
+            city: '',
+            country: '',
+        };
+        place.address_components.forEach(ac => {
+            if (ac.types.includes('street_number')) {
+                newLocation.streetNumber = ac.long_name;
+            }
+
+            if (ac.types.includes('route') || ac.types.includes('premise')) {
+                newLocation.street = ac.long_name;
+            }
+
+            if (ac.types.includes('administrative_area_level_1') || ac.types.includes('locality')) {
+                newLocation.city = ac.long_name;
+            }
+
+            if (ac.types.includes('postal_code')) {
+                newLocation.zipCode = ac.long_name;
+            }
+
+            if (ac.types.includes('country')) {
+                newLocation.country = ac.long_name;
+            }
+        });
+        newLocation.latitude = place.geometry.location.lat();
+        newLocation.longitude = place.geometry.location.lng();
+        newLocation.geocodedAddress = place.formatted_address;
+        this.setState({
+            cities: cities.push(newLocation)
         });
     }
 
@@ -269,12 +308,12 @@ export class AdminTruckingCreator extends Component {
                             background: 'white'
                         }}
                         handlePlaceChange={this.handlePlaceChange}
-                        hideMap={true}
+                        hideMap
                     />
                 </div>
             </div>
         );
-        
+        console.log(cityInput);
         const panel = cells.map((s, i) => {
             const wsInputs = [];
             weightSteps.forEach((ws, iw) => {

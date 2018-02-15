@@ -15,7 +15,7 @@ class AdminTrucking extends Component {
         this.state = {
             selectedRoute: false,
             currentView: 'open',
-            creatorView: true
+            creatorView: false
         };
         this.viewTrucking = this.viewTrucking.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
