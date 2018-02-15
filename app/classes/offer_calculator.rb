@@ -240,12 +240,12 @@ class OfferCalculator
     "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
   end
 
-  def determine_trucking_options(origin, hub)
+  def determine_trucking_options(origin, hub, target)
     google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
 
     price_results = @cargo_units.map do |cargo_unit|
-      calc_trucking_price(origin, cargo_unit, km, hub, @mongo)
+      calc_trucking_price(origin, cargo_unit, km, hub, @mongo, target)
     end
 
     trucking_total = { value: 0, currency: "" }
