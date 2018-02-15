@@ -11,6 +11,7 @@ import defaults from '../../styles/default_classes.scss';
 import { Price } from '../Price/Price';
 import { TextHeading } from '../TextHeading/TextHeading';
 import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
@@ -38,6 +39,7 @@ export class BookingConfirmation extends Component {
         const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
         const cargo = [];
         const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+        const brightGradientStyle = theme ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary) : {color: 'black'};
         const tenantName = tenant ? tenant.name : '';
         const pushToCargo = (array, Comp) => {
             array.forEach((ci, i) => {
@@ -168,10 +170,13 @@ export class BookingConfirmation extends Component {
                                     {cargo}
                                 </div>
                                 <div className="flex-100 layout-row layout-align-end-end">
-                                    <div className={`${styles.tot_price} flex-none layout-row layout-align-space-between`} >
-                                        <div className="flex-none clip">
-                                            <TextHeading theme={theme} size={3}  text="Total Price:" />
-                                        </div>
+
+                                    <div
+                                        className={`${styles.tot_price} flex-none layout-row layout-align-space-between`}
+                                        style={brightGradientStyle}
+                                    >
+                                        <p>Total Price:</p>
+                                        <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
                                         <Price value={shipment.total_price} user={user}/>
                                     </div>
                                 </div>
