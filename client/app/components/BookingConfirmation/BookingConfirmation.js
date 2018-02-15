@@ -12,18 +12,27 @@ import { Price } from '../Price/Price';
 import { TextHeading } from '../TextHeading/TextHeading';
 import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
 import { Tooltip } from '../Tooltip/Tooltip';
+import { Checkbox } from '../Checkbox/Checkbox';
 
 export class BookingConfirmation extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            acceptTerms: false
+        };
+        this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
     }
     componentDidMount() {
         const { setStage } = this.props;
         setStage(5);
         window.scrollTo(0, 0);
     }
+    toggleAcceptTerms() {
+        this.setState({ acceptTerms: !this.state.acceptTerms });
+        // this.props.handleInsurance();
+    }
     render() {
-        const { theme, shipmentData, tenant, user, shipmentDispatch } = this.props;
+        const { theme, shipmentData, user, shipmentDispatch } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
         const {
             shipment,
@@ -35,12 +44,12 @@ export class BookingConfirmation extends Component {
             cargoItems,
             containers
         } = shipmentData;
+        const {acceptTerms} = this.state;
         if (!shipment) return <h1> Loading</h1>;
         const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
         const cargo = [];
         const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const brightGradientStyle = theme ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary) : {color: 'black'};
-        const tenantName = tenant ? tenant.name : '';
         const pushToCargo = (array, Comp) => {
             array.forEach((ci, i) => {
                 const offset = i % 3 !== 0 ? 'offset-5' : '';
@@ -88,6 +97,24 @@ export class BookingConfirmation extends Component {
                 </div>
             );
         }
+        const acceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    text="Finish Booking"
+                    active
+                />
+            </div>
+        );
+        const nonAcceptedBtn = (
+            <div className="flex-none layout-row">
+                <RoundButton
+                    theme={theme}
+                    text="Finish Booking"
+                    handleNext={e => e.preventDefault()}
+                />
+            </div>
+        );
 
         return (
             <div className="flex-100 layout-row layout-wrap">
@@ -96,15 +123,8 @@ export class BookingConfirmation extends Component {
                         <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
                             <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                                 <p className="flex-100">
-                                    Thank you for booking with {tenantName}.
+                                    Please review your booking details before confirming the shipment.
                                 </p>
-                            </div>
-                            <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
-                                <p className="flex-100">Booking Reference: {shipment.imc_reference}</p>
-                            </div>
-                            <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
-                                <p className="flex-100"> We have just sent your order confirmation with all the booking details to your account e-mail address. Now, our team will review your order and contact you with any further instructions or simply confirm the request via e-mail.</p>
-                                <p className="flex-100">Do not hesitate to contact us either through the message center or your account manager </p>
                             </div>
                         </div>
                         <RouteHubBox hubs={hubs} route={schedules} theme={theme}/>
@@ -185,6 +205,26 @@ export class BookingConfirmation extends Component {
                     </div>
 
                 </div>
+                <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                        <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
+                            <div className="flex-50 layout-row layout-align-start-center">
+                                <div className="flex-15 layout-row layout-align-center-center">
+                                    <Checkbox
+                                        onChange={this.toggleAcceptTerms}
+                                        checked={this.state.insuranceView}
+                                        theme={theme}
+                                    />
+                                </div>
+                                <div className="flex layout-row layout-align-start-center">
+                                    <div className="flex-5"></div>
+                                    <p className="flex-95">By checking this box you certify the provided information is accurate and agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                                </div>
+                            </div>
+                            <div className="flex-50 layout-row layout-align-end-center">
+                                { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                            </div>
+                        </div>
+                    </div>
                 <hr className={`${styles.sec_break} flex-100`}/>
                 <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                     <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>

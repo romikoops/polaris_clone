@@ -78,7 +78,7 @@ module ShippingTools
 
     hsCodes = shipment_data[:hsCodes].as_json
     shipment.assign_attributes(
-      status: "requested", 
+      
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
@@ -156,15 +156,7 @@ module ShippingTools
     @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
 
-    message = {
-      title: 'Booking Received',
-      message: "
-        Thank you for making your booking through #{current_user.tenant.name}. 
-        You will be notified upon confirmation of the order.
-      ", 
-      shipmentRef: shipment.imc_reference
-    }
-    add_message_to_convo(current_user, message, true)
+    
 
     return {
       shipment:   shipment,
@@ -176,6 +168,22 @@ module ShippingTools
       cargoItems: @cargo_items,
       containers: @containers
     }
+  end
+
+  def confirm_shipment
+    shipment = Shipment.find(params[:shipment_id])
+    shipment.status = "requested"
+    shipment.save!
+    message = {
+      title: 'Booking Received',
+      message: "
+        Thank you for making your booking through #{current_user.tenant.name}. 
+        You will be notified upon confirmation of the order.
+      ", 
+      shipmentRef: shipment.imc_reference
+    }
+    add_message_to_convo(current_user, message, true)
+    return shipment
   end
 
   def contact_location_params(resource)

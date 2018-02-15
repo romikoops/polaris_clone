@@ -4,15 +4,14 @@ import styles from './BookingDetails.scss';
 import defaults from '../../styles/default_classes.scss';
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
 import { ContactSetter } from '../ContactSetter/ContactSetter';
-import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
+// import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox';
 import { CargoDetails } from '../CargoDetails/CargoDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { history } from '../../helpers';
-import { Checkbox } from '../Checkbox/Checkbox';
 import { isEmpty } from '../../helpers/objectTools';
 import * as Scroll from 'react-scroll';
 import Formsy from 'formsy-react';
-import { TextHeading }  from '../TextHeading/TextHeading';
+// import { TextHeading }  from '../TextHeading/TextHeading';
 // import { gradientTextGenerator } from '../../helpers';
 export class BookingDetails extends Component {
     constructor(props) {
@@ -228,29 +227,12 @@ export class BookingDetails extends Component {
             contacts,
             userLocations,
             schedules,
-            containers,
-            cargoItems,
-            locations
+            // containers,
+            // cargoItems,
+            // locations
         } = shipmentData;
-        const { consignee, shipper, notifyees, acceptTerms, customs } = this.state;
-        const acceptedBtn = (
-            <div className="flex-none layout-row">
-                <RoundButton
-                    theme={theme}
-                    text="Finish Booking"
-                    active
-                />
-            </div>
-        );
-        const nonAcceptedBtn = (
-            <div className="flex-none layout-row">
-                <RoundButton
-                    theme={theme}
-                    text="Finish Booking"
-                    handleNext={e => e.preventDefault()}
-                />
-            </div>
-        );
+        const { consignee, shipper, notifyees, customs } = this.state;
+
         return (
 
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -294,7 +276,7 @@ export class BookingDetails extends Component {
                         user={user}
                         finishBookingAttempted={this.state.finishBookingAttempted}
                     />
-                    <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                    {/* <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                         <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
                             <div className="flex-100 layout-row layout-align-start-center">
                                 <div className="flex-100 layout-row">
@@ -321,24 +303,19 @@ export class BookingDetails extends Component {
                                 }
                             </div>
                         </div>
-                    </div>
+                    </div>*/}
                     <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                         <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                             <div className="flex-50 layout-row layout-align-start-center">
-                                <div className="flex-15 layout-row layout-align-center-center">
-                                    <Checkbox
-                                        onChange={this.toggleAcceptTerms}
-                                        checked={this.state.insuranceView}
-                                        theme={theme}
-                                    />
-                                </div>
-                                <div className="flex layout-row layout-align-start-center">
-                                    <div className="flex-5"></div>
-                                    <p className="flex-95">By checking this box you agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
-                                </div>
                             </div>
                             <div className="flex-50 layout-row layout-align-end-center">
-                                { acceptTerms ? acceptedBtn : nonAcceptedBtn}
+                                <div className="flex-none layout-row">
+                                    <RoundButton
+                                        theme={theme}
+                                        text="Review Booking"
+                                        active
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -70,6 +70,10 @@ class ShipmentsController < ApplicationController
     resp = finish_shipment_booking(params)
     response_handler(resp)
   end
+  def confirm_shipment
+    resp = confirm_shipment(params)
+    response_handler(resp)
+  end
 
   def update
     resp = update_shipment(session, params)
