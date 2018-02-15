@@ -1,0 +1,2 @@
+class NexusTruckingAvailability < ApplicationRecord
+end

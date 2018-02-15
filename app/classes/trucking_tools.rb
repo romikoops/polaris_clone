@@ -66,7 +66,11 @@ module TruckingTools
     if hub && hub.trucking_type
       case hub_trucking_query["type"]
       when 'zipcode'
-        return calc_by_zipcode(destination, cargo_item, km, hub_trucking_query["table"], client)
+        if hub_trucking_query["modifier"] == "PER_CBM"
+          return calc_by_zipcode_cbm(destination, cargo_item.volume_in_cm3, km, hub_trucking_query["table"], client)
+        else
+          return calc_by_zipcode_weight(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
+        end
       when 'city'
         return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
       end
@@ -104,7 +108,7 @@ module TruckingTools
       return {value: 1.25 * km, currency: "EUR"}
     end
   end
-  def calc_by_zipcode_cbm(destination, weight, km, tpKey, client)
+  def calc_by_zipcode_cbm(destination, volume, km, tpKey, client)
     zc = destination.get_zip_code
     zip_int = zc.gsub!(" ", "").to_i
     tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)

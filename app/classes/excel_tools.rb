@@ -232,38 +232,82 @@ module ExcelTools
     locations = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
-    schedules = first_sheet.parse(vessel: 'VESSEL', call_sign: 'VOYAGE_CODE', from: 'FROM', to: 'TO', eta: 'ETA', etd: 'ETS')
+    schedules = first_sheet.parse( from: 'FROM', to: 'TO', eta: 'ETA', etd: 'ETS')
 
     schedules.each do |row|
       row[:mode_of_transport] = "air"
 
+      tenant = Tenant.find(current_user.tenant_id)
+     
+      tenant_vehicle = TenantVehicle.find_by(
+          tenant_id: user.tenant_id, 
+          mode_of_transport: row[:mode_of_transport]
+        )
+      startDate = row[:etd]
+      endDate =  row[:eta]
+      
       if locations[row[:from]] && locations[row[:to]]
-        route = Route.find_by("origin_id = ? AND destination_id = ?", locations[row[:from]].id, locations[row[:to]].id)
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+      
       else
         locations[row[:from]] = Location.find_by_name(row[:from])
         locations[row[:to]] = Location.find_by_name(row[:to])
 
-        route = Route.find_by("origin_id = ? AND destination_id = ?", locations[row[:from]].id, locations[row[:to]].id)
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
       end
+      origin_hub_ids = locations[row[:from]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      destination_hub_ids = locations[row[:to]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      hub_ids = origin_hub_ids + destination_hub_ids
 
-      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      stops = itinerary.stops.order(:index)
+      
+      if itinerary
+        sched = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
+      else
+        raise "Route cannot be found!"
+      end
+    end
+  end
 
+  def overwrite_trucking_schedules(params, user = current_user)
+    old_ids = Schedule.pluck(:id)
+    new_ids = []
+    locations = {}
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    schedules = first_sheet.parse(from: 'FROM', to: 'TO', eta: 'ETA', etd: 'ETS')
+
+    schedules.each do |row|
+      row[:mode_of_transport] = "trucking"
+
+      tenant = Tenant.find(current_user.tenant_id)
+     
       tenant_vehicle = TenantVehicle.find_by(
-        tenant_id: user.tenant_id, 
-        mode_of_transport: row[:mode_of_transport]
-      )
+          tenant_id: user.tenant_id, 
+          mode_of_transport: row[:mode_of_transport]
+        )
+      startDate = row[:etd]
+      endDate =  row[:eta]
+      
+      if locations[row[:from]] && locations[row[:to]]
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+      
+      else
+        locations[row[:from]] = Location.find_by_name(row[:from])
+        locations[row[:to]] = Location.find_by_name(row[:to])
 
-      hub1 = locations[row[:from]].hubs_by_type(row[:mode_of_transport]).first
-      hub2 = locations[row[:to]].hubs_by_type(row[:mode_of_transport]).first
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+      end
+      origin_hub_ids = locations[row[:from]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      destination_hub_ids = locations[row[:to]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      hub_ids = origin_hub_ids + destination_hub_ids
 
-      row[:vehicle_id] = tenant_vehicle.vehicle_id
-      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
-      row[:tenant_id] = user.tenant_id
-      row.delete(:from)
-      row.delete(:to)
-
-      if route
-        sched = route.schedules.find_or_create_by(row)
+      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      stops = itinerary.stops.order(:index)
+      
+      if itinerary
+        sched = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
       else
         raise "Route cannot be found!"
       end
@@ -274,34 +318,43 @@ module ExcelTools
     locations = {}
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
-    schedules = first_sheet.parse(vessel: 'VESSEL', call_sign: 'VOYAGE_CODE', from: 'FROM', to: 'TO', eta: 'ETA', etd: 'ETS')
-
+    schedules = first_sheet.parse(
+      vessel: 'VESSEL', 
+      call_sign: 'VOYAGE_CODE', 
+      from: 'FROM', 
+      to: 'TO', 
+      eta: 'ETA', 
+      etd: 'ETS')
     schedules.each do |row|
       row[:mode_of_transport] = "ocean"
 
+      tenant = Tenant.find(current_user.tenant_id)
+     
+      tenant_vehicle = TenantVehicle.find_by(
+          tenant_id: user.tenant_id, 
+          mode_of_transport: row[:mode_of_transport]
+        )
+      startDate = row[:etd]
+      endDate =  row[:eta]
+      
       if locations[row[:from]] && locations[row[:to]]
-        route = Route.find_by("origin_nexus_id = ? AND destination_nexus_id = ?", locations[row[:from]].id, locations[row[:to]].id)
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+      
       else
         locations[row[:from]] = Location.find_by_name(row[:from])
         locations[row[:to]] = Location.find_by_name(row[:to])
 
-        route = Route.find_by("origin_nexus_id = ? AND destination_nexus_id = ?", locations[row[:from]].id, locations[row[:to]].id)
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
       end
-      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      origin_hub_ids = locations[row[:from]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      destination_hub_ids = locations[row[:to]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
+      hub_ids = origin_hub_ids + destination_hub_ids
 
-      tenant_vehicle = TenantVehicle.find_by(
-        tenant_id: user.tenant_id, 
-        mode_of_transport: row[:mode_of_transport]
-      )
-
-      row[:tenant_id] = user.tenant_id
-      row[:vehicle_id] = tenant_vehicle.vehicle_id
-      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
-      row.delete(:from)
-      row.delete(:to)
-
-      if route
-        sched = hubroute.schedules.find_or_create_by(row)
+      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      stops = itinerary.stops.order(:index)
+      
+      if itinerary
+        sched = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
       else
         raise "Route cannot be found!"
       end
@@ -316,24 +369,33 @@ module ExcelTools
 
     schedules.each do |train_schedule|
       train_schedule[:mode_of_transport] = 'train'
-      if data_box[train_schedule[:from]] && data_box[train_schedule[:to]]
-        robj = Route.where("origin_id = ? AND destination_id = ?", data_box[train_schedule[:from]], data_box[train_schedule[:to]]).first
+      tenant = Tenant.find(current_user.tenant_id)
+      
+      tenant_vehicle = TenantVehicle.find_by(
+          tenant_id: user.tenant_id, 
+          mode_of_transport: train_schedule[:mode_of_transport]
+        )
+      startDate = train_schedule[:etd]
+      endDate =  train_schedule[:eta]
+      
+      if locations[train_schedule[:from]] && locations[train_schedule[:to]]
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: train_schedule[:mode_of_transport], name: "#{locations[train_schedule[:from]].name} - #{locations[train_schedule[:to]].name}")
+      
       else
-        data_box[train_schedule[:from]] = Location.find_by_hub_name(train_schedule[:from])
-        data_box[train_schedule[:to]] = Location.find_by_hub_name(train_schedule[:to])
-        robj = Route.where("origin_id = ? AND destination_id = ?", data_box[train_schedule[:from]], data_box[train_schedule[:to]]).first
+        locations[train_schedule[:from]] = Location.find_by_name(train_schedule[:from])
+        locations[train_schedule[:to]] = Location.find_by_name(train_schedule[:to])
+
+        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: train_schedule[:mode_of_transport], name: "#{locations[train_schedule[:from]].name} - #{locations[train_schedule[:to]].name}")
       end
-      hubroute = HubRoute.create_from_route(route, row[:mode_of_transport])
+      origin_hub_ids = locations[train_schedule[:from]].hubs_by_type(train_schedule[:mode_of_transport], user.tenant_id).ids
+      destination_hub_ids = locations[train_schedule[:to]].hubs_by_type(train_schedule[:mode_of_transport], user.tenant_id).ids
+      hub_ids = origin_hub_ids + destination_hub_ids
 
-      tenant_vehicle = TenantVehicle.find_by(tenant_id: user.tenant_id, mode_of_transport: row[:mode_of_transport])
-
-      hub1 = locations[row[:from]].hubs_by_type("rail").first
-      hub2 = locations[row[:to]].hubs_by_type("rail").first
-      row[:tenant_id] = user.tenant_id
-      row[:vehicle_id] = tenant_vehicle.vehicle_id
-      row[:hub_route_key] = "#{hubroute.starthub_id}-#{hubroute.endhub_id}"
-      if robj
-        ts = robj.schedules.find_or_create_by(train_schedule)
+      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      stops = itinerary.stops.order(:index)
+      
+      if itinerary
+        sched = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
       else
         raise "Route cannot be found!"
       end
@@ -866,7 +928,7 @@ module ExcelTools
         vehicle      = Vehicle.find_by(name: vehicle_name)
         # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
-
+      
         new_pricings_aux_data[pricing_key] = {
           itinerary:       itinerary,
           hub_ids:         hub_ids
@@ -916,6 +978,8 @@ module ExcelTools
         
         uuid = SecureRandom.uuid
        
+        
+
         pathKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}"
         priceKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
         pricing_data[:_id] = priceKey;

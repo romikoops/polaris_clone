@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdminNavItem.scss';
 import { gradientTextGenerator } from '../../helpers';
+import ReactTooltip from 'react-tooltip';
 export class AdminNavItem extends Component {
     constructor(props) {
         super(props);
@@ -9,11 +10,10 @@ export class AdminNavItem extends Component {
     }
     handleLink() {
         const {target, navFn} = this.props;
-        console.log('NAV ' + target);
         navFn(target);
     }
     render() {
-        const { iconClass, theme, text} = this.props;
+        const { iconClass, theme, text, tooltip} = this.props;
         const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         return(
             <div className={`flex-100 layout-row layout-wrap layout-align-start-center pointy ${styles.nav_item}`} onClick={this.handleLink}>
@@ -21,7 +21,10 @@ export class AdminNavItem extends Component {
                     <i className={`flex-none fa ${iconClass}`} style={textStyle}></i>
                 </div>
                 <div className="flex layout-row layout-wrap nav_text">
-                    <h3 className="flex-none" >{text}</h3>
+                    <h3 className="flex-none" >
+                        <p data-tip={tooltip} >{text}</p>
+                    </h3>
+                    <ReactTooltip className={`${styles.nav_tooltip} `} />
                 </div>
             </div>
         );

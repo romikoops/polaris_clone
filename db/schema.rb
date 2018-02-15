@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215091115) do
+ActiveRecord::Schema.define(version: 20180215132113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,6 +111,7 @@ ActiveRecord::Schema.define(version: 20180215091115) do
     t.string "trucking_type"
     t.string "photo"
     t.integer "nexus_id"
+    t.integer "trucking_availability_id"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -160,6 +161,14 @@ ActiveRecord::Schema.define(version: 20180215091115) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nexus_trucking_availabilities", force: :cascade do |t|
+    t.integer "trucking_availability_id"
+    t.integer "nexus_id"
+    t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -336,6 +345,13 @@ ActiveRecord::Schema.define(version: 20180215091115) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "vehicle_id"
+  end
+
+  create_table "trucking_availabilities", force: :cascade do |t|
+    t.jsonb "cargo_item"
+    t.jsonb "container"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "trucking_options", force: :cascade do |t|
