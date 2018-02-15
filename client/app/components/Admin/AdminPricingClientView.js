@@ -225,7 +225,16 @@ export class AdminPricingClientView extends Component {
                     {routeBoxes}
 
                 </div>
-                { editorBool ? <AdminPriceEditor closeEdit={this.closeEdit} theme={theme} hubRoute={editHubRoute} transport={editTransport} userId={client.id} isNew={false} pricing={editPricing} adminTools={adminActions} /> : '' }
+                { editorBool ? <AdminPriceEditor
+                    closeEdit={this.closeEdit}
+                    theme={theme}
+                    hubRoute={editHubRoute}
+                    transport={editTransport}
+                    userId={client.id}
+                    isNew={false}
+                    pricing={editPricing}
+                    adminTools={adminActions}
+                /> : '' }
             </div>
         );
     }

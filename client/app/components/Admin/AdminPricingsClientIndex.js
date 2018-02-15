@@ -19,7 +19,7 @@ export class AdminPricingsClientIndex extends Component {
     }
 
     backToIndex() {
-       history.goBack();
+        history.goBack();
     }
 
     viewClient(client) {

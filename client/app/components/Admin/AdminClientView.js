@@ -4,6 +4,7 @@ import { AdminShipmentRow, AdminAddressTile} from './';
 import styles from './Admin.scss';
 import {v4} from 'node-uuid';
 import { TextHeading } from '../TextHeading/TextHeading';
+import { adminClientsTooltips as clientTip } from '../../constants';
 export class AdminClientView extends Component {
     constructor(props) {
         super(props);
@@ -25,10 +26,23 @@ export class AdminClientView extends Component {
 
             // })
             // hubTiles.push( <AdminHubTile hub={hubs[ship]})
-            shipRows.push( <AdminShipmentRow key={v4()} shipment={ship} hubs={hubs} theme={theme} handleSelect={this.viewShipment}  client={client}/>);
+            shipRows.push( <AdminShipmentRow
+                key={v4()}
+                shipment={ship}
+                hubs={hubs}
+                theme={theme}
+                handleSelect={this.viewShipment}
+                client={client}/>);
         });
         const locationArr = locations.map((loc) => {
-            return <AdminAddressTile key={v4()} address={loc} theme={theme} client={client}/>;
+            return (<AdminAddressTile
+                key={v4()}
+                address={loc}
+                theme={theme}
+                client={client}
+                tooltip={clientTip.edit_location}
+                showTooltip
+            />);
         });
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">

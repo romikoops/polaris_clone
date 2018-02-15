@@ -8,6 +8,8 @@ import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 import { TextHeading } from '../TextHeading/TextHeading';
+import { adminRoutesTooltips as routeTip } from '../../constants';
+import ReactTooltip from 'react-tooltip';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminRoutes extends Component {
@@ -63,36 +65,64 @@ class AdminRoutes extends Component {
             </div>);
         const newButton = (
             <div className="flex-none layout-row">
-                <RoundButton
-                    theme={theme}
-                    size="small"
-                    text="New Route"
-                    active
-                    handleNext={this.toggleNewRoute}
-                    iconClass="fa-plus"
-                />
+                <div className={styles.btn_wrapper}>
+                    <p data-tip={routeTip.new} data-for="newRouteTip">
+                        <RoundButton
+                            theme={theme}
+                            size="small"
+                            text="New Route"
+                            active
+                            handleNext={this.toggleNewRoute}
+                            iconClass="fa-plus"
+                        />
+                    </p>
+                </div>
+                <ReactTooltip id="newRouteTip" className={`${styles.tooltip} `} />
             </div>);
         const title = selectedRoute ? 'Route Overview' : 'Routes';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <TextHeading theme={theme} size={1} text={title} />
+                    <TextHeading
+                        theme={theme}
+                        size={1}
+                        text={title}
+                    />
                     {selectedRoute ? backButton : ''}
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-end-center">
                     {newButton}
                 </div>
-                { this.state.newRoute ? <AdminRouteForm theme={theme} close={this.closeModal} hubs={hubs} saveRoute={this.saveNewRoute}/> : ''}
+                { this.state.newRoute ? <AdminRouteForm
+                    theme={theme}
+                    close={this.closeModal}
+                    hubs={hubs
+                    } saveRoute={this.saveNewRoute}
+                /> : ''}
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/routes"
-                        render={props => <AdminRoutesIndex theme={theme} hubs={hubs} hubHash={hubHash} itineraries={itineraries} adminDispatch={adminDispatch} {...props} viewItinerary={this.viewItinerary} loading={loading} />}
+                        render={props => <AdminRoutesIndex
+                            theme={theme}
+                            hubs={hubs}
+                            hubHash={hubHash}
+                            itineraries={itineraries}
+                            adminDispatch={adminDispatch} {...props}
+                            viewItinerary={this.viewItinerary}
+                            loading={loading}
+                        />}
                     />
                     <Route
                         exact
                         path="/admin/routes/:id"
-                        render={props => <AdminRouteView theme={theme} hubs={hubs} hubHash={hubHash} itineraryData={itinerary} adminActions={adminDispatch} {...props} loading={loading} />}
+                        render={props => <AdminRouteView
+                            theme={theme} hubs={hubs}
+                            hubHash={hubHash}
+                            itineraryData={itinerary}
+                            adminActions={adminDispatch} {...props}
+                            loading={loading}
+                        />}
                     />
                 </Switch>
             </div>

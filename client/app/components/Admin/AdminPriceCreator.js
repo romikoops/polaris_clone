@@ -211,7 +211,6 @@ export class AdminPriceCreator extends Component {
         const { pricing, selectOptions } = this.state;
         const panel = [];
         let gloss;
-        // debugger;
         if (cargoClass.value.includes('lcl')) {
             gloss = lclChargeGloss;
         } else {

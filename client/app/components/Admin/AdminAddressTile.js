@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { RoundButton } from '../RoundButton/RoundButton';
 import styles from './Admin.scss';
+import { Tooltip } from '../Tooltip/Tooltip';
 // import {v4} from 'node-uuid';
 export class AdminAddressTile extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ export class AdminAddressTile extends Component {
     }
 
     render() {
-        const {theme, address} = this.props;
+        const {theme, address, showTooltip, tooltip } = this.props;
         const { showEdit, editor } = this.state;
         if (!address) {
             return '';
@@ -104,12 +105,16 @@ export class AdminAddressTile extends Component {
                 </div>
             </div>
         );
+        const pencilIcon = showTooltip ? <Tooltip icon="fa-pencil" text={tooltip} theme={theme} toolText iconClass />
+            : <i className="flex-none fa fa-pencil clip" style={textStyle}></i>;
+
         return(
             <div className={` ${styles.address_card} flex-none layout-row layout-wrap layout-align-start-start`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
                     <p className={` ${styles.sec_subheader_text} ${styles.clip} flex-none no_m`} style={textStyle}>User Location</p>
                     <div className="flex-none layout-row layout-align-center-center" onClick={this.toggleEdit}>
-                        {showEdit ? <i className="flex-none fa fa-times clip" style={textStyle}></i> : <i className="flex-none fa fa-pencil clip" style={textStyle}></i> }
+                        {showEdit ? <i className="flex-none fa fa-times clip" style={textStyle}></i>
+                            : pencilIcon }
                     </div>
                 </div>
                 {showEdit ? editorBox : addressData}

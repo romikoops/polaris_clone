@@ -5,6 +5,7 @@ import { AdminClientTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { TextHeading } from '../../TextHeading/TextHeading';
+import { Tooltip } from '../../Tooltip/Tooltip';
 export class AdminSearchableClients extends Component {
     constructor(props) {
         super(props);
@@ -64,20 +65,21 @@ export class AdminSearchableClients extends Component {
         });
     }
     render() {
-        const { theme, title, seeAll, placeholder, tooltip, showTooltip} = this.props;
+        const { theme, title, seeAll, placeholder, tooltip, showTooltip, icon} = this.props;
 
         const { clients } = this.state;
         let clientsArr;
         if (clients) {
             clientsArr = clients.map((client) => {
-                return  (<AdminClientTile
-                    key={v4()}
-                    client={client}
-                    theme={theme}
-                    handleClick={this.handleClick}
-                    tooltip={tooltip}
-                    showTooltip={showTooltip}
-                />);
+                return  (
+                    <AdminClientTile
+                        key={v4()}
+                        client={client}
+                        theme={theme}
+                        handleClick={this.handleClick}
+                        tooltip={tooltip}
+                        showTooltip={showTooltip}
+                    />);
             });
         }
         const viewType = this.props.sideScroll ?
@@ -95,7 +97,14 @@ export class AdminSearchableClients extends Component {
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layout-row layout-align-start-center">
-                        <TextHeading theme={theme} size={1} text={title ? title : 'Clients'} />
+                        <div className="flex-100 layout-row layout-align-space-between-center">
+                            <div className="flex-none layout-row" >
+                                <div className="flex-none" >
+                                    <TextHeading theme={theme} size={1} text={title ? title : 'Clients'} />
+                                </div>
+                                { icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+                            </div>
+                        </div>
                     </div>
                     <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
                         <input

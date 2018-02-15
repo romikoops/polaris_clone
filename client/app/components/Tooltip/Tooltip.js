@@ -22,22 +22,12 @@ export class Tooltip extends Component {
                 color: theme.colors.primary
             };
         }
-        const tipText = text ? tooltips[text] : '';
+        const tipText = toolText ? text : tooltips[text];
         const clipClass = color ? '' : 'clip';
         const id = v4();
-        if(toolText) {
-            return (
-                <div className="flex-none layout-row layout-align-center-center">
-                    <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={toolText} data-for={id} />
-                    <div className="flex-30">
-                        <ReactTooltip id={id} className="flex-20"/>
-                    </div>
-                </div>
-            );
-        }
         return(
             <div className="flex-none layout-row layout-align-center-center">
-                <p className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText} data-for={id} />
+                <div className={`flex-none ${clipClass} fa ${icon}`} style={textStyle} data-tip={tipText} data-for={id} />
                 <div className="flex-30">
                     <ReactTooltip id={id} className="flex-20"/>
                 </div>

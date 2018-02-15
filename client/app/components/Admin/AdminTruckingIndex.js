@@ -5,6 +5,7 @@ import styles from './Admin.scss';
 // import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { AdminSearchableHubs } from './AdminSearchables';
+import { adminTrucking as truckTip } from '../../constants';
 export class AdminTruckingIndex extends Component {
     constructor(props) {
         super(props);
@@ -30,14 +31,35 @@ export class AdminTruckingIndex extends Component {
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <div className="flex-50 layout-row layout-wrap layout-align-start-start">
                         <p className="flex-90">Upload Trucking City Sheet</p>
-                        <FileUploader theme={theme} url={cityUrl} type="xlsx" text="Routes .xlsx"/>
+                        <FileUploader
+                            theme={theme}
+                            url={cityUrl}
+                            type="xlsx"
+                            text="Routes .xlsx"
+                            tooltip={truckTip.upload_city}
+                        />
                     </div>
                     <div className="flex-50 layout-row layout-wrap layout-align-start-start">
                         <p className="flex-90">Upload Trucking Zip Code Sheet</p>
-                        <FileUploader theme={theme} url={zipUrl} type="xlsx" text="Routes .xlsx"/>
+                        <FileUploader
+                            theme={theme}
+                            url={zipUrl}
+                            type="xlsx"
+                            text="Routes .xlsx"
+                            tooltip={truckTip.upload_zip}
+                        />
                     </div>
                 </div>
-                <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewTrucking}/>
+                <AdminSearchableHubs
+                    theme={theme}
+                    hubs={hubs}
+                    adminDispatch={adminDispatch}
+                    sideScroll={false}
+                    handleClick={viewTrucking}
+                    icon="fa-info-circle"
+                    tooltip={truckTip.manage}
+                    showTooltip
+                />
             </div>
         );
     }

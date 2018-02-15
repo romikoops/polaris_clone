@@ -8,12 +8,8 @@ import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 import { TextHeading } from '../TextHeading/TextHeading';
-import { adminHubs as tooltip } from '../../constants';
-import { Tooltip } from '../Tooltip/Tooltip';
 import { adminHubs as hubTip } from '../../constants';
 import ReactTooltip from 'react-tooltip';
-// import {v4} from 'node-uuid';
-// import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminHubs extends Component {
     constructor(props) {
         super(props);
@@ -84,17 +80,11 @@ class AdminHubs extends Component {
             </div>);
         const title = selectedHub ?
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <div className="flex-none">
-                    <TextHeading theme={theme} size={1} text="Hub Overview" />
-                </div>
-                <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
+                <TextHeading theme={theme} size={1} text="Hub Overview" />
                 {selectedHub ? backButton : ''}
             </div>
             : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <div className="flex-none">
-                    <TextHeading theme={theme} size={1} text="Hubs" />
-                </div>
-                <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
+                <TextHeading theme={theme} size={1} text="Hubs" />
                 {newButton}
             </div>;
         return(
@@ -102,17 +92,33 @@ class AdminHubs extends Component {
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
                     {title}
                 </div>
-                { this.state.newHub ? <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub}/> : ''}
+                { this.state.newHub ? <AdminHubForm
+                    theme={theme}
+                    close={this.closeModal}
+                    saveHub={this.saveNewHub}
+                /> : ''}
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/hubs"
-                        render={props => <AdminHubsIndex theme={theme} hubs={hubs} hubHash={hubHash} adminDispatch={adminDispatch} {...props} viewHub={this.viewHub} />}
+                        render={props => <AdminHubsIndex
+                            theme={theme}
+                            hubs={hubs}
+                            hubHash={hubHash}
+                            adminDispatch={adminDispatch} {...props}
+                            viewHub={this.viewHub}
+                        />}
                     />
                     <Route
                         exact
                         path="/admin/hubs/:id"
-                        render={props => <AdminHubView theme={theme} hubs={hubs} hubHash={hubHash} hubData={hub} adminActions={adminDispatch} {...props} />}
+                        render={props => <AdminHubView
+                            theme={theme}
+                            hubs={hubs}
+                            hubHash={hubHash}
+                            hubData={hub}
+                            adminActions={adminDispatch} {...props}
+                        />}
                     />
                 </Switch>
             </div>

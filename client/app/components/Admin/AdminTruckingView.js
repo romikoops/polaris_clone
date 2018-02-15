@@ -155,8 +155,16 @@ export class AdminTruckingView extends Component {
                 </div>
             </div>);
         };
-        const allCities = pricing.data.map(pi => <CityView pricingInstance={pi} viewExpander={expander} expandFn={this.expandView} panelStyle={expander[pi.city] ? styles.trucking_expanded : styles.trucking_closed}/>);
-        const allZips = pricing.data.map(pi => <ZipView pricingInstance={pi} viewExpander={expander} expandFn={this.expandView} panelStyle={expander[pi.lower_zip] ? styles.trucking_expanded : styles.trucking_closed}/>);
+        const allCities = pricing.data.map(pi => <CityView
+            pricingInstance={pi}
+            viewExpander={expander}
+            expandFn={this.expandView}
+            panelStyle={expander[pi.city] ? styles.trucking_expanded : styles.trucking_closed}/>);
+        const allZips = pricing.data.map(pi => <ZipView
+            pricingInstance={pi}
+            viewExpander={expander}
+            expandFn={this.expandView}
+            panelStyle={expander[pi.lower_zip] ? styles.trucking_expanded : styles.trucking_closed}/>);
         const truckView = truckingHub.type === 'city' ? allCities : allZips;
 
         return(

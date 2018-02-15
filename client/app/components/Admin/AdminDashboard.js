@@ -143,7 +143,6 @@ export class AdminDashboard extends Component {
                 handleShipmentAction={this.handleShipmentAction}
                 tooltip={adminTip.finished}
             /> : '';
-
         if (air) {
             air.forEach(asched => {
                 schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme}/>);
@@ -227,17 +226,34 @@ export class AdminDashboard extends Component {
                     </div>
 
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} limit={10}/>
+                        <AdminSearchableRoutes
+                            itineraries={itineraries}
+                            theme={theme}
+                            hubs={hubs}
+                            adminDispatch={adminDispatch} limit={10}/>
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <TextHeading theme={theme} size={1} text="Schedules"  />
+                        <TextHeading
+                            theme={theme}
+                            size={1}
+                            text="Schedules"
+                        />
                     </div>
                     { shortSchedArr }
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableHubs theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll/>
+                        <AdminSearchableHubs
+                            theme={theme}
+                            hubs={hubs}
+                            adminDispatch={adminDispatch}
+                            sideScroll
+                        />
                     </div>
                     <div className={'layout-row flex-100 layout-wrap layout-align-center-center ' + defaults.border_divider}>
-                        <AdminSearchableClients theme={theme} clients={filteredClients} adminDispatch={adminDispatch}/>
+                        <AdminSearchableClients
+                            theme={theme}
+                            clients={filteredClients}
+                            adminDispatch={adminDispatch}
+                        />
                     </div>
                 </div>
             </div>

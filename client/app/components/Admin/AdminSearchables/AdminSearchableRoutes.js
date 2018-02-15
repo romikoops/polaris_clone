@@ -95,12 +95,12 @@ export class AdminSearchableRoutes extends Component {
         }
         const viewType = this.props.sideScroll ?
             (<div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-                <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+                <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_inner}`}>
                     {itinerariesArr}
                 </div>
             </div>) :
             (<div className="layout-row flex-100 layout-align-start-center ">
-                <div className="layout-row flex-none layout-align-start-center layout-wrap">
+                <div className="layout-row flex-100 layout-align-start-center layout-wrap">
                     {itinerariesArr}
                 </div>
             </div>);
@@ -121,7 +121,7 @@ export class AdminSearchableRoutes extends Component {
                         />
                     </div>
                 </div>
-                <div  data-for={tooltipId} data-tip={tooltip}>
+                <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`} data-for={tooltipId} data-tip={tooltip}>
                     {viewType}
                     {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId}/> : ''}
                 </div>

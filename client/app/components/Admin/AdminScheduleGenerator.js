@@ -104,7 +104,6 @@ class AdminScheduleGenerator extends Component {
                 ordinalArray.push(parseInt(key, 10));
             }
         });
-        debugger;
         const req = {
             itinerary: itinerary.value,
             steps: stopIntervals,

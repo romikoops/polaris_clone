@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator} from './';
-import styles from './Admin.scss';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
+import { Tooltip } from '../Tooltip/Tooltip';
+import { adminTrucking as truckTip } from '../../constants';
+import { TextHeading } from '../TextHeading/TextHeading';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminTrucking extends Component {
@@ -48,9 +50,6 @@ class AdminTrucking extends Component {
         const relHubs = truckingHubs.map(th => {
             return hubHash[parseInt(th._id, 10)];
         });
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton
@@ -66,33 +65,55 @@ class AdminTrucking extends Component {
                 <RoundButton
                     theme={theme}
                     size="small"
-                    text="New"
+                    text="New Price"
                     active
                     handleNext={this.toggleCreator}
-                    iconClass="fa-plus-circle-o"
+                    iconClass="fa-plus"
                 />
             </div>);
         const title = selectedRoute ? 'Trucking Overview' : 'Trucking';
         return(
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
-                <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >{title}</p>
+                <div className="flex-100 layout-row layout-align-space-between-center">
+                    <div className="flex-none layout-row" >
+                        <div className="flex-none" >
+                            <TextHeading theme={theme} size={1} text={title} />
+                        </div>
+                        <Tooltip icon="fa-info-circle" theme={theme} text={truckTip.manage} toolText />
+                    </div>
                     {selectedRoute ? backButton : newButton}
                 </div>
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/trucking"
-                        render={props => <AdminTruckingIndex theme={theme} nexuses={nexuses} truckingHubs={truckingHubs} hubs={relHubs} {...props} adminDispatch={adminDispatch} loading={loading} viewTrucking={this.viewTrucking} />}
+                        render={props => <AdminTruckingIndex
+                            theme={theme}
+                            nexuses={nexuses}
+                            truckingHubs={truckingHubs}
+                            hubs={relHubs} {...props}
+                            adminDispatch={adminDispatch}
+                            loading={loading}
+                            viewTrucking={this.viewTrucking} />}
                     />
                     <Route
                         exact
                         path="/admin/trucking/:id"
-                        render={props => <AdminTruckingView theme={theme} hubs={relHubs} hubHash={hubHash} truckingDetail={truckingDetail} loading={loading} adminDispatch={adminDispatch} {...props} />}
+                        render={props => <AdminTruckingView t
+                            heme={theme}
+                            hubs={relHubs}
+                            hubHash={hubHash}
+                            truckingDetail={truckingDetail}
+                            loading={loading}
+                            adminDispatch={adminDispatch} {...props} />}
                     />
                 </Switch>
-                {creatorView ? <AdminTruckingCreator theme={theme} nexuses={nexuses} adminDispatch={adminDispatch} closeForm={this.toggleCreator} /> : '' }
+                {creatorView ? <AdminTruckingCreator
+                    theme={theme}
+                    nexuses={nexuses}
+                    adminDispatch={adminDispatch}
+                    closeForm={this.toggleCreator} /> : '' }
             </div>
         );
     }

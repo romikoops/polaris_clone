@@ -40,7 +40,7 @@ class AdminWizard extends Component {
             newHubs = wizard.newHubs;
             newScs = wizard.newScs;
         }
-        const StartView = ({theme}) => {
+        const StartView = () => {
             return ( <div className="layout-fill layout-row layout-align-center-center">
                 <RoundButton
                     theme={theme}
@@ -59,9 +59,7 @@ class AdminWizard extends Component {
                         <TextHeading theme={theme} size={1} text="Set Up Wizard" />
                     </div>
                     <div className={`flex-100 layout-row layout-align-start-center ${styles.sec_title}`}>
-                        <p>
-                            <TextHeading theme={theme} size={3} text="WARNING: Your existing data might be overwritten!" warning />
-                        </p>
+                        <b><TextHeading theme={theme} size={3} text="WARNING: Your existing data might be overwritten!" color="red" noClip /></b>
                     </div>
                     <Switch className="flex">
                         <Route

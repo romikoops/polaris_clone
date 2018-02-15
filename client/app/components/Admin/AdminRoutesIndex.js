@@ -5,6 +5,7 @@ import styles from './Admin.scss';
 // import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader';
 import { AdminSearchableRoutes } from './AdminSearchables';
+import { adminRoutesTooltips as routeTip } from '../../constants';
 export class AdminRoutesIndex extends Component {
     constructor(props) {
         super(props);
@@ -33,9 +34,24 @@ export class AdminRoutesIndex extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
                     <p className="flex-none">Upload Routes Sheet</p>
-                    <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Routes .xlsx"/>
+                    <FileUploader
+                        theme={theme}
+                        url={hubUrl}
+                        type="xlsx"
+                        text="Routes .xlsx"
+                        tooltip={routeTip.upload}
+                    />
                 </div>
-                <AdminSearchableRoutes itineraries={itineraries} theme={theme} hubs={hubs} adminDispatch={adminDispatch} sideScroll={false} handleClick={viewItinerary}/>
+                <AdminSearchableRoutes
+                    itineraries={itineraries}
+                    theme={theme}
+                    hubs={hubs}
+                    adminDispatch={adminDispatch}
+                    sideScroll={false}
+                    handleClick={viewItinerary}
+                    tooltip={routeTip.related}
+                    showTooltip
+                />
             </div>
         );
     }

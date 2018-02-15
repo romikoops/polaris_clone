@@ -42,7 +42,6 @@ class ValidatedInputFormsy extends Component {
         this.props.setValue(event.currentTarget.value);
     }
     render() {
-        // debugger;
         // An error message is returned only if the component is invalid
         const errorMessage = this.props.getErrorMessage();
         const inputStyles = {

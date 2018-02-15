@@ -12,6 +12,8 @@ import { adminActions } from '../../actions';
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput';
 import { TextHeading } from '../TextHeading/TextHeading';
 import reactTriggerChange from 'react-trigger-change';
+import { adminClientsTooltips as clientTip } from '../../constants';
+import { Tooltip } from '../Tooltip/Tooltip';
 
 class AdminClients extends Component {
     constructor(props) {
@@ -359,20 +361,45 @@ class AdminClients extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-start-start">
 
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                    <TextHeading theme={theme} size={1} text="Clients" />
-                    { newButton }
+
+                    <div className="flex-100 layout-row layout-align-space-between-center">
+                        <div className="flex-none layout-row" >
+                            <div className="flex-none" >
+                                <TextHeading
+                                    theme={theme}
+                                    size={1}
+                                    text="Clients" />
+                            </div>
+                            <Tooltip
+                                icon="fa-info-circle"
+                                theme={theme}
+                                text={clientTip.change}
+                                toolText/>
+                        </div>
+                        { newButton }
+                    </div>
                 </div>
                 { newClientBool ? newClientBox  : ''}
                 <Switch className="flex">
                     <Route
                         exact
                         path="/admin/clients"
-                        render={props => <AdminClientsIndex theme={theme} handleClientAction={this.handleClientAction} clients={clients} hubs={hubs} adminDispatch={adminDispatch} viewClient={this.viewClient} {...props} />}
+                        render={props => <AdminClientsIndex
+                            theme={theme}
+                            handleClientAction={this.handleClientAction}
+                            clients={clients}
+                            hubs={hubs}
+                            adminDispatch={adminDispatch}
+                            viewClient={this.viewClient} {...props} />}
                     />
                     <Route
                         exact
                         path="/admin/clients/:id"
-                        render={props => <AdminClientView theme={theme} hubs={hubs} handleClientAction={this.handleClientAction} clientData={client} {...props} />}
+                        render={props => <AdminClientView
+                            theme={theme}
+                            hubs={hubs}
+                            handleClientAction={this.handleClientAction}
+                            clientData={client} {...props} />}
                     />
                 </Switch>
             </div>

@@ -5,7 +5,8 @@ import { AdminHubTile } from '../';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
 import { TextHeading } from '../../TextHeading/TextHeading';
-import { adminClicked as clickTool } from '../../../constants';
+import { adminClicked as clickTip, adminTrucking as truckTip } from '../../../constants';
+import { Tooltip } from '../../Tooltip/Tooltip';
 export class AdminSearchableHubs extends Component {
     constructor(props) {
         super(props);
@@ -66,7 +67,7 @@ export class AdminSearchableHubs extends Component {
         });
     }
     render() {
-        const { theme, seeAll } = this.props;
+        const { theme, seeAll, showTooltip, icon, tooltip } = this.props;
         const { hubs } = this.state;
         let hubsArr;
         if (hubs) {
@@ -76,7 +77,7 @@ export class AdminSearchableHubs extends Component {
                     hub={hub}
                     theme={theme}
                     handleClick={this.handleClick}
-                    tooltip={clickTool.related}
+                    tooltip={clickTip.related}
                     showTooltip
                 />);
             });
@@ -93,11 +94,20 @@ export class AdminSearchableHubs extends Component {
                 </div>
             </div>);
 
+
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
                     <div className="flex-60 layout-row layout-align-start-center">
-                        <TextHeading theme={theme} size={1} text="Hubs" />
+                        <div className="flex-100 layout-row layout-align-space-between-center">
+                            <div className="flex-none layout-row" >
+                                <div className="flex-none" >
+                                    <TextHeading theme={theme} size={1} text="Hubs"/>
+                                    { showTooltip ?  <Tooltip icon="na-info-circle" theme={theme} text={truckTip.hubs} toolText/> : '' }
+                                </div>
+                                { icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+                            </div>
+                        </div>
                     </div>
                     <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
                         <input

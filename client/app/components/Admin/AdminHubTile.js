@@ -26,7 +26,6 @@ export class AdminHubTile extends Component {
     }
     render() {
         const { theme, hub, tooltip, showTooltip } = this.props;
-        debugger;
         if (!hub) {
             return '';
         }

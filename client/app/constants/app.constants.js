@@ -83,7 +83,7 @@ export const adminClicked = {
 export const adminPricing = {
     'manage': 'Manage everything that has to with prices, service charges, fees etc. Open prices & dedicated prices can be changed and reflected in the shop immediately',
     'upload_lcl': 'By using the Excel template you can update all your LCL rates with one upload',
-    'upload_fcl': 'by using the Excel template you can update all your FCL rates with one upload',
+    'upload_fcl': 'By using the Excel template you can update all your FCL rates with one upload',
     'routes': 'Adjust prices, fees and charges on the go. Find the relevant route and update the pricing data',
     'clients': 'Manage negotiated routes, prices and fees for your existing clients',
     'new': 'Create a new cargo pricing'
@@ -107,7 +107,8 @@ export const adminTrucking = {
 export const adminClientsTooltips = {
     'manage': 'Manage negotiated routes, prices and fees for your existing clients',
     'upload': 'Upload the Excel template in order to adjust all your clients prices',
-    'change': 'Change prices, fees, charges for an individual client and manage negotiated routes'
+    'change': 'Change prices, fees, charges for an individual client and manage negotiated routes',
+    'edit_location': 'Edit the User Location'
 };
 
 // Routes
@@ -118,13 +119,7 @@ export const adminRoutesTooltips = {
 };
 
 export const adminRoutesClickedTooltips = {
-
-// Route clicked
-
-// 1.	Related hubs:
-    '1': 'A glance of all the Hubs that are related to the chosen route',
-    // 2.	Routes:
-    '2': 'The chosen route for all modes of transport',
-    // 3.	Schedules:
-    '3': 'Relevant overview of sailing schedules of the chosen route',
+    'related': 'Get a glance of all the Hubs that are related to the chosen route',
+    'chosen': 'The chosen route for all modes of transport',
+    'relevant': 'Relevant overview of sailing schedules of the chosen route',
 };
