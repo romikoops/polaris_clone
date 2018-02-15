@@ -179,8 +179,8 @@ export class AdminTruckingCreator extends Component {
             return c;
         });
         const meta = {
-            type: rateBasis.value,
-            modifier: truckingBasis.value,
+            type: truckingBasis.value,
+            modifier: rateBasis.value,
             nexus_id: nexus.value.id
         };
         this.props.adminDispatch.saveNewTrucking({meta, data});

@@ -24,6 +24,30 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id) 
+   trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+        stops.each do |stop|
+          if stop.index == 0
+            data = {
+              eta: nil,
+              etd: start_date,
+              stop_index: stop.index,
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
+            }
+          else 
+            data = {
+              eta: end_date,
+              etd: nil,
+              stop_index: stop.index,
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
+            }
+          end
+          trip.layovers.create!(data)
+        end
+  end
+
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id)
     if start_date.kind_of? Date
       tmp_date = start_date
@@ -152,19 +176,19 @@ class Itinerary < ApplicationRecord
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
-    return_h[:origin_nexus]         = origin.hub.nexus.name                if options[:nexus_names] 
-    return_h[:destination_nexus]    = destination.hub.nexus.name           if options[:nexus_names]
-    return_h[:origin_nexus_id]      = origin.hub.nexus.id                  if options[:nexus_ids] 
-    return_h[:destination_nexus_id] = destination.hub.nexus.id             if options[:nexus_ids]
-    return_h[:origin_hub_id]        = origin.hub.id                        if options[:hub_ids] 
-    return_h[:destination_hub_id]   = destination.hub.id                   if options[:hub_ids]
-    return_h[:origin_hub_name]      = origin.hub.name                      if options[:hub_names] 
-    return_h[:destination_hub_name] = destination.hub.name                 if options[:hub_names]
-    return_h[:origin_stop_id]       = origin.id                            if options[:stop_ids] 
-    return_h[:destination_stop_id]  = destination.id                       if options[:stop_ids]
-    return_h[:modes_of_transport]   = modes_of_transport                   if options[:modes_of_transport]
-    return_h[:next_departure]       = next_departure                       if options[:next_departure]
-    return_h[:dedicated]            = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
+    return_h[:origin_nexus]       = origin.hub.nexus.name                if options[:nexus_names] 
+    return_h[:destination_nexus]  = destination.hub.nexus.name           if options[:nexus_names]
+    return_h[:origin_nexus_id]       = origin.hub.nexus.id               if options[:nexus_ids] 
+    return_h[:destination_nexus_id]  = destination.hub.nexus.id          if options[:nexus_ids]
+    return_h[:origin_hub_id]       = origin.hub.id                       if options[:hub_ids] 
+    return_h[:destination_hub_id]  = destination.hub.id                  if options[:hub_ids]
+    return_h[:origin_hub_name]       = origin.hub.name                   if options[:hub_names] 
+    return_h[:destination_hub_name]  = destination.hub.name              if options[:hub_names]
+    return_h[:origin_stop_id]       = origin.id                          if options[:stop_ids] 
+    return_h[:destination_stop_id]  = destination.id                     if options[:stop_ids]
+    return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
+    return_h[:next_departure]     = next_departure                       if options[:next_departure]
+    return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
   end
 
@@ -185,8 +209,7 @@ class Itinerary < ApplicationRecord
     end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
     start_hub_ids = start_hubs.ids
     end_hub_ids = end_hubs.ids
-    query = ("
-      SELECT *
+    query = "SELECT *
       FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id} AND id IN (
         SELECT d_stops.itinerary_id
@@ -194,17 +217,15 @@ class Itinerary < ApplicationRecord
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN #{start_hub_ids.sql_format}
-        ) AS o_stops
+        ) as o_stops
         JOIN (
           SELECT id, itinerary_id, index
           FROM stops
           WHERE hub_id IN #{end_hub_ids.sql_format}
-        ) AS d_stops
+        ) as d_stops
         ON o_stops.itinerary_id = d_stops.itinerary_id
         WHERE o_stops.index < d_stops.index
-      )
-    ")
-
+      )"
     results = Itinerary.find_by_sql(query)
     return {itineraries: results, origin_hubs: start_hubs, destination_hubs: end_hubs}
   end
