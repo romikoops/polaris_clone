@@ -51,8 +51,6 @@ export class ShipmentCargoItems extends Component {
         this.setState({cargoItemTypes: newCargoItemTypes});
         this.props.handleDelta(modifiedEvent);
 
-        console.log('event');
-        console.log(event);
         if (!event.dimension_x) return;
 
         const modifiedEventDimentionX = {

@@ -333,7 +333,6 @@ function uploadDocument(doc, type, url) {
                 dispatch(
                     alertActions.success('Uploading Document successful')
                 );
-                console.log(data);
                 dispatch(success(data));
             },
             error => {
@@ -362,7 +361,6 @@ function deleteDocument(id) {
                 dispatch(
                     alertActions.success('Deleting Document successful')
                 );
-                console.log(data);
                 dispatch(success(id));
             },
             error => {

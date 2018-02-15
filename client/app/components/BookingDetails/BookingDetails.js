@@ -134,7 +134,6 @@ export class BookingDetails extends Component {
         if (this.state.insurance) {
             const iVal = ((gVal * 1.1) + parseFloat(shipmentData.shipment.total_price, 10)) * 0.0017;
             // const finalVal = iVal > 22.13 ? iVal : 22.13;
-            console.log(iVal);
             this.setState({insurance: {bool: true, val: iVal}});
         }
     }

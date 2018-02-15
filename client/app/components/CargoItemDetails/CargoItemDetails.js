@@ -15,7 +15,6 @@ export class CargoItemDetails extends Component {
         this.setState({
             viewer: !this.state.viewer
         });
-        console.log(this.state.viewer);
     }
     render() {
         const { index, item, hsCodes, theme, viewHSCodes } = this.props;
