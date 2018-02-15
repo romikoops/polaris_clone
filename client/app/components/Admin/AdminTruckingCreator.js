@@ -7,6 +7,8 @@ import { RoundButton } from '../RoundButton/RoundButton';
 import { gradientTextGenerator } from '../../helpers';
 import { currencyOptions, rateBasises } from '../../constants/admin.constants';
 import Formsy from 'formsy-react';
+import GmapsWrapper from '../../hocs/GmapsWrapper';
+import { PlaceSearch } from '../Maps/PlaceSearch';
 export class AdminTruckingCreator extends Component {
     constructor(props) {
         super(props);
@@ -254,8 +256,25 @@ export class AdminTruckingCreator extends Component {
                 </div>
             </div>
         );
-
-        console.log(cells);
+        const cityInput = (
+            <div className="flex-100 layout-row layout-wrap">
+                <h3 className="flex-40">Find Cities</h3>
+                <div className="offset-5 flex-55">
+                    <GmapsWrapper
+                        theme={theme}
+                        component={PlaceSearch}
+                        inputStyles={{
+                            width: '96%',
+                            marginTop: '9px',
+                            background: 'white'
+                        }}
+                        handlePlaceChange={this.handlePlaceChange}
+                        hideMap={true}
+                    />
+                </div>
+            </div>
+        );
+        
         const panel = cells.map((s, i) => {
             const wsInputs = [];
             weightSteps.forEach((ws, iw) => {
@@ -271,7 +290,7 @@ export class AdminTruckingCreator extends Component {
             return (
                 <div key={`cell_${i}`} className="flex-100 layout-row layout-align-start-center layout-wrap">
                     <div className="flex-50 layout-row layout-row layout-wrap layout-align-start-start">
-                        <p className="flex-none">{` Effective Zipcode Range ${s.lower_zip} - ${s.upper_zip}`}</p>
+                        <p className="flex-none">{`Zipcode Range ${s.lower_zip} - ${s.upper_zip}`}</p>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center layout-wrap">
                         <div  className="flex-25 layout-row layout-wrap layout-align-start-start">
@@ -287,7 +306,7 @@ export class AdminTruckingCreator extends Component {
                 </div>
             );
         });
-        const addNewPrice = (
+        const addNewZip = (
             <div className="flex-100 layout-row layout-align-start-center">
                 <Formsy onValidSubmit={this.addNewCell} className="flex-100 layout-row layout-align-start-center" >
                     <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
@@ -319,7 +338,7 @@ export class AdminTruckingCreator extends Component {
         );
         const rateView = (
             <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
-                {addNewPrice}
+                {addNewZip}
                 {panel}
             </div>
         );

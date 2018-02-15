@@ -171,7 +171,7 @@ class SideNav extends Component {
                 target: 'wizard'
             }
         ];
-        const isAdmin = user.role_id === 1 || user.role_id === 3;
+        const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role_id === 4;
         const links = isAdmin ? adminLinks : userLinks;
         const expandNavClass = expanded ? styles.expanded : styles.collapsed;
         const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link;
