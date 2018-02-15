@@ -57,7 +57,7 @@ export class CargoItemDetails extends Component {
                 <hr className="flex-100"/>
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p>CBM</p>
-                    <p>{(1).toFixed(2) /* TBD */} m<sup>3</sup></p>
+                    <p>{(item.cbm).toFixed(2)} m<sup>3</sup></p>
                 </div>
                 <hr className="flex-100"/>
                 {viewHSCodes ?
