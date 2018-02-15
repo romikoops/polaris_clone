@@ -27,6 +27,36 @@ const mapStyle = {
 const isObjectEmpty = isEmpty;
 const colourSVG = colorSVG;
 const mapStyles = mapStyling;
+
+function backgroundColor(props) {
+    return !props.value && props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
+}
+function placeholderColorOverwrite(props) {
+    return !props.value && props.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '';
+}
+const StyledSelect = styled(Select)`
+    .Select-control {
+        background-color: ${props => backgroundColor(props)};
+        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+        border: 1px solid #F2F2F2 !important;
+    }
+    .Select-menu-outer {
+        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+        border: 1px solid #F2F2F2;
+    }
+    .Select-value {
+        background-color: ${props => backgroundColor(props)};
+        border: 1px solid #F2F2F2;
+    }
+    .Select-placeholder {
+        background-color: ${props => backgroundColor(props)};
+        ${props => placeholderColorOverwrite(props)}
+    }
+    .Select-option {
+        background-color: #F9F9F9;
+    }
+`;
+
 export class ShipmentLocationBox extends Component {
     constructor(props) {
         super(props);
@@ -54,8 +84,6 @@ export class ShipmentLocationBox extends Component {
             },
             autoTextOrigin: '',
             autoTextDest: '',
-            // origin: this.props.origin,
-            // destination: this.props.destination,
             shipment: {
                 has_pre_carriage: false,
                 has_on_carriage: false
@@ -93,6 +121,7 @@ export class ShipmentLocationBox extends Component {
         this.selectedRoute = this.selectedRoute.bind(this);
         this.loadPrevReq = this.loadPrevReq.bind(this);
         this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this);
+        this.scopeNexusOptions = this.scopeNexusOptions.bind(this);
     }
 
     componentDidMount() {
@@ -413,7 +442,26 @@ export class ShipmentLocationBox extends Component {
             }
         });
     }
+    scopeNexusOptions(userInput, target) {
+        fetch(
+            (
+                `${BASE_URL}/nexuses?` +
+                `itinerary_ids=${this.props.routeIds}&` +
+                `target=${target}&` +
+                `user_input=${userInput}`
+            ),
+            {
+                method: 'GET',
+                headers: authHeader()
+            }
+        ).then(promise => {
+            promise.json().then(response => {
+                this.setState(response.data);
+            });
+        });
+    }
     setOriginHub(event) {
+        this.scopeNexusOptions(event ? event.label : '', 'destination');
         if (event) {
             const origin = {
                 ...this.state.origin,
@@ -426,7 +474,6 @@ export class ShipmentLocationBox extends Component {
             const lng = event.value.longitude;
             const oSelect = event;
 
-            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
             this.props.setTargetAddress('origin', origin );
             this.setMarker(
                 { lat: lat, lng: lng },
@@ -434,12 +481,11 @@ export class ShipmentLocationBox extends Component {
             );
             this.setState({ oSelect, origin });
         } else {
-            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds);
             this.setState({
                 oSelect: '',
                 origin: {}
             });
-
+            this.state.markers.origin.setMap(null);
             this.props.setTargetAddress('origin', {});
         }
     }
@@ -449,6 +495,7 @@ export class ShipmentLocationBox extends Component {
     }
 
     setDestHub(event) {
+        this.scopeNexusOptions(event ? event.label : '', 'origin');
         if(event) {
             const destination = {
                 ...this.state.destination,
@@ -461,7 +508,6 @@ export class ShipmentLocationBox extends Component {
             const lng = event.value.longitude;
             const dSelect = event;
 
-            // this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, event.label);
             this.props.setTargetAddress('destination', destination );
             this.setMarker(
                 { lat: lat, lng: lng },
@@ -474,6 +520,7 @@ export class ShipmentLocationBox extends Component {
                 destination: {}
             });
 
+            this.state.markers.destination.setMap(null);
             this.props.setTargetAddress('destination', {});
         }
     }
@@ -526,7 +573,8 @@ export class ShipmentLocationBox extends Component {
                     const nexus = response.data.nexus;
                     const nexusName = nexus ? nexus.name : '';
 
-                    const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+                    let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
+                    if (this.state.availableOrigins) originOptions = this.state.availableOrigins;
                     const originOptionNames = originOptions.map(originOption => originOption.label);
 
                     this.setState({
@@ -538,8 +586,6 @@ export class ShipmentLocationBox extends Component {
                     );
                 });
             });
-
-            this.props.nexusDispatch.getAvailableDestinations(this.props.routeIds, place.name);
         } else if (target === 'destination') {
             fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
                 method: 'GET',
@@ -550,7 +596,7 @@ export class ShipmentLocationBox extends Component {
                     const nexusName = nexus ? nexus.name : '';
 
                     let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
-                    if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
+                    if (this.state.availableDestinations) destinationOptions = this.state.availableDestinations;
                     const destinationOptionNames = destinationOptions.map(destinationOption => destinationOption.label);
 
                     this.setState({
@@ -631,41 +677,16 @@ export class ShipmentLocationBox extends Component {
     render() {
         const { allNexuses } = this.props;
 
-        const originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
-
+        let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : [];
         let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : [];
-        if (this.props.availableDestinations) destinationOptions = this.props.availableDestinations;
 
-        const { originFieldsHaveErrors, destinationFieldsHaveErrors } = this.state;
+        const {
+            originFieldsHaveErrors, destinationFieldsHaveErrors,
+            availableOrigins, availableDestinations
+        } = this.state;
 
-        const backgroundColor = value => !value && this.props.nextStageAttempt ? '#FAD1CA' : '#F9F9F9';
-        const placeholderColorOverwrite = value => (
-            !value && this.props.nextStageAttempt ? 'color: rgb(211, 104, 80);' : ''
-        );
-
-        const StyledSelect = styled(Select)`
-            .Select-control {
-                background-color: ${props => backgroundColor(props.value)};
-                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-                border: 1px solid #F2F2F2 !important;
-            }
-            .Select-menu-outer {
-                box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-                border: 1px solid #F2F2F2;
-            }
-            .Select-value {
-                background-color: ${props => backgroundColor(props.value)};
-                border: 1px solid #F2F2F2;
-            }
-            .Select-placeholder {
-                background-color: ${props => backgroundColor(props.value)};
-                ${props => placeholderColorOverwrite(props.value)}
-            }
-            .Select-option {
-                background-color: #F9F9F9;
-            }
-        `;
-
+        if (availableDestinations) destinationOptions = availableDestinations;
+        if (availableOrigins) originOptions = availableOrigins;
 
         const showOriginError = !this.state.oSelect && this.props.nextStageAttempt;
         const originHubSelect = (
@@ -676,6 +697,7 @@ export class ShipmentLocationBox extends Component {
                     value={this.state.oSelect}
                     options={originOptions}
                     onChange={this.setOriginHub}
+                    nextStageAttempt={this.props.nextStageAttempt}
                 />
                 <span className={errorStyles.error_message} style={{color: 'white'}}>
                     {showOriginError ? 'Must not be blank' : ''}
@@ -693,6 +715,7 @@ export class ShipmentLocationBox extends Component {
                     options={destinationOptions}
                     onChange={this.setDestHub}
                     backgroundColor={backgroundColor}
+                    nextStageAttempt={this.props.nextStageAttempt}
                 />
                 <span className={errorStyles.error_message} style={{color: 'white'}}>
                     {showDestinationError ? 'Must not be blank' : ''}

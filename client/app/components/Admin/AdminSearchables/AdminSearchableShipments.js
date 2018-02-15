@@ -5,6 +5,7 @@ import { AdminShipmentRow } from '../';
 import { UserShipmentRow } from '../../UserAccount';
 import {v4} from 'node-uuid';
 import Fuse from 'fuse.js';
+import { Tooltip } from '../../Tooltip/Tooltip';
 export class AdminSearchableShipments extends Component {
     constructor(props) {
         super(props);
@@ -82,7 +83,7 @@ export class AdminSearchableShipments extends Component {
             : shipments;
     }
     render() {
-        const { hubs, theme, handleShipmentAction, title, userView, seeAll } = this.props;
+        const { hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip } = this.props;
         const { shipments } = this.state;
 
 
@@ -114,8 +115,14 @@ export class AdminSearchableShipments extends Component {
         return(
             <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
                 <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
-                    <div className="flex-60 layput-row layout-align-start-center">
-                        <b><p className="flex sub_header_text"> {title ? title : 'Shipments'}</p></b>
+                    <div className="flex-60 layout-row layout-align-start-center">
+                        <div className="flex-50 layout-row layout-align-start-center">
+                            <b><p className="flex sub_header_text"> {title ? title : 'Shipments'}</p>
+                            </b>
+                        </div>
+                        <div className="flex-50 layout-row layout-align-start-center">
+                            <Tooltip icon="fa-info-circle" toolText={tooltip} />
+                        </div>
                     </div>
                     <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
                         <input

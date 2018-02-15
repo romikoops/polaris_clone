@@ -10,7 +10,7 @@ export const appConstants = {
     REQUEST_TENANT: 'REQUEST_TENANT',
     RECEIVE_TENANT: 'RECEIVE_TENANT',
     RECEIVE_TENANT_ERROR: 'RECEIVE_TENANT_ERROR',
-    INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN',
+    INVALIDATE_SUBDOMAIN: 'INVALIDATE_SUBDOMAIN'
 };
 
 export const tooltips = {
@@ -38,4 +38,92 @@ export const tooltips = {
     'total_goods_value': 'The total value of goods is necessary to determine matters of insurance.',
     'cargo_notes': 'Information is needed on the amount of packages that are being shipped, and what kind of packages are being dealt with. Include a description of the goods. Alternatively, if you have a packing list, you can upload it below and leave this field blank.',
     'shipment_mots': 'You will receive results for all available modes of transport. Simply select which applies best to your shipment'
+};
+
+
+// Tool tips menu admin
+export const adminMenutooltip = {
+    'dashboard': 'Get a quick glance of shipments, hubs, sailing schedules and clients',
+    'shipments': 'Effectively manage your shipments. Get an overview of requested, open & finished shipments. In addition, it is possible to accept, edit & decline shipments',
+    'hubs': 'Manage your hubs as well as activating/deactivating them. Effectively, it decides whether or not cargo is accepted in these locations',
+    'pricing': 'Manage everything that has to with prices, service charges, fees etc. Open prices & dedicated prices can be changed and reflected in the shop immediately',
+    'schedules': 'Administrate sailing schedules by a simple upload',
+    'trucking': 'Update prices, fees, charges for trucking. Here zip code & city sheets can be uploaded',
+    'client': 'Manage negotiated routes, prices and fees for your existing clients',
+    'routes': 'Configure all the routes displayed in the shop',
+    'setup': 'This option is only for the very first configuration of the shop or if you want to reset the shop system with new data. IMPORTANT: this will overwrite all existing data'
+};
+
+// Dashboard
+export const adminDashboard = {
+    'requested': 'Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment',
+    'open': 'Shipments that have been accepted or edited. Shipments in this category requires transportation',
+    'finished': 'Shipments that have been processed and will be saved as history',
+    'routes': 'Configure all the routes displayed in the shop. Add & delete routes to be up to date about what you offer in the shop',
+    'schedules': 'Administrate sailing schedules by a simple upload',
+    'hubs': 'Manage your hubs as well as activating/deactivating them. Effectively, it decides whether or not cargo is accepted in these locations',
+    'clients': 'Manage negotiated routes, prices and fees for your existing clients'
+};
+
+// Hubs
+export const adminHubs = {
+    'manage': 'Manage your hubs as well as activating/deactivating them. Effectively, it decides whether or not cargo is accepted in these locations',
+    'upload': 'configure all operated hubs with an Excel upload',
+    'overview': 'Overview of all hubs activated in the shop and where you accept shipments'
+};
+
+// Hub is clicked
+export const adminClicked = {
+    'related': 'A glance of all the Hubs that are related to the chosen Hub',
+    'routes': 'Routes where the chosen Hub is involved',
+    'schedules': 'Overview of departures with the chosen Hub involved'
+};
+
+// Pricings
+export const adminPricing = {
+    'pricing': 'Manage everything that has to with prices, service charges, fees etc. Open prices & dedicated prices can be changed and reflected in the shop immediately',
+    'upload_lcl': 'By using the Excel template you can update all your LCL rates with one upload',
+    'upload_fcl': 'by using the Excel template you can update all your FCL rates with one upload',
+    'routes': 'Adjust prices, fees and charges on the go. Find the relevant route and update the pricing data',
+    'clients': 'Manage negotiated routes, prices and fees for your existing clients'
+};
+
+// Schedules
+export const adminSchedules = {
+    'upload_excel': 'Upload the Excel template to update schedules for train, air, ocean & trucking',
+    'auto_generate': 'This feature makes it possible to have schedules for all modes of transport to run in a loop to avoid Excel upload. Essentially, the schedules can run in a loop if tendencies can be spotted in your sailing schedules',
+};
+
+// Trucking
+export const adminTrucking = {
+    'manage': 'Manage prices for pre & on carriage from zip codes or cities',
+    'upload_city': 'In some places zip codes are not available hence prices are based on cities instead. Upload the Excel template here',
+    'upload_zip': 'If prices are calculated on zip codes the Excel template can be uploaded here',
+    'hubs': 'Hubs are consolidation points for line haul'
+};
+
+// Clients
+export const adminClientsTooltips = {
+    'manage': 'Manage negotiated routes, prices and fees for your existing clients',
+    'upload': 'Upload the Excel template in order to adjust all your clients prices',
+    'change': 'Change prices, fees, charges for an individual client and manage negotiated routes'
+};
+
+// Routes
+export const adminRoutesTooltips = {
+    'upload': 'Upload Excel template to update routes',
+    'new': 'Add another route to the system',
+    'related': 'See related Hubs and sailing schedules and configure all routes displayed in the shop'
+};
+
+export const adminRoutesClickedTooltips = {
+
+// Route clicked
+
+// 1.	Related hubs:
+    '1': 'A glance of all the Hubs that are related to the chosen route',
+    // 2.	Routes:
+    '2': 'The chosen route for all modes of transport',
+    // 3.	Schedules:
+    '3': 'Relevant overview of sailing schedules of the chosen route',
 };

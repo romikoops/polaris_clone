@@ -8,6 +8,8 @@ import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
 import { TextHeading } from '../TextHeading/TextHeading';
+import { adminHubs as tooltip } from '../../constants';
+import { Tooltip } from '../Tooltip/Tooltip';
 // import {v4} from 'node-uuid';
 // import FileUploader from '../../components/FileUploader/FileUploader';
 class AdminHubs extends Component {
@@ -77,11 +79,17 @@ class AdminHubs extends Component {
             </div>);
         const title = selectedHub ?
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <TextHeading theme={theme} size={1} text="Hub Overview" />
+                <div className="flex-none">
+                    <TextHeading theme={theme} size={1} text="Hub Overview" />
+                </div>
+                <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
                 {selectedHub ? backButton : ''}
             </div>
             : <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-                <TextHeading theme={theme} size={1} text="Hubs" />
+                <div className="flex-none">
+                    <TextHeading theme={theme} size={1} text="Hubs" />
+                </div>
+                <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
                 {newButton}
             </div>;
         return(
