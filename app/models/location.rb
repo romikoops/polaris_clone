@@ -37,7 +37,7 @@ class Location < ApplicationRecord
   end
 
   def self.from_short_name(input)
-    city, country = *input.split(", ")
+    city, country = *input.split(" ,")
     location = Location.find_by(city: city, country: country) 
     return location unless location.nil?
 
