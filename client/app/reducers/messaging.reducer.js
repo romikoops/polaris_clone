@@ -39,9 +39,17 @@ export function messaging(state = {}, action) {
             };
 
         case messagingConstants.SEND_USER_MESSAGE_SUCCESS:
+            const newMessages = state.conversations[action.payload.shipmentRef].messages;
+            newMessages.push(action.payload);
             return {
                 ...state,
-                ...action.payload,
+                conversations: {
+                    ...state.conversations,
+                    [action.payload.shipmentRef]: {
+                        ...state.conversations[action.payload.shipmentRef],
+                        messages: newMessages
+                    }
+                },
                 loading: false,
                 sending: false
             };
@@ -79,7 +87,7 @@ export function messaging(state = {}, action) {
         case messagingConstants.MARK_AS_READ_SUCCESS:
             return {
                 ...state,
-                ...action.payload,
+                conversations: action.payload.conversations,
                 loading: false
             };
         case messagingConstants.MARK_AS_READ_ERROR:

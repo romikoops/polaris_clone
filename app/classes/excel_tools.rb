@@ -58,7 +58,7 @@ module ExcelTools
       # 
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
       end
     end
 
@@ -119,7 +119,7 @@ module ExcelTools
       # 
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id})
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
       end
     end
 
@@ -170,11 +170,12 @@ module ExcelTools
           ntp[:rate_table].push(tmp)
         end
         results << ntp
-
+        new_trucking_location = Location.from_short_name("#{new_pricing[:city]} ,#{new_pricing[:province]}", 'trucking_option')
+        new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
       end
       update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
       hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "city", table: truckingTable, tenant_id: user.tenant_id})
+        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "city", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
       end
     end
 
@@ -853,9 +854,9 @@ module ExcelTools
           }
         }
         tenant = user.tenant
-        origin = Location.from_short_name(row[:origin])
+        origin = Location.from_short_name(row[:origin], 'nexus')
         sleep(1)
-        destination = Location.from_short_name(row[:destination])
+        destination = Location.from_short_name(row[:destination], 'nexus')
         sleep(1)
         origin_hub_ids = origin.hubs_by_type(row[:mot], user.tenant_id).ids
         destination_hub_ids = destination.hubs_by_type(row[:mot], user.tenant_id).ids

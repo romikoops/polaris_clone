@@ -117,7 +117,7 @@ class AdminClients extends Component {
 
     render() {
         const { newClient, newClientBool } = this.state;
-        const { theme, clients, hubs, client, adminDispatch } = this.props;
+        const { theme, clients, hubs, client, adminDispatch, managers } = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -372,7 +372,7 @@ class AdminClients extends Component {
                     <Route
                         exact
                         path="/admin/clients/:id"
-                        render={props => <AdminClientView theme={theme} hubs={hubs} handleClientAction={this.handleClientAction} clientData={client} {...props} />}
+                        render={props => <AdminClientView theme={theme} hubs={hubs} handleClientAction={this.handleClientAction} clientData={client} managers={managers} adminDispatch={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>
@@ -387,7 +387,7 @@ AdminClients.propTypes = {
 function mapStateToProps(state) {
     const { authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, shipment, shipments, hubs, client } = admin;
+    const { clients, shipment, shipments, hubs, client, managers } = admin;
 
     return {
         user,
@@ -397,7 +397,8 @@ function mapStateToProps(state) {
         shipments,
         shipment,
         hubs,
-        client
+        client,
+        managers
     };
 }
 function mapDispatchToProps(dispatch) {

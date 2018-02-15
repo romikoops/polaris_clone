@@ -60,7 +60,7 @@ module TruckingTools
   end
 
 
-  def calc_trucking_price(destination, cargo_item, km, hub, client)
+  def calc_trucking_price(destination, cargo_item, km, hub, client, target)
     hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
     p km
     if hub && hub.trucking_type
@@ -68,7 +68,7 @@ module TruckingTools
       when 'zipcode'
         return calc_by_zipcode(destination, cargo_item, km, hub_trucking_query["table"], client)
       when 'city'
-        return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client)
+        return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
       end
     else
       return {value: 1.25 * km, currency: "EUR"}
@@ -163,7 +163,7 @@ module TruckingTools
     end
   end
 
-  def calc_by_city(hub, destination, km, cargo_item, tpKey, client)
+  def calc_by_city(hub, destination, km, cargo_item, tpKey, client, target)
     cbm = (cargo_item.dimension_x * cargo_item.dimension_y * cargo_item.dimension_z) / 1000
     weight = cargo_item.payload_in_kg
     hub_pricings = get_item_fn(client, 'truckingTables', "_id", tpKey)
@@ -184,7 +184,7 @@ module TruckingTools
           @selected_rate = rate
         end
       end
-      price = ((weight) * @selected_rate["value"]) + @selected_rate["pickup_fee"] + @selected_rate["delivery_fee"]
+      price = ((weight) * @selected_rate["value"]) + target == 'origin' ? @selected_rate["pickup_fee"] : @selected_rate["delivery_fee"]
       if !@selected_rate["min_value"] || price > @selected_rate["min_value"]
         return {value:price, currency: @trucking_pricing["currency"]}
       else

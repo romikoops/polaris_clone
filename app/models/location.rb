@@ -36,7 +36,7 @@ class Location < ApplicationRecord
     end
   end
 
-  def self.from_short_name(input)
+  def self.from_short_name(input, location_type)
     city, country = *input.split(" ,")
     location = Location.find_by(city: city, country: country) 
     return location unless location.nil?
@@ -51,7 +51,7 @@ class Location < ApplicationRecord
     location = temp_location
 
     location.name = city
-    location.location_type = 'nexus'
+    location.location_type = location_type
     location.save!
     location
   end

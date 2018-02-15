@@ -170,7 +170,7 @@ class OfferCalculator
         set_trucking_charges!(charges, trip, sched_key)
         set_cargo_charges!(charges, trip, sched_key)
       else
-        byebug
+        # byebug
       end
     end
     @shipment.schedules_charges = charges
@@ -180,14 +180,16 @@ class OfferCalculator
     if @shipment.has_pre_carriage
       charges[sched_key][:trucking_pre] = determine_trucking_options(
         @shipment.origin, 
-        trip[0].stop.hub
+        trip[0].stop.hub,
+        'origin'
       )
     end
     
     if @shipment.has_on_carriage
       charges[sched_key][:trucking_on] = determine_trucking_options(
         @shipment.destination, 
-        trip[1].stop.hub
+        trip[1].stop.hub,
+        'destination'
       )
     end
   end
@@ -238,12 +240,12 @@ class OfferCalculator
     "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
   end
 
-  def determine_trucking_options(origin, hub)
+  def determine_trucking_options(origin, hub, target)
     google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
 
     price_results = @cargo_units.map do |cargo_unit|
-      calc_trucking_price(origin, cargo_unit, km, hub, @mongo)
+      calc_trucking_price(origin, cargo_unit, km, hub, @mongo, target)
     end
 
     trucking_total = { value: 0, currency: "" }

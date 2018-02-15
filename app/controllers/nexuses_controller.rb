@@ -25,12 +25,12 @@ class NexusesController < ApplicationController
 		ids = params[:itinerary_ids].split(",").map { |e| e.to_i }
 		itineraries = retrieve_route_options(current_user.tenant_id, ids)
 		# byebug
-		return itineraries.map{ |i| Location.find(i["destination_nexus_id"])} if params[:origin].nil?
+		return itineraries.map{ |itinerary| Location.find(itinerary["destination_nexus_id"])} if params[:origin].nil?
 
 		origin = Location.geocoded_location params[:origin]
 		origin_nexus_data = origin.closest_location_with_distance
 		origin_nexus = origin_nexus_data.first if origin_nexus_data.last <= 200
-		itineraries.reject {|i| i["origin_nexus_id"] != origin_nexus.id}.map { |i2| Location.find(i2["destination_nexus_id"])  }.uniq
+		itineraries.reject {|itinerary| itinerary["origin_nexus_id"] != origin_nexus.id}.map { |itinerary2| Location.find(itinerary2["destination_nexus_id"])  }.uniq
 	end
 
 	def format_available_destinations_for_select_box!

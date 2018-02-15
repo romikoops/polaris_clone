@@ -49,7 +49,6 @@ export class Conversation extends Component {
         const  { conversation, theme, shipment, user, tenant, clients } = this.props;
         const { message, title, showDetails } = this.state;
         const Element = Scroll.Element;
-        console.log(clients);
         const isAdmin = user.role_id === 1;
         const messages = isAdmin ?
             conversation.messages.map((msg) => {
