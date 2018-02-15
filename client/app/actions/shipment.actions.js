@@ -166,6 +166,47 @@ function setShipmentContacts(data) {
         );
     };
 }
+function acceptShipment(id) {
+    function request(shipmentData) {
+        return {
+            type: shipmentConstants.ACCEPT_SHIPMENT_REQUEST,
+            shipmentData
+        };
+    }
+    function success(shipmentData) {
+        return {
+            type: shipmentConstants.ACCEPT_SHIPMENT_SUCCESS,
+            shipmentData
+        };
+    }
+    function failure(error) {
+        return { type: shipmentConstants.ACCEPT_SHIPMENT_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request(id));
+
+        shipmentService.acceptShipment(id).then(
+            resp => {
+                const shipmentData = resp.data;
+                dispatch(success(shipmentData));
+                dispatch(
+                    push(
+                        '/booking/' +
+                            id +
+                            '/thank_you'
+                    )
+                );
+                dispatch(
+                    alertActions.success('Confirm Shipment successful')
+                );
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
 
 function getAll() {
     function request() {
@@ -405,5 +446,6 @@ export const shipmentActions = {
     goTo,
     toDashboard,
     clearLoading,
+    acceptShipment,
     delete: _delete
 };

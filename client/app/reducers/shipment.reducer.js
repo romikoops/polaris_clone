@@ -133,6 +133,34 @@ export function shipment(state = {}, action) {
                 loading: false
             };
 
+        case shipmentConstants.ACCEPT_SHIPMENT_REQUEST:
+            return {
+                ...state,
+                request: {
+                    ...state.request,
+                    stage5: action.shipmentData
+                },
+                loading: true
+            };
+        case shipmentConstants.ACCEPT_SHIPMENT_SUCCESS:
+            return {
+                ...state,
+                response: {
+                    ...state.response,
+                    stage5: action.shipmentData
+                },
+                loading: false,
+                activeShipment: action.shipmentData.shipment.id
+            };
+        case shipmentConstants.ACCEPT_SHIPMENT_FAILURE:
+            return {
+                ...state,
+                error: {
+                    ...state.error,
+                    stage3: [ action.error ] },
+                loading: false
+            };
+
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
             return state;
         case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS:

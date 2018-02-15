@@ -76,6 +76,14 @@ function setShipmentContacts(data) {
     const url = BASE_URL + '/shipments/' + data.shipment.id + '/update';
     return fetch(url, requestOptions).then(handleResponse);
 }
+function acceptShipment(id) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+    const url = BASE_URL + '/shipments/' + id + '/confirm_shipment';
+    return fetch(url, requestOptions).then(handleResponse);
+}
 
 function uploadDocument(doc, type, url) {
     const formData = new FormData();
@@ -107,5 +115,6 @@ export const shipmentService = {
     setShipmentDetails,
     getStoredShipment,
     setShipmentContacts,
-    uploadDocument
+    uploadDocument,
+    acceptShipment
 };

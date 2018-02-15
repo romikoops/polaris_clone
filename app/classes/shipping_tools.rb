@@ -170,7 +170,7 @@ module ShippingTools
     }
   end
 
-  def confirm_shipment
+  def confirm_booking(params)
     shipment = Shipment.find(params[:shipment_id])
     shipment.status = "requested"
     shipment.save!

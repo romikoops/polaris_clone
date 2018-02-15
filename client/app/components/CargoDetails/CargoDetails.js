@@ -220,7 +220,6 @@ export class CargoDetails extends Component {
                                             }}
                                             type="number"
                                             name="totalGoodsValue"
-                                            value={this.props.totalGoodsValue}
                                             onChange={this.handleChange}
                                             submitAttempted={this.props.finishBookingAttempted}
                                             validations={{ nonNegative: (values, value) => value > 0 }}

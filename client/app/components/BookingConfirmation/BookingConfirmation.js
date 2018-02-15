@@ -21,6 +21,7 @@ export class BookingConfirmation extends Component {
             acceptTerms: false
         };
         this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this);
+        this.acceptShipment = this.acceptShipment.bind(this);
     }
     componentDidMount() {
         const { setStage } = this.props;
@@ -30,6 +31,11 @@ export class BookingConfirmation extends Component {
     toggleAcceptTerms() {
         this.setState({ acceptTerms: !this.state.acceptTerms });
         // this.props.handleInsurance();
+    }
+    acceptShipment() {
+        const {shipmentData, shipmentDispatch} = this.props;
+        const {shipment} = shipmentData;
+        shipmentDispatch.acceptShipment(shipment.id);
     }
     render() {
         const { theme, shipmentData, user, shipmentDispatch } = this.props;
@@ -103,6 +109,7 @@ export class BookingConfirmation extends Component {
                     theme={theme}
                     text="Finish Booking"
                     active
+                    handleNext={this.acceptShipment}
                 />
             </div>
         );
@@ -128,7 +135,9 @@ export class BookingConfirmation extends Component {
                             </div>
                         </div>
                         <RouteHubBox hubs={hubs} route={schedules} theme={theme}/>
-                        <div className={`${styles.b_summ} flex-100`}>
+                    </div>
+                    <div className={`${styles.b_summ} flex-100 layout-row layout-align-center`}>
+                        <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start'}>
                             <div className={`${styles.b_summ_top} flex-100 layout-row`}>
                                 <div className="flex-33 layout-row">
                                     <div className="flex-15 layout-column layout-align-start-center">
@@ -142,10 +151,11 @@ export class BookingConfirmation extends Component {
                                             <TextHeading theme={theme} size={4}  text="Shipper" />
                                         </div>
                                         <p className={`${styles.address} flex-100`}>
-                                            {shipper.data.first_name} {shipper.data.last_name} <br/>
-                                            {shipper.location.street} {shipper.location.street_number} <br/>
-                                            {shipper.location.zip_code} {shipper.location.city} <br/>
-                                            {shipper.location.country}
+                                            {`${shipper.data.first_name} ${shipper.data.last_name} `} <br/>
+                                             {` ${shipper.location.street ? shipper.location.street : ''} 
+                                                ${shipper.location.street_number ? shipper.location.street_number : ''} `}<br/>
+                                             {` ${shipper.location.zip_code} ${shipper.location.city} `}<br/>
+                                             {` ${shipper.location.country} `}
                                         </p>
                                     </div>
                                 </div>
@@ -161,13 +171,13 @@ export class BookingConfirmation extends Component {
                                             <TextHeading theme={theme} size={4}  text="Consignee" />
                                         </div>
                                         <p className={`${styles.address} flex-100`}>
-                                            {consignee.data.first_name}
-                                            {consignee.data.last_name} <br />
-                                            {consignee.location.street}
-                                            {consignee.location.street_number} <br />
-                                            {consignee.location.zip_code}
-                                            {consignee.location.city} <br />
-                                            {consignee.location.country}
+                                            {`${consignee.data.first_name}
+                                            ${consignee.data.last_name} `} <br />
+                                            {`${consignee.location.street ? consignee.location.street : ''}
+                                            ${consignee.location.street_number ? consignee.location.street_number : ''} `} <br />
+                                            {`${consignee.location.zip_code}
+                                            ${consignee.location.city} `} <br />
+                                            {`${consignee.location.country} `}
                                         </p>
                                     </div>
                                 </div>
@@ -217,7 +227,7 @@ export class BookingConfirmation extends Component {
                                 </div>
                                 <div className="flex layout-row layout-align-start-center">
                                     <div className="flex-5"></div>
-                                    <p className="flex-95">By checking this box you certify the provided information is accurate and agree to the Terms and Conditions of {this.props.tenant.data.name}</p>
+                                    <p className="flex-95">By checking this box you certify the provided information is accurate and agree to the Terms and Conditions of {this.props.tenant.name}</p>
                                 </div>
                             </div>
                             <div className="flex-50 layout-row layout-align-end-center">

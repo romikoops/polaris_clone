@@ -129,6 +129,7 @@ export class BookingDetails extends Component {
     }
     calcInsurance(val) {
         const gVal = val ? val : parseInt(this.state.totalGoodsValue, 10);
+
         const {shipmentData} = this.props;
         const iVal = ((gVal * 1.1) + parseFloat(shipmentData.shipment.total_price, 10)) * 0.0017;
         this.setState({insurance: {bool: true, val: iVal}});
@@ -276,34 +277,6 @@ export class BookingDetails extends Component {
                         user={user}
                         finishBookingAttempted={this.state.finishBookingAttempted}
                     />
-                    {/* <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                        <div className={`content_width flex-none  layout-row layout-wrap layout-align-center-center ${styles.summary_container}`}>
-                            <div className="flex-100 layout-row layout-align-start-center">
-                                <div className="flex-100 layout-row">
-                                    <div className="flex-none">
-                                        {' '}
-                                        <TextHeading theme={theme} size={2} text="Summary" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex-90 layout-row layout-align-start-center">
-                                {shipment && theme && hubs
-                                    ? (<ShipmentSummaryBox
-                                        total={this.orderTotal()}
-                                        user={user}
-                                        hubs={hubs}
-                                        route={schedules}
-                                        theme={theme}
-                                        shipment={shipment}
-                                        locations={locations}
-                                        cargoItems={cargoItems}
-                                        containers={containers}
-                                    />)
-                                    : ('')
-                                }
-                            </div>
-                        </div>
-                    </div>*/}
                     <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
                         <div className={defaults.content_width + ' flex-none  layout-row layout-wrap layout-align-start-center'}>
                             <div className="flex-50 layout-row layout-align-start-center">

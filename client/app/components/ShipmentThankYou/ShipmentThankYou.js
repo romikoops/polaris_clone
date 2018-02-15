@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { moment } from '../../constants';
-import { v4 } from 'node-uuid';
 import styles from './ShipmentThankYou.scss';
-import { RouteHubBox } from '../RouteHubBox/RouteHubBox';
-import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails';
-import { ContainerDetails } from '../ContainerDetails/ContainerDetails';
 import { RoundButton } from '../RoundButton/RoundButton';
 import defaults from '../../styles/default_classes.scss';
-import { Price } from '../Price/Price';
-import { TextHeading } from '../TextHeading/TextHeading';
-import { gradientTextGenerator, /* gradientGenerator **/ } from '../../helpers';
-import { Tooltip } from '../Tooltip/Tooltip';
+
 
 export class ShipmentThankYou extends Component {
     constructor(props) {
@@ -23,25 +15,13 @@ export class ShipmentThankYou extends Component {
         window.scrollTo(0, 0);
     }
     render() {
-        const { theme, shipmentData, tenant, user, shipmentDispatch } = this.props;
+        const { theme, shipmentData, tenant, shipmentDispatch } = this.props;
         if (!shipmentData) return <h1>Loading</h1>;
         const {
-            shipment,
-            schedules,
-            hubs,
-            shipper,
-            consignee,
-            notifyees,
-            cargoItems,
-            containers
+            shipment
         } = shipmentData;
         if (!shipment) return <h1> Loading</h1>;
-        const createdDate = shipment ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A') :  moment().format('DD-MM-YYYY | HH:mm A');
-        const textStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
-        const brightGradientStyle = theme ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary) : {color: 'black'};
         const tenantName = tenant ? tenant.name : '';
-       
-
         return (
             <div className="flex-100 layout-row layout-wrap">
                 <div className="flex-100 layout-row layout-wrap layout-align-center">
@@ -60,19 +40,19 @@ export class ShipmentThankYou extends Component {
                                 <p className="flex-100">Do not hesitate to contact us either through the message center or your account manager </p>
                             </div>
                         </div>
-                        
-                <hr className={`${styles.sec_break} flex-100`}/>
-                <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-                    <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
-                        <RoundButton theme={theme}
-                            text="Back to dashboard"
-                            back iconClass="fa-angle0-left"
-                            handleNext={() => shipmentDispatch.toDashboard()}/>
+
+                        <hr className={`${styles.sec_break} flex-100`}/>
+                        <div className={`${styles.back_to_dash_sec} flex-100 layout-row layout-wrap layout-align-center`}>
+                            <div className={`${defaults.content_width} flex-none content-width layout-row layout-align-start-center`}>
+                                <RoundButton theme={theme}
+                                    text="Back to dashboard"
+                                    back iconClass="fa-angle0-left"
+                                    handleNext={() => shipmentDispatch.toDashboard()}/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-          </div>
-        </div>
         );
     }
 }

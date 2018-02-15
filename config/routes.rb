@@ -95,6 +95,7 @@ Rails.application.routes.draw do
       post "set_haulage",        as: :set_haulage
       post "finish_booking",     as: :finish_booking
       post "update",             as: :update_booking
+      post "confirm_shipment",   as: :confirm_booking
     end
 
     resources :nexuses, only: [:index]
