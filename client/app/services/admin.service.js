@@ -320,6 +320,14 @@ function saveNewTrucking(obj) {
     };
     return fetch(BASE_URL + '/admin/trucking', requestOptions).then(handleResponse);
 }
+function assignManager(obj) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify({obj})
+    };
+    return fetch(BASE_URL + '/admin/user_managers/assign', requestOptions).then(handleResponse);
+}
 
 
 export const adminService = {
@@ -354,5 +362,6 @@ export const adminService = {
     saveNewHub,
     newRoute,
     getLayovers,
-    saveNewTrucking
+    saveNewTrucking,
+    assignManager
 };

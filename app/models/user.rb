@@ -27,6 +27,8 @@ class User < ApplicationRecord
   has_many :consignees, through: :contacts
   has_many :notifyees, through: :contacts
 
+  has_many :user_managers
+
   # Devise
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable and :omniauthable

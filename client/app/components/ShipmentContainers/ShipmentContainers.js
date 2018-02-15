@@ -144,7 +144,7 @@ export class ShipmentContainers extends Component {
                             {
                                 container ? (
                                     <ValidatedInput
-                                        className="flex-80"
+                                        wrapperClassName="flex-80"
                                         name={`${i}-payload_in_kg`}
                                         value={container ? container.payload_in_kg : ''}
                                         type="number"

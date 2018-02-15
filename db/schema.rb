@@ -10,18 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213115524) do
+ActiveRecord::Schema.define(version: 20180215132113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cargo_item_types", force: :cascade do |t|
-    t.integer "dimension_x"
-    t.integer "dimension_y"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
     t.string "description"
     t.string "area"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category"
   end
 
   create_table "cargo_items", force: :cascade do |t|
@@ -110,6 +111,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.string "trucking_type"
     t.string "photo"
     t.integer "nexus_id"
+    t.integer "trucking_availability_id"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -159,6 +161,14 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nexus_trucking_availabilities", force: :cascade do |t|
+    t.integer "trucking_availability_id"
+    t.integer "nexus_id"
+    t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -285,6 +295,15 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "tenant_cargo_item_types", force: :cascade do |t|
+    t.bigint "tenant_id"
+    t.bigint "cargo_item_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
+    t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
+  end
+
   create_table "tenant_vehicles", force: :cascade do |t|
     t.integer "vehicle_id"
     t.integer "tenant_id"
@@ -326,6 +345,22 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "vehicle_id"
+  end
+
+  create_table "trucking_availabilities", force: :cascade do |t|
+    t.jsonb "cargo_item"
+    t.jsonb "container"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_options", force: :cascade do |t|
+    t.integer "nexus_id"
+    t.integer "tenant_id"
+    t.string "city_name"
+    t.integer "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
@@ -405,5 +440,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
   end
 
   add_foreign_key "routes", "mot_scopes"
+  add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
+  add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"
 end

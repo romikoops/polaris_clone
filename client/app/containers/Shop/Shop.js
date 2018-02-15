@@ -128,7 +128,7 @@ class Shop extends Component {
         const { theme } = tenant.data;
         const { request, response, error } = bookingData;
         const route1 = match.url + '/:shipmentId/shipment_details';
-        const route2 = match.url + '/:shipmentId/choose_route';
+        const route2 = match.url + '/:shipmentId/choose_offer';
         const route3 = match.url + '/:shipmentId/booking_details';
         const route4 = match.url + '/:shipmentId/finish_booking';
         const loadingScreen = loading ? <Loading theme={theme} /> : '';

@@ -117,7 +117,7 @@ class AdminClients extends Component {
 
     render() {
         const { newClient, newClientBool } = this.state;
-        const { theme, clients, hubs, client, adminDispatch } = this.props;
+        const { theme, clients, hubs, client, adminDispatch, managers } = this.props;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -147,7 +147,7 @@ class AdminClients extends Component {
                         </div>
                     </div>
                     <ValidatedInput
-                        className={styles.input_100}
+                        wrapperClassName={styles.input_100}
                         type="text"
                         value={newClient.companyName}
                         name={'companyName'}
@@ -162,7 +162,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_50}
+                        wrapperClassName={styles.input_50}
                         type="text"
                         value={newClient.firstName}
                         name="firstName"
@@ -177,7 +177,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_50}
+                        wrapperClassName={styles.input_50}
                         type="text"
                         value={newClient.lastName}
                         name="lastName"
@@ -192,7 +192,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_50}
+                        wrapperClassName={styles.input_50}
                         type="text"
                         value={newClient.email}
                         name="email"
@@ -211,7 +211,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_50}
+                        wrapperClassName={styles.input_50}
                         type="text"
                         value={newClient.phone}
                         name="phone"
@@ -226,7 +226,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_street}
+                        wrapperClassName={styles.input_street}
                         type="text"
                         value={newClient.street}
                         name="street"
@@ -241,7 +241,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_no}
+                        wrapperClassName={styles.input_no}
                         type="text"
                         value={newClient.number}
                         name="number"
@@ -256,7 +256,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_zip}
+                        wrapperClassName={styles.input_zip}
                         type="text"
                         value={newClient.zipCode}
                         name="zipCode"
@@ -271,7 +271,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_cc}
+                        wrapperClassName={styles.input_cc}
                         type="text"
                         value={newClient.city}
                         name="city"
@@ -286,7 +286,7 @@ class AdminClients extends Component {
                         required
                     />
                     <ValidatedInput
-                        className={styles.input_cc}
+                        wrapperClassName={styles.input_cc}
                         type="text"
                         value={newClient.country}
                         name="country"
@@ -304,7 +304,7 @@ class AdminClients extends Component {
                     <div className="flex-100 layout-row">
                         <div className="flex-50 layout-row layout-wrap">
                             <ValidatedInput
-                                className={styles.input_100}
+                                wrapperClassName={styles.input_100}
                                 type="password"
                                 value={newClient.password}
                                 name={'password'}
@@ -322,7 +322,7 @@ class AdminClients extends Component {
                         <div className="flex-50 layout-row layout-wrap">
                             <ValidatedInput
                                 inputRef={(input) => { this.passwordConfirmationInput = input; }}
-                                className={styles.input_100}
+                                wrapperClassName={styles.input_100}
                                 type="password"
                                 value={newClient.password_confirmation}
                                 name={'password_confirmation'}
@@ -372,7 +372,7 @@ class AdminClients extends Component {
                     <Route
                         exact
                         path="/admin/clients/:id"
-                        render={props => <AdminClientView theme={theme} hubs={hubs} handleClientAction={this.handleClientAction} clientData={client} {...props} />}
+                        render={props => <AdminClientView theme={theme} hubs={hubs} handleClientAction={this.handleClientAction} clientData={client} managers={managers} adminDispatch={adminDispatch} {...props} />}
                     />
                 </Switch>
             </div>
@@ -387,7 +387,7 @@ AdminClients.propTypes = {
 function mapStateToProps(state) {
     const { authentication, tenant, admin } = state;
     const { user, loggedIn } = authentication;
-    const { clients, shipment, shipments, hubs, client } = admin;
+    const { clients, shipment, shipments, hubs, client, managers } = admin;
 
     return {
         user,
@@ -397,7 +397,8 @@ function mapStateToProps(state) {
         shipments,
         shipment,
         hubs,
-        client
+        client,
+        managers
     };
 }
 function mapDispatchToProps(dispatch) {

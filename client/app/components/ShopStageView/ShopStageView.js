@@ -3,8 +3,8 @@ import styles from './ShopStageView.scss';
 import PropTypes from 'prop-types';
 import defs from '../../styles/default_classes.scss';
 import { SHIPMENT_STAGES } from '../../constants';
-import { gradientCSSGenerator, gradientTextGenerator } from '../../helpers';
-import styled from 'styled-components';
+import { gradientTextGenerator } from '../../helpers';
+
 export class ShopStageView extends Component {
     constructor(props) {
         super(props);
@@ -13,22 +13,18 @@ export class ShopStageView extends Component {
             currentStage: props.currentStage
         };
     }
-    componentDidMount() {
-        this.stageName(this.props.currentStage);
+    componentWillReceiveProps(nextProps) {
+        this.setStageHeader(nextProps.currentStage);
     }
+
+    setStageHeader(currentStage) {
+        const { header } = SHIPMENT_STAGES.find(stage => stage.step === currentStage);
+        this.setState({ stageHeader: header });
+    }
+
     stageFunction(stage) {
         const { theme } = this.props;
-        const gradientStyle = theme ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.brightPrimary;
-        // const borderStyle = {
-        //     borderColor: theme ? gradientGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.brightPrimary
-        // };
-        const activeBtnStyle = theme && theme.colors ? gradientCSSGenerator(theme.colors.primary, theme.colors.secondary) : theme.colors.primary;
-        console.log(activeBtnStyle);
-        const StyledCircle = styled.div`
-            background: ${activeBtnStyle};
-           color: ${theme.colors.primary};
-           
-        `;
+        const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary) : theme.colors.brightPrimary;
         let stageBox;
         if (stage.step < this.props.currentStage) {
             stageBox = (
@@ -54,7 +50,7 @@ export class ShopStageView extends Component {
                             {stage.step}{' '}
                         </h3>
                     </div>
-                    <StyledCircle className={styles.shop_stage_current_border} />
+                    <div style={gradientStyle} className={styles.shop_stage_current_border}></div>
                 </div>
             );
         } else {
@@ -69,14 +65,6 @@ export class ShopStageView extends Component {
             );
         }
         return stageBox;
-    }
-
-    stageName(cStage) {
-        SHIPMENT_STAGES.forEach(stage => {
-            if (stage.step === cStage) {
-                this.setState({ title: stage.header });
-            }
-        });
     }
     render() {
         const stageBoxes = [];
@@ -102,7 +90,7 @@ export class ShopStageView extends Component {
                     <div className={`layout-row ${defs.content_width} layout-wrap layout-align-start-center ${styles.banner_content}`}>
                         <h3 className="flex-none header"> {this.props.shopType } </h3>
                         <i className="fa fa-chevron-right fade"></i>
-                        <p className="flex-none fade"> {this.state.title} </p>
+                        <p className="flex-none fade"> {this.state.stageHeader} </p>
                     </div>
                 </div>
                 <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>

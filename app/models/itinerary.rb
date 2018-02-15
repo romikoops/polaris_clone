@@ -24,6 +24,30 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id) 
+   trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+        stops.each do |stop|
+          if stop.index == 0
+            data = {
+              eta: nil,
+              etd: start_date,
+              stop_index: stop.index,
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
+            }
+          else 
+            data = {
+              eta: end_date,
+              etd: nil,
+              stop_index: stop.index,
+              itinerary_id: stop.itinerary_id,
+              stop_id: stop.id
+            }
+          end
+          trip.layovers.create!(data)
+        end
+  end
+
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id)
     if start_date.kind_of? Date
       tmp_date = start_date

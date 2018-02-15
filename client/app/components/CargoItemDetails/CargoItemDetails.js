@@ -15,7 +15,6 @@ export class CargoItemDetails extends Component {
         this.setState({
             viewer: !this.state.viewer
         });
-        console.log(this.state.viewer);
     }
     render() {
         const { index, item, hsCodes, theme, viewHSCodes } = this.props;
@@ -53,6 +52,11 @@ export class CargoItemDetails extends Component {
                 <div className="flex-100 layout-row layout-align-space-between">
                     <p>Volume</p>
                     <p>{((item.dimension_y * item.dimension_x * item.dimension_y) / 1000000).toFixed(2)} m<sup>3</sup></p>
+                </div>
+                <hr className="flex-100"/>
+                <div className="flex-100 layout-row layout-align-space-between">
+                    <p>CBM</p>
+                    <p>{(item.cbm).toFixed(2)} m<sup>3</sup></p>
                 </div>
                 <hr className="flex-100"/>
                 {viewHSCodes ?

@@ -1062,6 +1062,34 @@ function saveNewTrucking(obj) {
     };
 }
 
+function assignManager(obj) {
+    function request(managerData) {
+        return { type: adminConstants.ASSIGN_MANAGER_REQUEST, payload: managerData };
+    }
+    function success(managerData) {
+        return { type: adminConstants.ASSIGN_MANAGER_SUCCESS, payload: managerData.data };
+    }
+    function failure(error) {
+        return { type: adminConstants.ASSIGN_MANAGER_FAILURE, error };
+    }
+    return dispatch => {
+        dispatch(request());
+
+        adminService.assignManager(obj).then(
+            data => {
+                dispatch(
+                    alertActions.success('New Trucking successful')
+                );
+                dispatch(success(data));
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            }
+        );
+    };
+}
+
 function viewTrucking(truckingHub, pricing) {
     const payload = {truckingHub, pricing};
     function set(data) {
@@ -1124,6 +1152,7 @@ export const adminActions = {
     clearLoading,
     logOut,
     getLayovers,
-    saveNewTrucking
+    saveNewTrucking,
+    assignManager
 
 };

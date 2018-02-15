@@ -50,10 +50,10 @@ export class ShipmentSummaryBox extends Component {
                 theme.colors.secondary
             )
             : {color: 'black'};
-        const gradientStyle = theme && theme.colors
+        const brightGradientStyle = theme && theme.colors
             ? gradientGenerator(
-                theme.colors.primary,
-                theme.colors.secondary
+                theme.colors.brightPrimary,
+                theme.colors.brightSecondary
             )
             : {background: 'black'};
         const dashedLineStyles = {
@@ -141,7 +141,7 @@ export class ShipmentSummaryBox extends Component {
                         >
                             <div
                                 className={`${styles.tot_price} flex-none layout-row layout-align-space-between-center`}
-                                style={gradientStyle}
+                                style={brightGradientStyle}
                             >
                                 <p>Total Price:</p>{' '}
                                 <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />

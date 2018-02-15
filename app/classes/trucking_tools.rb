@@ -60,22 +60,84 @@ module TruckingTools
   end
 
 
-  def calc_trucking_price(destination, cargo_item, km, hub, client)
+  def calc_trucking_price(destination, cargo_item, km, hub, client, target)
     hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
     p km
     if hub && hub.trucking_type
       case hub_trucking_query["type"]
       when 'zipcode'
-        return calc_by_zipcode(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
+        if hub_trucking_query["modifier"] == "PER_CBM"
+          return calc_by_zipcode_cbm(destination, cargo_item.volume_in_cm3, km, hub_trucking_query["table"], client)
+        else
+          return calc_by_zipcode_weight(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
+        end
       when 'city'
-        return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client)
+        return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
       end
     else
       return {value: 1.25 * km, currency: "EUR"}
     end
   end
 
-  def calc_by_zipcode(destination, weight, km, tpKey, client)
+  def calc_by_zipcode(destination, cargo_item, km, tpKey, client)
+    zc = destination.get_zip_code
+    zip_int = zc.gsub!(" ", "").to_i
+    tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
+    @selected_rate
+    
+    if tps
+      tps["rate_table"].each do |rate|
+        if weight >= rate["min"] && weight <= rate["max"]
+          @selected_rate = rate
+        end
+      end 
+      if @selected_rate
+        price = (weight / 100) * @selected_rate["value"]
+      elsif !@selected_rate && weight < tps["rate_table"][0]["min"]
+        @selected_rate = tps["rate_table"][0]
+          price = tps["rate_table"][0]["min_value"]
+      end
+      
+      if price > @selected_rate["min_value"]
+        return {value:price, currency: tps["currency"]}
+      else
+        return {value: @selected_rate["min_value"], currency: tps["currency"]}
+      end
+    else
+      
+      return {value: 1.25 * km, currency: "EUR"}
+    end
+  end
+  def calc_by_zipcode_cbm(destination, volume, km, tpKey, client)
+    zc = destination.get_zip_code
+    zip_int = zc.gsub!(" ", "").to_i
+    tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
+    @selected_rate
+    
+    if tps
+      tps["rate_table"].each do |rate|
+        if weight >= rate["min"] && weight <= rate["max"]
+          @selected_rate = rate
+        end
+      end 
+      if @selected_rate
+        price = (weight / 100) * @selected_rate["value"]
+      elsif !@selected_rate && weight < tps["rate_table"][0]["min"]
+        @selected_rate = tps["rate_table"][0]
+          price = tps["rate_table"][0]["min_value"]
+      end
+      
+      if price > @selected_rate["min_value"]
+        return {value:price, currency: tps["currency"]}
+      else
+        return {value: @selected_rate["min_value"], currency: tps["currency"]}
+      end
+    else
+      
+      return {value: 1.25 * km, currency: "EUR"}
+    end
+  end
+  def calc_by_zipcode_weight(destination, weight, km, tpKey, client)
     zc = destination.get_zip_code
     zip_int = zc.gsub!(" ", "").to_i
     tps = retrieve_tp_from_array('truckingTables', tpKey, zip_int, client)
@@ -105,7 +167,7 @@ module TruckingTools
     end
   end
 
-  def calc_by_city(hub, destination, km, cargo_item, tpKey, client)
+  def calc_by_city(hub, destination, km, cargo_item, tpKey, client, target)
     cbm = (cargo_item.dimension_x * cargo_item.dimension_y * cargo_item.dimension_z) / 1000
     weight = cargo_item.payload_in_kg
     hub_pricings = get_item_fn(client, 'truckingTables', "_id", tpKey)
@@ -126,7 +188,7 @@ module TruckingTools
           @selected_rate = rate
         end
       end
-      price = ((weight) * @selected_rate["value"]) + @selected_rate["pickup_fee"] + @selected_rate["delivery_fee"]
+      price = ((weight) * @selected_rate["value"]) + target == 'origin' ? @selected_rate["pickup_fee"] : @selected_rate["delivery_fee"]
       if !@selected_rate["min_value"] || price > @selected_rate["min_value"]
         return {value:price, currency: @trucking_pricing["currency"]}
       else

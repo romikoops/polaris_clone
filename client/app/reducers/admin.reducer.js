@@ -458,7 +458,8 @@ export function admin(state = {}, action) {
         case adminConstants.GET_CLIENTS_SUCCESS:
             return {
                 ...state,
-                clients: action.payload.data,
+                clients: action.payload.data.clients,
+                managers: action.payload.data.managers,
                 loading: false
             };
         case adminConstants.GET_CLIENTS_FAILURE:
@@ -654,6 +655,27 @@ export function admin(state = {}, action) {
                 loading: false
             };
         case adminConstants.NEW_TRUCKING_FAILURE:
+            return merge({}, state, {
+                error: { trucking: action.error },
+                loading: false
+            });
+
+        case adminConstants.ASSIGN_MANAGER_REQUEST:
+            return merge({}, state, {
+                loading: true
+            });
+        case adminConstants.ASSIGN_MANAGER_SUCCESS:
+            const newManagerArr = state.client.managerAssignments;
+            newManagerArr.push(action.payload);
+            return {
+                ...state,
+                client: {
+                    ...state.client,
+                    manager_assignments: newManagerArr
+                },
+                loading: false
+            };
+        case adminConstants.ASSIGN_MANAGER_FAILURE:
             return merge({}, state, {
                 error: { trucking: action.error },
                 loading: false

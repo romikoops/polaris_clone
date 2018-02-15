@@ -1,4 +1,9 @@
 class CargoItem < ApplicationRecord
+  EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
+    air: 0.167,
+    rails: 0.55,
+    ocean: 1.0
+  }
   belongs_to :shipment
 
   validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -35,11 +40,12 @@ class CargoItem < ApplicationRecord
     payload_in_kg / 1000    
   end
 
+  def cbm(mot = "ocean")
+    [volume, payload_in_tons / EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym]].max
+  end
+
   def weight_or_volume
-    if volume > payload_in_tons
-      volume
-    else
-      payload_in_tons
-    end
+    # Keeping this alias method temporarily
+    cbm
   end
 end

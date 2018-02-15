@@ -21,7 +21,7 @@ include MongoTools
   # overwrite_service_charges(req, shipper)
 
   # Overwrite dedicated pricings from excel sheet.
-   # If dedicated == true, shipper.id is automatically inserted.
+  # If dedicated == true, shipper.id is automatically inserted.
   # puts "# Overwrite dedicated pricings from excel sheet."
   # public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
   # req = {"xlsx" => public_pricings}
@@ -50,9 +50,9 @@ include MongoTools
   # req = {"xlsx" => trucking}
   # overwrite_zipcode_weight_trucking_rates(req, shipper)
 
-  # trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
-  # req = {"xlsx" => trucking}
-  # overwrite_city_trucking_rates(req, shipper)
+  trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_city_trucking_rates(req, shipper)
 
   tenant.update_route_details()
 # end

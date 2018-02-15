@@ -7,15 +7,14 @@ import { connect } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { adminActions } from '../../actions';
-// import {v4} from 'node-uuid';
-// import FileUploader from '../../components/FileUploader/FileUploader';
+import { gradientTextGenerator } from '../../helpers';
 class AdminTrucking extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedRoute: false,
             currentView: 'open',
-            creatorView: true
+            creatorView: false
         };
         this.viewTrucking = this.viewTrucking.bind(this);
         this.backToIndex = this.backToIndex.bind(this);
@@ -48,9 +47,7 @@ class AdminTrucking extends Component {
         const relHubs = truckingHubs.map(th => {
             return hubHash[parseInt(th._id, 10)];
         });
-        const textStyle = {
-            background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-        };
+        const textStyle =  theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
         const backButton = (
             <div className="flex-none layout-row">
                 <RoundButton

@@ -2,22 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Admin.scss';
 import { NamedSelect } from '../NamedSelect/NamedSelect';
-// import 'react-select/dist/react-select.css';
-// import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton';
 import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants';
-import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises} from '../../constants';
+import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema} from '../../constants';
 import { gradientTextGenerator } from '../../helpers';
 const fclChargeGloss = fclChargeGlossary;
 const lclChargeGloss = lclChargeGlossary;
 const chargeGloss = chargeGlossary;
 const rateOpts = rateBasises;
-// import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions;
 const cargoOpts = cargoOptions;
 const cargoClassOpts = cargoClassOptions;
 const moTOpts = moTOptions;
-const test = '123';
 export class AdminPriceEditor extends Component {
     constructor(props) {
         super(props);
@@ -38,9 +34,10 @@ export class AdminPriceEditor extends Component {
         this.setCargoClass = this.setCargoClass.bind(this);
         this.setAllFromOptions = this.setAllFromOptions.bind(this);
         this.deleteFee = this.deleteFee.bind(this);
+        this.showAddFeePanel = this.showAddFeePanel.bind(this);
+        this.addFeeToPricing = this.addFeeToPricing.bind(this);
     }
     componentWillMount() {
-        console.log(test);
         this.setAllFromOptions();
     }
     selectFromOptions(options, value) {
@@ -52,6 +49,38 @@ export class AdminPriceEditor extends Component {
             }
         });
         return result ? result : options[0];
+    }
+    addFeeToPricing(key) {
+        const { pricing } = this.state;
+        if (pricing.load_type === 'lcl') {
+            pricing.data[key] = lclPricingSchema.data[key];
+        } else {
+            pricing.data[key] = fclPricingSchema.data[key];
+        }
+        console.log('pricing', pricing);
+        const newObj = {data: {}};
+        const tmpObj = {};
+
+        Object.keys(pricing.data).forEach((key) => {
+            if (!newObj.data[key]) {
+                newObj.data[key] = {};
+            }
+            if (!tmpObj[key]) {
+                tmpObj[key] = {};
+            }
+            let opts;
+            Object.keys(pricing.data[key]).forEach(chargeKey => {
+                if (chargeKey === 'currency') {
+                    opts = currencyOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                } else if (chargeKey === 'rate_basis') {
+                    opts = rateOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                }
+                newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey]);
+            });
+        });
+        this.setState({selectOptions: newObj, options: tmpObj, pricing});
     }
     setAllFromOptions() {
         const { pricing } = this.props;
@@ -96,33 +125,8 @@ export class AdminPriceEditor extends Component {
         });
     }
     handleSelect(selection) {
-        console.log(selection);
-
-        console.log(this.state.pricing.data);
         const nameKeys = selection.name.split('-');
         this.setState({
-            pricing: {
-                ...this.state.pricing,
-                data: {
-                    ...this.state.pricing.data,
-                    [nameKeys[0]]: {
-                        ...this.state.pricing.data[nameKeys[0]],
-                        [nameKeys[1]]: selection.value
-                    }
-                }
-            },
-            selectOptions: {
-                ...this.state.selectOptions,
-                data: {
-                    ...this.state.selectOptions.data,
-                    [nameKeys[0]]: {
-                        ...this.state.selectOptions.data[nameKeys[0]],
-                        [nameKeys[1]]: selection
-                    }
-                }
-            }
-        });
-        console.log({
             pricing: {
                 ...this.state.pricing,
                 data: {
@@ -159,6 +163,9 @@ export class AdminPriceEditor extends Component {
         delete pricing.data[key];
         this.setState({pricing});
     }
+    showAddFeePanel() {
+        this.setState({showPanel: !this.state.showPanel});
+    }
     saveEdit() {
         const req = this.state.pricing;
 
@@ -168,15 +175,15 @@ export class AdminPriceEditor extends Component {
     render() {
         const {theme, hubRoute } = this.props;
         const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
-        const { pricing, selectOptions } = this.state;
+        const { pricing, selectOptions, showPanel } = this.state;
         const panel = [];
         let gloss;
-        if (pricing._id.includes('lcl')) {
+        if (pricing.load_type === 'lcl') {
             gloss = lclChargeGloss;
         } else {
             gloss = fclChargeGloss;
         }
-
+        console.log(this.state.pricing);
         Object.keys(pricing.data).forEach((key) => {
             const cells = [];
             Object.keys(pricing.data[key]).forEach(chargeKey => {
@@ -229,14 +236,26 @@ export class AdminPriceEditor extends Component {
                 </div>
             </div>);
         });
-        const showPanel = false;
+        const feeSchema = pricing.load_type === 'lcl' ? lclPricingSchema : fclPricingSchema;
+        const feesToAdd = Object.keys(feeSchema.data).map((key) => {
+            if (!pricing.data[key]) {
+                return (
+                    <div key={key} className="flex-33 layout-row layout-align-start-center" onClick={() => this.addFeeToPricing(key)}>
+                        <i className="fa fa-plus clip flex-none" style={textStyle}></i>
+                        <div className="flex-5"></div>
+                        <p className="flex-none">{key} - {gloss[key]} </p>
+                    </div>
+                );
+            }
+            return '';
+        });
         const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed;
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
                 <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeEdit}>
                 </div>
                 <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
-                    <div className="flex-95 layout-row layout-wrap layout-align-center-start">
+                    <div className={`flex-95 layout-row layout-wrap layout-align-center-start ${styles.editor_scroll}`}>
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >Edit Pricing</p>
                         </div>
@@ -253,7 +272,7 @@ export class AdminPriceEditor extends Component {
                                 size="small"
                                 text="Add Fee"
                                 active
-                                handleNext={this.showAddFee}
+                                handleNext={this.showAddFeePanel}
                                 iconClass="fa-plus"
                             />
                         </div>
@@ -267,7 +286,14 @@ export class AdminPriceEditor extends Component {
                                 iconClass="fa-floppy-o"
                             />
                         </div>
-                        <div className={`flex-100 layout-row layout-align-start-start layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+
+                    </div>
+                    <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+                        <div className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`} onClick={this.showAddFeePanel}>
+                            <i className="fa fa-times clip" style={textStyle}></i>
+                        </div>
+                        <div className="flex-90 layout-row layout-wrap layout-align-start-start">
+                            {feesToAdd}
                         </div>
                     </div>
                 </div>

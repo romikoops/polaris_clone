@@ -13,7 +13,7 @@ class Location < ApplicationRecord
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
         address_component["types"] == ["premise"]
-      end
+      end || {}
 
       location.premise          = premise_data["long_name"]
       location.street_number    = geo.street_number
@@ -36,21 +36,24 @@ class Location < ApplicationRecord
     end
   end
 
-  def self.from_short_name(input)
-    newname = input.split(" ,")[0]
-    location = Location.new(geocoded_address: input)
-    location.geocode
-    location.reverse_geocode
-    location.name = newname
-    location.location_type = 'nexus'
-    hl = location.as_json
-    hl.each do |k, v|
-      if !v
-        hl.delete(k)        
-      end
-    end
-    nl = Location.find_or_create_by!(hl)
-    return nl
+  def self.from_short_name(input, location_type)
+    city, country = *input.split(" ,")
+    location = Location.find_by(city: city, country: country) 
+    return location unless location.nil?
+
+    temp_location = Location.new(geocoded_address: input)
+    temp_location.geocode
+    temp_location.reverse_geocode
+    
+    location = Location.find_by(city: temp_location.city, country: temp_location.country) 
+    return location unless location.nil?
+
+    location = temp_location
+
+    location.name = city
+    location.location_type = location_type
+    location.save!
+    location
   end
 
   def set_geocoded_address_from_fields!
@@ -61,7 +64,6 @@ class Location < ApplicationRecord
   def geocode_from_address_fields!
     self.set_geocoded_address_from_fields!
     self.geocode
-    self.reverse_geocode
     self.save!
     self
   end
@@ -81,8 +83,9 @@ class Location < ApplicationRecord
 
   def self.create_and_geocode(raw_location_params)
     location_params = location_params(raw_location_params)
-    location = Location.find_or_initialize_by(location_params)
+    location = Location.find_or_create_by(location_params)
     location.geocode_from_address_fields! if location.geocoded_address.nil?
+    
     location
   end
 

@@ -54,6 +54,8 @@ export class AdminPriceCreator extends Component {
         this.setAllFromOptions = this.setAllFromOptions.bind(this);
         this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this);
         this.deleteFee = this.deleteFee.bind(this);
+        this.showAddFeePanel = this.showAddFeePanel.bind(this);
+        this.addFeeToPricing = this.addFeeToPricing.bind(this);
     }
     componentWillMount() {
         console.log(test);
@@ -115,6 +117,41 @@ export class AdminPriceCreator extends Component {
         const {pricing} = this.state;
         delete pricing.data[key];
         this.setState({pricing});
+    }
+    addFeeToPricing(key) {
+        const { pricing } = this.state;
+        if (pricing.load_type === 'lcl') {
+            pricing.data[key] = lclPricingSchema.data[key];
+        } else {
+            pricing.data[key] = fclPricingSchema.data[key];
+        }
+        console.log('pricing', pricing);
+        const newObj = {data: {}};
+        const tmpObj = {};
+
+        Object.keys(pricing.data).forEach((key) => {
+            if (!newObj.data[key]) {
+                newObj.data[key] = {};
+            }
+            if (!tmpObj[key]) {
+                tmpObj[key] = {};
+            }
+            let opts;
+            Object.keys(pricing.data[key]).forEach(chargeKey => {
+                if (chargeKey === 'currency') {
+                    opts = currencyOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                } else if (chargeKey === 'rate_basis') {
+                    opts = rateOpts.slice();
+                    // this.getOptions(opts, key, chargeKey);
+                }
+                newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey]);
+            });
+        });
+        this.setState({selectOptions: newObj, options: tmpObj, pricing});
+    }
+    showAddFeePanel() {
+        this.setState({showPanel: !this.state.showPanel});
     }
     handleSelect(selection) {
         console.log(selection);
@@ -204,7 +241,7 @@ export class AdminPriceCreator extends Component {
 
     render() {
         const {theme, itineraries, detailedItineraries, transportCategories, clients } = this.props;
-        const {route, hubRoute, cargoClass, steps, transportCategory, client } = this.state;
+        const {route, hubRoute, cargoClass, steps, transportCategory, client, showPanel } = this.state;
         const textStyle = {
             background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
         };
@@ -406,13 +443,26 @@ export class AdminPriceCreator extends Component {
             </div>
 
         );
-
+        const feeSchema = cargoClass.label === 'lcl' ? lclPricingSchema : fclPricingSchema;
+        const feesToAdd = Object.keys(feeSchema.data).map((key) => {
+            if (!pricing.data[key]) {
+                return (
+                    <div key={key} className="flex-33 layout-row layout-align-start-center" onClick={() => this.addFeeToPricing(key)}>
+                        <i className="fa fa-plus clip flex-none" style={textStyle}></i>
+                        <div className="flex-5"></div>
+                        <p className="flex-none">{key} - {gloss[key]} </p>
+                    </div>
+                );
+            }
+            return '';
+        });
+        const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed;
         return(
             <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
                 <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeForm}>
                 </div>
                 <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
-                    <div className="flex-95 layout-row layout-wrap layout-align-center-start">
+                    <div className={`flex-95 layout-row layout-wrap layout-align-center-start ${styles.editor_scroll}`}>
                         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
                             <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >New Pricing</p>
                         </div>
@@ -423,6 +473,16 @@ export class AdminPriceCreator extends Component {
                             </div>
                         </div>
                         {client ? panel : contextPanel}
+                         <div className="flex-100 layout-align-end-center layout-row" style={{margin: '15px'}}>
+                            <RoundButton
+                                theme={theme}
+                                size="small"
+                                text="Add Fee"
+                                active
+                                handleNext={this.showAddFeePanel}
+                                iconClass="fa-plus"
+                            />
+                        </div>
                         <div className="flex-100 layout-align-end-center layout-row" style={{margin: '15px'}}>
                             <RoundButton
                                 theme={theme}
@@ -432,6 +492,14 @@ export class AdminPriceCreator extends Component {
                                 handleNext={this.saveEdit}
                                 iconClass="fa-floppy-o"
                             />
+                        </div>
+                    </div>
+                    <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+                        <div className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`} onClick={this.showAddFeePanel}>
+                            <i className="fa fa-times clip" style={textStyle}></i>
+                        </div>
+                        <div className="flex-90 layout-row layout-wrap layout-align-start-start">
+                            {feesToAdd}
                         </div>
                     </div>
                 </div>

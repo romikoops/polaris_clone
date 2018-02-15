@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       end
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
+      post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create]
 
       resources :pricings, only: [:index]

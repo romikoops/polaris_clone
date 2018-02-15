@@ -81,7 +81,7 @@ export class MessageShipmentData extends Component {
                                 styles.hubs_row
                             }`}
                         >
-                            <div className={`${styles.header_hub}`}>
+                            <div className={` flex-40 ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
                                         <i
@@ -91,7 +91,6 @@ export class MessageShipmentData extends Component {
                                             style={gradientFontStyle}
                                         />
                                     </div>
-
                                     <h4 className="flex-85"> {startHub.name} </h4>
                                 </div>
                             </div>
@@ -101,7 +100,7 @@ export class MessageShipmentData extends Component {
                                 </div>
                                 <div style={dashedLineStyles} />
                             </div>
-                            <div className={`${styles.header_hub}`}>
+                            <div className={` flex-40 ${styles.header_hub}`}>
                                 <div className="flex-100 layout-row">
                                     <div className="flex-15 layout-row layout-align-center-center">
                                         <i className={`fa fa-flag-o clip ${styles.flag}`} style={gradientFontStyle}/>

@@ -94,7 +94,6 @@ export class ShipmentContactForm extends Component {
                 contact[k] = inputs[k];
             }
         }
-
         return { location, contact };
     }
     render() {
