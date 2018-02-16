@@ -16,10 +16,7 @@ export class CargoDetails extends Component {
     super(props)
     this.state = {
       insuranceView: true,
-      customsView: true,
-      hsCodes: {},
-      cargoNotes: '',
-      totalGoodsValue: 0
+      customsView: true
     }
     this.toggleInsurance = this.toggleInsurance.bind(this)
     this.toggleCustoms = this.toggleCustoms.bind(this)
@@ -41,12 +38,11 @@ export class CargoDetails extends Component {
     if (customsData && customsData.val && customsData.val !== converted) {
       setCustomsFee(resp)
     }
-    // }.bind(this), 1000);
   }
   deleteDoc (key) {
     const { shipmentData, shipmentDispatch } = this.props
     const { documents } = shipmentData
-    const id = documents[key].id
+    const { id } = documents[key]
     shipmentDispatch.deleteDocument(id)
   }
   fileFn (file) {
@@ -242,7 +238,10 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap alyout-align-start-start">
+              <div
+                className="flex-100 flex-gt-sm-50 layout-row layout-wrap
+                  layout-align-start-start"
+              >
                 <div className="flex-100 layout-row layout-wrap">
                   <div className="flex-100">
                     {' '}
@@ -293,10 +292,12 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
               </div>
-              <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap alyout-align-start-start">
+              <div
+                className="flex-100 flex-gt-sm-45 offset-gt-sm-5
+                  layout-row layout-wrap alyout-align-start-start"
+              >
                 <div className="flex-100 layout-row">
                   <div className={`flex-none ${styles.f_header}`}>
-                    {' '}
                     <TextHeading theme={theme} size={3} text="Required Documents" />
                   </div>
                 </div>
@@ -456,11 +457,13 @@ CargoDetails.propTypes = {
     key: PropTypes.string,
     rate: PropTypes.number
   })).isRequired,
-  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired
+  hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  finishBookingAttempted: PropTypes.bool
 }
 
 CargoDetails.defaultProps = {
-  theme: null
+  theme: null,
+  finishBookingAttempted: false
 }
 
 export default CargoDetails

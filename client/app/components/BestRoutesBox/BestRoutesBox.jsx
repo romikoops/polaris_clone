@@ -20,7 +20,6 @@ export class BestRoutesBox extends Component {
         fastestSchedule = { schedule: sched, total: fare }
         fastestFare = fees[schedKey].total
       }
-      // }
     })
     return (
       <div
@@ -74,7 +73,9 @@ export class BestRoutesBox extends Component {
       return fees[aKey] - fees[bKey]
     })
     const timeArray = schedules.sort((a, b) => moment(a.eta).diff(b.etd))
-    const depArray = schedules.sort((a, b) => moment(depDate).diff(a.etd) - moment(depDate).diff(b.etd))
+    const depArray = schedules.sort((a, b) => (
+      moment(depDate).diff(a.etd) - moment(depDate).diff(b.etd)
+    ))
     let lowScore = 100
     let bestFare
     let bestOption
