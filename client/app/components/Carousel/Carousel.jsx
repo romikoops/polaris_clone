@@ -20,7 +20,7 @@ export function Carousel ({ slides, noSlides, fade }) {
     speed: 2000,
     arrows: true
   }
-  const slideCountStyle = this.props.noSlides === 1 ? styles.one_slide : ''
+  const slideCountStyle = noSlides === 1 ? styles.one_slide : ''
   const StyledSlider = styled.div`
     .slick_slide {
       width: 1200px !important;

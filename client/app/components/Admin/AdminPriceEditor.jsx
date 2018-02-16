@@ -361,7 +361,7 @@ export class AdminPriceEditor extends Component {
 AdminPriceEditor.propTypes = {
   theme: PropTypes.theme,
   closeEdit: PropTypes.func.isRequired,
-  adminTools: PropTypes.func({
+  adminTools: PropTypes.shape({
     updatePricing: PropTypes.func
   }).isRequired,
   pricing: PropTypes.shape({

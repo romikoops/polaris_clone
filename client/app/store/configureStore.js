@@ -12,15 +12,13 @@ import DevTools from '../containers/DevTools'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export const history = createHistory()
-
 export function configureStore () {
-  const store = createStore(rootReducer, loadState(), compose(applyMiddleware([
+  const store = createStore(rootReducer, loadState(), compose(applyMiddleware(...[
     routerMiddleware(history), isDevelopment ? createLogger() : null, thunkMiddleware
   ].filter(Boolean)), isDevelopment ? DevTools.instrument() : null))
   store.subscribe(throttle(() => {
     const oldState = store.getState()
     const bData = oldState.bookingData
-    // delete bData.loading;
     saveState({
       bookingData: bData,
       tenant: oldState.tenant,

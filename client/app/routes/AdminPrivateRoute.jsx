@@ -22,7 +22,7 @@ export default function AdminPrivateRoute ({
 }
 
 AdminPrivateRoute.propTypes = {
-  component: PropTypes.node.isRequired,
+  component: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool,
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any

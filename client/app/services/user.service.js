@@ -262,3 +262,4 @@ export const userService = {
   editUserLocation,
   delete: _delete
 }
+export default userService

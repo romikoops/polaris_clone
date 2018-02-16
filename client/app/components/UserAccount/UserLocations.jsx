@@ -141,8 +141,8 @@ export class UserLocations extends Component {
             locInfo,
             this.makePrimary,
             this.toggleActiveView,
-            this.destroyLocation
-                        this.editLocation
+            this.destroyLocation,
+            this.editLocation
           )
           : undefined
         break

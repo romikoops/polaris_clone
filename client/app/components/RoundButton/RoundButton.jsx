@@ -56,7 +56,7 @@ export function RoundButton ({
   const activeButton = (
     <StyledButton
       className={`${styles.round_btn} ${bStyle} ${sizeClass}`}
-      onClick={this.props.handleNext}
+      onClick={handleNext}
     >
       <div className="layout-fill layout-row layout-align-space-around-center">
         <p className={styles.content}>
@@ -69,7 +69,7 @@ export function RoundButton ({
   const inactiveButton = (
     <button
       className={`${styles.round_btn} ${bStyle} ${sizeClass}`}
-      onClick={this.props.handleNext}
+      onClick={handleNext}
     >
       <div className="layout-fill layout-row layout-align-space-around-center">
         <p className={styles.content}>
@@ -85,7 +85,7 @@ export function RoundButton ({
 
 RoundButton.propTypes = {
   text: PropTypes.string.isRequired,
-  handleNext: PropTypes.func.isRequired,
+  handleNext: PropTypes.func,
   active: PropTypes.bool,
   back: PropTypes.bool,
   theme: PropTypes.theme,
@@ -100,7 +100,8 @@ RoundButton.defaultProps = {
   theme: null,
   icon: '',
   iconClass: '',
-  size: ''
+  size: '',
+  handleNext: null
 }
 
 export default RoundButton

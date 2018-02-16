@@ -358,7 +358,7 @@ UserContactsView.propTypes = {
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  contactData: PropTypes.shapeOf({
+  contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.shipments,
     location: PropTypes.location

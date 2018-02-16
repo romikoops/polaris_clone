@@ -54,10 +54,14 @@ export class LoginRegistrationWrapper extends Component {
 }
 
 LoginRegistrationWrapper.propTypes = {
-  component: PropTypes.node.isRequired,
-  initialCompName: PropTypes.string.isRequired
+  initialCompName: PropTypes.string.isRequired,
+  LoginPageProps: PropTypes.objectOf(PropTypes.any),
+  RegistrationPageProps: PropTypes.objectOf(PropTypes.any),
 }
 
-LoginRegistrationWrapper.defaultProps = {}
+LoginRegistrationWrapper.defaultProps = {
+  LoginPageProps: {},
+  RegistrationPageProps: {},
+}
 
 export default LoginRegistrationWrapper

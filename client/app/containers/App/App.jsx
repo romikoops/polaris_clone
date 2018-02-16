@@ -28,8 +28,8 @@ class App extends Component {
   componentDidUpdate (prevProps) {
     if (this.props.selectedSubdomain !== prevProps.selectedSubdomain) {
       // const subdomain = getSubdomain();
-      const { dispatch, selectedSubdomain } = this.props
-      dispatch(fetchTenantIfNeeded(selectedSubdomain))
+      const { appDispatch, selectedSubdomain } = this.props
+      appDispatch.fetchTenantIfNeeded(selectedSubdomain)
     }
   }
   render () {
@@ -89,7 +89,6 @@ App.propTypes = {
   tenant: PropTypes.tenant,
   user: PropTypes.user,
   loggedIn: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
   appDispatch: PropTypes.shape({
     fetchTenantIfNeeded: PropTypes.func,
     fetchCurrencies: PropTypes.func

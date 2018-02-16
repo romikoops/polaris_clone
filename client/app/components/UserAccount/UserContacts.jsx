@@ -249,7 +249,7 @@ UserContacts.propTypes = {
   }).isRequired,
   history: PropTypes.history.isRequired,
   loading: PropTypes.bool,
-  contactData: PropTypes.shapeOf({
+  contactData: PropTypes.shape({
     contact: PropTypes.contact,
     shipments: PropTypes.shipments,
     location: PropTypes.location

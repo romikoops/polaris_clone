@@ -4,7 +4,7 @@ import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { AdminClientTile } from '../'
-import { TextHeading } from '../../TextHeadings/TextHeading'
+import { TextHeading } from '../../TextHeading/TextHeading'
 
 export class AdminSearchableClients extends Component {
   constructor (props) {

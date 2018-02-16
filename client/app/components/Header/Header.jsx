@@ -188,7 +188,7 @@ Header.propTypes = {
   user: PropTypes.user,
   registering: PropTypes.bool,
   loggingIn: PropTypes.bool,
-  menu: PropTypes.node.isRequired,
+  menu: PropTypes.node,
   invert: PropTypes.bool,
   loginAttempt: PropTypes.bool,
   messageDispatch: PropTypes.shape({
@@ -213,7 +213,8 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   landingPage: false,
-  req: null
+  req: null,
+  menu: null
 }
 
 function mapStateToProps (state) {
