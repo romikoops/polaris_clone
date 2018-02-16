@@ -232,8 +232,8 @@ Admin.propTypes = {
 }
 
 Admin.defaultProps = {
-  theme: null,
-  user: null,
+  theme: {},
+  user: {},
   loggedIn: false
 }
 
