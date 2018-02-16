@@ -75,10 +75,15 @@ export default class AdminLayoverTile extends Component {
   }
 }
 AdminLayoverTile.propTypes = {
-  theme: PropTypes.theme.isRequired,
+  theme: PropTypes.theme,
   hub: PropTypes.objectOf(PropTypes.any).isRequired,
   navFn: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
-  target: PropTypes.String.isRequired,
+  target: PropTypes.String,
   layoverData: PropTypes.objectOf(PropTypes.any).isRequired
+}
+
+AdminLayoverTile.defaultProps = {
+  theme: null,
+  target: null
 }

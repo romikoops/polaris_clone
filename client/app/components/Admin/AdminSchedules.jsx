@@ -361,7 +361,7 @@ AdminSchedules.propTypes = {
     train: PropTypes.arrayOf(PropTypes.schedule),
     ocean: PropTypes.arrayOf(PropTypes.schedule),
     detailedItineraries: PropTypes.array.isRequired,
-    itineraryIds: PropTypes.ArrayOf(PropTypes.number).isRequired,
+    itineraryIds: PropTypes.Array,
     itineraries: PropTypes.objectOf(PropTypes.any).isRequired
   }),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
