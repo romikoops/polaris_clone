@@ -214,6 +214,7 @@ export default function getInputs (
 	        </div>
 	    </div>
   )
+  
   inputs.quantity = (
 	    <div className="layout-row flex layout-wrap layout-align-start-center" >
 	        <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>

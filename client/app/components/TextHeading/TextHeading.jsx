@@ -58,12 +58,14 @@ export class TextHeading extends Component {
   }
 }
 
-TextHeading.PropTypes = {
+TextHeading.propTypes = {
   size: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  warning: PropTypes.bool
 }
 TextHeading.defaultProps = {
-    theme: null
+  theme: null,
+  warning: false
 }
 export default TextHeading

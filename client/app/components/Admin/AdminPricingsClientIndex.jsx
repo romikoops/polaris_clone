@@ -8,7 +8,7 @@ import { history } from '../../helpers'
 import { AdminSearchableClients } from './AdminSearchables'
 // import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
-import {gradientTextGenerator} from '../../helpers'
+import { gradientTextGenerator } from '../../helpers'
 
 export class AdminPricingsClientIndex extends Component {
   static backToIndex () {

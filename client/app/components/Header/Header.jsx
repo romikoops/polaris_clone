@@ -37,7 +37,7 @@ class Header extends Component {
       messageDispatch.getUserConversations()
     }
     document.addEventListener('scroll', () => {
-            const isTop = window.pageYOffset < 100;
+      const isTop = window.pageYOffset < 100
       if (isTop !== this.state.isTop) {
         this.setState({ isTop })
       }

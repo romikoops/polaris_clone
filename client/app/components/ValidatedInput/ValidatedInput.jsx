@@ -5,7 +5,7 @@ import ValidatedInputFormsy from '../ValidatedInputFormsy/ValidatedInputFormsy'
 
 export function ValidatedInput (props) {
   return (
-    <Formsy className={props.className || props.wrapperClöassName}>
+    <Formsy className={props.wrapperClassName}>
       <ValidatedInputFormsy {...props} />
     </Formsy>
   )
@@ -14,9 +14,9 @@ export function ValidatedInput (props) {
 export default ValidatedInput
 
 ValidatedInput.propTypes = {
-  className: PropTypes.string
+  wrapperClassName: PropTypes.string
 }
 
 ValidatedInput.defaultProps = {
-  className: ''
+  wrapperClassName: ''
 }

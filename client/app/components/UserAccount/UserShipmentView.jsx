@@ -13,8 +13,8 @@ import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
 import FileTile from '../FileTile/FileTile'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { TextHeading } from '../TextHeading/TextHeading';
-import { gradientTextGenerator } from '../../helpers';
+import { TextHeading } from '../TextHeading/TextHeading'
+import { gradientTextGenerator } from '../../helpers'
 
 export class UserShipmentView extends Component {
   constructor (props) {
@@ -105,7 +105,7 @@ export class UserShipmentView extends Component {
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
-        const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : {color: 'black'};
+    const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
     const nArray = []
     const cargoView = []
     const docView = []
@@ -119,9 +119,9 @@ export class UserShipmentView extends Component {
               <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
             </div>
             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <div className="flex-100">
-                                    <TextHeading theme={theme} size={3}  text="Notifyee" />
-                                </div>
+              <div className="flex-100">
+                <TextHeading theme={theme} size={3} text="Notifyee" />
+              </div>
               <p className={` ${styles.address} flex-100`}>
                 {n.contact.first_name} {n.contact.last_name} <br />
                 {n.location.street} {n.location.street_number} <br />
@@ -138,9 +138,9 @@ export class UserShipmentView extends Component {
                 <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <div className="flex-100">
-                                    <TextHeading theme={theme} size={3}  text="Shipper" />
-                                </div>
+                <div className="flex-100">
+                  <TextHeading theme={theme} size={3} text="Shipper" />
+                </div>
                 <p className={`${styles.address} flex-100`}>
                   {n.contact.first_name} {n.contact.last_name} <br />
                   {n.location.street} {n.location.street_number} <br />
@@ -161,9 +161,9 @@ export class UserShipmentView extends Component {
                 />
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-                                <div className="flex-100">
-                                    <TextHeading theme={theme} size={3}  text="Consignee" />
-                                </div>
+                <div className="flex-100">
+                  <TextHeading theme={theme} size={3} text="Consignee" />
+                </div>
                 <p className={` ${styles.address} flex-100`}>
                   {n.contact.first_name} {n.contact.last_name} <br />
                   {n.location.street} {n.location.street_number} <br />

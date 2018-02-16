@@ -39,7 +39,8 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'text'
     }
   },
   {
@@ -83,7 +84,8 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -126,7 +128,8 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -172,7 +175,8 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -215,7 +219,8 @@ tenant_data = [
           cargo_item: false
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -261,7 +266,8 @@ tenant_data = [
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -305,7 +311,8 @@ tenant_data = [
           cargo_item: false
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   },
   {
@@ -347,7 +354,8 @@ tenant_data = [
           cargo_item: false
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'hs_codes'
     }
   }
 ]
@@ -358,6 +366,7 @@ CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension
 tenant_data.each do |tenant_attr|
   # tenant = Tenant.find_or_create_by(tenant_attr)
   tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
+  
   if ["demo", "greencarrier"].include? tenant.subdomain 
     tenant.cargo_item_types << CARGO_ITEM_TYPES_NO_DIMENSIONS
   else

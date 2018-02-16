@@ -134,7 +134,6 @@ export class ShipmentLocationBox extends Component {
     }
   }
 
-
   setHubsFromRoute (route) {
     let tmpOrigin = {}
     let tmpDest = {}
@@ -263,41 +262,7 @@ export class ShipmentLocationBox extends Component {
       map.setZoom(14)
     }
   }
-  loadPrevReq () {
-    const { prevRequest, allNexuses } = this.props
-    if (!prevRequest.shipment) {
-      return ''
-    }
-    const { shipment } = prevRequest
-    const newData = {}
-    newData.originHub = shipment.origin_id
-      ? allNexuses.origins.filter(o => o.value.id === shipment.origin_id)[0]
-      : null
-    newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : ''
-    newData.destinationHub = shipment.destination_id
-      ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0]
-      : null
-    newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : ''
-    if (shipment.origin_id) {
-      this.state.map
-        ? this.setOriginHub(newData.originHub)
-        : setTimeout(() => {
-          this.setOriginHub(newData.originHub)
-        }, 500)
-    }
-    if (shipment.origin_id) {
-      this.state.map
-        ? this.setDestHub(newData.destinationHub)
-        : setTimeout(() => {
-          this.setDestHub(newData.destinationHub)
-        }, 500)
-    }
-    this.setState({
-      autoTextOrigin: newData.autoTextOrigin,
-      autoTextDest: newData.autoTextDest
-    })
-    return ''
-  }
+  
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
@@ -414,7 +379,6 @@ export class ShipmentLocationBox extends Component {
       this.selectLocation(place, target)
     })
   }
-
 
   handleTrucking (event) {
     const { name, checked } = event.target
@@ -649,6 +613,41 @@ export class ShipmentLocationBox extends Component {
         break
     }
     return tmpCoord
+  }
+  loadPrevReq() {
+    const { prevRequest, allNexuses } = this.props
+    if (!prevRequest.shipment) {
+      return ''
+    }
+    const { shipment } = prevRequest
+    const newData = {}
+    newData.originHub = shipment.origin_id
+      ? allNexuses.origins.filter(o => o.value.id === shipment.origin_id)[0]
+      : null
+    newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : ''
+    newData.destinationHub = shipment.destination_id
+      ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0]
+      : null
+    newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : ''
+    if (shipment.origin_id) {
+      this.state.map
+        ? this.setOriginHub(newData.originHub)
+        : setTimeout(() => {
+          this.setOriginHub(newData.originHub)
+        }, 500)
+    }
+    if (shipment.origin_id) {
+      this.state.map
+        ? this.setDestHub(newData.destinationHub)
+        : setTimeout(() => {
+          this.setDestHub(newData.destinationHub)
+        }, 500)
+    }
+    this.setState({
+      autoTextOrigin: newData.autoTextOrigin,
+      autoTextDest: newData.autoTextDest
+    })
+    return ''
   }
   handleSwap () {
     const origin = { ...this.state.destination }
