@@ -127,7 +127,8 @@ UserShipments.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  shipments: PropTypes.shipments.isRequired
+  shipments: PropTypes.shipments.isRequired,
+  loading: PropTypes.func.isRequired
 }
 
 UserShipments.defaultProps = {

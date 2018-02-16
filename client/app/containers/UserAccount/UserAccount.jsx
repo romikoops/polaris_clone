@@ -19,7 +19,6 @@ import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import { Modal } from '../../components/Modal/Modal'
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes'
-import { Footer } from '../../components/Footer/Footer';
 // import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading'
 
@@ -45,7 +44,7 @@ class UserAccount extends Component {
     if (user && users && !users.loading && !users.dashboard) {
       userDispatch.getDashboard(user.id, false)
     }
-        if (user && users && !users.hubs) {
+    if (user && users && !users.hubs) {
       userDispatch.getHubs(false)
     }
   }

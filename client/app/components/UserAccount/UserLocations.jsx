@@ -6,7 +6,7 @@ import defaults from '../../styles/default_classes.scss'
 import { EditLocation } from './EditLocation'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation) => [
   <div
     key="addLocationButton"
     className={`${defaults.pointy} flex-33`}
@@ -58,7 +58,7 @@ const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) =
         </div>
         <div className={`${styles.footer}`}>
           <div className="layout-row layout-align-center-center">
-                            <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
+            <span className={`${defaults.emulate_link}`} onClick={() => editLocation(op.location)}>
                                 Edit
             </span>
                             &nbsp; | &nbsp;
@@ -88,8 +88,8 @@ export class UserLocations extends Component {
     this.toggleActiveView = this.toggleActiveView.bind(this)
     this.destroyLocation = this.destroyLocation.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
-        this.editLocation = this.editLocation.bind(this);
-        this.saveLocationEdit = this.saveLocationEdit.bind(this);
+    this.editLocation = this.editLocation.bind(this)
+    this.saveLocationEdit = this.saveLocationEdit.bind(this)
   }
 
   componentDidMount () {
@@ -99,20 +99,20 @@ export class UserLocations extends Component {
   destroyLocation (locationId) {
     const { userDispatch, user } = this.props
     userDispatch.destroyLocation(user.id, locationId, false)
-    }
+  }
 
-    saveLocationEdit(location) {
-        const { userDispatch, user } = this.props;
-        userDispatch.editUserLocation(user.id, location);
-        this.setState({activeView: 'allLocations'});
-    }
+  saveLocationEdit (location) {
+    const { userDispatch, user } = this.props
+    userDispatch.editUserLocation(user.id, location)
+    this.setState({ activeView: 'allLocations' })
+  }
 
-    editLocation(location) {
-        this.setState({
-            activeView: 'editLocation',
-            editLocation: location
-        });
-    }
+  editLocation (location) {
+    this.setState({
+      activeView: 'editLocation',
+      editLocation: location
+    })
+  }
 
   toggleActiveView (key) {
     this.setState({
@@ -149,29 +149,29 @@ export class UserLocations extends Component {
       case 'addLocation':
         activeView = undefined
         break
-            case 'newLocation':
-                activeView = (
-                    <EditLocationWrapper
-                        theme={this.props.theme}
-                        component={EditLocation}
-                        toggleActiveView={this.toggleActiveView}
-                        locationId={undefined}
-                        saveLocation={this.saveLocation}
-                    />
-                );
-                break;
-            case 'editLocation':
-                activeView = (
-                    <EditLocationWrapper
-                        theme={this.props.theme}
-                        component={EditLocation}
-                        toggleActiveView={this.toggleActiveView}
-                        locationId={undefined}
-                        location={this.state.editLocation}
-                        saveLocation={this.saveLocationEdit}
-                    />
-                );
-                break;
+      case 'newLocation':
+        activeView = (
+          <EditLocationWrapper
+            theme={this.props.theme}
+            component={EditLocation}
+            toggleActiveView={this.toggleActiveView}
+            locationId={undefined}
+            saveLocation={this.saveLocation}
+          />
+        )
+        break
+      case 'editLocation':
+        activeView = (
+          <EditLocationWrapper
+            theme={this.props.theme}
+            component={EditLocation}
+            toggleActiveView={this.toggleActiveView}
+            locationId={undefined}
+            location={this.state.editLocation}
+            saveLocation={this.saveLocationEdit}
+          />
+        )
+        break
       default:
         activeView = LocationView(locInfo)
     }
