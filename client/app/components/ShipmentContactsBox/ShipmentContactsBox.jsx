@@ -170,10 +170,6 @@ export class ShipmentContactsBox extends Component {
 ShipmentContactsBox.propTypes = {
   theme: PropTypes.theme,
   removeNotifyee: PropTypes.func.isRequired,
-  handleChange: PropTypes.func.isRequired,
-  handleNotifyeeChange: PropTypes.func.isRequired,
-  addNotifyee: PropTypes.func.isRequired,
-  toggleAddressBook: PropTypes.func.isRequired,
   consignee: PropTypes.shape({
     companyName: PropTypes.string,
     firstName: PropTypes.string,
@@ -209,12 +205,15 @@ ShipmentContactsBox.propTypes = {
     zipCode: PropTypes.string,
     city: PropTypes.string,
     country: PropTypes.string
-  }))
+  })),
+  setContactForEdit: PropTypes.func.isRequired,
+  finishBookingAttempted: PropTypes.bool
 }
 
 ShipmentContactsBox.defaultProps = {
   theme: null,
-  notifyees: []
+  notifyees: [],
+  finishBookingAttempted: false
 }
 
 export default ShipmentContactsBox
