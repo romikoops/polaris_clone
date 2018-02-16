@@ -12,7 +12,6 @@
   }
   .link_text {
     transition: all 1s ease-in-out;
-    overflow: none;
   }
   .expanded_link {
     width: calc(100% - 60px);
@@ -23,22 +22,31 @@
     visibility: hidden;
   }
   .icon_box {
-    width: 60px;
-    height: 60px;
-    font-size: 24px;
-  }
-  .expanded_icon {
-
-  }
-  .collapsed_icon {
-
+    text-align: center;
+    min-width: max-content;
+    height: min-content;
+    font-size: 120%;
+    margin-right: 10px;
+    overflow: visible;
   }
   .anchor {
-    // position: absolute;
-    // bottom: 0;
-    // right:0;
-    height: 60px;
     width: 60px;
+    height: 10px;
+    max-height: 60px;
   }
-
+  .dropdown_box {
+    margin-top: -5px;
+    margin-bottom: -5px;
+    padding: 0;
+  }
+  .text {
+    min-width: max-content;
+    max-width: max-content;
+  }
+  .text:hover {
+    cursor: pointer;
+  }
+  .tooltip {
+    max-width: 200px;
+  }
 }

@@ -1,5 +1,6 @@
 :local {
   .searchable {
+    width: 100%;
     margin: 15px 0;
   }
   .itinerary_row {
@@ -19,7 +20,7 @@
     padding: 15px 0;
   }
   .sec_title {
-    height: 75px;
+    min-height: 75px;
   }
   .sec_header {
     min-height: 60px;
@@ -499,6 +500,7 @@
   .overflow_hidden {
     overflow: hidden;
   }
+<<<<<<< HEAD
   .fee_panel_open {
     height: 300px !important;
     opacity: 1 !important;
@@ -525,5 +527,20 @@
     position: absolute;
     top: 10px;
     right: 10px;
+=======
+  .btn_wrapper {
+    position: relative !important;
+    display: inline-block !important;
+    width: 167px !important;
+    text-align: center !important;
+    align-content: center !important;
+  }
+  .top_margin {
+    margin-top: -20px !important;
+  }
+  .tooltip{
+    max-width: 150px !important;
+    text-align: left !important;
+>>>>>>> admin_tooltips
   }
 }
