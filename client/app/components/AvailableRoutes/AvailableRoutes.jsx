@@ -5,21 +5,11 @@ import { RouteSelector } from '../RouteSelector/RouteSelector'
 export class AvailableRoutes extends Component {
   constructor (props) {
     super(props)
-    this.viewShipment = this.viewShipment.bind(this)
-    this.makePrimary = this.makePrimary.bind(this)
     this.startBooking = this.startBooking.bind(this)
     this.routeSelected = this.routeSelected.bind(this)
   }
-  viewShipment (shipment) {
-    const { userDispatch } = this.props
-    userDispatch.getShipment(shipment.id, true)
-  }
   startBooking () {
     this.props.userDispatch.goTo('/booking')
-  }
-  makePrimary (locationId) {
-    const { userDispatch, user } = this.props
-    userDispatch.makePrimary(user.id, locationId)
   }
   routeSelected (route) {
     this.props.routeSelected(route)

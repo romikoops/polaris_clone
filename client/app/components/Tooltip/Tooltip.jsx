@@ -15,7 +15,7 @@ export function Tooltip ({
   const clipClass = color ? '' : 'clip'
   const id = v4()
   return (
-    <div className="flex-none layout-row layout-align-center-center tooltip">
+    <div className="flex-none layout-row layout-align-center-center tooltip" style={{ margin: '0 10px' }}>
       <p
         className={`flex-none ${clipClass} fa ${icon}`}
         style={textStyle}

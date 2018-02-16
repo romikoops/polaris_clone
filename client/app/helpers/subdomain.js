@@ -1,7 +1,7 @@
 export function getSubdomain () {
   const { host } = window.location
   if (host.indexOf('.') < 0) {
-    return 'greencarrier'
+    return 'demo'
   }
   if (
     host.split('.')[0] === 'www' ||

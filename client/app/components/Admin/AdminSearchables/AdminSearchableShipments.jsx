@@ -157,7 +157,7 @@ export class AdminSearchableShipments extends Component {
               </b>
             </div>
             <div className="flex-50 layout-row layout-align-start-center">
-              <Tooltip icon="fa-info-circle" toolText={tooltip} />
+              <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip} />
             </div>
           </div>
           <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>

@@ -137,7 +137,7 @@ export class AdminShipmentRow extends Component {
             </div>
             <div className={`${styles.connection_graphics}`}>
               <div className="flex-none layout-row layout-align-center-center">
-                {this.switchIcon(schedule)}
+                {AdminShipmentRow.switchIcon(schedule)}
               </div>
               <div style={dashedLineStyles} />
             </div>

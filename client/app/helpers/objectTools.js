@@ -1,14 +1,7 @@
 import { camelize } from './stringTools'
 
-export const isEmpty = (obj) => {
-  let returnBool = true
-  Object.keys(obj).forEach((key) => {
-    if (Object.prototype.hasOwnProperty.call(obj, key)) {
-      returnBool = false
-    }
-  })
-  return returnBool
-}
+export const isEmpty = obj =>
+  Object.keys(obj).every(k => !Object.prototype.hasOwnProperty.call(obj, k))
 
 export const camelizeKeys = (obj) => {
   const newObj = {}

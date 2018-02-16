@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Switch, Route, bindActionCreators, withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
 import {
@@ -253,9 +254,7 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch),
-    user: null,
-    loggedIn: false
+    adminDispatch: bindActionCreators(adminActions, dispatch)
   }
 }
 
