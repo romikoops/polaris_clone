@@ -5,7 +5,7 @@ import { moment } from '../../constants'
 import { AdminLayoverTile } from './'
 import { gradientTextGenerator } from '../../helpers'
 
-export class AdminTripPanel extends Component {
+class AdminTripPanel extends Component {
   static switchIcon (itinerary) {
     let icon
     switch (itinerary.mode_of_transport) {

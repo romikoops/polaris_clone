@@ -233,6 +233,8 @@ export class AdminClientView extends Component {
 AdminClientView.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
+  adminDispatch: PropTypes.func.isRequired,
+  managers: PropTypes.arrayOf(PropTypes.String).isRequired,
   clientData: PropTypes.shape({
     client: PropTypes.client,
     shipments: PropTypes.shipments,

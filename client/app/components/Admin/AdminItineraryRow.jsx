@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { v4 } from 'node-uuid'
 import styles from './Admin.scss'
 import { gradientTextGenerator, capitalize } from '../../helpers'
-import { v4 } from 'node-uuid'
 
-export class AdminItineraryRow extends Component {
+export default class AdminItineraryRow extends Component {
   constructor (props) {
     super(props)
     this.selectItinerary = this.selectItinerary.bind(this)
   }
   switchIcon (itinerary) {
-    const theme = this.props.theme
+    const { theme } = this.props
     const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     let icon
     switch (itinerary.mode_of_transport) {
@@ -59,8 +59,10 @@ export class AdminItineraryRow extends Component {
   }
 }
 AdminItineraryRow.propTypes = {
-  theme: PropTypes.object,
-  schedule: PropTypes.object,
-  handleClick: PropTypes.func,
-  hubs: PropTypes.object
+  theme: PropTypes.theme.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired
+}
+
+AdminItineraryRow.defaultPropTypes = {
 }

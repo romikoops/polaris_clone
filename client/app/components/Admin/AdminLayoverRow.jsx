@@ -3,11 +3,8 @@ import PropTypes from 'prop-types'
 import styles from './AdminScheduleLine.scss'
 import { moment } from '../../constants'
 
-export class AdminLayoverRow extends Component {
-  constructor (props) {
-    super(props)
-  }
-  switchIcon (sched) {
+export default class AdminLayoverRow extends Component {
+  static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {
       case 'ocean':
@@ -25,8 +22,7 @@ export class AdminLayoverRow extends Component {
     }
     return icon
   }
-
-  dashedGradient (color1, color2) {
+  static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
       color1
     }, ${color2})`
@@ -127,8 +123,8 @@ export class AdminLayoverRow extends Component {
   }
 }
 AdminLayoverRow.propTypes = {
-  theme: PropTypes.object,
-  schedule: PropTypes.object,
-  selectResult: PropTypes.func,
-  hubs: PropTypes.object
+  theme: PropTypes.theme.isRequired,
+  schedule: PropTypes.objectOf(PropTypes.object).isRequired,
+  hub: PropTypes.objectOf(PropTypes.any).isRequired,
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired
 }

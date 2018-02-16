@@ -144,7 +144,9 @@ AdminRoutes.propTypes = {
   route: PropTypes.route.isRequired,
   routes: PropTypes.arrayOf(PropTypes.route).isRequired,
   hubHash: PropTypes.objectOf(PropTypes.hub),
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
+  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminRoutes.defaultProps = {

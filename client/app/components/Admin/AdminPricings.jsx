@@ -178,7 +178,9 @@ AdminPricings.propTypes = {
   routePricings: PropTypes.shape({
     route: PropTypes.object,
     routePricingData: PropTypes.object
-  }).isRequired
+  }).isRequired,
+  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
+  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminPricings.defaultProps = {

@@ -3,12 +3,9 @@ import PropTypes from 'prop-types'
 import styles from './AdminLayoverTile.scss'
 import { moment } from '../../constants'
 
-export class AdminLayoverTile extends Component {
+export default class AdminLayoverTile extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      redirect: false
-    }
     this.handleLink = this.handleLink.bind(this)
     this.clickEv = this.clickEv.bind(this)
   }
@@ -78,8 +75,10 @@ export class AdminLayoverTile extends Component {
   }
 }
 AdminLayoverTile.propTypes = {
-  theme: PropTypes.object,
-  hub: PropTypes.object,
-  navFn: PropTypes.func,
-  handleClick: PropTypes.func
+  theme: PropTypes.theme.isRequired,
+  hub: PropTypes.objectOf(PropTypes.any).isRequired,
+  navFn: PropTypes.func.isRequired,
+  handleClick: PropTypes.func.isRequired,
+  target: PropTypes.String.isRequired,
+  layoverData: PropTypes.objectOf(PropTypes.any).isRequired
 }

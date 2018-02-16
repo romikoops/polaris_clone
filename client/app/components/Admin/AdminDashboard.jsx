@@ -12,10 +12,9 @@ import {
 import { RoundButton } from '../RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { Carousel } from '../Carousel/Carousel'
-import { activeRoutesData } from '../../constants'
 import style from './AdminDashboard.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { adminDashboard as adminTip } from '../../constants'
+import { adminDashboard as adminTip, activeRoutesData } from '../../constants'
 
 export class AdminDashboard extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -55,7 +54,9 @@ export class AdminDashboard extends Component {
   }
 
   componentDidMount () {
-    const { dashData, loading, adminDispatch } = this.props
+    const {
+      dashData, loading, adminDispatch, hubs
+    } = this.props
     if (!dashData && !loading) {
       adminDispatch.getDashboard(false)
     } else if (dashData && !dashData.schedules) {

@@ -6,14 +6,18 @@ import styles from './BookingDetails.scss'
 import defaults from '../../styles/default_classes.scss'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { ContactSetter } from '../ContactSetter/ContactSetter'
-import { ShipmentSummaryBox } from '../ShipmentSummaryBox/ShipmentSummaryBox'
 import { CargoDetails } from '../CargoDetails/CargoDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { Checkbox } from '../Checkbox/Checkbox'
 import { isEmpty } from '../../helpers/objectTools'
-import { TextHeading } from '../TextHeading/TextHeading'
-// import { gradientTextGenerator } from '../../helpers';
+
 export class BookingDetails extends Component {
+  static scrollTo (target, offset) {
+    Scroll.scroller.scrollTo(target, {
+      duration: 2000,
+      smooth: true,
+      offset: offset || 0
+    })
+  }
   constructor (props) {
     super(props)
     this.newContactData = {
@@ -34,7 +38,6 @@ export class BookingDetails extends Component {
     }
 
     this.state = {
-      addressBook: false,
       acceptTerms: false,
       consignee: {},
       shipper: {},
@@ -73,27 +76,6 @@ export class BookingDetails extends Component {
     setStage(4)
     window.scrollTo(0, 0)
   }
-  scrollTo (target, offset) {
-    Scroll.scroller.scrollTo(target, {
-      duration: 2000,
-      smooth: true,
-      offset: offset || 0
-    })
-  }
-  loadPrevReq (obj) {
-    this.setState({
-      consignee: obj.consignee,
-      shipper: obj.shipper,
-      notifyees: obj.notifyees,
-      hsCode: obj.hsCode,
-      totalGoodsValue: obj.totalGoodsValue,
-      cargoNotes: obj.cargoNotes
-    })
-  }
-  toggleAcceptTerms () {
-    this.setState({ acceptTerms: !this.state.acceptTerms })
-    // this.props.handleInsurance();
-  }
   setHsCode (id, codes) {
     let exCodes
     if (this.state.hsCodes[id]) {
@@ -107,6 +89,32 @@ export class BookingDetails extends Component {
         [id]: exCodes
       }
     })
+  }
+  setContact (contactData, type, index) {
+    if (type === 'notifyee') {
+      const { notifyees } = this.state
+      notifyees[index] = contactData
+      this.setState({ notifyees })
+    } else {
+      this.setState({ [type]: contactData })
+    }
+  }
+  setCustomsFee (fee) {
+    this.setState({ customs: fee })
+  }
+  loadPrevReq (obj) {
+    this.setState({
+      consignee: obj.consignee,
+      shipper: obj.shipper,
+      notifyees: obj.notifyees,
+      hsCodes: obj.hsCodes,
+      totalGoodsValue: obj.totalGoodsValue,
+      cargoNotes: obj.cargoNotes
+    })
+  }
+  toggleAcceptTerms () {
+    this.setState({ acceptTerms: !this.state.acceptTerms })
+    // this.props.handleInsurance();
   }
   deleteCode (cargoId, code) {
     const codes = this.state.hsCodes[cargoId]
@@ -154,16 +162,6 @@ export class BookingDetails extends Component {
     const { customs, insurance } = this.state
     return parseFloat(shipmentData.shipment.total_price, 10) + customs.val + insurance.val
   }
-  setCustomsFee (fee) {
-    this.setState({ customs: fee })
-  }
-  pushUpData () {}
-
-  saveDraft () {}
-
-  toDashboard () {
-    history.push('/dashboard')
-  }
   toNextStage () {
     const {
       consignee,
@@ -177,7 +175,7 @@ export class BookingDetails extends Component {
     } = this.state
 
     if ([shipper, consignee].some(isEmpty)) {
-      this.scrollTo('contact_setter')
+      BookingDetails.scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
       return
     }
@@ -201,21 +199,11 @@ export class BookingDetails extends Component {
 
     const { shipper, consignee } = this.state
     if ([shipper, consignee].some(isEmpty)) {
-      this.scrollTo('contact_setter')
+      BookingDetails.scrollTo('contact_setter')
       return
     }
-    this.scrollTo('totalGoodsValue', -50)
+    BookingDetails.scrollTo('totalGoodsValue', -50)
   }
-  setContact (contactData, type, index) {
-    if (type === 'notifyee') {
-      const notifyees = this.state.notifyees
-      notifyees[index] = contactData
-      this.setState({ notifyees })
-    } else {
-      this.setState({ [type]: contactData })
-    }
-  }
-
   backToDashboard (e) {
     e.preventDefault()
     this.props.shipmentDispatch.toDashboard()
@@ -322,7 +310,6 @@ BookingDetails.propTypes = {
   theme: PropTypes.theme,
   shipmentData: PropTypes.shipmentData,
   nextStage: PropTypes.func.isRequired,
-  tenant: PropTypes.tenant.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),

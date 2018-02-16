@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-// import styles from './UserAccount.scss';
 import { UserShipmentRow } from './'
 import styles from '../Admin/Admin.scss'
-
 import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 
@@ -128,8 +126,7 @@ UserShipments.propTypes = {
   loading: PropTypes.bool,
   user: PropTypes.user,
   hubs: PropTypes.arrayOf(PropTypes.object),
-  shipments: PropTypes.shipments.isRequired,
-  loading: PropTypes.func.isRequired
+  shipments: PropTypes.shipments.isRequired
 }
 
 UserShipments.defaultProps = {

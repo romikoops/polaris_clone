@@ -245,7 +245,13 @@ export class AdminPricePanel extends Component {
           const gKey = `${hr.origin_stop_id}_${hr.destination_stop_id}_${tr.id}`
           const pricing = pricingsObj[uPriceObj[gKey]]
           if (pricing) {
-            innerInner.push(<RPBInner key={v4()} hubRoute={hr} transport={tr} pricing={pricing} them={theme} />)
+            innerInner.push(<RPBInner
+              key={v4()}
+              hubRoute={hr}
+              transport={tr}
+              pricing={pricing}
+              them={theme}
+            />)
           }
         })
         return innerInner
@@ -319,16 +325,21 @@ export class AdminPricePanel extends Component {
 }
 AdminPricePanel.propTypes = {
   theme: PropTypes.theme,
-  pricing: PropTypes.shape({
+  clientPricings: PropTypes.shape({
     customer_id: PropTypes.number
   }),
-  navFn: PropTypes.func.isRequired,
-  target: PropTypes.string.isRequired
+  loading: PropTypes.func.isRequired,
+  adminActions: PropTypes.func.isRequired,
+  match: PropTypes.objectOf(PropTypes.any),
+  pricingData: PropTypes.objectOf(PropTypes.any)
+
 }
 
 AdminPricePanel.defaultProps = {
   theme: null,
-  pricing: []
+  clientPricings: [],
+  match: {},
+  pricingData: {}
 }
 
 export default AdminPricePanel
