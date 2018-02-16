@@ -26,9 +26,11 @@ export class ShipmentContainers extends Component {
     this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this)
     this.addContainer = this.addContainer.bind(this)
   }
-
+  setFirstRenderInputs (bool) {
+    this.setState({ firstRenderInputs: bool })
+  }
   handleContainerSelect (optionSelected) {
-    const index = optionSelected.index
+    const { index } = optionSelected
     const modifiedEventSizeClass = {
       target: { name: `${index}-sizeClass`, value: optionSelected.value }
     }
@@ -45,10 +47,6 @@ export class ShipmentContainers extends Component {
   handleContainerQ (event) {
     const modifiedEvent = { target: event }
     this.props.handleDelta(modifiedEvent)
-  }
-
-  setFirstRenderInputs (bool) {
-    this.setState({ firstRenderInputs: bool })
   }
 
   toggleDangerousGoods (i) {
@@ -68,7 +66,7 @@ export class ShipmentContainers extends Component {
   addContainer () {
     this.props.addContainer()
 
-    const selectors = this.state.selectors
+    const { selectors } = this.state
     selectors.push({})
 
     this.setState({ selectors, firstRenderInputs: true })

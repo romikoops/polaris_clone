@@ -27,7 +27,8 @@ export class RouteOption extends Component {
     const { theme, route } = this.props
     const originNexus = route.origin_nexus
     const destinationNexus = route.destination_nexus
-    const modesOfTransport = Object.keys(route.modes_of_transport).filter(mot => route.modes_of_transport[mot])
+    const modesOfTransport = Object.keys(route.modes_of_transport)
+      .filter(mot => route.modes_of_transport[mot])
     // const modesOfTransport  = ['ocean', 'air', 'train'];
     // route.dedicated = Math.random() < 0.3;
     const dashedLineStyles = {

@@ -66,6 +66,8 @@ FormsyInput.propTypes = {
   submitAttempted: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   errorMessageStyles: PropTypes.objectOf(PropTypes.string)
 }
 
@@ -73,8 +75,10 @@ FormsyInput.defaultProps = {
   disabled: false,
   submitAttempted: false,
   onFocus: null,
+  placeholder: '',
   onBlur: null,
-  errorMessageStyles: {}
+  errorMessageStyles: {},
+  onChange: null
 }
 
 export default withFormsy(FormsyInput)

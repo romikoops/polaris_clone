@@ -16,9 +16,13 @@ import styles from './ShipmentCargoItems.scss'
  * @param { object } cargoItem
  * @param { number } i
  * @param { object } theme
+ * @param { object } scope
  * @param { array } cargoItemTypes
  * @param { array } availableCargoItemTypes
  * @param { array } numberOptions
+ * @param { bool } firstRenderInputs
+ * @param { bool } showAlertModal
+ * @param { bool } nextStageAttempt
  *
  * @returns { object } JSX for each input
  */
@@ -28,9 +32,13 @@ export default function getInputs (
   theme,
   cargoItemTypes,
   availableCargoItemTypes,
-  numberOptions
+  numberOptions,
+  firstRenderInputs,
+  showAlertModal,
+  nextStageAttempt,
+  scope
 ) {
-  const { scope, handleDelta } = this.props
+  const { handleDelta } = this.props
   const placeholderInput = (
     <input
       className="flex-80"
@@ -68,9 +76,9 @@ export default function getInputs (
               value={cargoItem.payload_in_kg}
               type="number"
               onChange={handleDelta}
-              firstRenderInputs={this.state.firstRenderInputs}
+              firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={this.props.nextStageAttempt}
+              nextStageAttempt={nextStageAttempt}
               validations={{
                 nonNegative: (values, value) => value > 0
               }}
@@ -102,9 +110,9 @@ export default function getInputs (
               min="0"
               step="any"
               onChange={handleDelta}
-              firstRenderInputs={this.state.firstRenderInputs}
+              firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={this.props.nextStageAttempt}
+              nextStageAttempt={nextStageAttempt}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
@@ -146,9 +154,9 @@ export default function getInputs (
               min="0"
               step="any"
               onChange={handleDelta}
-              firstRenderInputs={this.state.firstRenderInputs}
+              firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={this.props.nextStageAttempt}
+              nextStageAttempt={nextStageAttempt}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
@@ -191,9 +199,9 @@ export default function getInputs (
               min="0"
               step="any"
               onChange={handleDelta}
-              firstRenderInputs={this.state.firstRenderInputs}
+              firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={this.props.nextStageAttempt}
+              nextStageAttempt={nextStageAttempt}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
@@ -214,7 +222,7 @@ export default function getInputs (
       </div>
     </div>
   )
-  
+
   inputs.quantity = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
@@ -243,7 +251,7 @@ export default function getInputs (
         theme={theme}
         size="34px"
         disabled={!scope.dangerous_goods}
-        onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
+        onClick={scope.dangerous_goods ? '' : showAlertModal}
       />
     </div>
   )

@@ -189,22 +189,23 @@ class SideNav extends Component {
           : 'black'
     }
     const navLinks = links.map((li) => {
-      li.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+      const tli = li
+      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       return (
-        <div className="flex-100 layout-row layout-align-start-center" onClick={li.action}>
+        <div className="flex-100 layout-row layout-align-start-center" onClick={tli.action}>
           <div
             className={`flex-none layout-row-layout-align-center-center ${
               styles.icon_box
             } ${expandIconClass}`}
           >
-            <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />
+            <i className={`fa flex-none clip pointy ${tli.icon}`} style={textStyle} />
           </div>
           <div
             className={`flex-none layout-row-layout-align-center-center ${
               styles.link_text
             } ${expandLinkClass}`}
           >
-            <p className="flex-none">{li.text}</p>
+            <p className="flex-none">{tli.text}</p>
           </div>
         </div>
       )

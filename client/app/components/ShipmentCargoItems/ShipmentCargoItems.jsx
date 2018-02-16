@@ -21,15 +21,15 @@ export class ShipmentCargoItems extends Component {
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
   }
 
+  setFirstRenderInputs (bool) {
+    this.setState({ firstRenderInputs: bool })
+  }
+
   handleCargoChange (event) {
     const { name, value } = event.target
     this.setState({
       newCargoItem: { ...this.state.newCargoItem, [name]: value }
     })
-  }
-
-  setFirstRenderInputs (bool) {
-    this.setState({ firstRenderInputs: bool })
   }
 
   addNewCargo () {
@@ -78,8 +78,10 @@ export class ShipmentCargoItems extends Component {
     this.props.deleteItem('cargoItems', index)
   }
   render () {
-    const { cargoItems, theme } = this.props
-    const { cargoItemTypes } = this.state
+    const {
+      cargoItems, theme, showAlertModal, nextStageAttempt, scope
+    } = this.props
+    const { cargoItemTypes, firstRenderInputs } = this.state
     const cargosAdded = []
     const availableCargoItemTypes = this.props.availableCargoItemTypes
       ? this.props.availableCargoItemTypes.map(cargoItemType => ({
@@ -113,7 +115,11 @@ export class ShipmentCargoItems extends Component {
         theme,
         cargoItemTypes,
         availableCargoItemTypes,
-        numberOptions
+        numberOptions,
+        firstRenderInputs,
+        showAlertModal,
+        nextStageAttempt,
+        scope
       )
       return (
         <div
@@ -157,7 +163,8 @@ export class ShipmentCargoItems extends Component {
           // Try to find one of the labels in the available cargo item types
           let defaultType
           defaultTypeLabels.find(defaultTypeLabel =>
-            (defaultType = availableCargoItemTypes.find(cargoItemType => cargoItemType.label === defaultTypeLabel)))
+            (defaultType = availableCargoItemTypes
+              .find(cargoItemType => cargoItemType.label === defaultTypeLabel)))
 
           // In case none of the defaultTypeLabels match the available
           // cargo item types, set the default to the first available.

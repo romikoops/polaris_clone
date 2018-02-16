@@ -5,7 +5,7 @@ import styles from './RouteHubBox.scss'
 import { moment } from '../../constants'
 
 export class RouteHubBox extends Component {
-  faIcon (sched) {
+  static faIcon (sched) {
     if (sched) {
       const faKeywords = {
         ocean: 'ship',
@@ -31,7 +31,7 @@ export class RouteHubBox extends Component {
       </div>
     ]
   }
-  dashedGradient (color1, color2) {
+  static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
   render () {

@@ -159,7 +159,6 @@ export class AdminSearchableRoutes extends Component {
   }
 }
 AdminSearchableRoutes.propTypes = {
-  routes: PropTypes.arrayOf(PropTypes.route).isRequired,
   handleClick: PropTypes.func,
   adminDispatch: PropTypes.shape({
     getClient: PropTypes.func,
@@ -168,6 +167,8 @@ AdminSearchableRoutes.propTypes = {
   seeAll: PropTypes.func,
   sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
+  limit: PropTypes.number,
+  itineraries: PropTypes.arrayOf(PropTypes.any),
   hubs: PropTypes.arrayOf(PropTypes.hub).isRequired
 }
 
@@ -175,7 +176,9 @@ AdminSearchableRoutes.defaultProps = {
   handleClick: null,
   seeAll: null,
   sideScroll: false,
-  theme: null
+  theme: null,
+  limit: 3,
+  itineraries: []
 }
 
 export default AdminSearchableRoutes

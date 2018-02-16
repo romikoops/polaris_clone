@@ -5,7 +5,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 // import 'react-select/dist/react-select.css';
 // import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton'
-import { currencyOptions, cargoOptions, cargoClassOptions, moTOptions } from '../../constants/admin.constants'
+import { currencyOptions, cargoClassOptions } from '../../constants/admin.constants'
 import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema, cargoGlossary } from '../../constants'
 
 const fclChargeGloss = fclChargeGlossary
@@ -14,23 +14,35 @@ const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 // import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions
-const cargoOpts = cargoOptions
 const cargoClassOpts = cargoClassOptions
-const moTOpts = moTOptions
+
 const lclSchema = lclPricingSchema
 const fclSchema = fclPricingSchema
 const cargoGloss = cargoGlossary
 const test = '123'
 export class AdminPriceCreator extends Component {
+  static selectFromOptions (options, value) {
+    let result
+    console.log(options)
+    options.forEach((op) => {
+      if (op.value === value) {
+        result = op
+      }
+    })
+    return result || options[0]
+  }
+  static prepForSelect (arr, labelKey, valueKey, glossary) {
+    return arr.map(a => ({
+      value: valueKey ? a[valueKey] : a,
+      label: glossary ? glossary[a[labelKey]] : a[labelKey]
+    }))
+  }
   constructor (props) {
     super(props)
     this.state = {
       pricing: lclSchema,
-      mot: moTOpts[0],
       cargoClass: cargoClassOpts[0],
-      cargo: cargoOpts[0],
       selectOptions: {},
-      options: {},
       route: false,
       hubRoute: false,
       transportCategory: false,
@@ -61,16 +73,7 @@ export class AdminPriceCreator extends Component {
     console.log(test)
     this.setAllFromOptions()
   }
-  selectFromOptions (options, value) {
-    let result
-    console.log(options)
-    options.forEach((op) => {
-      if (op.value === value) {
-        result = op
-      }
-    })
-    return result || options[0]
-  }
+
   setAllFromOptions () {
     const { pricing } = this.state
     const newObj = { data: {} }
@@ -95,68 +98,24 @@ export class AdminPriceCreator extends Component {
         newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
       })
     })
-    this.setState({ selectOptions: newObj, options: tmpObj })
+    this.setState({ selectOptions: newObj })
   }
-  handleChange (event) {
-    const { name, value } = event.target
-    const nameKeys = name.split('-')
-    this.setState({
-      pricing: {
-        ...this.state.pricing,
-        data: {
-          ...this.state.pricing.data,
-          [nameKeys[0]]: {
-            ...this.state.pricing.data[nameKeys[0]],
-            [nameKeys[1]]: parseInt(value, 10)
-          }
-        }
-      }
-    })
-  }
-  deleteFee (key) {
-    const { pricing } = this.state
-    delete pricing.data[key]
-    this.setState({ pricing })
-  }
-  addFeeToPricing (key) {
-    const { pricing } = this.state
-    if (pricing.load_type === 'lcl') {
-      pricing.data[key] = lclPricingSchema.data[key]
-    } else {
-      pricing.data[key] = fclPricingSchema.data[key]
-    }
-    console.log('pricing', pricing)
-    const newObj = { data: {} }
-    const tmpObj = {}
 
-    Object.keys(pricing.data).forEach((key) => {
-      if (!newObj.data[key]) {
-        newObj.data[key] = {}
-      }
-      if (!tmpObj[key]) {
-        tmpObj[key] = {}
-      }
-      let opts
-      Object.keys(pricing.data[key]).forEach((chargeKey) => {
-        if (chargeKey === 'currency') {
-          opts = currencyOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
-        } else if (chargeKey === 'rate_basis') {
-          opts = rateOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
-        }
-        newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
-      })
-    })
-    this.setState({ selectOptions: newObj, options: tmpObj, pricing })
+  setCargoClass (value) {
+    const schema = value.value === 'lcl' ? lclSchema : fclSchema
+    this.setState({ cargoClass: value, pricing: schema })
+    this.editPricing = schema
   }
-  showAddFeePanel () {
-    this.setState({ showPanel: !this.state.showPanel })
+  handleTopLevelSelect (selection) {
+    this.setState({
+      [selection.name]: selection,
+      steps: {
+        ...this.state.steps,
+        [selection.name]: true
+      }
+    })
   }
   handleSelect (selection) {
-    console.log(selection)
-
-    console.log(this.state.pricing.data)
     const nameKeys = selection.name.split('-')
     this.setState({
       pricing: {
@@ -203,25 +162,61 @@ export class AdminPriceCreator extends Component {
       }
     })
   }
-  handleTopLevelSelect (selection) {
+  showAddFeePanel () {
+    this.setState({ showPanel: !this.state.showPanel })
+  }
+  deleteFee (key) {
+    const { pricing } = this.state
+    delete pricing.data[key]
+    this.setState({ pricing })
+  }
+  handleChange (event) {
+    const { name, value } = event.target
+    const nameKeys = name.split('-')
     this.setState({
-      [selection.name]: selection,
-      steps: {
-        ...this.state.steps,
-        [selection.name]: true
+      pricing: {
+        ...this.state.pricing,
+        data: {
+          ...this.state.pricing.data,
+          [nameKeys[0]]: {
+            ...this.state.pricing.data[nameKeys[0]],
+            [nameKeys[1]]: parseInt(value, 10)
+          }
+        }
       }
     })
   }
-  setMOT (value) {
-    this.setState({ mot: value })
-  }
-  setCargo (value) {
-    this.setState({ cargo: value })
-  }
-  setCargoClass (value) {
-    const schema = value.value === 'lcl' ? lclSchema : fclSchema
-    this.setState({ cargoClass: value, pricing: schema })
-    this.editPricing = schema
+  addFeeToPricing (key) {
+    const { pricing } = this.state
+    if (pricing.load_type === 'lcl') {
+      pricing.data[key] = lclPricingSchema.data[key]
+    } else {
+      pricing.data[key] = fclPricingSchema.data[key]
+    }
+    console.log('pricing', pricing)
+    const newObj = { data: {} }
+    const tmpObj = {}
+
+    Object.keys(pricing.data).forEach((oKey) => {
+      if (!newObj.data[oKey]) {
+        newObj.data[oKey] = {}
+      }
+      if (!tmpObj[oKey]) {
+        tmpObj[oKey] = {}
+      }
+      let opts
+      Object.keys(pricing.data[oKey]).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOpts.slice()
+          // this.getOptions(opts, key, chargeKey);
+        } else if (chargeKey === 'rate_basis') {
+          opts = rateOpts.slice()
+          // this.getOptions(opts, key, chargeKey);
+        }
+        newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
+      })
+    })
+    this.setState({ selectOptions: newObj, pricing })
   }
   saveEdit () {
     const {
@@ -234,9 +229,6 @@ export class AdminPriceCreator extends Component {
     pricing.tenant_id = route.value.tenant_id
     this.props.adminDispatch.updatePricing(pricingId, pricing)
     this.props.closeForm()
-  }
-  prepForSelect (arr, labelKey, valueKey, glossary) {
-    return arr.map(a => ({ value: valueKey ? a[valueKey] : a, label: glossary ? glossary[a[labelKey]] : a[labelKey] }))
   }
 
   render () {
@@ -302,10 +294,16 @@ export class AdminPriceCreator extends Component {
           </div>)
         }
       })
-      panel.push(<div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
+      panel.push(<div
+        key={key}
+        className="flex-100 layout-row layout-align-none-center layout-wrap"
+      >
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.price_subheader}`}>
           <p className="flex-none">{key} - {gloss[key]}</p>
-          <div className="flex-none layout-row layout-align-center-center" onClick={() => this.deleteFee(key)}>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={() => this.deleteFee(key)}
+          >
             <i className="fa fa-trash clip" style={textStyle} />
           </div>
         </div>
@@ -433,7 +431,8 @@ export class AdminPriceCreator extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           {steps.cargoClass === false ? selectCargoClass : cargoClassResult}
-          {steps.cargoClass === true && steps.transportCategory === false ? selectTransportCategory : transportCategoryResult}
+          {steps.cargoClass === true && steps.transportCategory === false
+            ? selectTransportCategory : transportCategoryResult}
           {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult }
           {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult }
           {steps.hubRoute === true && steps.client === false ? selectClient : clientResult }
@@ -445,7 +444,11 @@ export class AdminPriceCreator extends Component {
     const feesToAdd = Object.keys(feeSchema.data).map((key) => {
       if (!pricing.data[key]) {
         return (
-          <div key={key} className="flex-33 layout-row layout-align-start-center" onClick={() => this.addFeeToPricing(key)}>
+          <div
+            key={key}
+            className="flex-33 layout-row layout-align-start-center"
+            onClick={() => this.addFeeToPricing(key)}
+          >
             <i className="fa fa-plus clip flex-none" style={textStyle} />
             <div className="flex-5" />
             <p className="flex-none">{key} - {gloss[key]} </p>
@@ -505,9 +508,21 @@ export class AdminPriceCreator extends Component {
   }
 }
 AdminPriceCreator.propTypes = {
-  theme: PropTypes.object,
-  hubs: PropTypes.array,
-  pricing: PropTypes.object,
-  isNew: PropTypes.bool,
-  userId: PropTypes.number
+  theme: PropTypes.theme,
+  closeForm: PropTypes.func,
+  adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  itineraries: PropTypes.arrayOf(PropTypes.any),
+  transportCategories: PropTypes.arrayOf(PropTypes.any),
+  detailedItineraries: PropTypes.arrayOf(PropTypes.any),
+  clients: PropTypes.arrayOf(PropTypes.any)
 }
+AdminPriceCreator.defaultProps = {
+  theme: {},
+  closeForm: null,
+  itineraries: [],
+  detailedItineraries: [],
+  transportCategories: [],
+  clients: []
+}
+
+export default AdminPriceCreator

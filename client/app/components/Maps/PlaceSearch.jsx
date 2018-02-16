@@ -167,11 +167,15 @@ export class PlaceSearch extends Component {
 PlaceSearch.propTypes = {
   theme: PropTypes.theme,
   handlePlaceChange: PropTypes.func.isRequired,
-  gMaps: PropTypes.gMaps.isRequired
+  gMaps: PropTypes.gMaps.isRequired,
+  hideMap: PropTypes.bool,
+  inputStyles: PropTypes.objectOf(PropTypes.string)
 }
 
 PlaceSearch.defaultProps = {
-  theme: null
+  theme: null,
+  hideMap: false,
+  inputStyles: {}
 }
 
 export default PlaceSearch
