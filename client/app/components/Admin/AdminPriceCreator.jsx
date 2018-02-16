@@ -21,7 +21,7 @@ const lclSchema = lclPricingSchema
 const fclSchema = fclPricingSchema
 const cargoGloss = cargoGlossary
 const test = '123'
-export class AdminPriceCreator extends Component {
+export default class AdminPriceCreator extends Component {
   constructor (props) {
     super(props)
     this.state = {

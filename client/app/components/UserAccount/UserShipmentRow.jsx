@@ -234,7 +234,7 @@ UserShipmentRow.propTypes = {
   handleAction: PropTypes.func.isRequired,
   hubs: PropTypes.arrayOf(PropTypes.object),
   shipment: PropTypes.shipment.isRequired,
-  user: PropTypes.objectOf(String).isRequired
+  user: PropTypes.objectOf(PropTypes.String).isRequired
 }
 
 UserShipmentRow.defaultProps = {

@@ -13,15 +13,7 @@ import {
 import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ShipmentSummaryBox extends Component {
-  constructor (props) {
-    super(props)
-    this.onChangeFunc = this.onChangeFunc.bind(this)
-  }
-  onChangeFunc (optionsSelected) {
-    const nameKey = this.props.name
-    this.props.onChange(nameKey, optionsSelected)
-  }
-  switchIcon (sched) {
+  static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {
       case 'ocean':
@@ -40,10 +32,17 @@ export class ShipmentSummaryBox extends Component {
     return icon
   }
 
-  dashedGradient (color1, color2) {
+  static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
-
+  constructor (props) {
+    super(props)
+    this.onChangeFunc = this.onChangeFunc.bind(this)
+  }
+  onChangeFunc (optionsSelected) {
+    const nameKey = this.props.name
+    this.props.onChange(nameKey, optionsSelected)
+  }
   render () {
     const {
       theme, shipment, hubs, route, user, total, locations
@@ -68,7 +67,9 @@ export class ShipmentSummaryBox extends Component {
       backgroundSize: '16px 2px, 100% 2px'
     }
     const originAddress = (
-      <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+      <div className="flex-100 flex-gt-sm-50
+      layout-wrap layout-row layout-align-space-between-center"
+      >
         <div className="flex-100 layout-row">
           <TextHeading theme={theme} size={4} text="Pickup Address :" />
         </div>
@@ -81,7 +82,9 @@ export class ShipmentSummaryBox extends Component {
       </div>
     )
     const destinationAddress = (
-      <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+      <div className="flex-100 flex-gt-sm-50
+      layout-wrap layout-row layout-align-space-between-center"
+      >
         <div className="flex-100 layout-row">
           <TextHeading theme={theme} size={4} text="Delivery Address :" />
         </div>
@@ -188,7 +191,9 @@ export class ShipmentSummaryBox extends Component {
                 </p>
               </div>
             </div>
-            <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-25
+            layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row">
                 <TextHeading theme={theme} size={4} text="Shipment Type :" />
               </div>
@@ -196,25 +201,33 @@ export class ShipmentSummaryBox extends Component {
             </div>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-            <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-25
+            layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row">
                 <TextHeading theme={theme} size={4} text="IncoTerm :" />
               </div>
               <p className="flex-none"> {shipment.incoterm} </p>
             </div>
-            <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-25
+            layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row">
                 <TextHeading theme={theme} size={4} text="MoT :" />
               </div>
               <p className="flex-none"> {capitalize(route[0].mode_of_transport)} </p>
             </div>
-            <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-25
+            layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row">
                 <TextHeading theme={theme} size={4} text="Pre-carriage :" />
               </div>
               <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
             </div>
-            <div className="flex-100 flex-gt-sm-25 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-25
+            layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row">
                 <TextHeading theme={theme} size={4} text="On-carriage :" />
               </div>

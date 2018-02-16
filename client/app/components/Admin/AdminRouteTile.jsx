@@ -126,21 +126,15 @@ export class AdminRouteTile extends Component {
 AdminRouteTile.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  route: PropTypes.shape({
-    origin_nexus_id: PropTypes.number,
-    origin_nexus: PropTypes.string,
-    destination_nexus_id: PropTypes.number,
-    destination_nexus: PropTypes.number
-  }),
   navFn: PropTypes.func.isRequired,
   handleClick: PropTypes.func.isRequired,
-  target: PropTypes.string.isRequired
+  target: PropTypes.string.isRequired,
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminRouteTile.defaultProps = {
   theme: null,
-  hubs: [],
-  route: null
+  hubs: []
 }
 
 export default AdminRouteTile

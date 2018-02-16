@@ -240,7 +240,11 @@ export class AdminPriceEditor extends Component {
           </div>)
         }
       })
-      panel.push(<div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
+      panel.push(<div
+        key={key}
+        className="flex-100
+      layout-row layout-align-none-center layout-wrap"
+      >
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${
             styles.price_subheader
