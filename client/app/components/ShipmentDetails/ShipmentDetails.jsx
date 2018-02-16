@@ -100,7 +100,6 @@ export class ShipmentDetails extends Component {
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
-    this.scrollTo = this.scrollTo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.toggleAlertModal = this.toggleAlertModal.bind(this)
