@@ -3,6 +3,7 @@ class Hub < ApplicationRecord
   belongs_to :tenant
   belongs_to :nexus, class_name: "Location"
   belongs_to :location
+  belongs_to :trucking_availability
   has_many :hub_routes
   has_many :schedules, through: :hub_routes
   has_many :routes, through: :hub_routes
