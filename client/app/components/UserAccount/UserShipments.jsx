@@ -125,6 +125,7 @@ UserShipments.propTypes = {
     getShipment: PropTypes.func
   }).isRequired,
   theme: PropTypes.theme,
+  loading: PropTypes.bool,
   user: PropTypes.user,
   hubs: PropTypes.arrayOf(PropTypes.object),
   shipments: PropTypes.shipments.isRequired
@@ -133,7 +134,8 @@ UserShipments.propTypes = {
 UserShipments.defaultProps = {
   theme: null,
   user: null,
-  hubs: []
+  hubs: [],
+  loading: false
 }
 
 export default UserShipments
