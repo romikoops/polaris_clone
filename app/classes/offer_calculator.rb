@@ -11,7 +11,7 @@ class OfferCalculator
     @origin_hubs      = []
     @destination_hubs = []
     @itineraries      = []
-    @trips         = {}
+    @trips            = {}
 
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false

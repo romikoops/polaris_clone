@@ -2,6 +2,7 @@ class NexusesController < ApplicationController
 	include ItineraryTools
 	skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
+
 	def index
 		formatted_available_nexuses = format_for_select_box(find_available_nexuses)
 		response_handler("available#{params[:target].capitalize}s" => formatted_available_nexuses )
@@ -18,7 +19,7 @@ class NexusesController < ApplicationController
 	private
 
 	def find_available_nexuses
-		# Expects a target param which is either "origin" or "destination"
+		# Expects a params[:target] #=> "origin" or "destination"
 		# Then the following variables are assigned:
 		#
 		#      target #=> "origin",      counterpart #=> "destination" 

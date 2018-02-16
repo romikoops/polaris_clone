@@ -257,7 +257,7 @@ export class ShipmentLocationBox extends Component {
       )
     }
   }
-  setOriginHub(event) {
+  setOriginHub (event) {
     this.scopeNexusOptions(event ? event.label : '', 'destination')
     if (event) {
       const origin = {
@@ -331,7 +331,6 @@ export class ShipmentLocationBox extends Component {
     }
   }
 
-  
   selectedRoute (route) {
     const origin = {
       city: '',
@@ -498,7 +497,7 @@ export class ShipmentLocationBox extends Component {
       })
     })
   }
-  
+
   handleAuto (event) {
     const { name, value } = event.target
     this.setState({ autoText: { [name]: value } })
@@ -613,7 +612,7 @@ export class ShipmentLocationBox extends Component {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
   }
-  toggleModal() {
+  toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
   loadPrevReq () {

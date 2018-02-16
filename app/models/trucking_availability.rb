@@ -1,9 +1,10 @@
 class TruckingAvailability < ApplicationRecord
-    def self.create_all!
-    [true, false].repeated_permutation(6).to_a.each do |values|
-      attributes = TruckingAvailability.given_attribute_names.zip(values).to_h
-      p attributes
-      # TruckingAvailability.create!(attributes)
+  def self.create_all!
+    attr_names = TruckingAvailability.given_attribute_names
+
+    [true, false].repeated_permutation(attr_names.size).each do |values|
+      attributes = attr_names.zip(values).to_h
+      TruckingAvailability.create!(attributes)
     end
   end
 

@@ -22,24 +22,37 @@ module ShippingTools
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
     origins = []
     destinations = []
+    available_trucking_options = {}
     itineraries.map! do |itinerary|
       origins << { 
-        value: Location.find(itinerary["origin_nexus_id"]), 
+        value: origin = Location.find(itinerary["origin_nexus_id"]), 
         label: itinerary["origin_nexus"] 
       }
       destinations << { 
-        value: Location.find(itinerary["destination_nexus_id"]), 
+        value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
+
+      on_carriage, pre_carriage = *[origin, destination].map do |nexus|
+        nexus.trucking_availability(shipment.tenant_id)[shipment.load_type]
+      end
+      available_trucking_options[:on_carriage]  ||= on_carriage
+      available_trucking_options[:pre_carriage] ||= pre_carriage
 
       itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
       itinerary
     end
+
+    # shipment.has_on_carriage, shipment.has_on_carriage = *[:origin, :destination].map do |target|
+    #   shipment[target]trucking_availability(shipment.tenant_id)[shipment.load_type.to_sym]
+    # end
+
     return {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
-      cargoItemTypes: tenant.cargo_item_types
+      cargoItemTypes: tenant.cargo_item_types,
+      available_trucking_options: available_trucking_options
     }
   end 
 

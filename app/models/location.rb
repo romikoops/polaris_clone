@@ -7,6 +7,9 @@ class Location < ApplicationRecord
   has_many :routes
   has_many :hubs
   has_many :stops, through: :hubs
+
+  has_many :nexus_trucking_availabilities, foreign_key: "nexus_id"
+
   # Geocoding
   geocoded_by :geocoded_address
   reverse_geocoded_by :latitude, :longitude do |location, results|
@@ -189,6 +192,12 @@ class Location < ApplicationRecord
     end
     lowest_distance = distances.reject(&:nan?).min
     return locations[distances.find_index(lowest_distance)], lowest_distance
+  end
+
+  def trucking_availability(tenant_id)
+    return nil unless location_type == "nexus"
+    
+    nexus_trucking_availabilities.find_by(tenant_id: tenant_id).trucking_availability
   end
 
   def closest_hubs
