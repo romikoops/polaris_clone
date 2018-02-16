@@ -19,7 +19,6 @@ import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import { Modal } from '../../components/Modal/Modal'
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes'
-import { Footer } from '../../components/Footer/Footer'
 // import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading'
 

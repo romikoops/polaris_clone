@@ -287,7 +287,9 @@ export class UserContactsView extends Component {
           <p className={` ${styles.sec_title_text} flex-none clip`} style={textStyle}>
             Overview
           </p>
-          <div className="flex-100 flex-gt-sm-25 layout-row layout-align-center-center button_padding">
+          <div className="flex-100 flex-gt-sm-25
+             layout-row layout-align-center-center button_padding"
+          >
             <RoundButton
               theme={theme}
               handleNext={this.goBack}

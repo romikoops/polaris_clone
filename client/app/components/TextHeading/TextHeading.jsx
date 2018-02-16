@@ -59,9 +59,9 @@ export class TextHeading extends Component {
 }
 
 TextHeading.propTypes = {
-  size: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
   theme: PropTypes.theme,
+  size: PropTypes.number.isRequired,
   warning: PropTypes.bool
 }
 TextHeading.defaultProps = {

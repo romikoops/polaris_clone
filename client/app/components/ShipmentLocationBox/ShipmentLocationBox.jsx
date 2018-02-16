@@ -133,6 +133,52 @@ export class ShipmentLocationBox extends Component {
       this.loadPrevReq()
     }
   }
+  getCoordinates (hub, hubName) {
+    const { allNexuses } = this.props
+    let tmpCoord = {}
+    switch (hub) {
+      case 'origins':
+        allNexuses.origins.forEach((nx) => {
+          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
+        })
+        break
+      case 'destinations':
+        allNexuses.destinations.forEach((nx) => {
+          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
+        })
+        break
+      default:
+        break
+    }
+    return tmpCoord
+  }
+  setDestHub (event) {
+    this.scopeNexusOptions(event ? event.label : '', 'origin')
+    if (event) {
+      const destination = {
+        ...this.state.destination,
+        hub_id: event.value.id,
+        hub_name: event.value.name,
+        lat: event.value.latitude,
+        lng: event.value.longitude
+      }
+      const lat = event.value.latitude
+      const lng = event.value.longitude
+      const dSelect = event
+
+      this.props.setTargetAddress('destination', destination)
+      this.setMarker({ lat, lng }, destination.hub_name, 'destination')
+      this.setState({ dSelect, destination })
+    } else {
+      this.setState({
+        dSelect: '',
+        destination: {}
+      })
+
+      this.state.markers.destination.setMap(null)
+      this.props.setTargetAddress('destination', {})
+    }
+  }
 
   setHubsFromRoute (route) {
     let tmpOrigin = {}
@@ -262,7 +308,7 @@ export class ShipmentLocationBox extends Component {
       map.setZoom(14)
     }
   }
-  
+
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
@@ -463,34 +509,6 @@ export class ShipmentLocationBox extends Component {
     this.setState({ autoText: { [name]: value } })
   }
 
-  setDestHub (event) {
-    this.scopeNexusOptions(event ? event.label : '', 'origin')
-    if (event) {
-      const destination = {
-        ...this.state.destination,
-        hub_id: event.value.id,
-        hub_name: event.value.name,
-        lat: event.value.latitude,
-        lng: event.value.longitude
-      }
-      const lat = event.value.latitude
-      const lng = event.value.longitude
-      const dSelect = event
-
-      this.props.setTargetAddress('destination', destination)
-      this.setMarker({ lat, lng }, destination.hub_name, 'destination')
-      this.setState({ dSelect, destination })
-    } else {
-      this.setState({
-        dSelect: '',
-        destination: {}
-      })
-
-      this.state.markers.destination.setMap(null)
-      this.props.setTargetAddress('destination', {})
-    }
-  }
-
   selectLocation (place, target) {
     const tmpAddress = {
       number: '',
@@ -536,7 +554,7 @@ export class ShipmentLocationBox extends Component {
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const nexus = response.data.nexus
+          const { nexus } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -595,26 +613,8 @@ export class ShipmentLocationBox extends Component {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
   }
-  getCoordinates (hub, hubName) {
-    const { allNexuses } = this.props
-    let tmpCoord = {}
-    switch (hub) {
-      case 'origins':
-        allNexuses.origins.forEach((nx) => {
-          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
-        })
-        break
-      case 'destinations':
-        allNexuses.destinations.forEach((nx) => {
-          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
-        })
-        break
-      default:
-        break
-    }
-    return tmpCoord
-  }
-  loadPrevReq() {
+
+  loadPrevReq () {
     const { prevRequest, allNexuses } = this.props
     if (!prevRequest.shipment) {
       return ''

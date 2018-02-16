@@ -6,7 +6,7 @@ import defaults from '../../styles/default_classes.scss'
 import { EditLocation } from './EditLocation'
 import EditLocationWrapper from '../../hocs/EditLocationWrapper'
 
-const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation) => [
+const LocationView = (locInfo, makePrimary, toggleActiveView, destroyLocation, editLocation) => [
   <div
     key="addLocationButton"
     className={`${defaults.pointy} flex-33`}
