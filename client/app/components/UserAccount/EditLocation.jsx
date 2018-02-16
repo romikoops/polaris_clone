@@ -85,7 +85,6 @@ export class EditLocation extends Component {
       })
     }
   }
-
   handleInputChange (event) {
     const val = event.target.value
 
@@ -349,13 +348,19 @@ EditLocation.propTypes = {
   toggleActiveView: PropTypes.func.isRequired,
   saveLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
+<<<<<<< HEAD
   geocodedAddress: PropTypes.string,
   location: PropTypes.objectOf(PropTypes.string).isRequired
+=======
+  location: PropTypes.location,
+  geocodedAddress: PropTypes.string
+>>>>>>> 0615345ce87374cd9db41401f36cbe107e4a4c4c
 }
 
 EditLocation.defaultProps = {
   theme: null,
-  geocodedAddress: ''
+  geocodedAddress: '',
+  location: {}
 }
 
 export default EditLocation

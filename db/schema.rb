@@ -348,8 +348,8 @@ ActiveRecord::Schema.define(version: 20180215132113) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.jsonb "cargo_item"
-    t.jsonb "container"
+    t.boolean "cargo_item"
+    t.boolean "container"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
