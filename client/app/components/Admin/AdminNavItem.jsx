@@ -46,11 +46,13 @@ AdminNavItem.propTypes = {
   iconClass: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
   navFn: PropTypes.func.isRequired,
-  target: PropTypes.string.isRequired
+  target: PropTypes.string.isRequired,
+  tooltip: PropTypes.string
 }
 
 AdminNavItem.defaultProps = {
-  theme: null
+  theme: null,
+  tooltip: ''
 }
 
 export default AdminNavItem

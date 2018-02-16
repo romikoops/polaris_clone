@@ -4,15 +4,30 @@ import styled from 'styled-components'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { AdminScheduleLine } from './'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import '../../styles/select-css-custom.css'
 // import {v4} from 'node-uuid';
 import FileUploader from '../FileUploader/FileUploader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminTripPanel } from './AdminTripPanel'
 
 export class AdminSchedules extends Component {
+  static dynamicSort (property) {
+    let sortOrder = 1
+    let prop
+    if (property[0] === '-') {
+      sortOrder = -1
+      prop = property.substr(1)
+    } else {
+      prop = property
+    }
+    return (a, b) => {
+      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
+      const result2 = result1 ? 1 : 0
+      return result2 * sortOrder
+    }
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -33,9 +48,7 @@ export class AdminSchedules extends Component {
     this.setHubFilter = this.setHubFilter.bind(this)
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
   }
-  toggleView () {
-    this.setState({ showList: !this.state.showList })
-  }
+
   setMoTFilter (mot) {
     if (!mot) {
       this.setState({
@@ -96,6 +109,15 @@ export class AdminSchedules extends Component {
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
+  getItinerariesForHub (hub) {
+    const filteredItineraries =
+    this.props.scheduleData.detailedItineraries
+      .filter(x => x.origin_hub_id === hub.id || x.destination_hub_id === hub.id)
+    return filteredItineraries.map(x => x.id)
+  }
+  toggleView () {
+    this.setState({ showList: !this.state.showList })
+  }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id)
@@ -106,27 +128,6 @@ export class AdminSchedules extends Component {
         [id]: !this.state.panelViewer[id]
       }
     })
-  }
-
-  getItinerariesForHub (hub) {
-    const filteredItineraries = this.props.scheduleData.detailedItineraries.filter(x => x.origin_hub_id === hub.id || x.destination_hub_id === hub.id)
-    return filteredItineraries.map(x => x.id)
-  }
-
-  dynamicSort (property) {
-    let sortOrder = 1
-    let prop
-    if (property[0] === '-') {
-      sortOrder = -1
-      prop = property.substr(1)
-    } else {
-      prop = property
-    }
-    return (a, b) => {
-      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
-      const result2 = result1 ? 1 : 0
-      return result2 * sortOrder
-    }
   }
   render () {
     const {
@@ -183,9 +184,6 @@ export class AdminSchedules extends Component {
       allTrips.sort(this.dynamicSort(sortFilter.value))
     }
     allTrips.forEach((trip, i) => {
-      console.log('itin_id', trip.itinerary_id)
-      itineraryIds ? console.log('itin_match', itineraryIds.includes(trip.itinerary_id)) : ''
-      console.log(itineraryIds)
       if (filters.hub && itineraryIds.includes(trip.itinerary_id) && i < slimit) {
         tripArr.push(<AdminTripPanel
           key={v4()}
@@ -361,14 +359,21 @@ AdminSchedules.propTypes = {
     routes: PropTypes.arrayOf(PropTypes.route),
     air: PropTypes.arrayOf(PropTypes.schedule),
     train: PropTypes.arrayOf(PropTypes.schedule),
-    ocean: PropTypes.arrayOf(PropTypes.schedule)
-  })
+    ocean: PropTypes.arrayOf(PropTypes.schedule),
+    detailedItineraries: PropTypes.array.isRequired,
+    itineraryIds: PropTypes.Array,
+    itineraries: PropTypes.objectOf(PropTypes.any).isRequired
+  }),
+  itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
+  adminDispatch: PropTypes.func.isRequired,
+  limit: PropTypes.number
 }
 
 AdminSchedules.defaultProps = {
   theme: null,
   hubs: [],
-  scheduleData: null
+  scheduleData: null,
+  limit: 0
 }
 
 export default AdminSchedules

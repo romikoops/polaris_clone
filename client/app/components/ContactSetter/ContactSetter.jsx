@@ -31,10 +31,10 @@ export class ContactSetter extends Component {
     }
 
     this.state = {
-    	contactData: {
-      	type: 'shipper',
-    		...this.newContactData
-    	},
+      contactData: {
+        type: 'shipper',
+        ...this.newContactData
+      },
       showBody: false
     }
     this.contactTypes = ['shipper', 'consignee', 'notifyee']
@@ -48,27 +48,11 @@ export class ContactSetter extends Component {
   }
 
   setContactForEdit (contactData) {
-  	this.setState({ contactData, showBody: true })
-  }
-
-  autofillContact (contactData) {
-  	this.setState({
-  		contactData: {
-        ...this.state.contactData,
-	  		contact: contactData.contact,
-	  		location: contactData.location
-  		}
-  	})
-  }
-  nextUnsetContactType (thisType) {
-    for (const t of ['shipper', 'consignee']) {
-      if (isEmpty(this.props[t]) && t !== thisType) return t
-    }
-    return 'notifyee'
+    this.setState({ contactData, showBody: true })
   }
 
   setContact (contactData) {
-  	const { type, index } = this.state.contactData
+    const { type, index } = this.state.contactData
 
     const newState = {
       contactData: Object.assign({}, this.newContactData)
@@ -86,33 +70,46 @@ export class ContactSetter extends Component {
   }
 
   setStage (i) {
-  	const contactType = this.contactTypes[i]
-  	if (contactType === 'notifyee') {
+    const contactType = this.contactTypes[i]
+    if (contactType === 'notifyee') {
       this.setState({
-	  		contactData: {
+        contactData: {
           index: 0,
-	  			type: this.contactTypes[i],
-	  			...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
-	  		}
+          type: this.contactTypes[i],
+          ...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
+        }
       })
-  	} else {
+    } else {
       this.setState({
-	  		contactData: {
-	  			type: this.contactTypes[i],
-	  			...this.props[this.contactTypes[i]]
-	  		}
+        contactData: {
+          type: this.contactTypes[i],
+          ...this.props[this.contactTypes[i]]
+        }
       })
-  	}
+    }
+  }
+
+  autofillContact (contactData) {
+    this.setState({
+      contactData: {
+        ...this.state.contactData,
+        contact: contactData.contact,
+        location: contactData.location
+      }
+    })
+  }
+  nextUnsetContactType (thisType) {
+    return ['shipper', 'consignee'].find(type => (
+      isEmpty(this.props[type]) && type !== thisType
+    )) || 'notifyee'
   }
 
   availableContacts () {
-  	const { contactData } = this.state
-
-  	const {
+    const {
       userLocations, shipper, consignee, notifyees
     } = this.props
-  	let { contacts } = this.props
-  	if (contactData.type === 'shipper') contacts = [...userLocations, ...contacts]
+    let { contacts } = this.props
+    if (this.state.contactData.type === 'shipper') contacts = [...userLocations, ...contacts]
 
     return contacts.filter(contactData => (
       shipper !== contactData &&
@@ -134,41 +131,44 @@ export class ContactSetter extends Component {
     if (showBody) showBodyIconStyles.transform = 'rotate(90deg)'
 
     return (
-      <div name="contact_setter" className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div
+        name="contact_setter"
+        className="flex-100 layout-row layout-wrap layout-align-center-start"
+      >
         <div className={`
-        	flex-none ${defs.content_width} layout-row layout-wrap
+          flex-none ${defs.content_width} layout-row layout-wrap
         `}
         >
-	        <div
+          <div
             className="flex-100 layout-row layout-align-center-center pointy"
             onClick={this.toggleShowBody}
-	        >
-	          <h1> Set Contact Details</h1>
+          >
+            <h1> Set Contact Details</h1>
             <i style={showBodyIconStyles} className="fa fa-chevron-right" />
-	        </div>
+          </div>
           <div className={`
             flex-100 layout-row layout-wrap ${styles.body} ${showBody ? '' : styles.hidden}
           `}
           >
             <div className="flex-100 layout-row layout-align-center-center">
-  	          <StageTimeline
+              <StageTimeline
                 theme={theme}
                 currentStageIndex={stageIndex}
                 stages={this.stages}
                 setStage={this.setStage}
-  	          />
+              />
             </div>
             <div
               className="flex-100 layout-row layout-align-center-center"
               style={{ marginBottom: '50px', height: '493px', boxShadow: 'rgba(0, 0, 0, 0.05) 2px 2px 1px' }}
             >
-  	          <div className="flex-50" style={{ height: '100%' }}>
-  	            <ShipmentContactForm
+              <div className="flex-50" style={{ height: '100%' }}>
+                <ShipmentContactForm
                   contactData={contactData}
                   theme={theme}
                   setContact={this.setContact}
                   close={this.toggleShowBody}
-  	            />
+                />
               </div>
 
               <div className="flex-50" style={{ height: '100%' }}>
@@ -177,11 +177,11 @@ export class ContactSetter extends Component {
                   autofillContact={this.autofillContact}
                   theme={theme}
                 />
-  	          </div>
+              </div>
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
-	          <ShipmentContactsBox
+            <ShipmentContactsBox
               consignee={consignee}
               shipper={shipper}
               notifyees={notifyees}
@@ -189,7 +189,7 @@ export class ContactSetter extends Component {
               removeNotifyee={this.props.removeNotifyee}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
-	          />
+            />
           </div>
         </div>
       </div>
@@ -198,14 +198,23 @@ export class ContactSetter extends Component {
 }
 
 ContactSetter.propTypes = {
-  contacts: PropTypes.array.isRequired,
-  userLocations: PropTypes.array,
+  contacts: PropTypes.arrayOf(PropTypes.any).isRequired,
+  userLocations: PropTypes.arrayOf(PropTypes.any),
+  shipper: PropTypes.objectOf(PropTypes.any),
+  consignee: PropTypes.objectOf(PropTypes.any),
+  notifyees: PropTypes.arrayOf(PropTypes.any),
   theme: PropTypes.theme,
-  setDetails: PropTypes.func.isRequired,
-  finishBookingAttempted: PropTypes.bool
+  finishBookingAttempted: PropTypes.bool,
+  setContact: PropTypes.func.isRequired,
+  removeNotifyee: PropTypes.func.isRequired
 }
 ContactSetter.defaultProps = {
   userLocations: [],
+  shipper: {},
+  consignee: {},
+  notifyees: [],
   theme: null,
   finishBookingAttempted: false
 }
+
+export default ContactSetter

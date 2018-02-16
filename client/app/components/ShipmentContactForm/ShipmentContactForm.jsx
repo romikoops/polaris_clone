@@ -1,15 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Formsy from 'formsy-react'
 import styles from './ShipmentContactForm.scss'
-// import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
 import defs from '../../styles/default_classes.scss'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import { PlaceSearch } from '../Maps/PlaceSearch'
-import Formsy from 'formsy-react'
+
 import FormsyInput from '../FormsyInput/FormsyInput'
 
 export class ShipmentContactForm extends Component {
+  static mapInputs (inputs) {
+    const location = {}
+    const contact = {}
+    Object.keys(inputs).forEach((k) => {
+      if (k.split('-')[0] === 'location') {
+        location[k.split('-')[1]] = inputs[k]
+      } else {
+        contact[k] = inputs[k]
+      }
+    })
+    return { location, contact }
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -77,25 +89,13 @@ export class ShipmentContactForm extends Component {
   }
   handleSubmit (contactData) {
     this.props.setContact(contactData)
-    this.refs.contactForm.reset()
+    this.contactForm.reset()
     this.setState({ setContactAttempted: false })
   }
   handleInvalidSubmit () {
     this.setState({ setContactAttempted: true })
   }
-  mapInputs (inputs) {
-    const location = {}
-    const contact = {}
 
-    for (const k of Object.keys(inputs)) {
-      if (k.split('-')[0] === 'location') {
-        location[k.split('-')[1]] = inputs[k]
-      } else {
-        contact[k] = inputs[k]
-      }
-    }
-    return { location, contact }
-  }
   render () {
     const { theme } = this.props
     const { contactData } = this.state
@@ -230,7 +230,7 @@ export class ShipmentContactForm extends Component {
             onValidSubmit={this.handleSubmit}
             onInvalidSubmit={this.handleInvalidSubmit}
             mapping={this.mapInputs}
-            ref="contactForm"
+            ref={(c) => { this.contactForm = c }}
             style={{ padding: '8px 20px' }}
           >
             <h3>Basic Details</h3>
@@ -353,9 +353,18 @@ export class ShipmentContactForm extends Component {
   }
 }
 ShipmentContactForm.propTypes = {
-  theme: PropTypes.object,
-  shipmentData: PropTypes.object,
-  user: PropTypes.object,
+  theme: PropTypes.theme,
+  close: PropTypes.func,
+  setContact: PropTypes.func,
   handleChange: PropTypes.func,
-  toggleAddressBook: PropTypes.func
+  contactData: PropTypes.objectOf(PropTypes.any)
 }
+ShipmentContactForm.defaultProps = {
+  theme: {},
+  handleChange: null,
+  contactData: {},
+  setContact: null,
+  close: null
+}
+
+export default ShipmentContactForm

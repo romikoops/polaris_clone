@@ -133,64 +133,50 @@ export class ShipmentLocationBox extends Component {
       this.loadPrevReq()
     }
   }
-  loadPrevReq () {
-    const { prevRequest, allNexuses } = this.props
-    if (!prevRequest.shipment) {
-      return ''
+  getCoordinates (hub, hubName) {
+    const { allNexuses } = this.props
+    let tmpCoord = {}
+    switch (hub) {
+      case 'origins':
+        allNexuses.origins.forEach(nx => (nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''))
+        break
+      case 'destinations':
+        allNexuses.destinations.forEach(nx =>
+          (nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''))
+        break
+      default:
+        break
     }
-    const { shipment } = prevRequest
-    const newData = {}
-    newData.originHub = shipment.origin_id
-      ? allNexuses.origins.filter(o => o.value.id === shipment.origin_id)[0]
-      : null
-    newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : ''
-    newData.destinationHub = shipment.destination_id
-      ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0]
-      : null
-    newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : ''
-    if (shipment.origin_id) {
-      this.state.map
-        ? this.setOriginHub(newData.originHub)
-        : setTimeout(() => {
-          this.setOriginHub(newData.originHub)
-        }, 500)
-    }
-    if (shipment.origin_id) {
-      this.state.map
-        ? this.setDestHub(newData.destinationHub)
-        : setTimeout(() => {
-          this.setDestHub(newData.destinationHub)
-        }, 500)
-    }
-    this.setState({
-      autoTextOrigin: newData.autoTextOrigin,
-      autoTextDest: newData.autoTextDest
-    })
-    return ''
+    return tmpCoord
   }
-  toggleModal () {
-    this.setState({ showModal: !this.state.showModal })
-  }
-  selectedRoute (route) {
-    const origin = {
-      city: '',
-      country: '',
-      fullAddress: '',
-      hub_id: route.origin_id,
-      hub_name: route.origin_nexus
+  setDestHub (event) {
+    this.scopeNexusOptions(event ? event.label : '', 'origin')
+    if (event) {
+      const destination = {
+        ...this.state.destination,
+        hub_id: event.value.id,
+        hub_name: event.value.name,
+        lat: event.value.latitude,
+        lng: event.value.longitude
+      }
+      const lat = event.value.latitude
+      const lng = event.value.longitude
+      const dSelect = event
+
+      this.props.setTargetAddress('destination', destination)
+      this.setMarker({ lat, lng }, destination.hub_name, 'destination')
+      this.setState({ dSelect, destination })
+    } else {
+      this.setState({
+        dSelect: '',
+        destination: {}
+      })
+
+      this.state.markers.destination.setMap(null)
+      this.props.setTargetAddress('destination', {})
     }
-    const destination = {
-      city: '',
-      country: '',
-      fullAddress: '',
-      hub_id: route.origin_id,
-      hub_name: route.origin_nexus
-    }
-    this.setState({ origin, destination })
-    this.setState({ showModal: !this.state.showModal })
-    this.setState({ locationFromModal: !this.state.locationFromModal })
-    this.setHubsFromRoute(route)
   }
+
   setHubsFromRoute (route) {
     let tmpOrigin = {}
     let tmpDest = {}
@@ -271,7 +257,101 @@ export class ShipmentLocationBox extends Component {
       )
     }
   }
+  setOriginHub(event) {
+    this.scopeNexusOptions(event ? event.label : '', 'destination')
+    if (event) {
+      const origin = {
+        ...this.state.origin,
+        hub_id: event.value.id,
+        hub_name: event.value.name,
+        lat: event.value.latitude,
+        lng: event.value.longitude
+      }
+      const lat = event.value.latitude
+      const lng = event.value.longitude
+      const oSelect = event
 
+      this.props.setTargetAddress('origin', origin)
+      this.setMarker({ lat, lng }, origin.hub_name, 'origin')
+      this.setState({ oSelect, origin })
+    } else {
+      this.setState({
+        oSelect: '',
+        origin: {}
+      })
+      this.state.markers.origin.setMap(null)
+      this.props.setTargetAddress('origin', {})
+    }
+  }
+  setMarker (location, name, target) {
+    const { markers, map } = this.state
+    const { theme } = this.props
+    const newMarkers = []
+    if (!isObjectEmpty(markers[target])) {
+      markers[target].setMap(null)
+    }
+    let icon
+    if (target === 'origin') {
+      icon = {
+        url: colourSVG('location', theme),
+        anchor: new this.props.gMaps.Point(25, 50),
+        scaledSize: new this.props.gMaps.Size(36, 36)
+      }
+    } else {
+      icon = {
+        url: colourSVG('flag', theme),
+        anchor: new this.props.gMaps.Point(25, 50),
+        scaledSize: new this.props.gMaps.Size(36, 36)
+      }
+    }
+    const marker = new this.props.gMaps.Marker({
+      position: location,
+      map,
+      title: name,
+      icon
+    })
+    markers[target] = marker
+    if (!isObjectEmpty(markers.origin)) {
+      newMarkers.push(markers.origin)
+    }
+    if (!isObjectEmpty(markers.destination)) {
+      newMarkers.push(markers.destination)
+    }
+    this.setState({ markers })
+    const bounds = new this.props.gMaps.LatLngBounds()
+    for (let i = 0; i < newMarkers.length; i++) {
+      bounds.extend(newMarkers[i].getPosition())
+    }
+
+    if (newMarkers.length > 1) {
+      map.fitBounds(bounds)
+    } else if (newMarkers.length === 1) {
+      map.setCenter(bounds.getCenter())
+      map.setZoom(14)
+    }
+  }
+
+  
+  selectedRoute (route) {
+    const origin = {
+      city: '',
+      country: '',
+      fullAddress: '',
+      hub_id: route.origin_id,
+      hub_name: route.origin_nexus
+    }
+    const destination = {
+      city: '',
+      country: '',
+      fullAddress: '',
+      hub_id: route.origin_id,
+      hub_name: route.origin_nexus
+    }
+    this.setState({ origin, destination })
+    this.setState({ showModal: !this.state.showModal })
+    this.setState({ locationFromModal: !this.state.locationFromModal })
+    this.setHubsFromRoute(route)
+  }
   initMap () {
     const mapsOptions = {
       center: {
@@ -366,54 +446,6 @@ export class ShipmentLocationBox extends Component {
     })
   }
 
-  setMarker (location, name, target) {
-    const { markers, map } = this.state
-    const { theme } = this.props
-    const newMarkers = []
-    if (!isObjectEmpty(markers[target])) {
-      markers[target].setMap(null)
-    }
-    let icon
-    if (target === 'origin') {
-      icon = {
-        url: colourSVG('location', theme),
-        anchor: new this.props.gMaps.Point(25, 50),
-        scaledSize: new this.props.gMaps.Size(36, 36)
-      }
-    } else {
-      icon = {
-        url: colourSVG('flag', theme),
-        anchor: new this.props.gMaps.Point(25, 50),
-        scaledSize: new this.props.gMaps.Size(36, 36)
-      }
-    }
-    const marker = new this.props.gMaps.Marker({
-      position: location,
-      map,
-      title: name,
-      icon
-    })
-    markers[target] = marker
-    if (!isObjectEmpty(markers.origin)) {
-      newMarkers.push(markers.origin)
-    }
-    if (!isObjectEmpty(markers.destination)) {
-      newMarkers.push(markers.destination)
-    }
-    this.setState({ markers })
-    const bounds = new this.props.gMaps.LatLngBounds()
-    for (let i = 0; i < newMarkers.length; i++) {
-      bounds.extend(newMarkers[i].getPosition())
-    }
-
-    if (newMarkers.length > 1) {
-      map.fitBounds(bounds)
-    } else if (newMarkers.length === 1) {
-      map.setCenter(bounds.getCenter())
-      map.setZoom(14)
-    }
-  }
-
   handleTrucking (event) {
     const { name, checked } = event.target
     this.setState({
@@ -466,63 +498,10 @@ export class ShipmentLocationBox extends Component {
       })
     })
   }
-  setOriginHub (event) {
-    this.scopeNexusOptions(event ? event.label : '', 'destination')
-    if (event) {
-      const origin = {
-        ...this.state.origin,
-        hub_id: event.value.id,
-        hub_name: event.value.name,
-        lat: event.value.latitude,
-        lng: event.value.longitude
-      }
-      const lat = event.value.latitude
-      const lng = event.value.longitude
-      const oSelect = event
-
-      this.props.setTargetAddress('origin', origin)
-      this.setMarker({ lat, lng }, origin.hub_name, 'origin')
-      this.setState({ oSelect, origin })
-    } else {
-      this.setState({
-        oSelect: '',
-        origin: {}
-      })
-      this.state.markers.origin.setMap(null)
-      this.props.setTargetAddress('origin', {})
-    }
-  }
+  
   handleAuto (event) {
     const { name, value } = event.target
     this.setState({ autoText: { [name]: value } })
-  }
-
-  setDestHub (event) {
-    this.scopeNexusOptions(event ? event.label : '', 'origin')
-    if (event) {
-      const destination = {
-        ...this.state.destination,
-        hub_id: event.value.id,
-        hub_name: event.value.name,
-        lat: event.value.latitude,
-        lng: event.value.longitude
-      }
-      const lat = event.value.latitude
-      const lng = event.value.longitude
-      const dSelect = event
-
-      this.props.setTargetAddress('destination', destination)
-      this.setMarker({ lat, lng }, destination.hub_name, 'destination')
-      this.setState({ dSelect, destination })
-    } else {
-      this.setState({
-        dSelect: '',
-        destination: {}
-      })
-
-      this.state.markers.destination.setMap(null)
-      this.props.setTargetAddress('destination', {})
-    }
   }
 
   selectLocation (place, target) {
@@ -570,7 +549,7 @@ export class ShipmentLocationBox extends Component {
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const nexus = response.data.nexus
+          const { nexus } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -580,7 +559,8 @@ export class ShipmentLocationBox extends Component {
           this.setState({
             originFieldsHaveErrors: !originOptionNames.includes(nexusName)
           })
-          this.props.handleSelectLocation(!originOptionNames.includes(nexusName) || this.state.destinationFieldsHaveErrors)
+          this.props.handleSelectLocation(!originOptionNames.includes(nexusName) ||
+          this.state.destinationFieldsHaveErrors)
         })
       })
     } else if (target === 'destination') {
@@ -589,18 +569,22 @@ export class ShipmentLocationBox extends Component {
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const nexus = response.data.nexus
+          const { nexus } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let destinationOptions =
             allNexuses && allNexuses.destinations ? allNexuses.destinations : []
-          if (this.state.availableDestinations) { destinationOptions = this.state.availableDestinations }
-          const destinationOptionNames = destinationOptions.map(destinationOption => destinationOption.label)
+          if (this.state.availableDestinations) {
+            destinationOptions = this.state.availableDestinations
+          }
+          const destinationOptionNames =
+          destinationOptions.map(destinationOption => destinationOption.label)
 
           this.setState({
             destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
           })
-          this.props.handleSelectLocation(this.state.originFieldsHaveErrors || !destinationOptionNames.includes(nexusName))
+          this.props.handleSelectLocation(this.state.originFieldsHaveErrors ||
+            !destinationOptionNames.includes(nexusName))
         })
       })
     }
@@ -629,37 +613,56 @@ export class ShipmentLocationBox extends Component {
     const target = event.target.name.split('-')[0]
     this.isOnFocus[target] = event.type === 'focus'
   }
-  getCoordinates (hub, hubName) {
-    const { allNexuses } = this.props
-    let tmpCoord = {}
-    switch (hub) {
-      case 'origins':
-        allNexuses.origins.forEach((nx) => {
-          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
-        })
-        break
-      case 'destinations':
-        allNexuses.destinations.forEach((nx) => {
-          nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''
-        })
-        break
-      default:
-        break
+  toggleModal() {
+    this.setState({ showModal: !this.state.showModal })
+  }
+  loadPrevReq () {
+    const { prevRequest, allNexuses } = this.props
+    if (!prevRequest.shipment) {
+      return ''
     }
-    return tmpCoord
+    const { shipment } = prevRequest
+    const newData = {}
+    newData.originHub = shipment.origin_id
+      ? allNexuses.origins.filter(o => o.value.id === shipment.origin_id)[0]
+      : null
+    newData.autoTextOrigin = shipment.origin_user_input ? shipment.origin_user_input : ''
+    newData.destinationHub = shipment.destination_id
+      ? allNexuses.destinations.filter(o => o.value.id === shipment.destination_id)[0]
+      : null
+    newData.autoTextDest = shipment.destination_user_input ? shipment.destination_user_input : ''
+    if (shipment.origin_id) {
+      this.state.map
+        ? this.setOriginHub(newData.originHub)
+        : setTimeout(() => {
+          this.setOriginHub(newData.originHub)
+        }, 500)
+    }
+    if (shipment.origin_id) {
+      this.state.map
+        ? this.setDestHub(newData.destinationHub)
+        : setTimeout(() => {
+          this.setDestHub(newData.destinationHub)
+        }, 500)
+    }
+    this.setState({
+      autoTextOrigin: newData.autoTextOrigin,
+      autoTextDest: newData.autoTextDest
+    })
+    return ''
   }
   handleSwap () {
     const origin = { ...this.state.destination }
     const destination = { ...this.state.origin }
     const autoText = { ...this.state.autoText }
-    const pre = this.state.shipment.has_pre_carriage
-    const on = this.state.shipment.has_on_carriage
+    // const pre = this.state.shipment.has_pre_carriage
+    // const on = this.state.shipment.has_on_carriage
     let autoTextDest = this.state.autoTextDest ? this.state.autoTextDest : ''
     let autoTextOrigin = this.state.autoTextOrigin ? this.state.autoTextOrigin : ''
-    if ((pre && !on) || (!pre && on)) {
-      () => this.changeAddressFormVisibility('origin');
-      () => this.changeAddressFormVisibility('destination')
-    }
+    // if ((pre && !on) || (!pre && on)) {
+    //   () => this.changeAddressFormVisibility('origin');
+    //   () => this.changeAddressFormVisibility('destination')
+    // }
     autoText.destination = destination.hub_name
     autoTextDest = this.state.autoTextOrigin
 
@@ -1062,7 +1065,6 @@ export class ShipmentLocationBox extends Component {
 ShipmentLocationBox.propTypes = {
   nextStageAttempt: PropTypes.bool,
   handleSelectLocation: PropTypes.func.isRequired,
-  availableDestinations: PropTypes.arrayOf(PropTypes.object),
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
   user: PropTypes.user,
@@ -1078,9 +1080,6 @@ ShipmentLocationBox.propTypes = {
   origin: PropTypes.shape({
     number: PropTypes.number
   }),
-  nexusDispatch: PropTypes.shape({
-    getAvailableDestinations: PropTypes.func
-  }).isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.number),
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
@@ -1094,7 +1093,6 @@ ShipmentLocationBox.defaultProps = {
   shipment: null,
   routeIds: [],
   prevRequest: null,
-  availableDestinations: [],
   selectedRoute: null,
   origin: null
 }

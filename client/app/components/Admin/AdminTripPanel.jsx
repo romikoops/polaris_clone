@@ -5,19 +5,8 @@ import { moment } from '../../constants'
 import { AdminLayoverTile } from './'
 import { gradientTextGenerator } from '../../helpers'
 
-export class AdminTripPanel extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      showPanel: false
-    }
-    this.showPanel = this.showPanel.bind(this)
-  }
-  showPanel () {
-    const { trip, toggleShowPanel } = this.props
-    toggleShowPanel(trip.id)
-  }
-  switchIcon (itinerary) {
+class AdminTripPanel extends Component {
+  static switchIcon (itinerary) {
     let icon
     switch (itinerary.mode_of_transport) {
       case 'ocean':
@@ -36,11 +25,16 @@ export class AdminTripPanel extends Component {
     return icon
   }
 
-  dashedGradient (color1, color2) {
+  static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
       color1
     }, ${color2})`
   }
+  constructor (props) {
+    super(props)
+    this.showPanel = this.showPanel.bind(this)
+  }
+
   render () {
     const {
       theme, trip, itinerary, layovers, showPanel
@@ -70,7 +64,8 @@ export class AdminTripPanel extends Component {
     const startTime = trip.eta ? trip.eta : trip.start_date
     const endTime = trip.etd ? trip.etd : trip.end_date
     const panelStyle = showPanel ? styles.panel_open : ''
-    const layoverArray = layovers && layovers[trip.id] ? layovers[trip.id].map(l => <AdminLayoverTile layoverData={l} theme={theme} />) : []
+    const layoverArray = layovers && layovers[trip.id] ? layovers[trip.id]
+      .map(l => <AdminLayoverTile layoverData={l} theme={theme} />) : []
     return (
       <div
         key={trip.id}
@@ -162,8 +157,18 @@ export class AdminTripPanel extends Component {
   }
 }
 AdminTripPanel.propTypes = {
-  theme: PropTypes.object,
-  trip: PropTypes.object,
-  selectResult: PropTypes.func,
-  hubs: PropTypes.object
+  theme: PropTypes.theme,
+  trip: PropTypes.objectOf(PropTypes.any),
+  showPanel: PropTypes.bool,
+  itinerary: PropTypes.objectOf(PropTypes.any),
+  layovers: PropTypes.arrayOf(PropTypes.any)
 }
+AdminTripPanel.defaultProps = {
+  theme: {},
+  trip: {},
+  showPanel: false,
+  itinerary: {},
+  layovers: []
+}
+
+export default AdminTripPanel

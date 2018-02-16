@@ -35,6 +35,7 @@ export class AddressBook extends PureComponent {
 AddressBook.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.contact),
   theme: PropTypes.theme,
+  autofillContact: PropTypes.func.isRequired
 }
 
 AddressBook.defaultProps = {

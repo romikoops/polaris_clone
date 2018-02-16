@@ -208,7 +208,13 @@ export class AdminPricingRouteView extends Component {
           if (rPriceObj[gKey]) {
             const pricing = pricingsObj[rPriceObj[gKey][userId]]
             if (pricing) {
-              innerInner.push(<RPBInner key={v4()} hubRoute={hr} transport={tr} pricing={pricing} theme={theme} />)
+              innerInner.push(<RPBInner
+                key={v4()}
+                hubRoute={hr}
+                transport={tr}
+                pricing={pricing}
+                theme={theme}
+              />)
             }
           }
         })
@@ -272,16 +278,6 @@ export class AdminPricingRouteView extends Component {
         />
       </div>
     )
-    // let routeBoxes;
-    // if (selectedClient) {
-    //     routeBoxes = routes.map((rt) => {
-
-    //         return (
-    //             <RoutePricingBox key={v4()} route={rt} hrArr={relHR} pricingsObj={pricings} uPriceObj={userPricings} transports={transportCategories} />
-    //         );
-    //     });
-    // }
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -344,7 +340,6 @@ export class AdminPricingRouteView extends Component {
 }
 AdminPricingRouteView.propTypes = {
   theme: PropTypes.theme,
-  hubs: PropTypes.arrayOf(PropTypes.hub),
   adminActions: PropTypes.shape({
     getRoutePricings: PropTypes.func
   }).isRequired,
@@ -359,12 +354,12 @@ AdminPricingRouteView.propTypes = {
   }),
   clients: PropTypes.arrayOf(PropTypes.client),
   loading: PropTypes.bool,
-  match: PropTypes.match.isRequired
+  match: PropTypes.match.isRequired,
+  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminPricingRouteView.defaultProps = {
   theme: null,
-  hubs: [],
   loading: false,
   routePricings: null,
   pricingData: null,

@@ -24,13 +24,7 @@ export class AdminRoutesIndex extends Component {
     if (!itineraries) {
       return ''
     }
-
-    // const routesArr = routes.map((rt) => <AdminRouteTile key={v4()} hubs={hubs} route={rt} theme={theme} handleClick={viewItinerary}/>);
-
     const hubUrl = '/admin/itineraries/process_csv'
-    // const textStyle = {
-    //     background: theme && theme.colors ? '-webkit-linear-gradient(left, ' + theme.colors.primary + ',' + theme.colors.secondary + ')' : 'black'
-    // };
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -54,18 +48,17 @@ export class AdminRoutesIndex extends Component {
 AdminRoutesIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  routes: PropTypes.arrayOf(PropTypes.route),
-  viewRoute: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   adminDispatch: PropTypes.shape({
     getRoutes: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  viewItinerary: PropTypes.func.isRequired,
+  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminRoutesIndex.defaultProps = {
   theme: null,
   hubs: [],
-  routes: [],
   loading: false
 }
 

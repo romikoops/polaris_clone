@@ -6,6 +6,11 @@ import { SHIPMENT_STAGES } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
 export class ShopStageView extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+    }
+  }
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
   }

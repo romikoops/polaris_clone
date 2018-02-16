@@ -46,7 +46,6 @@ export class UserDashboard extends Component {
   viewClient (client) {
     const { userDispatch } = this.props
     userDispatch.getContact(client.id, true)
-    this.setState({ selectedClient: true })
   }
   startBooking () {
     this.props.userDispatch.goTo('/booking')

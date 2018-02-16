@@ -11,6 +11,36 @@ import GmapsWrapper from '../../hocs/GmapsWrapper'
 import { PlaceSearch } from '../Maps/PlaceSearch'
 
 export class AdminTruckingCreator extends Component {
+  static prepForSelect (arr, labelKey, valueKey, glossary) {
+    return arr.map(a => ({
+      value: valueKey ? a[valueKey] : a,
+      label: glossary ? glossary[a[labelKey]] : a[labelKey]
+    }))
+  }
+  static grammaratize (label) {
+    let result
+    switch (label) {
+      case 'Per Container':
+        result = 'containers'
+        break
+      case 'Per Item':
+        result = 'items'
+        break
+      case 'Per cbm':
+        result = 'cbms'
+        break
+      case 'Per cbm/ton':
+        result = 'cbms/tons'
+        break
+      case 'Per Shipment':
+        result = 'shipments'
+        break
+      default:
+        result = ''
+        break
+    }
+    return result
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -144,8 +174,9 @@ export class AdminTruckingCreator extends Component {
     const nameKeys = name.split('-').map(i => parseInt(i, 10))
     const { cells } = this.state
     const adjCellTable = cells[nameKeys[0]].table.map((x) => {
-      x.min_value = parseInt(value, 10)
-      return x
+      const tx = x
+      tx.min_value = parseInt(value, 10)
+      return tx
     })
     cells[nameKeys[0]].min_value = parseInt(value, 10)
     cells[nameKeys[0]].table = adjCellTable
@@ -178,10 +209,11 @@ export class AdminTruckingCreator extends Component {
       cells, nexus, currency, rateBasis, truckingBasis
     } = this.state
     const data = cells.map((c) => {
-      delete c.min_value
-      c.nexus_id = nexus.value.id
-      c.currency = currency.label
-      return c
+      const tc = c
+      delete tc.min_value
+      tc.nexus_id = nexus.value.id
+      tc.currency = currency.label
+      return tc
     })
     const meta = {
       type: truckingBasis.value,
@@ -190,33 +222,6 @@ export class AdminTruckingCreator extends Component {
     }
     this.props.adminDispatch.saveNewTrucking({ meta, data })
     this.props.closeForm()
-  }
-  prepForSelect (arr, labelKey, valueKey, glossary) {
-    return arr.map(a => ({ value: valueKey ? a[valueKey] : a, label: glossary ? glossary[a[labelKey]] : a[labelKey] }))
-  }
-  grammaratize (label) {
-    let result
-    switch (label) {
-      case 'Per Container':
-        result = 'containers'
-        break
-      case 'Per Item':
-        result = 'items'
-        break
-      case 'Per cbm':
-        result = 'cbms'
-        break
-      case 'Per cbm/ton':
-        result = 'cbms/tons'
-        break
-      case 'Per Shipment':
-        result = 'shipments'
-        break
-      default:
-        result = ''
-        break
-    }
-    return result
   }
 
   render () {
@@ -322,6 +327,7 @@ export class AdminTruckingCreator extends Component {
     const panel = cells.map((s, i) => {
       const wsInputs = []
       weightSteps.forEach((ws, iw) => {
+        // eslint-disable-next-line react/no-array-index-key
         wsInputs.push(<div key={`ws_${iw}`} className="flex-25 layout-row layout-wrap layout-align-start-start">
           <div className="flex-100 layout-row layout-align-start-center">
             <p className="flex-none sup">{`${ws.min} - ${ws.max} ${currency.label} ${rateBasis.label}`}</p>
@@ -332,6 +338,7 @@ export class AdminTruckingCreator extends Component {
         </div>)
       })
       return (
+        // eslint-disable-next-line react/no-array-index-key
         <div key={`cell_${i}`} className="flex-100 layout-row layout-align-start-center layout-wrap">
           <div className="flex-50 layout-row layout-row layout-wrap layout-align-start-start">
             <p className="flex-none">{`Zipcode Range ${s.lower_zip} - ${s.upper_zip}`}</p>
@@ -352,13 +359,21 @@ export class AdminTruckingCreator extends Component {
     })
     const addNewZip = (
       <div className="flex-100 layout-row layout-align-start-center">
-        <Formsy onValidSubmit={this.addNewCell} className="flex-100 layout-row layout-align-start-center" >
+        <Formsy
+          onValidSubmit={this.addNewCell}
+          className="flex-100 layout-row layout-align-start-center"
+        >
           <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
             <div className="flex-100 layout-row layout-align-start-center">
               <p className="flex-none sup_l">Lower limit zipcode</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box">
-              <FormsyInput type="number" name="lower_zip" value={newCell.lower_zip} placeholder="Lower Zip" />
+              <FormsyInput
+                type="number"
+                name="lower_zip"
+                value={newCell.lower_zip}
+                placeholder="Lower Zip"
+              />
             </div>
           </div>
           <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
@@ -366,7 +381,12 @@ export class AdminTruckingCreator extends Component {
               <p className="flex-none sup_l">Upper limit zipcode</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box">
-              <FormsyInput type="number" name="upper_zip" value={newCell.upper_zip} placeholder="Upper Zip" />
+              <FormsyInput
+                type="number"
+                name="upper_zip"
+                value={newCell.upper_zip}
+                placeholder="Upper Zip"
+              />
             </div>
           </div>
           <div className="flex-33 layout-row layout-align-center-center" >
@@ -390,6 +410,7 @@ export class AdminTruckingCreator extends Component {
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         {
           weightSteps.map((ws, i) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div key={`ows_${i}`} className="flex-33 layout-row layout-wrap layout-align-center-start">
               <div className="flex-100 layout-row">
                 <p className="flex-none">{`Weight Range:  ${ws.min} - ${ws.max} ${this.grammaratize(rateBasis.label)}`}</p>
@@ -405,12 +426,31 @@ export class AdminTruckingCreator extends Component {
         <div className="flex-100 layout-row layout-align-start-center">
           <p className="flex-none">{`Set pricing weight steps. Values ${rateBasis.label} and inclusive`}</p>
         </div>
-        <Formsy onValidSubmit={this.addWeightStep} className="flex-100 layout-row layout-align-start-center" >
-          <div className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box">
-            <FormsyInput type="number" name="min" value={newStep.min} validations="isNumeric" placeholder="Lower Limit" />
+        <Formsy
+          onValidSubmit={this.addWeightStep}
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box"
+          >
+            <FormsyInput
+              type="number"
+              name="min"
+              value={newStep.min}
+              validations="isNumeric"
+              placeholder="Lower Limit"
+            />
           </div>
-          <div className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box">
-            <FormsyInput type="number" name="max" value={newStep.max} validations="isNumeric" placeholder="Upper Limit" />
+          <div
+            className="flex-33 layout-row layout-row layout-wrap layout-align-start-start input_box"
+          >
+            <FormsyInput
+              type="number"
+              name="max"
+              value={newStep.max}
+              validations="isNumeric"
+              placeholder="Upper Limit"
+            />
           </div>
           <div className="flex-33 layout-row layout-align-center-center">
             <RoundButton
@@ -457,7 +497,9 @@ export class AdminTruckingCreator extends Component {
           {selectRateBasis}
           {selectCurrency}
           {selectTruckingBasis}
-          {steps.truckingBasis === true && steps.weightSteps === false ? setWeightSteps : weightStepsArr }
+          {steps.truckingBasis === true &&
+            steps.weightSteps === false
+            ? setWeightSteps : weightStepsArr }
         </div>
       </div>
     )
@@ -485,12 +527,13 @@ export class AdminTruckingCreator extends Component {
 }
 AdminTruckingCreator.propTypes = {
   theme: PropTypes.theme,
-  hubs: PropTypes.array.isRequired,
-  pricing: PropTypes.object.isRequired,
-  isNew: PropTypes.bool,
-  userId: PropTypes.number.isRequired
+  adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  closeForm: PropTypes.func.isRequired,
+  nexuses: PropTypes.arrayOf(PropTypes.any).isRequired
+
 }
 AdminTruckingCreator.defaultProps = {
-  theme: null,
-  isNew: true
+  theme: {}
 }
+
+export default AdminTruckingCreator

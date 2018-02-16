@@ -2,13 +2,9 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-// import { AdminClientTile } from './';
-import { history } from '../../helpers'
-// import { pricingNames } from '../../constants/admin.constants';
 import { AdminSearchableClients } from './AdminSearchables'
-// import {v4} from 'node-uuid';
 import { RoundButton } from '../RoundButton/RoundButton'
-import {gradientTextGenerator} from '../../helpers'
+import { gradientTextGenerator, history } from '../../helpers'
 
 export class AdminPricingsClientIndex extends Component {
   static backToIndex () {

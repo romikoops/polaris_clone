@@ -197,6 +197,7 @@ AdminSearchableShipments.propTypes = {
   limit: PropTypes.number,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   userView: PropTypes.bool,
+  tooltip: PropTypes.string,
   handleShipmentAction: PropTypes.func.isRequired
 }
 
@@ -206,6 +207,7 @@ AdminSearchableShipments.defaultProps = {
   sideScroll: false,
   theme: null,
   limit: 0,
+  tooltip: '',
   hubs: [],
   userView: false
 }

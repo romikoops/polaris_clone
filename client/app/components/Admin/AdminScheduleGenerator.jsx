@@ -90,7 +90,7 @@ class AdminScheduleGenerator extends Component {
     this.setState({ weekdays: { ...this.state.weekdays, [ord]: !this.state.weekdays[ord] } })
   }
   handleDayChange (ev) {
-    this.setState({ startHub: moment(ev).format('DD/MM/YYYY') })
+    this.setState({ startDate: moment(ev).format('DD/MM/YYYY') })
   }
   handleDuration (ev) {
     const { name, value } = ev.target
@@ -234,7 +234,7 @@ class AdminScheduleGenerator extends Component {
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div className="flex-60 layout-row layout-align-start-center">
                 <StyledSelect
-                  name="starthub"
+                  name="startDate"
                   className={`${styles.select}`}
                   value={this.state.itinerary}
                   options={itineraryList}
@@ -411,13 +411,15 @@ AdminScheduleGenerator.propTypes = {
     getVehicleTypes: PropTypes.func,
     getHubs: PropTypes.func
   }).isRequired,
+  itineraries: PropTypes.arrayOf(PropTypes.any),
   vehicleTypes: PropTypes.arrayOf(PropTypes.vehicleType)
 }
 
 AdminScheduleGenerator.defaultProps = {
   theme: null,
   hubs: [],
-  vehicleTypes: []
+  vehicleTypes: [],
+  itineraries: []
 }
 
 function mapDispatchToProps (dispatch) {

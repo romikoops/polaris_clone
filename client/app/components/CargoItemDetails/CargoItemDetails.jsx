@@ -20,7 +20,7 @@ export class CargoItemDetails extends Component {
     const {
       index, item, hsCodes, theme, viewHSCodes
     } = this.props
-    const viewer = this.state.viewer
+    const { viewer } = this.state
     const textStyle = {
       background:
         theme && theme.colors

@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { v4 } from 'node-uuid'
 import styles from './StageTimeline.scss'
 import defs from '../../styles/default_classes.scss'
 import { capitalize } from '../../helpers/stringTools'
 import { Tooltip } from '../Tooltip/Tooltip'
 
-export class StageTimeline extends Component {
+export default class StageTimeline extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-      currentStageIndex: props.currentStageIndex
-    }
+    this.state = { }
   }
   generateStageBox (index) {
     const { theme } = this.props
@@ -47,14 +46,15 @@ export class StageTimeline extends Component {
   render () {
     const { theme } = this.props
     const currentStage = index => index === this.props.currentStageIndex
+    const index = v4()
     const stageBoxes = this.props.stages.map((stage, i) => (
       <div
-        key={i}
+        key={index}
         className="layout-column layout-align-start-center"
-        onClick={() => this.props.setStage(i)}
+        onClick={() => this.props.setStage(index)}
       >
-        { this.generateStageBox(i) }
-        <p className={`flex-none ${styles.stage_text} ${currentStage(i) ? styles.current : ''}`}>
+        { this.generateStageBox(index) }
+        <p className={`flex-none ${styles.stage_text} ${currentStage(index) ? styles.current : ''}`}>
           { capitalize(stage) }
           <Tooltip
             theme={theme}
@@ -81,7 +81,7 @@ export class StageTimeline extends Component {
 
 StageTimeline.propTypes = {
   theme: PropTypes.theme,
-  stages: PropTypes.array,
+  stages: PropTypes.arrayOf(Number),
   setStage: PropTypes.func.isRequired,
   currentStageIndex: PropTypes.number
 }

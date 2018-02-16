@@ -18,7 +18,7 @@ export class Conversation extends Component {
     this.toggleDetails = this.toggleDetails.bind(this)
   }
   componentDidMount () {
-    const scroller = Scroll.scroller
+    const { scroller } = Scroll
     scroller.scrollTo('messagesEnd', {
       duration: 1000,
       delay: 50,
@@ -51,7 +51,7 @@ export class Conversation extends Component {
       conversation, theme, shipment, user, tenant, clients
     } = this.props
     const { message, title, showDetails } = this.state
-    const Element = Scroll.Element
+    const { Element } = Scroll
     const isAdmin = user.role_id === 1
     const messages = isAdmin
       ? conversation.messages.map((msg) => {
@@ -67,7 +67,8 @@ export class Conversation extends Component {
           />
         )
       })
-      : conversation.messages.map(msg => <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()} />)
+      : conversation.messages.map(msg =>
+        <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()} />)
 
     const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed
     const btnStyle = {
@@ -95,7 +96,9 @@ export class Conversation extends Component {
           className={`${styles.msg_form} flex-30 width_100 layout-row layout-align-start-center`}
           onSubmit={this.reply}
         >
-          <div className="flex-90 layout-row layout-align-center-space-around height_100 layout-wrap">
+          <div
+            className="flex-90 layout-row layout-align-center-space-around height_100 layout-wrap"
+          >
             <div className="flex-95 layout-row layout-align-center-center input_box">
               <input
                 type="text"

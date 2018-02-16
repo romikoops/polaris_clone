@@ -6,18 +6,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import PropTypes from '../../prop-types'
 
 export class MessageShipmentData extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      working: true
-    }
-    this.onChangeFunc = this.onChangeFunc.bind(this)
-  }
-  onChangeFunc (optionsSelected) {
-    const nameKey = this.props.name
-    this.props.onChange(nameKey, optionsSelected)
-  }
-  switchIcon (sched) {
+  static switchIcon (sched) {
     let icon
     switch (sched.mode_of_transport) {
       case 'ocean':
@@ -35,9 +24,16 @@ export class MessageShipmentData extends Component {
     }
     return icon
   }
-
-  dashedGradient (color1, color2) {
+  static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
+  }
+  constructor (props) {
+    super(props)
+    this.onChangeFunc = this.onChangeFunc.bind(this)
+  }
+  onChangeFunc (optionsSelected) {
+    const nameKey = this.props.name
+    this.props.onChange(nameKey, optionsSelected)
   }
 
   render () {
@@ -169,7 +165,10 @@ export class MessageShipmentData extends Component {
             </div>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+            <div
+              className="
+              flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   IncoTerm:
@@ -179,7 +178,9 @@ export class MessageShipmentData extends Component {
                 <p className="flex-none"> {shipment.incoterm} </p>
               </div>
             </div>
-            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+            <div className="
+              flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   MoT:
@@ -189,7 +190,10 @@ export class MessageShipmentData extends Component {
                 <p className="flex-none"> {route.mode_of_transport} </p>
               </div>
             </div>
-            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+            <div
+              className="
+              flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   Pre-carrage:
@@ -199,7 +203,10 @@ export class MessageShipmentData extends Component {
                 <p className="flex-none"> {shipment.has_pre_carriage ? 'Yes' : 'No'} </p>
               </div>
             </div>
-            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+            <div
+              className="
+              flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   On-carriage:

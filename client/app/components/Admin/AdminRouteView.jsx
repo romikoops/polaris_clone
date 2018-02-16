@@ -78,19 +78,12 @@ AdminRouteView.propTypes = {
   adminActions: PropTypes.shape({
     getHub: PropTypes.func
   }).isRequired,
-  routeData: PropTypes.shape({
-    route: PropTypes.object,
-    startHubs: PropTypes.arrayOf(PropTypes.hub),
-    endHubs: PropTypes.arrayOf(PropTypes.hub),
-    hubRoutes: PropTypes.array,
-    schedules: PropTypes.array
-  })
+  itineraryData: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminRouteView.defaultProps = {
   theme: null,
-  hubHash: {},
-  routeData: null
+  hubHash: {}
 }
 
 export default AdminRouteView

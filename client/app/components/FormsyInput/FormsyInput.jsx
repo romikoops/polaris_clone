@@ -11,9 +11,9 @@ class FormsyInput extends Component {
   }
 
   changeValue (event) {
-        if (typeof this.props.onChange === 'function') {
-            this.props.onChange(event);
-        }
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(event)
+    }
     // setValue() will set the value of the component, which in
     // turn will validate it and the rest of the form
     // Important: Don't skip this step. This pattern is required
@@ -66,6 +66,8 @@ FormsyInput.propTypes = {
   submitAttempted: PropTypes.bool,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
+  placeholder: PropTypes.string,
+  onChange: PropTypes.func,
   errorMessageStyles: PropTypes.objectOf(PropTypes.string)
 }
 
@@ -73,8 +75,10 @@ FormsyInput.defaultProps = {
   disabled: false,
   submitAttempted: false,
   onFocus: null,
+  placeholder: '',
   onBlur: null,
-  errorMessageStyles: {}
+  errorMessageStyles: {},
+  onChange: null
 }
 
 export default withFormsy(FormsyInput)

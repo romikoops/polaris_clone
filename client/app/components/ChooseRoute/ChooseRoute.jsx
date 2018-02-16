@@ -12,12 +12,26 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ChooseRoute extends Component {
+  static dynamicSort (property) {
+    let sortOrder = 1
+    let prop
+    if (property[0] === '-') {
+      sortOrder = -1
+      prop = property.substr(1)
+    } else {
+      prop = property
+    }
+    return function (a, b) {
+      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
+      const result2 = result1 ? 1 : 0
+      return result2 * sortOrder
+    }
+  }
   constructor (props) {
     super(props)
     this.state = {
       selectedMoT: 'ocean',
       durationFilter: 40,
-      pickupDate: this.props.selectedDay,
       limits: {
         focus: true,
         alt: true
@@ -26,7 +40,6 @@ export class ChooseRoute extends Component {
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
     this.setMoT = this.setMoT.bind(this)
-    this.setDepDate = this.setDepDate.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
   componentDidMount () {
@@ -44,30 +57,12 @@ export class ChooseRoute extends Component {
   setMoT (val) {
     this.setState({ selectedMoT: val })
   }
-  setDepDate (val) {
-    this.setState({ pickupDate: val })
-  }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
   }
 
   chooseResult (obj) {
     this.props.chooseRoute(obj)
-  }
-  dynamicSort (property) {
-    let sortOrder = 1
-    let prop
-    if (property[0] === '-') {
-      sortOrder = -1
-      prop = property.substr(1)
-    } else {
-      prop = property
-    }
-    return function (a, b) {
-      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
-      const result2 = result1 ? 1 : 0
-      return result2 * sortOrder
-    }
   }
   render () {
     const {
@@ -84,7 +79,7 @@ export class ChooseRoute extends Component {
       shipment, originHubs, destinationHubs, schedules, cargoUnits
     } = shipmentData
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
-    schedules.sort(this.dynamicSort('etd'))
+    schedules.sort(ChooseRoute.dynamicSort('etd'))
     const idArrays = {
       closest: '',
       focus: [],
@@ -178,7 +173,6 @@ export class ChooseRoute extends Component {
               setMoT={this.setMoT}
               moT={this.state.selectedMoT}
               departureDate={depDay}
-              setDepartureDate={this.setDepDate}
             />
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">

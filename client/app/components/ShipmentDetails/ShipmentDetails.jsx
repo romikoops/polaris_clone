@@ -23,6 +23,20 @@ import { isEmpty } from '../../helpers/isEmpty'
 import '../../styles/select-css-custom.css'
 
 export class ShipmentDetails extends Component {
+  static scrollTo (target) {
+    Scroll.scroller.scrollTo(target, {
+      duration: 800,
+      smooth: true,
+      offset: -50
+    })
+  }
+  static errorsExist (errorsObjects) {
+    let returnBool = false
+    errorsObjects.forEach((errorsObj) => {
+      if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true
+    })
+    return returnBool
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -86,7 +100,6 @@ export class ShipmentDetails extends Component {
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
-    this.scrollTo = this.scrollTo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.toggleAlertModal = this.toggleAlertModal.bind(this)
@@ -101,13 +114,11 @@ export class ShipmentDetails extends Component {
     window.scrollTo(0, 0)
     setStage(2)
   }
-
-  scrollTo (target) {
-    Scroll.scroller.scrollTo(target, {
-      duration: 800,
-      smooth: true,
-      offset: -50
-    })
+  setIncoTerm (opt) {
+    this.setState({ incoterm: opt.value })
+  }
+  setTargetAddress (target, address) {
+    this.setState({ [target]: { ...this.state[target], ...address } })
   }
 
   loadPrevReq (obj) {
@@ -132,7 +143,7 @@ export class ShipmentDetails extends Component {
 
   newContainerGrossWeight () {
     const container = this.state.containers.new
-    container.type ? container.tare_weight + container.weight : 0
+    return container.type ? container.tare_weight + container.weight : 0
   }
 
   handleDayChange (selectedDay) {
@@ -158,7 +169,7 @@ export class ShipmentDetails extends Component {
     const val = event.target.value
     const addObj = this.state[key1]
     addObj[key2] = val
-    let fullAddress = this.state[key1].fullAddress
+    let { fullAddress } = this.state[key1]
 
     if (fullAddress) {
       fullAddress =
@@ -244,17 +255,6 @@ export class ShipmentDetails extends Component {
     this.setState({ containers, containersErrors })
   }
 
-  setTargetAddress (target, address) {
-    this.setState({ [target]: { ...this.state[target], ...address } })
-  }
-  errorsExist (errorsObjects) {
-    let returnBool = false
-    errorsObjects.forEach((errorsObj) => {
-      if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true
-    })
-    return returnBool
-  }
-
   handleNextStage () {
     if (!this.state.selectedDay) {
       this.setState({ nextStageAttempt: true })
@@ -276,7 +276,8 @@ export class ShipmentDetails extends Component {
       this.scrollTo('map')
       return
     }
-    // This was implemented under the assuption that in the initial state the following return values apply:
+    // This was implemented under the assuption that in
+    // the initial state the following return values apply:
     //      (1) this.errorsExist(this.state.cargoItemsErrors) #=> true
     //      (2) this.errorsExist(this.state.containersErrors) #=> true
     // So it will break out of the function and set nextStage attempt to true,
@@ -319,9 +320,7 @@ export class ShipmentDetails extends Component {
   toggleCarriage (target, value) {
     this.setState({ [target]: value })
   }
-  setIncoTerm (opt) {
-    this.setState({ incoterm: opt.value })
-  }
+
   toggleAlertModal () {
     this.setState({ alertModalShowing: !this.state.alertModalShowing })
   }
@@ -334,7 +333,7 @@ export class ShipmentDetails extends Component {
     const {
       theme, scope, emails, phones
     } = tenant.data
-    const messages = this.props.messages
+    const { messages } = this.props
     let cargoDetails
     const alertModalMessage = (
       <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
@@ -605,7 +604,8 @@ ShipmentDetails.propTypes = {
     shipment: PropTypes.shipment
   }),
   shipmentDispatch: PropTypes.shape({
-    goTo: PropTypes.func
+    goTo: PropTypes.func,
+    getDashboard: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired,
