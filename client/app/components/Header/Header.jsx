@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
-// import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
@@ -70,7 +69,7 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, landingPage
+      user, theme, tenant, invert, unread, req, dashboard, scrollable
     } = this.props
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
 
@@ -159,49 +158,48 @@ class Header extends Component {
       />
     )
     const classProps = scrollable && !isTop
-            ? `${styles.header_scrollable} 
+      ? `${styles.header_scrollable} 
         layout-row flex-100 layout-wrap layout-align-center`
-            : `${styles.header}
+      : `${styles.header}
         layout-row flex-100 layout-wrap layout-align-center`
 
-        const sideNav = (
-            <SideNav
-                theme={theme}
-                user={user}
-            />);
-        const dashboardMenu = (
-            <FloatingMenu
-                theme={theme}
-                comp={sideNav}
-            />);
-        return (
-            <div className={classProps} >
-                <div className="flex layout-row layout-align-start">
-                    { dashboard ? dashboardMenu : '' }
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                    {this.props.menu}
-                </div>
-                <div className={`${defs.content_width} layout-row flex-none`}>
-                    <div className={`${styles.infront} layout-row flex-50 layout-align-start-center`}>
-                        <img
-                            src={logoUrl}
-                            className={logoStyle}
-                            alt=""
-                            onClick={this.goHome}
-                        />
-                    </div>
-                    <div className="layout-row flex-50 layout-align-end-center">
-                        {rightCorner}
-                    </div>
-                </div>
-                <div className="flex layout-row layout-align-start-center">
-                </div>
-                { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+    const sideNav = (
+      <SideNav
+        theme={theme}
+        user={user}
+      />)+
+    const dashboardMenu = (
+      <FloatingMenu
+        theme={theme}
+        comp={sideNav}
+      />)
+    return (
+      <div className={classProps} >
+        <div className="flex layout-row layout-align-start">
+          { dashboard ? dashboardMenu : '' }
+        </div>
+        <div className="flex layout-row layout-align-start-center">
+          {this.props.menu}
+        </div>
+        <div className={`${defs.content_width} layout-row flex-none`}>
+          <div className={`${styles.infront} layout-row flex-50 layout-align-start-center`}>
+            <img
+              src={logoUrl}
+              className={logoStyle}
+              alt=""
+              onClick={this.goHome}
+            />
+          </div>
+          <div className="layout-row flex-50 layout-align-end-center">
+            {rightCorner}
+          </div>
+        </div>
+        <div className="flex layout-row layout-align-start-center" />
+        { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
 
-            </div>
-        );
-    }
+      </div>
+    )
+  }
 }
 
 Header.propTypes = {

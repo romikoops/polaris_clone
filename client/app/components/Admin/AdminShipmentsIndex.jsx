@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from '../../prop-types'
+import PropTypes from 'prop-types'
 import styles from './Admin.scss'
-// import {AdminShipmentRow } from './';
-// import {v4} from 'node-uuid';
 import { AdminSearchableShipments } from './AdminSearchables'
+import { adminDashboard as adminTip } from '../../constants'
 
 export class AdminShipmentsIndex extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
@@ -58,6 +57,7 @@ export class AdminShipmentsIndex extends Component {
           title="Requested Shipments"
           theme={theme}
           handleShipmentAction={handleShipmentAction}
+          tooltip={adminTip.requested}
         />
         <AdminSearchableShipments
           handleClick={this.viewShipment}
@@ -66,6 +66,7 @@ export class AdminShipmentsIndex extends Component {
           title="Open Shipments"
           theme={theme}
           handleShipmentAction={handleShipmentAction}
+          tooltip={adminTip.open}
         />
         <AdminSearchableShipments
           handleClick={this.viewShipment}
@@ -74,28 +75,26 @@ export class AdminShipmentsIndex extends Component {
           title="Finished Shipments"
           theme={theme}
           handleAction={handleShipmentAction}
+          tooltip={adminTip.finished}
         />
-        {mergedOpenShipments.length === 0 &&
+        { mergedOpenShipments.length === 0 &&
         mergedReqShipments.length === 0 &&
-        mergedFinishedShipments.length === 0 ? (
-            <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  styles.sec_subheader
-                }`}
-              >
-                <p className={` ${styles.sec_subheader_text} flex-none`}> No Shipments yet</p>
-              </div>
-              <p className="flex-none"> As shipments are requested, they will appear here</p>
+        mergedFinishedShipments.length === 0
+          ? <div className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center">
+            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_subheader}`}>
+              <p className={` ${styles.sec_subheader_text} flex-none`} > No Shipments yet</p>
             </div>
-          ) : (
-            ''
-          )}
+            <p className="flex-none" > As shipments are requested, they will appear here</p>
+          </div>
+          : ''
+        }
       </div>
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">{listView}</div>
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        { listView }
+      </div>
     )
   }
 }
