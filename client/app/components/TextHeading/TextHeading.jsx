@@ -65,7 +65,7 @@ TextHeading.propTypes = {
   warning: PropTypes.bool
 }
 TextHeading.defaultProps = {
-  theme: null,
+  theme: {},
   warning: false
 }
 export default TextHeading

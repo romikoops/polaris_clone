@@ -6,6 +6,7 @@ import styles from '../Admin.scss'
 import { AdminShipmentRow } from '../'
 import { UserShipmentRow } from '../../UserAccount'
 import { Tooltip } from '../../Tooltip/Tooltip'
+import { TextHeading } from '../../TextHeading/TextHeading'
 
 export class AdminSearchableShipments extends Component {
   constructor (props) {
@@ -80,7 +81,13 @@ export class AdminSearchableShipments extends Component {
   }
   render () {
     const {
-      hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip
+      hubs,
+      theme,
+      handleShipmentAction,
+      title,
+      userView,
+      seeAll,
+      tooltip
     } = this.props
     const { shipments } = this.state
 
@@ -153,7 +160,7 @@ export class AdminSearchableShipments extends Component {
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-50 layout-row layout-align-start-center">
               <b>
-                <p className="flex sub_header_text"> {title || 'Shipments'}</p>
+                <TextHeading size={1} text={title || 'Shipments'} color="black" />
               </b>
             </div>
             <div className="flex-50 layout-row layout-align-start-center">

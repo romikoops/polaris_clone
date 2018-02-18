@@ -8,7 +8,8 @@ import styles from './Header.scss'
 import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-
+import SideNav from '../SideNav/SideNav'
+import { FloatingMenu } from '../FloatingMenu/FloatingMenu'
 import { appActions, messagingActions } from '../../actions'
 import { accountIconColor } from '../../helpers'
 
@@ -36,7 +37,7 @@ class Header extends Component {
       messageDispatch.getUserConversations()
     }
     document.addEventListener('scroll', () => {
-      const isTop = window.pageYOffset < 100
+      const isTop = window.pageYOffset < 0
       if (isTop !== this.state.isTop) {
         this.setState({ isTop })
       }
@@ -71,6 +72,7 @@ class Header extends Component {
     const {
       user, theme, tenant, invert, unread, req, dashboard, scrollable
     } = this.props
+    const { isTop } = this.state
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
 
     // const dropDownImage = accountIcon;
@@ -167,7 +169,7 @@ class Header extends Component {
       <SideNav
         theme={theme}
         user={user}
-      />)+
+      />)
     const dashboardMenu = (
       <FloatingMenu
         theme={theme}
@@ -217,8 +219,9 @@ Header.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.object),
   showRegistration: PropTypes.bool,
   unread: PropTypes.number,
-  landingPage: PropTypes.bool,
-  req: PropTypes.req
+  req: PropTypes.req,
+  dashboard: PropTypes.bool,
+  scrollable: PropTypes.bool
 }
 
 Header.defaultProps = {
@@ -232,9 +235,10 @@ Header.defaultProps = {
   messages: null,
   showRegistration: false,
   unread: 0,
-  landingPage: false,
+  dashboard: false,
   req: null,
-  menu: null
+  menu: null,
+  scrollable: false
 }
 
 function mapStateToProps (state) {

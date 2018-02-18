@@ -88,6 +88,8 @@ class SideNav extends Component {
   render () {
     const { expanded } = this.state
     const { theme, user } = this.props
+    console.log('showing user .....')
+    console.log(user)
     const userLinks = [
       {
         icon: 'fa-tachometer',
@@ -190,6 +192,7 @@ class SideNav extends Component {
     const expandNavClass = expanded ? styles.expanded : styles.collapsed
     const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link
     const expandIconClass = expanded ? styles.expanded_icon : styles.collapsed_icon
+    console.log(isAdmin)
     const textStyle = {
       background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }

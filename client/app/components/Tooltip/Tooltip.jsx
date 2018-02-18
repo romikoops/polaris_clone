@@ -31,14 +31,15 @@ export function Tooltip ({
 
 Tooltip.propTypes = {
   theme: PropTypes.theme,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.string,
   icon: PropTypes.string.isRequired,
   color: PropTypes.string
 }
 
 Tooltip.defaultProps = {
-  color: null,
-  theme: null
+  color: '',
+  theme: '',
+  text: ''
 }
 
 export default Tooltip

@@ -9,7 +9,6 @@ import {
   AdminSearchableClients,
   AdminSearchableShipments
 } from './AdminSearchables'
-import { RoundButton } from '../RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { Carousel } from '../Carousel/Carousel'
 import style from './AdminDashboard.scss'
@@ -124,7 +123,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Requested Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedRequestedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -140,7 +139,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Open Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedOpenShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -156,7 +155,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Finished Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedFinishedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -197,16 +196,6 @@ export class AdminDashboard extends Component {
               </div>
               <div className={`flex-none layout-row layout-align-center-center ${style.carousel}`}>
                 <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade />
-              </div>
-              <div className={`flex-none layout-row layout-align-center-center ${style.dash_btn}`}>
-                <RoundButton
-                  theme={theme}
-                  handleNext={this.startBooking}
-                  active
-                  size="large"
-                  text="Make a Booking"
-                  iconClass="fa-archive"
-                />
               </div>
               <div
                 className={`flex-50 layout-row ${
@@ -315,6 +304,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
+              tooltip="adminTip.hubs"
+              icon="fa-info-circle"
+              showTooltip
               sideScroll
             />
           </div>
@@ -356,7 +348,7 @@ AdminDashboard.defaultProps = {
   loading: false,
   dashData: null,
   clients: [],
-  hubs: [],
+  hubs: {},
   hubHash: {}
 }
 

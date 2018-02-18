@@ -69,12 +69,13 @@ export class FloatingMenu extends Component {
 }
 
 FloatingMenu.propTypes = {
-  Comp: PropTypes.node.isRequired,
+  Comp: PropTypes.node,
   theme: PropTypes.theme
 }
 
 FloatingMenu.defaultProps = {
-  theme: null
+  theme: null,
+  Comp: null
 }
 
 export default FloatingMenu
