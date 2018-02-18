@@ -229,7 +229,7 @@ export class ShipmentContactForm extends Component {
             name="form"
             onValidSubmit={this.handleSubmit}
             onInvalidSubmit={this.handleInvalidSubmit}
-            mapping={this.mapInputs}
+            mapping={ShipmentContactForm.mapInputs}
             ref={(c) => { this.contactForm = c }}
             style={{ padding: '8px 20px' }}
           >

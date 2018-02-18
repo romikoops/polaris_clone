@@ -25,6 +25,7 @@ export default function GmapsLoader (props) {
             origin={props.origin}
             destination={props.destination}
             shipment={props.shipment}
+            shipmentDispatch={props.shipmentDispatch}
             nextStageAttempt={props.nextStageAttempt}
             handleAddressChange={props.handleAddressChange}
             routeIds={props.routeIds}
@@ -47,6 +48,10 @@ GmapsLoader.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.object
   }),
+  shipmentDispatch: PropTypes.shape({
+    goTo: PropTypes.func,
+    getDashboard: PropTypes.func
+  }).isRequired,
   setTargetAddress: PropTypes.func.isRequired,
   toggleCarriage: PropTypes.func.isRequired,
   shipment: PropTypes.shipment,

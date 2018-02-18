@@ -178,7 +178,7 @@ export class AdminDashboard extends Component {
         schedArr.push(<AdminScheduleLine key={v4()} schedule={osched} hubs={hubs} theme={theme} />)
       })
     }
-    const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5)
+    const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('etd')).slice(0, 5)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         <div

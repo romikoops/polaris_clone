@@ -19,7 +19,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
-import { isEmpty } from '../../helpers/isEmpty'
+import { isEmpty } from '../../helpers/objectTools'
 import '../../styles/select-css-custom.css'
 
 export class ShipmentDetails extends Component {
@@ -187,10 +187,6 @@ export class ShipmentDetails extends Component {
       ...this.state,
       [key1]: { ...this.state[key1], [key2]: val, fullAddress }
     })
-    console.log({
-      ...this.state,
-      [key1]: { ...this.state[key1], [key2]: val, fullAddress }
-    })
   }
 
   handleCargoItemChange (event, hasError) {
@@ -198,8 +194,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
-
-    cargoItems[index][suffixName] = value
+    cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -209,7 +204,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    containers[index][suffixName] = value
+    containers[index][suffixName] = value ? parseInt(value, 10) : 0
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
@@ -258,33 +253,35 @@ export class ShipmentDetails extends Component {
   handleNextStage () {
     if (!this.state.selectedDay) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('dayPicker')
+      ShipmentDetails.scrollTo('dayPicker')
       return
     }
 
     if (!this.state.incoterm) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('incoterms')
+      ShipmentDetails.scrollTo('incoterms')
       return
     }
+    // eslint-disable-next-line no-debugger
+    debugger
     if (
       isEmpty(this.state.origin) ||
       isEmpty(this.state.destination) ||
       this.state.AddressFormsHaveErrors
     ) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('map')
+      ShipmentDetails.scrollTo('map')
       return
     }
     // This was implemented under the assuption that in
     // the initial state the following return values apply:
-    //      (1) this.errorsExist(this.state.cargoItemsErrors) #=> true
-    //      (2) this.errorsExist(this.state.containersErrors) #=> true
+    //      (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) #=> true
+    //      (2) ShipmentDetails.errorsExist(this.state.containersErrors) #=> true
     // So it will break out of the function and set nextStage attempt to true,
     // in case one of them returns false
     if (
-      this.errorsExist(this.state.cargoItemsErrors) &&
-      this.errorsExist(this.state.containersErrors)
+      ShipmentDetails.errorsExist(this.state.cargoItemsErrors) &&
+      ShipmentDetails.errorsExist(this.state.containersErrors)
     ) {
       this.setState({ nextStageAttempt: true })
       return
@@ -326,7 +323,9 @@ export class ShipmentDetails extends Component {
   }
 
   render () {
-    const { tenant, user, shipmentData } = this.props
+    const {
+      tenant, user, shipmentData, shipmentDispatch
+    } = this.props
     if (!shipmentData) {
       return ''
     }
@@ -417,6 +416,7 @@ export class ShipmentDetails extends Component {
         handleAddressChange={this.handleAddressChange}
         shipment={shipmentData}
         routeIds={routeIds}
+        shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         nexusDispatch={this.props.nexusDispatch}
         availableDestinations={this.props.availableDestinations}
