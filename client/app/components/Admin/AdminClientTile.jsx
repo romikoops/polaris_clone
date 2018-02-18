@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { v4 } from 'node-uuid'
+import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './AdminClientTile.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -34,7 +36,13 @@ export class AdminClientTile extends Component {
     }
   }
   render () {
-    const { theme, client, deleteable } = this.props
+    const {
+      theme,
+      client,
+      deleteable,
+      showTooltip,
+      tooltip
+    } = this.props
     const { showDelete } = this.state
     if (!client) {
       return ''
@@ -121,6 +129,7 @@ export class AdminClientTile extends Component {
     )
     const switchView = showDelete ? deleter : content
     const contentView = deleteable ? switchView : content
+    const tooltipId = v4()
     return (
       <div className={`flex-none ${styles.client_card} layout-row pointy`}>
         {deleteable && !showDelete ? (
@@ -133,8 +142,9 @@ export class AdminClientTile extends Component {
         ) : (
           ''
         )}
-        <div className={`${styles.content} flex-100 layout-row layout-align-center-start`}>
+        <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
           {contentView}
+          {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId} /> : ''}
         </div>
       </div>
     )
@@ -147,12 +157,16 @@ AdminClientTile.propTypes = {
   deleteFn: PropTypes.func.isRequired,
   handleClick: PropTypes.func,
   target: PropTypes.string.isRequired,
-  deleteable: PropTypes.bool
+  deleteable: PropTypes.bool,
+  tooltip: PropTypes.string,
+  showTooltip: PropTypes.bool
 }
 AdminClientTile.defaultProps = {
   theme: null,
   deleteable: false,
-  handleClick: null
+  handleClick: null,
+  tooltip: '',
+  showTooltip: false
 }
 
 export default AdminClientTile

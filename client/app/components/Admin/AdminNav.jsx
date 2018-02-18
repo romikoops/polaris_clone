@@ -30,13 +30,6 @@ export class AdminNav extends Component {
           target: 'hubs',
           tooltip: tooltip.hubs
         },
-        // {
-        //     icon: 'fa-calculator',
-        //     text: 'Service Charges',
-        //     url: '/admin/service_charges',
-        //     target: 'serviceCharges',
-        //     tooltip: tooltip.dashboard
-        // },
         {
           icon: 'fa-area-chart',
           text: 'Pricing',
@@ -111,7 +104,10 @@ export class AdminNav extends Component {
     const navStyle = { height: `${linkItems.length * 55}px` }
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-center" style={navStyle}>
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+        style={navStyle}
+      >
         {linkItems}
       </div>
     )

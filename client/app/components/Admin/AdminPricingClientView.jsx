@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import { AdminPriceEditor } from './'
 import styles from './Admin.scss'
@@ -8,7 +9,8 @@ import {
   CONTAINER_DESCRIPTIONS,
   fclChargeGlossary,
   lclChargeGlossary,
-  chargeGlossary
+  chargeGlossary,
+  adminPricing as priceTip
 } from '../../constants'
 import { history } from '../../helpers'
 
@@ -179,6 +181,7 @@ export class AdminPricingClientView extends Component {
         </div>)
       })
 
+      const tooltipId = v4()
       return (
         <div
           key={v4()}
@@ -195,7 +198,16 @@ export class AdminPricingClientView extends Component {
               className="flex-10 layout-row layout-align-center-center"
               onClick={() => this.editThis(pricing, hubRoute, transport)}
             >
-              <i className="flex-none fa fa-pencil clip" style={textStyle} />
+              <i
+                className="flex-none fa fa-pencil clip"
+                style={textStyle}
+                data-for={tooltipId}
+                data-tip={priceTip.manage}
+              />
+              <ReactTooltip
+                className={styles.tooltip}
+                id={tooltipId}
+              />
             </div>
             <div
               className="flex-10 layout-row layout-align-center-center"

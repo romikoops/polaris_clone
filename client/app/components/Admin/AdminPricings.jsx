@@ -14,8 +14,7 @@ import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
-// import {v4} from 'node-uuid';
-// import FileUploader from '../../components/FileUploader/FileUploader';
+
 class AdminPricings extends Component {
   constructor (props) {
     super(props)

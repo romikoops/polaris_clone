@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-select'
-import styled from 'styled-components'
+import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
-import PropTypes from '../../prop-types'
-import styles from './Admin.scss'
-import AdminScheduleGenerator from './AdminScheduleGenerator'
-import '../../styles/select-css-custom.css'
-// import {v4} from 'node-uuid';
+import styled from 'styled-components'
 import FileUploader from '../FileUploader/FileUploader'
 import { RoundButton } from '../RoundButton/RoundButton'
+import styles from './Admin.scss'
+import { AdminTripPanel } from './'
+import AdminScheduleGenerator from './AdminScheduleGenerator'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { AdminTripPanel } from './AdminTripPanel'
+import { adminSchedules as schedTip } from '../../constants'
+import '../../styles/select-css-custom.css'
 
 export class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -243,11 +244,11 @@ export class AdminSchedules extends Component {
           <div className="flex-33 layout-row layout-align-start-center">
             <StyledSelect
               name="mot-filter"
+              placeholder="Filter by: MoT"
               className={`${styles.select}`}
               value={this.state.motFilter}
               options={filterMoTOptions}
               onChange={this.setMoTFilter}
-              placeholder="Filter by: MoT"
             />
           </div>
           <div className="flex-33 layout-row layout-align-start-center">
@@ -277,40 +278,22 @@ export class AdminSchedules extends Component {
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
+          <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`} >
             <p className={` ${styles.sec_header_text} flex-none`}>Excel Uploads</p>
           </div>
-          <div
-            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-              styles.sec_upload
-            }`}
-          >
+          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
             <p className="flex-80">Upload Train Schedules Sheet</p>
             <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx" />
           </div>
-          <div
-            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-              styles.sec_upload
-            }`}
-          >
+          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
             <p className="flex-80">Upload Air Schedules Sheet</p>
             <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx" />
           </div>
-          <div
-            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-              styles.sec_upload
-            }`}
-          >
+          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
             <p className="flex-80">Upload Vessel Schedules Sheet</p>
             <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx" />
           </div>
-          <div
-            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-              styles.sec_upload
-            }`}
-          >
+          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
             <p className="flex-80">Upload Trucking Schedules Sheet</p>
             <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx" />
           </div>
@@ -324,21 +307,23 @@ export class AdminSchedules extends Component {
         theme={theme}
         text="Back to list"
         size="small"
-        back
         iconClass="fa-th-list"
         handleNext={this.toggleView}
+        back
       />
     )
     const newButton = (
-      <RoundButton
-        theme={theme}
-        text="New"
-        active
-        size="small"
-        iconClass="fa-plus"
-        handleNext={this.toggleView}
-      />
-    )
+      <div data-for="tooltipId" data-tip={schedTip.upload_excel} >
+        <RoundButton
+          theme={theme}
+          text="New Upload"
+          active
+          size="small"
+          iconClass="fa-plus"
+          handleNext={this.toggleView}
+        />
+        <ReactTooltip id="tooltipId" className={`${styles.tooltip}`} />
+      </div>)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div

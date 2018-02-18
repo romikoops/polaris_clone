@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
-// import {LoginPage} from '../../containers/LoginPage';
 import styles from './LandingTop.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import Header from '../Header/Header'

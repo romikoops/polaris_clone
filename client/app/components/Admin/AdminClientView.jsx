@@ -6,7 +6,7 @@ import styles from './Admin.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import { managerRoles } from '../../constants'
+import { managerRoles, adminClientsTooltips as clientTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 
 export class AdminClientView extends Component {
@@ -97,9 +97,14 @@ export class AdminClientView extends Component {
         client={client}
       />)
     })
-    const locationArr = locations.map(loc => (
-      <AdminAddressTile key={v4()} address={loc} theme={theme} client={client} />
-    ))
+    const locationArr = locations.map(loc => (<AdminAddressTile
+      key={v4()}
+      address={loc}
+      theme={theme}
+      client={client}
+      tooltip={clientTip.edit_location}
+      showTooltip
+    />))
     const assignManagerBox = (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center-center padd_20">
