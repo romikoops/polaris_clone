@@ -426,8 +426,6 @@ function getShipments (redirect) {
     adminService.getShipments().then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
-        // eslint-disable-next-line no-debugger
-        debugger
         dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/shipments'))
@@ -707,10 +705,10 @@ function getItineraries (redirect) {
     adminService.getItineraries().then(
       (data) => {
         dispatch(alertActions.success('Fetching Routes successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/routes'))
         }
-        dispatch(success(data))
       },
       (error) => {
         // ;
@@ -764,10 +762,10 @@ function getItinerary (id, redirect) {
     adminService.getItinerary(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Route successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/routes/${id}`))
         }
-        dispatch(success(data))
       },
       (error) => {
         // ;

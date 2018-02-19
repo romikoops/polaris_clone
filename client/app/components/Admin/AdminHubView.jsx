@@ -20,6 +20,7 @@ export class AdminHubView extends Component {
     if (!hubData && !loading) {
       adminActions.getHub(parseInt(match.params.id, 10), false)
     }
+    this.props.setView()
   }
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
@@ -145,7 +146,8 @@ AdminHubView.propTypes = {
     schedules: PropTypes.array
   }),
   loading: PropTypes.bool,
-  match: PropTypes.match.isRequired
+  match: PropTypes.match.isRequired,
+  setView: PropTypes.func
 }
 
 AdminHubView.defaultProps = {
@@ -153,7 +155,8 @@ AdminHubView.defaultProps = {
   loading: false,
   hubData: null,
   hubHash: {},
-  hubs: []
+  hubs: [],
+  setView: null
 }
 
 export default AdminHubView

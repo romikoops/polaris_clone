@@ -262,7 +262,7 @@ class UserAccount extends Component {
                     setNav={this.setNavLink}
                     currencies={currencies}
                     theme={theme}
-                    user={user.data}
+                    user={user}
                     aliases={dashboard.aliases}
                     {...props}
                     locations={dashboard.locations}

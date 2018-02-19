@@ -5,7 +5,7 @@ import { moment } from '../../constants'
 import { AdminLayoverTile } from './'
 import { gradientTextGenerator } from '../../helpers'
 
-class AdminTripPanel extends Component {
+export class AdminTripPanel extends Component {
   static switchIcon (itinerary) {
     let icon
     switch (itinerary.mode_of_transport) {
@@ -34,7 +34,10 @@ class AdminTripPanel extends Component {
     super(props)
     this.showPanel = this.showPanel.bind(this)
   }
-
+  showPanel () {
+    const { trip, toggleShowPanel } = this.props
+    toggleShowPanel(trip.id)
+  }
   render () {
     const {
       theme, trip, itinerary, layovers, showPanel
@@ -54,7 +57,7 @@ class AdminTripPanel extends Component {
       width: '100%',
       background:
                 theme && theme.colors
-                  ? this.dashedGradient(
+                  ? AdminTripPanel.dashedGradient(
                     theme.colors.primary,
                     theme.colors.secondary
                   )
@@ -89,7 +92,7 @@ class AdminTripPanel extends Component {
             </div>
             <div className={`${styles.connection_graphics}`}>
               <div className="flex-none layout-row layout-align-center-center">
-                {this.switchIcon(itinerary)}
+                {AdminTripPanel.switchIcon(itinerary)}
               </div>
               <div style={dashedLineStyles} />
             </div>
@@ -161,14 +164,16 @@ AdminTripPanel.propTypes = {
   trip: PropTypes.objectOf(PropTypes.any),
   showPanel: PropTypes.bool,
   itinerary: PropTypes.objectOf(PropTypes.any),
-  layovers: PropTypes.arrayOf(PropTypes.any)
+  layovers: PropTypes.arrayOf(PropTypes.any),
+  toggleShowPanel: PropTypes.func
 }
 AdminTripPanel.defaultProps = {
   theme: {},
   trip: {},
   showPanel: false,
   itinerary: {},
-  layovers: []
+  layovers: [],
+  toggleShowPanel: null
 }
 
 export default AdminTripPanel

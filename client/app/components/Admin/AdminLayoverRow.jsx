@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './AdminScheduleLine.scss'
 import { moment } from '../../constants'
+import { gradientTextGenerator } from '../../helpers'
 
 export default class AdminLayoverRow extends Component {
   static switchIcon (sched) {
@@ -32,16 +33,14 @@ export default class AdminLayoverRow extends Component {
       theme, schedule, hub, itinerary
     } = this.props
     if (!schedule || !hub) {
+      // eslint-disable-next-line no-debugger
+      debugger
       return ''
     }
-    const gradientFontStyle = {
-      background:
+    const gradientFontStyle =
                 theme && theme.colors
-                  ? `-webkit-linear-gradient(left, ${
-                    theme.colors.brightPrimary
-                  }, ${theme.colors.brightSecondary})`
-                  : 'black'
-    }
+                  ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+                  : { color: 'black' }
     const startTime = schedule.eta ? schedule.eta : schedule.start_date
     const endTime = schedule.etd ? schedule.etd : schedule.end_date
     return (
@@ -56,7 +55,7 @@ export default class AdminLayoverRow extends Component {
             }`}
           >
             <div className="flex-20 layout-row layout-align-center-center">
-              {this.switchIcon(schedule)}
+              {AdminLayoverRow.switchIcon(schedule)}
             </div>
             <div className={`flex-80 ${styles.header_hub}`}>
               <div className="flex-100 layout-row">

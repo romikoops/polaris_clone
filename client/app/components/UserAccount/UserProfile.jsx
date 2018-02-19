@@ -486,12 +486,16 @@ export class UserProfile extends Component {
                 <ProfileBox user={user} style={textStyle} theme={theme} edit={this.editProfile} />
               )}
             </div>
-            <div className="flex-50 layout-row layout-align-center-center layout-wrap">
-              <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-                <h3 className="flex-none"> Currency Settings:</h3>
-                <p className="flex-100">Current Selection: {user.currency}</p>
+            <div className="flex-50 layout-row layout-align-end-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
+                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                  <h3 className="flex-none"> Currency Settings:</h3>
+                </div>
+                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                  <p className="flex-none">Current Selection: {user.currency}</p>
+                </div>
               </div>
-              <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
                 <StyledSelect
                   name="currency"
                   className={`${styles.select}`}
@@ -499,7 +503,7 @@ export class UserProfile extends Component {
                   options={currencyOptions}
                   onChange={this.setCurrency}
                 />
-                <div className={`flex-50 layout-row layout-align-end-center ${styles.btn_row}`}>
+                <div className={`flex-100 layout-row layout-align-start-center ${styles.btn_row}`}>
                   <RoundButton
                     theme={theme}
                     size="small"

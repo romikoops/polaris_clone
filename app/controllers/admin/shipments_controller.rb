@@ -11,7 +11,6 @@ class Admin::ShipmentsController < ApplicationController
     @documents['open_shipments'] = Document.get_documents_for_array(@open_shipments)
     @finished_shipments = Shipment.where(status: ["declined", "finished"], tenant_id: current_user.tenant_id)
     @documents['finished_shipments'] = Document.get_documents_for_array(@finished_shipments)
-    byebug
     resp = {
       requested: @requested_shipments,
       open: @open_shipments,

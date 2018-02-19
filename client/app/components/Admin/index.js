@@ -11,7 +11,7 @@ export * from './AdminNavItem'
 
 export { default as AdminItineraryRow } from './AdminItineraryRow'
 export { default as AdminTripPanel } from './AdminTripPanel'
-export { default as AdminLayoerTile } from './AdminLayoverTile'
+export { default as AdminLayoverTile } from './AdminLayoverTile'
 export { default as AdminLayoverRow } from './AdminLayoverRow'
 
 export * from './AdminPricePanel'
