@@ -13,7 +13,7 @@ class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: true
     }
   }
   setAdminUrl (target) {
@@ -199,7 +199,7 @@ class SideNav extends Component {
         ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={li.action}>
+        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
           <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
             <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
               <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />

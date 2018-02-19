@@ -30,10 +30,6 @@ class AdminTripPanel extends Component {
       color1
     }, ${color2})`
   }
-  constructor (props) {
-    super(props)
-    this.showPanel = this.showPanel.bind(this)
-  }
 
   render () {
     const {
