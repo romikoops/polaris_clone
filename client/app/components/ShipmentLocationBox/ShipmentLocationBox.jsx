@@ -462,7 +462,7 @@ export class ShipmentLocationBox extends Component {
 
   changeAddressFormVisibility (target, visibility) {
     const key = `show${capitalize(target)}Fields`
-    const value = visibility || !this.state[key]
+    const value = visibility != null ? visibility : !this.state[key]
     this.setState({ [key]: value })
   }
 
@@ -588,7 +588,7 @@ export class ShipmentLocationBox extends Component {
     })
     tmpAddress.fullAddress = place.formatted_address
     setTimeout(() => {
-      this.changeAddressFormVisibility(target, this.isOnFocus[target])
+      if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
     }, 6000)
 
     const { allNexuses } = this.props

@@ -12,7 +12,7 @@
     transition: all 0.3s ease;
   }
   .input_box.with_errors {
-    height: 120px;
+    height: 115px;
     .btn_address_form {
       top: 33px;
     }
@@ -82,7 +82,8 @@
   }
   .search_box {
     margin: 10px auto;
-    padding: 0 10px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
   .address_form {
     background: rgba(30, 30, 30, 0.5);
