@@ -412,13 +412,13 @@ function getTrucking (redirect) {
 
 function getShipments (redirect) {
   function request (shipmentData) {
-    return { type: adminConstants.GET_SHIPMENTS_REQUEST, payload: shipmentData }
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_REQUEST, payload: shipmentData }
   }
   function success (shipmentData) {
-    return { type: adminConstants.GET_SHIPMENTS_SUCCESS, payload: shipmentData }
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS, payload: shipmentData }
   }
   function failure (error) {
-    return { type: adminConstants.GET_SHIPMENTS_FAILURE, error }
+    return { type: adminConstants.ADMIN_GET_SHIPMENTS_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request())
@@ -426,11 +426,12 @@ function getShipments (redirect) {
     adminService.getShipments().then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipments successful'))
+        // eslint-disable-next-line no-debugger
+        // debugger
+        dispatch(success(data))
         if (redirect) {
           dispatch(push('/admin/shipments'))
         }
-
-        dispatch(success(data))
       },
       (error) => {
         // ;

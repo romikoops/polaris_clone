@@ -149,13 +149,14 @@ AdminSearchableClients.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
   sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
-  tooltip: PropTypes.string,
   showTooltip: PropTypes.bool,
-  icon: PropTypes.string
+  icon: PropTypes.string,
+  tooltip: PropTypes.string
+
 }
 
 AdminSearchableClients.defaultProps = {
@@ -163,9 +164,11 @@ AdminSearchableClients.defaultProps = {
   seeAll: null,
   sideScroll: false,
   theme: null,
-  tooltip: '',
   showTooltip: false,
-  icon: ''
+  icon: '',
+  tooltip: '',
+  title: '',
+  placeholder: ''
 }
 
 export default AdminSearchableClients

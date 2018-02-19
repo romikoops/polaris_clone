@@ -15,8 +15,8 @@ export class CargoDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      insuranceView: true,
-      customsView: true
+      insuranceView: false,
+      customsView: false
     }
     this.toggleInsurance = this.toggleInsurance.bind(this)
     this.toggleCustoms = this.toggleCustoms.bind(this)

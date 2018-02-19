@@ -6,7 +6,7 @@ import { mapStyling } from '../../constants/map.constants'
 
 const colourSVG = colorSVG
 const mapStyles = mapStyling
-const mapStyle = {
+const baseMapStyle = {
   width: '100%',
   height: '300px',
   borderRadius: '3px',
@@ -128,6 +128,7 @@ export class PlaceSearch extends Component {
 
   render () {
     const autoInputStyles = {}
+    const mapStyle = Object.assign({}, baseMapStyle)
     if (this.props.hideMap) {
       Object.assign(mapStyle, {
         display: 'none'

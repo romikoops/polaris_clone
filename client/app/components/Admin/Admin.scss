@@ -52,10 +52,12 @@
     font-size: 8px;
   }
   .clip {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
@@ -526,7 +528,6 @@
     position: absolute;
     top: 10px;
     right: 10px;
-  }
   .btn_wrapper {
     position: relative !important;
     display: inline-block !important;
@@ -541,4 +542,5 @@
     max-width: 150px !important;
     text-align: left !important;
   }
+}
 }

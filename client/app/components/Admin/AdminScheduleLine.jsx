@@ -180,15 +180,16 @@ export class AdminScheduleLine extends Component {
 }
 AdminScheduleLine.propTypes = {
   theme: PropTypes.theme,
-  schedule: PropTypes.schedule,
+  schedule: PropTypes.objectOf(PropTypes.any),
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  pickupDate: PropTypes.number.isRequired
+  pickupDate: PropTypes.number
 }
 
 AdminScheduleLine.defaultProps = {
   theme: null,
   hubs: [],
-  schedule: null
+  schedule: {},
+  pickupDate: null
 }
 
 export default AdminScheduleLine

@@ -16,6 +16,7 @@ import { BookingConfirmation } from '../../components/BookingConfirmation/Bookin
 import { shipmentActions } from '../../actions/shipment.actions'
 import { nexusActions } from '../../actions/nexus.actions'
 import { Footer } from '../../components/Footer/Footer'
+import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 
 class Shop extends Component {
   constructor (props) {
@@ -127,9 +128,10 @@ class Shop extends Component {
     const { theme } = tenant.data
     const { request, response, error } = bookingData
     const route1 = `${match.url}/:shipmentId/shipment_details`
-    const route2 = `${match.url}/:shipmentId/choose_route`
+    const route2 = `${match.url}/:shipmentId/choose_offer`
     const route3 = `${match.url}/:shipmentId/booking_details`
     const route4 = `${match.url}/:shipmentId/finish_booking`
+    const route5 = `${match.url}/:shipmentId/thank_you`
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
     let shipmentId = ''
     if (response && response.stage1 && !response.stage2) {
@@ -256,6 +258,20 @@ class Shop extends Component {
               tenant={tenant.data}
               user={user}
               shipmentData={response ? response.stage4 : {}}
+              setStage={this.selectShipmentStage}
+              shipmentDispatch={shipmentDispatch}
+            />
+          )}
+        />
+        <Route
+          path={route5}
+          render={props => (
+            <ShipmentThankYou
+              {...props}
+              theme={theme}
+              tenant={tenant.data}
+              user={user}
+              shipmentData={response ? response.stage5 : {}}
               setStage={this.selectShipmentStage}
               shipmentDispatch={shipmentDispatch}
             />

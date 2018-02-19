@@ -185,6 +185,8 @@ class SideNav extends Component {
         tooltip: menuTip.setup
       }
     ]
+    console.log('.............................')
+    console.log(user)
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? adminLinks : userLinks
     const expandNavClass = expanded ? styles.expanded : styles.collapsed
@@ -195,8 +197,7 @@ class SideNav extends Component {
     }
     const navLinks = links.map((li) => {
       const tli = li
-      tli.action = isAdmin
-        ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
       return (
         <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>

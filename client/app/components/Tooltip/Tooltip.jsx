@@ -17,7 +17,7 @@ export function Tooltip ({
   const id = v4()
 
   return (
-    <div className="flex-none layout-row layout-align-center-center">
+    <div className="flex-none layout-row layout-align-center-center tooltip" style={{ margin: '0 10px' }}>
       <p
         className={`flex-none ${clipClass} fa ${icon}`}
         style={textStyle}
@@ -32,16 +32,17 @@ export function Tooltip ({
 Tooltip.propTypes = {
   theme: PropTypes.theme,
   text: PropTypes.string,
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   color: PropTypes.string,
   toolText: PropTypes.string
 }
 
 Tooltip.defaultProps = {
-  color: null,
-  theme: null,
+  color: '',
+  theme: {},
   toolText: '',
-  text: ''
+  text: '',
+  icon: ''
 }
 
 export default Tooltip

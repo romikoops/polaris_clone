@@ -74,16 +74,14 @@ export class AdminSearchableHubs extends Component {
     const { hubs } = this.state
     let hubsArr
     if (hubs) {
-      hubsArr = hubs.map(hub => (
-        <AdminHubTile
-          key={v4()}
-          hub={hub}
-          theme={theme}
-          handleClick={this.handleClick}
-          tooltip={clickTip.related}
-          showTooltip
-        />
-      ))
+      hubsArr = hubs.map(hub => (<AdminHubTile
+        key={v4()}
+        hub={hub}
+        theme={theme}
+        handleClick={this.handleClick}
+        tooltip={clickTip.related}
+        showTooltip
+      />))
     }
     const viewType = this.props.sideScroll ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
@@ -97,16 +95,30 @@ export class AdminSearchableHubs extends Component {
       </div>
     )
     return (
-      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
+      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`} >
           <div className="flex-60 layput-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row" >
                 <div className="flex-none" >
-                  <TextHeading theme={theme} size={1} text="Hubs" />
-                  { showTooltip ? <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} /> : '' }
+                  <TextHeading
+                    theme={theme}
+                    size={1}
+                    text="Hubs"
+                  />
+                  { showTooltip ? <Tooltip
+                    icon="na-info-circle"
+                    theme={theme}
+                    text={truckTip.hubs}
+                    toolText
+                  /> : '' }
                 </div>
-                { icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : '' }
+                { icon ? <Tooltip
+                  theme={theme}
+                  icon={icon}
+                  text={tooltip}
+                  toolText
+                /> : '' }
               </div>
             </div>
           </div>
@@ -122,7 +134,10 @@ export class AdminSearchableHubs extends Component {
         {viewType}
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+            <div
+              className="flex-none layout-row layout-align-center-center"
+              onClick={this.seeAll}
+            >
               <p className="flex-none">See all</p>
             </div>
           </div>

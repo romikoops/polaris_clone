@@ -14,13 +14,15 @@ export class TextHeading extends Component {
       text, theme, size, color
     } = this.props
     let returnVal
-    const styling = !color ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-      : { color: '#DE2A2A' }
+    const styling = !color && theme
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+      : { color }
     const generalStyle = `${styles.text_style} flex-none clip`
     if (size) {
       switch (size) {
         case 1:
           returnVal = (
+
             <h1 className={generalStyle} style={styling}>
               {text}
             </h1>
@@ -65,7 +67,7 @@ TextHeading.propTypes = {
   color: PropTypes.string
 }
 TextHeading.defaultProps = {
-  theme: null,
+  theme: {},
   color: ''
 }
 export default TextHeading

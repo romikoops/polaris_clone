@@ -134,7 +134,11 @@ export class AdminSearchableRoutes extends Component {
           }`}
         >
           <div className="flex-60 layput-row layout-align-start-center">
-            <TextHeading theme={theme} size={1} text="Routes" />
+            <TextHeading
+              theme={theme}
+              size={1}
+              text="Routes"
+            />
           </div>
           <div className="flex-35 layput-row layout-align-start-center input_box_full">
             <input
@@ -145,13 +149,23 @@ export class AdminSearchableRoutes extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`} data-for={tooltipId} data-tip={tooltip}>
+        <div
+          className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}
+          data-for={tooltipId}
+          data-tip={tooltip}
+        >
           {viewType}
-          {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId} /> : ''}
+          {showTooltip ? <ReactTooltip
+            className={`${styles.tooltip}`}
+            id={tooltipId}
+          /> : ''}
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+            <div
+              className="flex-none layout-row layout-align-center-center"
+              onClick={this.seeAll}
+            >
               <p className="flex-none">See all</p>
             </div>
           </div>
@@ -174,8 +188,8 @@ AdminSearchableRoutes.propTypes = {
   limit: PropTypes.number,
   itineraries: PropTypes.arrayOf(PropTypes.any),
   hubs: PropTypes.arrayOf(PropTypes.hub).isRequired,
-  showTooltip: PropTypes.bool,
-  tooltip: PropTypes.string
+  tooltip: PropTypes.string,
+  showTooltip: PropTypes.bool
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -185,9 +199,8 @@ AdminSearchableRoutes.defaultProps = {
   theme: null,
   limit: 3,
   itineraries: [],
-  showTooltip: false,
-  tooltip: ''
-
+  tooltip: '',
+  showTooltip: false
 }
 
 export default AdminSearchableRoutes

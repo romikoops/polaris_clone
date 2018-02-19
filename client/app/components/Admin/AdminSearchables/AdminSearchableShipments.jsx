@@ -81,7 +81,13 @@ export class AdminSearchableShipments extends Component {
   }
   render () {
     const {
-      hubs, theme, handleShipmentAction, title, userView, seeAll, tooltip
+      hubs,
+      theme,
+      handleShipmentAction,
+      title,
+      userView,
+      seeAll,
+      tooltip
     } = this.props
     const { shipments } = this.state
 
@@ -155,7 +161,7 @@ export class AdminSearchableShipments extends Component {
               </div>
             </div>
           </div>
-          <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
+          <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
             <input
               type="text"
               name="search"
@@ -186,7 +192,7 @@ AdminSearchableShipments.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
   limit: PropTypes.number,
@@ -204,7 +210,8 @@ AdminSearchableShipments.defaultProps = {
   limit: 0,
   tooltip: '',
   hubs: [],
-  userView: false
+  userView: false,
+  title: 'shipment'
 }
 
 export default AdminSearchableShipments
