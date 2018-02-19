@@ -692,11 +692,15 @@ export class ShipmentLocationBox extends Component {
 
     const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
     const originHubSelect = (
-      <div style={{ position: 'relative', margin: 'auto' }}>
+      <div
+        style={{ position: 'relative' }}
+        className="flex-100 layout-row layout-wrap"
+      >
         <StyledSelect
           name="origin-hub"
-          className={`${styles.select}`}
+          className={styles.select}
           value={this.state.oSelect}
+          placeholder="Origin"
           options={originOptions}
           onChange={this.setOriginHub}
           nextStageAttempt={this.props.nextStageAttempt}
@@ -709,11 +713,15 @@ export class ShipmentLocationBox extends Component {
 
     const showDestinationError = !this.state.dSelect && this.props.nextStageAttempt
     const destinationHubSelect = (
-      <div style={{ position: 'relative', margin: 'auto' }}>
+      <div
+        style={{ position: 'relative' }}
+        className="flex-100 layout-row layout-wrap"
+      >
         <StyledSelect
           name="destination-hub"
-          className={`${styles.select}`}
+          className={styles.select}
           value={this.state.dSelect}
+          placeholder="Destination"
           options={destinationOptions}
           onChange={this.setDestHub}
           backgroundColor={backgroundColor}
@@ -987,11 +995,9 @@ export class ShipmentLocationBox extends Component {
             }
           >
             {this.state.showModal ? routeModal : ''}
-            <div className={`flex-none layout-row layout-wrap ${styles.input_box} ${errorClass}`}>
+            <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.input_box} ${errorClass}`}>
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
-                <div
-                  className={`flex-40 layout-row layout-align-center-center ${styles.toggle_box}`}
-                >
+                <div className={`flex-45 layout-row layout-align-start ${styles.toggle_box}`}>
                   <Toggle
                     className="flex-none"
                     id="has_pre_carriage"
@@ -1000,24 +1006,30 @@ export class ShipmentLocationBox extends Component {
                     defaultChecked={this.state.shipment.has_pre_carriage}
                     onChange={this.handleTrucking}
                   />
-                  <label htmlFor="pre-carriage">Pre-Carriage</label>
+                  <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>Pre-Carriage</label>
                 </div>
-                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.state.shipment.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
                   {originFields}
                 </div>
               </div>
+
               <div
-                className="flex-10 layout-row layout-align-center-center "
+                className="flex-5 layout-row layout-align-center-center"
                 onClick={this.handleSwap}
               >
                 <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
               </div>
+
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
-                <div
-                  className={`flex-40 layout-row layout-align-center-center ${styles.toggle_box}`}
-                >
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
+                  {this.state.shipment.has_on_carriage ? destAuto : ''}
+                  {displayLocationOptions('destination')}
+                  {destFields}
+                </div>
+                <div className={`flex-45 layout-row layout-align-end ${styles.toggle_box}`}>
+                  <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>On-Carriage</label>
                   <Toggle
                     className="flex-none"
                     id="has_on_carriage"
@@ -1026,12 +1038,6 @@ export class ShipmentLocationBox extends Component {
                     defaultChecked={this.state.shipment.has_on_carriage}
                     onChange={this.handleTrucking}
                   />
-                  <label htmlFor="on-carriage">On-Carriage</label>
-                </div>
-                <div className={`flex-50 layout-row layout-wrap ${styles.search_box}`}>
-                  {this.state.shipment.has_on_carriage ? destAuto : ''}
-                  {displayLocationOptions('destination')}
-                  {destFields}
                 </div>
               </div>
             </div>
