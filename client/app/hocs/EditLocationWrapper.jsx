@@ -31,10 +31,11 @@ export default function EditLocationWrapper (props) {
 EditLocationWrapper.propTypes = {
   theme: PropTypes.theme,
   saveLocation: PropTypes.func.isRequired,
-  handleAddressChange: PropTypes.func.isRequired,
-  component: PropTypes.node.isRequired
+  handleAddressChange: PropTypes.func,
+  component: PropTypes.func.isRequired
 }
 
 EditLocationWrapper.defaultProps = {
-  theme: null
+  theme: null,
+  handleAddressChange: null
 }

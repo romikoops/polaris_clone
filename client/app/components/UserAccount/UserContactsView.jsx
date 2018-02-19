@@ -362,7 +362,7 @@ UserContactsView.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.object),
   contactData: PropTypes.shape({
     contact: PropTypes.contact,
-    shipments: PropTypes.shipments,
+    shipments: PropTypes.arrayOf(PropTypes.object),
     location: PropTypes.location
   }).isRequired,
 

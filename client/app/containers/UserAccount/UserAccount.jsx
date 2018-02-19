@@ -186,6 +186,7 @@ class UserAccount extends Component {
             user={user}
             theme={theme}
             routes={dashboard.routes}
+            userDispatch={userDispatch}
             initialCompName="UserAccount"
           />
         }
@@ -339,7 +340,7 @@ UserAccount.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.object),
   users: PropTypes.shape({
     loading: PropTypes.bool,
-    hubs: PropTypes.bool
+    hubs: PropTypes.arrayOf(PropTypes.object)
   }),
   userDispatch: PropTypes.shape({
     getDashboard: PropTypes.func,

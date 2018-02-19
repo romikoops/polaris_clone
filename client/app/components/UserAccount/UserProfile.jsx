@@ -8,6 +8,7 @@ import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
 import '../../styles/select-css-custom.css'
 import { currencyOptions } from '../../constants'
+import { gradientTextGenerator } from '../../helpers'
 
 const ProfileBox = ({ user, style, edit }) => (
   <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
@@ -293,7 +294,7 @@ export class UserProfile extends Component {
   }
   render () {
     const {
-      user, aliases, locations, theme
+      user, aliases, locations, theme, userDispatch
     } = this.props
     if (!user) {
       return ''
@@ -323,12 +324,9 @@ export class UserProfile extends Component {
         background-color: #f9f9f9;
       }
     `
-    const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-          : 'black'
-    }
+    const textStyle = theme && theme.colors
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+      : { color: 'black' }
     const newButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -351,7 +349,7 @@ export class UserProfile extends Component {
           className={`flex-none layout-row layout-wrap layout-align-center-center ${
             styles.new_contact_backdrop
           }`}
-          onClick={this.toggleNewContact}
+          onClick={this.toggleNewAlias}
         />
         <div
           className={`flex-none layout-row layout-wrap layout-align-start-start ${
@@ -543,6 +541,7 @@ export class UserProfile extends Component {
             setNav={() => {}}
             locations={locations}
             makePrimary={this.makePrimary}
+            userDispatch={userDispatch}
             theme={theme}
             user={user}
           />
