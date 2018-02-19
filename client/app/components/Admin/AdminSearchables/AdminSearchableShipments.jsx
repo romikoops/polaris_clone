@@ -153,12 +153,13 @@ export class AdminSearchableShipments extends Component {
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-none layout-row" >
+              <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none" >
                   <TextHeading theme={theme} size={2} text={title || 'Shipments'} />
                 </div>
                 <Tooltip theme={theme} icon="fa-info-circle" toolText={tooltip} />
               </div>
+
             </div>
           </div>
           <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>

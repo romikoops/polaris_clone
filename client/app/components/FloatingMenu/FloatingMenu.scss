@@ -5,8 +5,14 @@
     min-height: 500px;
     position: relative;
     top: 20px;
-    left: 50px;
+    margin-left: 50px;
     z-index: 50;
+    @media screen and (max-width: 768px) {
+      left: 18px;
+    }
+    @media screen and (max-width: 1024px) {
+      left: 18px;
+    }
   }
   .icon_circle {
     width: 30px;
@@ -30,7 +36,7 @@
 
   }
   .open {
-    height: 100%;
+    height: min-content;
     *{
       opacity: 1;
     }
@@ -59,5 +65,13 @@
       width: 0;
       overflow: hidden;
     }
+  }
+  .wrapper_max {
+  background-color: rbga(255,255,255,1) !important;
+  height: 100%;
+  }
+  .wrapper_min {
+    background-color: rgba(255,255,255,0) !important;
+    height: 0px;
   }
 }

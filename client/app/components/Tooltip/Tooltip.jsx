@@ -17,9 +17,9 @@ export function Tooltip ({
   const id = v4()
 
   return (
-    <div className="flex-none layout-row layout-align-center-center tooltip" style={{ margin: '0 10px' }}>
+    <div className={`${styles.icon_placement} `} >
       <p
-        className={`flex-none ${clipClass} fa ${icon}`}
+        className={`${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}

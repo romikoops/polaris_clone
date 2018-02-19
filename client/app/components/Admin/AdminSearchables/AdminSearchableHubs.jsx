@@ -83,7 +83,7 @@ export class AdminSearchableHubs extends Component {
         showTooltip
       />))
     }
-    const viewType = this.props.sideScroll ? (
+    const viewType = (hubsArr.length > 3) ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
         <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
           {hubsArr}
@@ -99,20 +99,20 @@ export class AdminSearchableHubs extends Component {
         <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`} >
           <div className="flex-60 layput-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-none layout-row" >
+              <div className="flex-none layout-row layout-align-start-center" >
                 <div className="flex-none" >
                   <TextHeading
                     theme={theme}
                     size={1}
                     text="Hubs"
                   />
-                  { showTooltip ? <Tooltip
-                    icon="na-info-circle"
-                    theme={theme}
-                    text={truckTip.hubs}
-                    toolText
-                  /> : '' }
                 </div>
+                { showTooltip ? <Tooltip
+                  icon="na-info-circle"
+                  theme={theme}
+                  text={truckTip.hubs}
+                  toolText
+                /> : '' }
                 { icon ? <Tooltip
                   theme={theme}
                   icon={icon}
@@ -157,7 +157,6 @@ AdminSearchableHubs.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
@@ -167,7 +166,6 @@ AdminSearchableHubs.propTypes = {
 AdminSearchableHubs.defaultProps = {
   handleClick: null,
   seeAll: null,
-  sideScroll: false,
   theme: null,
   showTooltip: false,
   icon: '',

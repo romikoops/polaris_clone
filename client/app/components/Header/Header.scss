@@ -4,7 +4,7 @@
   .header {
     position: relative;
     height: 70px;
-    width: 100vw; 
+    width: 95vw; 
     z-index: 20 !important;
   }
   
@@ -14,9 +14,12 @@
     position: fixed !important;
     height: 70px !important;
     overflow-y: visible !important;
-    z-index: 200 !important;
+    z-index: 20 !important;
+    color: black !important;
   }  
-
+  .scrollable_text {
+    color: black !important;
+  }
   img.logo {
     height: 50px;
   }

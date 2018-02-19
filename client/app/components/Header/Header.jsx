@@ -35,7 +35,7 @@ class Header extends Component {
       messageDispatch.getUserConversations()
     }
     document.addEventListener('scroll', () => {
-      const isTop = window.pageYOffset < 0
+      const isTop = window.pageYOffset < 10
       if (isTop !== this.state.isTop) {
         this.setState({ isTop })
       }
@@ -123,7 +123,6 @@ class Header extends Component {
       logoStyle = styles.logo
     }
     const textColour = invert ? 'white' : 'black'
-
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -165,7 +164,7 @@ class Header extends Component {
 
     return (
       <div className={classProps} >
-        <div className={`${defs.content_width} layout-row flex-none`}>
+        <div className={`${defs.content_width} layout-row flex`}>
           { dashboard ? menu : '' }
           <div className={`${styles.infront} layout-row flex layout-align-start-center offset-20`}>
             <img
@@ -175,11 +174,12 @@ class Header extends Component {
               onClick={this.goHome}
             />
           </div>
+          <div className="flex layout-row layout-align-end-center">
+            {rightCorner}
+            { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+          </div>
         </div>
-        <div className="flex layout-row">
-          {rightCorner}
-        </div>
-        { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+
       </div>
     )
   }

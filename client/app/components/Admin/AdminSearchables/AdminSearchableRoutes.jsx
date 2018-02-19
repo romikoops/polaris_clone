@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
-import ReactTooltip from 'react-tooltip'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { TextHeading } from '../../TextHeading/TextHeading'
 import { AdminItineraryRow } from '../'
+import { Tooltip } from '../../Tooltip/Tooltip'
 
 export class AdminSearchableRoutes extends Component {
   constructor (props) {
@@ -57,7 +57,6 @@ export class AdminSearchableRoutes extends Component {
         keys
       }
       const fuse = new Fuse(this.props.itineraries, options)
-      console.log(fuse)
       return fuse.search(event.target.value)
     }
 
@@ -76,7 +75,7 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs, theme, seeAll, limit, showTooltip, tooltip
+      hubs, theme, seeAll, limit, showTooltip, tooltip, icon
     } = this.props
     const { itineraries } = this.state
     let itinerariesArr
@@ -112,7 +111,7 @@ export class AdminSearchableRoutes extends Component {
         return ''
       })
     }
-    const viewType = this.props.sideScroll ? (
+    const viewType = (itinerariesArr.length > 3) ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
         <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
           {itinerariesArr}
@@ -125,20 +124,18 @@ export class AdminSearchableRoutes extends Component {
         </div>
       </div>
     )
-    const tooltipId = v4()
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
-            styles.searchable_header
-          }`}
-        >
-          <div className="flex-60 layput-row layout-align-start-center">
-            <TextHeading
-              theme={theme}
-              size={1}
-              text="Routes"
-            />
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+          <div className="flex-60 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div className="flex-none layout-row layout-align-start-center" >
+                <div className="flex-none" >
+                  <TextHeading theme={theme} size={1} text="Routes" />
+                </div>
+                { icon && showTooltip ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+              </div>
+            </div>
           </div>
           <div className="flex-35 layput-row layout-align-start-center input_box_full">
             <input
@@ -149,16 +146,8 @@ export class AdminSearchableRoutes extends Component {
             />
           </div>
         </div>
-        <div
-          className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}
-          data-for={tooltipId}
-          data-tip={tooltip}
-        >
+        <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
           {viewType}
-          {showTooltip ? <ReactTooltip
-            className={`${styles.tooltip}`}
-            id={tooltipId}
-          /> : ''}
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
@@ -183,22 +172,22 @@ AdminSearchableRoutes.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
   limit: PropTypes.number,
   itineraries: PropTypes.arrayOf(PropTypes.any),
   hubs: PropTypes.arrayOf(PropTypes.hub).isRequired,
-  tooltip: PropTypes.string,
-  showTooltip: PropTypes.bool
+  showTooltip: PropTypes.bool,
+  icon: PropTypes.string,
+  tooltip: PropTypes.string
 }
 
 AdminSearchableRoutes.defaultProps = {
   handleClick: null,
   seeAll: null,
-  sideScroll: false,
   theme: null,
   limit: 3,
   itineraries: [],
+  icon: '',
   tooltip: '',
   showTooltip: false
 }

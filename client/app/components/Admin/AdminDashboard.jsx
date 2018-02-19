@@ -284,7 +284,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
-              sideScroll
+              tooltip={adminTip.routes}
+              icon="fa-info-circle"
+              showTooltip
             />
           </div>
           <div
@@ -307,7 +309,6 @@ export class AdminDashboard extends Component {
               tooltip={adminTip.hubs}
               icon="fa-info-circle"
               showTooltip
-              sideScroll
             />
           </div>
           <div
@@ -319,6 +320,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               clients={filteredClients}
               adminDispatch={adminDispatch}
+              tooltip={adminTip.clients}
+              icon="fa-info-circle"
+              showTooltip
             />
           </div>
         </div>

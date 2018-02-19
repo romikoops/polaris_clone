@@ -1,7 +1,18 @@
  :local {
     .footer {
-      height:140px;
+      min-height:140px;
       background: #5E5E5E;
+      @media screen and (min-width: 768px) {
+        height: 500px;
+        margin-bottom: 0px;
+        padding-bottom: 60px;
+      }
+      @media screen and (min-width: 1024px) {
+        
+      }
+      @media screen and (min-width: 1366px) {
+        
+      }
     }
     .button_row {
       height: 80%;
@@ -15,6 +26,15 @@
       color: white;
     }
     .copyright {
+      @media screen and (min-width: 768px) {
+
+      }
+      @media screen and (min-width: 1024px) {
+        
+      }
+      @media screen and (min-width: 1366px) {
+        
+      }
       height: 34px;
       color: white;
       border-top: 1px solid #979797;

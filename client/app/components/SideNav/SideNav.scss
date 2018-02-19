@@ -1,9 +1,26 @@
 :local {
   .side_nav {
+    left-margin: 0px;
     transition: all 1.5s ease-in-out;
+    min-width: min-content;
+    max-width: 110px;
+    background-color: white;
+    @media screen and (max-width: 768px) {
+      left: 0px;
+      padding-left: 20px;
+      min-width: 100vw;
+      max-width: 100vw;
+      }
+    @media screen and (max-width: 1024px) {
+      left: 0px;
+      padding-left: 25px;
+      min-width: 100vw;
+      max-width: 100vw;
+    }
+  
   }
   .expanded {
-    width: 300px !important;
+    width: 110px !important;
     position: fixed !important;
   }
   .collapsed {
@@ -14,7 +31,7 @@
     transition: all 1s ease-in-out;
   }
   .expanded_link {
-    width: calc(100% - 60px);
+
     visibility: normal;
   }
   .collapsed_link {

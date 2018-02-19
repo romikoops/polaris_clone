@@ -39,7 +39,6 @@ export class AdminSearchableClients extends Component {
     }
   }
   handleSearchChange (event) {
-    console.log(this.props.clients)
     if (event.target.value === '') {
       this.setState({
         clients: this.props.clients
@@ -90,7 +89,7 @@ export class AdminSearchableClients extends Component {
           showTooltip={showTooltip}
         />))
     }
-    const viewType = this.props.sideScroll ? (
+    const viewType = (clientsArr.length > 3) ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
         <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
           {clientsArr}
@@ -108,7 +107,7 @@ export class AdminSearchableClients extends Component {
         <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-none layout-row" >
+              <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none" >
                   <TextHeading theme={theme} size={1} text={title || 'Clients'} />
                 </div>
@@ -151,7 +150,6 @@ AdminSearchableClients.propTypes = {
   seeAll: PropTypes.func,
   title: PropTypes.string,
   placeholder: PropTypes.string,
-  sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
@@ -162,7 +160,6 @@ AdminSearchableClients.propTypes = {
 AdminSearchableClients.defaultProps = {
   handleClick: null,
   seeAll: null,
-  sideScroll: false,
   theme: null,
   showTooltip: false,
   icon: '',
