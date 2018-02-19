@@ -48,7 +48,6 @@ class AdminClients extends Component {
     this.viewClient = this.viewClient.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
     this.handleClientAction = this.handleClientAction.bind(this)
-    this.errorsExist = this.errorsExist.bind(this)
   }
   viewClient (client) {
     const { adminDispatch } = this.props
@@ -102,7 +101,7 @@ class AdminClients extends Component {
 
   saveNewClient () {
     this.setState({ newClientAttempt: true })
-    if (this.errorsExist([this.state.errors])) return
+    if (AdminClients.errorsExist([this.state.errors])) return
 
     const { newClient } = this.state
     const { adminDispatch } = this.props

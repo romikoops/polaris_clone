@@ -31,7 +31,7 @@ export class AdminShipmentsIndex extends Component {
     console.log(this.props)
     // const {selectedShipment} = this.state;
     const {
-      theme, hubs, shipments, clients, handleShipmentAction, hubHash
+      theme, hubs, shipments, clients, handleShipmentAction, hubHash, adminDispatch
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
@@ -54,6 +54,7 @@ export class AdminShipmentsIndex extends Component {
         <AdminSearchableShipments
           handleClick={this.viewShipment}
           hubs={hubHash}
+          adminDispatch={adminDispatch}
           shipments={mergedReqShipments}
           title="Requested Shipments"
           theme={theme}
@@ -62,6 +63,7 @@ export class AdminShipmentsIndex extends Component {
         <AdminSearchableShipments
           handleClick={this.viewShipment}
           hubs={hubHash}
+          adminDispatch={adminDispatch}
           shipments={mergedOpenShipments}
           title="Open Shipments"
           theme={theme}
@@ -70,6 +72,7 @@ export class AdminShipmentsIndex extends Component {
         <AdminSearchableShipments
           handleClick={this.viewShipment}
           hubs={hubHash}
+          adminDispatch={adminDispatch}
           shipments={mergedFinishedShipments}
           title="Finished Shipments"
           theme={theme}
@@ -106,7 +109,8 @@ AdminShipmentsIndex.propTypes = {
   clients: PropTypes.arrayOf(PropTypes.clients),
   handleShipmentAction: PropTypes.func.isRequired,
   viewShipment: PropTypes.func.isRequired,
-  hubHash: PropTypes.objectOf(PropTypes.hub)
+  hubHash: PropTypes.objectOf(PropTypes.hub),
+  adminDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 AdminShipmentsIndex.defaultProps = {
@@ -114,7 +118,8 @@ AdminShipmentsIndex.defaultProps = {
   hubs: [],
   shipments: [],
   clients: [],
-  hubHash: {}
+  hubHash: {},
+  adminDispatch: {}
 }
 
 export default AdminShipmentsIndex

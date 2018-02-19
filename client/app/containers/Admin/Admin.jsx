@@ -108,7 +108,7 @@ class Admin extends Component {
             defs.content_width
           } layout-row layout-wrap layout-align-start-start `}
         >
-          {menu}, user: null, loggedIn: false
+          {menu}
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
             <Switch className="flex">
               <Route

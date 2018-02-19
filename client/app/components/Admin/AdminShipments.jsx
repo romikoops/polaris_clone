@@ -70,7 +70,6 @@ class AdminShipments extends Component {
         />
       </div>
     )
-
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
