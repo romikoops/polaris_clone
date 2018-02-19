@@ -235,6 +235,9 @@ class Location < ApplicationRecord
       trucking_availability = TruckingAvailability.find_by(
         trucking_availability_attributes(tenant.id)
       )
+
+      next if trucking_availability.nil? # No hubs
+
       nexus_trucking_availability = NexusTruckingAvailability.find_or_initialize_by(
         nexus: self,
         tenant: tenant
@@ -245,7 +248,7 @@ class Location < ApplicationRecord
   end
 
   def self.update_all_trucking_availabilities
-    Location.where(location_type: "nexus").each(&:update_trucking_availability!)
+    where(location_type: "nexus").each(&:update_trucking_availability!)
   end
 
   def closest_hubs

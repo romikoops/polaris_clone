@@ -32,9 +32,10 @@ class NexusesController < ApplicationController
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
 		itineraries   = retrieve_route_options(current_user.tenant_id, itinerary_ids)
 
-
-		return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"])} if user_input.blank?
-
+		if user_input.blank?
+			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"])}
+		end
+		
 		nexus = Location.geocoded_location user_input
 		nexus_data = nexus.closest_location_with_distance
 		nexus = nexus_data.first if nexus_data.last <= 200

@@ -11,19 +11,24 @@ class Hub < ApplicationRecord
   has_many :layovers, through: :stops
   has_one :service_charge
 
- 
+  MOT_HUB_NAME = {
+    "ocean" => "Port",
+    "air"   => "Airport",
+    "rail"  => "Railway Station"    
+  }
 
-  def self.create_from_nexus(nexus, mot, tenant_id)
-    hub_type_name = {
-      "ocean" => "Port",
-      "air" => "Airport",
-      "rail" => "Railway Station"
-    }
-    
-    hub = nexus.hubs.find_or_create_by( nexus_id: nexus.id, tenant_id: tenant_id, hub_type: mot, latitude: nexus.latitude, longitude: nexus.longitude, name: "#{nexus.name} #{hub_type_name[mot]}", photo: nexus.photo)
-    p tenant_id
-    return hub
+  def self.create_from_nexus(nexus, mot, tenant_id)    
+    nexus.hubs.find_or_create_by(
+      nexus_id: nexus.id,
+      tenant_id: tenant_id,
+      hub_type: mot,
+      latitude: nexus.latitude,
+      longitude: nexus.longitude,
+      name: "#{nexus.name} #{MOT_HUB_NAME[mot]}",
+      photo: nexus.photo
+    )
   end
+
   def self.update_all!
     hubs = Hub.all
     hubs.each do |h|
@@ -31,6 +36,7 @@ class Hub < ApplicationRecord
       h.save!
     end
   end
+
   def generate_hub_code!(tenant_id)
     existing_hubs = self.nexus.hubs.where(hub_type: self.hub_type, tenant_id: tenant_id)
     num = existing_hubs.length
@@ -44,6 +50,7 @@ class Hub < ApplicationRecord
   def self.ports
     self.where(hub_type: "ocean")
   end
+
   def self.prepped_ports
     ports = self.where(hub_type: "ocean")
     resp = []

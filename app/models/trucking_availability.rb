@@ -1,4 +1,10 @@
 class TruckingAvailability < ApplicationRecord
+  def given_attributes
+    self.class.given_attribute_names.each_with_object({}) do |attr_name, return_h|
+      return_h[attr_name.to_sym] = self[attr_name]
+    end
+  end
+  
   def self.create_all!
     attr_names = TruckingAvailability.given_attribute_names
 
