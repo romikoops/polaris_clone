@@ -195,7 +195,7 @@ class SideNav extends Component {
     }
     const navLinks = links.map((li) => {
       const tli = li
-      tli.action.action = isAdmin
+      tli.action = isAdmin
         ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
       return (

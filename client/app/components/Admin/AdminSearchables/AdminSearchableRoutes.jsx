@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import ReactTooltip from 'react-tooltip'
 import Fuse from 'fuse.js'
 import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
@@ -75,7 +76,7 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs, theme, seeAll, limit
+      hubs, theme, seeAll, limit, showTooltip, tooltip
     } = this.props
     const { itineraries } = this.state
     let itinerariesArr
@@ -124,7 +125,7 @@ export class AdminSearchableRoutes extends Component {
         </div>
       </div>
     )
-
+    const tooltipId = v4()
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
         <div
@@ -144,7 +145,10 @@ export class AdminSearchableRoutes extends Component {
             />
           </div>
         </div>
-        {viewType}
+        <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`} data-for={tooltipId} data-tip={tooltip}>
+          {viewType}
+          {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId} /> : ''}
+        </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
             <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
@@ -169,7 +173,9 @@ AdminSearchableRoutes.propTypes = {
   theme: PropTypes.theme,
   limit: PropTypes.number,
   itineraries: PropTypes.arrayOf(PropTypes.any),
-  hubs: PropTypes.arrayOf(PropTypes.hub).isRequired
+  hubs: PropTypes.arrayOf(PropTypes.hub).isRequired,
+  showTooltip: PropTypes.bool,
+  tooltip: PropTypes.string
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -178,7 +184,10 @@ AdminSearchableRoutes.defaultProps = {
   sideScroll: false,
   theme: null,
   limit: 3,
-  itineraries: []
+  itineraries: [],
+  showTooltip: false,
+  tooltip: ''
+
 }
 
 export default AdminSearchableRoutes

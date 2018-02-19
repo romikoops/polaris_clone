@@ -6,6 +6,7 @@ import styles from '../Admin.scss'
 import { AdminShipmentRow } from '../'
 import { UserShipmentRow } from '../../UserAccount'
 import { Tooltip } from '../../Tooltip/Tooltip'
+import { TextHeading } from '../../TextHeading/TextHeading'
 
 export class AdminSearchableShipments extends Component {
   constructor (props) {
@@ -142,22 +143,16 @@ export class AdminSearchableShipments extends Component {
       </div>
     )
     return (
-      <div
-        className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
-      >
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
-            styles.searchable_header
-          }`}
-        >
+      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
           <div className="flex-60 layout-row layout-align-start-center">
-            <div className="flex-50 layout-row layout-align-start-center">
-              <b>
-                <p className="flex sub_header_text"> {title || 'Shipments'}</p>
-              </b>
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center">
-              <Tooltip icon="fa-info-circle" toolText={tooltip} />
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div className="flex-none layout-row" >
+                <div className="flex-none" >
+                  <TextHeading size={1} text={title || 'Shipments'} />
+                </div>
+                <Tooltip icon="fa-info-circle" text={tooltip} toolText color />
+              </div>
             </div>
           </div>
           <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>

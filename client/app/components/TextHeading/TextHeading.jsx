@@ -11,10 +11,10 @@ export class TextHeading extends Component {
   }
   render () {
     const {
-      text, theme, size, warning
+      text, theme, size, color
     } = this.props
     let returnVal
-    const styling = !warning ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+    const styling = !color ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: '#DE2A2A' }
     const generalStyle = `${styles.text_style} flex-none clip`
     if (size) {
@@ -62,10 +62,10 @@ TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   size: PropTypes.number.isRequired,
-  warning: PropTypes.bool
+  color: PropTypes.string
 }
 TextHeading.defaultProps = {
   theme: null,
-  warning: false
+  color: ''
 }
 export default TextHeading
