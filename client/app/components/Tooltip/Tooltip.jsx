@@ -4,6 +4,7 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { tooltips } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
+import styles from './Tooltip.scss'
 
 export function Tooltip ({
   text, icon, theme, color, toolText
@@ -14,18 +15,16 @@ export function Tooltip ({
   const tipText = toolText || tooltips[text]
   const clipClass = color ? '' : 'clip'
   const id = v4()
-  console.log(tipText)
+
   return (
-    <div className="flex-none layout-row layout-align-center-center tooltip">
+    <div className="flex-none layout-row layout-align-center-center">
       <p
         className={`flex-none ${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}
       />
-
-      <ReactTooltip id={id} />
-
+      <ReactTooltip id={id} className={styles.tooltip_box} />
     </div>
   )
 }
