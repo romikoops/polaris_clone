@@ -2,16 +2,24 @@
   @import '../../styles/defaults';
 
   .header {
+    position: relative;
     height: 70px;
-    background-color: transparent;
+    width: 95vw; 
+    z-index: 20 !important;
   }
   
   .header_scrollable {
-    height: 70px;
-    overflow-y: visible;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,1);
+    width: 100vw !important;
+    position: fixed !important;
+    height: 70px !important;
+    overflow-y: visible !important;
+    z-index: 20 !important;
+    color: black !important;
   }  
-
+  .scrollable_text {
+    color: black !important;
+  }
   img.logo {
     height: 50px;
   }
@@ -55,5 +63,4 @@
       font-size: 18px;
     }
   }
-
 }

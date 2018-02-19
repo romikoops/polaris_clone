@@ -6,7 +6,6 @@ import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import Header from '../../components/Header/Header'
 import { NavSidebar } from '../../components/NavSidebar/NavSidebar'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
 import {
   UserProfile,
   UserDashboard,
@@ -19,8 +18,8 @@ import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import { Modal } from '../../components/Modal/Modal'
 import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes'
-// import styles from '../../components/UserAccount/UserAccount.scss';
 import Loading from '../../components/Loading/Loading'
+import { SideNav } from '../../components/SideNav/SideNav'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -169,16 +168,6 @@ class UserAccount extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const nav = (
-      <NavSidebar
-        theme={theme}
-        navHeadlineInfo={navHeadlineInfo}
-        navLinkInfo={navLinkInfo}
-        toggleActiveClass={this.setUrl}
-        activeLink={this.state.activeLink}
-      />
-    )
-
     const routeModal = (
       <Modal
         component={
@@ -196,19 +185,33 @@ class UserAccount extends Component {
         parentToggle={this.toggleModal}
       />
     )
+    const nav = (
+      <NavSidebar
+        theme={theme}
+        navHeadlineInfo={navHeadlineInfo}
+        navLinkInfo={navLinkInfo}
+        toggleActiveClass={this.setUrl}
+        activeLink={this.state.activeLink}
+      />
+    )
+    const menu = (<SideNav
+      comp={nav}
+      theme={theme}
+    />)
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-center">
-        <Header theme={theme} />
+      <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
         {loadingScreen}
         {this.state.showModal ? routeModal : ''}
-        <div
-          className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${
-            defs.spacing_md_bottom
-          }`}
-        >
-          <FloatingMenu Comp={nav} theme={theme} />
+        <Header
+          theme={theme}
+          nav={menu}
+          dashboard
+          scrollable
+        />
+        <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
 
           <div className="layout-row flex-100 ">
+
             <Switch className="flex">
               <Route
                 exact
@@ -290,7 +293,12 @@ class UserAccount extends Component {
               <Route
                 path="/account/billing"
                 render={props => (
-                  <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
+                  <UserBilling
+                    setNav={this.setNavLink}
+                    theme={theme}
+                    user={user}
+                    {...props}
+                  />
                 )}
               />
               <Route

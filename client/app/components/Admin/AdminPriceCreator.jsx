@@ -2,20 +2,27 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-// import 'react-select/dist/react-select.css';
-// import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton'
-import { currencyOptions, cargoClassOptions } from '../../constants/admin.constants'
-import { fclChargeGlossary, lclChargeGlossary, chargeGlossary, rateBasises, lclPricingSchema, fclPricingSchema, cargoGlossary } from '../../constants'
+import {
+  currencyOptions,
+  cargoClassOptions
+} from '../../constants/admin.constants'
+import {
+  fclChargeGlossary,
+  lclChargeGlossary,
+  chargeGlossary,
+  rateBasises,
+  lclPricingSchema,
+  fclPricingSchema,
+  cargoGlossary
+} from '../../constants'
 
 const fclChargeGloss = fclChargeGlossary
 const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
-// import {v4} from 'node-uuid';
 const currencyOpts = currencyOptions
 const cargoClassOpts = cargoClassOptions
-
 const lclSchema = lclPricingSchema
 const fclSchema = fclPricingSchema
 const cargoGloss = cargoGlossary
@@ -260,10 +267,18 @@ export class AdminPriceCreator extends Component {
       const cells = []
       Object.keys(pricing.data[key]).forEach((chargeKey) => {
         if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-          cells.push(<div key={chargeKey} className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+          >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <div className={`flex-95 layout-row ${styles.editor_input}`}>
-              <input type="number" value={pricing.data[key][chargeKey]} onChange={this.handleChange} name={`${key}-${chargeKey}`} />
+              <input
+                type="number"
+                value={pricing.data[key][chargeKey]}
+                onChange={this.handleChange}
+                name={`${key}-${chargeKey}`}
+              />
             </div>
           </div>)
         } else if (chargeKey === 'rate_basis') {
@@ -279,7 +294,10 @@ export class AdminPriceCreator extends Component {
             />
           </div>)
         } else if (chargeKey === 'currency') {
-          cells.push(<div key={chargeKey} className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+          >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <div className="flex-95 layout-row">
               <NamedSelect
@@ -449,7 +467,10 @@ export class AdminPriceCreator extends Component {
             className="flex-33 layout-row layout-align-start-center"
             onClick={() => this.addFeeToPricing(key)}
           >
-            <i className="fa fa-plus clip flex-none" style={textStyle} />
+            <i
+              className="fa fa-plus clip flex-none"
+              style={textStyle}
+            />
             <div className="flex-5" />
             <p className="flex-none">{key} - {gloss[key]} </p>
           </div>
@@ -460,7 +481,10 @@ export class AdminPriceCreator extends Component {
     const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed
     return (
       <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
-        <div className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`} onClick={this.props.closeForm} />
+        <div
+          className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`}
+          onClick={this.props.closeForm}
+        />
         <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
           <div className={`flex-95 layout-row layout-wrap layout-align-center-start ${styles.editor_scroll}`}>
             <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -468,12 +492,18 @@ export class AdminPriceCreator extends Component {
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-60 layout-row layout-align-start-center">
-                <i className="fa fa-map-signs clip" style={textStyle} />
+                <i
+                  className="fa fa-map-signs clip"
+                  style={textStyle}
+                />
                 <p className="flex-none offset-5">{hubRoute ? hubRoute.label : ''}</p>
               </div>
             </div>
             {client ? panel : contextPanel}
-            <div className="flex-100 layout-align-end-center layout-row" style={{ margin: '15px' }}>
+            <div
+              className="flex-100 layout-align-end-center layout-row"
+              style={{ margin: '15px' }}
+            >
               <RoundButton
                 theme={theme}
                 size="small"
@@ -483,7 +513,10 @@ export class AdminPriceCreator extends Component {
                 iconClass="fa-plus"
               />
             </div>
-            <div className="flex-100 layout-align-end-center layout-row" style={{ margin: '15px' }}>
+            <div
+              className="flex-100 layout-align-end-center layout-row"
+              style={{ margin: '15px' }}
+            >
               <RoundButton
                 theme={theme}
                 size="small"
@@ -495,8 +528,14 @@ export class AdminPriceCreator extends Component {
             </div>
           </div>
           <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
-            <div className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`} onClick={this.showAddFeePanel}>
-              <i className="fa fa-times clip" style={textStyle} />
+            <div
+              className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`}
+              onClick={this.showAddFeePanel}
+            >
+              <i
+                className="fa fa-times clip"
+                style={textStyle}
+              />
             </div>
             <div className="flex-90 layout-row layout-wrap layout-align-start-start">
               {feesToAdd}

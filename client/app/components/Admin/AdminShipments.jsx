@@ -5,8 +5,6 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminShipmentView, AdminShipmentsIndex } from './'
-// import {v4} from 'node-uuid';
-// import { withRouter } from 'react-router-dom';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
@@ -72,9 +70,8 @@ class AdminShipments extends Component {
     )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
+
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
           <TextHeading theme={theme} size={1} text="Shipments" />
           {selectedShipment ? backButton : ''}
         </div>
@@ -82,34 +79,30 @@ class AdminShipments extends Component {
           <Route
             exact
             path="/admin/shipments"
-            render={props => (
-              <AdminShipmentsIndex
-                theme={theme}
-                handleShipmentAction={this.handleShipmentAction}
-                clients={clients}
-                hubs={hubs}
-                hubHash={hubHash}
-                shipments={shipments}
-                viewShipment={this.viewShipment}
-                {...props}
-              />
-            )}
+            render={props => (<AdminShipmentsIndex
+              theme={theme}
+              handleShipmentAction={this.handleShipmentAction}
+              clients={clients}
+              hubs={hubs}
+              hubHash={hubHash}
+              shipments={shipments}
+              viewShipment={this.viewShipment}
+              {...props}
+            />)}
           />
           <Route
             exact
             path="/admin/shipments/:id"
-            render={props => (
-              <AdminShipmentView
-                theme={theme}
-                adminDispatch={adminDispatch}
-                loading={loading}
-                hubs={hubs}
-                handleShipmentAction={this.handleShipmentAction}
-                shipmentData={shipment}
-                clients={clients}
-                {...props}
-              />
-            )}
+            render={props => (<AdminShipmentView
+              theme={theme}
+              adminDispatch={adminDispatch}
+              loading={loading}
+              hubs={hubs}
+              handleShipmentAction={this.handleShipmentAction}
+              shipmentData={shipment}
+              clients={clients}
+              {...props}
+            />)}
           />
         </Switch>
       </div>

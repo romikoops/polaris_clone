@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from '../../prop-types'
-// import {AdminRouteTile} from './';
+import PropTypes from 'prop-types'
 import styles from './Admin.scss'
-// import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader'
 import { AdminSearchableRoutes } from './AdminSearchables'
+import { adminRoutesTooltips as routeTip } from '../../constants'
 
 export class AdminRoutesIndex extends Component {
   constructor (props) {
@@ -29,11 +28,15 @@ export class AdminRoutesIndex extends Component {
     const hubUrl = '/admin/itineraries/process_csv'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
-        >
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
           <p className="flex-none">Upload Routes Sheet</p>
-          <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Routes .xlsx" />
+          <FileUploader
+            theme={theme}
+            url={hubUrl}
+            type="xlsx"
+            text="Routes .xlsx"
+            tooltip={routeTip.upload}
+          />
         </div>
         <AdminSearchableRoutes
           itineraries={itineraries}
@@ -42,6 +45,8 @@ export class AdminRoutesIndex extends Component {
           adminDispatch={adminDispatch}
           sideScroll={false}
           handleClick={viewItinerary}
+          tooltip={routeTip.related}
+          showTooltip
         />
       </div>
     )

@@ -10,8 +10,7 @@ import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminHubs as tooltip } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
-// import {v4} from 'node-uuid';
-// import FileUploader from '../../components/FileUploader/FileUploader';
+
 class AdminHubs extends Component {
   constructor (props) {
     super(props)

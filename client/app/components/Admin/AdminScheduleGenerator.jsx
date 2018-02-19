@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux'
 import Select from 'react-select'
+import { bindActionCreators } from 'redux'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
 import styled from 'styled-components'
 import 'react-day-picker/lib/style.css'
-import PropTypes from '../../prop-types'
-import styles from './Admin.scss'
-import { BASE_URL, moment } from '../../constants'
+import ReactTooltip from 'react-tooltip'
 import '../../styles/select-css-custom.css'
+import { moment, BASE_URL, adminSchedules as schedTip } from '../../constants'
 import { adminActions } from '../../actions'
-// import { dispatch } from 'react-redux';
 import { Checkbox } from '../Checkbox/Checkbox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { authHeader } from '../../helpers'
+import styles from './Admin.scss'
 
 class AdminScheduleGenerator extends Component {
   static handleIntervalChange (ev) {
@@ -221,7 +221,18 @@ class AdminScheduleGenerator extends Component {
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}>Auto Generate</p>
+            <p className={` ${styles.sec_header_text} flex-none`}>
+            Auto Generate
+              <i
+                className="fa fa-info-circle"
+                data-for="autoGenTooltip"
+                data-tip={schedTip.auto_generate}
+              />
+              <ReactTooltip
+                className={styles.tooltip}
+                id="autoGenTooltip"
+              />
+            </p>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div

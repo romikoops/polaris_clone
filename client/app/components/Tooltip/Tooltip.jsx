@@ -4,41 +4,45 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { tooltips } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
+import styles from './Tooltip.scss'
 
 export function Tooltip ({
-  text, icon, theme, color
+  text, icon, theme, color, toolText
 }) {
   const textStyle = color
     ? { color }
     : gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-  const tipText = tooltips[text]
+  const tipText = toolText || tooltips[text]
   const clipClass = color ? '' : 'clip'
   const id = v4()
+
   return (
-    <div className="flex-none layout-row layout-align-center-center tooltip" style={{ margin: '0 10px' }}>
+    <div className={`${styles.icon_placement} `} >
       <p
-        className={`flex-none ${clipClass} fa ${icon}`}
+        className={`${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}
       />
-      <div className="flex-30">
-        <ReactTooltip id={id} className="flex-20" />
-      </div>
+      <ReactTooltip id={id} className={styles.tooltip_box} />
     </div>
   )
 }
 
 Tooltip.propTypes = {
   theme: PropTypes.theme,
-  text: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
-  color: PropTypes.string
+  text: PropTypes.string,
+  icon: PropTypes.string,
+  color: PropTypes.string,
+  toolText: PropTypes.string
 }
 
 Tooltip.defaultProps = {
-  color: null,
-  theme: null
+  color: '',
+  theme: {},
+  toolText: '',
+  text: '',
+  icon: ''
 }
 
 export default Tooltip

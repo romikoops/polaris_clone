@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from '../../prop-types'
+import PropTypes from 'prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './Admin.scss'
-// import {v4} from 'node-uuid';
+import { Tooltip } from '../Tooltip/Tooltip'
+
 export class AdminAddressTile extends Component {
   constructor (props) {
     super(props)
@@ -36,7 +37,12 @@ export class AdminAddressTile extends Component {
   }
 
   render () {
-    const { theme, address } = this.props
+    const {
+      theme,
+      address,
+      showTooltip,
+      tooltip
+    } = this.props
     const { showEdit, editor } = this.state
     if (!address) {
       return ''
@@ -92,7 +98,12 @@ export class AdminAddressTile extends Component {
             'layout-align-space-between-center input_box_full'
           }
         >
-          <input type="text" value={editor.street} name="street" onChange={this.handleChange} />
+          <input
+            type="text"
+            value={editor.street}
+            name="street"
+            onChange={this.handleChange}
+          />
         </div>
         <div
           className={
@@ -100,7 +111,12 @@ export class AdminAddressTile extends Component {
             'layout-align-space-between-center input_box_full'
           }
         >
-          <input type="text" value={editor.city} name="city" onChange={this.handleChange} />
+          <input
+            type="text"
+            value={editor.city}
+            name="city"
+            onChange={this.handleChange}
+          />
         </div>
         <div
           className={
@@ -108,7 +124,12 @@ export class AdminAddressTile extends Component {
             'layout-align-space-between-center input_box_full'
           }
         >
-          <input type="text" value={editor.zip_code} name="zip_code" onChange={this.handleChange} />
+          <input
+            type="text"
+            value={editor.zip_code}
+            name="zip_code"
+            onChange={this.handleChange}
+          />
         </div>
         <div
           className={
@@ -116,7 +137,12 @@ export class AdminAddressTile extends Component {
             'layout-align-space-between-center input_box_full'
           }
         >
-          <input type="text" value={editor.country} name="country" onChange={this.handleChange} />
+          <input
+            type="text"
+            value={editor.country}
+            name="country"
+            onChange={this.handleChange}
+          />
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center ">
           <RoundButton
@@ -127,10 +153,26 @@ export class AdminAddressTile extends Component {
             handleNext={this.saveEdit}
           />
           <hr className="flex-100" />
-          <RoundButton size="full" text="Delete" theme={theme} handleNext={this.deleteAddress} />
+          <RoundButton
+            size="full"
+            text="Delete"
+            theme={theme}
+            handleNext={this.deleteAddress}
+          />
         </div>
       </div>
     )
+    const pencilIcon = showTooltip ? (<Tooltip
+      icon="fa-pencil"
+      text={tooltip}
+      theme={theme}
+      toolText
+      iconClass
+    />)
+      : (<i
+        className="flex-none fa fa-pencil clip"
+        style={textStyle}
+      />)
     return (
       <div
         className={` ${
@@ -152,11 +194,11 @@ export class AdminAddressTile extends Component {
             className="flex-none layout-row layout-align-center-center"
             onClick={this.toggleEdit}
           >
-            {showEdit ? (
-              <i className="flex-none fa fa-times clip" style={textStyle} />
-            ) : (
-              <i className="flex-none fa fa-pencil clip" style={textStyle} />
-            )}
+            {showEdit ? <i
+              className="flex-none fa fa-times clip"
+              style={textStyle}
+            />
+              : pencilIcon }
           </div>
         </div>
         {showEdit ? editorBox : addressData}
@@ -168,12 +210,16 @@ AdminAddressTile.propTypes = {
   theme: PropTypes.theme,
   saveEdit: PropTypes.func.isRequired,
   deleteAddress: PropTypes.func.isRequired,
-  address: PropTypes.address
+  address: PropTypes.address,
+  tooltip: PropTypes.string,
+  showTooltip: PropTypes.bool
 }
 
 AdminAddressTile.defaultProps = {
   theme: null,
-  address: null
+  address: null,
+  tooltip: '',
+  showTooltip: false
 }
 
 export default AdminAddressTile

@@ -5,6 +5,7 @@ import PropTypes from '../../../prop-types'
 import styles from '../Admin.scss'
 import { AdminClientTile } from '../'
 import { TextHeading } from '../../TextHeading/TextHeading'
+import { Tooltip } from '../../Tooltip/Tooltip'
 
 export class AdminSearchableClients extends Component {
   constructor (props) {
@@ -38,7 +39,6 @@ export class AdminSearchableClients extends Component {
     }
   }
   handleSearchChange (event) {
-    console.log(this.props.clients)
     if (event.target.value === '') {
       this.setState({
         clients: this.props.clients
@@ -67,17 +67,29 @@ export class AdminSearchableClients extends Component {
   }
   render () {
     const {
-      theme, title, seeAll, placeholder
+      theme,
+      title,
+      seeAll,
+      placeholder,
+      tooltip,
+      showTooltip,
+      icon
     } = this.props
 
     const { clients } = this.state
     let clientsArr
     if (clients) {
       clientsArr = clients.map(client => (
-        <AdminClientTile key={v4()} client={client} theme={theme} handleClick={this.handleClick} />
-      ))
+        <AdminClientTile
+          key={v4()}
+          client={client}
+          theme={theme}
+          handleClick={this.handleClick}
+          tooltip={tooltip}
+          showTooltip={showTooltip}
+        />))
     }
-    const viewType = this.props.sideScroll ? (
+    const viewType = (clientsArr.length > 3) ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
         <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
           {clientsArr}
@@ -91,18 +103,18 @@ export class AdminSearchableClients extends Component {
       </div>
     )
     return (
-      <div
-        className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
-      >
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
-            styles.searchable_header
-          }`}
-        >
-          <div className="flex-60 layoput-row layout-align-start-center">
-            <TextHeading theme={theme} size={1} text={title || 'Clients'} />
+      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}>
+        <div className={`serchables flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+          <div className="flex-60 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div className="flex-none layout-row layout-align-start-center">
+                <div className="flex-none" >
+                  <TextHeading theme={theme} size={1} text={title || 'Clients'} />
+                </div>
+                { icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+              </div>
+            </div>
           </div>
-
           <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
             <input
               type="text"
@@ -136,17 +148,24 @@ AdminSearchableClients.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  title: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
-  sideScroll: PropTypes.bool,
-  theme: PropTypes.theme
+  title: PropTypes.string,
+  placeholder: PropTypes.string,
+  theme: PropTypes.theme,
+  showTooltip: PropTypes.bool,
+  icon: PropTypes.string,
+  tooltip: PropTypes.string
+
 }
 
 AdminSearchableClients.defaultProps = {
   handleClick: null,
   seeAll: null,
-  sideScroll: false,
-  theme: null
+  theme: null,
+  showTooltip: false,
+  icon: '',
+  tooltip: '',
+  title: '',
+  placeholder: ''
 }
 
 export default AdminSearchableClients

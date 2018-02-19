@@ -263,7 +263,7 @@ export class ShipmentDetails extends Component {
       return
     }
     // eslint-disable-next-line no-debugger
-    debugger
+    // debugger
     if (
       isEmpty(this.state.origin) ||
       isEmpty(this.state.destination) ||

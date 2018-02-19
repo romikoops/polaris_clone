@@ -8,6 +8,7 @@
     @media screen and (min-width: 1920px) {
       width: 1200px;
     }
+    
   }
 
   .button_padding {
@@ -217,9 +218,5 @@
     &:focus {
       outline: none;
     }
-  }
-  .tooltip {
-    height: 20px;
-    width: 20px;
   }
 }
