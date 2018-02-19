@@ -9,7 +9,6 @@ import {
   AdminSearchableClients,
   AdminSearchableShipments
 } from './AdminSearchables'
-import { RoundButton } from '../RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { Carousel } from '../Carousel/Carousel'
 import style from './AdminDashboard.scss'
@@ -197,16 +196,6 @@ export class AdminDashboard extends Component {
               </div>
               <div className={`flex-none layout-row layout-align-center-center ${style.carousel}`}>
                 <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade />
-              </div>
-              <div className={`flex-none layout-row layout-align-center-center ${style.dash_btn}`}>
-                <RoundButton
-                  theme={theme}
-                  handleNext={this.startBooking}
-                  active
-                  size="large"
-                  text="Make a Booking"
-                  iconClass="fa-archive"
-                />
               </div>
               <div
                 className={`flex-50 layout-row ${

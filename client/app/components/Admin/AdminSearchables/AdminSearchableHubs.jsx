@@ -104,9 +104,9 @@ export class AdminSearchableHubs extends Component {
               <div className="flex-none layout-row" >
                 <div className="flex-none" >
                   <TextHeading theme={theme} size={1} text="Hubs" />
-                  { showTooltip ? <Tooltip icon="na-info-circle" theme={theme} text={truckTip.hubs} toolText /> : '' }
+                  { showTooltip ? <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} /> : '' }
                 </div>
-                { icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+                { icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : '' }
               </div>
             </div>
           </div>

@@ -149,9 +149,9 @@ export class AdminSearchableShipments extends Component {
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row" >
                 <div className="flex-none" >
-                  <TextHeading size={1} text={title || 'Shipments'} />
+                  <TextHeading theme={theme} size={1} text={title || 'Shipments'} />
                 </div>
-                <Tooltip icon="fa-info-circle" text={tooltip} toolText color />
+                <Tooltip theme={theme} icon="fa-info-circle" toolText={tooltip} />
               </div>
             </div>
           </div>
