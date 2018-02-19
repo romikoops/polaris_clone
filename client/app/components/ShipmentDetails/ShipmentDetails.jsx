@@ -80,7 +80,7 @@ export class ShipmentDetails extends Component {
       has_on_carriage: false,
       has_pre_carriage: false,
       shipment: this.props.shipmentData ? this.props.shipmentData.shipment : {},
-      allNexuses: this.props.shipmentData ? this.props.shipmentData.all_nexuses : {},
+      allNexuses: this.props.shipmentData ? this.props.shipmentData.allNexuses : {},
       routeSet: false
     }
 
@@ -408,7 +408,8 @@ export class ShipmentDetails extends Component {
       <GmapsLoader
         theme={theme}
         setTargetAddress={this.setTargetAddress}
-        allNexuses={shipmentData.all_nexuses}
+        allNexuses={shipmentData.allNexuses}
+        availableTruckingOptions={shipmentData.availableTruckingOptions}
         component={ShipmentLocationBox}
         toggleCarriage={this.toggleCarriage}
         origin={this.state.origin}

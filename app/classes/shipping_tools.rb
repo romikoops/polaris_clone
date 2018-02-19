@@ -51,9 +51,9 @@ module ShippingTools
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
-      cargoItemTypes: tenant.cargo_item_types,
+      cargo_item_types: tenant.cargo_item_types,
       available_trucking_options: available_trucking_options
-    }
+    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end 
 
   def get_shipment_offer(session, params, load_type)

@@ -4,9 +4,8 @@ import PropTypes from '../prop-types'
 import { API_KEY } from '../constants'
 
 export default function GmapsLoader (props) {
-  const apiKey = API_KEY
   const params = {
-    key: apiKey, // Define your api key here
+    key: API_KEY, // Define your api key here
     libraries: 'places' // To request multiple libraries, separate them with a comma
   }
   const ParamComponent = props.component
@@ -18,6 +17,7 @@ export default function GmapsLoader (props) {
           <ParamComponent
             prevRequest={props.prevRequest}
             allNexuses={props.allNexuses}
+            availableTruckingOptions={props.availableTruckingOptions}
             setTargetAddress={props.setTargetAddress}
             theme={props.theme}
             gMaps={googleMaps}
@@ -39,7 +39,14 @@ export default function GmapsLoader (props) {
 GmapsLoader.propTypes = {
   theme: PropTypes.theme,
   component: PropTypes.node.isRequired,
-  allNexuses: PropTypes.arrayOf(PropTypes.object),
+  allNexuses: PropTypes.shape({
+    origins: PropTypes.array,
+    destinations: PropTypes.array
+  }).isRequired,
+  availableTruckingOptions: PropTypes.shape({
+    onCarriage: PropTypes.bool,
+    preCarriage: PropTypes.bool
+  }).isRequired,
   origin: PropTypes.location.isRequired,
   destination: PropTypes.location.isRequired,
   prevRequest: PropTypes.shape({
@@ -56,7 +63,6 @@ GmapsLoader.propTypes = {
 
 GmapsLoader.defaultProps = {
   theme: null,
-  allNexuses: [],
   routeIds: [],
   prevRequest: null,
   shipment: null

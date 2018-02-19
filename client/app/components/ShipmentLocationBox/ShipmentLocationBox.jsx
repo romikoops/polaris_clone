@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
+import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import '../../styles/react-toggle.scss'
@@ -553,7 +554,7 @@ export class ShipmentLocationBox extends Component {
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
-          const originOptionNames = originOptions.map(originOption => originOption.label)
+          const originOptionNames = originOptions.map(option => option.label)
 
           this.setState({
             originFieldsHaveErrors: !originOptionNames.includes(nexusName)
@@ -576,8 +577,7 @@ export class ShipmentLocationBox extends Component {
           if (this.state.availableDestinations) {
             destinationOptions = this.state.availableDestinations
           }
-          const destinationOptionNames =
-          destinationOptions.map(destinationOption => destinationOption.label)
+          const destinationOptionNames = destinationOptions.map(option => option.label)
 
           this.setState({
             destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
@@ -675,7 +675,7 @@ export class ShipmentLocationBox extends Component {
     this.setOriginHub(this.state.dSelect)
   }
   render () {
-    const { allNexuses } = this.props
+    const { allNexuses, availableTruckingOptions } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
     let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : []
@@ -997,7 +997,24 @@ export class ShipmentLocationBox extends Component {
             {this.state.showModal ? routeModal : ''}
             <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.input_box} ${errorClass}`}>
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
-                <div className={`flex-45 layout-row layout-align-start ${styles.toggle_box}`}>
+                <div className={
+                  'flex-45 layout-row layout-align-start ' +
+                  `${styles.toggle_box} ` +
+                  `${!availableTruckingOptions.preCarriage ? styles.not_available : ''}`
+                }
+                >
+                  { !availableTruckingOptions.preCarriage
+                    ? (
+                      <div>
+                        <ReactTooltip />
+                        <div
+                          className={styles.toggle_box_overlay}
+                          data-tip="Pre-Carriage is not available"
+                        />
+                      </div>
+                    )
+                    : ''
+                  }
                   <Toggle
                     className="flex-none"
                     id="has_pre_carriage"
@@ -1028,7 +1045,24 @@ export class ShipmentLocationBox extends Component {
                   {displayLocationOptions('destination')}
                   {destFields}
                 </div>
-                <div className={`flex-45 layout-row layout-align-end ${styles.toggle_box}`}>
+                <div className={
+                  'flex-45 layout-row layout-align-end ' +
+                  `${styles.toggle_box} ` +
+                  `${!availableTruckingOptions.onCarriage ? styles.not_available : ''}`
+                }
+                >
+                  { !availableTruckingOptions.onCarriage
+                    ? (
+                      <div>
+                        <ReactTooltip />
+                        <div
+                          className={styles.toggle_box_overlay}
+                          data-tip="On-Carriage is not available"
+                        />
+                      </div>
+                    )
+                    : ''
+                  }
                   <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>On-Carriage</label>
                   <Toggle
                     className="flex-none"
@@ -1080,6 +1114,10 @@ ShipmentLocationBox.propTypes = {
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,
     destinations: PropTypes.array
+  }).isRequired,
+  availableTruckingOptions: PropTypes.shape({
+    onCarriage: PropTypes.bool,
+    preCarriage: PropTypes.bool
   }).isRequired,
   selectedRoute: PropTypes.route,
   origin: PropTypes.shape({

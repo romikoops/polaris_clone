@@ -59,6 +59,21 @@
   }
   .toggle_box {
     padding: 20px 10px;
+    position: relative;
+    &.not_available {
+      opacity: 0.85;
+    }
+  }
+  .toggle_box_overlay {
+    background: black;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    cursor: not-allowed;
   }
   .toggle_box label {
     color: whitesmoke;
