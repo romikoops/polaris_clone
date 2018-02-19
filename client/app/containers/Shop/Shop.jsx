@@ -14,7 +14,6 @@ import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions } from '../../actions/shipment.actions'
-import { nexusActions } from '../../actions/nexus.actions'
 import { Footer } from '../../components/Footer/Footer'
 
 class Shop extends Component {
@@ -203,7 +202,6 @@ class Shop extends Component {
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
               nexusDispatch={nexusDispatch}
-              availableDestinations={this.props.availableDestinations}
             />
           )}
         />
@@ -285,8 +283,6 @@ Shop.propTypes = {
   currencies: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   dashboard: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  availableDestinations: PropTypes.any,
 
   history: PropTypes.history.isRequired,
   match: PropTypes.shape({
@@ -307,20 +303,18 @@ Shop.defaultProps = {
   user: null,
   nexusDispatch: null,
   currencies: null,
-  dashboard: null,
-  availableDestinations: null
+  dashboard: null
 }
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, bookingData, nexus, app
+    users, authentication, tenant, bookingData, app
   } = state
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
   const { currencies } = app
   const { loading } = bookingData
-  const { availableDestinations } = nexus
   return {
     user,
     users,
@@ -330,15 +324,13 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loading,
-    currencies,
-    availableDestinations
+    currencies
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    nexusDispatch: bindActionCreators(nexusActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Shop))

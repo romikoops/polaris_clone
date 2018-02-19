@@ -418,8 +418,6 @@ export class ShipmentDetails extends Component {
         shipment={shipmentData}
         routeIds={routeIds}
         prevRequest={this.props.prevRequest}
-        nexusDispatch={this.props.nexusDispatch}
-        availableDestinations={this.props.availableDestinations}
         handleSelectLocation={this.handleSelectLocation}
       />
     )
@@ -608,11 +606,7 @@ ShipmentDetails.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired,
-  nexusDispatch: PropTypes.shape({
-    getAvailableDestinations: PropTypes.func
-  }).isRequired,
-  availableDestinations: PropTypes.arrayOf().isRequired
+  user: PropTypes.user.isRequired
 }
 
 ShipmentDetails.defaultProps = {
