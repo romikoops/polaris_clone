@@ -262,8 +262,6 @@ export class ShipmentDetails extends Component {
       ShipmentDetails.scrollTo('incoterms')
       return
     }
-    // eslint-disable-next-line no-debugger
-    // debugger
     if (
       isEmpty(this.state.origin) ||
       isEmpty(this.state.destination) ||
