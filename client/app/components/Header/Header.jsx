@@ -68,7 +68,7 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, dashboard, scrollable, menu
+      user, theme, tenant, invert, unread, req, showMenu, scrollable, menu
     } = this.props
     const { isTop } = this.state
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
@@ -165,7 +165,7 @@ class Header extends Component {
     return (
       <div className={classProps} >
         <div className={`${defs.content_width} layout-row flex`}>
-          { dashboard ? menu : '' }
+          { showMenu ? menu : '' }
           <div className={`${styles.infront} layout-row flex layout-align-start-center offset-20`}>
             <img
               src={logoUrl}
@@ -201,7 +201,7 @@ Header.propTypes = {
   showRegistration: PropTypes.bool,
   unread: PropTypes.number,
   req: PropTypes.req,
-  dashboard: PropTypes.bool,
+  showMenu: PropTypes.bool,
   scrollable: PropTypes.bool
 }
 
@@ -216,7 +216,7 @@ Header.defaultProps = {
   messages: null,
   showRegistration: false,
   unread: 0,
-  dashboard: false,
+  showMenu: false,
   req: null,
   menu: null,
   scrollable: false

@@ -51,6 +51,7 @@ export class BookingDetails extends Component {
         val: 0
       },
       hsCodes: {},
+      hsTexts: {},
       totalGoodsValue: 0,
       cargoNotes: '',
       finishBookingAttempted: false
@@ -62,6 +63,7 @@ export class BookingDetails extends Component {
     this.handleInsurance = this.handleInsurance.bind(this)
     this.calcInsurance = this.calcInsurance.bind(this)
     this.setHsCode = this.setHsCode.bind(this)
+    this.handleHsTextChange = this.handleHsTextChange.bind(this)
     this.deleteCode = this.deleteCode.bind(this)
     this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
     this.setCustomsFee = this.setCustomsFee.bind(this)
@@ -101,6 +103,15 @@ export class BookingDetails extends Component {
   }
   setCustomsFee (fee) {
     this.setState({ customs: fee })
+  }
+  handleHsTextChange (event) {
+    const { name, value } = event.target
+    this.setState({
+      hsTexts: {
+        ...this.state.hsTexts,
+        [name]: value
+      }
+    })
   }
   loadPrevReq (obj) {
     this.setState({
@@ -171,7 +182,8 @@ export class BookingDetails extends Component {
       totalGoodsValue,
       cargoNotes,
       insurance,
-      customs
+      customs,
+      hsTexts
     } = this.state
 
     if ([shipper, consignee].some(isEmpty)) {
@@ -189,7 +201,8 @@ export class BookingDetails extends Component {
         totalGoodsValue,
         cargoNotes,
         insurance,
-        customs
+        customs,
+        hsTexts
       }
     }
     this.props.nextStage(data)
@@ -210,7 +223,7 @@ export class BookingDetails extends Component {
   }
   render () {
     const {
-      theme, shipmentData, shipmentDispatch, currencies, user
+      theme, shipmentData, shipmentDispatch, currencies, user, tenant
     } = this.props
     const {
       shipment,
@@ -252,7 +265,9 @@ export class BookingDetails extends Component {
             handleChange={this.handleCargoInput}
             shipmentData={shipmentData}
             hsCodes={this.state.hsCodes}
+            hsTexts={this.state.hsTexts}
             setHsCode={this.setHsCode}
+            handleHsTextChange={this.handleHsTextChange}
             deleteCode={this.deleteCode}
             cargoNotes={this.state.cargoNotes}
             totalGoodsValue={this.state.totalGoodsValue}
@@ -263,6 +278,7 @@ export class BookingDetails extends Component {
             customsData={customs}
             setCustomsFee={this.setCustomsFee}
             user={user}
+            tenant={tenant}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />
           <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
@@ -308,6 +324,7 @@ export class BookingDetails extends Component {
 
 BookingDetails.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData,
   nextStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
@@ -327,6 +344,7 @@ BookingDetails.propTypes = {
 
 BookingDetails.defaultProps = {
   theme: null,
+  tenant: null,
   prevRequest: null,
   shipmentData: null
 }
