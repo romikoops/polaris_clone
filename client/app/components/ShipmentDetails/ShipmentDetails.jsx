@@ -96,7 +96,7 @@ export class ShipmentDetails extends Component {
     this.addNewCargoItem = this.addNewCargoItem.bind(this)
     this.addNewContainer = this.addNewContainer.bind(this)
     this.setTargetAddress = this.setTargetAddress.bind(this)
-    this.toggleCarriage = this.toggleCarriage.bind(this)
+    this.handleChangeCarriage = this.handleChangeCarriage.bind(this)
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
@@ -317,7 +317,7 @@ export class ShipmentDetails extends Component {
     this.props.shipmentDispatch.getDashboard(true)
   }
 
-  toggleCarriage (target, value) {
+  handleChangeCarriage (target, value) {
     this.setState({ [target]: value })
   }
 
@@ -409,9 +409,10 @@ export class ShipmentDetails extends Component {
         theme={theme}
         setTargetAddress={this.setTargetAddress}
         allNexuses={shipmentData.allNexuses}
-        availableTruckingOptions={shipmentData.availableTruckingOptions}
         component={ShipmentLocationBox}
-        toggleCarriage={this.toggleCarriage}
+        handleChangeCarriage={this.handleChangeCarriage}
+        has_on_carriage={this.state.has_on_carriage}
+        has_pre_carriage={this.state.has_pre_carriage}
         origin={this.state.origin}
         destination={this.state.destination}
         nextStageAttempt={this.state.nextStageAttempt}

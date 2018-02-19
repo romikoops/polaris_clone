@@ -17,11 +17,12 @@ export default function GmapsLoader (props) {
           <ParamComponent
             prevRequest={props.prevRequest}
             allNexuses={props.allNexuses}
-            availableTruckingOptions={props.availableTruckingOptions}
             setTargetAddress={props.setTargetAddress}
             theme={props.theme}
             gMaps={googleMaps}
-            setCarriage={props.toggleCarriage}
+            handleChangeCarriage={props.handleChangeCarriage}
+            has_on_carriage={props.has_on_carriage}
+            has_pre_carriage={props.has_pre_carriage}
             origin={props.origin}
             destination={props.destination}
             shipment={props.shipment}
@@ -43,17 +44,15 @@ GmapsLoader.propTypes = {
     origins: PropTypes.array,
     destinations: PropTypes.array
   }).isRequired,
-  availableTruckingOptions: PropTypes.shape({
-    onCarriage: PropTypes.bool,
-    preCarriage: PropTypes.bool
-  }).isRequired,
+  has_on_carriage: PropTypes.bool,
+  has_pre_carriage: PropTypes.bool,
   origin: PropTypes.location.isRequired,
   destination: PropTypes.location.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.object
   }),
   setTargetAddress: PropTypes.func.isRequired,
-  toggleCarriage: PropTypes.func.isRequired,
+  handleChangeCarriage: PropTypes.func.isRequired,
   shipment: PropTypes.shipment,
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
@@ -65,5 +64,7 @@ GmapsLoader.defaultProps = {
   theme: null,
   routeIds: [],
   prevRequest: null,
-  shipment: null
+  shipment: null,
+  has_on_carriage: true,
+  has_pre_carriage: true
 }

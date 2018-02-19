@@ -16,6 +16,13 @@ class NexusesController < ApplicationController
 		response_handler(nexus: nexus)
 	end
 
+	def trucking_availability
+		nexus = Location.find(params[:nexus_id])
+		trucking_availability = nexus.trucking_availability(params[:tenant_id])
+		
+		response_handler(truckingAvailable: trucking_availability[params[:load_type]])
+	end
+
 	private
 
 	def find_available_nexuses
@@ -35,7 +42,7 @@ class NexusesController < ApplicationController
 		if user_input.blank?
 			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"])}
 		end
-		
+
 		nexus = Location.geocoded_location user_input
 		nexus_data = nexus.closest_location_with_distance
 		nexus = nexus_data.first if nexus_data.last <= 200

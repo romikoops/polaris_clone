@@ -85,10 +85,6 @@ export class ShipmentLocationBox extends Component {
       },
       autoTextOrigin: '',
       autoTextDest: '',
-      shipment: {
-        has_pre_carriage: false,
-        has_on_carriage: false
-      },
       autocomplete: {
         origin: false,
         destination: false
@@ -98,7 +94,11 @@ export class ShipmentLocationBox extends Component {
         destination: {}
       },
       showModal: false,
-      locationFromModal: false
+      locationFromModal: false,
+      truckingOptions: {
+        onCarriage: true,
+        preCarriage: true
+      }
     }
 
     this.isOnFocus = {
@@ -123,6 +123,7 @@ export class ShipmentLocationBox extends Component {
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
+    this.updateTruckingOptions = this.updateTruckingOptions.bind(this)
   }
 
   componentDidMount () {
@@ -181,7 +182,7 @@ export class ShipmentLocationBox extends Component {
   setHubsFromRoute (route) {
     let tmpOrigin = {}
     let tmpDest = {}
-    // TO DO: AllNexuses changed to object with origin and dest arrays
+
     this.props.allNexuses.origins.forEach((nx) => {
       if (nx.value.id === route.origin_nexus_id) {
         tmpOrigin = nx.value
@@ -332,6 +333,45 @@ export class ShipmentLocationBox extends Component {
     }
   }
 
+  updateTruckingOptions (target, nexus, tenantId, loadType, nexusOptions) {
+    fetch(
+      `${BASE_URL}/trucking_availability?` +
+      `nexus_id=${nexus.id}&` +
+      `tenant_id=${tenantId}&` +
+      `load_type=${loadType}`,
+      {
+        method: 'GET',
+        headers: authHeader()
+      }
+    ).then((promise) => {
+      promise.json().then((response) => {
+        const prefix = target === 'origin' ? 'pre' : 'on'
+        const { truckingAvailable } = response.data
+        console.log(this.state.truckingOptions)
+        console.log(truckingAvailable)
+        if (!truckingAvailable) {
+          const nexusOption = nexusOptions.find(option => option.label === nexus.name)
+          target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
+
+          this.handleTrucking({
+            target: {
+              name: `has_${prefix}_carriage`,
+              checked: false
+            }
+          })
+        }
+
+        this.setState({
+          truckingOptions: {
+            ...this.state.truckingOptions,
+            [`${prefix}Carriage`]: truckingAvailable
+          }
+        })
+        console.log(response)
+      })
+    })
+  }
+
   selectedRoute (route) {
     const origin = {
       city: '',
@@ -367,11 +407,11 @@ export class ShipmentLocationBox extends Component {
     const map = new this.props.gMaps.Map(document.getElementById('map'), mapsOptions)
     this.setState({ map })
 
-    if (this.state.shipment.has_pre_carriage) {
+    if (this.props.has_pre_carriage) {
       this.initAutocomplete(map, 'origin')
     }
 
-    if (this.state.shipment.has_on_carriage) {
+    if (this.props.has_on_carriage) {
       this.initAutocomplete(map, 'destination')
     }
   }
@@ -448,22 +488,19 @@ export class ShipmentLocationBox extends Component {
 
   handleTrucking (event) {
     const { name, checked } = event.target
-    this.setState({
-      shipment: { ...this.state.shipment, [name]: checked }
-    })
 
     if (name === 'has_pre_carriage') {
       if (checked) {
         this.postToggleAutocomplete('origin')
       }
-      this.props.setCarriage('has_pre_carriage', checked)
+      this.props.handleChangeCarriage('has_pre_carriage', checked)
     }
 
     if (name === 'has_on_carriage') {
       if (checked) {
         this.postToggleAutocomplete('destination')
       }
-      this.props.setCarriage('has_on_carriage', checked)
+      this.props.handleChangeCarriage('has_on_carriage', checked)
     }
   }
 
@@ -554,8 +591,14 @@ export class ShipmentLocationBox extends Component {
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
-          const originOptionNames = originOptions.map(option => option.label)
 
+          if (nexus && nexus.id) {
+            const tenantId = this.props.shipment.shipment.tenant_id
+            const loadType = this.props.shipment.shipment.load_type
+            this.updateTruckingOptions(target, nexus, tenantId, loadType, originOptions)
+          }
+
+          const originOptionNames = originOptions.map(option => option.label)
           this.setState({
             originFieldsHaveErrors: !originOptionNames.includes(nexusName)
           })
@@ -577,8 +620,14 @@ export class ShipmentLocationBox extends Component {
           if (this.state.availableDestinations) {
             destinationOptions = this.state.availableDestinations
           }
-          const destinationOptionNames = destinationOptions.map(option => option.label)
 
+          if (nexus && nexus.id) {
+            const tenantId = this.props.shipment.shipment.tenant_id
+            const loadType = this.props.shipment.shipment.load_type
+            this.updateTruckingOptions(target, nexus, tenantId, loadType, destinationOptions)
+          }
+
+          const destinationOptionNames = destinationOptions.map(option => option.label)
           this.setState({
             destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
           })
@@ -654,8 +703,8 @@ export class ShipmentLocationBox extends Component {
     const origin = { ...this.state.destination }
     const destination = { ...this.state.origin }
     const autoText = { ...this.state.autoText }
-    // const pre = this.state.shipment.has_pre_carriage
-    // const on = this.state.shipment.has_on_carriage
+    // const pre = this.props.has_pre_carriage
+    // const on = this.props.has_on_carriage
     let autoTextDest = this.state.autoTextDest ? this.state.autoTextDest : ''
     let autoTextOrigin = this.state.autoTextOrigin ? this.state.autoTextOrigin : ''
     // if ((pre && !on) || (!pre && on)) {
@@ -675,7 +724,7 @@ export class ShipmentLocationBox extends Component {
     this.setOriginHub(this.state.dSelect)
   }
   render () {
-    const { allNexuses, availableTruckingOptions } = this.props
+    const { allNexuses } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
     let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : []
@@ -684,7 +733,8 @@ export class ShipmentLocationBox extends Component {
       originFieldsHaveErrors,
       destinationFieldsHaveErrors,
       availableOrigins,
-      availableDestinations
+      availableDestinations,
+      truckingOptions
     } = this.state
 
     if (availableDestinations) destinationOptions = availableDestinations
@@ -733,12 +783,12 @@ export class ShipmentLocationBox extends Component {
       </div>
     )
     let toggleLogic =
-      this.state.shipment.has_pre_carriage && this.state.showOriginFields ? styles.visible : ''
+      this.props.has_pre_carriage && this.state.showOriginFields ? styles.visible : ''
     const originFields = (
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
           className={`${styles.btn_address_form} ${
-            this.state.shipment.has_pre_carriage ? '' : styles.hidden
+            this.props.has_pre_carriage ? '' : styles.hidden
           }`}
           onClick={() => this.changeAddressFormVisibility('origin')}
         >
@@ -839,12 +889,12 @@ export class ShipmentLocationBox extends Component {
     )
 
     toggleLogic =
-      this.state.shipment.has_on_carriage && this.state.showDestinationFields ? styles.visible : ''
+      this.props.has_on_carriage && this.state.showDestinationFields ? styles.visible : ''
     const destFields = (
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
           className={`${styles.btn_address_form} ${
-            this.state.shipment.has_on_carriage ? '' : styles.hidden
+            this.props.has_on_carriage ? '' : styles.hidden
           }`}
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
@@ -943,10 +993,10 @@ export class ShipmentLocationBox extends Component {
       </div>
     )
     const displayLocationOptions = (target) => {
-      if (target === 'origin' && !this.state.shipment.has_pre_carriage) {
+      if (target === 'origin' && !this.props.has_pre_carriage) {
         return originHubSelect
       }
-      if (target === 'destination' && !this.state.shipment.has_on_carriage) {
+      if (target === 'destination' && !this.props.has_on_carriage) {
         return destinationHubSelect
       }
       return ''
@@ -1000,10 +1050,10 @@ export class ShipmentLocationBox extends Component {
                 <div className={
                   'flex-45 layout-row layout-align-start ' +
                   `${styles.toggle_box} ` +
-                  `${!availableTruckingOptions.preCarriage ? styles.not_available : ''}`
+                  `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                 }
                 >
-                  { !availableTruckingOptions.preCarriage
+                  { !truckingOptions.preCarriage
                     ? (
                       <div>
                         <ReactTooltip />
@@ -1019,14 +1069,13 @@ export class ShipmentLocationBox extends Component {
                     className="flex-none"
                     id="has_pre_carriage"
                     name="has_pre_carriage"
-                    value={String(this.state.shipment.has_pre_carriage)}
-                    defaultChecked={this.state.shipment.has_pre_carriage}
+                    checked={this.props.has_pre_carriage}
                     onChange={this.handleTrucking}
                   />
                   <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>Pre-Carriage</label>
                 </div>
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
-                  {this.state.shipment.has_pre_carriage ? originAuto : ''}
+                  {this.props.has_pre_carriage ? originAuto : ''}
                   {displayLocationOptions('origin')}
                   {originFields}
                 </div>
@@ -1041,17 +1090,17 @@ export class ShipmentLocationBox extends Component {
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
-                  {this.state.shipment.has_on_carriage ? destAuto : ''}
+                  {this.props.has_on_carriage ? destAuto : ''}
                   {displayLocationOptions('destination')}
                   {destFields}
                 </div>
                 <div className={
                   'flex-45 layout-row layout-align-end ' +
                   `${styles.toggle_box} ` +
-                  `${!availableTruckingOptions.onCarriage ? styles.not_available : ''}`
+                  `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                 }
                 >
-                  { !availableTruckingOptions.onCarriage
+                  { !truckingOptions.onCarriage
                     ? (
                       <div>
                         <ReactTooltip />
@@ -1068,8 +1117,7 @@ export class ShipmentLocationBox extends Component {
                     className="flex-none"
                     id="has_on_carriage"
                     name="has_on_carriage"
-                    value={String(this.state.shipment.has_on_carriage)}
-                    defaultChecked={this.state.shipment.has_on_carriage}
+                    checked={this.props.has_on_carriage}
                     onChange={this.handleTrucking}
                   />
                 </div>
@@ -1110,15 +1158,13 @@ ShipmentLocationBox.propTypes = {
   shipment: PropTypes.shipment,
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
-  setCarriage: PropTypes.func.isRequired,
+  handleChangeCarriage: PropTypes.func.isRequired,
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,
     destinations: PropTypes.array
   }).isRequired,
-  availableTruckingOptions: PropTypes.shape({
-    onCarriage: PropTypes.bool,
-    preCarriage: PropTypes.bool
-  }).isRequired,
+  has_on_carriage: PropTypes.bool,
+  has_pre_carriage: PropTypes.bool,
   selectedRoute: PropTypes.route,
   origin: PropTypes.shape({
     number: PropTypes.number
@@ -1137,7 +1183,9 @@ ShipmentLocationBox.defaultProps = {
   routeIds: [],
   prevRequest: null,
   selectedRoute: null,
-  origin: null
+  origin: null,
+  has_on_carriage: true,
+  has_pre_carriage: true
 }
 
 export default ShipmentLocationBox

@@ -217,16 +217,16 @@ class Location < ApplicationRecord
   def trucking_availability_attributes(tenant_id)
     ActiveRecord::Base.connection.execute("
       SELECT
-        booleans.container_sum  > 0 AS container, 
-        booleans.cargo_item_sum > 0 AS cargo_item
+        sums.container_sum  > 0 AS container, 
+        sums.cargo_item_sum > 0 AS cargo_item
       FROM (
         SELECT
         SUM(CASE WHEN container  THEN 1 ELSE 0 END) AS container_sum,
         SUM(CASE WHEN cargo_item THEN 1 ELSE 0 END) AS cargo_item_sum
         FROM trucking_availabilities
         JOIN hubs ON hubs.trucking_availability_id = trucking_availabilities.id
-        WHERE hubs.tenant_id = #{tenant_id}
-      ) AS booleans
+        WHERE hubs.nexus_id = #{self.id} AND hubs.tenant_id = #{tenant_id}
+      ) AS sums
     ").first
   end
 
