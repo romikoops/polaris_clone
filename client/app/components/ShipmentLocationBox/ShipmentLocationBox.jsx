@@ -153,6 +153,14 @@ export class ShipmentLocationBox extends Component {
   }
   setDestHub (event) {
     this.scopeNexusOptions(event ? event.label : '', 'origin')
+
+    this.setState({
+      truckingOptions: {
+        ...this.state.truckingOptions,
+        onCarriage: true
+      }
+    })
+
     if (event) {
       const destination = {
         ...this.state.destination,
@@ -261,6 +269,12 @@ export class ShipmentLocationBox extends Component {
   }
   setOriginHub (event) {
     this.scopeNexusOptions(event ? event.label : '', 'destination')
+    this.setState({
+      truckingOptions: {
+        ...this.state.truckingOptions,
+        preCarriage: true
+      }
+    })
     if (event) {
       const origin = {
         ...this.state.origin,
@@ -1059,7 +1073,7 @@ export class ShipmentLocationBox extends Component {
                         <ReactTooltip />
                         <div
                           className={styles.toggle_box_overlay}
-                          data-tip="Pre-Carriage is not available"
+                          data-tip={`Pre-Carriage is not available in ${this.state.oSelect.label}`}
                         />
                       </div>
                     )
@@ -1106,7 +1120,7 @@ export class ShipmentLocationBox extends Component {
                         <ReactTooltip />
                         <div
                           className={styles.toggle_box_overlay}
-                          data-tip="On-Carriage is not available"
+                          data-tip={`On-Carriage is not available in ${this.state.dSelect.label}`}
                         />
                       </div>
                     )
