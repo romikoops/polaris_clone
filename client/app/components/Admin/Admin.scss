@@ -52,10 +52,12 @@
     font-size: 8px;
   }
   .clip {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
