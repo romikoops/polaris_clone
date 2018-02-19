@@ -79,7 +79,7 @@ export class AdminDashboard extends Component {
   }
   render () {
     const {
-      theme, dashData, clients, hubs, hubHash, adminDispatch
+      dashData, clients, hubs, hubHash, adminDispatch, theme
     } = this.props
     // ;
     if (!dashData) {
@@ -195,7 +195,7 @@ export class AdminDashboard extends Component {
                 <h2 className="flex-none">Welcome back, Admin</h2>
               </div>
               <div className={`flex-none layout-row layout-align-center-center ${style.carousel}`}>
-                <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade />
+                <Carousel theme={theme} slides={activeRoutesData} noSlides={1} fade />
               </div>
               <div
                 className={`flex-50 layout-row ${
@@ -304,7 +304,7 @@ export class AdminDashboard extends Component {
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
-              tooltip="adminTip.hubs"
+              tooltip={adminTip.hubs}
               icon="fa-info-circle"
               showTooltip
               sideScroll

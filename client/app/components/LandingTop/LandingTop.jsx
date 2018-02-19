@@ -28,7 +28,7 @@ export class LandingTop extends Component {
   toAccount () {
     this.props.goTo('/account')
   }
-  toAdmin () {
+  toAdmin (target) {
     this.props.toAdmin(true)
   }
   toBooking () {
@@ -64,6 +64,7 @@ export class LandingTop extends Component {
     const myAccount = (
       <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active />
     )
+
     const toAdmin = (
       <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active />
     )
@@ -84,12 +85,7 @@ export class LandingTop extends Component {
               styles.layout_elem
             }`}
           >
-            {user && user.role_id === 2 ? (
-              <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active />
-            ) : (
-              ''
-            )}
-            {!user ? (
+            {(user && user.role_id === 2) || !user ? (
               <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active />
             ) : (
               ''
@@ -97,12 +93,7 @@ export class LandingTop extends Component {
             {user && !user.guest && user.role_id === 2 ? myAccount : ''}
             {user && user.role_id === 1 ? toAdmin : ''}
           </div>
-
-          <div
-            className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-end ${
-              styles.layout_elem
-            }`}
-          >
+          <div className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-end ${styles.layout_elem}`}>
             <div className={styles.sign_up}>
               <h2>Never spend precious time on transportation again, shipping made simple</h2>
               <h3>Enjoy the most advanced and easy to use booking system in the market</h3>

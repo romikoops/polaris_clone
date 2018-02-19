@@ -13,7 +13,7 @@ class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: true
     }
   }
   setAdminUrl (target) {
@@ -88,8 +88,6 @@ class SideNav extends Component {
   render () {
     const { expanded } = this.state
     const { theme, user } = this.props
-    console.log('showing user .....')
-    console.log(user)
     const userLinks = [
       {
         icon: 'fa-tachometer',
@@ -192,17 +190,15 @@ class SideNav extends Component {
     const expandNavClass = expanded ? styles.expanded : styles.collapsed
     const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link
     const expandIconClass = expanded ? styles.expanded_icon : styles.collapsed_icon
-    console.log(isAdmin)
     const textStyle = {
       background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }
     const navLinks = links.map((li) => {
       const tli = li
-      tli.action.action = isAdmin
-        ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={li.action}>
+        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
           <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
             <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
               <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />

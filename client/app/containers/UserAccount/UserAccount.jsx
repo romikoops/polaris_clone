@@ -194,7 +194,7 @@ class UserAccount extends Component {
       />
     )
     const menu = (<SideNav
-      Comp={nav}
+      comp={nav}
       theme={theme}
     />)
     return (

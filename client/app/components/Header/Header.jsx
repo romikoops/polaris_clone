@@ -8,8 +8,6 @@ import styles from './Header.scss'
 import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-import SideNav from '../SideNav/SideNav'
-import { FloatingMenu } from '../FloatingMenu/FloatingMenu'
 import { appActions, messagingActions } from '../../actions'
 import { accountIconColor } from '../../helpers'
 
@@ -70,7 +68,7 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, dashboard, scrollable
+      user, theme, tenant, invert, unread, req, dashboard, scrollable, menu
     } = this.props
     const { isTop } = this.state
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
@@ -161,30 +159,15 @@ class Header extends Component {
     )
     const classProps = scrollable && !isTop
       ? `${styles.header_scrollable} 
-        layout-row flex-100 layout-wrap layout-align-center`
+        layout-row flex-100 layout-wrap layout-align-center-space-between`
       : `${styles.header}
         layout-row flex-100 layout-wrap layout-align-center`
 
-    const sideNav = (
-      <SideNav
-        theme={theme}
-        user={user}
-      />)
-    const dashboardMenu = (
-      <FloatingMenu
-        theme={theme}
-        comp={sideNav}
-      />)
     return (
       <div className={classProps} >
-        <div className="flex layout-row layout-align-start">
-          { dashboard ? dashboardMenu : '' }
-        </div>
-        <div className="flex layout-row layout-align-start-center">
-          {this.props.menu}
-        </div>
         <div className={`${defs.content_width} layout-row flex-none`}>
-          <div className={`${styles.infront} layout-row flex-50 layout-align-start-center`}>
+          { dashboard ? menu : '' }
+          <div className="layout-row flex layout-align-start-center offset-20">
             <img
               src={logoUrl}
               className={logoStyle}
@@ -192,13 +175,9 @@ class Header extends Component {
               onClick={this.goHome}
             />
           </div>
-          <div className="layout-row flex-50 layout-align-end-center">
-            {rightCorner}
-          </div>
+          {rightCorner}
+          { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
         </div>
-        <div className="flex layout-row layout-align-start-center" />
-        { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
-
       </div>
     )
   }

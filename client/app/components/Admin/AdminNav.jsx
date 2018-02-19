@@ -116,11 +116,12 @@ export class AdminNav extends Component {
 AdminNav.propTypes = {
   theme: PropTypes.theme,
   navLink: PropTypes.func.isRequired,
-  user: PropTypes.user.isRequired
+  user: PropTypes.user
 }
 
 AdminNav.defaultProps = {
-  theme: null
+  theme: null,
+  user: null
 }
 
 export default AdminNav

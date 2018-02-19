@@ -17,7 +17,8 @@ export class FloatingMenu extends Component {
   }
 
   render () {
-    const { Comp, theme } = this.props
+    const { comp, theme } = this.props
+
     const rotateIcon = keyframes` 
     /* 0%, 100% {
          font-size: 20px;
@@ -35,15 +36,12 @@ export class FloatingMenu extends Component {
          transform-style: preserve-3D;
 
      }*/
-`
+    `
     const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
-    const Title = styled.div`
- letter-spacing: 3px;
-`
-    const AnimIcon = styled.div`
- :hover {animation: ${rotateIcon} 1.5s linear;}
- ${Title}:hover & {animation: ${rotateIcon} 1.5s linear;}
-`
+    const Title = styled.div` letter-spacing: 3px;`
+    const AnimIcon = styled.div` :hover {animation: ${rotateIcon} 1.5s linear;}
+      ${Title}:hover & {animation: ${rotateIcon} 1.5s linear;}
+    `
     const currentStyle = this.state.expand ? styles.open : styles.closed
     const wrapperStyle = this.state.expand ? styles.wrapper_max : styles.wrapper_min
     return (
@@ -60,7 +58,7 @@ export class FloatingMenu extends Component {
           </div>
         </Title>
         <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>
-          {Comp}
+          {comp}
         </div>
 
       </div>
@@ -69,13 +67,13 @@ export class FloatingMenu extends Component {
 }
 
 FloatingMenu.propTypes = {
-  Comp: PropTypes.node,
+  comp: PropTypes.node,
   theme: PropTypes.theme
 }
 
 FloatingMenu.defaultProps = {
   theme: null,
-  Comp: null
+  comp: null
 }
 
 export default FloatingMenu

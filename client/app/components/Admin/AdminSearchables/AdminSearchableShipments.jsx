@@ -149,25 +149,17 @@ export class AdminSearchableShipments extends Component {
       </div>
     )
     return (
-      <div
-        className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
-      >
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
-            styles.searchable_header
-          }`}
-        >
-          <div className="flex-60 layout-row layout-align-start-center">
-            <div className="flex-50 layout-row layout-align-start-center">
-              <b>
-                <TextHeading size={1} text={title || 'Shipments'} color="black" />
-              </b>
-            </div>
-            <div className="flex-50 layout-row layout-align-start-center">
-              <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip} />
+      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
+        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+          <div className="flex-100 layout-row layout-align-space-between-center-center">
+            <div className="flex-none layout-row" >
+              <div className="flex-none" >
+                <TextHeading theme={theme} size={2} text={title} />
+              </div>
+              <Tooltip icon="fa-info-circle" theme={theme} text={tooltip} toolText />
             </div>
           </div>
-          <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
+          <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
             <input
               type="text"
               name="search"
@@ -198,7 +190,7 @@ AdminSearchableShipments.propTypes = {
     goTo: PropTypes.func
   }).isRequired,
   seeAll: PropTypes.func,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   sideScroll: PropTypes.bool,
   theme: PropTypes.theme,
   limit: PropTypes.number,
@@ -216,7 +208,8 @@ AdminSearchableShipments.defaultProps = {
   limit: 0,
   tooltip: '',
   hubs: [],
-  userView: false
+  userView: false,
+  title: 'shipment'
 }
 
 export default AdminSearchableShipments

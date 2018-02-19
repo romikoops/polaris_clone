@@ -6,12 +6,12 @@ import { tooltips } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
 export function Tooltip ({
-  text, icon, theme, color
+  text, icon, theme, color, toolText
 }) {
   const textStyle = color
     ? { color }
     : gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-  const tipText = tooltips[text]
+  const tipText = toolText ? text : tooltips[text]
   const clipClass = color ? '' : 'clip'
   const id = v4()
   return (
@@ -33,13 +33,15 @@ Tooltip.propTypes = {
   theme: PropTypes.theme,
   text: PropTypes.string,
   icon: PropTypes.string.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  toolText: PropTypes.bool
 }
 
 Tooltip.defaultProps = {
   color: '',
   theme: '',
-  text: ''
+  text: '',
+  toolText: false
 }
 
 export default Tooltip

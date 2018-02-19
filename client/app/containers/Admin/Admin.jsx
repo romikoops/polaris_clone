@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
-import PropTypes from '../../prop-types'
-import Header from '../../components/Header/Header'
-import {
-  AdminNav,
-  AdminDashboard,
-  AdminSchedules,
-  AdminServiceCharges,
-  SuperAdmin
-} from '../../components/Admin'
-import SideNav from '../../components/SideNav/SideNav'
+import { bindActionCreators } from 'redux'
+import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import { adminActions } from '../../actions'
+import { Footer } from '../../components/Footer/Footer'
+import { AdminDashboard, AdminSchedules, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/AdminHubs'
@@ -19,10 +14,10 @@ import AdminRoutes from '../../components/Admin/AdminRoutes'
 import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
-import { Footer } from '../../components/Footer/Footer'
 import Loading from '../../components/Loading/Loading'
 import defs from '../../styles/default_classes.scss'
-import { adminActions } from '../../actions'
+import Header from '../../components/Header/Header'
+import SideNav from '../../components/SideNav/SideNav'
 
 class Admin extends Component {
   constructor (props) {
@@ -80,14 +75,7 @@ class Admin extends Component {
     } = this.props
 
     const {
-      hubs,
-      serviceCharges,
-      pricingData,
-      schedules,
-      shipments,
-      clients,
-      dashboard,
-      loading
+      hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, loading
     } = adminData
 
     const hubHash = {}
@@ -97,19 +85,17 @@ class Admin extends Component {
       })
     }
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
-    const nav = (<AdminNav navLink={this.setUrl} theme={theme} user={user} />)
-    const menu = <SideNav Comp={nav} theme={theme} />
-
+    const nav = (<SideNav theme={theme} user={user} />)
+    const menu = <FloatingMenu comp={nav} theme={theme} />
+    // ;
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
+        <Header theme={theme} menu={menu} dashboard scrollable />
         {loadingScreen}
-        <Header user={user} theme={theme} nav={menu} dashboard scrollable />
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`}>
-
           <div className="flex-100 layout-row layout-wrap layout-align-start-start">
             <Switch className="flex">
               <Route
-
                 path="/admin/dashboard"
                 render={props => (<AdminDashboard
                   theme={theme}
@@ -122,7 +108,6 @@ class Admin extends Component {
                 />)}
               />
               <Route
-
                 path="/admin/hubs"
                 render={props => (<AdminHubs
                   theme={theme}
@@ -148,7 +133,6 @@ class Admin extends Component {
                   theme={theme}
                   {...props}
                   hubs={hubHash}
-                  adminDispatch={adminDispatch}
                   scheduleData={schedules}
                 />)}
               />
@@ -185,7 +169,6 @@ class Admin extends Component {
                 />)}
               />
               <Route
-
                 path="/admin/routes"
                 render={props => (<AdminRoutes
                   theme={theme}
@@ -195,7 +178,6 @@ class Admin extends Component {
                 />)}
               />
               <Route
-
                 path="/admin/wizard"
                 render={props => (<AdminWizard
                   theme={theme}
@@ -204,7 +186,6 @@ class Admin extends Component {
                 />)}
               />
               <Route
-
                 path="/admin/trucking"
                 render={props => (<AdminTrucking
                   theme={theme}
@@ -213,7 +194,6 @@ class Admin extends Component {
                 />)}
               />
               <Route
-
                 path="/admin/super_admin/upload"
                 render={props => (<SuperAdmin
                   theme={theme}
@@ -234,7 +214,7 @@ Admin.propTypes = {
   user: PropTypes.any,
   loggedIn: PropTypes.bool,
   adminData: PropTypes.shape({
-    hubs: PropTypes.obj,
+    hubs: PropTypes.array,
     serviceCharges: PropTypes.any,
     pricingData: PropTypes.any,
     schedules: PropTypes.any,
@@ -280,7 +260,9 @@ function mapStateToProps (state) {
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    user: null,
+    loggedIn: false
   }
 }
 
