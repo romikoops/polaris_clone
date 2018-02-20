@@ -9,8 +9,9 @@
   }
   
   .header_scrollable {
+    position: relative;
     background-color: rgba(255,255,255,1);
-    width: 100vw !important;
+    width: 95vw !important;
     position: fixed !important;
     height: 70px !important;
     overflow-y: visible !important;

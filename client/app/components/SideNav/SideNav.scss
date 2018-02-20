@@ -1,10 +1,12 @@
 :local {
   .side_nav {
-    left-margin: 0px;
+    position: fixed;
+    margin-left: 0px;
     transition: all 1.5s ease-in-out;
-    min-width: min-content;
-    max-width: 110px;
+    min-width: 150px;
+    width: max-content;
     background-color: white;
+    padding-left: 20px;
     @media screen and (max-width: 768px) {
       left: 0px;
       padding-left: 20px;
@@ -30,8 +32,14 @@
   .link_text {
     transition: all 1s ease-in-out;
   }
-  .expanded_link {
+  .expanded_icon {
+    visibility: normal;
+    position: relative;
+  }
+  .collapsed_icon {
 
+  }
+  .expanded_link {
     visibility: normal;
   }
   .collapsed_link {
@@ -66,4 +74,5 @@
   .tooltip {
     max-width: 200px;
   }
+ 
 }

@@ -1,9 +1,9 @@
 :local {
   .wrapper {
+    position: absolute;
     width: 150px;
     height: max-content;
     min-height: 500px;
-    position: relative;
     top: 20px;
     margin-left: 50px;
     z-index: 50;
@@ -25,6 +25,8 @@
     }
   }
   .menu_content {
+    position: absolute !important;
+
     *{
       transition: all 0.75s linear;
       overflow: hidden;
