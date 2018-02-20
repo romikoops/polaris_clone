@@ -4,7 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from './FloatingMenu.scss'
 import { gradientTextGenerator } from '../../helpers'
 
-export class FloatingMenu extends Component {
+class FloatingMenu extends Component {
   constructor (props) {
     super(props)
     this.state = {
