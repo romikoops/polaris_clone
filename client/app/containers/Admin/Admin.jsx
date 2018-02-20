@@ -18,6 +18,7 @@ import Loading from '../../components/Loading/Loading'
 import defs from '../../styles/default_classes.scss'
 import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
+import styles from './Admin.scss'
 
 class Admin extends Component {
   constructor (props) {
@@ -93,7 +94,7 @@ class Admin extends Component {
 
         <Header theme={theme} menu={menu} showMenu scrollable />
         {loadingScreen}
-        <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`}>
+        <div className={`${defs.content_width} ${styles.top_margin} flex-none layout-row layout-wrap layout-align-start-start hundred`}>
           <div className="flex-100 layout-row layout-wrap layout-align-center-center">
             <Switch className="flex">
               <Route

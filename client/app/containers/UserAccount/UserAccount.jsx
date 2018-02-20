@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
-import PropTypes from '../../prop-types'
-import defs from '../../styles/default_classes.scss'
-import { Header } from '../../components/Header/Header'
 import {
   UserProfile,
   UserDashboard,
@@ -13,11 +10,16 @@ import {
   UserLocations,
   UserBilling
 } from '../../components/UserAccount'
-import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
+import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import PropTypes from '../../prop-types'
+import Header from '../../components/Header/Header'
+import UserContacts from '../../components/UserAccount/UserContacts'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import { Footer } from '../../components/Footer/Footer'
+import defs from '../../styles/default_classes.scss'
+import styles from './UserAccount.scss'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -126,7 +128,7 @@ class UserAccount extends Component {
           showMenu
           scrollable
         />
-        <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
+        <div className={`${defs.content_width} ${defs.spacing_md_bottom} ${styles.top_margin} layout-row flex-none`}>
 
           <div className="layout-row flex-100 ">
 
@@ -252,6 +254,7 @@ class UserAccount extends Component {
             </Switch>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }
