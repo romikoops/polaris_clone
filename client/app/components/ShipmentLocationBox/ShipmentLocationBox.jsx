@@ -873,9 +873,10 @@ export class ShipmentLocationBox extends Component {
           <input
             id="origin"
             name="origin"
-            className={`flex-none ${styles.input} ${
-              originFieldsHaveErrors ? styles.with_errors : ''
-            }`}
+            className={
+              `flex-none ${styles.input} ` +
+              `${originFieldsHaveErrors ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAuto}
             value={this.state.autoText.origin}
@@ -893,9 +894,10 @@ export class ShipmentLocationBox extends Component {
     const destFields = (
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
-          className={`${styles.btn_address_form} ${
-            this.props.has_on_carriage ? '' : styles.hidden
-          }`}
+          className={
+            `${styles.btn_address_form} ` +
+            `${this.props.has_on_carriage ? '' : styles.hidden}`
+          }
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
           <i className={`${styles.down} fa fa-angle-double-down`} />
@@ -978,9 +980,10 @@ export class ShipmentLocationBox extends Component {
           <input
             id="destination"
             name="destination"
-            className={`flex-none ${styles.input} ${
-              destinationFieldsHaveErrors ? styles.with_errors : ''
-            }`}
+            className={
+              `flex-none ${styles.input} ` +
+              `${destinationFieldsHaveErrors ? styles.with_errors : ''}`
+            }
             type="string"
             onChange={this.handleAuto}
             value={this.state.autoText.destination}
