@@ -23,6 +23,7 @@ class AdminHubs extends Component {
     this.toggleNewHub = this.toggleNewHub.bind(this)
     this.saveNewHub = this.saveNewHub.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.setView = this.setView.bind(this)
   }
   componentDidMount () {
     const { hubs, adminDispatch, loading } = this.props
@@ -30,15 +31,19 @@ class AdminHubs extends Component {
       adminDispatch.getHubs(false)
     }
   }
+  setView () {
+    this.setState({ selectedHub: true })
+  }
   viewHub (hub) {
     const { adminDispatch } = this.props
     adminDispatch.getHub(hub.id, true)
-    this.setState({ selectedHub: true })
+    this.setView()
   }
+
   backToIndex () {
-    const { dispatch, history } = this.props
+    const { adminDispatch } = this.props
     this.setState({ selectedHub: false })
-    dispatch(history.push('/admin/hubs'))
+    adminDispatch.goTo('/admin/hubs')
   }
   toggleNewHub () {
     this.setState({ newHub: !this.state.newHub })
@@ -81,18 +86,22 @@ class AdminHubs extends Component {
     )
     const title = selectedHub ? (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-        <div className="flex-none">
-          <TextHeading theme={theme} size={1} text="Hub Overview" />
+        <div className="flex-none layout-row layout-align-start-center">
+          <div className="flex-none">
+            <TextHeading theme={theme} size={1} text="Hub Overview" />
+          </div>
+          <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         </div>
-        <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
-        {selectedHub ? backButton : ''}
+        { backButton}
       </div>
     ) : (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-        <div className="flex-none">
-          <TextHeading theme={theme} size={1} text="Hubs" />
+        <div className="flex-none layout-row layout-align-start-center">
+          <div className="flex-none">
+            <TextHeading theme={theme} size={1} text="Hubs" />
+          </div>
+          <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         </div>
-        <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         {newButton}
       </div>
     )
@@ -126,6 +135,7 @@ class AdminHubs extends Component {
             path="/admin/hubs/:id"
             render={props => (
               <AdminHubView
+                setView={this.setView}
                 theme={theme}
                 hubs={hubs}
                 hubHash={hubHash}

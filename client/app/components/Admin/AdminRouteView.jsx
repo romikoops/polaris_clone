@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-import { AdminScheduleLine, AdminHubTile } from './'
+import { AdminLayoverRow, AdminHubTile } from './'
 import styles from './Admin.scss'
 import { gradientTextGenerator } from '../../helpers'
 
@@ -37,7 +37,7 @@ export class AdminRouteView extends Component {
 
     const schedArr = schedules.map((sched, i) => {
       if (i <= this.state.scheduleLimit) {
-        return <AdminScheduleLine key={v4()} schedule={sched} hubs={hubHash} theme={theme} />
+        return <AdminLayoverRow key={v4()} schedule={sched} hubs={hubHash} theme={theme} />
       }
       return ''
     })

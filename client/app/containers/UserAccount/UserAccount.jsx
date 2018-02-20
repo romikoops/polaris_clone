@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
-import Header from '../../components/Header/Header'
+import { Header } from '../../components/Header/Header'
 import {
   UserProfile,
   UserDashboard,
@@ -55,24 +55,30 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     switch (target) {
       case 'pricing':
+        // this.setState({ activeLink: target })
         userDispatch.getPricings(user.id, true)
         break
       case 'chooseRoutes':
         this.toggleModal()
         break
       case 'shipments':
+        // this.setState({ activeLink: target })
         userDispatch.getShipments(true)
         break
       case 'contacts':
+        // this.setState({ activeLink: target })
         userDispatch.goTo('/account/contacts')
         break
       case 'dashboard':
+        // this.setState({ activeLink: target })
         userDispatch.getDashboard(user.id, true)
         break
       case 'locations':
+        // this.setState({ activeLink: target })
         userDispatch.getLocations(user.id, true)
         break
       case 'profile':
+        // this.setState({ activeLink: target })
         userDispatch.goTo('/account/profile')
         break
       default:
@@ -109,7 +115,7 @@ class UserAccount extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const nav = (<SideNav theme={theme} user={user} routes={dashboard.routes} />)
+    const nav = (<SideNav theme={theme} user={user} />)
     const menu = <FloatingMenu Comp={nav} theme={theme} />
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
@@ -178,7 +184,7 @@ class UserAccount extends Component {
                     setNav={this.setNavLink}
                     currencies={currencies}
                     theme={theme}
-                    user={user.data}
+                    user={user}
                     aliases={dashboard.aliases}
                     {...props}
                     locations={dashboard.locations}
@@ -260,7 +266,7 @@ UserAccount.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.object),
   users: PropTypes.shape({
     loading: PropTypes.bool,
-    hubs: PropTypes.bool
+    hubs: PropTypes.arrayOf(PropTypes.object)
   }),
   userDispatch: PropTypes.shape({
     getDashboard: PropTypes.func,

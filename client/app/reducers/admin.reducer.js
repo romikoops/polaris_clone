@@ -203,8 +203,6 @@ export default function admin (state = {}, action) {
       return reqShips
     }
     case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
-      // eslint-disable-next-line no-debugger
-      // debugger
       return {
         ...state,
         dashboard: {

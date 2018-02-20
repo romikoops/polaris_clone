@@ -34,13 +34,14 @@ AvailableRoutes.propTypes = {
     getShipment: PropTypes.func,
     goTo: PropTypes.func
   }).isRequired,
-  routeSelected: PropTypes.func.isRequired
+  routeSelected: PropTypes.func
 }
 
 AvailableRoutes.defaultProps = {
   theme: null,
   routes: [],
-  user: null
+  user: null,
+  routeSelected: null
 }
 
 export default AvailableRoutes

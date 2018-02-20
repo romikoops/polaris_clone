@@ -161,7 +161,7 @@ function mapStateToProps (state) {
   const { authentication, tenant, admin } = state
   const { user, loggedIn } = authentication
   const {
-    clients, hubs, route, routes, loading
+    clients, hubs, itinerary, itineraries, loading
   } = admin
 
   return {
@@ -169,8 +169,8 @@ function mapStateToProps (state) {
     tenant,
     loggedIn,
     hubs,
-    route,
-    routes,
+    itinerary,
+    itineraries,
     clients,
     loading
   }

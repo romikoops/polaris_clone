@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180215132113) do
+ActiveRecord::Schema.define(version: 20180219173916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180215132113) do
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
     t.string "cargo_group_id"
+    t.string "customs_text"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -66,6 +67,7 @@ ActiveRecord::Schema.define(version: 20180215132113) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.string "cargo_group_id"
+    t.string "customs_text"
   end
 
   create_table "currencies", force: :cascade do |t|
