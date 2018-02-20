@@ -7,14 +7,18 @@ import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { adminActions, userActions } from '../../actions'
 import { adminMenutooltip as menuTip } from '../../constants'
+import { Modal } from '../Modal/Modal'
+import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
 import styles from './SideNav.scss'
 
 class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: true
+      expanded: true,
+      showModal: false
     }
+    this.toggleModal = this.toggleModal.bind(this)
   }
   setAdminUrl (target) {
     console.log(target)
@@ -85,9 +89,28 @@ class SideNav extends Component {
         break
     }
   }
+  toggleModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
   render () {
     const { expanded } = this.state
-    const { theme, user } = this.props
+    const { theme, user, routes } = this.props
+    const routeModal = (
+      <Modal
+        component={
+          <AvailableRoutes
+            user={user}
+            theme={theme}
+            routes={routes}
+            initialCompName="UserAccount"
+          />
+        }
+        width="48vw"
+        verticalPadding="30px"
+        horizontalPadding="15px"
+        parentToggle={this.toggleModal}
+      />
+    )
     const userLinks = [
       {
         icon: 'fa-tachometer',
@@ -185,8 +208,6 @@ class SideNav extends Component {
         tooltip: menuTip.setup
       }
     ]
-    console.log('.............................')
-    console.log(user)
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? adminLinks : userLinks
     const expandNavClass = expanded ? styles.expanded : styles.collapsed
@@ -215,6 +236,7 @@ class SideNav extends Component {
     })
     return (
       <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
+        {this.state.showModal ? routeModal : ''}
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
         <div className="flex layout-row layout-align-center-start layout-wrap">
           {navLinks}
@@ -245,11 +267,13 @@ SideNav.propTypes = {
     goTo: PropTypes.func,
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  routes: PropTypes.objectOf(PropTypes.any)
 }
 
 SideNav.defaultProps = {
-  theme: null
+  theme: null,
+  routes: null
 }
 
 function mapStateToProps (state) {

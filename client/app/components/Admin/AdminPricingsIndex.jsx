@@ -95,8 +95,8 @@ export class AdminPricingsIndex extends Component {
               text="Open Pricings .xlsx"
             />
           </div>
-          <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload} ${styles.top_margin}`}>
-            <p className="flex-100">New Pricing Creator</p>
+          <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+            <p className={`${styles.new_margin} flex-100`}>New Pricing Creator</p>
             {newButton}
           </div>
         </div>

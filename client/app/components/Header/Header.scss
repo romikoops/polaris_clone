@@ -2,13 +2,14 @@
   @import '../../styles/defaults';
 
   .header {
-    position: relative;
+    position: fixed;
     height: 70px;
-    width: 95vw; 
+    width: 100vw !important; 
     z-index: 20 !important;
   }
   
   .header_scrollable {
+    position: relative;
     background-color: rgba(255,255,255,1);
     width: 100vw !important;
     position: fixed !important;
@@ -62,5 +63,11 @@
     i {
       font-size: 18px;
     }
+  }
+  .logo {
+  left: 0px;
+  }
+  .user_menu {
+    margin-right: 3%;
   }
 }

@@ -72,20 +72,19 @@ class FileUploader extends React.Component {
     const { theme, type, tooltip } = this.props
     const tooltipId = v4()
     return (
-      <div className={styles.upload_btn_wrapper}>
+      <div
+        className={styles.upload_btn_wrapper}
+        data-tip={tooltip}
+        data-for={tooltipId}
+      >
         <form onSubmit={this.onFormSubmit}>
-          <p
-            data-tip={tooltip}
-            data-for={tooltipId}
-          >
-            <RoundButton
-              text="Upload"
-              theme={theme}
-              size="small"
-              handleNext={clickUploaderInput}
-              active
-            />
-          </p>
+          <RoundButton
+            text="Upload"
+            theme={theme}
+            size="small"
+            handleNext={clickUploaderInput}
+            active
+          />
           <ReactTooltip
             id={tooltipId}
             className={`${styles.tooltip} `}

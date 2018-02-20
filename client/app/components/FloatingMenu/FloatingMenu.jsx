@@ -44,6 +44,7 @@ export class FloatingMenu extends Component {
     `
     const currentStyle = this.state.expand ? styles.open : styles.closed
     const wrapperStyle = this.state.expand ? styles.wrapper_max : styles.wrapper_min
+
     return (
       <div className={`flex-none layout-row layout-wrap layout-align-center-start ${styles.wrapper} ${wrapperStyle}`}>
         <Title

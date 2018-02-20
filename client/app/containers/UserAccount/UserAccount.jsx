@@ -4,8 +4,7 @@ import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
-import Header from '../../components/Header/Header'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import { Header } from '../../components/Header/Header'
 import {
   UserProfile,
   UserDashboard,
@@ -16,25 +15,19 @@ import {
 } from '../../components/UserAccount'
 import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
-import { Modal } from '../../components/Modal/Modal'
-import { AvailableRoutes } from '../../components/AvailableRoutes/AvailableRoutes'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
+import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
 
 class UserAccount extends Component {
   constructor (props) {
     super(props)
-
-    this.state = {
-      showModal: false
-    }
 
     this.getLocations = this.getLocations.bind(this)
     this.destroyLocation = this.destroyLocation.bind(this)
     this.makePrimary = this.makePrimary.bind(this)
     this.setUrl = this.setUrl.bind(this)
     this.setNavLink = this.setNavLink.bind(this)
-    this.toggleModal = this.toggleModal.bind(this)
   }
   componentDidMount () {
     const { userDispatch, users, user } = this.props
@@ -48,7 +41,6 @@ class UserAccount extends Component {
 
   setNavLink (target) {
     const { userDispatch, users, user } = this.props
-    // this.setState({ activeLink: target })
     if (user && users && !users.loading && !users.dashboard) {
       userDispatch.getDashboard(user.id, false)
     }
@@ -93,7 +85,6 @@ class UserAccount extends Component {
         break
     }
   }
-
   destroyLocation (locationId) {
     const { userDispatch, user } = this.props
     userDispatch.destroyLocation(user.id, locationId)
@@ -103,11 +94,6 @@ class UserAccount extends Component {
     const { userDispatch, user } = this.props
     userDispatch.makePrimary(user.id, locationId)
   }
-
-  toggleModal () {
-    this.setState({ showModal: !this.state.showModal })
-  }
-
   render () {
     const {
       user, theme, users, userDispatch, authDispatch, currencies, appDispatch
@@ -129,33 +115,14 @@ class UserAccount extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const routeModal = (
-      <Modal
-        component={
-          <AvailableRoutes
-            user={user}
-            theme={theme}
-            routes={dashboard.routes}
-            userDispatch={userDispatch}
-            initialCompName="UserAccount"
-          />
-        }
-        width="48vw"
-        verticalPadding="30px"
-        horizontalPadding="15px"
-        parentToggle={this.toggleModal}
-      />
-    )
-
     const nav = (<SideNav theme={theme} user={user} />)
     const menu = <FloatingMenu Comp={nav} theme={theme} />
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
         {loadingScreen}
-        {this.state.showModal ? routeModal : ''}
         <Header
           theme={theme}
-          nav={menu}
+          menu={menu}
           showMenu
           scrollable
         />
