@@ -1039,13 +1039,12 @@ export class ShipmentLocationBox extends Component {
         >
           <div
             className={
-              `${defaults.content_width
-              } layout-row flex-none layout-align-start-start ${
-                styles.map_container}`
+              `${defaults.content_width} ${styles.map_container} ` +
+              'layout-row flex-none layout-align-start-start'
             }
           >
             {this.state.showModal ? routeModal : ''}
-            <div className={`flex-100 layout-row layout-wrap layout-align-center-center ${styles.input_box} ${errorClass}`}>
+            <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.input_box} ${errorClass}`}>
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
                 <div className={
                   'flex-45 layout-row layout-align-start ' +
@@ -1084,6 +1083,7 @@ export class ShipmentLocationBox extends Component {
               <div
                 className="flex-5 layout-row layout-align-center-center"
                 onClick={this.handleSwap}
+                style={{ height: '60px' }}
               >
                 <i className={`${styles.fa_exchange_style} fa fa-exchange `} />
               </div>
