@@ -441,22 +441,8 @@ export class ShipmentLocationBox extends Component {
   postToggleAutocomplete (target) {
     const { map } = this.state
 
-    if (target === 'origin') {
-      setTimeout(
-        () => {
-          this.initAutocomplete(map, target)
-        },
-        1000
-      )
-    }
-
-    if (target === 'destination') {
-      setTimeout(
-        () => {
-          this.initAutocomplete(map, target)
-        },
-        1000
-      )
+    if (target === 'origin' || target === 'destination') {
+      setTimeout(() => this.initAutocomplete(map, target), 1000)
     }
   }
 
