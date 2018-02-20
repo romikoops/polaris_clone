@@ -429,3 +429,9 @@ export const managerRoles = [
   { label: 'Air', value: 'air' },
   { label: 'Rail', value: 'rail' }
 ]
+
+export const truckingFees = [
+  { label: 'Fuel Surcharge', value: 'FSC' },
+  { label: 'Loading/Unloading Time', value: 'ULT' },
+  { label: 'VAT', value: 'VAT' }
+]

@@ -6,10 +6,156 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator } from '../../helpers'
-import { currencyOptions, rateBasises } from '../../constants/admin.constants'
+import { currencyOptions, rateBasises, truckingFees } from '../../constants/admin.constants'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import { PlaceSearch } from '../Maps/PlaceSearch'
 
+export const TruckingCityFinder = ({ weightSteps }) => {
+
+}
+export const TruckingDistanceSetter = ({ newCell, theme, addNewCell }) => (
+  <div className="flex-100 layout-row layout-align-start-center">
+    <Formsy
+      onValidSubmit={addNewCell}
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <p className="flex-none sup_l">Lower limit distance</p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center input_box">
+          <FormsyInput
+            type="number"
+            name="lower_distance"
+            value={newCell.lower_distance}
+            placeholder="Lower Distance"
+          />
+        </div>
+      </div>
+      <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <p className="flex-none sup_l">Upper limit distance</p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center input_box">
+          <FormsyInput
+            type="number"
+            name="upper_distance"
+            value={newCell.upper_distance}
+            placeholder="Upper Distance"
+          />
+        </div>
+      </div>
+      <div className="flex-33 layout-row layout-align-center-center" >
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Add another"
+          iconClass="fa-plus-square-o"
+        />
+      </div>
+    </Formsy>
+  </div>
+)
+TruckingDistanceSetter.propTypes = {
+  theme: PropTypes.theme,
+  newCell: PropTypes.objectOf(PropTypes.any).isRequired,
+  addNewCell: PropTypes.func.isRequired
+}
+TruckingDistanceSetter.defaultProps = {
+  theme: {}
+}
+export const TruckingZipSetter = ({ newCell, theme, addNewCell }) => (
+  <div className="flex-100 layout-row layout-align-start-center">
+    <Formsy
+      onValidSubmit={addNewCell}
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <p className="flex-none sup_l">Lower limit zipcode</p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center input_box">
+          <FormsyInput
+            type="number"
+            name="lower_zip"
+            value={newCell.lower_zip}
+            placeholder="Lower Zip"
+          />
+        </div>
+      </div>
+      <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <p className="flex-none sup_l">Upper limit zipcode</p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center input_box">
+          <FormsyInput
+            type="number"
+            name="upper_zip"
+            value={newCell.upper_zip}
+            placeholder="Upper Zip"
+          />
+        </div>
+      </div>
+      <div className="flex-33 layout-row layout-align-center-center" >
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Add another"
+          iconClass="fa-plus-square-o"
+        />
+      </div>
+    </Formsy>
+  </div>
+)
+TruckingZipSetter.propTypes = {
+  theme: PropTypes.theme,
+  newCell: PropTypes.objectOf(PropTypes.any).isRequired,
+  addNewCell: PropTypes.func.isRequired
+}
+TruckingZipSetter.defaultProps = {
+  theme: {}
+}
+export const TruckingCitySetter = ({ newCell, theme, addNewCell }) => (
+  <div className="flex-100 layout-row layout-align-start-center">
+    <Formsy
+      onValidSubmit={addNewCell}
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div className="flex-66 layout-row layout-wrap">
+        <h3 className="flex-40">Find Cities</h3>
+        <div className="offset-5 flex-55">
+          <GmapsWrapper
+            theme={theme}
+            component={PlaceSearch}
+            inputStyles={{
+              width: '96%',
+              marginTop: '9px',
+              background: 'white'
+            }}
+            handlePlaceChange={this.handlePlaceChange}
+            hideMap
+          />
+        </div>
+      </div>
+      <div className="flex-33 layout-row layout-align-center-center" >
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Add another"
+          iconClass="fa-plus-square-o"
+        />
+      </div>
+    </Formsy>
+  </div>
+)
+TruckingCitySetter.propTypes = {
+  theme: PropTypes.theme,
+  newCell: PropTypes.objectOf(PropTypes.any).isRequired,
+  addNewCell: PropTypes.func.isRequired
+}
+TruckingCitySetter.defaultProps = {
+  theme: {}
+}
 export class AdminTruckingCreator extends Component {
   static prepForSelect (arr, labelKey, valueKey, glossary) {
     return arr.map(a => ({
@@ -17,7 +163,7 @@ export class AdminTruckingCreator extends Component {
       label: glossary ? glossary[a[labelKey]] : a[labelKey]
     }))
   }
-  static grammaratize (label) {
+  static grammarize (label) {
     let result
     switch (label) {
       case 'Per Container':
@@ -74,6 +220,7 @@ export class AdminTruckingCreator extends Component {
     this.addWeightStep = this.addWeightStep.bind(this)
     this.saveWeightSteps = this.saveWeightSteps.bind(this)
     this.addNewCell = this.addNewCell.bind(this)
+    this.handleInputDisplays = this.handleInputDisplays.bind(this)
   }
 
   handleChange (event) {
@@ -85,6 +232,22 @@ export class AdminTruckingCreator extends Component {
       }
     })
   }
+  handleInputDisplays () {
+    const { truckingBasis, newCell } = this.state
+    const { theme } = this.props
+    switch (truckingBasis.value) {
+      case 'city':
+        return <TruckingCitySetter theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
+      case 'zip_code':
+        return <TruckingZipSetter theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
+      case 'distance':
+        return (
+          <TruckingDistanceSetter theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
+        )
+      default:
+        return <TruckingZipSetter theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
+    }
+  }
   addNewCell (model) {
     const { cells, weightSteps } = this.state
     const tmpCell = { ...model }
@@ -93,8 +256,6 @@ export class AdminTruckingCreator extends Component {
     this.setState({
       cells,
       newCell: {
-        upper_zip: '',
-        lower_zip: '',
         table: []
       }
     })
@@ -122,7 +283,6 @@ export class AdminTruckingCreator extends Component {
   }
 
   handlePlaceChange (place) {
-    const { cities } = this.state
     const newLocation = {
       streetNumber: '',
       street: '',
@@ -155,7 +315,12 @@ export class AdminTruckingCreator extends Component {
     newLocation.longitude = place.geometry.location.lng()
     newLocation.geocodedAddress = place.formatted_address
     this.setState({
-      cities: cities.push(newLocation)
+      tmpCity: newLocation,
+      newCell: {
+        ...this.state.newCell,
+        city: newLocation.city,
+        country: newLocation.country
+      }
     })
   }
 
@@ -227,14 +392,28 @@ export class AdminTruckingCreator extends Component {
   render () {
     const { theme, nexuses } = this.props
     const {
-      nexus, currency, rateBasis, steps, cells, newStep, weightSteps, newCell, truckingBasis
+      nexus,
+      currency,
+      rateBasis,
+      steps,
+      cells,
+      newStep,
+      weightSteps,
+      truckingBasis,
+      loadType
     } = this.state
     const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
     const truckingBasises = [
       { value: 'city', label: 'City' },
-      { value: 'zipcode', label: 'Zip Code' }
+      { value: 'zipcode', label: 'Zip Code' },
+      { value: 'distance', label: 'Distance (Round Trip)' }
     ]
-    const nexusOpts = this.prepForSelect(nexuses, 'name', false, false)
+    const loadTypeOpts = [
+      { value: 'lcl', label: 'LCL' },
+      { value: 'fcl', label: 'FCL' }
+    ]
+    console.log(truckingFees)
+    const nexusOpts = AdminTruckingCreator.prepForSelect(nexuses, 'name', false, false)
     const selectNexus = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
@@ -245,6 +424,23 @@ export class AdminTruckingCreator extends Component {
               classes={`${styles.select}`}
               value={nexus}
               options={nexusOpts}
+              className="flex-100"
+              onChange={this.handleTopLevelSelect}
+            />
+          </div>
+        </div>
+      </div>
+    )
+    const selectLoadType = (
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <h4 className="flex-100 letter_3">Select a Load Type</h4>
+          <div className="flex-75 layout-row">
+            <NamedSelect
+              name="loadType"
+              classes={`${styles.select}`}
+              value={loadType}
+              options={loadTypeOpts}
               className="flex-100"
               onChange={this.handleTopLevelSelect}
             />
@@ -305,25 +501,6 @@ export class AdminTruckingCreator extends Component {
         </div>
       </div>
     )
-    const cityInput = (
-      <div className="flex-100 layout-row layout-wrap">
-        <h3 className="flex-40">Find Cities</h3>
-        <div className="offset-5 flex-55">
-          <GmapsWrapper
-            theme={theme}
-            component={PlaceSearch}
-            inputStyles={{
-              width: '96%',
-              marginTop: '9px',
-              background: 'white'
-            }}
-            handlePlaceChange={this.handlePlaceChange}
-            hideMap
-          />
-        </div>
-      </div>
-    )
-    console.log(cityInput)
     const panel = cells.map((s, i) => {
       const wsInputs = []
       weightSteps.forEach((ws, iw) => {
@@ -357,52 +534,9 @@ export class AdminTruckingCreator extends Component {
         </div>
       )
     })
-    const addNewZip = (
-      <div className="flex-100 layout-row layout-align-start-center">
-        <Formsy
-          onValidSubmit={this.addNewCell}
-          className="flex-100 layout-row layout-align-start-center"
-        >
-          <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none sup_l">Lower limit zipcode</p>
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center input_box">
-              <FormsyInput
-                type="number"
-                name="lower_zip"
-                value={newCell.lower_zip}
-                placeholder="Lower Zip"
-              />
-            </div>
-          </div>
-          <div className="flex-33 layout-row layout-row layout-wrap layout-align-center-start">
-            <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none sup_l">Upper limit zipcode</p>
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center input_box">
-              <FormsyInput
-                type="number"
-                name="upper_zip"
-                value={newCell.upper_zip}
-                placeholder="Upper Zip"
-              />
-            </div>
-          </div>
-          <div className="flex-33 layout-row layout-align-center-center" >
-            <RoundButton
-              theme={theme}
-              size="small"
-              text="Add another"
-              iconClass="fa-plus-square-o"
-            />
-          </div>
-        </Formsy>
-      </div>
-    )
     const rateView = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
-        {addNewZip}
+        {this.handleInputDisplays()}
         {panel}
       </div>
     )
@@ -413,7 +547,7 @@ export class AdminTruckingCreator extends Component {
             // eslint-disable-next-line react/no-array-index-key
             <div key={`ows_${i}`} className="flex-33 layout-row layout-wrap layout-align-center-start">
               <div className="flex-100 layout-row">
-                <p className="flex-none">{`Weight Range:  ${ws.min} - ${ws.max} ${this.grammaratize(rateBasis.label)}`}</p>
+                <p className="flex-none">{`Weight Range:  ${ws.min} - ${ws.max} ${AdminTruckingCreator.grammarize(rateBasis.label)}`}</p>
               </div>
             </div>
           ))
@@ -494,6 +628,7 @@ export class AdminTruckingCreator extends Component {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
 
           {selectNexus}
+          {selectLoadType}
           {selectRateBasis}
           {selectCurrency}
           {selectTruckingBasis}
