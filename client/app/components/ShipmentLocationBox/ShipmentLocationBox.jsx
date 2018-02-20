@@ -1025,6 +1025,18 @@ export class ShipmentLocationBox extends Component {
       />
     )
 
+    const toggleCSS = `
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          ${theme.colors.brightPrimary} 0%,
+          ${theme.colors.brightSecondary} 100%
+        );
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+    `
+    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1130,22 +1142,7 @@ export class ShipmentLocationBox extends Component {
               <div id="map" style={mapStyle} />
             </div>
           </div>
-          {theme ? (
-            <style
-              dangerouslySetInnerHTML={{
-                __html: `
-                            .react-toggle--checked .react-toggle-track {
-                                background: linear-gradient(90deg, ${
-            theme.colors.brightPrimary
-            } 0%, ${theme.colors.brightSecondary} 100%);
-                                border: 0.5px solid rgba(0, 0, 0, 0);
-                            }
-                    `
-              }}
-            />
-          ) : (
-            ''
-          )}
+          {styleTagJSX}
         </div>
       </div>
     )
