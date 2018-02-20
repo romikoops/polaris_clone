@@ -1,12 +1,10 @@
 :local {
   .side_nav {
     position: fixed;
-    margin-left: 0px;
     transition: all 1.5s ease-in-out;
     min-width: 150px;
     width: max-content;
     background-color: white;
-    padding-left: 20px;
     @media screen and (max-width: 768px) {
       left: 0px;
       padding-left: 20px;
@@ -23,11 +21,9 @@
   }
   .expanded {
     width: 110px !important;
-    position: fixed !important;
   }
   .collapsed {
     width: 60px;
-    position: relative;
   }
   .link_text {
     transition: all 1s ease-in-out;
@@ -62,7 +58,10 @@
   .dropdown_box {
     margin-top: -5px;
     margin-bottom: -5px;
-    padding: 0;
+    @media screen and (max-width: 1024px) {
+      margin-left: 47px;
+    }
+   
   }
   .text {
     min-width: max-content;

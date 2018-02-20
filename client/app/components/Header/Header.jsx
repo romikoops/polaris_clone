@@ -164,22 +164,19 @@ class Header extends Component {
 
     return (
       <div className={classProps} >
-        <div className={`${defs.content_width} layout-row flex`}>
-          { showMenu ? menu : '' }
-          <div className={`${styles.infront} layout-row flex layout-align-start-center offset-20`}>
-            <img
-              src={logoUrl}
-              className={logoStyle}
-              alt=""
-              onClick={this.goHome}
-            />
-          </div>
-          <div className="flex layout-row layout-align-end-center">
-            {rightCorner}
-            { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
-          </div>
+        { showMenu ? menu : '' }
+        <div className={`${styles.logo} layout-row flex layout-align-start-center offset-10`}>
+          <img
+            src={logoUrl}
+            className={logoStyle}
+            alt=""
+            onClick={this.goHome}
+          />
         </div>
-
+        <div className={`${styles.user_menu} flex layout-row layout-align-end-center`}>
+          {rightCorner}
+          { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+        </div>
       </div>
     )
   }
