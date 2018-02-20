@@ -473,11 +473,10 @@ export class ShipmentDetails extends Component {
       }
     `
     const dayPickerSection = (
-      <div
-        className={`
-                ${styles.date_sec} ${defaults.content_width}
-                layout-row flex-none layout-align-start-center
-            `}
+      <div className={
+        `${defaults.content_width} ` +
+        'layout-row flex-none layout-align-start-center'
+      }
       >
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
@@ -492,13 +491,14 @@ export class ShipmentDetails extends Component {
                 size={3}
               />
             </div>
-            <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />{' '}
+            <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>
           <div
             name="dayPicker"
-            className={`flex-none layout-row ${styles.dpb} ${
-              showDayPickerError ? styles.with_errors : ''
-            }`}
+            className={
+              `flex-none layout-row ${styles.dpb} ` +
+              `${showDayPickerError ? styles.with_errors : ''}`
+            }
           >
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
               <i className="flex-none fa fa-calendar" />
@@ -520,7 +520,6 @@ export class ShipmentDetails extends Component {
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
           <div className="flex-100 layout-row layout-align-end-center">
             <div className="flex-none letter_2">
-              {' '}
               <TextHeading theme={theme} text="Select Incoterm :" size={3} />
             </div>
           </div>
@@ -548,13 +547,80 @@ export class ShipmentDetails extends Component {
         {flash}
         {alertModal}
         <div className={
-          `${styles.date_section} layout-row flex-100 ` +
+          `${styles.date_sec} layout-row flex-100 ` +
           'layout-wrap layout-align-center-center'
         }
         >
           {dayPickerSection}
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
+        <div
+          className={
+            `${styles.trucking_sec} layout-row flex-100 ` +
+            `${this.state.has_pre_carriage || this.state.has_on_carriage ? styles.visible : ''} ` +
+            'layout-wrap layout-align-center'
+          }
+        >
+          <div className="content_width">
+            <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
+              <div className="flex-100">
+                <TextHeading
+                  theme={theme}
+                  text="Trucking Details"
+                  size={3}
+                />
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center">
+                <div className="flex-50 layout-row layout-wrap">
+                  <div className="flex-100">
+                    <h5>Pre-Carriage</h5>
+                  </div>
+                  <div className="flex-100 layout-column layout-align-space-around">
+                    <div className={styles.form_group}>
+                      <input
+                        type="radio"
+                        id="pre_carriage_side_lifter"
+                        name="pre_carriage_truck"
+                      />
+                      <label htmlFor="pre_carriage_side_lifter">Side Lifter</label>
+                    </div>
+                    <div className={styles.form_group}>
+                      <input
+                        type="radio"
+                        id="pre_carriage_chassis"
+                        name="pre_carriage_truck"
+                      />
+                      <label htmlFor="pre_carriage_chassis">Chassis</label>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex-50 layout-row layout-wrap">
+                  <div className="flex-100">
+                    <h5>On-Carriage</h5>
+                  </div>
+                  <div className="flex-100 layout-column layout-align-space-around">
+                    <div className={styles.form_group}>
+                      <input
+                        type="radio"
+                        id="on_carriage_side_lifter"
+                        name="on_carriage_truck"
+                      />
+                      <label htmlFor="on_carriage_side_lifter">Side Lifter</label>
+                    </div>
+                    <div className={styles.form_group}>
+                      <input
+                        type="radio"
+                        id="on_carriage_chassis"
+                        name="on_carriage_truck"
+                      />
+                      <label htmlFor="on_carriage_chassis">Chassis</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div className={
           `${defaults.border_divider} layout-row flex-100 ` +
