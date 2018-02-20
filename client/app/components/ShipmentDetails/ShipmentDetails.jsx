@@ -547,39 +547,37 @@ export class ShipmentDetails extends Component {
       >
         {flash}
         {alertModal}
-        <div
-          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
-            styles.date_section
-          }`}
+        <div className={
+          `${styles.date_section} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
         >
           {dayPickerSection}
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
-        <div
-          className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
-          }
+        <div className={
+          `${defaults.border_divider} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
         >
-          <div
-            className={`
-                        ${styles.btn_sec} ${defaults.content_width}
-                        layout-row flex-none layout-wrap layout-align-start-start
-                    `}
+          <div className={
+            `${styles.btn_sec} ${defaults.content_width} ` +
+            'layout-row flex-none layout-wrap layout-align-start-start'
+          }
           >
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div
-          className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
-          }
+        <div className={
+          `${defaults.border_divider} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
         >
-          <div
-            className={`
-                        ${styles.btn_sec} ${defaults.content_width} 
-                        layout-row flex-none layout-wrap layout-align-start-start
-                    `}
+          <div className={
+            `${styles.btn_sec} ${defaults.content_width} ` +
+            'layout-row flex-none layout-wrap layout-align-start-start'
+          }
           >
             <RoundButton
               text="Back to Dashboard"
