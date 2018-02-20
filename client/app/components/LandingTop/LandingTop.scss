@@ -28,6 +28,26 @@
     font-size: 18px;
     font-weight: normal;
   }
+  h4 {
+    font-size: 16px;
+    font-weight: normal;
+  }
+  @media (min-width: 768px) and (max-width: 1366px) {
+    height: min-content;
+    margin-top: -12vh !important;
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
 }
 
 .layout_elem {
@@ -70,6 +90,10 @@
   bottom: 0;
   opacity: 0.7;
   z-index: 0;
+  @media (min-width: 1024px) and (max-width: 1366px) {
+  width: 130%;
+  left: -230px;
+  }
 }
 .top_shade {
   background-image: linear-gradient(
@@ -86,14 +110,17 @@
   opacity: 0.7;
   z-index: 0;
 }
-.btn_box {
-  height: 30vh;
-  margin-top: calc(65vh/3);
-  background-color: blue;
-}
-.top_btn {
-}
-.bot_btn {
-
+.responsive {
+  z-index: 1;
+  @media (min-width: 768px) and (max-width: 1024px) {
+    margin-top: 10% !important;
+    padding-top: 100px !important;
+    height: 300px !important;
   }
+  @media (min-width: 1024px) and (max-width: 1366px) {
+    margin-top: 20% !important;
+    padding-top: 60px !important;
+    height: 300px !important;
+  }
+}
 }

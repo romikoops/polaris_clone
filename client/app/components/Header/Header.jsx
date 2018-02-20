@@ -167,12 +167,16 @@ class Header extends Component {
       : `${styles.header}
         layout-row flex-100 layout-wrap layout-align-center`
 
+    const isDashboard = showMenu
+      ? `${defs.content_width} ${styles.responsive} layout-row flex-none`
+      : `${defs.content_width} layout-row flex-none`
+
     return (
       <div className={classProps} >
-        <div className={`${styles.dashboard_menu} layout-rox flex layout-align-start-center`}>
+        <div className={`${styles.dashboard_menu} layout-row flex layout-align-start-center`}>
           { showMenu ? menu : '' }
         </div>
-        <div className={`${defs.content_width} layout-row flex-none`}>
+        <div className={isDashboard}>
           <div className="layout-row flex layout-align-start-center">
             <img
               src={logoUrl}

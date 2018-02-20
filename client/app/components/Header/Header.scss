@@ -7,7 +7,11 @@
     width: 100vw !important; 
     z-index: 20 !important;
   }
-  
+  .responsive {
+    @media (min-width: 768px) and (max-width: 1366px) {
+      padding-left: 40vw;
+    }
+  }
   .header_scrollable {
     position: fixed;
     height: 70px;
@@ -64,9 +68,6 @@
   }
   .logo {
   margin-left: calc(100vw / 12);
-  @media screen and (max-width: 768px) {
-  
-  }
   }
   .user_menu {
     margin-left: calc(100vw / 5);
@@ -76,7 +77,12 @@
   }
   .dashboard_menu {
     position: absolute;
-   left: 0px;
-
+    left: 3vw;
+    @media (min-width: 768px) and (max-width: 1024px) {
+      left: -7vw;
+    }
+    @media (min-width: 1024px) and (max-width: 1366px) {
+      left: -3vw;
+    }
   }
 }
