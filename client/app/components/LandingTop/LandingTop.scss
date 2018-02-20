@@ -31,6 +31,8 @@
 }
 
 .layout_elem {
+  margin-top: 10%;
+  padding-top: 60px;
   z-index: 1;
 }
 
@@ -84,12 +86,14 @@
   opacity: 0.7;
   z-index: 0;
 }
-.top_button_margin {
-margin-top: 25%;
-margin-bottom: 0px;
+.btn_box {
+  height: 30vh;
+  margin-top: calc(65vh/3);
+  background-color: blue;
 }
-.button_spacing {
-  position: relative;
-  top: -10%;
+.top_btn {
 }
+.bot_btn {
+
+  }
 }

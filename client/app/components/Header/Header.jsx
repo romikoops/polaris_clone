@@ -93,13 +93,18 @@ class Header extends Component {
     if (this.state.redirect) {
       return <Redirect push to="/" />
     }
-    const dropDown = (
-      <NavDropdown
+    const dropDown = (isTop
+      ? (<NavDropdown
         dropDownText={dropDownText}
         dropDownImage={adjIcon}
         linkOptions={accountLinks}
         invert={invert}
-      />
+      />)
+      : (<NavDropdown
+        dropDownText={dropDownText}
+        dropDownImage={adjIcon}
+        linkOptions={accountLinks}
+      />)
     )
 
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
