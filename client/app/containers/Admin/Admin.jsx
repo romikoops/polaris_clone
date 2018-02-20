@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
 import { AdminDashboard, AdminSchedules, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
@@ -93,7 +93,7 @@ class Admin extends Component {
 
         <Header theme={theme} menu={menu} showMenu scrollable />
         {loadingScreen}
-        <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`}>
+        <div className={`flex-none ${defs.content_width} layout-row layout-wrap layout-align-start-start hundred`} style={{ marginTop: '60px' }}>
           <div className="flex-100 layout-row layout-wrap layout-align-center-center">
             <Switch className="flex">
               <Route

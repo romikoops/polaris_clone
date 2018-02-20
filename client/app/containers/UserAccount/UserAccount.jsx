@@ -4,20 +4,20 @@ import { bindActionCreators } from 'redux'
 import { Switch, Route, withRouter } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
-import { Header } from '../../components/Header/Header'
+import Header from '../../components/Header/Header'
 import {
   UserProfile,
   UserDashboard,
   UserShipments,
   UserShipmentView,
   UserLocations,
-  UserBilling
+  UserBilling,
+  UserContacts
 } from '../../components/UserAccount'
-import UserContacts from '../../components/UserAccount/UserContacts'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -126,7 +126,7 @@ class UserAccount extends Component {
           showMenu
           scrollable
         />
-        <div className={`${defs.content_width} layout-row flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
+        <div className={`${defs.content_width} layout-row header_buffer flex-none ${defs.spacing_md_top} ${defs.spacing_md_bottom}`}>
 
           <div className="layout-row flex-100 ">
 

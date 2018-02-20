@@ -330,6 +330,7 @@ export class AdminPriceCreator extends Component {
         </div>
       </div>)
     })
+
     const selectCargoClass = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">

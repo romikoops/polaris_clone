@@ -12,7 +12,6 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
-      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
 
       currency_row = first_sheet.row(1)
       hubs = nexus.hubs
@@ -73,7 +72,6 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
-      old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
 
       currency_row = first_sheet.row(1)
       hubs = nexus.hubs
