@@ -10,6 +10,7 @@ import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment, incoterms } from '../../constants'
 import '../../styles/day-picker-custom.css'
+import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -561,65 +562,7 @@ export class ShipmentDetails extends Component {
             'layout-wrap layout-align-center'
           }
         >
-          <div className="content_width">
-            <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
-              <div className="flex-100">
-                <TextHeading
-                  theme={theme}
-                  text="Trucking Details"
-                  size={3}
-                />
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-center">
-                <div className="flex-50 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <h5>Pre-Carriage</h5>
-                  </div>
-                  <div className="flex-100 layout-column layout-align-space-around">
-                    <div className={styles.form_group}>
-                      <input
-                        type="radio"
-                        id="pre_carriage_side_lifter"
-                        name="pre_carriage_truck"
-                      />
-                      <label htmlFor="pre_carriage_side_lifter">Side Lifter</label>
-                    </div>
-                    <div className={styles.form_group}>
-                      <input
-                        type="radio"
-                        id="pre_carriage_chassis"
-                        name="pre_carriage_truck"
-                      />
-                      <label htmlFor="pre_carriage_chassis">Chassis</label>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex-50 layout-row layout-wrap">
-                  <div className="flex-100">
-                    <h5>On-Carriage</h5>
-                  </div>
-                  <div className="flex-100 layout-column layout-align-space-around">
-                    <div className={styles.form_group}>
-                      <input
-                        type="radio"
-                        id="on_carriage_side_lifter"
-                        name="on_carriage_truck"
-                      />
-                      <label htmlFor="on_carriage_side_lifter">Side Lifter</label>
-                    </div>
-                    <div className={styles.form_group}>
-                      <input
-                        type="radio"
-                        id="on_carriage_chassis"
-                        name="on_carriage_truck"
-                      />
-                      <label htmlFor="on_carriage_chassis">Chassis</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TruckingDetails theme={theme} />
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div className={
