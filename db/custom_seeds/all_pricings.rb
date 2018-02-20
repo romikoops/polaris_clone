@@ -1,10 +1,12 @@
 include ExcelTools
 include MongoTools
 
-Tenant.all.each do |tenant|
-  # tenant = Tenant.find_by_subdomain("demo")
+# Tenant.all.each do |tenant|
+  tenant = Tenant.find_by_subdomain("demo")
   shipper = tenant.users.second
   Stop.destroy_all
+  Hub.destroy_all
+  Location.where(location_type: 'nexus')
   Layover.destroy_all
   tenant.itineraries.destroy_all
   Trip.destroy_all
@@ -15,10 +17,10 @@ Tenant.all.each do |tenant|
   overwrite_hubs(req, shipper)
 
   # # Overwrite service charges from excel sheet
-  puts "# Overwrite service charges from excel sheet"
-  service_charges = File.open("#{Rails.root}/db/dummydata/2_service_charges.xlsx")
-  req = {"xlsx" => service_charges}
-  overwrite_service_charges(req, shipper)
+  # puts "# Overwrite service charges from excel sheet"
+  # service_charges = File.open("#{Rails.root}/db/dummydata/2_service_charges.xlsx")
+  # req = {"xlsx" => service_charges}
+  # overwrite_service_charges(req, shipper)
 
   # Overwrite dedicated pricings from excel sheet.
   # If dedicated == true, shipper.id is automatically inserted.
@@ -55,4 +57,4 @@ Tenant.all.each do |tenant|
   overwrite_city_trucking_rates(req, shipper)
 
   tenant.update_route_details()
-end
+# end

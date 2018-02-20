@@ -12,6 +12,16 @@ import { NamedSelect } from '../../NamedSelect/NamedSelect'
 import { gradientTextGenerator, isEmpty } from '../../../helpers'
 
 export class TruckingFeeSetter extends Component {
+  static selectFromOptions (options, value) {
+    let result
+    console.log(options)
+    options.forEach((op) => {
+      if (op.value === value) {
+        result = op
+      }
+    })
+    return result || options[0]
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -46,18 +56,42 @@ export class TruckingFeeSetter extends Component {
           opts = rateBasises.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj[key][chargeKey] = this.selectFromOptions(opts, fees[key][chargeKey])
+        newObj[key][chargeKey] = TruckingFeeSetter.selectFromOptions(opts, fees[key][chargeKey])
       })
     })
 
     this.setState({ selectOptions: newObj })
   }
-  addFee (key) {
-    this.setState({
-      fees: {
-        ...this.state.fees,
-        [key]: truckingFees[key]
+  addFee (fee) {
+    const { fees } = this.state
+    const newObj = {}
+    const tmpObj = {}
+    fees[fee.key] = fee
+    const keyArr = Object.keys(fees)
+    keyArr.forEach((key) => {
+      if (!newObj[key]) {
+        newObj[key] = {}
       }
+      if (!tmpObj[key]) {
+        tmpObj[key] = {}
+      }
+      let opts
+      Object.keys(fees[key]).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOptions.slice()
+          // this.getOptions(opts, key, chargeKey);
+        } else if (chargeKey === 'rate_basis') {
+          opts = rateBasises.slice()
+          // this.getOptions(opts, key, chargeKey);
+        }
+        newObj[key][chargeKey] = (chargeKey === 'currency' || chargeKey === 'rate_basis') ? TruckingFeeSetter.selectFromOptions(opts, fees[key][chargeKey]) : ''
+      })
+    })
+
+    this.setState({ selectOptions: newObj })
+    this.setState({
+      selectOptions: newObj,
+      fees
     })
   }
   deleteFee (key) {
@@ -74,93 +108,92 @@ export class TruckingFeeSetter extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const panel =
-      !isEmpty(fees)
-        ? Object.keys(fees).map((key) => {
-          const cells = []
-          Object.keys(fees[key]).forEach((chargeKey) => {
-            if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-              cells.push(<div
-                key={chargeKey}
-                className={`flex layout-row layout-align-none-center layout-wrap ${
-                  styles.price_cell
-                }`}
-              >
-                <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-                <div className={`flex-95 layout-row ${styles.editor_input}`}>
-                  <input
-                    type="number"
-                    value={fees[key][chargeKey]}
-                    onChange={this.handleChange}
-                    name={`${key}-${chargeKey}`}
-                  />
-                </div>
-              </div>)
-            } else if (chargeKey === 'rate_basis') {
-              cells.push(<div
-                className={`flex layout-row layout-align-none-center layout-wrap ${
-                  styles.price_cell
-                }`}
-              >
-                <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-                <NamedSelect
+    const panel = !isEmpty(fees)
+      ? Object.keys(fees).map((key) => {
+        const cells = []
+        Object.keys(fees[key]).forEach((chargeKey) => {
+          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+              <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                <input
+                  type="number"
+                  value={fees[key][chargeKey]}
+                  onChange={this.handleChange}
                   name={`${key}-${chargeKey}`}
+                />
+              </div>
+            </div>)
+          } else if (chargeKey === 'rate_basis') {
+            cells.push(<div
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+              <NamedSelect
+                name={`${key}-${chargeKey}`}
+                classes={`${styles.select}`}
+                value={selectOptions ? selectOptions[key][chargeKey] : ''}
+                options={rateBasises}
+                className="flex-100"
+                onChange={this.handleSelect}
+              />
+            </div>)
+          } else if (chargeKey === 'currency') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+              <div className="flex-95 layout-row">
+                <NamedSelect
+                  name={`${key}-currency`}
                   classes={`${styles.select}`}
-                  value={selectOptions ? selectOptions[key][chargeKey] : ''}
-                  options={rateBasises}
+                  value={selectOptions ? selectOptions[key].currency : ''}
+                  options={currencyOptions}
                   className="flex-100"
                   onChange={this.handleSelect}
                 />
-              </div>)
-            } else if (chargeKey === 'currency') {
-              cells.push(<div
-                key={chargeKey}
-                className={`flex layout-row layout-align-none-center layout-wrap ${
-                  styles.price_cell
-                }`}
-              >
-                <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-                <div className="flex-95 layout-row">
-                  <NamedSelect
-                    name={`${key}-currency`}
-                    classes={`${styles.select}`}
-                    value={selectOptions ? selectOptions[key].currency : ''}
-                    options={currencyOptions}
-                    className="flex-100"
-                    onChange={this.handleSelect}
-                  />
-                </div>
-              </div>)
-            }
-          })
-          return (
-            <div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  styles.price_subheader
-                }`}
-              >
-                <p className="flex-none">
-                  {key} - {fees[key].label}
-                </p>
-                <div
-                  className="flex-none layout-row layout-align-center-center"
-                  onClick={() => this.deleteFee(key)}
-                >
-                  <i className="fa fa-trash clip" style={textStyle} />
-                </div>
               </div>
-              <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
-            </div>
-          )
+            </div>)
+          }
         })
-        : []
-    const availableFees = Object.keys(truckingFees).map(tfk => (
+        return (
+          <div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.price_subheader
+              }`}
+            >
+              <p className="flex-none">
+                {key} - {fees[key].label}
+              </p>
+              <div
+                className="flex-none layout-row layout-align-center-center"
+                onClick={() => this.deleteFee(key)}
+              >
+                <i className="fa fa-trash clip" style={textStyle} />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+          </div>
+        )
+      })
+      : []
+    const availableFees = truckingFees.map(tfk => (
       <div
         className="flex-33 layout-row layout-align-center-center"
         onClick={() => this.addFee(tfk)}
       >
-        <p className="flex-none ">{truckingFees[tfk].label}</p>
+        <p className="flex-none ">{tfk.label}</p>
       </div>
     ))
     return (

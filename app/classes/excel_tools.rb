@@ -688,9 +688,13 @@ module ExcelTools
       cargo_classes = [
         'lcl'
       ]
+      steps_in_order = []
+      stops_in_order.length.times do 
+        steps_in_order << 30
+      end
       itinerary.generate_weekly_schedules(
         stops_in_order,
-        [30],
+        steps_in_order,
         row[:effective_date], 
         row[:expiration_date], 
         [1, 5],
@@ -944,9 +948,13 @@ module ExcelTools
         'fcl_40f_hq'
       ]
       new_pricings_aux_data[pricing_key][:stops_in_order] = new_pricings_aux_data[pricing_key][:hub_ids].map.with_index { |h, i| new_pricings_aux_data[pricing_key][:itinerary].stops.find_or_create_by!(hub_id: h, index: i)  }
+      steps_in_order = []
+      new_pricings_aux_data[pricing_key][:stops_in_order].length.times do 
+        steps_in_order << 30
+      end
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
-        [30],
+        steps_in_order,
         row[:effective_date], 
         row[:expiration_date], 
         [1, 5],
