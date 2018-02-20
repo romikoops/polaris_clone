@@ -166,6 +166,7 @@ class Shop extends Component {
           showRegistration={this.state.showRegistration}
           req={req}
         />
+
         <ShopStageView
           className="flex-100"
           shopType={this.state.shopType}

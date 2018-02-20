@@ -93,13 +93,18 @@ class Header extends Component {
     if (this.state.redirect) {
       return <Redirect push to="/" />
     }
-    const dropDown = (
-      <NavDropdown
+    const dropDown = (isTop
+      ? (<NavDropdown
         dropDownText={dropDownText}
         dropDownImage={adjIcon}
         linkOptions={accountLinks}
         invert={invert}
-      />
+      />)
+      : (<NavDropdown
+        dropDownText={dropDownText}
+        dropDownImage={adjIcon}
+        linkOptions={accountLinks}
+      />)
     )
 
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
@@ -158,24 +163,32 @@ class Header extends Component {
     )
     const classProps = scrollable && !isTop
       ? `${styles.header_scrollable} 
-        layout-row flex-100 layout-wrap layout-align-center-space-between`
+        layout-row flex-100 layout-wrap layout-align-center`
       : `${styles.header}
         layout-row flex-100 layout-wrap layout-align-center`
 
+    const isDashboard = showMenu
+      ? `${defs.content_width} ${styles.responsive} layout-row flex-none`
+      : `${defs.content_width} layout-row flex-none`
+
     return (
       <div className={classProps} >
-        { showMenu ? menu : '' }
-        <div className={`${styles.logo} layout-row flex layout-align-start-center offset-10`}>
-          <img
-            src={logoUrl}
-            className={logoStyle}
-            alt=""
-            onClick={this.goHome}
-          />
+        <div className={`${styles.dashboard_menu} layout-row flex layout-align-start-center`}>
+          { showMenu ? menu : '' }
         </div>
-        <div className={`${styles.user_menu} flex layout-row layout-align-end-center`}>
-          {rightCorner}
-          { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+        <div className={isDashboard}>
+          <div className="layout-row flex layout-align-start-center">
+            <img
+              src={logoUrl}
+              className={logoStyle}
+              alt=""
+              onClick={this.goHome}
+            />
+          </div>
+          <div className="flex layout-row layout-align-end-center">
+            {rightCorner}
+            { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+          </div>
         </div>
       </div>
     )

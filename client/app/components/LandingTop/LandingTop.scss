@@ -28,9 +28,31 @@
     font-size: 18px;
     font-weight: normal;
   }
+  h4 {
+    font-size: 16px;
+    font-weight: normal;
+  }
+  @media (min-width: 768px) and (max-width: 1366px) {
+    height: min-content;
+    margin-top: -12vh !important;
+    h2 {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    h4 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
 }
 
 .layout_elem {
+  margin-top: 10%;
+  padding-top: 60px;
   z-index: 1;
 }
 
@@ -68,6 +90,10 @@
   bottom: 0;
   opacity: 0.7;
   z-index: 0;
+  @media (min-width: 1024px) and (max-width: 1366px) {
+  width: 130%;
+  left: -230px;
+  }
 }
 .top_shade {
   background-image: linear-gradient(
@@ -84,12 +110,17 @@
   opacity: 0.7;
   z-index: 0;
 }
-.top_button_margin {
-margin-top: 25%;
-margin-bottom: 0px;
-}
-.button_spacing {
-  position: relative;
-  top: -10%;
+.responsive {
+  z-index: 1;
+  @media (min-width: 768px) and (max-width: 1024px) {
+    margin-top: 10% !important;
+    padding-top: 100px !important;
+    height: 300px !important;
+  }
+  @media (min-width: 1024px) and (max-width: 1366px) {
+    margin-top: 20% !important;
+    padding-top: 60px !important;
+    height: 300px !important;
+  }
 }
 }
