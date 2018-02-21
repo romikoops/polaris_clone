@@ -11,7 +11,7 @@ import {
   UserBilling
 } from '../../components/UserAccount'
 import { userActions, authenticationActions, appActions } from '../../actions'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
+import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
 import UserContacts from '../../components/UserAccount/UserContacts'

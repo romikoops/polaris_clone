@@ -142,6 +142,25 @@ class Location < ApplicationRecord
   def hubs_by_type(hub_type, tenant_id)
     hubs.where(hub_type: hub_type, tenant_id: tenant_id)
   end
+  def hubs_by_type_seeder(hub_type, tenant_id)
+    hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+    if hubs.length < 1
+      case hub_type
+      when 'ocean'
+        name = "#{self.name} Port"
+      when 'air'
+        name = "#{self.name} Airport"
+      when 'rail'
+        name = "#{self.name} Railyard"
+      else
+        name = self.name
+      end
+      hub =  self.hubs.create!(hub_type: hub_type, tenant_id: tenant_id, name: name, latitude: self.latitude, longitude: self.longitude, location_id: self.id, nexus_id: self.id)
+      return self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+    else
+      hubs
+    end
+  end
 
   def pretty_hub_type
     case self.location_type

@@ -84,8 +84,13 @@ export class AdminTruckingCreator extends Component {
     this.addNewCell = this.addNewCell.bind(this)
     this.handlePlaceChange = this.handlePlaceChange.bind(this)
     this.handleInputDisplays = this.handleInputDisplays.bind(this)
+    this.setFeeSchema = this.setFeeSchema.bind(this)
   }
-
+  setFeeSchema (fees) {
+    this.setState({
+      feeSchema: fees
+    })
+  }
   handleChange (event) {
     const { name, value } = event.target
     this.setState({
@@ -169,6 +174,7 @@ export class AdminTruckingCreator extends Component {
         )
     }
   }
+
   addNewCell (model) {
     const { cells, weightSteps, loadType } = this.state
     const tmpCell = { ...model }
