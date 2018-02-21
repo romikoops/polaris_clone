@@ -20,7 +20,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
-import { isEmpty } from '../../helpers/isEmpty'
+import { isEmpty } from '../../helpers/objectTools'
 import '../../styles/select-css-custom.css'
 
 export class ShipmentDetails extends Component {
@@ -181,22 +181,11 @@ export class ShipmentDetails extends Component {
     let { fullAddress } = this.state[key1]
 
     if (fullAddress) {
-      fullAddress =
-        `${addObj.number
-        } ${
-          addObj.street
-        } ${
-          addObj.city
-        } ${
-          addObj.zipCode
-        } ${
-          addObj.country}`
+      fullAddress = `${addObj.number} ${addObj.street} ${addObj.city} ${addObj.zipCode} ${
+        addObj.country
+      }`
     }
     this.setState({
-      ...this.state,
-      [key1]: { ...this.state[key1], [key2]: val, fullAddress }
-    })
-    console.log({
       ...this.state,
       [key1]: { ...this.state[key1], [key2]: val, fullAddress }
     })
@@ -207,8 +196,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
-
-    cargoItems[index][suffixName] = value
+    cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -218,7 +206,11 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    containers[index][suffixName] = value
+    if (suffixName === 'sizeClass') {
+      containers[index][suffixName] = value
+    } else {
+      containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
@@ -361,7 +353,9 @@ export class ShipmentDetails extends Component {
   }
 
   render () {
-    const { tenant, user, shipmentData } = this.props
+    const {
+      tenant, user, shipmentData, shipmentDispatch
+    } = this.props
     if (!shipmentData) {
       return ''
     }
@@ -454,6 +448,7 @@ export class ShipmentDetails extends Component {
         handleAddressChange={this.handleAddressChange}
         shipment={shipmentData}
         routeIds={routeIds}
+        shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
       />
@@ -591,7 +586,7 @@ export class ShipmentDetails extends Component {
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div
           className={
-            `${styles.trucking_sec} layout-row flex-100 ` +
+            `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
             `${this.state.has_pre_carriage || this.state.has_on_carriage ? styles.visible : ''} ` +
             'layout-wrap layout-align-center'
           }

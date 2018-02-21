@@ -1,11 +1,13 @@
 import React from 'react'
 import fetch from 'isomorphic-fetch'
 import { Promise } from 'es6-promise-promise'
+import ReactTooltip from 'react-tooltip'
+import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { BASE_URL } from '../../constants'
 import { authHeader } from '../../helpers'
-import styles from './FileUploader.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
+import styles from './FileUploader.scss'
 
 class FileUploader extends React.Component {
   static handleResponse (response) {
@@ -67,9 +69,14 @@ class FileUploader extends React.Component {
     const clickUploaderInput = () => {
       this.uploaderInput.click()
     }
-    const { theme, type } = this.props
+    const { theme, type, tooltip } = this.props
+    const tooltipId = v4()
     return (
-      <div className={styles.upload_btn_wrapper}>
+      <div
+        className={styles.upload_btn_wrapper}
+        data-tip={tooltip}
+        data-for={tooltipId}
+      >
         <form onSubmit={this.onFormSubmit}>
           <RoundButton
             text="Upload"
@@ -78,13 +85,15 @@ class FileUploader extends React.Component {
             handleNext={clickUploaderInput}
             active
           />
+          <ReactTooltip
+            id={tooltipId}
+            className={`${styles.tooltip} `}
+          />
           <input
             type="file"
             onChange={this.onChange}
             name={type}
-            ref={(input) => {
-              this.uploaderInput = input
-            }}
+            ref={(input) => { this.uploaderInput = input }}
           />
         </form>
       </div>
@@ -97,13 +106,15 @@ FileUploader.propTypes = {
   type: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   dispatchFn: PropTypes.func,
-  uploadFn: PropTypes.func
+  uploadFn: PropTypes.func,
+  tooltip: PropTypes.string
 }
 
 FileUploader.defaultProps = {
   uploadFn: null,
   dispatchFn: null,
-  theme: null
+  theme: null,
+  tooltip: ''
 }
 
 export default FileUploader

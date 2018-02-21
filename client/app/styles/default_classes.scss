@@ -8,6 +8,7 @@
     @media screen and (min-width: 1920px) {
       width: 1200px;
     }
+    
   }
 
   .button_padding {
@@ -218,8 +219,17 @@
       outline: none;
     }
   }
-  .tooltip {
-    height: 20px;
-    width: 20px;
+  .input_box_full textarea {
+    width: 100%;
+    border: 1px solid #F2F2F2;
+    background-color: #F9F9F9;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    padding: 0 10px;
+    &:focus {
+      outline: none;
+    }
+  }
+  .header_buffer {
+    margin-top: 60px;
   }
 }

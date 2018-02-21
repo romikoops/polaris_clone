@@ -19,9 +19,9 @@ export const adminConstants = {
   GET_ROUTE_SUCCESS: 'GET_ROUTE_SUCCESS',
   GET_ROUTE_FAILURE: 'GET_ROUTE_FAILURE',
 
-  GET_SHIPMENTS_REQUEST: 'GET_SHIPMENTS_REQUEST',
-  GET_SHIPMENTS_SUCCESS: 'GET_SHIPMENTS_SUCCESS',
-  GET_SHIPMENTS_FAILURE: 'GET_SHIPMENTS_FAILURE',
+  ADMIN_GET_SHIPMENTS_REQUEST: 'ADMIN_GET_SHIPMENTS_REQUEST',
+  ADMIN_GET_SHIPMENTS_SUCCESS: 'ADMIN_GET_SHIPMENTS_SUCCESS',
+  ADMIN_GET_SHIPMENTS_FAILURE: 'ADMIN_GET_SHIPMENTS_FAILURE',
 
   GET_DASH_SHIPMENTS_REQUEST: 'GET_DASH_SHIPMENTS_REQUEST',
   GET_DASH_SHIPMENTS_SUCCESS: 'GET_DASH_SHIPMENTS_SUCCESS',
@@ -251,7 +251,8 @@ export const rateBasises = [
   { value: 'PER_CONTAINER', label: 'Per Container' },
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
-  { value: 'PER_CBM', label: 'Per cbm' }
+  { value: 'PER_CBM', label: 'Per cbm' },
+  { value: 'PER_TON', label: 'Per ton' }
 ]
 
 export const lclPricingSchema = {
@@ -428,4 +429,22 @@ export const managerRoles = [
   { label: 'FCL', value: 'fcl' },
   { label: 'Air', value: 'air' },
   { label: 'Rail', value: 'rail' }
+]
+
+export const truckingFees = [
+  { label: 'Fuel Surcharge', key: 'FSC', rate_basis: 'PERCENTAGE' },
+  {
+    label: 'Loading/Unloading Time', key: 'ULT', rate_basis: 'TIME', step_in_minutes: 30
+  },
+  { label: 'VAT', key: 'VAT', rate_basis: 'PERCENTAGE' },
+  { label: 'Congestion Charge', key: 'CCC', rate_basis: 'PER_CARGO_ITEM' },
+  { label: 'Delivery Fee', key: 'DLF', rate_basis: 'PER_SHIPMENT' },
+  { label: 'Pickup Fee', key: 'PUF', rate_basis: 'PER_SHIPMENT' },
+  {
+    label: 'Over Max Rate', key: 'OMR', rate_basis: 'PER_KM', base: 10
+  },
+  { label: 'Per CMB Rate', key: 'PCR', rate_basis: 'PER_CBM' },
+  {
+    label: 'Waiting Fee', key: 'PWF', rate_basis: 'TIME', step_in_minutes: 30
+  }
 ]

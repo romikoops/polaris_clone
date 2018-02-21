@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
-import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
+// import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { moment } from '../../constants'
 import styles from './ChooseRoute.scss'
@@ -21,7 +21,7 @@ export class ChooseRoute extends Component {
     } else {
       prop = property
     }
-    return function (a, b) {
+    return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
       const result2 = result1 ? 1 : 0
       return result2 * sortOrder
@@ -89,7 +89,7 @@ export class ChooseRoute extends Component {
     const focusRoutes = []
     const altRoutes = []
     schedules.forEach((sched) => {
-      console.log(sched.id)
+      console.log(sched)
       if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
         if (
           Math.abs(moment(sched.etd).diff(depDay, 'days')) < smallestDiff &&
@@ -177,7 +177,7 @@ export class ChooseRoute extends Component {
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <TextHeading theme={theme} size={2} text="Choose Offer" />
+              <TextHeading theme={theme} size={2} text="Choose Departure" />
               <p className={`flex-none ${styles.one_line_summ}`}>
                 {' '}
                 Shipping {cargoUnits.length} x{' '}
@@ -185,7 +185,7 @@ export class ChooseRoute extends Component {
                 {destinationHubs[0].name.split(' ')[0]}
               </p>
             </div>
-            <div className="flex-100 layout-row">
+            {/* <div className="flex-100 layout-row">
               <BestRoutesBox
                 moT={this.state.selectedMoT}
                 user={user}
@@ -193,7 +193,7 @@ export class ChooseRoute extends Component {
                 theme={this.props.theme}
                 shipmentData={this.props.shipmentData}
               />
-            </div>
+            </div> */}
             <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                 <div className="flex-none">

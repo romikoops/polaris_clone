@@ -9,7 +9,6 @@ import {
   AdminSearchableClients,
   AdminSearchableShipments
 } from './AdminSearchables'
-import { RoundButton } from '../RoundButton/RoundButton'
 import Loading from '../../components/Loading/Loading'
 import { Carousel } from '../Carousel/Carousel'
 import style from './AdminDashboard.scss'
@@ -80,7 +79,7 @@ export class AdminDashboard extends Component {
   }
   render () {
     const {
-      theme, dashData, clients, hubs, hubHash, adminDispatch
+      dashData, clients, hubs, hubHash, adminDispatch, theme
     } = this.props
     // ;
     if (!dashData) {
@@ -124,7 +123,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Requested Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedRequestedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -140,7 +139,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Open Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedOpenShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -156,7 +155,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Finished Shipments"
         limit={3}
-        hubs={hubHash}
+        hubs={hubs}
         shipments={mergedFinishedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -178,7 +177,7 @@ export class AdminDashboard extends Component {
         schedArr.push(<AdminScheduleLine key={v4()} schedule={osched} hubs={hubs} theme={theme} />)
       })
     }
-    const shortSchedArr = schedArr.sort(this.dynamicSort('etd')).slice(0, 5)
+    const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('etd')).slice(0, 5)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-center">
         <div
@@ -196,17 +195,7 @@ export class AdminDashboard extends Component {
                 <h2 className="flex-none">Welcome back, Admin</h2>
               </div>
               <div className={`flex-none layout-row layout-align-center-center ${style.carousel}`}>
-                <Carousel theme={this.props.theme} slides={activeRoutesData} noSlides={1} fade />
-              </div>
-              <div className={`flex-none layout-row layout-align-center-center ${style.dash_btn}`}>
-                <RoundButton
-                  theme={theme}
-                  handleNext={this.startBooking}
-                  active
-                  size="large"
-                  text="Make a Booking"
-                  iconClass="fa-archive"
-                />
+                <Carousel theme={theme} slides={activeRoutesData} noSlides={1} fade />
               </div>
               <div
                 className={`flex-50 layout-row ${
@@ -295,7 +284,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
-              sideScroll
+              tooltip={adminTip.routes}
+              icon="fa-info-circle"
+              showTooltip
             />
           </div>
           <div
@@ -315,7 +306,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               hubs={hubs}
               adminDispatch={adminDispatch}
-              sideScroll
+              tooltip={adminTip.hubs}
+              icon="fa-info-circle"
+              showTooltip
             />
           </div>
           <div
@@ -327,6 +320,9 @@ export class AdminDashboard extends Component {
               theme={theme}
               clients={filteredClients}
               adminDispatch={adminDispatch}
+              tooltip={adminTip.clients}
+              icon="fa-info-circle"
+              showTooltip
             />
           </div>
         </div>
@@ -356,7 +352,7 @@ AdminDashboard.defaultProps = {
   loading: false,
   dashData: null,
   clients: [],
-  hubs: [],
+  hubs: {},
   hubHash: {}
 }
 

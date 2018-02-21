@@ -1,17 +1,24 @@
 import React, { Component } from 'react'
+import ReactTooltip from 'react-tooltip'
+import PropTypes from 'prop-types'
+import { v4 } from 'node-uuid'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
-import PropTypes from '../../prop-types'
-import styles from './SideNav.scss'
 import { adminActions, userActions } from '../../actions'
+import { adminMenutooltip as menuTip } from '../../constants'
+import { Modal } from '../Modal/Modal'
+import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
+import styles from './SideNav.scss'
 
 class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: false
+      expanded: true,
+      showModal: false
     }
+    this.toggleModal = this.toggleModal.bind(this)
   }
   setAdminUrl (target) {
     console.log(target)
@@ -42,7 +49,7 @@ class SideNav extends Component {
         adminDispatch.getDashboard(true)
         break
       case 'routes':
-        adminDispatch.getRoutes(true)
+        adminDispatch.getItineraries(true)
         break
       case 'wizard':
         adminDispatch.goTo('/admin/wizard')
@@ -82,9 +89,28 @@ class SideNav extends Component {
         break
     }
   }
+  toggleModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
   render () {
     const { expanded } = this.state
-    const { theme, user } = this.props
+    const { theme, user, routes } = this.props
+    const routeModal = (
+      <Modal
+        component={
+          <AvailableRoutes
+            user={user}
+            theme={theme}
+            routes={routes}
+            initialCompName="UserAccount"
+          />
+        }
+        width="48vw"
+        verticalPadding="30px"
+        horizontalPadding="15px"
+        parentToggle={this.toggleModal}
+      />
+    )
     const userLinks = [
       {
         icon: 'fa-tachometer',
@@ -122,113 +148,99 @@ class SideNav extends Component {
         icon: 'fa-tachometer',
         text: 'Dashboard',
         url: '/admin/dashboard',
-        target: 'dashboard'
+        target: 'dashboard',
+        tooltip: menuTip.dashboard
       },
       {
         icon: 'fa-ship',
         text: 'Shipments',
         url: '/admin/shipments',
-        target: 'shipments'
+        target: 'shipments',
+        tooltip: menuTip.shipments
       },
       {
         icon: 'fa-building-o',
         text: 'Hubs',
         url: '/admin/hubs',
-        target: 'hubs'
+        target: 'hubs',
+        tooltip: menuTip.hubs
       },
       {
         icon: 'fa-area-chart',
         text: 'Pricing',
         url: '/admin/pricing',
-        target: 'pricing'
+        target: 'pricing',
+        tooltip: menuTip.pricing
       },
       {
         icon: 'fa-list',
         text: 'Schedules',
         url: '/admin/schedules',
-        target: 'schedules'
+        target: 'schedules',
+        tooltip: menuTip.schedules
       },
       {
         icon: 'fa-truck',
         text: 'Trucking',
         url: '/admin/trucking',
-        target: 'trucking'
+        target: 'trucking',
+        tooltip: menuTip.trucking
       },
       {
         icon: 'fa-users',
         text: 'Client',
         url: '/admin/clients',
-        target: 'clients'
+        target: 'clients',
+        tooltip: menuTip.clients
       },
       {
         icon: 'fa-map-signs',
         text: 'Routes',
         url: '/admin/routes',
-        target: 'routes'
+        target: 'routes',
+        tooltip: menuTip.routes
       },
       {
         icon: 'fa-magic',
         text: 'Set Up',
         url: '/admin/wizard',
-        target: 'wizard'
+        target: 'wizard',
+        tooltip: menuTip.setup
       }
     ]
-    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role_id === 4
+    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? adminLinks : userLinks
     const expandNavClass = expanded ? styles.expanded : styles.collapsed
     const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link
     const expandIconClass = expanded ? styles.expanded_icon : styles.collapsed_icon
     const textStyle = {
-      background:
-        theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${
-            theme.colors.primary
-          },${
-            theme.colors.secondary
-          })`
-          : 'black'
+      background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }
     const navLinks = links.map((li) => {
       const tli = li
       tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+      const toolId = v4()
       return (
-        <div className="flex-100 layout-row layout-align-start-center" onClick={tli.action}>
-          <div
-            className={`flex-none layout-row-layout-align-center-center ${
-              styles.icon_box
-            } ${expandIconClass}`}
-          >
-            <i className={`fa flex-none clip pointy ${tli.icon}`} style={textStyle} />
+        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
+          <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
+            <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
+              <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />
+            </div>
+            <div className={`flex-none layout-row-layout-align-center-center ${styles.link_text} ${expandLinkClass}`}>
+              <p className={`${styles.text} flex-none`}>{li.text}</p>
+            </div>
           </div>
-          <div
-            className={`flex-none layout-row-layout-align-center-center ${
-              styles.link_text
-            } ${expandLinkClass}`}
-          >
-            <p className="flex-none">{tli.text}</p>
-          </div>
+          { isAdmin ? <ReactTooltip className={styles.tooltip} id={toolId} /> : '' }
         </div>
       )
     })
     return (
-      <div
-        className={`flex-none layout-column layout-align-start-start layout-wrap ${
-          styles.side_nav
-        } ${expandNavClass}`}
-      >
-        <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`}>
-          {expanded ? (
-            <div className="flex-none layout-row layout-align-center-center">
-              <i className="flex-none fa fa-angle-double-left" />
-            </div>
-          ) : (
-            <div className="flex-none layout-row layout-align-center-center">
-              <i className="flex-none fa fa-angle-double-right" />{' '}
-            </div>
-          )}
+      <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
+        {this.state.showModal ? routeModal : ''}
+        <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
+        <div className="flex layout-row layout-align-center-start layout-wrap">
+          {navLinks}
         </div>
-        <div className="flex-15 layout-row layout-align-center-center" />
-        <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
       </div>
     )
   }
@@ -255,11 +267,13 @@ SideNav.propTypes = {
     goTo: PropTypes.func,
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  routes: PropTypes.objectOf(PropTypes.any)
 }
 
 SideNav.defaultProps = {
-  theme: null
+  theme: null,
+  routes: null
 }
 
 function mapStateToProps (state) {

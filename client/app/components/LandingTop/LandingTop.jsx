@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
-// import {LoginPage} from '../../containers/LoginPage';
 import styles from './LandingTop.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import Header from '../Header/Header'
@@ -29,7 +28,7 @@ export class LandingTop extends Component {
   toAccount () {
     this.props.goTo('/account')
   }
-  toAdmin () {
+  toAdmin (target) {
     this.props.toAdmin(true)
   }
   toBooking () {
@@ -65,6 +64,7 @@ export class LandingTop extends Component {
     const myAccount = (
       <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active />
     )
+
     const toAdmin = (
       <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active />
     )
@@ -78,19 +78,10 @@ export class LandingTop extends Component {
         <div className={styles.top_mask} />
         <div className="layout-row flex-100 layout-wrap">
           <div className={`${styles.top_row} flex-100 layout-row`}>
-            <Header user={user} theme={theme} landingPage invert />
+            <Header user={user} theme={theme} scrollable invert />
           </div>
-          <div
-            className={`flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ${
-              styles.layout_elem
-            }`}
-          >
-            {user && user.role_id === 2 ? (
-              <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active />
-            ) : (
-              ''
-            )}
-            {!user ? (
+          <div className={`flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ${styles.layout_elem} ${styles.responsive}`}>
+            {(user && user.role_id === 2) || !user ? (
               <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active />
             ) : (
               ''
@@ -98,17 +89,16 @@ export class LandingTop extends Component {
             {user && !user.guest && user.role_id === 2 ? myAccount : ''}
             {user && user.role_id === 1 ? toAdmin : ''}
           </div>
-
-          <div
-            className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-end ${
-              styles.layout_elem
-            }`}
-          >
+          <div className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-center ${styles.layout_elem}`}>
             <div className={styles.sign_up}>
-              <h2>Never spend precious time on transportation again, shipping made simple</h2>
-              <h3>Enjoy the most advanced and easy to use booking system in the market</h3>
+              <h2 className="flex-none" >
+                Never spend precious time on transportation again, shipping made simple
+              </h2>
+              <h3 className="flex-none">
+                Enjoy the most advanced and easy to use booking system in the market
+              </h3>
               <div className="flex-none layout-row layout-align-start-center">
-                <p className="flex-none">powered by</p>
+                <h4 className="flex-none">powered by</h4>
                 <div className="flex-5" />
                 <img
                   src="https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png"

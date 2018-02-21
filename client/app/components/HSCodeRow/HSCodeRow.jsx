@@ -54,7 +54,7 @@ export class HSCodeRow extends Component {
 
   render () {
     const {
-      containers, cargoItems, hsCodes, theme
+      containers, cargoItems, hsCodes, theme, tenant, hsTexts
     } = this.props
     const { showPaste } = this.state
     const containersAdded = []
@@ -74,6 +74,9 @@ export class HSCodeRow extends Component {
       // }
       // return [];
     }
+    // // eslint-disable-next-line no-debugger
+    // debugger
+    const textInputBool = tenant && tenant.data && tenant.data.scope && tenant.data.scope.cargo_info_level && tenant.data.scope.cargo_info_level === 'text'
     const HSCell = ({ code, cargoId }) => (
       <div className={`flex-33 layout-row ${styles.hs_cell}`}>
         <p className="flex-none">{code.value}</p>
@@ -138,24 +141,34 @@ export class HSCodeRow extends Component {
                 )}
               </div>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center">
-              <NamedAsync
-                classes="flex-50"
-                multi
-                name={cont.cargo_group_id}
-                value=""
-                autoload={false}
-                loadOptions={getOptions}
-                onChange={this.props.setCode}
-              />
-              <div className="flex-50 layout-row layout-wrap">
-                {hsCodes[cont.cargo_group_id]
-                  ? hsCodes[cont.cargo_group_id].map(hs => (
-                    <HSCell code={hs} cargoId={cont.cargo_group_id} />
-                  ))
-                  : ''}
-              </div>
-            </div>
+            {
+              textInputBool
+                ? (
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="input_box_full flex-80 layout-row layout-align-center-center">
+                      <textarea name={`${cont.cargo_group_id}`} onChange={this.props.handleHsTextChange} value={hsTexts[cont.cargo_group_id]} id="" cols="30" rows="10" />
+                    </div>
+                  </div>
+                )
+                : (<div className="flex-100 layout-row layout-align-start-center">
+                  <NamedAsync
+                    classes="flex-50"
+                    multi
+                    name={cont.cargo_group_id}
+                    value=""
+                    autoload={false}
+                    loadOptions={getOptions}
+                    onChange={this.props.setCode}
+                  />
+                  <div className="flex-50 layout-row layout-wrap">
+                    {hsCodes[cont.cargo_group_id]
+                      ? hsCodes[cont.cargo_group_id].map(hs => (
+                        <HSCell code={hs} cargoId={cont.cargo_group_id} />
+                      ))
+                      : ''}
+                  </div>
+                </div>)
+            }
           </div>
         )
         containersAdded.push(tmpCont)
@@ -213,24 +226,34 @@ export class HSCodeRow extends Component {
                 </div>
               </div>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center">
-              <NamedAsync
-                classes="flex-50"
-                multi
-                name={cont.cargo_group_id}
-                value=""
-                autoload={false}
-                loadOptions={getOptions}
-                onChange={this.props.setCode}
-              />
-              <div className="flex-50 layout-row layout-wrap">
-                {hsCodes[cont.cargo_group_id]
-                  ? hsCodes[cont.cargo_group_id].map(hs => (
-                    <HSCell code={hs} cargoId={cont.cargo_group_id} />
-                  ))
-                  : ''}
-              </div>
-            </div>
+            {
+              textInputBool
+                ? (
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="input_box_full flex-80 layout-row layout-align-center-center">
+                      <textarea name={`${cont.cargo_group_id}`} onChange={this.props.handleHsTextChange} value={hsTexts[cont.cargo_group_id]} id="" cols="30" rows="10" />
+                    </div>
+                  </div>
+                )
+                : (<div className="flex-100 layout-row layout-align-start-center">
+                  <NamedAsync
+                    classes="flex-50"
+                    multi
+                    name={cont.cargo_group_id}
+                    value=""
+                    autoload={false}
+                    loadOptions={getOptions}
+                    onChange={this.props.setCode}
+                  />
+                  <div className="flex-50 layout-row layout-wrap">
+                    {hsCodes[cont.cargo_group_id]
+                      ? hsCodes[cont.cargo_group_id].map(hs => (
+                        <HSCell code={hs} cargoId={cont.cargo_group_id} />
+                      ))
+                      : ''}
+                  </div>
+                </div>)
+            }
           </div>
         )
         cargoItemsAdded.push(tmpCont)
@@ -260,6 +283,7 @@ export class HSCodeRow extends Component {
 
 HSCodeRow.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.objectOf(PropTypes.any),
   hsCodes: PropTypes.arrayOf(PropTypes.string),
   setCode: PropTypes.func.isRequired,
   deleteCode: PropTypes.func.isRequired,
@@ -268,12 +292,17 @@ HSCodeRow.propTypes = {
   })),
   cargoItems: PropTypes.arrayOf(PropTypes.shape({
     cargo_group_id: PropTypes.number
-  }))
+  })),
+  hsTexts: PropTypes.objectOf(PropTypes.string),
+  handleHsTextChange: PropTypes.func
 }
 HSCodeRow.defaultProps = {
   theme: null,
+  tenant: {},
   hsCodes: [],
   containers: [],
-  cargoItems: []
+  cargoItems: [],
+  hsTexts: {},
+  handleHsTextChange: null
 }
 export default HSCodeRow

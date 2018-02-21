@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-import { AdminLayoverRow, AdminHubTile } from './'
+import {
+  AdminLayoverRow,
+  AdminHubTile
+} from './'
 import { AdminSearchableRoutes } from './AdminSearchables'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
+import { adminClicked as clickTool } from '../../constants'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -20,6 +24,7 @@ export class AdminHubView extends Component {
     if (!hubData && !loading) {
       adminActions.getHub(parseInt(match.params.id, 10), false)
     }
+    this.props.setView()
   }
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
@@ -32,7 +37,11 @@ export class AdminHubView extends Component {
   }
   render () {
     const {
-      theme, hubData, hubs, hubHash, adminActions
+      theme,
+      hubData,
+      hubs,
+      hubHash,
+      adminActions
     } = this.props
     // ;s
     if (!hubData) {
@@ -59,6 +68,7 @@ export class AdminHubView extends Component {
           hub={hubHash[hubObj.id]}
           theme={theme}
           handleClick={() => adminActions.getHub(hubObj.id, true)}
+          tooltip={clickTool.related}
         />)
       }
     })
@@ -89,7 +99,13 @@ export class AdminHubView extends Component {
     const schedArr = schedules.map((sched) => {
       const tmpItin = this.getItineraryFromLayover(sched.itinerary_id)
       return (
-        <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
+        <AdminLayoverRow
+          key={v4()}
+          schedule={sched}
+          hub={hub}
+          theme={theme}
+          itinerary={tmpItin}
+        />
       )
     })
     console.log(routes)
@@ -145,7 +161,8 @@ AdminHubView.propTypes = {
     schedules: PropTypes.array
   }),
   loading: PropTypes.bool,
-  match: PropTypes.match.isRequired
+  match: PropTypes.match.isRequired,
+  setView: PropTypes.func
 }
 
 AdminHubView.defaultProps = {
@@ -153,7 +170,8 @@ AdminHubView.defaultProps = {
   loading: false,
   hubData: null,
   hubHash: {},
-  hubs: []
+  hubs: [],
+  setView: null
 }
 
 export default AdminHubView

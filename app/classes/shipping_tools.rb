@@ -86,10 +86,12 @@ module ShippingTools
   end
 
   def update_shipment(session, params)
+    tenant = current_user.tenant
     shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
 
     hsCodes = shipment_data[:hsCodes].as_json
+    hsTexts = shipment_data[:hsTexts].as_json
     shipment.assign_attributes(
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
@@ -141,8 +143,13 @@ module ShippingTools
           cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
           cargo_item.save!
         end
+        hs_text = hsTexts[cargo_item.cargo_group_id.to_s]
         
-        cargo_item.attributes.merge({ cbm: cargo_item.cbm(shipment.itinerary.mode_of_transport).to_f })
+        if hs_text
+          cargo_item.customs_text = hs_text
+          cargo_item.save!
+        end
+        cargo_item.attributes.merge({ chargeable_weight: cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f })
       end
     end
     if shipment.containers
@@ -152,6 +159,12 @@ module ShippingTools
           hsCodes[cn.cargo_group_id.to_s].each do |hs|
             cn.hs_codes << hs["value"]
           end
+          cn.save!
+        end
+        hs_text = hsTexts[cn.cargo_group_id.to_s]
+        
+        if hs_text
+          cn.customs_text = hs_text
           cn.save!
         end
       end

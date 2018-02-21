@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(version: 20180221134258) do
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
     t.string "cargo_group_id"
+    t.string "customs_text"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -66,6 +67,7 @@ ActiveRecord::Schema.define(version: 20180221134258) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.string "cargo_group_id"
+    t.string "customs_text"
   end
 
   create_table "currencies", force: :cascade do |t|

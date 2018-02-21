@@ -45,6 +45,23 @@ export class EditLocation extends Component {
     this.saveLocation = this.saveLocation.bind(this)
     this.handleInputChange = this.handleInputChange.bind(this)
   }
+  componentDidMount () {
+    this.initMap()
+  }
+  componentWillReceiveProps () {
+    if (!this.state.location.street && this.props.location) {
+      this.setState({
+        location: {
+          street: this.props.location.street,
+          number: this.props.location.street_number,
+          zipCode: this.props.location.zip_code,
+          city: this.props.location.city,
+          country: this.props.location.country,
+          fullAddress: this.props.location.geocoded_address
+        }
+      })
+    }
+  }
   setMarker (location, name) {
     const { markers, map } = this.state
     const { theme } = this.props
@@ -69,21 +86,6 @@ export class EditLocation extends Component {
     }
 
     map.fitBounds(bounds)
-  }
-  componentDidReceiveProps () {
-    this.initMap()
-    if (!this.state.location.street && this.props.location) {
-      this.setState({
-        location: {
-          street: this.props.location.street,
-          number: this.props.location.street_number,
-          zipCode: this.props.location.zip_code,
-          city: this.props.location.city,
-          country: this.props.location.country,
-          fullAddress: this.props.location.geocoded_address
-        }
-      })
-    }
   }
   handleInputChange (event) {
     const val = event.target.value
@@ -349,12 +351,13 @@ EditLocation.propTypes = {
   saveLocation: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   geocodedAddress: PropTypes.string,
-  location: PropTypes.objectOf(PropTypes.string).isRequired
+  location: PropTypes.objectOf(PropTypes.string)
 }
 
 EditLocation.defaultProps = {
   theme: null,
-  geocodedAddress: ''
+  geocodedAddress: '',
+  location: {}
 }
 
 export default EditLocation

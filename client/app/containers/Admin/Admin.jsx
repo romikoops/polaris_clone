@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Switch, Route, bindActionCreators, withRouter } from 'react-router-dom'
-import PropTypes from '../../prop-types'
-import Header from '../../components/Header/Header'
-import {
-  AdminNav,
-  AdminDashboard,
-  AdminSchedules,
-  AdminServiceCharges,
-  SuperAdmin
-} from '../../components/Admin'
+import { Switch, Route, withRouter } from 'react-router-dom'
+import { bindActionCreators } from 'redux'
+import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
+import { adminActions } from '../../actions'
+import { Footer } from '../../components/Footer/Footer'
+import { AdminDashboard, AdminSchedules, AdminServiceCharges, SuperAdmin } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/AdminHubs'
@@ -17,10 +14,11 @@ import AdminRoutes from '../../components/Admin/AdminRoutes'
 import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
-import { FloatingMenu } from '../../components/FloatingMenu/FloatingMenu'
 import Loading from '../../components/Loading/Loading'
 import defs from '../../styles/default_classes.scss'
-import { adminActions } from '../../actions'
+import Header from '../../components/Header/Header'
+import SideNav from '../../components/SideNav/SideNav'
+import styles from './Admin.scss'
 
 class Admin extends Component {
   constructor (props) {
@@ -60,7 +58,7 @@ class Admin extends Component {
         adminDispatch.getDashboard(true)
         break
       case 'routes':
-        adminDispatch.getRoutes(true)
+        adminDispatch.getItineraries(true)
         break
       case 'wizard':
         adminDispatch.goTo('/admin/wizard')
@@ -78,14 +76,7 @@ class Admin extends Component {
     } = this.props
 
     const {
-      hubs,
-      serviceCharges,
-      pricingData,
-      schedules,
-      shipments,
-      clients,
-      dashboard,
-      loading
+      hubs, serviceCharges, pricingData, schedules, shipments, clients, dashboard, loading
     } = adminData
 
     const hubHash = {}
@@ -95,108 +86,129 @@ class Admin extends Component {
       })
     }
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
-    const nav = <AdminNav navLink={this.setUrl} theme={theme} user={user} />
+    const nav = (<SideNav theme={theme} user={user} />)
     const menu = <FloatingMenu Comp={nav} theme={theme} />
     // ;
     return (
-      <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-        <Header theme={theme} />
+      <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
+
+        <Header theme={theme} menu={menu} showMenu scrollable />
         {loadingScreen}
-        <div
-          className={`flex-none ${
-            defs.content_width
-          } layout-row layout-wrap layout-align-start-start `}
-        >
-          {menu}, user: null, loggedIn: false
-          <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className={`${defs.content_width} ${styles.top_margin} flex-none layout-row layout-wrap layout-align-start-start hundred`}>
+          <div className="flex-100 layout-row layout-wrap layout-align-center-center">
             <Switch className="flex">
               <Route
                 path="/admin/dashboard"
-                render={props => (
-                  <AdminDashboard
-                    theme={theme}
-                    {...props}
-                    clients={clients}
-                    hubs={hubs}
-                    hubHash={hubHash}
-                    dashData={dashboard}
-                    adminDispatch={adminDispatch}
-                  />
-                )}
+                render={props => (<AdminDashboard
+                  theme={theme}
+                  {...props}
+                  clients={clients}
+                  hubs={hubs}
+                  hubHash={hubHash}
+                  dashData={dashboard}
+                  adminDispatch={adminDispatch}
+                />)}
               />
               <Route
                 path="/admin/hubs"
-                render={props => (
-                  <AdminHubs theme={theme} {...props} hubHash={hubHash} hubs={hubs} />
-                )}
+                render={props => (<AdminHubs
+                  theme={theme}
+                  {...props}
+                  hubHash={hubHash}
+                  hubs={hubs}
+                />)}
               />
               <Route
+
                 path="/admin/pricings"
-                render={props => (
-                  <AdminPricings theme={theme} {...props} hubs={hubs} pricingData={pricingData} />
-                )}
+                render={props => (<AdminPricings
+                  theme={theme}
+                  {...props}
+                  hubs={hubs}
+                  pricingData={pricingData}
+                />)}
               />
               <Route
+
                 path="/admin/schedules"
                 render={props => (
                   <AdminSchedules
                     theme={theme}
                     {...props}
                     hubs={hubHash}
+                    adminDispatch={adminDispatch}
                     scheduleData={schedules}
                   />
                 )}
               />
               <Route
+
                 path="/admin/service_charges"
-                render={props => (
-                  <AdminServiceCharges
-                    theme={theme}
-                    {...props}
-                    hubs={hubs}
-                    charges={serviceCharges}
-                    adminTools={adminDispatch}
-                  />
-                )}
+                render={props => (<AdminServiceCharges
+                  theme={theme}
+                  {...props}
+                  hubs={hubs}
+                  charges={serviceCharges}
+                  adminTools={adminDispatch}
+                />)}
               />
               <Route
+
                 path="/admin/shipments"
-                render={props => (
-                  <AdminShipments
-                    theme={theme}
-                    {...props}
-                    hubs={hubs}
-                    hubHash={hubHash}
-                    shipments={shipments}
-                    clients={clients}
-                  />
-                )}
+                render={props => (<AdminShipments
+                  theme={theme}
+                  {...props}
+                  hubs={hubs}
+                  hubHash={hubHash}
+                  shipments={shipments}
+                  clients={clients}
+                />)}
               />
               <Route
+
                 path="/admin/clients"
-                render={props => <AdminClients theme={theme} {...props} hubs={hubHash} />}
+                render={props => (<AdminClients
+                  theme={theme}
+                  {...props}
+                  hubs={hubHash}
+                />)}
               />
               <Route
                 path="/admin/routes"
-                render={props => (
-                  <AdminRoutes theme={theme} {...props} hubHash={hubHash} clients={clients} />
-                )}
+                render={props => (<AdminRoutes
+                  theme={theme}
+                  {...props}
+                  hubHash={hubHash}
+                  clients={clients}
+                />)}
               />
               <Route
                 path="/admin/wizard"
-                render={props => <AdminWizard theme={theme} {...props} hubHash={hubHash} />}
+                render={props => (<AdminWizard
+                  theme={theme}
+                  {...props}
+                  hubHash={hubHash}
+                />)}
               />
               <Route
                 path="/admin/trucking"
-                render={props => <AdminTrucking theme={theme} {...props} hubHash={hubHash} />}
+                render={props => (<AdminTrucking
+                  theme={theme}
+                  {...props}
+                  hubHash={hubHash}
+                />)}
               />
               <Route
                 path="/admin/super_admin/upload"
-                render={props => <SuperAdmin theme={theme} {...props} />}
+                render={props => (<SuperAdmin
+                  theme={theme}
+                  {...props}
+                />)}
               />
             </Switch>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }
@@ -232,8 +244,8 @@ Admin.propTypes = {
 }
 
 Admin.defaultProps = {
-  theme: null,
-  user: null,
+  theme: {},
+  user: {},
   loggedIn: false
 }
 

@@ -2,16 +2,27 @@
   @import '../../styles/defaults';
 
   .header {
+    position: fixed;
     height: 70px;
-    background-color: transparent;
+    width: 100vw !important; 
+    z-index: 20 !important;
   }
-  
+  .responsive {
+    @media (min-width: 768px) and (max-width: 1366px) {
+      padding-left: 40vw;
+    }
+  }
   .header_scrollable {
+    position: fixed;
     height: 70px;
-    overflow-y: visible;
-    background-color: rgba(255,255,255,0.9);
+    width: 100vw !important; 
+    z-index: 20 !important;
+    background-color: rgba(255,255,255,1);
+    color: black !important;
   }  
-
+  .scrollable_text {
+    color: black !important;
+  }
   img.logo {
     height: 50px;
   }
@@ -55,5 +66,23 @@
       font-size: 18px;
     }
   }
-
+  .logo {
+  margin-left: calc(100vw / 12);
+  }
+  .user_menu {
+    margin-left: calc(100vw / 5);
+    @media screen and (max-width: 768px) {
+      margin-right: 15px;
+    }
+  }
+  .dashboard_menu {
+    position: absolute;
+    left: 3vw;
+    @media (min-width: 768px) and (max-width: 1024px) {
+      left: -7vw;
+    }
+    @media (min-width: 1024px) and (max-width: 1366px) {
+      left: -3vw;
+    }
+  }
 }

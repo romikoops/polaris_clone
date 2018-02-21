@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './AdminLayoverTile.scss'
 import { moment } from '../../constants'
 
-export default class AdminLayoverTile extends Component {
+export class AdminLayoverTile extends Component {
   constructor (props) {
     super(props)
     this.handleLink = this.handleLink.bind(this)
@@ -87,3 +87,5 @@ AdminLayoverTile.defaultProps = {
   theme: null,
   target: null
 }
+
+export default AdminLayoverTile

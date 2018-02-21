@@ -24,8 +24,8 @@ function newShipment (type) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(alertActions.success('Fetching New Shipment successful'))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
         dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
       },
       (error) => {
         error.then((data) => {

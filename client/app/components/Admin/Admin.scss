@@ -1,5 +1,6 @@
 :local {
   .searchable {
+    width: 100%;
     margin: 15px 0;
   }
   .itinerary_row {
@@ -19,7 +20,7 @@
     padding: 15px 0;
   }
   .sec_title {
-    height: 75px;
+    min-height: 75px;
   }
   .sec_header {
     min-height: 60px;
@@ -51,10 +52,12 @@
     font-size: 8px;
   }
   .clip {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
@@ -97,14 +100,14 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 10;
+    z-index: 80;
     background: rgba(2,3,1,0.25);
   }
   .new_contact_content {
     width: 650px;
     height: 550px;
     position: relative;
-    z-index: 20;
+    z-index: 85;
     border-radius: 5px;
     background: #ffffff;
     padding: 15px;
@@ -525,5 +528,21 @@
     position: absolute;
     top: 10px;
     right: 10px;
+  .btn_wrapper {
+    position: relative !important;
+    display: inline-block !important;
+    width: 167px !important;
+    text-align: center !important;
+    align-content: center !important;
   }
+  .new_margin {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px
+   
+  }
+  .tooltip{
+    max-width: 150px !important;
+    text-align: left !important;
+  }
+}
 }

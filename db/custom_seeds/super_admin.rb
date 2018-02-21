@@ -38,7 +38,8 @@ super_tenant_data = {
           cargo_item: true
         }
       },
-      dangerous_goods: false
+      dangerous_goods: false,
+      cargo_info_level: 'text'
     }
   }
 super_tenant = Tenant.create!(super_tenant_data)

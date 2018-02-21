@@ -1,7 +1,7 @@
 class Tenant < ApplicationRecord
   include ImageTools
   extend MongoTools
-
+  include MongoTools
   has_many :routes
   has_many :hubs
   has_many :routes
@@ -29,7 +29,7 @@ class Tenant < ApplicationRecord
       itinerary.set_scope!
 
       itinerary.routes
-    end
+    end    
     # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
     update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end

@@ -65,6 +65,7 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         journey_end = journey_start + steps_in_order.sum.days
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        p trip
         stops_in_order.each do |stop|
           if stop.index == 0
             data = {
@@ -84,7 +85,8 @@ class Itinerary < ApplicationRecord
               stop_id: stop.id
             }
           end
-          trip.layovers.create!(data)
+          layover = trip.layovers.create!(data)
+          p layover
         end
       end
       tmp_date += 1.day

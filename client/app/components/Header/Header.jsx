@@ -5,11 +5,9 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
-// import accountIcon from '../../assets/images/icons/person-dark.svg';
 import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-
 import { appActions, messagingActions } from '../../actions'
 import { accountIconColor } from '../../helpers'
 
@@ -37,7 +35,7 @@ class Header extends Component {
       messageDispatch.getUserConversations()
     }
     document.addEventListener('scroll', () => {
-      const isTop = window.pageYOffset < 100
+      const isTop = window.pageYOffset < 10
       if (isTop !== this.state.isTop) {
         this.setState({ isTop })
       }
@@ -70,8 +68,9 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, landingPage
+      user, theme, tenant, invert, unread, req, showMenu, scrollable, menu
     } = this.props
+    const { isTop } = this.state
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
 
     // const dropDownImage = accountIcon;
@@ -94,13 +93,18 @@ class Header extends Component {
     if (this.state.redirect) {
       return <Redirect push to="/" />
     }
-    const dropDown = (
-      <NavDropdown
+    const dropDown = (isTop
+      ? (<NavDropdown
         dropDownText={dropDownText}
         dropDownImage={adjIcon}
         linkOptions={accountLinks}
         invert={invert}
-      />
+      />)
+      : (<NavDropdown
+        dropDownText={dropDownText}
+        dropDownImage={adjIcon}
+        linkOptions={accountLinks}
+      />)
     )
 
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
@@ -124,7 +128,6 @@ class Header extends Component {
       logoStyle = styles.logo
     }
     const textColour = invert ? 'white' : 'black'
-
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -158,25 +161,35 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
+    const classProps = scrollable && !isTop
+      ? `${styles.header_scrollable} 
+        layout-row flex-100 layout-wrap layout-align-center`
+      : `${styles.header}
+        layout-row flex-100 layout-wrap layout-align-center`
+
+    const isDashboard = showMenu
+      ? `${defs.content_width} ${styles.responsive} layout-row flex-none`
+      : `${defs.content_width} layout-row flex-none`
+
     return (
-      <div
-        className={
-          landingPage && !this.state.isTop
-            ? `${styles.header_scrollable}
-                layout-row flex-100 layout-wrap layout-align-center`
-            : `${styles.header}
-                layout-row flex-100 layout-wrap layout-align-center`
-        }
-      >
-        <div className="flex layout-row layout-align-start-center">{this.props.menu}</div>
-        <div className={`${defs.content_width} layout-row flex-none`}>
-          <div className="layout-row flex-50 layout-align-start-center">
-            <img src={logoUrl} className={logoStyle} alt="" onClick={this.goHome} />
-          </div>
-          <div className="layout-row flex-50 layout-align-end-center">{rightCorner}</div>
+      <div className={classProps} >
+        <div className={`${styles.dashboard_menu} layout-row flex layout-align-start-center`}>
+          { showMenu ? menu : '' }
         </div>
-        <div className="flex layout-row layout-align-start-center" />
-        {this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : ''}
+        <div className={isDashboard}>
+          <div className="layout-row flex layout-align-start-center">
+            <img
+              src={logoUrl}
+              className={logoStyle}
+              alt=""
+              onClick={this.goHome}
+            />
+          </div>
+          <div className="flex layout-row layout-align-end-center">
+            {rightCorner}
+            { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+          </div>
+        </div>
       </div>
     )
   }
@@ -197,8 +210,9 @@ Header.propTypes = {
   messages: PropTypes.arrayOf(PropTypes.object),
   showRegistration: PropTypes.bool,
   unread: PropTypes.number,
-  landingPage: PropTypes.bool,
-  req: PropTypes.req
+  req: PropTypes.req,
+  showMenu: PropTypes.bool,
+  scrollable: PropTypes.bool
 }
 
 Header.defaultProps = {
@@ -212,9 +226,10 @@ Header.defaultProps = {
   messages: null,
   showRegistration: false,
   unread: 0,
-  landingPage: false,
+  showMenu: false,
   req: null,
-  menu: null
+  menu: null,
+  scrollable: false
 }
 
 function mapStateToProps (state) {

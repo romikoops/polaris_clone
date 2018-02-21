@@ -1,7 +1,15 @@
  :local {
     .footer {
-      height:140px;
+      min-height:140px;
       background: #5E5E5E;
+      @media screen and (min-width: 768px) {
+      }
+      @media screen and (min-width: 1024px) {
+        
+      }
+      @media screen and (min-width: 1366px) {
+        
+      }
     }
     .button_row {
       height: 80%;
@@ -19,6 +27,14 @@
       color: white;
       border-top: 1px solid #979797;
       font-size: 14px;
+      @media screen and (min-width: 768px) {
+      }
+      @media screen and (min-width: 1024px) {
+        
+      }
+      @media screen and (min-width: 1366px) {
+        
+      }
     }
     .contact_bar {
       background: white;

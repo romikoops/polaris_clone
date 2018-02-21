@@ -9,7 +9,7 @@ import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
-import { isEmpty } from '../../helpers/isEmpty'
+// import { isEmpty } from '../../helpers/isEmpty'
 import { colorSVG, authHeader } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { Modal } from '../Modal/Modal'
@@ -25,7 +25,7 @@ const mapStyle = {
   borderRadius: '3px',
   boxShadow: '1px 1px 2px 2px rgba(0,1,2,0.25)'
 }
-const isObjectEmpty = isEmpty
+
 const colourSVG = colorSVG
 const mapStyles = mapStyling
 
@@ -303,20 +303,20 @@ export class ShipmentLocationBox extends Component {
     const { markers, map } = this.state
     const { theme } = this.props
     const newMarkers = []
-    if (!isObjectEmpty(markers[target])) {
+    if (markers[target].title !== undefined) {
       markers[target].setMap(null)
     }
     let icon
     if (target === 'origin') {
       icon = {
         url: colourSVG('location', theme),
-        anchor: new this.props.gMaps.Point(25, 50),
+        anchor: new this.props.gMaps.Point(18, 18),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     } else {
       icon = {
         url: colourSVG('flag', theme),
-        anchor: new this.props.gMaps.Point(25, 50),
+        anchor: new this.props.gMaps.Point(18, 18),
         scaledSize: new this.props.gMaps.Size(36, 36)
       }
     }
@@ -327,10 +327,10 @@ export class ShipmentLocationBox extends Component {
       icon
     })
     markers[target] = marker
-    if (!isObjectEmpty(markers.origin)) {
+    if (markers.origin.title !== undefined) {
       newMarkers.push(markers.origin)
     }
-    if (!isObjectEmpty(markers.destination)) {
+    if (markers.destination.title !== undefined) {
       newMarkers.push(markers.destination)
     }
     this.setState({ markers })
@@ -338,12 +338,14 @@ export class ShipmentLocationBox extends Component {
     for (let i = 0; i < newMarkers.length; i++) {
       bounds.extend(newMarkers[i].getPosition())
     }
-
-    if (newMarkers.length > 1) {
+    if (!markers.origin.title && !markers.destination.title) {
       map.fitBounds(bounds)
-    } else if (newMarkers.length === 1) {
+    } else if ((markers.origin.title && !markers.destination.title) ||
+     (!markers.origin.title && markers.destination.title)) {
       map.setCenter(bounds.getCenter())
       map.setZoom(14)
+    } else {
+      map.fitBounds(bounds)
     }
   }
 
@@ -724,7 +726,7 @@ export class ShipmentLocationBox extends Component {
     this.setOriginHub(this.state.dSelect)
   }
   render () {
-    const { allNexuses } = this.props
+    const { allNexuses, shipmentDispatch } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
     let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : []
@@ -1015,6 +1017,7 @@ export class ShipmentLocationBox extends Component {
             theme={theme}
             routes={shipment.itineraries}
             routeSelected={this.selectedRoute}
+            userDispatch={shipmentDispatch}
             initialCompName="UserAccount"
           />
         }
@@ -1165,6 +1168,10 @@ ShipmentLocationBox.propTypes = {
   }).isRequired,
   has_on_carriage: PropTypes.bool,
   has_pre_carriage: PropTypes.bool,
+  shipmentDispatch: PropTypes.shape({
+    goTo: PropTypes.func,
+    getDashboard: PropTypes.func
+  }).isRequired,
   selectedRoute: PropTypes.route,
   origin: PropTypes.shape({
     number: PropTypes.number

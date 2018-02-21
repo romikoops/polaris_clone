@@ -86,9 +86,9 @@ export class AdminShipmentView extends Component {
               <p className="flex-100">Notifyee</p>
               <p className={` ${styles.address} flex-100`}>
                 {n.contact.first_name} {n.contact.last_name} <br />
-                {n.location.street} {n.location.street_number} <br />
-                {n.location.zip_code} {n.location.city} <br />
-                {n.location.country}
+                {n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
+                {n.location ? `${n.location.zip_code} ${n.location.city}` : ''} <br />
+                {n.location ? `${n.location.country}` : ''}
               </p>
             </div>
           </div>)
@@ -103,9 +103,9 @@ export class AdminShipmentView extends Component {
                 <p className="flex-100">Shipper</p>
                 <p className={`${styles.address} flex-100`}>
                   {n.contact.first_name} {n.contact.last_name} <br />
-                  {n.location.street} {n.location.street_number} <br />
-                  {n.location.zip_code} {n.location.city} <br />
-                  {n.location.country}
+                  {n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
+                  {n.location ? `${n.location.zip_code} ${n.location.city}` : ''} <br />
+                  {n.location ? `${n.location.country}` : ''}
                 </p>
               </div>
             </div>
@@ -124,9 +124,9 @@ export class AdminShipmentView extends Component {
                 <p className="flex-100">Consignee</p>
                 <p className={` ${styles.address} flex-100`}>
                   {n.contact.first_name} {n.contact.last_name} <br />
-                  {n.location.street} {n.location.street_number} <br />
-                  {n.location.zip_code} {n.location.city} <br />
-                  {n.location.country}
+                  {n.location ? `${n.location.street} ${n.location.street_number}` : ''} <br />
+                  {n.location ? `${n.location.zip_code} ${n.location.city}` : ''} <br />
+                  {n.location ? `${n.location.country}` : ''}
                 </p>
               </div>
             </div>

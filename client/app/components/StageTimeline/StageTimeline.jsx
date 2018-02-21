@@ -46,15 +46,14 @@ export default class StageTimeline extends Component {
   render () {
     const { theme } = this.props
     const currentStage = index => index === this.props.currentStageIndex
-    const index = v4()
     const stageBoxes = this.props.stages.map((stage, i) => (
       <div
-        key={index}
+        key={v4()}
         className="layout-column layout-align-start-center"
-        onClick={() => this.props.setStage(index)}
+        onClick={() => this.props.setStage(i)}
       >
-        { this.generateStageBox(index) }
-        <p className={`flex-none ${styles.stage_text} ${currentStage(index) ? styles.current : ''}`}>
+        { this.generateStageBox(i) }
+        <p className={`flex-none ${styles.stage_text} ${currentStage(i) ? styles.current : ''}`}>
           { capitalize(stage) }
           <Tooltip
             theme={theme}

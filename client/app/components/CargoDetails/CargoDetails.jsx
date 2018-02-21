@@ -15,8 +15,8 @@ export class CargoDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      insuranceView: true,
-      customsView: true
+      insuranceView: false,
+      customsView: false
     }
     this.toggleInsurance = this.toggleInsurance.bind(this)
     this.toggleCustoms = this.toggleCustoms.bind(this)
@@ -54,22 +54,48 @@ export class CargoDetails extends Component {
   }
 
   calcCustomsFee () {
-    const { hsCodes, shipmentData, currencies } = this.props
+    const {
+      hsCodes, shipmentData, currencies, tenant, hsTexts
+    } = this.props
     const { customs, cargoItems, containers } = shipmentData
-    let hsCount = 0
-    cargoItems.forEach((ci) => {
-      if (hsCodes[ci.id]) {
-        hsCount += hsCodes[ci.id].length
+    if (tenant && tenant.data.scope.cargo_info_level === 'text') {
+      let hsCount = 0
+      cargoItems.forEach((ci) => {
+        if (hsTexts[ci.cargo_group_id]) {
+          hsCount += 1
+        }
+      })
+      containers.forEach((cn) => {
+        if (hsTexts[cn.cargo_group_id]) {
+          hsCount += 1
+        }
+      })
+      if (!customs) {
+        return 200
       }
-    })
-    containers.forEach((cn) => {
-      if (hsCodes[cn.id]) {
-        hsCount += hsCodes[cn.id].length
+      if (hsCount > customs.limit) {
+        const diff = hsCount - customs.limit
+        return customs.fee + (diff * customs.extra)
       }
-    })
-    if (hsCount > customs.limit) {
-      const diff = hsCount - customs.limit
-      return customs.fee + diff * customs.extra
+    } else {
+      let hsCount = 0
+      cargoItems.forEach((ci) => {
+        if (hsCodes[ci.cargo_group_id]) {
+          hsCount += hsCodes[ci.cargo_group_id].length
+        }
+      })
+      containers.forEach((cn) => {
+        if (hsCodes[cn.cargo_group_id]) {
+          hsCount += hsCodes[cn.cargo_group_id].length
+        }
+      })
+      if (!customs) {
+        return 200
+      }
+      if (hsCount > customs.limit) {
+        const diff = hsCount - customs.limit
+        return customs.fee + (diff * customs.extra)
+      }
     }
     const converted = converter(customs.fee, customs.currency, currencies).toFixed(2)
     return converted
@@ -79,7 +105,8 @@ export class CargoDetails extends Component {
   }
   render () {
     const {
-      shipmentData, theme, insurance, hsCodes, setHsCode, deleteCode, user
+      shipmentData, theme, insurance, hsCodes, hsTexts, handleHsTextChange,
+      setHsCode, deleteCode, user, tenant
     } = this.props
     const {
       dangerousGoods, documents, customs, cargoItems, containers
@@ -158,9 +185,12 @@ export class CargoDetails extends Component {
           containers={containers}
           cargoItems={cargoItems}
           theme={theme}
+          tenant={tenant}
           setCode={setHsCode}
+          handleHsTextChange={handleHsTextChange}
           deleteCode={deleteCode}
           hsCodes={hsCodes}
+          hsTexts={hsTexts}
         />
       </div>
     )
@@ -435,6 +465,7 @@ export class CargoDetails extends Component {
 }
 CargoDetails.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
@@ -458,12 +489,17 @@ CargoDetails.propTypes = {
     rate: PropTypes.number
   })).isRequired,
   hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  finishBookingAttempted: PropTypes.bool
+  finishBookingAttempted: PropTypes.bool,
+  hsTexts: PropTypes.objectOf(PropTypes.string),
+  handleHsTextChange: PropTypes.func
 }
 
 CargoDetails.defaultProps = {
   theme: null,
-  finishBookingAttempted: false
+  tenant: null,
+  finishBookingAttempted: false,
+  hsTexts: {},
+  handleHsTextChange: null
 }
 
 export default CargoDetails

@@ -2,13 +2,11 @@
   .btn_sec{
     height: 157px;
     padding-top: 48px;
-    // border-top: 1px solid #EDEDED;
   }
 
   .trucking_sec {
     height: 0px;
     overflow: hidden;
-    border-top: 1px solid #EDEDED;
     margin-bottom: 30px;
     transition: all 0.6s ease;
     &.visible {
@@ -17,7 +15,6 @@
   }
   .cargo_sec {
     min-height: 187px;
-    // border-top: 1px solid #EDEDED;
   }
   .date_sec {
     min-height: 160px;

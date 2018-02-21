@@ -49,7 +49,7 @@ export class RouteHubBox extends Component {
       width: '100%',
       background:
         theme && theme.colors
-          ? this.dashedGradient(theme.colors.primary, theme.colors.secondary)
+          ? RouteHubBox.dashedGradient(theme.colors.primary, theme.colors.secondary)
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
@@ -112,7 +112,7 @@ export class RouteHubBox extends Component {
                 style={{ marginTop: '100px' }}
               >
                 <div className="flex-none width_100 layout-row layout-align-center-center">
-                  {this.faIcon(route)}
+                  {RouteHubBox.faIcon(route)}
                 </div>
                 <div style={dashedLineStyles} />
                 {timeDiff}

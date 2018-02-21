@@ -196,13 +196,13 @@ export default function admin (state = {}, action) {
       return errDash
     }
 
-    case adminConstants.GET_SHIPMENTS_REQUEST: {
+    case adminConstants.ADMIN_GET_SHIPMENTS_REQUEST: {
       const reqShips = merge({}, state, {
         loading: true
       })
       return reqShips
     }
-    case adminConstants.GET_SHIPMENTS_SUCCESS:
+    case adminConstants.ADMIN_GET_SHIPMENTS_SUCCESS:
       return {
         ...state,
         dashboard: {
@@ -212,7 +212,7 @@ export default function admin (state = {}, action) {
         shipments: action.payload.data,
         loading: false
       }
-    case adminConstants.GET_SHIPMENTS_FAILURE: {
+    case adminConstants.ADMIN_GET_SHIPMENTS_FAILURE: {
       const errShips = merge({}, state, {
         error: { shipments: action.error },
         loading: false

@@ -5,7 +5,7 @@ import defs from '../../styles/default_classes.scss'
 import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 import { AddressBook } from '../AddressBook/AddressBook'
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
-import { StageTimeline } from '../StageTimeline/StageTimeline'
+import StageTimeline from '../StageTimeline/StageTimeline'
 import { isEmpty } from '../../helpers/objectTools'
 
 export class ContactSetter extends Component {
