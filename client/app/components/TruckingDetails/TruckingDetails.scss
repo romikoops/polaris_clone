@@ -37,6 +37,7 @@
         left: 0;
         right: 0;
         cursor: not-allowed;
+        z-index: 20;
       }
       &.disabled {
         opacity: 0.4;

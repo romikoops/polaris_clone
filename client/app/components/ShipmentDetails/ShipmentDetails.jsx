@@ -84,6 +84,10 @@ export class ShipmentDetails extends Component {
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false
     }
+    this.truckTypes = {
+      container: ['side_lifter', 'chassis'],
+      cargo_item: ['default']
+    }
 
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
       this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date
@@ -324,8 +328,9 @@ export class ShipmentDetails extends Component {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${truckingKey}-`
     } else if (!shipment.trucking[truckingKey].truck_type) {
-      // Set a default truck if carriage is toggled on and truck is empty
-      artificialEvent.target.id = `${truckingKey}-chassis`
+      // Set first truckType if carriage is toggled on and truckType is empty
+      const truckType = this.truckTypes[this.state.shipment.load_type][0]
+      artificialEvent.target.id = `${truckingKey}-${truckType}`
     }
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
@@ -565,6 +570,10 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
+    const truckTypes = this.truckTypes[this.state.shipment.load_type]
+    const showTruckingDetails =
+      truckTypes.length > 1 &&
+      (this.state.has_pre_carriage || this.state.has_on_carriage)
 
     return (
       <div
@@ -584,13 +593,14 @@ export class ShipmentDetails extends Component {
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${this.state.has_pre_carriage || this.state.has_on_carriage ? styles.visible : ''} ` +
+            `${showTruckingDetails ? styles.visible : ''} ` +
             'layout-wrap layout-align-center'
           }
         >
           <TruckingDetails
             theme={theme}
             trucking={this.state.shipment.trucking}
+            truckTypes={truckTypes}
             handleTruckingDetailsChange={this.handleTruckingDetailsChange}
           />
         </div>

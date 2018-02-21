@@ -6,7 +6,10 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { humanizeSnakeCase, capitalize } from '../../helpers/stringTools'
 
 export default function TruckingDetails (props) {
-  const { theme, trucking, handleTruckingDetailsChange } = props
+  const {
+    theme, trucking, truckTypes, handleTruckingDetailsChange
+  } = props
+
   function tooltip (truckType) {
     return (
       <Tooltip
@@ -46,8 +49,7 @@ export default function TruckingDetails (props) {
           <h5>{`${prefix}-Carriage`}</h5>
         </div>
         <div className="flex-100 layout-column layout-align-space-around">
-          { formGroup(carriage, 'side_lifter') }
-          { formGroup(carriage, 'chassis') }
+          { truckTypes.map(_truckType => formGroup(carriage, _truckType)) }
         </div>
       </div>
     )
@@ -81,6 +83,7 @@ TruckingDetails.propTypes = {
       truck: PropTypes.string
     }
   }).isRequired,
+  truckTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   handleTruckingDetailsChange: PropTypes.func.isRequired
 }
 
