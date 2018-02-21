@@ -566,6 +566,8 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
+    console.log('TRUCKING')
+    console.log(this.state.shipment.trucking)
 
     return (
       <div

@@ -3,7 +3,7 @@ import PropTypes from '../../prop-types'
 import styles from './TruckingDetails.scss'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { humanizeSnakeCase } from '../../helpers/stringTools'
+import { humanizeSnakeCase, capitalize } from '../../helpers/stringTools'
 
 export default function TruckingDetails (props) {
   const { theme, trucking, handleTruckingDetailsChange } = props
@@ -33,6 +33,24 @@ export default function TruckingDetails (props) {
       </div>
     )
   }
+
+  function carriageSection (carriage) {
+    const disabled = !trucking[carriage].truck_type
+    const disabledClass = disabled ? styles.disabled : ''
+    const prefix = capitalize(carriage.split('_')[0])
+    return (
+      <div className={`${styles.carriage_sec} ${disabledClass} flex-50 layout-row layout-wrap`}>
+        <div className={disabled ? styles.overlay : ''} />
+        <div className="flex-100">
+          <h5>{`${prefix}-Carriage`}</h5>
+        </div>
+        <div className="flex-100 layout-column layout-align-space-around">
+          { formGroup(carriage, 'side_lifter') }
+          { formGroup(carriage, 'chassis') }
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="content_width">
       <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
@@ -44,24 +62,8 @@ export default function TruckingDetails (props) {
           />
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-center">
-          <div className="flex-50 layout-row layout-wrap">
-            <div className="flex-100">
-              <h5>Pre-Carriage</h5>
-            </div>
-            <div className="flex-100 layout-column layout-align-space-around">
-              { formGroup('pre_carriage', 'side_lifter') }
-              { formGroup('pre_carriage', 'chassis') }
-            </div>
-          </div>
-          <div className="flex-50 layout-row layout-wrap">
-            <div className="flex-100">
-              <h5>On-Carriage</h5>
-            </div>
-            <div className="flex-100 layout-column layout-align-space-around">
-              { formGroup('on_carriage', 'side_lifter') }
-              { formGroup('on_carriage', 'chassis') }
-            </div>
-          </div>
+          { carriageSection('pre_carriage') }
+          { carriageSection('on_carriage') }
         </div>
       </div>
     </div>
