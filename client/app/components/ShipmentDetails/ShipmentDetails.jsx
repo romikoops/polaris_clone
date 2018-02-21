@@ -109,7 +109,6 @@ export class ShipmentDetails extends Component {
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
-    console.log('!!!!!!!! MOUNTING!!!!!!!')
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
@@ -566,8 +565,6 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
-    console.log('TRUCKING')
-    console.log(this.state.shipment.trucking)
 
     return (
       <div

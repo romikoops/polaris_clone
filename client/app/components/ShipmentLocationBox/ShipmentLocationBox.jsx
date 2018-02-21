@@ -363,8 +363,6 @@ export class ShipmentLocationBox extends Component {
       promise.json().then((response) => {
         const prefix = target === 'origin' ? 'pre' : 'on'
         const { truckingAvailable } = response.data
-        console.log(this.state.truckingOptions)
-        console.log(truckingAvailable)
         if (!truckingAvailable) {
           const nexusOption = nexusOptions.find(option => option.label === nexus.name)
           target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
@@ -383,7 +381,6 @@ export class ShipmentLocationBox extends Component {
             [`${prefix}Carriage`]: truckingAvailable
           }
         })
-        console.log(response)
       })
     })
   }
