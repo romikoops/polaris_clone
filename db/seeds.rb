@@ -14,6 +14,8 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   require './mot_scopes'
   puts 'roles'
   require './roles'
+  puts 'cargo_item_types'
+  require './cargo_item_types'
   puts 'tenants'
   require './tenants'
   puts 'admin'

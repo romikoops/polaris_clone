@@ -9,6 +9,7 @@ import {
 } from '../../../constants'
 import styles from '../Admin.scss'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
+import { RoundButton } from '../../RoundButton/RoundButton'
 import { gradientTextGenerator, isEmpty } from '../../../helpers'
 
 export class TruckingFeeSetter extends Component {
@@ -33,6 +34,9 @@ export class TruckingFeeSetter extends Component {
   }
   componentWillMount () {
     this.setAllFromOptions()
+  }
+  setFees () {
+    this.props.setFees(this.state.fees)
   }
 
   setAllFromOptions () {
@@ -84,7 +88,10 @@ export class TruckingFeeSetter extends Component {
           opts = rateBasises.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj[key][chargeKey] = (chargeKey === 'currency' || chargeKey === 'rate_basis') ? TruckingFeeSetter.selectFromOptions(opts, fees[key][chargeKey]) : ''
+        newObj[key][chargeKey] =
+          chargeKey === 'currency' || chargeKey === 'rate_basis'
+            ? TruckingFeeSetter.selectFromOptions(opts, fees[key][chargeKey])
+            : ''
       })
     })
 
@@ -112,24 +119,7 @@ export class TruckingFeeSetter extends Component {
       ? Object.keys(fees).map((key) => {
         const cells = []
         Object.keys(fees[key]).forEach((chargeKey) => {
-          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-            cells.push(<div
-              key={chargeKey}
-              className={`flex layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-              <div className={`flex-95 layout-row ${styles.editor_input}`}>
-                <input
-                  type="number"
-                  value={fees[key][chargeKey]}
-                  onChange={this.handleChange}
-                  name={`${key}-${chargeKey}`}
-                />
-              </div>
-            </div>)
-          } else if (chargeKey === 'rate_basis') {
+          if (chargeKey === 'rate_basis') {
             cells.push(<div
               className={`flex layout-row layout-align-none-center layout-wrap ${
                 styles.price_cell
@@ -188,19 +178,32 @@ export class TruckingFeeSetter extends Component {
         )
       })
       : []
-    const availableFees = truckingFees.map(tfk => (
-      <div
+    const availableFees = truckingFees.map((tfk) => {
+      if (fees[tfk.key]) {
+        return ''
+      }
+      return (<div
         className="flex-33 layout-row layout-align-center-center"
         onClick={() => this.addFee(tfk)}
       >
         <p className="flex-none ">{tfk.label}</p>
       </div>
-    ))
+      )
+    })
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">{panel}</div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
           {availableFees}
+        </div>
+        <div className="flex-33 layout-row layout-align-center-center">
+          <RoundButton
+            theme={theme}
+            size="small"
+            text="Save Fees"
+            iconClass="fa-plus-square-o"
+            handleNext={this.setFees}
+          />
         </div>
       </div>
     )
@@ -208,7 +211,8 @@ export class TruckingFeeSetter extends Component {
 }
 
 TruckingFeeSetter.propTypes = {
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  setFees: PropTypes.func.isRequired
 }
 TruckingFeeSetter.defaultProps = {
   theme: {}

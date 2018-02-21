@@ -172,16 +172,9 @@ export class ShipmentDetails extends Component {
     let { fullAddress } = this.state[key1]
 
     if (fullAddress) {
-      fullAddress =
-        `${addObj.number
-        } ${
-          addObj.street
-        } ${
-          addObj.city
-        } ${
-          addObj.zipCode
-        } ${
-          addObj.country}`
+      fullAddress = `${addObj.number} ${addObj.street} ${addObj.city} ${addObj.zipCode} ${
+        addObj.country
+      }`
     }
     this.setState({
       ...this.state,
@@ -204,7 +197,11 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    if (suffixName === 'sizeClass') {
+      containers[index][suffixName] = value
+    } else {
+      containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
@@ -555,9 +552,9 @@ export class ShipmentDetails extends Component {
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div
-          className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
-          }
+          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
+            defaults.border_divider
+          }`}
         >
           <div
             className={`
@@ -569,9 +566,9 @@ export class ShipmentDetails extends Component {
           </div>
         </div>
         <div
-          className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
-          }
+          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
+            defaults.border_divider
+          }`}
         >
           <div
             className={`
