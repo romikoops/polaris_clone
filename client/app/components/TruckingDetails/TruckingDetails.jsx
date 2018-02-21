@@ -3,6 +3,7 @@ import PropTypes from '../../prop-types'
 import styles from './TruckingDetails.scss'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { humanizeSnakeCase } from '../../helpers/stringTools'
 
 function tooltip (truckType, theme) {
   return (
@@ -12,6 +13,20 @@ function tooltip (truckType, theme) {
       theme={theme}
       wrapperClassName={styles.tooltip}
     />
+  )
+}
+
+function formGroup (loadType, truckType, theme) {
+  return (
+    <div className={`${styles.form_group} layout-row layout-align-start-end`}>
+      <input
+        type="radio"
+        id={`${loadType}_${truckType}`}
+        name={`${loadType}_truck`}
+      />
+      <label htmlFor={`${loadType}_${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
+      { tooltip(truckType, theme) }
+    </div>
   )
 }
 
@@ -33,24 +48,8 @@ export default function TruckingDetails (props) {
               <h5>Pre-Carriage</h5>
             </div>
             <div className="flex-100 layout-column layout-align-space-around">
-              <div className={`${styles.form_group} layout-row layout-align-start-end`}>
-                <input
-                  type="radio"
-                  id="pre_carriage_side_lifter"
-                  name="pre_carriage_truck"
-                />
-                <label htmlFor="pre_carriage_side_lifter">Side Lifter</label>
-                { tooltip('side_lifter', theme) }
-              </div>
-              <div className={`${styles.form_group} layout-row layout-align-start-end`}>
-                <input
-                  type="radio"
-                  id="pre_carriage_chassis"
-                  name="pre_carriage_truck"
-                />
-                <label htmlFor="pre_carriage_chassis">Chassis</label>
-                { tooltip('chassis', theme) }
-              </div>
+              { formGroup('pre_carriage', 'side_lifter', theme) }
+              { formGroup('pre_carriage', 'chassis', theme) }
             </div>
           </div>
           <div className="flex-50 layout-row layout-wrap">
@@ -58,24 +57,8 @@ export default function TruckingDetails (props) {
               <h5>On-Carriage</h5>
             </div>
             <div className="flex-100 layout-column layout-align-space-around">
-              <div className={`${styles.form_group} layout-row layout-align-start-end`}>
-                <input
-                  type="radio"
-                  id="on_carriage_side_lifter"
-                  name="on_carriage_truck"
-                />
-                <label htmlFor="on_carriage_side_lifter">Side Lifter</label>
-                { tooltip('side_lifter', theme) }
-              </div>
-              <div className={`${styles.form_group} layout-row layout-align-start-end`}>
-                <input
-                  type="radio"
-                  id="on_carriage_chassis"
-                  name="on_carriage_truck"
-                />
-                <label htmlFor="on_carriage_chassis">Chassis</label>
-                { tooltip('chassis', theme) }
-              </div>
+              { formGroup('on_carriage', 'side_lifter', theme) }
+              { formGroup('on_carriage', 'chassis', theme) }
             </div>
           </div>
         </div>
