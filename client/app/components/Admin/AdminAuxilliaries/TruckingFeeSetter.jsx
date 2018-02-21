@@ -178,14 +178,18 @@ export class TruckingFeeSetter extends Component {
         )
       })
       : []
-    const availableFees = truckingFees.map(tfk => (
-      <div
+    const availableFees = truckingFees.map((tfk) => {
+      if (fees[tfk.key]) {
+        return ''
+      }
+      return (<div
         className="flex-33 layout-row layout-align-center-center"
         onClick={() => this.addFee(tfk)}
       >
         <p className="flex-none ">{tfk.label}</p>
       </div>
-    ))
+      )
+    })
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">{panel}</div>

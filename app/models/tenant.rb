@@ -29,8 +29,7 @@ class Tenant < ApplicationRecord
       itinerary.set_scope!
 
       itinerary.routes
-    end
-    byebug
+    end    
     # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
     update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end
