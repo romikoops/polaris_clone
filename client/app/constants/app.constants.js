@@ -57,7 +57,9 @@ export const tooltips = {
   cargo_notes:
     'Information is needed on the amount of packages that are being shipped, and what kind of packages are being dealt with. Include a description of the goods. Alternatively, if you have a packing list, you can upload it below and leave this field blank.',
   shipment_mots:
-    'You will receive results for all available modes of transport. Simply select which applies best to your shipment'
+    'You will receive results for all available modes of transport. Simply select which applies best to your shipment',
+  side_lifter: 'TBD',
+  chassis: 'TBD'
 }
 
 // Tool tips menu admin

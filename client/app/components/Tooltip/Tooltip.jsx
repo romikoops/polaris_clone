@@ -6,7 +6,7 @@ import { tooltips } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
 export function Tooltip ({
-  text, icon, theme, color
+  text, icon, theme, color, wrapperClassName
 }) {
   const textStyle = color
     ? { color }
@@ -15,16 +15,14 @@ export function Tooltip ({
   const clipClass = color ? '' : 'clip'
   const id = v4()
   return (
-    <div className="flex-none layout-row layout-align-center-center tooltip">
-      <p
+    <div className={`${wrapperClassName} flex-none layout-row layout-align-center-center tooltip`}>
+      <i
         className={`flex-none ${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}
       />
-      <div className="flex-30">
-        <ReactTooltip id={id} className="flex-20" />
-      </div>
+      <ReactTooltip id={id} />
     </div>
   )
 }
@@ -33,12 +31,14 @@ Tooltip.propTypes = {
   theme: PropTypes.theme,
   text: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  wrapperClassName: PropTypes.string
 }
 
 Tooltip.defaultProps = {
   color: null,
-  theme: null
+  theme: null,
+  wrapperClassName: ''
 }
 
 export default Tooltip
