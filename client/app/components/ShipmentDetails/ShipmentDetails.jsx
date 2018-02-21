@@ -321,12 +321,10 @@ export class ShipmentDetails extends Component {
     const truckingKey = target.replace('has_', '')
     const { shipment } = this.state
     const artificialEvent = { target: {} }
-    // // eslint-disable-next-line no-debugger
-    // debugger
     if (!value) {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${truckingKey}-`
-    } else if (!shipment.trucking[truckingKey]) {
+    } else if (!shipment.trucking[truckingKey].truck_type) {
       // Set a default truck if carriage is toggled on and truck is empty
       artificialEvent.target.id = `${truckingKey}-chassis`
     }
@@ -593,6 +591,7 @@ export class ShipmentDetails extends Component {
         >
           <TruckingDetails
             theme={theme}
+            trucking={this.state.shipment.trucking}
             handleTruckingDetailsChange={this.handleTruckingDetailsChange}
           />
         </div>
