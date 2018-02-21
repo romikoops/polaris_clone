@@ -25,6 +25,7 @@ export default function TruckingDetails (props) {
           type="radio"
           id={`${carriage}-${truckType}`}
           name={`${carriage}_truck`}
+          value={`${carriage}_truck`}
           checked={trucking[carriage].truck_type === truckType}
           onChange={handleTruckingDetailsChange}
         />
