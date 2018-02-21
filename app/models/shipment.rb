@@ -32,6 +32,7 @@ class Shipment < ApplicationRecord
   # ActiveRecord Callbacks
   before_create :assign_uuid
   before_create :generate_imc_reference
+  before_create :set_default_trucking
 
   # Basic associations
   belongs_to :shipper, class_name: "User", optional: true
@@ -278,5 +279,10 @@ class Shipment < ApplicationRecord
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
     errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone) 
+  end
+
+  def set_default_trucking
+    no_trucking_h = { truck_type: '' }
+    self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
   end
 end

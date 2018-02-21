@@ -16,22 +16,23 @@ function tooltip (truckType, theme) {
   )
 }
 
-function formGroup (loadType, truckType, theme) {
+function formGroup (carriage, truckType, theme, handleTruckingDetailsChange) {
   return (
     <div className={`${styles.form_group} layout-row layout-align-start-end`}>
       <input
         type="radio"
-        id={`${loadType}_${truckType}`}
-        name={`${loadType}_truck`}
+        id={`${carriage}-${truckType}`}
+        name={`${carriage}_truck`}
+        onChange={handleTruckingDetailsChange}
       />
-      <label htmlFor={`${loadType}_${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
+      <label htmlFor={`${carriage}_${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
       { tooltip(truckType, theme) }
     </div>
   )
 }
 
 export default function TruckingDetails (props) {
-  const { theme } = props
+  const { theme, handleTruckingDetailsChange } = props
   return (
     <div className="content_width">
       <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
@@ -48,8 +49,8 @@ export default function TruckingDetails (props) {
               <h5>Pre-Carriage</h5>
             </div>
             <div className="flex-100 layout-column layout-align-space-around">
-              { formGroup('pre_carriage', 'side_lifter', theme) }
-              { formGroup('pre_carriage', 'chassis', theme) }
+              { formGroup('pre_carriage', 'side_lifter', theme, handleTruckingDetailsChange) }
+              { formGroup('pre_carriage', 'chassis', theme, handleTruckingDetailsChange) }
             </div>
           </div>
           <div className="flex-50 layout-row layout-wrap">
@@ -57,8 +58,8 @@ export default function TruckingDetails (props) {
               <h5>On-Carriage</h5>
             </div>
             <div className="flex-100 layout-column layout-align-space-around">
-              { formGroup('on_carriage', 'side_lifter', theme) }
-              { formGroup('on_carriage', 'chassis', theme) }
+              { formGroup('on_carriage', 'side_lifter', theme, handleTruckingDetailsChange) }
+              { formGroup('on_carriage', 'chassis', theme, handleTruckingDetailsChange) }
             </div>
           </div>
         </div>
@@ -68,7 +69,8 @@ export default function TruckingDetails (props) {
 }
 
 TruckingDetails.propTypes = {
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  handleTruckingDetailsChange: PropTypes.func.isRequired
 }
 
 TruckingDetails.defaultProps = {

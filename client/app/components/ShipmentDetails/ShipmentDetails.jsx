@@ -80,8 +80,8 @@ export class ShipmentDetails extends Component {
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
-      shipment: this.props.shipmentData ? this.props.shipmentData.shipment : {},
-      allNexuses: this.props.shipmentData ? this.props.shipmentData.allNexuses : {},
+      shipment: props.shipmentData ? props.shipmentData.shipment : {},
+      allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false
     }
 
@@ -100,6 +100,7 @@ export class ShipmentDetails extends Component {
     this.handleChangeCarriage = this.handleChangeCarriage.bind(this)
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
+    this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
@@ -114,6 +115,12 @@ export class ShipmentDetails extends Component {
     }
     window.scrollTo(0, 0)
     setStage(2)
+  }
+  componentWillReceiveProps (nextProps, nextState) {
+    if (!nextState.shipment) {
+      const { shipment } = nextProps.shipmentData
+      this.setState({ shipment })
+    }
   }
   setIncoTerm (opt) {
     this.setState({ incoterm: opt.value })
@@ -137,6 +144,7 @@ export class ShipmentDetails extends Component {
       },
       has_on_carriage: obj.has_on_carriage,
       has_pre_carriage: obj.has_pre_carriage,
+      trucking: obj.trucking,
       incoterm: obj.incoterm,
       routeSet: true
     })
@@ -259,13 +267,13 @@ export class ShipmentDetails extends Component {
   handleNextStage () {
     if (!this.state.selectedDay) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('dayPicker')
+      ShipmentDetails.scrollTo('dayPicker')
       return
     }
 
     if (!this.state.incoterm) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('incoterms')
+      ShipmentDetails.scrollTo('incoterms')
       return
     }
     if (
@@ -274,29 +282,25 @@ export class ShipmentDetails extends Component {
       this.state.AddressFormsHaveErrors
     ) {
       this.setState({ nextStageAttempt: true })
-      this.scrollTo('map')
+      ShipmentDetails.scrollTo('map')
       return
     }
     // This was implemented under the assuption that in
     // the initial state the following return values apply:
-    //      (1) this.errorsExist(this.state.cargoItemsErrors) #=> true
-    //      (2) this.errorsExist(this.state.containersErrors) #=> true
+    //   (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) //=> true
+    //   (2) ShipmentDetails.errorsExist(this.state.containersErrors) //=> true
     // So it will break out of the function and set nextStage attempt to true,
     // in case one of them returns false
     if (
-      this.errorsExist(this.state.cargoItemsErrors) &&
-      this.errorsExist(this.state.containersErrors)
+      ShipmentDetails.errorsExist(this.state.cargoItemsErrors) &&
+      ShipmentDetails.errorsExist(this.state.containersErrors)
     ) {
       this.setState({ nextStageAttempt: true })
       return
     }
 
-    console.log('NEXT STAGE PLZ')
+    const data = { shipment: this.state.shipment }
 
-    const data = {
-      shipment: this.state.shipment ? this.state.shipment : this.props.shipmentData.shipment
-    }
-    console.log(this.state.shipment ? 'stateful shipment' : 'prop shipment')
     data.shipment.origin_user_input = this.state.origin.fullAddress
       ? this.state.origin.fullAddress
       : ''
@@ -320,6 +324,36 @@ export class ShipmentDetails extends Component {
 
   handleChangeCarriage (target, value) {
     this.setState({ [target]: value })
+
+    // Upate trucking details according to toggle
+    const truckingKey = target.replace('has_', '')
+    const { shipment } = this.state
+    const artificialEvent = { target: {} }
+    // // eslint-disable-next-line no-debugger
+    // debugger
+    if (!value) {
+      // Set truckType to '', if carriage is toggled off
+      artificialEvent.target.id = `${truckingKey}-`
+    } else if (!shipment.trucking[truckingKey]) {
+      // Set a default truck if carriage is toggled on and truck is empty
+      artificialEvent.target.id = `${truckingKey}-chassis`
+    }
+    if (!artificialEvent.target.id) return
+    this.handleTruckingDetailsChange(artificialEvent)
+  }
+
+  handleTruckingDetailsChange (event) {
+    const [carriage, truckType] = event.target.id.split('-')
+    const { shipment } = this.state
+    this.setState({
+      shipment: {
+        ...shipment,
+        trucking: {
+          ...shipment.trucking,
+          [carriage]: { truck_type: truckType }
+        }
+      }
+    })
   }
 
   toggleAlertModal () {
@@ -562,7 +596,10 @@ export class ShipmentDetails extends Component {
             'layout-wrap layout-align-center'
           }
         >
-          <TruckingDetails theme={theme} />
+          <TruckingDetails
+            theme={theme}
+            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+          />
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div className={

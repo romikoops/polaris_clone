@@ -91,7 +91,6 @@ module ShippingTools
 
     hsCodes = shipment_data[:hsCodes].as_json
     shipment.assign_attributes(
-      
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
