@@ -622,7 +622,8 @@ export class AdminTruckingCreator extends Component {
                 <p className="flex-none offset-5">{nexus ? nexus.label : ''}</p>
               </div>
             </div>
-            {!steps.fees && steps.direction ? feeBuilder : contextPanel}
+            {!steps.fees && !steps.direction ? contextPanel : '' }
+            {!steps.fees && steps.direction ? feeBuilder : ''}
             {!steps.cellSteps && steps.fees ? stepSetter : ''}
             {steps.cellSteps && steps.fees ? rateView : ''}
             {cells.length > 0 ? saveBtn : ''}
