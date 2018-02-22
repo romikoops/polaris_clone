@@ -57,7 +57,11 @@ export const tooltips = {
   cargo_notes:
     'Information is needed on the amount of packages that are being shipped, and what kind of packages are being dealt with. Include a description of the goods. Alternatively, if you have a packing list, you can upload it below and leave this field blank.',
   shipment_mots:
-    'You will receive results for all available modes of transport. Simply select which applies best to your shipment'
+    'You will receive results for all available modes of transport. Simply select which applies best to your shipment',
+  side_lifter:
+    'If you require a side-lifter (SIMA), where the container is lifted down on the ground for loading/unloading, an additional charge will be applied on top of the chassi price. Amount to be added depending on Port of loading/discharge and final stuffing/delivery location.',
+  chassis:
+    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.'
 }
 
 // Tool tips menu admin

@@ -360,6 +360,9 @@ tenant_data = [
   }
 ]
 
+
+# Cargo Item Types
+
 CARGO_ITEM_TYPES = CargoItemType.all
 CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
 
@@ -370,9 +373,39 @@ def update_cargo_item_types!(tenant)
     tenant.cargo_item_types << CARGO_ITEM_TYPES
   end
 end
+
+
+# Trucking Availability
+
+All_AVAILABLE = TruckingAvailability.find_by(
+  container:  true,
+  cargo_item: true
+)
+NONE_AVAILABLE = TruckingAvailability.find_by(
+  container:  false,
+  cargo_item: false
+)
+
+def available?(hub, tenant)
+  %w(Gothenburg Shanghai).include?(hub.nexus.name) ||
+  %w(demo greencarrier).exclude?(tenant.subdomain)  
+end
+
+def update_hubs_trucking_availability!(tenant)
+  tenant.hubs.each do |hub|
+    hub.trucking_availability = available?(hub, tenant) ? All_AVAILABLE : NONE_AVAILABLE
+    hub.save!
+  end
+end
+
+
+# Create or update tenants 
+
 tenant_data.each do |tenant_attr|
   tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])  
   tenant = tenant ? tenant.update!(tenant_attr) : Tenant.create!(tenant_attr)
   update_cargo_item_types!(tenant)
+  update_hubs_trucking_availability!(tenant)
 end
 
+Location.update_all_trucking_availabilities
