@@ -228,7 +228,7 @@ export class AdminTruckingCreator extends Component {
         return tmp
       })
     } else {
-      tmpCell.lcl = {}
+      tmpCell.lcl = { ...model }
       tmpCell.lcl.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
         tmp.fees = tableFees

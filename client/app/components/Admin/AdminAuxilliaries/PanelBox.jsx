@@ -114,7 +114,7 @@ PanelBox.propTypes = {
   cellSteps: PropTypes.arrayOf(PropTypes.object),
   handleRateChange: PropTypes.func.isRequired,
   shrinkPanel: PropTypes.func.isRequired,
-  shrinkView: PropTypes.objectOf(PropTypes.string),
+  shrinkView: PropTypes.objectOf(PropTypes.bool),
   lowerKey: PropTypes.string,
   upperKey: PropTypes.string,
   handleMinimumChange: PropTypes.func.isRequired,
