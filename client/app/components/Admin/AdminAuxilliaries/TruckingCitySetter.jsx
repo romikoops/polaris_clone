@@ -40,6 +40,7 @@ export const TruckingCitySetter = ({
                 marginTop: '9px',
                 background: 'white'
               }}
+              options={{ types: ['(cities)'] }}
               handlePlaceChange={handlePlaceChange}
               hideMap
             />

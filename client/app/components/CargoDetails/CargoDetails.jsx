@@ -75,7 +75,7 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
-        return customs.fee + (diff * customs.extra)
+        return customs.fee + diff * customs.extra
       }
     } else {
       let hsCount = 0
@@ -94,7 +94,7 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
-        return customs.fee + (diff * customs.extra)
+        return customs.fee + diff * customs.extra
       }
     }
     const converted = converter(customs.fee, customs.currency, currencies).toFixed(2)
@@ -105,8 +105,16 @@ export class CargoDetails extends Component {
   }
   render () {
     const {
-      shipmentData, theme, insurance, hsCodes, hsTexts, handleHsTextChange,
-      setHsCode, deleteCode, user, tenant
+      shipmentData,
+      theme,
+      insurance,
+      hsCodes,
+      hsTexts,
+      handleHsTextChange,
+      setHsCode,
+      deleteCode,
+      user,
+      tenant
     } = this.props
     const {
       dangerousGoods, documents, customs, cargoItems, containers
@@ -163,14 +171,15 @@ export class CargoDetails extends Component {
           <p className="flex-90">
             <strong>
               {' '}
-              Customs Clearance is the documented permission to pass that a national customs
-              authority grants to imported goods so that they can enter the country o to exported
-              goods so that they can leave the country.
+              When you ship goods from outside the European Union (EU), you may be charged customs
+              duty and/or VAT. You can either handle the customs on your own, or have Greencarrier
+              handle it for you.
             </strong>
           </p>
           <p className="flex-90">
-            The customs clearance is typically given to a shipping agent to prove that all
-            applicable customs duties have been paid and the shipment has been appoved.
+            To cover our costs when we present your goods to the customs authorities – and pay any
+            customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
+            depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
         </div>
         <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
@@ -268,8 +277,7 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              <div
-                className="flex-100 flex-gt-sm-50 layout-row layout-wrap
+              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap
                   layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap">
@@ -322,8 +330,7 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
               </div>
-              <div
-                className="flex-100 flex-gt-sm-45 offset-gt-sm-5
+              <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5
                   layout-row layout-wrap alyout-align-start-start"
               >
                 <div className="flex-100 layout-row">
@@ -446,7 +453,7 @@ export class CargoDetails extends Component {
           >
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Customs" />
+                <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
               </div>
               <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
               <Checkbox

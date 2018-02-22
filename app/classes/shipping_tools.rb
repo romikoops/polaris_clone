@@ -32,7 +32,7 @@ module ShippingTools
         value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
-
+      # byebug
       on_carriage, pre_carriage = *[origin, destination].map do |nexus|
         nexus.trucking_availability(shipment.tenant_id)[shipment.load_type]
       end

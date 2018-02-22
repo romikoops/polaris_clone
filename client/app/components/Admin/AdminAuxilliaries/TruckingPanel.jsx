@@ -72,12 +72,6 @@ export class TruckingPanel extends Component {
     const lclPanel = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <p className="flex-none">Global Fees</p>
-          </div>
-          {globalFeePanel}
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <PanelBox
             cells={cells}
             cellSteps={cellSteps}
@@ -104,12 +98,7 @@ export class TruckingPanel extends Component {
             {truckType === 'chassi' ? 'Chassis Truck' : 'Sidelifter Truck'}
           </p>
         </div>
-        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-            <p className="flex-none">Global Fees</p>
-          </div>
-          {globalFeePanel}
-        </div>
+
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <PanelBox
             cells={cells}
@@ -132,6 +121,12 @@ export class TruckingPanel extends Component {
     ))
     return (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+            <p className="flex-none">Global Fees</p>
+          </div>
+          {globalFeePanel}
+        </div>
         {loadType.value === 'lcl' ? lclPanel : fclPanel}
       </div>
     )
