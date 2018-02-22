@@ -130,13 +130,18 @@ export class ShipmentCargoItems extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.colliType}
             {inputs.quantity}
-            {inputs.grossWeight}
+            {inputs.dangerousGoods}
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.length}
             {inputs.height}
             {inputs.width}
-            {inputs.dangerousGoods}
+            {inputs.volume}
+          </div>
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            {inputs.grossWeight}
+            {inputs.chargeableWeight}
+            <div className="flex" />
           </div>
 
           {cargoItem ? (

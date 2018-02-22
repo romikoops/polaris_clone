@@ -17,7 +17,7 @@ export function Tooltip ({
   const id = v4()
 
   return (
-    <div className={`${wrapperClassName} ${styles.icon_placement}`} >
+    <div className={`${wrapperClassName}`} >
       <i
         className={`${clipClass} fa ${icon}`}
         style={textStyle}

@@ -62,7 +62,7 @@ export default function getInputs (
     </div>
   )
   inputs.grossWeight = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
+    <div className="layout-row flex-25 layout-wrap layout-align-start-center" >
       <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
         <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
         <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
@@ -92,6 +92,53 @@ export default function getInputs (
         }
         <div className="flex-20 layout-row layout-align-center-center">
           kg
+        </div>
+      </div>
+    </div>
+  )
+
+  const volume =
+    cargoItem &&
+    cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
+  function chargeableWeight (mot) {
+    const effectiveKgPerCubicMeter = {
+      air: 167,
+      rail: 550,
+      ocean: 1000
+    }
+    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
+  }
+  inputs.chargeableWeight = (
+    <div className={
+      `${styles.chargeable_weight} layout-row flex-40 ` +
+      'layout-wrap layout-align-start-center'
+    }
+    >
+      <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
+        <p className={`${styles.input_label} flex-none`}> Chargeable Weight </p>
+      </div>
+      <div className={
+        `${styles.chargeable_weight_values} flex-95 ` +
+        'layout-row layout-align-center-center'
+      }
+      >
+        <div className="flex-33 layout-row">
+          <i className="fa fa-ship" />
+          <p className={`${styles.chargeable_weight_value}`}>
+            { cargoItem && chargeableWeight('ocean') } kg
+          </p>
+        </div>
+        <div className="flex-33 layout-row">
+          <i className="fa fa-plane" />
+          <p className={`${styles.chargeable_weight_value}`}>
+            { cargoItem && chargeableWeight('air') } kg
+          </p>
+        </div>
+        <div className="flex-33 layout-row">
+          <i className="fa fa-train" />
+          <p className={`${styles.chargeable_weight_value}`}>
+            { cargoItem && chargeableWeight('rail') } kg
+          </p>
         </div>
       </div>
     </div>
@@ -222,13 +269,46 @@ export default function getInputs (
       </div>
     </div>
   )
+  inputs.volume = (
+    <div className="layout-row flex layout-wrap layout-align-start-center" >
+      <p className={`${styles.input_label} flex-100`}> Volume </p>
+      <ReactTooltip />
+      <div
+        className={`flex-95 layout-row ${styles.input_box}`}
+        data-tip={'Volume is automatically set by \'Length\', \'Height\', and \'Width\''}
+      >
+        {
+          cargoItem ? (
+            <ValidatedInput
+              wrapperClassName="flex-80"
+              name={`${i}-volume`}
+              value={
+                cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
+              }
+              type="number"
+              min="0"
+              step="any"
+              onChange={handleDelta}
+              firstRenderInputs={firstRenderInputs}
+              setFirstRenderInputs={this.setFirstRenderInputs}
+              nextStageAttempt={nextStageAttempt}
+              disabled
+            />
+          ) : placeholderInput
+        }
+        <div className="flex-20 layout-row layout-align-center-center">
+          m <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
+        </div>
+      </div>
+    </div>
+  )
 
   inputs.quantity = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
       <NamedSelect
         placeholder={cargoItem ? cargoItem.quantity : ''}
-        className={`${styles.select} flex-95`}
+        className="flex-95"
         name={`${i}-quantity`}
         value={cargoItem ? cargoItem.quantity : ''}
         options={cargoItem ? numberOptions : ''}
