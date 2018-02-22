@@ -314,8 +314,8 @@ export class AdminTruckingCreator extends Component {
     const { name, value } = event.target
     const nameKeys = name.split('-')
     const cells = [...this.state.cells]
-    cells[parseInt(nameKeys[0], 10)][nameKeys[1]]
-      .table[parseInt(nameKeys[2], 10)].fees[nameKeys[3]].value = parseInt(value, 10)
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table[parseInt(nameKeys[2], 10)]
+      .fees[nameKeys[3]].value = parseInt(value, 10)
     this.setState({
       cells
     })
@@ -401,7 +401,15 @@ export class AdminTruckingCreator extends Component {
       cellSteps,
       truckingBasis,
       loadType,
-      direction
+      direction,
+      newCell,
+      currency,
+      lowerKey,
+      upperKey,
+      stepBasis,
+      feeSchema,
+      cellUpperKey,
+      cellLowerKey
     } = this.state
     const textStyle =
       theme && theme.colors
@@ -490,7 +498,24 @@ export class AdminTruckingCreator extends Component {
     const rateView = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
         {this.handleInputDisplays()}
-        {this.handleCellDisplays()}
+        <TruckingPanel
+          theme={theme}
+          cells={cells}
+          truckingBasis={truckingBasis}
+          newCell={newCell}
+          stepBasis={stepBasis}
+          upperKey={upperKey}
+          lowerKey={lowerKey}
+          loadType={loadType}
+          cellUpperKey={cellUpperKey}
+          cellLowerKey={cellLowerKey}
+          globalFees={feeSchema.globalFees}
+          handleRateChange={this.handleRateChange}
+          saveGlobalFees={this.saveGlobalFees}
+          handleMinimumChange={this.handleMinimumChange}
+          cellSteps={cellSteps}
+          currency={currency}
+        />
       </div>
     )
     const cellStepsArr = (
@@ -623,7 +648,7 @@ export class AdminTruckingCreator extends Component {
                 <p className="flex-none offset-5">{nexus ? nexus.label : ''}</p>
               </div>
             </div>
-            {!steps.fees && !steps.direction ? contextPanel : '' }
+            {!steps.fees && !steps.direction ? contextPanel : ''}
             {!steps.fees && steps.direction ? feeBuilder : ''}
             {!steps.cellSteps && steps.fees ? stepSetter : ''}
             {steps.cellSteps && steps.fees ? rateView : ''}

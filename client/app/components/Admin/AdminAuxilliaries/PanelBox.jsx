@@ -36,9 +36,13 @@ export const PanelBox = ({
           className="flex-100 layout-row layout-wrap layout-align-start-start"
         >
           <div className="flex-100 layout-row layout-align-start-center">
-            <p className="flex-none sup">{`${ws[lowerKey]} - ${ws[upperKey]} ${
-              stepBasis.label
-            }`}</p>
+            {ws.city
+              ? <p className="flex-none sup">{`${ws.city} ${ws.country} ${
+                stepBasis.label
+              }`}</p>
+              : <p className="flex-none sup">{`${ws[lowerKey]} - ${ws[upperKey]} ${
+                stepBasis.label
+              }`}</p>}
           </div>
           <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
             <p className="flex-none sup">Base Rate</p>
