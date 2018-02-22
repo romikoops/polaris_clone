@@ -80,9 +80,13 @@ export const PanelBox = ({
               layout-wrap
               layout-align-space-between-start"
           >
-            <p className="flex-none">{`${truckingBasis.label} Range ${
-              s[target][cellLowerKey]
-            } - ${s[target][cellUpperKey]}`}</p>
+            {cellLowerKey === 'city'
+              ? <p className="flex-none">{`${truckingBasis.label}: ${
+                s[target][cellLowerKey]
+              }, ${s[target][cellUpperKey]}`}</p>
+              : <p className="flex-none">{`${truckingBasis.label} Range ${
+                s[target][cellLowerKey]
+              } - ${s[target][cellUpperKey]}`}</p> }
             <div
               className="flex-10 layout-row layout-align-center-center"
               onClick={() => shrinkPanel(`cell_${i}`)}

@@ -445,6 +445,7 @@ module ExcelTools
         name:          "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", 
         photo:         hub_row[:photo]
       )
+      byebug
       hub.generate_hub_code!(user.tenant_id) unless hub.hub_code
       hub
     end

@@ -26,12 +26,15 @@ class Admin::TruckingController < ApplicationController
     truckingHubId = "#{meta["nexus_id"]}_#{current_user.tenant_id}"
     data.each do |d|
       d.each do |dk, dv|
+        byebug
         dv["table"].each_with_index do |dt, i|
           pricingKey = "#{meta["nexus_id"]}_#{dk}_#{i}_#{current_user.tenant_id}"
           pricingId = "#{meta["nexus_id"]}_#{i}_#{current_user.tenant_id}" 
           pricings[pricingKey] = {"variable" => dt["fees"], "fixed" => global}
           tmp = dt
           tmp.delete("fees")
+          tmp["lcl"] = {}
+          tmp["fcl"] = {}
           tmp["trucking_hub_id"] = truckingHubId
           tmp["tenant_id"] = current_user.tenant_id
           if meta["loadType"] == 'lcl'
