@@ -11,6 +11,8 @@ class Hub < ApplicationRecord
   has_many :layovers, through: :stops
   has_one :service_charge
 
+  before_create :set_trucking_availability
+
   MOT_HUB_NAME = {
     "ocean" => "Port",
     "air"   => "Airport",
@@ -95,5 +97,14 @@ class Hub < ApplicationRecord
       raise "Location contains invalid hub status!"
     end
     self.save!
+  end
+
+  private
+
+  def set_trucking_availability
+    self.trucking_availability ||= TruckingAvailability.find_or_create_by(
+      cargo_item: false,
+      container: false
+    )
   end
 end
