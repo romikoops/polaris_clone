@@ -113,6 +113,7 @@ export class CargoDetails extends Component {
       handleHsTextChange,
       setHsCode,
       deleteCode,
+      finishBookingAttempted,
       user,
       tenant
     } = this.props
@@ -371,11 +372,16 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap">
+                <div className="flex-50 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Packing Sheet" />
+                      <TextHeading
+                        theme={theme}
+                        size={3}
+                        text="Packing Sheet"
+                        color={finishBookingAttempted && !documents.packing_sheet ? 'red' : false}
+                      />
                     </div>
                   </div>
                   <div className="flex-100">
@@ -392,11 +398,20 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap">
+                <div className="flex-50 layout-row layout-wrap" name="commercial_invoice">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Commercial Invoice" />
+                      <TextHeading
+                        theme={theme}
+                        size={3}
+                        text="Commercial Invoice"
+                        color={
+                          finishBookingAttempted && !documents.commercial_invoice
+                            ? 'red'
+                            : false
+                        }
+                      />
                     </div>
                   </div>
                   <div className="flex-100">

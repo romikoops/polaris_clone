@@ -192,8 +192,22 @@ export class BookingDetails extends Component {
       hsTexts,
       customsCredit
     } = this.state
-
+    const { documents } = this.props.shipmentData
+    // eslint-disable-next-line camelcase
+    const { packing_sheet, commercial_invoice } = documents
     if ([shipper, consignee].some(isEmpty)) {
+      BookingDetails.scrollTo('contact_setter')
+      this.setState({ finishBookingAttempted: true })
+      return
+    }
+    // eslint-disable-next-line camelcase
+    if (!packing_sheet || (packing_sheet && isEmpty(packing_sheet))) {
+      BookingDetails.scrollTo('contact_setter')
+      this.setState({ finishBookingAttempted: true })
+      return
+    }
+    // eslint-disable-next-line camelcase
+    if (!commercial_invoice || (commercial_invoice && isEmpty(commercial_invoice))) {
       BookingDetails.scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
       return

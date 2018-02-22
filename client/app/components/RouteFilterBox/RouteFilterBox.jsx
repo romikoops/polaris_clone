@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
+import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.css'
 import { moment } from '../../constants'
@@ -36,13 +37,6 @@ export class RouteFilterBox extends Component {
   }
   render () {
     const { theme, pickup } = this.props
-    const dayPickerProps = {
-      disabledDays: {
-        before: new Date(moment()
-          .add(7, 'days')
-          .format())
-      }
-    }
     const StyledRange = styled.div`
       input[type='range']::-webkit-slider-runnable-track {
         width: 100%;
@@ -57,6 +51,23 @@ export class RouteFilterBox extends Component {
         opacity: 0.9;
       }
     `
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days')
+          .format())
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+
     return (
       <div className={styles.filterbox}>
         <div className={styles.pickup_date}>
@@ -69,6 +80,8 @@ export class RouteFilterBox extends Component {
             </div>
             <DayPickerInput
               placeholder="DD/MM/YYYY"
+              formatDate={formatDate}
+              parseDate={parseDate}
               format="DD/MM/YYYY"
               className={styles.dpb_picker}
               value={this.state.selectedDay}
