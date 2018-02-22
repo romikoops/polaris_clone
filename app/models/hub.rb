@@ -11,7 +11,7 @@ class Hub < ApplicationRecord
   has_many :layovers, through: :stops
   has_one :service_charge
 
-  before_create: :set_trucking_availability
+  before_create :set_trucking_availability
 
   MOT_HUB_NAME = {
     "ocean" => "Port",

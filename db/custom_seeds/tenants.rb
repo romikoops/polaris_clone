@@ -63,7 +63,7 @@
 #     # Here is an example:
 #     #     
 #     {        
-#       values: ['Gothenburg, Shanghai'],
+#       values: ['Gothenburg', 'Shanghai'],
 #     },
 #     {        
 #       values: ['Rotterdam Port'],
@@ -130,14 +130,23 @@ tenant_data = [
     # only being used for seeding purposes
     other_data: {
       trucking_availability: [
-        {        
-          values: [''],
-          options: {
-            upload_mode: :nexus_names,
-            only_container: true
-          }
-        }
-      ]
+    {        
+      values: ['Gothenburg', 'Shanghai'],
+    },
+    {        
+      values: ['Rotterdam Port'],
+      options: {
+        upload_mode: :hub_names,
+        load_type: :container
+      }
+    },
+    {        
+      values: ['Mumbai'],
+      options: {
+        load_type: :cargo_item
+      }
+    }   
+  ]
     }
   },
   {
@@ -464,10 +473,18 @@ CARGO_ITEM_TYPES = CargoItemType.all
 CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
 
 def update_cargo_item_types!(tenant)
-  if %w(demo greencarrier).include? tenant.subdomain 
-    tenant.cargo_item_types << CARGO_ITEM_TYPES_NO_DIMENSIONS
+  if %w(demo greencarrier).include? tenant.subdomain
+    begin
+      tenant.cargo_item_types << CARGO_ITEM_TYPES_NO_DIMENSIONS
+    rescue
+      
+    end
   else
-    tenant.cargo_item_types << CARGO_ITEM_TYPES
+    begin
+      tenant.cargo_item_types << CARGO_ITEM_TYPES
+    rescue
+      
+    end
   end
 end
 
@@ -491,12 +508,17 @@ def find_trucking_availability(setting)
   trucking_availability = TruckingAvailability.find_by(trucking_availability_attr)
 end
 
-def hubs_to_update
-  if setting.dig(:options, :hub_names)
+def hubs_to_update(tenant, setting)
+  puts setting
+  if setting.dig(:options, :upload_mode) == :hub_names
     tenant.hubs.where(name: setting[:values])
   else
     nexus_ids = setting[:values].map do |value|
-      Location.find_by(location_type: "nexus", name: value).id
+      if (nexus = Location.find_by(location_type: "nexus", name: value)).nil?
+        puts "(!) Warning: Tenant #{tenant.subdomain} does not have Nexus #{value}"
+      else
+        nexus.id
+      end
     end
     
     tenant.hubs.where(nexus_id: nexus_ids)
@@ -505,14 +527,14 @@ end
 
 def update_hubs_trucking_availability!(tenant, trucking_availability_settings)
   if trucking_availability_settings.nil?
-    puts "no trucking availability for tenant #{tenant.subdomain}"
+    puts "No trucking availability set for tenant #{tenant.subdomain}"
     return
   end
 
   trucking_availability_settings.each do |setting|
     trucking_availability = find_trucking_availability(setting)
 
-    hubs_to_update(setting).each do |hub|
+    hubs_to_update(tenant, setting).each do |hub|
       hub.trucking_availability = trucking_availability
       hub.save!
     end
@@ -523,10 +545,14 @@ end
 # Create or update tenants 
 
 tenant_data.each do |tenant_attr|
-  tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])  
-  tenant = tenant ? tenant.update!(tenant_attr) : Tenant.create!(tenant_attr)
+  other_data = tenant_attr.delete(:other_data) || {}
+
+  tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
+  tenant ? tenant.assign_attributes(tenant_attr) : tenant = Tenant.new(tenant_attr)
+  tenant.save!
+
   update_cargo_item_types!(tenant)
-  update_hubs_trucking_availability!(tenant, tenant_attr[:other_data][:trucking_availability])
+  update_hubs_trucking_availability!(tenant, other_data[:trucking_availability])
 end
 
 Location.update_all_trucking_availabilities
