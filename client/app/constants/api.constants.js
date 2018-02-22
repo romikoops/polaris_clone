@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'production') {
   url = 'https://devapi.itsmycargo.com'
 } else {
   url = 'http://localhost:3000'
+  // url = 'https://devapi.itsmycargo.com'
   // url = 'http://192.168.178.61:3000';
   // url = 'https://api2.itsmycargo.com'; // ISA username: demo@isa.dk pass: same as before
   // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';

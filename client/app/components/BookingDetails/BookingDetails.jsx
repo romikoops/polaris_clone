@@ -54,7 +54,8 @@ export class BookingDetails extends Component {
       hsTexts: {},
       totalGoodsValue: 0,
       cargoNotes: '',
-      finishBookingAttempted: false
+      finishBookingAttempted: false,
+      customsCredit: false
     }
     this.removeNotifyee = this.removeNotifyee.bind(this)
     this.toNextStage = this.toNextStage.bind(this)
@@ -68,6 +69,7 @@ export class BookingDetails extends Component {
     this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
     this.setCustomsFee = this.setCustomsFee.bind(this)
     this.setContact = this.setContact.bind(this)
+    this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
   }
   componentDidMount () {
     const { prevRequest, setStage, hideRegistration } = this.props
@@ -125,7 +127,6 @@ export class BookingDetails extends Component {
   }
   toggleAcceptTerms () {
     this.setState({ acceptTerms: !this.state.acceptTerms })
-    // this.props.handleInsurance();
   }
   deleteCode (cargoId, code) {
     const codes = this.state.hsCodes[cargoId]
@@ -135,6 +136,11 @@ export class BookingDetails extends Component {
         ...this.state.hsCodes,
         [cargoId]: newCodes
       }
+    })
+  }
+  toggleCustomsCredit () {
+    this.setState({
+      customsCredit: !this.state.customsCredit
     })
   }
   handleInsurance () {
@@ -183,7 +189,8 @@ export class BookingDetails extends Component {
       cargoNotes,
       insurance,
       customs,
-      hsTexts
+      hsTexts,
+      customsCredit
     } = this.state
 
     if ([shipper, consignee].some(isEmpty)) {
@@ -202,7 +209,8 @@ export class BookingDetails extends Component {
         cargoNotes,
         insurance,
         customs,
-        hsTexts
+        hsTexts,
+        customsCredit
       }
     }
     this.props.nextStage(data)
@@ -236,7 +244,7 @@ export class BookingDetails extends Component {
       // locations
     } = shipmentData
     const {
-      consignee, shipper, notifyees, customs
+      consignee, shipper, notifyees, customs, customsCredit
     } = this.state
 
     return (
@@ -278,15 +286,16 @@ export class BookingDetails extends Component {
             customsData={customs}
             setCustomsFee={this.setCustomsFee}
             user={user}
+            customsCredit={customsCredit}
             tenant={tenant}
+            toggleCustomsCredit={this.toggleCustomsCredit}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />
           <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
             <div
-              className={
-                `${defaults.content_width
-                } flex-none  layout-row layout-wrap layout-align-start-center`
-              }
+              className={`${
+                defaults.content_width
+              } flex-none  layout-row layout-wrap layout-align-start-center`}
             >
               <div className="flex-50 layout-row layout-align-start-center" />
               <div className="flex-50 layout-row layout-align-end-center">

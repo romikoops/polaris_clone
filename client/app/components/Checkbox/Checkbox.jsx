@@ -25,8 +25,10 @@ export class Checkbox extends PureComponent {
     this.props.onChange(!this.state.checked)
   }
   render () {
-    const { disabled, theme, name } = this.props
-    const { checked } = this.state
+    const {
+      disabled, theme, name, checked
+    } = this.props
+    // const { checked } = this.state
     const checkGradient = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }

@@ -240,6 +240,7 @@ module ShippingTools
     end
     shipment = Shipment.find(params[:shipment_id])
     shipment.shipper_id = params[:shipment][:shipper_id]
+    shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
     # byebug

@@ -6,6 +6,7 @@ export function getSubdomain () {
   if (
     host.split('.')[0] === 'www' ||
     host.split('.')[0] === 'react' ||
+    host.split('.')[0] === 'dev' ||
     host.includes('localhost')
   ) {
     return 'demo'

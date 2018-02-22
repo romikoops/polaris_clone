@@ -14,6 +14,8 @@ export const appConstants = {
 }
 
 export const tooltips = {
+  customs_credit:
+    'Customs credit is a scheme which makes it easier to pay customs duties and taxes. Your payment deadline will be deferred because customs duties and taxes which accrue during a month will fall due for payment on the 18th of the following month. Without customs credit, you will have to pay the taxes at the time of customs clearance.',
   pickup_location:
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',

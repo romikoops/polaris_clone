@@ -26,7 +26,7 @@ export class CargoDetails extends Component {
   }
   toggleInsurance () {
     this.setState({ insuranceView: !this.state.insuranceView })
-    // this.props.handleInsurance();
+    this.props.handleInsurance()
   }
   toggleCustoms () {
     const { setCustomsFee, customsData } = this.props
@@ -188,6 +188,38 @@ export class CargoDetails extends Component {
             {' '}
             {customs ? this.calcCustomsFee() : '18.50'} {user.currency}
           </h6>
+        </div>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className="flex-40 layout-row -alyout-align-start-center">
+              <p className="flex-none">Do you have your own customs credit? </p>
+              <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+            </div>
+            <div className="flex-15 layout-row layout-align-start-center">
+              <Checkbox
+                onChange={this.props.toggleCustomsCredit}
+                checked={this.props.customsCredit}
+                theme={theme}
+              />
+              <div className="flex-5" />
+              <p className="flex-30">Yes</p>
+            </div>
+            <div className="flex-15 layout-row layout-align-start-center">
+              <Checkbox
+                onChange={this.props.toggleCustomsCredit}
+                checked={!this.props.customsCredit}
+                theme={theme}
+              />
+              <div className="flex-5" />
+              <p className="flex-30">No</p>
+            </div>
+          </div>
+          <div className="flex-80 layout-row layout-wrap layout-align-start-center">
+            <p className="flex-90">
+              <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
+              VAT will be applied to the final invoice if you do not have customs credit.
+            </p>
+          </div>
         </div>
         <HSCodeRow
           className="flex-100"
@@ -475,6 +507,8 @@ CargoDetails.propTypes = {
   tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleInsurance: PropTypes.func.isRequired,
+  toggleCustomsCredit: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,
   insurance: PropTypes.shape({
@@ -498,7 +532,8 @@ CargoDetails.propTypes = {
   hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
-  handleHsTextChange: PropTypes.func
+  handleHsTextChange: PropTypes.func,
+  customsCredit: PropTypes.bool
 }
 
 CargoDetails.defaultProps = {
@@ -506,7 +541,8 @@ CargoDetails.defaultProps = {
   tenant: null,
   finishBookingAttempted: false,
   hsTexts: {},
-  handleHsTextChange: null
+  handleHsTextChange: null,
+  customsCredit: false
 }
 
 export default CargoDetails
