@@ -43,7 +43,6 @@ class Admin::TruckingController < ApplicationController
         end
       end
     end
-    pricing_id = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}" 
     truckingTable = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}" 
    pricings.each do |k, v|
     update_item('truckingPricings', {_id: k}, v)

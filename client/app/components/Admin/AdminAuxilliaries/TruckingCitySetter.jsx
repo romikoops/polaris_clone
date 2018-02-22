@@ -8,36 +8,33 @@ import { PlaceSearch } from '../../Maps/PlaceSearch'
 import { RoundButton } from '../../RoundButton/RoundButton'
 
 export const TruckingCitySetter = ({
-  newCell, theme, addNewCell, handlePlaceChange
+  newCell, theme, addNewCell, handlePlaceChange, tmpCity
 }) => (
   <div className="flex-100 layout-row layout-align-start-center">
-    <Formsy
-      onValidSubmit={addNewCell}
-      className="flex-100 layout-row layout-align-start-center"
-    >
+    <Formsy onValidSubmit={addNewCell} className="flex-100 layout-row layout-align-start-center">
       <div className="flex-66 layout-row layout-wrap">
         <h3 className="flex-40">Find Cities</h3>
-        <div className="offset-5 flex-55">
-          <GmapsWrapper
-            theme={theme}
-            component={PlaceSearch}
-            inputStyles={{
-              width: '96%',
-              marginTop: '9px',
-              background: 'white'
-            }}
-            handlePlaceChange={handlePlaceChange}
-            hideMap
-          />
-        </div>
+        { tmpCity.city
+          ? <div className="flex-66 layout-row layout-align-start-center">
+            <p className="flex-none">{`${tmpCity.city}`}</p>
+          </div>
+          : <div className="offset-5 flex-55">
+            <GmapsWrapper
+              theme={theme}
+              component={PlaceSearch}
+              inputStyles={{
+                width: '96%',
+                marginTop: '9px',
+                background: 'white'
+              }}
+              handlePlaceChange={handlePlaceChange}
+              hideMap
+            />
+          </div>
+        }
       </div>
-      <div className="flex-33 layout-row layout-align-center-center" >
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Add another"
-          iconClass="fa-plus-square-o"
-        />
+      <div className="flex-33 layout-row layout-align-center-center">
+        <RoundButton theme={theme} size="small" text="Add another" iconClass="fa-plus-square-o" />
       </div>
     </Formsy>
   </div>
@@ -45,10 +42,12 @@ export const TruckingCitySetter = ({
 TruckingCitySetter.propTypes = {
   theme: PropTypes.theme,
   newCell: PropTypes.objectOf(PropTypes.any).isRequired,
+  tmpCity: PropTypes.objectOf(PropTypes.any),
   addNewCell: PropTypes.func.isRequired,
   handlePlaceChange: PropTypes.func.isRequired
 }
 TruckingCitySetter.defaultProps = {
-  theme: {}
+  theme: {},
+  tmpCity: {}
 }
 export default TruckingCitySetter

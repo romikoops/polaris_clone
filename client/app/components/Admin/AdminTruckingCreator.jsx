@@ -13,7 +13,6 @@ import {
   TruckingZipSetter,
   TruckingFeeSetter,
   // TruckingDistancePanel,
-  TruckingCityPanel,
   TruckingStepSetter,
   TruckingPanel
 } from './AdminAuxilliaries'
@@ -114,7 +113,7 @@ export class AdminTruckingCreator extends Component {
     })
   }
   handleInputDisplays () {
-    const { truckingBasis, newCell } = this.state
+    const { truckingBasis, newCell, tmpCity } = this.state
     const { theme } = this.props
     switch (truckingBasis.value) {
       case 'city':
@@ -122,6 +121,7 @@ export class AdminTruckingCreator extends Component {
           <TruckingCitySetter
             theme={theme}
             newCell={newCell}
+            tmpCity={tmpCity}
             addNewCell={this.addNewCell}
             handlePlaceChange={this.handlePlaceChange}
           />
@@ -136,77 +136,6 @@ export class AdminTruckingCreator extends Component {
         return <TruckingZipSetter theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
     }
   }
-  handleCellDisplays () {
-    const {
-      truckingBasis,
-      newCell,
-      cells,
-      cellSteps,
-      loadType,
-      currency,
-      lowerKey,
-      upperKey,
-      stepBasis,
-      feeSchema,
-      cellUpperKey,
-      cellLowerKey
-    } = this.state
-    const { theme } = this.props
-    switch (truckingBasis.value) {
-      case 'city':
-        return <TruckingCityPanel theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
-      // case 'zipcode':
-      //   return (
-      //     <TruckingZipPanel
-      //       theme={theme}
-      //       cells={cells}
-      //       truckingBasis={truckingBasis}
-      //       newCell={newCell}
-      //       handleRateChange={this.handleRateChange}
-      //       handleMinimumChange={this.handleMinimumChange}
-      //       cellSteps={cellSteps}
-      //       currency={currency}
-      //     />
-      //   )
-      // case 'distance':
-      //   return (
-      //     <TruckingDistancePanel
-      //       theme={theme}
-      //       cells={cells}
-      //       truckingBasis={truckingBasis}
-      //       newCell={newCell}
-      //       handleRateChange={this.handleRateChange}
-      //       handleFCLChange={this.handleFCLChange}
-      //       handleMinimumChange={this.handleMinimumChange}
-      //       cellSteps={cellSteps}
-      //       currency={currency}
-      //       loadType={loadType}
-      //     />
-      //   )
-      default:
-        return (
-          <TruckingPanel
-            theme={theme}
-            cells={cells}
-            truckingBasis={truckingBasis}
-            newCell={newCell}
-            stepBasis={stepBasis}
-            upperKey={upperKey}
-            lowerKey={lowerKey}
-            loadType={loadType}
-            cellUpperKey={cellUpperKey}
-            cellLowerKey={cellLowerKey}
-            globalFees={feeSchema.globalFees}
-            handleRateChange={this.handleRateChange}
-            saveGlobalFees={this.saveGlobalFees}
-            handleMinimumChange={this.handleMinimumChange}
-            cellSteps={cellSteps}
-            currency={currency}
-          />
-        )
-    }
-  }
-
   addNewCell (model) {
     const {
       cells, cellSteps, loadType, feeSchema
