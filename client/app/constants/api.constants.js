@@ -12,6 +12,5 @@ if (process.env.NODE_ENV === 'production') {
   // url = 'http://imcr-staging.edrmpdsn2j.eu-central-1.elasticbeanstalk.com';
 }
 export const BASE_URL = `${url}/subdomain/${subdomainKey}`
-// export const BASE_URL = url;
 
 export default BASE_URL

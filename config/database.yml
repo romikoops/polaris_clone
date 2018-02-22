@@ -78,6 +78,21 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
+staging:
+  <<: *default
+#  database: imcr_production
+#  username: greencarrier4
+#  password: <%= ENV['IMC_DATABASE_PASSWORD'] %>
+  database: ebdb
+
+  adapter: postgresql
+  encoding: utf8
+  database: '<%= ENV['RDS_DB_NAME'] %>'
+  username: <%= ENV['RDS_DB_USERNAME'] %>
+  password: <%= ENV['RDS_DB_PASSWORD'] %>
+  host: <%= ENV['RDS_HOSTNAME'] %>
+  port: <%= ENV['RDS_PORT'] %>
+
 production:
   <<: *default
 #  database: imcr_production

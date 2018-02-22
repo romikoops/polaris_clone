@@ -50,7 +50,9 @@ export class TruckingPanel extends Component {
       handleRateChange,
       loadType,
       handleMinimumChange,
-      truckingBasis
+      truckingBasis,
+      cellUpperKey,
+      cellLowerKey
     } = this.props
     const { globalFeeData, shrinkView } = this.state
     console.log(cellSteps)
@@ -88,6 +90,8 @@ export class TruckingPanel extends Component {
             target="lcl"
             stepBasis={stepBasis}
             truckingBasis={truckingBasis}
+            cellUpperKey={cellUpperKey}
+            cellLowerKey={cellLowerKey}
           />
         </div>
       </div>
@@ -118,6 +122,8 @@ export class TruckingPanel extends Component {
             handleMinimumChange={handleMinimumChange}
             target={truckType}
             stepBasis={stepBasis}
+            cellUpperKey={cellUpperKey}
+            cellLowerKey={cellLowerKey}
             truckingBasis={truckingBasis}
           />
         </div>
@@ -142,7 +148,9 @@ TruckingPanel.propTypes = {
   globalFees: PropTypes.objectOf(PropTypes.any).isRequired,
   handleRateChange: PropTypes.func.isRequired,
   handleMinimumChange: PropTypes.func.isRequired,
-  saveGlobalFees: PropTypes.func.isRequired
+  saveGlobalFees: PropTypes.func.isRequired,
+  cellUpperKey: PropTypes.string.isRequired,
+  cellLowerKey: PropTypes.string.isRequired
 }
 TruckingPanel.defaultProps = {
   theme: {}

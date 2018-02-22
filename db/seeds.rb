@@ -28,8 +28,10 @@ Dir.chdir("#{Rails.root}/db/custom_seeds/") do
   require './vehicle_types'
   puts 'drop_all_pricings'
   require './drop_all_pricings'
-  puts 'all_pricings'
-  require './all_pricings'
+  # puts 'all_pricings'
+  # require './all_pricings'
+  puts 'demo_seed'
+  require './demo_seed'
   # puts 'hs_codes'
   # require './hs_code'
 end

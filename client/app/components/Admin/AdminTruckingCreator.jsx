@@ -147,7 +147,9 @@ export class AdminTruckingCreator extends Component {
       lowerKey,
       upperKey,
       stepBasis,
-      feeSchema
+      feeSchema,
+      cellUpperKey,
+      cellLowerKey
     } = this.state
     const { theme } = this.props
     switch (truckingBasis.value) {
@@ -192,6 +194,8 @@ export class AdminTruckingCreator extends Component {
             upperKey={upperKey}
             lowerKey={lowerKey}
             loadType={loadType}
+            cellUpperKey={cellUpperKey}
+            cellLowerKey={cellLowerKey}
             globalFees={feeSchema.globalFees}
             handleRateChange={this.handleRateChange}
             saveGlobalFees={this.saveGlobalFees}
@@ -208,6 +212,7 @@ export class AdminTruckingCreator extends Component {
       cells, cellSteps, loadType, feeSchema
     } = this.state
     const tmpCell = {}
+    const keys = Object.keys(model).sort()
     const tableFees = Object.assign({}, feeSchema.variableFees)
     if (loadType.value === 'fcl') {
       tmpCell.chassis = { ...model }
@@ -233,6 +238,8 @@ export class AdminTruckingCreator extends Component {
     cells.push(tmpCell)
     this.setState({
       cells,
+      cellUpperKey: keys[1],
+      cellLowerKey: keys[0],
       newCell: {
         table: []
       }

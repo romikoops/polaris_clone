@@ -19,12 +19,14 @@ export const PanelBox = ({
   handleMinimumChange,
   target,
   stepBasis,
-  truckingBasis
+  truckingBasis,
+  cellUpperKey,
+  cellLowerKey
 }) =>
   (cells
     ? cells.map((s, i) => {
       const wsInputs = []
-      console.log(cells)
+      console.log(cells, lowerKey, upperKey)
       cellSteps.forEach((ws, iw) => {
         console.log(truckingBasis)
         console.log(cells[i][target].table[iw].value)
@@ -74,7 +76,9 @@ export const PanelBox = ({
               layout-wrap
               layout-align-space-between-start"
           >
-            <p className="flex-none">{`${truckingBasis.label} Range ${s[target][lowerKey]} - ${s[target][upperKey]}`}</p>
+            <p className="flex-none">{`${truckingBasis.label} Range ${
+              s[target][cellLowerKey]
+            } - ${s[target][cellUpperKey]}`}</p>
             <div
               className="flex-10 layout-row layout-align-center-center"
               onClick={() => shrinkPanel(`cell_${i}`)}
@@ -116,7 +120,9 @@ PanelBox.propTypes = {
   handleMinimumChange: PropTypes.func.isRequired,
   target: PropTypes.string,
   stepBasis: PropTypes.objectOf(PropTypes.string),
-  truckingBasis: PropTypes.objectOf(PropTypes.string)
+  truckingBasis: PropTypes.objectOf(PropTypes.string),
+  cellUpperKey: PropTypes.string.isRequired,
+  cellLowerKey: PropTypes.string.isRequired
 }
 PanelBox.defaultProps = {
   theme: {},
