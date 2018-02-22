@@ -9,11 +9,13 @@ import { gradientTextGenerator } from '../../helpers'
 import {
   TruckingCitySetter,
   TruckingDistanceSetter,
-  TruckingZipPanel,
+  // TruckingZipPanel,
   TruckingZipSetter,
   TruckingFeeSetter,
-  TruckingDistancePanel,
-  TruckingCityPanel
+  // TruckingDistancePanel,
+  TruckingCityPanel,
+  TruckingStepSetter,
+  TruckingPanel
 } from './AdminAuxilliaries'
 
 export class AdminTruckingCreator extends Component {
@@ -56,20 +58,21 @@ export class AdminTruckingCreator extends Component {
       rateBasis: false,
       truckingBasis: false,
       currency: false,
-      laodType: {},
+      loadType: {},
       cells: [],
       newCell: {
         table: []
       },
       cities: [],
       newStep: {},
-      weightSteps: [],
+      cellSteps: [],
+      feeSchema: {},
       steps: {
         nexus: false,
         rateBasis: false,
         currency: false,
         truckingBasis: false,
-        weightSteps: false
+        cellSteps: false
       }
     }
     this.handleFCLChange = this.handleFCLChange.bind(this)
@@ -80,15 +83,25 @@ export class AdminTruckingCreator extends Component {
     this.saveEdit = this.saveEdit.bind(this)
     this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
     this.addWeightStep = this.addWeightStep.bind(this)
-    this.saveWeightSteps = this.saveWeightSteps.bind(this)
+    this.saveSteps = this.saveSteps.bind(this)
     this.addNewCell = this.addNewCell.bind(this)
     this.handlePlaceChange = this.handlePlaceChange.bind(this)
     this.handleInputDisplays = this.handleInputDisplays.bind(this)
     this.setFeeSchema = this.setFeeSchema.bind(this)
+    this.saveGlobalFees = this.saveGlobalFees.bind(this)
   }
   setFeeSchema (fees) {
     this.setState({
-      feeSchema: fees
+      feeSchema: fees,
+      steps: {
+        ...this.state.steps,
+        fees: true
+      }
+    })
+  }
+  saveGlobalFees (fees) {
+    this.setState({
+      globalFees: fees
     })
   }
   handleChange (event) {
@@ -125,50 +138,65 @@ export class AdminTruckingCreator extends Component {
   }
   handleCellDisplays () {
     const {
-      truckingBasis, newCell, cells, rateBasis, weightSteps, loadType, currency
+      truckingBasis,
+      newCell,
+      cells,
+      cellSteps,
+      loadType,
+      currency,
+      lowerKey,
+      upperKey,
+      stepBasis,
+      feeSchema
     } = this.state
     const { theme } = this.props
     switch (truckingBasis.value) {
       case 'city':
         return <TruckingCityPanel theme={theme} newCell={newCell} addNewCell={this.addNewCell} />
-      case 'zipcode':
-        return (
-          <TruckingZipPanel
-            theme={theme}
-            cells={cells}
-            rateBasis={rateBasis}
-            newCell={newCell}
-            handleRateChange={this.handleRateChange}
-            handleMinimumChange={this.handleMinimumChange}
-            weightSteps={weightSteps}
-            currency={currency}
-          />
-        )
-      case 'distance':
-        return (
-          <TruckingDistancePanel
-            theme={theme}
-            cells={cells}
-            rateBasis={rateBasis}
-            newCell={newCell}
-            handleRateChange={this.handleRateChange}
-            handleFCLChange={this.handleFCLChange}
-            handleMinimumChange={this.handleMinimumChange}
-            weightSteps={weightSteps}
-            currency={currency}
-            loadType={loadType}
-          />
-        )
+      // case 'zipcode':
+      //   return (
+      //     <TruckingZipPanel
+      //       theme={theme}
+      //       cells={cells}
+      //       truckingBasis={truckingBasis}
+      //       newCell={newCell}
+      //       handleRateChange={this.handleRateChange}
+      //       handleMinimumChange={this.handleMinimumChange}
+      //       cellSteps={cellSteps}
+      //       currency={currency}
+      //     />
+      //   )
+      // case 'distance':
+      //   return (
+      //     <TruckingDistancePanel
+      //       theme={theme}
+      //       cells={cells}
+      //       truckingBasis={truckingBasis}
+      //       newCell={newCell}
+      //       handleRateChange={this.handleRateChange}
+      //       handleFCLChange={this.handleFCLChange}
+      //       handleMinimumChange={this.handleMinimumChange}
+      //       cellSteps={cellSteps}
+      //       currency={currency}
+      //       loadType={loadType}
+      //     />
+      //   )
       default:
         return (
-          <TruckingZipPanel
+          <TruckingPanel
             theme={theme}
             cells={cells}
-            rateBasis={rateBasis}
+            truckingBasis={truckingBasis}
             newCell={newCell}
+            stepBasis={stepBasis}
+            upperKey={upperKey}
+            lowerKey={lowerKey}
+            loadType={loadType}
+            globalFees={feeSchema.globalFees}
             handleRateChange={this.handleRateChange}
+            saveGlobalFees={this.saveGlobalFees}
             handleMinimumChange={this.handleMinimumChange}
-            weightSteps={weightSteps}
+            cellSteps={cellSteps}
             currency={currency}
           />
         )
@@ -176,14 +204,32 @@ export class AdminTruckingCreator extends Component {
   }
 
   addNewCell (model) {
-    const { cells, weightSteps, loadType } = this.state
-    const tmpCell = { ...model }
+    const {
+      cells, cellSteps, loadType, feeSchema
+    } = this.state
+    const tmpCell = {}
+    const tableFees = Object.assign({}, feeSchema.variableFees)
     if (loadType.value === 'fcl') {
-      tmpCell.chassi_rate = 0
-      tmpCell.sima_rate = 0
+      tmpCell.chassis = { ...model }
+      tmpCell.side_lifter = { ...model }
+      tmpCell.chassis.table = cellSteps.map((s) => {
+        const tmp = Object.assign({}, s)
+        tmp.fees = tableFees
+        return tmp
+      })
+      tmpCell.side_lifter.table = cellSteps.map((s) => {
+        const tmp = Object.assign({}, s)
+        tmp.fees = tableFees
+        return tmp
+      })
     } else {
-      tmpCell.table = weightSteps.map(s => Object.assign({}, s))
+      tmpCell.lcl.table = cellSteps.map((s) => {
+        const tmp = Object.assign({}, s)
+        tmp.fees = tableFees
+        return tmp
+      })
     }
+
     cells.push(tmpCell)
     this.setState({
       cells,
@@ -193,14 +239,14 @@ export class AdminTruckingCreator extends Component {
     })
   }
   addWeightStep (model) {
-    const { weightSteps } = this.state
-    weightSteps.push({ ...model })
+    const { cellSteps } = this.state
+    cellSteps.push({ ...model })
     this.setState({
       newStep: {
         min: parseInt(model.max, 10) + 1,
         max: parseInt(model.max, 10) + 4
       },
-      weightSteps
+      cellSteps
     })
   }
 
@@ -215,8 +261,6 @@ export class AdminTruckingCreator extends Component {
   }
 
   handlePlaceChange (place) {
-    // eslint-disable-next-line no-debugger
-    debugger
     const newLocation = {
       streetNumber: '',
       street: '',
@@ -260,9 +304,10 @@ export class AdminTruckingCreator extends Component {
 
   handleRateChange (event) {
     const { name, value } = event.target
-    const nameKeys = name.split('-').map(i => parseInt(i, 10))
+    const nameKeys = name.split('-')
     const cells = [...this.state.cells]
-    cells[nameKeys[0]].table[nameKeys[1]].value = parseInt(value, 10)
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]]
+      .table[parseInt(nameKeys[2], 10)][nameKeys[3]] = parseInt(value, 10)
     this.setState({
       cells
     })
@@ -271,22 +316,22 @@ export class AdminTruckingCreator extends Component {
     const { name, value } = event.target
     const nameKeys = name.split('-').map(i => parseInt(i, 10))
     const cells = [...this.state.cells]
-    cells[nameKeys[0]][nameKeys[1]] = parseInt(value, 10)
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]] = parseInt(value, 10)
     this.setState({
       cells
     })
   }
   handleMinimumChange (event) {
     const { name, value } = event.target
-    const nameKeys = name.split('-').map(i => parseInt(i, 10))
+    const nameKeys = name.split('-')
     const { cells } = this.state
-    const adjCellTable = cells[nameKeys[0]].table.map((x) => {
+    const adjCellTable = cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table.map((x) => {
       const tx = x
       tx.min_value = parseInt(value, 10)
       return tx
     })
-    cells[nameKeys[0]].min_value = parseInt(value, 10)
-    cells[nameKeys[0]].table = adjCellTable
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]].min_value = parseInt(value, 10)
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table = adjCellTable
     this.setState({
       cells
     })
@@ -301,11 +346,15 @@ export class AdminTruckingCreator extends Component {
       }
     })
   }
-  saveWeightSteps () {
+  saveSteps (obj) {
     this.setState({
+      cellSteps: obj.steps,
+      stepBasis: obj.stepBasis,
+      upperKey: obj.upperKey,
+      lowerKey: obj.lowerKey,
       steps: {
         ...this.state.steps,
-        weightSteps: true
+        cellSteps: true
       }
     })
   }
@@ -313,7 +362,7 @@ export class AdminTruckingCreator extends Component {
   saveEdit () {
     console.log(this.state)
     const {
-      cells, nexus, currency, rateBasis, truckingBasis
+      cells, nexus, currency, rateBasis, truckingBasis, globalFees, loadType
     } = this.state
     const data = cells.map((c) => {
       const tc = c
@@ -325,9 +374,11 @@ export class AdminTruckingCreator extends Component {
     const meta = {
       type: truckingBasis.value,
       modifier: rateBasis.value,
-      nexus_id: nexus.value.id
+      nexus_id: nexus.value.id,
+      loadType: loadType.value
     }
-    this.props.adminDispatch.saveNewTrucking({ meta, data })
+    const global = globalFees
+    this.props.adminDispatch.saveNewTrucking({ meta, data, global })
     this.props.closeForm()
   }
 
@@ -339,9 +390,10 @@ export class AdminTruckingCreator extends Component {
       steps,
       cells,
       newStep,
-      weightSteps,
+      cellSteps,
       truckingBasis,
-      loadType
+      loadType,
+      direction
     } = this.state
     const textStyle =
       theme && theme.colors
@@ -351,6 +403,10 @@ export class AdminTruckingCreator extends Component {
       { value: 'city', label: 'City' },
       { value: 'zipcode', label: 'Zip Code' },
       { value: 'distance', label: 'Distance (Round Trip)' }
+    ]
+    const directionOpts = [
+      { value: 'import', label: 'Import' },
+      { value: 'export', label: 'Export' }
     ]
     const loadTypeOpts = [{ value: 'lcl', label: 'LCL' }, { value: 'fcl', label: 'FCL' }]
     const nexusOpts = AdminTruckingCreator.prepForSelect(nexuses, 'name', false, false)
@@ -364,6 +420,23 @@ export class AdminTruckingCreator extends Component {
               classes={`${styles.select}`}
               value={nexus}
               options={nexusOpts}
+              className="flex-100"
+              onChange={this.handleTopLevelSelect}
+            />
+          </div>
+        </div>
+      </div>
+    )
+    const selectDirection = (
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <h4 className="flex-100 letter_3">Select a Direction</h4>
+          <div className="flex-75 layout-row">
+            <NamedSelect
+              name="direction"
+              classes={`${styles.select}`}
+              value={direction}
+              options={directionOpts}
               className="flex-100"
               onChange={this.handleTopLevelSelect}
             />
@@ -412,9 +485,9 @@ export class AdminTruckingCreator extends Component {
         {this.handleCellDisplays()}
       </div>
     )
-    const weightStepsArr = (
+    const cellStepsArr = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-        {weightSteps.map((ws, i) => (
+        {cellSteps.map((ws, i) => (
           <div
             // eslint-disable-next-line react/no-array-index-key
             key={`ows_${i}`}
@@ -427,7 +500,7 @@ export class AdminTruckingCreator extends Component {
         ))}
       </div>
     )
-    const setWeightSteps = (
+    const setcellSteps = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap height_100">
         <div className="flex-100 layout-row layout-align-start-center">
           <p className="flex-none">{`Set pricing weight steps. Values ${
@@ -479,20 +552,20 @@ export class AdminTruckingCreator extends Component {
             />
           </div>
         </Formsy>
-        <div className="flex-100 layout-row layout-align-start-center">{weightStepsArr}</div>
+        <div className="flex-100 layout-row layout-align-start-center">{cellStepsArr}</div>
         <div className="flex-100 layout-row layout-align-end-center button_padding">
           <RoundButton
             theme={theme}
             size="small"
             text="Next"
             active
-            handleNext={this.saveWeightSteps}
+            handleNext={this.saveSteps}
             iconClass="fa-chevron-right"
           />
         </div>
       </div>
     )
-    console.log(setWeightSteps)
+    console.log(setcellSteps)
     const saveBtn = (
       <div
         className="flex-100 layout-align-end-center layout-row button_padding"
@@ -514,31 +587,18 @@ export class AdminTruckingCreator extends Component {
           {selectNexus}
           {selectLoadType}
           {selectTruckingBasis}
-          {/* {steps.truckingBasis === true && steps.weightSteps === false
-            ? setWeightSteps
-            : weightStepsArr} */}
+          {selectDirection}
+          {/* {steps.truckingBasis === true && steps.cellSteps === false
+            ? setcellSteps
+            : cellStepsArr} */}
         </div>
       </div>
     )
-
-    const feeBuilder = <TruckingFeeSetter theme={theme} />
+    const stepSetter = <TruckingStepSetter theme={theme} saveSteps={this.saveSteps} />
+    const feeBuilder = <TruckingFeeSetter theme={theme} setFees={this.setFeeSchema} />
     return (
-      <div
-        className={` ${
-          styles.editor_backdrop
-        } flex-none layout-row layout-wrap layout-align-center-center`}
-      >
-        <div
-          className={` ${
-            styles.editor_fade
-          } flex-none layout-row layout-wrap layout-align-center-start`}
-          onClick={this.props.closeForm}
-        />
-        <div
-          className={` ${
-            styles.editor_box
-          } flex-none layout-row layout-wrap layout-align-center-start`}
-        >
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+        <div className="flex-none content_width layout-row layout-wrap layout-align-center-start">
           <div className="flex-95 layout-row layout-wrap layout-align-center-start height_100">
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
@@ -555,8 +615,9 @@ export class AdminTruckingCreator extends Component {
                 <p className="flex-none offset-5">{nexus ? nexus.label : ''}</p>
               </div>
             </div>
-            {steps.truckingBasis ? feeBuilder : contextPanel}
-            {steps.weightSteps && steps.fees ? rateView : ''}
+            {!steps.fees && steps.direction ? feeBuilder : contextPanel}
+            {!steps.cellSteps && steps.fees ? stepSetter : ''}
+            {steps.cellSteps && steps.fees ? rateView : ''}
             {cells.length > 0 ? saveBtn : ''}
           </div>
         </div>
