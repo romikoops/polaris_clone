@@ -315,7 +315,7 @@ export class AdminTruckingCreator extends Component {
     const nameKeys = name.split('-')
     const cells = [...this.state.cells]
     cells[parseInt(nameKeys[0], 10)][nameKeys[1]]
-      .table[parseInt(nameKeys[2], 10)][nameKeys[3]] = parseInt(value, 10)
+      .table[parseInt(nameKeys[2], 10)].fees[nameKeys[3]].value = parseInt(value, 10)
     this.setState({
       cells
     })
