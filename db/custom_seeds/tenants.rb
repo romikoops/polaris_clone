@@ -1,9 +1,9 @@
 # Template for new Tenant Data
-# 
+
 # theme: {
 #   colors: {
 #     # Colors can be in RGB or HEX format
-# 
+
 #     primary: "#0EAF50",
 #     secondary: "#008ACB",
 #     brightPrimary: "#06CA52",
@@ -63,7 +63,7 @@
 #     # Here is an example:
 #     #     
 #     {        
-#       values: ['Gothenburg', 'Shanghai'],
+#       values: ['Gothenburg', 'Shanghai']
 #     },
 #     {        
 #       values: ['Rotterdam Port'],
@@ -78,6 +78,47 @@
 #         load_type: :cargo_item
 #       }
 #     }   
+#   ],
+#   # Cargo item types can be set in one of the 3 following ways:
+#   #   1. Choose a default option (Either :all, or :no_dimensions)
+#   #   2. An array (a list) of categories with no dimentions or area.
+#   #   3. An array (a list) of hashes (key/value pair groups) 
+#    
+#    
+#   # Method 1:
+#   
+#   cargo_item_types: :all
+#   
+#   
+#   # Method 2:
+#    
+#   cargo_item_types: [
+#     "Pallet",
+#     "Carton",
+#     "Crate",
+#     "Bottle",
+#     "Stack",
+#     "Drum",
+#     "Skid",
+#     "Barrel"
+#   ]
+#   
+#   
+#   # Method 3:
+#   
+#   cargo_item_types: [
+#     { 
+#       category: 'Pallet',
+#       dimension_x: 101.6, 
+#       dimension_y: 121.9, 
+#       area: 'North America'
+#     },
+#     { 
+#       category: 'Pallet',
+#       dimension_x: 100.0, 
+#       dimension_y: 120.0, 
+#       area: 'Europe, Asia'
+#     }
 #   ]
 # }
 
@@ -130,23 +171,20 @@ tenant_data = [
     # only being used for seeding purposes
     other_data: {
       trucking_availability: [
-    {        
-      values: ['Gothenburg', 'Shanghai'],
-    },
-    {        
-      values: ['Rotterdam Port'],
-      options: {
-        upload_mode: :hub_names,
-        load_type: :container
-      }
-    },
-    {        
-      values: ['Mumbai'],
-      options: {
-        load_type: :cargo_item
-      }
-    }   
-  ]
+        {        
+          values: ['Gothenburg', 'Shanghai']
+        }   
+      ],
+      cargo_item_types: [
+        "Pallet",
+        "Carton",
+        "Crate",
+        "Bottle",
+        "Stack",
+        "Drum",
+        "Skid",
+        "Barrel"
+      ]
     }
   },
   {
@@ -192,6 +230,25 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    # The following data is not a attribute of the Tenant model
+    # only being used for seeding purposes
+    other_data: {
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai']
+        }   
+      ],
+      cargo_item_types: [
+        "Pallet",
+        "Carton",
+        "Crate",
+        "Bottle",
+        "Stack",
+        "Drum",
+        "Skid",
+        "Barrel"
+      ]
     }
   },
   {
@@ -236,6 +293,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   },
   {
@@ -283,6 +343,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   },
   {
@@ -327,6 +390,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   },
   {
@@ -374,6 +440,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   },
   {
@@ -419,6 +488,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   },
   {
@@ -462,6 +534,9 @@ tenant_data = [
       },
       dangerous_goods: false,
       cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+      cargo_item_types: :all
     }
   }
 ]
@@ -472,19 +547,38 @@ tenant_data = [
 CARGO_ITEM_TYPES = CargoItemType.all
 CARGO_ITEM_TYPES_NO_DIMENSIONS = CargoItemType.where(dimension_x: nil, dimension_y: nil)
 
-def update_cargo_item_types!(tenant)
-  if %w(demo greencarrier).include? tenant.subdomain
-    begin
-      tenant.cargo_item_types << CARGO_ITEM_TYPES_NO_DIMENSIONS
-    rescue
-      
+def update_cargo_item_types!(tenant, cargo_item_types_attr)
+  if cargo_item_types_attr.nil?
+    puts "No cargo item types set for tenant #{tenant.subdomain}"
+    return
+  end
+
+  if cargo_item_types_attr == :all
+    CARGO_ITEM_TYPES.each do |cargo_item_type|
+      TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
     end
-  else
-    begin
-      tenant.cargo_item_types << CARGO_ITEM_TYPES
-    rescue
-      
+    return
+  end
+
+  if cargo_item_types_attr == :no_dimensions
+    CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
+      TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
     end
+    return
+  end
+
+  cargo_item_types_attr.each do |cargo_item_type_attr|
+    if cargo_item_type_attr.is_a? Hash
+      cargo_item_type = CargoItemType.find_by(cargo_item_type_attr)
+    else
+      cargo_item_type = CargoItemType.find_by(
+        category: cargo_item_type_attr,
+        dimension_x: nil,
+        dimension_y: nil,
+        area: nil
+      )
+    end
+    TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
   end
 end
 
@@ -509,7 +603,6 @@ def find_trucking_availability(setting)
 end
 
 def hubs_to_update(tenant, setting)
-  puts setting
   if setting.dig(:options, :upload_mode) == :hub_names
     tenant.hubs.where(name: setting[:values])
   else
@@ -520,7 +613,6 @@ def hubs_to_update(tenant, setting)
         nexus.id
       end
     end
-    
     tenant.hubs.where(nexus_id: nexus_ids)
   end
 end
@@ -551,7 +643,7 @@ tenant_data.each do |tenant_attr|
   tenant ? tenant.assign_attributes(tenant_attr) : tenant = Tenant.new(tenant_attr)
   tenant.save!
 
-  update_cargo_item_types!(tenant)
+  update_cargo_item_types!(tenant, other_data[:cargo_item_types])
   update_hubs_trucking_availability!(tenant, other_data[:trucking_availability])
 end
 
