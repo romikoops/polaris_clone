@@ -11,6 +11,7 @@ export class TruckingPanel extends Component {
       shrinkView: {}
     }
     this.handleGlobalFeeChange = this.handleGlobalFeeChange.bind(this)
+    this.shrinkPanel = this.shrinkPanel.bind(this)
   }
   handleGlobalFeeChange (event) {
     const { name, value } = event.target
