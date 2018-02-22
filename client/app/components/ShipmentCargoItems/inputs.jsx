@@ -4,6 +4,7 @@ import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
+import { switchIcon } from '../../helpers'
 import styles from './ShipmentCargoItems.scss'
 
 /**
@@ -108,6 +109,16 @@ export default function getInputs (
     }
     return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
   }
+  function chargeableWeightElemJSX (mot) {
+    return (
+      <div className="flex-33 layout-row">
+        { switchIcon(mot) }
+        <p className={`${styles.chargeable_weight_value}`}>
+          { cargoItem && chargeableWeight(mot) } kg
+        </p>
+      </div>
+    )
+  }
   inputs.chargeableWeight = (
     <div className={
       `${styles.chargeable_weight} layout-row flex-40 ` +
@@ -119,27 +130,14 @@ export default function getInputs (
       </div>
       <div className={
         `${styles.chargeable_weight_values} flex-95 ` +
-        'layout-row layout-align-center-center'
+        'layout-row layout-align-start-center'
       }
       >
-        <div className="flex-33 layout-row">
-          <i className="fa fa-ship" />
-          <p className={`${styles.chargeable_weight_value}`}>
-            { cargoItem && chargeableWeight('ocean') } kg
-          </p>
-        </div>
-        <div className="flex-33 layout-row">
-          <i className="fa fa-plane" />
-          <p className={`${styles.chargeable_weight_value}`}>
-            { cargoItem && chargeableWeight('air') } kg
-          </p>
-        </div>
-        <div className="flex-33 layout-row">
-          <i className="fa fa-train" />
-          <p className={`${styles.chargeable_weight_value}`}>
-            { cargoItem && chargeableWeight('rail') } kg
-          </p>
-        </div>
+        {
+          Object.keys(scope.modes_of_transport).map(mot => (
+            scope.modes_of_transport[mot].cargo_item ? chargeableWeightElemJSX(mot) : ''
+          ))
+        }
       </div>
     </div>
   )
