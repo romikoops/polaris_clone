@@ -373,7 +373,6 @@ def update_cargo_item_types!(tenant)
     tenant.cargo_item_types << CARGO_ITEM_TYPES
   end
 end
-<<<<<<< HEAD
 
 
 # Trucking Availability
