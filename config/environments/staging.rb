@@ -6,7 +6,7 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  # Do not eager load code on boot.
+  # Do  eager load code on boot.
   config.eager_load = true
 
   # Show full error reports.
@@ -37,7 +37,7 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
