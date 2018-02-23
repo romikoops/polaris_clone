@@ -72,8 +72,8 @@ class ShipmentsController < ApplicationController
   end
   def confirm_shipment
     resp = confirm_booking(params)
-    tenant_notification_email(shipment.shipper, resp)
-    shipper_notification_email(shipment.shipper, resp)
+    tenant_notification_email(resp.shipper, resp)
+    shipper_notification_email(resp.shipper, resp)
     response_handler({shipment: resp})
   end
 

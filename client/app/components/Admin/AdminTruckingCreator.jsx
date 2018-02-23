@@ -307,7 +307,7 @@ export class AdminTruckingCreator extends Component {
   saveEdit () {
     console.log(this.state)
     const {
-      cells, nexus, currency, rateBasis, truckingBasis, loadType
+      cells, nexus, currency, truckingBasis, stepBasis, loadType, direction
     } = this.state
     const data = cells.map((c) => {
       const tc = Object.assign({}, c)
@@ -316,10 +316,11 @@ export class AdminTruckingCreator extends Component {
       return tc
     })
     const meta = {
-      type: truckingBasis.value,
-      modifier: rateBasis.value,
+      modifier: truckingBasis.value,
       nexus_id: nexus.value.id,
-      loadType: loadType.value
+      loadType: loadType.value,
+      direction: direction.value,
+      subModifier: stepBasis.value
     }
     this.props.adminDispatch.saveNewTrucking({ meta, data })
     this.props.closeForm()

@@ -528,6 +528,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
+  }
   .btn_wrapper {
     position: relative !important;
     display: inline-block !important;
@@ -544,5 +545,29 @@
     max-width: 150px !important;
     text-align: left !important;
   }
-}
+  .price_cell_row {
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+  }
+  .add_price_cell{
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+  }
+  .add_price_button{
+    border-radius: 15px;
+    width: 95%;
+     &:focus {
+      outline: none;
+    }
+    &:hover {
+      margin: -1px 1px 1px -1px;
+      box-shadow: 1px 1px 1px rgba(black, 0.3);
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
 }
