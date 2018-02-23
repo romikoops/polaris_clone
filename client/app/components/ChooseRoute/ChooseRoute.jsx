@@ -39,6 +39,7 @@ export class ChooseRoute extends Component {
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
+    this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
@@ -53,6 +54,11 @@ export class ChooseRoute extends Component {
   }
   setDuration (val) {
     this.setState({ durationFilter: val })
+  }
+  setDepartureDate (date) {
+    const { shipmentDispatch, req } = this.props
+    req.planned_pickup_date = date
+    shipmentDispatch.setShipmentDetails(req)
   }
   setMoT (val) {
     this.setState({ selectedMoT: val })
@@ -173,6 +179,7 @@ export class ChooseRoute extends Component {
               setMoT={this.setMoT}
               moT={this.state.selectedMoT}
               departureDate={depDay}
+              setDepartureDate={this.setDepartureDate}
             />
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
@@ -306,6 +313,7 @@ ChooseRoute.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   chooseRoute: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
+  req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
@@ -318,7 +326,8 @@ ChooseRoute.propTypes = {
 ChooseRoute.defaultProps = {
   theme: null,
   prevRequest: null,
-  messages: []
+  messages: [],
+  req: {}
 }
 
 export default ChooseRoute

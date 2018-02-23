@@ -86,8 +86,9 @@ export class PlaceSearch extends Component {
 
   initAutocomplete (map) {
     // const targetId = target + '-gmac';
+    const options = this.props.options ? this.props.options : {}
     const input = document.getElementById('location')
-    const autocomplete = new this.props.gMaps.places.Autocomplete(input)
+    const autocomplete = new this.props.gMaps.places.Autocomplete(input, options)
     autocomplete.bindTo('bounds', map)
     this.setState({ autoListener: { ...this.state.autoListener, location: autocomplete } })
     this.autocompleteListener(map, autocomplete)
@@ -170,13 +171,15 @@ PlaceSearch.propTypes = {
   handlePlaceChange: PropTypes.func.isRequired,
   gMaps: PropTypes.gMaps.isRequired,
   hideMap: PropTypes.bool,
-  inputStyles: PropTypes.objectOf(PropTypes.string)
+  inputStyles: PropTypes.objectOf(PropTypes.string),
+  options: PropTypes.objectOf(PropTypes.any)
 }
 
 PlaceSearch.defaultProps = {
   theme: null,
   hideMap: false,
-  inputStyles: {}
+  inputStyles: {},
+  options: {}
 }
 
 export default PlaceSearch

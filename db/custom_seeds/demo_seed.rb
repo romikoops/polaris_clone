@@ -5,16 +5,16 @@ include MongoTools
   tenant = Tenant.find_by_subdomain("demo")
   shipper = tenant.users.second
   Stop.destroy_all
-  # Hub.destroy_all
-  # Location.where(location_type: 'nexus')
+  Hub.destroy_all
+  Location.where(location_type: 'nexus')
   Layover.destroy_all
   tenant.itineraries.destroy_all
   Trip.destroy_all
   # Overwrite hubs from excel sheet
-  # puts "# Overwrite hubs from excel sheet"
-  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  # req = {"xlsx" => hubs}
-  # overwrite_hubs(req, shipper)
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
   # # Overwrite service charges from excel sheet
   # puts "# Overwrite service charges from excel sheet"

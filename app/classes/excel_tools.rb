@@ -434,7 +434,7 @@ module ExcelTools
       )
       hub_code = hub_row[:hub_code] unless hub_row[:hub_code].blank?
       
-      hub = nexus.hubs.find_or_create_by(
+      hub = nexus.hubs.find_or_create_by!(
         nexus_id:      nexus.id, 
         location_id:   location.id, 
         tenant_id:     user.tenant_id, 

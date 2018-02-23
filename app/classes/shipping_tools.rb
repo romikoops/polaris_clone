@@ -32,7 +32,7 @@ module ShippingTools
         value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
-
+      # byebug
       on_carriage, pre_carriage = *[origin, destination].map do |nexus|
         nexus.trucking_availability(shipment.tenant_id)[shipment.load_type]
       end
@@ -240,6 +240,7 @@ module ShippingTools
     end
     shipment = Shipment.find(params[:shipment_id])
     shipment.shipper_id = params[:shipment][:shipper_id]
+    shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
     # byebug

@@ -19,7 +19,7 @@ export function Tooltip ({
   return (
     <div className={`${wrapperClassName}`} >
       <i
-        className={`${clipClass} fa ${icon}`}
+        className={`${clipClass} flex-none fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}
