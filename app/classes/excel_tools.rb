@@ -8,6 +8,7 @@ module ExcelTools
     # new_trucking_ids = []
     mongo = get_client
     defaults = []
+    load_type = "lcl"
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -26,15 +27,24 @@ module ExcelTools
         min_max_arr = cell.split(" - ")
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
-      results = []
-      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
+      trucking_table_id = "#{nexus.id}_#{user.tenant_id}" 
+      truckingQueries = []
+      truckingTable = "#{nexus.id}_#{user.tenant_id}"
+      truckingPricings = []
       (4..num_rows).each do |line|
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
         row_min_value = row_data.shift
         # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
-        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
+        ntp = {
+          trucking_hub_id: trucking_table_id,
+          currency: currency_row[3],
+          tenant_id: user.tenant_id,
+          nexus_id: nexus.id,
+          lower_zip: zip_code_range_array[0].to_i,
+          upper_zip: zip_code_range_array[1].to_i
+        }
         row_data.each_with_index do |val, index|
           tmp = defaults[index]
           if row_min_value < weight_min_row[index]
@@ -43,22 +53,27 @@ module ExcelTools
             min_value = row_min_value
           end
           tmp[:min_value] = min_value
-          tmp[:value] = val
-          ntp[:rate_table].push(tmp)
-
-          
-
-          # new_trucking_ids << ntp.id
+          tmp[:base_rate] = {
+            value: val,
+            rate_basis: 'PER_X_WEIGHT',
+            base: 100
+          }
+          tmp[:_id] = SecureRandom.uuid
+          truckingPricings.push(tmp)
+          ntp[:lcl] = {
+            default: tmp[:_id]
+          }
+          truckingQueries.push(ntp)
         end
-        # p ntp
-        results << ntp
-        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
       end
-      # 
-      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
-      hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
+      truckingQueries.each do |k|
+        update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
       end
+      truckingPricings.each do |k|
+        update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+      end
+      update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id})
+
     end
 
   end
@@ -160,8 +175,8 @@ module ExcelTools
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3]
           tmp[:value] = row_data[i]
-          tmp[:pickup_fee] = row_data[8]
-          tmp[:delivery_fee] = row_data[9]
+          tmp[:pickup_fee] = {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+          tmp[:delivery_fee] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           tmp[:delivery_eta_in_days] = row_data[10]
           tmp[:per_cbm_rate] = row_data[7]
 
