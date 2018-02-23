@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
+import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import ustyles from './UserAccount.scss'
 import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
-// import {v4} from 'node-uuid';
 import { Carousel } from '../Carousel/Carousel'
 import { activeRoutesData } from '../../constants'
 import { AdminSearchableClients } from '../Admin/AdminSearchables'
@@ -91,7 +91,7 @@ export class UserDashboard extends Component {
     const newReqShips =
       mergedRequestedShipments.length > 0 ? (
         UserDashboard.limitArray(mergedRequestedShipments, 3).map(ship => (
-          <UserMergedShipment ship={ship} viewShipment={this.viewShipment} />
+          <UserMergedShipment key={v4()} ship={ship} viewShipment={this.viewShipment} />
         ))
       ) : (
         <div className="flex-100 layout-row layout-align-start-center">
@@ -101,7 +101,7 @@ export class UserDashboard extends Component {
     const newOpenShips =
       mergedOpenShipments.length > 0 ? (
         UserDashboard.limitArray(mergedOpenShipments, 3).map(ship => (
-          <UserMergedShipment ship={ship} viewShipment={this.viewShipment} />
+          <UserMergedShipment key={v4()} ship={ship} viewShipment={this.viewShipment} />
         ))
       ) : (
         <div className="flex-100 layout-row layout-align-start-center">
@@ -296,10 +296,10 @@ UserDashboard.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
-  hubs: PropTypes.arrayOf(PropTypes.object),
+  hubs: PropTypes.objectOf(PropTypes.object),
   dashboard: PropTypes.shape({
     shipments: PropTypes.shipments,
-    pricings: PropTypes.arrayOf(PropTypes.object),
+    pricings: PropTypes.objectOf(PropTypes.string),
     contacts: PropTypes.arrayOf(PropTypes.object),
     locations: PropTypes.arrayOf(PropTypes.location)
   })

@@ -6,7 +6,6 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
-import styles from './Shop.scss'
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute'
@@ -17,6 +16,7 @@ import { shipmentActions } from '../../actions/shipment.actions'
 import { nexusActions } from '../../actions/nexus.actions'
 import { Footer } from '../../components/Footer/Footer'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
+import styles from './Shop.scss'
 
 class Shop extends Component {
   constructor (props) {
@@ -165,121 +165,124 @@ class Shop extends Component {
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
+          scrollable
         />
-
-        <ShopStageView
-          className="flex-100"
-          shopType={this.state.shopType}
-          match={match}
-          theme={theme}
-          currentStage={this.state.stageTracker.stage}
-          setStage={this.selectShipmentStageAndGo}
-          shipmentId={shipmentId}
-        />
-        <Route
-          exact
-          path={match.url}
-          render={props => (
-            <ChooseShipment
-              {...props}
-              theme={theme}
-              selectLoadType={this.selectLoadType}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage1 : []}
-              shipmentDispatch={shipmentDispatch}
-            />
-          )}
-        />
-        <Route
-          path={route1}
-          render={props => (
-            <ShipmentDetails
-              {...props}
-              tenant={tenant}
-              user={user}
-              dashboard={dashboard}
-              shipmentData={response ? response.stage1 : {}}
-              prevRequest={request && request.stage2 ? request.stage2 : {}}
-              req={request && request.stage1 ? request.stage1 : {}}
-              setShipmentDetails={this.setShipmentData}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage2 : []}
-              shipmentDispatch={shipmentDispatch}
-              nexusDispatch={nexusDispatch}
-              availableDestinations={this.props.availableDestinations}
-            />
-          )}
-        />
-        <Route
-          path={route2}
-          render={props => (
-            <ChooseRoute
-              {...props}
-              chooseRoute={this.selectShipmentRoute}
-              theme={theme}
-              shipmentData={response && response.stage2 ? response.stage2 : {}}
-              prevRequest={request && request.stage3 ? request.stage3 : null}
-              req={request && request.stage2 ? request.stage2 : {}}
-              user={user}
-              setStage={this.selectShipmentStage}
-              messages={error ? error.stage3 : []}
-              shipmentDispatch={shipmentDispatch}
-            />
-          )}
-        />
-        {response && response.stage3 ? (
+        <div className={styles.main_content}>
+          <ShopStageView
+            className="flex-100"
+            shopType={this.state.shopType}
+            match={match}
+            theme={theme}
+            currentStage={this.state.stageTracker.stage}
+            setStage={this.selectShipmentStageAndGo}
+            shipmentId={shipmentId}
+          />
           <Route
-            path={route3}
+            exact
+            path={match.url}
             render={props => (
-              <BookingDetails
+              <ChooseShipment
                 {...props}
-                nextStage={this.setShipmentContacts}
                 theme={theme}
-                shipmentData={response && response.stage3 ? response.stage3 : {}}
-                prevRequest={request && request.stage4 ? request.stage4 : null}
-                currencies={currencies}
+                selectLoadType={this.selectLoadType}
                 setStage={this.selectShipmentStage}
-                messages={error ? error.stage4 : []}
-                tenant={tenant}
-                user={user}
+                messages={error ? error.stage1 : []}
                 shipmentDispatch={shipmentDispatch}
-                hideRegistration={this.hideRegistration}
               />
             )}
           />
-        ) : (
-          ''
-        )}
-        <Route
-          path={route4}
-          render={props => (
-            <BookingConfirmation
-              {...props}
-              theme={theme}
-              tenant={tenant.data}
-              user={user}
-              shipmentData={response ? response.stage4 : {}}
-              setStage={this.selectShipmentStage}
-              shipmentDispatch={shipmentDispatch}
+          <Route
+            path={route1}
+            render={props => (
+              <ShipmentDetails
+                {...props}
+                tenant={tenant}
+                user={user}
+                dashboard={dashboard}
+                shipmentData={response ? response.stage1 : {}}
+                prevRequest={request && request.stage2 ? request.stage2 : {}}
+                req={request && request.stage1 ? request.stage1 : {}}
+                setShipmentDetails={this.setShipmentData}
+                setStage={this.selectShipmentStage}
+                messages={error ? error.stage2 : []}
+                shipmentDispatch={shipmentDispatch}
+                nexusDispatch={nexusDispatch}
+                availableDestinations={this.props.availableDestinations}
+              />
+            )}
+          />
+          <Route
+            path={route2}
+            render={props => (
+              <ChooseRoute
+                {...props}
+                chooseRoute={this.selectShipmentRoute}
+                theme={theme}
+                shipmentData={response && response.stage2 ? response.stage2 : {}}
+                prevRequest={request && request.stage3 ? request.stage3 : null}
+                req={request && request.stage2 ? request.stage2 : {}}
+                user={user}
+                setStage={this.selectShipmentStage}
+                messages={error ? error.stage3 : []}
+                shipmentDispatch={shipmentDispatch}
+              />
+            )}
+          />
+          {response && response.stage3 ? (
+            <Route
+              path={route3}
+              render={props => (
+                <BookingDetails
+                  {...props}
+                  nextStage={this.setShipmentContacts}
+                  theme={theme}
+                  shipmentData={response && response.stage3 ? response.stage3 : {}}
+                  prevRequest={request && request.stage4 ? request.stage4 : null}
+                  currencies={currencies}
+                  setStage={this.selectShipmentStage}
+                  messages={error ? error.stage4 : []}
+                  tenant={tenant}
+                  user={user}
+                  shipmentDispatch={shipmentDispatch}
+                  hideRegistration={this.hideRegistration}
+                />
+              )}
             />
+          ) : (
+            ''
           )}
-        />
-        <Route
-          path={route5}
-          render={props => (
-            <ShipmentThankYou
-              {...props}
-              theme={theme}
-              tenant={tenant.data}
-              user={user}
-              shipmentData={response ? response.stage5 : {}}
-              setStage={this.selectShipmentStage}
-              shipmentDispatch={shipmentDispatch}
-            />
-          )}
-        />
-        <div className={`${styles.pre_footer_break} flex-100`} />
-        <Footer className="flex-100" theme={theme} tenant={tenant.data} />
+          <Route
+            path={route4}
+            render={props => (
+              <BookingConfirmation
+                {...props}
+                theme={theme}
+                tenant={tenant.data}
+                user={user}
+                shipmentData={response ? response.stage4 : {}}
+                setStage={this.selectShipmentStage}
+                shipmentDispatch={shipmentDispatch}
+              />
+            )}
+          />
+          <Route
+            path={route5}
+            render={props => (
+              <ShipmentThankYou
+                {...props}
+                theme={theme}
+                tenant={tenant.data}
+                user={user}
+                shipmentData={response ? response.stage5 : {}}
+                setStage={this.selectShipmentStage}
+                shipmentDispatch={shipmentDispatch}
+              />
+            )}
+          />
+        </div>
+        <div className={styles.footer} >
+          <Footer className="flex-100" theme={theme} tenant={tenant.data} />
+        </div>
       </div>
     )
   }

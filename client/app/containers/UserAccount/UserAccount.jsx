@@ -118,13 +118,14 @@ class UserAccount extends Component {
       })
     }
     const nav = (<SideNav theme={theme} user={user} />)
-    const menu = <FloatingMenu Comp={nav} theme={theme} />
+    const menu = <FloatingMenu Comp={nav} theme={theme} title="MENU" icon="fa-bars" />
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
         {loadingScreen}
         <Header
           theme={theme}
           menu={menu}
+          shipments={users.dashboard.shipments}
           showMenu
           scrollable
         />

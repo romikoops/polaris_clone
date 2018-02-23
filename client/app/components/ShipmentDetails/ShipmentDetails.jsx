@@ -540,7 +540,8 @@ export class ShipmentDetails extends Component {
 
     return (
       <div
-        className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
+        className="layout-row flex-100 layout-wrap no_max
+         SHIP_DETAILS layout-align-start-start layout-wrap"
         style={{ height: '1800px' }}
       >
         {flash}

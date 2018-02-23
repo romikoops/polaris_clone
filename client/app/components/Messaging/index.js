@@ -1,4 +1,5 @@
-export * from './ConvoTile'
+export { ConvoTile } from './ConvoTile'
+export * from './Infobox'
 export * from './Conversation'
 export * from './Message'
 export * from './MessageShipmentData'

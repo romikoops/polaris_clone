@@ -22,8 +22,11 @@ export function Price ({ value, scale, user }) {
 
 Price.propTypes = {
   value: PropTypes.number.isRequired,
-  scale: PropTypes.string.isRequired,
+  scale: PropTypes.string,
   user: PropTypes.user.isRequired
+}
+Price.defaultProps = {
+  scale: ''
 }
 
 export default Price

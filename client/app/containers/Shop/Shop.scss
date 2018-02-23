@@ -1,7 +1,11 @@
 @import '../../styles/defaults';
 :local {
-	.pre_footer_break {
-	  height: 65px;
-	  background: $light-grey;
+	.main_content {
+		min-height: calc(100vh - 275px);
+	}
+	.footer {
+		width: 100vw;
+		height: 100vh;
+		background-color: blue;
 	}
 }

@@ -113,30 +113,35 @@ class SideNav extends Component {
     )
     const userLinks = [
       {
+        key: v4(),
         icon: 'fa-tachometer',
         text: 'Dashboard',
         url: '/account/dashboard',
         target: 'dashboard'
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Avail. Routes',
         url: '/chooseroute/chooseroute',
         target: 'chooseRoutes'
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Shipments',
         url: '/account/shipments',
         target: 'shipments'
       },
       {
+        key: v4(),
         icon: 'fa-user',
         text: 'Profile',
         url: '/account/profile',
         target: 'profile'
       },
       {
+        key: v4(),
         icon: 'fa-address-card',
         text: 'Contacts',
         url: '/account/contacts',
@@ -145,6 +150,7 @@ class SideNav extends Component {
     ]
     const adminLinks = [
       {
+        key: v4(),
         icon: 'fa-tachometer',
         text: 'Dashboard',
         url: '/admin/dashboard',
@@ -152,6 +158,7 @@ class SideNav extends Component {
         tooltip: menuTip.dashboard
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Shipments',
         url: '/admin/shipments',
@@ -159,6 +166,7 @@ class SideNav extends Component {
         tooltip: menuTip.shipments
       },
       {
+        key: v4(),
         icon: 'fa-building-o',
         text: 'Hubs',
         url: '/admin/hubs',
@@ -166,6 +174,7 @@ class SideNav extends Component {
         tooltip: menuTip.hubs
       },
       {
+        key: v4(),
         icon: 'fa-area-chart',
         text: 'Pricing',
         url: '/admin/pricing',
@@ -173,6 +182,7 @@ class SideNav extends Component {
         tooltip: menuTip.pricing
       },
       {
+        key: v4(),
         icon: 'fa-list',
         text: 'Schedules',
         url: '/admin/schedules',
@@ -180,6 +190,7 @@ class SideNav extends Component {
         tooltip: menuTip.schedules
       },
       {
+        key: v4(),
         icon: 'fa-truck',
         text: 'Trucking',
         url: '/admin/trucking',
@@ -187,6 +198,7 @@ class SideNav extends Component {
         tooltip: menuTip.trucking
       },
       {
+        key: v4(),
         icon: 'fa-users',
         text: 'Client',
         url: '/admin/clients',
@@ -194,6 +206,7 @@ class SideNav extends Component {
         tooltip: menuTip.clients
       },
       {
+        key: v4(),
         icon: 'fa-map-signs',
         text: 'Routes',
         url: '/admin/routes',
@@ -201,6 +214,7 @@ class SideNav extends Component {
         tooltip: menuTip.routes
       },
       {
+        key: v4(),
         icon: 'fa-magic',
         text: 'Set Up',
         url: '/admin/wizard',
@@ -221,7 +235,7 @@ class SideNav extends Component {
       tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
+        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} key={li.key} onClick={tli.action}>
           <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
             <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
               <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />
