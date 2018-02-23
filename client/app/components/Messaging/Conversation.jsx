@@ -3,9 +3,7 @@ import { v4 } from 'node-uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
-// import { Message, MessageShipmentData } from './'
-import { Message } from './'
-import { FloatingMenu } from '../FloatingMenu/FloatingMenu'
+import { Message, MessageShipmentData } from './'
 import PropTypes from '../../prop-types'
 
 export class Conversation extends Component {
@@ -66,7 +64,7 @@ export class Conversation extends Component {
   }
   render () {
     const {
-      conversation, theme, /* shipment, */ user, tenant, clients
+      conversation, theme, shipment, user, tenant, clients
     } = this.props
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
@@ -93,8 +91,6 @@ export class Conversation extends Component {
           theme={theme}
           key={v4()}
         />))
-
-    const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed
     const btnStyle = {
       background:
         theme && theme.colors
@@ -105,32 +101,25 @@ export class Conversation extends Component {
           })`
           : 'black'
     }
-    /*  const dropdown = (<div className={`${styles.summary} flex-none layout-row
-    layout-wrap layout-align-start-center `}
-    >
-      <MessageShipmentData
-        theme={theme}
-        shipmentData={shipment}
-        user={user}
-        closeInfo={this.toggleDetails}
-      />
-    </div>) */
-    const infoMenu = (
-      <FloatingMenu
-        // Comp={dropdown}
-        theme={theme}
-        title="Show Details"
-        icon="fa-info"
-      />)
+    const detailView = (<MessageShipmentData
+      theme={theme}
+      shipmentData={shipment}
+      user={user}
+      closeInfo={this.toggleDetails}
+    />)
+    const showDetailView = showDetails ? styles.detail_wrapper_open
+      : styles.detail_wrapper_closed
+    const showMessageView = showDetails ? styles.message_wrapper_closed
+      : styles.message_wrapper_open
     const messageView = (
-      <div className="flex-100 layout-column layout-align-start-start" ref>
+      <div className={`${showMessageView} flex-100 layout-column layout-align-start-start`} ref>
         <div
           id="messageList"
-          className={`flex-70 layout-row layout-align-start-start layout-wrap ${
-            styles.message_scroll
-          }`}
+          className={`${styles.message_scroll} 
+          flex-70 layout-row layout-align-start-start layout-wrap `}
         >
-          {messages}
+          { messages }
+
           <Element name="messagesEnd" />
         </div>
         <form
@@ -179,17 +168,27 @@ export class Conversation extends Component {
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`${summWrapStyle} ${styles.summary_wrapper} 
+          className={`${styles.summary_wrapper} ${showDetailView}
           flex-10 layout-row layout-wrap layout-align-start-center `}
+          onClick={this.toggleDetails}
         >
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-            onClick={this.toggleDetails}
-          >
+          <div className="flex-70 layout-wrap layout-row layout-align-start-center">
             <div className="flex-5" />
-            <p className="flex-none">Shipment Reference: {conversation.messages[0].shipmentRef}</p>
-            { infoMenu }
+            <p className="flex-none">
+              Shipment Reference:
+              <b>
+                {conversation.messages[0].shipmentRef}
+              </b>
+            </p>
           </div>
+          <div className="flex-30 layout-align-end-center layout-row">
+            <i>
+              Show Details
+            </i>
+            <div className="flex-5" />
+            <i className="fa fa-info clip" style={btnStyle} />
+          </div>
+          { showDetails ? detailView : '' }
         </div>
         <div className="flex-90 layout-column layout-align-start-start">
           { messageView }
@@ -205,14 +204,16 @@ Conversation.propTypes = {
     messages: PropTypes.array
   }).isRequired,
   theme: PropTypes.theme,
-  // shipment: PropTypes.shipment.isRequired,
+  shipment: PropTypes.shipment,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.client).isRequired
+  clients: PropTypes.arrayOf(PropTypes.client)
 }
 
 Conversation.defaultProps = {
-  theme: null
+  theme: null,
+  clients: null,
+  shipment: null
 }
 
 export default Conversation

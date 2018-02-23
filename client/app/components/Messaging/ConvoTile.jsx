@@ -35,46 +35,52 @@ export function ConvoTile ({
         : 'black'
   }
   const shipmentStatus = () => {
-    const status = { color: '' }
+    const color = { color: '' }
+    let icon = ''
     switch (shipment.status) {
-      case 'requested': status.color = '#E5E04B'
+      case 'requested':
+        icon = 'fa fa-hourglass-half'
+        color.color = '#DEBC4C'
         break
-      case 'confirmed': status.color = '#3ACE62'
+      case 'confirmed':
+        icon = 'fa fa-check'
+        color.color = '#3ACE62'
         break
-      default: status.color = '#CE3F3F'
+      default:
+        icon = 'fa fa-times'
+        color.color = '#CE3F3F'
         break
     }
-    return status
+    return <i className={icon} style={color} />
   }
-  const ConvoView = shipment.convoKey ? (
-    <ConvoTileDiv className={`flex layout-row layout-align-center-start pointy layout-wrap ${styles.convo_tile}`}>
+  const showStatus = shipmentStatus()
+  const ConvoView = (
+    <ConvoTileDiv className={`flex layout-row layout-align-center-start-space-between pointy layout-wrap ${styles.convo_tile}`}>
       <div className="flex-95 layout-row layout-align-start-center">
         <div className="flex-15-layout-row-layout-align-start-center">
-          <i className={`flex-none clip fa ${shipment.icon}`} style={iconStyle} />
+          { shipment.convoKey ? <i className={`flex-none clip fa ${shipment.icon}`} style={iconStyle} />
+            : <i className="flex-none clip fa fa-truck" style={iconStyle} /> }
         </div>
-        <p className="flex-none">Shipment Reference:</p> {convoKey}
+        <div className="flex-5" />
+        <p className="flex-none">Shipment Ref.:</p>
+        <div className="flex-5" />
+        <b>{convoKey}</b>
       </div>
       <div className="flex-95 layout-row layout-align-start-center">
-        {shipment.origin} - {shipment.destination}
+        { shipment.convoKey ? `${shipment.origin} - ${shipment.destination}`
+          : 'Rejected by Admin' }
       </div>
       <div className="flex-95 layout-row layout-align-start-center">
-      status: {shipment.status}<i className="fa fa-circle" style={shipmentStatus()} />
-      </div>
-      <p className="flex-none" />
-    </ConvoTileDiv>
-  ) : (
-    <ConvoTileDiv className={`flex layout-row layout-align-center-start pointy layout-wrap ${styles.convo_tile}`}>
-      <div className="flex-95 layout-row layout-align-start-center">
-        <div className="flex-15-layout-row-layout-align-start-center">
-          <i className="fa fa-times" style={shipmentStatus()} />
-        </div>
-        <p className="flex-none">Shipment ID: {convoKey}</p>
-      </div>
-      <div className="flex-95 layout-row layout-align-start-center">
-        Shipment has been rejected by the Admin
-      </div>
-      <div className="flex-95 layout-row layout-align-start-center">
-        status: Rejected
+        STATUS:
+        <div className="flex-5" />
+        <i>
+          <b>
+            { shipment.convoKey ? shipment.status.toUpperCase()
+              : 'REJECTED' }
+          </b>
+        </i>
+        <div className="flex-5" />
+        {showStatus}
       </div>
       <p className="flex-none" />
     </ConvoTileDiv>

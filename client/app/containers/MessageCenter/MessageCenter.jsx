@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
+import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { ConvoTile, Conversation } from '../../components/Messaging'
 import { messagingActions } from '../../actions'
@@ -105,6 +106,7 @@ class MessageCenter extends Component {
     convoKeys = Object.keys(conversations)
     const convos = convoKeys.map(ms => (
       <ConvoTile
+        key={v4()}
         theme={theme}
         conversation={conversations[ms]}
         convoKey={ms}
@@ -118,6 +120,7 @@ class MessageCenter extends Component {
     }
     const messageView = selectedConvo ? (
       <Conversation
+        key={v4()}
         conversation={conversations[selectedConvo]}
         theme={theme}
         tenant={tenant}

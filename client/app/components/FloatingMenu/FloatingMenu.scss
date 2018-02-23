@@ -2,13 +2,13 @@
   .wrapper {
     position: relative;
     width: 150px;
-    height: max-content;
-    min-height: 500px;
+    min-height: 50px;
+    max-height: 500px;
     top: 20px;
-    margin-left: 50px;
+    margin-left: 20px;
     z-index: 50;
-    @media (max-width: 768px) and (max-width: 1366px) {
-      left: 10px;
+    @media (max-width: 768px) and (max-width: 1440px) {
+      margin-left: 10px !important;
     }
   }
   .icon_circle {

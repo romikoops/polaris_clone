@@ -62,7 +62,6 @@ export class FloatingMenu extends Component {
         <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>
           {Comp}
         </div>
-
       </div>
     )
   }

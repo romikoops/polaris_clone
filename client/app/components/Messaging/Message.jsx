@@ -120,7 +120,7 @@ Message.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
-  client: PropTypes.client.isRequired,
+  client: PropTypes.client,
   message: PropTypes.shape({
     sender_id: PropTypes.number,
     user_id: PropTypes.number,
@@ -130,7 +130,8 @@ Message.propTypes = {
 }
 
 Message.defaultProps = {
-  theme: null
+  theme: null,
+  client: null
 }
 
 export default Message
