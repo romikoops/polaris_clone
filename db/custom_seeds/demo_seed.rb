@@ -52,9 +52,9 @@ include MongoTools
   req = {"xlsx" => trucking}
   overwrite_zipcode_weight_trucking_rates(req, shipper)
 
-  # trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
-  # req = {"xlsx" => trucking}
-  # overwrite_city_trucking_rates(req, shipper)
+  trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_city_trucking_rates(req, shipper)
 
   # tenant.update_route_details()
 # end

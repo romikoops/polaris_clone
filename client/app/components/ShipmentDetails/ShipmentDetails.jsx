@@ -578,7 +578,7 @@ export class ShipmentDetails extends Component {
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
-        style={{ height: '1800px' }}
+        style={{ minHeight: '1800px' }}
       >
         {flash}
         {alertModal}

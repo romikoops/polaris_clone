@@ -47,12 +47,12 @@ class Admin::TruckingController < ApplicationController
       end
     end
     truckingTable = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}" 
-   pricings.each do |k, v|
-    update_item('truckingPricings', {_id: k}, v)
-   end
-   pricingKeys.each do |k, v|
-    update_item('truckingQueries', {_id: k}, v)
-   end
+    pricings.each do |k, v|
+      update_item('truckingPricings', {_id: k}, v)
+    end
+    pricingKeys.each do |k, v|
+      update_item('truckingQueries', {_id: k}, v)
+    end
     update_item('truckingHubs', {_id: "#{meta["nexus_id"]}"}, {type: "#{meta["type"]}", modifier: "#{meta["modifier"]}", table: truckingTable, tenant_id: current_user.tenant_id})
   end
   def overwrite_zip_trucking

@@ -142,25 +142,33 @@ export class AdminTruckingCreator extends Component {
     } = this.state
     const tmpCell = {}
     const keys = Object.keys(model).sort()
-    const tableFees = Object.assign({}, feeSchema.variableFees)
     if (loadType.value === 'fcl') {
       tmpCell.chassis = { ...model }
       tmpCell.side_lifter = { ...model }
       tmpCell.chassis.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
-        tmp.fees = tableFees
+        tmp.fees = {}
+        Object.keys(feeSchema.variableFees).forEach((k) => {
+          tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
+        })
         return tmp
       })
       tmpCell.side_lifter.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
-        tmp.fees = tableFees
+        tmp.fees = {}
+        Object.keys(feeSchema.variableFees).forEach((k) => {
+          tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
+        })
         return tmp
       })
     } else {
       tmpCell.lcl = { ...model }
       tmpCell.lcl.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
-        tmp.fees = tableFees
+        tmp.fees = {}
+        Object.keys(feeSchema.variableFees).forEach((k) => {
+          tmp.fees[k] = Object.assign({}, feeSchema.variableFees[k])
+        })
         return tmp
       })
     }
@@ -244,7 +252,7 @@ export class AdminTruckingCreator extends Component {
     const nameKeys = name.split('-')
     const cells = [...this.state.cells]
     cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table[parseInt(nameKeys[2], 10)]
-      .fees[nameKeys[3]].value = parseInt(value, 10)
+      .fees[nameKeys[3]][nameKeys[4]] = +value
     this.setState({
       cells
     })
@@ -299,12 +307,11 @@ export class AdminTruckingCreator extends Component {
   saveEdit () {
     console.log(this.state)
     const {
-      cells, nexus, currency, rateBasis, truckingBasis, globalFees, loadType
+      cells, nexus, currency, rateBasis, truckingBasis, loadType
     } = this.state
     const data = cells.map((c) => {
-      const tc = c
+      const tc = Object.assign({}, c)
       delete tc.min_value
-      tc.nexus_id = nexus.value.id
       tc.currency = currency.label
       return tc
     })
@@ -314,8 +321,7 @@ export class AdminTruckingCreator extends Component {
       nexus_id: nexus.value.id,
       loadType: loadType.value
     }
-    const global = globalFees
-    this.props.adminDispatch.saveNewTrucking({ meta, data, global })
+    this.props.adminDispatch.saveNewTrucking({ meta, data })
     this.props.closeForm()
   }
 
