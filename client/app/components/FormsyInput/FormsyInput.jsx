@@ -33,7 +33,7 @@ class FormsyInput extends Component {
     const rawValue = this.props.getValue()
     const value = rawValue == null ? '' : this.props.getValue().toString()
     return (
-      <div className={styles.wrapper_input}>
+      <div className={`${this.props.wrapperClassName} ${styles.wrapper_input}`}>
         <input
           style={inputStyles}
           onChange={this.changeValue}
@@ -68,7 +68,8 @@ FormsyInput.propTypes = {
   onBlur: PropTypes.func,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
-  errorMessageStyles: PropTypes.objectOf(PropTypes.string)
+  errorMessageStyles: PropTypes.objectOf(PropTypes.string),
+  wrapperClassName: PropTypes.string
 }
 
 FormsyInput.defaultProps = {
@@ -78,7 +79,8 @@ FormsyInput.defaultProps = {
   placeholder: '',
   onBlur: null,
   errorMessageStyles: {},
-  onChange: null
+  onChange: null,
+  wrapperClassName: ''
 }
 
 export default withFormsy(FormsyInput)
