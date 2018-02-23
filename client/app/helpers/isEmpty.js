@@ -1,4 +1,4 @@
 export function isEmpty (obj) {
-  Object.keys(obj).every(k => !Object.prototype.hasOwnProperty.call(obj, k))
+  return !Object.keys(obj).some(key => Object.prototype.hasOwnProperty.call(obj, key))
 }
 export default isEmpty

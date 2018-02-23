@@ -4,9 +4,8 @@ import PropTypes from '../prop-types'
 import { API_KEY } from '../constants'
 
 export default function GmapsLoader (props) {
-  const apiKey = API_KEY
   const params = {
-    key: apiKey, // Define your api key here
+    key: API_KEY, // Define your api key here
     libraries: 'places' // To request multiple libraries, separate them with a comma
   }
   const ParamComponent = props.component
@@ -21,7 +20,9 @@ export default function GmapsLoader (props) {
             setTargetAddress={props.setTargetAddress}
             theme={props.theme}
             gMaps={googleMaps}
-            setCarriage={props.toggleCarriage}
+            handleChangeCarriage={props.handleChangeCarriage}
+            has_on_carriage={props.has_on_carriage}
+            has_pre_carriage={props.has_pre_carriage}
             origin={props.origin}
             destination={props.destination}
             shipment={props.shipment}
@@ -29,8 +30,6 @@ export default function GmapsLoader (props) {
             nextStageAttempt={props.nextStageAttempt}
             handleAddressChange={props.handleAddressChange}
             routeIds={props.routeIds}
-            nexusDispatch={props.nexusDispatch}
-            availableDestinations={props.availableDestinations}
             handleSelectLocation={props.handleSelectLocation}
           />
         )
@@ -42,7 +41,12 @@ export default function GmapsLoader (props) {
 GmapsLoader.propTypes = {
   theme: PropTypes.theme,
   component: PropTypes.node.isRequired,
-  allNexuses: PropTypes.arrayOf(PropTypes.object),
+  allNexuses: PropTypes.shape({
+    origins: PropTypes.array,
+    destinations: PropTypes.array
+  }).isRequired,
+  has_on_carriage: PropTypes.bool,
+  has_pre_carriage: PropTypes.bool,
   origin: PropTypes.location.isRequired,
   destination: PropTypes.location.isRequired,
   prevRequest: PropTypes.shape({
@@ -53,21 +57,19 @@ GmapsLoader.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   setTargetAddress: PropTypes.func.isRequired,
-  toggleCarriage: PropTypes.func.isRequired,
+  handleChangeCarriage: PropTypes.func.isRequired,
   shipment: PropTypes.shipment,
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
-  nexusDispatch: PropTypes.func.isRequired,
-  availableDestinations: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired
 }
 
 GmapsLoader.defaultProps = {
   theme: null,
-  allNexuses: [],
-  availableDestinations: [],
   routeIds: [],
   prevRequest: null,
-  shipment: null
+  shipment: null,
+  has_on_carriage: true,
+  has_pre_carriage: true
 }

@@ -251,7 +251,7 @@ export class MessageShipmentData extends Component {
 
 MessageShipmentData.propTypes = {
   name: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   theme: PropTypes.theme,
   shipmentData: PropTypes.shipmentData.isRequired,
   closeInfo: PropTypes.func.isRequired,
@@ -261,7 +261,8 @@ MessageShipmentData.propTypes = {
 
 MessageShipmentData.defaultProps = {
   theme: null,
-  name: ''
+  name: '',
+  onChange: null
 }
 
 export default MessageShipmentData

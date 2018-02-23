@@ -236,7 +236,7 @@ export class BookingConfirmation extends Component {
               defaults.content_width
             } flex-none  layout-row layout-wrap layout-align-start-center`}
           >
-            <div className="flex-50 layout-row layout-align-start-center">
+            <div className="flex-65 layout-row layout-align-start-center">
               <div className="flex-15 layout-row layout-align-center-center">
                 <Checkbox
                   onChange={this.toggleAcceptTerms}
@@ -246,13 +246,28 @@ export class BookingConfirmation extends Component {
               </div>
               <div className="flex layout-row layout-align-start-center">
                 <div className="flex-5" />
-                <p className="flex-95">
-                  By checking this box you certify the provided information is accurate and agree to
-                  the Terms and Conditions of {this.props.tenant.name}
-                </p>
+                <div className="flex-95 layout-row layout-wrap layout-align-start-center">
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <TextHeading theme={theme} text="By checking this box" size={4} />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <ul className={`flex-100 ${styles.terms_list}`}>
+                      <li>you verify that all the information provided above is true</li>
+                      <li>
+                        you agree to our Terms and Conditions and the General Conditions of the
+                        Nordic Association of Freight Forwarders (NSAB) and those of{' '}
+                        {this.props.tenant.name}
+                      </li>
+                      <li>
+                        you agree to pay the price of the shipment as stated above upon arrival of
+                        the invoice
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex-50 layout-row layout-align-end-center">
+            <div className="flex-35 layout-row layout-align-end-center">
               {acceptTerms ? acceptedBtn : nonAcceptedBtn}
             </div>
           </div>

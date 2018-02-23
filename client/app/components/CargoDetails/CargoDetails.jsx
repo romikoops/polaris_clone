@@ -26,7 +26,7 @@ export class CargoDetails extends Component {
   }
   toggleInsurance () {
     this.setState({ insuranceView: !this.state.insuranceView })
-    // this.props.handleInsurance();
+    this.props.handleInsurance()
   }
   toggleCustoms () {
     const { setCustomsFee, customsData } = this.props
@@ -75,7 +75,7 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
-        return customs.fee + (diff * customs.extra)
+        return customs.fee + diff * customs.extra
       }
     } else {
       let hsCount = 0
@@ -94,7 +94,7 @@ export class CargoDetails extends Component {
       }
       if (hsCount > customs.limit) {
         const diff = hsCount - customs.limit
-        return customs.fee + (diff * customs.extra)
+        return customs.fee + diff * customs.extra
       }
     }
     const converted = converter(customs.fee, customs.currency, currencies).toFixed(2)
@@ -105,8 +105,17 @@ export class CargoDetails extends Component {
   }
   render () {
     const {
-      shipmentData, theme, insurance, hsCodes, hsTexts, handleHsTextChange,
-      setHsCode, deleteCode, user, tenant
+      shipmentData,
+      theme,
+      insurance,
+      hsCodes,
+      hsTexts,
+      handleHsTextChange,
+      setHsCode,
+      deleteCode,
+      finishBookingAttempted,
+      user,
+      tenant
     } = this.props
     const {
       dangerousGoods, documents, customs, cargoItems, containers
@@ -163,14 +172,15 @@ export class CargoDetails extends Component {
           <p className="flex-90">
             <strong>
               {' '}
-              Customs Clearance is the documented permission to pass that a national customs
-              authority grants to imported goods so that they can enter the country o to exported
-              goods so that they can leave the country.
+              When you ship goods from outside the European Union (EU), you may be charged customs
+              duty and/or VAT. You can either handle the customs on your own, or have Greencarrier
+              handle it for you.
             </strong>
           </p>
           <p className="flex-90">
-            The customs clearance is typically given to a shipping agent to prove that all
-            applicable customs duties have been paid and the shipment has been appoved.
+            To cover our costs when we present your goods to the customs authorities – and pay any
+            customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
+            depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
         </div>
         <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
@@ -179,6 +189,38 @@ export class CargoDetails extends Component {
             {' '}
             {customs ? this.calcCustomsFee() : '18.50'} {user.currency}
           </h6>
+        </div>
+        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div className="flex-40 layout-row -alyout-align-start-center">
+              <p className="flex-none">Do you have your own customs credit? </p>
+              <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+            </div>
+            <div className="flex-15 layout-row layout-align-start-center">
+              <Checkbox
+                onChange={this.props.toggleCustomsCredit}
+                checked={this.props.customsCredit}
+                theme={theme}
+              />
+              <div className="flex-5" />
+              <p className="flex-30">Yes</p>
+            </div>
+            <div className="flex-15 layout-row layout-align-start-center">
+              <Checkbox
+                onChange={this.props.toggleCustomsCredit}
+                checked={!this.props.customsCredit}
+                theme={theme}
+              />
+              <div className="flex-5" />
+              <p className="flex-30">No</p>
+            </div>
+          </div>
+          <div className="flex-80 layout-row layout-wrap layout-align-start-center">
+            <p className="flex-90">
+              <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
+              VAT will be applied to the final invoice if you do not have customs credit.
+            </p>
+          </div>
         </div>
         <HSCodeRow
           className="flex-100"
@@ -268,8 +310,7 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              <div
-                className="flex-100 flex-gt-sm-50 layout-row layout-wrap
+              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap
                   layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap">
@@ -322,8 +363,7 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
               </div>
-              <div
-                className="flex-100 flex-gt-sm-45 offset-gt-sm-5
+              <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5
                   layout-row layout-wrap alyout-align-start-start"
               >
                 <div className="flex-100 layout-row">
@@ -332,11 +372,16 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap">
+                <div className="flex-50 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Packing Sheet" />
+                      <TextHeading
+                        theme={theme}
+                        size={3}
+                        text="Packing Sheet"
+                        color={finishBookingAttempted && !documents.packing_sheet ? 'red' : false}
+                      />
                     </div>
                   </div>
                   <div className="flex-100">
@@ -353,11 +398,20 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap">
+                <div className="flex-50 layout-row layout-wrap" name="commercial_invoice">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Commercial Invoice" />
+                      <TextHeading
+                        theme={theme}
+                        size={3}
+                        text="Commercial Invoice"
+                        color={
+                          finishBookingAttempted && !documents.commercial_invoice
+                            ? 'red'
+                            : false
+                        }
+                      />
                     </div>
                   </div>
                   <div className="flex-100">
@@ -446,7 +500,7 @@ export class CargoDetails extends Component {
           >
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Customs" />
+                <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
               </div>
               <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
               <Checkbox
@@ -468,6 +522,8 @@ CargoDetails.propTypes = {
   tenant: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
+  handleInsurance: PropTypes.func.isRequired,
+  toggleCustomsCredit: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,
   insurance: PropTypes.shape({
@@ -491,7 +547,8 @@ CargoDetails.propTypes = {
   hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
-  handleHsTextChange: PropTypes.func
+  handleHsTextChange: PropTypes.func,
+  customsCredit: PropTypes.bool
 }
 
 CargoDetails.defaultProps = {
@@ -499,7 +556,8 @@ CargoDetails.defaultProps = {
   tenant: null,
   finishBookingAttempted: false,
   hsTexts: {},
-  handleHsTextChange: null
+  handleHsTextChange: null,
+  customsCredit: false
 }
 
 export default CargoDetails

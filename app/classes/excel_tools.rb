@@ -8,6 +8,7 @@ module ExcelTools
     # new_trucking_ids = []
     mongo = get_client
     defaults = []
+    load_type = "lcl"
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -26,39 +27,60 @@ module ExcelTools
         min_max_arr = cell.split(" - ")
         defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
-      results = []
-      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
+      trucking_table_id = "#{nexus.id}_#{user.tenant_id}" 
+      truckingQueries = []
+      truckingTable = "#{nexus.id}_#{user.tenant_id}"
+      truckingPricings = []
       (4..num_rows).each do |line|
+        # byebug
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
         row_min_value = row_data.shift
         # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
-        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
+        ntp = {
+          trucking_hub_id: trucking_table_id,
+          tenant_id: user.tenant_id,
+          nexus_id: nexus.id,
+          _id: SecureRandom.uuid,
+          modifier: 'kg',
+          zipcode: {
+            lower_zip: zip_code_range_array[0].to_i,
+            upper_zip: zip_code_range_array[1].to_i
+          }
+        }
         row_data.each_with_index do |val, index|
-          tmp = defaults[index]
+          tmp = defaults[index].clone
           if row_min_value < weight_min_row[index]
             min_value = weight_min_row[index]
           else
             min_value = row_min_value
           end
           tmp[:min_value] = min_value
-          tmp[:value] = val
-          ntp[:rate_table].push(tmp)
-
-          
-
-          # new_trucking_ids << ntp.id
+          tmp[:fees] = {  
+            base_rate: {
+              value: val,
+              rate_basis: 'PER_X_KG',
+              currency: currency_row[3],
+              base: 100
+            }
+          }
+          tmp[:_id] = SecureRandom.uuid
+          tmp[:trucking_pricing_id] = ntp[:_id]
+          truckingPricings.push(tmp)
+          # byebug
         end
-        # p ntp
-        results << ntp
-        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
+        truckingQueries.push(ntp)
       end
-      # 
-      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
-      hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
+      # byebug
+      truckingQueries.each do |k|
+        update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
       end
+      truckingPricings.each do |k|
+        update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+      end
+      update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
+
     end
 
   end
@@ -134,9 +156,10 @@ module ExcelTools
       first_sheet = xlsx.sheet(sheet_name)
       nexus = Location.find_by(name: sheet_name, location_type: "nexus")
       # old_trucking_ids = TruckingPricing.where(nexus_id: nexus.id).pluck(:id)
-      results = []
+      truckingPricings = []
+      truckingQueries = []
       hubs = nexus.hubs
-      truckingTable = "#{nexus.id}_#{user.tenant_id}"  
+      trucking_table_id = "#{nexus.id}_#{user.tenant_id}"  
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
       [3,4,5,6].each do |i|
@@ -147,33 +170,46 @@ module ExcelTools
         row_data = first_sheet.row(line)
         new_pricing = {}
 
-        new_pricing[:province] = row_data[0].downcase
-        new_pricing[:city] = row_data[1].downcase
-        new_pricing[:dist_hub] = row_data[2].split(' , ')
+        new_pricing[:city] = {
+          province: row_data[0].downcase,
+          city: row_data[1].downcase,
+          dist_hub: row_data[2].split(' , ')
+      }
         new_pricing[:currency] = "CNY"
         new_pricing[:tenant_id] = user.tenant_id
         new_pricing[:nexus_id] = nexus.id
-        new_pricing[:rate_type] = "city"
-        new_pricing[:rate_table] = []
+        new_pricing[:trucking_hub_id] = trucking_table_id
+        new_pricing[:delivery_eta_in_days] = row_data[10]
+        new_pricing[:modifier] = 'kg'
         ntp = new_pricing
-
+        ntp[:_id] = SecureRandom.uuid
         [3,4,5,6].each do |i|
-          tmp = defaults[i - 3]
-          tmp[:value] = row_data[i]
-          tmp[:pickup_fee] = row_data[8]
-          tmp[:delivery_fee] = row_data[9]
-          tmp[:delivery_eta_in_days] = row_data[10]
-          tmp[:per_cbm_rate] = row_data[7]
-
-          ntp[:rate_table].push(tmp)
+          tmp = defaults[i - 3].clone
+          tmp[:_id] = SecureRandom.uuid
+          tmp[:fees] = {
+            base_rate: {
+              value: row_data[i],
+              rate_basis: 'PER_KG',
+              currency: "CNY"
+            },
+            pickup_fee: {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' },
+            delivery_fee: {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' },
+            per_cbm_rate: {value: row_data[7], currency: new_pricing[:currency], rate_basis: 'PER_CBM' }
+          }
+          tmp[:trucking_pricing_id] = ntp[:_id]
+         
+          truckingPricings.push(tmp)
         end
-        results << ntp
+        truckingQueries << ntp
         new_trucking_location = Location.from_short_name("#{new_pricing[:city]} ,#{new_pricing[:province]}", 'trucking_option')
         new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
       end
-      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
-      hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "city", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
+      update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id})
+      truckingQueries.each do |k|
+        update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+      end
+      truckingPricings.each do |k|
+        update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
       end
     end
 
@@ -417,7 +453,9 @@ module ExcelTools
       nexus = Location.find_or_create_by(
         name:          hub_row[:hub_name], 
         location_type: "nexus", 
-        photo:         hub_row[:photo], 
+        photo:         hub_row[:photo],
+        latitude:      hub_row[:latitude], 
+        longitude:     hub_row[:longitude],
         country:       hub_row[:country], 
         city:          hub_row[:hub_name]
       )
@@ -432,7 +470,7 @@ module ExcelTools
       )
       hub_code = hub_row[:hub_code] unless hub_row[:hub_code].blank?
       
-      hub = nexus.hubs.find_or_create_by(
+      hub = nexus.hubs.find_or_create_by!(
         nexus_id:      nexus.id, 
         location_id:   location.id, 
         tenant_id:     user.tenant_id, 
@@ -688,9 +726,13 @@ module ExcelTools
       cargo_classes = [
         'lcl'
       ]
+      steps_in_order = []
+      stops_in_order.length.times do 
+        steps_in_order << 30
+      end
       itinerary.generate_weekly_schedules(
         stops_in_order,
-        [30],
+        steps_in_order,
         row[:effective_date], 
         row[:expiration_date], 
         [1, 5],
@@ -918,10 +960,9 @@ module ExcelTools
         sleep(1)
         destination = Location.from_short_name(row[:destination], 'nexus')
         sleep(1)
-        origin_hub_ids = origin.hubs_by_type(row[:mot], user.tenant_id).ids
-        destination_hub_ids = destination.hubs_by_type(row[:mot], user.tenant_id).ids
+        origin_hub_ids = origin.hubs_by_type_seeder(row[:mot], user.tenant_id).ids
+        destination_hub_ids = destination.hubs_by_type_seeder(row[:mot], user.tenant_id).ids
         hub_ids = origin_hub_ids + destination_hub_ids
-
         vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
         vehicle      = Vehicle.find_by(name: vehicle_name)
         # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
@@ -944,9 +985,13 @@ module ExcelTools
         'fcl_40f_hq'
       ]
       new_pricings_aux_data[pricing_key][:stops_in_order] = new_pricings_aux_data[pricing_key][:hub_ids].map.with_index { |h, i| new_pricings_aux_data[pricing_key][:itinerary].stops.find_or_create_by!(hub_id: h, index: i)  }
+      steps_in_order = []
+      new_pricings_aux_data[pricing_key][:stops_in_order].length.times do 
+        steps_in_order << 30
+      end
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
-        [30],
+        steps_in_order,
         row[:effective_date], 
         row[:expiration_date], 
         [1, 5],
@@ -975,26 +1020,26 @@ module ExcelTools
         pricing_data["data"] = cargo_class_prices
         
         uuid = SecureRandom.uuid
-       
-        
-
         pathKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}"
         priceKey = "#{new_pricings_aux_data[pricing_key][:stops_in_order][0].id}_#{new_pricings_aux_data[pricing_key][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
-        pricing_data[:_id] = priceKey;
-        pricing_data[:tenant_id] = user.tenant_id;
+        # pricing_data[:_id] = priceKey;
+        pricing_data[:tenant_id] = user.tenant_id
         pricing_data[:load_type] = cargo_class
         if dedicated
           priceKey += "_#{user.id}"
           user_pricing = { pathKey => priceKey }
 
-          put_item_fn(mongo, 'pricings', pricing_data)
+          update_item_fn(mongo, 'pricings', {_id: priceKey}, pricing_data)
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_hub_route_pricings[pathKey] ||= {}
           new_hub_route_pricings[pathKey]["#{user.id}"] = priceKey
+          new_hub_route_pricings[pathKey]["itinerary_id"]          = new_pricings_aux_data[pricing_key][:itinerary].id
+          new_hub_route_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_hub_route_pricings[pathKey]["transport_category_id"] = transport_category.id
         else
           
-          put_item_fn(mongo, 'pricings', pricing_data)
+          update_item_fn(mongo, 'pricings', {_id: priceKey}, pricing_data)
 
           new_hub_route_pricings[pathKey] ||= {}
           new_hub_route_pricings[pathKey]["open"]                  = priceKey

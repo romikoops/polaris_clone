@@ -11,10 +11,11 @@ class OfferCalculator
     @origin_hubs      = []
     @destination_hubs = []
     @itineraries      = []
-    @trips         = {}
+    @trips            = {}
 
-    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
-    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
+    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
+    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
+    @shipment.trucking = trucking_params(params).to_h
 
     @shipment.incoterm = params[:shipment][:incoterm]
     
@@ -52,15 +53,22 @@ class OfferCalculator
   def calc_offer!
     determine_itinerary!
     # determine_route! 
-    # determine_hubs! 
+    # determine_hubs!
+
+    # TBD - Trucking
+    # You have access to the following property in shipment:
+    # @shipment.trucking #=> {
+    #   "on_carriage"  => { "truck_type" => "chassis"},
+    #   "pre_carriage" => { "truck_type" => "side_lifter"}
+    # }
        
     determine_longest_trucking_time!
     determine_layovers!  
-    # determine_schedules! 
+    # determine_schedules!
     # add_schedules_charges!
     add_trip_charges! 
-    prep_schedules!
     convert_currencies!
+    prep_schedules!
   end
 
   def calc_alternative_schedules!(up_to)
@@ -134,7 +142,6 @@ class OfferCalculator
       layovers = origin_layovers + destination_layovers
       schedule_obj[itin.id] = layovers.group_by(&:trip_id)
     end
-    # byebugs
     @trips = schedule_obj
   end
 
@@ -157,7 +164,7 @@ class OfferCalculator
   def add_trip_charges!
     charges = {}
     @total_price[:cargo] = { value: 0, currency: '' }
-    # byebug
+    
     @trips.each do |itinerary_id, trips|
       trip = trips.first[1]
       if trip.length > 1
@@ -170,7 +177,7 @@ class OfferCalculator
         set_trucking_charges!(charges, trip, sched_key)
         set_cargo_charges!(charges, trip, sched_key)
       else
-        # byebug
+        # 
       end
     end
     @shipment.schedules_charges = charges
@@ -196,10 +203,13 @@ class OfferCalculator
 
   def prep_schedules!
     schedules = []
+    
     @trips.each do |iKey, iValue|
       iValue.each do |tKey, tValue|
         if tValue.length > 1
           schedules.push({
+            id: SecureRandom.uuid,
+            total: @shipment.schedules_charges["#{tValue[0].stop.hub_id}-#{tValue[1].stop.hub_id}"]["total"],
             itinerary_id: iKey,
             eta: tValue[1].eta, 
             etd: tValue[0].etd, 
@@ -227,7 +237,9 @@ class OfferCalculator
         @user, 
         @cargo_units.length
       )
+      
     end
+    
   end
 
   def path_key(cargo_unit, trip)
@@ -301,5 +313,13 @@ class OfferCalculator
     Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)
       .where("eta > ?", @current_eta_in_search)
       .order(eta: :asc)
+  end
+
+  private
+
+  def trucking_params(params)
+    params.require(:shipment).require(:trucking).permit(
+      on_carriage: :truck_type, pre_carriage: :truck_type
+    )
   end
 end

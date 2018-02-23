@@ -6,6 +6,7 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
+import styles from './Shop.scss'
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute'
@@ -13,10 +14,8 @@ import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions } from '../../actions/shipment.actions'
-import { nexusActions } from '../../actions/nexus.actions'
 import { Footer } from '../../components/Footer/Footer'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
-import styles from './Shop.scss'
 
 class Shop extends Component {
   constructor (props) {
@@ -165,124 +164,120 @@ class Shop extends Component {
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
-          scrollable
         />
-        <div className={styles.main_content}>
-          <ShopStageView
-            className="flex-100"
-            shopType={this.state.shopType}
-            match={match}
-            theme={theme}
-            currentStage={this.state.stageTracker.stage}
-            setStage={this.selectShipmentStageAndGo}
-            shipmentId={shipmentId}
-          />
+
+        <ShopStageView
+          className="flex-100"
+          shopType={this.state.shopType}
+          match={match}
+          theme={theme}
+          currentStage={this.state.stageTracker.stage}
+          setStage={this.selectShipmentStageAndGo}
+          shipmentId={shipmentId}
+        />
+        <Route
+          exact
+          path={match.url}
+          render={props => (
+            <ChooseShipment
+              {...props}
+              theme={theme}
+              selectLoadType={this.selectLoadType}
+              setStage={this.selectShipmentStage}
+              messages={error ? error.stage1 : []}
+              shipmentDispatch={shipmentDispatch}
+            />
+          )}
+        />
+        <Route
+          path={route1}
+          render={props => (
+            <ShipmentDetails
+              {...props}
+              tenant={tenant}
+              user={user}
+              dashboard={dashboard}
+              shipmentData={response ? response.stage1 : {}}
+              prevRequest={request && request.stage2 ? request.stage2 : {}}
+              req={request && request.stage1 ? request.stage1 : {}}
+              setShipmentDetails={this.setShipmentData}
+              setStage={this.selectShipmentStage}
+              messages={error ? error.stage2 : []}
+              shipmentDispatch={shipmentDispatch}
+              nexusDispatch={nexusDispatch}
+            />
+          )}
+        />
+        <Route
+          path={route2}
+          render={props => (
+            <ChooseRoute
+              {...props}
+              chooseRoute={this.selectShipmentRoute}
+              theme={theme}
+              shipmentData={response && response.stage2 ? response.stage2 : {}}
+              prevRequest={request && request.stage3 ? request.stage3 : null}
+              req={request && request.stage2 ? request.stage2 : {}}
+              user={user}
+              setStage={this.selectShipmentStage}
+              messages={error ? error.stage3 : []}
+              shipmentDispatch={shipmentDispatch}
+            />
+          )}
+        />
+        {response && response.stage3 ? (
           <Route
-            exact
-            path={match.url}
+            path={route3}
             render={props => (
-              <ChooseShipment
+              <BookingDetails
                 {...props}
+                nextStage={this.setShipmentContacts}
                 theme={theme}
-                selectLoadType={this.selectLoadType}
+                shipmentData={response && response.stage3 ? response.stage3 : {}}
+                prevRequest={request && request.stage4 ? request.stage4 : null}
+                currencies={currencies}
                 setStage={this.selectShipmentStage}
-                messages={error ? error.stage1 : []}
-                shipmentDispatch={shipmentDispatch}
-              />
-            )}
-          />
-          <Route
-            path={route1}
-            render={props => (
-              <ShipmentDetails
-                {...props}
+                messages={error ? error.stage4 : []}
                 tenant={tenant}
                 user={user}
-                dashboard={dashboard}
-                shipmentData={response ? response.stage1 : {}}
-                prevRequest={request && request.stage2 ? request.stage2 : {}}
-                req={request && request.stage1 ? request.stage1 : {}}
-                setShipmentDetails={this.setShipmentData}
-                setStage={this.selectShipmentStage}
-                messages={error ? error.stage2 : []}
                 shipmentDispatch={shipmentDispatch}
-                nexusDispatch={nexusDispatch}
-                availableDestinations={this.props.availableDestinations}
+                hideRegistration={this.hideRegistration}
               />
             )}
           />
-          <Route
-            path={route2}
-            render={props => (
-              <ChooseRoute
-                {...props}
-                chooseRoute={this.selectShipmentRoute}
-                theme={theme}
-                shipmentData={response && response.stage2 ? response.stage2 : {}}
-                prevRequest={request && request.stage3 ? request.stage3 : null}
-                req={request && request.stage2 ? request.stage2 : {}}
-                user={user}
-                setStage={this.selectShipmentStage}
-                messages={error ? error.stage3 : []}
-                shipmentDispatch={shipmentDispatch}
-              />
-            )}
-          />
-          {response && response.stage3 ? (
-            <Route
-              path={route3}
-              render={props => (
-                <BookingDetails
-                  {...props}
-                  nextStage={this.setShipmentContacts}
-                  theme={theme}
-                  shipmentData={response && response.stage3 ? response.stage3 : {}}
-                  prevRequest={request && request.stage4 ? request.stage4 : null}
-                  currencies={currencies}
-                  setStage={this.selectShipmentStage}
-                  messages={error ? error.stage4 : []}
-                  tenant={tenant}
-                  user={user}
-                  shipmentDispatch={shipmentDispatch}
-                  hideRegistration={this.hideRegistration}
-                />
-              )}
+        ) : (
+          ''
+        )}
+        <Route
+          path={route4}
+          render={props => (
+            <BookingConfirmation
+              {...props}
+              theme={theme}
+              tenant={tenant.data}
+              user={user}
+              shipmentData={response ? response.stage4 : {}}
+              setStage={this.selectShipmentStage}
+              shipmentDispatch={shipmentDispatch}
             />
-          ) : (
-            ''
           )}
-          <Route
-            path={route4}
-            render={props => (
-              <BookingConfirmation
-                {...props}
-                theme={theme}
-                tenant={tenant.data}
-                user={user}
-                shipmentData={response ? response.stage4 : {}}
-                setStage={this.selectShipmentStage}
-                shipmentDispatch={shipmentDispatch}
-              />
-            )}
-          />
-          <Route
-            path={route5}
-            render={props => (
-              <ShipmentThankYou
-                {...props}
-                theme={theme}
-                tenant={tenant.data}
-                user={user}
-                shipmentData={response ? response.stage5 : {}}
-                setStage={this.selectShipmentStage}
-                shipmentDispatch={shipmentDispatch}
-              />
-            )}
-          />
-        </div>
-        <div className={styles.footer} >
-          <Footer className="flex-100" theme={theme} tenant={tenant.data} />
-        </div>
+        />
+        <Route
+          path={route5}
+          render={props => (
+            <ShipmentThankYou
+              {...props}
+              theme={theme}
+              tenant={tenant.data}
+              user={user}
+              shipmentData={response ? response.stage5 : {}}
+              setStage={this.selectShipmentStage}
+              shipmentDispatch={shipmentDispatch}
+            />
+          )}
+        />
+        <div className={`${styles.pre_footer_break} flex-100`} />
+        <Footer className="flex-100" theme={theme} tenant={tenant.data} />
       </div>
     )
   }
@@ -305,8 +300,6 @@ Shop.propTypes = {
   currencies: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   dashboard: PropTypes.any,
-  // eslint-disable-next-line react/forbid-prop-types
-  availableDestinations: PropTypes.any,
 
   history: PropTypes.history.isRequired,
   match: PropTypes.shape({
@@ -327,20 +320,18 @@ Shop.defaultProps = {
   user: null,
   nexusDispatch: null,
   currencies: null,
-  dashboard: null,
-  availableDestinations: null
+  dashboard: null
 }
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, bookingData, nexus, app
+    users, authentication, tenant, bookingData, app
   } = state
   const {
     user, loggedIn, loggingIn, registering
   } = authentication
   const { currencies } = app
   const { loading } = bookingData
-  const { availableDestinations } = nexus
   return {
     user,
     users,
@@ -350,15 +341,13 @@ function mapStateToProps (state) {
     loggingIn,
     registering,
     loading,
-    currencies,
-    availableDestinations
+    currencies
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
-    nexusDispatch: bindActionCreators(nexusActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Shop))

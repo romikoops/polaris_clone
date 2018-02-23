@@ -7,7 +7,7 @@ import { gradientTextGenerator } from '../../helpers'
 import styles from './Tooltip.scss'
 
 export function Tooltip ({
-  text, icon, theme, color, toolText
+  text, icon, theme, color, toolText, wrapperClassName
 }) {
   const textStyle = color
     ? { color }
@@ -34,7 +34,8 @@ Tooltip.propTypes = {
   text: PropTypes.string,
   icon: PropTypes.string,
   color: PropTypes.string,
-  toolText: PropTypes.string
+  toolText: PropTypes.string,
+  wrapperClassName: PropTypes.string
 }
 
 Tooltip.defaultProps = {
@@ -42,7 +43,8 @@ Tooltip.defaultProps = {
   theme: {},
   toolText: '',
   text: '',
-  icon: ''
+  icon: '',
+  wrapperClassName: ''
 }
 
 export default Tooltip

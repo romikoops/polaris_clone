@@ -102,7 +102,8 @@ export class AdminPriceCreator extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
+        newObj.data[key][chargeKey] =
+        AdminPriceCreator.selectFromOptions(opts, pricing.data[key][chargeKey])
       })
     })
     this.setState({ selectOptions: newObj })
@@ -220,7 +221,8 @@ export class AdminPriceCreator extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
+        newObj.data[key][chargeKey] =
+        AdminPriceCreator.selectFromOptions(opts, pricing.data[key][chargeKey])
       })
     })
     this.setState({ selectOptions: newObj, pricing })

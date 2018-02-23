@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
-import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
+// import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
 import { moment } from '../../constants'
 import styles from './ChooseRoute.scss'
@@ -21,7 +21,7 @@ export class ChooseRoute extends Component {
     } else {
       prop = property
     }
-    return function (a, b) {
+    return (a, b) => {
       const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
       const result2 = result1 ? 1 : 0
       return result2 * sortOrder
@@ -39,6 +39,7 @@ export class ChooseRoute extends Component {
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
+    this.setDepartureDate = this.setDepartureDate.bind(this)
     this.setMoT = this.setMoT.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
@@ -53,6 +54,11 @@ export class ChooseRoute extends Component {
   }
   setDuration (val) {
     this.setState({ durationFilter: val })
+  }
+  setDepartureDate (date) {
+    const { shipmentDispatch, req } = this.props
+    req.planned_pickup_date = date
+    shipmentDispatch.setShipmentDetails(req)
   }
   setMoT (val) {
     this.setState({ selectedMoT: val })
@@ -89,7 +95,7 @@ export class ChooseRoute extends Component {
     const focusRoutes = []
     const altRoutes = []
     schedules.forEach((sched) => {
-      console.log(sched.id)
+      console.log(sched)
       if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
         if (
           Math.abs(moment(sched.etd).diff(depDay, 'days')) < smallestDiff &&
@@ -173,11 +179,12 @@ export class ChooseRoute extends Component {
               setMoT={this.setMoT}
               moT={this.state.selectedMoT}
               departureDate={depDay}
+              setDepartureDate={this.setDepartureDate}
             />
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <TextHeading theme={theme} size={2} text="Choose Offer" />
+              <TextHeading theme={theme} size={2} text="Choose Departure" />
               <p className={`flex-none ${styles.one_line_summ}`}>
                 {' '}
                 Shipping {cargoUnits.length} x{' '}
@@ -185,7 +192,7 @@ export class ChooseRoute extends Component {
                 {destinationHubs[0].name.split(' ')[0]}
               </p>
             </div>
-            <div className="flex-100 layout-row">
+            {/* <div className="flex-100 layout-row">
               <BestRoutesBox
                 moT={this.state.selectedMoT}
                 user={user}
@@ -193,7 +200,7 @@ export class ChooseRoute extends Component {
                 theme={this.props.theme}
                 shipmentData={this.props.shipmentData}
               />
-            </div>
+            </div> */}
             <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                 <div className="flex-none">
@@ -306,6 +313,7 @@ ChooseRoute.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   chooseRoute: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
+  req: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
@@ -318,7 +326,8 @@ ChooseRoute.propTypes = {
 ChooseRoute.defaultProps = {
   theme: null,
   prevRequest: null,
-  messages: []
+  messages: [],
+  req: {}
 }
 
 export default ChooseRoute

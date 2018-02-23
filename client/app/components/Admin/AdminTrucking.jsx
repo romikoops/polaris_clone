@@ -41,7 +41,7 @@ class AdminTrucking extends Component {
   }
 
   render () {
-    const { selectedRoute, creatorView } = this.state
+    const { selectedRoute } = this.state
     const {
       theme, adminDispatch, trucking, hubHash, loading, truckingDetail
     } = this.props
@@ -60,7 +60,8 @@ class AdminTrucking extends Component {
           handleNext={this.backToIndex}
           iconClass="fa-chevron-left"
         />
-      </div>)
+      </div>
+    )
     const newButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -68,17 +69,17 @@ class AdminTrucking extends Component {
           size="small"
           text="New Price"
           active
-          handleNext={this.toggleCreator}
+          handleNext={() => adminDispatch.goTo('/admin/trucking/new/creator')}
           iconClass="fa-plus"
         />
-      </div>)
+      </div>
+    )
     const title = selectedRoute ? 'Trucking Overview' : 'Trucking'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
         <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-none layout-row" >
-            <div className="flex-none" >
+          <div className="flex-none layout-row">
+            <div className="flex-none">
               <TextHeading theme={theme} size={1} text={title} />
             </div>
             <Tooltip icon="fa-info-circle" theme={theme} text={truckTip.manage} toolText />
@@ -89,37 +90,47 @@ class AdminTrucking extends Component {
           <Route
             exact
             path="/admin/trucking"
-            render={props => (<AdminTruckingIndex
-              theme={theme}
-              nexuses={nexuses}
-              truckingHubs={truckingHubs}
-              hubs={relHubs}
-              {...props}
-              adminDispatch={adminDispatch}
-              loading={loading}
-              viewTrucking={this.viewTrucking}
-            />)}
+            render={props => (
+              <AdminTruckingIndex
+                theme={theme}
+                nexuses={nexuses}
+                truckingHubs={truckingHubs}
+                hubs={relHubs}
+                {...props}
+                adminDispatch={adminDispatch}
+                loading={loading}
+                viewTrucking={this.viewTrucking}
+              />
+            )}
           />
           <Route
             exact
             path="/admin/trucking/:id"
-            render={props => (<AdminTruckingView
-              theme={theme}
-              hubs={relHubs}
-              hubHash={hubHash}
-              truckingDetail={truckingDetail}
-              loading={loading}
-              adminDispatch={adminDispatch}
-              {...props}
-            />)}
+            render={props => (
+              <AdminTruckingView
+                theme={theme}
+                hubs={relHubs}
+                hubHash={hubHash}
+                truckingDetail={truckingDetail}
+                loading={loading}
+                adminDispatch={adminDispatch}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/trucking/new/creator"
+            render={props => (
+              <AdminTruckingCreator
+                theme={theme}
+                nexuses={nexuses}
+                adminDispatch={adminDispatch}
+                closeForm={this.toggleCreator}
+              />
+            )}
           />
         </Switch>
-        {creatorView ? <AdminTruckingCreator
-          theme={theme}
-          nexuses={nexuses}
-          adminDispatch={adminDispatch}
-          closeForm={this.toggleCreator}
-        /> : '' }
       </div>
     )
   }

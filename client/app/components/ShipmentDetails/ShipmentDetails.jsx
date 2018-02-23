@@ -10,6 +10,7 @@ import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
 import { moment, incoterms } from '../../constants'
 import '../../styles/day-picker-custom.css'
+import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
@@ -79,9 +80,13 @@ export class ShipmentDetails extends Component {
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
-      shipment: this.props.shipmentData ? this.props.shipmentData.shipment : {},
-      allNexuses: this.props.shipmentData ? this.props.shipmentData.all_nexuses : {},
+      shipment: props.shipmentData ? props.shipmentData.shipment : {},
+      allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false
+    }
+    this.truckTypes = {
+      container: ['side_lifter', 'chassis'],
+      cargo_item: ['default']
     }
 
     if (this.props.shipmentData && this.props.shipmentData.shipment) {
@@ -96,9 +101,10 @@ export class ShipmentDetails extends Component {
     this.addNewCargoItem = this.addNewCargoItem.bind(this)
     this.addNewContainer = this.addNewContainer.bind(this)
     this.setTargetAddress = this.setTargetAddress.bind(this)
-    this.toggleCarriage = this.toggleCarriage.bind(this)
+    this.handleChangeCarriage = this.handleChangeCarriage.bind(this)
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
+    this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
     this.deleteCargo = this.deleteCargo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
@@ -107,12 +113,17 @@ export class ShipmentDetails extends Component {
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
-    console.log('!!!!!!!! MOUNTING!!!!!!!')
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
     window.scrollTo(0, 0)
     setStage(2)
+  }
+  componentWillReceiveProps (nextProps, nextState) {
+    if (!nextState.shipment) {
+      const { shipment } = nextProps.shipmentData
+      this.setState({ shipment })
+    }
   }
   setIncoTerm (opt) {
     this.setState({ incoterm: opt.value })
@@ -136,6 +147,7 @@ export class ShipmentDetails extends Component {
       },
       has_on_carriage: obj.has_on_carriage,
       has_pre_carriage: obj.has_pre_carriage,
+      trucking: obj.trucking,
       incoterm: obj.incoterm,
       routeSet: true
     })
@@ -172,16 +184,9 @@ export class ShipmentDetails extends Component {
     let { fullAddress } = this.state[key1]
 
     if (fullAddress) {
-      fullAddress =
-        `${addObj.number
-        } ${
-          addObj.street
-        } ${
-          addObj.city
-        } ${
-          addObj.zipCode
-        } ${
-          addObj.country}`
+      fullAddress = `${addObj.number} ${addObj.street} ${addObj.city} ${addObj.zipCode} ${
+        addObj.country
+      }`
     }
     this.setState({
       ...this.state,
@@ -204,7 +209,11 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    if (suffixName === 'sizeClass') {
+      containers[index][suffixName] = value
+    } else {
+      containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
@@ -273,8 +282,8 @@ export class ShipmentDetails extends Component {
     }
     // This was implemented under the assuption that in
     // the initial state the following return values apply:
-    //      (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) #=> true
-    //      (2) ShipmentDetails.errorsExist(this.state.containersErrors) #=> true
+    //   (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) //=> true
+    //   (2) ShipmentDetails.errorsExist(this.state.containersErrors) //=> true
     // So it will break out of the function and set nextStage attempt to true,
     // in case one of them returns false
     if (
@@ -285,12 +294,8 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    console.log('NEXT STAGE PLZ')
+    const data = { shipment: this.state.shipment }
 
-    const data = {
-      shipment: this.state.shipment ? this.state.shipment : this.props.shipmentData.shipment
-    }
-    console.log(this.state.shipment ? 'stateful shipment' : 'prop shipment')
     data.shipment.origin_user_input = this.state.origin.fullAddress
       ? this.state.origin.fullAddress
       : ''
@@ -312,8 +317,37 @@ export class ShipmentDetails extends Component {
     this.props.shipmentDispatch.getDashboard(true)
   }
 
-  toggleCarriage (target, value) {
+  handleChangeCarriage (target, value) {
     this.setState({ [target]: value })
+
+    // Upate trucking details according to toggle
+    const truckingKey = target.replace('has_', '')
+    const { shipment } = this.state
+    const artificialEvent = { target: {} }
+    if (!value) {
+      // Set truckType to '', if carriage is toggled off
+      artificialEvent.target.id = `${truckingKey}-`
+    } else if (!shipment.trucking[truckingKey].truck_type) {
+      // Set first truckType if carriage is toggled on and truckType is empty
+      const truckType = this.truckTypes[this.state.shipment.load_type][0]
+      artificialEvent.target.id = `${truckingKey}-${truckType}`
+    }
+    if (!artificialEvent.target.id) return
+    this.handleTruckingDetailsChange(artificialEvent)
+  }
+
+  handleTruckingDetailsChange (event) {
+    const [carriage, truckType] = event.target.id.split('-')
+    const { shipment } = this.state
+    this.setState({
+      shipment: {
+        ...shipment,
+        trucking: {
+          ...shipment.trucking,
+          [carriage]: { truck_type: truckType }
+        }
+      }
+    })
   }
 
   toggleAlertModal () {
@@ -405,9 +439,11 @@ export class ShipmentDetails extends Component {
       <GmapsLoader
         theme={theme}
         setTargetAddress={this.setTargetAddress}
-        allNexuses={shipmentData.all_nexuses}
+        allNexuses={shipmentData.allNexuses}
         component={ShipmentLocationBox}
-        toggleCarriage={this.toggleCarriage}
+        handleChangeCarriage={this.handleChangeCarriage}
+        has_on_carriage={this.state.has_on_carriage}
+        has_pre_carriage={this.state.has_pre_carriage}
         origin={this.state.origin}
         destination={this.state.destination}
         nextStageAttempt={this.state.nextStageAttempt}
@@ -416,8 +452,6 @@ export class ShipmentDetails extends Component {
         routeIds={routeIds}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
-        nexusDispatch={this.props.nexusDispatch}
-        availableDestinations={this.props.availableDestinations}
         handleSelectLocation={this.handleSelectLocation}
       />
     )
@@ -471,11 +505,10 @@ export class ShipmentDetails extends Component {
       }
     `
     const dayPickerSection = (
-      <div
-        className={`
-                ${styles.date_sec} ${defaults.content_width}
-                layout-row flex-none layout-align-start-center
-            `}
+      <div className={
+        `${defaults.content_width} ` +
+        'layout-row flex-none layout-align-start-center'
+      }
       >
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
@@ -490,13 +523,14 @@ export class ShipmentDetails extends Component {
                 size={3}
               />
             </div>
-            <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />{' '}
+            <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>
           <div
             name="dayPicker"
-            className={`flex-none layout-row ${styles.dpb} ${
-              showDayPickerError ? styles.with_errors : ''
-            }`}
+            className={
+              `flex-none layout-row ${styles.dpb} ` +
+              `${showDayPickerError ? styles.with_errors : ''}`
+            }
           >
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
               <i className="flex-none fa fa-calendar" />
@@ -518,7 +552,6 @@ export class ShipmentDetails extends Component {
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
           <div className="flex-100 layout-row layout-align-end-center">
             <div className="flex-none letter_2">
-              {' '}
               <TextHeading theme={theme} text="Select Incoterm :" size={3} />
             </div>
           </div>
@@ -537,48 +570,63 @@ export class ShipmentDetails extends Component {
         </div>
       </div>
     )
+    const truckTypes = this.truckTypes[this.state.shipment.load_type]
+    const showTruckingDetails =
+      truckTypes.length > 1 &&
+      (this.state.has_pre_carriage || this.state.has_on_carriage)
 
     return (
       <div
-        className="layout-row flex-100 layout-wrap no_max
-         SHIP_DETAILS layout-align-start-start layout-wrap"
-        style={{ height: '1800px' }}
+        className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
+        style={{ minHeight: '1800px' }}
       >
         {flash}
         {alertModal}
-        <div
-          className={`layout-row flex-100 layout-wrap layout-align-center-center ${
-            styles.date_section
-          }`}
+        <div className={
+          `${styles.date_sec} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
         >
           {dayPickerSection}
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div
           className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
+            `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
+            `${showTruckingDetails ? styles.visible : ''} ` +
+            'layout-wrap layout-align-center'
           }
         >
-          <div
-            className={`
-                        ${styles.btn_sec} ${defaults.content_width}
-                        layout-row flex-none layout-wrap layout-align-start-start
-                    `}
+          <TruckingDetails
+            theme={theme}
+            trucking={this.state.shipment.trucking}
+            truckTypes={truckTypes}
+            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+          />
+        </div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={
+          `${defaults.border_divider} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
+        >
+          <div className={
+            `${styles.btn_sec} ${defaults.content_width} ` +
+            'layout-row flex-none layout-wrap layout-align-start-start'
+          }
           >
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div
-          className={
-            `layout-row flex-100 layout-wrap layout-align-center-center ${defaults.border_divider}`
-          }
+        <div className={
+          `${defaults.border_divider} layout-row flex-100 ` +
+          'layout-wrap layout-align-center-center'
+        }
         >
-          <div
-            className={`
-                        ${styles.btn_sec} ${defaults.content_width} 
-                        layout-row flex-none layout-wrap layout-align-start-start
-                    `}
+          <div className={
+            `${styles.btn_sec} ${defaults.content_width} ` +
+            'layout-row flex-none layout-wrap layout-align-start-start'
+          }
           >
             <RoundButton
               text="Back to Dashboard"
@@ -607,11 +655,7 @@ ShipmentDetails.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired,
-  nexusDispatch: PropTypes.shape({
-    getAvailableDestinations: PropTypes.func
-  }).isRequired,
-  availableDestinations: PropTypes.arrayOf().isRequired
+  user: PropTypes.user.isRequired
 }
 
 ShipmentDetails.defaultProps = {

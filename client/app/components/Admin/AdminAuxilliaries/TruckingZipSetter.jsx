@@ -7,8 +7,6 @@ import FormsyInput from '../../FormsyInput/FormsyInput'
 import { RoundButton } from '../../RoundButton/RoundButton'
 
 export function TruckingZipSetter ({ newCell, theme, addNewCell }) {
-  // eslint-disable-next-line no-debugger
-  debugger
   return (
     <div className="flex-100 layout-row layout-align-start-center">
       <Formsy
