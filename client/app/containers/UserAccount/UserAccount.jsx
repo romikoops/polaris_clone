@@ -125,6 +125,7 @@ class UserAccount extends Component {
         <Header
           theme={theme}
           menu={menu}
+          shipments={users.dashboard.shipments}
           showMenu
           scrollable
         />

@@ -18,7 +18,7 @@ export function Tooltip ({
 
   return (
     <div className={`${styles.icon_placement} `} >
-      <p
+      <i
         className={`${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}

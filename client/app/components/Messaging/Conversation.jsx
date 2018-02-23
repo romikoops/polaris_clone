@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
+import defStyles from '../../styles/default_classes.scss'
 import { Message, MessageShipmentData } from './'
 import PropTypes from '../../prop-types'
 
@@ -16,6 +17,7 @@ export class Conversation extends Component {
     this.handleReplyChange = this.handleReplyChange.bind(this)
     this.reply = this.reply.bind(this)
     this.toggleDetails = this.toggleDetails.bind(this)
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
   componentDidMount () {
     const { scroller } = Scroll
@@ -26,6 +28,10 @@ export class Conversation extends Component {
       containerId: 'messageList',
       offset: 50
     })
+    this.scrollToBottom()
+  }
+  componentDidUpdate () {
+    this.scrollToBottom()
   }
   handleReplyChange (ev) {
     const { name, value } = ev.target
@@ -33,6 +39,9 @@ export class Conversation extends Component {
   }
   toggleDetails () {
     this.setState({ showDetails: !this.state.showDetails })
+    if (!this.state.showDetails) {
+      this.scrollToBottom()
+    }
   }
   reply (event) {
     event.preventDefault()
@@ -43,13 +52,21 @@ export class Conversation extends Component {
       message,
       shipmentRef: conversation.messages[0].shipmentRef
     }
+    this.setState({
+      message: '',
+      title: ''
+    })
     sendMessage(msg)
+    this.scrollToBottom()
   }
-
+  scrollToBottom () {
+    this.el.scrollIntoView({ behavior: 'smooth' })
+  }
   render () {
     const {
       conversation, theme, shipment, user, tenant, clients
     } = this.props
+    console.log(conversation)
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
     const isAdmin = user.role_id === 1
@@ -68,7 +85,13 @@ export class Conversation extends Component {
         )
       })
       : conversation.messages.map(msg =>
-        <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()} />)
+        (<Message
+          tenant={tenant}
+          user={user}
+          message={msg}
+          theme={theme}
+          key={v4()}
+        />))
 
     const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed
     const btnStyle = {
@@ -82,7 +105,7 @@ export class Conversation extends Component {
           : 'black'
     }
     const messageView = (
-      <div className="flex-100 layout-column layout-align-start-start">
+      <div className="flex-100 layout-column layout-align-start-start" ref>
         <div
           id="messageList"
           className={`flex-70 layout-row layout-align-start-start layout-wrap ${
@@ -93,7 +116,7 @@ export class Conversation extends Component {
           <Element name="messagesEnd" />
         </div>
         <form
-          className={`${styles.msg_form} flex-30 width_100 layout-row layout-align-start-center`}
+          className={`${styles.msg_form} ${defStyles.border_divider} flex-30 width_100 layout-row layout-align-start-center`}
           onSubmit={this.reply}
         >
           <div
@@ -132,29 +155,39 @@ export class Conversation extends Component {
             </button>
           </div>
         </form>
+        <div ref={(el) => { this.el = el }} />
       </div>
     )
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`flex-10 layout-row layout-wrap layout-align-start-center ${summWrapStyle} ${
-            styles.summary_wrapper
-          }`}
+          className={`${summWrapStyle} ${styles.summary_wrapper} 
+          flex-10 layout-row layout-wrap layout-align-start-center `}
         >
           <div
             className="flex-100 layout-row layout-align-start-center"
             onClick={this.toggleDetails}
           >
             <div className="flex-5" />
-            <p className="flex-none">Shipment: {conversation.shipmentRef}</p>
+            <p className="flex-none">Shipment Reference: {conversation.messages[0].shipmentRef}</p>
             <div className="flex" />
             <div className="flex-10 layout-row layout-align-center-center">
               <i className="fa fa-info clip" style={btnStyle} />
             </div>
           </div>
-          {/* <div className={`${summStyle} flex-none layout-row layout-wrap layout-align-start-center ${styles.summary}`}>
-                        <MessageShipmentData theme={theme} shipmentData={shipment} user={user} closeInfo={this.toggleDetails}/>
-                    </div> */}
+          <div className={`${styles.summary} flex-none layout-row
+           layout-wrap layout-align-start-center `}
+          >
+            {
+              this.state.showDetails ? <MessageShipmentData
+                theme={theme}
+                shipmentData={shipment}
+                user={user}
+                closeInfo={this.toggleDetails}
+              />
+                : ''
+            }
+          </div>
         </div>
         <div className="flex-90 layout-column layout-align-start-start">
           {showDetails ? (
