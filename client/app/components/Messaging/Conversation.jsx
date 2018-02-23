@@ -3,7 +3,9 @@ import { v4 } from 'node-uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
-import { Message, MessageShipmentData } from './'
+// import { Message, MessageShipmentData } from './'
+import { Message } from './'
+import { FloatingMenu } from '../FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 
 export class Conversation extends Component {
@@ -64,9 +66,8 @@ export class Conversation extends Component {
   }
   render () {
     const {
-      conversation, theme, shipment, user, tenant, clients
+      conversation, theme, /* shipment, */ user, tenant, clients
     } = this.props
-    console.log(conversation)
     const { message, title, showDetails } = this.state
     const { Element } = Scroll
     const isAdmin = user.role_id === 1
@@ -104,6 +105,23 @@ export class Conversation extends Component {
           })`
           : 'black'
     }
+    /*  const dropdown = (<div className={`${styles.summary} flex-none layout-row
+    layout-wrap layout-align-start-center `}
+    >
+      <MessageShipmentData
+        theme={theme}
+        shipmentData={shipment}
+        user={user}
+        closeInfo={this.toggleDetails}
+      />
+    </div>) */
+    const infoMenu = (
+      <FloatingMenu
+        // Comp={dropdown}
+        theme={theme}
+        title="Show Details"
+        icon="fa-info"
+      />)
     const messageView = (
       <div className="flex-100 layout-column layout-align-start-start" ref>
         <div
@@ -170,36 +188,11 @@ export class Conversation extends Component {
           >
             <div className="flex-5" />
             <p className="flex-none">Shipment Reference: {conversation.messages[0].shipmentRef}</p>
-            <div className="flex" />
-            <div className="flex-10 layout-row layout-align-center-center">
-              <i className="fa fa-info clip" style={btnStyle} />
-            </div>
-          </div>
-          <div className={`${styles.summary} flex-none layout-row
-           layout-wrap layout-align-start-center `}
-          >
-            {
-              this.state.showDetails ? <MessageShipmentData
-                theme={theme}
-                shipmentData={shipment}
-                user={user}
-                closeInfo={this.toggleDetails}
-              />
-                : ''
-            }
+            { infoMenu }
           </div>
         </div>
         <div className="flex-90 layout-column layout-align-start-start">
-          {showDetails ? (
-            <MessageShipmentData
-              theme={theme}
-              shipmentData={shipment}
-              user={user}
-              closeInfo={this.toggleDetails}
-            />
-          ) : (
-            messageView
-          )}
+          { messageView }
         </div>
       </div>
     )
@@ -212,7 +205,7 @@ Conversation.propTypes = {
     messages: PropTypes.array
   }).isRequired,
   theme: PropTypes.theme,
-  shipment: PropTypes.shipment.isRequired,
+  // shipment: PropTypes.shipment.isRequired,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
   clients: PropTypes.arrayOf(PropTypes.client).isRequired

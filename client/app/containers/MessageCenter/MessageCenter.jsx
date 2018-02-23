@@ -40,7 +40,6 @@ class MessageCenter extends Component {
     const { messageDispatch } = this.props
     messageDispatch.markAsRead(selectedConvo.shipmentRef)
     messageDispatch.getShipment(selectedConvo.shipmentRef)
-    MessageCenter.scrollToBottom()
   }
   sendMessage (msg) {
     const { messageDispatch } = this.props

@@ -146,7 +146,7 @@ AdminSearchableClients.propTypes = {
   adminDispatch: PropTypes.shape({
     getClient: PropTypes.func,
     goTo: PropTypes.func
-  }).isRequired,
+  }),
   seeAll: PropTypes.func,
   title: PropTypes.string,
   placeholder: PropTypes.string,
@@ -165,7 +165,8 @@ AdminSearchableClients.defaultProps = {
   icon: '',
   tooltip: '',
   title: '',
-  placeholder: ''
+  placeholder: '',
+  adminDispatch: null
 }
 
 export default AdminSearchableClients

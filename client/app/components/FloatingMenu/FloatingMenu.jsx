@@ -8,16 +8,17 @@ export class FloatingMenu extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expand: true
+      expand: false
     }
     this.toggleMenu = this.toggleMenu.bind(this)
   }
   toggleMenu () {
     this.setState({ expand: !this.state.expand })
   }
-
   render () {
-    const { Comp, theme } = this.props
+    const {
+      Comp, theme, title, icon
+    } = this.props
 
     const rotateIcon = keyframes` 
     /* 0%, 100% {
@@ -52,10 +53,10 @@ export class FloatingMenu extends Component {
           onClick={this.toggleMenu}
         >
           <AnimIcon className={`flex-none layout-row layout-align-center-center ${styles.icon_circle}`}>
-            <i className="fa fa-bars flex-none clip" style={textStyle} />
+            <i className={`fa ${icon} flex-none clip`} style={textStyle} />
           </AnimIcon>
           <div className="flex layout-row layout-align-start-center">
-            <h4 className="flex-none no_m">MENU</h4>
+            <h4 className="flex-none no_m">{title}</h4>
           </div>
         </Title>
         <div className={`flex-100 layout-row ${styles.menu_content} ${currentStyle}`}>
@@ -69,12 +70,16 @@ export class FloatingMenu extends Component {
 
 FloatingMenu.propTypes = {
   Comp: PropTypes.node,
-  theme: PropTypes.theme
+  theme: PropTypes.theme,
+  title: PropTypes.string,
+  icon: PropTypes.string
 }
 
 FloatingMenu.defaultProps = {
   theme: null,
-  Comp: null
+  Comp: null,
+  title: '',
+  icon: ''
 }
 
 export default FloatingMenu

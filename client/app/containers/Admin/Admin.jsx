@@ -87,7 +87,7 @@ class Admin extends Component {
     }
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
     const nav = (<SideNav theme={theme} user={user} />)
-    const menu = <FloatingMenu Comp={nav} theme={theme} />
+    const menu = <FloatingMenu Comp={nav} theme={theme} title="MENU" icon="fa-bars" />
     // ;
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
