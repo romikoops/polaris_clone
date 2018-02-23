@@ -1,22 +1,16 @@
 import React from 'react'
 
 export function switchIcon (mot) {
-  let icon
   switch (mot) {
     case 'ocean':
-      icon = <i className="fa fa-ship" />
-      break
+      return <i className="fa fa-ship" />
     case 'air':
-      icon = <i className="fa fa-plane" />
-      break
-    case 'train':
-      icon = <i className="fa fa-train" />
-      break
+      return <i className="fa fa-plane" />
+    case 'rail':
+      return <i className="fa fa-train" />
     default:
-      icon = <i className="fa fa-ship" />
-      break
+      return <i className="fa fa-ship" />
   }
-  return icon
 }
 
 export default switchIcon
