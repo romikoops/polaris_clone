@@ -9,9 +9,7 @@ import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
 import { appActions, messagingActions } from '../../actions'
-import { accountIconColor } from '../../helpers'
 
-const iconColourer = accountIconColor
 class Header extends Component {
   constructor (props) {
     super(props)
@@ -68,12 +66,11 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, showMenu, scrollable, menu
+      user, theme, tenant, invert, unread, req, scrollable
     } = this.props
     const { isTop } = this.state
     const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
 
-    // const dropDownImage = accountIcon;
     const accountLinks = [
       {
         url: '/account',
@@ -89,22 +86,15 @@ class Header extends Component {
       }
     ]
 
-    const adjIcon = iconColourer(invert ? '#FFFFFF' : '#000000')
     if (this.state.redirect) {
       return <Redirect push to="/" />
     }
-    const dropDown = (isTop
-      ? (<NavDropdown
+    const dropDown = (
+      <NavDropdown
         dropDownText={dropDownText}
-        dropDownImage={adjIcon}
         linkOptions={accountLinks}
-        invert={invert}
-      />)
-      : (<NavDropdown
-        dropDownText={dropDownText}
-        dropDownImage={adjIcon}
-        linkOptions={accountLinks}
-      />)
+        invert={isTop && invert}
+      />
     )
 
     const alertStyle = unread > 0 ? styles.unread : styles.all_read
@@ -127,7 +117,7 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-    const textColour = invert ? 'white' : 'black'
+    const textColor = invert ? 'white' : 'black'
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -136,7 +126,7 @@ class Header extends Component {
     )
 
     const loginPrompt = (
-      <a className={defs.pointy} style={{ color: textColour }} onClick={this.toggleShowLogin}>
+      <a className={defs.pointy} style={{ color: textColor }} onClick={this.toggleShowLogin}>
         Log in
       </a>
     )
@@ -161,22 +151,18 @@ class Header extends Component {
         parentToggle={this.toggleShowLogin}
       />
     )
-    const classProps = scrollable && !isTop
-      ? `${styles.header_scrollable} 
-        layout-row flex-100 layout-wrap layout-align-center`
-      : `${styles.header}
-        layout-row flex-100 layout-wrap layout-align-center`
-
-    const isDashboard = showMenu
-      ? `${defs.content_width} ${styles.responsive} layout-row flex-none`
-      : `${defs.content_width} layout-row flex-none`
+    const headerClass =
+      `${styles.header} layout-row flex-100 layout-wrap layout-align-center ` +
+      `${invert ? styles.inverted : ''} ` +
+      `${scrollable ? styles.scrollable : ''} ` +
+      `${scrollable && !isTop ? styles.scrolled : ''}`
 
     return (
-      <div className={classProps} >
-        <div className={`${styles.dashboard_menu} layout-row flex layout-align-start-center`}>
-          { showMenu ? menu : '' }
-        </div>
-        <div className={isDashboard}>
+      <div
+        className={headerClass}
+        style={{ color: invert ? 'white' : 'black' }}
+      >
+        <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
           <div className="layout-row flex layout-align-start-center">
             <img
               src={logoUrl}
@@ -201,7 +187,6 @@ Header.propTypes = {
   user: PropTypes.user,
   registering: PropTypes.bool,
   loggingIn: PropTypes.bool,
-  menu: PropTypes.node,
   invert: PropTypes.bool,
   loginAttempt: PropTypes.bool,
   messageDispatch: PropTypes.shape({
@@ -211,7 +196,6 @@ Header.propTypes = {
   showRegistration: PropTypes.bool,
   unread: PropTypes.number,
   req: PropTypes.req,
-  showMenu: PropTypes.bool,
   scrollable: PropTypes.bool
 }
 
@@ -226,9 +210,7 @@ Header.defaultProps = {
   messages: null,
   showRegistration: false,
   unread: 0,
-  showMenu: false,
   req: null,
-  menu: null,
   scrollable: false
 }
 

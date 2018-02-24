@@ -7,14 +7,17 @@ import Header from '../Header/Header'
 import { moment } from '../../constants'
 
 const StyledTop = styled.div`
-  background-image: linear-gradient(rgba(black, 0.3), rgba(black, 0.3));
-  background-image: url(${props => props.bg});
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.3)
+    ),
+    url(${props => props.bg});
 
-  height: 65vh;
+  height: 550px;
   background-size: cover;
   background-position: center;
   padding-bottom: 120px;
-  box-shadow: 0px 1px 15px rgba(black, 0.7);
+  box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.7);
   position: relative;
 `
 
