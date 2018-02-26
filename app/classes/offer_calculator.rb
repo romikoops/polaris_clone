@@ -192,7 +192,7 @@ class OfferCalculator
         'origin',
         'export'
       )
-      byebug
+      
     end
     
     if @shipment.has_on_carriage
@@ -292,7 +292,7 @@ class OfferCalculator
       else
         raw_totals[svalue["trucking_on"]["currency"]] += svalue["trucking_on"]["value"].to_f
       end
-      byebug
+      
       if !raw_totals[svalue["trucking_pre"]["currency"]]
         raw_totals[svalue["trucking_pre"]["currency"]] = svalue["trucking_pre"]["value"].to_f
       else
