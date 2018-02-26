@@ -580,13 +580,15 @@ export class ShipmentLocationBox extends Component {
     const { allNexuses } = this.props
     const lat = place.geometry.location.lat()
     const lng = place.geometry.location.lng()
+
+    const tenantId = this.props.shipment.shipment.tenant_id
     if (target === 'origin') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
+      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
         method: 'GET',
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const { nexus } = response.data
+          const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -594,8 +596,14 @@ export class ShipmentLocationBox extends Component {
           const originOptionNames = originOptions.map(option => option.label)
           const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
 
-          if (!originFieldsHaveErrors) {
-            const tenantId = this.props.shipment.shipment.tenant_id
+          if (truckingOptions) {
+            this.setState({
+              truckingOptions: {
+                ...this.state.truckingOptions,
+                preCarriage: true
+              }
+            })
+          } else if (!originFieldsHaveErrors) {
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, originOptions)
           }
@@ -607,12 +615,12 @@ export class ShipmentLocationBox extends Component {
         })
       })
     } else if (target === 'destination') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
+      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
         method: 'GET',
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const { nexus } = response.data
+          const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let destinationOptions =
@@ -623,8 +631,14 @@ export class ShipmentLocationBox extends Component {
           const destinationOptionNames = destinationOptions.map(option => option.label)
           const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
 
-          if (!destinationFieldsHaveErrors) {
-            const tenantId = this.props.shipment.shipment.tenant_id
+          if (truckingOptions) {
+            this.setState({
+              truckingOptions: {
+                ...this.state.truckingOptions,
+                preCarriage: true
+              }
+            })
+          } else if (!destinationFieldsHaveErrors) {
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, destinationOptions)
           }

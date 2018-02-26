@@ -4,17 +4,18 @@ class Location < ApplicationRecord
   has_many :shipments
   has_many :contacts
 
-  # has_many :hubs
-  has_many :routes
-  has_many :stops, through: :hubs
-
   has_many :hubs do
     def tenant_id(tenant_id)
       where(tenant_id: tenant_id)
     end
   end
+  has_many :routes
+  has_many :stops, through: :hubs
+
   
   has_many :nexus_trucking_availabilities, foreign_key: "nexus_id"
+
+  scope :nexus, -> { where(location_type: "nexus") }
 
   # Geocoding
   geocoded_by :geocoded_address
@@ -269,6 +270,20 @@ class Location < ApplicationRecord
   def self.update_all_trucking_availabilities
     where(location_type: "nexus").each(&:update_trucking_availability!)
   end
+
+  def trucking_options(tenant_id)
+    return nil unless location_type == "nexus"
+    
+    ActiveRecord::Base.connection.exec_query("
+      SELECT DISTINCT city_name FROM trucking_options
+      JOIN  hub_trucking_options ON hub_trucking_options.trucking_option_id = trucking_options.id
+      JOIN  hubs                 ON hub_trucking_options.hub_id             = hubs.id
+      WHERE hubs.tenant_id = #{tenant_id}
+      AND   hubs.nexus_id  = #{self.id}
+    ").rows.flatten
+  end
+    
+
 
   def closest_hubs
     hubs = Location.where(location_type: "nexus")
