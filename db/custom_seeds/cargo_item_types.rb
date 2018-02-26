@@ -37,18 +37,18 @@ cargo_item_types_data = [
     dimension_y: 120,
     area: 'Europe'
   },
-  { category: 'Carton'},
-  { category: 'Crate'},
-  { category: 'Roll'},
-  { category: 'Pallet'},
+  { category: 'Carton' },
+  { category: 'Crate' },
+  { category: 'Roll' },
+  { category: 'Pallet' },
   { category: 'Bottle' },
   { category: 'Stack' },
   { category: 'Drum' },
   { category: 'Skid' },
   { category: 'Barrel' }
-];
+]
 
 cargo_item_types_data.each do |cargo_item_types_attr|
-  cargo_item = CargoItemType.new(cargo_item_types_data)
+  cargo_item = CargoItemType.new(cargo_item_types_attr)
   puts "#{cargo_item.description} already exists in db" unless cargo_item.save
 end

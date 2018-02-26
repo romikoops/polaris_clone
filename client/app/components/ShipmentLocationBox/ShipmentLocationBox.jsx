@@ -363,6 +363,7 @@ export class ShipmentLocationBox extends Component {
       promise.json().then((response) => {
         const prefix = target === 'origin' ? 'pre' : 'on'
         const { truckingAvailable } = response.data
+
         if (!truckingAvailable) {
           const nexusOption = nexusOptions.find(option => option.label === nexus.name)
           target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
@@ -590,19 +591,19 @@ export class ShipmentLocationBox extends Component {
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
+          const originOptionNames = originOptions.map(option => option.label)
+          const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
 
-          if (nexus && nexus.id) {
+          if (!originFieldsHaveErrors) {
             const tenantId = this.props.shipment.shipment.tenant_id
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, originOptions)
           }
 
-          const originOptionNames = originOptions.map(option => option.label)
-          this.setState({
-            originFieldsHaveErrors: !originOptionNames.includes(nexusName)
-          })
-          this.props.handleSelectLocation(!originOptionNames.includes(nexusName) ||
-          this.state.destinationFieldsHaveErrors)
+          this.setState({ originFieldsHaveErrors })
+          const addressFormsHaveErrors =
+            originFieldsHaveErrors || this.state.destinationFieldsHaveErrors
+          this.props.handleSelectLocation(addressFormsHaveErrors)
         })
       })
     } else if (target === 'destination') {
@@ -619,19 +620,19 @@ export class ShipmentLocationBox extends Component {
           if (this.state.availableDestinations) {
             destinationOptions = this.state.availableDestinations
           }
+          const destinationOptionNames = destinationOptions.map(option => option.label)
+          const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
 
-          if (nexus && nexus.id) {
+          if (!destinationFieldsHaveErrors) {
             const tenantId = this.props.shipment.shipment.tenant_id
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, destinationOptions)
           }
 
-          const destinationOptionNames = destinationOptions.map(option => option.label)
-          this.setState({
-            destinationFieldsHaveErrors: !destinationOptionNames.includes(nexusName)
-          })
-          this.props.handleSelectLocation(this.state.originFieldsHaveErrors ||
-            !destinationOptionNames.includes(nexusName))
+          this.setState({ destinationFieldsHaveErrors })
+          const addressFormsHaveErrors =
+            this.state.originFieldsHaveErrors || destinationFieldsHaveErrors
+          this.props.handleSelectLocation(addressFormsHaveErrors)
         })
       })
     }
@@ -738,6 +739,7 @@ export class ShipmentLocationBox extends Component {
 
     if (availableDestinations) destinationOptions = availableDestinations
     if (availableOrigins) originOptions = availableOrigins
+    console.log(originOptions)
 
     const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
     const originHubSelect = (
