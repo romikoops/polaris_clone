@@ -88,6 +88,7 @@ module TruckingTools
                   { "min_weight" => { "$lte" => cargo[:weight]}},
                   {  "max_weight" => { "$gte" => cargo[:weight] }},
                   { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
+                  { 'type' => { "$eq" => delivery_type}},
                   
                 ]
                 # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
@@ -187,7 +188,9 @@ module TruckingTools
     trucking_hub = retrieve_trucking_hub(hub.nexus, load_type, hub.tenant_id)
     
     trucking_query = retrieve_trucking_query(trucking_hub, destination, km, direction)
-    
+    if !delivery_type && load_type == 'lcl'
+      delivery_type == 'default'
+    end
     
     trucking_pricing = retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
     

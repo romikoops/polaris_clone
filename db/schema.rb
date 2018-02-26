@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180222154439) do
+ActiveRecord::Schema.define(version: 20180226165016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,13 @@ ActiveRecord::Schema.define(version: 20180222154439) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+  end
+
+  create_table "hub_trucking_options", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "trucking_option_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -288,7 +295,7 @@ ActiveRecord::Schema.define(version: 20180222154439) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-    t.boolean "customs_credit", default: false
+    t.boolean "customs_credit"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -352,8 +359,8 @@ ActiveRecord::Schema.define(version: 20180222154439) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item", default: false
-    t.boolean "container", default: false
+    t.boolean "cargo_item"
+    t.boolean "container"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

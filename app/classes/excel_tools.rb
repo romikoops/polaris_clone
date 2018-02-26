@@ -67,6 +67,7 @@ module ExcelTools
             }
           }
           tmp[:direction] = direction
+          tmp[:type] = "default"
           tmp[:_id] = SecureRandom.uuid
           tmp[:trucing_hub_id] = trucking_table_id
           tmp[:trucking_query_id] = ntp[:_id]
@@ -190,6 +191,7 @@ module ExcelTools
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3].clone
           tmp[:_id] = SecureRandom.uuid
+          tmp[:type] = "default"
           tmp[:fees] = {
             base_rate: {
               value: row_data[i],
@@ -210,6 +212,9 @@ module ExcelTools
         truckingQueries << ntp
         new_trucking_location = Location.from_short_name("#{new_pricing[:city]} ,#{new_pricing[:province]}", 'trucking_option')
         new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
+        hubs.each do |hub|
+          HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
+        end
       end
       update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id})
       truckingQueries.each do |k|
