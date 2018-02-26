@@ -1,9 +1,9 @@
 import { Promise } from 'es6-promise-promise'
+import { push } from 'react-router-redux'
 import { BASE_URL, appConstants } from '../constants'
 import { appService } from '../services'
 import { alertActions, shipmentActions, userActions, adminActions, authenticationActions } from './'
 // import { Promise } from 'es6-promise-promise';
-// import { push } from 'react-router-redux';
 
 const { fetch } = window
 
@@ -133,13 +133,20 @@ function clearLoading () {
   }
 }
 
+function goTo (path) {
+  return (dispatch) => {
+    dispatch(push(path))
+  }
+}
+
 export const appActions = {
   fetchCurrencies,
   shouldFetchTenant,
   fetchTenantIfNeeded,
   invalidateSubdomain,
   setCurrency,
-  clearLoading
+  clearLoading,
+  goTo
 }
 
 export default appActions

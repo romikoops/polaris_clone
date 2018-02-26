@@ -1,27 +1,25 @@
 :local {
   @import '../../styles/defaults';
-
-  img.dropDownImage {
+  
+  .wrapper_profile_icon {
     position: relative;
-    // top: 3px;
+    top: -2px;
     height: 20px;
     width: 20px;
     margin-right: $spacing-sm;
   }
-  .white {
-    * {
-      color: white;
-    }
-  }
-  .black {
-    * {
-      color: black;
+  img.profile_icon {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    transition: all 0.5s ease;
+    &.hidden {
+      opacity: 0;
     }
   }
 
   .dropbtn {
     background-color: transparent;
-    color: black;
     padding: 16px;
     font-size: 18px;
     border: none;
@@ -45,10 +43,10 @@
   }
 
   .dropdowncontent a, .dropdowncontent div {
-    color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    color: black;
   }
 
   .dropdowncontent a:hover {
@@ -62,5 +60,4 @@
   .dropdown:hover .dropbtn {
     text-decoration: underline;
   }
-
 }

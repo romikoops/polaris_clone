@@ -15,103 +15,11 @@ class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: true,
-      showModal: false
+      showModal: false,
+      linkTextClass: '',
+      linkVisibility: []
     }
-    this.toggleModal = this.toggleModal.bind(this)
-  }
-  setAdminUrl (target) {
-    console.log(target)
-    const { adminDispatch } = this.props
-    switch (target) {
-      case 'hubs':
-        adminDispatch.getHubs(true)
-        break
-      case 'serviceCharges':
-        adminDispatch.getServiceCharges(true)
-        break
-      case 'pricing':
-        adminDispatch.getPricings(true)
-        break
-      case 'schedules':
-        adminDispatch.getSchedules(true)
-        break
-      case 'trucking':
-        adminDispatch.getTrucking(true)
-        break
-      case 'shipments':
-        adminDispatch.getShipments(true)
-        break
-      case 'clients':
-        adminDispatch.getClients(true)
-        break
-      case 'dashboard':
-        adminDispatch.getDashboard(true)
-        break
-      case 'routes':
-        adminDispatch.getItineraries(true)
-        break
-      case 'wizard':
-        adminDispatch.goTo('/admin/wizard')
-        break
-      case 'super_admin':
-        adminDispatch.goTo('/admin/super_admin/upload')
-        break
-      default:
-        break
-    }
-  }
-  setUserUrl (target) {
-    const { userDispatch, user } = this.props
-    switch (target) {
-      case 'pricing':
-        userDispatch.getPricings(user.id, true)
-        break
-      case 'chooseRoutes':
-        this.toggleModal()
-        break
-      case 'shipments':
-        userDispatch.getShipments(true)
-        break
-      case 'contacts':
-        userDispatch.goTo('/account/contacts')
-        break
-      case 'dashboard':
-        userDispatch.getDashboard(user.id, true)
-        break
-      case 'locations':
-        userDispatch.getLocations(user.id, true)
-        break
-      case 'profile':
-        userDispatch.goTo('/account/profile')
-        break
-      default:
-        break
-    }
-  }
-  toggleModal () {
-    this.setState({ showModal: !this.state.showModal })
-  }
-  render () {
-    const { expanded } = this.state
-    const { theme, user, routes } = this.props
-    const routeModal = (
-      <Modal
-        component={
-          <AvailableRoutes
-            user={user}
-            theme={theme}
-            routes={routes}
-            initialCompName="UserAccount"
-          />
-        }
-        width="48vw"
-        verticalPadding="30px"
-        horizontalPadding="15px"
-        parentToggle={this.toggleModal}
-      />
-    )
-    const userLinks = [
+    this.userLinks = [
       {
         key: v4(),
         icon: 'fa-tachometer',
@@ -148,7 +56,7 @@ class SideNav extends Component {
         target: 'contacts'
       }
     ]
-    const adminLinks = [
+    this.adminLinks = [
       {
         key: v4(),
         icon: 'fa-tachometer',
@@ -222,34 +130,175 @@ class SideNav extends Component {
         tooltip: menuTip.setup
       }
     ]
+
+    const { user } = props
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
-    const links = isAdmin ? adminLinks : userLinks
-    const expandNavClass = expanded ? styles.expanded : styles.collapsed
-    const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link
-    const expandIconClass = expanded ? styles.expanded_icon : styles.collapsed_icon
+    const links = isAdmin ? this.adminLinks : this.userLinks
+
+    links.forEach((link, i) => { this.state.linkVisibility[i] = false })
+
+    this.linkTextClass = ''
+    this.toggleModal = this.toggleModal.bind(this)
+    this.setLinkVisibility = this.setLinkVisibility.bind(this)
+    this.handleClickAction = this.handleClickAction.bind(this)
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.expand) {
+      this.setState({ linkTextClass: '' })
+    } else {
+      setTimeout(() => {
+        if (nextProps.expand) {
+          this.setState({ linkTextClass: styles.collapsed })
+        }
+      }, 200)
+    }
+  }
+  setAdminUrl (target) {
+    const { adminDispatch } = this.props
+    switch (target) {
+      case 'hubs':
+        adminDispatch.getHubs(true)
+        break
+      case 'serviceCharges':
+        adminDispatch.getServiceCharges(true)
+        break
+      case 'pricing':
+        adminDispatch.getPricings(true)
+        break
+      case 'schedules':
+        adminDispatch.getSchedules(true)
+        break
+      case 'trucking':
+        adminDispatch.getTrucking(true)
+        break
+      case 'shipments':
+        adminDispatch.getShipments(true)
+        break
+      case 'clients':
+        adminDispatch.getClients(true)
+        break
+      case 'dashboard':
+        adminDispatch.getDashboard(true)
+        break
+      case 'routes':
+        adminDispatch.getItineraries(true)
+        break
+      case 'wizard':
+        adminDispatch.goTo('/admin/wizard')
+        break
+      case 'super_admin':
+        adminDispatch.goTo('/admin/super_admin/upload')
+        break
+      default:
+        break
+    }
+  }
+  setUserUrl (target) {
+    const { userDispatch, user } = this.props
+    switch (target) {
+      case 'pricing':
+        userDispatch.getPricings(user.id, true)
+        break
+      case 'chooseRoutes':
+        this.toggleModal()
+        break
+      case 'shipments':
+        userDispatch.getShipments(true)
+        break
+      case 'contacts':
+        userDispatch.goTo('/account/contacts')
+        break
+      case 'dashboard':
+        userDispatch.getDashboard(user.id, true)
+        break
+      case 'locations':
+        userDispatch.getLocations(user.id, true)
+        break
+      case 'profile':
+        userDispatch.goTo('/account/profile')
+        break
+      default:
+        break
+    }
+  }
+  setLinkVisibility (bool, i) {
+    const { linkVisibility } = this.state
+    linkVisibility[i] = bool
+    this.setState({ linkVisibility })
+  }
+  handleClickAction (li, i, isAdmin) {
+    if (!this.state.linkVisibility[i]) return
+    isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
+  }
+
+  toggleModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
+  render () {
+    const {
+      theme, user, routes, expand
+    } = this.props
+    const routeModal = (
+      <Modal
+        component={
+          <AvailableRoutes
+            user={user}
+            theme={theme}
+            routes={routes}
+            initialCompName="UserAccount"
+          />
+        }
+        width="48vw"
+        verticalPadding="30px"
+        horizontalPadding="15px"
+        parentToggle={this.toggleModal}
+      />
+    )
+    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
+    const links = isAdmin ? this.adminLinks : this.userLinks
     const textStyle = {
       background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }
-    const navLinks = links.map((li) => {
-      const tli = li
-      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+    const navLinks = links.map((li, i) => {
       const toolId = v4()
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} key={li.key} onClick={tli.action}>
-          <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
-            <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
+        <div
+          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
+          key={li.key}
+          onClick={() => this.handleClickAction(li, i, isAdmin)}
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+            onMouseLeave={() => this.setLinkVisibility(false, i)}
+          >
+            <div
+              className={`flex-none layout-row-layout-align-center-center ${styles.icon_box}`}
+              onMouseEnter={() => this.setLinkVisibility(true, i)}
+            >
               <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />
             </div>
-            <div className={`flex-none layout-row-layout-align-center-center ${styles.link_text} ${expandLinkClass}`}>
+            <div
+              className={
+                `flex-none layout-row-layout-align-center-center ${styles.link_text} ` +
+                `${this.state.linkTextClass}`
+              }
+              data-for={toolId}
+              data-tip={isAdmin ? li.tooltip : ''}
+              style={this.state.linkVisibility[i] ? { opacity: 1, visibility: 'visible' } : {}}
+            >
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>
           </div>
-          { isAdmin ? <ReactTooltip className={styles.tooltip} id={toolId} /> : '' }
+          {
+            isAdmin && (expand || this.state.linkVisibility[i])
+              ? <ReactTooltip className={styles.tooltip} id={toolId} />
+              : ''
+          }
         </div>
       )
     })
     return (
-      <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
+      <div className={`flex-100 layout-column layout-align-start-start layout-wrap ${styles.side_nav}`}>
         {this.state.showModal ? routeModal : ''}
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
         <div className="flex layout-row layout-align-center-start layout-wrap">
@@ -282,12 +331,14 @@ SideNav.propTypes = {
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
   }).isRequired,
-  routes: PropTypes.objectOf(PropTypes.any)
+  routes: PropTypes.objectOf(PropTypes.any),
+  expand: PropTypes.bool
 }
 
 SideNav.defaultProps = {
   theme: null,
-  routes: null
+  routes: null,
+  expand: false
 }
 
 function mapStateToProps (state) {

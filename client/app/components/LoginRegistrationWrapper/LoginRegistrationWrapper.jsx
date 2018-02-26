@@ -37,7 +37,7 @@ export class LoginRegistrationWrapper extends Component {
         ? `${styles.ie_11} layout-row layout-align-space-between`
         : 'layout-row layout-align-space-between'
     return (
-      <div>
+      <div style={{ color: 'black' }}>
         <div>
           <Comp {...compProps} />
         </div>
