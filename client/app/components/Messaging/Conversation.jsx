@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import Scroll from 'react-scroll'
 import styles from './Messaging.scss'
+import defStyles from '../../styles/default_classes.scss'
 import { Message, MessageShipmentData } from './'
 import PropTypes from '../../prop-types'
 
@@ -16,6 +17,7 @@ export class Conversation extends Component {
     this.handleReplyChange = this.handleReplyChange.bind(this)
     this.reply = this.reply.bind(this)
     this.toggleDetails = this.toggleDetails.bind(this)
+    this.scrollToBottom = this.scrollToBottom.bind(this)
   }
   componentDidMount () {
     const { scroller } = Scroll
@@ -26,6 +28,10 @@ export class Conversation extends Component {
       containerId: 'messageList',
       offset: 50
     })
+    this.scrollToBottom()
+  }
+  componentDidUpdate () {
+    this.scrollToBottom()
   }
   handleReplyChange (ev) {
     const { name, value } = ev.target
@@ -33,6 +39,9 @@ export class Conversation extends Component {
   }
   toggleDetails () {
     this.setState({ showDetails: !this.state.showDetails })
+    if (!this.state.showDetails) {
+      this.scrollToBottom()
+    }
   }
   reply (event) {
     event.preventDefault()
@@ -43,9 +52,16 @@ export class Conversation extends Component {
       message,
       shipmentRef: conversation.messages[0].shipmentRef
     }
+    this.setState({
+      message: '',
+      title: ''
+    })
     sendMessage(msg)
+    this.scrollToBottom()
   }
-
+  scrollToBottom () {
+    this.el.scrollIntoView({ behavior: 'smooth' })
+  }
   render () {
     const {
       conversation, theme, shipment, user, tenant, clients
@@ -68,9 +84,13 @@ export class Conversation extends Component {
         )
       })
       : conversation.messages.map(msg =>
-        <Message tenant={tenant} user={user} message={msg} theme={theme} key={v4()} />)
-
-    const summWrapStyle = showDetails ? styles.wrapper_open : styles.wrapper_closed
+        (<Message
+          tenant={tenant}
+          user={user}
+          message={msg}
+          theme={theme}
+          key={v4()}
+        />))
     const btnStyle = {
       background:
         theme && theme.colors
@@ -81,19 +101,29 @@ export class Conversation extends Component {
           })`
           : 'black'
     }
+    const detailView = (<MessageShipmentData
+      theme={theme}
+      shipmentData={shipment}
+      user={user}
+      closeInfo={this.toggleDetails}
+    />)
+    const showDetailView = showDetails ? styles.detail_wrapper_open
+      : styles.detail_wrapper_closed
+    const showMessageView = showDetails ? styles.message_wrapper_closed
+      : styles.message_wrapper_open
     const messageView = (
-      <div className="flex-100 layout-column layout-align-start-start">
+      <div className={`${showMessageView} flex-100 layout-column layout-align-start-start`} ref>
         <div
           id="messageList"
-          className={`flex-70 layout-row layout-align-start-start layout-wrap ${
-            styles.message_scroll
-          }`}
+          className={`${styles.message_scroll} 
+          flex-70 layout-row layout-align-start-start layout-wrap `}
         >
-          {messages}
+          { messages }
+
           <Element name="messagesEnd" />
         </div>
         <form
-          className={`${styles.msg_form} flex-30 width_100 layout-row layout-align-start-center`}
+          className={`${styles.msg_form} ${defStyles.border_divider} flex-30 width_100 layout-row layout-align-start-center`}
           onSubmit={this.reply}
         >
           <div
@@ -132,41 +162,36 @@ export class Conversation extends Component {
             </button>
           </div>
         </form>
+        <div ref={(el) => { this.el = el }} />
       </div>
     )
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`flex-10 layout-row layout-wrap layout-align-start-center ${summWrapStyle} ${
-            styles.summary_wrapper
-          }`}
+          className={`${styles.summary_wrapper} ${showDetailView}
+          flex-10 layout-row layout-wrap layout-align-start-center `}
+          onClick={this.toggleDetails}
         >
-          <div
-            className="flex-100 layout-row layout-align-start-center"
-            onClick={this.toggleDetails}
-          >
+          <div className="flex-70 layout-wrap layout-row layout-align-start-center">
             <div className="flex-5" />
-            <p className="flex-none">Shipment: {conversation.shipmentRef}</p>
-            <div className="flex" />
-            <div className="flex-10 layout-row layout-align-center-center">
-              <i className="fa fa-info clip" style={btnStyle} />
-            </div>
+            <p className="flex-none">
+              Shipment Reference:
+              <b>
+                {conversation.messages[0].shipmentRef}
+              </b>
+            </p>
           </div>
-          {/* <div className={`${summStyle} flex-none layout-row layout-wrap layout-align-start-center ${styles.summary}`}>
-                        <MessageShipmentData theme={theme} shipmentData={shipment} user={user} closeInfo={this.toggleDetails}/>
-                    </div> */}
+          <div className="flex-30 layout-align-end-center layout-row">
+            <i>
+              Show Details
+            </i>
+            <div className="flex-5" />
+            <i className="fa fa-info clip" style={btnStyle} />
+          </div>
+          { showDetails ? detailView : '' }
         </div>
         <div className="flex-90 layout-column layout-align-start-start">
-          {showDetails ? (
-            <MessageShipmentData
-              theme={theme}
-              shipmentData={shipment}
-              user={user}
-              closeInfo={this.toggleDetails}
-            />
-          ) : (
-            messageView
-          )}
+          { messageView }
         </div>
       </div>
     )
@@ -179,14 +204,16 @@ Conversation.propTypes = {
     messages: PropTypes.array
   }).isRequired,
   theme: PropTypes.theme,
-  shipment: PropTypes.shipment.isRequired,
+  shipment: PropTypes.shipment,
   user: PropTypes.user.isRequired,
   tenant: PropTypes.tenant.isRequired,
-  clients: PropTypes.arrayOf(PropTypes.client).isRequired
+  clients: PropTypes.arrayOf(PropTypes.client)
 }
 
 Conversation.defaultProps = {
-  theme: null
+  theme: null,
+  clients: null,
+  shipment: null
 }
 
 export default Conversation

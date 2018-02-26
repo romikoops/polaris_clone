@@ -16,45 +16,47 @@ class Admin::TruckingController < ApplicationController
     nexuses = Location.where(location_type: 'nexus')
     response_handler({truckingHubs: all_trucking_hubs, truckingPrices: all_trucking_prices, nexuses: nexuses})
   end
+
   def create
     data = params[:obj][:data].as_json
     meta = params[:obj][:meta].as_json
     global = params[:obj][:global].as_json
     byebug
-    pricingKeys = {}
-    pricings = {}
-    truckingHubId = "#{meta["nexus_id"]}_#{current_user.tenant_id}"
+    truckingQueries = []
+    truckingPricings = []
+    truckingHubId = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}"
     data.each do |d|
       d.each do |dk, dv|
-        byebug
+        query = dv.clone
+        query.delete("table")
+        query[:_id] = SecureRandom.uuid
+        query[:modifier] = meta["subModifier"]
+        query[:trucking_hub_id] = truckingHubId
         dv["table"].each_with_index do |dt, i|
-          pricingKey = "#{meta["nexus_id"]}_#{dk}_#{i}_#{current_user.tenant_id}"
-          pricingId = "#{meta["nexus_id"]}_#{i}_#{current_user.tenant_id}" 
-          pricings[pricingKey] = {"variable" => dt["fees"], "fixed" => global}
-          tmp = dt
-          tmp.delete("fees")
-          tmp["lcl"] = {}
-          tmp["fcl"] = {}
+          
+          tmp = dt.clone
+          
+          tmp[:_id] = SecureRandom.uuid
+          tmp["type"] = dk
+          tmp["direction"] = meta["direction"]
           tmp["trucking_hub_id"] = truckingHubId
+          tmp["trucking_pricing_id"] = query[:_id]
           tmp["tenant_id"] = current_user.tenant_id
-          if meta["loadType"] == 'lcl'
-            tmp["lcl"]["default"] = pricingKey
-          else
-            tmp["fcl"][dk] = pricingKey
-          end
-          pricingKeys[pricingId] = tmp
+          truckingPricings << tmp
         end
+        truckingQueries << query
       end
     end
-    truckingTable = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}" 
-   pricings.each do |k, v|
-    update_item('truckingPricings', {_id: k}, v)
-   end
-   pricingKeys.each do |k, v|
-    update_item('truckingQueries', {_id: k}, v)
-   end
-    update_item('truckingHubs', {_id: "#{meta["nexus_id"]}"}, {type: "#{meta["type"]}", modifier: "#{meta["modifier"]}", table: truckingTable, tenant_id: current_user.tenant_id})
+
+    truckingPricings.each do |k|
+      update_item('truckingPricings', {_id: k[:_id]}, k)
+    end
+    truckingQueries.each do |k|
+      update_item('truckingQueries', {_id: k[:_id]}, k)
+    end
+    update_item('truckingHubs', {_id: truckingHubId}, {type: "#{meta["type"]}", load_type: meta["loadType"], modifier: "#{meta["modifier"]}", tenant_id: current_user.tenant_id})
   end
+
   def overwrite_zip_trucking
      if params[:file]
       req = {'xlsx' => params[:file]}

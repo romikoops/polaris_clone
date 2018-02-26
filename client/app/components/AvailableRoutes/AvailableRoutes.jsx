@@ -33,7 +33,7 @@ AvailableRoutes.propTypes = {
   userDispatch: PropTypes.shape({
     getShipment: PropTypes.func,
     goTo: PropTypes.func
-  }).isRequired,
+  }),
   routeSelected: PropTypes.func
 }
 
@@ -41,7 +41,8 @@ AvailableRoutes.defaultProps = {
   theme: null,
   routes: [],
   user: null,
-  routeSelected: null
+  routeSelected: null,
+  userDispatch: null
 }
 
 export default AvailableRoutes

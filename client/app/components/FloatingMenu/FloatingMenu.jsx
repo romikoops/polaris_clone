@@ -47,10 +47,8 @@ class FloatingMenu extends Component {
       })
     }
   }
-
   render () {
     const { Comp, theme, user } = this.props
-
     const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
     const currentStyle = this.state.expand ? styles.open : styles.closed
 

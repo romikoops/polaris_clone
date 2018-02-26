@@ -95,7 +95,7 @@ export class TruckingPanel extends Component {
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           <p className="flex-none">
-            {truckType === 'chassi' ? 'Chassis Truck' : 'Sidelifter Truck'}
+            {truckType === 'chassis' ? 'Chassis Truck' : 'Sidelifter Truck'}
           </p>
         </div>
 

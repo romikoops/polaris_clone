@@ -29,7 +29,7 @@ export function UserMergedShipHeaders (props) {
 
 UserMergedShipHeaders.propTypes = {
   title: PropTypes.string.isRequired,
-  total: PropTypes.string.isRequired
+  total: PropTypes.number.isRequired
 }
 
 export default UserMergedShipHeaders

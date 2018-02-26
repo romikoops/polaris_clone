@@ -59,7 +59,7 @@ export class MessageShipmentData extends Component {
       width: '100%',
       background:
         theme && theme.colors
-          ? this.dashedGradient(theme.colors.primary, theme.colors.secondary)
+          ? MessageShipmentData.dashedGradient(theme.colors.primary, theme.colors.secondary)
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
@@ -85,7 +85,7 @@ export class MessageShipmentData extends Component {
               </div>
               <div className={` flex ${styles.connection_graphics}`}>
                 <div className="flex-none layout-row layout-align-center-center">
-                  {this.switchIcon(route)}
+                  {MessageShipmentData.switchIcon(route)}
                 </div>
                 <div style={dashedLineStyles} />
               </div>
@@ -153,7 +153,9 @@ export class MessageShipmentData extends Component {
                 </p>
               </div>
             </div>
-            <div className="flex-100 flex-gt-sm-50 layout-wrap layout-row layout-align-space-between-center">
+            <div className="flex-100 flex-gt-sm-50 layout-wrap
+            layout-row layout-align-space-between-center"
+            >
               <div className="flex-100 layout-row layout-align-center">
                 <h4 className={styles.date_title} style={gradientFontStyle}>
                   Shipment Type:
@@ -248,8 +250,8 @@ export class MessageShipmentData extends Component {
 }
 
 MessageShipmentData.propTypes = {
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  name: PropTypes.string,
+  onChange: PropTypes.func,
   theme: PropTypes.theme,
   shipmentData: PropTypes.shipmentData.isRequired,
   closeInfo: PropTypes.func.isRequired,
@@ -258,7 +260,9 @@ MessageShipmentData.propTypes = {
 }
 
 MessageShipmentData.defaultProps = {
-  theme: null
+  theme: null,
+  name: '',
+  onChange: null
 }
 
 export default MessageShipmentData

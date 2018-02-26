@@ -192,10 +192,13 @@ export const lclChargeGlossary = {
 }
 export const chargeGlossary = {
   rate_basis: 'Rate Basis',
+  base_rate: 'Base Rate',
+  base: 'Base',
   rate: 'Rate',
   currency: 'Currency',
   cbm: 'CBM',
   ton: 'Ton',
+  kg: 'Kg',
   min: 'Minimum',
   PER_ITEM: 'Per Item',
   PER_CONTAINER: 'Per Container',

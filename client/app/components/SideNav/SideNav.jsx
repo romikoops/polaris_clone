@@ -21,30 +21,35 @@ class SideNav extends Component {
     }
     this.userLinks = [
       {
+        key: v4(),
         icon: 'fa-tachometer',
         text: 'Dashboard',
         url: '/account/dashboard',
         target: 'dashboard'
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Avail. Routes',
         url: '/chooseroute/chooseroute',
         target: 'chooseRoutes'
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Shipments',
         url: '/account/shipments',
         target: 'shipments'
       },
       {
+        key: v4(),
         icon: 'fa-user',
         text: 'Profile',
         url: '/account/profile',
         target: 'profile'
       },
       {
+        key: v4(),
         icon: 'fa-address-card',
         text: 'Contacts',
         url: '/account/contacts',
@@ -53,6 +58,7 @@ class SideNav extends Component {
     ]
     this.adminLinks = [
       {
+        key: v4(),
         icon: 'fa-tachometer',
         text: 'Dashboard',
         url: '/admin/dashboard',
@@ -60,6 +66,7 @@ class SideNav extends Component {
         tooltip: menuTip.dashboard
       },
       {
+        key: v4(),
         icon: 'fa-ship',
         text: 'Shipments',
         url: '/admin/shipments',
@@ -67,6 +74,7 @@ class SideNav extends Component {
         tooltip: menuTip.shipments
       },
       {
+        key: v4(),
         icon: 'fa-building-o',
         text: 'Hubs',
         url: '/admin/hubs',
@@ -74,6 +82,7 @@ class SideNav extends Component {
         tooltip: menuTip.hubs
       },
       {
+        key: v4(),
         icon: 'fa-area-chart',
         text: 'Pricing',
         url: '/admin/pricing',
@@ -81,6 +90,7 @@ class SideNav extends Component {
         tooltip: menuTip.pricing
       },
       {
+        key: v4(),
         icon: 'fa-list',
         text: 'Schedules',
         url: '/admin/schedules',
@@ -88,6 +98,7 @@ class SideNav extends Component {
         tooltip: menuTip.schedules
       },
       {
+        key: v4(),
         icon: 'fa-truck',
         text: 'Trucking',
         url: '/admin/trucking',
@@ -95,6 +106,7 @@ class SideNav extends Component {
         tooltip: menuTip.trucking
       },
       {
+        key: v4(),
         icon: 'fa-users',
         text: 'Client',
         url: '/admin/clients',
@@ -102,6 +114,7 @@ class SideNav extends Component {
         tooltip: menuTip.clients
       },
       {
+        key: v4(),
         icon: 'fa-map-signs',
         text: 'Routes',
         url: '/admin/routes',
@@ -109,6 +122,7 @@ class SideNav extends Component {
         tooltip: menuTip.routes
       },
       {
+        key: v4(),
         icon: 'fa-magic',
         text: 'Set Up',
         url: '/admin/wizard',
@@ -126,6 +140,7 @@ class SideNav extends Component {
     this.linkTextClass = ''
     this.toggleModal = this.toggleModal.bind(this)
     this.setLinkVisibility = this.setLinkVisibility.bind(this)
+    this.handleClickAction = this.handleClickAction.bind(this)
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.expand) {
@@ -209,11 +224,18 @@ class SideNav extends Component {
     linkVisibility[i] = bool
     this.setState({ linkVisibility })
   }
+  handleClickAction (li, i, isAdmin) {
+    if (!this.state.linkVisibility[i]) return
+    isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
+  }
+
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
   render () {
-    const { theme, user, routes } = this.props
+    const {
+      theme, user, routes, expand
+    } = this.props
     const routeModal = (
       <Modal
         component={
@@ -236,16 +258,16 @@ class SideNav extends Component {
       background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }
     const navLinks = links.map((li, i) => {
-      const tli = li
-      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
       const toolId = v4()
 
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
+        <div
+          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
+          key={li.key}
+          onClick={() => this.handleClickAction(li, i, isAdmin)}
+        >
           <div
             className="flex-100 layout-row layout-align-start-center"
-            data-for={toolId}
-            data-tip={isAdmin ? li.tooltip : ''}
             onMouseLeave={() => this.setLinkVisibility(false, i)}
           >
             <div
@@ -259,12 +281,18 @@ class SideNav extends Component {
                 `flex-none layout-row-layout-align-center-center ${styles.link_text} ` +
                 `${this.state.linkTextClass}`
               }
+              data-for={toolId}
+              data-tip={isAdmin ? li.tooltip : ''}
               style={this.state.linkVisibility[i] ? { opacity: 1 } : {}}
             >
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>
           </div>
-          { isAdmin ? <ReactTooltip className={styles.tooltip} id={toolId} /> : '' }
+          {
+            isAdmin && (expand || this.state.linkVisibility[i])
+              ? <ReactTooltip className={styles.tooltip} id={toolId} />
+              : ''
+          }
         </div>
       )
     })

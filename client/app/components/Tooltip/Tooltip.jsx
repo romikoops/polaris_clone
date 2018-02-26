@@ -17,9 +17,9 @@ export function Tooltip ({
   const id = v4()
 
   return (
-    <div className={`${wrapperClassName}`} >
+    <div className={`${styles.icon_placement} `} >
       <i
-        className={`${clipClass} flex-none fa ${icon}`}
+        className={`${clipClass} fa ${icon}`}
         style={textStyle}
         data-tip={tipText}
         data-for={id}

@@ -107,7 +107,7 @@ export default function getInputs (
       rail: 550,
       ocean: 1000
     }
-    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
+    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
   }
   function chargeableWeightElemJSX (mot) {
     return (

@@ -255,6 +255,18 @@ export const rateBasises = [
   { value: 'PER_TON', label: 'Per ton' },
   { value: 'PERCENTAGE', label: 'Percentage' }
 ]
+export const truckingRateBasises = [
+  { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_CONTAINER', label: 'Per Container' },
+  { value: 'PER_SHIPMENT', label: 'Per Shipment' },
+  { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
+  { value: 'PER_CBM_KG', label: 'Per cbm/kg' },
+  { value: 'PER_CBM', label: 'Per cbm' },
+  { value: 'PER_TON', label: 'Per ton' },
+  { value: 'PER_KG', label: 'Per kg' },
+  { value: 'PER_X_KG', label: 'Per (x) kg´s', base: 10 },
+  { value: 'PERCENTAGE', label: 'Percentage' }
+]
 
 export const lclPricingSchema = {
   data: {

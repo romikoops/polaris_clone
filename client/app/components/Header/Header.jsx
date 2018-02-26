@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
-import { Redirect } from 'react-router'
 import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
@@ -14,13 +13,13 @@ class Header extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      redirect: false,
       showLogin: false,
       isTop: true
     }
     this.goHome = this.goHome.bind(this)
     this.toggleShowLogin = this.toggleShowLogin.bind(this)
     this.toggleShowMessages = this.toggleShowMessages.bind(this)
+    this.checkIsTop = this.checkIsTop.bind(this)
   }
   componentWillMount () {
     if (this.props.loginAttempt && !this.state.showLogin) {
@@ -32,12 +31,7 @@ class Header extends Component {
     if (!messages) {
       messageDispatch.getUserConversations()
     }
-    document.addEventListener('scroll', () => {
-      const isTop = window.pageYOffset < 10
-      if (isTop !== this.state.isTop) {
-        this.setState({ isTop })
-      }
-    })
+    document.addEventListener('scroll', this.checkIsTop)
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.showRegistration) {
@@ -51,9 +45,17 @@ class Header extends Component {
       })
     }
   }
-
+  componentWillUnmount () {
+    document.removeEventListener('scroll', this.checkIsTop)
+  }
+  checkIsTop () {
+    const isTop = window.pageYOffset < 10
+    if (isTop !== this.state.isTop) {
+      this.setState({ isTop })
+    }
+  }
   goHome () {
-    this.setState({ redirect: true })
+    this.props.appDispatch.goTo('/')
   }
   toggleShowLogin () {
     this.setState({
@@ -86,9 +88,6 @@ class Header extends Component {
       }
     ]
 
-    if (this.state.redirect) {
-      return <Redirect push to="/" />
-    }
     const dropDown = (
       <NavDropdown
         dropDownText={dropDownText}
@@ -117,7 +116,7 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-    const textColor = invert ? 'white' : 'black'
+    const textColor = isTop && invert ? 'white' : 'black'
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -196,7 +195,8 @@ Header.propTypes = {
   showRegistration: PropTypes.bool,
   unread: PropTypes.number,
   req: PropTypes.req,
-  scrollable: PropTypes.bool
+  scrollable: PropTypes.bool,
+  appDispatch: PropTypes.func.isRequired
 }
 
 Header.defaultProps = {

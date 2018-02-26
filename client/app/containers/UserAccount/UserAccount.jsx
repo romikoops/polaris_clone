@@ -8,13 +8,13 @@ import {
   UserShipments,
   UserShipmentView,
   UserLocations,
-  UserBilling
+  UserBilling,
+  UserContacts
 } from '../../components/UserAccount'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
 import Header from '../../components/Header/Header'
-import UserContacts from '../../components/UserAccount/UserContacts'
 import Loading from '../../components/Loading/Loading'
 import SideNav from '../../components/SideNav/SideNav'
 import { Footer } from '../../components/Footer/Footer'
@@ -122,12 +122,10 @@ class UserAccount extends Component {
       <div className="layout-row flex-100 hundred">
         { loadingScreen }
         { menu }
-        <Header theme={theme} scrollable />
+        <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
         <div className="layout-row flex layout-wrap layout-align-center">
           <div className={`${defs.content_width} ${defs.spacing_md_bottom} ${styles.top_margin} layout-row flex-none`}>
-
             <div className="layout-row flex-100 ">
-
               <Switch className="flex">
                 <Route
                   exact
