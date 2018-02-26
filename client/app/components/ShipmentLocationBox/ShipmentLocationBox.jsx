@@ -122,6 +122,7 @@ export class ShipmentLocationBox extends Component {
     this.selectedRoute = this.selectedRoute.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
+    this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
     this.updateTruckingOptions = this.updateTruckingOptions.bind(this)
   }
@@ -719,24 +720,29 @@ export class ShipmentLocationBox extends Component {
   handleSwap () {
     const origin = { ...this.state.destination }
     const destination = { ...this.state.origin }
-    const autoText = { ...this.state.autoText }
-    // const pre = this.props.has_pre_carriage
-    // const on = this.props.has_on_carriage
-    let autoTextDest = this.state.autoTextDest ? this.state.autoTextDest : ''
-    let autoTextOrigin = this.state.autoTextOrigin ? this.state.autoTextOrigin : ''
-    // if ((pre && !on) || (!pre && on)) {
-    //   () => this.changeAddressFormVisibility('origin');
-    //   () => this.changeAddressFormVisibility('destination')
-    // }
-    autoText.destination = destination.hub_name
-    autoTextDest = this.state.autoTextOrigin
+    const { autoText } = this.state
+    const autoTextOrigin = autoText.origin
+    const autoTextDestination = autoText.destination
+    autoText.origin = autoTextDestination
+    autoText.destination = autoTextOrigin
 
-    autoText.origin = origin.hub_name
-    autoTextOrigin = this.state.autoTextDest
+    this.handleTrucking({
+      target: {
+        name: 'has_on_carriage',
+        checked: this.props.has_pre_carriage
+      }
+    })
+    this.handleTrucking({
+      target: {
+        name: 'has_pre_carriage',
+        checked: this.props.has_on_carriage
+      }
+    })
 
     this.setState({
-      origin, destination, autoText, autoTextOrigin, autoTextDest
+      origin, destination, autoText
     })
+
     this.setDestHub(this.state.oSelect)
     this.setOriginHub(this.state.dSelect)
   }
