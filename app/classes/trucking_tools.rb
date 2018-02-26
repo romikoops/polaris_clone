@@ -32,6 +32,75 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
+  def retrieve_trucking_hub(nexus, load_type, tenant_id)
+    trucking_hub_id = "#{nexus.id}_#{load_type}_#{tenant_id}"
+    resp = get_item("truckingHubs", trucking_hub_id)
+  end
+  def retrieve_trucking_query(trucking_hub, destination)
+    case trucking_hub["modifier"]
+      when 'zipcode'
+        zip_int = destination.get_zip_code.to_i
+        query = { "$and" => [
+                  {"$lte" => ["zipcode.lower_zip", zip_int]},
+                  {"$gte" => [ "zipcode.upper_zip", zip_int ]} ,
+                  {'trucking_hub_id' => {"$eq" => trucking_hub["_id"]}} 
+                ] 
+              }
+        resp = get_items_query('truckingQueries', query).to_a
+        if resp
+          return resp.first
+        end
+      end
+  end
+  def retrieve_trucking_pricing(trucking_query, cargo, delivery_type, direction)
+    case trucking_query["modifier"]
+      when 'weight'
+        weight = cargo.payload_in_kg
+        query = { "$and" => [
+                  {"$lte" => ["zipcode.min_weight", weight]},
+                  {"$gte" => [ "zipcode.max_weight", weight ]} ,
+                  {"$eq" => ['trucking_hub_id', trucking_query["_id"]]},
+                  {"$eq" => ["direction", direction] } 
+                ] 
+              }
+        resp = get_items_query('truckingPricings', query).to_a
+        if resp
+          return resp.first
+        end
+      end
+  end
+  def calculate_trucking_price(pricing, cargo, direction)
+    fees = {}
+    pricing.fees.each do |k, fee|
+      result = fee_calculator(fee, cargo)
+      fees[result["key"]] = result
+    end
+    fees
+  end
+  def fee_calculator(fee, cargo)
+    case fee["rate_basis"]
+      when 'PER_KG'
+        return {currency: fee["currency"], value: cargo.payload_in_kg * fee["value"], key: fee["key"]}
+      when 'PER_X_KG'
+        return {currency: fee["currency"], value: (cargo.payload_in_kg / fee["base"]) * fee["value"], key: fee["key"]}
+      when 'PER_X_TON'
+        return {currency: fee["currency"], value: (cargo.payload_in_tons / fee["base"]) * fee["value"], key: fee["key"]}
+      when 'PER_SHIPMENT'
+        return {currency: fee["currency"], value: fee["value"], key: fee["key"]}
+      when 'PER_ITEM'
+        return {currency: fee["currency"], value: fee["value"], key: fee["key"]}
+      when 'PER_CBM_TON'
+        cbm_value = cargo.volume * fee["cbm"]
+        ton_value = cargo.payload_in_tons * fee["ton"]
+        return_value = ton_value > cbm_value ? ton_value : cbm_value
+        return {currency: fee["currency"], value: return_value, key: fee["key"]}
+      when 'PER_CBM_KG'
+        cbm_value = cargo.volume * fee["cbm"]
+        kg_value = cargo.payload_in_kg * fee["kg"]
+        return_value = kg_value > cbm_value ? kg_value : cbm_value
+        return {currency: fee["currency"], value: return_value, key: fee["key"]}
+      end
+  end
   def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
       { "$match" => { "_id" => table_key }},

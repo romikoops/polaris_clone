@@ -57,7 +57,7 @@ class ShipmentsController < ApplicationController
   end
 
   def create
-    resp = new_shipment(params[:loadType].underscore)
+    resp = new_shipment(params[:details])
     response_handler(resp)
   end
 

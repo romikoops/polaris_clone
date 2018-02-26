@@ -66,6 +66,7 @@ module ExcelTools
             }
           }
           tmp[:_id] = SecureRandom.uuid
+          tmp[:trucing_hub_id] = trucking_table_id
           tmp[:trucking_pricing_id] = ntp[:_id]
           truckingPricings.push(tmp)
           # byebug
