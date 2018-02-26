@@ -67,7 +67,7 @@ class Landing extends Component {
             initialCompName="RegistrationPage"
           />
         }
-        width="40vw"
+        width="80vw"
         verticalPadding="60px"
         horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}
