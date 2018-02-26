@@ -14,6 +14,8 @@ export const appConstants = {
 }
 
 export const tooltips = {
+  customs_credit:
+    'Customs credit is a scheme which makes it easier to pay customs duties and taxes. Your payment deadline will be deferred because customs duties and taxes which accrue during a month will fall due for payment on the 18th of the following month. Without customs credit, you will have to pay the taxes at the time of customs clearance.',
   pickup_location:
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',
@@ -57,7 +59,11 @@ export const tooltips = {
   cargo_notes:
     'Information is needed on the amount of packages that are being shipped, and what kind of packages are being dealt with. Include a description of the goods. Alternatively, if you have a packing list, you can upload it below and leave this field blank.',
   shipment_mots:
-    'You will receive results for all available modes of transport. Simply select which applies best to your shipment'
+    'You will receive results for all available modes of transport. Simply select which applies best to your shipment',
+  side_lifter:
+    'If you require a side-lifter (SIMA), where the container is lifted down on the ground for loading/unloading, an additional charge will be applied on top of the chassi price. Amount to be added depending on Port of loading/discharge and final stuffing/delivery location.',
+  chassis:
+    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.'
 }
 
 // Tool tips menu admin

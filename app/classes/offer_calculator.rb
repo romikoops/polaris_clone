@@ -11,10 +11,11 @@ class OfferCalculator
     @origin_hubs      = []
     @destination_hubs = []
     @itineraries      = []
-    @trips         = {}
+    @trips            = {}
 
-    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage] ? true : false
-    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]  ? true : false
+    @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
+    @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
+    @shipment.trucking = trucking_params(params).to_h
 
     @shipment.incoterm = params[:shipment][:incoterm]
     
@@ -52,11 +53,18 @@ class OfferCalculator
   def calc_offer!
     determine_itinerary!
     # determine_route! 
-    # determine_hubs! 
-       
+    determine_hubs!
+
+    # TBD - Trucking
+    # You have access to the following property in shipment:
+    # @shipment.trucking #=> {
+    #   "on_carriage"  => { "truck_type" => "chassis"},
+    #   "pre_carriage" => { "truck_type" => "side_lifter"}
+    # }
     determine_longest_trucking_time!
-    determine_layovers!  
-    # determine_schedules! 
+    determine_layovers!
+    
+    # determine_schedules!
     # add_schedules_charges!
     add_trip_charges! 
     convert_currencies!
@@ -105,6 +113,7 @@ class OfferCalculator
           @furthest_hub_from_origin.lat_lng_string,
           @shipment.planned_pickup_date.to_i
         )
+        
         driving_time = google_directions.driving_time_in_seconds
         @longest_trucking_time = google_directions.driving_time_in_seconds_for_trucks(driving_time)
       else
@@ -134,7 +143,6 @@ class OfferCalculator
       layovers = origin_layovers + destination_layovers
       schedule_obj[itin.id] = layovers.group_by(&:trip_id)
     end
-    # s
     @trips = schedule_obj
   end
 
@@ -181,15 +189,18 @@ class OfferCalculator
       charges[sched_key][:trucking_pre] = determine_trucking_options(
         @shipment.origin, 
         trip[0].stop.hub,
-        'origin'
+        'origin',
+        'export'
       )
+      
     end
     
     if @shipment.has_on_carriage
       charges[sched_key][:trucking_on] = determine_trucking_options(
         @shipment.destination, 
         trip[1].stop.hub,
-        'destination'
+        'destination',
+        'import'
       )
     end
   end
@@ -245,20 +256,21 @@ class OfferCalculator
     "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
   end
 
-  def determine_trucking_options(origin, hub, target)
+  def determine_trucking_options(origin, hub, target, direction)
     google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
+    truck_type = direction == 'export' ? @shipment.trucking["pre_carriage"] : @shipment.trucking["on_carriage"]
+    # price_results = @cargo_units.map do |cargo_unit|
+    #   calc_trucking_price(origin, cargo_unit, km, hub, target, @shipment.load_type, direction, @shipment.trucking)
+    # end
+    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, @shipment.trucking)
 
-    price_results = @cargo_units.map do |cargo_unit|
-      calc_trucking_price(origin, cargo_unit, km, hub, @mongo, target)
-    end
-
-    trucking_total = { value: 0, currency: "" }
-    price_results.each do |pr|
-      trucking_total[:value] += pr[:value]
-      trucking_total[:currency] = pr[:currency]
-    end
-    trucking_total     
+    # trucking_total = { value: 0, currency: "" }
+    # price_results.each do |pr|
+    #   trucking_total[:value] += pr[:value]
+    #   trucking_total[:currency] = pr[:currency]
+    # end
+    # trucking_total     
   end
   
   def convert_currencies!
@@ -280,6 +292,7 @@ class OfferCalculator
       else
         raw_totals[svalue["trucking_on"]["currency"]] += svalue["trucking_on"]["value"].to_f
       end
+      
       if !raw_totals[svalue["trucking_pre"]["currency"]]
         raw_totals[svalue["trucking_pre"]["currency"]] = svalue["trucking_pre"]["value"].to_f
       else
@@ -306,5 +319,13 @@ class OfferCalculator
     Schedule.where(mode_of_transport: mode_of_transport, from: stop1.hub_name, to: stop2.hub_name)
       .where("eta > ?", @current_eta_in_search)
       .order(eta: :asc)
+  end
+
+  private
+
+  def trucking_params(params)
+    params.require(:shipment).require(:trucking).permit(
+      on_carriage: :truck_type, pre_carriage: :truck_type
+    )
   end
 end

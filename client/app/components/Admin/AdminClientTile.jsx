@@ -153,10 +153,10 @@ export class AdminClientTile extends Component {
 AdminClientTile.propTypes = {
   theme: PropTypes.theme,
   client: PropTypes.client.isRequired,
-  navFn: PropTypes.func.isRequired,
-  deleteFn: PropTypes.func.isRequired,
+  navFn: PropTypes.func,
+  deleteFn: PropTypes.func,
   handleClick: PropTypes.func,
-  target: PropTypes.string.isRequired,
+  target: PropTypes.string,
   deleteable: PropTypes.bool,
   tooltip: PropTypes.string,
   showTooltip: PropTypes.bool
@@ -166,7 +166,10 @@ AdminClientTile.defaultProps = {
   deleteable: false,
   handleClick: null,
   tooltip: '',
-  showTooltip: false
+  showTooltip: false,
+  navFn: null,
+  deleteFn: null,
+  target: ''
 }
 
 export default AdminClientTile

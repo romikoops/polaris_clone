@@ -3,9 +3,10 @@ module ShippingTools
   include MongoTools
   include NotificationTools
 
-  def new_shipment(load_type)
+  def new_shipment(obj)
     tenant = current_user.tenant
-
+    load_type = obj["loadType"].underscore
+    direction = obj["direction"]
     shipment = Shipment.create(
       shipper_id: current_user.id, 
       status: "booking_process_started", 
@@ -22,25 +23,38 @@ module ShippingTools
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
     origins = []
     destinations = []
+    available_trucking_options = {}
     itineraries.map! do |itinerary|
       origins << { 
-        value: Location.find(itinerary["origin_nexus_id"]), 
+        value: origin = Location.find(itinerary["origin_nexus_id"]), 
         label: itinerary["origin_nexus"] 
       }
       destinations << { 
-        value: Location.find(itinerary["destination_nexus_id"]), 
+        value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
+      # byebug
+      on_carriage, pre_carriage = *[origin, destination].map do |nexus|
+        nexus.trucking_availability(shipment.tenant_id)[shipment.load_type]
+      end
+      available_trucking_options[:on_carriage]  ||= on_carriage
+      available_trucking_options[:pre_carriage] ||= pre_carriage
 
       itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
       itinerary
     end
+
+    # shipment.has_on_carriage, shipment.has_on_carriage = *[:origin, :destination].map do |target|
+    #   shipment[target]trucking_availability(shipment.tenant_id)[shipment.load_type.to_sym]
+    # end
+
     return {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
-      cargoItemTypes: tenant.cargo_item_types
-    }
+      cargo_item_types: tenant.cargo_item_types,
+      available_trucking_options: available_trucking_options
+    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end 
 
   def get_shipment_offer(session, params, load_type)
@@ -80,7 +94,6 @@ module ShippingTools
     hsCodes = shipment_data[:hsCodes].as_json
     hsTexts = shipment_data[:hsTexts].as_json
     shipment.assign_attributes(
-      
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
@@ -228,6 +241,7 @@ module ShippingTools
     end
     shipment = Shipment.find(params[:shipment_id])
     shipment.shipper_id = params[:shipment][:shipper_id]
+    shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
     # byebug

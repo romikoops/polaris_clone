@@ -15,13 +15,145 @@ class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      expanded: true,
-      showModal: false
+      showModal: false,
+      linkTextClass: '',
+      linkVisibility: []
     }
+    this.userLinks = [
+      {
+        key: v4(),
+        icon: 'fa-tachometer',
+        text: 'Dashboard',
+        url: '/account/dashboard',
+        target: 'dashboard'
+      },
+      {
+        key: v4(),
+        icon: 'fa-ship',
+        text: 'Avail. Routes',
+        url: '/chooseroute/chooseroute',
+        target: 'chooseRoutes'
+      },
+      {
+        key: v4(),
+        icon: 'fa-ship',
+        text: 'Shipments',
+        url: '/account/shipments',
+        target: 'shipments'
+      },
+      {
+        key: v4(),
+        icon: 'fa-user',
+        text: 'Profile',
+        url: '/account/profile',
+        target: 'profile'
+      },
+      {
+        key: v4(),
+        icon: 'fa-address-card',
+        text: 'Contacts',
+        url: '/account/contacts',
+        target: 'contacts'
+      }
+    ]
+    this.adminLinks = [
+      {
+        key: v4(),
+        icon: 'fa-tachometer',
+        text: 'Dashboard',
+        url: '/admin/dashboard',
+        target: 'dashboard',
+        tooltip: menuTip.dashboard
+      },
+      {
+        key: v4(),
+        icon: 'fa-ship',
+        text: 'Shipments',
+        url: '/admin/shipments',
+        target: 'shipments',
+        tooltip: menuTip.shipments
+      },
+      {
+        key: v4(),
+        icon: 'fa-building-o',
+        text: 'Hubs',
+        url: '/admin/hubs',
+        target: 'hubs',
+        tooltip: menuTip.hubs
+      },
+      {
+        key: v4(),
+        icon: 'fa-area-chart',
+        text: 'Pricing',
+        url: '/admin/pricing',
+        target: 'pricing',
+        tooltip: menuTip.pricing
+      },
+      {
+        key: v4(),
+        icon: 'fa-list',
+        text: 'Schedules',
+        url: '/admin/schedules',
+        target: 'schedules',
+        tooltip: menuTip.schedules
+      },
+      {
+        key: v4(),
+        icon: 'fa-truck',
+        text: 'Trucking',
+        url: '/admin/trucking',
+        target: 'trucking',
+        tooltip: menuTip.trucking
+      },
+      {
+        key: v4(),
+        icon: 'fa-users',
+        text: 'Client',
+        url: '/admin/clients',
+        target: 'clients',
+        tooltip: menuTip.clients
+      },
+      {
+        key: v4(),
+        icon: 'fa-map-signs',
+        text: 'Routes',
+        url: '/admin/routes',
+        target: 'routes',
+        tooltip: menuTip.routes
+      },
+      {
+        key: v4(),
+        icon: 'fa-magic',
+        text: 'Set Up',
+        url: '/admin/wizard',
+        target: 'wizard',
+        tooltip: menuTip.setup
+      }
+    ]
+
+    const { user } = props
+    const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
+    const links = isAdmin ? this.adminLinks : this.userLinks
+
+    links.forEach((link, i) => { this.state.linkVisibility[i] = false })
+
+    this.linkTextClass = ''
     this.toggleModal = this.toggleModal.bind(this)
+    this.setLinkVisibility = this.setLinkVisibility.bind(this)
+    this.handleClickAction = this.handleClickAction.bind(this)
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.expand) {
+      this.setState({ linkTextClass: '' })
+    } else {
+      setTimeout(() => {
+        if (nextProps.expand) {
+          this.setState({ linkTextClass: styles.collapsed })
+        }
+      }, 200)
+    }
   }
   setAdminUrl (target) {
-    console.log(target)
     const { adminDispatch } = this.props
     switch (target) {
       case 'hubs':
@@ -89,12 +221,23 @@ class SideNav extends Component {
         break
     }
   }
+  setLinkVisibility (bool, i) {
+    const { linkVisibility } = this.state
+    linkVisibility[i] = bool
+    this.setState({ linkVisibility })
+  }
+  handleClickAction (li, i, isAdmin) {
+    if (!this.state.linkVisibility[i]) return
+    isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
+  }
+
   toggleModal () {
     this.setState({ showModal: !this.state.showModal })
   }
   render () {
-    const { expanded } = this.state
-    const { theme, user, routes } = this.props
+    const {
+      theme, user, routes, expand
+    } = this.props
     const routeModal = (
       <Modal
         component={
@@ -111,131 +254,51 @@ class SideNav extends Component {
         parentToggle={this.toggleModal}
       />
     )
-    const userLinks = [
-      {
-        icon: 'fa-tachometer',
-        text: 'Dashboard',
-        url: '/account/dashboard',
-        target: 'dashboard'
-      },
-      {
-        icon: 'fa-ship',
-        text: 'Avail. Routes',
-        url: '/chooseroute/chooseroute',
-        target: 'chooseRoutes'
-      },
-      {
-        icon: 'fa-ship',
-        text: 'Shipments',
-        url: '/account/shipments',
-        target: 'shipments'
-      },
-      {
-        icon: 'fa-user',
-        text: 'Profile',
-        url: '/account/profile',
-        target: 'profile'
-      },
-      {
-        icon: 'fa-address-card',
-        text: 'Contacts',
-        url: '/account/contacts',
-        target: 'contacts'
-      }
-    ]
-    const adminLinks = [
-      {
-        icon: 'fa-tachometer',
-        text: 'Dashboard',
-        url: '/admin/dashboard',
-        target: 'dashboard',
-        tooltip: menuTip.dashboard
-      },
-      {
-        icon: 'fa-ship',
-        text: 'Shipments',
-        url: '/admin/shipments',
-        target: 'shipments',
-        tooltip: menuTip.shipments
-      },
-      {
-        icon: 'fa-building-o',
-        text: 'Hubs',
-        url: '/admin/hubs',
-        target: 'hubs',
-        tooltip: menuTip.hubs
-      },
-      {
-        icon: 'fa-area-chart',
-        text: 'Pricing',
-        url: '/admin/pricing',
-        target: 'pricing',
-        tooltip: menuTip.pricing
-      },
-      {
-        icon: 'fa-list',
-        text: 'Schedules',
-        url: '/admin/schedules',
-        target: 'schedules',
-        tooltip: menuTip.schedules
-      },
-      {
-        icon: 'fa-truck',
-        text: 'Trucking',
-        url: '/admin/trucking',
-        target: 'trucking',
-        tooltip: menuTip.trucking
-      },
-      {
-        icon: 'fa-users',
-        text: 'Client',
-        url: '/admin/clients',
-        target: 'clients',
-        tooltip: menuTip.clients
-      },
-      {
-        icon: 'fa-map-signs',
-        text: 'Routes',
-        url: '/admin/routes',
-        target: 'routes',
-        tooltip: menuTip.routes
-      },
-      {
-        icon: 'fa-magic',
-        text: 'Set Up',
-        url: '/admin/wizard',
-        target: 'wizard',
-        tooltip: menuTip.setup
-      }
-    ]
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
-    const links = isAdmin ? adminLinks : userLinks
-    const expandNavClass = expanded ? styles.expanded : styles.collapsed
-    const expandLinkClass = expanded ? styles.expanded_link : styles.collapsed_link
-    const expandIconClass = expanded ? styles.expanded_icon : styles.collapsed_icon
+    const links = isAdmin ? this.adminLinks : this.userLinks
     const textStyle = {
       background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
     }
-    const navLinks = links.map((li) => {
-      const tli = li
-      tli.action = isAdmin ? () => this.setAdminUrl(li.target) : () => this.setUserUrl(li.target)
+    const navLinks = links.map((li, i) => {
       const toolId = v4()
       return (
-        <div className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`} onClick={tli.action}>
-          <div className="flex-100 layout-row layout-align-start-center" data-for={toolId} data-tip={isAdmin ? li.tooltip : ''}>
-            <div className={`flex-none layout-row-layout-align-center-center ${styles.icon_box} ${expandIconClass}`}>
+        <div
+          className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
+          key={li.key}
+          onClick={() => this.handleClickAction(li, i, isAdmin)}
+        >
+          <div
+            className="flex-100 layout-row layout-align-start-center"
+            onMouseLeave={() => this.setLinkVisibility(false, i)}
+          >
+            <div
+              className={`flex-none layout-row-layout-align-center-center ${styles.icon_box}`}
+              onMouseEnter={() => this.setLinkVisibility(true, i)}
+            >
               <i className={`fa flex-none clip pointy ${li.icon}`} style={textStyle} />
             </div>
-            <div className={`flex-none layout-row-layout-align-center-center ${styles.link_text} ${expandLinkClass}`}>
+            <div
+              className={
+                `flex-none layout-row-layout-align-center-center ${styles.link_text} ` +
+                `${this.state.linkTextClass}`
+              }
+              data-for={toolId}
+              data-tip={isAdmin ? li.tooltip : ''}
+              style={this.state.linkVisibility[i] ? { opacity: 1, visibility: 'visible' } : {}}
+            >
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>
           </div>
-          { isAdmin ? <ReactTooltip className={styles.tooltip} id={toolId} /> : '' }
+          {
+            isAdmin && (expand || this.state.linkVisibility[i])
+              ? <ReactTooltip className={styles.tooltip} id={toolId} />
+              : ''
+          }
         </div>
       )
     })
     return (
-      <div className={`flex-none layout-column layout-align-start-start layout-wrap ${styles.side_nav} ${expandNavClass}`}>
+      <div className={`flex-100 layout-column layout-align-start-start layout-wrap ${styles.side_nav}`}>
         {this.state.showModal ? routeModal : ''}
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
         <div className="flex layout-row layout-align-center-start layout-wrap">
@@ -268,12 +331,14 @@ SideNav.propTypes = {
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
   }).isRequired,
-  routes: PropTypes.objectOf(PropTypes.any)
+  routes: PropTypes.objectOf(PropTypes.any),
+  expand: PropTypes.bool
 }
 
 SideNav.defaultProps = {
   theme: null,
-  routes: null
+  routes: null,
+  expand: false
 }
 
 function mapStateToProps (state) {

@@ -51,7 +51,10 @@
   .select_100{
     width: 100%;
   }
-  .input_label {
+  .select {
+    width: 97%;
+  }
+  p.input_label {
     letter-spacing: 1px;
     margin: 30px 0 5px 0;
   }
@@ -71,6 +74,15 @@
     transition: all 0.3s ease;
     &:hover {
       opacity: 1;
+    }
+  }
+  .chargeable_weight {
+    padding-left: 50px;
+    .chargeable_weight_values {
+      height: 36px;
+    }
+    p.chargeable_weight_value {
+      margin: 0 0 0 5px;
     }
   }
 }

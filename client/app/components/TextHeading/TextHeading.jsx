@@ -17,7 +17,7 @@ export class TextHeading extends Component {
     const styling = !color && theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color }
-    const generalStyle = `${styles.text_style} flex-none clip`
+    const generalStyle = `${styles.text_style} flex-none ${!color ? 'clip' : ''}`
     if (size) {
       switch (size) {
         case 1:

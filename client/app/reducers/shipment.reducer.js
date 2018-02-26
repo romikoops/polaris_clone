@@ -173,7 +173,9 @@ export default function shipment (state = {}, action) {
       return {
         ...state,
         response: {
+          ...state.response,
           stage3: {
+            ...state.response.stage3,
             documents: docs
           }
         },

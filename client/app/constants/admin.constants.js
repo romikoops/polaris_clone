@@ -252,7 +252,20 @@ export const rateBasises = [
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
   { value: 'PER_CBM', label: 'Per cbm' },
-  { value: 'PER_TON', label: 'Per ton' }
+  { value: 'PER_TON', label: 'Per ton' },
+  { value: 'PERCENTAGE', label: 'Percentage' }
+]
+export const truckingRateBasises = [
+  { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_CONTAINER', label: 'Per Container' },
+  { value: 'PER_SHIPMENT', label: 'Per Shipment' },
+  { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
+  { value: 'PER_CBM_KG', label: 'Per cbm/kg' },
+  { value: 'PER_CBM', label: 'Per cbm' },
+  { value: 'PER_TON', label: 'Per ton' },
+  { value: 'PER_KG', label: 'Per kg' },
+  { value: 'PER_X_KG', label: 'Per (x) kg´s', base: 10 },
+  { value: 'PERCENTAGE', label: 'Percentage' }
 ]
 
 export const lclPricingSchema = {
@@ -432,19 +445,59 @@ export const managerRoles = [
 ]
 
 export const truckingFees = [
-  { label: 'Fuel Surcharge', key: 'FSC', rate_basis: 'PERCENTAGE' },
   {
-    label: 'Loading/Unloading Time', key: 'ULT', rate_basis: 'TIME', step_in_minutes: 30
+    label: 'Fuel Surcharge',
+    key: 'FSC',
+    rate_basis: 'PERCENTAGE'
   },
-  { label: 'VAT', key: 'VAT', rate_basis: 'PERCENTAGE' },
-  { label: 'Congestion Charge', key: 'CCC', rate_basis: 'PER_CARGO_ITEM' },
-  { label: 'Delivery Fee', key: 'DLF', rate_basis: 'PER_SHIPMENT' },
-  { label: 'Pickup Fee', key: 'PUF', rate_basis: 'PER_SHIPMENT' },
   {
-    label: 'Over Max Rate', key: 'OMR', rate_basis: 'PER_KM', base: 10
+    label: 'Loading/Unloading Time',
+    key: 'ULT',
+    rate_basis: 'TIME',
+    step_in_minutes: 30,
+    currency: 'EUR'
   },
-  { label: 'Per CMB Rate', key: 'PCR', rate_basis: 'PER_CBM' },
   {
-    label: 'Waiting Fee', key: 'PWF', rate_basis: 'TIME', step_in_minutes: 30
+    label: 'VAT',
+    key: 'VAT',
+    rate_basis: 'PERCENTAGE'
+  },
+  {
+    label: 'Congestion Charge',
+    key: 'CCC',
+    rate_basis: 'PER_CARGO_ITEM',
+    currency: 'EUR'
+  },
+  {
+    label: 'Delivery Fee',
+    key: 'DLF',
+    rate_basis: 'PER_SHIPMENT',
+    currency: 'EUR'
+  },
+  {
+    label: 'Pickup Fee',
+    key: 'PUF',
+    rate_basis: 'PER_SHIPMENT',
+    currency: 'EUR'
+  },
+  {
+    label: 'Over Max Rate',
+    key: 'OMR',
+    rate_basis: 'PER_KM',
+    base: 10,
+    currency: 'EUR'
+  },
+  {
+    label: 'Per CMB Rate',
+    key: 'PCR',
+    rate_basis: 'PER_CBM',
+    currency: 'EUR'
+  },
+  {
+    label: 'Waiting Fee',
+    key: 'PWF',
+    rate_basis: 'TIME',
+    step_in_minutes: 30,
+    currency: 'EUR'
   }
 ]

@@ -86,14 +86,13 @@ class Admin extends Component {
       })
     }
     const loadingScreen = loading ? <Loading theme={theme} /> : ''
-    const nav = (<SideNav theme={theme} user={user} />)
-    const menu = <FloatingMenu Comp={nav} theme={theme} />
-    // ;
+    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
 
-        <Header theme={theme} menu={menu} showMenu scrollable />
-        {loadingScreen}
+        { loadingScreen }
+        { menu }
+        <Header theme={theme} scrollable />
         <div className={`${defs.content_width} ${styles.top_margin} flex-none layout-row layout-wrap layout-align-start-start hundred`}>
           <div className="flex-100 layout-row layout-wrap layout-align-center-center">
             <Switch className="flex">

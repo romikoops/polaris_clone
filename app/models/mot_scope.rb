@@ -8,20 +8,16 @@ class MotScope < ApplicationRecord
 		end
 	end
 
-	def self.given_attribute_names
-		attribute_names - %w(id created_at updated_at)
-	end
-
 	def is_contained_in?(domain_scope)
-		MotScope.given_attribute_names.all? { |attribute| 
+		MotScope.given_attribute_names.all? do |attribute| 
 			domain_scope[attribute] ? true : !self[attribute]  
-		}
+		end
 	end
 
 	def intercepts?(other_scope)
-		MotScope.given_attribute_names.any? { |attribute| 
+		MotScope.given_attribute_names.any? do |attribute| 
 			other_scope[attribute] == self[attribute] && self[attribute] 
-		}
+		end
 	end
 
 	def contained_scopes
