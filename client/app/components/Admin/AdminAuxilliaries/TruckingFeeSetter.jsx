@@ -48,8 +48,6 @@ export class TruckingFeeSetter extends Component {
   }
   setFees () {
     const { variableFees, globalFees } = this.state
-    // eslint-disable-next-line no-debugger
-    debugger
     this.props.setFees({
       variableFees,
       globalFees
@@ -258,15 +256,18 @@ export class TruckingFeeSetter extends Component {
           }
         })
         return (
-          <div key={key} className="flex-50 layout-row layout-align-none-center layout-wrap">
+          <div
+            key={key}
+            className={`flex-50 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell_row
+            }`}
+          >
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.price_subheader
               }`}
             >
-              <p className="flex-none">
-                {key} - {globalFees[key].label}
-              </p>
+              <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
                 onClick={() => this.deleteFee(key)}
@@ -349,9 +350,7 @@ export class TruckingFeeSetter extends Component {
                 styles.price_subheader
               }`}
             >
-              <p className="flex-none">
-                {key} - {variableFees[key].label}
-              </p>
+              <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
                 onClick={() => this.deleteFee(key)}
@@ -382,7 +381,7 @@ export class TruckingFeeSetter extends Component {
           <div className="flex-100 layout-row layout-align-center-center">
             <div className="flex-50 layout-row layout-align-center-center">
               <div
-                className={`flex-none layout-row layout-align-center-center ${
+                className={`flex-none layout-row layout-align-center-center pointy ${
                   styles.add_price_button
                 }`}
                 onClick={() => this.addFee(tfk, true)}
@@ -392,7 +391,7 @@ export class TruckingFeeSetter extends Component {
             </div>
             <div className="flex-50 layout-row layout-align-center-center">
               <div
-                className={`flex-none layout-row layout-align-center-center ${
+                className={`flex-none layout-row layout-align-center-center pointy ${
                   styles.add_price_button
                 }`}
                 onClick={() => this.addFee(tfk, false)}
@@ -421,14 +420,16 @@ export class TruckingFeeSetter extends Component {
           </div>
           {variablePanel}
         </div>
-        <div className="flex-33 layout-row layout-align-center-center">
-          <RoundButton
-            theme={theme}
-            size="small"
-            text="Save Fees"
-            iconClass="fa-plus-square-o"
-            handleNext={this.setFees}
-          />
+        <div className="flex-100 layout-row layout-wrap layout-align-end-center button_padding">
+          <div className="flex-33 layout-row layout-align-center-center">
+            <RoundButton
+              theme={theme}
+              size="small"
+              text="Save Fees"
+              iconClass="fa-plus-square-o"
+              handleNext={this.setFees}
+            />
+          </div>
         </div>
       </div>
     )

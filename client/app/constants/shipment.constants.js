@@ -204,7 +204,16 @@ export const chargeGlossary = {
   PER_CONTAINER: 'Per Container',
   PER_SHIPMENT: 'Per Shipment',
   PER_CBM_TON: 'Per cbm/ton',
-  PER_CBM: 'Per cbm'
+  PER_CBM: 'Per cbm',
+  FSC: 'Fuel Surcharge',
+  ULT: 'Loading/Unloading Time',
+  VAT: 'VAT',
+  CCC: 'Congestion Charge',
+  DLF: 'Delivery Fee',
+  PUF: 'Pickup Fee',
+  OMR: 'Over Max Rate',
+  PCR: 'Per CMB Rate',
+  PWF: 'Waiting Fee'
 }
 
 export const incoterms = [

@@ -21,8 +21,6 @@ export class AdminRoutesIndex extends Component {
       theme, viewItinerary, hubs, itineraries, adminDispatch
     } = this.props
     if (!itineraries) {
-      // eslint-disable-next-line no-debugger
-      debugger
       return ''
     }
     const hubUrl = '/admin/itineraries/process_csv'
