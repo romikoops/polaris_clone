@@ -210,7 +210,7 @@ module ExcelTools
           truckingPricings.push(tmp)
         end
         truckingQueries << ntp
-        new_trucking_location = Location.from_short_name("#{new_pricing[:city]} ,#{new_pricing[:province]}", 'trucking_option')
+        new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
         new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city][:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
         hubs.each do |hub|
           HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)

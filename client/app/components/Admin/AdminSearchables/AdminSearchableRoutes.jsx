@@ -111,29 +111,38 @@ export class AdminSearchableRoutes extends Component {
         return ''
       })
     }
-    const viewType = (itinerariesArr.length > 3) ? (
-      <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-        <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
-          {itinerariesArr}
+    const viewType =
+      itinerariesArr.length > 3 ? (
+        <div className="layout-row flex-100 layout-align-start-center ">
+          <div className="layout-row flex-none layout-align-start-center layout-wrap">
+            {itinerariesArr}
+          </div>
         </div>
-      </div>
-    ) : (
-      <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-none layout-align-start-center layout-wrap">
-          {itinerariesArr}
+      ) : (
+        <div className="layout-row flex-100 layout-align-start-center ">
+          <div className="layout-row flex-none layout-align-start-center layout-wrap">
+            {itinerariesArr}
+          </div>
         </div>
-      </div>
-    )
+      )
     return (
       <div className={`layout-row flex-100 layout-wrap layout-align-start ${styles.searchable}`}>
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`}>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${
+            styles.searchable_header
+          }`}
+        >
           <div className="flex-60 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-none layout-row layout-align-start-center" >
-                <div className="flex-none" >
+              <div className="flex-none layout-row layout-align-start-center">
+                <div className="flex-none">
                   <TextHeading theme={theme} size={1} text="Routes" />
                 </div>
-                { icon && showTooltip ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+                {icon && showTooltip ? (
+                  <Tooltip theme={theme} icon={icon} text={tooltip} toolText />
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>
@@ -151,10 +160,7 @@ export class AdminSearchableRoutes extends Component {
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div
-              className="flex-none layout-row layout-align-center-center"
-              onClick={this.seeAll}
-            >
+            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
               <p className="flex-none">See all</p>
             </div>
           </div>
