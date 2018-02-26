@@ -374,6 +374,9 @@ export class ShipmentLocationBox extends Component {
               checked: false
             }
           })
+          this.setState({
+            autoText: { [target]: '' }
+          })
         }
 
         this.setState({
@@ -654,7 +657,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({ [target]: tmpAddress })
     this.props.setTargetAddress(target, tmpAddress)
     this.setState({
-      autoText: { [target]: place.name }
+      autoText: { [target]: place.formatted_address }
     })
   }
   resetAuto (target) {
@@ -753,7 +756,6 @@ export class ShipmentLocationBox extends Component {
 
     if (availableDestinations) destinationOptions = availableDestinations
     if (availableOrigins) originOptions = availableOrigins
-    console.log(originOptions)
 
     const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
     const originHubSelect = (
