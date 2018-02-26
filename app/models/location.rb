@@ -102,7 +102,7 @@ class Location < ApplicationRecord
     location = Location.new(geocoded_address: user_input)
     location.geocode
     location.reverse_geocode
-    
+    location.save!
     location
   end
 
@@ -294,11 +294,11 @@ class Location < ApplicationRecord
 
   def get_zip_code
     if self.zip_code
-      return self.zip_code
+      return self.zip_code.gsub(' ', '')
     else
       self.geocoded_address
       self.reverse_geocode
-      return self.zip_code
+      return self.zip_code.gsub(' ', '')
     end
   end
 

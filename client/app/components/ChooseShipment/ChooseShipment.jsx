@@ -8,7 +8,7 @@ import { LOAD_TYPES } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize } from '../../helpers'
+import { capitalize, gradientTextGenerator } from '../../helpers'
 
 export class ChooseShipment extends Component {
   constructor (props) {
@@ -40,6 +40,7 @@ export class ChooseShipment extends Component {
     const { theme, messages } = this.props
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+    const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
     const directionButtons = ['import', 'export'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       return (
@@ -49,7 +50,10 @@ export class ChooseShipment extends Component {
           } ${buttonStyle}`}
           onClick={() => this.setDirection(dir)}
         >
-          <p className="flex-none">{capitalize(dir)}</p>
+          <div className="flex-80 layout-row layout-align-space-between-center">
+            <p className="flex-none">{capitalize(dir)}</p>
+            {direction === dir ? <i className="flex-none fa fa-check clip" style={gradientStyle} /> : ''}
+          </div>
         </div>
       )
     })
@@ -64,12 +68,7 @@ export class ChooseShipment extends Component {
       />
     )
     const disabledBtn = (
-      <RoundButton
-        theme={theme}
-        size="small"
-        text="Next Step"
-        iconClass="fa-chevron-right"
-      />
+      <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
     )
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>

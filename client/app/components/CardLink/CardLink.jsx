@@ -5,6 +5,7 @@ import PropTypes from '../../prop-types'
 import styles from './CardLink.scss'
 // import { connect } from 'react-redux';
 import { tenantDefaults } from '../../constants'
+import { gradientTextGenerator } from '../../helpers'
 
 export class CardLink extends Component {
   constructor (props) {
@@ -20,19 +21,15 @@ export class CardLink extends Component {
     if (this.state.redirect) {
       return <Redirect push to={this.props.path} />
     }
-    console.log(code)
     const theme = this.props.theme ? this.props.theme : tenantDefaults.theme
     const handleClick = path ? () => this.setState({ redirect: true }) : this.props.handleClick
     const buttonStyle = code && selectedType === code ? styles.selected : styles.unselected
     const backgroundSize = options && options.contained ? 'contain' : 'cover'
     const imgClass = { backgroundImage: `url(${img})`, backgroundSize }
-    const gradientStyle = {
-      background: theme
-        ? `-webkit-linear-gradient(left, ${theme.colors.brightPrimary} 0%, ${
-          theme.colors.brightSecondary
-        } 100%)`
-        : 'black'
-    }
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
     return (
       <div
         className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30 ${buttonStyle}`}
@@ -46,7 +43,9 @@ export class CardLink extends Component {
             <p className="flex-none">{text} </p>
           </div>
           <div className="flex-none layout-row layout-align-center-center">
-            <i className="flex-none fa fa-chevron-right" style={gradientStyle} />
+            { code && selectedType === code
+              ? <i className="flex-none fa fa-check" style={gradientStyle} />
+              : '' }
           </div>
         </div>
       </div>
