@@ -147,7 +147,9 @@ class SideNav extends Component {
       this.setState({ linkTextClass: '' })
     } else {
       setTimeout(() => {
-        this.setState({ linkTextClass: styles.collapsed })
+        if (nextProps.expand) {
+          this.setState({ linkTextClass: styles.collapsed })
+        }
       }, 200)
     }
   }
@@ -259,7 +261,6 @@ class SideNav extends Component {
     }
     const navLinks = links.map((li, i) => {
       const toolId = v4()
-
       return (
         <div
           className={`${styles.dropdown_box} flex-100 layout-row layout-align-start-center`}
@@ -283,7 +284,7 @@ class SideNav extends Component {
               }
               data-for={toolId}
               data-tip={isAdmin ? li.tooltip : ''}
-              style={this.state.linkVisibility[i] ? { opacity: 1 } : {}}
+              style={this.state.linkVisibility[i] ? { opacity: 1, visibility: 'visible' } : {}}
             >
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>

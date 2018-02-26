@@ -33,11 +33,13 @@ class FloatingMenu extends Component {
     this.setState({ expand: !this.state.expand })
     if (this.state.expand) {
       setTimeout(() => {
-        this.setState({
-          overflowOverwrite: { overflow: 'visible' },
-          collapsePromptHrWidthOverwrite: { width: '50px' },
-          collapsePromptOverwriteP: { opacity: '0' }
-        })
+        if (!this.state.expand) {
+          this.setState({
+            overflowOverwrite: { overflow: 'visible' },
+            collapsePromptHrWidthOverwrite: { width: '50px' },
+            collapsePromptOverwriteP: { opacity: '0' }
+          })
+        }
       }, 800)
     } else {
       this.setState({
