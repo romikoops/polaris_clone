@@ -1042,7 +1042,7 @@ export class ShipmentLocationBox extends Component {
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-          <div className="layout-row flex-none layout-align-start content_width">
+          <div className={`layout-row flex-none layout-align-start ${defaults.content_width}`}>
             <RoundButton
               text="Show All Routes"
               handleNext={this.toggleModal}

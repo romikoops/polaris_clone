@@ -326,7 +326,7 @@ export class TruckingFeeSetter extends Component {
               }`}
             >
               <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-              <div className="flex-95 layout-row input_box">
+              <div className="flex-95 layout-row input_box_full">
                 <input
                   type="number"
                   value={variableFees[key].base}
@@ -338,7 +338,12 @@ export class TruckingFeeSetter extends Component {
           }
         })
         return (
-          <div key={key} className={`flex-50 layout-row layout-align-none-center layout-wrap ${styles.price_cell_row}`}>
+          <div
+            key={key}
+            className={`flex-50 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell_row
+            }`}
+          >
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.price_subheader
@@ -364,26 +369,32 @@ export class TruckingFeeSetter extends Component {
         return ''
       }
       return (
-        <div className={`flex-33 layout-row layout-align-center-center layout-wrap ${styles.add_price_cell}`}>
+        <div
+          className={`flex-none layout-row layout-align-center-center layout-wrap ${
+            styles.add_price_cell
+          }`}
+        >
           <div className="flex-100 layout-row layout-align-center-center">
-            <p className="flex-none ">{tfk.label}</p>
+            <p className="flex-none letter_3 clip" style={textStyle}>
+              {tfk.label}
+            </p>
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
-            <div
-              className="flex-50 layout-row layout-align-center-center"
-            >
+            <div className="flex-50 layout-row layout-align-center-center">
               <div
-                className={`flex-none layout-row layout-align-center-center ${styles.add_price_button}`}
+                className={`flex-none layout-row layout-align-center-center ${
+                  styles.add_price_button
+                }`}
                 onClick={() => this.addFee(tfk, true)}
               >
                 <p className="flex-none ">Add To Global</p>
               </div>
             </div>
-            <div
-              className="flex-50 layout-row layout-align-center-center"
-            >
+            <div className="flex-50 layout-row layout-align-center-center">
               <div
-                className={`flex-none layout-row layout-align-center-center ${styles.add_price_button}`}
+                className={`flex-none layout-row layout-align-center-center ${
+                  styles.add_price_button
+                }`}
                 onClick={() => this.addFee(tfk, false)}
               >
                 <p className="flex-none ">Add To Variable</p>
@@ -395,7 +406,7 @@ export class TruckingFeeSetter extends Component {
     })
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-wrap layout-align-space-between-space-between">
           {availableFees}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">

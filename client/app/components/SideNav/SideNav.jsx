@@ -227,7 +227,7 @@ class SideNav extends Component {
     this.setState({ linkVisibility })
   }
   handleClickAction (li, i, isAdmin) {
-    if (!this.state.linkVisibility[i]) return
+    if (!this.state.linkVisibility[i] && !this.state.expand) return
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
 

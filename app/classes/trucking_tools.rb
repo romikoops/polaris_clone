@@ -52,7 +52,7 @@ module TruckingTools
         if resp
           return resp.first
         end
-      end
+      
       when 'city'
         city = destination.city
         query = [
@@ -65,7 +65,7 @@ module TruckingTools
         if resp
           return resp.first
         end
-      end
+      
       when 'distance'
         dist = km * 2
         query = [
