@@ -71,7 +71,7 @@ class Header extends Component {
       user, theme, tenant, invert, unread, req, scrollable
     } = this.props
     const { isTop } = this.state
-    const dropDownText = user ? `${user.first_name} ${user.last_name}` : ''
+    const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
 
     const accountLinks = [
       {
@@ -129,7 +129,7 @@ class Header extends Component {
         Log in
       </a>
     )
-    const rightCorner = user && !user.guest ? dropDowns : loginPrompt
+    const rightCorner = user && user.first_name && !user.guest ? dropDowns : loginPrompt
     const loginModal = (
       <Modal
         component={
