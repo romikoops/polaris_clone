@@ -7,21 +7,21 @@ class Admin::TruckingController < ApplicationController
   def index
     client = get_client
     all_trucking_hubs = get_items_fn(client, 'truckingHubs', "tenant_id", current_user.tenant_id)
-    all_trucking_prices = {}
-
-    all_trucking_hubs.each do |th|
-      tp = get_item_fn(client, 'truckingTables', "_id", th["table"])
-      all_trucking_prices[th["_id"]] = tp
-    end
-    nexuses = Location.where(location_type: 'nexus')
-    response_handler({truckingHubs: all_trucking_hubs, truckingPrices: all_trucking_prices, nexuses: nexuses})
+    all_trucking_nexuses = all_trucking_hubs.map {|th| {trucking: th, nexus: Location.find(th["nexus_id"])}}
+    response_handler({truckingNexuses: all_trucking_nexuses, nexuses: Location.where(location_type: "nexus")})
   end
 
+  def show
+    trucking_hub = get_item("truckingHubs", "_id", params[:id])
+    trucking_queries = get_items("truckingQueries", "trucking_hub_id", params[:id])
+    trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+    # byebug
+    response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings)
+  end
   def create
     data = params[:obj][:data].as_json
     meta = params[:obj][:meta].as_json
     global = params[:obj][:global].as_json
-    byebug
     truckingQueries = []
     truckingPricings = []
     truckingHubId = "#{meta["nexus_id"]}_#{meta["loadType"]}_#{current_user.tenant_id}"

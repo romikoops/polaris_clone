@@ -213,7 +213,19 @@ export const chargeGlossary = {
   PUF: 'Pickup Fee',
   OMR: 'Over Max Rate',
   PCR: 'Per CMB Rate',
-  PWF: 'Waiting Fee'
+  PWF: 'Waiting Fee',
+  min_value: 'Minimum Value',
+  min_weight: 'Min. Weight',
+  max_weight: 'Max. Weight',
+  min_distance: 'Min. Distance',
+  max_distance: 'Max. Distance',
+  min_cbm: 'Min. CBM',
+  max_cbm: 'Max. CBM',
+  city: 'City',
+  province: 'Province',
+  value: 'Rate',
+  delivery_fee: 'Delivery Fee',
+  pickup_fee: 'Pickup Fee'
 }
 
 export const incoterms = [

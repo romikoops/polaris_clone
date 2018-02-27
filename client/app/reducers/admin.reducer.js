@@ -413,6 +413,27 @@ export default function admin (state = {}, action) {
       return errTruck
     }
 
+    case adminConstants.VIEW_TRUCKING_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.VIEW_TRUCKING_SUCCESS: {
+      return {
+        ...state,
+        truckingDetail: action.payload,
+        loading: false
+      }
+    }
+    case adminConstants.VIEW_TRUCKING_FAILURE: {
+      return {
+        ...state,
+        error: { trucking: action.error },
+        loading: false
+      }
+    }
+
     case adminConstants.GET_VEHICLE_TYPES_REQUEST: {
       const reqVehicleTypes = merge({}, state, {
         loading: true
