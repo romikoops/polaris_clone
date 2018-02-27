@@ -8,6 +8,7 @@ module UsersDeviseTokenAuth
 			super
 			if @resource.valid? && !@resource.guest
 				location = Location.create(location_params)
+				location.geocode_from_address_fields!
 				@resource.locations << location unless location.nil?
 				@resource.save
 			end				
