@@ -31,6 +31,7 @@ export default function GmapsLoader (props) {
             handleAddressChange={props.handleAddressChange}
             routeIds={props.routeIds}
             handleSelectLocation={props.handleSelectLocation}
+            handleCarriageNexuses={props.handleCarriageNexuses}
           />
         )
       }
@@ -62,7 +63,8 @@ GmapsLoader.propTypes = {
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
-  handleSelectLocation: PropTypes.func.isRequired
+  handleSelectLocation: PropTypes.func.isRequired,
+  handleCarriageNexuses: PropTypes.func.isRequired
 }
 
 GmapsLoader.defaultProps = {

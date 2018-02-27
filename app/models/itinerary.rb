@@ -201,13 +201,24 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def self.for_locations(shipment, radius = 200)
-    start_city, start_city_dist = shipment.origin.closest_location_with_distance
-
-    end_city, end_city_dist = shipment.destination.closest_location_with_distance
-    if start_city_dist > radius || end_city_dist > radius
-      start_city = end_city = nil
+  def self.for_locations(shipment, carriage_nexuses)
+    if  carriage_nexuses && carriage_nexuses["preCarriage"]
+      start_city = Location.find(carriage_nexuses["preCarriage"])
+    else
+      start_city = Location.find(shipment.origin_id)
+      #  OLD redundant code
+      # start_city, start_city_dist = shipment.origin.closest_location_with_distance
     end
+    if  carriage_nexuses && carriage_nexuses["onCarriage"]
+      end_city = Location.find(carriage_nexuses["onCarriage"])
+    else
+      end_city = Location.find(shipment.destination_id)
+      #  OLD redundant code
+      # end_city, end_city_dist = shipment.destination.closest_location_with_distance
+    end
+    # if start_city_dist > radius || end_city_dist > radius
+    #   start_city = end_city = nil
+    # end
     start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
     end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
     start_hub_ids = start_hubs.ids

@@ -110,6 +110,7 @@ export class ShipmentDetails extends Component {
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
     this.toggleAlertModal = this.toggleAlertModal.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
+    this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
   componentDidMount () {
     const { prevRequest, setStage } = this.props
@@ -310,9 +311,17 @@ export class ShipmentDetails extends Component {
     data.shipment.has_pre_carriage = this.state.has_pre_carriage
     data.shipment.planned_pickup_date = this.state.selectedDay
     data.shipment.incoterm = this.state.incoterm
+    data.shipment.carriageNexuses = this.state.carriageNexuses
     this.props.setShipmentDetails(data)
   }
-
+  handleCarriageNexuses (target, id) {
+    this.setState({
+      carriageNexuses: {
+        ...this.state.carriageNexuses,
+        [target]: id
+      }
+    })
+  }
   returnToDashboard () {
     this.props.shipmentDispatch.getDashboard(true)
   }
@@ -450,6 +459,7 @@ export class ShipmentDetails extends Component {
         handleAddressChange={this.handleAddressChange}
         shipment={shipmentData}
         routeIds={routeIds}
+        handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
@@ -505,10 +515,8 @@ export class ShipmentDetails extends Component {
       }
     `
     const dayPickerSection = (
-      <div className={
-        `${defaults.content_width} ` +
-        'layout-row flex-none layout-align-start-center'
-      }
+      <div
+        className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}
       >
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
@@ -572,8 +580,7 @@ export class ShipmentDetails extends Component {
     )
     const truckTypes = this.truckTypes[this.state.shipment.load_type]
     const showTruckingDetails =
-      truckTypes.length > 1 &&
-      (this.state.has_pre_carriage || this.state.has_on_carriage)
+      truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
 
     return (
       <div
@@ -582,10 +589,10 @@ export class ShipmentDetails extends Component {
       >
         {flash}
         {alertModal}
-        <div className={
-          `${styles.date_sec} layout-row flex-100 ` +
-          'layout-wrap layout-align-center-center'
-        }
+        <div
+          className={
+            `${styles.date_sec} layout-row flex-100 layout-wrap layout-align-center-center`
+          }
         >
           {dayPickerSection}
         </div>
@@ -605,28 +612,32 @@ export class ShipmentDetails extends Component {
           />
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
-        <div className={
-          `${defaults.border_divider} layout-row flex-100 ` +
-          'layout-wrap layout-align-center-center'
-        }
-        >
-          <div className={
-            `${styles.btn_sec} ${defaults.content_width} ` +
-            'layout-row flex-none layout-wrap layout-align-start-start'
+        <div
+          className={
+            `${defaults.border_divider} layout-row flex-100 ` +
+            'layout-wrap layout-align-center-center'
           }
+        >
+          <div
+            className={
+              `${styles.btn_sec} ${defaults.content_width} ` +
+              'layout-row flex-none layout-wrap layout-align-start-start'
+            }
           >
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div className={
-          `${defaults.border_divider} layout-row flex-100 ` +
-          'layout-wrap layout-align-center-center'
-        }
-        >
-          <div className={
-            `${styles.btn_sec} ${defaults.content_width} ` +
-            'layout-row flex-none layout-wrap layout-align-start-start'
+        <div
+          className={
+            `${defaults.border_divider} layout-row flex-100 ` +
+            'layout-wrap layout-align-center-center'
           }
+        >
+          <div
+            className={
+              `${styles.btn_sec} ${defaults.content_width} ` +
+              'layout-row flex-none layout-wrap layout-align-start-start'
+            }
           >
             <RoundButton
               text="Back to Dashboard"

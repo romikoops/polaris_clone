@@ -599,7 +599,7 @@ export class ShipmentLocationBox extends Component {
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
           const originOptionNames = originOptions.map(option => option.label)
           const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
-
+          this.props.handleCarriageNexuses('preCarriage', nexus.id)
           if (truckingOptions) {
             this.setState({
               truckingOptions: {
@@ -634,12 +634,12 @@ export class ShipmentLocationBox extends Component {
           }
           const destinationOptionNames = destinationOptions.map(option => option.label)
           const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
-
+          this.props.handleCarriageNexuses('onCarriage', nexus.id)
           if (truckingOptions) {
             this.setState({
               truckingOptions: {
                 ...this.state.truckingOptions,
-                preCarriage: true
+                onCarriage: true
               }
             })
           } else if (!destinationFieldsHaveErrors) {
@@ -1200,7 +1200,8 @@ ShipmentLocationBox.propTypes = {
   routeIds: PropTypes.arrayOf(PropTypes.number),
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
-  })
+  }),
+  handleCarriageNexuses: PropTypes.func.isRequired
 }
 
 ShipmentLocationBox.defaultProps = {
