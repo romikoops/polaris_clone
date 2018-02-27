@@ -11,6 +11,20 @@ import styles from './RegistrationPage.scss'
 import FormsyInput from '../../components/FormsyInput/FormsyInput'
 
 class RegistrationPage extends React.Component {
+  static mergeMinLengthValidations (minLength, validations, validationErrors) {
+    const returnObj = {}
+    returnObj.validations = Object.assign(minLength ? { minLength } : {}, validations || {})
+
+    const minLengthErrors = {
+      isDefaultRequiredValue: `Minimum ${minLength} characters`,
+      minLength: `Minimum ${minLength} characters`
+    }
+    returnObj.validationErrors = Object.assign(
+      minLength ? minLengthErrors : {},
+      validationErrors || {}
+    )
+    return returnObj
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -66,9 +80,10 @@ class RegistrationPage extends React.Component {
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
+
   generateFormGroup (args) {
     const {
-      field, minLength, validations, validationErrors
+      field, flex, offset, minLength, type, required
     } = args
     const { theme } = this.props
     const focusStyles = {
@@ -77,26 +92,31 @@ class RegistrationPage extends React.Component {
       borderRadius: '2px',
       margin: '-1px 0 29px 0'
     }
+
+    let { validations, validationErrors } = args
+    if (minLength) {
+      ({ validations, validationErrors } =
+        RegistrationPage.mergeMinLengthValidations(minLength, validations, validationErrors))
+    }
+
     return (
-      <div className="form-group">
+      <div className={`flex-${flex || '100'} offset-${offset || 0}`}>
         <label htmlFor={field}>{humanizeSnakeCase(field)}</label>
         <FormsyInput
-          type="text"
+          type={type || 'text'}
           className={styles.form_control}
           onFocus={this.handleFocus}
           onBlur={this.handleFocus}
           name={field}
+          id={field}
           submitAttempted={this.state.submitAttempted}
-          validations={{
-            ...validations,
-            minLength
+          validations={validations}
+          validationErrors={validationErrors}
+          errorMessageStyles={{
+            fontSize: '12px',
+            bottom: '-19px'
           }}
-          validationErrors={{
-            ...validationErrors,
-            isDefaultRequiredValue: `Must be at least ${minLength} characters long`,
-            minLength: `Must be at least ${minLength} characters long`
-          }}
-          required
+          required={required == null ? true : required}
         />
         <hr style={this.state.focus[field] ? focusStyles : {}} />
       </div>
@@ -122,292 +142,65 @@ class RegistrationPage extends React.Component {
         onInvalidSubmit={this.handleInvalidSubmit}
       >
         {alert}
-        <div className="flex-100 layout-row">
-          <div className="flex-30">
-            <h3>Basic Details</h3>
+        <div className="flex-100 layout-row layout-wrap">
+          <div className="flex-45 layout-row layout-wrap">
+            <div className="flex-100">
+              <h3>Account Details</h3>
+            </div>
             {
               this.generateFormGroup({
-                field: 'first_name',
-                validations: 'minLength:2',
-                validationErrors: {
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                },
-                required: true
+                field: 'email',
+                minLength: 2,
+                validations: { matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i },
+                validationErrors: { matchRegexp: 'Invalid email' }
               })
             }
-            <div className="form-group">
-              <label htmlFor="last_name">Last Name</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="last_name"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:2"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                }}
-                required
-              />
-              <hr style={this.state.focus.last_name ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="email"
-                submitAttempted={this.state.submitAttempted}
-                validations={{
-                  minLength: 2,
-                  matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-                }}
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long',
-                  matchRegexp: 'Invalid email'
-                }}
-                required
-              />
-              <hr style={this.state.focus.email ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="phone"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:8"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must have at least 8 characters',
-                  minLength: 'Must have at least 8 characters'
-                }}
-                required
-              />
-              <hr style={this.state.focus.phone ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Confirm Password</label>
-              <FormsyInput
-                type="password"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="confirm_password"
-                submitAttempted={this.state.submitAttempted}
-                validations="equalsField:password"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
+            { this.generateFormGroup({ field: 'password', minLength: 8, type: 'password' }) }
+            {
+              this.generateFormGroup({
+                field: 'confirm_password',
+                validations: { equalsField: 'password' },
+                validationErrors: {
                   equalsField: 'Must match password'
-                }}
-                required
-              />
-              <hr style={this.state.focus.confirm_password ? focusStyles : {}} />
+                },
+                required: false
+              })
+            }
+            <div className="flex-100">
+              <h3>Address Details</h3>
             </div>
+            { this.generateFormGroup({ field: 'street', minLength: 2, flex: 70 }) }
+            {
+              this.generateFormGroup({
+                field: 'number', minLength: 1, flex: 25, offset: 5
+              })
+            }
+            { this.generateFormGroup({ field: 'postal_code', minLength: 4, flex: 30 }) }
+            {
+              this.generateFormGroup({
+                field: 'city', minLength: 2, flex: 30, offset: 5
+              })
+            }
+            {
+              this.generateFormGroup({
+                field: 'country', minLength: 3, flex: 30, offset: 5
+              })
+            }
           </div>
-          <div className="offset-5 flex-30">
-            <div className="form-group">
-              <label htmlFor="first_name">First Name</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="first_name"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:2"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                }}
-                required
-              />
-              <hr style={this.state.focus.first_name ? focusStyles : {}} />
+          <div className="offset-10 flex-45 layout-row layout-wrap">
+            <div className="flex-100">
+              <h3>Basic Details</h3>
             </div>
-            <div className="form-group">
-              <label htmlFor="last_name">Last Name</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="last_name"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:2"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                }}
-                required
-              />
-              <hr style={this.state.focus.last_name ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="email"
-                submitAttempted={this.state.submitAttempted}
-                validations={{
-                  minLength: 2,
-                  matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-                }}
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long',
-                  matchRegexp: 'Invalid email'
-                }}
-                required
-              />
-              <hr style={this.state.focus.email ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <FormsyInput
-                type="password"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="password"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:8"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must have at least 8 characters'
-                }}
-                required
-              />
-              <hr style={this.state.focus.password ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Confirm Password</label>
-              <FormsyInput
-                type="password"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="confirm_password"
-                submitAttempted={this.state.submitAttempted}
-                validations="equalsField:password"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  equalsField: 'Must match password'
-                }}
-                required
-              />
-              <hr style={this.state.focus.confirm_password ? focusStyles : {}} />
-            </div>
-          </div>
-          <div className="offset-5 flex-30">
-            <div className="form-group">
-              <label htmlFor="first_name">First Name</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="first_name"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:2"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                }}
-                required
-              />
-              <hr style={this.state.focus.first_name ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="last_name">Last Name</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="last_name"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:2"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long'
-                }}
-                required
-              />
-              <hr style={this.state.focus.last_name ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <FormsyInput
-                type="text"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="email"
-                submitAttempted={this.state.submitAttempted}
-                validations={{
-                  minLength: 2,
-                  matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-                }}
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must be at least two characters long',
-                  matchRegexp: 'Invalid email'
-                }}
-                required
-              />
-              <hr style={this.state.focus.email ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Password</label>
-              <FormsyInput
-                type="password"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="password"
-                submitAttempted={this.state.submitAttempted}
-                validations="minLength:8"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  minLength: 'Must have at least 8 characters'
-                }}
-                required
-              />
-              <hr style={this.state.focus.password ? focusStyles : {}} />
-            </div>
-            <div className="form-group">
-              <label htmlFor="password">Confirm Password</label>
-              <FormsyInput
-                type="password"
-                className={styles.form_control}
-                onFocus={this.handleFocus}
-                onBlur={this.handleFocus}
-                name="confirm_password"
-                submitAttempted={this.state.submitAttempted}
-                validations="equalsField:password"
-                validationErrors={{
-                  isDefaultRequiredValue: 'Must not be blank',
-                  equalsField: 'Must match password'
-                }}
-                required
-              />
-              <hr style={this.state.focus.confirm_password ? focusStyles : {}} />
-            </div>
+            { this.generateFormGroup({ field: 'company_name', minLength: 8 }) }
+            { this.generateFormGroup({ field: 'vat_number', minLength: 5 }) }
+            <div className={styles.pusher} />
+            { this.generateFormGroup({ field: 'first_name', minLength: 2 }) }
+            { this.generateFormGroup({ field: 'last_name', minLength: 2 }) }
+            { this.generateFormGroup({ field: 'phone', minLength: 8 }) }
           </div>
         </div>
         <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton text="register" theme={theme} active />
+          <RoundButton text="Register new account" theme={theme} active />
           <div className={styles.spinner}>{registering && <LoadingSpinner />}</div>
         </div>
       </Formsy>
@@ -420,7 +213,7 @@ RegistrationPage.propTypes = {
   registrationAttempt: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  req: PropTypes.any.isRequired,
+  req: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
@@ -431,6 +224,7 @@ RegistrationPage.defaultProps = {
   registrationAttempt: false,
   user: null,
   theme: null,
+  req: null,
   registering: false
 }
 
