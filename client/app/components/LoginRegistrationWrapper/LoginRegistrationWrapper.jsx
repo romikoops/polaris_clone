@@ -24,6 +24,8 @@ export class LoginRegistrationWrapper extends Component {
 
   render () {
     const toggleComp = (CurrentComp) => {
+      if (this.props.updateDimentions != null) this.props.updateDimentions()
+
       const nextComp = CurrentComp === 'LoginPage' ? 'RegistrationPage' : 'LoginPage'
       this.setState({
         compName: nextComp
@@ -56,12 +58,14 @@ export class LoginRegistrationWrapper extends Component {
 LoginRegistrationWrapper.propTypes = {
   initialCompName: PropTypes.string.isRequired,
   LoginPageProps: PropTypes.objectOf(PropTypes.any),
-  RegistrationPageProps: PropTypes.objectOf(PropTypes.any)
+  RegistrationPageProps: PropTypes.objectOf(PropTypes.any),
+  updateDimentions: PropTypes.func
 }
 
 LoginRegistrationWrapper.defaultProps = {
   LoginPageProps: {},
-  RegistrationPageProps: {}
+  RegistrationPageProps: {},
+  updateDimentions: null
 }
 
 export default LoginRegistrationWrapper

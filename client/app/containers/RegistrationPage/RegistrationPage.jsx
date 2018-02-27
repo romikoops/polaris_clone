@@ -192,7 +192,7 @@ class RegistrationPage extends React.Component {
               <h3>Basic Details</h3>
             </div>
             { this.generateFormGroup({ field: 'company_name', minLength: 8 }) }
-            { this.generateFormGroup({ field: 'vat_number', minLength: 5 }) }
+            { this.generateFormGroup({ field: 'VAT_number', minLength: 5 }) }
             <div className={styles.pusher} />
             { this.generateFormGroup({ field: 'first_name', minLength: 2 }) }
             { this.generateFormGroup({ field: 'last_name', minLength: 2 }) }

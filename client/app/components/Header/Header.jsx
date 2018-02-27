@@ -144,9 +144,8 @@ class Header extends Component {
             initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
           />
         }
-        width="80vw"
         verticalPadding="60px"
-        horizontalPadding="0px"
+        horizontalPadding="60px"
         parentToggle={this.toggleShowLogin}
       />
     )
