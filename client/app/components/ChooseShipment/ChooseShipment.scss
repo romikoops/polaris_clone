@@ -38,4 +38,23 @@
       line-height: 24px;
     }
   }
+  
+  .direction_card {
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 20px;
+    min-width: 400px;
+    max-width: 453.63px;
+    margin-bottom: 50px;
+    box-shadow: 1px 1.5px 6px rgba(black, 0.12);
+    cursor: pointer;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  .selected {
+    -webkit-box-shadow: inset 0px 0px 33px -7px rgba(0,0,0,0.66);
+    -moz-box-shadow: inset 0px 0px 33px -7px rgba(0,0,0,0.66);
+    box-shadow: inset 0px 0px 33px -7px rgba(0,0,0,0.66);
+  }
 }

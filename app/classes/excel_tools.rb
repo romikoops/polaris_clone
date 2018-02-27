@@ -3,7 +3,7 @@ module ExcelTools
   include MongoTools
   include PricingTools
 
-  def overwrite_zipcode_weight_trucking_rates(params, user = current_user)
+  def overwrite_zipcode_weight_trucking_rates(params, user = current_user, direction)
     # old_trucking_ids = nil
     # new_trucking_ids = []
     mongo = get_client
@@ -25,11 +25,11 @@ module ExcelTools
       num_rows = first_sheet.last_row
       header_row.each do |cell|
         min_max_arr = cell.split(" - ")
-        defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
+        defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
-      trucking_table_id = "#{nexus.id}_#{user.tenant_id}" 
+      trucking_table_id = "#{nexus.id}_#{load_type}_#{user.tenant_id}" 
       truckingQueries = []
-      truckingTable = "#{nexus.id}_#{user.tenant_id}"
+      truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
       truckingPricings = []
       (4..num_rows).each do |line|
         # byebug
@@ -42,6 +42,7 @@ module ExcelTools
           trucking_hub_id: trucking_table_id,
           tenant_id: user.tenant_id,
           nexus_id: nexus.id,
+          direction: direction,
           _id: SecureRandom.uuid,
           modifier: 'kg',
           zipcode: {
@@ -65,8 +66,11 @@ module ExcelTools
               base: 100
             }
           }
+          tmp[:direction] = direction
+          tmp[:type] = "default"
           tmp[:_id] = SecureRandom.uuid
-          tmp[:trucking_pricing_id] = ntp[:_id]
+          tmp[:trucing_hub_id] = trucking_table_id
+          tmp[:trucking_query_id] = ntp[:_id]
           truckingPricings.push(tmp)
           # byebug
         end
@@ -147,7 +151,7 @@ module ExcelTools
     # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
 
-  def overwrite_city_trucking_rates(params, user = current_user)
+  def overwrite_city_trucking_rates(params, user = current_user, direction)
     
     mongo = get_client
     defaults = []
@@ -181,28 +185,36 @@ module ExcelTools
         new_pricing[:trucking_hub_id] = trucking_table_id
         new_pricing[:delivery_eta_in_days] = row_data[10]
         new_pricing[:modifier] = 'kg'
+        new_pricing[:direction] = direction
         ntp = new_pricing
         ntp[:_id] = SecureRandom.uuid
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3].clone
           tmp[:_id] = SecureRandom.uuid
+          tmp[:type] = "default"
           tmp[:fees] = {
             base_rate: {
               value: row_data[i],
               rate_basis: 'PER_KG',
               currency: "CNY"
             },
-            pickup_fee: {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' },
-            delivery_fee: {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' },
             per_cbm_rate: {value: row_data[7], currency: new_pricing[:currency], rate_basis: 'PER_CBM' }
           }
-          tmp[:trucking_pricing_id] = ntp[:_id]
+          if  direction === 'export'
+            tmp[:pickup_fee] = {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+          else
+            tmp[:delivery_fee] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+          end
+          tmp[:trucking_query_id] = ntp[:_id]
          
           truckingPricings.push(tmp)
         end
         truckingQueries << ntp
-        new_trucking_location = Location.from_short_name("#{new_pricing[:city]} ,#{new_pricing[:province]}", 'trucking_option')
-        new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
+        new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
+        new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city][:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
+        hubs.each do |hub|
+          HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
+        end
       end
       update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id})
       truckingQueries.each do |k|

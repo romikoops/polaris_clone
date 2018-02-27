@@ -47,9 +47,11 @@ Tenant.all.each do |tenant|
 
   # Overwrite trucking data from excel sheet
   puts "# Overwrite trucking data from excel sheet"
-  trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zipcode_weight_trucking_rates(req, shipper)
+  ["import", "export"].each do |dir|
+    trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+    req = {"xlsx" => trucking}
+    overwrite_zipcode_weight_trucking_rates(req, shipper)
+  end
 
   trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
   req = {"xlsx" => trucking}

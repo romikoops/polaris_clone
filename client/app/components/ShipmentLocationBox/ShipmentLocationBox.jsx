@@ -122,6 +122,7 @@ export class ShipmentLocationBox extends Component {
     this.selectedRoute = this.selectedRoute.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
+    this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
     this.updateTruckingOptions = this.updateTruckingOptions.bind(this)
   }
@@ -374,6 +375,9 @@ export class ShipmentLocationBox extends Component {
               checked: false
             }
           })
+          this.setState({
+            autoText: { [target]: '' }
+          })
         }
 
         this.setState({
@@ -580,13 +584,15 @@ export class ShipmentLocationBox extends Component {
     const { allNexuses } = this.props
     const lat = place.geometry.location.lat()
     const lng = place.geometry.location.lng()
+
+    const tenantId = this.props.shipment.shipment.tenant_id
     if (target === 'origin') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
+      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
         method: 'GET',
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const { nexus } = response.data
+          const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -594,8 +600,14 @@ export class ShipmentLocationBox extends Component {
           const originOptionNames = originOptions.map(option => option.label)
           const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
 
-          if (!originFieldsHaveErrors) {
-            const tenantId = this.props.shipment.shipment.tenant_id
+          if (truckingOptions) {
+            this.setState({
+              truckingOptions: {
+                ...this.state.truckingOptions,
+                preCarriage: true
+              }
+            })
+          } else if (!originFieldsHaveErrors) {
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, originOptions)
           }
@@ -607,12 +619,12 @@ export class ShipmentLocationBox extends Component {
         })
       })
     } else if (target === 'destination') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}`, {
+      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
         method: 'GET',
         headers: authHeader()
       }).then((promise) => {
         promise.json().then((response) => {
-          const { nexus } = response.data
+          const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
           let destinationOptions =
@@ -623,8 +635,14 @@ export class ShipmentLocationBox extends Component {
           const destinationOptionNames = destinationOptions.map(option => option.label)
           const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
 
-          if (!destinationFieldsHaveErrors) {
-            const tenantId = this.props.shipment.shipment.tenant_id
+          if (truckingOptions) {
+            this.setState({
+              truckingOptions: {
+                ...this.state.truckingOptions,
+                preCarriage: true
+              }
+            })
+          } else if (!destinationFieldsHaveErrors) {
             const loadType = this.props.shipment.shipment.load_type
             this.updateTruckingOptions(target, nexus, tenantId, loadType, destinationOptions)
           }
@@ -640,7 +658,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({ [target]: tmpAddress })
     this.props.setTargetAddress(target, tmpAddress)
     this.setState({
-      autoText: { [target]: place.name }
+      autoText: { [target]: place.formatted_address }
     })
   }
   resetAuto (target) {
@@ -702,24 +720,29 @@ export class ShipmentLocationBox extends Component {
   handleSwap () {
     const origin = { ...this.state.destination }
     const destination = { ...this.state.origin }
-    const autoText = { ...this.state.autoText }
-    // const pre = this.props.has_pre_carriage
-    // const on = this.props.has_on_carriage
-    let autoTextDest = this.state.autoTextDest ? this.state.autoTextDest : ''
-    let autoTextOrigin = this.state.autoTextOrigin ? this.state.autoTextOrigin : ''
-    // if ((pre && !on) || (!pre && on)) {
-    //   () => this.changeAddressFormVisibility('origin');
-    //   () => this.changeAddressFormVisibility('destination')
-    // }
-    autoText.destination = destination.hub_name
-    autoTextDest = this.state.autoTextOrigin
+    const { autoText } = this.state
+    const autoTextOrigin = autoText.origin
+    const autoTextDestination = autoText.destination
+    autoText.origin = autoTextDestination
+    autoText.destination = autoTextOrigin
 
-    autoText.origin = origin.hub_name
-    autoTextOrigin = this.state.autoTextDest
+    this.handleTrucking({
+      target: {
+        name: 'has_on_carriage',
+        checked: this.props.has_pre_carriage
+      }
+    })
+    this.handleTrucking({
+      target: {
+        name: 'has_pre_carriage',
+        checked: this.props.has_on_carriage
+      }
+    })
 
     this.setState({
-      origin, destination, autoText, autoTextOrigin, autoTextDest
+      origin, destination, autoText
     })
+
     this.setDestHub(this.state.oSelect)
     this.setOriginHub(this.state.dSelect)
   }
@@ -739,7 +762,6 @@ export class ShipmentLocationBox extends Component {
 
     if (availableDestinations) destinationOptions = availableDestinations
     if (availableOrigins) originOptions = availableOrigins
-    console.log(originOptions)
 
     const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
     const originHubSelect = (
@@ -1042,7 +1064,7 @@ export class ShipmentLocationBox extends Component {
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-          <div className="layout-row flex-none layout-align-start content_width">
+          <div className={`layout-row flex-none layout-align-start ${defaults.content_width}`}>
             <RoundButton
               text="Show All Routes"
               handleNext={this.toggleModal}
