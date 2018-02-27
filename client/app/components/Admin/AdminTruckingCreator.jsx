@@ -358,7 +358,8 @@ export class AdminTruckingCreator extends Component {
     ]
     const directionOpts = [
       { value: 'import', label: 'Import' },
-      { value: 'export', label: 'Export' }
+      { value: 'export', label: 'Export' },
+      { value: 'either', label: 'Either' }
     ]
     const loadTypeOpts = [{ value: 'lcl', label: 'LCL' }, { value: 'fcl', label: 'FCL' }]
     const nexusOpts = AdminTruckingCreator.prepForSelect(nexuses, 'name', false, false)

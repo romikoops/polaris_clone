@@ -54,9 +54,10 @@ module TruckingTools
         end
       
       when 'city'
-        city = destination.city
+        
+        city_or_query = destination.city.downcase.split.map {|text| {"city.city" => {"$eq" => text}} }
         query = [
-                  { "city.city" => { "$lte" => city}},
+                  { "$or" => city_or_query},
                   { 'trucking_hub_id' => { "$eq" => trucking_hub["_id"]}},
                   { 'direction' => { "$eq" => direction}}
                 ]
@@ -88,8 +89,20 @@ module TruckingTools
                   { "min_weight" => { "$lte" => cargo[:weight]}},
                   {  "max_weight" => { "$gte" => cargo[:weight] }},
                   { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
-                  { 'type' => { "$eq" => delivery_type}},
-                  
+                  { 'type' => { "$eq" => delivery_type}}
+                ]
+                # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
+        
+        resp = get_items_query('truckingPricings', query).to_a
+        
+        if resp
+          return resp.first
+        end
+      when 'unit'
+        query = [
+                  { "all_units" => { "$eq" => ""}},
+                  { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
+                  { 'type' => { "$eq" => delivery_type}}
                 ]
                 # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
         
@@ -118,7 +131,7 @@ module TruckingTools
     end
     
 
-      if result["value"] > pricing["min_value"]
+      if !pricing["min_value"] || (pricing["min_value"] && result["value"] > pricing["min_value"])
   
         return {value: result["value"], currency: result["currency"] }
       else
@@ -182,18 +195,20 @@ module TruckingTools
   def calc_trucking_price(destination, cargos, km, hub, target, load_type, direction, delivery_type)
     cargo = {
       number_of_items: cargos.length,
-      volume: cargos.map { |cargo| cargo.volume }.sum.to_i,
-      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_i
+      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
     }
     trucking_hub = retrieve_trucking_hub(hub.nexus, load_type, hub.tenant_id)
     
+    p trucking_hub[:_id]
     trucking_query = retrieve_trucking_query(trucking_hub, destination, km, direction)
-    if !delivery_type && load_type == 'lcl'
-      delivery_type == 'default'
+    p trucking_query[:_id]
+    if delivery_type == "" && load_type == 'cargo_item'
+      delivery_type = 'default'
     end
     
     trucking_pricing = retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
-    
+    p trucking_pricing[:_id]
     fees = calculate_trucking_price(trucking_pricing, cargo, direction)
     
     # hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")

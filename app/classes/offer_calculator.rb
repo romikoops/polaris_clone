@@ -1,5 +1,5 @@
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :trips
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :trips, :carriage_nexuses
   include CurrencyTools
   include PricingTools
   include MongoTools
@@ -12,7 +12,7 @@ class OfferCalculator
     @destination_hubs = []
     @itineraries      = []
     @trips            = {}
-
+    @carriage_nexuses = params[:shipment][:carriageNexuses]
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
     @shipment.trucking = trucking_params(params).to_h
@@ -92,7 +92,7 @@ class OfferCalculator
   end
 
   def determine_itinerary!
-    data  = Itinerary.for_locations(@shipment)
+    data  = Itinerary.for_locations(@shipment, @carriage_nexuses)
     @itineraries = data[:itineraries]
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
@@ -259,11 +259,11 @@ class OfferCalculator
   def determine_trucking_options(origin, hub, target, direction)
     google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
-    truck_type = direction == 'export' ? @shipment.trucking["pre_carriage"] : @shipment.trucking["on_carriage"]
+    truck_type = direction == 'export' ? @shipment.trucking["pre_carriage"]["truck_type"] : @shipment.trucking["on_carriage"]["truck_type"]
     # price_results = @cargo_units.map do |cargo_unit|
     #   calc_trucking_price(origin, cargo_unit, km, hub, target, @shipment.load_type, direction, @shipment.trucking)
     # end
-    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, @shipment.trucking)
+    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, truck_type)
 
     # trucking_total = { value: 0, currency: "" }
     # price_results.each do |pr|

@@ -39,6 +39,14 @@ function getItinerary (id) {
 
   return fetch(`${BASE_URL}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
+function viewTrucking (id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: authHeader()
+  }
+
+  return fetch(`${BASE_URL}/admin/trucking/${id}`, requestOptions).then(handleResponse)
+}
 function getLayovers (id) {
   const requestOptions = {
     method: 'GET',
@@ -364,7 +372,8 @@ export const adminService = {
   newRoute,
   getLayovers,
   saveNewTrucking,
-  assignManager
+  assignManager,
+  viewTrucking
 }
 
 export default adminService

@@ -50,7 +50,6 @@ class AdminScheduleGenerator extends Component {
     this.handleDuration = this.handleDuration.bind(this)
     this.genSchedules = this.genSchedules.bind(this)
     this.getStopsForItinerary = this.getStopsForItinerary.bind(this)
-    this.handleIntervalChange = this.handleIntervalChange.bind(this)
   }
   componentDidMount () {
     const { hubs, vehicleTypes, adminDispatch } = this.props

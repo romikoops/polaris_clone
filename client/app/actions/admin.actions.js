@@ -990,16 +990,30 @@ function assignManager (obj) {
   }
 }
 
-function viewTrucking (truckingHub, pricing) {
-  const payload = { truckingHub, pricing }
-  function set (data) {
-    // ;
-    return { type: adminConstants.VIEW_TRUCKING, payload: data }
+function viewTrucking (truckingHub) {
+  function request (truckingData) {
+    return { type: adminConstants.VIEW_TRUCKING_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.VIEW_TRUCKING_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.VIEW_TRUCKING_FAILURE, error }
   }
   return (dispatch) => {
-    // eslint-disable-next-line no-underscore-dangle
-    dispatch(push(`/admin/trucking/${truckingHub._id}`))
-    dispatch(set(payload))
+    dispatch(request())
+
+    adminService.viewTrucking(truckingHub).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(success(data))
+        dispatch(push(`/admin/trucking/${truckingHub}`))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
   }
 }
 

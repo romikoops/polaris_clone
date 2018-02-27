@@ -36,6 +36,13 @@ export class TruckingStepSetter extends Component {
           [upperKey]: 0
         }
       })
+    } else if (selection.value === 'unit') {
+      this.props.saveSteps({
+        steps: [{ all_units: '' }],
+        upperKey: 'all_units',
+        lowerKey: 'all_units',
+        stepBasis: selection
+      })
     } else {
       this.setState({
         stepBasis: selection,
@@ -81,7 +88,7 @@ export class TruckingStepSetter extends Component {
     const basisOptions = [
       { label: 'Weight', value: 'weight' },
       { label: 'CBM', value: 'cbm' },
-      { label: 'Distance', value: 'km' }
+      { label: 'Unit', value: 'unit' }
     ]
     const stepsArr = (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">

@@ -69,7 +69,7 @@ module ExcelTools
           tmp[:direction] = direction
           tmp[:type] = "default"
           tmp[:_id] = SecureRandom.uuid
-          tmp[:trucing_hub_id] = trucking_table_id
+          tmp[:trucking_hub_id] = trucking_table_id
           tmp[:trucking_query_id] = ntp[:_id]
           truckingPricings.push(tmp)
           # byebug
@@ -163,12 +163,12 @@ module ExcelTools
       truckingPricings = []
       truckingQueries = []
       hubs = nexus.hubs
-      trucking_table_id = "#{nexus.id}_#{user.tenant_id}"  
+      trucking_table_id = "#{nexus.id}_lcl_#{user.tenant_id}"  
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
       [3,4,5,6].each do |i|
         min_max_arr = weight_cat_row[i].split(" - ")
-        defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
+        defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
       (3..num_rows).each do |line|
         row_data = first_sheet.row(line)
@@ -194,16 +194,16 @@ module ExcelTools
           tmp[:type] = "default"
           tmp[:fees] = {
             base_rate: {
-              value: row_data[i],
-              rate_basis: 'PER_KG',
+              kg: row_data[i],
+              cbm: row_data[7],
+              rate_basis: 'PER_CBM_KG',
               currency: "CNY"
-            },
-            per_cbm_rate: {value: row_data[7], currency: new_pricing[:currency], rate_basis: 'PER_CBM' }
+            }
           }
           if  direction === 'export'
-            tmp[:pickup_fee] = {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+            tmp[:fees][:PUF] = {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           else
-            tmp[:delivery_fee] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+            tmp[:fees][:DLF] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           end
           tmp[:trucking_query_id] = ntp[:_id]
          
