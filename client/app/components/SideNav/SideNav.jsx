@@ -147,7 +147,7 @@ class SideNav extends Component {
       this.setState({ linkTextClass: '' })
     } else {
       setTimeout(() => {
-        if (nextProps.expand) {
+        if (!this.props.expand) {
           this.setState({ linkTextClass: styles.collapsed })
         }
       }, 200)
