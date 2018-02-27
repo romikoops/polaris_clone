@@ -16,14 +16,28 @@ class RegistrationPage extends React.Component {
     returnObj.validations = Object.assign(minLength ? { minLength } : {}, validations || {})
 
     const minLengthErrors = {
-      isDefaultRequiredValue: `Minimum ${minLength} characters`,
-      minLength: `Minimum ${minLength} characters`
+      isDefaultRequiredValue: `Min. ${minLength} characters`,
+      minLength: `Min. ${minLength} characters`
     }
     returnObj.validationErrors = Object.assign(
       minLength ? minLengthErrors : {},
       validationErrors || {}
     )
     return returnObj
+  }
+  static mapInputs (inputs) {
+    const locationInputs = ['street', 'number', 'zip_code', 'city', 'country']
+    const model = { location: {} }
+    Object.keys(inputs).forEach((inputName) => {
+      if (inputName === 'number') {
+        model.location.street_number = inputs.number
+      } else if (locationInputs.includes(inputName)) {
+        model.location[inputName] = inputs[inputName]
+      } else {
+        model[inputName] = inputs[inputName]
+      }
+    })
+    return model
   }
   constructor (props) {
     super(props)
@@ -140,6 +154,7 @@ class RegistrationPage extends React.Component {
         name="form"
         onValidSubmit={this.handleSubmit}
         onInvalidSubmit={this.handleInvalidSubmit}
+        mapping={RegistrationPage.mapInputs}
       >
         {alert}
         <div className="flex-100 layout-row layout-wrap">
@@ -163,6 +178,7 @@ class RegistrationPage extends React.Component {
                 validationErrors: {
                   equalsField: 'Must match password'
                 },
+                type: 'password',
                 required: false
               })
             }
@@ -175,7 +191,7 @@ class RegistrationPage extends React.Component {
                 field: 'number', minLength: 1, flex: 25, offset: 5
               })
             }
-            { this.generateFormGroup({ field: 'postal_code', minLength: 4, flex: 30 }) }
+            { this.generateFormGroup({ field: 'zip_code', minLength: 4, flex: 30 }) }
             {
               this.generateFormGroup({
                 field: 'city', minLength: 2, flex: 30, offset: 5
@@ -199,9 +215,9 @@ class RegistrationPage extends React.Component {
             { this.generateFormGroup({ field: 'phone', minLength: 8 }) }
           </div>
         </div>
-        <div className={`form-group ${styles.form_group_submit_btn}`}>
+        <div className={`${styles.form_group_submit_btn} layout-row layout-align-center`}>
           <RoundButton text="Register new account" theme={theme} active />
-          <div className={styles.spinner}>{registering && <LoadingSpinner />}</div>
+          <div className={styles.spinner}>{ registering && <LoadingSpinner /> }</div>
         </div>
       </Formsy>
     )
