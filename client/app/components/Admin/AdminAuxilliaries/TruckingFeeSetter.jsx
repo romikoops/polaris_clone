@@ -42,6 +42,7 @@ export class TruckingFeeSetter extends Component {
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleBaseChange = this.handleBaseChange.bind(this)
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this)
   }
   componentWillMount () {
     this.setAllFromOptions()
@@ -90,6 +91,27 @@ export class TruckingFeeSetter extends Component {
     })
 
     this.setState({ selectOptions: newObj })
+  }
+  handleCurrencyChange (event) {
+    const nameKeys = event.name.split('-')
+    const tempFee = {
+      ...this.state[nameKeys[0]][nameKeys[1]],
+      [nameKeys[2]]: event.value
+    }
+
+    this.setState({
+      selectOptions: {
+        ...this.state.selectOptions,
+        [nameKeys[1]]: {
+          ...this.state.selectOptions[nameKeys[1]],
+          [nameKeys[2]]: event
+        }
+      },
+      [nameKeys[0]]: {
+        ...this.state[nameKeys[0]],
+        [nameKeys[1]]: tempFee
+      }
+    })
   }
   handleSelect (event) {
     const nameKeys = event.name.split('-')
@@ -249,7 +271,7 @@ export class TruckingFeeSetter extends Component {
                   value={selectOptions ? selectOptions[key].currency : ''}
                   options={currencyOptions}
                   className="flex-100"
-                  onChange={this.handleSelect}
+                  onChange={this.handleCurrencyChange}
                 />
               </div>
             </div>)
@@ -270,7 +292,7 @@ export class TruckingFeeSetter extends Component {
               <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
-                onClick={() => this.deleteFee(key)}
+                onClick={() => this.deleteFee(key, true)}
               >
                 <i className="fa fa-trash clip" style={textStyle} />
               </div>
@@ -315,7 +337,7 @@ export class TruckingFeeSetter extends Component {
                   value={selectOptions ? selectOptions[key].currency : ''}
                   options={currencyOptions}
                   className="flex-100"
-                  onChange={this.handleSelect}
+                  onChange={this.handleCurrencyChange}
                 />
               </div>
             </div>)
@@ -353,7 +375,7 @@ export class TruckingFeeSetter extends Component {
               <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
-                onClick={() => this.deleteFee(key)}
+                onClick={() => this.deleteFee(key, false)}
               >
                 <i className="fa fa-trash clip" style={textStyle} />
               </div>

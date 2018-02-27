@@ -66,8 +66,6 @@ export class AdminPriceCreator extends Component {
     this.editPricing = lclSchema
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
-    this.setMOT = this.setMOT.bind(this)
-    this.setCargo = this.setCargo.bind(this)
     this.saveEdit = this.saveEdit.bind(this)
     this.setCargoClass = this.setCargoClass.bind(this)
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
@@ -231,7 +229,7 @@ export class AdminPriceCreator extends Component {
     const {
       hubRoute, transportCategory, route, cargoClass, pricing, client
     } = this.state
-    const clientTag = client !== 'open' ? `_${client.value.id}` : ''
+    const clientTag = client.value !== 'OPEN' ? `_${client.value.id}` : ''
     const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${transportCategory.value.id}_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
     pricing.hub_route_id = hubRoute.value.id
     pricing.route_id = route.value.id
@@ -259,11 +257,11 @@ export class AdminPriceCreator extends Component {
     } else {
       gloss = fclChargeGloss
     }
-    const routeOpts = this.prepForSelect(itineraries, 'name', false, false)
+    const routeOpts = AdminPriceCreator.prepForSelect(itineraries, 'name', false, false)
     const clientOpts = clients.map(a => ({ value: a, label: `${a.first_name} ${a.last_name}` }))
     clientOpts.push({ value: 'OPEN', label: 'Open' })
     const hubRouteOpts = route ? detailedItineraries.filter(di => di.id === route.value.id).map(a => ({ value: a, label: `${a.origin_hub_name} - ${a.destination_hub_name}` })) : []
-    const transportCategoryOpts = cargoClass ? this.prepForSelect(transportCategories.filter(x => x.cargo_class === cargoClass.value), 'name', false, cargoGloss) : []
+    const transportCategoryOpts = cargoClass ? AdminPriceCreator.prepForSelect(transportCategories.filter(x => x.cargo_class === cargoClass.value), 'name', false, cargoGloss) : []
 
     Object.keys(pricing.data).forEach((key) => {
       const cells = []

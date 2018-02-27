@@ -89,8 +89,20 @@ module TruckingTools
                   { "min_weight" => { "$lte" => cargo[:weight]}},
                   {  "max_weight" => { "$gte" => cargo[:weight] }},
                   { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
-                  { 'type' => { "$eq" => delivery_type}},
-                  
+                  { 'type' => { "$eq" => delivery_type}}
+                ]
+                # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
+        
+        resp = get_items_query('truckingPricings', query).to_a
+        
+        if resp
+          return resp.first
+        end
+      when 'unit'
+        query = [
+                  { "all_units" => { "$eq" => ""}},
+                  { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
+                  { 'type' => { "$eq" => delivery_type}}
                 ]
                 # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
         

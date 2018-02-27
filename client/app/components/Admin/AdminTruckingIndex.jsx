@@ -40,7 +40,7 @@ export class AdminTruckingIndex extends Component {
             <p className="flex-90">Upload Trucking Zip Code Sheet</p>
             <FileUploader theme={theme} url={zipUrl} type="xlsx" text="Routes .xlsx" />
           </div>
-          <div className="flex-33 layout-row layout-align-center-center">
+          <div className="flex-33 layout-row layout-align-center-center layout-wrap">
             <p className="flex-90">Create a New Trucking Price</p>
             <RoundButton
               theme={theme}
