@@ -120,8 +120,8 @@ export class ShipmentDetails extends Component {
     window.scrollTo(0, 0)
     setStage(2)
   }
-  componentWillReceiveProps (nextProps, nextState) {
-    if (!nextState.shipment) {
+  componentWillReceiveProps (nextProps) {
+    if (!this.state.shipment) {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
