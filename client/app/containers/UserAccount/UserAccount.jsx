@@ -109,7 +109,6 @@ class UserAccount extends Component {
     if (!dashboard) {
       return ''
     }
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
 
     const hubHash = {}
     if (hubs) {
@@ -117,6 +116,8 @@ class UserAccount extends Component {
         hubHash[hub.data.id] = hub
       })
     }
+
+    const loadingScreen = loading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="layout-row flex-100 hundred">

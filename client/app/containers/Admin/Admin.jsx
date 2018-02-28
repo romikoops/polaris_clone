@@ -101,10 +101,10 @@ class Admin extends Component {
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
-        {loadingScreen}
-        {menu}
+        { loadingScreen }
+        { menu }
         <Header theme={theme} scrollable />
-        <div className="flex layout-row layout-align-center-start layout-wrap hundred">
+        <div className="flex layout-row layout-align-center-start layout-wrap">
           <div
             className={`${defs.content_width} ${
               styles.top_margin
@@ -200,8 +200,8 @@ class Admin extends Component {
               </Switch>
             </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     )
   }
