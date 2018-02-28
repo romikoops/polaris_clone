@@ -563,7 +563,8 @@ module ExcelTools
         'fcl_40f_hq',
         'lcl'
       ]
-
+      row[:effective_date] = DateTime.now
+      row[:expiration_date] = row[:effective_date] + 60.days
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
       lcl_obj = {
@@ -742,6 +743,8 @@ module ExcelTools
       stops_in_order.length.times do 
         steps_in_order << 30
       end
+      row[:effective_date] = DateTime.now
+      row[:expiration_date] = row[:effective_date] + 60.days
       itinerary.generate_weekly_schedules(
         stops_in_order,
         steps_in_order,
@@ -1001,6 +1004,8 @@ module ExcelTools
       new_pricings_aux_data[pricing_key][:stops_in_order].length.times do 
         steps_in_order << 30
       end
+      row[:effective_date] = DateTime.now
+      row[:expiration_date] = row[:effective_date] + 60.days
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
         steps_in_order,
