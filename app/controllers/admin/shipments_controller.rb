@@ -52,8 +52,9 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] =  doc.get_signed_url
       @documents << tmp
     end
+    locations = {origin: @shipment.origin, destination: @shipment.destination}
     p @shipment.id
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes}
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations}
     response_handler(resp)
   end
 
