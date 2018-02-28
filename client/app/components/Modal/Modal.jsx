@@ -8,11 +8,13 @@ export class Modal extends Component {
     super(props)
     this.state = {
       height: '0',
+      width: '0',
       windowHeight: '0',
       hidden: false
     }
     this.hide = this.hide.bind(this)
     this.updateDimentions = this.updateDimentions.bind(this)
+    this.triggerUpdateDimentions = this.triggerUpdateDimentions.bind(this)
     this.updatedDimentions = false
   }
 
@@ -31,10 +33,15 @@ export class Modal extends Component {
   componentWillUnmount () {
     window.removeEventListener('resize', this.updateDimentions)
   }
+  triggerUpdateDimentions () {
+    this.updatedDimentions = false
+    this.forceUpdate()
+  }
 
   updateDimentions () {
     this.setState({
       height: this.modal.clientHeight,
+      width: this.modal.clientWidth,
       windowHeight: window.innerHeight
     })
   }
@@ -48,37 +55,39 @@ export class Modal extends Component {
 
   render () {
     if (this.state.hidden) return ''
-    const width = this.props.width ? this.props.width : '40vw'
+
+    const { width, height, windowHeight } = this.state
 
     const propsMinHeight = dimentionToPx({
       value: this.props.minHeight,
-      windowHeight: this.state.windowHeight
+      windowHeight
     })
-    const minHeight = propsMinHeight || this.state.windowHeight * 0.5
-    const minTop = Math.max(this.state.windowHeight / 2 - minHeight, 100)
+    const minHeight = propsMinHeight || 0
+    const minTop = Math.max(windowHeight / 2 - height, 100)
 
     const modalStyles = {
-      top: `${Math.min(this.state.windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
+      top: `${Math.min(windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
       minHeight,
-      maxHeight: this.state.windowHeight * 0.9,
-      width,
-      left: `calc(50vw - ${width}/2)`,
-      padding: `${this.props.horizontalPadding} ${this.props.verticalPadding}`,
+      maxHeight: `calc(${windowHeight * 0.9}px - (${this.props.verticalPadding} * 2))`,
+      left: `calc(50% - ${width}px/2)`,
+      padding: `${this.props.verticalPadding} ${this.props.horizontalPadding}`,
       overflowY: 'auto'
     }
+
+    const component = Object.assign({}, this.props.component)
+    component.props = Object.assign({}, component.props)
+    component.props.updateDimentions = this.triggerUpdateDimentions
 
     return (
       <div>
         <div className={`${styles.modal_background} ${styles.full_size}`} onClick={this.hide} />
 
         <div
-          ref={(div) => {
-            this.modal = div
-          }}
+          ref={(div) => { this.modal = div }}
           style={modalStyles}
-          className={`${styles.modal} layout-row layout-align-center-center`}
+          className={styles.modal}
         >
-          {this.props.component}
+          { component }
         </div>
       </div>
     )
@@ -88,15 +97,15 @@ export class Modal extends Component {
 Modal.propTypes = {
   component: PropTypes.node.isRequired,
   parentToggle: PropTypes.func.isRequired,
-  width: PropTypes.string,
   minHeight: PropTypes.string,
-  horizontalPadding: PropTypes.string.isRequired,
-  verticalPadding: PropTypes.string.isRequired
+  horizontalPadding: PropTypes.string,
+  verticalPadding: PropTypes.string
 }
 
 Modal.defaultProps = {
-  width: '',
-  minHeight: ''
+  minHeight: '',
+  horizontalPadding: '20px',
+  verticalPadding: '20px'
 }
 
 export default Modal

@@ -120,8 +120,8 @@ export class ShipmentDetails extends Component {
     window.scrollTo(0, 0)
     setStage(2)
   }
-  componentWillReceiveProps (nextProps, nextState) {
-    if (!nextState.shipment) {
+  componentWillReceiveProps (nextProps) {
+    if (!this.state.shipment) {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
@@ -525,8 +525,8 @@ export class ShipmentDetails extends Component {
                 theme={theme}
                 text={
                   this.state.has_pre_carriage
-                    ? 'Approximate Pickup Date :'
-                    : 'Approximate Departure Date :'
+                    ? 'Approximate Pickup Date:'
+                    : 'Approximate Departure Date:'
                 }
                 size={3}
               />
@@ -560,7 +560,7 @@ export class ShipmentDetails extends Component {
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
           <div className="flex-100 layout-row layout-align-end-center">
             <div className="flex-none letter_2">
-              <TextHeading theme={theme} text="Select Incoterm :" size={3} />
+              <TextHeading theme={theme} text="Select Incoterm:" size={3} />
             </div>
           </div>
           <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>

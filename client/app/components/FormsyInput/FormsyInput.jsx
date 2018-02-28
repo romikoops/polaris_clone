@@ -45,6 +45,7 @@ class FormsyInput extends Component {
           onFocus={this.props.onFocus}
           onBlur={this.props.onBlur}
           placeholder={this.props.placeholder}
+          id={this.props.id}
         />
         <span className={errorStyles.error_message} style={this.props.errorMessageStyles}>
           {errorHidden ? '' : errorMessage}
@@ -67,6 +68,7 @@ FormsyInput.propTypes = {
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   placeholder: PropTypes.string,
+  id: PropTypes.string,
   onChange: PropTypes.func,
   errorMessageStyles: PropTypes.objectOf(PropTypes.string),
   wrapperClassName: PropTypes.string
@@ -77,6 +79,7 @@ FormsyInput.defaultProps = {
   submitAttempted: false,
   onFocus: null,
   placeholder: '',
+  id: '',
   onBlur: null,
   errorMessageStyles: {},
   onChange: null,

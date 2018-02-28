@@ -6,10 +6,39 @@ import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { Alert } from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
+import { humanizeSnakeCase } from '../../helpers'
 import styles from './RegistrationPage.scss'
 import FormsyInput from '../../components/FormsyInput/FormsyInput'
 
 class RegistrationPage extends React.Component {
+  static mergeMinLengthValidations (minLength, validations, validationErrors) {
+    const returnObj = {}
+    returnObj.validations = Object.assign(minLength ? { minLength } : {}, validations || {})
+
+    const minLengthErrors = {
+      isDefaultRequiredValue: `Min. ${minLength} characters`,
+      minLength: `Min. ${minLength} characters`
+    }
+    returnObj.validationErrors = Object.assign(
+      minLength ? minLengthErrors : {},
+      validationErrors || {}
+    )
+    return returnObj
+  }
+  static mapInputs (inputs) {
+    const locationInputs = ['street', 'number', 'zip_code', 'city', 'country']
+    const model = { location: {} }
+    Object.keys(inputs).forEach((inputName) => {
+      if (inputName === 'number') {
+        model.location.street_number = inputs.number
+      } else if (locationInputs.includes(inputName)) {
+        model.location[inputName] = inputs[inputName]
+      } else {
+        model[inputName] = inputs[inputName]
+      }
+    })
+    return model
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -21,6 +50,7 @@ class RegistrationPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
+    this.generateFormGroup = this.generateFormGroup.bind(this)
   }
 
   componentWillMount () {
@@ -65,14 +95,50 @@ class RegistrationPage extends React.Component {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
 
-  render () {
-    const { registering, theme } = this.props
+  generateFormGroup (args) {
+    const {
+      field, flex, offset, minLength, type, required
+    } = args
+    const { theme } = this.props
     const focusStyles = {
       borderColor: theme && theme.colors ? theme.colors.primary : 'black',
       borderWidth: '1.5px',
       borderRadius: '2px',
       margin: '-1px 0 29px 0'
     }
+
+    let { validations, validationErrors } = args
+    if (minLength) {
+      ({ validations, validationErrors } =
+        RegistrationPage.mergeMinLengthValidations(minLength, validations, validationErrors))
+    }
+
+    return (
+      <div className={`flex-${flex || '100'} offset-${offset || 0}`}>
+        <label htmlFor={field}>{humanizeSnakeCase(field)}</label>
+        <FormsyInput
+          type={type || 'text'}
+          className={styles.form_control}
+          onFocus={this.handleFocus}
+          onBlur={this.handleFocus}
+          name={field}
+          id={field}
+          submitAttempted={this.state.submitAttempted}
+          validations={validations}
+          validationErrors={validationErrors}
+          errorMessageStyles={{
+            fontSize: '12px',
+            bottom: '-19px'
+          }}
+          required={required == null ? true : required}
+        />
+        <hr style={this.state.focus[field] ? focusStyles : {}} />
+      </div>
+    )
+  }
+
+  render () {
+    const { registering, theme } = this.props
     const alert = this.state.alertVisible ? (
       <Alert
         message={{ type: 'error', text: 'Email has already been taken' }}
@@ -88,105 +154,70 @@ class RegistrationPage extends React.Component {
         name="form"
         onValidSubmit={this.handleSubmit}
         onInvalidSubmit={this.handleInvalidSubmit}
+        mapping={RegistrationPage.mapInputs}
       >
         {alert}
-        <div className="form-group">
-          <label htmlFor="first_name">First Name</label>
-          <FormsyInput
-            type="text"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="first_name"
-            submitAttempted={this.state.submitAttempted}
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <hr style={this.state.focus.first_name ? focusStyles : {}} />
+        <div className="flex-100 layout-row layout-wrap">
+          <div className="flex-45 layout-row layout-wrap">
+            <div className="flex-100">
+              <h3>Account Details</h3>
+            </div>
+            {
+              this.generateFormGroup({
+                field: 'email',
+                minLength: 2,
+                validations: { matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i },
+                validationErrors: { matchRegexp: 'Invalid email' }
+              })
+            }
+            { this.generateFormGroup({ field: 'password', minLength: 8, type: 'password' }) }
+            {
+              this.generateFormGroup({
+                field: 'confirm_password',
+                validations: { equalsField: 'password' },
+                validationErrors: {
+                  equalsField: 'Must match password'
+                },
+                type: 'password',
+                required: false
+              })
+            }
+            <div className="flex-100">
+              <h3>Address Details</h3>
+            </div>
+            { this.generateFormGroup({ field: 'street', minLength: 2, flex: 70 }) }
+            {
+              this.generateFormGroup({
+                field: 'number', minLength: 1, flex: 25, offset: 5
+              })
+            }
+            { this.generateFormGroup({ field: 'zip_code', minLength: 4, flex: 30 }) }
+            {
+              this.generateFormGroup({
+                field: 'city', minLength: 2, flex: 30, offset: 5
+              })
+            }
+            {
+              this.generateFormGroup({
+                field: 'country', minLength: 3, flex: 30, offset: 5
+              })
+            }
+          </div>
+          <div className="offset-10 flex-45 layout-row layout-wrap">
+            <div className="flex-100">
+              <h3>Basic Details</h3>
+            </div>
+            { this.generateFormGroup({ field: 'company_name', minLength: 8 }) }
+            { this.generateFormGroup({ field: 'VAT_number', minLength: 5 }) }
+            <div className={styles.pusher} />
+            { this.generateFormGroup({ field: 'first_name', minLength: 2 }) }
+            { this.generateFormGroup({ field: 'last_name', minLength: 2 }) }
+            { this.generateFormGroup({ field: 'phone', minLength: 8 }) }
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="last_name">Last Name</label>
-          <FormsyInput
-            type="text"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="last_name"
-            submitAttempted={this.state.submitAttempted}
-            validations="minLength:2"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long'
-            }}
-            required
-          />
-          <hr style={this.state.focus.last_name ? focusStyles : {}} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <FormsyInput
-            type="text"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="email"
-            submitAttempted={this.state.submitAttempted}
-            validations={{
-              minLength: 2,
-              matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
-            }}
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must be at least two characters long',
-              matchRegexp: 'Invalid email'
-            }}
-            required
-          />
-          <hr style={this.state.focus.email ? focusStyles : {}} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <FormsyInput
-            type="password"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="password"
-            submitAttempted={this.state.submitAttempted}
-            validations="minLength:8"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              minLength: 'Must have at least 8 characters'
-            }}
-            required
-          />
-          <hr style={this.state.focus.password ? focusStyles : {}} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Confirm Password</label>
-          <FormsyInput
-            type="password"
-            className={styles.form_control}
-            onFocus={this.handleFocus}
-            onBlur={this.handleFocus}
-            name="confirm_password"
-            submitAttempted={this.state.submitAttempted}
-            validations="equalsField:password"
-            validationErrors={{
-              isDefaultRequiredValue: 'Must not be blank',
-              equalsField: 'Must match password'
-            }}
-            required
-          />
-          <hr style={this.state.focus.confirm_password ? focusStyles : {}} />
-        </div>
-        <div className={`form-group ${styles.form_group_submit_btn}`}>
-          <RoundButton text="register" theme={theme} active />
-          <div className={styles.spinner}>{registering && <LoadingSpinner />}</div>
+        <div className={`${styles.form_group_submit_btn} layout-row layout-align-center`}>
+          <RoundButton text="Register new account" theme={theme} active />
+          <div className={styles.spinner}>{ registering && <LoadingSpinner /> }</div>
         </div>
       </Formsy>
     )
@@ -198,7 +229,7 @@ RegistrationPage.propTypes = {
   registrationAttempt: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  req: PropTypes.any.isRequired,
+  req: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
@@ -209,6 +240,7 @@ RegistrationPage.defaultProps = {
   registrationAttempt: false,
   user: null,
   theme: null,
+  req: null,
   registering: false
 }
 

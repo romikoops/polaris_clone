@@ -50,10 +50,19 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
-    @user.update_attributes(update_params)
+    @user.update_attributes(user_params)
+
+    if @user.valid? && !@user.guest && params[:update][:location]
+      location = Location.create(location_params)
+      location.geocode_from_address_fields!
+      @user.locations << location unless location.nil?
+      @user.save
+    end       
+
     headers = @user.create_new_auth_token
     response_handler({user: @user, headers: headers})
   end
+
   def currencies
     currency = current_user ? current_user.currency : "EUR"
     results = get_currency_array(current_user.currency)
@@ -74,9 +83,26 @@ class UsersController < ApplicationController
 
   private
 
-  def update_params
-    params.require(:update).permit(
-      :first_name, :last_name, :email, :phone, :company_name, :password, :guest, :tenant_id
+  def user_params
+    return_params = params.require(:update).permit(
+      :guest, :tenant_id, :email, :password, :confirm_password, :password_confirmation,
+      :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+    ).to_h
+
+    unless return_params[:confirm_password].nil?
+      return_params[:password_confirmation] = return_params.delete(:confirm_password)
+    end
+
+    unless return_params[:VAT_number].nil?
+      return_params[:vat_number] = return_params.delete(:VAT_number)
+    end
+
+    return_params
+  end
+
+  def location_params
+    params.require(:update).require(:location).permit(
+      :street, :street_number, :zip_code, :city, :country
     )
   end
 end
