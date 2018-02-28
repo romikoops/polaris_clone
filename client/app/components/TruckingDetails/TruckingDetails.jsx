@@ -32,7 +32,7 @@ export default function TruckingDetails (props) {
           checked={trucking[carriage].truck_type === truckType}
           onChange={handleTruckingDetailsChange}
         />
-        <label htmlFor={`${carriage}_${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
+        <label htmlFor={`${carriage}-${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
         { tooltip(truckType, theme) }
       </div>
     )
