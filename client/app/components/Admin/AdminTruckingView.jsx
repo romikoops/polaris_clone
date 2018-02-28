@@ -5,6 +5,7 @@ import styles from './Admin.scss'
 import { history, capitalize } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -14,11 +15,16 @@ export class AdminTruckingView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentQuery: false
+      currentQuery: false,
+      queryFilter: 'either'
     }
     this.viewQuery = this.viewQuery.bind(this)
+    this.setQueryFilter = this.setQueryFilter.bind(this)
     this.cellGenerator = this.cellGenerator.bind(this)
     this.closeQueryView = this.closeQueryView.bind(this)
+  }
+  setQueryFilter (selection) {
+    this.setState({ queryFilter: selection })
   }
   viewQuery (query) {
     this.setState({ currentQuery: query })
@@ -26,10 +32,13 @@ export class AdminTruckingView extends Component {
   closeQueryView () {
     this.setState({ currentQuery: false })
   }
+
   cellGenerator (truckingHub, queries) {
+    const { queryFilter } = this.state
+    const filteredQueries = queryFilter.value === 'either' ? queries : queries.filter(q => q.query.direction === queryFilter.value)
     switch (truckingHub.modifier) {
       case 'zipcode':
-        return queries.map(q => (
+        return filteredQueries.map(q => (
           <div
             key={v4()}
             className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
@@ -44,7 +53,7 @@ export class AdminTruckingView extends Component {
           </div>
         ))
       case 'city':
-        return queries.map(q => (
+        return filteredQueries.map(q => (
           <div
             key={v4()}
             className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
@@ -57,7 +66,7 @@ export class AdminTruckingView extends Component {
           </div>
         ))
       case 'distance':
-        return queries.map(q => (
+        return filteredQueries.map(q => (
           <div
             key={v4()}
             className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
@@ -81,7 +90,12 @@ export class AdminTruckingView extends Component {
     if (!truckingDetail) {
       return ''
     }
-    const { currentQuery } = this.state
+    const queryFilterOptions = [
+      { value: 'either', label: 'Import/Export' },
+      { value: 'export', label: 'Export' },
+      { value: 'import', label: 'Import' }
+    ]
+    const { currentQuery, queryFilter } = this.state
     const { truckingHub, truckingQueries } = truckingDetail
     const nexus = nexuses.filter(n => n.id === truckingHub.nexus_id)[0]
     const textStyle = {
@@ -111,7 +125,20 @@ export class AdminTruckingView extends Component {
       />
     )
     const truckView = currentQuery ? displayPanel : this.cellGenerator(truckingHub, truckingQueries)
-
+    const queryFilterRow = (
+      <div className="flex-100 layout-row layout-align-end-center">
+        <div className="flex-25 layout-row layout-align-center-center">
+          <NamedSelect
+            name="queryFilter"
+            classes={`${styles.select}`}
+            value={queryFilter}
+            options={queryFilterOptions}
+            className="flex-100"
+            onChange={this.setQueryFilter}
+          />
+        </div>
+      </div>
+    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -129,6 +156,7 @@ export class AdminTruckingView extends Component {
             <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
           </div>
           <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+            {currentQuery ? '' : queryFilterRow}
             {truckView}
           </div>
         </div>

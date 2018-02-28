@@ -3,10 +3,7 @@ import PropTypes from 'prop-types'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { RoundButton } from '../RoundButton/RoundButton'
-import {
-  currencyOptions,
-  cargoClassOptions
-} from '../../constants/admin.constants'
+import { currencyOptions, cargoClassOptions } from '../../constants/admin.constants'
 import {
   fclChargeGlossary,
   lclChargeGlossary,
@@ -26,7 +23,7 @@ const cargoClassOpts = cargoClassOptions
 const lclSchema = lclPricingSchema
 const fclSchema = fclPricingSchema
 const cargoGloss = cargoGlossary
-const test = '123'
+
 export class AdminPriceCreator extends Component {
   static selectFromOptions (options, value) {
     let result
@@ -75,7 +72,6 @@ export class AdminPriceCreator extends Component {
     this.addFeeToPricing = this.addFeeToPricing.bind(this)
   }
   componentWillMount () {
-    console.log(test)
     this.setAllFromOptions()
   }
 
@@ -100,8 +96,10 @@ export class AdminPriceCreator extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[key][chargeKey] =
-        AdminPriceCreator.selectFromOptions(opts, pricing.data[key][chargeKey])
+        newObj.data[key][chargeKey] = AdminPriceCreator.selectFromOptions(
+          opts,
+          pricing.data[key][chargeKey]
+        )
       })
     })
     this.setState({ selectOptions: newObj })
@@ -124,28 +122,6 @@ export class AdminPriceCreator extends Component {
   handleSelect (selection) {
     const nameKeys = selection.name.split('-')
     this.setState({
-      pricing: {
-        ...this.state.pricing,
-        data: {
-          ...this.state.pricing.data,
-          [nameKeys[0]]: {
-            ...this.state.pricing.data[nameKeys[0]],
-            [nameKeys[1]]: selection.value
-          }
-        }
-      },
-      selectOptions: {
-        ...this.state.selectOptions,
-        data: {
-          ...this.state.selectOptions.data,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions.data[nameKeys[0]],
-            [nameKeys[1]]: selection
-          }
-        }
-      }
-    })
-    console.log({
       pricing: {
         ...this.state.pricing,
         data: {
@@ -199,7 +175,7 @@ export class AdminPriceCreator extends Component {
     } else {
       pricing.data[key] = fclPricingSchema.data[key]
     }
-    console.log('pricing', pricing)
+
     const newObj = { data: {} }
     const tmpObj = {}
 
@@ -219,8 +195,10 @@ export class AdminPriceCreator extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[key][chargeKey] =
-        AdminPriceCreator.selectFromOptions(opts, pricing.data[key][chargeKey])
+        newObj.data[key][chargeKey] = AdminPriceCreator.selectFromOptions(
+          opts,
+          pricing.data[key][chargeKey]
+        )
       })
     })
     this.setState({ selectOptions: newObj, pricing })
@@ -230,10 +208,13 @@ export class AdminPriceCreator extends Component {
       hubRoute, transportCategory, route, cargoClass, pricing, client
     } = this.state
     const clientTag = client.value !== 'OPEN' ? `_${client.value.id}` : ''
-    const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${transportCategory.value.id}_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
+    const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${
+      transportCategory.value.id
+    }_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
     pricing.hub_route_id = hubRoute.value.id
-    pricing.route_id = route.value.id
+    pricing.itinerary_id = route.value.id
     pricing.tenant_id = route.value.tenant_id
+    pricing.transport_category_id = transportCategory.value.id
     this.props.adminDispatch.updatePricing(pricingId, pricing)
     this.props.closeForm()
   }
@@ -246,12 +227,14 @@ export class AdminPriceCreator extends Component {
       route, hubRoute, cargoClass, steps, transportCategory, client, showPanel
     } = this.state
     const textStyle = {
-      background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
+      background:
+        theme && theme.colors
+          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
+          : 'black'
     }
     const { pricing, selectOptions } = this.state
     const panel = []
     let gloss
-    // debugger;
     if (cargoClass.value.includes('lcl')) {
       gloss = lclChargeGloss
     } else {
@@ -260,8 +243,19 @@ export class AdminPriceCreator extends Component {
     const routeOpts = AdminPriceCreator.prepForSelect(itineraries, 'name', false, false)
     const clientOpts = clients.map(a => ({ value: a, label: `${a.first_name} ${a.last_name}` }))
     clientOpts.push({ value: 'OPEN', label: 'Open' })
-    const hubRouteOpts = route ? detailedItineraries.filter(di => di.id === route.value.id).map(a => ({ value: a, label: `${a.origin_hub_name} - ${a.destination_hub_name}` })) : []
-    const transportCategoryOpts = cargoClass ? AdminPriceCreator.prepForSelect(transportCategories.filter(x => x.cargo_class === cargoClass.value), 'name', false, cargoGloss) : []
+    const hubRouteOpts = route
+      ? detailedItineraries
+        .filter(di => di.id === route.value.id)
+        .map(a => ({ value: a, label: `${a.origin_hub_name} - ${a.destination_hub_name}` }))
+      : []
+    const transportCategoryOpts = cargoClass
+      ? AdminPriceCreator.prepForSelect(
+        transportCategories.filter(x => x.cargo_class === cargoClass.value),
+        'name',
+        false,
+        cargoGloss
+      )
+      : []
 
     Object.keys(pricing.data).forEach((key) => {
       const cells = []
@@ -269,7 +263,9 @@ export class AdminPriceCreator extends Component {
         if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
           cells.push(<div
             key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
           >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <div className={`flex-95 layout-row ${styles.editor_input}`}>
@@ -282,7 +278,11 @@ export class AdminPriceCreator extends Component {
             </div>
           </div>)
         } else if (chargeKey === 'rate_basis') {
-          cells.push(<div className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}>
+          cells.push(<div
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <NamedSelect
               name={`${key}-${chargeKey}`}
@@ -296,7 +296,9 @@ export class AdminPriceCreator extends Component {
         } else if (chargeKey === 'currency') {
           cells.push(<div
             key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
           >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <div className="flex-95 layout-row">
@@ -316,8 +318,14 @@ export class AdminPriceCreator extends Component {
         key={key}
         className="flex-100 layout-row layout-align-none-center layout-wrap"
       >
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.price_subheader}`}>
-          <p className="flex-none">{key} - {gloss[key]}</p>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${
+            styles.price_subheader
+          }`}
+        >
+          <p className="flex-none">
+            {key} - {gloss[key]}
+          </p>
           <div
             className="flex-none layout-row layout-align-center-center"
             onClick={() => this.deleteFee(key)}
@@ -325,9 +333,7 @@ export class AdminPriceCreator extends Component {
             <i className="fa fa-trash clip" style={textStyle} />
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-start-center">
-          { cells }
-        </div>
+        <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
       </div>)
     })
 
@@ -436,13 +442,13 @@ export class AdminPriceCreator extends Component {
     )
     const transportCategoryResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Transport Category:  </h4>
+        <h4 className="flex-none letter_3">Transport Category: </h4>
         <h4 className="flex-none letter_3">{transportCategory.label}</h4>
       </div>
     )
     const clientResult = (
       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-        <h4 className="flex-none letter_3">Client:  </h4>
+        <h4 className="flex-none letter_3">Client: </h4>
         <h4 className="flex-none letter_3">{client.label}</h4>
       </div>
     )
@@ -451,13 +457,13 @@ export class AdminPriceCreator extends Component {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           {steps.cargoClass === false ? selectCargoClass : cargoClassResult}
           {steps.cargoClass === true && steps.transportCategory === false
-            ? selectTransportCategory : transportCategoryResult}
-          {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult }
-          {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult }
-          {steps.hubRoute === true && steps.client === false ? selectClient : clientResult }
+            ? selectTransportCategory
+            : transportCategoryResult}
+          {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult}
+          {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult}
+          {steps.hubRoute === true && steps.client === false ? selectClient : clientResult}
         </div>
       </div>
-
     )
     const feeSchema = cargoClass.label === 'lcl' ? lclPricingSchema : fclPricingSchema
     const feesToAdd = Object.keys(feeSchema.data).map((key) => {
@@ -468,12 +474,11 @@ export class AdminPriceCreator extends Component {
             className="flex-33 layout-row layout-align-start-center"
             onClick={() => this.addFeeToPricing(key)}
           >
-            <i
-              className="fa fa-plus clip flex-none"
-              style={textStyle}
-            />
+            <i className="fa fa-plus clip flex-none" style={textStyle} />
             <div className="flex-5" />
-            <p className="flex-none">{key} - {gloss[key]} </p>
+            <p className="flex-none">
+              {key} - {gloss[key]}{' '}
+            </p>
           </div>
         )
       }
@@ -481,30 +486,44 @@ export class AdminPriceCreator extends Component {
     })
     const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed
     return (
-      <div className={` ${styles.editor_backdrop} flex-none layout-row layout-wrap layout-align-center-center`}>
+      <div
+        className={` ${
+          styles.editor_backdrop
+        } flex-none layout-row layout-wrap layout-align-center-center`}
+      >
         <div
-          className={` ${styles.editor_fade} flex-none layout-row layout-wrap layout-align-center-start`}
+          className={` ${
+            styles.editor_fade
+          } flex-none layout-row layout-wrap layout-align-center-start`}
           onClick={this.props.closeForm}
         />
-        <div className={` ${styles.editor_box} flex-none layout-row layout-wrap layout-align-center-start`}>
-          <div className={`flex-95 layout-row layout-wrap layout-align-center-start ${styles.editor_scroll}`}>
-            <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-              <p className={` ${styles.sec_title_text} flex-none`} style={textStyle} >New Pricing</p>
+        <div
+          className={` ${
+            styles.editor_box
+          } flex-none layout-row layout-wrap layout-align-center-start`}
+        >
+          <div
+            className={`flex-95 layout-row layout-wrap layout-align-center-start ${
+              styles.editor_scroll
+            }`}
+          >
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_title
+              }`}
+            >
+              <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
+                New Pricing
+              </p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-60 layout-row layout-align-start-center">
-                <i
-                  className="fa fa-map-signs clip"
-                  style={textStyle}
-                />
+                <i className="fa fa-map-signs clip" style={textStyle} />
                 <p className="flex-none offset-5">{hubRoute ? hubRoute.label : ''}</p>
               </div>
             </div>
             {client ? panel : contextPanel}
-            <div
-              className="flex-100 layout-align-end-center layout-row"
-              style={{ margin: '15px' }}
-            >
+            <div className="flex-100 layout-align-end-center layout-row" style={{ margin: '15px' }}>
               <RoundButton
                 theme={theme}
                 size="small"
@@ -514,10 +533,7 @@ export class AdminPriceCreator extends Component {
                 iconClass="fa-plus"
               />
             </div>
-            <div
-              className="flex-100 layout-align-end-center layout-row"
-              style={{ margin: '15px' }}
-            >
+            <div className="flex-100 layout-align-end-center layout-row" style={{ margin: '15px' }}>
               <RoundButton
                 theme={theme}
                 size="small"
@@ -528,15 +544,16 @@ export class AdminPriceCreator extends Component {
               />
             </div>
           </div>
-          <div className={`flex-100 layout-row layout-align-center-center layout-wrap ${styles.add_fee_panel} ${panelViewClass}`}>
+          <div
+            className={`flex-100 layout-row layout-align-center-center layout-wrap ${
+              styles.add_fee_panel
+            } ${panelViewClass}`}
+          >
             <div
               className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`}
               onClick={this.showAddFeePanel}
             >
-              <i
-                className="fa fa-times clip"
-                style={textStyle}
-              />
+              <i className="fa fa-times clip" style={textStyle} />
             </div>
             <div className="flex-90 layout-row layout-wrap layout-align-start-start">
               {feesToAdd}

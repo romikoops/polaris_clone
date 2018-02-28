@@ -38,6 +38,7 @@ module TruckingTools
     resp = get_item("truckingHubs", '_id', trucking_hub_id)
   end
   def retrieve_trucking_query(trucking_hub, destination, km, direction)
+    
     case trucking_hub["modifier"]
       when 'zipcode'
         zip_int = destination.get_zip_code.to_i
@@ -152,6 +153,8 @@ module TruckingTools
         return {currency: fee["currency"], value: fee["value"], key: key}
       when 'PER_ITEM'
         return {currency: fee["currency"], value: fee["value"] * cargo[:number_of_items], key: key}
+      when 'PER_CONTAINER'
+        return {currency: fee["currency"], value: fee["value"] * cargo[:number_of_items], key: key}
       when 'PER_CBM_TON'
         cbm_value = cargo[:volume] * fee["cbm"]
         ton_value = (cargo[:weight]/ 1000) * fee["ton"]
@@ -193,7 +196,11 @@ module TruckingTools
 
 
   def calc_trucking_price(destination, cargos, km, hub, target, load_type, direction, delivery_type)
-    cargo = {
+
+    cargo = load_type === 'container' ? {
+      number_of_items: cargos.length,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    } : {
       number_of_items: cargos.length,
       volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
       weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f

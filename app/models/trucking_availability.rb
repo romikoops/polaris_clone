@@ -61,4 +61,5 @@ def self.update_hubs_trucking_availability!(tenant, trucking_availability_settin
     end
   end
 end
+
 end

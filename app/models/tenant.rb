@@ -29,8 +29,7 @@ class Tenant < ApplicationRecord
       itinerary.set_scope!
 
       itinerary.routes
-    end    
-    # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
+    end
     update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end
 
@@ -94,4 +93,5 @@ class Tenant < ApplicationRecord
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
   end
+  
 end

@@ -287,7 +287,7 @@ export class AdminPricingRouteView extends Component {
           </p>
           {backButton}
         </div>
-        <RouteHubBox hubs={routeBoxHubs} itinerary={itinerary} theme={theme} />
+        <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
