@@ -52,10 +52,10 @@ Tenant.all.each do |tenant|
     req = {"xlsx" => trucking}
     overwrite_zipcode_weight_trucking_rates(req, shipper)
   end
-
-  trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_city_trucking_rates(req, shipper)
-
+  ["import", "export"].each do |dir|
+    trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+    req = {"xlsx" => trucking}
+    overwrite_city_trucking_rates(req, shipper)
+  end
   tenant.update_route_details()
 end

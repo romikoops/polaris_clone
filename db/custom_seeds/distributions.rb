@@ -8,6 +8,8 @@ subdomains =  [
 
 subdomains.each do |s|
   tenant = Tenant.find_by_subdomain(s[:subdomain])
-  tenant.web = s
-  tenant.save!
+  if tenant
+    tenant.web = s
+    tenant.save!
+  end
 end
