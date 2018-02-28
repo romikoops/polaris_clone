@@ -77,8 +77,8 @@ class Admin::TruckingController < ApplicationController
       values: [nexus.name],
       options: {
         load_type: update_type
-      }]
-    })
+      }
+    }])
     nexus.update_trucking_availability!({id: tenant.id})
   end
 
