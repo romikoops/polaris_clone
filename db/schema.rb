@@ -352,8 +352,8 @@ ActiveRecord::Schema.define(version: 20180222154439) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item", default: false
-    t.boolean "container", default: false
+    t.boolean "cargo_item"
+    t.boolean "container"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

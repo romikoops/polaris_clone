@@ -175,22 +175,42 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
-    z-index: 200;
+    z-index: 10;
     overflow: hidden;
+  }
+  .summary_wrapper_closed {
+    background-color: #fff;
+  }
+  .summary_wrapper_open {
+    background-color: #00aabb !important;
   }
   .msg_form {
     padding: 5px;
   }
   .detail_wrapper_open{
-    height: 100%;
+    position: fixed;
+    top: initial;
+    background-color: rbga(255,255,255,1) !important;
+  height: 100%;
   }
   .detail_wrapper_closed {
-    height: 75px;
+    background-color: rbga(255,255,255,0) !important;
+    height: 0px;
   }
-  .message_wraper_open {
+  .detail_content {
+    position: relative;
+    *{
+      transition: all 0.75s linear;
+      overflow: hidden;
+    }
+    transition: all 0.75s linear;
+    h3 {
+      transition: all 0.75s linear;
+    }
 
   }
-  .message_wrapper_closed {
-    height: 250px;
+  .convo_list {
+    position: relative;
+    overflow: scroll;
   }
 }

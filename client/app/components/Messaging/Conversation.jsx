@@ -39,6 +39,7 @@ export class Conversation extends Component {
   }
   toggleDetails () {
     this.setState({ showDetails: !this.state.showDetails })
+    console.log(this.state.showDetails)
     if (!this.state.showDetails) {
       this.scrollToBottom()
     }
@@ -107,18 +108,16 @@ export class Conversation extends Component {
       user={user}
       closeInfo={this.toggleDetails}
     />)
-    const showDetailView = showDetails ? styles.detail_wrapper_open
-      : styles.detail_wrapper_closed
-    const showMessageView = showDetails ? styles.message_wrapper_closed
-      : styles.message_wrapper_open
     const messageView = (
-      <div className={`${showMessageView} flex-100 layout-column layout-align-start-start`} ref>
+      <div className="flex-100 layout-column layout-align-start-start" ref>
         <div
           id="messageList"
           className={`${styles.message_scroll} 
           flex-70 layout-row layout-align-start-start layout-wrap `}
         >
-          { messages }
+          <div className="flex-70 layout-row layout-align-start-start layout-wrap" >
+            { messages }
+          </div>
 
           <Element name="messagesEnd" />
         </div>
@@ -165,15 +164,17 @@ export class Conversation extends Component {
         <div ref={(el) => { this.el = el }} />
       </div>
     )
+    //  const showDetailView = this.state.showDetails ? styles.detail_wrapper_open
+    //    : styles.detail_wrapper_closed
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`${styles.summary_wrapper} ${showDetailView}
-          flex-10 layout-row layout-wrap layout-align-start-center `}
+          className={`${styles.summary_wrapper} 
+          flex-15 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >
-          <div className="flex-70 layout-wrap layout-row layout-align-start-center">
-            <div className="flex-5" />
+          <div className="flex-5" />
+          <div className="flex-10 layout-wrap layout-row layout-align-start-center">
             <p className="flex-none">
               Shipment Reference:
               <b>
@@ -181,17 +182,22 @@ export class Conversation extends Component {
               </b>
             </p>
           </div>
-          <div className="flex-30 layout-align-end-center layout-row">
+          <div className="flex-80 layout-align-end-center layout-row">
             <i>
               Show Details
             </i>
             <div className="flex-5" />
             <i className="fa fa-info clip" style={btnStyle} />
+
           </div>
-          { showDetails ? detailView : '' }
+          { !showDetails
+            ? <div className="flex-15 layout-row layout-align-center-center">
+              <i className="fa fa-angle-double-down" />
+            </div>
+            : '' }
         </div>
         <div className="flex-90 layout-column layout-align-start-start">
-          { messageView }
+          { showDetails ? detailView : messageView }
         </div>
       </div>
     )
