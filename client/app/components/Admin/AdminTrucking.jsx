@@ -21,14 +21,9 @@ class AdminTrucking extends Component {
     this.backToIndex = this.backToIndex.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
-  viewTrucking (hub) {
-    const { adminDispatch, trucking } = this.props
-    const { truckingHubs, truckingPrices } = trucking
-    // eslint-disable-next-line no-underscore-dangle
-    const hubTable = truckingHubs.filter(th => th._id === String(hub.id))[0]
-    // eslint-disable-next-line no-underscore-dangle
-    const pricing = truckingPrices[hubTable._id]
-    adminDispatch.viewTrucking(hubTable, pricing)
+  viewTrucking (truckingNexusId) {
+    const { adminDispatch } = this.props
+    adminDispatch.viewTrucking(truckingNexusId)
     this.setState({ selectedRoute: true })
   }
   toggleCreator () {
@@ -43,14 +38,12 @@ class AdminTrucking extends Component {
   render () {
     const { selectedRoute } = this.state
     const {
-      theme, adminDispatch, trucking, hubHash, loading, truckingDetail
+      theme, adminDispatch, trucking, loading, truckingDetail
     } = this.props
     if (!trucking) {
       return ''
     }
-    const { truckingHubs, nexuses } = trucking
-    // eslint-disable-next-line no-underscore-dangle
-    const relHubs = truckingHubs.map(th => hubHash[parseInt(th._id, 10)])
+    const { truckingNexuses, nexuses } = trucking
     const backButton = (
       <div className="flex-none layout-row">
         <RoundButton
@@ -62,29 +55,17 @@ class AdminTrucking extends Component {
         />
       </div>
     )
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="New Price"
-          active
-          handleNext={() => adminDispatch.goTo('/admin/trucking/new/creator')}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
     const title = selectedRoute ? 'Trucking Overview' : 'Trucking'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-space-between-center">
-          <div className="flex-none layout-row">
+          <div className="flex-none layout-row layout-align-start-center">
             <div className="flex-none">
               <TextHeading theme={theme} size={1} text={title} />
             </div>
             <Tooltip icon="fa-info-circle" theme={theme} text={truckTip.manage} toolText />
           </div>
-          {selectedRoute ? backButton : newButton}
+          {selectedRoute ? backButton : ''}
         </div>
         <Switch className="flex">
           <Route
@@ -93,9 +74,7 @@ class AdminTrucking extends Component {
             render={props => (
               <AdminTruckingIndex
                 theme={theme}
-                nexuses={nexuses}
-                truckingHubs={truckingHubs}
-                hubs={relHubs}
+                truckingNexuses={truckingNexuses}
                 {...props}
                 adminDispatch={adminDispatch}
                 loading={loading}
@@ -109,8 +88,7 @@ class AdminTrucking extends Component {
             render={props => (
               <AdminTruckingView
                 theme={theme}
-                hubs={relHubs}
-                hubHash={hubHash}
+                nexuses={nexuses}
                 truckingDetail={truckingDetail}
                 loading={loading}
                 adminDispatch={adminDispatch}

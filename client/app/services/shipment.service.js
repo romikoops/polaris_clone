@@ -37,11 +37,11 @@ function getShipment (id) {
   return fetch(`${BASE_URL}/shipments/${id}`, requestOptions).then(handleResponse)
 }
 
-function newShipment (loadType) {
+function newShipment (details) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
-    body: JSON.stringify({ loadType })
+    body: JSON.stringify({ details })
   }
   const url = `${BASE_URL}/shipments`
   return fetch(url, requestOptions).then(handleResponse)

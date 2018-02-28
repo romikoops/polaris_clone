@@ -193,6 +193,7 @@ export const lclChargeGlossary = {
 export const chargeGlossary = {
   rate_basis: 'Rate Basis',
   base_rate: 'Base Rate',
+  base: 'Base',
   rate: 'Rate',
   currency: 'Currency',
   cbm: 'CBM',
@@ -203,7 +204,28 @@ export const chargeGlossary = {
   PER_CONTAINER: 'Per Container',
   PER_SHIPMENT: 'Per Shipment',
   PER_CBM_TON: 'Per cbm/ton',
-  PER_CBM: 'Per cbm'
+  PER_CBM: 'Per cbm',
+  FSC: 'Fuel Surcharge',
+  ULT: 'Loading/Unloading Time',
+  VAT: 'VAT',
+  CCC: 'Congestion Charge',
+  DLF: 'Delivery Fee',
+  PUF: 'Pickup Fee',
+  OMR: 'Over Max Rate',
+  PCR: 'Per CMB Rate',
+  PWF: 'Waiting Fee',
+  min_value: 'Minimum Value',
+  min_weight: 'Min. Weight',
+  max_weight: 'Max. Weight',
+  min_distance: 'Min. Distance',
+  max_distance: 'Max. Distance',
+  min_cbm: 'Min. CBM',
+  max_cbm: 'Max. CBM',
+  city: 'City',
+  province: 'Province',
+  value: 'Rate',
+  delivery_fee: 'Delivery Fee',
+  pickup_fee: 'Pickup Fee'
 }
 
 export const incoterms = [

@@ -32,7 +32,7 @@ export default function TruckingDetails (props) {
           checked={trucking[carriage].truck_type === truckType}
           onChange={handleTruckingDetailsChange}
         />
-        <label htmlFor={`${carriage}_${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
+        <label htmlFor={`${carriage}-${truckType}`}>{ humanizeSnakeCase(truckType) }</label>
         { tooltip(truckType, theme) }
       </div>
     )
@@ -55,7 +55,7 @@ export default function TruckingDetails (props) {
     )
   }
   return (
-    <div className="content_width">
+    <div className="content_width_booking">
       <div className={`${styles.trucking_details} layout-row layout-wrap layout-align-center`}>
         <div className="flex-100">
           <TextHeading

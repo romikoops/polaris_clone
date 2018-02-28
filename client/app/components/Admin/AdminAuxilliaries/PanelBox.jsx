@@ -10,7 +10,7 @@ import styles from '../Admin.scss'
 export class PanelBox extends Component {
   static panelSwitcher (fee, cells, i, iw, target, fk, handleRateChange) {
     console.log(fee, cells, i, iw, target, fk, handleRateChange)
-    if (fee.cbm !== 'undefined' && fee.kg !== 'undefined') {
+    if (fee.cbm !== undefined && fee.kg !== undefined) {
       return (
         <div className="flex-100 layout-row layout-align-start-center">
           <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
@@ -44,7 +44,7 @@ export class PanelBox extends Component {
           </div>
         </div>
       )
-    } else if (fee.cbm !== 'undefined' && fee.ton !== 'undefined') {
+    } else if (fee.cbm !== undefined && fee.ton !== undefined) {
       return (
         <div className="flex-100 layout-row layout-align-start-center">
           <div className="flex-25 layout-row layout-align-start-center input_box layout-wrap">
@@ -194,7 +194,7 @@ export class PanelBox extends Component {
         )
       })
       : []
-    return <div className="flex-100 layout-row layout-align-start-start">{panel}</div>
+    return <div className="flex-100 layout-row layout-align-start-start layout-wrap">{panel}</div>
   }
 }
 PanelBox.propTypes = {

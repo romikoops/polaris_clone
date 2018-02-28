@@ -138,13 +138,13 @@ export class AdminTruckingCreator extends Component {
   }
   addNewCell (model) {
     const {
-      cells, cellSteps, loadType, feeSchema
+      cells, cellSteps, loadType, feeSchema, truckingBasis
     } = this.state
     const tmpCell = {}
     const keys = Object.keys(model).sort()
     if (loadType.value === 'fcl') {
-      tmpCell.chassis = { ...model }
-      tmpCell.side_lifter = { ...model }
+      tmpCell.chassis = { [truckingBasis.value]: { ...model } }
+      tmpCell.side_lifter = { [truckingBasis.value]: { ...model } }
       tmpCell.chassis.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
         tmp.fees = {}
@@ -162,7 +162,7 @@ export class AdminTruckingCreator extends Component {
         return tmp
       })
     } else {
-      tmpCell.lcl = { ...model }
+      tmpCell.lcl = { [truckingBasis.value]: { ...model } }
       tmpCell.lcl.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
         tmp.fees = {}
@@ -307,7 +307,7 @@ export class AdminTruckingCreator extends Component {
   saveEdit () {
     console.log(this.state)
     const {
-      cells, nexus, currency, rateBasis, truckingBasis, loadType
+      cells, nexus, currency, truckingBasis, stepBasis, loadType, direction
     } = this.state
     const data = cells.map((c) => {
       const tc = Object.assign({}, c)
@@ -316,10 +316,11 @@ export class AdminTruckingCreator extends Component {
       return tc
     })
     const meta = {
-      type: truckingBasis.value,
-      modifier: rateBasis.value,
+      modifier: truckingBasis.value,
       nexus_id: nexus.value.id,
-      loadType: loadType.value
+      loadType: loadType.value,
+      direction: direction.value,
+      subModifier: stepBasis.value
     }
     this.props.adminDispatch.saveNewTrucking({ meta, data })
     this.props.closeForm()
@@ -357,7 +358,8 @@ export class AdminTruckingCreator extends Component {
     ]
     const directionOpts = [
       { value: 'import', label: 'Import' },
-      { value: 'export', label: 'Export' }
+      { value: 'export', label: 'Export' },
+      { value: 'either', label: 'Either' }
     ]
     const loadTypeOpts = [{ value: 'lcl', label: 'LCL' }, { value: 'fcl', label: 'FCL' }]
     const nexusOpts = AdminTruckingCreator.prepForSelect(nexuses, 'name', false, false)

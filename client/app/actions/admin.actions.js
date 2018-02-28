@@ -942,9 +942,9 @@ function saveNewTrucking (obj) {
   function request (truckingData) {
     return { type: adminConstants.NEW_TRUCKING_REQUEST, payload: truckingData }
   }
-  function success (truckingData) {
-    return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data }
-  }
+  // function success (truckingData) {
+  //   return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data }
+  // }
   function failure (error) {
     return { type: adminConstants.NEW_TRUCKING_FAILURE, error }
   }
@@ -954,7 +954,7 @@ function saveNewTrucking (obj) {
     adminService.saveNewTrucking(obj).then(
       (data) => {
         dispatch(alertActions.success('New Trucking successful'))
-        dispatch(success(data))
+        dispatch(viewTrucking(data.data.truckingHubId))
       },
       (error) => {
         dispatch(failure(error))
@@ -990,16 +990,30 @@ function assignManager (obj) {
   }
 }
 
-function viewTrucking (truckingHub, pricing) {
-  const payload = { truckingHub, pricing }
-  function set (data) {
-    // ;
-    return { type: adminConstants.VIEW_TRUCKING, payload: data }
+function viewTrucking (truckingHub) {
+  function request (truckingData) {
+    return { type: adminConstants.VIEW_TRUCKING_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.VIEW_TRUCKING_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.VIEW_TRUCKING_FAILURE, error }
   }
   return (dispatch) => {
-    // eslint-disable-next-line no-underscore-dangle
-    dispatch(push(`/admin/trucking/${truckingHub._id}`))
-    dispatch(set(payload))
+    dispatch(request())
+
+    adminService.viewTrucking(truckingHub).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(success(data))
+        dispatch(push(`/admin/trucking/${truckingHub}`))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
   }
 }
 

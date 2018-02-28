@@ -32,6 +32,141 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
+  def retrieve_trucking_hub(nexus, cargo_type, tenant_id)
+    load_type = cargo_type === 'cargo_item' ? 'lcl' : 'fcl'
+    trucking_hub_id = "#{nexus.id}_#{load_type}_#{tenant_id}"
+    resp = get_item("truckingHubs", '_id', trucking_hub_id)
+  end
+  def retrieve_trucking_query(trucking_hub, destination, km, direction)
+    
+    case trucking_hub["modifier"]
+      when 'zipcode'
+        zip_int = destination.get_zip_code.to_i
+        query = [
+                  { "zipcode.lower_zip" => { "$lte" => zip_int}},
+                  {  "zipcode.upper_zip" => { "$gte" => zip_int }},
+                  { 'trucking_hub_id' => { "$eq" => trucking_hub["_id"]}},
+                  { 'direction' => { "$eq" => direction}}
+                ]
+        
+        resp = get_items_query('truckingQueries', query).to_a
+        if resp
+          return resp.first
+        end
+      
+      when 'city'
+        
+        city_or_query = destination.city.downcase.split.map {|text| {"city.city" => {"$eq" => text}} }
+        query = [
+                  { "$or" => city_or_query},
+                  { 'trucking_hub_id' => { "$eq" => trucking_hub["_id"]}},
+                  { 'direction' => { "$eq" => direction}}
+                ]
+        
+        resp = get_items_query('truckingQueries', query).to_a
+        if resp
+          return resp.first
+        end
+      
+      when 'distance'
+        dist = km * 2
+        query = [
+                  { "distance.lower_distance" => { "$lte" => dist}},
+                  {  "distance.upper_distance" => { "$gte" => dist }},
+                  { 'trucking_hub_id' => { "$eq" => trucking_hub["_id"]}},
+                  { 'direction' => { "$eq" => direction}}
+                ]
+        
+        resp = get_items_query('truckingQueries', query).to_a
+        if resp
+          return resp.first
+        end
+      end
+  end
+  def retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
+    case trucking_query["modifier"]
+      when 'kg'
+        query = [
+                  { "min_weight" => { "$lte" => cargo[:weight]}},
+                  {  "max_weight" => { "$gte" => cargo[:weight] }},
+                  { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
+                  { 'type' => { "$eq" => delivery_type}}
+                ]
+                # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
+        
+        resp = get_items_query('truckingPricings', query).to_a
+        
+        if resp
+          return resp.first
+        end
+      when 'unit'
+        query = [
+                  { "all_units" => { "$eq" => ""}},
+                  { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
+                  { 'type' => { "$eq" => delivery_type}}
+                ]
+                # query = [{ "min_weight" => { "$lte" => weight}},{  "max_weight" => { "$gte" => weight }},{ 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},{ "direction" => {"$eq" => direction} } ]
+        
+        resp = get_items_query('truckingPricings', query).to_a
+        
+        if resp
+          return resp.first
+        end
+      end
+  end
+  def calculate_trucking_price(pricing, cargo, direction)
+    fees = {}
+    result = {}
+    pricing["fees"].each do |k, fee|
+      results = fee_calculator(k, fee, cargo)
+      fees[k] = results
+    end
+    fees.each do |k, v|
+
+      if !result["value"]
+        result["value"] = v[:value]
+      else
+        result["value"] += v[:value]
+      end
+      result["currency"] = v[:currency]
+    end
+    
+
+      if !pricing["min_value"] || (pricing["min_value"] && result["value"] > pricing["min_value"])
+  
+        return {value: result["value"], currency: result["currency"] }
+      else
+  
+        return  {value: pricing["min_value"], currency: result["currency"] }
+      end
+
+  end
+  def fee_calculator(key, fee, cargo)
+    case fee["rate_basis"]
+      when 'PER_KG'
+        return {currency: fee["currency"], value: cargo[:weight] * fee["value"], key: key}
+      when 'PER_X_KG'
+        return {currency: fee["currency"], value: (cargo[:weight] / fee["base"]) * fee["value"], key: key}
+      when 'PER_X_TON'
+        return {currency: fee["currency"], value: ((cargo[:weight]/ 1000) / fee["base"]) * fee["value"], key: key}
+      when 'PER_SHIPMENT'
+        return {currency: fee["currency"], value: fee["value"], key: key}
+      when 'PER_ITEM'
+        return {currency: fee["currency"], value: fee["value"] * cargo[:number_of_items], key: key}
+      when 'PER_CONTAINER'
+        return {currency: fee["currency"], value: fee["value"] * cargo[:number_of_items], key: key}
+      when 'PER_CBM_TON'
+        cbm_value = cargo[:volume] * fee["cbm"]
+        ton_value = (cargo[:weight]/ 1000) * fee["ton"]
+        return_value = ton_value > cbm_value ? ton_value : cbm_value
+        return {currency: fee["currency"], value: return_value, key: key}
+      when 'PER_CBM_KG'
+        cbm_value = cargo[:volume] * fee["cbm"]
+        kg_value = cargo[:weight] * fee["kg"]
+        return_value = kg_value > cbm_value ? kg_value : cbm_value
+        return {currency: fee["currency"], value: return_value, key: key}
+      end
+  end
   def retrieve_tp_from_array(table, table_key, zip_int, client)
     resp = client[table.to_sym].aggregate([
       { "$match" => { "_id" => table_key }},
@@ -60,23 +195,45 @@ module TruckingTools
   end
 
 
-  def calc_trucking_price(destination, cargo_item, km, hub, client, target)
-    hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
-    p km
-    if hub && hub.trucking_type
-      case hub_trucking_query["type"]
-      when 'zipcode'
-        if hub_trucking_query["modifier"] == "PER_CBM"
-          return calc_by_zipcode_cbm(destination, cargo_item.volume_in_cm3, km, hub_trucking_query["table"], client)
-        else
-          return calc_by_zipcode_weight(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
-        end
-      when 'city'
-        return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
-      end
-    else
-      return {value: 1.25 * km, currency: "EUR"}
+  def calc_trucking_price(destination, cargos, km, hub, target, load_type, direction, delivery_type)
+
+    cargo = load_type === 'container' ? {
+      number_of_items: cargos.length,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    } : {
+      number_of_items: cargos.length,
+      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    }
+    trucking_hub = retrieve_trucking_hub(hub.nexus, load_type, hub.tenant_id)
+    
+    p trucking_hub[:_id]
+    trucking_query = retrieve_trucking_query(trucking_hub, destination, km, direction)
+    p trucking_query[:_id]
+    if delivery_type == "" && load_type == 'cargo_item'
+      delivery_type = 'default'
     end
+    
+    trucking_pricing = retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
+    p trucking_pricing[:_id]
+    fees = calculate_trucking_price(trucking_pricing, cargo, direction)
+    
+    # hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
+    # p km
+    # if hub && hub.trucking_type
+    #   case hub_trucking_query["type"]
+    #   when 'zipcode'
+    #     if hub_trucking_query["modifier"] == "PER_CBM"
+    #       return calc_by_zipcode_cbm(destination, cargo_item.volume_in_cm3, km, hub_trucking_query["table"], client)
+    #     else
+    #       return calc_by_zipcode_weight(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
+    #     end
+    #   when 'city'
+    #     return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
+    #   end
+    # else
+    #   return {value: 1.25 * km, currency: "EUR"}
+    # end
   end
 
   def calc_by_zipcode(destination, cargo_item, km, tpKey, client)

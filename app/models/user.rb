@@ -106,17 +106,8 @@ class User < ApplicationRecord
     created_at.to_date.to_s(:long)
   end
 
-  def main_location
-    u_loc = user_locations.where(primary: true).first
-    if !u_loc 
-      return Location.new(street: "",
-          zip_code: "",
-          city: "",
-          country: "")
-    else
-      return u_loc.location
-    end
-    
+  def primary_location
+    user_locations.where(primary: true).first.try(:location)
   end
 
   def secondary_locations

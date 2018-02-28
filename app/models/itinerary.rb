@@ -137,6 +137,7 @@ class Itinerary < ApplicationRecord
       rails: exists.('rails')
     }
   end
+
   def hubs
     self.stops.flat_map { |s| s.hub }
   end
@@ -161,36 +162,36 @@ class Itinerary < ApplicationRecord
   end
 
   def routes
-    stops = self.stops.order(:index).to_a.combination(2).to_a
-    return stops.map { |s| self.detailed_hash(
-        s,
-        {
-          nexus_names: true,
-          nexus_ids: true, 
-          stop_ids: true,
-          hub_ids: true,
-          hub_names: true,
-          modes_of_transport: true
-        }
-      ) }
+    self.stops.order(:index).to_a.combination(2).map do |stop|
+      self.detailed_hash(
+        stop,
+        nexus_names:        true,
+        nexus_ids:          true, 
+        stop_ids:           true,
+        hub_ids:            true,
+        hub_names:          true,
+        modes_of_transport: true
+      )
+    end
   end
+
   def detailed_hash(stop_array, options = {})
     origin = stop_array[0]
     destination = stop_array[1]
     return_h = attributes
-    return_h[:origin_nexus]       = origin.hub.nexus.name                if options[:nexus_names] 
-    return_h[:destination_nexus]  = destination.hub.nexus.name           if options[:nexus_names]
-    return_h[:origin_nexus_id]       = origin.hub.nexus.id               if options[:nexus_ids] 
-    return_h[:destination_nexus_id]  = destination.hub.nexus.id          if options[:nexus_ids]
-    return_h[:origin_hub_id]       = origin.hub.id                       if options[:hub_ids] 
-    return_h[:destination_hub_id]  = destination.hub.id                  if options[:hub_ids]
-    return_h[:origin_hub_name]       = origin.hub.name                   if options[:hub_names] 
-    return_h[:destination_hub_name]  = destination.hub.name              if options[:hub_names]
-    return_h[:origin_stop_id]       = origin.id                          if options[:stop_ids] 
-    return_h[:destination_stop_id]  = destination.id                     if options[:stop_ids]
-    return_h[:modes_of_transport] = modes_of_transport                   if options[:modes_of_transport]
-    return_h[:next_departure]     = next_departure                       if options[:next_departure]
-    return_h[:dedicated]          = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
+    return_h[:origin_nexus]         = origin.hub.nexus.name                if options[:nexus_names] 
+    return_h[:destination_nexus]    = destination.hub.nexus.name           if options[:nexus_names]
+    return_h[:origin_nexus_id]      = origin.hub.nexus.id                  if options[:nexus_ids] 
+    return_h[:destination_nexus_id] = destination.hub.nexus.id             if options[:nexus_ids]
+    return_h[:origin_hub_id]        = origin.hub.id                        if options[:hub_ids] 
+    return_h[:destination_hub_id]   = destination.hub.id                   if options[:hub_ids]
+    return_h[:origin_hub_name]      = origin.hub.name                      if options[:hub_names] 
+    return_h[:destination_hub_name] = destination.hub.name                 if options[:hub_names]
+    return_h[:origin_stop_id]       = origin.id                            if options[:stop_ids] 
+    return_h[:destination_stop_id]  = destination.id                       if options[:stop_ids]
+    return_h[:modes_of_transport]   = modes_of_transport                   if options[:modes_of_transport]
+    return_h[:next_departure]       = next_departure                       if options[:next_departure]
+    return_h[:dedicated]            = options[:ids_dedicated].include?(id) unless options[:ids_dedicated].nil?
     return_h
   end
 
@@ -200,20 +201,33 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def self.for_locations(shipment, radius = 200)
-    start_city, start_city_dist = shipment.origin.closest_location_with_distance
-
-    end_city, end_city_dist = shipment.destination.closest_location_with_distance
-    if start_city_dist > radius || end_city_dist > radius
-      start_city = end_city = nil
+  def self.for_locations(shipment, carriage_nexuses)
+    if  carriage_nexuses && carriage_nexuses["preCarriage"]
+      start_city = Location.find(carriage_nexuses["preCarriage"])
+    else
+      start_city = Location.find(shipment.origin_id)
+      #  OLD redundant code
+      # start_city, start_city_dist = shipment.origin.closest_location_with_distance
     end
+    if  carriage_nexuses && carriage_nexuses["onCarriage"]
+      end_city = Location.find(carriage_nexuses["onCarriage"])
+    else
+      end_city = Location.find(shipment.destination_id)
+      #  OLD redundant code
+      # end_city, end_city_dist = shipment.destination.closest_location_with_distance
+    end
+    # if start_city_dist > radius || end_city_dist > radius
+    #   start_city = end_city = nil
+    # end
     start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
     end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
     start_hub_ids = start_hubs.ids
     end_hub_ids = end_hubs.ids
-    query = "SELECT *
-      FROM itineraries
-      WHERE tenant_id = #{shipment.tenant_id} AND id IN (
+
+    query = "
+      SELECT * FROM itineraries
+      WHERE tenant_id = #{shipment.tenant_id}
+      AND id IN (
         SELECT d_stops.itinerary_id
         FROM (
           SELECT id, itinerary_id, index
@@ -227,9 +241,10 @@ class Itinerary < ApplicationRecord
         ) as d_stops
         ON o_stops.itinerary_id = d_stops.itinerary_id
         WHERE o_stops.index < d_stops.index
-      )"
-    results = Itinerary.find_by_sql(query)
-    return {itineraries: results, origin_hubs: start_hubs, destination_hubs: end_hubs}
+      )
+    "
+    itineraries = Itinerary.find_by_sql(query)
+    { itineraries: itineraries, origin_hubs: start_hubs, destination_hubs: end_hubs }
   end
 
   def set_scope!

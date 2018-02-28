@@ -240,7 +240,7 @@ export class BookingConfirmation extends Component {
               <div className="flex-15 layout-row layout-align-center-center">
                 <Checkbox
                   onChange={this.toggleAcceptTerms}
-                  checked={this.state.insuranceView}
+                  checked={this.state.acceptTerms}
                   theme={theme}
                 />
               </div>

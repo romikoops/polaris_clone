@@ -28,7 +28,6 @@ export class AdminPricingRouteView extends Component {
     }
     this.editThis = this.editThis.bind(this)
     this.closeEdit = this.closeEdit.bind(this)
-    this.backToIndex = this.backToIndex.bind(this)
     this.selectClient = this.selectClient.bind(this)
     this.closeClientView = this.closeClientView.bind(this)
   }
@@ -288,7 +287,7 @@ export class AdminPricingRouteView extends Component {
           </p>
           {backButton}
         </div>
-        <RouteHubBox hubs={routeBoxHubs} itinerary={itinerary} theme={theme} />
+        <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}

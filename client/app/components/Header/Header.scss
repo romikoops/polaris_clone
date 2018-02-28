@@ -2,26 +2,29 @@
   @import '../../styles/defaults';
 
   .header {
-    position: fixed;
     height: 70px;
     width: 100vw !important; 
     z-index: 20 !important;
-  }
-  .responsive {
-    @media (min-width: 768px) and (max-width: 1366px) {
-      padding-left: 40vw;
+    transition: all 0.5s ease;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    box-shadow: 0 0 5px rgba(black, 0.2);
+    background-color: white;
+    &.inverted {
+      box-shadow: none;
+      border-color: transparent;
+      background-color: transparent;      
     }
-  }
-  .header_scrollable {
-    position: fixed;
-    height: 70px;
-    width: 100vw !important; 
-    z-index: 20 !important;
-    background-color: rgba(255,255,255,1);
-    color: black !important;
-  }  
-  .scrollable_text {
-    color: black !important;
+    &.scrollable {
+      position: fixed;
+      left: 0;
+      right: 0;      
+    }
+    &.scrolled {
+      background-color: white;
+      color: black !important;
+      box-shadow: 0 0 5px rgba(black, 0.2);
+      border-color: rgb(230, 230, 230);
+    }
   }
   img.logo {
     height: 50px;
@@ -67,22 +70,6 @@
     }
   }
   .logo {
-  margin-left: calc(100vw / 12);
-  }
-  .user_menu {
-    margin-left: calc(100vw / 5);
-    @media screen and (max-width: 768px) {
-      margin-right: 15px;
-    }
-  }
-  .dashboard_menu {
-    position: absolute;
-    left: 3vw;
-    @media (min-width: 768px) and (max-width: 1024px) {
-      left: -7vw;
-    }
-    @media (min-width: 1024px) and (max-width: 1366px) {
-      left: -3vw;
-    }
+    margin-left: calc(100vw / 12);
   }
 }

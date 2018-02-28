@@ -3,9 +3,10 @@ module ShippingTools
   include MongoTools
   include NotificationTools
 
-  def new_shipment(load_type)
+  def new_shipment(obj)
     tenant = current_user.tenant
-
+    load_type = obj["loadType"].underscore
+    direction = obj["direction"]
     shipment = Shipment.create(
       shipper_id: current_user.id, 
       status: "booking_process_started", 

@@ -3,19 +3,28 @@ import PropTypes from '../../prop-types'
 import { CardLink } from '../CardLink/CardLink'
 import styles from './CardLinkRow.scss'
 
-export function CardLinkRow ({ cardArray, handleClick, theme }) {
+export function CardLinkRow ({
+  cardArray, handleClick, theme, selectedType
+}) {
+  console.log(selectedType)
   const cards = cardArray.map(card => (
     <CardLink
       key={card.name}
       text={card.name}
       img={card.img}
       path={card.url}
+      code={card.code}
+      selectedType={selectedType}
       handleClick={card.handleClick ? card.handleClick : handleClick}
       theme={theme}
       options={card.options}
     />
   ))
-  return <div className={`${styles.card_link_row} layout-row flex-100`}>{cards}</div>
+  return (
+    <div className={`${styles.card_link_row} layout-row flex-100 layout-align-space-around-center`}>
+      {cards}
+    </div>
+  )
 }
 
 CardLinkRow.propTypes = {
@@ -27,11 +36,13 @@ CardLinkRow.propTypes = {
     handleClick: PropTypes.func,
     options: PropTypes.object
   })).isRequired,
+  selectedType: PropTypes.string,
   handleClick: PropTypes.func.isRequired
 }
 
 CardLinkRow.defaultProps = {
-  theme: null
+  theme: null,
+  selectedType: ''
 }
 
 export default CardLinkRow

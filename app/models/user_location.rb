@@ -1,18 +1,20 @@
 class UserLocation < ApplicationRecord
-  CATEGORIES = %w(main secondary)
-
   belongs_to :user
   belongs_to :location
+  before_validation :set_primary
 
-  # def  
-    
-  # end
+  validates :primary, uniqueness: {
+    scope: :user,
+    message: "'primary' has already been taken by this User"
+  }, if: -> { primary == true }
 
-  #  validates :category, presence: true, inclusion: CATEGORIES
-  # validates :category, uniqueness: {
-  #   scope: :user,
-  #   message: "'main' has already been taken by this User"
-  # }, if: -> { category == 'main' }
+  validates :location, uniqueness: { scope: :user }
 
-  # validates :location, uniqueness: { scope: :user }
+  private
+
+  def set_primary
+    if user.user_locations.pluck(:primary).none?
+      self.primary = true
+    end
+  end
 end

@@ -74,8 +74,7 @@ export class HSCodeRow extends Component {
       // }
       // return [];
     }
-    // // eslint-disable-next-line no-debugger
-    // debugger
+
     const textInputBool = tenant && tenant.data && tenant.data.scope && tenant.data.scope.cargo_info_level && tenant.data.scope.cargo_info_level === 'text'
     const HSCell = ({ code, cargoId }) => (
       <div className={`flex-33 layout-row ${styles.hs_cell}`}>

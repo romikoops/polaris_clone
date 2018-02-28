@@ -33,8 +33,6 @@ export default class AdminLayoverRow extends Component {
       theme, schedule, hub, itinerary
     } = this.props
     if (!schedule || !hub) {
-      // eslint-disable-next-line no-debugger
-      debugger
       return ''
     }
     const gradientFontStyle =

@@ -1,7 +1,7 @@
 @import "../../styles/defaults";
 :local {
 	form.registration_form {
-		width: 317px;
+		width: 700px;
 
 		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 			color: $grey;
@@ -26,6 +26,13 @@
 			border: .5px solid rgb(10, 10, 10);
 			margin: 0 0 30px 0;
 		}
+		h3 {
+			margin: 5px 0 25px 0;
+		}
+		.pusher {
+			margin: 25px;
+			width: 100%;
+		}
 		.form_group_submit_btn {
 			padding-top: 25px;
 			position: relative;
@@ -33,14 +40,14 @@
 				opacity: 0.6;
 		    position: absolute;
 		    top: 31px;
-		    right: 7px;
+		    right: 197px;
 		    transform: scale(0.25);
 		    transform-origin: top right;
 			}
 		}
 		label {
-			text-transform: uppercase;
 			margin-bottom: 4px;
+			font-size: 15px;
 		}
 	}
 

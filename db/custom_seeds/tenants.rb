@@ -236,7 +236,10 @@ tenant_data = [
     other_data: {
       trucking_availability: [
         {        
-          values: ['Gothenburg', 'Shanghai']
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
         }   
       ],
       cargo_item_types: [
@@ -295,7 +298,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -345,7 +356,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -392,7 +411,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -442,7 +469,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -490,7 +525,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -536,7 +579,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   }
 ]
@@ -585,55 +636,6 @@ end
 
 # Trucking Availability
 
-def find_trucking_availability(setting)
-  load_types = [:container, :cargo_item]
-  if (load_type = load_types.delete(setting.dig(:options, :load_type))).nil?        
-    trucking_availability_attr = {
-      container: true,
-      cargo_item: true
-    }
-  else
-    trucking_availability_attr = {
-      load_type        => false,
-      load_types.first => true
-    }
-  end
-
-  trucking_availability = TruckingAvailability.find_by(trucking_availability_attr)
-end
-
-def hubs_to_update(tenant, setting)
-  if setting.dig(:options, :upload_mode) == :hub_names
-    tenant.hubs.where(name: setting[:values])
-  else
-    nexus_ids = setting[:values].map do |value|
-      if (nexus = Location.find_by(location_type: "nexus", name: value)).nil?
-        puts "(!) Warning: Tenant #{tenant.subdomain} does not have Nexus #{value}"
-      else
-        nexus.id
-      end
-    end
-    tenant.hubs.where(nexus_id: nexus_ids)
-  end
-end
-
-def update_hubs_trucking_availability!(tenant, trucking_availability_settings)
-  if trucking_availability_settings.nil?
-    puts "No trucking availability set for tenant #{tenant.subdomain}"
-    return
-  end
-
-  trucking_availability_settings.each do |setting|
-    trucking_availability = find_trucking_availability(setting)
-
-    hubs_to_update(tenant, setting).each do |hub|
-      hub.trucking_availability = trucking_availability
-      hub.save!
-    end
-  end
-end
-
-
 # Create or update tenants 
 
 tenant_data.each do |tenant_attr|
@@ -644,7 +646,7 @@ tenant_data.each do |tenant_attr|
   tenant.save!
 
   update_cargo_item_types!(tenant, other_data[:cargo_item_types])
-  update_hubs_trucking_availability!(tenant, other_data[:trucking_availability])
+  TruckingAvailability.update_hubs_trucking_availability!(tenant, other_data[:trucking_availability])
 end
 
 Location.update_all_trucking_availabilities

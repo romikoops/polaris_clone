@@ -3,6 +3,7 @@ export * from './AdminDashboard'
 export { default as AdminHubs } from './AdminHubs'
 export * from './AdminHubsIndex'
 export * from './AdminHubTile'
+export * from './AdminNexusTile'
 export * from './AdminHubView'
 export * from './AdminHubForm'
 

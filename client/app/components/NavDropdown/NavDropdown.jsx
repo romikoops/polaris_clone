@@ -2,11 +2,25 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './NavDropdown.scss'
 import defaults from '../../styles/default_classes.scss'
+import { accountIconColor } from '../../helpers'
+
+const iconColorer = accountIconColor
+
+function profileIconJSX (src, hide) {
+  return (
+    <img
+      src={src}
+      className={`flex-none ${styles.profile_icon} ${hide ? styles.hidden : ''}`}
+    />
+  )
+}
 
 export function NavDropdown ({
-  invert, linkOptions, dropDownImage, dropDownText
+  linkOptions, dropDownText, invert
 }) {
-  const textClass = invert ? styles.white : styles.black
+  const whiteProfileIconJSX = profileIconJSX(iconColorer('white'), !invert) || ''
+  const blackProfileIconJSX = profileIconJSX(iconColorer('black'), invert) || ''
+
   const links = linkOptions.map((op) => {
     const icon = (
       <i className={`fa ${op.fontAwesomeIcon} ${defaults.spacing_sm_right}`} aria-hidden="true" />
@@ -23,13 +37,12 @@ export function NavDropdown ({
     return <div onClick={op.select}>{op.key}</div>
   })
   return (
-    <div className={`${styles.dropdown} ${textClass}`}>
+    <div className={`${styles.dropdown}`}>
       <div className={`${styles.dropbtn} layout-row layout-align-center-center`}>
-        {dropDownImage ? (
-          <img src={dropDownImage} className={`flex-none ${styles.dropDownImage}`} alt="" />
-        ) : (
-          ''
-        )}
+        <div className={styles.wrapper_profile_icon}>
+          {whiteProfileIconJSX}
+          {blackProfileIconJSX}
+        </div>
         {dropDownText ? <span className="flex-none">{dropDownText}</span> : ''}
         <i
           className={`flex-none fa fa-caret-down ${defaults.spacing_sm_left}`}
@@ -42,19 +55,17 @@ export function NavDropdown ({
 }
 
 NavDropdown.propTypes = {
-  invert: PropTypes.bool,
-  dropDownImage: PropTypes.string,
   dropDownText: PropTypes.string,
   linkOptions: PropTypes.arrayOf(PropTypes.shape({
     text: PropTypes.string,
     fontAwesomeIcon: PropTypes.string
-  })).isRequired
+  })).isRequired,
+  invert: PropTypes.bool
 }
 
 NavDropdown.defaultProps = {
-  invert: false,
-  dropDownImage: PropTypes.string,
-  dropDownText: PropTypes.string
+  dropDownText: PropTypes.string,
+  invert: false
 }
 
 export default NavDropdown

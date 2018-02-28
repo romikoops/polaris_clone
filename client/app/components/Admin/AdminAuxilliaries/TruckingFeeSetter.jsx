@@ -42,14 +42,13 @@ export class TruckingFeeSetter extends Component {
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
     this.handleBaseChange = this.handleBaseChange.bind(this)
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this)
   }
   componentWillMount () {
     this.setAllFromOptions()
   }
   setFees () {
     const { variableFees, globalFees } = this.state
-    // eslint-disable-next-line no-debugger
-    debugger
     this.props.setFees({
       variableFees,
       globalFees
@@ -93,9 +92,33 @@ export class TruckingFeeSetter extends Component {
 
     this.setState({ selectOptions: newObj })
   }
-  handleSelect (event) {
+  handleCurrencyChange (event) {
     const nameKeys = event.name.split('-')
     const tempFee = {
+      ...this.state[nameKeys[0]][nameKeys[1]],
+      [nameKeys[2]]: event.value
+    }
+
+    this.setState({
+      selectOptions: {
+        ...this.state.selectOptions,
+        [nameKeys[1]]: {
+          ...this.state.selectOptions[nameKeys[1]],
+          [nameKeys[2]]: event
+        }
+      },
+      [nameKeys[0]]: {
+        ...this.state[nameKeys[0]],
+        [nameKeys[1]]: tempFee
+      }
+    })
+  }
+  handleSelect (event) {
+    const nameKeys = event.name.split('-')
+    const { value, currency } = this.state[nameKeys[0]][nameKeys[1]]
+    const tempFee = {
+      currency,
+      value,
       [nameKeys[2]]: event.value
     }
     if (event.value === 'PER_CBM_TON') {
@@ -120,10 +143,7 @@ export class TruckingFeeSetter extends Component {
       },
       [nameKeys[0]]: {
         ...this.state[nameKeys[0]],
-        [nameKeys[1]]: {
-          ...this.state[nameKeys[0]][nameKeys[1]],
-          ...tempFee
-        }
+        [nameKeys[1]]: tempFee
       }
     })
   }
@@ -251,25 +271,28 @@ export class TruckingFeeSetter extends Component {
                   value={selectOptions ? selectOptions[key].currency : ''}
                   options={currencyOptions}
                   className="flex-100"
-                  onChange={this.handleSelect}
+                  onChange={this.handleCurrencyChange}
                 />
               </div>
             </div>)
           }
         })
         return (
-          <div key={key} className="flex-50 layout-row layout-align-none-center layout-wrap">
+          <div
+            key={key}
+            className={`flex-50 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell_row
+            }`}
+          >
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.price_subheader
               }`}
             >
-              <p className="flex-none">
-                {key} - {globalFees[key].label}
-              </p>
+              <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
-                onClick={() => this.deleteFee(key)}
+                onClick={() => this.deleteFee(key, true)}
               >
                 <i className="fa fa-trash clip" style={textStyle} />
               </div>
@@ -314,7 +337,7 @@ export class TruckingFeeSetter extends Component {
                   value={selectOptions ? selectOptions[key].currency : ''}
                   options={currencyOptions}
                   className="flex-100"
-                  onChange={this.handleSelect}
+                  onChange={this.handleCurrencyChange}
                 />
               </div>
             </div>)
@@ -326,7 +349,7 @@ export class TruckingFeeSetter extends Component {
               }`}
             >
               <p className="flex-100">{chargeGlossary[chargeKey]}</p>
-              <div className="flex-95 layout-row input_box">
+              <div className="flex-95 layout-row input_box_full">
                 <input
                   type="number"
                   value={variableFees[key].base}
@@ -338,18 +361,21 @@ export class TruckingFeeSetter extends Component {
           }
         })
         return (
-          <div key={key} className="flex-50 layout-row layout-align-none-center layout-wrap">
+          <div
+            key={key}
+            className={`flex-50 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell_row
+            }`}
+          >
             <div
               className={`flex-100 layout-row layout-align-space-between-center ${
                 styles.price_subheader
               }`}
             >
-              <p className="flex-none">
-                {key} - {variableFees[key].label}
-              </p>
+              <p className="flex-none">{chargeGlossary[key]}</p>
               <div
                 className="flex-none layout-row layout-align-center-center"
-                onClick={() => this.deleteFee(key)}
+                onClick={() => this.deleteFee(key, false)}
               >
                 <i className="fa fa-trash clip" style={textStyle} />
               </div>
@@ -364,22 +390,36 @@ export class TruckingFeeSetter extends Component {
         return ''
       }
       return (
-        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
+        <div
+          className={`flex-none layout-row layout-align-center-center layout-wrap ${
+            styles.add_price_cell
+          }`}
+        >
           <div className="flex-100 layout-row layout-align-center-center">
-            <p className="flex-none ">{tfk.label}</p>
+            <p className="flex-none letter_3 clip" style={textStyle}>
+              {tfk.label}
+            </p>
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
-            <div
-              className="flex-50 layout-row layout-align-center-center"
-              onClick={() => this.addFee(tfk, true)}
-            >
-              <p className="flex-none ">Add To Global</p>
+            <div className="flex-50 layout-row layout-align-center-center">
+              <div
+                className={`flex-none layout-row layout-align-center-center pointy ${
+                  styles.add_price_button
+                }`}
+                onClick={() => this.addFee(tfk, true)}
+              >
+                <p className="flex-none ">Add To Global</p>
+              </div>
             </div>
-            <div
-              className="flex-50 layout-row layout-align-center-center"
-              onClick={() => this.addFee(tfk, false)}
-            >
-              <p className="flex-none ">Add To Variable</p>
+            <div className="flex-50 layout-row layout-align-center-center">
+              <div
+                className={`flex-none layout-row layout-align-center-center pointy ${
+                  styles.add_price_button
+                }`}
+                onClick={() => this.addFee(tfk, false)}
+              >
+                <p className="flex-none ">Add To Variable</p>
+              </div>
             </div>
           </div>
         </div>
@@ -387,7 +427,7 @@ export class TruckingFeeSetter extends Component {
     })
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-wrap layout-align-space-between-space-between">
           {availableFees}
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -402,14 +442,16 @@ export class TruckingFeeSetter extends Component {
           </div>
           {variablePanel}
         </div>
-        <div className="flex-33 layout-row layout-align-center-center">
-          <RoundButton
-            theme={theme}
-            size="small"
-            text="Save Fees"
-            iconClass="fa-plus-square-o"
-            handleNext={this.setFees}
-          />
+        <div className="flex-100 layout-row layout-wrap layout-align-end-center button_padding">
+          <div className="flex-33 layout-row layout-align-center-center">
+            <RoundButton
+              theme={theme}
+              size="small"
+              text="Save Fees"
+              iconClass="fa-plus-square-o"
+              handleNext={this.setFees}
+            />
+          </div>
         </div>
       </div>
     )

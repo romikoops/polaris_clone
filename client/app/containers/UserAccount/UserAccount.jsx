@@ -109,7 +109,6 @@ class UserAccount extends Component {
     if (!dashboard) {
       return ''
     }
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
 
     const hubHash = {}
     if (hubs) {
@@ -117,145 +116,141 @@ class UserAccount extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const nav = (<SideNav theme={theme} user={user} />)
-    const menu = <FloatingMenu Comp={nav} theme={theme} title="MENU" icon="fa-bars" />
+
+    const loadingScreen = loading ? <Loading theme={theme} /> : ''
+    const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
-      <div className="layout-row flex-100 layout-wrap layout-align-center hundred">
-        {loadingScreen}
-        <Header
-          theme={theme}
-          menu={menu}
-          shipments={users.dashboard.shipments}
-          showMenu
-          scrollable
-        />
-        <div className={`${defs.content_width} ${defs.spacing_md_bottom} ${styles.top_margin} layout-row flex-none`}>
-
-          <div className="layout-row flex-100 ">
-
-            <Switch className="flex">
-              <Route
-                exact
-                path="/account"
-                render={props => (
-                  <UserDashboard
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    {...props}
-                    user={user}
-                    hubs={hubHash}
-                    navFn={this.setUrl}
-                    userDispatch={userDispatch}
-                    dashboard={dashboard}
-                  />
-                )}
-              />
-              <Route
-                path="/account/routesavailable"
-                render={props => (
-                  <UserLocations
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    {...props}
-                    locations={users.dashboard.locations}
-                    getLocations={this.getLocations}
-                    destroyLocation={this.destroyLocation}
-                    makePrimary={this.makePrimary}
-                  />
-                )}
-              />
-              <Route
-                path="/account/locations"
-                render={props => (
-                  <UserLocations
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    {...props}
-                    user={user}
-                    locations={users.dashboard.locations}
-                    getLocations={this.getLocations}
-                    destroyLocation={this.destroyLocation}
-                    makePrimary={this.makePrimary}
-                  />
-                )}
-              />
-              <Route
-                path="/account/profile"
-                render={props => (
-                  <UserProfile
-                    appDispatch={appDispatch}
-                    setNav={this.setNavLink}
-                    currencies={currencies}
-                    theme={theme}
-                    user={user}
-                    aliases={dashboard.aliases}
-                    {...props}
-                    locations={dashboard.locations}
-                    userDispatch={userDispatch}
-                    authDispatch={authDispatch}
-                  />
-                )}
-              />
-              <Route
-                path="/account/contacts"
-                render={props => (
-                  <UserContacts
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    user={user}
-                    aliases={dashboard.aliases}
-                    {...props}
-                    locations={dashboard.locations}
-                    userDispatch={userDispatch}
-                    authDispatch={authDispatch}
-                  />
-                )}
-              />
-              <Route
-                path="/account/billing"
-                render={props => (
-                  <UserBilling
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    user={user}
-                    {...props}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/account/shipments"
-                render={props => (
-                  <UserShipments
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    hubs={hubHash}
-                    user={user}
-                    {...props}
-                    shipments={shipments}
-                    userDispatch={userDispatch}
-                  />
-                )}
-              />
-              <Route
-                path="/account/shipments/:id"
-                render={props => (
-                  <UserShipmentView
-                    setNav={this.setNavLink}
-                    theme={theme}
-                    hubs={hubs}
-                    user={user}
-                    loading={loading}
-                    {...props}
-                    shipmentData={shipment}
-                    userDispatch={userDispatch}
-                  />
-                )}
-              />
-            </Switch>
+      <div className="layout-row flex-100 hundred">
+        { loadingScreen }
+        { menu }
+        <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
+        <div className="layout-row flex layout-wrap layout-align-center">
+          <div className={`${defs.content_width} ${defs.spacing_md_bottom} ${styles.top_margin} layout-row flex-none`}>
+            <div className="layout-row flex-100 ">
+              <Switch className="flex">
+                <Route
+                  exact
+                  path="/account"
+                  render={props => (
+                    <UserDashboard
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      {...props}
+                      user={user}
+                      hubs={hubHash}
+                      navFn={this.setUrl}
+                      userDispatch={userDispatch}
+                      dashboard={dashboard}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/routesavailable"
+                  render={props => (
+                    <UserLocations
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      {...props}
+                      locations={users.dashboard.locations}
+                      getLocations={this.getLocations}
+                      destroyLocation={this.destroyLocation}
+                      makePrimary={this.makePrimary}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/locations"
+                  render={props => (
+                    <UserLocations
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      {...props}
+                      user={user}
+                      locations={users.dashboard.locations}
+                      getLocations={this.getLocations}
+                      destroyLocation={this.destroyLocation}
+                      makePrimary={this.makePrimary}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/profile"
+                  render={props => (
+                    <UserProfile
+                      appDispatch={appDispatch}
+                      setNav={this.setNavLink}
+                      currencies={currencies}
+                      theme={theme}
+                      user={user}
+                      aliases={dashboard.aliases}
+                      {...props}
+                      locations={dashboard.locations}
+                      userDispatch={userDispatch}
+                      authDispatch={authDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/contacts"
+                  render={props => (
+                    <UserContacts
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      user={user}
+                      aliases={dashboard.aliases}
+                      {...props}
+                      locations={dashboard.locations}
+                      userDispatch={userDispatch}
+                      authDispatch={authDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/billing"
+                  render={props => (
+                    <UserBilling
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      user={user}
+                      {...props}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/account/shipments"
+                  render={props => (
+                    <UserShipments
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      hubs={hubHash}
+                      user={user}
+                      {...props}
+                      shipments={shipments}
+                      userDispatch={userDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  path="/account/shipments/:id"
+                  render={props => (
+                    <UserShipmentView
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      hubs={hubs}
+                      user={user}
+                      loading={loading}
+                      {...props}
+                      shipmentData={shipment}
+                      userDispatch={userDispatch}
+                    />
+                  )}
+                />
+              </Switch>
+            </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
     )
   }

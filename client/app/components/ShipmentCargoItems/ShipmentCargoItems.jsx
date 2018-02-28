@@ -121,12 +121,19 @@ export class ShipmentCargoItems extends Component {
         nextStageAttempt,
         scope
       )
+
       return (
         <div
           key={i}
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           style={{ position: 'relative' }}
         >
+          <h3
+            className={styles.unit_header}
+            style={i < 0 ? { opacity: 0 } : {}}
+          >
+            Cargo Unit {i + 1}
+          </h3>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.colliType}
             {inputs.quantity}
@@ -158,7 +165,6 @@ export class ShipmentCargoItems extends Component {
 
     if (cargoItems) {
       cargoItems.forEach((cargoItem, i) => {
-        if (i > 0) cargosAdded.push(generateSeparator())
         if (!cargoItemTypes[i]) {
           // Set a default cargo item type as the select box value
 
@@ -167,9 +173,11 @@ export class ShipmentCargoItems extends Component {
 
           // Try to find one of the labels in the available cargo item types
           let defaultType
-          defaultTypeLabels.find(defaultTypeLabel =>
-            (defaultType = availableCargoItemTypes
-              .find(cargoItemType => cargoItemType.label === defaultTypeLabel)))
+          defaultTypeLabels.find(defaultTypeLabel => (
+            defaultType = availableCargoItemTypes.find(cargoItemType => (
+              cargoItemType.label === defaultTypeLabel
+            ))
+          ))
 
           // In case none of the defaultTypeLabels match the available
           // cargo item types, set the default to the first available.
@@ -178,6 +186,7 @@ export class ShipmentCargoItems extends Component {
           this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
         }
         cargosAdded.push(generateCargoItem(cargoItem, i))
+        cargosAdded.push(generateSeparator())
       })
     }
 
@@ -202,13 +211,12 @@ export class ShipmentCargoItems extends Component {
                 } layout-wrap layout-align-center-center`}
                 onClick={this.addNewCargo}
               >
-                <p> Add unit</p>
                 <i className="fa fa-plus-square-o clip" style={textStyle} />
+                <p> Add unit</p>
               </div>
             </div>
             <div className={`flex-100 ${styles.new_container_placeholder}`}>
-              {generateSeparator(null, -1)}
-              {generateCargoItem(null, -1)}
+              { generateCargoItem(null, -1) }
             </div>
           </div>
         </div>

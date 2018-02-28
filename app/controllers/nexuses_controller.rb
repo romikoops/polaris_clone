@@ -13,6 +13,18 @@ class NexusesController < ApplicationController
 		nexus_data = geocoded_location.closest_location_with_distance
 		nexus = nexus_data.first if nexus_data.last <= 200
 
+		if nexus.nil?
+			city = geocoded_location.reverse_geocode.city.downcase
+			
+			trucking_options_are_available = city.split.any? do |word|
+				nexus_data.first.trucking_options(params[:tenant_id]).include?(word)
+			end
+
+			if trucking_options_are_available
+				return response_handler(nexus: nexus_data.first, truckingOptions: true)
+			end
+		end
+
 		response_handler(nexus: nexus)
 	end
 
