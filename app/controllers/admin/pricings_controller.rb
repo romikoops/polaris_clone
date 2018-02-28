@@ -39,27 +39,53 @@ class Admin::PricingsController < ApplicationController
     data.delete("subdomain_id")
     data.delete("action")
     resp = update_pricing(params[:id], data)
-    parse_and_update_itinerary_pricing_id(params[:id])
+    parse_and_update_itinerary_pricing_id(data)
     new_pricing = get_item("pricings", "_id", params[:id])
     response_handler(new_pricing)
   end
 
-  def parse_and_update_itinerary_pricing_id(id)
-    keys_split = params[:id].split("_")
+  def parse_and_update_itinerary_pricing_id(data)
+    
+    keys_split = data["id"].split("_")
     itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
-    if id.include?("fcl")
-      if keys_split.length == 7
-        update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => params[:id]})
+    existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
+    
+    if  !existing_itinerary
+      new_itinerary = {
+        tenant_id: current_user.tenant_id,
+        transport_category_id: data["transport_category_id"],
+        itinerary_id: data["itinerary_id"]
+      }
+      if data["id"].include?("fcl")
+        if keys_split.length == 7
+          new_itinerary["#{keys_split[6]}"] = data["id"]
+        else
+          new_itinerary["open"] = data["id"]    
+        end
       else
-        update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => params[:id]})    
+        if keys_split.length == 6
+          new_itinerary["#{keys_split[5]}"] = data["id"]
+        else
+          new_itinerary["open"] = data["id"]    
+        end
       end
+      update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
     else
-      if keys_split.length == 6
-        update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => params[:id]})
+      if data["id"].include?("fcl")
+        if keys_split.length == 7
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
+        else
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
+        end
       else
-        update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => params[:id]})    
+        if keys_split.length == 6
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
+        else
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
+        end
       end
     end
+    current_user.tenant.update_route_details
   end
 
   # def overwrite_main_carriage

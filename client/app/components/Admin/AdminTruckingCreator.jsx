@@ -138,13 +138,13 @@ export class AdminTruckingCreator extends Component {
   }
   addNewCell (model) {
     const {
-      cells, cellSteps, loadType, feeSchema
+      cells, cellSteps, loadType, feeSchema, truckingBasis
     } = this.state
     const tmpCell = {}
     const keys = Object.keys(model).sort()
     if (loadType.value === 'fcl') {
-      tmpCell.chassis = { ...model }
-      tmpCell.side_lifter = { ...model }
+      tmpCell.chassis = { [truckingBasis.value]: { ...model } }
+      tmpCell.side_lifter = { [truckingBasis.value]: { ...model } }
       tmpCell.chassis.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
         tmp.fees = {}
@@ -162,7 +162,7 @@ export class AdminTruckingCreator extends Component {
         return tmp
       })
     } else {
-      tmpCell.lcl = { ...model }
+      tmpCell.lcl = { [truckingBasis.value]: { ...model } }
       tmpCell.lcl.table = cellSteps.map((s) => {
         const tmp = Object.assign({}, s)
         tmp.fees = {}

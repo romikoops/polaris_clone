@@ -942,9 +942,9 @@ function saveNewTrucking (obj) {
   function request (truckingData) {
     return { type: adminConstants.NEW_TRUCKING_REQUEST, payload: truckingData }
   }
-  function success (truckingData) {
-    return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data }
-  }
+  // function success (truckingData) {
+  //   return { type: adminConstants.NEW_TRUCKING_SUCCESS, payload: truckingData.data }
+  // }
   function failure (error) {
     return { type: adminConstants.NEW_TRUCKING_FAILURE, error }
   }
@@ -954,7 +954,7 @@ function saveNewTrucking (obj) {
     adminService.saveNewTrucking(obj).then(
       (data) => {
         dispatch(alertActions.success('New Trucking successful'))
-        dispatch(success(data))
+        dispatch(viewTrucking(data.data.truckingHubId))
       },
       (error) => {
         dispatch(failure(error))

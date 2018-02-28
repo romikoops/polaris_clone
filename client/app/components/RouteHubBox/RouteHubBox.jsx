@@ -67,8 +67,8 @@ export class RouteHubBox extends Component {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
-    // ;
-    const timeDiff = route ? (
+
+    const timeDiff = route && route[0] && route[0].eta ? (
       <div
         className="flex-65 layout-row layout-wrap layout-align-center-center"
         style={{ marginTop: '25px' }}

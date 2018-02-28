@@ -202,7 +202,7 @@ function mapStateToProps (state) {
     routes,
     transportCategories,
     clientPricings,
-    routePricings,
+    itineraryPricings,
     loading
   } = admin
 
@@ -216,7 +216,7 @@ function mapStateToProps (state) {
     clientPricings,
     routes,
     clients,
-    routePricings,
+    itineraryPricings,
     loading
   }
 }

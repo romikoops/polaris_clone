@@ -236,14 +236,11 @@ tenant_data = [
     other_data: {
       trucking_availability: [
         {        
-          values: ['Gothenburg']
-        },
-        {        
-          values: ['Shanghai'],
+          values: ['Gothenburg', 'Shanghai'],
           options: {
             load_type: :cargo_item
           }
-        }     
+        }   
       ],
       cargo_item_types: [
         "Pallet",
@@ -301,7 +298,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -351,7 +356,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -398,7 +411,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -448,7 +469,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -496,7 +525,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   },
   {
@@ -542,7 +579,15 @@ tenant_data = [
       cargo_info_level: 'hs_codes'
     },
     other_data: {
-      cargo_item_types: :all
+      cargo_item_types: :all,
+      trucking_availability: [
+        {        
+          values: ['Gothenburg', 'Shanghai'],
+          options: {
+            load_type: :cargo_item
+          }
+        }   
+      ]
     }
   }
 ]

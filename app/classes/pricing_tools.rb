@@ -7,7 +7,7 @@ module PricingTools
   def get_user_price(client, path_key, user)
     path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
     
-    raise ApplicationError::NoRoutes if path_pricing.nil?
+    return nil if path_pricing.nil? 
 
     path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"
     price_key        = path_pricing[path_pricing_key]    
@@ -17,7 +17,7 @@ module PricingTools
 
   def determine_cargo_item_price(client, cargo, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
-    
+    return nil if pricing.nil?
     totals = {"total" => {}}
     pricing["data"].each do |k, v|
       case v["rate_basis"]
@@ -55,18 +55,38 @@ module PricingTools
 
   def determine_container_price(client, container, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
-    
+    return nil if pricing.nil?
     totals = {"total" => {}}
+    
     pricing["data"].each do |k, v|
-      if v["rate_basis"].include?('CONTAINER')
-        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
-        if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
-        end
-        # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
+      # if v["rate_basis"].include?('CONTAINER')
+      #   totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+      #   if !totals[k]["currency"]
+      #     totals[k]["currency"] = v["currency"]
+      #   end
+      #   # totals[v["currency"]] ? totals[v["currency"]] += v["rate"].to_i : totals[v["currency"]] = v["rate"].to_i 
+      # end
+      case v["rate_basis"]
+        when 'PER_CONTAINER'
+          totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+          if !totals[k]["currency"]
+            totals[k]["currency"] = v["currency"]
+          end
+        when "PER_ITEM"
+          totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+          if !totals[k]["currency"]
+            totals[k]["currency"] = v["currency"]
+          end
+        when "PER_SHIPMENT"
+          totals[k] ? totals[k]["value"] += v["rate"].to_i / quantity : totals[k] = {"value" => v["rate"].to_i / quantity, "currency" => v["currency"]}
+          if !totals[k]["currency"]
+            totals[k]["currency"] = v["currency"]
+          end
       end
     end
-    totals["total"] = {value: sum_and_convert_cargo(totals, user.currency), currency: user.currency}
+    cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
+    return nil if cargo_rate_value.nil? || cargo_rate_value == 0
+    totals["total"] = {value: cargo_rate_value, currency: user.currency}
     return totals
   end
 
