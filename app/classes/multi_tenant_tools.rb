@@ -30,9 +30,9 @@ module MultiTenantTools
       File.open("blank.html", 'w') { |file| file.write(newHtml) }
       upFile = open("blank.html")
       s3.put_object(bucket: "multi.itsmycargo.com", key: objKey, body: upFile, content_type: 'text/html', acl: 'public-read')
-      # if tenant.web
-      #   invalidate(tenant.web["cloudfront"], tenant.subdomain)
-      # end
+      if tenant.web && tenant.web["cloudfront"]
+        invalidate(tenant.web["cloudfront"], tenant.subdomain)
+      end
     end
   end
 

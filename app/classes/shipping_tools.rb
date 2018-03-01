@@ -128,7 +128,7 @@ module ShippingTools
         shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.shipper.currency }
       end
     end
-
+    shipment.notes = shipment_data["notes"]
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
 
     if shipment.cargo_items
