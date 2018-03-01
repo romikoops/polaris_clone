@@ -52,7 +52,7 @@ export class BookingDetails extends Component {
       },
       hsCodes: {},
       hsTexts: {},
-      totalGoodsValue: 0,
+      totalGoodsValue: { value: 0, currency: 'EUR' },
       cargoNotes: '',
       finishBookingAttempted: false,
       customsCredit: false
@@ -156,7 +156,7 @@ export class BookingDetails extends Component {
     const gVal = val || parseInt(this.state.totalGoodsValue, 10)
 
     const { shipmentData } = this.props
-    const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price, 10)) * 0.0017
+    const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price.value, 10)) * 0.0017
     this.setState({ insurance: { bool: true, val: iVal } })
   }
   removeNotifyee (i) {
@@ -164,11 +164,24 @@ export class BookingDetails extends Component {
     notifyees.splice(i, 1)
     this.setState({ notifyees })
   }
+  handleTotalGoodsCurrency (selection) {
+    this.setState({
+      totalGoodsValue: {
+        ...this.state.totalGoodsValue,
+        currency: selection.value
+      }
+    })
+  }
   handleCargoInput (event) {
     const { name, value } = event.target
     if (name === 'totalGoodsValue') {
       const gVal = parseInt(value, 10)
-      this.setState({ [name]: gVal })
+      this.setState({
+        [name]: {
+          ...this.state[name],
+          value: gVal
+        }
+      })
       this.calcInsurance(gVal)
     } else {
       this.setState({ [name]: value })
@@ -177,7 +190,7 @@ export class BookingDetails extends Component {
   orderTotal () {
     const { shipmentData } = this.props
     const { customs, insurance } = this.state
-    return parseFloat(shipmentData.shipment.total_price, 10) + customs.val + insurance.val
+    return parseFloat(shipmentData.shipment.total_price.value, 10) + customs.val + insurance.val
   }
   toNextStage () {
     const {
@@ -190,6 +203,7 @@ export class BookingDetails extends Component {
       insurance,
       customs,
       hsTexts,
+      eori,
       customsCredit
     } = this.state
     const { documents } = this.props.shipmentData
@@ -224,6 +238,7 @@ export class BookingDetails extends Component {
         insurance,
         customs,
         hsTexts,
+        eori,
         customsCredit
       }
     }
@@ -258,11 +273,14 @@ export class BookingDetails extends Component {
       // locations
     } = shipmentData
     const {
-      consignee, shipper, notifyees, customs, customsCredit
+      consignee, shipper, notifyees, customs, customsCredit, eori
     } = this.state
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-center-start"
+        style={{ paddingTop: '60px' }}
+      >
         {shipment && theme && hubs ? (
           <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
         ) : (
@@ -286,6 +304,7 @@ export class BookingDetails extends Component {
             theme={theme}
             handleChange={this.handleCargoInput}
             shipmentData={shipmentData}
+            handleTotalGoodsCurrency={this.handleTotalGoodsCurrency}
             hsCodes={this.state.hsCodes}
             hsTexts={this.state.hsTexts}
             setHsCode={this.setHsCode}
@@ -300,6 +319,7 @@ export class BookingDetails extends Component {
             customsData={customs}
             setCustomsFee={this.setCustomsFee}
             user={user}
+            eori={eori}
             customsCredit={customsCredit}
             tenant={tenant}
             toggleCustomsCredit={this.toggleCustomsCredit}

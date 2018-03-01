@@ -829,7 +829,7 @@ module ExcelTools
           extra: row[:exp_extra]
         }
       price_obj = {"lcl" =>lcl_obj.to_h}
-      
+
       if dedicated
         cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid

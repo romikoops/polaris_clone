@@ -59,7 +59,8 @@ Rails.application.routes.draw do
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
-
+      post "shipments/:id/edit_price", to: "shipments#edit_price"
+       post "shipments/:id/edit_time", to: "shipments#edit_time"
       resources :schedules, only: [:index]
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 

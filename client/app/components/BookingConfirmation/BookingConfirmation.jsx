@@ -223,7 +223,7 @@ export class BookingConfirmation extends Component {
                   >
                     <p>Total Price:</p>
                     <Tooltip theme={theme} icon="fa-info-circle" color="white" text="total_price" />
-                    <Price value={shipment.total_price} user={user} />
+                    <Price value={shipment.total_price.value} user={user} />
                   </div>
                 </div>
               </div>
