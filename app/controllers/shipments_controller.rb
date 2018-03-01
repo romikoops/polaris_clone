@@ -37,23 +37,35 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    @shipment = Shipment.find(params[:id])
-    @cargo_items = @shipment.cargo_items
-    @containers = @shipment.containers
-    @shipment_contacts = @shipment.shipment_contacts
-    @contacts = []
-    @shipment_contacts.each do |sc|
-      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    shipment = Shipment.find(params[:id])
+
+    cargo_items = shipment.cargo_items.map do |cargo_item|
+      chargeable_weight = cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f
+      cargo_item.attributes.merge(chargeable_weight: chargeable_weight)
     end
-    @schedules = @shipment.schedule_set
-    @documents = []
-    @shipment.documents.each do |doc|
-      tmp = doc.as_json
-      tmp["signed_url"] =  doc.get_signed_url
-      @documents << tmp
+    
+    containers = shipment.containers
+
+    shipment_contacts = shipment.shipment_contacts
+
+    contacts = shipment_contacts.map do |sc|
+      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
-    response_handler(resp)
+
+    documents = shipment.documents.map do |doc|
+      tmp_doc = doc.as_json
+      tmp_doc["signed_url"] = doc.get_signed_url
+      tmp_doc
+    end
+
+    response_handler(
+      shipment: shipment,
+      cargoItems: cargo_items,
+      containers: containers,
+      contacts: contacts,
+      documents: documents,
+      schedules: shipment.schedule_set
+    )
   end
 
   def create

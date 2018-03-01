@@ -21,7 +21,7 @@ class TransportCategory < ApplicationRecord
 		validates :cargo_class, 
 			inclusion: { 
 	      in: LOAD_TYPE_CARGO_CLASSES[_load_type], 
-	      message: "must be included in [#{LOAD_TYPE_CARGO_CLASSES[_load_type].join(', ')}]" 
+	      message: "must be included in #{LOAD_TYPE_CARGO_CLASSES[_load_type].log_format}" 
 	    }, 
 	    if: -> { self.load_type == _load_type }
 
@@ -38,8 +38,18 @@ class TransportCategory < ApplicationRecord
 		presence: true, 
 		inclusion: { 
       in: LOAD_TYPES, 
-      message: "must be included in [#{LOAD_TYPES.join(', ')}]" 
+      message: "must be included in #{LOAD_TYPES.log_format}" 
     }
+
+  validates :name,
+  	presence: true,
+  	uniqueness: {
+  		scope: [:vehicle_id, :cargo_class],
+      message: -> _self, _ do
+      	"'#{_self.name}' taken for " +
+	      "vehicle id '#{_self.vehicle_id}' cargo class '#{_self.cargo_class}'"
+      end 
+  	}
 
 	private
 

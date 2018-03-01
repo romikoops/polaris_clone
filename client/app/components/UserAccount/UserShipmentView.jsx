@@ -124,9 +124,6 @@ export class UserShipmentView extends Component {
               </div>
               <p className={` ${styles.address} flex-100`}>
                 {n.contact.first_name} {n.contact.last_name} <br />
-                {n.location.street} {n.location.street_number} <br />
-                {n.location.zip_code} {n.location.city} <br />
-                {n.location.country}
               </p>
             </div>
           </div>)
