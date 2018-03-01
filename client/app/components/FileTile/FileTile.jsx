@@ -214,7 +214,7 @@ class FileTile extends React.Component {
             className="flex-none layout-row layout-align-center-center"
             onClick={this.toggleShowDenial}
           >
-            <i className="clip fa fa-times" style={textStyle} />
+            <i className=" fa fa-times" style={{ color: 'red' }} />
           </div>
         </div>
         <div

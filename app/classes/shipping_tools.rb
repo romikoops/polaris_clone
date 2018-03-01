@@ -129,8 +129,8 @@ module ShippingTools
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
         shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-        shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
-        shipment.total_price = shipment.schedules_charges[key]["total"]
+        shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val] ? shipment_data[:insurance][:val] : 0
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.shipper.currency }
       end
     end
 
@@ -248,6 +248,7 @@ module ShippingTools
     params[:schedules].each do |sched|
       shipment.schedule_set << sched
     end
+    shipment.trip_id = params[:schedules][0]["trip_id"]
     case shipment.load_type
       when 'lcl'
         @dangerous = false

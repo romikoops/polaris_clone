@@ -625,6 +625,7 @@
   }
   .showPanel {
     height: 100px;
+    overflow: visible !important;
   }
   .hidePanel {
     height: 0px;
@@ -632,5 +633,17 @@
   .panelDefault {
     transition: all 1.5s linear;
     overflow: hidden;
+    position: relative;
+  }
+  .time_edit_button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .time_save_buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
   }
 }

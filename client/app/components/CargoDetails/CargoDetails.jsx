@@ -7,20 +7,24 @@ import FileUploader from '../FileUploader/FileUploader'
 import { HSCodeRow } from '../HSCodeRow/HSCodeRow'
 import defaults from '../../styles/default_classes.scss'
 import { converter } from '../../helpers'
+import { currencyOptions } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 export class CargoDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
       insuranceView: false,
-      customsView: false
+      customsView: false,
+      totalGoodsCurrency: { value: 'EUR', label: 'EUR' }
     }
     this.toggleInsurance = this.toggleInsurance.bind(this)
     this.toggleCustoms = this.toggleCustoms.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
     this.fileFn = this.fileFn.bind(this)
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
   }
@@ -32,7 +36,7 @@ export class CargoDetails extends Component {
     const { setCustomsFee, customsData } = this.props
     this.setState({ customsView: !this.state.customsView })
     // this.timeoutId = setTimeout(function() {
-    this.setState({ showNoCustoms: this.state.customsView })
+    // this.setState({ showNoCustoms: this.state.customsView })
     const converted = this.calcCustomsFee()
     const resp = converted === 0 ? { bool: false, val: 0 } : { bool: true, val: converted }
     if (customsData && customsData.val && customsData.val !== converted) {
@@ -103,6 +107,10 @@ export class CargoDetails extends Component {
   handleChange (event) {
     this.props.handleChange(event)
   }
+  handleTotalGoodsCurrency (selection) {
+    this.setState({ totalGoodsCurrency: selection })
+    this.props.handleTotalGoodsCurrency(selection.value)
+  }
   render () {
     const {
       shipmentData,
@@ -115,8 +123,10 @@ export class CargoDetails extends Component {
       deleteCode,
       finishBookingAttempted,
       user,
-      tenant
+      tenant,
+      eori
     } = this.props
+    const { totalGoodsCurrency } = this.state
     const {
       dangerousGoods, documents, customs, cargoItems, containers
     } = shipmentData
@@ -239,7 +249,7 @@ export class CargoDetails extends Component {
     const noCustomsBox = (
       <div
         className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${
-          this.state.showNoCustoms ? styles.show : ''
+          !this.state.customsView ? styles.show : ''
         }`}
       >
         <div className="flex-33 no_max layout-row layout-align-center-center">
@@ -262,7 +272,7 @@ export class CargoDetails extends Component {
           </div>
         </div>
         <div className="flex-33 no_max layout-row layout-align-center-center">
-          {this.props.totalGoodsValue > 20000 ? (
+          {this.props.totalGoodsValue.value > 20000 ? (
             <div className="flex-90 layout-row layout-wrap">
               <div className="flex-100">
                 <p className={`flex-none ${styles.f_header}`}> Customs Value Declaration</p>
@@ -287,14 +297,10 @@ export class CargoDetails extends Component {
         <div className="flex-33 no_max layout-row layout-align-center-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
-              <p className={`flex-none ${styles.f_header}`}> EORI</p>
+              <p className={`flex-none ${styles.f_header}`}> EORI ( if applicable)</p>
             </div>
-            <div className="flex-100">
-              {documents.eori ? (
-                <DocViewer doc={documents.eori} />
-              ) : (
-                <FileUploader theme={theme} dispatchFn={this.fileFn} type="eori" text="EORI" />
-              )}
+            <div className="flex-100 input_box">
+              <input type="text" name="eori" value={eori} onChange={this.handleChange} />
             </div>
           </div>
         </div>
@@ -320,25 +326,35 @@ export class CargoDetails extends Component {
                       <TextHeading theme={theme} size={3} text="Total valued goods" />
                     </div>
                   </div>
-                  <div className="flex-100">
-                    <FormsyInput
-                      className={styles.cargo_input}
-                      wrapperClassName={styles.wrapper_cargo_input}
-                      errorMessageStyles={{
-                        fontSize: '13px',
-                        bottom: '-17px'
-                      }}
-                      type="number"
-                      name="totalGoodsValue"
-                      onChange={this.handleChange}
-                      submitAttempted={this.props.finishBookingAttempted}
-                      validations={{ nonNegative: (values, value) => value > 0 }}
-                      validationErrors={{
-                        nonNegative: 'Must be greater than 0',
-                        isDefaultRequiredValue: 'Must be greater than 0'
-                      }}
-                      required
-                    />
+                  <div className="flex-100 layout-row">
+                    <div className="flex-33 layout-row">
+                      <NamedSelect
+                        className="flex-100"
+                        options={currencyOptions}
+                        onChange={this.handleTotalGoodsCurrency}
+                        value={totalGoodsCurrency}
+                      />
+                    </div>
+                    <div className="flex-66 layout-row">
+                      <FormsyInput
+                        className={`flex-100 ${styles.cargo_input} `}
+                        wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                        errorMessageStyles={{
+                          fontSize: '13px',
+                          bottom: '-17px'
+                        }}
+                        type="number"
+                        name="totalGoodsValue"
+                        onChange={this.handleChange}
+                        submitAttempted={this.props.finishBookingAttempted}
+                        validations={{ nonNegative: (values, value) => value > 0 }}
+                        validationErrors={{
+                          nonNegative: 'Must be greater than 0',
+                          isDefaultRequiredValue: 'Must be greater than 0'
+                        }}
+                        required
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="flex-100 layout-row layout-wrap">
@@ -407,9 +423,7 @@ export class CargoDetails extends Component {
                         size={3}
                         text="Commercial Invoice"
                         color={
-                          finishBookingAttempted && !documents.commercial_invoice
-                            ? 'red'
-                            : false
+                          finishBookingAttempted && !documents.commercial_invoice ? 'red' : false
                         }
                       />
                     </div>
@@ -548,7 +562,9 @@ CargoDetails.propTypes = {
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
   handleHsTextChange: PropTypes.func,
-  customsCredit: PropTypes.bool
+  customsCredit: PropTypes.bool,
+  handleTotalGoodsCurrency: PropTypes.func.isRequired,
+  eori: PropTypes.string
 }
 
 CargoDetails.defaultProps = {
@@ -557,7 +573,8 @@ CargoDetails.defaultProps = {
   finishBookingAttempted: false,
   hsTexts: {},
   handleHsTextChange: null,
-  customsCredit: false
+  customsCredit: false,
+  eori: ''
 }
 
 export default CargoDetails

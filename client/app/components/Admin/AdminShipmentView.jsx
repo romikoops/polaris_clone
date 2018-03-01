@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails'
 import { ContainerDetails } from '../ContainerDetails/ContainerDetails'
 import FileTile from '../FileTile/FileTile'
 import PropTypes from '../../prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
-import { moment } from '../../constants'
+import { moment, currencyOptions } from '../../constants'
 import { capitalize, gradientTextGenerator } from '../../helpers'
 import styles from './Admin.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -42,13 +45,23 @@ export class AdminShipmentView extends Component {
     super(props)
     this.state = {
       showEditPrice: false,
-      newTotal: 0
+      newTotal: 0,
+      showEditTime: false,
+      newTimes: {
+        eta: '',
+        etd: ''
+      }
     }
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
     this.toggleEditPrice = this.toggleEditPrice.bind(this)
+    this.toggleEditTime = this.toggleEditTime.bind(this)
     this.saveNewPrice = this.saveNewPrice.bind(this)
+    this.saveNewTime = this.saveNewTime.bind(this)
     this.handleNewTotalChange = this.handleNewTotalChange.bind(this)
+    this.handleCurrencySelect = this.handleCurrencySelect.bind(this)
+    this.handleDayChange = this.handleDayChange.bind(this)
+    this.handleTimeChange = this.handleTimeChange.bind(this)
   }
   componentDidMount () {
     const {
@@ -62,6 +75,33 @@ export class AdminShipmentView extends Component {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'decline')
   }
+  handleCurrencySelect (selection) {
+    this.setState({ currency: selection })
+  }
+  handleDayChange (event, target) {
+    this.setState({
+      newTimes: {
+        ...this.state.newTimes,
+        [target]: {
+          ...this.state.newTimes[target],
+          day: event
+        }
+      }
+    })
+  }
+  handleTimeChange (event, target) {
+    const { value } = event.target
+
+    this.setState({
+      newTimes: {
+        ...this.state.newTimes,
+        [target]: {
+          ...this.state.newTimes[target],
+          time: value
+        }
+      }
+    })
+  }
 
   handleAccept () {
     const { shipmentData, handleShipmentAction } = this.props
@@ -70,11 +110,40 @@ export class AdminShipmentView extends Component {
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
   }
-  saveNewPrice () {
-    this.setState({})
+  toggleEditTime () {
+    this.setState({ showEditTime: !this.state.showEditTime })
   }
-  handleNewTotalChange () {
-    this.setState({})
+  saveNewTime () {
+    const { newTimes } = this.state
+    const { adminDispatch, shipmentData } = this.props
+    const etaTimes = newTimes.eta.time.split(':').map(t => parseInt(t, 10))
+    const etdTimes = newTimes.etd.time.split(':').map(t => parseInt(t, 10))
+    const newEta = moment(newTimes.eta.day)
+      .startOf('day')
+      .add(etaTimes[0], 'hours')
+      .add(etaTimes[1], 'minutes')
+      .format('lll')
+    const newEtd = moment(newTimes.etd.day)
+      .startOf('day')
+      .add(etdTimes[0], 'hours')
+      .add(etdTimes[1], 'minutes')
+      .format('lll')
+    const timeObj = { newEta, newEtd }
+    adminDispatch.editShipmentTime(shipmentData.shipment.id, timeObj)
+    this.toggleEditTime()
+  }
+  saveNewPrice () {
+    const { newTotal, currency } = this.state
+    const { adminDispatch, shipmentData } = this.props
+    adminDispatch.editShipmentPrice(shipmentData.shipment.id, {
+      value: newTotal,
+      currency: currency.value
+    })
+    this.toggleEditPrice()
+  }
+  handleNewTotalChange (event) {
+    const { value } = event.target
+    this.setState({ newTotal: +value })
   }
   render () {
     const {
@@ -95,7 +164,9 @@ export class AdminShipmentView extends Component {
       locations
     } = shipmentData
     // ;
-    const { newTotal, showEditPrice } = this.state
+    const {
+      newTotal, showEditPrice, currency, showEditTime, newTimes
+    } = this.state
     const hubKeys = schedules[0].hub_route_key.split('-')
     const hubsObj = { startHub: {}, endHub: {} }
     hubs.forEach((c) => {
@@ -106,6 +177,22 @@ export class AdminShipmentView extends Component {
         hubsObj.endHub = c
       }
     })
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days')
+          .format())
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -276,6 +363,7 @@ export class AdminShipmentView extends Component {
       )
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const newFeeStyle = showEditPrice ? styles.showPanel : styles.hidePanel
+    const newTimeStyle = showEditTime ? styles.showPanel : styles.hidePanel
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -316,10 +404,14 @@ export class AdminShipmentView extends Component {
             <TextHeading theme={theme} size={3} text="Itinerary" />
           </div>
           <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-          <div className="flex-100 layout-row layout-align-space-between-center">
+          <div
+            className="flex-100 layout-row layout-align-space-between-center"
+            style={{ position: 'relative' }}
+          >
             <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-              <div className="flex-100 layout-row layout-align-center-start">
-                <p className="flex-none">{`ETD: ${moment(schedules[0].etd).format('DD/MM/YYYY | HH:mm')}`}</p>
+              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
+                <p className="flex-none letter_3">{` ${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}</p>
               </div>
               {shipment.has_pre_carriage ? (
                 <div className="flex-100 layout-row layout-align-start-start">
@@ -335,8 +427,9 @@ export class AdminShipmentView extends Component {
               )}
             </div>
             <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-              <div className="flex-100 layout-row layout-align-center-start">
-                <p className="flex-none">{`ETA: ${moment(schedules[0].eta).format('DD/MM/YYYY | HH:mm')}`}</p>
+              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
+                <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
               </div>
               {shipment.has_on_carriage ? (
                 <div className="flex-100 layout-row layout-align-start-start">
@@ -351,6 +444,71 @@ export class AdminShipmentView extends Component {
               ) : (
                 ''
               )}
+            </div>
+            <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
+              <i className="fa fa-pencil clip" style={textStyle} />
+            </div>
+          </div>
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${
+              styles.panelDefault
+            } ${newTimeStyle}`}
+          >
+            <div className="flex-40 layout-row layout-align-center-center">
+              <div className="flex-65 layout-row input_box_full">
+                <DayPickerInput
+                  name="dayPicker"
+                  placeholder="DD/MM/YYYY"
+                  format="DD/MM/YYYY"
+                  formatDate={formatDate}
+                  parseDate={parseDate}
+                  value={newTimes.etd.day}
+                  onDayChange={e => this.handleDayChange(e, 'etd')}
+                  dayPickerProps={dayPickerProps}
+                />
+              </div>
+              <div className="flex-35 layout-row input_box_full">
+                <input
+                  type="time"
+                  value={newTimes.etd.time}
+                  onChange={e => this.handleTimeChange(e, 'etd')}
+                />
+              </div>
+            </div>
+            <div className="flex-40 layout-row layout-align-center-center">
+              <div className="flex-65 layout-row input_box_full">
+                <DayPickerInput
+                  name="dayPicker"
+                  placeholder="DD/MM/YYYY"
+                  format="DD/MM/YYYY"
+                  formatDate={formatDate}
+                  parseDate={parseDate}
+                  value={newTimes.eta.day}
+                  onDayChange={e => this.handleDayChange(e, 'eta')}
+                  dayPickerProps={dayPickerProps}
+                />
+              </div>
+              <div className="flex-35 layout-row input_box_full">
+                <input
+                  type="time"
+                  value={newTimes.eta.time}
+                  onChange={e => this.handleTimeChange(e, 'eta')}
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-end-center" style={{ height: '50px' }}>
+              <div
+                className="flex-10 layout-row layout-align-center-center pointy"
+                onClick={this.saveNewTime}
+              >
+                <i className="fa fa-check clip" style={textStyle} />
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-center-center pointy"
+                onClick={this.toggleEditTime}
+              >
+                <i className="fa fa-times" style={{ color: 'red' }} />
+              </div>
             </div>
           </div>
         </div>
@@ -369,7 +527,7 @@ export class AdminShipmentView extends Component {
           />
           <h3 className="flex-70 letter_3">Shipment Total:</h3>
           <div className="flex-30 layout-row layout-align-end-center">
-            <h3 className="flex-none letter_3"> {parseFloat(shipment.total_price).toFixed(2)} </h3>
+            <h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
             <div
               className="flex-20 layout-row layout-align-center-center pointy"
               onClick={this.toggleEditPrice}
@@ -377,12 +535,24 @@ export class AdminShipmentView extends Component {
               <i className="fa fa-pencil clip" style={textStyle} />
             </div>
           </div>
-          <div className={`flex-100 layout-row layout-align-space-between-center ${styles.panelDefault} ${newFeeStyle}`}>
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${
+              styles.panelDefault
+            } ${newFeeStyle}`}
+          >
             <div className="flex-30 layout-align-start-center">
               <p className="flex-none">Set new total price:</p>
             </div>
-            <div className="flex-30 layout-row layout-align-end-center">
-              <div className="flex-70 layout-row input_box_full">
+            <div className="flex-40 layout-row layout-align-end-center">
+              <div className="flex-40 layout-row input_box_full">
+                <NamedSelect
+                  name=""
+                  options={currencyOptions}
+                  value={currency}
+                  onChange={this.handleCurrencySelect}
+                />
+              </div>
+              <div className="flex-40 layout-row input_box_full">
                 <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
               </div>
               <div
@@ -395,7 +565,7 @@ export class AdminShipmentView extends Component {
                 className="flex-15 layout-row layout-align-center-center pointy"
                 onClick={this.toggleEditPrice}
               >
-                <i className="fa fa-times clip" style={{ color: 'red' }} />
+                <i className="fa fa-times" style={{ color: 'red' }} />
               </div>
             </div>
           </div>

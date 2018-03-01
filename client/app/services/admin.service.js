@@ -338,6 +338,22 @@ function assignManager (obj) {
   }
   return fetch(`${BASE_URL}/admin/user_managers/assign`, requestOptions).then(handleResponse)
 }
+function editShipmentPrice (id, priceObj) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ priceObj })
+  }
+  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
+}
+function editShipmentTime (id, timeObj) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ timeObj })
+  }
+  return fetch(`${BASE_URL}/admin/shipments/${id}/edit_time`, requestOptions).then(handleResponse)
+}
 
 export const adminService = {
   getHubs,
@@ -373,7 +389,9 @@ export const adminService = {
   getLayovers,
   saveNewTrucking,
   assignManager,
-  viewTrucking
+  viewTrucking,
+  editShipmentPrice,
+  editShipmentTime
 }
 
 export default adminService

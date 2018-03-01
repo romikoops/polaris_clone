@@ -26,8 +26,8 @@ class Shipment < ApplicationRecord
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :total_price,              numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  
+  # validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
   before_create :assign_uuid

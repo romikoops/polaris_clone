@@ -58,6 +58,37 @@ class Admin::ShipmentsController < ApplicationController
     response_handler(resp)
   end
 
+  def edit_price
+    shipment = Shipment.find(params[:id])
+    shipment.total_price = {value: params[:priceObj]["value"], currency: params[:priceObj]["currency"]}
+    shipment.save!
+    message = {
+        title: 'Shipment Price Change',
+        message: "Your shipment #{shipment.imc_reference} has an updated price. Your new total is #{params[:priceObj]["currency"]} #{params[:priceObj]["value"]}. For any issues, please contact your support agent.",
+        shipmentRef: shipment.imc_reference
+      }
+      add_message_to_convo(shipment.shipper, message, true)
+    response_handler(shipment)
+  end
+
+  def edit_time
+    shipment = Shipment.find(params[:id])
+    new_etd = DateTime.parse(params[:timeObj]["newEtd"])
+    new_eta = DateTime.parse(params[:timeObj]["newEta"])
+    shipment.planned_eta = new_eta
+    shipment.planned_etd = new_etd
+    shipment.schedule_set[0]["eta"] = new_eta
+    shipment.schedule_set[0]["etd"] = new_etd
+    shipment.save!
+    message = {
+        title: 'Shipment Schedule Updated',
+        message: "Your shipment #{shipment.imc_reference} has an updated schedule. Your new estimated departure is #{params[:timeObj]["newEtd"]}, estimated to arrive at #{params[:timeObj]["newEta"]}. For any issues, please contact your support agent.",
+        shipmentRef: shipment.imc_reference
+      }
+      add_message_to_convo(shipment.shipper, message, true)
+    response_handler(shipment)
+  end
+
   def edit
     @shipment = Shipment.find(params[:id])
     @containers = Container.where(shipment_id: @shipment.id)

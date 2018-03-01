@@ -305,7 +305,7 @@ class OfferCalculator
       end
       converted_totals = sum_and_convert(raw_totals, @user.currency)
       @shipment.schedules_charges[key]["total"] = converted_totals
-      @shipment.schedules_charges[key]["currency"] = @user.currency
+
       
       if @total_price[:total] == 0 
         
@@ -314,7 +314,7 @@ class OfferCalculator
         @total_price[:total] = converted_totals
       end
     end
-    @shipment.total_price = @total_price[:total]
+    @shipment.total_price = {value: @total_price[:total], currency: @user.currency}
 
   end
 
