@@ -293,15 +293,11 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-<<<<<<< HEAD
-    t.boolean "customs_credit"
+    t.boolean "customs_credit", default: false
     t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
-=======
-    t.boolean "customs_credit", default: false
->>>>>>> b6657b5b647ca6ed4974ade330aab68c88df0907
   end
 
   create_table "stops", force: :cascade do |t|
