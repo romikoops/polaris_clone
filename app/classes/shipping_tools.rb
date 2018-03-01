@@ -7,12 +7,19 @@ module ShippingTools
     tenant = current_user.tenant
     load_type = obj["loadType"].underscore
     direction = obj["direction"]
-    shipment = Shipment.create(
+    shipment = Shipment.new(
       shipper_id: current_user.id, 
       status: "booking_process_started", 
-      load_type: load_type, 
+      load_type: load_type,
+      direction: direction,
       tenant_id: tenant.id
     )
+    unless shipment.save
+      puts shipment.errors.full_messages
+      
+      # TBD - Create custom errors (ApplicationError)
+      shipment.save!
+    end
 
     shipment.send("#{load_type}s").create if shipment.send("#{load_type}s").empty?
 

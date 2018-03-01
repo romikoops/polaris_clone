@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180301125948) do
+ActiveRecord::Schema.define(version: 20180301151130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
+    t.string "direction"
   end
 
   create_table "stops", force: :cascade do |t|
