@@ -204,10 +204,7 @@ export class AdminPricingClientView extends Component {
                 data-for={tooltipId}
                 data-tip={priceTip.manage}
               />
-              <ReactTooltip
-                className={styles.tooltip}
-                id={tooltipId}
-              />
+              <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
             </div>
             <div
               className="flex-10 layout-row layout-align-center-center"
