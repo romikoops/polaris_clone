@@ -403,8 +403,6 @@ export class ShipmentDetails extends Component {
             toggleAlertModal={this.toggleAlertModal}
           />
         }
-        width="50vw"
-        minHeight="1px"
         parentToggle={this.toggleAlertModal}
       />
     ) : (
