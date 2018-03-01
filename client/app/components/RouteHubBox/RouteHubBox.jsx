@@ -75,7 +75,7 @@ export class RouteHubBox extends Component {
       >
         <h4 className="flex-100 no_m center" style={{ marginBottom: '10px' }}>
           {' '}
-          Transit Time
+          Est. Transit Time
         </h4>
         <p className="flex-100 no_m center">
           {' '}

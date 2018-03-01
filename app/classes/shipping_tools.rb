@@ -165,7 +165,12 @@ module ShippingTools
         end
       end
     end
-    
+    @documents = []
+    shipment.documents.each do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      @documents << tmp
+    end
     @schedules = []
     shipment.schedule_set.each do |ss|
       @schedules.push(ss)
@@ -175,19 +180,20 @@ module ShippingTools
     shipment.save!
     @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
     @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
-    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
+    locations = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}, origin: shipment.origin, destination: shipment.destination}
 
     
 
     return {
       shipment:   shipment,
       schedules:  @schedules,
-      hubs:       hubs,
+      locations:       locations,
       consignee:  consignee,
       notifyees:  notifyees,
       shipper:    shipper,
       cargoItems: @cargo_items,
-      containers: @containers
+      containers: @containers, 
+      documents: @documents
     }
   end
 

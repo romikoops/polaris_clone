@@ -77,4 +77,27 @@
     height: 120px;
     padding-top: 48px;
   }
+  .shipment_card {
+    padding: 15px;
+    margin: 25px 0;
+    box-shadow: 1px 2px 1px 1px lightgray;
+  }
+  .contact_text{
+    margin: 3px;
+  }
+  .sec_title_text {
+    margin: 0;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 30px;
+
+  }
+  .sec_title {
+    min-height: 75px;
+  }
+  .sec_title_text_normal {
+    margin: 0;
+    font-size: 30px;
+  }
 }
