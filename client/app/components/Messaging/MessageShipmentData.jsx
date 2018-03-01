@@ -44,7 +44,7 @@ export class MessageShipmentData extends Component {
       return ''
     }
     const { hubs, schedules, shipment } = shipmentData
-    const total = parseFloat(shipment.total_price, 10)
+    const total = parseFloat(shipment.total_price.value, 10)
     const { startHub, endHub } = hubs
     const route = schedules[0]
     const gradientFontStyle = {

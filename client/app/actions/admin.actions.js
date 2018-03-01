@@ -963,6 +963,56 @@ function saveNewTrucking (obj) {
     )
   }
 }
+function editShipmentPrice (id, priceObj) {
+  function request (shipmentData) {
+    return { type: adminConstants.EDIT_SHIPMENT_PRICE_REQUEST, payload: shipmentData }
+  }
+  function success (shipmentData) {
+    return { type: adminConstants.EDIT_SHIPMENT_PRICE_SUCCESS, payload: shipmentData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_SHIPMENT_PRICE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editShipmentPrice(id, priceObj).then(
+      (data) => {
+        dispatch(alertActions.success('Edit Time successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function editShipmentTime (id, timeObj) {
+  function request (truckingData) {
+    return { type: adminConstants.EDIT_SHIPMENT_TIME_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.EDIT_SHIPMENT_TIME_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_SHIPMENT_TIME_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editShipmentTime(id, timeObj).then(
+      (data) => {
+        dispatch(alertActions.success('New Trucking successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function assignManager (obj) {
   function request (managerData) {
@@ -1068,7 +1118,9 @@ export const adminActions = {
   logOut,
   getLayovers,
   saveNewTrucking,
-  assignManager
+  assignManager,
+  editShipmentPrice,
+  editShipmentTime
 }
 
 export default adminActions

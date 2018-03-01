@@ -829,6 +829,40 @@ export default function admin (state = {}, action) {
         error: { route: action.error },
         loading: false
       }
+    case adminConstants.EDIT_SHIPMENT_PRICE_REQUEST:
+      return state
+    case adminConstants.EDIT_SHIPMENT_PRICE_SUCCESS:
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          shipment: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_SHIPMENT_PRICE_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+    case adminConstants.EDIT_SHIPMENT_TIME_REQUEST:
+      return state
+    case adminConstants.EDIT_SHIPMENT_TIME_SUCCESS:
+      return {
+        ...state,
+        shipment: {
+          ...state.shipment,
+          shipment: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_SHIPMENT_TIME_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
     case adminConstants.CLEAR_LOADING:
       return {
         ...state,

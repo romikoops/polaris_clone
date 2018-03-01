@@ -615,4 +615,35 @@
   .trucking_fee_breakdown{
     border-radius: 0 0 5px 5px;
   }
+  .shipment_card {
+    padding: 15px;
+    margin: 25px 0;
+    box-shadow: 1px 2px 1px 1px lightgray;
+  }
+  .contact_text{
+    margin: 3px;
+  }
+  .showPanel {
+    height: 100px;
+    overflow: visible !important;
+  }
+  .hidePanel {
+    height: 0px;
+  }
+  .panelDefault {
+    transition: all 1.5s linear;
+    overflow: hidden;
+    position: relative;
+  }
+  .time_edit_button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .time_save_buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+  }
 }
