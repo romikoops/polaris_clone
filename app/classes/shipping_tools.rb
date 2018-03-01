@@ -155,6 +155,7 @@ module ShippingTools
         cargo_item.attributes.merge({ chargeable_weight: cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f })
       end
     end
+
     if shipment.containers
       @containers = shipment.containers
       shipment.containers.map do |cn|
@@ -172,23 +173,21 @@ module ShippingTools
         end
       end
     end
-    
-    @schedules = []
-    shipment.schedule_set.each do |ss|
-      @schedules.push(ss)
-    end
-    shipment.planned_etd = @schedules.first["etd"]
-    shipment.planned_eta = @schedules.last["eta"]
-    shipment.save!
-    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
-    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
-    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
 
-    
+    shipment.planned_etd = shipment.schedule_set.first["etd"]
+    shipment.planned_eta = shipment.schedule_set.last["eta"]
+    shipment.save!
+
+    origin      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
+    destination = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
+    hubs = {
+      startHub: { data: origin,      location: @origin.nexus },
+      endHub:   { data: destination, location: @destination.nexus}
+    }
 
     return {
       shipment:   shipment,
-      schedules:  @schedules,
+      schedules:  shipment.schedule_set,
       hubs:       hubs,
       consignee:  consignee,
       notifyees:  notifyees,
@@ -231,14 +230,14 @@ module ShippingTools
     @user_locations = current_user.user_locations.map do |uloc|
       { 
         location: uloc.location.attributes, 
-        contact: current_user.attributes
+        contact:  current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       { 
         location: contact.location.try(:attributes) || {},
-        contact: contact.attributes
+        contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
     shipment = Shipment.find(params[:shipment_id])
@@ -246,28 +245,29 @@ module ShippingTools
     shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
-    # byebug
+
     params[:schedules].each do |sched|
       shipment.schedule_set << sched
     end
+
     shipment.trip_id = params[:schedules][0]["trip_id"]
     case shipment.load_type
-      when 'lcl'
-        @dangerous = false
-        res = shipment.cargo_items.where(dangerous_goods: true)
-        if res.length > 0
-          @dangerous = true
-        end
-      when 'fcl'
-        @dangerous = false
-        res = shipment.containers.where(dangerous_goods: true)
-        if res.length > 0
-          @dangerous = true
-        end
+    when 'lcl'
+      @dangerous = false
+      res = shipment.cargo_items.where(dangerous_goods: true)
+      if res.length > 0
+        @dangerous = true
+      end
+    when 'fcl'
+      @dangerous = false
+      res = shipment.containers.where(dangerous_goods: true)
+      if res.length > 0
+        @dangerous = true
+      end
     end
     shipment.save!
-    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
-    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
+    @origin      = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
+    @destination = Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
@@ -283,9 +283,23 @@ module ShippingTools
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     customs_fee = get_item('customsFees', '_id', priceKey)
-    # @schedules = params[:schedules]
-    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    return {shipment: shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee, locations: {origin: shipment.origin, destination: shipment.destination}}
+    hubs = { 
+      startHub: { data: @origin,      location: @origin.nexus },
+      endHub:   { data: @destination, location: @destination.nexus }
+    }
+    return {
+      shipment:       shipment,
+      hubs:           hubs,
+      contacts:       @contacts,
+      userLocations:  @user_locations,
+      schedules:      @schedules,
+      dangerousGoods: @dangerous,
+      documents:      documents,
+      containers:     containers,
+      cargoItems:     cargo_items,
+      customs:        customs_fee,
+      locations:      { origin: shipment.origin, destination: shipment.destination }
+    }
   end
 
   def get_shipment_pdf(params)

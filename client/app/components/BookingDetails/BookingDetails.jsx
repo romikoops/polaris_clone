@@ -293,6 +293,7 @@ export class BookingDetails extends Component {
             shipper={shipper}
             consignee={consignee}
             notifyees={notifyees}
+            direction={shipment.direction}
             setContact={this.setContact}
             theme={theme}
             removeNotifyee={this.removeNotifyee}

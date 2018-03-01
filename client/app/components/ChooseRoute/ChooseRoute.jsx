@@ -192,15 +192,6 @@ export class ChooseRoute extends Component {
                 {destinationHubs[0].name.split(' ')[0]}
               </p>
             </div>
-            {/* <div className="flex-100 layout-row">
-              <BestRoutesBox
-                moT={this.state.selectedMoT}
-                user={user}
-                chooseResult={this.chooseResult}
-                theme={this.props.theme}
-                shipmentData={this.props.shipmentData}
-              />
-            </div> */}
             <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                 <div className="flex-none">
