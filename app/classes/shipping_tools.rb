@@ -33,7 +33,6 @@ module ShippingTools
         value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
-      # byebug
       on_carriage, pre_carriage = *[origin, destination].map do |nexus|
         nexus.trucking_availability(shipment.tenant_id)[shipment.load_type]
       end
@@ -44,10 +43,6 @@ module ShippingTools
       itinerary
     end
 
-    # shipment.has_on_carriage, shipment.has_on_carriage = *[:origin, :destination].map do |target|
-    #   shipment[target]trucking_availability(shipment.tenant_id)[shipment.load_type.to_sym]
-    # end
-
     return {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
@@ -55,7 +50,7 @@ module ShippingTools
       cargo_item_types: tenant.cargo_item_types,
       available_trucking_options: available_trucking_options
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
-  end 
+  end
 
   def get_shipment_offer(session, params, load_type)
     shipment = Shipment.find(params[:shipment_id])

@@ -3,13 +3,13 @@ class SuperAdminsController < ApplicationController
   include MultiTenantTools
   include Response
   def new_demo_site
-      if params[:file]
-        tenant = JSON.parse(File.read(params[:file].tempfile))
-        new_site(tenant, true)
-        response_handler(true)
-      else
-        response_handler(false)
-      end
+    if params[:file]
+      tenant = JSON.parse(File.read(params[:file].tempfile))
+      new_site(tenant, true)
+      response_handler(true)
+    else
+      response_handler(false)
+    end
   end
   private
 

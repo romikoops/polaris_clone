@@ -593,8 +593,8 @@ class TenantSeeder
   ]
 
 
-  def self.exec
-    TENANT_DATA.each do |tenant_attr|
+  def self.exec(tenant_data = TENANT_DATA)
+    tenant_data.each do |tenant_attr|
       other_data = tenant_attr.delete(:other_data) || {}
 
       tenant = Tenant.find_by(subdomain: tenant_attr[:subdomain])
