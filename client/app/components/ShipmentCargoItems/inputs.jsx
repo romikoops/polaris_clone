@@ -180,7 +180,7 @@ export default function getInputs (
   inputs.length = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Length </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={
@@ -225,7 +225,7 @@ export default function getInputs (
   inputs.width = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Width </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={
@@ -270,7 +270,7 @@ export default function getInputs (
   inputs.volume = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Volume </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={'Volume is automatically set by \'Length\', \'Height\', and \'Width\''}

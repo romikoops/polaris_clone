@@ -291,7 +291,7 @@ class SideNav extends Component {
           </div>
           {
             isAdmin && (expand || this.state.linkVisibility[i])
-              ? <ReactTooltip className={styles.tooltip} id={toolId} />
+              ? <ReactTooltip className={styles.tooltip} id={toolId} effect="solid" />
               : ''
           }
         </div>

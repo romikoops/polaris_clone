@@ -144,7 +144,11 @@ export class AdminClientTile extends Component {
         )}
         <div className={`${styles.content} flex-100 layout-row layout-align-center-start`} data-for={tooltipId} data-tip={tooltip}>
           {contentView}
-          {showTooltip ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId} /> : ''}
+          {
+            showTooltip
+              ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+              : ''
+          }
         </div>
       </div>
     )

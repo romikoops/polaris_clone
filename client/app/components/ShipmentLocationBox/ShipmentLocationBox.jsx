@@ -1094,7 +1094,7 @@ export class ShipmentLocationBox extends Component {
                   { !truckingOptions.preCarriage
                     ? (
                       <div>
-                        <ReactTooltip />
+                        <ReactTooltip effect="solid" />
                         <div
                           className={styles.toggle_box_overlay}
                           data-tip={`Pre-Carriage is not available in ${this.state.oSelect.label}`}
@@ -1142,7 +1142,7 @@ export class ShipmentLocationBox extends Component {
                   { !truckingOptions.onCarriage
                     ? (
                       <div>
-                        <ReactTooltip />
+                        <ReactTooltip effect="solid" />
                         <div
                           className={styles.toggle_box_overlay}
                           data-tip={`On-Carriage is not available in ${this.state.dSelect.label}`}

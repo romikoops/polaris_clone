@@ -65,10 +65,11 @@ export class AdminNexusTile extends Component {
             <h4 className="flex-100"> {nexus.name} </h4>
           </div>
         </div>
-        {showTooltip ? <ReactTooltip
-          className={`${styles.tooltip}`}
-          id={tooltipId}
-        /> : ''}
+        {
+          showTooltip
+            ? <ReactTooltip className={`${styles.tooltip}`} id={tooltipId} effect="solid" />
+            : ''
+        }
       </div>
     )
   }

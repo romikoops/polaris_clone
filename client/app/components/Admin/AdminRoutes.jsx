@@ -77,7 +77,7 @@ class AdminRoutes extends Component {
             />
           </p>
         </div>
-        <ReactTooltip id="newRouteTip" className={`${styles.tooltip} `} />
+        <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
       </div>)
     const title = selectedRoute ? 'Route Overview' : 'Routes'
     return (

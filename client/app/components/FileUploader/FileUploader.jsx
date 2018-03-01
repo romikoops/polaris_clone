@@ -87,7 +87,8 @@ class FileUploader extends React.Component {
           />
           <ReactTooltip
             id={tooltipId}
-            className={`${styles.tooltip} `}
+            className={styles.tooltip}
+            effect="solid"
           />
           <input
             type="file"
