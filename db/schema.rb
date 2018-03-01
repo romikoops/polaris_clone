@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(version: 20180227154245) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-    t.boolean "customs_credit"
+    t.boolean "customs_credit", default: false
   end
 
   create_table "stops", force: :cascade do |t|
