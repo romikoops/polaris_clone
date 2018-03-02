@@ -298,6 +298,7 @@ ActiveRecord::Schema.define(version: 20180302102310) do
     t.integer "trip_id"
     t.string "eori"
     t.string "direction"
+    t.string "notes"
   end
 
   create_table "stops", force: :cascade do |t|

@@ -204,6 +204,7 @@ export class BookingDetails extends Component {
       customs,
       hsTexts,
       eori,
+      notes,
       customsCredit
     } = this.state
     const { documents } = this.props.shipmentData
@@ -239,6 +240,7 @@ export class BookingDetails extends Component {
         customs,
         hsTexts,
         eori,
+        notes,
         customsCredit
       }
     }
@@ -318,6 +320,7 @@ export class BookingDetails extends Component {
             shipmentDispatch={shipmentDispatch}
             currencies={currencies}
             customsData={customs}
+            notes={this.state.notes}
             setCustomsFee={this.setCustomsFee}
             user={user}
             eori={eori}

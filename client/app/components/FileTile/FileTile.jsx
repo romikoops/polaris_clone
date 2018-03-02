@@ -229,7 +229,7 @@ class FileTile extends React.Component {
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-start ${
           styles.tile
-        } ${statusStyle}`}
+        } `}
       >
         {showDenialDetails ? denyDetails : ''}
         <div className="flex-100 layout-row layout-wrap layout-align-center-center">

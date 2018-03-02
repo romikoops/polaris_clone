@@ -136,7 +136,7 @@ module ShippingTools
         shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.user.currency }
       end
     end
-
+    shipment.notes = shipment_data["notes"]
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
 
     if shipment.cargo_items
@@ -175,26 +175,35 @@ module ShippingTools
       end
     end
 
+    documents = shipment.documents.map do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      tmp
+    end
+
     shipment.planned_etd = shipment.schedule_set.first["etd"]
     shipment.planned_eta = shipment.schedule_set.last["eta"]
     shipment.save!
 
-    origin      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
-    destination = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
-    hubs = {
-      startHub: { data: origin,      location: origin.nexus },
-      endHub:   { data: destination, location: destination.nexus}
+    origin_hub      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
+    destination_hub = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
+    locations = {
+      startHub:    { data: origin_hub, location: origin_hub.nexus },
+      endHub:      { data: destination_hub, location: destination_hub.nexus },
+      origin:      shipment.origin,
+      destination: shipment.destination
     }
 
     return {
       shipment:   shipment,
       schedules:  shipment.schedule_set,
-      hubs:       hubs,
+      locations:  locations,
       consignee:  consignee,
       notifyees:  notifyees,
       shipper:    shipper,
       cargoItems: @cargo_items,
-      containers: @containers
+      containers: @containers, 
+      documents:  documents
     }
   end
 

@@ -234,7 +234,7 @@ export class AdminShipmentView extends Component {
               </div>
             </div>
           </div>)
-          if (nArray.length === 1) {
+          if (nArray.length % 2 === 1) {
             nArray.push(<div key={v4()} className="flex-45 layout-row" />)
           }
         }

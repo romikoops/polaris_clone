@@ -20,7 +20,8 @@ class FileUploader extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      file: null
+      file: null,
+      error: false
     }
     this.onFormSubmit = this.onFormSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -44,39 +45,52 @@ class FileUploader extends React.Component {
     if (!file) {
       return ''
     }
-    if (dispatchFn) {
-      if (type) {
-        file.doc_type = type
+    const fileNameSplit = file.name.split('.')
+    const fileExt = fileNameSplit[fileNameSplit.length - 1]
+    if (
+      fileExt === 'docx' ||
+      fileExt === 'doc' ||
+      fileExt === 'jpeg' ||
+      fileExt === 'jpg' ||
+      fileExt === 'tiff' ||
+      fileExt === 'png' ||
+      fileExt === 'pdf'
+    ) {
+      if (dispatchFn) {
+        if (type) {
+          file.doc_type = type
+        }
+        return dispatchFn(file)
       }
-      return dispatchFn(file)
+      if (uploadFn) {
+        return uploadFn(file, type, url)
+      }
+      const formData = new window.FormData()
+      formData.append('file', file)
+      formData.append('type', type)
+      const requestOptions = {
+        method: 'POST',
+        headers: { ...authHeader() },
+        body: formData
+      }
+      const uploadUrl = BASE_URL + url
+      return fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
     }
-    if (uploadFn) {
-      return uploadFn(file, type, url)
-    }
-    const formData = new window.FormData()
-    formData.append('file', file)
-    formData.append('type', type)
-    const requestOptions = {
-      method: 'POST',
-      headers: { ...authHeader() },
-      body: formData
-    }
-    const uploadUrl = BASE_URL + url
-    return fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
+    return this.showFileTypeError()
   }
-
+  showFileTypeError () {
+    this.setState({ error: true })
+    this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
+  }
   render () {
     const clickUploaderInput = () => {
       this.uploaderInput.click()
     }
     const { theme, type, tooltip } = this.props
     const tooltipId = v4()
+    const errorStyle = this.state.error ? styles.error : ''
     return (
-      <div
-        className={styles.upload_btn_wrapper}
-        data-tip={tooltip}
-        data-for={tooltipId}
-      >
+      <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `} data-tip={tooltip} data-for={tooltipId}>
         <form onSubmit={this.onFormSubmit}>
           <RoundButton
             text="Upload"
@@ -85,18 +99,19 @@ class FileUploader extends React.Component {
             handleNext={clickUploaderInput}
             active
           />
-          <ReactTooltip
-            id={tooltipId}
-            className={styles.tooltip}
-            effect="solid"
-          />
+          <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />
           <input
             type="file"
             onChange={this.onChange}
             name={type}
-            ref={(input) => { this.uploaderInput = input }}
+            ref={(input) => {
+              this.uploaderInput = input
+            }}
           />
         </form>
+        <div className={`${styles.file_error} ${errorStyle} layout-row layout-align-center`}>
+          <p className="flex-100">Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed</p>
+        </div>
       </div>
     )
   }

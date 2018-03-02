@@ -43,11 +43,9 @@ export class CargoDetails extends Component {
       setCustomsFee(resp)
     }
   }
-  deleteDoc (key) {
-    const { shipmentData, shipmentDispatch } = this.props
-    const { documents } = shipmentData
-    const { id } = documents[key]
-    shipmentDispatch.deleteDocument(id)
+  deleteDoc (doc) {
+    const { shipmentDispatch } = this.props
+    shipmentDispatch.deleteDocument(doc.id)
   }
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
@@ -449,7 +447,8 @@ export class CargoDetails extends Component {
                       <TextHeading theme={theme} size={3} text="Certificate of Origin" />
                     </div>
                   </div>
-                  <div className="flex-100">
+                  <div className="flex-100 layout-row layout-wrap">
+                    <p className="flex-75 center no_m">(if applicable)</p>
                     {documents.certificate_of_origin ? (
                       <DocViewer doc={documents.certificate_of_origin} />
                     ) : (
@@ -486,6 +485,51 @@ export class CargoDetails extends Component {
                 ) : (
                   ''
                 )}
+              </div>
+              <div className="flex-100 layout-row layout-align-start-start">
+                <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    <div className="flex-100">
+                      <div className={`flex-none ${styles.f_header}`}>
+                        {' '}
+                        <TextHeading theme={theme} size={3} text="Miscellaneous Documentation" />
+                      </div>
+                    </div>
+                    <FileUploader
+                      theme={theme}
+                      type="miscellaneous"
+                      dispatchFn={this.fileFn}
+                      text="Miscellaneous"
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    {documents && documents.miscellaneous
+                      ? documents.miscellaneous.map(d => (
+                        <div className="flex-50 layout-row layout-align-center-center">
+                          <DocViewer doc={d} />
+                        </div>
+                      ))
+                      : ''}
+                  </div>
+                </div>
+                <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-100">
+                    <div className={`flex-none ${styles.f_header}`}>
+                      {' '}
+                      <TextHeading theme={theme} size={3} text="Notes" />
+                    </div>
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                    <textarea
+                      name="notes"
+                      id=""
+                      cols="30"
+                      rows="6"
+                      value={this.props.notes}
+                      onChange={this.props.handleChange}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -564,7 +608,8 @@ CargoDetails.propTypes = {
   handleHsTextChange: PropTypes.func,
   customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
-  eori: PropTypes.string
+  eori: PropTypes.string,
+  notes: PropTypes.string
 }
 
 CargoDetails.defaultProps = {
@@ -574,7 +619,8 @@ CargoDetails.defaultProps = {
   hsTexts: {},
   handleHsTextChange: null,
   customsCredit: false,
-  eori: ''
+  eori: '',
+  notes: ''
 }
 
 export default CargoDetails
