@@ -11,7 +11,8 @@ import {
   rateBasises,
   lclPricingSchema,
   fclPricingSchema,
-  cargoGlossary
+  cargoGlossary,
+  rateBasisSchema
 } from '../../constants'
 
 const fclChargeGloss = fclChargeGlossary
@@ -119,30 +120,60 @@ export class AdminPriceCreator extends Component {
       }
     })
   }
+
   handleSelect (selection) {
     const nameKeys = selection.name.split('-')
-    this.setState({
-      pricing: {
-        ...this.state.pricing,
-        data: {
-          ...this.state.pricing.data,
-          [nameKeys[0]]: {
-            ...this.state.pricing.data[nameKeys[0]],
-            [nameKeys[1]]: selection.value
+    if (nameKeys[1] === 'rate_basis') {
+      const price = this.state.pricing.data[nameKeys[0]]
+      const newSchema = rateBasisSchema[selection.value]
+      Object.keys(newSchema).forEach((k) => {
+        if (price[k] && newSchema[k] && k !== 'rate_basis') {
+          newSchema[k] = price[k]
+        }
+      })
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.pricing.data,
+            [nameKeys[0]]: newSchema
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions.data,
+            [nameKeys[0]]: {
+              ...this.state.selectOptions.data[nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
           }
         }
-      },
-      selectOptions: {
-        ...this.state.selectOptions,
-        data: {
-          ...this.state.selectOptions.data,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions.data[nameKeys[0]],
-            [nameKeys[1]]: selection
+      })
+    } else {
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.pricing.data,
+            [nameKeys[0]]: {
+              ...this.state.pricing.data[nameKeys[0]],
+              [nameKeys[1]]: selection.value
+            }
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions.data,
+            [nameKeys[0]]: {
+              ...this.state.selectOptions.data[nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
   showAddFeePanel () {
     this.setState({ showPanel: !this.state.showPanel })

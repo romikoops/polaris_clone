@@ -39,10 +39,7 @@ class ShipmentsController < ApplicationController
   def show
     shipment = Shipment.find(params[:id])
 
-    cargo_items = shipment.cargo_items.map do |cargo_item|
-      chargeable_weight = cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f
-      cargo_item.attributes.merge(chargeable_weight: chargeable_weight)
-    end
+    cargo_items = shipment.cargo_items
     
     containers = shipment.containers
 

@@ -153,7 +153,8 @@ module ShippingTools
           cargo_item.customs_text = hs_text
           cargo_item.save!
         end
-        cargo_item.attributes.merge({ chargeable_weight: cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f })
+        cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+        cargo_item
       end
     end
 
