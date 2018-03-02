@@ -33,6 +33,13 @@
   .card_link_row {
     margin-bottom: 77px;
   }
+  .section {
+    transition: all 0.8s ease;
+    &.inactive {    
+      filter: grayscale(30%);
+      opacity: 0.3;
+    }
+  }
 
   .card_img {
     width: 100% !important;

@@ -96,8 +96,18 @@ export class ChooseShipment extends Component {
           <div className="flex-100 layout-row layout-align-space-around-center">
             { directionButtons }
           </div>
-          <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
-          <div className={`${styles.next_step_sec} flex-100 layout-row layout-align-center`}>
+          <div className={
+            `flex-100 layout-row ${styles.section} ` +
+            `${direction ? '' : styles.inactive}`
+          }
+          >
+            <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
+          </div>
+          <div className={
+            `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
+            `${styles.section} ${direction && loadType ? '' : styles.inactive}`
+          }
+          >
             <div
               className={`${styles.mot_sec} flex-80 layout-row layout-wrap layout-align-center`}
               style={{
