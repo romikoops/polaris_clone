@@ -8,7 +8,7 @@ module ShippingTools
     load_type = obj["loadType"].underscore
     direction = obj["direction"]
     shipment = Shipment.new(
-      shipper_id: current_user.id, 
+      user_id: current_user.id, 
       status: "booking_process_started", 
       load_type: load_type,
       direction: direction,
@@ -104,13 +104,11 @@ module ShippingTools
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id).merge({ alias: true })
+      contact_params(resource, contact_location.id).merge(alias: true)
     )
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
-    user_location = current_user.user_locations.find_or_create_by(location_id: contact_location.id)
-    user_location.update_attributes!(primary: true) if user_location.id == 1
-    shipment.shipper_location = contact_location
     shipper = { data: contact, location: contact_location }
+    user_location = current_user.user_locations.find_or_create_by(location_id: contact_location.id)
 
     # Consignee
     resource = shipment_data.require(:consignee)
@@ -132,7 +130,7 @@ module ShippingTools
         key = ss["hub_route_key"]
         shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
         shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val] ? shipment_data[:insurance][:val] : 0
-        shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.shipper.currency }
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.user.currency }
       end
     end
 
@@ -181,8 +179,8 @@ module ShippingTools
     origin      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
     destination = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
     hubs = {
-      startHub: { data: origin,      location: @origin.nexus },
-      endHub:   { data: destination, location: @destination.nexus}
+      startHub: { data: origin,      location: origin.nexus },
+      endHub:   { data: destination, location: destination.nexus}
     }
 
     return {
@@ -241,7 +239,7 @@ module ShippingTools
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
     shipment = Shipment.find(params[:shipment_id])
-    shipment.shipper_id = params[:shipment][:shipper_id]
+    shipment.user_id = params[:shipment][:user_id]
     shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json

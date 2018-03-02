@@ -59,12 +59,12 @@ class ShipmentsController < ApplicationController
     end
 
     response_handler(
-      shipment: shipment,
+      shipment:   shipment,
       cargoItems: cargo_items,
       containers: containers,
-      contacts: contacts,
-      documents: documents,
-      schedules: shipment.schedule_set
+      contacts:   contacts,
+      documents:  documents,
+      schedules:  shipment.schedule_set
     )
   end
 
@@ -82,10 +82,11 @@ class ShipmentsController < ApplicationController
     resp = finish_shipment_booking(params)
     response_handler(resp)
   end
+  
   def confirm_shipment
     resp = confirm_booking(params)
-    tenant_notification_email(resp.shipper, resp)
-    shipper_notification_email(resp.shipper, resp)
+    tenant_notification_email(resp.user, resp)
+    shipper_notification_email(resp.user, resp)
     response_handler({shipment: resp})
   end
 

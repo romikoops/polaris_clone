@@ -28,7 +28,7 @@ class Shipment < ApplicationRecord
   before_create :set_default_trucking
 
   # Basic associations
-  belongs_to :shipper, class_name: "User", optional: true
+  belongs_to :user, optional: true
   belongs_to :consignee, optional: true
   belongs_to :tenant, optional: true
   has_many :documents
@@ -40,7 +40,6 @@ class Shipment < ApplicationRecord
   belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
-  belongs_to :shipper_location, class_name: "Location", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

@@ -64,10 +64,10 @@
     <div class="col-xs-6">
       <div class="wrap-overflow">
         <u><strong>Consignor:</strong></u><br>
-        <%= line_wrap(shipment.shipper.full_name) %><br>
+        <%= line_wrap(shipment.user.full_name) %><br>
         <strong>Address:</strong> <%= line_wrap(shipment.shipper_legal_location.full_address) %><br>
-        <strong>Phone:</strong> <%= line_wrap(shipment.shipper.phone) %><br>
-        <strong>Email:</strong> <%= line_wrap(shipment.shipper.email) %><br>
+        <strong>Phone:</strong> <%= line_wrap(shipment.user.phone) %><br>
+        <strong>Email:</strong> <%= line_wrap(shipment.user.email) %><br>
       </div>
     </div>
     <div class="col-xs-6">
