@@ -36,7 +36,7 @@ function login (data) {
         const shipmentReq = data.req
         dispatch(success(response.data))
         if (shipmentReq) {
-          shipmentReq.shipment.shipper_id = response.data.id
+          shipmentReq.shipment.user_id = response.data.id
           dispatch(shipmentActions.setShipmentRoute(shipmentReq))
         } else if (response.data.role_id === 1 && !data.noRedirect) {
           dispatch(push('/admin/dashboard'))

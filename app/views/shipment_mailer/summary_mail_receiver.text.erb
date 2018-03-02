@@ -1,6 +1,6 @@
 Dear <%= @shipment.receiver.full_name %>,
 
-We have received a booking for a shipment from <%= @shipment.shipper.company_name %> that you are the consignee for. The ItsMyCargo Booking Reference is <%= @shipment.imc_reference %>.
+We have received a booking for a shipment from <%= @shipment.user.company_name %> that you are the consignee for. The ItsMyCargo Booking Reference is <%= @shipment.imc_reference %>.
 
 Attached you find all details regarding the shipment as a pdf-file, including Estimated Time of Arrival at Port: <%= @shipment.end_port_location.city_country %>.
 

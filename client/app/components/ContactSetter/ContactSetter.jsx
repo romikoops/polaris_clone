@@ -29,16 +29,19 @@ export class ContactSetter extends Component {
         gecodedAddress: ''
       }
     }
+    this.contactTypes = props.direction === 'export'
+      ? ['shipper', 'consignee', 'notifyee']
+      : ['consignee', 'shipper', 'notifyee']
+
+    this.stages = this.contactTypes.slice(0, 2).concat(['notifyees'])
 
     this.state = {
       contactData: {
-        type: 'shipper',
+        type: this.contactTypes[0],
         ...this.newContactData
       },
       showBody: false
     }
-    this.contactTypes = ['shipper', 'consignee', 'notifyee']
-    this.stages = ['shipper', 'consignee', 'notifyees']
     this.autofillContact = this.autofillContact.bind(this)
     this.setContact = this.setContact.bind(this)
     this.setStage = this.setStage.bind(this)
@@ -99,7 +102,7 @@ export class ContactSetter extends Component {
     })
   }
   nextUnsetContactType (thisType) {
-    return ['shipper', 'consignee'].find(type => (
+    return this.contactTypes.slice(0, 2).find(type => (
       isEmpty(this.props[type]) && type !== thisType
     )) || 'notifyee'
   }
@@ -109,8 +112,9 @@ export class ContactSetter extends Component {
       userLocations, shipper, consignee, notifyees
     } = this.props
     let { contacts } = this.props
-    if (this.state.contactData.type === 'shipper') contacts = [...userLocations, ...contacts]
-
+    if (this.state.contactData.type === this.contactTypes[0]) {
+      contacts = [...userLocations, ...contacts]
+    }
     return contacts.filter(contactData => (
       shipper !== contactData &&
       consignee !== contactData &&
@@ -135,10 +139,7 @@ export class ContactSetter extends Component {
         name="contact_setter"
         className="flex-100 layout-row layout-wrap layout-align-center-start"
       >
-        <div className={`
-          flex-none ${defs.content_width} layout-row layout-wrap
-        `}
-        >
+        <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div
             className="flex-100 layout-row layout-align-center-center pointy"
             onClick={this.toggleShowBody}
@@ -185,6 +186,7 @@ export class ContactSetter extends Component {
               consignee={consignee}
               shipper={shipper}
               notifyees={notifyees}
+              direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
               setContactForEdit={this.setContactForEdit}
@@ -203,6 +205,7 @@ ContactSetter.propTypes = {
   shipper: PropTypes.objectOf(PropTypes.any),
   consignee: PropTypes.objectOf(PropTypes.any),
   notifyees: PropTypes.arrayOf(PropTypes.any),
+  direction: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   finishBookingAttempted: PropTypes.bool,
   setContact: PropTypes.func.isRequired,

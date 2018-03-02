@@ -12,7 +12,7 @@ class ScopeValidator < ActiveModel::EachValidator
 
     value.deep_stringify_keys!
     
-    unless value.deep_values.all? { |value| is_a_boolean?(value) || value.is_a?(String)}
+    unless value.deep_values.all? { |value| is_a_boolean?(value) || value.is_a?(String) }
       add_error('last level values must be Boolean or String')
     end
 

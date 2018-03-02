@@ -7,11 +7,11 @@ import { adminDashboard as adminTip } from '../../constants'
 export class AdminShipmentsIndex extends Component {
   static prepShipment (baseShipment, clients, hubsObj) {
     const shipment = Object.assign({}, baseShipment)
-    shipment.clientName = clients[shipment.shipper_id]
-      ? `${clients[shipment.shipper_id].first_name} ${clients[shipment.shipper_id].last_name}`
+    shipment.clientName = clients[shipment.user_id]
+      ? `${clients[shipment.user_id].first_name} ${clients[shipment.user_id].last_name}`
       : ''
-    shipment.companyName = clients[shipment.shipper_id]
-      ? `${clients[shipment.shipper_id].company_name}`
+    shipment.companyName = clients[shipment.user_id]
+      ? `${clients[shipment.user_id].company_name}`
       : ''
     const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
     shipment.originHub = hubsObj[hubKeys[0]] ? hubsObj[hubKeys[0]].name : ''

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302101007) do
+ActiveRecord::Schema.define(version: 20180302102310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 20180302101007) do
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.integer "shipper_id"
+    t.integer "user_id"
     t.integer "location_id"
     t.string "company_name"
     t.string "first_name"
@@ -267,8 +267,7 @@ ActiveRecord::Schema.define(version: 20180302101007) do
   end
 
   create_table "shipments", force: :cascade do |t|
-    t.integer "shipper_id"
-    t.integer "shipper_location_id"
+    t.integer "user_id"
     t.integer "origin_id"
     t.integer "destination_id"
     t.integer "route_id"
@@ -294,11 +293,12 @@ ActiveRecord::Schema.define(version: 20180302101007) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-    t.boolean "customs_credit"
+    t.boolean "customs_credit", default: false
     t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
+    t.string "direction"
     t.string "notes"
   end
 
@@ -363,8 +363,8 @@ ActiveRecord::Schema.define(version: 20180302101007) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item"
-    t.boolean "container"
+    t.boolean "cargo_item", default: false
+    t.boolean "container", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

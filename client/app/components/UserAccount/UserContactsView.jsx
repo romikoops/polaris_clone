@@ -277,7 +277,7 @@ export class UserContactsView extends Component {
     const { editBool, editObj } = this.state
     const shipArr = []
     shipments.forEach((ship) => {
-      shipArr.push(this.prepShipment(ship, contact, hubs))
+      shipArr.push(UserContactsView.prepShipment(ship, contact, hubs))
     })
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
