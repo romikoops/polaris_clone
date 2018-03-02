@@ -15,6 +15,7 @@ class CargoItem < ApplicationRecord
   # Class Methods
   def self.extract(params)
     cargos = []
+    byebug
     params.each do |value|  
       payload_in_kg = value["payload_in_kg"].to_d
       dimension_x = value["dimension_x"].to_d
@@ -25,7 +26,7 @@ class CargoItem < ApplicationRecord
       
       unless value["_destroy"] == "1"
         quantity.times do
-          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z, cargo_item_type_id: value["cargo_item_type_id"], cargo_group_id: cargo_group_id)
+          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z, cargo_item_type_id: value["colliType"], cargo_group_id: cargo_group_id)
         end
       end
     end
@@ -41,8 +42,9 @@ class CargoItem < ApplicationRecord
     payload_in_kg / 1000    
   end
 
-  def chargeable_weight(mot = "ocean")
-    [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym], payload_in_tons].max
+  def set_chargeable_weight!(mot = "ocean")
+    chargeable_weight = [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym], payload_in_tons].max
+    save!
   end
 
   def weight_or_volume

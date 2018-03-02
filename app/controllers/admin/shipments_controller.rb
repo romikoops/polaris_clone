@@ -25,12 +25,15 @@ class Admin::ShipmentsController < ApplicationController
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
     hs_codes = []
+    cargo_item_types = {}
+
     @cargo_items.each do |ci|
       if ci && ci.hs_codes
         ci.hs_codes.each do |hs|
           hs_codes << hs
         end
       end
+      cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)
     end
     @containers.each do |cn|
       if cn && cn.hs_codes
@@ -54,7 +57,7 @@ class Admin::ShipmentsController < ApplicationController
     end
     locations = {origin: @shipment.origin, destination: @shipment.destination}
     p @shipment.id
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations}
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations, cargoItemTypes: cargo_item_types}
     response_handler(resp)
   end
 
