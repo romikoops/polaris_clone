@@ -104,18 +104,21 @@ module ShippingTools
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id).merge(alias: true)
+      contact_params(resource, contact_location.id).merge(alias: shipment.export?)
     )
     shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
     shipper = { data: contact, location: contact_location }
-    user_location = current_user.user_locations.find_or_create_by(location_id: contact_location.id)
+    UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
+    contact = current_user.contacts.find_or_create_by(
+      contact_params(resource, contact_location.id).merge(alias: shipment.import?)
+    )
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
     consignee = { data: contact, location: contact_location }
+    UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|

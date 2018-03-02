@@ -73,6 +73,27 @@ class Shipment < ApplicationRecord
   end
 
   # Instance methods
+
+  def import?
+    direction == "import"
+  end
+
+  def export?
+    direction == "export"
+  end
+
+  def shipper
+    find_contacts("shipper").first
+  end
+
+  def consignee
+    find_contacts("consignee").first
+  end
+
+  def notifyees
+    find_contacts("notifyee")
+  end
+
   def full_haulage_to_string
     self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
   end
@@ -192,14 +213,6 @@ class Shipment < ApplicationRecord
     raise "Not implemented"
   end
 
-  def notifyees
-    shipment_contacts.where(contact_type: "notifyee").map(&:contact)
-  end    
-
-  def consignee
-    shipment_contacts.find_by(contact_type: "consignee").contact
-  end    
-
   def etd
     Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
   end
@@ -266,6 +279,16 @@ class Shipment < ApplicationRecord
 
   def assign_uuid
     self.uuid = SecureRandom.uuid
+  end
+
+  def find_contacts(type)
+    Contact.find_by_sql("
+      SELECT * FROM contacts
+      JOIN  shipment_contacts ON shipment_contacts.contact_id   = contacts.id
+      JOIN  shipments         ON shipments.id                   = shipment_contacts.shipment_id
+      WHERE shipments.id = #{self.id}
+      AND   shipment_contacts.contact_type = '#{type}'
+    ")    
   end
 
   def planned_pickup_date_is_a_datetime?
