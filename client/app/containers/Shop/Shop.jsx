@@ -124,7 +124,7 @@ class Shop extends Component {
       currencies,
       dashboard
     } = this.props
-    const { theme } = tenant.data
+    const { theme, scope } = tenant.data
     const { request, response, error } = bookingData
     const route1 = `${match.url}/:shipmentId/shipment_details`
     const route2 = `${match.url}/:shipmentId/choose_offer`
@@ -182,6 +182,7 @@ class Shop extends Component {
             <ChooseShipment
               {...props}
               theme={theme}
+              scope={scope}
               selectLoadType={this.selectLoadType}
               setStage={this.selectShipmentStage}
               messages={error ? error.stage1 : []}
