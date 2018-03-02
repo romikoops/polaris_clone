@@ -15,7 +15,6 @@ class CargoItem < ApplicationRecord
   # Class Methods
   def self.extract(params)
     cargos = []
-    byebug
     params.each do |value|  
       payload_in_kg = value["payload_in_kg"].to_d
       dimension_x = value["dimension_x"].to_d
