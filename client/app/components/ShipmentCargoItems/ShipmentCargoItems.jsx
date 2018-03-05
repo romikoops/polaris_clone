@@ -42,7 +42,7 @@ export class ShipmentCargoItems extends Component {
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
     const modifiedEvent = {
-      target: { name: event.name, value: event.key }
+      target: { name: `${index}-cargo_item_type_id`, value: event.key }
     }
     const newCargoItemTypes = this.state.cargoItemTypes
     newCargoItemTypes[index] = event
@@ -61,7 +61,6 @@ export class ShipmentCargoItems extends Component {
     this.props.handleDelta(modifiedEventDimentionY)
   }
   toggleCheckbox (value, e) {
-    console.log('toggle')
     const artificialEvent = {
       target: { name: e.target.name, value }
     }
@@ -240,7 +239,7 @@ ShipmentCargoItems.propTypes = {
     key: PropTypes.number,
     dimension_x: PropTypes.number,
     dimension_y: PropTypes.number,
-    dangerousGoods: PropTypes.bool,
+    dangerous_goods: PropTypes.bool,
     stackable: PropTypes.bool
   })),
   availableCargoItemTypes: PropTypes.arrayOf(PropTypes.shape({

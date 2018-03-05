@@ -230,7 +230,7 @@ export default function getInputs (
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={
           cargoItem && !!cargoItemTypes[i].dimension_y ? (
-            'Width is automatically set by \'Collie Type\''
+            'Width is automatically set by \'Colli Type\''
           ) : ''
         }
       >
@@ -286,7 +286,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={() => {}}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -323,9 +323,9 @@ export default function getInputs (
         <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
       </div>
       <Checkbox
-        name={`${i}-dangerousGoods`}
+        name={`${i}-dangerous_goods`}
         onChange={(checked, e) => this.toggleCheckbox(checked, e)}
-        checked={cargoItem ? cargoItem.dangerousGoods : false}
+        checked={cargoItem ? cargoItem.dangerous_goods : false}
         theme={theme}
         size="34px"
         disabled={!scope.dangerous_goods}

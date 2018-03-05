@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305094634) do
+ActiveRecord::Schema.define(version: 20180305141922) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,10 +37,11 @@ ActiveRecord::Schema.define(version: 20180305094634) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
-    t.string "cargo_group_id"
     t.string "customs_text"
     t.decimal "chargeable_weight"
     t.boolean "stackable", default: true
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "contacts", force: :cascade do |t|

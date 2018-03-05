@@ -49,7 +49,7 @@ export class ShipmentDetails extends Component {
           sizeClass: '',
           tareWeight: 0,
           quantity: 1,
-          dangerousGoods: false
+          dangerous_goods: false
         }
       ],
       cargoItems: [
@@ -59,8 +59,8 @@ export class ShipmentDetails extends Component {
           dimension_y: 0,
           dimension_z: 0,
           quantity: 1,
-          colliType: '',
-          dangerousGoods: false,
+          cargo_item_type_id: '',
+          dangerous_goods: false,
           stackable: true
         }
       ],
@@ -234,7 +234,8 @@ export class ShipmentDetails extends Component {
       dimension_y: 0,
       dimension_z: 0,
       quantity: 1,
-      dangerousGoods: false,
+      cargo_item_type_id: '',
+      dangerous_goods: false,
       stackable: true
     }
     const newErrors = {
@@ -255,7 +256,7 @@ export class ShipmentDetails extends Component {
       sizeClass: '',
       tareWeight: 0,
       quantity: 1,
-      dangerousGoods: false
+      dangerous_goods: false
     }
 
     const newErrors = {

@@ -13,23 +13,10 @@ class CargoItem < ApplicationRecord
   validates :dimension_z,   presence: true, numericality: { greater_than_or_equal_to: 0 }
 
   # Class Methods
-  def self.extract(params)
-    cargos = []
-    params.each do |value|  
-      payload_in_kg = value["payload_in_kg"].to_d
-      dimension_x = value["dimension_x"].to_d
-      dimension_y = value["dimension_y"].to_d
-      dimension_z = value["dimension_z"].to_d
-      quantity = value["quantity"].to_i
-      cargo_group_id = SecureRandom.uuid
-      
-      unless value["_destroy"] == "1"
-        quantity.times do
-          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z, cargo_item_type_id: value["colliType"], cargo_group_id: cargo_group_id)
-        end
-      end
+  def self.extract(cargo_items_attributes)
+    cargo_items_attributes.map do |cargo_item_attributes|
+      new(cargo_item_attributes)
     end
-    cargos
   end
 
   # Instance Methods
