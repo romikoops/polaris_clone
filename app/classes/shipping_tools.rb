@@ -99,9 +99,11 @@ module ShippingTools
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
-    if  shipment_data[:incoterm]
-      shipment.incoterm[:text] = shipment_data[:incoterm]
+
+    if shipment_data[:incoterm]
+      shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
     end
+
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
@@ -143,18 +145,19 @@ module ShippingTools
 
     if shipment.cargo_items
       @cargo_items = shipment.cargo_items.map do |cargo_item|
-        hs_code_hashes = hsCodes[cargo_item.cargo_group_id.to_s]
+        hs_code_hashes = hsCodes[cargo_item.id.to_s]
         
         if hs_code_hashes
           cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
           cargo_item.save!
         end
-        hs_text = hsTexts[cargo_item.cargo_group_id.to_s]
+        hs_text = hsTexts[cargo_item.id.to_s]
         
         if hs_text
           cargo_item.customs_text = hs_text
           cargo_item.save!
         end
+
         cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
         cargo_item
       end
