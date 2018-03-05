@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305141922) do
+ActiveRecord::Schema.define(version: 20180305150857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,8 +69,9 @@ ActiveRecord::Schema.define(version: 20180305141922) do
     t.boolean "dangerous_goods"
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
-    t.string "cargo_group_id"
     t.string "customs_text"
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "currencies", force: :cascade do |t|
