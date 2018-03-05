@@ -9,7 +9,9 @@ export class Checkbox extends PureComponent {
     this.state = {
       checked: props.checked
     }
-    this.handleChange = this.handleChange.bind(this)
+  }
+  componentWillReceiveProps (nextProps) {
+    this.setState({ checked: nextProps.checked })
   }
 
   componentWillUnmount () {
@@ -18,17 +20,14 @@ export class Checkbox extends PureComponent {
     }
   }
 
-  handleChange () {
-    this.setState({
-      checked: !this.state.checked
-    })
-    this.props.onChange(!this.state.checked)
+  handleChange (e) {
+    this.props.onChange(!this.state.checked, e)
   }
   render () {
     const {
-      disabled, theme, name, checked
+      disabled, theme, name
     } = this.props
-    // const { checked } = this.state
+    const { checked } = this.state
     const checkGradient = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
@@ -44,7 +43,7 @@ export class Checkbox extends PureComponent {
             checked={checked}
             disabled={disabled}
             name={name}
-            onChange={this.handleChange}
+            onChange={e => this.handleChange(e)}
           />
           <span style={sizeStyles}>
             <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />

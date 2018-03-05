@@ -60,7 +60,8 @@ export class ShipmentDetails extends Component {
           dimension_z: 0,
           quantity: 1,
           colliType: '',
-          dangerousGoods: false
+          dangerousGoods: false,
+          stackable: true
         }
       ],
       routes: {},
@@ -112,13 +113,15 @@ export class ShipmentDetails extends Component {
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
-  componentDidMount () {
+  componentWillMount () {
     const { prevRequest, setStage } = this.props
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
-    window.scrollTo(0, 0)
     setStage(2)
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
   }
   componentWillReceiveProps (nextProps) {
     if (!this.state.shipment) {
@@ -200,7 +203,11 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
-    cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+    if (typeof value === 'boolean') {
+      cargoItems[index][suffixName] = value
+    } else {
+      cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -227,7 +234,8 @@ export class ShipmentDetails extends Component {
       dimension_y: 0,
       dimension_z: 0,
       quantity: 1,
-      dangerousGoods: false
+      dangerousGoods: false,
+      stackable: true
     }
     const newErrors = {
       payload_in_kg: true,

@@ -323,13 +323,32 @@ export default function getInputs (
         <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
       </div>
       <Checkbox
-        name={`${i}-dangerous_goods`}
-        onChange={() => this.toggleDangerousGoods(i)}
+        name={`${i}-dangerousGoods`}
+        onChange={(checked, e) => this.toggleCheckbox(checked, e)}
         checked={cargoItem ? cargoItem.dangerousGoods : false}
         theme={theme}
         size="34px"
         disabled={!scope.dangerous_goods}
         onClick={scope.dangerous_goods ? '' : showAlertModal}
+      />
+    </div>
+  )
+  inputs.nonStackable = (
+    <div
+      className="layout-row flex layout-wrap layout-align-start-center"
+    >
+      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+        <p className={`${styles.input_label} flex-none`}> Non Stackable </p>
+        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+      </div>
+      <Checkbox
+        name={`${i}-stackable`}
+        onChange={(checked, e) => this.toggleCheckbox(!checked, e)}
+        checked={cargoItem ? !cargoItem.stackable : false}
+        theme={theme}
+        size="34px"
+        disabled={false}
+        onClick={scope.non_stackable ? '' : showAlertModal}
       />
     </div>
   )
