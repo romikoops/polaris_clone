@@ -99,7 +99,9 @@ module ShippingTools
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
-
+    if  shipment_data[:incoterm]
+      shipment.incoterm[:text] = shipment_data[:incoterm]
+    end
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))

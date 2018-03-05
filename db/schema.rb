@@ -290,7 +290,6 @@ ActiveRecord::Schema.define(version: 20180305141922) do
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
-    t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
     t.integer "itinerary_id"
@@ -302,6 +301,7 @@ ActiveRecord::Schema.define(version: 20180305141922) do
     t.string "eori"
     t.string "direction"
     t.string "notes"
+    t.jsonb "incoterm"
   end
 
   create_table "stops", force: :cascade do |t|

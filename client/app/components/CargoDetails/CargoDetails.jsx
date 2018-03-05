@@ -448,7 +448,7 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-wrap">
-                    <p className="flex-75 center no_m">(if applicable)</p>
+                    <p className="flex-75 center five_m">(if applicable)</p>
                     {documents.certificate_of_origin ? (
                       <DocViewer doc={documents.certificate_of_origin} />
                     ) : (
@@ -488,6 +488,31 @@ export class CargoDetails extends Component {
               </div>
               <div className="flex-100 layout-row layout-align-start-start">
                 <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-100">
+                    <div className={`flex-none ${styles.f_header}`}>
+                      {' '}
+                      <TextHeading theme={theme} size={3} text="Notes" />
+                    </div>
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                    <textarea
+                      name="notes"
+                      id=""
+                      cols="30"
+                      rows="6"
+                      value={this.props.notes}
+                      onChange={this.props.handleChange}
+                    />
+                  </div>
+                </div>
+                <div className="
+                flex-gt-sm-45
+                 offset-gt-sm-5
+                 layout-row
+                 layout-align-start-start
+                 layout-wrap
+                "
+                >
                   <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                     <div className="flex-100">
                       <div className={`flex-none ${styles.f_header}`}>
@@ -512,23 +537,25 @@ export class CargoDetails extends Component {
                       : ''}
                   </div>
                 </div>
-                <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <TextHeading theme={theme} size={3} text="Notes" />
-                    </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-start">
+              <div className="flex-50 layout-row layout-align-start-start layout-wrap">
+                <div className="flex-100">
+                  <div className={`flex-none ${styles.f_header}`}>
+                    {' '}
+                    <TextHeading theme={theme} size={3} text="Incoterm" />
                   </div>
-                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                    <textarea
-                      name="notes"
-                      id=""
-                      cols="30"
-                      rows="6"
-                      value={this.props.notes}
-                      onChange={this.props.handleChange}
-                    />
-                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                  <textarea
+                    name="incoterm"
+                    id=""
+                    cols="30"
+                    rows="6"
+                    value={this.props.incoterm}
+                    onChange={this.props.handleChange}
+                  />
                 </div>
               </div>
             </div>
@@ -609,7 +636,8 @@ CargoDetails.propTypes = {
   customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
-  notes: PropTypes.string
+  notes: PropTypes.string,
+  incoterm: PropTypes.string
 }
 
 CargoDetails.defaultProps = {
@@ -620,7 +648,8 @@ CargoDetails.defaultProps = {
   handleHsTextChange: null,
   customsCredit: false,
   eori: '',
-  notes: ''
+  notes: '',
+  incoterm: ''
 }
 
 export default CargoDetails
