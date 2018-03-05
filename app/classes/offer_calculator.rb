@@ -29,6 +29,7 @@ class OfferCalculator
     plural_load_type = @shipment.load_type.pluralize
     @shipment.send(plural_load_type).destroy_all
     @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
+    byebug
     @shipment.send("#{plural_load_type}=", @cargo_units)
 
     @shipment.planned_pickup_date = Chronic.parse(
@@ -343,5 +344,15 @@ class OfferCalculator
         :quantity, :cargo_item_type_id, :dangerous_goods, :stackable
       ]
     )[:cargo_items_attributes]
+  end
+
+  def containers_params(params)
+    params.require(:shipment).permit(
+      containers_attributes: [
+        :payload_in_kg, :sizeClass, :tareWeight, :quantity, :dangerous_goods
+      ]
+    )[:containers_attributes].map do |container_attributes|
+      container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }
+    end
   end
 end

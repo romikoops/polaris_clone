@@ -165,18 +165,18 @@ module ShippingTools
 
     if shipment.containers
       @containers = shipment.containers
-      shipment.containers.map do |cn|
-        if hsCodes[cn.cargo_group_id.to_s]
-          hsCodes[cn.cargo_group_id.to_s].each do |hs|
-            cn.hs_codes << hs["value"]
-          end
-          cn.save!
+      shipment.containers.map do |container|
+        hs_code_hashes = hsCodes[container.id.to_s]
+        
+        if hs_code_hashes
+          container.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          container.save!
         end
-        hs_text = hsTexts[cn.cargo_group_id.to_s]
+        hs_text = hsTexts[container.id.to_s]
         
         if hs_text
-          cn.customs_text = hs_text
-          cn.save!
+          container.customs_text = hs_text
+          container.save!
         end
       end
     end
