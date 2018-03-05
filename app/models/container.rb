@@ -31,11 +31,12 @@ class Container < ApplicationRecord
   private
 
   def set_gross_weight
-    self.gross_weight = payload_in_kg + tare_weight
+    self.gross_weight = (payload_in_kg || 0) + (tare_weight || 0)
   end
 
   def set_weight_class
-    return unless weight_class.nil?
+    return unless weight_class.blank?
+    return if size_class.nil?
 
     size = size_class.split("_").first
     which_weight_step = nil

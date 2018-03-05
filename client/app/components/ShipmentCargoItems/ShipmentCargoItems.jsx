@@ -142,8 +142,8 @@ export class ShipmentCargoItems extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.colliType}
             {inputs.quantity}
-            {inputs.dangerousGoods}
             {inputs.nonStackable}
+            {inputs.dangerousGoods}
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.length}

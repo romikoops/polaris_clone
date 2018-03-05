@@ -302,11 +302,11 @@ export default function getInputs (
   )
 
   inputs.quantity = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
+    <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
+      <p className={`${styles.input_label} flex-100`}> Quantity </p>
       <NamedSelect
         placeholder={cargoItem ? cargoItem.quantity : ''}
-        className="flex-95"
+        wrapperStyle={{ width: '92.5%' }}
         name={`${i}-quantity`}
         value={cargoItem ? cargoItem.quantity : ''}
         options={cargoItem ? numberOptions : ''}

@@ -29,7 +29,6 @@ class OfferCalculator
     plural_load_type = @shipment.load_type.pluralize
     @shipment.send(plural_load_type).destroy_all
     @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
-    byebug
     @shipment.send("#{plural_load_type}=", @cargo_units)
 
     @shipment.planned_pickup_date = Chronic.parse(
