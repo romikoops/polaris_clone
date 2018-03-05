@@ -43,6 +43,7 @@ class TenantSeeder
   #     }
   #   },
   #   dangerous_goods: false,
+  # incoterm_info_level: 'simple',
   #   cargo_info_level: 'text'
   # },
   # # The following data is not a attribute of the Tenant model
@@ -165,6 +166,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'text'
       },
       # The following data is not a attribute of the Tenant model
@@ -229,6 +231,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       # The following data is not a attribute of the Tenant model
@@ -295,6 +298,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {
@@ -353,6 +357,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {
@@ -408,6 +413,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {
@@ -466,6 +472,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {
@@ -522,6 +529,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {
@@ -576,6 +584,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        incoterm_info_level: 'simple',
         cargo_info_level: 'hs_codes'
       },
       other_data: {

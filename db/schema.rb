@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180302102310) do
+ActiveRecord::Schema.define(version: 20180305112155) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -288,7 +288,6 @@ ActiveRecord::Schema.define(version: 20180302102310) do
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
-    t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
     t.integer "itinerary_id"
@@ -300,6 +299,7 @@ ActiveRecord::Schema.define(version: 20180302102310) do
     t.string "eori"
     t.string "notes"
     t.string "direction"
+    t.jsonb "incoterm"
   end
 
   create_table "stops", force: :cascade do |t|
