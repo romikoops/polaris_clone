@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentContactsBox.scss'
-// import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss'
 import errors from '../../styles/errors.scss'
 import { ContactCard } from '../ContactCard/ContactCard'
