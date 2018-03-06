@@ -28,12 +28,18 @@ class MessageCenter extends Component {
     this.state = {
       selectedConvo: false
     }
-    this.selectConvo = this.selectConvo.bind(this)
+    this.viewConvo = this.viewConvo.bind(this)
     this.sendMessage = this.sendMessage.bind(this)
     this.filterHubs = this.filterHubs.bind(this)
     this.filterShipments = this.filterShipments.bind(this)
+    this.setSelected = this.setSelected.bind(this)
   }
-  selectConvo (convParam) {
+  setSelected (key) {
+    this.setState({ key })
+  }
+  viewConvo (convParam) {
+    console.log(convParam.convoKey)
+    this.setSelected(convParam.convoKey)
     const { conversations } = this.props
     const selectedConvo = conversations[convParam]
     selectedConvo.shipmentRef = selectedConvo.messages[0].shipmentRef
@@ -61,13 +67,13 @@ class MessageCenter extends Component {
     let tmpShipment = {}
     let shipment = {}
     if (shipments && convoKey) {
-      if (shipments.requested.length > 0 && tmpShipment.length !== 0) {
+      if (shipments.requested.length > 0 && tmpShipment.length === undefined) {
         tmpShipment = shipments.requested.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.open.length > 0 && tmpShipment.length === 0) {
+      if (shipments.open.length > 0 && tmpShipment.length === undefined) {
         tmpShipment = shipments.open.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.finished.length > 0 && tmpShipment.length === 0) {
+      if (shipments.finished.length > 0 && tmpShipment.length === undefined) {
         tmpShipment = shipments.finished.filter(shp => (shp.imc_reference === convoKey))
       }
     }
@@ -85,7 +91,6 @@ class MessageCenter extends Component {
         status: tmpShipment[0].status
       }
       : shipment = {}
-
     return shipment
   }
   render () {
@@ -104,16 +109,22 @@ class MessageCenter extends Component {
     }
     let convoKeys = {}
     convoKeys = Object.keys(conversations)
-    const convos = convoKeys.map(ms => (
-      <ConvoTile
-        key={v4()}
-        theme={theme}
-        conversation={conversations[ms]}
-        convoKey={ms}
-        viewConvo={this.selectConvo}
-        shipment={this.filterShipments(ms)}
-      />
-    ))
+
+    const convos = convoKeys.map((ms) => {
+      const { key } = this.state
+      const tileStyle = key === ms ? styles.selected : styles.unselected
+      return (
+        <ConvoTile
+          key={v4()}
+          className={tileStyle}
+          theme={theme}
+          conversation={conversations[ms]}
+          convoKey={ms}
+          viewConvo={this.viewConvo}
+          shipment={this.filterShipments(ms)}
+        />
+      )
+    })
     const { selectedConvo } = this.state
     const textStyle = {
       color: 'white'
@@ -135,6 +146,7 @@ class MessageCenter extends Component {
         <h3 className="flex-none">Please select a conversation</h3>
       </div>
     )
+
     return (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${styles.backdrop}`}
