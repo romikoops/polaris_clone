@@ -9,7 +9,6 @@ import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
-// import { isEmpty } from '../../helpers/isEmpty'
 import { colorSVG, authHeader } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { Modal } from '../Modal/Modal'
@@ -535,7 +534,11 @@ export class ShipmentLocationBox extends Component {
       }
     ).then((promise) => {
       promise.json().then((response) => {
-        this.setState(response.data)
+        if (Object.values(response.data)[0].length > 0) {
+          this.setState(response.data)
+        } else {
+          target === 'origin' ? this.setDestHub() : this.setOriginHub()
+        }
       })
     })
   }
@@ -599,7 +602,7 @@ export class ShipmentLocationBox extends Component {
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
           const originOptionNames = originOptions.map(option => option.label)
           const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
-          this.props.handleCarriageNexuses('preCarriage', nexus.id)
+          if (nexus) this.props.handleCarriageNexuses('preCarriage', nexus.id)
           if (truckingOptions) {
             this.setState({
               truckingOptions: {
@@ -634,7 +637,7 @@ export class ShipmentLocationBox extends Component {
           }
           const destinationOptionNames = destinationOptions.map(option => option.label)
           const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
-          this.props.handleCarriageNexuses('onCarriage', nexus.id)
+          if (nexus) this.props.handleCarriageNexuses('onCarriage', nexus.id)
           if (truckingOptions) {
             this.setState({
               truckingOptions: {
@@ -718,33 +721,54 @@ export class ShipmentLocationBox extends Component {
     return ''
   }
   handleSwap () {
-    const origin = { ...this.state.destination }
-    const destination = { ...this.state.origin }
-    const { autoText } = this.state
-    const autoTextOrigin = autoText.origin
-    const autoTextDestination = autoText.destination
-    autoText.origin = autoTextDestination
-    autoText.destination = autoTextOrigin
+    /* eslint-disable camelcase */
+    const { has_on_carriage, has_pre_carriage } = this.props
 
-    this.handleTrucking({
-      target: {
-        name: 'has_on_carriage',
-        checked: this.props.has_pre_carriage
-      }
-    })
-    this.handleTrucking({
-      target: {
-        name: 'has_pre_carriage',
-        checked: this.props.has_on_carriage
-      }
-    })
+    if (has_pre_carriage || has_on_carriage) {
+      // Trucking
+      this.handleTrucking({
+        target: {
+          name: 'has_on_carriage',
+          checked: has_pre_carriage
+        }
+      })
+      this.handleTrucking({
+        target: {
+          name: 'has_pre_carriage',
+          checked: has_on_carriage
+        }
+      })
 
-    this.setState({
-      origin, destination, autoText
-    })
+      // Origin/Destination with trucking
+      const { autoText } = this.state
 
-    this.setDestHub(this.state.oSelect)
-    this.setOriginHub(this.state.dSelect)
+      const origin = { ...this.state.destination }
+      const destination = { ...this.state.origin }
+      const autoTextOrigin = autoText.destination
+      const autoTextDestination = autoText.origin
+
+      autoText.origin = autoTextOrigin || ''
+      autoText.destination = autoTextDestination || ''
+
+      this.setState({
+        origin, destination, autoText
+      })
+
+      // Address Fields Errors
+      const originFieldsHaveErrors = this.state.destinationFieldsHaveErrors
+      const destinationFieldsHaveErrors = this.state.originFieldsHaveErrors
+      this.setState({ originFieldsHaveErrors, destinationFieldsHaveErrors })
+    }
+
+    // Origin/Destination without trucking
+    if (!has_on_carriage) {
+      this.setOriginHub(this.state.dSelect)
+    }
+    if (!has_pre_carriage) {
+      this.setDestHub(this.state.oSelect)
+    }
+
+    /* eslint-enable camelcase */
   }
   render () {
     const { allNexuses, shipmentDispatch } = this.props

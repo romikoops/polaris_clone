@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305112155) do
+ActiveRecord::Schema.define(version: 20180305150857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,9 +37,11 @@ ActiveRecord::Schema.define(version: 20180305112155) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
-    t.string "cargo_group_id"
     t.string "customs_text"
     t.decimal "chargeable_weight"
+    t.boolean "stackable", default: true
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "contacts", force: :cascade do |t|
@@ -67,8 +69,9 @@ ActiveRecord::Schema.define(version: 20180305112155) do
     t.boolean "dangerous_goods"
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
-    t.string "cargo_group_id"
     t.string "customs_text"
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -292,13 +295,13 @@ ActiveRecord::Schema.define(version: 20180305112155) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-    t.boolean "customs_credit"
+    t.boolean "customs_credit", default: false
     t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
-    t.string "notes"
     t.string "direction"
+    t.string "notes"
     t.jsonb "incoterm"
   end
 
@@ -363,8 +366,8 @@ ActiveRecord::Schema.define(version: 20180305112155) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item"
-    t.boolean "container"
+    t.boolean "cargo_item", default: false
+    t.boolean "container", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

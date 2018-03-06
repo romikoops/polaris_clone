@@ -99,9 +99,11 @@ module ShippingTools
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
-    if  shipment_data[:incoterm]
-      shipment.incoterm[:text] = shipment_data[:incoterm]
+
+    if shipment_data[:incoterm]
+      shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
     end
+
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
@@ -143,18 +145,19 @@ module ShippingTools
 
     if shipment.cargo_items
       @cargo_items = shipment.cargo_items.map do |cargo_item|
-        hs_code_hashes = hsCodes[cargo_item.cargo_group_id.to_s]
+        hs_code_hashes = hsCodes[cargo_item.id.to_s]
         
         if hs_code_hashes
           cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
           cargo_item.save!
         end
-        hs_text = hsTexts[cargo_item.cargo_group_id.to_s]
+        hs_text = hsTexts[cargo_item.id.to_s]
         
         if hs_text
           cargo_item.customs_text = hs_text
           cargo_item.save!
         end
+
         cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
         cargo_item
       end
@@ -162,18 +165,18 @@ module ShippingTools
 
     if shipment.containers
       @containers = shipment.containers
-      shipment.containers.map do |cn|
-        if hsCodes[cn.cargo_group_id.to_s]
-          hsCodes[cn.cargo_group_id.to_s].each do |hs|
-            cn.hs_codes << hs["value"]
-          end
-          cn.save!
+      shipment.containers.map do |container|
+        hs_code_hashes = hsCodes[container.id.to_s]
+        
+        if hs_code_hashes
+          container.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          container.save!
         end
-        hs_text = hsTexts[cn.cargo_group_id.to_s]
+        hs_text = hsTexts[container.id.to_s]
         
         if hs_text
-          cn.customs_text = hs_text
-          cn.save!
+          container.customs_text = hs_text
+          container.save!
         end
       end
     end
