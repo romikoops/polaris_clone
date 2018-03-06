@@ -205,7 +205,7 @@ class RegistrationPage extends React.Component {
           </div>
           <div className="offset-10 flex-45 layout-row layout-wrap">
             <div className="flex-100">
-              <h3>Basic Details</h3>
+              <h3>Company Details</h3>
             </div>
             { this.generateFormGroup({ field: 'company_name', minLength: 8 }) }
             { this.generateFormGroup({ field: 'VAT_number', minLength: 5 }) }
