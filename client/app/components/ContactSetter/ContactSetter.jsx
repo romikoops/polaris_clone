@@ -76,18 +76,20 @@ export class ContactSetter extends Component {
 
   setStage (i) {
     const contactType = this.contactTypes[i]
+
     if (contactType === 'notifyee') {
       this.setState({
         contactData: {
           index: 0,
-          type: this.contactTypes[i],
+          type: contactType,
           ...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
         }
       })
     } else {
       this.setState({
         contactData: {
-          type: this.contactTypes[i],
+          type: contactType,
+          ...this.newContactData,
           ...this.props[this.contactTypes[i]]
         }
       })
