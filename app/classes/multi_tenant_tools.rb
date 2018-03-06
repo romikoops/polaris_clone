@@ -335,6 +335,15 @@ module MultiTenantTools
     puts "Seed prcings"
     PricingSeeder.exec(subdomain: subdomain)
   end
+  def do_customs
+    Tenant.all.each do |t|
+      shipper = t.users.where(role_id: 2).first
+      puts "# Overwrite customs and charges from excel sheet"
+      public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+      req = {"xlsx" => public_pricings}
+      overwrite_customs(req, dedicated = false, shipper)
+    end
+  end
 
   def invalidate(cfId, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
