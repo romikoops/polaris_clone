@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
 
-  has_many :shipments, foreign_key: "shipper_id"
+  has_many :shipments
   has_many :receivable_shipments, foreign_key: "consignee_id"
 
   # belongs_to :notifying_shipment, class_name: "Shipment"
@@ -23,7 +23,7 @@ class User < ApplicationRecord
   has_many :routes, foreign_key: :customer_id
   has_many :pricings, foreign_key: :customer_id
 
-  has_many :contacts, foreign_key: :shipper_id
+  has_many :contacts
   has_many :consignees, through: :contacts
   has_many :notifyees, through: :contacts
 

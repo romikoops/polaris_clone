@@ -18,4 +18,14 @@
     max-width: 150px !important;
     text-align: left !important;
   }
+  .error {
+    height: 40px !important;
+    
+  }
+  .file_error {
+    overflow: hidden;
+    height: 0px;
+    font-size: 10px;
+    transition: all 2s linear;
+  }
 }

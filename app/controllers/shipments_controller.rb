@@ -39,10 +39,7 @@ class ShipmentsController < ApplicationController
   def show
     shipment = Shipment.find(params[:id])
 
-    cargo_items = shipment.cargo_items.map do |cargo_item|
-      chargeable_weight = cargo_item.chargeable_weight(shipment.itinerary.mode_of_transport).to_f
-      cargo_item.attributes.merge(chargeable_weight: chargeable_weight)
-    end
+    cargo_items = shipment.cargo_items
     
     containers = shipment.containers
 
@@ -59,12 +56,12 @@ class ShipmentsController < ApplicationController
     end
 
     response_handler(
-      shipment: shipment,
+      shipment:   shipment,
       cargoItems: cargo_items,
       containers: containers,
-      contacts: contacts,
-      documents: documents,
-      schedules: shipment.schedule_set
+      contacts:   contacts,
+      documents:  documents,
+      schedules:  shipment.schedule_set
     )
   end
 
@@ -82,10 +79,11 @@ class ShipmentsController < ApplicationController
     resp = finish_shipment_booking(params)
     response_handler(resp)
   end
+  
   def confirm_shipment
     resp = confirm_booking(params)
-    tenant_notification_email(resp.shipper, resp)
-    shipper_notification_email(resp.shipper, resp)
+    tenant_notification_email(resp.user, resp)
+    shipper_notification_email(resp.user, resp)
     response_handler({shipment: resp})
   end
 

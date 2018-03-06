@@ -27,7 +27,7 @@ export class ShipmentThankYou extends Component {
             <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
               <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                 <p className="flex-100">
-                                    Thank you for booking with {tenantName}.
+                  Thank you for booking with {tenantName}.
                 </p>
               </div>
               <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
@@ -35,13 +35,14 @@ export class ShipmentThankYou extends Component {
               </div>
               <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
                 <p className="flex-100">
-                We have just sent your order confirmation with all the booking details
-                to your account e-mail address. Now, our team will review your order
-                and contact you with any further instructions or simply confirm the
-                request via e-mail.</p>
+                  We have just sent your order confirmation with all the booking details
+                  to your account e-mail address. Now, our team will review your order
+                  and contact you with any further instructions or simply confirm the
+                  request via e-mail.
+                </p>
                 <p className="flex-100">
-                Do not hesitate to contact us either through the
-                message center or your account manager
+                  Do not hesitate to contact us either through the
+                  message center or your account manager
                 </p>
               </div>
             </div>

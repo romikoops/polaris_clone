@@ -180,7 +180,7 @@ export default function getInputs (
   inputs.length = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Length </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={
@@ -225,12 +225,12 @@ export default function getInputs (
   inputs.width = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Width </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={
           cargoItem && !!cargoItemTypes[i].dimension_y ? (
-            'Width is automatically set by \'Collie Type\''
+            'Width is automatically set by \'Colli Type\''
           ) : ''
         }
       >
@@ -270,7 +270,7 @@ export default function getInputs (
   inputs.volume = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
       <p className={`${styles.input_label} flex-100`}> Volume </p>
-      <ReactTooltip />
+      <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
         data-tip={'Volume is automatically set by \'Length\', \'Height\', and \'Width\''}
@@ -286,7 +286,7 @@ export default function getInputs (
               type="number"
               min="0"
               step="any"
-              onChange={handleDelta}
+              onChange={() => {}}
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
@@ -302,11 +302,11 @@ export default function getInputs (
   )
 
   inputs.quantity = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> No. of Cargo Items </p>
+    <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
+      <p className={`${styles.input_label} flex-100`}> Quantity </p>
       <NamedSelect
         placeholder={cargoItem ? cargoItem.quantity : ''}
-        className="flex-95"
+        wrapperStyle={{ width: '92.5%' }}
         name={`${i}-quantity`}
         value={cargoItem ? cargoItem.quantity : ''}
         options={cargoItem ? numberOptions : ''}
@@ -324,12 +324,31 @@ export default function getInputs (
       </div>
       <Checkbox
         name={`${i}-dangerous_goods`}
-        onChange={() => this.toggleDangerousGoods(i)}
-        checked={cargoItem ? cargoItem.dangerousGoods : false}
+        onChange={(checked, e) => this.toggleCheckbox(checked, e)}
+        checked={cargoItem ? cargoItem.dangerous_goods : false}
         theme={theme}
         size="34px"
         disabled={!scope.dangerous_goods}
         onClick={scope.dangerous_goods ? '' : showAlertModal}
+      />
+    </div>
+  )
+  inputs.nonStackable = (
+    <div
+      className="layout-row flex layout-wrap layout-align-start-center"
+    >
+      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+        <p className={`${styles.input_label} flex-none`}> Non Stackable </p>
+        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+      </div>
+      <Checkbox
+        name={`${i}-stackable`}
+        onChange={(checked, e) => this.toggleCheckbox(!checked, e)}
+        checked={cargoItem ? !cargoItem.stackable : false}
+        theme={theme}
+        size="34px"
+        disabled={false}
+        onClick={scope.non_stackable ? '' : showAlertModal}
       />
     </div>
   )

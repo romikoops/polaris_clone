@@ -1,4 +1,30 @@
 :local {
+  .next_step_sec {
+    margin-bottom: 40px;
+    .mot_sec {
+      color: white;
+      border-radius: 5px;
+      .mot_icons {
+        padding: 10px 0;
+        margin-bottom: 10px;      
+        i {
+          text-shadow: 1px 1px 5px rgba(black, 0.40);
+          font-size: 35px;
+          padding: 10px;
+        }
+      }
+      h3 {
+        color: black;
+        font-weight: normal;
+      }
+      hr {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+    .next_step_btn_sec {
+      margin-bottom: 20px;
+    }
+  }
   .card_link {
     width: 420px;
     height: 270px;
@@ -6,6 +32,13 @@
   }
   .card_link_row {
     margin-bottom: 77px;
+  }
+  .section {
+    transition: all 0.8s ease;
+    &.inactive {    
+      filter: grayscale(30%);
+      opacity: 0.3;
+    }
   }
 
   .card_img {

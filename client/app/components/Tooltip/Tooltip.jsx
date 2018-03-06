@@ -24,7 +24,7 @@ export function Tooltip ({
         data-tip={tipText}
         data-for={id}
       />
-      <ReactTooltip id={id} className={styles.tooltip_box} />
+      <ReactTooltip id={id} className={styles.tooltip_box} effect="solid" />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 class Shipment < ApplicationRecord
   extend ShippingTools
-  STATUSES = %w(
+  STATUSES = %w( 
     requested
     booking_process_started
     pending
@@ -9,20 +9,13 @@ class Shipment < ApplicationRecord
     ignored
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
-  
-  # Validations 
-  validates :status, 
-    inclusion: { 
-      in: STATUSES, 
-      message: "must be included in #{STATUSES.log_format}" 
-    },
-    allow_nil: true
-  validates :load_type, 
-    inclusion: { 
-      in: LOAD_TYPES, 
-      message: "must be included in #{LOAD_TYPES.log_format}" 
-    },
-    allow_nil: true
+  DIRECTIONS = %w(import export)
+
+  # Validations
+  { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
+    CustomValidations.inclusion(self, attribute, array)
+  end
+
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
@@ -35,7 +28,7 @@ class Shipment < ApplicationRecord
   before_create :set_default_trucking
 
   # Basic associations
-  belongs_to :shipper, class_name: "User", optional: true
+  belongs_to :user, optional: true
   belongs_to :consignee, optional: true
   belongs_to :tenant, optional: true
   has_many :documents
@@ -47,7 +40,6 @@ class Shipment < ApplicationRecord
   belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
-  belongs_to :shipper_location, class_name: "Location", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
@@ -81,6 +73,27 @@ class Shipment < ApplicationRecord
   end
 
   # Instance methods
+
+  def import?
+    direction == "import"
+  end
+
+  def export?
+    direction == "export"
+  end
+
+  def shipper
+    find_contacts("shipper").first
+  end
+
+  def consignee
+    find_contacts("consignee").first
+  end
+
+  def notifyees
+    find_contacts("notifyee")
+  end
+
   def full_haulage_to_string
     self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
   end
@@ -200,14 +213,6 @@ class Shipment < ApplicationRecord
     raise "Not implemented"
   end
 
-  def notifyees
-    shipment_contacts.where(contact_type: "notifyee").map(&:contact)
-  end    
-
-  def consignee
-    shipment_contacts.find_by(contact_type: "consignee").contact
-  end    
-
   def etd
     Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
   end
@@ -274,6 +279,16 @@ class Shipment < ApplicationRecord
 
   def assign_uuid
     self.uuid = SecureRandom.uuid
+  end
+
+  def find_contacts(type)
+    Contact.find_by_sql("
+      SELECT * FROM contacts
+      JOIN  shipment_contacts ON shipment_contacts.contact_id   = contacts.id
+      JOIN  shipments         ON shipments.id                   = shipment_contacts.shipment_id
+      WHERE shipments.id = #{self.id}
+      AND   shipment_contacts.contact_type = '#{type}'
+    ")    
   end
 
   def planned_pickup_date_is_a_datetime?

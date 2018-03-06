@@ -48,7 +48,9 @@ module PricingTools
         end
       end
     end
-    totals["total"] = {value: sum_and_convert_cargo(totals, user.currency), currency: user.currency}
+    converted = sum_and_convert_cargo(totals, user.currency)
+    cargo.unit_price = {value: converted, currency: user.currency}
+    totals["total"] = {value: converted * cargo.quantity, currency: user.currency}
     
     return totals
   end
@@ -86,7 +88,8 @@ module PricingTools
     end
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
     return nil if cargo_rate_value.nil? || cargo_rate_value == 0
-    totals["total"] = {value: cargo_rate_value, currency: user.currency}
+    container.unit_price = {value: cargo_rate_value, currency: user.currency}
+    totals["total"] = {value: cargo_rate_value * container.quantity, currency: user.currency}
     return totals
   end
 

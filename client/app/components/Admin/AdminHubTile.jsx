@@ -66,10 +66,11 @@ export class AdminHubTile extends Component {
             <p className="flex-100">{hub.location.geocoded_address}</p>
           </div>
         </div>
-        {showTooltip ? <ReactTooltip
-          className={`${styles.tooltip}`}
-          id={tooltipId}
-        /> : ''}
+        {
+          showTooltip
+            ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+            : ''
+        }
       </div>
     )
   }

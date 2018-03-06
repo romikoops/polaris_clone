@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180301125948) do
+ActiveRecord::Schema.define(version: 20180305150857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,12 +37,15 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
-    t.string "cargo_group_id"
     t.string "customs_text"
+    t.decimal "chargeable_weight"
+    t.boolean "stackable", default: true
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.integer "shipper_id"
+    t.integer "user_id"
     t.integer "location_id"
     t.string "company_name"
     t.string "first_name"
@@ -66,8 +69,9 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.boolean "dangerous_goods"
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
-    t.string "cargo_group_id"
     t.string "customs_text"
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -266,8 +270,7 @@ ActiveRecord::Schema.define(version: 20180301125948) do
   end
 
   create_table "shipments", force: :cascade do |t|
-    t.integer "shipper_id"
-    t.integer "shipper_location_id"
+    t.integer "user_id"
     t.integer "origin_id"
     t.integer "destination_id"
     t.integer "route_id"
@@ -288,7 +291,6 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
-    t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
     t.integer "itinerary_id"
@@ -298,6 +300,12 @@ ActiveRecord::Schema.define(version: 20180301125948) do
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
+<<<<<<< HEAD
+=======
+    t.string "direction"
+    t.string "notes"
+    t.jsonb "incoterm"
+>>>>>>> 72c45e915842c229dc47aa4c9f2dffbadc26155e
   end
 
   create_table "stops", force: :cascade do |t|

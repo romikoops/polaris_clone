@@ -35,7 +35,7 @@ export class AdminNavItem extends Component {
           <h3 className="flex-none">
             <p data-tip={tooltip}>{text}</p>
           </h3>
-          <ReactTooltip className={`${styles.nav_tooltip} `} />
+          <ReactTooltip className={styles.nav_tooltip} effect="solid" />
         </div>
       </div>
     )

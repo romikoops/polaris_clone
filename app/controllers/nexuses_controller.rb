@@ -52,7 +52,7 @@ class NexusesController < ApplicationController
 		itineraries   = retrieve_route_options(current_user.tenant_id, itinerary_ids)
 
 		if user_input.blank?
-			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"])}
+			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq
 		end
 
 		nexus = Location.geocoded_location user_input

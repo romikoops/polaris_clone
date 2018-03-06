@@ -5,16 +5,15 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 // import 'react-select/dist/react-select.css';
 // import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton'
-import {
-  currencyOptions
-} from '../../constants/admin.constants'
+import { currencyOptions } from '../../constants/admin.constants'
 import {
   fclChargeGlossary,
   lclChargeGlossary,
   chargeGlossary,
   rateBasises,
   lclPricingSchema,
-  fclPricingSchema
+  fclPricingSchema,
+  rateBasisSchema
 } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
 
@@ -43,10 +42,8 @@ export class AdminPriceEditor extends Component {
     this.editPricing = props.pricing
     this.handleChange = this.handleChange.bind(this)
     this.handleSelect = this.handleSelect.bind(this)
-    this.setMOT = this.setMOT.bind(this)
-    this.setCargo = this.setCargo.bind(this)
+
     this.saveEdit = this.saveEdit.bind(this)
-    this.setCargoClass = this.setCargoClass.bind(this)
     this.setAllFromOptions = this.setAllFromOptions.bind(this)
     this.deleteFee = this.deleteFee.bind(this)
     this.showAddFeePanel = this.showAddFeePanel.bind(this)
@@ -76,7 +73,10 @@ export class AdminPriceEditor extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[key][chargeKey] = this.selectFromOptions(opts, pricing.data[key][chargeKey])
+        newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
+          opts,
+          pricing.data[key][chargeKey]
+        )
       })
     })
     this.setState({ selectOptions: newObj })
@@ -108,7 +108,10 @@ export class AdminPriceEditor extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj.data[pKey][chargeKey] = this.selectFromOptions(opts, pricing.data[pKey][chargeKey])
+        newObj.data[pKey][chargeKey] = AdminPriceEditor.selectFromOptions(
+          opts,
+          pricing.data[pKey][chargeKey]
+        )
       })
     })
     this.setState({ selectOptions: newObj, pricing })
@@ -131,28 +134,57 @@ export class AdminPriceEditor extends Component {
   }
   handleSelect (selection) {
     const nameKeys = selection.name.split('-')
-    this.setState({
-      pricing: {
-        ...this.state.pricing,
-        data: {
-          ...this.state.pricing.data,
-          [nameKeys[0]]: {
-            ...this.state.pricing.data[nameKeys[0]],
-            [nameKeys[1]]: selection.value
+    if (nameKeys[1] === 'rate_basis') {
+      const price = this.state.pricing.data[nameKeys[0]]
+      const newSchema = rateBasisSchema[selection.value]
+      Object.keys(newSchema).forEach((k) => {
+        if (price[k] && newSchema[k] && k !== 'rate_basis') {
+          newSchema[k] = price[k]
+        }
+      })
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.pricing.data,
+            [nameKeys[0]]: newSchema
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions.data,
+            [nameKeys[0]]: {
+              ...this.state.selectOptions.data[nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
           }
         }
-      },
-      selectOptions: {
-        ...this.state.selectOptions,
-        data: {
-          ...this.state.selectOptions.data,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions.data[nameKeys[0]],
-            [nameKeys[1]]: selection
+      })
+    } else {
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.pricing.data,
+            [nameKeys[0]]: {
+              ...this.state.pricing.data[nameKeys[0]],
+              [nameKeys[1]]: selection.value
+            }
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions.data,
+            [nameKeys[0]]: {
+              ...this.state.selectOptions.data[nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
           }
         }
-      }
-    })
+      })
+    }
   }
   deleteFee (key) {
     const { pricing } = this.state

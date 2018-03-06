@@ -322,7 +322,7 @@ export class AdminSchedules extends Component {
           iconClass="fa-plus"
           handleNext={this.toggleView}
         />
-        <ReactTooltip id="tooltipId" className={`${styles.tooltip}`} />
+        <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
       </div>)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">

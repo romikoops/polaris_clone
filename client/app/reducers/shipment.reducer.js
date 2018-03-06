@@ -169,7 +169,19 @@ export default function shipment (state = {}, action) {
       return state
     case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS: {
       const docs = state.response.stage3.documents
-      docs[action.payload.doc_type] = action.payload
+      if (action.payload.doc_type === 'miscellaneous') {
+        let miscArr
+        if (!docs.miscellaneous) {
+          miscArr = [action.payload]
+        } else {
+          miscArr = docs.miscellaneous
+          miscArr.push(action.payload)
+        }
+        docs.miscellaneous = miscArr
+      } else {
+        docs[action.payload.doc_type] = action.payload
+      }
+
       return {
         ...state,
         response: {
@@ -196,7 +208,9 @@ export default function shipment (state = {}, action) {
     case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
       const docObj = {}
       Object.keys(state.response.stage3.documents).forEach((key) => {
-        if (state.response.stage3.documents[key].id !== action.payload) {
+        if (key === 'miscellaneous') {
+          docObj[key] = state.response.stage3.documents[key].filter(d => d.id !== action.payload)
+        } else if (state.response.stage3.documents[key].id !== action.payload) {
           docObj[key] = state.response.stage3.documents[key]
         }
       })

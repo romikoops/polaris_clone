@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
-import Select from 'react-select'
+// import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import GmapsLoader from '../../hocs/GmapsLoader'
 import styles from './ShipmentDetails.scss'
 import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
-import { moment, incoterms } from '../../constants'
+import { moment } from '../../constants'
 import '../../styles/day-picker-custom.css'
 import TruckingDetails from '../TruckingDetails/TruckingDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -18,6 +18,8 @@ import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
+import { IncotermRow } from '../Incoterm/Row'
+import { IncotermBox } from '../Incoterm/Box'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 import { isEmpty } from '../../helpers/objectTools'
@@ -49,7 +51,7 @@ export class ShipmentDetails extends Component {
           sizeClass: '',
           tareWeight: 0,
           quantity: 1,
-          dangerousGoods: false
+          dangerous_goods: false
         }
       ],
       cargoItems: [
@@ -59,8 +61,9 @@ export class ShipmentDetails extends Component {
           dimension_y: 0,
           dimension_z: 0,
           quantity: 1,
-          colliType: '',
-          dangerousGoods: false
+          cargo_item_type_id: '',
+          dangerous_goods: false,
+          stackable: true
         }
       ],
       routes: {},
@@ -112,13 +115,15 @@ export class ShipmentDetails extends Component {
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
-  componentDidMount () {
+  componentWillMount () {
     const { prevRequest, setStage } = this.props
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
-    window.scrollTo(0, 0)
     setStage(2)
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
   }
   componentWillReceiveProps (nextProps) {
     if (!this.state.shipment) {
@@ -127,7 +132,13 @@ export class ShipmentDetails extends Component {
     }
   }
   setIncoTerm (opt) {
-    this.setState({ incoterm: opt.value })
+    this.setState({
+      incoterm: {
+        ...this.state.incoterm,
+        key: opt.value,
+        text: opt.label
+      }
+    })
   }
   setTargetAddress (target, address) {
     this.setState({ [target]: { ...this.state[target], ...address } })
@@ -200,7 +211,11 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
-    cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+    if (typeof value === 'boolean') {
+      cargoItems[index][suffixName] = value
+    } else {
+      cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -227,7 +242,9 @@ export class ShipmentDetails extends Component {
       dimension_y: 0,
       dimension_z: 0,
       quantity: 1,
-      dangerousGoods: false
+      cargo_item_type_id: '',
+      dangerous_goods: false,
+      stackable: true
     }
     const newErrors = {
       payload_in_kg: true,
@@ -247,7 +264,7 @@ export class ShipmentDetails extends Component {
       sizeClass: '',
       tareWeight: 0,
       quantity: 1,
-      dangerousGoods: false
+      dangerous_goods: false
     }
 
     const newErrors = {
@@ -267,7 +284,7 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    if (!this.state.incoterm) {
+    if (!this.state.incoterm && this.props.tenant.data.scope.incoterm_info_level !== 'simple') {
       this.setState({ nextStageAttempt: true })
       ShipmentDetails.scrollTo('incoterms')
       return
@@ -403,8 +420,6 @@ export class ShipmentDetails extends Component {
             toggleAlertModal={this.toggleAlertModal}
           />
         }
-        width="50vw"
-        minHeight="1px"
         parentToggle={this.toggleAlertModal}
       />
     ) : (
@@ -489,35 +504,34 @@ export class ShipmentDetails extends Component {
     const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
     const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
 
-    const backgroundColor = value => (!value && this.state.nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
-    const placeholderColorOverwrite = value =>
-      (!value && this.state.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
-    const StyledSelect = styled(Select)`
-      .Select-control {
-        background-color: ${props => backgroundColor(props.value)};
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: ${props => backgroundColor(props.value)};
-        border: 1px solid #f2f2f2;
-      }
-      .Select-placeholder {
-        background-color: ${props => backgroundColor(props.value)};
-        ${props => placeholderColorOverwrite(props.value)};
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
+    // const backgroundColor = value => (!value && this.state.
+    // nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
+    // const placeholderColorOverwrite = value =>
+    //   (!value && this.state.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
+    // const StyledSelect = styled(Select)`
+    //   .Select-control {
+    //     background-color: ${props => backgroundColor(props.value)};
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2 !important;
+    //   }
+    //   .Select-menu-outer {
+    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-value {
+    //     background-color: ${props => backgroundColor(props.value)};
+    //     border: 1px solid #f2f2f2;
+    //   }
+    //   .Select-placeholder {
+    //     background-color: ${props => backgroundColor(props.value)};
+    //     ${props => placeholderColorOverwrite(props.value)};
+    //   }
+    //   .Select-option {
+    //     background-color: #f9f9f9;
+    //   }
+    // `
     const dayPickerSection = (
-      <div
-        className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}
-      >
+      <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
@@ -558,7 +572,18 @@ export class ShipmentDetails extends Component {
         </div>
 
         <div className="flex-50 layout-row layout-wrap layout-align-end-center">
-          <div className="flex-100 layout-row layout-align-end-center">
+          <IncotermBox
+            theme={theme}
+            preCarriage={this.state.has_pre_carriage}
+            onCarriage={this.state.has_on_carriage}
+            tenantScope={scope}
+            incoterm={this.state.incoterm}
+            setIncoTerm={this.setIncoTerm}
+            errorStyles={errorStyles}
+            showIncotermError={showIncotermError}
+            nextStageAttempt={this.state.nextStageAttempt}
+          />
+          {/* <div className="flex-100 layout-row layout-align-end-center">
             <div className="flex-none letter_2">
               <TextHeading theme={theme} text="Select Incoterm:" size={3} />
             </div>
@@ -574,7 +599,7 @@ export class ShipmentDetails extends Component {
             <span className={errorStyles.error_message}>
               {showIncotermError ? 'Must not be blank' : ''}
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
     )
@@ -590,9 +615,9 @@ export class ShipmentDetails extends Component {
         {flash}
         {alertModal}
         <div
-          className={
-            `${styles.date_sec} layout-row flex-100 layout-wrap layout-align-center-center`
-          }
+          className={`${
+            styles.date_sec
+          } layout-row flex-100 layout-wrap layout-align-center-center`}
         >
           {dayPickerSection}
         </div>
@@ -610,6 +635,17 @@ export class ShipmentDetails extends Component {
             truckTypes={truckTypes}
             handleTruckingDetailsChange={this.handleTruckingDetailsChange}
           />
+        </div>
+        <div className="flex-100 layout-row layout-align-center-center">
+          <div className="flex-none content_width_booking layout-row layout-align-center-center">
+            <IncotermRow
+              theme={theme}
+              preCarriage={this.state.has_pre_carriage}
+              onCarriage={this.state.has_on_carriage}
+              originFees
+              destinationFees
+            />
+          </div>
         </div>
         <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div
