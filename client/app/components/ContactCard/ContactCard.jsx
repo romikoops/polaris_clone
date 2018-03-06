@@ -6,12 +6,12 @@ import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../helpers'
 
 export class ContactCard extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.selectContact = this.selectContact.bind(this)
-  }
   selectContact () {
     this.props.select(this.props.contactData, this.props.contactType)
+  }
+  removeFunc (e) {
+    e.stopPropagation()
+    this.props.removeFunc()
   }
   render () {
     const {
@@ -26,17 +26,18 @@ export class ContactCard extends PureComponent {
 
     const removeIcon =
       typeof removeFunc === 'function' ? (
-        <i className={`${styles.remove_icon} fa fa-times`} onClick={removeFunc} />
+        <i className={`${styles.remove_icon} fa fa-times`} onClick={e => this.removeFunc(e)} />
       ) : (
         ''
       )
     return (
       <div
         key={v4()}
-        className={`flex-100 layout-row ${styles.contact_card} ${
-          popOutHover ? styles.pop_out_hover : ''
-        }`}
-        onClick={this.selectContact}
+        className={
+          `flex-100 layout-row ${styles.contact_card} ` +
+          `${popOutHover ? styles.pop_out_hover : ''}`
+        }
+        onClick={() => this.selectContact()}
       >
         {removeIcon}
         <div className="flex layout-row layout-wrap">
@@ -49,10 +50,9 @@ export class ContactCard extends PureComponent {
                 </p>
               </div>
             </div>
-            <div
-              className={`flex-40 layout-row layout-wrap layout-align-start-center ${
-                styles.contact_details
-              }`}
+            <div className={
+              `flex-40 layout-row layout-wrap layout-align-start-center ${styles.contact_details}`
+            }
             >
               <div className="flex-100 layout-row layout-align-start-center">
                 <i className="fa fa-envelope flex-none" style={iconStyle} />
@@ -69,10 +69,9 @@ export class ContactCard extends PureComponent {
                 </p>
               </div>
             </div>
-            <div
-              className={`flex-40 layout-row layout-wrap layout-align-start-center ${
-                styles.contact_details
-              }`}
+            <div className={
+              `flex-40 layout-row layout-wrap layout-align-start-center ${styles.contact_details}`
+            }
             >
               <div className="flex-100 layout-row layout-align-start-center">
                 <i className="fa fa-phone flex-none" style={iconStyle} />

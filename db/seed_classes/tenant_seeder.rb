@@ -157,8 +157,8 @@ class TenantSeeder
             cargo_item: true
           },
           rail: {
-            container: true,
-            cargo_item: true
+            container: false,
+            cargo_item: false
           },
           air: {
             container: true,
