@@ -233,7 +233,7 @@ export class ShipmentContactForm extends Component {
             ref={(c) => { this.contactForm = c }}
             style={{ padding: '8px 20px' }}
           >
-            <h3>Basic Details</h3>
+            <h3>Company Details</h3>
             <FormsyInput
               wrapperClassName={`${styles.wrapper_input} flex-95`}
               className={styles.input}
