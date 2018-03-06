@@ -44,15 +44,16 @@ export class ShipmentContactsBox extends Component {
   }
 
   placeholderCard (type, i) {
-    const errorMessage = (
+    const showError = this.props.finishBookingAttempted && type !== 'notifyee'
+    const requiredSpanStyles = { left: '15px', top: '14px', fontSize: '17px' }
+    const requiredSpan = (
       <span
         className={errors.error_message}
-        style={{ left: '15px', top: '14px', fontSize: '17px' }}
+        style={Object.assign(requiredSpanStyles, showError ? {} : { color: 'inherit' })}
       >
         * Required
       </span>
     )
-    const showError = this.props.finishBookingAttempted && type !== 'notifyee'
     return (
       <div
         className={
@@ -70,7 +71,7 @@ export class ShipmentContactsBox extends Component {
         <h3>
           {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
         </h3>
-        {showError ? errorMessage : ''}
+        { type !== 'notifyee' && requiredSpan }
       </div>
     )
   }
@@ -157,7 +158,7 @@ export class ShipmentContactsBox extends Component {
               }
               >
                 <i className="fa fa-users flex-none" style={textStyle} />
-                <p className="flex-none"> Notifyees</p>
+                <p className="flex-none"> Notify (Optional) </p>
               </div>
             </div>
             { notifyeeContacts }
