@@ -46,6 +46,7 @@ export class BookingDetails extends Component {
         bool: false,
         val: 0
       },
+      incoterm: '',
       customs: {
         bool: false,
         val: 0
@@ -204,6 +205,8 @@ export class BookingDetails extends Component {
       customs,
       hsTexts,
       eori,
+      notes,
+      incoterm,
       customsCredit
     } = this.state
     const { documents } = this.props.shipmentData
@@ -239,6 +242,8 @@ export class BookingDetails extends Component {
         customs,
         hsTexts,
         eori,
+        notes,
+        incoterm,
         customsCredit
       }
     }
@@ -293,6 +298,7 @@ export class BookingDetails extends Component {
             shipper={shipper}
             consignee={consignee}
             notifyees={notifyees}
+            direction={shipment.direction}
             setContact={this.setContact}
             theme={theme}
             removeNotifyee={this.removeNotifyee}
@@ -317,11 +323,13 @@ export class BookingDetails extends Component {
             shipmentDispatch={shipmentDispatch}
             currencies={currencies}
             customsData={customs}
+            notes={this.state.notes}
             setCustomsFee={this.setCustomsFee}
             user={user}
             eori={eori}
             customsCredit={customsCredit}
             tenant={tenant}
+            incoterm={this.state.incoterm}
             toggleCustomsCredit={this.toggleCustomsCredit}
             finishBookingAttempted={this.state.finishBookingAttempted}
           />

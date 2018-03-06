@@ -64,7 +64,7 @@ class ContactsController < ApplicationController
 
   def delete_alias
     contact = Contact.find(params[:id])
-    if contact.shipper_id == current_user.id
+    if contact.user_id == current_user.id
       contact.destroy
       response_handler(params[:id])
       else

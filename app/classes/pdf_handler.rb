@@ -7,6 +7,7 @@ class PdfHandler
 		@margin   = args[:margin]   || args["margin"]
 		@shipment = args[:shipment] || args["shipment"]
 		@name     = args[:name]     || args["name"]
+    
     @full_name = "#{@name}_#{@shipment.imc_reference}.pdf"
 	end
 
@@ -28,7 +29,7 @@ class PdfHandler
   end
 
   def upload
-    @doc = Document.new_upload_backend(@pdf, @shipment, @name, @shipment.shipper)
+    @doc = Document.new_upload_backend(@pdf, @shipment, @name, @shipment.user)
     @url = @doc.get_signed_url
     self
   end

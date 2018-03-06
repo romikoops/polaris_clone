@@ -230,6 +230,7 @@ class AdminScheduleGenerator extends Component {
               <ReactTooltip
                 className={styles.tooltip}
                 id="autoGenTooltip"
+                effect="solid"
               />
             </p>
           </div>

@@ -220,7 +220,11 @@ export const cargoGlossary = {
   any: 'Any',
   dry_goods: 'Dry Goods',
   liquid_bulk: 'Liquid Bulk',
-  gas_bulk: 'Gas Bulk'
+  gas_bulk: 'Gas Bulk',
+  lcl: 'LCL',
+  fcl_20f: 'FCL 20ft',
+  fcl_40f: 'FCL 40ft',
+  fcl_40f_hq: 'FCL 40ft HQ'
 }
 export const currencyOptions = [
   { value: 'EUR', label: 'EUR' },
@@ -358,6 +362,53 @@ export const lclPricingSchema = {
   hub_route_id: null
 }
 
+export const rateBasisSchema = {
+  PER_CBM: {
+    currency: 'USD',
+    rate: 22,
+    rate_basis: 'PER_CBM'
+  },
+  PER_KG: {
+    currency: 'USD',
+    rate: 22,
+    rate_basis: 'PER_KG'
+  },
+  PER_X_KG: {
+    currency: 'USD',
+    rate: 22,
+    base: 0,
+    rate_basis: 'PER_X_KG'
+  },
+  PER_ITEM: {
+    currency: 'USD',
+    rate: 675,
+    rate_basis: 'PER_ITEM'
+  },
+  PER_CONTAINER: {
+    currency: 'USD',
+    rate: 675,
+    rate_basis: 'PER_CONTAINER'
+  },
+  PER_CBM_TON: {
+    currency: 'USD',
+    cbm: 50,
+    ton: 50,
+    min: 50,
+    rate_basis: 'PER_CBM_TON'
+  },
+  PER_CBM_KG: {
+    currency: 'USD',
+    cbm: 50,
+    kg: 50,
+    min: 50,
+    rate_basis: 'PER_CBM_KG'
+  },
+  PER_SHIPMENT: {
+    currency: 'EUR',
+    rate: 5,
+    rate_basis: 'PER_SHIPMENT'
+  }
+}
 export const fclPricingSchema = {
   route_id: null,
   hub_route_id: null,

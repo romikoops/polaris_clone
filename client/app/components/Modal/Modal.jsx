@@ -69,6 +69,7 @@ export class Modal extends Component {
       top: `${Math.min(windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
       minHeight,
       maxHeight: `calc(${windowHeight * 0.9}px - (${this.props.verticalPadding} * 2))`,
+      maxWidth: '90%',
       left: `calc(50% - ${width}px/2)`,
       padding: `${this.props.verticalPadding} ${this.props.horizontalPadding}`,
       overflowY: 'auto'

@@ -15,7 +15,6 @@ export class ShipmentCargoItems extends Component {
     }
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
-    this.toggleDangerousGoods = this.toggleDangerousGoods.bind(this)
     this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this)
     this.handleCargoItemQ = this.handleCargoItemQ.bind(this)
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
@@ -43,7 +42,7 @@ export class ShipmentCargoItems extends Component {
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
     const modifiedEvent = {
-      target: { name: event.name, value: event.key }
+      target: { name: `${index}-cargo_item_type_id`, value: event.key }
     }
     const newCargoItemTypes = this.state.cargoItemTypes
     newCargoItemTypes[index] = event
@@ -61,11 +60,17 @@ export class ShipmentCargoItems extends Component {
     this.props.handleDelta(modifiedEventDimentionX)
     this.props.handleDelta(modifiedEventDimentionY)
   }
-  toggleDangerousGoods (i) {
+  toggleCheckbox (value, e) {
+    const artificialEvent = {
+      target: { name: e.target.name, value }
+    }
+    this.props.handleDelta(artificialEvent)
+  }
+  toggleStackable (i) {
     const event = {
       target: {
-        name: `${i}-dangerousGoods`,
-        value: !this.props.cargoItems[i].dangerousGoods
+        name: `${i}-stackable`,
+        value: !this.props.cargoItems[i].stackable
       }
     }
     this.props.handleDelta(event)
@@ -137,6 +142,7 @@ export class ShipmentCargoItems extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {inputs.colliType}
             {inputs.quantity}
+            {inputs.nonStackable}
             {inputs.dangerousGoods}
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -233,7 +239,8 @@ ShipmentCargoItems.propTypes = {
     key: PropTypes.number,
     dimension_x: PropTypes.number,
     dimension_y: PropTypes.number,
-    dangerousGoods: PropTypes.bool
+    dangerous_goods: PropTypes.bool,
+    stackable: PropTypes.bool
   })),
   availableCargoItemTypes: PropTypes.arrayOf(PropTypes.shape({
     description: PropTypes.text,

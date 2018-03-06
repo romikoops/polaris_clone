@@ -31,6 +31,9 @@ export class ShipmentContactsBox extends Component {
       }
     }
     this.setContactForEdit = this.setContactForEdit.bind(this)
+    this.generateContactCard = this.generateContactCard.bind(this)
+    this.generateContactSection = this.generateContactSection.bind(this)
+    this.placeholderCard = this.placeholderCard.bind(this)
   }
 
   setContactForEdit (contactData, contactType, contactIndex) {
@@ -40,44 +43,80 @@ export class ShipmentContactsBox extends Component {
       index: contactIndex
     })
   }
+
+  placeholderCard (type, i) {
+    const errorMessage = (
+      <span
+        className={errors.error_message}
+        style={{ left: '15px', top: '14px', fontSize: '17px' }}
+      >
+        * Required
+      </span>
+    )
+    const showError = this.props.finishBookingAttempted && type !== 'notifyee'
+    return (
+      <div
+        className={
+          `layout-column flex-align-center-center ${styles.placeholder_card} ` +
+          `${showError ? styles.with_errors : ''}`
+        }
+        onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
+      >
+        <div className="flex-100 layout-row layout-align-center-center">
+          <i
+            className={`fa fa-${type === 'notifyee' ? 'plus' : 'mouse-pointer'}`}
+            style={{ fontSize: '30px' }}
+          />
+        </div>
+        <h3>
+          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
+        </h3>
+        {showError ? errorMessage : ''}
+      </div>
+    )
+  }
+  generateContactCard (contactData, contactType) {
+    return contactData.contact ? (
+      <ContactCard
+        contactData={contactData}
+        theme={this.props.theme}
+        select={this.setContactForEdit}
+        key={v4()}
+        contactType={contactType}
+      />
+    ) : (
+      this.placeholderCard(contactType)
+    )
+  }
+  generateContactSection (contactData, contactType) {
+    const { theme } = this.props
+    const textStyle = theme
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+      : { color: 'black' }
+
+    return (
+      <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
+        <div
+          className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}
+        >
+          <div className="flex-75 layout-row layout-align-start-center">
+            <i className="fa fa-user flex-none" style={textStyle} />
+            <p className="flex-none">{ capitalize(contactType) }</p>
+          </div>
+        </div>
+        <div className={styles.contact_wrapper}>
+          { this.generateContactCard(contactData, contactType) }
+        </div>
+      </div>
+    )
+  }
   render () {
     const {
-      shipper, consignee, notifyees, theme, finishBookingAttempted
+      shipper, consignee, notifyees, theme
     } = this.props
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
-    const placeholderCard = (type, i) => {
-      const errorMessage = (
-        <span
-          className={errors.error_message}
-          style={{ left: '15px', top: '14px', fontSize: '17px' }}
-        >
-          * Required
-        </span>
-      )
-      const showError = finishBookingAttempted && type !== 'notifyee'
-      return (
-        <div
-          className={`
-                        layout-column flex-align-center-center ${styles.placeholder_card}
-                        ${showError ? styles.with_errors : ''}
-                    `}
-          onClick={() => this.setContactForEdit(Object.assign({}, this.newContactData), type, i)}
-        >
-          <div className="flex-100 layout-row layout-align-center-center">
-            <i
-              className={`fa fa-${type === 'notifyee' ? 'plus' : 'mouse-pointer'}`}
-              style={{ fontSize: '30px' }}
-            />
-          </div>
-          <h3>
-            {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
-          </h3>
-          {showError ? errorMessage : ''}
-        </div>
-      )
-    }
     const notifyeeContacts =
       notifyees &&
       notifyees.map((notifyee, i) => (
@@ -96,71 +135,33 @@ export class ShipmentContactsBox extends Component {
       ))
     notifyeeContacts.push(<div className="flex-50">
       <div className={styles.contact_wrapper}>
-        {placeholderCard('notifyee', notifyeeContacts.length)}
+        { this.placeholderCard('notifyee', notifyeeContacts.length) }
       </div>
     </div>)
-    const shipperContact = shipper.contact ? (
-      <ContactCard
-        contactData={shipper}
-        theme={theme}
-        select={this.setContactForEdit}
-        key={v4()}
-        contactType="shipper"
-      />
-    ) : (
-      placeholderCard('shipper')
-    )
-    const consigneeContact = consignee.contact ? (
-      <ContactCard
-        contactData={consignee}
-        theme={theme}
-        select={this.setContactForEdit}
-        key={v4()}
-        contactType="consignee"
-      />
-    ) : (
-      placeholderCard('consignee')
-    )
+
+    const firstRowContacts = [
+      this.generateContactSection(shipper, 'shipper'),
+      this.generateContactSection(consignee, 'consignee')
+    ]
+    if (this.props.direction === 'import') firstRowContacts.reverse()
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div className="flex-100 layout-row layout-wrap" style={{ height: '185px' }}>
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-              <div
-                className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}
-              >
-                <div className="flex-75 layout-row layout-align-start-center">
-                  <i className="fa fa-user flex-none" style={textStyle} />
-                  <p className="flex-none">Shipper</p>
-                </div>
-              </div>
-              <div className={styles.contact_wrapper}>{shipperContact}</div>
-            </div>
-            <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start">
-              <div
-                className={`${styles.contact_header} flex-100 layout-row layout-align-start-center`}
-              >
-                <div className="flex-75 layout-row layout-align-start-center">
-                  <i className="fa fa-user flex-none" style={textStyle} />
-                  <p className="flex-none">Consignee</p>
-                </div>
-              </div>
-              <div className={styles.contact_wrapper}>{consigneeContact}</div>
-            </div>
+            { firstRowContacts }
           </div>
           <div className="flex-100 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <div
-                className={`
-                                ${styles.contact_header} flex-50
-                                layout-row layout-align-start-center
-                            `}
+              <div className={
+                `${styles.contact_header} flex-50 ` +
+                'layout-row layout-align-start-center'
+              }
               >
                 <i className="fa fa-users flex-none" style={textStyle} />
                 <p className="flex-none"> Notifyees</p>
               </div>
             </div>
-            {notifyeeContacts}
+            { notifyeeContacts }
           </div>
         </div>
       </div>
@@ -207,6 +208,7 @@ ShipmentContactsBox.propTypes = {
     country: PropTypes.string
   })),
   setContactForEdit: PropTypes.func.isRequired,
+  direction: PropTypes.string.isRequired,
   finishBookingAttempted: PropTypes.bool
 }
 

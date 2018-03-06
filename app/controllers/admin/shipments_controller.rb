@@ -25,12 +25,15 @@ class Admin::ShipmentsController < ApplicationController
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
     hs_codes = []
+    cargo_item_types = {}
+
     @cargo_items.each do |ci|
       if ci && ci.hs_codes
         ci.hs_codes.each do |hs|
           hs_codes << hs
         end
       end
+      cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)
     end
     @containers.each do |cn|
       if cn && cn.hs_codes
@@ -54,7 +57,7 @@ class Admin::ShipmentsController < ApplicationController
     end
     locations = {origin: @shipment.origin, destination: @shipment.destination}
     p @shipment.id
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations}
+    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations, cargoItemTypes: cargo_item_types}
     response_handler(resp)
   end
 
@@ -67,7 +70,7 @@ class Admin::ShipmentsController < ApplicationController
         message: "Your shipment #{shipment.imc_reference} has an updated price. Your new total is #{params[:priceObj]["currency"]} #{params[:priceObj]["value"]}. For any issues, please contact your support agent.",
         shipmentRef: shipment.imc_reference
       }
-      add_message_to_convo(shipment.shipper, message, true)
+      add_message_to_convo(shipment.user, message, true)
     response_handler(shipment)
   end
 
@@ -85,7 +88,7 @@ class Admin::ShipmentsController < ApplicationController
         message: "Your shipment #{shipment.imc_reference} has an updated schedule. Your new estimated departure is #{params[:timeObj]["newEtd"]}, estimated to arrive at #{params[:timeObj]["newEta"]}. For any issues, please contact your support agent.",
         shipmentRef: shipment.imc_reference
       }
-      add_message_to_convo(shipment.shipper, message, true)
+      add_message_to_convo(shipment.user, message, true)
     response_handler(shipment)
   end
 
@@ -102,13 +105,13 @@ class Admin::ShipmentsController < ApplicationController
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        shipper_confirmation_email(@shipment.shipper, @shipment)
+        shipper_confirmation_email(@shipment.user, @shipment)
         message = {
           title: 'Booking Accepted',
           message: "Your booking has been accepted! If you have any further questions or edis to your booking please contact the support department.",
           shipmentRef: @shipment.imc_reference
         }
-        add_message_to_convo(@shipment.shipper, message, true)
+        add_message_to_convo(@shipment.user, message, true)
         response_handler(@shipment)
       when "decline"
         @shipment.decline!
@@ -117,7 +120,7 @@ class Admin::ShipmentsController < ApplicationController
           message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and gods type. For more info contact us through the support channels.",
           shipmentRef: @shipment.imc_reference
         }
-        add_message_to_convo(@shipment.shipper, message, true)
+        add_message_to_convo(@shipment.user, message, true)
         response_handler(@shipment)
       when "ignore"
         @shipment.ignore!

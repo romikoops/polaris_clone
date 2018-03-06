@@ -67,7 +67,7 @@ export class AdminPricingsIndex extends Component {
             active
           />
         </p>
-        <ReactTooltip id="newPriceTip" className={`${styles.tooltip} `} />
+        <ReactTooltip id="newPriceTip" className={styles.tooltip} effect="solid" />
       </div>)
     const { itineraries, detailedItineraries, transportCategories } = pricingData
     const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv'
