@@ -25,8 +25,9 @@ class Admin::HubsController < ApplicationController
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
     layovers = hub.layovers.limit(20)
-    routes = get_itineraries_for_hub(hub)  
-    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers}
+    routes = get_itineraries_for_hub(hub)
+    charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
+    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges}
     response_handler(resp)
   end
   def set_status

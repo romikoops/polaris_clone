@@ -1,618 +1,545 @@
-// import React, { Component } from 'react'
-// import PropTypes from 'prop-types'
-// import styles from './Admin.scss'
-// import { NamedSelect } from '../NamedSelect/NamedSelect'
-// import { RoundButton } from '../RoundButton/RoundButton'
-// import { currencyOptions, cargoClassOptions } from '../../constants/admin.constants'
-// import {
-//   fclChargeGlossary,
-//   lclChargeGlossary,
-//   chargeGlossary,
-//   rateBasises,
-//   lclPricingSchema,
-//   fclPricingSchema,
-//   cargoGlossary,
-//   rateBasisSchema
-// } from '../../constants'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Toggle from 'react-toggle'
+import styles from '../../Admin.scss'
+import { NamedSelect } from '../../../NamedSelect/NamedSelect'
+import { RoundButton } from '../../../RoundButton/RoundButton'
+import { currencyOptions, cargoClassOptions } from '../../../../constants/admin.constants'
+import {
+  fclChargeGlossary,
+  lclChargeGlossary,
+  chargeGlossary,
+  rateBasises,
+  lclPricingSchema,
+  fclPricingSchema,
+  cargoGlossary,
+  rateBasisSchema
+} from '../../../../constants'
+import { TextHeading } from '../../../TextHeading/TextHeading'
 
-// const fclChargeGloss = fclChargeGlossary
-// const lclChargeGloss = lclChargeGlossary
-// const chargeGloss = chargeGlossary
-// const rateOpts = rateBasises
-// const currencyOpts = currencyOptions
-// const cargoClassOpts = cargoClassOptions
-// const lclSchema = lclPricingSchema
-// const fclSchema = fclPricingSchema
-// const cargoGloss = cargoGlossary
+const fclChargeGloss = fclChargeGlossary
+const lclChargeGloss = lclChargeGlossary
+const chargeGloss = chargeGlossary
+const rateOpts = rateBasises
+const currencyOpts = currencyOptions
+const cargoClassOpts = cargoClassOptions
+const lclSchema = lclPricingSchema
+const fclSchema = fclPricingSchema
+const cargoGloss = cargoGlossary
 
-// export class AdminHubFees extends Component {
-//   static selectFromOptions (options, value) {
-//     let result
-//     console.log(options)
-//     options.forEach((op) => {
-//       if (op.value === value) {
-//         result = op
-//       }
-//     })
-//     return result || options[0]
-//   }
-//   static prepForSelect (arr, labelKey, valueKey, glossary) {
-//     return arr.map(a => ({
-//       value: valueKey ? a[valueKey] : a,
-//       label: glossary ? glossary[a[labelKey]] : a[labelKey]
-//     }))
-//   }
-//   constructor (props) {
-//     super(props)
-//     this.state = {
-//       pricing: lclSchema,
-//       cargoClass: cargoClassOpts[0],
-//       selectOptions: {},
-//       route: false,
-//       hubRoute: false,
-//       transportCategory: false,
-//       client: false,
-//       steps: {
-//         cargoClass: false,
-//         route: false,
-//         hubRoute: false,
-//         transportCategory: false,
-//         pricing: false,
-//         client: false
-//       }
-//     }
-//     this.editPricing = lclSchema
-//     this.handleChange = this.handleChange.bind(this)
-//     this.handleSelect = this.handleSelect.bind(this)
-//     this.saveEdit = this.saveEdit.bind(this)
-//     this.setCargoClass = this.setCargoClass.bind(this)
-//     this.setAllFromOptions = this.setAllFromOptions.bind(this)
-//     this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
-//     this.deleteFee = this.deleteFee.bind(this)
-//     this.showAddFeePanel = this.showAddFeePanel.bind(this)
-//     this.addFeeToPricing = this.addFeeToPricing.bind(this)
-//   }
-//   componentWillMount () {
-//     this.setAllFromOptions()
-//   }
+export class AdminHubFees extends Component {
+  static selectFromOptions (options, value) {
+    let result
+    console.log(options)
+    options.forEach((op) => {
+      if (op.value === value) {
+        result = op
+      }
+    })
+    return result || options[0]
+  }
+  static prepForSelect (arr, labelKey, valueKey, glossary) {
+    return arr.map(a => ({
+      value: valueKey ? a[valueKey] : a,
+      label: glossary ? glossary[a[labelKey]] : a[labelKey]
+    }))
+  }
+  constructor (props) {
+    super(props)
+    this.state = {
+      pricing: lclSchema,
+      cargoClass: cargoClassOpts[0],
+      selectOptions: {},
+      edit: false,
+      direction: 'import'
+    }
+    this.editPricing = lclSchema
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
+    this.saveEdit = this.saveEdit.bind(this)
+    this.setCargoClass = this.setCargoClass.bind(this)
+    this.setAllFromOptions = this.setAllFromOptions.bind(this)
+    this.handleTopLevelSelect = this.handleTopLevelSelect.bind(this)
+    this.deleteFee = this.deleteFee.bind(this)
+    this.showAddFeePanel = this.showAddFeePanel.bind(this)
+    this.addFeeToPricing = this.addFeeToPricing.bind(this)
+  }
+  componentWillMount () {
+    // this.setAllFromOptions()
+  }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.charges.nexus_id) {
+      this.setAllFromOptions(nextProps.charges)
+    }
+    this.setState({ chargesEdit: nextProps.charges })
+  }
 
-//   setAllFromOptions () {
-//     const { pricing } = this.state
-//     const newObj = { data: {} }
-//     const tmpObj = {}
+  setAllFromOptions (charges) {
+    const newObj = { import: {}, export: {} }
+    const tmpObj = {}
 
-//     Object.keys(pricing.data).forEach((key) => {
-//       if (!newObj.data[key]) {
-//         newObj.data[key] = {}
-//       }
-//       if (!tmpObj[key]) {
-//         tmpObj[key] = {}
-//       }
-//       let opts
-//       Object.keys(pricing.data[key]).forEach((chargeKey) => {
-//         if (chargeKey === 'currency') {
-//           opts = currencyOpts.slice()
-//           // this.getOptions(opts, key, chargeKey);
-//         } else if (chargeKey === 'rate_basis') {
-//           opts = rateOpts.slice()
-//           // this.getOptions(opts, key, chargeKey);
-//         }
-//         newObj.data[key][chargeKey] = AdminHubFees.selectFromOptions(
-//           opts,
-//           pricing.data[key][chargeKey]
-//         )
-//       })
-//     })
-//     this.setState({ selectOptions: newObj })
-//   }
+    if (!charges.import) {
+      return
+    }
+    ['import', 'export'].forEach((dir) => {
+      Object.keys(charges[dir]).forEach((key) => {
+        if (!newObj[dir][key]) {
+          newObj[dir][key] = {}
+        }
+        if (!tmpObj[key]) {
+          tmpObj[key] = {}
+        }
+        let opts
+        Object.keys(charges[dir][key]).forEach((chargeKey) => {
+          if (chargeKey === 'currency') {
+            opts = currencyOpts.slice()
+            // this.getOptions(opts, key, chargeKey);
+          } else if (chargeKey === 'rate_basis') {
+            opts = rateOpts.slice()
+            // this.getOptions(opts, key, chargeKey);
+          }
+          newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
+            opts,
+            charges[dir][key][chargeKey]
+          )
+        })
+      })
+    })
 
-//   setCargoClass (value) {
-//     const schema = value.value === 'lcl' ? lclSchema : fclSchema
-//     this.setState({ cargoClass: value, pricing: schema })
-//     this.editPricing = schema
-//   }
-//   handleTopLevelSelect (selection) {
-//     this.setState({
-//       [selection.name]: selection,
-//       steps: {
-//         ...this.state.steps,
-//         [selection.name]: true
-//       }
-//     })
-//   }
+    this.setState({ selectOptions: newObj })
+  }
 
-//   handleSelect (selection) {
-//     const nameKeys = selection.name.split('-')
-//     if (nameKeys[1] === 'rate_basis') {
-//       const price = this.state.pricing.data[nameKeys[0]]
-//       const newSchema = rateBasisSchema[selection.value]
-//       Object.keys(newSchema).forEach((k) => {
-//         if (price[k] && newSchema[k] && k !== 'rate_basis') {
-//           newSchema[k] = price[k]
-//         }
-//       })
-//       this.setState({
-//         pricing: {
-//           ...this.state.pricing,
-//           data: {
-//             ...this.state.pricing.data,
-//             [nameKeys[0]]: newSchema
-//           }
-//         },
-//         selectOptions: {
-//           ...this.state.selectOptions,
-//           data: {
-//             ...this.state.selectOptions.data,
-//             [nameKeys[0]]: {
-//               ...this.state.selectOptions.data[nameKeys[0]],
-//               [nameKeys[1]]: selection
-//             }
-//           }
-//         }
-//       })
-//     } else {
-//       this.setState({
-//         pricing: {
-//           ...this.state.pricing,
-//           data: {
-//             ...this.state.pricing.data,
-//             [nameKeys[0]]: {
-//               ...this.state.pricing.data[nameKeys[0]],
-//               [nameKeys[1]]: selection.value
-//             }
-//           }
-//         },
-//         selectOptions: {
-//           ...this.state.selectOptions,
-//           data: {
-//             ...this.state.selectOptions.data,
-//             [nameKeys[0]]: {
-//               ...this.state.selectOptions.data[nameKeys[0]],
-//               [nameKeys[1]]: selection
-//             }
-//           }
-//         }
-//       })
-//     }
-//   }
-//   showAddFeePanel () {
-//     this.setState({ showPanel: !this.state.showPanel })
-//   }
-//   deleteFee (key) {
-//     const { pricing } = this.state
-//     delete pricing.data[key]
-//     this.setState({ pricing })
-//   }
-//   handleChange (event) {
-//     const { name, value } = event.target
-//     const nameKeys = name.split('-')
-//     this.setState({
-//       pricing: {
-//         ...this.state.pricing,
-//         data: {
-//           ...this.state.pricing.data,
-//           [nameKeys[0]]: {
-//             ...this.state.pricing.data[nameKeys[0]],
-//             [nameKeys[1]]: parseInt(value, 10)
-//           }
-//         }
-//       }
-//     })
-//   }
-//   addFeeToPricing (key) {
-//     const { pricing } = this.state
-//     if (pricing.load_type === 'lcl') {
-//       pricing.data[key] = lclPricingSchema.data[key]
-//     } else {
-//       pricing.data[key] = fclPricingSchema.data[key]
-//     }
+  setCargoClass (value) {
+    const schema = value.value === 'lcl' ? lclSchema : fclSchema
+    this.setState({ cargoClass: value, pricing: schema })
+    this.editPricing = schema
+  }
+  handleTopLevelSelect (selection) {
+    this.setState({
+      [selection.name]: selection,
+      steps: {
+        ...this.state.steps,
+        [selection.name]: true
+      }
+    })
+  }
 
-//     const newObj = { data: {} }
-//     const tmpObj = {}
+  handleSelect (selection) {
+    const { direction } = this.state
+    const nameKeys = selection.name.split('-')
+    if (nameKeys[1] === 'rate_basis') {
+      const price = this.state.charges[nameKeys[0]]
+      const newSchema = rateBasisSchema[selection.value]
+      Object.keys(newSchema).forEach((k) => {
+        if (price[k] && newSchema[k] && k !== 'rate_basis') {
+          newSchema[k] = price[k]
+        }
+      })
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.charges,
+            [nameKeys[0]]: newSchema
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions[direction],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[direction][nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
+          }
+        }
+      })
+    } else {
+      this.setState({
+        pricing: {
+          ...this.state.pricing,
+          data: {
+            ...this.state.charges,
+            [nameKeys[0]]: {
+              ...this.state.charges[nameKeys[0]],
+              [nameKeys[1]]: selection.value
+            }
+          }
+        },
+        selectOptions: {
+          ...this.state.selectOptions,
+          data: {
+            ...this.state.selectOptions[direction],
+            [nameKeys[0]]: {
+              ...this.state.selectOptions[direction][nameKeys[0]],
+              [nameKeys[1]]: selection
+            }
+          }
+        }
+      })
+    }
+  }
+  showAddFeePanel () {
+    this.setState({ showPanel: !this.state.showPanel })
+  }
+  deleteFee (key) {
+    const { charges } = this.state
+    delete charges[key]
+    this.setState({ charges })
+  }
+  handleChange (event) {
+    const { name, value } = event.target
+    const nameKeys = name.split('-')
+    this.setState({
+      pricing: {
+        ...this.state.pricing,
+        data: {
+          ...this.state.charges,
+          [nameKeys[0]]: {
+            ...this.state.charges[nameKeys[0]],
+            [nameKeys[1]]: parseInt(value, 10)
+          }
+        }
+      }
+    })
+  }
+  toggleEdit () {
+    this.setState({ edit: !this.state.edit })
+  }
+  addFeeToPricing (key) {
+    const { charges, direction } = this.state
+    if (charges.load_type === 'lcl') {
+      charges[key] = lclPricingSchema.data[key]
+    } else {
+      charges[key] = fclPricingSchema.data[key]
+    }
 
-//     Object.keys(pricing.data).forEach((oKey) => {
-//       if (!newObj.data[oKey]) {
-//         newObj.data[oKey] = {}
-//       }
-//       if (!tmpObj[oKey]) {
-//         tmpObj[oKey] = {}
-//       }
-//       let opts
-//       Object.keys(pricing.data[oKey]).forEach((chargeKey) => {
-//         if (chargeKey === 'currency') {
-//           opts = currencyOpts.slice()
-//           // this.getOptions(opts, key, chargeKey);
-//         } else if (chargeKey === 'rate_basis') {
-//           opts = rateOpts.slice()
-//           // this.getOptions(opts, key, chargeKey);
-//         }
-//         newObj.data[key][chargeKey] = AdminHubFees.selectFromOptions(
-//           opts,
-//           pricing.data[key][chargeKey]
-//         )
-//       })
-//     })
-//     this.setState({ selectOptions: newObj, pricing })
-//   }
-//   saveEdit () {
-//     const {
-//       hubRoute, transportCategory, route, cargoClass, pricing, client
-//     } = this.state
-//     const clientTag = client.value !== 'OPEN' ? `_${client.value.id}` : ''
-//     const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${
-//       transportCategory.value.id
-//     }_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
-//     pricing.hub_route_id = hubRoute.value.id
-//     pricing.itinerary_id = route.value.id
-//     pricing.tenant_id = route.value.tenant_id
-//     pricing.transport_category_id = transportCategory.value.id
-//     this.props.adminDispatch.updatePricing(pricingId, pricing)
-//     this.props.closeForm()
-//   }
+    const newObj = { data: {} }
+    const tmpObj = {}
 
-//   render () {
-//     const {
-//       theme, itineraries, detailedItineraries, transportCategories, clients
-//     } = this.props
-//     const {
-//       route, hubRoute, cargoClass, steps, transportCategory, client, showPanel
-//     } = this.state
-//     const textStyle = {
-//       background:
-//         theme && theme.colors
-//           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
-//           : 'black'
-//     }
-//     const { pricing, selectOptions } = this.state
-//     const panel = []
-//     let gloss
-//     if (cargoClass.value.includes('lcl')) {
-//       gloss = lclChargeGloss
-//     } else {
-//       gloss = fclChargeGloss
-//     }
-//     const routeOpts = AdminHubFees.prepForSelect(itineraries, 'name', false, false)
-//     const clientOpts = clients.map(a => ({ value: a, label: `${a.first_name} ${a.last_name}` }))
-//     clientOpts.push({ value: 'OPEN', label: 'Open' })
-//     const hubRouteOpts = route
-//       ? detailedItineraries
-//         .filter(di => di.id === route.value.id)
-//         .map(a => ({ value: a, label: `${a.origin_hub_name} - ${a.destination_hub_name}` }))
-//       : []
-//     const transportCategoryOpts = cargoClass
-//       ? AdminHubFees.prepForSelect(
-//         transportCategories.filter(x => x.cargo_class === cargoClass.value),
-//         'name',
-//         false,
-//         cargoGloss
-//       )
-//       : []
+    Object.keys(charges).forEach((oKey) => {
+      if (!newObj[direction][oKey]) {
+        newObj[direction][oKey] = {}
+      }
+      if (!tmpObj[oKey]) {
+        tmpObj[oKey] = {}
+      }
+      let opts
+      Object.keys(charges[oKey]).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOpts.slice()
+          // this.getOptions(opts, key, chargeKey);
+        } else if (chargeKey === 'rate_basis') {
+          opts = rateOpts.slice()
+          // this.getOptions(opts, key, chargeKey);
+        }
+        newObj[direction][key][chargeKey] = AdminHubFees.selectFromOptions(
+          opts,
+          charges[key][chargeKey]
+        )
+      })
+    })
+    this.setState({ selectOptions: newObj, charges })
+  }
+  saveEdit () {
+    const {
+      hubRoute, transportCategory, route, cargoClass, pricing, client
+    } = this.state
+    const clientTag = client.value !== 'OPEN' ? `_${client.value.id}` : ''
+    const pricingId = `${hubRoute.value.origin_stop_id}_${hubRoute.value.destination_stop_id}_${
+      transportCategory.value.id
+    }_${route.value.tenant_id}_${cargoClass.value}${clientTag}`
+    pricing.hub_route_id = hubRoute.value.id
+    pricing.itinerary_id = route.value.id
+    pricing.tenant_id = route.value.tenant_id
+    pricing.transport_category_id = transportCategory.value.id
+    this.props.adminDispatch.updatePricing(pricingId, pricing)
+    this.props.closeForm()
+  }
+  handleDirectionChange (e) {
+    const {
+      directionBool
+    } = this.state
+    if (!directionBool) {
+      this.setState({
+        direction: 'export',
+        directionBool: true
+      })
+    } else {
+      this.setState({
+        direction: 'import',
+        directionBool: false
+      })
+    }
+  }
 
-//     Object.keys(pricing.data).forEach((key) => {
-//       const cells = []
-//       Object.keys(pricing.data[key]).forEach((chargeKey) => {
-//         if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-//           cells.push(<div
-//             key={chargeKey}
-//             className={`flex layout-row layout-align-none-center layout-wrap ${
-//               styles.price_cell
-//             }`}
-//           >
-//             <p className="flex-100">{chargeGloss[chargeKey]}</p>
-//             <div className={`flex-95 layout-row ${styles.editor_input}`}>
-//               <input
-//                 type="number"
-//                 value={pricing.data[key][chargeKey]}
-//                 onChange={this.handleChange}
-//                 name={`${key}-${chargeKey}`}
-//               />
-//             </div>
-//           </div>)
-//         } else if (chargeKey === 'rate_basis') {
-//           cells.push(<div
-//             className={`flex layout-row layout-align-none-center layout-wrap ${
-//               styles.price_cell
-//             }`}
-//           >
-//             <p className="flex-100">{chargeGloss[chargeKey]}</p>
-//             <NamedSelect
-//               name={`${key}-${chargeKey}`}
-//               classes={`${styles.select}`}
-//               value={selectOptions ? selectOptions.data[key][chargeKey] : ''}
-//               options={rateOpts}
-//               className="flex-100"
-//               onChange={this.handleSelect}
-//             />
-//           </div>)
-//         } else if (chargeKey === 'currency') {
-//           cells.push(<div
-//             key={chargeKey}
-//             className={`flex layout-row layout-align-none-center layout-wrap ${
-//               styles.price_cell
-//             }`}
-//           >
-//             <p className="flex-100">{chargeGloss[chargeKey]}</p>
-//             <div className="flex-95 layout-row">
-//               <NamedSelect
-//                 name={`${key}-currency`}
-//                 classes={`${styles.select}`}
-//                 value={selectOptions ? selectOptions.data[key].currency : ''}
-//                 options={currencyOpts}
-//                 className="flex-100"
-//                 onChange={this.handleSelect}
-//               />
-//             </div>
-//           </div>)
-//         }
-//       })
-//       panel.push(<div
-//         key={key}
-//         className="flex-100 layout-row layout-align-none-center layout-wrap"
-//       >
-//         <div
-//           className={`flex-100 layout-row layout-align-space-between-center ${
-//             styles.price_subheader
-//           }`}
-//         >
-//           <p className="flex-none">
-//             {key} - {gloss[key]}
-//           </p>
-//           <div
-//             className="flex-none layout-row layout-align-center-center"
-//             onClick={() => this.deleteFee(key)}
-//           >
-//             <i className="fa fa-trash clip" style={textStyle} />
-//           </div>
-//         </div>
-//         <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
-//       </div>)
-//     })
+  render () {
+    const { theme, charges, loadType } = this.props
 
-//     const selectCargoClass = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center">
-//           <h4 className="flex-100 letter_3">Select a Cargo Type</h4>
-//           <div className="flex-75 layout-row">
-//             <NamedSelect
-//               name="cargoClass"
-//               classes={`${styles.select}`}
-//               value={cargoClass}
-//               options={cargoClassOpts}
-//               className="flex-100"
-//               onChange={this.handleTopLevelSelect}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     )
-//     const selectRoute = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center">
-//           <h4 className="flex-100 letter_3">Select a route</h4>
-//           <div className="flex-75 layout-row">
-//             <NamedSelect
-//               name="route"
-//               classes={`${styles.select}`}
-//               value={route}
-//               options={routeOpts}
-//               className="flex-100"
-//               onChange={this.handleTopLevelSelect}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     )
-//     const selectHubRoute = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center">
-//           <h4 className="flex-100 letter_3">Select a specific combination of Hubs</h4>
-//           <div className="flex-75 layout-row">
-//             <NamedSelect
-//               name="hubRoute"
-//               classes={`${styles.select}`}
-//               value={hubRoute}
-//               options={hubRouteOpts}
-//               className="flex-100"
-//               onChange={this.handleTopLevelSelect}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     )
-//     const selectClient = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center">
-//           <h4 className="flex-100 letter_3">Select users this pricing applies to</h4>
-//           <div className="flex-75 layout-row">
-//             <NamedSelect
-//               name="client"
-//               classes={`${styles.select}`}
-//               value={client}
-//               options={clientOpts}
-//               className="flex-100"
-//               onChange={this.handleTopLevelSelect}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     )
-//     const selectTransportCategory = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center">
-//           <h4 className="flex-100 letter_3">Select the type of good shipped</h4>
-//           <div className="flex-75 layout-row">
-//             <NamedSelect
-//               name="transportCategory"
-//               classes={`${styles.select}`}
-//               value={transportCategory}
-//               options={transportCategoryOpts}
-//               className="flex-100"
-//               onChange={this.handleTopLevelSelect}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     )
-//     const cargoClassResult = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-//         <h4 className="flex-none letter_3">Cargo Class: </h4>
-//         <h4 className="flex-none letter_3">{cargoClass.label}</h4>
-//       </div>
-//     )
-//     const routeResult = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-//         <h4 className="flex-none letter_3">Route: </h4>
-//         <h4 className="flex-none letter_3">{route.label}</h4>
-//       </div>
-//     )
-//     const hubRouteResult = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-//         <h4 className="flex-none letter_3">Sub Route: </h4>
-//         <h4 className="flex-none letter_3">{hubRoute.label}</h4>
-//       </div>
-//     )
-//     const transportCategoryResult = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-//         <h4 className="flex-none letter_3">Transport Category: </h4>
-//         <h4 className="flex-none letter_3">{transportCategory.label}</h4>
-//       </div>
-//     )
-//     const clientResult = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-//         <h4 className="flex-none letter_3">Client: </h4>
-//         <h4 className="flex-none letter_3">{client.label}</h4>
-//       </div>
-//     )
-//     const contextPanel = (
-//       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-//         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-//           {steps.cargoClass === false ? selectCargoClass : cargoClassResult}
-//           {steps.cargoClass === true && steps.transportCategory === false
-//             ? selectTransportCategory
-//             : transportCategoryResult}
-//           {steps.transportCategory === true && steps.route === false ? selectRoute : routeResult}
-//           {steps.route === true && steps.hubRoute === false ? selectHubRoute : hubRouteResult}
-//           {steps.hubRoute === true && steps.client === false ? selectClient : clientResult}
-//         </div>
-//       </div>
-//     )
-//     const feeSchema = cargoClass.label === 'lcl' ? lclPricingSchema : fclPricingSchema
-//     const feesToAdd = Object.keys(feeSchema.data).map((key) => {
-//       if (!pricing.data[key]) {
-//         return (
-//           <div
-//             key={key}
-//             className="flex-33 layout-row layout-align-start-center"
-//             onClick={() => this.addFeeToPricing(key)}
-//           >
-//             <i className="fa fa-plus clip flex-none" style={textStyle} />
-//             <div className="flex-5" />
-//             <p className="flex-none">
-//               {key} - {gloss[key]}{' '}
-//             </p>
-//           </div>
-//         )
-//       }
-//       return ''
-//     })
-//     const panelViewClass = showPanel ? styles.fee_panel_open : styles.fee_panel_closed
-//     return (
-//       <div
-//         className={` ${
-//           styles.editor_backdrop
-//         } flex-none layout-row layout-wrap layout-align-center-center`}
-//       >
-//         <div
-//           className={` ${
-//             styles.editor_fade
-//           } flex-none layout-row layout-wrap layout-align-center-start`}
-//           onClick={this.props.closeForm}
-//         />
-//         <div
-//           className={` ${
-//             styles.editor_box
-//           } flex-none layout-row layout-wrap layout-align-center-start`}
-//         >
-//           <div
-//             className={`flex-95 layout-row layout-wrap layout-align-center-start ${
-//               styles.editor_scroll
-//             }`}
-//           >
-//             <div
-//               className={`flex-100 layout-row layout-align-space-between-center ${
-//                 styles.sec_title
-//               }`}
-//             >
-//               <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-//                 New Pricing
-//               </p>
-//             </div>
-//             <div className="flex-100 layout-row layout-align-start-center">
-//               <div className="flex-60 layout-row layout-align-start-center">
-//                 <i className="fa fa-map-signs clip" style={textStyle} />
-//                 <p className="flex-none offset-5">{hubRoute ? hubRoute.label : ''}</p>
-//               </div>
-//             </div>
-//             {client ? panel : contextPanel}
-//             <div className="flex-100
-//  layout-align-end-center layout-row" style={{ margin: '15px' }}>
-//               <RoundButton
-//                 theme={theme}
-//                 size="small"
-//                 text="Add Fee"
-//                 active
-//                 handleNext={this.showAddFeePanel}P
-//                 iconClass="fa-plus"
-//               />
-//             </div>
-//             <div className="flex-100
-// layout-align-end-center layout-row" style={{ margin: '15px' }}>
-//               <RoundButton
-//                 theme={theme}
-//                 size="small"
-//                 text="Save"
-//                 active
-//                 handleNext={this.saveEdit}
-//                 iconClass="fa-floppy-o"
-//               />
-//             </div>
-//           </div>
-//           <div
-//             className={`flex-100 layout-row layout-align-center-center layout-wrap ${
-//               styles.add_fee_panel
-//             } ${panelViewClass}`}
-//           >
-//             <div
-//               className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`}
-//               onClick={this.showAddFeePanel}
-//             >
-//               <i className="fa fa-times clip" style={textStyle} />
-//             </div>
-//             <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-//               {feesToAdd}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     )
-//   }
-// }
-// AdminHubFees.propTypes = {
-//   theme: PropTypes.theme,
-//   closeForm: PropTypes.func,
-//   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-//   itineraries: PropTypes.arrayOf(PropTypes.any),
-//   transportCategories: PropTypes.arrayOf(PropTypes.any),
-//   detailedItineraries: PropTypes.arrayOf(PropTypes.any),
-//   clients: PropTypes.arrayOf(PropTypes.any)
-// }
-// AdminHubFees.defaultProps = {
-//   theme: {},
-//   closeForm: null,
-//   itineraries: [],
-//   detailedItineraries: [],
-//   transportCategories: [],
-//   clients: []
-// }
+    const textStyle = {
+      background:
+        theme && theme.colors
+          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
+          : 'black'
+    }
+    const {
+      chargesEdit, selectOptions, edit, showPanel, direction, directionBool
+    } = this.state
+    const panel = []
+    const viewPanel = []
+    let gloss
+    const toggleCSS = `
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          ${theme.colors.brightPrimary} 0%,
+          ${theme.colors.primary} 100%
+        ) !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          ${theme.colors.brightSecondary} 0%,
+          ${theme.colors.secondary} 100%
+        ) !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    `
+    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+    if (loadType.includes('lcl')) {
+      gloss = lclChargeGloss
+    } else {
+      gloss = fclChargeGloss
+    }
 
-// export default AdminHubFees
+    if (!charges[direction]) {
+      return ''
+    }
+    Object.keys(charges[direction]).forEach((key) => {
+      const cells = []
+      const viewCells = []
+      Object.keys(charges[direction][key]).forEach((chargeKey) => {
+        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <div className={`flex-95 layout-row ${styles.editor_input}`}>
+              <input
+                type="number"
+                value={charges[direction][key][chargeKey]}
+                onChange={this.handleChange}
+                name={`${key}-${chargeKey}`}
+              />
+            </div>
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">
+              {charges[direction][key][chargeKey]} {charges[direction][key].currency}
+            </p>
+          </div>)
+        } else if (chargeKey === 'rate_basis') {
+          cells.push(<div
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <NamedSelect
+              name={`${key}-${chargeKey}`}
+              classes={`${styles.select}`}
+              value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
+              options={rateOpts}
+              className="flex-100"
+              onChange={this.handleSelect}
+            />
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
+          </div>)
+        } else if (chargeKey === 'currency') {
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <div className="flex-95 layout-row">
+              <NamedSelect
+                name={`${key}-currency`}
+                classes={`${styles.select}`}
+                value={selectOptions ? selectOptions[direction][key].currency : ''}
+                options={currencyOpts}
+                className="flex-100"
+                onChange={this.handleSelect}
+              />
+            </div>
+          </div>)
+        }
+      })
+      panel.push(<div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${
+            styles.price_subheader
+          }`}
+        >
+          <p className="flex-none">
+            {key} - {gloss[key]}
+          </p>
+          <div
+            className="flex-none layout-row layout-align-center-center"
+            onClick={() => this.deleteFee(key)}
+          >
+            <i className="fa fa-trash clip" style={textStyle} />
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+      </div>)
+      viewPanel.push(<div
+        className={`flex-100 layout-row layout-align-none-center layout-wrap ${
+          styles.expand_panel
+        }`}
+      >
+        <div
+          className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}
+        >
+          <p className="flex-none">
+            {key} - {gloss[key]}
+          </p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">{viewCells}</div>
+      </div>)
+    })
+
+    const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
+    const feesToAdd = Object.keys(feeSchema.data).map((key) => {
+      if (!charges[key]) {
+        return (
+          <div
+            key={key}
+            className="flex-33 layout-row layout-align-start-center"
+            onClick={() => this.addFeeToPricing(key)}
+          >
+            <i className="fa fa-plus clip flex-none" style={textStyle} />
+            <div className="flex-5" />
+            <p className="flex-none">
+              {key} - {gloss[key]}{' '}
+            </p>
+          </div>
+        )
+      }
+      return ''
+    })
+    const panelViewClass = showPanel ? styles.hub_fee_panel_open : styles.hub_fee_panel_closed
+    const impStyle = directionBool ? styles.toggle_off : styles.toggle_on
+    const expStyle = directionBool ? styles.toggle_on : styles.toggle_off
+    return (
+      <div
+        className={` ${styles.fee_box} flex-none layout-row layout-wrap layout-align-center-center`}
+      >
+        <div className=" flex-none layout-row layout-wrap layout-align-center-start">
+          <div className="flex-95 layout-row layout-wrap layout-align-center-start">
+            <div className="flex-100 layout-row">
+              <div className="flex-50 layout-row layout-align-start-center">
+                <TextHeading theme={theme} text={direction.label} size={4} />
+              </div>
+              <div className="flex-40 layout-row layout-align-end-center">
+                <p className={`${impStyle} flex-none five_m`}>Import</p>
+                <p />
+                <Toggle checked={directionBool} onChange={e => this.handleDirectionChange(e)} />
+                <p className={`${expStyle} flex-none five_m`}>Export</p>
+              </div>
+              <div
+                className="flex-10 layout-row layout-align-end-center"
+                onClick={() => this.toggleEdit()}
+              >
+                <i className="fa fa-pencil clip flex-none" style={textStyle} />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap" style={{ position: 'relative' }}>
+              {edit ? panel : viewPanel}
+            </div>
+            <div
+              className="
+              flex-50
+              layout-align-end-center
+              layout-row"
+              style={{ margin: '15px' }}
+            >
+              <RoundButton
+                theme={theme}
+                size="small"
+                text="Add Fee"
+                active
+                handleNext={this.showAddFeePanel}
+                P
+                iconClass="fa-plus"
+              />
+            </div>
+            <div
+              className="flex-50
+layout-align-end-center layout-row"
+              style={{ margin: '15px' }}
+            >
+              <RoundButton
+                theme={theme}
+                size="small"
+                text="Save"
+                active
+                handleNext={this.saveEdit}
+                iconClass="fa-floppy-o"
+              />
+            </div>
+          </div>
+          <div
+            className={`flex-100 layout-row layout-align-center-center layout-wrap ${
+              styles.add_hub_fee_panel
+            } ${panelViewClass}`}
+          >
+            <div
+              className={`flex-none layout-row layout-align-center-center ${styles.panel_close}`}
+              onClick={this.showAddFeePanel}
+            >
+              <i className="fa fa-times clip" style={textStyle} />
+            </div>
+            <div className="flex-90 layout-row layout-wrap layout-align-start-start">
+              {feesToAdd}
+            </div>
+          </div>
+        </div>
+        {styleTagJSX}
+      </div>
+    )
+  }
+}
+AdminHubFees.propTypes = {
+  theme: PropTypes.theme,
+  closeForm: PropTypes.func,
+  adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
+  charges: PropTypes.objectOf(PropTypes.any)
+}
+AdminHubFees.defaultProps = {
+  theme: {},
+  closeForm: null,
+  charges: {}
+}
+
+export default AdminHubFees
