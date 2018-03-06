@@ -483,7 +483,7 @@ function getShipment (id, redirect) {
       (data) => {
         dispatch(alertActions.success('Fetching Shipment successful'))
         if (redirect) {
-          dispatch(push(`/admin/shipments/${id}`))
+          dispatch(push(`/admin/shipments/view/${id}`))
         }
         dispatch(success(data))
       },
@@ -988,6 +988,31 @@ function editShipmentPrice (id, priceObj) {
     )
   }
 }
+function editLocalCharges (nexusId, data) {
+  function request (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
+  }
+  function success (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_SUCCESS, payload: chargeData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editShipmentPrice(nexusId, data).then(
+      (resp) => {
+        dispatch(alertActions.success('Edit Local Charges successful'))
+        dispatch(success(resp))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function editShipmentTime (id, timeObj) {
   function request (truckingData) {
     return { type: adminConstants.EDIT_SHIPMENT_TIME_REQUEST, payload: truckingData }
@@ -1120,7 +1145,8 @@ export const adminActions = {
   saveNewTrucking,
   assignManager,
   editShipmentPrice,
-  editShipmentTime
+  editShipmentTime,
+  editLocalCharges
 }
 
 export default adminActions

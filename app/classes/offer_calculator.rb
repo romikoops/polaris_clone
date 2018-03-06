@@ -304,9 +304,7 @@ class OfferCalculator
         raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
       end
       converted_totals = sum_and_convert(raw_totals, @user.currency)
-      @shipment.schedules_charges[key]["total"] = converted_totals
-
-      
+      @shipment.schedules_charges[key]["total"] = {value: converted_totals, currency: @user.currency}
       if @total_price[:total] == 0 
         
         @total_price[:total] = converted_totals

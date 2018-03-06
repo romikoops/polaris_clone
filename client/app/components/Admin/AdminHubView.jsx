@@ -9,12 +9,14 @@ import { adminClicked as clickTool, cargoClassOptions } from '../../constants'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import AdminHubFees from './Hub/Fees'
+import { AdminCustomsSetter } from './Customs/Setter'
 
 export class AdminHubView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentLoadType: {value: 'lcl'}
+      currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
+      currentCustomsLoadType: { value: 'lcl', label: 'Lcl' }
     }
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
@@ -27,8 +29,11 @@ export class AdminHubView extends Component {
       adminActions.getHub(parseInt(match.params.id, 10), false)
     }
     this.props.setView()
-    if (!this.state.currentFee) {
-      this.filterChargesByLoadType({value: 'lcl'})
+    if (!this.state.currentFee && this.props.hubData && this.props.hubData.charges) {
+      this.filterChargesByLoadType({ value: 'lcl' }, 'fees')
+    }
+    if (!this.state.currentFee && this.props.hubData && this.props.hubData.customs) {
+      this.filterChargesByLoadType({ value: 'lcl' }, 'customs')
     }
   }
   getItineraryFromLayover (id) {
@@ -40,22 +45,32 @@ export class AdminHubView extends Component {
     const { hub } = hubData
     adminActions.activateHub(hub.id)
   }
-  filterChargesByLoadType (e) {
-    const filteredCharges = this.props.hubData.charges.filter(x => x.load_type === e.value)[0]
-    this.setState({
-      currentFee: filteredCharges,
-      currentLoadType: e
-    })
+  filterChargesByLoadType (e, target) {
+    if (target === 'customs') {
+      const filteredCustoms = this.props.hubData.customs.filter(x => x.load_type === e.value)[0]
+      this.setState({
+        currentCustoms: filteredCustoms,
+        currentCustomsLoadType: e
+      })
+    } else {
+      const filteredCharges = this.props.hubData.charges.filter(x => x.load_type === e.value)[0]
+      this.setState({
+        currentFee: filteredCharges,
+        currentFeeLoadType: e
+      })
+    }
   }
   render () {
     const {
       theme, hubData, hubs, hubHash, adminActions
     } = this.props
-    const { currentLoadType, currentFee } = this.state
+    const {
+      currentCustomsLoadType, currentFeeLoadType, currentFee, currentCustoms
+    } = this.state
     if (!hubData) {
       return ''
     }
-    
+
     const {
       hub, relatedHubs, routes, schedules
     } = hubData
@@ -107,7 +122,6 @@ export class AdminHubView extends Component {
         <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
       )
     })
-    console.log(routes)
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -135,12 +149,37 @@ export class AdminHubView extends Component {
             <NamedSelect
               className={styles.select}
               options={cargoClassOptions}
-              onChange={e => this.filterChargesByLoadType(e)}
-              value={currentLoadType}
-              name="currentLoadType"
+              onChange={e => this.filterChargesByLoadType(e, 'fees')}
+              value={currentFeeLoadType}
+              name="currentFeeLoadType"
             />
           </div>
-          <AdminHubFees theme={theme} charges={currentFee} adminDispatch={adminActions} loadType={currentLoadType.value}/>
+          <AdminHubFees
+            theme={theme}
+            charges={currentFee}
+            adminDispatch={adminActions}
+            loadType={currentFeeLoadType.value}
+          />
+        </div>
+        <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+          <div className="flex-50 layout-row layout-align-start-center">
+            <TextHeading theme={theme} text="Customs" size={3} />
+          </div>
+          <div className="flex-50 layout-row layout-align-end-center">
+            <NamedSelect
+              className={styles.select}
+              options={cargoClassOptions}
+              onChange={e => this.filterChargesByLoadType(e, 'customs')}
+              value={currentCustomsLoadType}
+              name="currentCustomsLoadType"
+            />
+          </div>
+          <AdminCustomsSetter
+            theme={theme}
+            charges={currentCustoms}
+            adminDispatch={adminActions}
+            loadType={currentCustomsLoadType.value}
+          />
         </div>
         <AdminSearchableRoutes
           itineraries={routes}
@@ -173,7 +212,8 @@ AdminHubView.propTypes = {
     relatedHubs: PropTypes.arrayOf(PropTypes.hub),
     routes: PropTypes.array,
     schedules: PropTypes.array,
-    charges: PropTypes.array
+    charges: PropTypes.array,
+    customs: PropTypes.array
   }),
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,

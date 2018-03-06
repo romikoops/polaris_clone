@@ -112,7 +112,7 @@ class AdminPricings extends Component {
               <AdminPricingsRouteIndex
                 theme={theme}
                 hubs={hubs}
-                routes={itineraries || pricingData.itineraries}
+                itineraries={itineraries || pricingData.itineraries}
                 adminTools={adminDispatch}
                 {...props}
               />
@@ -165,9 +165,9 @@ AdminPricings.propTypes = {
     getRoute: PropTypes.func
   }).isRequired,
   pricingData: PropTypes.shape({
-    routes: PropTypes.array
+    itineraries: PropTypes.array
   }),
-  routes: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
+  itineraries: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
   hubHash: PropTypes.objectOf(PropTypes.hub),
   clients: PropTypes.arrayOf(PropTypes.client),
   clientPricings: PropTypes.shape({
@@ -178,8 +178,7 @@ AdminPricings.propTypes = {
     route: PropTypes.object,
     routePricingData: PropTypes.object
   }).isRequired,
-  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
+  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminPricings.defaultProps = {
@@ -189,7 +188,7 @@ AdminPricings.defaultProps = {
   pricingData: null,
   hubHash: {},
   clients: [],
-  routes: []
+  itineraries: []
 }
 
 function mapStateToProps (state) {
@@ -199,7 +198,7 @@ function mapStateToProps (state) {
     clients,
     hubs,
     pricingData,
-    routes,
+    itineraries,
     transportCategories,
     clientPricings,
     itineraryPricings,
@@ -214,7 +213,7 @@ function mapStateToProps (state) {
     pricingData,
     transportCategories,
     clientPricings,
-    routes,
+    itineraries,
     clients,
     itineraryPricings,
     loading

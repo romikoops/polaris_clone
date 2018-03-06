@@ -279,7 +279,7 @@ export class ChooseRoute extends Component {
           </div>
         </div>
 
-        <div
+        { !user.guest ? <div
           className={`${
             styles.back_to_dash_sec
           } flex-100 layout-row layout-wrap layout-align-center`}
@@ -293,7 +293,7 @@ export class ChooseRoute extends Component {
               handleNext={() => shipmentDispatch.goTo('/account')}
             />
           </div>
-        </div>
+        </div> : '' }
       </div>
     )
   }

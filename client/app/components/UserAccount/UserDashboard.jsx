@@ -220,9 +220,9 @@ export class UserDashboard extends Component {
                 {seeAll !== false ? (
                   <div className="flex-100 layout-row layout-align-end-center">
                     <div
-                      className="flex-none layout-row layout-align-center-center"
+                      className="flex-none layout-row layout-align-center-center pointy"
                       value="1"
-                      onClick={this.seeAll}
+                      onClick={() => userDispatch.goTo('/account/shipments/requested')}
                     >
                       <p className="flex-none">See all</p>
                     </div>
@@ -237,9 +237,9 @@ export class UserDashboard extends Component {
                 {seeAll !== false ? (
                   <div className="flex-100 layout-row layout-align-end-center">
                     <div
-                      className="flex-none layout-row layout-align-center-center"
+                      className="flex-none layout-row layout-align-center-center pointy"
                       value="2"
-                      onClick={this.seeAll}
+                      onClick={() => userDispatch.goTo('/account/shipments/open')}
                     >
                       <p className="flex-none">See all</p>
                     </div>

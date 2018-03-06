@@ -142,7 +142,7 @@ module ShippingTools
     end
     shipment.notes = shipment_data["notes"]
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
-
+    cargo_item_types = {}
     if shipment.cargo_items
       @cargo_items = shipment.cargo_items.map do |cargo_item|
         hs_code_hashes = hsCodes[cargo_item.id.to_s]
@@ -157,7 +157,7 @@ module ShippingTools
           cargo_item.customs_text = hs_text
           cargo_item.save!
         end
-
+        cargo_item_types[cargo_item.cargo_item_type_id] = CargoItemType.find(cargo_item.cargo_item_type_id)
         cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
         cargo_item
       end
@@ -209,7 +209,8 @@ module ShippingTools
       shipper:    shipper,
       cargoItems: @cargo_items,
       containers: @containers, 
-      documents:  documents
+      documents:  documents,
+      cargoItemTypes: cargo_item_types
     }
   end
 

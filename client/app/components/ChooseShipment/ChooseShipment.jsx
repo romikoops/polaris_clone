@@ -39,7 +39,10 @@ export class ChooseShipment extends Component {
     const { theme, scope, messages } = this.props
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
-    const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
     const directionButtons = ['import', 'export'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
       return (
@@ -52,11 +55,11 @@ export class ChooseShipment extends Component {
         >
           <div className="flex-80 layout-row layout-align-space-between-center">
             <p className="flex-none">{capitalize(dir)}</p>
-            {
-              direction === dir
-                ? <i className="flex-none fa fa-check clip" style={gradientStyle} />
-                : ''
-            }
+            {direction === dir ? (
+              <i className="flex-none fa fa-check clip" style={gradientStyle} />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       )
@@ -75,17 +78,17 @@ export class ChooseShipment extends Component {
       <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
     )
 
-    const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
-      .filter(mot => scope.modes_of_transport[mot])
-      .map(mot => switchIcon(mot))
+    // const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
+    //   .filter(mot => scope.modes_of_transport[mot])
+    //   .map(mot => switchIcon(mot))
 
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
         {flash}
-        <div className={
-          `flex-none ${defs.content_width} ` +
-          'layout-row layout-align-start-center layout-wrap'
-        }
+        <div
+          className={
+            `flex-none ${defs.content_width} ` + 'layout-row layout-align-start-center layout-wrap'
+          }
         >
           <div className={`${styles.header} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none">
@@ -93,20 +96,32 @@ export class ChooseShipment extends Component {
             </div>
             <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
           </div>
-          <div className="flex-100 layout-row layout-align-space-around-center">
-            { directionButtons }
+          <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading theme={theme} size={4} text="Are you importing or exporting?" />
+            </div>
+            {directionButtons}
           </div>
-          <div className={
-            `flex-100 layout-row ${styles.section} ` +
-            `${direction ? '' : styles.inactive}`
-          }
+          <div
+            className={
+              `flex-100 layout-row layout-wrap ${styles.section} ` +
+              `${direction ? '' : styles.inactive}`
+            }
           >
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading
+                theme={theme}
+                size={4}
+                text="Are you shipping cargo items or containers?"
+              />
+            </div>
             <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
           </div>
-          <div className={
-            `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
-            `${styles.section} ${direction && loadType ? '' : styles.inactive}`
-          }
+          <div
+            className={
+              `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
+              `${styles.section} ${direction && loadType ? '' : styles.inactive}`
+            }
           >
             <div
               className={`${styles.mot_sec} flex-80 layout-row layout-wrap layout-align-center`}
@@ -117,18 +132,24 @@ export class ChooseShipment extends Component {
               <div className="flex-100">
                 <hr />
               </div>
-              <div className="flex-100 layout-row layout-align-center">
+              {/* <div className="flex-100 layout-row layout-align-center">
                 <h3>Search results will include the following modes of transport</h3>
               </div>
-              <div className={
-                `${styles.mot_icons} flex-20 layout-row ` +
-                'layout-align-space-around-center'
-              }
+              <div
+                className={
+                  `${styles.mot_icons} flex-20 layout-row ` + 'layout-align-space-around-center'
+                }
               >
-                { modesOfTransportJSX }
-              </div>
-              <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-center`}>
-                { loadType && direction ? activeBtn : disabledBtn }
+                {modesOfTransportJSX}
+              </div> */}
+              <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
+                <div className="flex-none layout-column layout-align-center-center">
+                  {loadType && direction ? activeBtn : disabledBtn}
+                  <p className={`${styles.mot_note} flex-none`}>
+                    Availabilities will be shown for all applicable<br /> modes of transport for
+                    your shipment
+                  </p>
+                </div>
               </div>
               <div className="flex-100">
                 <hr />

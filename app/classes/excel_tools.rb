@@ -828,14 +828,32 @@ module ExcelTools
         }
       }
       customsObj = {
-          currency: row[:exp_currency],
+        export:{ 
+           EXP: {currency: row[:exp_currency],
           fee: row[:exp_declaration],
           limit: row[:exp_limit],
-          extra: row[:exp_extra]
+          extra: row[:exp_extra],
+          rate_basis: 'PER_BILL'
         }
+        },
+        import:{ 
+          IMP: {currency: row[:exp_currency],
+          fee: row[:exp_declaration],
+          limit: row[:exp_limit],
+          extra: row[:exp_extra],
+          rate_basis: 'PER_BILL'
+        }
+        },
+        load_type: 'lcl',
+        tenant_id: user.tenant_id
+      }
       price_obj = {"lcl" =>lcl_obj.to_h}
+      customsObj[:nexus_id] = origin.id
       origin_charge_key = "#{origin.id}_#{user.tenant_id}_lcl"
       destination_charge_key = "#{destination.id}_#{user.tenant_id}_lcl"
+      update_item('customsFees', {_id: "#{origin_charge_key}"}, customsObj)
+      customsObj[:nexus_id] = destination.id
+      update_item('customsFees', {_id: "#{destination_charge_key}"}, customsObj)
       update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, nexus_id: origin.id, load_type: 'lcl'})
       update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, nexus_id: destination.id, load_type: 'lcl'})
       # if dedicated

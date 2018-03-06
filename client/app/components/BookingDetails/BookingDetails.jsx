@@ -71,6 +71,7 @@ export class BookingDetails extends Component {
     this.setCustomsFee = this.setCustomsFee.bind(this)
     this.setContact = this.setContact.bind(this)
     this.toggleCustomsCredit = this.toggleCustomsCredit.bind(this)
+    this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
   }
   componentDidMount () {
     const { prevRequest, setStage, hideRegistration } = this.props
@@ -150,15 +151,18 @@ export class BookingDetails extends Component {
     if (insurance.bool) {
       this.setState({ insurance: { bool: false, val: 0 } })
     } else {
-      this.calcInsurance()
+      this.calcInsurance(false, true)
     }
   }
-  calcInsurance (val) {
-    const gVal = val || parseInt(this.state.totalGoodsValue, 10)
-
+  calcInsurance (val, bool) {
+    const gVal = val || parseInt(this.state.totalGoodsValue.value, 10)
     const { shipmentData } = this.props
     const iVal = (gVal * 1.1 + parseFloat(shipmentData.shipment.total_price.value, 10)) * 0.0017
-    this.setState({ insurance: { bool: true, val: iVal } })
+    if (bool) {
+      this.setState({ insurance: { bool, val: iVal } })
+    } else {
+      this.setState({ insurance: { ...this.state.insurance, val: iVal } })
+    }
   }
   removeNotifyee (i) {
     const { notifyees } = this.state
@@ -169,7 +173,7 @@ export class BookingDetails extends Component {
     this.setState({
       totalGoodsValue: {
         ...this.state.totalGoodsValue,
-        currency: selection.value
+        currency: selection
       }
     })
   }
@@ -183,7 +187,7 @@ export class BookingDetails extends Component {
           value: gVal
         }
       })
-      this.calcInsurance(gVal)
+      this.calcInsurance(gVal, false)
     } else {
       this.setState({ [name]: value })
     }
@@ -209,26 +213,12 @@ export class BookingDetails extends Component {
       incoterm,
       customsCredit
     } = this.state
-    const { documents } = this.props.shipmentData
-    // eslint-disable-next-line camelcase
-    const { packing_sheet, commercial_invoice } = documents
     if ([shipper, consignee].some(isEmpty)) {
       BookingDetails.scrollTo('contact_setter')
       this.setState({ finishBookingAttempted: true })
       return
     }
-    // eslint-disable-next-line camelcase
-    if (!packing_sheet || (packing_sheet && isEmpty(packing_sheet))) {
-      BookingDetails.scrollTo('contact_setter')
-      this.setState({ finishBookingAttempted: true })
-      return
-    }
-    // eslint-disable-next-line camelcase
-    if (!commercial_invoice || (commercial_invoice && isEmpty(commercial_invoice))) {
-      BookingDetails.scrollTo('contact_setter')
-      this.setState({ finishBookingAttempted: true })
-      return
-    }
+
     const data = {
       shipment: {
         id: this.props.shipmentData.shipment.id,

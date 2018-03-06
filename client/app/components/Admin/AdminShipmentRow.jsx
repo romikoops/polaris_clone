@@ -82,7 +82,6 @@ export class AdminShipmentRow extends Component {
     }
     const hubKeys = shipment.schedule_set[0].hub_route_key.split('-')
     if (!hubs[hubKeys[0]] || !hubs[hubKeys[1]]) {
-      // ;
       return ''
     }
     const schedule = {}

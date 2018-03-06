@@ -1,11 +1,11 @@
 export const LOAD_TYPES = [
   {
-    name: 'Cargo Item Shipment',
+    name: 'Cargo Item',
     img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
     code: 'cargoItem'
   },
   {
-    name: 'Full Container Shipment',
+    name: 'Full Container',
     img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
     code: 'container'
   }
@@ -199,6 +199,9 @@ export const chargeGlossary = {
   cbm: 'CBM',
   ton: 'Ton',
   kg: 'Kg',
+  fee: 'Fee',
+  limit: 'Limit',
+  extra: 'Extra',
   min: 'Minimum',
   PER_ITEM: 'Per Item',
   PER_CONTAINER: 'Per Container',

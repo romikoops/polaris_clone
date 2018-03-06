@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       resources :service_charges, only: [:index, :update]
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
-
+      post "service_charges/:id/edit", to: "service_charges#edit"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple

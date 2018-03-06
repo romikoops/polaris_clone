@@ -13,9 +13,7 @@ import {
   lclChargeGlossary,
   chargeGlossary,
   rateBasises,
-  lclPricingSchema,
-  fclPricingSchema,
-  // cargoGlossary,
+  customsFeeSchema,
   rateBasisSchema
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
@@ -30,7 +28,7 @@ const currencyOpts = currencyOptions
 // const fclSchema = fclPricingSchema
 // const cargoGloss = cargoGlossary
 
-export class AdminHubFees extends Component {
+export class AdminCustomsSetter extends Component {
   static selectFromOptions (options, value) {
     if (!value) {
       return options[0]
@@ -102,7 +100,7 @@ export class AdminHubFees extends Component {
             opts = rateOpts.slice()
             // this.getOptions(opts, key, chargeKey);
           }
-          newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
+          newObj[dir][key][chargeKey] = AdminCustomsSetter.selectFromOptions(
             opts,
             charges[dir][key][chargeKey]
           )
@@ -208,9 +206,9 @@ export class AdminHubFees extends Component {
   addFeeToPricing (key) {
     const { charges, direction, selectOptions } = this.state
     if (charges.load_type === 'lcl') {
-      charges[direction][key] = lclPricingSchema.data[key]
+      charges[direction][key] = customsFeeSchema[key]
     } else {
-      charges[direction][key] = fclPricingSchema.data[key]
+      charges[direction][key] = customsFeeSchema[key]
     }
 
     const newObj = Object.assign({}, selectOptions)
@@ -232,7 +230,7 @@ export class AdminHubFees extends Component {
           opts = rateOpts.slice()
           // this.getOptions(opts, key, chargeKey);
         }
-        newObj[direction][oKey][chargeKey] = AdminHubFees.selectFromOptions(
+        newObj[direction][oKey][chargeKey] = AdminCustomsSetter.selectFromOptions(
           opts,
           charges[direction][oKey][chargeKey]
         )
@@ -384,7 +382,11 @@ export class AdminHubFees extends Component {
       })
       panel.push(<div
         key={key}
-        className="flex-100 layout-row layout-align-none-center layout-wrap"
+        className="
+      flex-100
+      layout-row
+      layout-align-none-center
+      layout-wrap"
       >
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${
@@ -418,9 +420,7 @@ export class AdminHubFees extends Component {
         <div className="flex-100 layout-row layout-align-start-center">{viewCells}</div>
       </div>)
     })
-
-    const feeSchema = loadType === 'lcl' ? lclPricingSchema : fclPricingSchema
-    const feesToAdd = Object.keys(feeSchema.data).map((key) => {
+    const feesToAdd = Object.keys(customsFeeSchema).map((key) => {
       if (!charges[key]) {
         return (
           <div
@@ -529,16 +529,16 @@ layout-align-end-center layout-row"
     )
   }
 }
-AdminHubFees.propTypes = {
+AdminCustomsSetter.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   charges: PropTypes.objectOf(PropTypes.any),
   loadType: PropTypes.string
 }
-AdminHubFees.defaultProps = {
+AdminCustomsSetter.defaultProps = {
   theme: {},
   charges: {},
   loadType: 'lcl'
 }
 
-export default AdminHubFees
+export default AdminCustomsSetter
