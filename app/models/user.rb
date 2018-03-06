@@ -1,3 +1,5 @@
+require "#{Rails.root}/lib/devise_token_auth/app/models/devise_token_auth/concerns/user"
+
 class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
