@@ -67,6 +67,8 @@ export class ContactSetter extends Component {
     newState.contactData.type = nextType
     if (nextType === 'notifyee') {
       newState.contactData.index = this.props.notifyees.length
+
+      if (type === 'notifyee') this.setState({ showBody: false })
     }
 
     this.setState(newState)
