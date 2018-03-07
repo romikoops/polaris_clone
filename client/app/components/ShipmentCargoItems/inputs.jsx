@@ -104,7 +104,7 @@ export default function getInputs (
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
   inputs.volume = (
-    <div className="flex-100">
+    <div className="flex-30">
       <p className={`${styles.input_label}`}> Volume </p>
       <p className={`${styles.input_label}`}>
         { volume }
@@ -135,7 +135,7 @@ export default function getInputs (
   }
   inputs.chargeableWeight = (
     <div className={
-      `${styles.chargeable_weight} layout-row flex-100 ` +
+      `${styles.chargeable_weight} layout-row flex-70 ` +
       'layout-wrap layout-align-start-center'
     }
     >

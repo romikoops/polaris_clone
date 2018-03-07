@@ -50,36 +50,48 @@ export default class QuantityInput extends PureComponent {
     const { pressedUp, pressedDown } = this.state
 
     return (
-      <div
-        className={
-          `${styles.quantity} layout-row flex-100 ` +
-          `${pressedUp && styles.pressed_up} ${pressedDown && styles.pressed_down} ` +
-          'layout-wrap layout-align-start-center'
-        }
-      >
-        <div className="flex-100 layout-row">
-          <ValidatedInput
-            onKeyDown={e => this.handleKeyDown(e)}
-            wrapperClassName="flex-100"
-            name={`${i}-quantity`}
-            value={cargoItem ? cargoItem.quantity : ''}
-            type="number"
-            min="0"
-            step="any"
-            onChange={e => this.handleChange(e)}
-            firstRenderInputs={firstRenderInputs}
-            setFirstRenderInputs={this.setFirstRenderInputs}
-            nextStageAttempt={nextStageAttempt}
-            validations={{
-              nonNegative: (values, value) => value > 0
-            }}
-            validationErrors={{
-              nonNegative: 'Must be greater than 0'
-            }}
-          />
+      <div className="flex-100 layout-row">
+        <div className="flex-80 layout-row layout-align-center">
+          <div
+            className={
+              `${styles.quantity} layout-row flex-100 ` +
+              `${pressedUp && styles.pressed_up} ${pressedDown && styles.pressed_down} ` +
+              'layout-wrap layout-align-start-center'
+            }
+          >
+            <div className="flex-100 layout-row">
+              <ValidatedInput
+                onKeyDown={e => this.handleKeyDown(e)}
+                wrapperClassName="flex-100"
+                name={`${i}-quantity`}
+                value={cargoItem ? cargoItem.quantity : ''}
+                type="number"
+                min="0"
+                step="any"
+                onChange={e => this.handleChange(e)}
+                firstRenderInputs={firstRenderInputs}
+                setFirstRenderInputs={this.setFirstRenderInputs}
+                nextStageAttempt={nextStageAttempt}
+                validations={{
+                  nonNegative: (values, value) => value > 0
+                }}
+                validationErrors={{
+                  nonNegative: 'Must be greater than 0'
+                }}
+              />
+            </div>
+            <hr className="flex-100" />
+            <p
+              className="flex-100 layout-row layout-align-center-start"
+              style={{ margin: 0 }}
+            >
+              Quantity
+            </p>
+          </div>
         </div>
-        <hr className="flex-100" />
-        <p className="flex-100 layout-row layout-align-center-start"> Quantity </p>
+        <div className="flex-20 layout-row layout-align-center-center">
+          <p className="flex-none" style={{ margin: 0 }}>X</p>
+        </div>
       </div>
     )
   }

@@ -127,10 +127,10 @@ export class ShipmentCargoItems extends Component {
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
         >
-          <div className="flex-10 layout-row layout-align-center">
+          <div className="flex-15 layout-row layout-align-center">
             {inputs.quantity}
           </div>
-          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-70`}>
+          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               {inputs.colliType}
               {inputs.nonStackable}
@@ -145,13 +145,12 @@ export class ShipmentCargoItems extends Component {
           </div>
           <div className={
             `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
-           'layout-row layout-align-center flex-20'
+           'layout-row layout-align-center flex-85 offset-15'
           }
           >
             <div className="layout-row flex-100 layout-wrap layout-align-start">
               {inputs.volume}
               {inputs.chargeableWeight}
-              <div className="flex" />
             </div>
           </div>
 
