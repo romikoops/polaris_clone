@@ -4,13 +4,16 @@ class PricingSeeder
 
 	def self.exec(filter = {})
 		Tenant.where(filter).each do |tenant|
-		  shipper = tenant.users.second
-		  tenant.stops.destroy_all
+			shipper = tenant.users.second
+			tenant.itineraries.destroy_all
+			tenant.stops.destroy_all
+			tenant.trips.destroy_all
+			tenant.layovers.destroy_all
 		  tenant.hubs.destroy_all
 		  # Location.where(location_type: 'nexus')
-		  tenant.layovers.destroy_all
-		  tenant.itineraries.destroy_all
-		  tenant.trips.destroy_all
+		  
+		  
+		  
 		  # # Overwrite hubs from excel sheet
 		  puts "# Overwrite hubs from excel sheet"
 		  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
@@ -27,7 +30,7 @@ class PricingSeeder
 		  # Overwrite public pricings from excel sheet
 		  puts "# Overwrite public pricings from excel sheet"
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-		  req = {"xlsx" => public_pricings}
+		  req = {"xlsx" => public_pricings} 
 		  overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
 
 		  puts "# Overwrite MAERSK pricings from excel sheet"
