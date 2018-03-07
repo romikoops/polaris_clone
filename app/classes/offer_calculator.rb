@@ -176,10 +176,10 @@ class OfferCalculator
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-        
+        set_local_charges!(charges, trip, sched_key)
         set_trucking_charges!(charges, trip, sched_key)
         set_cargo_charges!(charges, trip, sched_key)
-        set_local_charges!(charges, trip, sched_key)
+       
       end
     end
     
