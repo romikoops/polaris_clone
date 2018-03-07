@@ -184,7 +184,7 @@ class OfferCalculator
     end
     
     charges.reject!{ |_, charge| charge[:cargo].empty? }
-    raise ApplicationError::NoRoute if charges.empty?
+    raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges
   end
 
