@@ -5,12 +5,12 @@ class PricingSeeder
 	def self.exec(filter = {})
 		Tenant.where(filter).each do |tenant|
 		  shipper = tenant.users.second
-		  Stop.destroy_all
-		  Hub.destroy_all
-		  Location.where(location_type: 'nexus')
-		  Layover.destroy_all
+		  tenant.stops.destroy_all
+		  tenant.hubs.destroy_all
+		  # Location.where(location_type: 'nexus')
+		  tenant.layovers.destroy_all
 		  tenant.itineraries.destroy_all
-		  Trip.destroy_all
+		  tenant.trips.destroy_all
 		  # # Overwrite hubs from excel sheet
 		  puts "# Overwrite hubs from excel sheet"
 		  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
