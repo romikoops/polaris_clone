@@ -63,16 +63,15 @@ export default function getInputs (
     </div>
   )
   inputs.grossWeight = (
-    <div className="layout-row flex-25 layout-wrap layout-align-start-center" >
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center" >
-        <p className={`${styles.input_label} flex-none`}> Gross Weight </p>
-        <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
-      </div>
-      <div className={`flex-95 layout-row ${styles.input_box}`}>
+    <div className="layout-row flex-30 layout-wrap layout-align-start-center" >
+      <div className={`flex-85 layout-row ${styles.input_box}`}>
+        <div className="flex-40 layout-row layout-align-center-center">
+          Weight
+        </div>
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-80"
+              wrapperClassName="flex-60"
               name={`${i}-payload_in_kg`}
               value={cargoItem.payload_in_kg}
               type="number"
@@ -95,6 +94,7 @@ export default function getInputs (
           kg
         </div>
       </div>
+      <Tooltip theme={theme} icon="fa-info-circle" text="payload_in_kg" />
     </div>
   )
 
@@ -160,12 +160,14 @@ export default function getInputs (
   )
   inputs.height = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> Height </p>
       <div className={`flex-95 layout-row ${styles.input_box}`}>
+        <div className="flex-20 layout-row layout-align-center-center">
+          H
+        </div>
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-80"
+              wrapperClassName="flex-55"
               name={`${i}-dimension_z`}
               value={cargoItem.dimension_z}
               type="number"
@@ -188,7 +190,7 @@ export default function getInputs (
             />
           ) : placeholderInput
         }
-        <div className="flex-20 layout-row layout-align-center-center">
+        <div className="flex-25 layout-row layout-align-center-center">
           cm
         </div>
       </div>
@@ -196,7 +198,6 @@ export default function getInputs (
   )
   inputs.length = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> Length </p>
       <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
@@ -206,10 +207,14 @@ export default function getInputs (
           ) : ''
         }
       >
+        <div className="flex-20 layout-row layout-align-center-center">
+          L
+        </div>
+
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-80"
+              wrapperClassName="flex-55"
               name={`${i}-dimension_x`}
               value={cargoItem.dimension_x}
               type="number"
@@ -233,7 +238,7 @@ export default function getInputs (
             />
           ) : placeholderInput
         }
-        <div className="flex-20 layout-row layout-align-center-center">
+        <div className="flex-25 layout-row layout-align-center-center">
           cm
         </div>
       </div>
@@ -241,7 +246,6 @@ export default function getInputs (
   )
   inputs.width = (
     <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> Width </p>
       <ReactTooltip effect="solid" />
       <div
         className={`flex-95 layout-row ${styles.input_box}`}
@@ -251,10 +255,13 @@ export default function getInputs (
           ) : ''
         }
       >
+        <div className="flex-20 layout-row layout-align-center-center">
+          W
+        </div>
         {
           cargoItem ? (
             <ValidatedInput
-              wrapperClassName="flex-80"
+              wrapperClassName="flex-55"
               name={`${i}-dimension_y`}
               value={cargoItem.dimension_y}
               type="number"
@@ -278,7 +285,7 @@ export default function getInputs (
             />
           ) : placeholderInput
         }
-        <div className="flex-20 layout-row layout-align-center-center">
+        <div className="flex-25 layout-row layout-align-center-center">
           cm
         </div>
       </div>

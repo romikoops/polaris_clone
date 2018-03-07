@@ -138,10 +138,14 @@ export class ShipmentCargoItems extends Component {
               {inputs.nonStackable}
               {inputs.dangerousGoods}
             </div>
-            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div
+              className="layout-row flex-100 layout-wrap layout-align-start-center"
+              style={{ marginTop: '20px' }}
+            >
               {inputs.length}
               {inputs.height}
               {inputs.width}
+              <div className="flex-10" />
               {inputs.grossWeight}
             </div>
             <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded()}>
