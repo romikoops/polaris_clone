@@ -63,7 +63,7 @@
   }
   p.input_label {
     letter-spacing: 1px;
-    margin: 30px 0 5px 0;
+    margin: 5px 0;
   }
   .separator {
     hr {
@@ -72,18 +72,31 @@
       width: 64%;
     }
   }
+  .cargo_item_box {
+    padding: 20px;
+    border: 1px solid rgba(black, 0.1);
+    background: rgba(black, 0.02);    
+  }
+  .cargo_item_inputs {
+    border-radius: 1px;
+  }
+  .cargo_item_info {
+    border-radius: 1px;
+  }
   h3.unit_header {
     margin: 40px 0px 0px;
     font-size: 17px;
     letter-spacing: 1px;
   }
-  i.delete_icon {
-    position: absolute;
-    left: -35px;
-    top: 34px;
-    font-size: 20px;
+  .delete_icon {
+    i {
+      font-size: 20px;
+      padding: 5px;      
+    }
     cursor: pointer;
-    padding: 5px;
+    position: absolute;
+    right: 3px;
+    top: -30px;
     opacity: 0.7;
     transition: all 0.3s ease;
     &:hover {
@@ -91,7 +104,6 @@
     }
   }
   .chargeable_weight {
-    padding-left: 50px;
     .chargeable_weight_values {
       height: 36px;
     }

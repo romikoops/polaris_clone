@@ -44,7 +44,6 @@ class ValidatedInputFormsy extends Component {
     this.props.setValue(event.currentTarget.value)
   }
   render () {
-    // debugger;
     // An error message is returned only if the component is invalid
     const errorMessage = this.props.getErrorMessage()
     const inputStyles = {
@@ -73,6 +72,7 @@ class ValidatedInputFormsy extends Component {
           name={this.props.name}
           disabled={this.props.disabled}
           className={this.props.className}
+          onKeyDown={this.props.onKeyDown}
         />
         <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
       </div>
@@ -95,7 +95,8 @@ ValidatedInputFormsy.propTypes = {
   getValue: PropTypes.func.isRequired,
   setFirstRenderInputs: PropTypes.func,
   firstRenderInputs: PropTypes.bool,
-  nextStageAttempt: PropTypes.bool
+  nextStageAttempt: PropTypes.bool,
+  onKeyDown: PropTypes.func
 }
 
 ValidatedInputFormsy.defaultProps = {
@@ -103,7 +104,8 @@ ValidatedInputFormsy.defaultProps = {
   placeholder: '',
   setFirstRenderInputs: null,
   firstRenderInputs: false,
-  nextStageAttempt: false
+  nextStageAttempt: false,
+  onKeyDown: null
 }
 
 export default withFormsy(ValidatedInputFormsy)

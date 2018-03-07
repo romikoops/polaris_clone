@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
+import QuantityInput from '../QuantityInput/QuantityInput'
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -101,6 +102,19 @@ export default function getInputs (
   const volume =
     cargoItem &&
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
+
+  inputs.volume = (
+    <div className="flex-100">
+      <p className={`${styles.input_label}`}> Volume </p>
+      <p className={`${styles.input_label}`}>
+        { volume }
+        { ' ' }
+        <span>m</span>
+        <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
+      </p>
+    </div>
+  )
+
   function chargeableWeight (mot) {
     const effectiveKgPerCubicMeter = {
       air: 167,
@@ -121,7 +135,7 @@ export default function getInputs (
   }
   inputs.chargeableWeight = (
     <div className={
-      `${styles.chargeable_weight} layout-row flex-40 ` +
+      `${styles.chargeable_weight} layout-row flex-100 ` +
       'layout-wrap layout-align-start-center'
     }
     >
@@ -267,52 +281,15 @@ export default function getInputs (
       </div>
     </div>
   )
-  inputs.volume = (
-    <div className="layout-row flex layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> Volume </p>
-      <ReactTooltip effect="solid" />
-      <div
-        className={`flex-95 layout-row ${styles.input_box}`}
-        data-tip={'Volume is automatically set by \'Length\', \'Height\', and \'Width\''}
-      >
-        {
-          cargoItem ? (
-            <ValidatedInput
-              wrapperClassName="flex-80"
-              name={`${i}-volume`}
-              value={
-                cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
-              }
-              type="number"
-              min="0"
-              step="any"
-              onChange={() => {}}
-              firstRenderInputs={firstRenderInputs}
-              setFirstRenderInputs={this.setFirstRenderInputs}
-              nextStageAttempt={nextStageAttempt}
-              disabled
-            />
-          ) : placeholderInput
-        }
-        <div className="flex-20 layout-row layout-align-center-center">
-          m <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
-        </div>
-      </div>
-    </div>
-  )
 
   inputs.quantity = (
-    <div className="layout-row flex-15 layout-wrap layout-align-start-center" >
-      <p className={`${styles.input_label} flex-100`}> Quantity </p>
-      <NamedSelect
-        placeholder={cargoItem ? cargoItem.quantity : ''}
-        wrapperStyle={{ width: '92.5%' }}
-        name={`${i}-quantity`}
-        value={cargoItem ? cargoItem.quantity : ''}
-        options={cargoItem ? numberOptions : ''}
-        onChange={this.handleCargoItemQ}
-      />
-    </div>
+    <QuantityInput
+      i={i}
+      cargoItem={cargoItem}
+      handleDelta={handleDelta}
+      firstRenderInputs={firstRenderInputs}
+      nextStageAttempt={nextStageAttempt}
+    />
   )
   inputs.dangerousGoods = (
     <div

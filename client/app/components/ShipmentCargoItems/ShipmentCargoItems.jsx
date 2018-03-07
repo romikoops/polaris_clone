@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
@@ -16,7 +15,6 @@ export class ShipmentCargoItems extends Component {
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
     this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this)
-    this.handleCargoItemQ = this.handleCargoItemQ.bind(this)
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
   }
 
@@ -34,10 +32,6 @@ export class ShipmentCargoItems extends Component {
   addNewCargo () {
     this.props.addCargoItem()
     this.setState({ firstRenderInputs: true })
-  }
-  handleCargoItemQ (event) {
-    const modifiedEvent = { target: event }
-    this.props.handleDelta(modifiedEvent)
   }
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
@@ -107,11 +101,11 @@ export class ShipmentCargoItems extends Component {
           : 'black'
     }
 
-    const generateSeparator = () => (
-      <div key={v4()} className={`${styles.separator} flex-100`}>
-        <hr />
-      </div>
-    )
+    // const generateSeparator = () => (
+    //   <div key={v4()} className={`${styles.separator} flex-100`}>
+    //     <hr />
+    //   </div>
+    // )
     const generateCargoItem = (cargoItem, i) => {
       const inputs = getInputs.call(
         this,
@@ -130,38 +124,42 @@ export class ShipmentCargoItems extends Component {
       return (
         <div
           key={i}
-          className="layout-row flex-100 layout-wrap layout-align-start-center"
-          style={{ position: 'relative' }}
+          className="layout-row flex-100 layout-wrap layout-align-stretch"
+          style={{ position: 'relative', margin: '30px 0' }}
         >
-          <h3
-            className={styles.unit_header}
-            style={i < 0 ? { opacity: 0 } : {}}
-          >
-            Cargo Unit {i + 1}
-          </h3>
-          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            {inputs.colliType}
+          <div className="flex-10 layout-row layout-align-center">
             {inputs.quantity}
-            {inputs.nonStackable}
-            {inputs.dangerousGoods}
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            {inputs.length}
-            {inputs.height}
-            {inputs.width}
-            {inputs.volume}
+          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-70`}>
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+              {inputs.colliType}
+              {inputs.nonStackable}
+              {inputs.dangerousGoods}
+            </div>
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+              {inputs.length}
+              {inputs.height}
+              {inputs.width}
+              {inputs.grossWeight}
+            </div>
           </div>
-          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-            {inputs.grossWeight}
-            {inputs.chargeableWeight}
-            <div className="flex" />
+          <div className={
+            `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
+           'layout-row layout-align-center flex-20'
+          }
+          >
+            <div className="layout-row flex-100 layout-wrap layout-align-start">
+              {inputs.volume}
+              {inputs.chargeableWeight}
+              <div className="flex" />
+            </div>
           </div>
 
           {cargoItem ? (
-            <i
-              className={`fa fa-trash ${styles.delete_icon}`}
-              onClick={() => this.deleteCargo(i)}
-            />
+            <div className={styles.delete_icon} onClick={() => this.deleteCargo(i)}>
+              Delete
+              <i className="fa fa-trash" />
+            </div>
           ) : (
             ''
           )}
@@ -192,7 +190,7 @@ export class ShipmentCargoItems extends Component {
           this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
         }
         cargosAdded.push(generateCargoItem(cargoItem, i))
-        cargosAdded.push(generateSeparator())
+        // cargosAdded.push(generateSeparator())
       })
     }
 
