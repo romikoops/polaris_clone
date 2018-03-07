@@ -45,8 +45,8 @@ class FileUploader extends React.Component {
     if (!file) {
       return ''
     }
-    const fileNameSplit = file.name.split('.')
-    const fileExt = fileNameSplit[fileNameSplit.length - 1]
+    // const fileNameSplit = file.name.split('.')
+    // const fileExt = fileNameSplit[fileNameSplit.length - 1]
     // if (
     //   fileExt === 'docx' ||
     //   fileExt === 'doc' ||
@@ -89,6 +89,7 @@ class FileUploader extends React.Component {
     const { theme, type, tooltip } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
+    console.log(errorStyle)
     return (
       <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `} data-tip={tooltip} data-for={tooltipId}>
         <form onSubmit={this.onFormSubmit}>
