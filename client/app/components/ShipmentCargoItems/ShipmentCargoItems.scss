@@ -1,6 +1,6 @@
 :local {
   .input_box {
-    height: 36px;
+    height: 30px;
     width: 170px;
     border: 1px solid #F2F2F2;
     border-radius: 3px;
@@ -105,10 +105,10 @@
     overflow: hidden;
     transition: all 0.8s ease;
     &.expanded {
-      height: 107px;
+      height: 45px;
     }
     .inner_cargo_item_info {
-      height: 107px;
+      height: 45px;
     }
   }
   h3.unit_header {
@@ -118,22 +118,23 @@
   }
   .delete_icon {
     i {
-      font-size: 20px;
+      font-size: 14px;
       padding: 5px;      
     }
     cursor: pointer;
     position: absolute;
     right: 3px;
-    top: -30px;
+    top: -23px;
     opacity: 0.7;
     transition: all 0.3s ease;
+    font-size: 13px;
     &:hover {
       opacity: 1;
     }
   }
   .chargeable_weight {
     .chargeable_weight_values {
-      height: 36px;
+      height: 30px;
     }
     p.chargeable_weight_value {
       margin: 0 0 0 5px;

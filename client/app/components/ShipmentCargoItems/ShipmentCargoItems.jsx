@@ -12,7 +12,7 @@ export class ShipmentCargoItems extends Component {
     super(props)
     this.state = {
       cargoItemTypes: [],
-      cargoItemInfoExpanded: false
+      cargoItemInfoExpanded: []
     }
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
@@ -62,8 +62,10 @@ export class ShipmentCargoItems extends Component {
     }
     this.props.handleDelta(artificialEvent)
   }
-  toggleCargoItemInfoExpanded () {
-    this.setState({ cargoItemInfoExpanded: !this.state.cargoItemInfoExpanded })
+  toggleCargoItemInfoExpanded (i) {
+    const { cargoItemInfoExpanded } = this.state
+    cargoItemInfoExpanded[i] = !cargoItemInfoExpanded[i]
+    this.setState({ cargoItemInfoExpanded })
   }
   deleteCargo (index) {
     const { cargoItemTypes } = this.state
@@ -143,19 +145,19 @@ export class ShipmentCargoItems extends Component {
               style={{ marginTop: '20px' }}
             >
               {inputs.length}
-              {inputs.height}
               {inputs.width}
+              {inputs.height}
               <div className="flex-10" />
               {inputs.grossWeight}
             </div>
-            <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded()}>
+            <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded(i)}>
               Aditional Details
-              <i className={`${cargoItemInfoExpanded && styles.rotated} fa fa-chevron-right`} />
+              <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
             </div>
           </div>
           <div className={
             `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
-            `${cargoItemInfoExpanded && styles.expanded} ` +
+            `${cargoItemInfoExpanded[i] && styles.expanded} ` +
             'flex-85 offset-15'
           }
           >
@@ -183,26 +185,26 @@ export class ShipmentCargoItems extends Component {
 
     if (cargoItems) {
       cargoItems.forEach((cargoItem, i) => {
-        if (!cargoItemTypes[i]) {
-          // Set a default cargo item type as the select box value
+        // if (!cargoItemTypes[i]) {
+        //   // Set a default cargo item type as the select box value
 
-          // Define labels of the default cargo item types in order of priority
-          const defaultTypeLabels = ['Pallet', '100.0cm × 120.0cm Pallet: Europe, Asia']
+        //   // Define labels of the default cargo item types in order of priority
+        //   const defaultTypeLabels = ['Pallet', '100.0cm × 120.0cm Pallet: Europe, Asia']
 
-          // Try to find one of the labels in the available cargo item types
-          let defaultType
-          defaultTypeLabels.find(defaultTypeLabel => (
-            defaultType = availableCargoItemTypes.find(cargoItemType => (
-              cargoItemType.label === defaultTypeLabel
-            ))
-          ))
+        //   // Try to find one of the labels in the available cargo item types
+        //   let defaultType
+        //   defaultTypeLabels.find(defaultTypeLabel => (
+        //     defaultType = availableCargoItemTypes.find(cargoItemType => (
+        //       cargoItemType.label === defaultTypeLabel
+        //     ))
+        //   ))
 
-          // In case none of the defaultTypeLabels match the available
-          // cargo item types, set the default to the first available.
-          defaultType = defaultType || availableCargoItemTypes[0]
+        //   // In case none of the defaultTypeLabels match the available
+        //   // cargo item types, set the default to the first available.
+        //   defaultType = defaultType || availableCargoItemTypes[0]
 
-          this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
-        }
+        //   this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
+        // }
         cargosAdded.push(generateCargoItem(cargoItem, i))
         // cargosAdded.push(generateSeparator())
       })
@@ -238,6 +240,20 @@ export class ShipmentCargoItems extends Component {
             </div>
           </div>
         </div>
+        <style>
+          {`
+            .Select-control {
+              display: flex;
+              height: 32px;
+              position: relative;
+            }
+            .Select-arrow-zone {
+              position: absolute;
+              right: 0;
+              top: 5px
+            }
+          `}
+        </style>
       </div>
     )
   }
