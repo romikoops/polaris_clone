@@ -3,24 +3,6 @@ class PricingSeeder
 	extend MongoTools
 
 	def self.exec(filter = {})
-		if filter.empty?
-			PRICING_TABLES = %w(
-				customsFees
-				hubRoutePricings
-				pricings
-				routeOptions
-				truckingHubs
-				truckingPricings
-				truckingQueries
-				localCharges
-				userPricings
-				itineraryPricings
-				itineraryOptions
-			)
-
-			PRICING_TABLES.each { |table| drop_table table }
-
-		end
 		Tenant.where(filter).each do |tenant|
 			shipper = tenant.users.second
 			tenant.itineraries.destroy_all
@@ -55,7 +37,7 @@ class PricingSeeder
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
 		  req = {"xlsx" => public_pricings}
 		  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
-
+	
 		  # Overwrite trucking data from excel sheet
 		  puts "# Overwrite trucking data from excel sheet"
 		  ["import", "export"].each do |dir|

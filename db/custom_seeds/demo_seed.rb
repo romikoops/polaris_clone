@@ -10,14 +10,14 @@ include MongoTools
   # Layover.destroy_all
   # tenant.itineraries.destroy_all
   # Trip.destroy_all
-  # # Overwrite hubs from excel sheet
-  # puts "# Overwrite hubs from excel sheet"
-  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  # req = {"xlsx" => hubs}
-  # overwrite_hubs(req, shipper)
+  # Overwrite hubs from excel sheet
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
-  # ### Overwrite dedicated pricings from excel sheet.
-  # ### If dedicated == true, shipper.id is automatically inserted.
+  ### Overwrite dedicated pricings from excel sheet.
+  ### If dedicated == true, shipper.id is automatically inserted.
   puts "# Overwrite dedicated pricings from excel sheet."
   public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
   req = {"xlsx" => public_pricings}
@@ -38,6 +38,11 @@ include MongoTools
   public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
   req = {"xlsx" => public_pricings}
   overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
+
+  puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  req = {"xlsx" => local_charges}
+  overwrite_local_charges(req, shipper)
 
 
   # Overwrite trucking data from excel sheet
