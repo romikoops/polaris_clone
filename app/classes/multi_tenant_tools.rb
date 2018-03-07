@@ -335,13 +335,13 @@ module MultiTenantTools
     puts "Seed prcings"
     PricingSeeder.exec(subdomain: subdomain)
   end
-  def do_customs
+  def do_customs(mot)
     Tenant.all.each do |t|
       shipper = t.users.where(role_id: 2).first
       puts "# Overwrite customs and charges from excel sheet"
       public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
       req = {"xlsx" => public_pricings}
-      overwrite_customs(req, dedicated = false, shipper)
+      overwrite_customs(req, mot, shipper)
     end
   end
 

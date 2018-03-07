@@ -385,7 +385,6 @@ module ExcelTools
       
       if locations[row[:from]] && locations[row[:to]]
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
-      
       else
         locations[row[:from]] = Location.find_by_name(row[:from])
         locations[row[:to]] = Location.find_by_name(row[:to])
@@ -564,7 +563,7 @@ module ExcelTools
         'lcl'
       ]
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 21.days
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
       lcl_obj = {
@@ -744,15 +743,15 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
-      # itinerary.generate_weekly_schedules(
-      #   stops_in_order,
-      #   steps_in_order,
-      #   row[:effective_date], 
-      #   row[:expiration_date], 
-      #   [1, 5],
-      #   vehicle.id
-      # )
+      row[:expiration_date] = row[:effective_date] + 21.days
+      itinerary.generate_weekly_schedules(
+        stops_in_order,
+        steps_in_order,
+        row[:effective_date], 
+        row[:expiration_date], 
+        [1, 5],
+        vehicle.id
+      )
 
       lcl_obj = {
         BAS: {
@@ -856,73 +855,73 @@ module ExcelTools
       update_item('customsFees', {_id: "#{destination_charge_key}"}, customsObj)
       update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, nexus_id: origin.id, load_type: 'lcl'})
       update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, nexus_id: destination.id, load_type: 'lcl'})
-      # if dedicated
-      #   cargo_classes.each do |cargo_class|
-      #     uuid = SecureRandom.uuid
+      if dedicated
+        cargo_classes.each do |cargo_class|
+          uuid = SecureRandom.uuid
 
-      #     transport_category_name = row[:cargo_type] || "any"
-      #     transport_category = vehicle.transport_categories.find_by(
-      #       name: transport_category_name, 
-      #       cargo_class: cargo_class
-      #     )
+          transport_category_name = row[:cargo_type] || "any"
+          transport_category = vehicle.transport_categories.find_by(
+            name: transport_category_name, 
+            cargo_class: cargo_class
+          )
           
-      #     pathKey  = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
-      #     priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}_#{user.id}"
+          pathKey  = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
+          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}_#{user.id}"
           
-      #     pricing = { 
-      #       data:      price_obj[cargo_class], 
-      #       _id:       priceKey,
-      #       tenant_id: user.tenant_id,
-      #       load_type: cargo_class
-      #     }
+          pricing = { 
+            data:      price_obj[cargo_class], 
+            _id:       priceKey,
+            tenant_id: user.tenant_id,
+            load_type: cargo_class
+          }
           
-      #     update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
           
-      #     user_pricing = { pathKey => priceKey}
+          user_pricing = { pathKey => priceKey}
           
-      #     update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-      #     update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
-      #     new_itinerary_pricings[pathKey] ||= {}
-      #     new_itinerary_pricings[pathKey]["#{user.id}"] = priceKey
-      #   end
-      # else
-      #   cargo_classes.each do |cargo_class|
-      #     uuid = SecureRandom.uuid
+          new_itinerary_pricings[pathKey] ||= {}
+          new_itinerary_pricings[pathKey]["#{user.id}"] = priceKey
+        end
+      else
+        cargo_classes.each do |cargo_class|
+          uuid = SecureRandom.uuid
 
-      #     transport_category_name = row[:cargo_type] || "any"
-      #     transport_category = vehicle.transport_categories.find_by(
-      #       name: transport_category_name, 
-      #       cargo_class: cargo_class
-      #     )
+          transport_category_name = row[:cargo_type] || "any"
+          transport_category = vehicle.transport_categories.find_by(
+            name: transport_category_name, 
+            cargo_class: cargo_class
+          )
 
-      #     pathKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
-      #     priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
+          pathKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}"
+          priceKey = "#{stops_in_order[0].id}_#{stops_in_order.last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_class}"
 
-      #     pricing = { 
-      #       data:         price_obj[cargo_class], 
-      #       _id:          priceKey,
-      #       itinerary_id: itinerary.id,
-      #       tenant_id:    user.tenant_id
-      #     }
+          pricing = { 
+            data:         price_obj[cargo_class], 
+            _id:          priceKey,
+            itinerary_id: itinerary.id,
+            tenant_id:    user.tenant_id
+          }
 
-      #     update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
-      #     update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
 
-      #     new_itinerary_pricings[pathKey] ||= {}
-      #     new_itinerary_pricings[pathKey]["open"]                  = priceKey
-      #     new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
-      #     new_itinerary_pricings[pathKey]["itinerary_id"]          = itinerary.id
-      #     new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
-      #   end
-      # end
+          new_itinerary_pricings[pathKey] ||= {}
+          new_itinerary_pricings[pathKey]["open"]                  = priceKey
+          new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_itinerary_pricings[pathKey]["itinerary_id"]          = itinerary.id
+          new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
+        end
+      end
     end
 
-    # new_itinerary_pricings.each do |key, value|
-    #   update_itinerary_pricing(key, value)
-    # end
+    new_itinerary_pricings.each do |key, value|
+      update_itinerary_pricing(key, value)
+    end
   end
-  def overwrite_customs(params, dedicated, user = current_user)
+  def overwrite_customs(params, mot, user = current_user)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -977,14 +976,14 @@ module ExcelTools
       tenant = user.tenant
       origin      = Location.find_by(name: row[:origin], location_type: 'nexus')
       destination = Location.find_by(name: row[:destination], location_type: 'nexus')
-      origin_hub_ids = origin.hubs_by_type(row[:mot], user.tenant_id).ids
-      destination_hub_ids = destination.hubs_by_type(row[:mot], user.tenant_id).ids
+      origin_hub_ids = origin.hubs_by_type(mot, user.tenant_id).ids
+      destination_hub_ids = destination.hubs_by_type(mot, user.tenant_id).ids
       hub_ids = origin_hub_ids + destination_hub_ids
 
-      vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
+      vehicle_name = row[:vehicle_type] || "#{mot}_default"
       vehicle      = Vehicle.find_by(name: vehicle_name)
-      # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
-      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+      # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, mot, vehicle.id, "#{origin.name} - #{destination.name}")
+      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: mot, name: "#{origin.name} - #{destination.name}")
       stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
       cargo_classes = [
         'lcl'
@@ -994,15 +993,7 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
-      # itinerary.generate_weekly_schedules(
-      #   stops_in_order,
-      #   steps_in_order,
-      #   row[:effective_date], 
-      #   row[:expiration_date], 
-      #   [1, 5],
-      #   vehicle.id
-      # )
+      row[:expiration_date] = row[:effective_date] + 21.days
 
       lcl_obj = {
         BAS: {
@@ -1099,13 +1090,13 @@ module ExcelTools
       }
       price_obj = {"lcl" =>lcl_obj.to_h}
       customsObj[:nexus_id] = origin.id
-      origin_charge_key = "#{origin.id}_#{user.tenant_id}_lcl"
-      destination_charge_key = "#{destination.id}_#{user.tenant_id}_lcl"
+      origin_charge_key = "#{origin_hub_ids.first}_#{user.tenant_id}_lcl"
+      destination_charge_key = "#{destination_hub_ids.first}_#{user.tenant_id}_lcl"
       update_item('customsFees', {_id: "#{origin_charge_key}"}, customsObj)
       customsObj[:nexus_id] = destination.id
       update_item('customsFees', {_id: "#{destination_charge_key}"}, customsObj)
-      update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, nexus_id: origin.id, load_type: 'lcl'})
-      update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, nexus_id: destination.id, load_type: 'lcl'})
+      update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, hub_id: origin_hub_ids.first, nexus_id: origin.id, load_type: 'lcl', mode_of_transport: mot})
+      update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, hub_id: destination_hub_ids.first, nexus_id: destination.id, load_type: 'lcl', mode_of_transport: mot})
      
     end
 
@@ -1218,7 +1209,7 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 21.days
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
         steps_in_order,

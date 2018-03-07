@@ -47,36 +47,36 @@ class FileUploader extends React.Component {
     }
     const fileNameSplit = file.name.split('.')
     const fileExt = fileNameSplit[fileNameSplit.length - 1]
-    if (
-      fileExt === 'docx' ||
-      fileExt === 'doc' ||
-      fileExt === 'jpeg' ||
-      fileExt === 'jpg' ||
-      fileExt === 'tiff' ||
-      fileExt === 'png' ||
-      fileExt === 'pdf'
-    ) {
-      if (dispatchFn) {
-        if (type) {
-          file.doc_type = type
-        }
-        return dispatchFn(file)
+    // if (
+    //   fileExt === 'docx' ||
+    //   fileExt === 'doc' ||
+    //   fileExt === 'jpeg' ||
+    //   fileExt === 'jpg' ||
+    //   fileExt === 'tiff' ||
+    //   fileExt === 'png' ||
+    //   fileExt === 'pdf'
+    // ) {
+    if (dispatchFn) {
+      if (type) {
+        file.doc_type = type
       }
-      if (uploadFn) {
-        return uploadFn(file, type, url)
-      }
-      const formData = new window.FormData()
-      formData.append('file', file)
-      formData.append('type', type)
-      const requestOptions = {
-        method: 'POST',
-        headers: { ...authHeader() },
-        body: formData
-      }
-      const uploadUrl = BASE_URL + url
-      return fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
+      return dispatchFn(file)
     }
-    return this.showFileTypeError()
+    if (uploadFn) {
+      return uploadFn(file, type, url)
+    }
+    const formData = new window.FormData()
+    formData.append('file', file)
+    formData.append('type', type)
+    const requestOptions = {
+      method: 'POST',
+      headers: { ...authHeader() },
+      body: formData
+    }
+    const uploadUrl = BASE_URL + url
+    return fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
+    // }
+    // return this.showFileTypeError()
   }
   showFileTypeError () {
     this.setState({ error: true })
@@ -109,9 +109,9 @@ class FileUploader extends React.Component {
             }}
           />
         </form>
-        <div className={`${styles.file_error} ${errorStyle} layout-row layout-align-center`}>
+        {/* <div className={`${styles.file_error} ${errorStyle} layout-row layout-align-center`}>
           <p className="flex-100">Only .jpg, .png, .pdf, .tiff, .doc & .docx files allowed</p>
-        </div>
+        </div> */}
       </div>
     )
   }

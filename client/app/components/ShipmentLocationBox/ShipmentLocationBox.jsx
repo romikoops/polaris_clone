@@ -135,12 +135,21 @@ export class ShipmentLocationBox extends Component {
       this.loadPrevReq()
     }
   }
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.has_pre_carriage) {
+      this.postToggleAutocomplete('origin')
+    }
+    if (nextProps.has_on_carriage) {
+      this.postToggleAutocomplete('destination')
+    }
+  }
   getCoordinates (hub, hubName) {
     const { allNexuses } = this.props
     let tmpCoord = {}
     switch (hub) {
       case 'origins':
-        allNexuses.origins.forEach(nx => (nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''))
+        allNexuses.origins.forEach(nx =>
+          (nx.label === hubName ? (tmpCoord = { lat: nx.value.latitude, lng: nx.longitude }) : ''))
         break
       case 'destinations':
         allNexuses.destinations.forEach(nx =>
@@ -245,26 +254,20 @@ export class ShipmentLocationBox extends Component {
       )
       this.setMarker({ lat: tmpDest.latitude, lng: tmpDest.longitude }, tmpDest.name, 'destination')
     } else {
-      setTimeout(
-        () => {
-          this.setMarker(
-            { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
-            tmpOrigin.name,
-            'origin'
-          )
-        },
-        750
-      )
-      setTimeout(
-        () => {
-          this.setMarker(
-            { lat: tmpDest.latitude, lng: tmpDest.longitude },
-            tmpDest.name,
-            'destination'
-          )
-        },
-        750
-      )
+      setTimeout(() => {
+        this.setMarker(
+          { lat: tmpOrigin.latitude, lng: tmpOrigin.longitude },
+          tmpOrigin.name,
+          'origin'
+        )
+      }, 750)
+      setTimeout(() => {
+        this.setMarker(
+          { lat: tmpDest.latitude, lng: tmpDest.longitude },
+          tmpDest.name,
+          'destination'
+        )
+      }, 750)
     }
   }
   setOriginHub (event) {
@@ -340,8 +343,10 @@ export class ShipmentLocationBox extends Component {
     }
     if (!markers.origin.title && !markers.destination.title) {
       map.fitBounds(bounds)
-    } else if ((markers.origin.title && !markers.destination.title) ||
-     (!markers.origin.title && markers.destination.title)) {
+    } else if (
+      (markers.origin.title && !markers.destination.title) ||
+      (!markers.origin.title && markers.destination.title)
+    ) {
       map.setCenter(bounds.getCenter())
       map.setZoom(14)
     } else {
@@ -352,9 +357,9 @@ export class ShipmentLocationBox extends Component {
   updateTruckingOptions (target, nexus, tenantId, loadType, nexusOptions) {
     fetch(
       `${BASE_URL}/trucking_availability?` +
-      `nexus_id=${nexus.id}&` +
-      `tenant_id=${tenantId}&` +
-      `load_type=${loadType}`,
+        `nexus_id=${nexus.id}&` +
+        `tenant_id=${tenantId}&` +
+        `load_type=${loadType}`,
       {
         method: 'GET',
         headers: authHeader()
@@ -751,7 +756,9 @@ export class ShipmentLocationBox extends Component {
       autoText.destination = autoTextDestination || ''
 
       this.setState({
-        origin, destination, autoText
+        origin,
+        destination,
+        autoText
       })
 
       // Address Fields Errors
@@ -789,10 +796,7 @@ export class ShipmentLocationBox extends Component {
 
     const showOriginError = !this.state.oSelect && this.props.nextStageAttempt
     const originHubSelect = (
-      <div
-        style={{ position: 'relative' }}
-        className="flex-100 layout-row layout-wrap"
-      >
+      <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
         <StyledSelect
           name="origin-hub"
           className={styles.select}
@@ -810,10 +814,7 @@ export class ShipmentLocationBox extends Component {
 
     const showDestinationError = !this.state.dSelect && this.props.nextStageAttempt
     const destinationHubSelect = (
-      <div
-        style={{ position: 'relative' }}
-        className="flex-100 layout-row layout-wrap"
-      >
+      <div style={{ position: 'relative' }} className="flex-100 layout-row layout-wrap">
         <StyledSelect
           name="destination-hub"
           className={styles.select}
@@ -921,8 +922,7 @@ export class ShipmentLocationBox extends Component {
             id="origin"
             name="origin"
             className={
-              `flex-none ${styles.input} ` +
-              `${originFieldsHaveErrors ? styles.with_errors : ''}`
+              `flex-none ${styles.input} ` + `${originFieldsHaveErrors ? styles.with_errors : ''}`
             }
             type="string"
             onChange={this.handleAuto}
@@ -942,8 +942,7 @@ export class ShipmentLocationBox extends Component {
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
           className={
-            `${styles.btn_address_form} ` +
-            `${this.props.has_on_carriage ? '' : styles.hidden}`
+            `${styles.btn_address_form} ` + `${this.props.has_on_carriage ? '' : styles.hidden}`
           }
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
@@ -1107,34 +1106,40 @@ export class ShipmentLocationBox extends Component {
             }
           >
             {this.state.showModal ? routeModal : ''}
-            <div className={`flex-100 layout-row layout-wrap layout-align-center-start ${styles.input_box} ${errorClass}`}>
+            <div
+              className={`flex-100 layout-row layout-wrap layout-align-center-start ${
+                styles.input_box
+              } ${errorClass}`}
+            >
               <div className="flex-45 layout-row layout-wrap layout-align-start-start mc">
-                <div className={
-                  'flex-45 layout-row layout-align-start ' +
-                  `${styles.toggle_box} ` +
-                  `${!truckingOptions.preCarriage ? styles.not_available : ''}`
-                }
-                >
-                  { !truckingOptions.preCarriage
-                    ? (
-                      <div>
-                        <ReactTooltip effect="solid" />
-                        <div
-                          className={styles.toggle_box_overlay}
-                          data-tip={`Pre-Carriage is not available in ${this.state.oSelect.label}`}
-                        />
-                      </div>
-                    )
-                    : ''
+                <div
+                  className={
+                    'flex-45 layout-row layout-align-start ' +
+                    `${styles.toggle_box} ` +
+                    `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                   }
+                >
+                  {!truckingOptions.preCarriage ? (
+                    <div>
+                      <ReactTooltip effect="solid" />
+                      <div
+                        className={styles.toggle_box_overlay}
+                        data-tip={`Pre-Carriage is not available in ${this.state.oSelect.label}`}
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
                   <Toggle
                     className="flex-none"
                     id="has_pre_carriage"
                     name="has_pre_carriage"
                     checked={this.props.has_pre_carriage}
-                    onChange={this.handleTrucking}
+                    // onChange={this.handleTrucking}
                   />
-                  <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>Pre-Carriage</label>
+                  <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
+                    Pre-Carriage
+                  </label>
                 </div>
                 <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
                   {this.props.has_pre_carriage ? originAuto : ''}
@@ -1157,31 +1162,33 @@ export class ShipmentLocationBox extends Component {
                   {displayLocationOptions('destination')}
                   {destFields}
                 </div>
-                <div className={
-                  'flex-45 layout-row layout-align-end ' +
-                  `${styles.toggle_box} ` +
-                  `${!truckingOptions.onCarriage ? styles.not_available : ''}`
-                }
-                >
-                  { !truckingOptions.onCarriage
-                    ? (
-                      <div>
-                        <ReactTooltip effect="solid" />
-                        <div
-                          className={styles.toggle_box_overlay}
-                          data-tip={`On-Carriage is not available in ${this.state.dSelect.label}`}
-                        />
-                      </div>
-                    )
-                    : ''
+                <div
+                  className={
+                    'flex-45 layout-row layout-align-end ' +
+                    `${styles.toggle_box} ` +
+                    `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                   }
-                  <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>On-Carriage</label>
+                >
+                  {!truckingOptions.onCarriage ? (
+                    <div>
+                      <ReactTooltip effect="solid" />
+                      <div
+                        className={styles.toggle_box_overlay}
+                        data-tip={`On-Carriage is not available in ${this.state.dSelect.label}`}
+                      />
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
+                    On-Carriage
+                  </label>
                   <Toggle
                     className="flex-none"
                     id="has_on_carriage"
                     name="has_on_carriage"
                     checked={this.props.has_on_carriage}
-                    onChange={this.handleTrucking}
+                    // onChange={this.handleTrucking}
                   />
                 </div>
               </div>

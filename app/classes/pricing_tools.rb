@@ -14,6 +14,58 @@ module PricingTools
 
     get_item_fn(client, 'pricings', '_id', price_key)
   end
+  def determine_local_charges(hub, load_type, cargos, direction, mot, user)
+    cargo = load_type === 'container' ? {
+      number_of_items: cargos.length,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    } : {
+      number_of_items: cargos.length,
+      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    }
+    lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
+    query = [
+      {"tenant_id" => hub.tenant_id},
+      {"hub_id" => hub.id},
+      {"load_type" => lt},
+      {"mode_of_transport" => mot}
+    ]
+    charge = get_items_query('localCharges', query).first
+  
+    totals = {"total" => {}}
+    charge[direction].each do |k,v|
+       case v["rate_basis"]
+      when "PER_ITEM"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i * cargo.volume : totals[k] = {"value" => v["rate"].to_i * cargo[:volume], "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM_TON"
+        ton = (cargo[:weight] / 1000) * v["ton"]
+        cbm = cargo[:volume] * v["cbm"]
+        tmp = 0
+        cbm > ton ? tmp = cbm : tmp = ton
+        tmp > v["min"] ? res = tmp : res = v["min"]
+        totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_SHIPMENT"
+        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      end
+    end
+    converted = sum_and_convert_cargo(totals, user.currency)
+    totals["total"] = {value: converted, currency: user.currency}
+    return totals
+  end
 
   def determine_cargo_item_price(client, cargo, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)

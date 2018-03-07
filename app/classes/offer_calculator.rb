@@ -179,6 +179,7 @@ class OfferCalculator
         
         set_trucking_charges!(charges, trip, sched_key)
         set_cargo_charges!(charges, trip, sched_key)
+        set_local_charges!(charges, trip, sched_key)
       end
     end
     
@@ -204,6 +205,31 @@ class OfferCalculator
         trip[1].stop.hub,
         'destination',
         'import'
+      )
+    end
+  end
+
+  def set_local_charges!(charges, trip, sched_key)
+    if @shipment.has_pre_carriage
+      charges[sched_key][:export] = determine_local_charges(
+        trip[0].stop.hub,
+        @shipment.load_type,
+        @cargo_units,
+        'export',
+        trip[0].itinerary.mode_of_transport,
+        @user
+      )
+      
+    end
+    
+    if @shipment.has_on_carriage
+      charges[sched_key][:import] = determine_local_charges(
+        trip[1].stop.hub,
+        @shipment.load_type,
+        @cargo_units,
+        'import',
+        trip[1].itinerary.mode_of_transport,
+        @user
       )
     end
   end
