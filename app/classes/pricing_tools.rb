@@ -6,7 +6,7 @@ module PricingTools
   end
   def get_user_price(client, path_key, user)
     path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
-    Rails.logger.debug "PATH KEY FOR PRICING #{path_key}"
+    Rails.logger.info "PATH KEY FOR PRICING #{path_key}"
     return nil if path_pricing.nil? 
 
     path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"

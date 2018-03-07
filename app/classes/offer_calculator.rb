@@ -270,8 +270,8 @@ class OfferCalculator
         @user, 
         @cargo_units.length
       )
-       Rails.logger.debug "CHARGE RESULT"
-       Rails.logger.debug charge_result
+       Rails.logger.info "CHARGE RESULT"
+       Rails.logger.info charge_result
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end
