@@ -140,7 +140,7 @@ class OfferCalculator
     @itineraries.each do |itin|
       origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).order(:etd).uniq
       destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).order(:etd).uniq
-      byebug
+      
       layovers = origin_layovers + destination_layovers
       trip_layovers = layovers.group_by(&:trip_id)
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
@@ -171,7 +171,7 @@ class OfferCalculator
     
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
-      byebug
+      
       if trip && trip.length > 1
         sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
         
@@ -276,7 +276,7 @@ class OfferCalculator
       )
        Rails.logger.info "CHARGE RESULT"
        Rails.logger.info charge_result
-       byebug
+       
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end

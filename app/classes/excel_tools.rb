@@ -283,7 +283,7 @@ module ExcelTools
         end
         hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
       end
-      byebug
+      
       hub_fees.each do |k,v|
         lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
         update_item('localCharges', {"_id" => lc_id}, v)
