@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
+import QuantityInput from '../QuantityInput/QuantityInput'
 import { TextHeading } from '../TextHeading/TextHeading'
 import '../../styles/select-css-custom.css'
 import getInputs from './inputs'
@@ -78,7 +79,7 @@ export class ShipmentCargoItems extends Component {
   }
   render () {
     const {
-      cargoItems, theme, showAlertModal, nextStageAttempt, scope
+      cargoItems, theme, showAlertModal, nextStageAttempt, scope, handleDelta
     } = this.props
     const { cargoItemTypes, firstRenderInputs } = this.state
     const cargosAdded = []
@@ -128,7 +129,13 @@ export class ShipmentCargoItems extends Component {
           style={{ position: 'relative', margin: '30px 0' }}
         >
           <div className="flex-15 layout-row layout-align-center">
-            {inputs.quantity}
+            <QuantityInput
+              i={i}
+              cargoItem={cargoItem}
+              handleDelta={handleDelta}
+              firstRenderInputs={firstRenderInputs}
+              nextStageAttempt={nextStageAttempt}
+            />
           </div>
           <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">

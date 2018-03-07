@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactTooltip from 'react-tooltip'
-import QuantityInput from '../QuantityInput/QuantityInput'
 import { ValidatedInput } from '../ValidatedInput/ValidatedInput'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -280,16 +279,6 @@ export default function getInputs (
         </div>
       </div>
     </div>
-  )
-
-  inputs.quantity = (
-    <QuantityInput
-      i={i}
-      cargoItem={cargoItem}
-      handleDelta={handleDelta}
-      firstRenderInputs={firstRenderInputs}
-      nextStageAttempt={nextStageAttempt}
-    />
   )
   inputs.dangerousGoods = (
     <div

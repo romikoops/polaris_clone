@@ -66,18 +66,12 @@ export default class QuantityInput extends PureComponent {
                 name={`${i}-quantity`}
                 value={cargoItem ? cargoItem.quantity : ''}
                 type="number"
-                min="0"
+                min="1"
                 step="any"
                 onChange={e => this.handleChange(e)}
                 firstRenderInputs={firstRenderInputs}
                 setFirstRenderInputs={this.setFirstRenderInputs}
                 nextStageAttempt={nextStageAttempt}
-                validations={{
-                  nonNegative: (values, value) => value > 0
-                }}
-                validationErrors={{
-                  nonNegative: 'Must be greater than 0'
-                }}
               />
             </div>
             <hr className="flex-100" />
