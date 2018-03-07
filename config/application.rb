@@ -37,7 +37,9 @@ module Imcr
         resource '*', :headers => :any, :expose  => ['access-token', 'expiry', 'token-type', 'uid', 'client'], :methods => [:get, :post, :patch, :put, :delete, :options]
       end
     end
-
+    Raven.configure do |config|
+      config.dsn = 'https://f1fed03d4f7847dc8a43d00b03812994:60755ae2bcca4c3eadd7e80693e3455a@sentry.io/299826'
+    end
     # Autoloads the validators directory
     config.autoload_paths += %W["#{config.root}/app/validators/"]
 

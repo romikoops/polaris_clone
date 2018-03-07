@@ -42,7 +42,7 @@ gem 'rack-cors'
 gem 'geocoder'
 
 # gem 'remote_syslog_logger'
-# gem "sentry-raven"
+gem "sentry-raven"
 
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'
