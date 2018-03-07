@@ -71,7 +71,7 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
-  config.logger = RemoteSyslogLogger.new('logs6.papertrailapp.com', 17326, :program => "rails-production")
+  # config.logger = RemoteSyslogLogger.new('logs6.papertrailapp.com', 17326, :program => "rails-production")
   # if ENV["RAILS_LOG_TO_STDOUT"].present?
   #   logger           = ActiveSupport::Logger.new(STDOUT)
   #   logger.formatter = config.log_formatter
