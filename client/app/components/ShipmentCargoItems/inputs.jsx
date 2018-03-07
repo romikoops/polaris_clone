@@ -103,14 +103,18 @@ export default function getInputs (
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
   inputs.volume = (
-    <div className="flex-30">
-      <p className={`${styles.input_label}`}> Volume </p>
-      <p className={`${styles.input_label}`}>
-        { volume }
-        { ' ' }
-        <span>m</span>
-        <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
-      </p>
+    <div className="flex-30 layout-row layout-wrap layout-align-center-center">
+      <div className="flex-100">
+        <p className={styles.input_label}> Volume </p>
+      </div>
+      <div className="flex-100">
+        <p className={styles.input_label}>
+          { volume }
+          { ' ' }
+          <span>m</span>
+          <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
+        </p>
+      </div>
     </div>
   )
 

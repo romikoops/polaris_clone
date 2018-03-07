@@ -73,15 +73,43 @@
     }
   }
   .cargo_item_box {
-    padding: 20px;
-    border: 1px solid rgba(black, 0.1);
-    background: rgba(black, 0.02);    
+    border: 1px solid rgba(black, 0.08);
   }
   .cargo_item_inputs {
+    background: rgba(black, 0.005);    
+    padding: 20px 20px 30px 20px;
     border-radius: 1px;
+    position: relative;
+    .expandIcon {
+      position: absolute;
+      bottom: 0;
+      right: 9px;
+      font-size: 13.5px;
+      cursor: pointer;
+      i {
+        padding: 5px;
+        margin-left: 5px;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        &.rotated {
+          transform: rotate(90deg);
+        }
+      }
+    }
   }
   .cargo_item_info {
-    border-radius: 1px;
+    background: rgba(black, 0.02);    
+    padding: 0 20px;
+    border-radius: 0 0 1px 1px;
+    height: 0px;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    &.expanded {
+      height: 107px;
+    }
+    .inner_cargo_item_info {
+      height: 107px;
+    }
   }
   h3.unit_header {
     margin: 40px 0px 0px;

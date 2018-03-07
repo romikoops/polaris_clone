@@ -11,7 +11,8 @@ export class ShipmentCargoItems extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      cargoItemTypes: []
+      cargoItemTypes: [],
+      cargoItemInfoExpanded: false
     }
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
@@ -61,14 +62,8 @@ export class ShipmentCargoItems extends Component {
     }
     this.props.handleDelta(artificialEvent)
   }
-  toggleStackable (i) {
-    const event = {
-      target: {
-        name: `${i}-stackable`,
-        value: !this.props.cargoItems[i].stackable
-      }
-    }
-    this.props.handleDelta(event)
+  toggleCargoItemInfoExpanded () {
+    this.setState({ cargoItemInfoExpanded: !this.state.cargoItemInfoExpanded })
   }
   deleteCargo (index) {
     const { cargoItemTypes } = this.state
@@ -81,7 +76,7 @@ export class ShipmentCargoItems extends Component {
     const {
       cargoItems, theme, showAlertModal, nextStageAttempt, scope, handleDelta
     } = this.props
-    const { cargoItemTypes, firstRenderInputs } = this.state
+    const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
     const availableCargoItemTypes = this.props.availableCargoItemTypes
       ? this.props.availableCargoItemTypes.map(cargoItemType => ({
@@ -149,13 +144,22 @@ export class ShipmentCargoItems extends Component {
               {inputs.width}
               {inputs.grossWeight}
             </div>
+            <div className={styles.expandIcon} onClick={() => this.toggleCargoItemInfoExpanded()}>
+              Aditional Details
+              <i className={`${cargoItemInfoExpanded && styles.rotated} fa fa-chevron-right`} />
+            </div>
           </div>
           <div className={
             `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
-           'layout-row layout-align-center flex-85 offset-15'
+            `${cargoItemInfoExpanded && styles.expanded} ` +
+            'flex-85 offset-15'
           }
           >
-            <div className="layout-row flex-100 layout-wrap layout-align-start">
+            <div className={
+              `${styles.inner_cargo_item_info} layout-row ` +
+              'layout-wrap layout-align-start'
+            }
+            >
               {inputs.volume}
               {inputs.chargeableWeight}
             </div>
