@@ -41,7 +41,8 @@ gem 'rack-cors'
 # Use geocoder for backend geocoding
 gem 'geocoder'
 
-gem 'remote_syslog_logger'
+# gem 'remote_syslog_logger'
+# gem "sentry-raven"
 
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'

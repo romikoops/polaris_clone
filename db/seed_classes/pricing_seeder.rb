@@ -3,6 +3,24 @@ class PricingSeeder
 	extend MongoTools
 
 	def self.exec(filter = {})
+		if filter.empty?
+			PRICING_TABLES = %w(
+				customsFees
+				hubRoutePricings
+				pricings
+				routeOptions
+				truckingHubs
+				truckingPricings
+				truckingQueries
+				localCharges
+				userPricings
+				itineraryPricings
+				itineraryOptions
+			)
+
+			PRICING_TABLES.each { |table| drop_table table }
+
+		end
 		Tenant.where(filter).each do |tenant|
 			shipper = tenant.users.second
 			tenant.itineraries.destroy_all

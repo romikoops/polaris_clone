@@ -81,7 +81,7 @@ export function IncotermBox ({
       value: 'DTP',
       direction: 'import',
       preCarriage: true,
-      onCarriage: true
+      onCarriage: false
     },
     {
       label: 'Door to Door',
