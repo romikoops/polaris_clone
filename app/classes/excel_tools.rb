@@ -286,9 +286,9 @@ module ExcelTools
           when 'PER_ITEM'
             charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when 'PER_CBM_TON'
-            charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when 'PER_CBM_KG'
-            charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           end
           if row[:fee_code] != 'CUST'
             hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)

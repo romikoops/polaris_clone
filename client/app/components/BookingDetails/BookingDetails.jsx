@@ -112,11 +112,12 @@ export class BookingDetails extends Component {
     }
   }
   setCustomsFee (target, fee) {
+    const { customs } = this.state
+    customs[target] = fee
+    const totalFee = customs.import.val + customs.export.val
+    customs.total = { val: totalFee, currency: fee.currency }
     this.setState({
-      customs: {
-        ...this.state.customs,
-        [target]: fee
-      }
+      customs
     })
   }
   handleHsTextChange (event) {

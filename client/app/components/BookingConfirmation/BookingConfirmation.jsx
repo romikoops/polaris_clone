@@ -525,11 +525,18 @@ export class BookingConfirmation extends Component {
                   <h5 className="flex-none letter_3">Customs</h5>
                 </div>
                 <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  <h4 className="flex-100 no_m letter_3 center">
-                    {BookingConfirmation.sumCustomsFees(feeHash.cargo).currency}
-                  </h4>
+                  {feeHash.customs && feeHash.customs.val ? (
+                    <h4 className="flex-100 no_m letter_3 center">{feeHash.customs.currency}</h4>
+                  ) : (
+                    <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                      None
+                    </h4>
+                  )}
+
                   <h3 className="flex-100 no_m letter_3 center">
-                    {BookingConfirmation.sumCustomsFees(feeHash.cargo).total}
+                    {feeHash.customs && feeHash.customs.val
+                      ? `${feeHash.customs.val.toFixed(2)}`
+                      : 'None'}
                   </h3>
                 </div>
               </div>

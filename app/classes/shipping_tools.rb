@@ -136,10 +136,20 @@ module ShippingTools
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
         shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-        shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val] ? shipment_data[:insurance][:val] : 0
-        shipment.total_price = { value: shipment.schedules_charges[key]["total"], currency: shipment.user.currency }
+        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:insurance][:val] ? shipment_data[:insurance][:val] : 0
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end
+    
+    if shipment_data[:customs][:total][:val] > 0
+      shipment.schedule_set.each do |ss|
+        key = ss["hub_route_key"]
+        shipment.schedules_charges[key][:customs] = {val: shipment_data[:customs][:total][:val], currency: shipment_data[:customs][:total][:currency]}
+        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:customs][:total][:val] ? shipment_data[:customs][:total][:val] : 0
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
+      end
+    end
+    shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data["notes"]
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
     cargo_item_types = {}
@@ -263,9 +273,9 @@ module ShippingTools
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
 
-    params[:schedules].each do |sched|
-      shipment.schedule_set << sched
-    end
+    # params[:schedules].each do |sched|
+      shipment.schedule_set = params[:schedules]
+    # end
 
     shipment.trip_id = params[:schedules][0]["trip_id"]
     case shipment.load_type
