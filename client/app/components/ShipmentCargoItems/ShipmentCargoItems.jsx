@@ -43,7 +43,7 @@ export class ShipmentCargoItems extends Component {
     const newCargoItemTypes = this.state.cargoItemTypes
     newCargoItemTypes[index] = event
     this.setState({ cargoItemTypes: newCargoItemTypes })
-    this.props.handleDelta(modifiedEvent)
+    this.props.handleDelta(modifiedEvent, !event.key)
 
     if (!event.dimension_x) return
 
@@ -213,9 +213,10 @@ export class ShipmentCargoItems extends Component {
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div
-          className={`layout-row flex-none ${
-            defs.content_width
-          } layout-wrap layout-align-center-center section_padding`}
+          className={
+            `layout-row flex-none ${defs.content_width} ` +
+            'layout-wrap layout-align-center-center section_padding'
+          }
           style={{ margin: '0 0 70px 0' }}
         >
           <TextHeading theme={theme} text="Cargo Units" size={3} />
@@ -226,9 +227,10 @@ export class ShipmentCargoItems extends Component {
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             <div className={`${styles.add_unit_wrapper} content_width`}>
               <div
-                className={`layout-row flex-none ${
-                  styles.add_unit
-                } layout-wrap layout-align-center-center`}
+                className={
+                  `layout-row flex-none ${styles.add_unit} ` +
+                  'layout-wrap layout-align-center-center'
+                }
                 onClick={this.addNewCargo}
               >
                 <i className="fa fa-plus-square-o clip" style={textStyle} />

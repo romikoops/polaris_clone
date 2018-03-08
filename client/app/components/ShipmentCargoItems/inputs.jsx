@@ -47,14 +47,17 @@ export default function getInputs (
     />
   )
   const inputs = {}
+  const showColliTypeErrors = !firstRenderInputs && nextStageAttempt && !cargoItemTypes[i]
+
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
       <div style={{ width: '95%' }}>
         <NamedSelect
           placeholder="Select your colli type"
           className={styles.select_100}
+          showErrors={showColliTypeErrors}
           name={`${i}-colliType`}
-          value={cargoItemTypes[i]}
+          value={cargoItemTypes[i] && cargoItemTypes[i].label && cargoItemTypes[i]}
           options={availableCargoItemTypes}
           onChange={this.handleCargoItemType}
         />
