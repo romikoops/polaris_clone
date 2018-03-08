@@ -1,8 +1,5 @@
-require "#{Rails.root}/lib/devise_token_auth/app/controllers/devise_token_auth/sessions_controller"
-
 module UsersDeviseTokenAuth
   class UsersDeviseTokenAuth::SessionsController < DeviseTokenAuth::SessionsController
-    include UsersDeviseTokenAuth::Concerns::ResourceFinder
     before_action :configure_permitted_parameters, if: :devise_controller?
     skip_before_action :require_authentication!
     skip_before_action :require_non_guest_authentication!
@@ -19,15 +16,15 @@ module UsersDeviseTokenAuth
       devise_parameter_sanitizer.permit(:sign_in, keys: [:subdomain_id])
     end
 
-    def find_resource(field, value)
-      tenant = Tenant.find_by(subdomain: params[:subdomain_id])
+    def find_resource(_, email)
+      tenant_id = Tenant.find_by(subdomain: params[:subdomain_id]).id
       query = "
-        #{field.to_s} = ?
-        AND provider = '#{provider.to_s}'
-        AND tenant_id = '#{tenant.id}'
+        tenant_id = ?
+        AND email = ?
+        AND provider = 'tenant_email'
       "
 
-      @resource = resource_class.where(query, value).first
+      @resource = resource_class.where(query, tenant_id, email).first
     end
   end
 end
