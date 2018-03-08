@@ -1,16 +1,16 @@
 include ExcelTools
 include MongoTools
-
+['greencarrier', 'demo', 'easyshipping'].each do |sub|
 # Tenant.all.each do |tenant|
-  tenant = Tenant.find_by_subdomain("demo")
-  shipper = tenant.users.second
+  tenant = Tenant.find_by_subdomain(sub)
+  shipper = tenant.users.where(role_id: 2).first
   # Stop.destroy_all
   # Hub.destroy_all
   # Location.where(location_type: 'nexus')
   # Layover.destroy_all
   # tenant.itineraries.destroy_all
   # Trip.destroy_all
-  # # Overwrite hubs from excel sheet
+  # Overwrite hubs from excel sheet
   # puts "# Overwrite hubs from excel sheet"
   # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
   # req = {"xlsx" => hubs}
@@ -23,34 +23,36 @@ include MongoTools
   req = {"xlsx" => public_pricings}
   overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
 
-  # # # # Overwrite public pricings from excel sheet
+  # # # # # Overwrite public pricings from excel sheet
   puts "# Overwrite public pricings from excel sheet"
   public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
   req = {"xlsx" => public_pricings}
   overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
-  # # # # Overwrite public pricings from excel sheet
-  puts "# Overwrite customs and charges from excel sheet"
-  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_customs(req, dedicated = false, shipper)
+  # # # # # Overwrite public pricings from excel sheet
+
 
   puts "# Overwrite MAERSK pricings from excel sheet"
   public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
   req = {"xlsx" => public_pricings}
   overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
+  # puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
+  # req = {"xlsx" => local_charges}
+  # overwrite_local_charges(req, shipper)
 
-  # Overwrite trucking data from excel sheet
-  puts "# Overwrite trucking data from excel sheet"
-  ["import", "export"].each do |dir|
-    trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_zipcode_weight_trucking_rates(req, shipper, dir)
-  end
-  ["import", "export"].each do |dir|
-    trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_city_trucking_rates(req, shipper, dir)
-  end
+
+  # # Overwrite trucking data from excel sheet
+  # puts "# Overwrite trucking data from excel sheet"
+  # ["import", "export"].each do |dir|
+  #   trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+  #   req = {"xlsx" => trucking}
+  #   overwrite_zipcode_weight_trucking_rates(req, shipper, dir)
+  # end
+  # ["import", "export"].each do |dir|
+  #   trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+  #   req = {"xlsx" => trucking}
+  #   overwrite_city_trucking_rates(req, shipper, dir)
+  # end
   tenant.update_route_details()
-# end
+end

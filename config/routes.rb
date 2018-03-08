@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
-    registrations: 'users_devise_token_auth/registrations'
-  }
+    registrations: 'users_devise_token_auth/registrations',
+  }, skip: [:omniauth_callbacks]
   
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'

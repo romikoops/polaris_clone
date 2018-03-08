@@ -13,7 +13,7 @@ gem 'pg', '~> 0.21'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
-gem 'devise_token_auth'
+gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 
 gem 'sprockets-rails', require: 'sprockets/railtie'
@@ -42,7 +42,7 @@ gem 'rack-cors'
 gem 'geocoder'
 
 # gem 'remote_syslog_logger'
-# gem "sentry-raven"
+gem "sentry-raven"
 
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'

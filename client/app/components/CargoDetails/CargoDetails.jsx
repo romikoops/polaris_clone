@@ -35,15 +35,23 @@ export class CargoDetails extends Component {
     this.props.handleInsurance()
   }
   toggleCustoms () {
-    const { setCustomsFee, customsData } = this.props
     this.setState({ customsView: !this.state.customsView })
-    // this.timeoutId = setTimeout(function() {
-    // this.setState({ showNoCustoms: this.state.customsView })
-    const converted = this.calcCustomsFee()
-    const resp = converted === 0 ? { bool: false, val: 0 } : { bool: true, val: converted }
-    if (customsData && customsData.val && customsData.val !== converted) {
-      setCustomsFee(resp)
-    }
+  }
+  toggleSpecificCustoms (target) {
+    const {
+      setCustomsFee,
+      // customsData,
+      shipmentData
+    } = this.props
+    const { customs } = shipmentData
+    const converted = customs[target].total.value
+    const resp = converted === 0
+      ? { bool: false, val: 0 }
+      : { bool: true, val: converted, currency: customs[target].total.currency }
+
+    // if (customsData && customsData[target].val && customsData[target].val !== converted) {
+    setCustomsFee(target, resp)
+    // }
   }
   deleteDoc (doc) {
     const { shipmentDispatch } = this.props
@@ -57,7 +65,7 @@ export class CargoDetails extends Component {
     shipmentDispatch.uploadDocument(file, type, url)
   }
 
-  calcCustomsFee () {
+  calcCustomsFee (target) {
     const {
       hsCodes, shipmentData, currencies, tenant, hsTexts
     } = this.props
@@ -121,13 +129,15 @@ export class CargoDetails extends Component {
       // handleHsTextChange,
       // setHsCode,
       // deleteCode,
+      customsData,
       finishBookingAttempted,
       user,
+      tenant,
       eori
     } = this.props
     const { totalGoodsCurrency } = this.state
     const {
-      dangerousGoods, documents, customs
+      dangerousGoods, documents
     } = shipmentData
     const DocViewer = ({ doc }) => (
       <div className="flex-100 layout-row layout-align-start-center">
@@ -191,46 +201,88 @@ export class CargoDetails extends Component {
             customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
-        </div>
-        <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
-          <h5 className="flex-100"> Price </h5>
-          <h6 className="flex-100">
-            {' '}
-            {customs ? this.calcCustomsFee() : '18.50'} {user.currency}
-          </h6>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-start">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none"> Export Customs: </p>
+                <Checkbox
+                  onChange={() => this.toggleSpecificCustoms('export')}
+                  checked={customsData.export.bool}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none"> Import Customs</p>
+                <Checkbox
+                  onChange={() => this.toggleSpecificCustoms('import')}
+                  checked={customsData.import.bool}
+                  theme={theme}
+                />
+              </div>
+            </div>
+          </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div className="flex-40 layout-row -alyout-align-start-center">
-              <p className="flex-none">Do you have your own customs credit? </p>
-              <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+              <div className="flex-40 layout-row -alyout-align-start-center">
+                <p className="flex-none">Do you have your own customs credit? </p>
+                <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+              </div>
+              <div className="flex-15 layout-row layout-align-start-center">
+                <Checkbox
+                  onChange={this.props.toggleCustomsCredit}
+                  checked={this.props.customsCredit}
+                  theme={theme}
+                />
+                <div className="flex-5" />
+                <p className="flex-30">Yes</p>
+              </div>
+              <div className="flex-15 layout-row layout-align-start-center">
+                <Checkbox
+                  onChange={this.props.toggleCustomsCredit}
+                  checked={!this.props.customsCredit}
+                  theme={theme}
+                />
+                <div className="flex-5" />
+                <p className="flex-30">No</p>
+              </div>
             </div>
-            <div className="flex-15 layout-row layout-align-start-center">
-              <Checkbox
-                onChange={this.props.toggleCustomsCredit}
-                checked={this.props.customsCredit}
-                theme={theme}
-              />
-              <div className="flex-5" />
-              <p className="flex-30">Yes</p>
+            <div className="flex-80 layout-row layout-wrap layout-align-start-center">
+              <p className="flex-90">
+                <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
+                VAT will be applied to the final invoice if you do not have customs credit.
+              </p>
             </div>
-            <div className="flex-15 layout-row layout-align-start-center">
-              <Checkbox
-                onChange={this.props.toggleCustomsCredit}
-                checked={!this.props.customsCredit}
-                theme={theme}
-              />
-              <div className="flex-5" />
-              <p className="flex-30">No</p>
-            </div>
-          </div>
-          <div className="flex-80 layout-row layout-wrap layout-align-start-center">
-            <p className="flex-90">
-              <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
-              VAT will be applied to the final invoice if you do not have customs credit.
-            </p>
           </div>
         </div>
+        <div className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}>
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Import</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? customsData.import.val.toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Export</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? customsData.export.val.toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+
+          <div className={`${styles.customs_total} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Total</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? (customsData.import.val + customsData.export.val).toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+
+        </div>
+
         {/* <HSCodeRow
           className="flex-100"
           containers={containers}

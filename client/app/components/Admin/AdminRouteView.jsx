@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import { AdminLayoverRow, AdminHubTile } from './'
 import styles from './Admin.scss'
 import { gradientTextGenerator } from '../../helpers'
+import { RoundButton } from '../RoundButton/RoundButton'
 
 export class AdminRouteView extends Component {
   constructor (props) {
@@ -51,7 +52,6 @@ export class AdminRouteView extends Component {
             {itinerary.name}
           </p>
         </div>
-
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
@@ -67,6 +67,25 @@ export class AdminRouteView extends Component {
             <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
           </div>
           {schedArr}
+        </div>
+        <div className="layout-row flex-100 layout-wrap layout-align-center">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+          >
+            <p className={` ${styles.sec_header_text} flex-none`}> Comments </p>
+          </div>
+          <div className="flex-100" style={{ margin: '10px 0' }}>
+            <textarea rows="10" cols="100" />
+          </div>
+          <div className="flex-100">
+            <RoundButton
+              theme={theme}
+              text="save"
+              size="small"
+              handleNext={() => window.alert('comment saved')}
+              active
+            />
+          </div>
         </div>
       </div>
     )

@@ -7,20 +7,24 @@ import PropTypes from '../../prop-types'
 
 const StyledSelect = styled(Select)`
   .Select-control {
-      background-color: #F9F9F9;
-      box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-      border: 1px solid #F2F2F2 !important;
+    background: ${props => (props.showErrors ? props.errorStyles.background : '#F9F9F9')};
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    border: 1px solid #F2F2F2 !important;
+  }
+  .Select-placeholder {
+    background: ${props => (props.showErrors ? props.errorStyles.background : '#F9F9F9')};
+    ${props => (props.showErrors ? `color: ${props.errorStyles.color};` : '')}
   }
   .Select-menu-outer {
-      box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
-      border: 1px solid #F2F2F2;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    border: 1px solid #F2F2F2;
   }
   .Select-value {
-      background-color: #F9F9F9;
-      border: 1px solid #F2F2F2;
+    background: #F9F9F9;
+    border: 1px solid #F2F2F2;
   }
   .Select-option {
-      background-color: #F9F9F9;
+    background: #F9F9F9;
   }
 `
 
@@ -28,6 +32,11 @@ export class NamedSelect extends Component {
   constructor (props) {
     super(props)
     this.onChangeFunc = this.onChangeFunc.bind(this)
+    this.errorStyles = {
+      background: 'rgba(232, 114, 88, 0.3)',
+      borderColor: 'rgba(232, 114, 88, 0.01)',
+      color: 'rgba(211, 104, 80, 1)'
+    }
   }
   onChangeFunc (optionSelected) {
     const modifiedOptionSelected = Object.assign({}, optionSelected)
@@ -43,6 +52,7 @@ export class NamedSelect extends Component {
       <StyledSelect
         {...props}
         onChange={this.onChangeFunc}
+        errorStyles={this.errorStyles}
       />
     )
   }
