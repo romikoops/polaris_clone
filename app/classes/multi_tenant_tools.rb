@@ -250,9 +250,10 @@ module MultiTenantTools
     })
   end
 
-  def seed_demo_site(tenant_data)
-    tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
-    tenant = Tenant.find_or_create_by!(tenant_data)
+  def seed_demo_site(subdomain, tld)
+    # tld = tenant_data["web"] && tenant_data["web"]["tld"] ? tenant_data["web"]["tld"] : tenant_data["emails"]["support"].split('.')[1]
+    # tenant = Tenant.find_or_create_by!(tenant_data)
+    tenant = Tenant.find_by_subdomain(subdomain)
     tenant.users.destroy_all
     admin = tenant.users.new(
       role: Role.find_by_name('admin'),
@@ -262,7 +263,7 @@ module MultiTenantTools
       last_name: "Admin",
       phone: "123456789",
 
-      email: "admin@#{tenant.subdomain}.#{tld}",
+      email: "admin@#{subdomain}.#{tld}",
       password: "demo123456789",
       password_confirmation: "demo123456789",
 
