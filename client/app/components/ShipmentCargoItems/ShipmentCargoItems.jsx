@@ -130,7 +130,6 @@ export class ShipmentCargoItems extends Component {
               i={i}
               cargoItem={cargoItem}
               handleDelta={handleDelta}
-              firstRenderInputs={firstRenderInputs}
               nextStageAttempt={nextStageAttempt}
             />
           </div>

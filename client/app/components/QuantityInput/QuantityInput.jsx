@@ -30,21 +30,12 @@ export default class QuantityInput extends PureComponent {
     }
   }
 
-  handleChange (e) {
-    // if (e.target.value <= 0 || e.target.value === '') {
-    //   e.preventDefault()
-    //   return false
-    // }
-    this.props.handleDelta(e)
-    return true
-  }
-
   render () {
     const {
       cargoItem,
       i,
-      firstRenderInputs,
-      nextStageAttempt
+      nextStageAttempt,
+      handleDelta
     } = this.props
 
     const { pressedUp, pressedDown } = this.state
@@ -68,8 +59,15 @@ export default class QuantityInput extends PureComponent {
                 type="number"
                 min="1"
                 step="any"
-                onChange={e => this.handleChange(e)}
-                firstRenderInputs={firstRenderInputs}
+                onChange={handleDelta}
+                errorStyles={{
+                  fontSize: '10px',
+                  top: '-14px',
+                  bottom: 'unset'
+                }}
+                validations={{ nonNegative: (values, value) => value > 0 }}
+                validationErrors={{ nonNegative: 'Must be greater than 0' }}
+                firstRenderInputs
                 setFirstRenderInputs={this.setFirstRenderInputs}
                 nextStageAttempt={nextStageAttempt}
               />
@@ -94,7 +92,6 @@ QuantityInput.propTypes = {
   cargoItem: PropTypes.objectOf(PropTypes.any),
   i: PropTypes.integer,
   handleDelta: PropTypes.func,
-  firstRenderInputs: PropTypes.bool,
   nextStageAttempt: PropTypes.bool
 }
 
@@ -102,6 +99,5 @@ QuantityInput.defaultProps = {
   cargoItem: null,
   i: -1,
   handleDelta: null,
-  firstRenderInputs: false,
   nextStageAttempt: false
 }

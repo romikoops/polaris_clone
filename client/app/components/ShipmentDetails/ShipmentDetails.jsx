@@ -78,7 +78,8 @@ export class ShipmentDetails extends Component {
           dimension_x: true,
           dimension_y: true,
           dimension_z: true,
-          cargo_item_type_id: true
+          cargo_item_type_id: true,
+          quantity: false
         }
       ],
       nextStageAttempt: false,
@@ -253,7 +254,8 @@ export class ShipmentDetails extends Component {
       dimension_x: true,
       dimension_y: true,
       dimension_z: true,
-      cargo_item_type_id: true
+      cargo_item_type_id: true,
+      quantity: false
     }
     const { cargoItems, cargoItemsErrors } = this.state
     cargoItems.push(newCargoItem)
