@@ -44,7 +44,6 @@ class ValidatedInputFormsy extends Component {
     this.props.setValue(event.currentTarget.value)
   }
   render () {
-    // debugger;
     // An error message is returned only if the component is invalid
     const errorMessage = this.props.getErrorMessage()
     const inputStyles = {
@@ -73,8 +72,15 @@ class ValidatedInputFormsy extends Component {
           name={this.props.name}
           disabled={this.props.disabled}
           className={this.props.className}
+          onKeyDown={this.props.onKeyDown}
+          min={this.props.min}
         />
-        <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
+        <span
+          className={errorStyles.error_message}
+          style={this.props.errorStyles}
+        >
+          {ErrorHidden ? '' : errorMessage}
+        </span>
       </div>
     )
   }
@@ -83,11 +89,11 @@ class ValidatedInputFormsy extends Component {
 ValidatedInputFormsy.propTypes = {
   isValidValue: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  inputRef: PropTypes.element.isRequired,
+  inputRef: PropTypes.element,
   isValid: PropTypes.func.isRequired,
   getErrorMessage: PropTypes.func.isRequired,
   setValue: PropTypes.func.isRequired,
@@ -95,7 +101,10 @@ ValidatedInputFormsy.propTypes = {
   getValue: PropTypes.func.isRequired,
   setFirstRenderInputs: PropTypes.func,
   firstRenderInputs: PropTypes.bool,
-  nextStageAttempt: PropTypes.bool
+  nextStageAttempt: PropTypes.bool,
+  onKeyDown: PropTypes.func,
+  min: PropTypes.string,
+  errorStyles: PropTypes.objectOf(PropTypes.string)
 }
 
 ValidatedInputFormsy.defaultProps = {
@@ -103,7 +112,12 @@ ValidatedInputFormsy.defaultProps = {
   placeholder: '',
   setFirstRenderInputs: null,
   firstRenderInputs: false,
-  nextStageAttempt: false
+  nextStageAttempt: false,
+  onKeyDown: null,
+  min: '',
+  errorStyles: {},
+  inputRef: null,
+  className: ''
 }
 
 export default withFormsy(ValidatedInputFormsy)
