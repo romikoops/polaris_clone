@@ -50,11 +50,11 @@
           }
         }
       }
-      &:checked {
-        + span {
-          border-width: $checkboxSize / 2;
-        }
-      }
+      // &:checked {
+      //   + span {
+      //     border-width: $checkboxSize / 2;
+      //   }
+      // }
       &:disabled {
         + span {
           background: $disabledBG;

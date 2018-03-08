@@ -77,7 +77,9 @@ export class ShipmentDetails extends Component {
           payload_in_kg: true,
           dimension_x: true,
           dimension_y: true,
-          dimension_z: true
+          dimension_z: true,
+          cargo_item_type_id: true,
+          quantity: false
         }
       ],
       nextStageAttempt: false,
@@ -208,6 +210,7 @@ export class ShipmentDetails extends Component {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
+
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
@@ -248,7 +251,9 @@ export class ShipmentDetails extends Component {
       payload_in_kg: true,
       dimension_x: true,
       dimension_y: true,
-      dimension_z: true
+      dimension_z: true,
+      cargo_item_type_id: true,
+      quantity: false
     }
     const { cargoItems, cargoItemsErrors } = this.state
     cargoItems.push(newCargoItem)

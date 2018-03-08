@@ -5,22 +5,26 @@ module UsersDeviseTokenAuth
     skip_before_action :require_non_guest_authentication!
     
     wrap_parameters false
-    # def render_create_success
-    #   render json: {data: @resource.errors}
-    # end
-    def create
-      # user request.headers['origin'] to determine tenant
-      super
-    end
-    def render_create_error_not_confirmed
-      # 
-    end
+
     def render_create_error_bad_credentials
       raise ApplicationError::BadCredentials
     end
 
+    private
+
     def configure_permitted_parameters
       devise_parameter_sanitizer.permit(:sign_in, keys: [:subdomain_id])
-    end   
+    end
+
+    def find_resource(_, email)
+      tenant_id = Tenant.find_by(subdomain: params[:subdomain_id]).id
+      query = "
+        tenant_id = ?
+        AND email = ?
+        AND provider = 'tenant_email'
+      "
+
+      @resource = resource_class.where(query, tenant_id, email).first
+    end
   end
 end

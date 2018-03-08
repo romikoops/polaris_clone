@@ -35,6 +35,8 @@ export class Checkbox extends PureComponent {
     const border = {
       border: `1px solid ${theme && theme.colors ? theme.colors.secondary : 'black'}`
     }
+    const size = this.props.size ? +this.props.size.replace('px', '') : 25
+    const iconStyles = Object.assign({ fontSize: `${Math.max(Math.min(size * 0.8, 15), 12)}px` }, checkGradient)
     return (
       <div className={`${styles.checkbox} flex-none`} style={border} onClick={this.props.onClick}>
         <label>
@@ -46,7 +48,7 @@ export class Checkbox extends PureComponent {
             onChange={e => this.handleChange(e)}
           />
           <span style={sizeStyles}>
-            <i className={`fa fa-check ${checked ? styles.show : ''}`} style={checkGradient} />
+            <i className={`fa fa-check ${checked ? styles.show : ''}`} style={iconStyles} />
           </span>
         </label>
       </div>
