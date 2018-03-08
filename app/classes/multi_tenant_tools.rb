@@ -344,6 +344,13 @@ module MultiTenantTools
       overwrite_local_charges(req, shipper)
   end
 
+  def quick_fix
+    public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
+    req = {"xlsx" => public_pricings}
+    overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
+    overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
+  end
+
   def invalidate(cfId, subdomain)
     cloudfront = Aws::CloudFront::Client.new(
         access_key_id: ENV['AWS_KEY'],
