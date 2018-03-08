@@ -234,7 +234,7 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
-      
+
       rows = first_sheet.parse(
         fee: 'FEE',
         mot: 'MOT',
@@ -707,7 +707,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -724,35 +724,8 @@ module ExcelTools
       lcl_rate_wm: 'LCL_RATE_WM',
       lcl_rate_min: 'LCL_RATE_MIN',
       lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
-      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
-      ohc_currency: "OHC_CURRENCY",
-      ohc_cbm: "OHC_CBM",
-      ohc_ton: "OHC_TON",
-      ohc_min: "OHC_MIN",
-      lcls_currency: "LCLS_CURRENCY",
-      lcl_service_cbm: "LCL_SERVICE_CBM",
-      lcl_service_ton: "LCL_SERVICE_TON",
-      lcl_service_min: "LCL_SERVICE_MIN",
-      isps_currency: "ISPS_CURRENCY",
-      isps: "ISPS",
-      exp_currency: "EXP_CURRENCY",
-      exp_declaration: "EXP_DECLARATION",
-      exp_limit: "EXP_LIMIT",
-      exp_extra: "EXP_XTRA",
-      odf_currency: "ODF_CURRENCY",
-      odf: "ODF",
-      ls_currency: "LS_CURRENCY",
-      liner_service_fee: "LINER_SERVICE_FEE",
-      vgm_currency: "VGM_CURRENCY",
-      vgm_fee: "VGM_FEE", 
-      ddf_currency: "DDF_CURRENCY",
-      ddf: "DDF",
-      dhc_currency: "DHC_CURRENCY",
-      dhc: "DHC",
-      customs_currency: "CUSTOMS_CURRENCY",
-      customs_clearance: "CUSTOMS_CLEARANCE",
-      cfs_currency: "CFS_CURRENCY",
-      cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
+      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN'
+      
     )
     new_pricings = []
     new_itinerary_pricings = {}
@@ -780,14 +753,16 @@ module ExcelTools
       end
       row[:effective_date] = DateTime.now
       row[:expiration_date] = row[:effective_date] + 40.days
-      itinerary.generate_weekly_schedules(
-        stops_in_order,
-        steps_in_order,
-        row[:effective_date], 
-        row[:expiration_date], 
-        [1, 5],
-        vehicle.id
-      )
+      if generate
+        itinerary.generate_weekly_schedules(
+          stops_in_order,
+          steps_in_order,
+          row[:effective_date], 
+          row[:expiration_date], 
+          [1, 5],
+          vehicle.id
+        )
+      end
 
       lcl_obj = {
         BAS: {
@@ -873,7 +848,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     terms = {
       "BAS" => "Basic Ocean Freight",
@@ -982,6 +957,7 @@ module ExcelTools
       end
       row[:effective_date] = DateTime.now
       row[:expiration_date] = row[:effective_date] + 40.days
+      if generate
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
         steps_in_order,
@@ -990,6 +966,7 @@ module ExcelTools
         [1, 5],
         vehicle.id
       )
+      end
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
 
