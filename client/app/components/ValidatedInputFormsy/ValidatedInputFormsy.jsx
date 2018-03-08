@@ -75,7 +75,12 @@ class ValidatedInputFormsy extends Component {
           onKeyDown={this.props.onKeyDown}
           min={this.props.min}
         />
-        <span className={errorStyles.error_message}>{ErrorHidden ? '' : errorMessage}</span>
+        <span
+          className={errorStyles.error_message}
+          style={this.props.errorStyles}
+        >
+          {ErrorHidden ? '' : errorMessage}
+        </span>
       </div>
     )
   }
@@ -98,7 +103,8 @@ ValidatedInputFormsy.propTypes = {
   firstRenderInputs: PropTypes.bool,
   nextStageAttempt: PropTypes.bool,
   onKeyDown: PropTypes.func,
-  min: PropTypes.string
+  min: PropTypes.string,
+  errorStyles: PropTypes.objectOf(PropTypes.string)
 }
 
 ValidatedInputFormsy.defaultProps = {
@@ -108,7 +114,8 @@ ValidatedInputFormsy.defaultProps = {
   firstRenderInputs: false,
   nextStageAttempt: false,
   onKeyDown: null,
-  min: ''
+  min: '',
+  errorStyles: {}
 }
 
 export default withFormsy(ValidatedInputFormsy)

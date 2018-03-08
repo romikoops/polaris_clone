@@ -241,16 +241,21 @@ export class ShipmentCargoItems extends Component {
           </div>
         </div>
         <style>
-          {`
-            .Select-control {
+          {`            
+            .colli_type .Select-control {
               display: flex;
               height: 32px;
               position: relative;
             }
-            .Select-arrow-zone {
+            .colli_type .Select-clear-zone {
+              position: absolute;
+              right: 25px;
+              top: 5px;           
+            }
+            .colli_type .Select-arrow-zone {
               position: absolute;
               right: 0;
-              top: 5px
+              top: 5px;
             }
           `}
         </style>

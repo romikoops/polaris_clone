@@ -48,7 +48,7 @@ export default function getInputs (
   )
   const inputs = {}
   inputs.colliType = (
-    <div className="layout-row flex-40 layout-wrap layout-align-start-center" >
+    <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
       <div style={{ width: '95%' }}>
         <NamedSelect
           placeholder="Select your colli type"
@@ -78,6 +78,10 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
               validations={{
                 nonNegative: (values, value) => value > 0
               }}
@@ -176,6 +180,10 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
@@ -223,6 +231,10 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
@@ -270,6 +282,10 @@ export default function getInputs (
               firstRenderInputs={firstRenderInputs}
               setFirstRenderInputs={this.setFirstRenderInputs}
               nextStageAttempt={nextStageAttempt}
+              errorStyles={{
+                fontSize: '10px',
+                bottom: '-14px'
+              }}
               validations={{
                 nonNegative: (values, value) => value > 0,
                 maxDimention: (values, value) => value < 1000
