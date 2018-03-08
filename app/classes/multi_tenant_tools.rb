@@ -345,6 +345,8 @@ module MultiTenantTools
   end
 
   def quick_fix
+    t = Tenant.find_by_subdomain(subdomain)
+      shipper = t.users.where(role_id: 2).first
     public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
     req = {"xlsx" => public_pricings}
     overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
