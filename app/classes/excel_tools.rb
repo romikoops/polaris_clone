@@ -253,8 +253,9 @@ module ExcelTools
         minimum: 'MINIMUM'
       )
       hub_fees = {}
+       customs = {}
       ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
-       hub_fees[lt] = {
+      hub_fees[lt] = {
         "import" => {},
         "export" => {},
         "mode_of_transport" => rows[0][:mot],
@@ -263,30 +264,46 @@ module ExcelTools
         "hub_id" => hub.id,
         "load_type" => lt
       }
+      customs[lt] = {
+        "import" => {}, 
+        "export" => {},
+        "nexus_id" => hub.nexus.id,
+        "tenant_id" => hub.tenant_id,
+        "hub_id" => hub.id,
+        "load_type" => lt
+      }
       end
       rows.each do |row|
-        case row[:rate_basis]
-        when 'PER_SHIPMENT'
-          charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CONTAINER'
-          charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_BILL'
-          charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM'
-          charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_ITEM'
-          charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM_TON'
-          charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM_KG'
-          charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        end
-        hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+          case row[:rate_basis]
+          when 'PER_SHIPMENT'
+            charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CONTAINER'
+            charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_BILL'
+            charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM'
+            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_ITEM'
+            charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_TON'
+            charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_KG'
+            charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          end
+          if row[:fee_code] != 'CUST'
+            hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+          else
+            customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase)
+          end
       end
       
       hub_fees.each do |k,v|
         lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
         update_item('localCharges', {"_id" => lc_id}, v)
+      end
+      customs.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
+        update_item('customsFees', {"_id" => lc_id}, v)
       end
     end
   end
@@ -786,94 +803,9 @@ module ExcelTools
           rate_basis: 'PER_CBM'
         }
       }
-      destination_import_fees = {
-        DHC: {
-          currency: row[:dhc_currency],
-          rate: row[:dhc],
-          rate_basis: 'PER_ITEM'
-          # cbm: row[:dhc_cbm],
-          # ton: row[:dhc_ton],
-          # min: row[:dhc_min],
-          # rate_basis: 'PER_CBM_TON'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        DDF: {
-          currency: row[:ddf_currency],
-          rate: row[:ddf],
-          rate_basis: 'PER_SHIPMENT'
-        }
-      }
-      origin_export_fees = {
-         OHC: {
-          currency: row[:ohc_currency],
-          cbm: row[:ohc_cbm],
-          ton: row[:ohc_ton],
-          min: row[:ohc_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        CFS: {
-          currency: row[:cfs_currency],
-          rate: row[:cfs_terminal_charges],
-          rate_basis: 'PER_CBM'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        ODF: {
-          currency: row[:odf_currency],
-          rate: row[:odf],
-          rate_basis: 'PER_SHIPMENT'
-        }
-      }
-      customsObj = {
-        export:{ 
-           EXP: {currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra],
-          rate_basis: 'PER_BILL'
-        }
-        },
-        import:{ 
-          IMP: {currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra],
-          rate_basis: 'PER_BILL'
-        }
-        },
-        load_type: 'lcl',
-        tenant_id: user.tenant_id
-      }
+      
       price_obj = {"lcl" =>lcl_obj.to_h}
-      customsObj[:nexus_id] = origin.id
-      origin_charge_key = "#{origin.id}_#{user.tenant_id}_lcl"
-      destination_charge_key = "#{destination.id}_#{user.tenant_id}_lcl"
-      update_item('customsFees', {_id: "#{origin_charge_key}"}, customsObj)
-      customsObj[:nexus_id] = destination.id
-      update_item('customsFees', {_id: "#{destination_charge_key}"}, customsObj)
-      update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, nexus_id: origin.id, load_type: 'lcl'})
-      update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, nexus_id: destination.id, load_type: 'lcl'})
+      
       if dedicated
         cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
@@ -898,7 +830,7 @@ module ExcelTools
           
           user_pricing = { pathKey => priceKey}
           
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_itinerary_pricings[pathKey] ||= {}
@@ -925,7 +857,7 @@ module ExcelTools
           }
 
           update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          
 
           new_itinerary_pricings[pathKey] ||= {}
           new_itinerary_pricings[pathKey]["open"]                  = priceKey
@@ -940,186 +872,7 @@ module ExcelTools
       update_itinerary_pricing(key, value)
     end
   end
-  def overwrite_customs(params, mot, user = current_user)
-    mongo = get_client
-    xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    first_sheet = xlsx.sheet(xlsx.sheets.first)
-    pricing_rows = first_sheet.parse(
-      customer_id: 'CUSTOMER_ID',
-      effective_date: 'EFFECTIVE_DATE',
-      expiration_date: 'EXPIRATION_DATE',
-      origin: 'ORIGIN',
-      vehicle_type: 'VEHICLE_TYPE',
-      mot: 'MOT',
-      cargo_type: 'CARGO_TYPE',
-      destination: 'DESTINATION',
-      lcl_currency: 'LCL_CURRENCY',
-      lcl_rate_wm: 'LCL_RATE_WM',
-      lcl_rate_min: 'LCL_RATE_MIN',
-      lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
-      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
-      ohc_currency: "OHC_CURRENCY",
-      ohc_cbm: "OHC_CBM",
-      ohc_ton: "OHC_TON",
-      ohc_min: "OHC_MIN",
-      lcls_currency: "LCLS_CURRENCY",
-      lcl_service_cbm: "LCL_SERVICE_CBM",
-      lcl_service_ton: "LCL_SERVICE_TON",
-      lcl_service_min: "LCL_SERVICE_MIN",
-      isps_currency: "ISPS_CURRENCY",
-      isps: "ISPS",
-      exp_currency: "EXP_CURRENCY",
-      exp_declaration: "EXP_DECLARATION",
-      exp_limit: "EXP_LIMIT",
-      exp_extra: "EXP_XTRA",
-      odf_currency: "ODF_CURRENCY",
-      odf: "ODF",
-      ls_currency: "LS_CURRENCY",
-      liner_service_fee: "LINER_SERVICE_FEE",
-      vgm_currency: "VGM_CURRENCY",
-      vgm_fee: "VGM_FEE", 
-      ddf_currency: "DDF_CURRENCY",
-      ddf: "DDF",
-      dhc_currency: "DHC_CURRENCY",
-      dhc: "DHC",
-      customs_currency: "CUSTOMS_CURRENCY",
-      customs_clearance: "CUSTOMS_CLEARANCE",
-      cfs_currency: "CFS_CURRENCY",
-      cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
-    )
-    new_pricings = []
-    new_itinerary_pricings = {}
 
-    pricing_rows.each_with_index do |row, index|
-      puts "load pricing row #{index}..."
-      tenant = user.tenant
-      origin      = Location.find_by(name: row[:origin], location_type: 'nexus')
-      destination = Location.find_by(name: row[:destination], location_type: 'nexus')
-      origin_hub_ids = origin.hubs_by_type(mot, user.tenant_id).ids
-      destination_hub_ids = destination.hubs_by_type(mot, user.tenant_id).ids
-      hub_ids = origin_hub_ids + destination_hub_ids
-
-      vehicle_name = row[:vehicle_type] || "#{mot}_default"
-      vehicle      = Vehicle.find_by(name: vehicle_name)
-      # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, mot, vehicle.id, "#{origin.name} - #{destination.name}")
-      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: mot, name: "#{origin.name} - #{destination.name}")
-      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
-      cargo_classes = [
-        'lcl'
-      ]
-      steps_in_order = []
-      stops_in_order.length.times do 
-        steps_in_order << 30
-      end
-      row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 40.days
-
-      lcl_obj = {
-        BAS: {
-          currency: row[:lcl_currency],
-          rate: row[:lcl_rate_wm],
-          min: row[:lcl_rate_min],
-          rate_basis: 'PER_CBM'
-        },
-        HAS: {
-          currency: row[:lcl_currency],
-          rate: row[:lcl_heavy_weight_surcharge_wm],
-          min: row[:lcl_heavy_weight_surcharge_min],
-          rate_basis: 'PER_CBM'
-        }
-      }
-      destination_import_fees = {
-        DHC: {
-          currency: row[:dhc_currency],
-          rate: row[:dhc],
-          rate_basis: 'PER_ITEM'
-          # cbm: row[:dhc_cbm],
-          # ton: row[:dhc_ton],
-          # min: row[:dhc_min],
-          # rate_basis: 'PER_CBM_TON'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        DDF: {
-          currency: row[:ddf_currency],
-          rate: row[:ddf],
-          rate_basis: 'PER_SHIPMENT'
-        }
-      }
-      origin_export_fees = {
-         OHC: {
-          currency: row[:ohc_currency],
-          cbm: row[:ohc_cbm],
-          ton: row[:ohc_ton],
-          min: row[:ohc_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        CFS: {
-          currency: row[:cfs_currency],
-          rate: row[:cfs_terminal_charges],
-          rate_basis: 'PER_CBM'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        ODF: {
-          currency: row[:odf_currency],
-          rate: row[:odf],
-          rate_basis: 'PER_SHIPMENT'
-        }
-      }
-      customsObj = {
-        export:{ 
-           EXP: {currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra],
-          rate_basis: 'PER_BILL'
-        }
-        },
-        import:{ 
-          IMP: {currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra],
-          rate_basis: 'PER_BILL'
-        }
-        },
-        load_type: 'lcl',
-        tenant_id: user.tenant_id
-      }
-      price_obj = {"lcl" =>lcl_obj.to_h}
-      customsObj[:nexus_id] = origin.id
-      origin_charge_key = "#{origin_hub_ids.first}_#{user.tenant_id}_lcl"
-      destination_charge_key = "#{destination_hub_ids.first}_#{user.tenant_id}_lcl"
-      update_item('customsFees', {_id: "#{origin_charge_key}"}, customsObj)
-      customsObj[:nexus_id] = destination.id
-      update_item('customsFees', {_id: "#{destination_charge_key}"}, customsObj)
-      update_item('localCharges', {"_id" => origin_charge_key}, {"export" => origin_export_fees, "tenant_id" => user.tenant_id, hub_id: origin_hub_ids.first, nexus_id: origin.id, load_type: 'lcl', mode_of_transport: mot})
-      update_item('localCharges', {"_id" => destination_charge_key}, {"import" => destination_import_fees, "tenant_id" => user.tenant_id, hub_id: destination_hub_ids.first, nexus_id: destination.id, load_type: 'lcl', mode_of_transport: mot})
-     
-    end
-
-  end
   def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
     mongo = get_client
     terms = {
