@@ -335,14 +335,13 @@ module MultiTenantTools
     puts "Seed prcings"
     PricingSeeder.exec(subdomain: subdomain)
   end
-  def do_customs()
-    Tenant.all.each do |t|
+  def do_customs(subdomain)
+   t = Tenant.find_by_subdomain(subdomain)
       shipper = t.users.where(role_id: 2).first
        puts "# Overwrite Local Charges From Sheet"
       local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
       req = {"xlsx" => local_charges}
       overwrite_local_charges(req, shipper)
-    end
   end
 
   def invalidate(cfId, subdomain)
