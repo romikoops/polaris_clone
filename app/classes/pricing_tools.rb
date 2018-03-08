@@ -31,7 +31,7 @@ module PricingTools
       {"mode_of_transport" => mot}
     ]
     charge = get_items_query('localCharges', query).first
-  
+    return {} if charge.nil?
     totals = {"total" => {}}
     charge[direction].each do |k,v|
        case v["rate_basis"]
