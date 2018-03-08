@@ -89,11 +89,11 @@ class ValidatedInputFormsy extends Component {
 ValidatedInputFormsy.propTypes = {
   isValidValue: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   disabled: PropTypes.bool,
   type: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  inputRef: PropTypes.element.isRequired,
+  inputRef: PropTypes.element,
   isValid: PropTypes.func.isRequired,
   getErrorMessage: PropTypes.func.isRequired,
   setValue: PropTypes.func.isRequired,
@@ -115,7 +115,9 @@ ValidatedInputFormsy.defaultProps = {
   nextStageAttempt: false,
   onKeyDown: null,
   min: '',
-  errorStyles: {}
+  errorStyles: {},
+  inputRef: null,
+  className: ''
 }
 
 export default withFormsy(ValidatedInputFormsy)
