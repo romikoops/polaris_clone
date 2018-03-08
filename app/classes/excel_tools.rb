@@ -298,11 +298,11 @@ module ExcelTools
       end
       
       hub_fees.each do |k,v|
-        lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
         update_item('localCharges', {"_id" => lc_id}, v)
       end
       customs.each do |k,v|
-        lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
         update_item('customsFees', {"_id" => lc_id}, v)
       end
     end

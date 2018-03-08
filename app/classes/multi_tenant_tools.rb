@@ -35,13 +35,56 @@ module MultiTenantTools
       end
     end
   end
-
+  def new_fn
+    tenant_data = {
+    theme: {
+      colors: {
+        primary: "##373838",
+        secondary: "#CCCCCC",
+        brightPrimary: "#E9E9E9",
+        brightSecondary: "#54DC84"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/gw.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png"
+    },
+    addresses: {
+      main:"Krohnskamp 22, 22301 Hamburg, Deutschland"
+    },
+    phones:{
+      main:"+ 49 172 543 0 576",
+      support: "+ 49 172 543 0 576"
+    },
+    emails: {
+      sales: "jan.glembocki@gw-freight.com",
+      support: "support@gw-freight.com"
+    },
+    subdomain: "gwforwarding",
+    name: "GW Forwarding",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        }
+      },
+      dangerous_goods: false,
+      incoterm_info_level: 'simple',
+      cargo_info_level: 'hs_codes'
+    }
+  }
+    new_site(tenant_data, false)
+  end
   def new_site(tenant, is_demo)
     new_tenant = Tenant.create(tenant)
-    title = tenant["name"] + " | ItsMyCargo"
-    meta = tenant["meta"]
-    favicon = tenant["favicon"] ? tenant["favicon"] : "https://assets.itsmycargo.com/assets/favicon.ico"
-    indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
+    title = tenant[:name] + " | ItsMyCargo"
+    meta = tenant[:meta]
+    favicon = tenant[:favicon] ? tenant[:favicon] : "https://assets.itsmycargo.com/assets/favicon.ico"
+    # indexHtml = Nokogiri::HTML(open("https://assets.itsmycargo.com/index.html"))
+    indexHtml = Nokogiri::HTML(open(Rails.root.to_s + "/client/dist/index.html"))
     titles = indexHtml.xpath("//title")
     titles[0].content = title
     metas = indexHtml.xpath("//meta")
@@ -58,7 +101,7 @@ module MultiTenantTools
         secret_access_key: ENV['AWS_SECRET'],
         region: "us-east-1"
       )
-      objKey = tenant["subdomain"] + ".html"
+      objKey = tenant[:subdomain] + ".html"
       newHtml = indexHtml.to_html
      File.open("blank.html", 'w') { |file|
       file.write(newHtml)
@@ -71,7 +114,7 @@ module MultiTenantTools
     if is_demo
       seed_demo_site(tenant)
     end
-    create_distribution(tenant["subdomain"])
+    create_distribution(tenant[:subdomain])
   end
 
   def create_distribution(subd)
@@ -124,8 +167,8 @@ module MultiTenantTools
           default_root_object: path,
           price_class: price_class,
           viewer_certificate: viewer_certificate,
-          enabled: true 
-        },
+          enabled: true,
+       
         custom_error_responses: {
           quantity: 2, # required
           items: [
@@ -141,8 +184,9 @@ module MultiTenantTools
               response_code: "200",
               error_caching_min_ttl: 1,
             }
-          ],
+          ]
         }
+         }
       @distribution_id          = resp[:distribution][:id]
       @distribution_domain_name = resp[:distribution][:domain_name]
       tenant = Tenant.find_by_subdomain(subd)

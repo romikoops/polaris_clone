@@ -1,5 +1,7 @@
 module PricingTools
   include MongoTools
+  include CurrencyTools
+
   def get_mongo_client 
     client = get_client
     return client
@@ -34,7 +36,7 @@ module PricingTools
     return {} if charge.nil?
     totals = {"total" => {}}
     charge[direction].each do |k,v|
-       case v["rate_basis"]
+      case v["rate_basis"]
       when "PER_ITEM"
         totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
         if !totals[k]["currency"]
@@ -62,6 +64,53 @@ module PricingTools
         end
       end
     end
+    converted = sum_and_convert_cargo(totals, user.currency)
+    totals["total"] = {value: converted, currency: user.currency}
+    return totals
+  end
+
+  def calc_customs_fees(charge, cargos, load_type, user)
+    cargo = load_type === 'container' ? {
+      number_of_items: cargos.length,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    } : {
+      number_of_items: cargos.length,
+      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
+      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+    }
+    
+    return {} if charge.nil?
+    totals = {"total" => {}}
+    charge.each do |k,v|
+      case v["rate_basis"]
+      when "PER_ITEM"
+        totals[k] ? totals[k]["value"] += v["value"].to_i : totals[k] = {"value" => v["value"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM"
+        totals[k] ? totals[k]["value"] += v["value"].to_i * cargo.volume : totals[k] = {"value" => v["value"].to_i * cargo[:volume], "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_CBM_TON"
+        ton = (cargo[:weight] / 1000) * v["ton"]
+        cbm = cargo[:volume] * v["cbm"]
+        tmp = 0
+        cbm > ton ? tmp = cbm : tmp = ton
+        tmp > v["min"] ? res = tmp : res = v["min"]
+        totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_SHIPMENT"
+        totals[k] ? totals[k]["value"] += v["value"].to_i : totals[k] = {"value" => v["value"].to_i, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      end
+    end
+    
     converted = sum_and_convert_cargo(totals, user.currency)
     totals["total"] = {value: converted, currency: user.currency}
     return totals
@@ -99,13 +148,14 @@ module PricingTools
           totals[k]["currency"] = v["currency"]
         end
       end
-    end
+      
     converted = sum_and_convert_cargo(totals, user.currency)
     cargo.unit_price = {value: converted, currency: user.currency}
     totals["total"] = {value: converted * cargo.quantity, currency: user.currency}
     
     return totals
   end
+end
 
   def determine_container_price(client, container, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)

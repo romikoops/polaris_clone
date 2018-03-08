@@ -48,8 +48,14 @@ export class BookingDetails extends Component {
       },
       incoterm: '',
       customs: {
-        bool: false,
-        val: 0
+        import: {
+          bool: false,
+          val: 0
+        },
+        export: {
+          bool: false,
+          val: 0
+        }
       },
       hsCodes: {},
       hsTexts: {},
@@ -105,8 +111,13 @@ export class BookingDetails extends Component {
       this.setState({ [type]: contactData })
     }
   }
-  setCustomsFee (fee) {
-    this.setState({ customs: fee })
+  setCustomsFee (target, fee) {
+    this.setState({
+      customs: {
+        ...this.state.customs,
+        [target]: fee
+      }
+    })
   }
   handleHsTextChange (event) {
     const { name, value } = event.target

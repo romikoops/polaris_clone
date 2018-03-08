@@ -294,12 +294,19 @@ module ShippingTools
     containers = shipment.containers
     if containers.length > 0
       cargoKey = containers.first.size_class
+      cargos = containers
     else
       cargoKey = 'lcl'
+      cargos = cargo_items
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
-    customs_fee = get_item('customsFees', '_id', priceKey)
+    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => cargoKey}]).first
+    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => cargoKey}]).first
+    customs_fee = {
+      import: calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user),
+      export: calc_customs_fees(origin_customs_fee["import"], cargos, shipment.load_type, current_user)
+    }
     hubs = { 
       startHub: { data: @origin,      location: @origin.nexus },
       endHub:   { data: @destination, location: @destination.nexus }
@@ -387,4 +394,6 @@ module ShippingTools
     end
     results
   end
+
+  
 end

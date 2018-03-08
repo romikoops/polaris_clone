@@ -11,10 +11,10 @@ include MongoTools
   # tenant.itineraries.destroy_all
   # Trip.destroy_all
   # Overwrite hubs from excel sheet
-  puts "# Overwrite hubs from excel sheet"
-  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  req = {"xlsx" => hubs}
-  overwrite_hubs(req, shipper)
+  # puts "# Overwrite hubs from excel sheet"
+  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  # req = {"xlsx" => hubs}
+  # overwrite_hubs(req, shipper)
 
   # ### Overwrite dedicated pricings from excel sheet.
   # ### If dedicated == true, shipper.id is automatically inserted.

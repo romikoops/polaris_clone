@@ -598,7 +598,62 @@ class TenantSeeder
           }   
         ]
       }
-    }
+    },
+    {
+    theme: {
+      colors: {
+        primary: "##373838",
+        secondary: "#CCCCCC",
+        brightPrimary: "#E9E9E9",
+        brightSecondary: "#54DC84"
+      },
+      logoLarge: "https://assets.itsmycargo.com/assets/images/logos/gw.png",
+      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/gw.png"
+    },
+    addresses: {
+      main:"Krohnskamp 22, 22301 Hamburg, Deutschland"
+    },
+    phones:{
+      main:"+ 49 172 543 0 576",
+      support: "+ 49 172 543 0 576"
+    },
+    emails: {
+      sales: "jan.glembocki@gw-freight.com",
+      support: "support@gw-freight.com"
+    },
+    subdomain: "gwforwarding",
+    name: "GW Forwarding",
+    scope: {
+      modes_of_transport: {
+        ocean: {
+          container: true,
+          cargo_item: true
+        },
+        air: {
+          container: false,
+          cargo_item: true
+        },
+        rail: {
+            container: false,
+            cargo_item: false
+          }
+      },
+      dangerous_goods: false,
+      incoterm_info_level: 'simple',
+      cargo_info_level: 'hs_codes'
+    },
+    other_data: {
+        cargo_item_types: :all,
+        trucking_availability: [
+          {        
+            values: ['Gothenburg', 'Shanghai'],
+            options: {
+              load_type: :cargo_item
+            }
+          }   
+        ]
+      }
+  }
   ]
 
 

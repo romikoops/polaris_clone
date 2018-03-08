@@ -60,4 +60,28 @@
   .show {
     height: 250px;
   }
+  .customs_prices{
+    margin: 10px 0;
+    p {
+      font-size: 12px;
+      margin: 3px;
+      border-bottom: 0.5px solid rgba(0,0,0,0.25);
+    }
+    h6 {
+      margin: 5px;
+       font-size: 14px;
+    }
+  }
+  .customs_total{
+    margin: 15px 0;
+    p {
+      font-size: 14px;
+      margin: 3px;
+      border-bottom: 1px solid rgba(0,0,0,0.25);
+    }
+    h6 {
+      margin: 5px;
+      font-size: 16px;
+    }
+  }
 }
