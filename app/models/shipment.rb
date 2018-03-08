@@ -214,11 +214,11 @@ class Shipment < ApplicationRecord
   end
 
   def etd
-    Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
+    planned_etd
   end
 
   def eta
-    Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
+    planned_eta
   end
 
   def cargo_charges
