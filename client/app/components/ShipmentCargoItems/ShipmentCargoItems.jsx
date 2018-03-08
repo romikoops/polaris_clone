@@ -250,7 +250,7 @@ export class ShipmentCargoItems extends Component {
             .colli_type .Select-clear-zone {
               position: absolute;
               right: 25px;
-              top: 5px;           
+              top: 6px;           
             }
             .colli_type .Select-arrow-zone {
               position: absolute;
