@@ -365,7 +365,7 @@ export class BookingDetails extends Component {
                 text="Back to dashboard"
                 back
                 iconClass="fa-angle-left"
-                handleNext={this.backToDashboard}
+                handleNext={e => this.backToDashboard(e)}
               />
             </div>
           </div>

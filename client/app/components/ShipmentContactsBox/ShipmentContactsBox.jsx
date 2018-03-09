@@ -69,7 +69,7 @@ export class ShipmentContactsBox extends Component {
           />
         </div>
         <h3>
-          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
+          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(nameToDisplay(type))}
         </h3>
         { type !== 'notifyee' && requiredSpan }
       </div>

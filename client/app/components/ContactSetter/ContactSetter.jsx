@@ -6,7 +6,7 @@ import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 import { AddressBook } from '../AddressBook/AddressBook'
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import StageTimeline from '../StageTimeline/StageTimeline'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, nameToDisplay } from '../../helpers'
 
 export class ContactSetter extends Component {
   constructor (props) {
@@ -160,7 +160,7 @@ export class ContactSetter extends Component {
               <StageTimeline
                 theme={theme}
                 currentStageIndex={stageIndex}
-                stages={this.stages}
+                stages={this.stages.map(nameToDisplay)}
                 setStage={this.setStage}
               />
             </div>

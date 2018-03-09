@@ -7,8 +7,8 @@ export default function nameToDisplay (str) {
   }
   const inputIsCapitalized = capitalize(str) === str
   const convertedStr = inputIsCapitalized
-    ? capitalize(converstionTable[str.toLowerCase()])
-    : converstionTable[str]
+    ? capitalize(converstionTable[str.toLowerCase()] || str)
+    : converstionTable[str] || str
 
   return convertedStr
 }
