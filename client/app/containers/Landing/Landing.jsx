@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
+import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
 import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
 import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
@@ -31,6 +32,31 @@ class Landing extends Component {
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
     return loading || !(loggingIn || registering)
+  }
+  bookNow () {
+    const { tenant, loggedIn, authDispatch } = this.props
+
+    if (loggedIn) {
+      authDispatch.goTo('/booking')
+    } else {
+      const unixTimeStamp = moment().unix().toString()
+      const randNum = Math.floor(Math.random() * 100).toString()
+      const randSuffix = unixTimeStamp + randNum
+      const email = `guest${randSuffix}@${tenant.data.subdomain}.com`
+
+      authDispatch.register(
+        {
+          email,
+          password: 'guestpassword',
+          password_confirmation: 'guestpassword',
+          first_name: 'Guest',
+          last_name: '',
+          tenant_id: tenant.data.id,
+          guest: true
+        },
+        true
+      )
+    }
   }
 
   showCarousel () {
@@ -84,6 +110,7 @@ class Landing extends Component {
           loggedIn={loggedIn}
           tenant={tenant}
           authDispatch={authDispatch}
+          bookNow={() => this.bookNow()}
         />
         <div className={`${styles.service_box} layout-row flex-100 layout-wrap`}>
           <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>
@@ -127,12 +154,12 @@ class Landing extends Component {
         <BlogPostHighlights theme={theme} />
         <div className={`${styles.btm_promo} flex-100 layout-row`}>
           <div className={`flex-50 ${styles.btm_promo_img}`} />
-          <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-center`}>
-            <div className="flex-80 layout-column layout-align-start-center height_100">
+          <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
+            <div className="flex-90 layout-column layout-align-start-start height_100">
               <div className="flex-20 layout-column layout-align-center-start">
                 <h2> There are tons of benefits of managing your logistics online: </h2>
               </div>
-              <div className="flex-65 layout-column layout-align-center-start">
+              <div className="flex-65 layout-column layout-align-start-start">
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
                   <p> Place bookings from wherever, whenever </p>
@@ -154,16 +181,16 @@ class Landing extends Component {
                   <p> Pull statistics and reports on your logistics </p>
                 </div>
               </div>
-              <div
-                className={`${
-                  styles.btm_promo_btn_wrapper
-                } flex-15 layout-column layout-align-start-left`}
+              <div className={
+                `${styles.btm_promo_btn_wrapper} flex-15 ` +
+                'layout-row layout-align-start-left'
+              }
               >
                 <RoundButton
                   text="Book Now"
                   theme={theme}
                   active
-                  handleNext={this.toggleShowLogin}
+                  handleNext={() => this.bookNow()}
                 />
               </div>
             </div>
