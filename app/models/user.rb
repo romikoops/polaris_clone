@@ -7,9 +7,10 @@ class User < ApplicationRecord
   before_validation :set_default_role, :sync_uid
 
   validates :tenant_id, presence: true
-  # validates :email, presence: true, uniqueness: {
-  #   scope: :tenant_id
-  # }
+  validates :email, presence: true, uniqueness: {
+    scope: :tenant_id,
+    message: -> _self, _ { "'#{_self.email}' taken for Tenant '#{_self.tenant.subdomain}'" } 
+  }
 
   # Basic associations
   belongs_to :tenant
