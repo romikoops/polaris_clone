@@ -34,10 +34,12 @@ class Landing extends Component {
     return loading || !(loggingIn || registering)
   }
   bookNow () {
-    const { tenant, loggedIn, authDispatch } = this.props
+    const {
+      tenant, loggedIn, authDispatch, userDispatch
+    } = this.props
 
     if (loggedIn) {
-      authDispatch.goTo('/booking')
+      userDispatch.goTo('/booking')
     } else {
       const unixTimeStamp = moment().unix().toString()
       const randNum = Math.floor(Math.random() * 100).toString()
