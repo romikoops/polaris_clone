@@ -415,6 +415,7 @@ export class CargoDetails extends Component {
                         options={currencyOptions}
                         onChange={this.handleTotalGoodsCurrency}
                         value={totalGoodsCurrency}
+                        clearable={false}
                       />
                     </div>
                   </div>
