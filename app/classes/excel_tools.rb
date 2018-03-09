@@ -299,9 +299,17 @@ module ExcelTools
             customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase)
           end
       end
-      
+      # local_charges = []
       hub_fees.each do |k,v|
         lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
+        # local_charges.push(
+        #   {
+        #     :filter => {:_id => lc_id},
+        #     :update => {
+        #       "$set" => 
+        #     }
+        #   }
+        # )
         update_item('localCharges', {"_id" => lc_id}, v)
       end
       customs.each do |k,v|
