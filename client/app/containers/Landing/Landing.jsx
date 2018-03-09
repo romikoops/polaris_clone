@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
-// import {LandingTopAuthed} from '../../components/LandingTopAuthed/LandingTopAuthed';
 import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
 import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
@@ -94,7 +93,9 @@ class Landing extends Component {
             </h2>
           </div>
           <div className={`${styles.services_row} flex-100 layout-row layout-align-center`}>
-            <div className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center">
+            <div
+              className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center"
+            >
               <div
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
               >
