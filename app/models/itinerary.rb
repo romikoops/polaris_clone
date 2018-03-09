@@ -163,6 +163,10 @@ class Itinerary < ApplicationRecord
 
   def routes
     self.stops.order(:index).to_a.combination(2).map do |stop|
+      if  !stop[0].hub || !stop[1].hub
+        stop[0].itinerary.destroy
+        return
+      end
       self.detailed_hash(
         stop,
         nexus_names:        true,

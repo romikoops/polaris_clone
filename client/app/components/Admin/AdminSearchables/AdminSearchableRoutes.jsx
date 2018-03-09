@@ -60,8 +60,8 @@ export class AdminSearchableRoutes extends Component {
       return fuse.search(event.target.value)
     }
 
-    const filteredRoutesOrigin = search('name')
-    const filteredRoutesDestination = search('mode_of_transport')
+    const filteredRoutesOrigin = search(['name'])
+    const filteredRoutesDestination = search(['mode_of_transport'])
 
     let TopRoutes = filteredRoutesDestination.filter(itinerary =>
       filteredRoutesOrigin.includes(itinerary))

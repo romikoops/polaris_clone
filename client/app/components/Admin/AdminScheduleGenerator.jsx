@@ -16,12 +16,6 @@ import { authHeader } from '../../helpers'
 import styles from './Admin.scss'
 
 class AdminScheduleGenerator extends Component {
-  static handleIntervalChange (ev) {
-    const { name, value } = ev.target
-    const stops = this.state.stopIntervals
-    stops[name] = value
-    this.setState({ stopIntervals: stops })
-  }
   constructor (props) {
     super(props)
     console.log(props)
@@ -53,7 +47,7 @@ class AdminScheduleGenerator extends Component {
   }
   componentDidMount () {
     const { hubs, vehicleTypes, adminDispatch } = this.props
-    if (!vehicleTypes) {
+    if (vehicleTypes.length < 1) {
       adminDispatch.getVehicleTypes(false)
     }
     if (!hubs) {
@@ -87,6 +81,12 @@ class AdminScheduleGenerator extends Component {
   }
   toggleWeekdays (ord) {
     this.setState({ weekdays: { ...this.state.weekdays, [ord]: !this.state.weekdays[ord] } })
+  }
+  handleIntervalChange (ev) {
+    const { name, value } = ev.target
+    const stops = this.state.stopIntervals
+    stops[name] = value
+    this.setState({ stopIntervals: stops })
   }
   handleDayChange (ev) {
     this.setState({ startDate: moment(ev).format('DD/MM/YYYY') })
@@ -127,6 +127,12 @@ class AdminScheduleGenerator extends Component {
 
     const future = {
       after: new Date()
+    }
+    const hubHash = {}
+    if (hubs) {
+      hubs.forEach((hub) => {
+        hubHash[hub.data.id] = hub
+      })
     }
     console.log('mot', mot)
     const vehicleTypeOptions = []
@@ -194,9 +200,9 @@ class AdminScheduleGenerator extends Component {
         (stops[i + 1] ? (
           <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
-              <p className="flex-none">{hubs[s.hub_id].data.name}</p>
+              <p className="flex-none">{hubHash[s.hub_id].data.name}</p>
               <p className="flex-none">-></p>
-              <p className="flex-none">{hubs[stops[i + 1].hub_id].data.name}</p>
+              <p className="flex-none">{hubHash[stops[i + 1].hub_id].data.name}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center input_box_full">
               <input
@@ -205,7 +211,7 @@ class AdminScheduleGenerator extends Component {
                 value={stopIntervals[i]}
                 name={i}
                 placeholder="Days"
-                onChange={AdminScheduleGenerator.handleIntervalChange}
+                onChange={ev => this.handleIntervalChange(ev)}
               />
             </div>
           </div>

@@ -48,6 +48,7 @@ export class AdminSchedules extends Component {
     this.setSortFilter = this.setSortFilter.bind(this)
     this.setHubFilter = this.setHubFilter.bind(this)
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
+    this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
   }
 
   setMoTFilter (mot) {
@@ -107,13 +108,36 @@ export class AdminSchedules extends Component {
       })
     }
   }
+  setItineraryFilter (itinerary) {
+    if (!itinerary) {
+      this.setState({
+        itineraryFilter: { value: false, label: false },
+        filters: {
+          ...this.state.filters,
+          itinerary: false
+        }
+      })
+    } else {
+      this.setState({
+        itineraryFilter: itinerary,
+        filters: {
+          ...this.state.filters,
+          itinerary: true
+        }
+      })
+    }
+  }
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
   getItinerariesForHub (hub) {
     const filteredItineraries =
-    this.props.scheduleData.detailedItineraries
-      .filter(x => x.origin_hub_id === hub.id || x.destination_hub_id === hub.id)
+    this.props.scheduleData.detailedItineraries.filter((itinerary) => {
+      if (!itinerary) {
+        return false
+      }
+      return (itinerary.origin_hub_id === hub.id) || (itinerary.destination_hub_id === hub.id)
+    })
     return filteredItineraries.map(x => x.id)
   }
   toggleView () {
@@ -135,11 +159,12 @@ export class AdminSchedules extends Component {
       theme, hubs, scheduleData, adminDispatch, limit
     } = this.props
     const {
-      filters, hubFilter, sortFilter, panelViewer, motFilter
+      filters, hubFilter, sortFilter, panelViewer, motFilter, itineraryFilter
     } = this.state
     if (!scheduleData || !hubs) {
       return ''
     }
+
     const filterMoTOptions = [
       { value: 'rail', label: 'Rail' },
       { value: 'air', label: 'Air' },
@@ -178,27 +203,35 @@ export class AdminSchedules extends Component {
         break
     }
     let itineraryIds
+    let filteredByHubs = []
+    let filteredByItinerary = []
+
+    if (filters.sort) {
+      allTrips.sort(AdminSchedules.dynamicSort(sortFilter.value))
+    }
+    if (filters.itinerary) {
+      filteredByItinerary = allTrips.filter(x => x.itinerary_id === itineraryFilter.value)
+    }
     if (filters.hub) {
       itineraryIds = this.getItinerariesForHub(hubFilter.value)
+      filteredByHubs = allTrips.filter(x => itineraryIds.includes(x.itinerary_id))
     }
-    if (filters.sort) {
-      allTrips.sort(this.dynamicSort(sortFilter.value))
+
+    let results = []
+    // const results = [...new Set([...filteredByHubs, ...filteredByItinerary])]
+    if (filteredByHubs.length > 0 && filteredByItinerary.length > 0) {
+      const tmp = [...filteredByHubs.slice(), ...filteredByItinerary.slice()]
+      results = [...new Set(tmp)]
+    } else if (filteredByHubs.length > 0 && filteredByItinerary.length === 0) {
+      results = filteredByHubs
+    } else if (filteredByHubs.length === 0 && filteredByItinerary.length > 0) {
+      results = filteredByItinerary
+    } else {
+      results = allTrips
     }
-    allTrips.forEach((trip, i) => {
-      if (filters.hub && itineraryIds.includes(trip.itinerary_id) && i < slimit) {
-        tripArr.push(<AdminTripPanel
-          key={v4()}
-          trip={trip}
-          showPanel={panelViewer[trip.id]}
-          toggleShowPanel={this.toggleShowPanel}
-          layovers={itineraryLayovers}
-          adminDispatch={adminDispatch}
-          itinerary={this.getItinerary(trip)}
-          hubs={hubs}
-          theme={theme}
-        />)
-      }
-      if (!filters.hub && i < slimit) {
+    console.log(results)
+    results.forEach((trip, i) => {
+      if (i < slimit) {
         tripArr.push(<AdminTripPanel
           key={v4()}
           trip={trip}
@@ -235,13 +268,17 @@ export class AdminSchedules extends Component {
     Object.keys(hubs).forEach((key) => {
       hubList.push({ value: hubs[key].data, label: hubs[key].data.name })
     })
+    const itineraryList = []
+    itineraries.forEach((itinerary) => {
+      itineraryList.push({ value: itinerary.id, label: itinerary.name })
+    })
     const listView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div
           className="flex-100 layout-row layout-align-start-center"
           style={{ marginBottom: '25px' }}
         >
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <StyledSelect
               name="mot-filter"
               placeholder="Filter by: MoT"
@@ -251,7 +288,7 @@ export class AdminSchedules extends Component {
               onChange={this.setMoTFilter}
             />
           </div>
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <StyledSelect
               name="sort-filter"
               placeholder="Sort by: Time"
@@ -261,7 +298,7 @@ export class AdminSchedules extends Component {
               onChange={this.setSortFilter}
             />
           </div>
-          <div className="flex-33 layout-row layout-align-start-center">
+          <div className="flex-25 layout-row layout-align-start-center">
             <StyledSelect
               name="hub-filter"
               placeholder="Filter by: Hub"
@@ -269,6 +306,16 @@ export class AdminSchedules extends Component {
               value={this.state.hubFilter}
               options={hubList}
               onChange={this.setHubFilter}
+            />
+          </div>
+          <div className="flex-25 layout-row layout-align-start-center">
+            <StyledSelect
+              name="itinerary-filter"
+              placeholder="Filter by: Itinerary"
+              className={`${styles.select}`}
+              value={this.state.itineraryFilter}
+              options={itineraryList}
+              onChange={ev => this.setItineraryFilter(ev)}
             />
           </div>
         </div>
@@ -298,7 +345,7 @@ export class AdminSchedules extends Component {
             <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx" />
           </div>
         </div>
-        <AdminScheduleGenerator theme={theme} itineraries={itineraries} hubs={hubs} />
+        <AdminScheduleGenerator theme={theme} itineraries={itineraries} />
       </div>
     )
     const currView = showList ? listView : genView
