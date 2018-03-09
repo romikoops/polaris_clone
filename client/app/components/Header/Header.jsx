@@ -126,7 +126,7 @@ class Header extends Component {
 
     const loginPrompt = (
       <a className={defs.pointy} style={{ color: textColor }} onClick={this.toggleShowLogin}>
-        Log in
+        Login/Register
       </a>
     )
     const rightCorner = user && user.first_name && !user.guest ? dropDowns : loginPrompt
