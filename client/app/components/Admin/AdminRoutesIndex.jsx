@@ -45,6 +45,7 @@ export class AdminRoutesIndex extends Component {
           handleClick={viewItinerary}
           tooltip={routeTip.related}
           showTooltip
+          seeAll={false}
         />
       </div>
     )

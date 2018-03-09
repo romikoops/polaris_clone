@@ -360,6 +360,17 @@
   -webkit-align-items: stretch;
               -ms-grid-row-align: stretch;
           align-items: stretch; }
+.layout-align,
+.layout-align-stretch-stretch {
+  -webkit-box-pack: stretch;
+  -webkit-justify-content: stretch;
+          justify-content: stretch;
+  -webkit-align-content: stretch;
+          align-content: stretch;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+              -ms-grid-row-align: stretch;
+          align-items: stretch; }
 
 .layout-align-start,
 .layout-align-start-start,

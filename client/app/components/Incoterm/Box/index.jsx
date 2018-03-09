@@ -18,7 +18,8 @@ export function IncotermBox ({
   setIncoTerm,
   errorStyles,
   showIncotermError,
-  nextStageAttempt
+  nextStageAttempt,
+  direction
 }) {
   const selectedStyle =
     theme && theme.colors
@@ -39,6 +40,64 @@ export function IncotermBox ({
     }
     return 'Port to Port'
   }
+  const simpleOptions = [
+    {
+      label: 'Door to Destination Port',
+      value: 'DTP',
+      direction: 'export',
+      preCarriage: true,
+      onCarriage: false
+    },
+    {
+      label: 'Door to Door',
+      value: 'DTD',
+      direction: 'export',
+      preCarriage: true,
+      onCarriage: true
+    },
+    {
+      label: 'Origin Port to Door',
+      value: 'PTD',
+      direction: 'export',
+      preCarriage: true,
+      onCarriage: true
+    },
+    {
+      label: 'Origin Port to Destination Port',
+      value: 'PTP',
+      direction: 'export',
+      preCarriage: false,
+      onCarriage: false
+    },
+    {
+      label: 'Origin Port to Door',
+      value: 'PTD',
+      direction: 'import',
+      preCarriage: false,
+      onCarriage: true
+    },
+    {
+      label: 'Door to Destination Port',
+      value: 'DTP',
+      direction: 'import',
+      preCarriage: true,
+      onCarriage: false
+    },
+    {
+      label: 'Door to Door',
+      value: 'DTD',
+      direction: 'import',
+      preCarriage: true,
+      onCarriage: true
+    },
+    {
+      label: 'Origin Port to Destination Port',
+      value: 'PTP',
+      direction: 'import',
+      preCarriage: false,
+      onCarriage: false
+    }
+  ]
   const backgroundColor = value => (!value && nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
   const placeholderColorOverwrite = value =>
     (!value && nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
@@ -83,7 +142,7 @@ export function IncotermBox ({
     </div>
   )
 
-  const dropdown = (
+  const dropdownFull = (
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none letter_2">
@@ -104,8 +163,44 @@ export function IncotermBox ({
       </div>
     </div>
   )
-  const boxView =
-    tenantScope && tenantScope.incoterm_info_level === 'simple' ? textDisplay : dropdown
+  const filteredOptions = simpleOptions.filter(x => x.direction === direction)
+  const dropdownSimple = (
+    <div className="flex-100 layout-row layout-align-end-center layout-wrap">
+      <div className="flex-100 layout-row layout-align-end-center">
+        <div className="flex-none letter_2">
+          <TextHeading theme={theme} text="Select Incoterm:" size={3} />
+        </div>
+      </div>
+      <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
+        <StyledSelect
+          name="incoterms"
+          className={styles.select}
+          value={incoterm}
+          options={filteredOptions}
+          onChange={setIncoTerm}
+        />
+        <span className={errorStyles.error_message}>
+          {showIncotermError ? 'Must not be blank' : ''}
+        </span>
+      </div>
+    </div>
+  )
+  let boxView
+  const switchVal =
+    tenantScope && tenantScope.incoterm_info_level ? tenantScope.incoterm_info_level : ''
+  switch (switchVal) {
+    case 'simple':
+      boxView = dropdownSimple
+      break
+    case 'text':
+      boxView = textDisplay
+      break
+    case 'full':
+      boxView = dropdownFull
+      break
+    default:
+      break
+  }
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
       {boxView}
@@ -124,7 +219,8 @@ IncotermBox.propTypes = {
   errorStyles: PropTypes.objectOf(PropTypes.any),
   showIncotermError: PropTypes.bool,
   nextStageAttempt: PropTypes.bool,
-  value: PropTypes.bool
+  value: PropTypes.bool,
+  direction: PropTypes.string
 }
 
 IncotermBox.defaultProps = {
@@ -137,7 +233,8 @@ IncotermBox.defaultProps = {
   errorStyles: {},
   showIncotermError: false,
   nextStageAttempt: false,
-  value: false
+  value: false,
+  direction: ''
 }
 
 export default IncotermBox

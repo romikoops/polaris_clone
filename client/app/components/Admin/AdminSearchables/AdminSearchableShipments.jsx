@@ -17,6 +17,7 @@ export class AdminSearchableShipments extends Component {
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.seeAll = this.seeAll.bind(this)
+    this.limitArray = this.limitArray.bind(this)
   }
 
   componentDidUpdate (prevProps) {
@@ -68,7 +69,8 @@ export class AdminSearchableShipments extends Component {
       'imc_reference',
       'companyName',
       'originHub',
-      'destinationHub'
+      'destinationHub',
+      'clientName'
     ])
 
     this.setState({
@@ -174,7 +176,10 @@ export class AdminSearchableShipments extends Component {
         {viewType}
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+            <div
+              className="flex-none layout-row layout-align-center-center pointy"
+              onClick={this.seeAll}
+            >
               <p className="flex-none">See all</p>
             </div>
           </div>

@@ -2,8 +2,8 @@ development:
   host: 'localhost'
   port: '6379'
 test:
-  host: 'imcr-eu-cache.7gkcnp.ng.0001.euc1.cache.amazonaws.com'
+  host: 'imcr-new-cache.7gkcnp.0001.euc1.cache.amazonaws.com'
   port: '6379'
 production:
-  host: 'imcr-eu-cache.7gkcnp.ng.0001.euc1.cache.amazonaws.com'
+  host: 'imcr-new-cache.7gkcnp.0001.euc1.cache.amazonaws.com'
   port: '6379'

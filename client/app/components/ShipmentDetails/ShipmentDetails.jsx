@@ -134,12 +134,10 @@ export class ShipmentDetails extends Component {
     }
   }
   setIncoTerm (opt) {
+    this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
+    this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
     this.setState({
-      incoterm: {
-        ...this.state.incoterm,
-        key: opt.value,
-        text: opt.label
-      }
+      incoterm: opt
     })
   }
   setTargetAddress (target, address) {
@@ -535,6 +533,7 @@ export class ShipmentDetails extends Component {
     //     background-color: #f9f9f9;
     //   }
     // `
+
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
@@ -585,6 +584,7 @@ export class ShipmentDetails extends Component {
             incoterm={this.state.incoterm}
             setIncoTerm={this.setIncoTerm}
             errorStyles={errorStyles}
+            direction={shipmentData.shipment.direction}
             showIncotermError={showIncotermError}
             nextStageAttempt={this.state.nextStageAttempt}
           />
@@ -647,8 +647,8 @@ export class ShipmentDetails extends Component {
               theme={theme}
               preCarriage={this.state.has_pre_carriage}
               onCarriage={this.state.has_on_carriage}
-              originFees
-              destinationFees
+              originFees={this.state.has_pre_carriage}
+              destinationFees={this.state.has_on_carriage}
             />
           </div>
         </div>

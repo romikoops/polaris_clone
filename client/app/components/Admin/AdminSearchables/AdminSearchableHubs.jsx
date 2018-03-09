@@ -36,7 +36,7 @@ export class AdminSearchableHubs extends Component {
     if (seeAll) {
       seeAll()
     } else {
-      adminDispatch.goTo('/hubs')
+      adminDispatch.goTo('/admin/hubs')
     }
   }
   handleSearchChange (event) {
@@ -135,7 +135,7 @@ export class AdminSearchableHubs extends Component {
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
             <div
-              className="flex-none layout-row layout-align-center-center"
+              className="flex-none layout-row layout-align-center-center pointy"
               onClick={this.seeAll}
             >
               <p className="flex-none">See all</p>

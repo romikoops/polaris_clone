@@ -210,7 +210,7 @@ function getShipment (id, redirect) {
       (data) => {
         dispatch(alertActions.success('Fetching Shipment successful'))
         if (redirect) {
-          dispatch(push(`/account/shipments/${id}`))
+          dispatch(push(`/account/shipments/view/${id}`))
         }
         dispatch(success(data))
       },

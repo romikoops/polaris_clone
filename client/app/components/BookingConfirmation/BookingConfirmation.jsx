@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-import { moment } from '../../constants'
+import { moment, documentTypes } from '../../constants'
 import styles from './BookingConfirmation.scss'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
-import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails'
-import { ContainerDetails } from '../ContainerDetails/ContainerDetails'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 import { Price } from '../Price/Price'
@@ -13,7 +11,9 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { Checkbox } from '../Checkbox/Checkbox'
-import FileTile from '../FileTile/FileTile'
+import { CargoItemGroup } from '../Cargo/Item/Group'
+import { CargoContainerGroup } from '../Cargo/Container/Group'
+import DocumentsForm from '../Documents/Form'
 
 export class BookingConfirmation extends Component {
   static sumCargoFees (cargos) {
@@ -38,7 +38,7 @@ export class BookingConfirmation extends Component {
       }
     })
     if (total === 0.0) {
-      return { currency: '', total: 'N/A' }
+      return { currency: '', total: 'None' }
     }
     return { currency: curr, total: total.toFixed(2) }
   }
@@ -49,6 +49,8 @@ export class BookingConfirmation extends Component {
     }
     this.toggleAcceptTerms = this.toggleAcceptTerms.bind(this)
     this.acceptShipment = this.acceptShipment.bind(this)
+    this.fileFn = this.fileFn.bind(this)
+    this.deleteDoc = this.deleteDoc.bind(this)
   }
   componentDidMount () {
     const { setStage } = this.props
@@ -59,10 +61,92 @@ export class BookingConfirmation extends Component {
     this.setState({ acceptTerms: !this.state.acceptTerms })
     // this.props.handleInsurance();
   }
+  deleteDoc (doc) {
+    const { shipmentDispatch } = this.props
+    shipmentDispatch.deleteDocument(doc.id)
+  }
   acceptShipment () {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
     shipmentDispatch.acceptShipment(shipment.id)
+  }
+  fileFn (file) {
+    const { shipmentData, shipmentDispatch } = this.props
+    const { shipment } = shipmentData
+    const type = file.doc_type
+    const url = `/shipments/${shipment.id}/upload/${type}`
+    shipmentDispatch.uploadDocument(file, type, url)
+  }
+  prepCargoItemGroups (cargos) {
+    const { theme, shipmentData } = this.props
+    const { cargoItemTypes, hsCodes } = shipmentData
+    const cargoGroups = {}
+    let groupCount = 1
+    const resultArray = []
+    cargos.forEach((c) => {
+      if (!cargoGroups[c.id]) {
+        cargoGroups[c.id] = {
+          dimension_y: parseFloat(c.dimension_y) * parseInt(c.quantity, 10),
+          dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),
+          dimension_x: parseFloat(c.dimension_x) * parseInt(c.quantity, 10),
+          payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
+          quantity: 1,
+          groupAlias: groupCount,
+          cargo_group_id: c.id,
+          chargeable_weight: parseFloat(c.chargeable_weight) * parseInt(c.quantity, 10),
+          hsCodes: c.hs_codes,
+          hsText: c.hs_text,
+          cargoType: cargoItemTypes[c.cargo_item_type_id],
+          volume:
+            parseFloat(c.dimension_y) *
+            parseFloat(c.dimension_x) *
+            parseFloat(c.dimension_y) /
+            1000000 *
+            parseInt(c.quantity, 10),
+          items: []
+        }
+        for (let index = 0; index < parseInt(c.quantity, 10); index++) {
+          cargoGroups[c.id].items.push(c)
+        }
+        groupCount += 1
+      }
+    })
+    Object.keys(cargoGroups).forEach((k) => {
+      resultArray.push(<CargoItemGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+    })
+    return resultArray
+  }
+  prepContainerGroups (cargos) {
+    const { theme, shipmentData } = this.props
+    const { hsCodes } = shipmentData
+    const cargoGroups = {}
+    let groupCount = 1
+    const resultArray = []
+    cargos.forEach((c) => {
+      if (!cargoGroups[c.id]) {
+        cargoGroups[c.id] = {
+          items: [],
+          size_class: c.size_class,
+          payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
+          tare_weight: parseFloat(c.tare_weight) * parseInt(c.quantity, 10),
+          gross_weight: parseFloat(c.gross_weight) * parseInt(c.quantity, 10),
+          quantity: 1,
+          groupAlias: groupCount,
+          cargo_group_id: c.id,
+          hsCodes: c.hs_codes,
+          hsText: c.customs_text
+        }
+        groupCount += 1
+      }
+    })
+    Object.keys(cargoGroups).forEach((k) => {
+      resultArray.push(<CargoContainerGroup
+        group={cargoGroups[k]}
+        theme={theme}
+        hsCodes={hsCodes}
+      />)
+    })
+    return resultArray
   }
   render () {
     const {
@@ -83,26 +167,23 @@ export class BookingConfirmation extends Component {
     const { acceptTerms } = this.state
     const hubs = { startHub: locations.startHub, endHub: locations.endHub }
     if (!shipment) return <h1> Loading</h1>
-    // const createdDate = shipment
-    //   ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
-    //   : moment().format('DD-MM-YYYY | HH:mm A')
-    const cargo = []
+
+    let cargoView
+
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
     const brightGradientStyle = theme
       ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
       : { color: 'black' }
-    const pushToCargo = (array, Comp) => {
-      array.forEach((ci, i) => {
-        const offset = i % 3 !== 0 ? 'offset-5' : ''
-        cargo.push(<div key={v4()} className={`flex-30 ${offset} layout-row layout-align-center-center`}>
-          <Comp item={ci} index={i} theme={theme} viewHSCodes={false} />
-        </div>)
-      })
+
+    if (containers) {
+      cargoView = this.prepContainerGroups(containers)
     }
-    if (shipment.load_type === 'cargo_item' && cargoItems) pushToCargo(cargoItems, CargoItemDetails)
-    if (shipment.load_type === 'container' && containers) pushToCargo(containers, ContainerDetails)
+    if (cargoItems.length > 0) {
+      cargoView = this.prepCargoItemGroups(cargoItems)
+    }
+
     let notifyeesJSX =
       (notifyees &&
         notifyees.map(notifyee => (
@@ -154,7 +235,7 @@ export class BookingConfirmation extends Component {
           <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
         </div>
         <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-          <p className="flex-100">Shipper</p>
+          <p className="flex-100">Sender</p>
           <div className="flex-100 layout-row layout-align-space-between-start">
             <div className="flex-60 layout-row layout-wrap layout-align-center-start">
               <p className={`${styles.contact_text} flex-100`}>
@@ -188,7 +269,7 @@ export class BookingConfirmation extends Component {
           <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
         </div>
         <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-          <p className="flex-100">Consignee</p>
+          <p className="flex-100">Receiver</p>
           <div className="flex-100 layout-row layout-align-space-between-start">
             <div className="flex-60 layout-row layout-wrap layout-align-center-start">
               <p className={`${styles.contact_text} flex-100`}>
@@ -220,7 +301,17 @@ export class BookingConfirmation extends Component {
     const docView = []
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<FileTile key={doc.id} doc={doc} theme={theme} />)
+        docView.push(<div className="flex-50 layout-row">
+          <DocumentsForm
+            theme={theme}
+            type={doc.doc_type}
+            dispatchFn={this.fileFn}
+            text={documentTypes[doc.doc_type]}
+            doc={doc}
+            viewer
+            deleteFn={this.deleteDoc}
+          />
+        </div>)
       })
     }
     return (
@@ -236,7 +327,7 @@ export class BookingConfirmation extends Component {
               className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}
             >
               <p className="flex-100">
-                Please review your booking details before confirming the shipment.
+                Please review your booking below before confirming the shipment.
               </p>
             </div>
           </div>
@@ -371,11 +462,11 @@ export class BookingConfirmation extends Component {
                     </h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value}` : 'N/A'}
+                    {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value}` : 'None'}
                   </h3>
                 </div>
               </div>
@@ -394,11 +485,11 @@ export class BookingConfirmation extends Component {
                     </h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_on_carriage ? `${feeHash.trucking_on.value}` : 'N/A'}
+                    {shipment.has_on_carriage ? `${feeHash.trucking_on.value}` : 'None'}
                   </h3>
                 </div>
               </div>
@@ -415,13 +506,13 @@ export class BookingConfirmation extends Component {
                     <h4 className="flex-100 no_m letter_3 center">{feeHash.insurance.currency}</h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
                     {feeHash.insurance && feeHash.insurance.val
                       ? `${feeHash.insurance.val.toFixed(2)}`
-                      : 'N/A'}
+                      : 'None'}
                   </h3>
                 </div>
               </div>
@@ -434,11 +525,18 @@ export class BookingConfirmation extends Component {
                   <h5 className="flex-none letter_3">Customs</h5>
                 </div>
                 <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  <h4 className="flex-100 no_m letter_3 center">
-                    {BookingConfirmation.sumCustomsFees(feeHash.cargo).currency}
-                  </h4>
+                  {feeHash.customs && feeHash.customs.val ? (
+                    <h4 className="flex-100 no_m letter_3 center">{feeHash.customs.currency}</h4>
+                  ) : (
+                    <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                      None
+                    </h4>
+                  )}
+
                   <h3 className="flex-100 no_m letter_3 center">
-                    {BookingConfirmation.sumCustomsFees(feeHash.cargo).total}
+                    {feeHash.customs && feeHash.customs.val
+                      ? `${feeHash.customs.val.toFixed(2)}`
+                      : 'None'}
                   </h3>
                 </div>
               </div>
@@ -473,7 +571,9 @@ export class BookingConfirmation extends Component {
             <div className="flex-100 layout-row layout-align-start-center">
               <TextHeading theme={theme} size={3} text="Cargo Details" />
             </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">{cargo}</div>
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+              {cargoView}
+            </div>
           </div>
           <div
             className={`${

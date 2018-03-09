@@ -39,7 +39,7 @@ export class AdminShipmentView extends Component {
       }
     })
     if (total === 0.0) {
-      return { currency: '', total: 'N/A' }
+      return { currency: ' ', total: 'None' }
     }
     return { currency: curr, total: total.toFixed(2) }
   }
@@ -131,33 +131,27 @@ export class AdminShipmentView extends Component {
     let groupCount = 1
     const resultArray = []
     cargos.forEach((c) => {
-      if (!cargoGroups[c.cargo_group_id]) {
-        cargoGroups[c.cargo_group_id] = {
-          items: [c],
-          dimension_y: c.dimension_y,
-          dimension_z: c.dimension_z,
-          dimension_x: c.dimension_x,
-          payload_in_kg: c.payload_in_kg,
+      if (!cargoGroups[c.id]) {
+        cargoGroups[c.id] = {
+          dimension_y: parseFloat(c.dimension_y) * parseInt(c.quantity, 10),
+          dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),
+          dimension_x: parseFloat(c.dimension_x) * parseInt(c.quantity, 10),
+          payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
           quantity: 1,
           groupAlias: groupCount,
-          cargo_group_id: c.cargo_group_id,
-          chargeable_weight: c.chargeable_weight,
+          cargo_group_id: c.id,
+          chargeable_weight: parseFloat(c.chargeable_weight) * parseInt(c.quantity, 10),
           hsCodes: c.hs_codes,
           hsText: c.hs_text,
           cargoType: cargoItemTypes[c.cargo_item_type_id],
-          volume: c.dimension_y * c.dimension_x * c.dimension_y / 1000000
+          volume: (parseFloat(c.dimension_y) * parseFloat(c.dimension_x) *
+           parseFloat(c.dimension_y) / 1000000) * parseInt(c.quantity, 10),
+          items: []
+        }
+        for (let index = 0; index < parseInt(c.quantity, 10); index++) {
+          cargoGroups[c.id].items.push(c)
         }
         groupCount += 1
-      } else {
-        cargoGroups[c.cargo_group_id].items.push(c)
-        cargoGroups[c.cargo_group_id].dimension_y += c.dimension_y
-        cargoGroups[c.cargo_group_id].dimension_z += c.dimension_z
-        cargoGroups[c.cargo_group_id].dimension_x += c.dimension_x
-        cargoGroups[c.cargo_group_id].payload_in_kg += c.payload_in_kg
-        cargoGroups[c.cargo_group_id].chargeable_weight += c.chargeable_weight
-        cargoGroups[c.cargo_group_id].quantity += 1
-        cargoGroups[c.cargo_group_id].volume +=
-          c.dimension_y * c.dimension_x * c.dimension_y / 1000000
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
@@ -172,26 +166,20 @@ export class AdminShipmentView extends Component {
     let groupCount = 1
     const resultArray = []
     cargos.forEach((c) => {
-      if (!cargoGroups[c.cargo_group_id]) {
-        cargoGroups[c.cargo_group_id] = {
-          items: [c],
+      if (!cargoGroups[c.id]) {
+        cargoGroups[c.id] = {
+          items: [],
           size_class: c.size_class,
-          payload_in_kg: c.payload_in_kg,
-          tare_weight: c.tare_weight,
-          gross_weight: c.gross_weight,
+          payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
+          tare_weight: parseFloat(c.tare_weight) * parseInt(c.quantity, 10),
+          gross_weight: parseFloat(c.gross_weight) * parseInt(c.quantity, 10),
           quantity: 1,
           groupAlias: groupCount,
-          cargo_group_id: c.cargo_group_id,
+          cargo_group_id: c.id,
           hsCodes: c.hs_codes,
           hsText: c.customs_text
         }
         groupCount += 1
-      } else {
-        cargoGroups[c.cargo_group_id].items.push(c)
-        cargoGroups[c.cargo_group_id].payload_in_kg += c.payload_in_kg
-        cargoGroups[c.cargo_group_id].tare_weight += c.tare_weight
-        cargoGroups[c.cargo_group_id].gross_weight += c.gross_weight
-        cargoGroups[c.cargo_group_id].quantity += 1
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
@@ -750,11 +738,11 @@ export class AdminShipmentView extends Component {
                     </h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value}` : 'N/A'}
+                    {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value}` : 'None'}
                   </h3>
                 </div>
               </div>
@@ -773,11 +761,11 @@ export class AdminShipmentView extends Component {
                     </h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_on_carriage ? `${feeHash.trucking_on.value}` : 'N/A'}
+                    {shipment.has_on_carriage ? `${feeHash.trucking_on.value}` : 'None'}
                   </h3>
                 </div>
               </div>
@@ -794,13 +782,13 @@ export class AdminShipmentView extends Component {
                     <h4 className="flex-100 no_m letter_3 center">{feeHash.insurance.currency}</h4>
                   ) : (
                     <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      N/A
+                      None
                     </h4>
                   )}
                   <h3 className="flex-100 no_m letter_3 center">
                     {feeHash.insurance && feeHash.insurance.val
                       ? `${feeHash.insurance.val.toFixed(2)}`
-                      : 'N/A'}
+                      : 'None'}
                   </h3>
                 </div>
               </div>

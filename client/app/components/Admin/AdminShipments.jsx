@@ -8,6 +8,7 @@ import { AdminShipmentView, AdminShipmentsIndex } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminShipmentsGroup } from './Shipments/Group'
 
 class AdminShipments extends Component {
   constructor (props) {
@@ -70,8 +71,9 @@ class AdminShipments extends Component {
     )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+        >
           <TextHeading theme={theme} size={1} text="Shipments" />
           {selectedShipment ? backButton : ''}
         </div>
@@ -79,30 +81,91 @@ class AdminShipments extends Component {
           <Route
             exact
             path="/admin/shipments"
-            render={props => (<AdminShipmentsIndex
-              theme={theme}
-              handleShipmentAction={this.handleShipmentAction}
-              clients={clients}
-              hubs={hubs}
-              hubHash={hubHash}
-              shipments={shipments}
-              viewShipment={this.viewShipment}
-              {...props}
-            />)}
+            render={props => (
+              <AdminShipmentsIndex
+                theme={theme}
+                handleShipmentAction={this.handleShipmentAction}
+                clients={clients}
+                hubs={hubs}
+                hubHash={hubHash}
+                shipments={shipments}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
           />
           <Route
             exact
-            path="/admin/shipments/:id"
-            render={props => (<AdminShipmentView
-              theme={theme}
-              adminDispatch={adminDispatch}
-              loading={loading}
-              hubs={hubs}
-              handleShipmentAction={this.handleShipmentAction}
-              shipmentData={shipment}
-              clients={clients}
-              {...props}
-            />)}
+            path="/admin/shipments/view/:id"
+            render={props => (
+              <AdminShipmentView
+                theme={theme}
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipmentData={shipment}
+                clients={clients}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/requested"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Requested"
+                target="requested"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/open"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Open"
+                target="open"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/finished"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Finished"
+                target="finished"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                {...props}
+              />
+            )}
           />
         </Switch>
       </div>

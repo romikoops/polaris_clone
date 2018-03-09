@@ -186,6 +186,7 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         dashboard: action.payload.data,
+        shipments: action.payload.data.shipments,
         loading: false
       }
     case adminConstants.GET_DASHBOARD_FAILURE: {
@@ -861,6 +862,23 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         error: { route: action.error },
+        loading: false
+      }
+    case adminConstants.EDIT_LOCAL_CHARGES_REQUEST:
+      return state
+    case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS:
+      return {
+        ...state,
+        hub: {
+          ...state.hub,
+          charges: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_LOCAL_CHARGES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
         loading: false
       }
     case adminConstants.CLEAR_LOADING:

@@ -16,7 +16,6 @@ export class AdminPricingsClientIndex extends Component {
     this.state = {
       redirect: false
     }
-    this.backToIndex = this.backToIndex.bind(this)
     this.viewClient = this.viewClient.bind(this)
   }
 
@@ -26,7 +25,7 @@ export class AdminPricingsClientIndex extends Component {
   }
 
   render () {
-    const { theme, clients, adminTools } = this.props
+    const { theme, clients } = this.props
     // const { selectedPricing } = this.state;
     if (!clients) {
       return ''
@@ -40,7 +39,7 @@ export class AdminPricingsClientIndex extends Component {
           theme={theme}
           size="small"
           text="Back"
-          handleNext={this.backToIndex}
+          handleNext={AdminPricingsClientIndex.backToIndex}
           iconClass="fa-chevron-left"
         />
       </div>
@@ -64,7 +63,7 @@ export class AdminPricingsClientIndex extends Component {
           theme={theme}
           clients={clients}
           handleClick={this.viewClient}
-          seeAll={() => adminTools.goTo('/admin/pricings/clients')}
+          seeAll={false}
         />
       </div>
     )

@@ -61,23 +61,18 @@ export class CargoContainerGroup extends Component {
         <div className="flex-100 layout-row layout-align-start-center">
           <p className="flex-none" style={{ fontSize: '10px' }}>{`Item ${i}`}</p>
         </div>
-        <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
+        <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
           <p className="flex-none">Payload in Kg</p>
-          <p className="flex-none">{item.payload_in_kg} cm</p>
-        </div>
-        <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-          <p className="flex-none">Tare Weight</p>
-          <p className="flex-none">{item.tare_weight} cm</p>
-        </div>
-
-        <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-          <p className="flex-none">Gross Weight</p>
-          <p className="flex-none">{item.gross_weight} cm</p>
-        </div>
-
-        <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-          <p className="flex-none">Gross Weight</p>
           <p className="flex-none">{item.payload_in_kg} kg</p>
+        </div>
+        <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
+          <p className="flex-none">Tare Weight</p>
+          <p className="flex-none">{item.tare_weight} kg</p>
+        </div>
+
+        <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
+          <p className="flex-none">Gross Weight</p>
+          <p className="flex-none">{item.gross_weight} kg</p>
         </div>
         <hr className="flex-100" />
       </div>
@@ -111,24 +106,20 @@ export class CargoContainerGroup extends Component {
             styles.detailed_row
           } flex-100 layout-row layout-wrap layout-align-none-center`}
         >
-          <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
+          <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
             <p className="flex-none">Payload in Kg</p>
-            <p className="flex-none">{group.payload_in_kg} cm</p>
-          </div>
-          <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-            <p className="flex-none">Tare Weight</p>
-            <p className="flex-none">{group.tare_weight} cm</p>
-          </div>
-
-          <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-            <p className="flex-none">Gross Weight</p>
-            <p className="flex-none">{group.gross_weight} cm</p>
-          </div>
-
-          <div className={`${styles.unit_data_cell} flex-25 layout-row layout-align-space-between`}>
-            <p className="flex-none">Gross Weight</p>
             <p className="flex-none">{group.payload_in_kg} kg</p>
           </div>
+          <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
+            <p className="flex-none">Tare Weight</p>
+            <p className="flex-none">{group.tare_weight} kg</p>
+          </div>
+
+          <div className={`${styles.unit_data_cell} flex-33 layout-row layout-align-space-between`}>
+            <p className="flex-none">Gross Weight</p>
+            <p className="flex-none">{group.gross_weight} kg</p>
+          </div>
+
         </div>
         <hr className="flex-100" />
       </div>

@@ -130,6 +130,7 @@ export class AdminDashboard extends Component {
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.requested}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/requested')}
       />
     ) : (
       ''
@@ -146,6 +147,7 @@ export class AdminDashboard extends Component {
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.open}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/open')}
       />
     ) : (
       ''
@@ -162,6 +164,7 @@ export class AdminDashboard extends Component {
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.finished}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/finished')}
       />
     ) : (
       ''

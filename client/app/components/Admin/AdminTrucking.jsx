@@ -6,11 +6,15 @@ import PropTypes from '../../prop-types'
 import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
+import { history } from '../../helpers'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { adminTrucking as truckTip } from '../../constants'
 import { TextHeading } from '../TextHeading/TextHeading'
 
 class AdminTrucking extends Component {
+  static backToIndex () {
+    history.goBack()
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -18,7 +22,6 @@ class AdminTrucking extends Component {
       creatorView: false
     }
     this.viewTrucking = this.viewTrucking.bind(this)
-    this.backToIndex = this.backToIndex.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
   viewTrucking (truckingNexusId) {
@@ -28,11 +31,6 @@ class AdminTrucking extends Component {
   }
   toggleCreator () {
     this.setState({ creatorView: !this.state.creatorView })
-  }
-  backToIndex () {
-    const { dispatch, history } = this.props
-    this.setState({ selectedRoute: false })
-    dispatch(history.push('/admin/routes'))
   }
 
   render () {
@@ -50,7 +48,7 @@ class AdminTrucking extends Component {
           theme={theme}
           size="small"
           text="Back"
-          handleNext={this.backToIndex}
+          handleNext={AdminTrucking.backToIndex}
           iconClass="fa-chevron-left"
         />
       </div>

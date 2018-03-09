@@ -35,7 +35,7 @@ export class AdminSearchableClients extends Component {
     if (seeAll) {
       seeAll()
     } else {
-      adminDispatch.goTo('/clients')
+      adminDispatch.goTo('/admin/clients')
     }
   }
   handleSearchChange (event) {
@@ -129,7 +129,10 @@ export class AdminSearchableClients extends Component {
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+            <div
+              className="flex-none layout-row layout-align-center-center pointy"
+              onClick={this.seeAll}
+            >
               <p className="flex-none">See all</p>
             </div>
           </div>

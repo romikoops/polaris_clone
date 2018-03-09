@@ -140,6 +140,7 @@ class OfferCalculator
     @itineraries.each do |itin|
       origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 10.days).order(:etd).uniq
       destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).order(:etd).uniq
+      
       layovers = origin_layovers + destination_layovers
       trip_layovers = layovers.group_by(&:trip_id)
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
@@ -170,20 +171,24 @@ class OfferCalculator
     
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
+      
       if trip && trip.length > 1
         sched_key = "#{trip[0].stop.hub_id}-#{trip[1].stop.hub_id}"
         
         next if charges[sched_key]
 
         charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-        
+        set_local_charges!(charges, trip, sched_key)
         set_trucking_charges!(charges, trip, sched_key)
+        
         set_cargo_charges!(charges, trip, sched_key)
+       
       end
     end
     
     charges.reject!{ |_, charge| charge[:cargo].empty? }
-    raise ApplicationError::NoRoute if charges.empty?
+    
+    raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges
   end
 
@@ -204,6 +209,31 @@ class OfferCalculator
         trip[1].stop.hub,
         'destination',
         'import'
+      )
+    end
+  end
+
+  def set_local_charges!(charges, trip, sched_key)
+    if @shipment.has_pre_carriage
+      charges[sched_key][:export] = determine_local_charges(
+        trip[0].stop.hub,
+        @shipment.load_type,
+        @cargo_units,
+        'export',
+        trip[0].itinerary.mode_of_transport,
+        @user
+      )
+      
+    end
+    
+    if @shipment.has_on_carriage
+      charges[sched_key][:import] = determine_local_charges(
+        trip[1].stop.hub,
+        @shipment.load_type,
+        @cargo_units,
+        'import',
+        trip[1].itinerary.mode_of_transport,
+        @user
       )
     end
   end
@@ -244,6 +274,9 @@ class OfferCalculator
         @user, 
         @cargo_units.length
       )
+       Rails.logger.info "CHARGE RESULT"
+       Rails.logger.info charge_result
+       
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end
@@ -304,9 +337,7 @@ class OfferCalculator
         raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
       end
       converted_totals = sum_and_convert(raw_totals, @user.currency)
-      @shipment.schedules_charges[key]["total"] = converted_totals
-
-      
+      @shipment.schedules_charges[key]["total"] = {value: converted_totals, currency: @user.currency}
       if @total_price[:total] == 0 
         
         @total_price[:total] = converted_totals

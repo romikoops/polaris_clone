@@ -4,7 +4,8 @@ import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
 import FileUploader from '../FileUploader/FileUploader'
-import { HSCodeRow } from '../HSCodeRow/HSCodeRow'
+import DocumentsForm from '../Documents/Form'
+// import { HSCodeRow } from '../HSCodeRow/HSCodeRow'
 import defaults from '../../styles/default_classes.scss'
 import { converter } from '../../helpers'
 import { currencyOptions } from '../../constants'
@@ -26,6 +27,7 @@ export class CargoDetails extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
     this.fileFn = this.fileFn.bind(this)
+    this.deleteDoc = this.deleteDoc.bind(this)
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
   }
   toggleInsurance () {
@@ -33,15 +35,23 @@ export class CargoDetails extends Component {
     this.props.handleInsurance()
   }
   toggleCustoms () {
-    const { setCustomsFee, customsData } = this.props
     this.setState({ customsView: !this.state.customsView })
-    // this.timeoutId = setTimeout(function() {
-    // this.setState({ showNoCustoms: this.state.customsView })
-    const converted = this.calcCustomsFee()
-    const resp = converted === 0 ? { bool: false, val: 0 } : { bool: true, val: converted }
-    if (customsData && customsData.val && customsData.val !== converted) {
-      setCustomsFee(resp)
-    }
+  }
+  toggleSpecificCustoms (target) {
+    const {
+      setCustomsFee,
+      // customsData,
+      shipmentData
+    } = this.props
+    const { customs } = shipmentData
+    const converted = customs[target].total.value
+    const resp = converted === 0
+      ? { bool: false, val: 0 }
+      : { bool: true, val: converted, currency: customs[target].total.currency }
+
+    // if (customsData && customsData[target].val && customsData[target].val !== converted) {
+    setCustomsFee(target, resp)
+    // }
   }
   deleteDoc (doc) {
     const { shipmentDispatch } = this.props
@@ -55,7 +65,7 @@ export class CargoDetails extends Component {
     shipmentDispatch.uploadDocument(file, type, url)
   }
 
-  calcCustomsFee () {
+  calcCustomsFee (target) {
     const {
       hsCodes, shipmentData, currencies, tenant, hsTexts
     } = this.props
@@ -114,11 +124,12 @@ export class CargoDetails extends Component {
       shipmentData,
       theme,
       insurance,
-      hsCodes,
-      hsTexts,
-      handleHsTextChange,
-      setHsCode,
-      deleteCode,
+      // hsCodes,
+      // hsTexts,
+      // handleHsTextChange,
+      // setHsCode,
+      // deleteCode,
+      customsData,
       finishBookingAttempted,
       user,
       tenant,
@@ -126,7 +137,7 @@ export class CargoDetails extends Component {
     } = this.props
     const { totalGoodsCurrency } = this.state
     const {
-      dangerousGoods, documents, customs, cargoItems, containers
+      dangerousGoods, documents
     } = shipmentData
     const DocViewer = ({ doc }) => (
       <div className="flex-100 layout-row layout-align-start-center">
@@ -144,7 +155,7 @@ export class CargoDetails extends Component {
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
-          this.state.insuranceView ? styles.show : ''
+          this.props.insurance.bool ? styles.show : ''
         }`}
       >
         <div className="flex-80 layout-row layout-wrap">
@@ -190,47 +201,89 @@ export class CargoDetails extends Component {
             customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
-        </div>
-        <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
-          <h5 className="flex-100"> Price </h5>
-          <h6 className="flex-100">
-            {' '}
-            {customs ? this.calcCustomsFee() : '18.50'} {user.currency}
-          </h6>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-start">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none"> Export Customs: </p>
+                <Checkbox
+                  onChange={() => this.toggleSpecificCustoms('export')}
+                  checked={customsData.export.bool}
+                  theme={theme}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none"> Import Customs</p>
+                <Checkbox
+                  onChange={() => this.toggleSpecificCustoms('import')}
+                  checked={customsData.import.bool}
+                  theme={theme}
+                />
+              </div>
+            </div>
+          </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div className="flex-40 layout-row -alyout-align-start-center">
-              <p className="flex-none">Do you have your own customs credit? </p>
-              <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+              <div className="flex-40 layout-row -alyout-align-start-center">
+                <p className="flex-none">Do you have your own customs credit? </p>
+                <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
+              </div>
+              <div className="flex-15 layout-row layout-align-start-center">
+                <Checkbox
+                  onChange={this.props.toggleCustomsCredit}
+                  checked={this.props.customsCredit}
+                  theme={theme}
+                />
+                <div className="flex-5" />
+                <p className="flex-30">Yes</p>
+              </div>
+              <div className="flex-15 layout-row layout-align-start-center">
+                <Checkbox
+                  onChange={this.props.toggleCustomsCredit}
+                  checked={!this.props.customsCredit}
+                  theme={theme}
+                />
+                <div className="flex-5" />
+                <p className="flex-30">No</p>
+              </div>
             </div>
-            <div className="flex-15 layout-row layout-align-start-center">
-              <Checkbox
-                onChange={this.props.toggleCustomsCredit}
-                checked={this.props.customsCredit}
-                theme={theme}
-              />
-              <div className="flex-5" />
-              <p className="flex-30">Yes</p>
+            <div className="flex-80 layout-row layout-wrap layout-align-start-center">
+              <p className="flex-90">
+                <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
+                VAT will be applied to the final invoice if you do not have customs credit.
+              </p>
             </div>
-            <div className="flex-15 layout-row layout-align-start-center">
-              <Checkbox
-                onChange={this.props.toggleCustomsCredit}
-                checked={!this.props.customsCredit}
-                theme={theme}
-              />
-              <div className="flex-5" />
-              <p className="flex-30">No</p>
-            </div>
-          </div>
-          <div className="flex-80 layout-row layout-wrap layout-align-start-center">
-            <p className="flex-90">
-              <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
-              VAT will be applied to the final invoice if you do not have customs credit.
-            </p>
           </div>
         </div>
-        <HSCodeRow
+        <div className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}>
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Import</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? customsData.import.val.toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Export</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? customsData.export.val.toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+
+          <div className={`${styles.customs_total} flex-100 layout-row  layout-align-center-start`}>
+            <p className="flex-none">Total</p>
+            <h6 className="flex-none center">
+              {' '}
+              {customsData ? (customsData.import.val + customsData.export.val).toFixed(2) : '18.50'} {user.currency}
+            </h6>
+          </div>
+
+        </div>
+
+        {/* <HSCodeRow
           className="flex-100"
           containers={containers}
           cargoItems={cargoItems}
@@ -241,7 +294,7 @@ export class CargoDetails extends Component {
           deleteCode={deleteCode}
           hsCodes={hsCodes}
           hsTexts={hsTexts}
-        />
+        /> */}
       </div>
     )
     const noCustomsBox = (
@@ -295,10 +348,21 @@ export class CargoDetails extends Component {
         <div className="flex-33 no_max layout-row layout-align-center-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
-              <p className={`flex-none ${styles.f_header}`}> EORI ( if applicable)</p>
+              {/* <TextHeading theme={theme} size={4} text="EORI" /> */}
+              <p className={`flex-none ${styles.f_header}`}>
+                {' '}
+                EORI <i>(if applicable)</i>
+              </p>
+              {/* <p className="flex-75 center five_m">(if applicable)</p> */}
             </div>
             <div className="flex-100 input_box">
-              <input type="text" name="eori" value={eori} onChange={this.handleChange} />
+              <input
+                type="text"
+                name="eori"
+                value={eori}
+                onChange={this.handleChange}
+                placeholder="Type in EORI number"
+              />
             </div>
           </div>
         </div>
@@ -325,14 +389,6 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100 layout-row">
-                    <div className="flex-33 layout-row">
-                      <NamedSelect
-                        className="flex-100"
-                        options={currencyOptions}
-                        onChange={this.handleTotalGoodsCurrency}
-                        value={totalGoodsCurrency}
-                      />
-                    </div>
                     <div className="flex-66 layout-row">
                       <FormsyInput
                         className={`flex-100 ${styles.cargo_input} `}
@@ -344,13 +400,21 @@ export class CargoDetails extends Component {
                         type="number"
                         name="totalGoodsValue"
                         onChange={this.handleChange}
-                        submitAttempted={this.props.finishBookingAttempted}
+                        submitAttempted={finishBookingAttempted}
                         validations={{ nonNegative: (values, value) => value > 0 }}
                         validationErrors={{
                           nonNegative: 'Must be greater than 0',
                           isDefaultRequiredValue: 'Must be greater than 0'
                         }}
                         required
+                      />
+                    </div>
+                    <div className="flex-33 layout-row">
+                      <NamedSelect
+                        className="flex-100"
+                        options={currencyOptions}
+                        onChange={this.handleTotalGoodsCurrency}
+                        value={totalGoodsCurrency}
                       />
                     </div>
                   </div>
@@ -376,6 +440,24 @@ export class CargoDetails extends Component {
                     />
                   </div>
                 </div>
+                <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-100">
+                    <div className={`flex-none ${styles.f_header}`}>
+                      {' '}
+                      <TextHeading theme={theme} size={3} text="Incoterm" />
+                    </div>
+                  </div>
+                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                    <textarea
+                      name="incoterm"
+                      id=""
+                      cols="30"
+                      rows="6"
+                      value={this.props.incoterm}
+                      onChange={this.props.handleChange}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5
                   layout-row layout-wrap alyout-align-start-start"
@@ -386,48 +468,32 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap" name="packing_sheet">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={3}
-                        text="Packing Sheet"
-                        color={finishBookingAttempted && !documents.packing_sheet ? 'red' : false}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-100">
-                    {documents.packing_sheet ? (
-                      <DocViewer doc={documents.packing_sheet} />
-                    ) : (
-                      <FileUploader
-                        theme={theme}
-                        type="packing_sheet"
-                        dispatchFn={this.fileFn}
-                        text="Packing Sheet"
-                      />
-                    )}
+                <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
+                  <div className="flex-100 layout-row">
+                    <DocumentsForm
+                      theme={theme}
+                      type="packing_sheet"
+                      dispatchFn={this.fileFn}
+                      text="Packing Sheet"
+                      doc={documents.packing_sheet}
+                      isRequired
+                      deleteFn={this.deleteDoc}
+                    />
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap" name="commercial_invoice">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={3}
-                        text="Commercial Invoice"
-                        color={
-                          finishBookingAttempted && !documents.commercial_invoice ? 'red' : false
-                        }
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-100">
-                    {documents.commercial_invoice ? (
+                <div className="flex-100 layout-row layout-wrap" name="commercial_invoice">
+                  <div className="flex-100 layout-row">
+                    <DocumentsForm
+                      theme={theme}
+                      type="commercial_invoice"
+                      dispatchFn={this.fileFn}
+                      text="Commercial Invoice"
+                      doc={documents.commercial_invoice}
+                      isRequired
+                      deleteFn={this.deleteDoc}
+                    />
+                    {/* {documents.commercial_invoice ? (
                       <DocViewer doc={documents.commercial_invoice} />
                     ) : (
                       <FileUploader
@@ -436,129 +502,95 @@ export class CargoDetails extends Component {
                         dispatchFn={this.fileFn}
                         text="Commercial Invoice"
                       />
-                    )}
+                    )} */}
                   </div>
                 </div>
 
-                <div className="flex-50 layout-row layout-wrap">
-                  <div className="flex-100 layout-row">
-                    <div className="flex-none">
-                      {' '}
-                      <TextHeading theme={theme} size={3} text="Certificate of Origin" />
-                    </div>
-                  </div>
+                <div className="flex-100 layout-row layout-wrap">
                   <div className="flex-100 layout-row layout-wrap">
-                    <p className="flex-75 center five_m">(if applicable)</p>
-                    {documents.certificate_of_origin ? (
-                      <DocViewer doc={documents.certificate_of_origin} />
-                    ) : (
-                      <FileUploader
-                        theme={theme}
-                        type="certificate_of_origin"
-                        dispatchFn={this.fileFn}
-                        text="Certificate of Origin"
-                      />
-                    )}
+                    <DocumentsForm
+                      theme={theme}
+                      type="certificate_of_origin"
+                      dispatchFn={this.fileFn}
+                      text="Certificate of Origin"
+                      doc={documents.certificate_of_origin}
+                      deleteFn={this.deleteDoc}
+                    />
                   </div>
                 </div>
                 {dangerousGoods ? (
-                  <div className="flex-50 layout-row layout-wrap">
-                    <div className="flex-100">
-                      <div className={`flex-none ${styles.f_header}`}>
-                        {' '}
-                        <TextHeading theme={theme} size={3} text="Dangerouus Goods Declaration" />
-                      </div>
-                    </div>
-                    <div className="flex-100">
-                      {documents.dangerous_goods ? (
-                        <DocViewer doc={documents.dangerous_goods} />
-                      ) : (
-                        <FileUploader
-                          theme={theme}
-                          type="dangerous_goods"
-                          dispatchFn={this.fileFn}
-                          text="Dangerous Goods Declaration"
-                        />
-                      )}
+                  <div className="flex-100 layout-row layout-wrap">
+                    <div className="flex-100 layout-row layout-wrap">
+                      <DocumentsForm
+                        theme={theme}
+                        type="dangerous_goods"
+                        dispatchFn={this.fileFn}
+                        text="Dangerous Goods"
+                        doc={documents.dangerous_goods}
+                        deleteFn={this.deleteDoc}
+                      />
                     </div>
                   </div>
                 ) : (
                   ''
                 )}
-              </div>
-              <div className="flex-100 layout-row layout-align-start-start">
-                <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-                  <div className="flex-100">
-                    <div className={`flex-none ${styles.f_header}`}>
-                      {' '}
-                      <TextHeading theme={theme} size={3} text="Notes" />
-                    </div>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                    <textarea
-                      name="notes"
-                      id=""
-                      cols="30"
-                      rows="6"
-                      value={this.props.notes}
-                      onChange={this.props.handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="
-                flex-gt-sm-45
-                 offset-gt-sm-5
-                 layout-row
-                 layout-align-start-start
-                 layout-wrap
-                "
-                >
+
+                <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                     <div className="flex-100">
                       <div className={`flex-none ${styles.f_header}`}>
                         {' '}
-                        <TextHeading theme={theme} size={3} text="Miscellaneous Documentation" />
+                        <TextHeading theme={theme} size={3} text="Document Notes" />
                       </div>
                     </div>
-                    <FileUploader
-                      theme={theme}
-                      type="miscellaneous"
-                      dispatchFn={this.fileFn}
-                      text="Miscellaneous"
-                    />
+                    <div className="flex-100 layout-row layout-align-start-start input_box_full">
+                      <textarea
+                        name="notes"
+                        id=""
+                        cols="30"
+                        rows="6"
+                        value={this.props.notes}
+                        onChange={this.props.handleChange}
+                      />
+                    </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                    {documents && documents.miscellaneous
-                      ? documents.miscellaneous.map(d => (
-                        <div className="flex-50 layout-row layout-align-center-center">
-                          <DocViewer doc={d} />
-                        </div>
-                      ))
-                      : ''}
+                  <div className="
+                flex-gt-sm-100
+                 layout-row
+                 layout-align-start-start
+                 layout-wrap
+                "
+                  >
+                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                      <DocumentsForm
+                        theme={theme}
+                        type="miscellaneous"
+                        dispatchFn={this.fileFn}
+                        text="Miscellaneous"
+                        multiple
+                        deleteFn={this.deleteDoc}
+                      />
+                    </div>
+                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                      {documents && documents.miscellaneous
+                        ? documents.miscellaneous.map(d => (
+                          <DocumentsForm
+                            theme={theme}
+                            type="miscellaneous"
+                            dispatchFn={this.fileFn}
+                            text="Miscellaneous"
+                            doc={d}
+                            displayOnly
+                            deleteFn={this.deleteDoc}
+                          />
+                        ))
+                        : ''}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="flex-100 layout-row layout-align-start-start">
-              <div className="flex-50 layout-row layout-align-start-start layout-wrap">
-                <div className="flex-100">
-                  <div className={`flex-none ${styles.f_header}`}>
-                    {' '}
-                    <TextHeading theme={theme} size={3} text="Incoterm" />
-                  </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-start-start input_box_full">
-                  <textarea
-                    name="incoterm"
-                    id=""
-                    cols="30"
-                    rows="6"
-                    value={this.props.incoterm}
-                    onChange={this.props.handleChange}
-                  />
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-center padd_top">
@@ -572,7 +604,7 @@ export class CargoDetails extends Component {
               <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
               <Checkbox
                 onChange={this.toggleInsurance}
-                checked={this.state.insuranceView}
+                checked={this.props.insurance.bool}
                 theme={theme}
               />
             </div>
@@ -612,7 +644,8 @@ CargoDetails.propTypes = {
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,
   insurance: PropTypes.shape({
-    val: PropTypes.any
+    val: PropTypes.any,
+    bool: PropTypes.bool
   }).isRequired,
   customsData: PropTypes.shape({
     val: PropTypes.any
@@ -623,8 +656,8 @@ CargoDetails.propTypes = {
     uploadDocument: PropTypes.func
   }).isRequired,
   user: PropTypes.user.isRequired,
-  deleteCode: PropTypes.func.isRequired,
-  setHsCode: PropTypes.func.isRequired,
+  // deleteCode: PropTypes.func.isRequired,
+  // setHsCode: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     rate: PropTypes.number
@@ -632,7 +665,7 @@ CargoDetails.propTypes = {
   hsCodes: PropTypes.arrayOf(PropTypes.string).isRequired,
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
-  handleHsTextChange: PropTypes.func,
+  // handleHsTextChange: PropTypes.func,
   customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
@@ -645,7 +678,7 @@ CargoDetails.defaultProps = {
   tenant: null,
   finishBookingAttempted: false,
   hsTexts: {},
-  handleHsTextChange: null,
+  // handleHsTextChange: null,
   customsCredit: false,
   eori: '',
   notes: '',

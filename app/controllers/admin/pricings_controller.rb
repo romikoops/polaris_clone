@@ -111,7 +111,7 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_fcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_fcl_pricings(req, true)
+      overwrite_mongo_maersk_fcl_pricings(req, true)
       response_handler(true)
     else
       response_handler(false)

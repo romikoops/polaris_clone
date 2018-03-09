@@ -228,47 +228,125 @@ module ExcelTools
     # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
     # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
+<<<<<<< HEAD
+def overwrite_local_charges(params, user = current_user)
+=======
 
-  def overwrite_service_charges(params, user = current_user)
-    old_ids = ServiceCharge.pluck(:id)
-    new_ids = []
-
+  def overwrite_local_charges(params, user = current_user)
+>>>>>>> mergewithdev
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
+<<<<<<< HEAD
+      
+=======
 
-    rows = first_sheet.parse
-    rows.each do |r|
-      new_charge = {
-        effective_date: r[0],
-        expiration_date: r[1],
-        hub_code: r[2],
-        terminal_handling_cbm: {currency: r[3], value: r[4], trade_direction: "export"},
-        terminal_handling_ton: {currency: r[3], value: r[5], trade_direction: "export"},
-        terminal_handling_min: {currency: r[3], value: r[6], trade_direction: "export"},
-        lcl_service_cbm: {currency: r[7], value: r[8], trade_direction: "export"},
-        lcl_service_ton: {currency: r[7], value: r[9], trade_direction: "export"},
-        lcl_service_min: {currency: r[7], value: r[10], trade_direction: "export"},
-        isps: {currency: r[11], value: r[12], trade_direction: "export"},
-        exp_declaration: {currency: r[13], value: r[14], trade_direction: "export"},
-        extra_hs_code: {currency: r[15], value: r[16], trade_direction: "export"},
-        doc_fee: {currency: r[17], value: r[18], trade_direction: "export"},
-        liner_service_fee: {currency: r[19], value: r[20], trade_direction: "export"},
-        vgm_fee: {currency: r[21], value: r[22], trade_direction: "export"},
-        documentation_fee: {currency: r[23], value: r[24], trade_direction: "import"},
-        handling_fee: {currency: r[25], value: r[26], trade_direction: "import"},
-        customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
-        cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
+>>>>>>> mergewithdev
+      rows = first_sheet.parse(
+        fee: 'FEE',
+        mot: 'MOT',
+        fee_code: 'FEE_CODE',
+        load_type: 'LOAD_TYPE',
+        direction:	'DIRECTION',
+        currency:	'CURRENCY',
+        rate_basis:	'RATE_BASIS',
+        ton: 'TON',
+        cbm: 'CBM',
+        kg: 'KG',
+        item: 'ITEM',
+        shipment: 'SHIPMENT',
+        bill: 'BILL',
+        container: 'CONTAINER',
+        minimum: 'MINIMUM'
+      )
+      hub_fees = {}
+<<<<<<< HEAD
+      ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+       hub_fees[lt] = {
+=======
+       customs = {}
+      ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+      hub_fees[lt] = {
+>>>>>>> mergewithdev
+        "import" => {},
+        "export" => {},
+        "mode_of_transport" => rows[0][:mot],
+        "nexus_id" => hub.nexus.id,
+        "tenant_id" => hub.tenant_id,
+        "hub_id" => hub.id,
+        "load_type" => lt
+<<<<<<< HEAD
       }
-      hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
-      new_charge.delete(:hub_code)
-      new_charge[:hub_id] = hub.id
-
-      if hub.service_charge
-        hub.service_charge.destroy
       end
-
-      sc = ServiceCharge.create(new_charge)
-      hub.service_charge = sc
+      rows.each do |row|
+        case row[:rate_basis]
+        when 'PER_SHIPMENT'
+          charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_CONTAINER'
+          charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_BILL'
+          charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_CBM'
+          charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_ITEM'
+          charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_CBM_TON'
+          charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        when 'PER_CBM_KG'
+          charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+        end
+        hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+      end
+      
+      hub_fees.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
+        update_item('localCharges', {"_id" => lc_id}, v)
+      end
+=======
+      }
+      customs[lt] = {
+        "import" => {}, 
+        "export" => {},
+        "nexus_id" => hub.nexus.id,
+        "tenant_id" => hub.tenant_id,
+        "hub_id" => hub.id,
+        "load_type" => lt
+      }
+      end
+      rows.each do |row|
+          case row[:rate_basis]
+          when 'PER_SHIPMENT'
+            charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CONTAINER'
+            charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_BILL'
+            charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM'
+            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_ITEM'
+            charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_TON'
+            charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_KG'
+            charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          end
+          if row[:fee_code] != 'CUST'
+            hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+          else
+            customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase)
+          end
+      end
+      
+      hub_fees.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
+        update_item('localCharges', {"_id" => lc_id}, v)
+      end
+      customs.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
+        update_item('customsFees', {"_id" => lc_id}, v)
+      end
+>>>>>>> mergewithdev
     end
   end
 
@@ -385,7 +463,6 @@ module ExcelTools
       
       if locations[row[:from]] && locations[row[:to]]
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
-      
       else
         locations[row[:from]] = Location.find_by_name(row[:from])
         locations[row[:to]] = Location.find_by_name(row[:to])
@@ -564,7 +641,7 @@ module ExcelTools
         'lcl'
       ]
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 40.days
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
       lcl_obj = {
@@ -672,7 +749,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -689,35 +766,8 @@ module ExcelTools
       lcl_rate_wm: 'LCL_RATE_WM',
       lcl_rate_min: 'LCL_RATE_MIN',
       lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
-      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
-      ohc_currency: "OHC_CURRENCY",
-      ohc_cbm: "OHC_CBM",
-      ohc_ton: "OHC_TON",
-      ohc_min: "OHC_MIN",
-      lcls_currency: "LCLS_CURRENCY",
-      lcl_service_cbm: "LCL_SERVICE_CBM",
-      lcl_service_ton: "LCL_SERVICE_TON",
-      lcl_service_min: "LCL_SERVICE_MIN",
-      isps_currency: "ISPS_CURRENCY",
-      isps: "ISPS",
-      exp_currency: "EXP_CURRENCY",
-      exp_declaration: "EXP_DECLARATION",
-      exp_limit: "EXP_LIMIT",
-      exp_extra: "EXP_XTRA",
-      odf_currency: "ODF_CURRENCY",
-      odf: "ODF",
-      ls_currency: "LS_CURRENCY",
-      liner_service_fee: "LINER_SERVICE_FEE",
-      vgm_currency: "VGM_CURRENCY",
-      vgm_fee: "VGM_FEE", 
-      ddf_currency: "DDF_CURRENCY",
-      ddf: "DDF",
-      dhc_currency: "DHC_CURRENCY",
-      dhc: "DHC",
-      customs_currency: "CUSTOMS_CURRENCY",
-      customs_clearance: "CUSTOMS_CLEARANCE",
-      cfs_currency: "CFS_CURRENCY",
-      cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
+      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN'
+      
     )
     new_pricings = []
     new_itinerary_pricings = {}
@@ -744,15 +794,17 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
-      itinerary.generate_weekly_schedules(
-        stops_in_order,
-        steps_in_order,
-        row[:effective_date], 
-        row[:expiration_date], 
-        [1, 5],
-        vehicle.id
-      )
+      row[:expiration_date] = row[:effective_date] + 40.days
+      if generate
+        itinerary.generate_weekly_schedules(
+          stops_in_order,
+          steps_in_order,
+          row[:effective_date], 
+          row[:expiration_date], 
+          [1, 5],
+          vehicle.id
+        )
+      end
 
       lcl_obj = {
         BAS: {
@@ -766,70 +818,11 @@ module ExcelTools
           rate: row[:lcl_heavy_weight_surcharge_wm],
           min: row[:lcl_heavy_weight_surcharge_min],
           rate_basis: 'PER_CBM'
-        },
-        OHC: {
-          currency: row[:ohc_currency],
-          cbm: row[:ohc_cbm],
-          ton: row[:ohc_ton],
-          min: row[:ohc_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        DHC: {
-          currency: row[:dhc_currency],
-          rate: row[:dhc],
-          rate_basis: 'PER_ITEM'
-          # cbm: row[:dhc_cbm],
-          # ton: row[:dhc_ton],
-          # min: row[:dhc_min],
-          # rate_basis: 'PER_CBM_TON'
-        },
-        CUSTOMS: {
-          currency: row[:customs_currency],
-          rate: row[:customs_clearance],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        CFS: {
-          currency: row[:cfs_currency],
-          rate: row[:cfs_terminal_charges],
-          rate_basis: 'PER_CBM'
-        },
-        LS: {
-          currency: row[:ls_currency],
-          rate: row[:liner_service_fee],
-          rate_basis: 'PER_ITEM'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        DDF: {
-          currency: row[:ddf_currency],
-          rate: row[:ddf],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        ODF: {
-          currency: row[:odf_currency],
-          rate: row[:odf],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        
-      }
-      customsObj = {
-          currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra]
         }
+      }
+      
       price_obj = {"lcl" =>lcl_obj.to_h}
-
+      
       if dedicated
         cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
@@ -854,7 +847,7 @@ module ExcelTools
           
           user_pricing = { pathKey => priceKey}
           
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          
           update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_itinerary_pricings[pathKey] ||= {}
@@ -881,7 +874,7 @@ module ExcelTools
           }
 
           update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          
 
           new_itinerary_pricings[pathKey] ||= {}
           new_itinerary_pricings[pathKey]["open"]                  = priceKey
@@ -897,7 +890,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     terms = {
       "BAS" => "Basic Ocean Freight",
@@ -1005,7 +998,8 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 40.days
+      if generate
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
         steps_in_order,
@@ -1014,6 +1008,7 @@ module ExcelTools
         [1, 5],
         vehicle.id
       )
+      end
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
 
@@ -1084,5 +1079,16 @@ module ExcelTools
     base_str = cargo_class.dup
     base_str.slice! cargo_class.rindex("f")
     "#{base_str}_rate".to_sym
+  end
+
+  def local_charge_load_setter(all_charges, charge, load_type, direction)
+    if load_type === 'fcl'
+      ['fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+        all_charges[lt][direction][charge[:key]] = charge
+      end
+    else
+      all_charges[load_type][direction][charge[:key]] = charge
+    end
+    return all_charges
   end
 end

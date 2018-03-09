@@ -59,6 +59,7 @@ export class AdminShipmentsIndex extends Component {
           theme={theme}
           handleShipmentAction={handleShipmentAction}
           tooltip={adminTip.requested}
+          seeAll={false}
         />
         <AdminSearchableShipments
           handleClick={this.viewShipment}
@@ -69,6 +70,7 @@ export class AdminShipmentsIndex extends Component {
           theme={theme}
           handleShipmentAction={handleShipmentAction}
           tooltip={adminTip.open}
+          seeAll={false}
         />
         <AdminSearchableShipments
           handleClick={this.viewShipment}
@@ -79,6 +81,7 @@ export class AdminShipmentsIndex extends Component {
           theme={theme}
           handleAction={handleShipmentAction}
           tooltip={adminTip.finished}
+          seeAll={false}
         />
         { mergedOpenShipments.length === 0 &&
         mergedReqShipments.length === 0 &&

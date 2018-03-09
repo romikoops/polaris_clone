@@ -1,6 +1,7 @@
 class Trip < ApplicationRecord
   has_many :layovers
   belongs_to :vehicle
+  belongs_to :itinerary
   def self.update_times
     trips = Trip.all
     trips.each do |t|

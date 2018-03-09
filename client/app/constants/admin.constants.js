@@ -156,7 +156,11 @@ export const adminConstants = {
 
   VIEW_TRUCKING_REQUEST: 'VIEW_TRUCKING_REQUEST',
   VIEW_TRUCKING_SUCCESS: 'VIEW_TRUCKING_SUCCESS',
-  VIEW_TRUCKING_FAILURE: 'VIEW_TRUCKING_FAILURE'
+  VIEW_TRUCKING_FAILURE: 'VIEW_TRUCKING_FAILURE',
+
+  EDIT_LOCAL_CHARGES_REQUEST: 'EDIT_LOCAL_CHARGES_REQUEST',
+  EDIT_LOCAL_CHARGES_SUCCESS: 'EDIT_LOCAL_CHARGES_SUCCESS',
+  EDIT_LOCAL_CHARGES_FAILURE: 'EDIT_LOCAL_CHARGES_FAILURE'
 }
 
 export const serviceChargeNames = {
@@ -268,7 +272,8 @@ export const rateBasises = [
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
   { value: 'PER_CBM', label: 'Per cbm' },
   { value: 'PER_TON', label: 'Per ton' },
-  { value: 'PERCENTAGE', label: 'Percentage' }
+  { value: 'PERCENTAGE', label: 'Percentage' },
+  { value: 'PER_BILL', label: 'Per Bill of Lading' }
 ]
 export const truckingRateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
@@ -361,7 +366,124 @@ export const lclPricingSchema = {
   route_id: null,
   hub_route_id: null
 }
+export const exportFeeSchema = {
+  OHC: {
+    currency: 'USD',
+    cbm: 165,
+    ton: 395,
+    min: 395,
+    rate_basis: 'PER_CBM_TON'
+  },
+  DHC: {
+    currency: 'USD',
+    rate: 50,
+    rate_basis: 'PER_ITEM'
+  },
+  CUSTOMS: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  CFS: {
+    currency: 'USD',
+    rate: 22,
+    rate_basis: 'PER_CBM'
+  },
+  LS: {
+    currency: 'USD',
+    rate: 675,
+    rate_basis: 'PER_ITEM'
+  },
+  LCLS: {
+    currency: 'USD',
+    cbm: 50,
+    ton: 50,
+    min: 50,
+    rate_basis: 'PER_CBM_TON'
+  },
+  ISPS: {
+    currency: 'EUR',
+    rate: 5,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  DDF: {
+    currency: 'USD',
+    rate: 5,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  ODF: {
+    currency: 'USD',
+    rate: 625,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  VGM: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  ENS: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  }
+}
+export const importFeeSchema = {
+  DHC: {
+    currency: 'USD',
+    rate: 50,
+    rate_basis: 'PER_ITEM'
+  },
 
+  LCLS: {
+    currency: 'USD',
+    cbm: 50,
+    ton: 50,
+    min: 50,
+    rate_basis: 'PER_CBM_TON'
+  },
+  ISPS: {
+    currency: 'EUR',
+    rate: 5,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  DDF: {
+    currency: 'USD',
+    rate: 5,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  ODF: {
+    currency: 'USD',
+    rate: 625,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  VGM: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  ENS: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  }
+}
+export const customsFeeSchema = {
+  CUSTOMS: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  },
+  TRF: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_DOC'
+  },
+  ENS: {
+    currency: 'USD',
+    rate: 25,
+    rate_basis: 'PER_SHIPMENT'
+  }
+}
 export const rateBasisSchema = {
   PER_CBM: {
     currency: 'USD',
@@ -407,6 +529,12 @@ export const rateBasisSchema = {
     currency: 'EUR',
     rate: 5,
     rate_basis: 'PER_SHIPMENT'
+  },
+  PER_BILL: {
+    currency: 'EUR',
+    rate: 5,
+    extra: 5,
+    rate_basis: 'PER_BILL'
   }
 }
 export const fclPricingSchema = {

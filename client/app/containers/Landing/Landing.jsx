@@ -94,9 +94,7 @@ class Landing extends Component {
             </h2>
           </div>
           <div className={`${styles.services_row} flex-100 layout-row layout-align-center`}>
-            <div
-              className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center"
-            >
+            <div className="layout-row flex-100 flex-gt-sm-80 card layout-align-space-between-center">
               <div
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
               >
@@ -113,7 +111,7 @@ class Landing extends Component {
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
               >
                 <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1} />
-                <h3>Transparent </h3>
+                <h3> Full Transparency </h3>
               </div>
               <div
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
@@ -131,24 +129,28 @@ class Landing extends Component {
           <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-center`}>
             <div className="flex-80 layout-column layout-align-start-center height_100">
               <div className="flex-20 layout-column layout-align-center-start">
-                <h2> Enjoy the most advanced and easy to use booking system on the planet </h2>
+                <h2> There are tons of benefits of managing your logistics online: </h2>
               </div>
               <div className="flex-65 layout-column layout-align-center-start">
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Instant Booking </p>
+                  <p> Place bookings from wherever, whenever </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Price Comparison </p>
+                  <p> Get an instant overview of available offers </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Fastest Routes </p>
+                  <p> Reuse old shipments and store addresses </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Real Time Updates </p>
+                  <p> View or download documents when you need them </p>
+                </div>
+                <div className="flex layout-row layout-align-start-center">
+                  <i className="fa fa-check" />
+                  <p> Pull statistics and reports on your logistics </p>
                 </div>
               </div>
               <div
@@ -157,7 +159,7 @@ class Landing extends Component {
                 } flex-15 layout-column layout-align-start-left`}
               >
                 <RoundButton
-                  text="Sign Up"
+                  text="Book Now"
                   theme={theme}
                   active
                   handleNext={this.toggleShowLogin}

@@ -106,7 +106,7 @@ export class AdminPricingRouteView extends Component {
           theme={theme}
           size="small"
           text="Back"
-          handleNext={this.backToIndex}
+          handleNext={AdminPricingRouteView.backToIndex}
           iconClass="fa-chevron-left"
         />
       </div>
