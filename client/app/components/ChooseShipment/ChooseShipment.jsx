@@ -8,7 +8,7 @@ import { LOAD_TYPES } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize, gradientTextGenerator, switchIcon, percentageToHex } from '../../helpers'
+import { capitalize, gradientTextGenerator, percentageToHex } from '../../helpers'
 
 export class ChooseShipment extends Component {
   constructor (props) {
@@ -36,7 +36,7 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, scope, messages } = this.props
+    const { theme, messages } = this.props
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =
@@ -45,6 +45,7 @@ export class ChooseShipment extends Component {
         : { color: 'black' }
     const directionButtons = ['import', 'export'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
+      const commercialAction = { import: 'Buying', export: 'Selling' }
       return (
         <div
           className={
@@ -54,7 +55,7 @@ export class ChooseShipment extends Component {
           onClick={() => this.setDirection(dir)}
         >
           <div className="flex-80 layout-row layout-align-space-between-center">
-            <p className="flex-none">{capitalize(dir)}</p>
+            <p className="flex-none"> I am { commercialAction[dir] } ({ capitalize(dir) })</p>
             {direction === dir ? (
               <i className="flex-none fa fa-check clip" style={gradientStyle} />
             ) : (
@@ -87,7 +88,8 @@ export class ChooseShipment extends Component {
         {flash}
         <div
           className={
-            `flex-none ${defs.content_width} ` + 'layout-row layout-align-start-center layout-wrap'
+            `flex-none ${defs.content_width} ` +
+            'layout-row layout-align-start-center layout-wrap'
           }
         >
           <div className={`${styles.header} flex-100 layout-row layout-align-start-center`}>
@@ -165,8 +167,7 @@ export class ChooseShipment extends Component {
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
   messages: PropTypes.arrayOf(PropTypes.string),
-  selectLoadType: PropTypes.func.isRequired,
-  scope: PropTypes.objectOf(PropTypes.any).isRequired
+  selectLoadType: PropTypes.func.isRequired
 }
 
 ChooseShipment.defaultProps = {
