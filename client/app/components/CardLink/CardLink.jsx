@@ -25,7 +25,7 @@ export class CardLink extends Component {
     const handleClick = path ? () => this.setState({ redirect: true }) : this.props.handleClick
     const buttonStyle = code && selectedType === code ? styles.selected : styles.unselected
     const backgroundSize = options && options.contained ? 'contain' : 'cover'
-    const imgClass = { backgroundImage: `url(${img})`, backgroundSize }
+    const imgStyles = { backgroundImage: `url(${img})`, backgroundSize }
     const gradientStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -35,17 +35,19 @@ export class CardLink extends Component {
         className={`${styles.card_link}  layout-column flex-100 flex-gt-sm-30 ${buttonStyle}`}
         onClick={handleClick}
       >
-        <div className={`${styles.card_img}  flex-85`} style={imgClass} />
+        <div className={`${styles.card_img} flex-85`} style={imgStyles} />
         <div
-          className={`${styles.card_action}  flex-15 layout-row layout-align-space-between-center`}
+          className={`${styles.card_action} flex-15 layout-row layout-align-space-between-center`}
         >
           <div className="flex-none layout-row layout-align-center-center">
             <p className="flex-none">{text} </p>
           </div>
           <div className="flex-none layout-row layout-align-center-center">
-            { code && selectedType === code
-              ? <i className="flex-none fa fa-check" style={gradientStyle} />
-              : '' }
+            {
+              code && selectedType === code
+                ? <i className="flex-none fa fa-check" style={gradientStyle} />
+                : ''
+            }
           </div>
         </div>
       </div>

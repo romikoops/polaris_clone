@@ -415,6 +415,7 @@ export class CargoDetails extends Component {
                         options={currencyOptions}
                         onChange={this.handleTotalGoodsCurrency}
                         value={totalGoodsCurrency}
+                        clearable={false}
                       />
                     </div>
                   </div>
@@ -593,41 +594,47 @@ export class CargoDetails extends Component {
 
           </div>
         </div>
-        <div className="flex-100 layout-row layout-align-center padd_top">
-          <div
-            className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
-          >
-            <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Insurance" />
+        <div className={
+          `${styles.insurance_customs_sec} flex-100 ` +
+          'layout-row layout-wrap layout-align-center'
+        }
+        >
+          <div className="flex-100 layout-row layout-align-center padd_top">
+            <div
+              className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
+            >
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={2} text="Insurance" />
+                </div>
+                <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
+                <Checkbox
+                  onChange={this.toggleInsurance}
+                  checked={this.props.insurance.bool}
+                  theme={theme}
+                />
               </div>
-              <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
-              <Checkbox
-                onChange={this.toggleInsurance}
-                checked={this.props.insurance.bool}
-                theme={theme}
-              />
+              {insuranceBox}
             </div>
-            {insuranceBox}
           </div>
-        </div>
-        <div className="flex-100 layout-row layout-align-center padd_top">
-          <div
-            className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
-          >
-            <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
+          <div className="flex-100 layout-row layout-align-center padd_top">
+            <div
+              className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
+            >
+              <div className="flex-100 layout-row layout-align-start-center">
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
+                </div>
+                <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
+                <Checkbox
+                  onChange={this.toggleCustoms}
+                  checked={this.state.customsView}
+                  theme={theme}
+                />
               </div>
-              <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
-              <Checkbox
-                onChange={this.toggleCustoms}
-                checked={this.state.customsView}
-                theme={theme}
-              />
+              {customsBox}
+              {noCustomsBox}
             </div>
-            {customsBox}
-            {noCustomsBox}
           </div>
         </div>
       </div>

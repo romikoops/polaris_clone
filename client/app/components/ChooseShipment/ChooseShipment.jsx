@@ -8,19 +8,19 @@ import { LOAD_TYPES } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize, gradientTextGenerator, switchIcon, percentageToHex } from '../../helpers'
+import { capitalize, gradientTextGenerator, percentageToHex } from '../../helpers'
 
 export class ChooseShipment extends Component {
   constructor (props) {
     super(props)
-    const cards = LOAD_TYPES.map(loadType => ({
+    this.state = {}
+    this.cards = LOAD_TYPES.map(loadType => ({
       name: loadType.name,
       img: loadType.img,
       code: loadType.code,
       options: { contained: true },
       handleClick: () => this.setLoadType(loadType.code)
     }))
-    this.state = { cards }
     this.setLoadType = this.setLoadType.bind(this)
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
@@ -36,7 +36,7 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, scope, messages } = this.props
+    const { theme, messages } = this.props
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     const gradientStyle =
@@ -45,6 +45,7 @@ export class ChooseShipment extends Component {
         : { color: 'black' }
     const directionButtons = ['import', 'export'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
+      const commercialAction = { import: 'Buying', export: 'Selling' }
       return (
         <div
           className={
@@ -54,7 +55,7 @@ export class ChooseShipment extends Component {
           onClick={() => this.setDirection(dir)}
         >
           <div className="flex-80 layout-row layout-align-space-between-center">
-            <p className="flex-none">{capitalize(dir)}</p>
+            <p className="flex-none"> I am { commercialAction[dir] } ({ capitalize(dir) })</p>
             {direction === dir ? (
               <i className="flex-none fa fa-check clip" style={gradientStyle} />
             ) : (
@@ -87,7 +88,8 @@ export class ChooseShipment extends Component {
         {flash}
         <div
           className={
-            `flex-none ${defs.content_width} ` + 'layout-row layout-align-start-center layout-wrap'
+            `flex-none ${defs.content_width} ` +
+            'layout-row layout-align-start-center layout-wrap'
           }
         >
           <div className={`${styles.header} flex-100 layout-row layout-align-start-center`}>
@@ -115,7 +117,7 @@ export class ChooseShipment extends Component {
                 text="Are you shipping cargo items or containers?"
               />
             </div>
-            <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
+            <CardLinkRow theme={theme} cards={this.cards} selectedType={loadType} />
           </div>
           <div
             className={
@@ -165,8 +167,7 @@ export class ChooseShipment extends Component {
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
   messages: PropTypes.arrayOf(PropTypes.string),
-  selectLoadType: PropTypes.func.isRequired,
-  scope: PropTypes.objectOf(PropTypes.any).isRequired
+  selectLoadType: PropTypes.func.isRequired
 }
 
 ChooseShipment.defaultProps = {

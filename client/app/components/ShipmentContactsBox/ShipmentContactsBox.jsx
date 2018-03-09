@@ -6,7 +6,7 @@ import defs from '../../styles/default_classes.scss'
 import errors from '../../styles/errors.scss'
 import { ContactCard } from '../ContactCard/ContactCard'
 import { capitalize } from '../../helpers/stringTools'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, nameToDisplay } from '../../helpers'
 
 export class ShipmentContactsBox extends Component {
   constructor (props) {
@@ -69,7 +69,7 @@ export class ShipmentContactsBox extends Component {
           />
         </div>
         <h3>
-          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
+          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(nameToDisplay(type))}
         </h3>
         { type !== 'notifyee' && requiredSpan }
       </div>
@@ -101,7 +101,7 @@ export class ShipmentContactsBox extends Component {
         >
           <div className="flex-75 layout-row layout-align-start-center">
             <i className="fa fa-user flex-none" style={textStyle} />
-            <p className="flex-none">{ capitalize(contactType) }</p>
+            <p className="flex-none">{ capitalize(nameToDisplay(contactType)) }</p>
           </div>
         </div>
         <div className={styles.contact_wrapper}>

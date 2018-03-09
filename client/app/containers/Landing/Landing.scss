@@ -1,96 +1,96 @@
 @import "../../styles/defaults";
 :local {
-.wrapper_landing {
-  background: $light-grey;
-  overflow-x: hidden;
-}
-.service_label{
-  background-color: $light-grey;
-  padding: 70px 0 40px 0;
-  h2 {
-    font-weight: normal;
+  .wrapper_landing {
+    background: $light-grey;
+    overflow-x: hidden;
   }
-}
-.services_row {
-  position: relative;
-  box-shadow: 0 1.5px 8px rgba(black, .12);
-  background: white;
-  padding: 50px 0;
-  margin-top: -10px;
-  h3 {
-    font-weight: normal;
+  .service_label{
+    background-color: $light-grey;
+    padding: 70px 0 40px 0;
+    h2 {
+      font-weight: normal;
+    }
   }
-}
-.services_row:before {
-  top: 0;
-  left: 50%;
-  border: solid transparent;
-  content: " ";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: 12px solid white;
+  .services_row {
+    position: relative;
+    box-shadow: 0 1.5px 8px rgba(black, .12);
+    background: white;
+    padding: 50px 0;
+    margin-top: -10px;
+    h3 {
+      font-weight: normal;
+      margin-bottom: 0;
+    }
+  }
+  .services_row:before {
+    top: 0;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 12px solid white;
 
-  box-sizing: border-box;
+    box-sizing: border-box;
+      
+    transform-origin: 0 0;
+    transform: rotate(135deg);
     
-  transform-origin: 0 0;
-  transform: rotate(135deg);
-  
-  box-shadow: -0.5px 0.5px 0.5px rgba(black, .05);
-}
-
-.service_row .service {
-  height: 150px;
-  width: 150px;
-  background-color: transparent;
-  margin: 75px;
-}
-.service i {
-   // background: -webkit-linear-gradient(#00E503, #00ACE5);
-  // @media screen { 
-  //   @media (min-width: 0px) {
-      -webkit-background-clip: text !important;
-      -webkit-text-fill-color: transparent !important;
-  //   } 
-  // }
-
-  font-size: 40px !important;
-}
-.mc {
-  height: max-content;
-}
-.btm_promo_img {
-  background-image: url('https://assets.itsmycargo.com/assets/default_images/container_ship_sm.jpg');
-  background-size: cover;
-  background-position: center;
-}
-.btm_promo_text {
-  padding: 35px 70px;
-  h2 {
-    font-weight: normal;
-    font-size: 21px;
+    box-shadow: -0.5px 0.5px 0.5px rgba(black, .05);
   }
-  p {
-    font-size: 18px;
+
+  .service_row .service {
+    height: 150px;
+    width: 150px;
+    background-color: transparent;
+    margin: 75px;
   }
-}
-.btm_promo_text > div {
-  height: 100%;
-}
+  .service i {
+     // background: -webkit-linear-gradient(#00E503, #00ACE5);
+    // @media screen { 
+    //   @media (min-width: 0px) {
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    //   } 
+    // }
 
-.btm_promo_btn_wrapper {
-  margin: 20px 0;
-}
-
-.btm_promo {
-  margin-bottom: 120px;
-  background: white;
-  min-height: 500px;
-  box-shadow: 0 1.5px 8px rgba(black, .12);
-  i {
-    color: $green;
-    margin-right: 10px;
+    font-size: 40px !important;
   }
-}
+  .mc {
+    height: max-content;
+  }
+  .btm_promo_img {
+    background-image: url('https://assets.itsmycargo.com/assets/default_images/container_ship_sm.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+  .btm_promo_text {
+    padding: 35px 70px;
+    h2 {
+      font-weight: normal;
+      font-size: 21px;
+    }
+    p {
+      font-size: 18px;
+    }
+  }
+  .btm_promo_text > div {
+    height: 100%;
+  }
 
+  .btm_promo_btn_wrapper {
+    margin-top: 40px;
+  }
+
+  .btm_promo {
+    margin-bottom: 120px;
+    background: white;
+    min-height: 500px;
+    box-shadow: 0 1.5px 8px rgba(black, .12);
+    i {
+      color: $green;
+      margin-right: 10px;
+    }
+  }
 }

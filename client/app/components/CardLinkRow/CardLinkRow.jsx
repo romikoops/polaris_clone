@@ -4,10 +4,9 @@ import { CardLink } from '../CardLink/CardLink'
 import styles from './CardLinkRow.scss'
 
 export function CardLinkRow ({
-  cardArray, handleClick, theme, selectedType
+  cards, handleClick, theme, selectedType
 }) {
-  console.log(selectedType)
-  const cards = cardArray.map(card => (
+  const cardLinks = cards.map(card => (
     <CardLink
       key={card.name}
       text={card.name}
@@ -22,14 +21,14 @@ export function CardLinkRow ({
   ))
   return (
     <div className={`${styles.card_link_row} layout-row flex-100 layout-align-space-around-center`}>
-      {cards}
+      { cardLinks }
     </div>
   )
 }
 
 CardLinkRow.propTypes = {
   theme: PropTypes.theme,
-  cardArray: PropTypes.arrayOf(PropTypes.shape({
+  cards: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     img: PropTypes.string,
     url: PropTypes.string,

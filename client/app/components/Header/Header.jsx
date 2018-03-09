@@ -126,7 +126,7 @@ class Header extends Component {
 
     const loginPrompt = (
       <a className={defs.pointy} style={{ color: textColor }} onClick={this.toggleShowLogin}>
-        Log in
+        Login/Register
       </a>
     )
     const rightCorner = user && user.first_name && !user.guest ? dropDowns : loginPrompt
@@ -144,8 +144,8 @@ class Header extends Component {
             initialCompName={this.props.showRegistration ? 'RegistrationPage' : 'LoginPage'}
           />
         }
-        verticalPadding="60px"
-        horizontalPadding="60px"
+        verticalPadding="30px"
+        horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}
       />
     )

@@ -1,12 +1,12 @@
 export const LOAD_TYPES = [
   {
     name: 'Cargo Item',
-    img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
+    img: 'https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg',
     code: 'cargoItem'
   },
   {
-    name: 'Full Container',
-    img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
+    name: 'Container',
+    img: 'https://assets.itsmycargo.com/assets/images/icons/container.svg',
     code: 'container'
   }
 ]
@@ -32,9 +32,9 @@ export const SHIPMENT_STAGES = [
   },
   {
     step: 4,
-    text: 'Booking overview & details',
-    header: 'Booking Details',
-    url: '/booking_details'
+    text: 'Final Details',
+    header: 'Final Details',
+    url: '/final_details'
   },
   {
     step: 5,

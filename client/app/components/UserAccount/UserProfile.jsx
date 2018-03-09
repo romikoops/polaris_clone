@@ -500,6 +500,7 @@ export class UserProfile extends Component {
                   value={this.state.currencySelect}
                   options={currencyOptions}
                   onChange={this.setCurrency}
+                  clearable={false}
                 />
                 <div className={`flex-100 layout-row layout-align-start-center ${styles.btn_row}`}>
                   <RoundButton

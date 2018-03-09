@@ -246,7 +246,7 @@ export class UserShipmentView extends Component {
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100">
-                  <TextHeading theme={theme} size={3} text="Consignee" />
+                  <TextHeading theme={theme} size={3} text="Receiver" />
                 </div>
                 <p className={` ${styles.address} flex-100`}>
                   {n.contact.first_name} {n.contact.last_name} <br />
