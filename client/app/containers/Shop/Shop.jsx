@@ -128,7 +128,7 @@ class Shop extends Component {
     const { request, response, error } = bookingData
     const route1 = `${match.url}/:shipmentId/shipment_details`
     const route2 = `${match.url}/:shipmentId/choose_offer`
-    const route3 = `${match.url}/:shipmentId/booking_details`
+    const route3 = `${match.url}/:shipmentId/final_details`
     const route4 = `${match.url}/:shipmentId/finish_booking`
     const route5 = `${match.url}/:shipmentId/thank_you`
     const loadingScreen = loading ? <Loading theme={theme} /> : ''

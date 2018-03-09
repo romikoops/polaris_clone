@@ -97,7 +97,7 @@ function setShipmentRoute (data) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/booking_details`))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/final_details`))
         dispatch(alertActions.success('Set Shipment Route successful'))
       },
       (error) => {
