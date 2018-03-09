@@ -128,9 +128,22 @@ module PricingTools
           totals[k]["currency"] = v["currency"]
         end
       when "PER_CBM"
-        totals[k] ? totals[k]["value"] += v["rate"].to_i * cargo.volume : totals[k] = {"value" => v["rate"].to_i * cargo.volume, "currency" => v["currency"]}
-        if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+        if v["watershed"]
+          ratio = cargo.payload_in_kg / cargo.volume
+          if ratio > v["watershed"]
+            min_value = v["rate"].to_i * cargo.volume > v["min"] ? v["rate"].to_i * cargo.volume : v["min"]
+            totals[k] ? totals[k]["value"] += min_value : totals[k] = {"value" => min_value, "currency" => v["currency"]}
+          else
+            totals[k] ? totals[k]["value"] += 0 : totals[k] = {"value" => 0, "currency" => v["currency"]}
+          end
+          if !totals[k]["currency"]
+            totals[k]["currency"] = v["currency"]
+          end
+        else
+          totals[k] ? totals[k]["value"] += v["rate"].to_i * cargo.volume : totals[k] = {"value" => v["rate"].to_i * cargo.volume, "currency" => v["currency"]}
+          if !totals[k]["currency"]
+            totals[k]["currency"] = v["currency"]
+          end
         end
       when "PER_CBM_TON"
         ton = cargo.payload_in_tons * v["ton"]

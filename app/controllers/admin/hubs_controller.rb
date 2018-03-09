@@ -36,7 +36,11 @@ class Admin::HubsController < ApplicationController
     hub.toggle_hub_status!
     response_handler(hub)
   end
-
+  def delete
+    hub = Hub.find(params[:hub_id])
+    hub.destroy!
+    response_handler({id: params[:hub_id]})
+  end
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}

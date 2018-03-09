@@ -36,10 +36,10 @@ include MongoTools
   req = {"xlsx" => public_pricings}
   overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
-  # puts "# Overwrite Local Charges From Sheet"
-  # local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
-  # req = {"xlsx" => local_charges}
-  # overwrite_local_charges(req, shipper)
+  puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/fake_local_charges.xlsx")
+  req = {"xlsx" => local_charges}
+  overwrite_local_charges(req, shipper)
 
 
   # # Overwrite trucking data from excel sheet

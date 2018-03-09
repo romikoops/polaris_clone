@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       resources :hubs, only: [:index, :show, :create] do
         patch "set_status"
       end
+      post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
       post "user_managers/assign", to: "user_managers#assign"

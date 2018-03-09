@@ -228,21 +228,12 @@ module ExcelTools
     # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
     # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
   end
-<<<<<<< HEAD
-def overwrite_local_charges(params, user = current_user)
-=======
 
   def overwrite_local_charges(params, user = current_user)
->>>>>>> mergewithdev
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> mergewithdev
       rows = first_sheet.parse(
         fee: 'FEE',
         mot: 'MOT',
@@ -261,14 +252,9 @@ def overwrite_local_charges(params, user = current_user)
         minimum: 'MINIMUM'
       )
       hub_fees = {}
-<<<<<<< HEAD
-      ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
-       hub_fees[lt] = {
-=======
        customs = {}
       ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
       hub_fees[lt] = {
->>>>>>> mergewithdev
         "import" => {},
         "export" => {},
         "mode_of_transport" => rows[0][:mot],
@@ -276,34 +262,6 @@ def overwrite_local_charges(params, user = current_user)
         "tenant_id" => hub.tenant_id,
         "hub_id" => hub.id,
         "load_type" => lt
-<<<<<<< HEAD
-      }
-      end
-      rows.each do |row|
-        case row[:rate_basis]
-        when 'PER_SHIPMENT'
-          charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CONTAINER'
-          charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_BILL'
-          charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM'
-          charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_ITEM'
-          charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM_TON'
-          charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        when 'PER_CBM_KG'
-          charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
-        end
-        hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
-      end
-      
-      hub_fees.each do |k,v|
-        lc_id = "#{hub.id}_#{hub.tenant_id}_load_type"
-        update_item('localCharges', {"_id" => lc_id}, v)
-      end
-=======
       }
       customs[lt] = {
         "import" => {}, 
@@ -346,7 +304,6 @@ def overwrite_local_charges(params, user = current_user)
         lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
         update_item('customsFees', {"_id" => lc_id}, v)
       end
->>>>>>> mergewithdev
     end
   end
 
@@ -766,7 +723,8 @@ def overwrite_local_charges(params, user = current_user)
       lcl_rate_wm: 'LCL_RATE_WM',
       lcl_rate_min: 'LCL_RATE_MIN',
       lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
-      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN'
+      lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
+      lcl_heavy_weight_watershed_cbm: 'LCL_HEAVY_WEIGHT_WATERSHED_CBM'
       
     )
     new_pricings = []
@@ -817,7 +775,8 @@ def overwrite_local_charges(params, user = current_user)
           currency: row[:lcl_currency],
           rate: row[:lcl_heavy_weight_surcharge_wm],
           min: row[:lcl_heavy_weight_surcharge_min],
-          rate_basis: 'PER_CBM'
+          rate_basis: 'PER_CBM',
+          watershed: row[:lcl_heavy_weight_watershed_cbm]
         }
       }
       

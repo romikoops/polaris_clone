@@ -314,6 +314,13 @@ function saveNewHub (hub, location) {
   }
   return fetch(`${BASE_URL}/admin/hubs`, requestOptions).then(handleResponse)
 }
+function deleteHub (hubId) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions).then(handleResponse)
+}
 function newRoute (itinerary) {
   const requestOptions = {
     method: 'POST',
@@ -400,7 +407,8 @@ export const adminService = {
   viewTrucking,
   editShipmentPrice,
   editShipmentTime,
-  editLocalCharges
+  editLocalCharges,
+  deleteHub
 }
 
 export default adminService

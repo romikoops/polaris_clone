@@ -176,6 +176,29 @@ export default function admin (state = {}, action) {
       })
       return errHub
     }
+    case adminConstants.DELETE_HUB_REQUEST: {
+      const reqHub = merge({}, state, {
+        loading: true
+      })
+      return reqHub
+    }
+    // eslint-disable-next-line no-case-declarations
+    case adminConstants.DELETE_HUB_SUCCESS:
+      const hubs = state.hubs.filter(x => x.id !== parseInt(action.payload.id, 10))
+      const hub = state.hub.hub.id === parseInt(action.payload.id, 10) ? {} : state.hub
+      return {
+        ...state,
+        hub,
+        hubs,
+        loading: false
+      }
+    case adminConstants.DELETE_HUB_FAILURE: {
+      const errHub = merge({}, state, {
+        error: { hub: action.error },
+        loading: false
+      })
+      return errHub
+    }
     case adminConstants.GET_DASHBOARD_REQUEST: {
       const reqDash = merge({}, state, {
         loading: true

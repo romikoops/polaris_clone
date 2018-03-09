@@ -36,9 +36,15 @@ export class AdminHubView extends Component {
       this.filterChargesByLoadType({ value: 'lcl' }, 'customs')
     }
   }
+  
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
     return routes.filter(x => x.id === id)[0]
+  }
+  deleteHub () {
+    const { hubData, adminActions } = this.props
+    const { hub } = hubData
+    adminActions.deleteHub(hub.id, true)
   }
   toggleHubActive () {
     const { hubData, adminActions } = this.props
@@ -115,6 +121,17 @@ export class AdminHubView extends Component {
         />
       </div>
     )
+    const deleteBtn = (
+      <div className="flex-none layout-row">
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Delete"
+          handleNext={() => this.deleteHub()}
+          iconClass="fa-trash"
+        />
+      </div>
+    )
 
     const schedArr = schedules.map((sched) => {
       const tmpItin = this.getItineraryFromLayover(sched.itinerary_id)
@@ -131,6 +148,7 @@ export class AdminHubView extends Component {
             {hub.name}
           </p>
           {hub.hub_status === 'active' ? deactivate : activate}
+          {deleteBtn}
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
