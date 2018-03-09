@@ -5,7 +5,7 @@ export const LOAD_TYPES = [
     code: 'cargoItem'
   },
   {
-    name: 'Full Container',
+    name: 'Container',
     img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
     code: 'container'
   }
