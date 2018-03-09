@@ -325,7 +325,21 @@ class OfferCalculator
         end
         
       end
-      
+      if !svalue["import"].empty?
+        if !raw_totals[svalue["import"]["total"]["currency"]]
+          raw_totals[svalue["import"]["total"]["currency"]] = svalue["import"]["total"]["value"].to_f
+        else
+          raw_totals[svalue["import"]["total"]["currency"]] += svalue["import"]["total"]["value"].to_f
+        end
+      end
+      if !svalue["export"].empty?
+        if !raw_totals[svalue["export"]["total"]["currency"]]
+          raw_totals[svalue["export"]["total"]["currency"]] = svalue["export"]["total"]["value"].to_f
+        else
+          raw_totals[svalue["export"]["total"]["currency"]] += svalue["export"]["total"]["value"].to_f
+        end
+      end
+
       if !raw_totals[svalue["trucking_on"]["currency"]]
         raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
       else
