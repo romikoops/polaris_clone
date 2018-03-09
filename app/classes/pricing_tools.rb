@@ -38,12 +38,12 @@ module PricingTools
     charge[direction].each do |k,v|
       case v["rate_basis"]
       when "PER_ITEM"
-        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
         if !totals[k]["currency"]
           totals[k]["currency"] = v["currency"]
         end
       when "PER_CBM"
-        totals[k] ? totals[k]["value"] += v["rate"].to_i * cargo.volume : totals[k] = {"value" => v["rate"].to_i * cargo[:volume], "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += v["value"].to_f * cargo.volume : totals[k] = {"value" => v["value"].to_f * cargo[:volume], "currency" => v["currency"]}
         if !totals[k]["currency"]
           totals[k]["currency"] = v["currency"]
         end
@@ -58,7 +58,12 @@ module PricingTools
           totals[k]["currency"] = v["currency"]
         end
       when "PER_SHIPMENT"
-        totals[k] ? totals[k]["value"] += v["rate"].to_i : totals[k] = {"value" => v["rate"].to_i, "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
+        if !totals[k]["currency"]
+          totals[k]["currency"] = v["currency"]
+        end
+      when "PER_BILL"
+        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
         if !totals[k]["currency"]
           totals[k]["currency"] = v["currency"]
         end
