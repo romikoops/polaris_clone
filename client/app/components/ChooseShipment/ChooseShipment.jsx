@@ -13,14 +13,14 @@ import { capitalize, gradientTextGenerator, percentageToHex } from '../../helper
 export class ChooseShipment extends Component {
   constructor (props) {
     super(props)
-    const cards = LOAD_TYPES.map(loadType => ({
+    this.state = {}
+    this.cards = LOAD_TYPES.map(loadType => ({
       name: loadType.name,
       img: loadType.img,
       code: loadType.code,
       options: { contained: true },
       handleClick: () => this.setLoadType(loadType.code)
     }))
-    this.state = { cards }
     this.setLoadType = this.setLoadType.bind(this)
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
@@ -117,7 +117,7 @@ export class ChooseShipment extends Component {
                 text="Are you shipping cargo items or containers?"
               />
             </div>
-            <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
+            <CardLinkRow theme={theme} cards={this.cards} selectedType={loadType} />
           </div>
           <div
             className={
