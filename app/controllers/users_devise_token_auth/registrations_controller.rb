@@ -6,7 +6,7 @@ module UsersDeviseTokenAuth
 		
 		def create
 			super do |resource|
-				if resource.guest
+				unless resource.guest
 					# Create Address
 					location = Location.create(location_params)
 					location.geocode_from_address_fields!
