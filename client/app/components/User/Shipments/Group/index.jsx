@@ -24,7 +24,8 @@ export class UserShipmentsGroup extends Component {
     this.viewShipment = this.viewShipment.bind(this)
   }
   viewShipment (shipment) {
-    this.props.viewShipment(shipment)
+    const { userDispatch } = this.props
+    userDispatch.getShipment(shipment.id, true)
   }
 
   render () {

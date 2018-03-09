@@ -164,6 +164,7 @@ module PricingTools
         end
       end
     end
+    
     converted = sum_and_convert_cargo(totals, user.currency)
     cargo.unit_price = {value: converted, currency: user.currency}
     totals["total"] = {value: converted * cargo.quantity, currency: user.currency}

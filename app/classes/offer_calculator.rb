@@ -313,9 +313,10 @@ class OfferCalculator
   
   def convert_currencies!
     
-    raw_totals = {}
+    
    
     @shipment.schedules_charges.each do |key, svalue|
+      raw_totals = {}
       svalue["cargo"].each do |id, charges|
         if !raw_totals[charges["total"]["currency"]]
           raw_totals[charges["total"]["currency"]] = charges["total"]["value"].to_f
