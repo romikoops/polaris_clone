@@ -7,6 +7,7 @@
     font-size: 24px !important;
     margin-top: 14px;
   }
+
   .address {
     height: 92px;
     width: 118px;
@@ -82,9 +83,6 @@
   //   margin: 25px 0;
   //   box-shadow: 1px 2px 1px 1px lightgray;
   // }
-  .contact_text{
-    margin: 3px;
-  }
   .sec_title_text {
     margin: 0;
     background-clip: text !important;
@@ -101,29 +99,24 @@
     font-size: 30px;
   }
   .main_panel {
-    overflow:hidden;
-    transition: all 1.5s linear;
-    padding: 15px;
-  }
-  .closed_main_panel {
-    max-height: 0 !important;
-    
-  }
-  .main_panel.closed_main_panel {
-    padding: 0 !important;
-    opacity: 0;
-  }
-  .open_main_panel {
-    max-height: none;
-    opacity: 1;
+    .inner_wrapper {
+      padding: 15px;
+    }
+    transition: max-height 1s linear;
+    max-height: 400px;
+    overflow: hidden;
+    width: 100%;
+    &.collapsed {
+      max-height: 0;
+    }
   }
   .heading_style {
     background: lightgrey;
-    padding: 5px 15px;
+    padding: 0 15px;
+    border-radius: 5px 5px 0 0;
     h3, p {
       margin: 10px;
     }
-    border-radius: 5px 5px 0 0;
   }
   .total_row {
     padding: 15px;
@@ -137,9 +130,9 @@
     color: lightgray;
   }
   .shipment_card {
-    // padding: 15px;
     margin: 25px 0;
     box-shadow: 1px 2px 1px 1px lightgray;
+    border-radius: 5px 5px 2px 2px;
   }
   .contact_text{
     margin: 3px;

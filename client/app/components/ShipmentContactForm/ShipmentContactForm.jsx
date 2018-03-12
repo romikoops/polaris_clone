@@ -6,6 +6,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import defs from '../../styles/default_classes.scss'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import { PlaceSearch } from '../Maps/PlaceSearch'
+import { nameToDisplay } from '../../helpers'
 
 import FormsyInput from '../FormsyInput/FormsyInput'
 
@@ -334,7 +335,10 @@ export class ShipmentContactForm extends Component {
             { contactData.type !== 'notifyee' ? locationSection : pusherPlaceholder }
             <div className="layout-row layout-align-space-between" style={{ width: '97.5%' }}>
               <RoundButton
-                text={`${contactData.type === 'notifyee' ? 'Add' : 'Set'} ${contactData.type}`}
+                text={
+                  `${contactData.type === 'notifyee' ? 'Add' : 'Set'} ` +
+                  `${nameToDisplay(contactData.type)}`
+                }
                 theme={theme}
                 size="small"
                 active
