@@ -30,7 +30,6 @@ module ShippingTools
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
     origins = []
     destinations = []
-    available_trucking_options = {}
     itineraries.map! do |itinerary|
       origins << { 
         value: origin = Location.find(itinerary["origin_nexus_id"]), 
