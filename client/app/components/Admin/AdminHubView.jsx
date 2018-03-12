@@ -36,7 +36,7 @@ export class AdminHubView extends Component {
       this.filterChargesByLoadType({ value: 'lcl' }, 'customs')
     }
   }
-  
+
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
     return routes.filter(x => x.id === id)[0]

@@ -30,7 +30,7 @@ class Admin::ServiceChargesController < ApplicationController
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_service_charges(req)
+      overwrite_local_charges(req, current_user)
       response_handler(true)
     else
       response_handler(false)

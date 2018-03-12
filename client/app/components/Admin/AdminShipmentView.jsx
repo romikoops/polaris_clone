@@ -706,22 +706,20 @@ export class AdminShipmentView extends Component {
                 styles.b_summ_top
               } flex-100 layout-row layout-align-space-around-center`}
             >
-              <div
-                className={`${
-                  styles.charge_card
-                } flex-30 layout-row layout-align-start-start layout-wrap`}
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <h5 className="flex-none letter_3">Freight</h5>
-                </div>
-                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  <h4 className="flex-100 no_m letter_3 center">
-                    {AdminShipmentView.sumCargoFees(feeHash.cargo).currency}
+              <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                {feeHash.customs && feeHash.customs.val ? (
+                  <h4 className="flex-100 no_m letter_3 center">{feeHash.customs.currency}</h4>
+                ) : (
+                  <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                      None
                   </h4>
-                  <h3 className="flex-100 no_m letter_3 center">
-                    {AdminShipmentView.sumCargoFees(feeHash.cargo).total}
-                  </h3>
-                </div>
+                )}
+
+                <h3 className="flex-100 no_m letter_3 center">
+                  {feeHash.customs && feeHash.customs.val
+                    ? `${feeHash.customs.val.toFixed(2)}`
+                    : 'None'}
+                </h3>
               </div>
               <div
                 className={`${

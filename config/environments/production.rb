@@ -22,7 +22,7 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  
+      
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'
@@ -81,3 +81,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+Raven.configure do |config|
+      config.dsn = 'http://e38fa6c168f64dec8070b81ba26694cc:2516c99c0be842c99e3b2cc6884f2e99@ec2-52-29-81-197.eu-central-1.compute.amazonaws.com/3'
+      # config.environments = ['staging', 'production']
+    end

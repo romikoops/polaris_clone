@@ -77,11 +77,11 @@
     height: 120px;
     padding-top: 48px;
   }
-  .shipment_card {
-    padding: 15px;
-    margin: 25px 0;
-    box-shadow: 1px 2px 1px 1px lightgray;
-  }
+  // .shipment_card {
+  //   padding: 15px;
+  //   margin: 25px 0;
+  //   box-shadow: 1px 2px 1px 1px lightgray;
+  // }
   .contact_text{
     margin: 3px;
   }
@@ -99,5 +99,61 @@
   .sec_title_text_normal {
     margin: 0;
     font-size: 30px;
+  }
+  .main_panel {
+    overflow:hidden;
+    transition: all 1.5s linear;
+    padding: 15px;
+  }
+  .closed_main_panel {
+    max-height: 0 !important;
+    
+  }
+  .main_panel.closed_main_panel {
+    padding: 0 !important;
+    opacity: 0;
+  }
+  .open_main_panel {
+    max-height: none;
+    opacity: 1;
+  }
+  .heading_style {
+    background: lightgrey;
+    padding: 5px 15px;
+    h3, p {
+      margin: 10px;
+    }
+    border-radius: 5px 5px 0 0;
+  }
+  .total_row {
+    padding: 15px;
+  }
+  .toggle_on {
+    opacity: 1;
+    color: black;
+  }
+  .toggle_off {
+    opacity: 0.75;
+    color: lightgray;
+  }
+  .shipment_card {
+    // padding: 15px;
+    margin: 25px 0;
+    box-shadow: 1px 2px 1px 1px lightgray;
+  }
+  .contact_text{
+    margin: 3px;
+  }
+  .showPanel {
+    height: 100px;
+    overflow: visible !important;
+  }
+  .hidePanel {
+    height: 0px;
+  }
+  .panelDefault {
+    transition: all 1.5s linear;
+    overflow: hidden;
+    position: relative;
   }
 }

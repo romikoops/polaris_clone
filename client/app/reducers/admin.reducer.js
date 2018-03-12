@@ -687,11 +687,11 @@ export default function admin (state = {}, action) {
       return reqRoutes
     }
     case adminConstants.GET_ROUTES_SUCCESS: {
-      const succRoutes = merge({}, state, {
+      return {
+        ...state,
         itineraries: action.payload.data,
         loading: false
-      })
-      return succRoutes
+      }
     }
     case adminConstants.GET_ROUTES_FAILURE: {
       const errRoutes = merge({}, state, {
@@ -708,11 +708,11 @@ export default function admin (state = {}, action) {
       return reqRoute
     }
     case adminConstants.GET_ROUTE_SUCCESS: {
-      const succRoute = merge({}, state, {
+      return {
+        ...state,
         itinerary: action.payload.data,
         loading: false
-      })
-      return succRoute
+      }
     }
     case adminConstants.GET_ROUTE_FAILURE: {
       const errRoute = merge({}, state, {

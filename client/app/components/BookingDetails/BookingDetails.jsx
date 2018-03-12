@@ -55,6 +55,9 @@ export class BookingDetails extends Component {
         export: {
           bool: false,
           val: 0
+        },
+        total: {
+          val: 0
         }
       },
       hsCodes: {},

@@ -38,8 +38,9 @@ class ShipmentsController < ApplicationController
 
   def show
     shipment = Shipment.find(params[:id])
-
+    cargo_item_types = {}
     cargo_items = shipment.cargo_items
+    cargo_items.map { |ci| cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)}
     
     containers = shipment.containers
 
@@ -48,7 +49,7 @@ class ShipmentsController < ApplicationController
     contacts = shipment_contacts.map do |sc|
       { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
-
+    locations = {origin: shipment.origin, destination: shipment.destination}
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
       tmp_doc["signed_url"] = doc.get_signed_url
@@ -61,7 +62,9 @@ class ShipmentsController < ApplicationController
       containers: containers,
       contacts:   contacts,
       documents:  documents,
-      schedules:  shipment.schedule_set
+      schedules:  shipment.schedule_set,
+      cargoItemTypes: cargo_item_types,
+      locations: locations 
     )
   end
 

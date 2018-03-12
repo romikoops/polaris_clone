@@ -234,6 +234,9 @@ module ExcelTools
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
       hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
+      if !hub
+        return
+      end
       rows = first_sheet.parse(
         fee: 'FEE',
         mot: 'MOT',
@@ -257,7 +260,7 @@ module ExcelTools
       hub_fees[lt] = {
         "import" => {},
         "export" => {},
-        "mode_of_transport" => rows[0][:mot],
+        "mode_of_transport" => rows[0][:mot].downcase,
         "nexus_id" => hub.nexus.id,
         "tenant_id" => hub.tenant_id,
         "hub_id" => hub.id,
@@ -269,6 +272,7 @@ module ExcelTools
         "nexus_id" => hub.nexus.id,
         "tenant_id" => hub.tenant_id,
         "hub_id" => hub.id,
+        "mode_of_transport" => rows[0][:mot].downcase,
         "load_type" => lt
       }
       end

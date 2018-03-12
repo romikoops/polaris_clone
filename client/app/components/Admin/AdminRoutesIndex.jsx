@@ -40,6 +40,7 @@ export class AdminRoutesIndex extends Component {
           itineraries={itineraries}
           theme={theme}
           hubs={hubs}
+          limit={40}
           adminDispatch={adminDispatch}
           sideScroll={false}
           handleClick={viewItinerary}
