@@ -254,7 +254,9 @@ export class BookingConfirmation extends Component {
         </div>)
       })
     }
-    const themeTitled = theme && theme.colors ? { background: theme.colors.primary, color: 'white' } : { background: 'rgba(0,0,0,0.25)', color: 'white' }
+    const themeTitled = theme && theme.colors
+      ? { background: theme.colors.primary, color: 'white' }
+      : { background: 'rgba(0,0,0,0.25)', color: 'white' }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
         <div className={
@@ -262,16 +264,17 @@ export class BookingConfirmation extends Component {
           'layout-align-center-start content_width_booking'
         }
         >
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${
-              styles.shipment_card
-            }`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Overview" />
               <div
@@ -285,39 +288,42 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${
-                collapser.overview ? styles.closed_main_panel : styles.open_main_panel
-              } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-                <p className={` ${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
-                <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
-                  {shipment.imc_reference}
-                </p>
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-                <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Status:</p>
-                <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
-                  {capitalize(shipment.status)}
-                </p>
-              </div>
-              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-                <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Created at:</p>
-                <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>{createdDate}</p>
+            <div className={`${collapser.overview ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div className={
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
+              }
+              >
+                <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                  <p className={` ${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
+                  <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
+                    {shipment.imc_reference}
+                  </p>
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                  <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Status:</p>
+                  <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
+                    {capitalize(shipment.status)}
+                  </p>
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                  <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Created at:</p>
+                  <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>{createdDate}</p>
+                </div>
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.shipment_card
-            } flex-100 layout-row layout-align-start-center layout-wrap`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Itinerary" />
               <div
@@ -331,69 +337,74 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${
-                collapser.itinerary ? styles.closed_main_panel : styles.open_main_panel
-              } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
-            >
-              <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-              <div
-                className="flex-100 layout-row layout-align-space-between-center"
-                style={{ position: 'relative' }}
+            <div className={`${collapser.itinerary ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div className={
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
+              }
               >
-                <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-                  <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                    <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
-                    <p className="flex-none letter_3">{` ${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}</p>
-                  </div>
-                  {shipment.has_pre_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start">
-                      <address className="flex-none">
-                        {`${locations.origin.street_number} ${locations.origin.street}`} <br />
-                        {`${locations.origin.city}`} <br />
-                        {`${locations.origin.zip_code}`} <br />
-                        {`${locations.origin.country}`} <br />
-                      </address>
+                <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
+                <div
+                  className="flex-100 layout-row layout-align-space-between-center"
+                  style={{ position: 'relative' }}
+                >
+                  <div className="flex-40 layout-row layout-wrap layout-align-center-center">
+                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                      <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
+                      <p className="flex-none letter_3">
+                        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+                      </p>
                     </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div className="flex-40 layout-row layout-wrap layout-align-center-center">
-                  <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                    <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                    <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
+                    {shipment.has_pre_carriage ? (
+                      <div className="flex-100 layout-row layout-align-start-start">
+                        <address className="flex-none">
+                          {`${locations.origin.street_number} ${locations.origin.street}`} <br />
+                          {`${locations.origin.city}`} <br />
+                          {`${locations.origin.zip_code}`} <br />
+                          {`${locations.origin.country}`} <br />
+                        </address>
+                      </div>
+                    ) : (
+                      ''
+                    )}
                   </div>
-                  {shipment.has_on_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start">
-                      <address className="flex-none">
-                        {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-                        <br />
-                        {`${locations.destination.city}`} <br />
-                        {`${locations.destination.zip_code}`} <br />
-                        {`${locations.destination.country}`} <br />
-                      </address>
+                  <div className="flex-40 layout-row layout-wrap layout-align-center-center">
+                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                      <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
+                      <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
                     </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
-                <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
-                  <i className="fa fa-pencil clip" style={textStyle} />
+                    {shipment.has_on_carriage ? (
+                      <div className="flex-100 layout-row layout-align-start-start">
+                        <address className="flex-none">
+                          {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
+                          <br />
+                          {`${locations.destination.city}`} <br />
+                          {`${locations.destination.zip_code}`} <br />
+                          {`${locations.destination.country}`} <br />
+                        </address>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
+                    <i className="fa fa-pencil clip" style={textStyle} />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.shipment_card
-            } flex-100 layout-row layout-align-start-center layout-wrap`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Fares & Fees" />
               <div
@@ -417,141 +428,149 @@ export class BookingConfirmation extends Component {
                 <h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
               </div>
             </div>
-            <div
-              className={`${collapser.charges ? styles.closed_main_panel : styles.open_main_panel} ${
-                styles.main_panel
-              } flex-100 layout-row layout-wrap layout-align-start-start`}
-            >
-              <div
-                className={`${
-                  styles.b_summ_top
-                } flex-100 layout-row layout-align-space-around-center`}
+            <div className={`${collapser.charges ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div className={
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
+              }
               >
                 <div
                   className={`${
-                    styles.charge_card
-                  } flex-30 layout-row layout-align-start-start layout-wrap`}
+                    styles.b_summ_top
+                  } flex-100 layout-row layout-align-space-around-center`}
                 >
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <h5 className="flex-none letter_3">Freight</h5>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    <h4 className="flex-100 no_m letter_3 center">
-                      {BookingConfirmation.sumCargoFees(feeHash.cargo).currency}
-                    </h4>
-                    <h3 className="flex-100 no_m letter_3 center">
-                      {BookingConfirmation.sumCargoFees(feeHash.cargo).total}
-                    </h3>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    styles.charge_card
-                  } flex-30 layout-row layout-align-start-start layout-wrap`}
-                >
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <h5 className="flex-none letter_3">Pre Carriage</h5>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    {feeHash.trucking_pre.currency ? (
+                  <div
+                    className={`${
+                      styles.charge_card
+                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                  >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                      <h5 className="flex-none letter_3">Freight</h5>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
                       <h4 className="flex-100 no_m letter_3 center">
-                        {feeHash.trucking_pre.currency}
+                        {BookingConfirmation.sumCargoFees(feeHash.cargo).currency}
                       </h4>
-                    ) : (
-                      <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                        None
-                      </h4>
-                    )}
-                    <h3 className="flex-100 no_m letter_3 center">
-                      {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value.toFixed(2)}` : 'None'}
-                    </h3>
+                      <h3 className="flex-100 no_m letter_3 center">
+                        {BookingConfirmation.sumCargoFees(feeHash.cargo).total}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className={`${
-                    styles.charge_card
-                  } flex-30 layout-row layout-align-start-start layout-wrap`}
-                >
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <h5 className="flex-none letter_3">On Carriage</h5>
+                  <div
+                    className={`${
+                      styles.charge_card
+                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                  >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                      <h5 className="flex-none letter_3">Pre Carriage</h5>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                      {feeHash.trucking_pre.currency ? (
+                        <h4 className="flex-100 no_m letter_3 center">
+                          {feeHash.trucking_pre.currency}
+                        </h4>
+                      ) : (
+                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                          None
+                        </h4>
+                      )}
+                      <h3 className="flex-100 no_m letter_3 center">
+                        {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value.toFixed(2)}` : 'None'}
+                      </h3>
+                    </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    {feeHash.trucking_on.currency ? (
-                      <h4 className="flex-100 no_m letter_3 center">
-                        {feeHash.trucking_on.currency}
-                      </h4>
-                    ) : (
-                      <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                        None
-                      </h4>
-                    )}
-                    <h3 className="flex-100 no_m letter_3 center">
-                      {shipment.has_on_carriage ? `${feeHash.trucking_on.value.toFixed(2)}` : 'None'}
-                    </h3>
+                  <div
+                    className={`${
+                      styles.charge_card
+                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                  >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                      <h5 className="flex-none letter_3">On Carriage</h5>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                      {feeHash.trucking_on.currency ? (
+                        <h4 className="flex-100 no_m letter_3 center">
+                          {feeHash.trucking_on.currency}
+                        </h4>
+                      ) : (
+                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                          None
+                        </h4>
+                      )}
+                      <h3 className="flex-100 no_m letter_3 center">
+                        {shipment.has_on_carriage ? `${feeHash.trucking_on.value.toFixed(2)}` : 'None'}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className={`${
-                    styles.charge_card
-                  } flex-30 layout-row layout-align-start-start layout-wrap`}
-                >
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <h5 className="flex-none letter_3">Insurance</h5>
+                  <div
+                    className={`${
+                      styles.charge_card
+                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                  >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                      <h5 className="flex-none letter_3">Insurance</h5>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                      {feeHash.insurance && feeHash.insurance.val ? (
+                        <h4 className="flex-100 no_m letter_3 center">
+                          {feeHash.insurance.currency}
+                        </h4>
+                      ) : (
+                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                          None
+                        </h4>
+                      )}
+                      <h3 className="flex-100 no_m letter_3 center">
+                        {feeHash.insurance && feeHash.insurance.val
+                          ? `${feeHash.insurance.val.toFixed(2)}`
+                          : 'None'}
+                      </h3>
+                    </div>
                   </div>
-                  <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    {feeHash.insurance && feeHash.insurance.val ? (
-                      <h4 className="flex-100 no_m letter_3 center">
-                        {feeHash.insurance.currency}
-                      </h4>
-                    ) : (
-                      <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                        None
-                      </h4>
-                    )}
-                    <h3 className="flex-100 no_m letter_3 center">
-                      {feeHash.insurance && feeHash.insurance.val
-                        ? `${feeHash.insurance.val.toFixed(2)}`
-                        : 'None'}
-                    </h3>
-                  </div>
-                </div>
-                <div
-                  className={`${
-                    styles.charge_card
-                  } flex-30 layout-row layout-align-start-start layout-wrap`}
-                >
-                  <div className="flex-100 layout-row layout-align-center-center">
-                    <h5 className="flex-none letter_3">Customs</h5>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                    {feeHash.customs && feeHash.customs.val ? (
-                      <h4 className="flex-100 no_m letter_3 center">{feeHash.customs.currency}</h4>
-                    ) : (
-                      <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      None
-                      </h4>
-                    )}
-
-                    <h3 className="flex-100 no_m letter_3 center">
-                      {feeHash.customs && feeHash.customs.val
-                        ? `${feeHash.customs.val.toFixed(2)}`
-                        : 'None'}
-                    </h3>
+                  <div
+                    className={`${
+                      styles.charge_card
+                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                  >
+                    <div className="flex-100 layout-row layout-align-center-center">
+                      <h5 className="flex-none letter_3">Customs</h5>
+                    </div>
+                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
+                      {
+                        feeHash.customs && feeHash.customs.val
+                          ? (
+                            <h4 className="flex-100 no_m letter_3 center">
+                              {feeHash.customs.currency}
+                            </h4>
+                          )
+                          : (
+                            <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                              None
+                            </h4>
+                          )
+                      }
+                      <h3 className="flex-100 no_m letter_3 center">
+                        {feeHash.customs && feeHash.customs.val
+                          ? `${feeHash.customs.val.toFixed(2)}`
+                          : 'None'}
+                      </h3>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.shipment_card
-            } flex-100 layout-row layout-align-start-center layout-wrap`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Contact Details" />
               <div
@@ -565,34 +584,37 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div className={
-              `${collapser.contacts ? styles.closed_main_panel : styles.open_main_panel} ` +
-              `${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`
-            }
-            >
+            <div className={`${collapser.contacts ? styles.collapsed : ''} ${styles.main_panel}`}>
               <div className={
-                `${styles.b_summ_top} flex-100 ` +
-                'layout-row layout-align-space-around-stretch'
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
               }
               >
-                { shipperAndConsignee }
-              </div>
-              <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
-                {' '}
-                {notifyeesJSX}{' '}
+                <div className={
+                  `${styles.b_summ_top} flex-100 ` +
+                  'layout-row layout-align-space-around-stretch'
+                }
+                >
+                  { shipperAndConsignee }
+                </div>
+                <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+                  {' '}
+                  {notifyeesJSX}{' '}
+                </div>
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.shipment_card
-            } flex-100 layout-row layout-align-start-center layout-wrap`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Cargo Details" />
               <div
@@ -606,26 +628,29 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${collapser.cargo ? styles.closed_main_panel : styles.open_main_panel} ${
-                styles.main_panel
-              } flex-100 layout-row layout-wrap layout-align-start-start`}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                {cargoView}
+            <div className={`${collapser.cargo ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div className={
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
+              }
+              >
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                  {cargoView}
+                </div>
               </div>
             </div>
           </div>
-          <div
-            className={`${
-              styles.shipment_card
-            } flex-100 layout-row layout-align-start-center layout-wrap`}
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
           >
             <div
               style={themeTitled}
-              className={`${
-                styles.heading_style
-              } flex-100 layout-row layout-align-space-between-center`}
+              className={
+                `${styles.heading_style} flex-100 ` +
+                'layout-row layout-align-space-between-center'
+              }
             >
               <TextHeading theme={theme} color="white" size={3} text="Documents" />
               <div
@@ -639,26 +664,31 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${
-                collapser.documents ? styles.closed_main_panel : styles.open_main_panel
-              } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
-            >
-              <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                {docView}
+            <div className={`${collapser.documents ? styles.collapsed : ''} ${styles.main_panel}`}>
+              <div className={
+                `${styles.inner_wrapper} flex-100 ` +
+                'layout-row layout-wrap layout-align-start-start'
+              }
+              >
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                  {docView}
+                </div>
               </div>
             </div>
           </div>
 
-          <div className={`${styles.btn_sec} flex-100 layout-row layout-wrap layout-align-center`}>
-            <div
-              className="flex-100  layout-row layout-wrap layout-align-start-center"
-            >
+          <div className={
+            `${styles.shipment_card} flex-100 ` +
+            'layout-row layout-align-space-between-center layout-wrap'
+          }
+          >
+            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
               <div
                 style={themeTitled}
-                className={`${
-                  styles.heading_style
-                } flex-100 layout-row layout-align-space-between-center`}
+                className={
+                  `${styles.heading_style} flex-100 ` +
+                  'layout-row layout-align-space-between-center'
+                }
               >
                 <TextHeading theme={theme} color="white" size={3} text="Agree and Submit" />
               </div>
@@ -693,7 +723,7 @@ export class BookingConfirmation extends Component {
                   </div>
                 </div>
               </div>
-              <div className="flex-35 layout-row layout-align-end-center">
+              <div className="flex-33 layout-row layout-align-end-center">
                 {acceptTerms ? acceptedBtn : nonAcceptedBtn}
               </div>
             </div>
