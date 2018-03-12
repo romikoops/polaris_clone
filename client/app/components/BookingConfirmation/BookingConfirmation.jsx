@@ -14,7 +14,6 @@ import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
-import { Loading } from '../Loading/Loading'
 
 export class BookingConfirmation extends Component {
   static sumCargoFees (cargos) {
@@ -69,11 +68,7 @@ export class BookingConfirmation extends Component {
   acceptShipment () {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
-    this.setState({ loading: true })
     shipmentDispatch.acceptShipment(shipment.id)
-    setTimeout(() => {
-      this.setState({ loading: false })
-    }, 5000)
   }
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
@@ -165,8 +160,6 @@ export class BookingConfirmation extends Component {
     const {
       theme, shipmentData, shipmentDispatch
     } = this.props
-    const { loading } = this.state
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
@@ -339,7 +332,6 @@ export class BookingConfirmation extends Component {
     const themeTitled = theme && theme.colors ? { background: theme.colors.primary, color: 'white' } : { background: 'rgba(0,0,0,0.25)', color: 'white' }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-        { loadingScreen }
         <div className="
           flex-none
           layout-row

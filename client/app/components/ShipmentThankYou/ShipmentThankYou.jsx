@@ -7,7 +7,7 @@ import defaults from '../../styles/default_classes.scss'
 export class ShipmentThankYou extends Component {
   componentDidMount () {
     const { setStage } = this.props
-    setStage(5)
+    setStage(6)
     window.scrollTo(0, 0)
   }
   render () {

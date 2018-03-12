@@ -18,6 +18,14 @@ import { Footer } from '../../components/Footer/Footer'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 
 class Shop extends Component {
+  static statusRequested (props) {
+    return (
+      props.bookingData.response &&
+      props.bookingData.response.stage5 &&
+      props.bookingData.response.stage5.shipment &&
+      props.bookingData.response.stage5.shipment.status === 'requested'
+    )
+  }
   constructor (props) {
     super(props)
 
@@ -26,6 +34,7 @@ class Shop extends Component {
     this.state = {
       stageTracker: {},
       shopType: 'Booking',
+      fakeLoading: false,
       showRegistration: false
     }
     this.selectLoadType = this.selectLoadType.bind(this)
@@ -36,6 +45,13 @@ class Shop extends Component {
     this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this)
     this.toggleShowRegistration = this.toggleShowRegistration.bind(this)
     this.hideRegistration = this.hideRegistration.bind(this)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
+      this.setState({ fakeLoading: true })
+      setTimeout(() => this.setState({ fakeLoading: false }), 3000)
+    }
   }
 
   shouldComponentUpdate (nextProps) {
@@ -65,6 +81,7 @@ class Shop extends Component {
   selectShipmentStage (stage) {
     this.setState({ stageTracker: { stage } })
   }
+
   selectShipmentStageAndGo (stage) {
     const { history, bookingData } = this.props
     const activeId = bookingData.activeShipment
@@ -88,6 +105,7 @@ class Shop extends Component {
       showRegistration: false
     })
   }
+
   toggleShowMessages () {
     this.setState({
       showMessages: !this.state.showMessages
@@ -124,6 +142,7 @@ class Shop extends Component {
       currencies,
       dashboard
     } = this.props
+    const { fakeLoading } = this.state
     const { theme, scope } = tenant.data
     const { request, response, error } = bookingData
     const route1 = `${match.url}/:shipmentId/shipment_details`
@@ -131,29 +150,7 @@ class Shop extends Component {
     const route3 = `${match.url}/:shipmentId/final_details`
     const route4 = `${match.url}/:shipmentId/finish_booking`
     const route5 = `${match.url}/:shipmentId/thank_you`
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
-    let shipmentId = ''
-    if (response && response.stage1 && !response.stage2) {
-      shipmentId = response.stage1.shipment.id
-    } else if (response && response.stage1 && response.stage2 && !response.stage3) {
-      shipmentId = response.stage2.shipment.id
-    } else if (
-      response &&
-      response.stage1 &&
-      response.stage2 &&
-      response.stage3 &&
-      !response.stage4
-    ) {
-      shipmentId = response.stage3.shipment.id
-    } else if (
-      response &&
-      response.stage1 &&
-      response.stage2 &&
-      response.stage3 &&
-      response.stage4
-    ) {
-      shipmentId = response.stage4.shipment.id
-    }
+    const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req } = this.state
 
     return (
@@ -173,7 +170,7 @@ class Shop extends Component {
           theme={theme}
           currentStage={this.state.stageTracker.stage}
           setStage={this.selectShipmentStageAndGo}
-          shipmentId={shipmentId}
+          disabledClick={Shop.statusRequested(this.props)}
         />
         <Route
           exact
