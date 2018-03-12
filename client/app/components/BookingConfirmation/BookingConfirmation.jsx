@@ -14,6 +14,7 @@ import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
+import Contact from '../Contact/Contact'
 
 export class BookingConfirmation extends Component {
   static sumCargoFees (cargos) {
@@ -194,39 +195,30 @@ export class BookingConfirmation extends Component {
       cargoView = this.prepCargoItemGroups(cargoItems)
     }
 
-    let notifyeesJSX =
+    const shipperAndConsignee = [
+      <Contact contact={shipper} contactType="Shipper" textStyle={textStyle} />,
+      <Contact contact={consignee} contactType="Consignee" textStyle={textStyle} />
+    ]
+
+    if (shipment.direction === 'import') shipperAndConsignee.reverse()
+
+    const notifyeesJSX =
       (notifyees &&
         notifyees.map(notifyee => (
           <div key={v4()} className="flex-40 layout-row">
             <div className="flex-15 layout-column layout-align-start-center">
-              <i className={`${styles.icon} fa fa-user flex-none`} style={textStyle} />
+              <i className={`${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
             </div>
             <div className="flex-85 layout-row layout-wrap layout-align-start-start">
               <div className="flex-100">
-                <TextHeading theme={theme} size={4} text="Notifyee" />
+                <h3 style={{ fontWeight: 'normal' }}>Notifyee</h3>
               </div>
-              <p className={`${styles.address} flex-100`}>
-                {notifyee.first_name} {notifyee.last_name} <br />
-              </p>
+              <p style={{ marginTop: 0 }}>{notifyee.first_name} {notifyee.last_name}</p>
             </div>
           </div>
         ))) ||
       []
-    if (notifyeesJSX.length === 0) {
-      notifyeesJSX = (
-        <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-          <div className="flex-5 layout-column layout-align-start-center">
-            <i className={`${styles.icon} fa fa-users flex-none`} style={textStyle} />
-          </div>
-          <div className="flex-95 layout-row layout-wrap layout-align-start-start">
-            <div className="flex-100">
-              <TextHeading theme={theme} size={4} text="Notifyees" />
-            </div>
-            <p className={`${styles.address} flex-100`}>No notifyees added</p>
-          </div>
-        </div>
-      )
-    } else if (notifyeesJSX.length % 2 === 1) {
+    if (notifyeesJSX.length % 2 === 1) {
       notifyeesJSX.push(<div className="flex-40" />)
     }
     const acceptedBtn = (
@@ -244,74 +236,7 @@ export class BookingConfirmation extends Component {
         <RoundButton theme={theme} text="Finish Booking" handleNext={e => e.preventDefault()} />
       </div>
     )
-    const shipperContact = (
-      <div className="flex-45 layout-row">
-        <div className="flex-10 layout-column layout-align-start-center">
-          <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
-        </div>
-        <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-          <p className="flex-100">Sender</p>
-          <div className="flex-100 layout-row layout-align-space-between-start">
-            <div className="flex-60 layout-row layout-wrap layout-align-center-start">
-              <p className={`${styles.contact_text} flex-100`}>
-                {shipper.data.first_name} {shipper.data.last_name}
-              </p>
-              <p className={`${styles.contact_text} flex-100`}>{shipper.data.company_name}</p>
-              <p className={`${styles.contact_text} flex-100`}>{shipper.data.email}</p>
-              <p className={`${styles.contact_text} flex-100`}>{shipper.data.phone}</p>
-            </div>
-            <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
-              <p className={`${styles.contact_text} flex-100 center`}>Address</p>
-              <address className={` ${styles.address} flex-100 center`}>
-                {shipper.location
-                  ? `${shipper.location.street} ${shipper.location.street_number}`
-                  : ''}{' '}
-                <br />
-                {shipper.location
-                  ? `${shipper.location.zip_code} ${shipper.location.city}`
-                  : ''}{' '}
-                <br />
-                {shipper.location ? `${shipper.location.country}` : ''}
-              </address>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-    const consigneeContact = (
-      <div className="flex-45 layout-row">
-        <div className="flex-10 layout-column layout-align-start-center">
-          <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
-        </div>
-        <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-          <p className="flex-100">Receiver</p>
-          <div className="flex-100 layout-row layout-align-space-between-start">
-            <div className="flex-60 layout-row layout-wrap layout-align-center-start">
-              <p className={`${styles.contact_text} flex-100`}>
-                {consignee.data.first_name} {consignee.data.last_name}
-              </p>
-              <p className={`${styles.contact_text} flex-100`}>{consignee.data.company_name}</p>
-              <p className={`${styles.contact_text} flex-100`}>{consignee.data.email}</p>
-              <p className={`${styles.contact_text} flex-100`}>{consignee.data.phone}</p>
-            </div>
-            <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
-              <p className={`${styles.contact_text} flex-100 center`}>Address</p>
-              <address className={` ${styles.address} flex-100 center`}>
-                {consignee.location
-                  ? `${consignee.location.street} ${consignee.location.street_number}`
-                  : ''}{' '}
-                <br />
-                {consignee.location
-                  ? `${consignee.location.zip_code} ${consignee.location.city}`
-                  : ''}{' '}
-                <br />
-                {consignee.location ? `${consignee.location.country}` : ''}
-              </address>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const docView = []
     if (documents) {
@@ -332,12 +257,10 @@ export class BookingConfirmation extends Component {
     const themeTitled = theme && theme.colors ? { background: theme.colors.primary, color: 'white' } : { background: 'rgba(0,0,0,0.25)', color: 'white' }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-        <div className="
-          flex-none
-          layout-row
-          layout-wrap
-          layout-align-center-start
-          content_width_booking"
+        <div className={
+          'flex-none layout-row layout-wrap ' +
+          'layout-align-center-start content_width_booking'
+        }
         >
           <div
             className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${
@@ -642,18 +565,17 @@ export class BookingConfirmation extends Component {
                 )}
               </div>
             </div>
-            <div
-              className={`${collapser.contacts ? styles.closed_main_panel : styles.open_main_panel} ${
-                styles.main_panel
-              } flex-100 layout-row layout-wrap layout-align-start-start`}
+            <div className={
+              `${collapser.contacts ? styles.closed_main_panel : styles.open_main_panel} ` +
+              `${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`
+            }
             >
-              <div
-                className={`${
-                  styles.b_summ_top
-                } flex-100 layout-row layout-align-space-around-center`}
+              <div className={
+                `${styles.b_summ_top} flex-100 ` +
+                'layout-row layout-align-space-around-stretch'
+              }
               >
-                {shipperContact}
-                {consigneeContact}
+                { shipperAndConsignee }
               </div>
               <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
                 {' '}
@@ -791,7 +713,7 @@ export class BookingConfirmation extends Component {
                 theme={theme}
                 text="Back to dashboard"
                 back
-                iconClass="fa-angle0-left"
+                iconClass="fa-angle-left"
                 handleNext={() => shipmentDispatch.toDashboard()}
               />
             </div>
