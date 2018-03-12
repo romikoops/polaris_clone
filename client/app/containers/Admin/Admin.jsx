@@ -24,6 +24,7 @@ import defs from '../../styles/default_classes.scss'
 import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
+import NavBar from '../Nav'
 
 class Admin extends Component {
   constructor (props) {
@@ -101,10 +102,11 @@ class Admin extends Component {
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
-        { loadingScreen }
-        { menu }
+        {loadingScreen}
+        {menu}
         <Header theme={theme} scrollable />
         <div className="flex layout-row layout-align-center-start layout-wrap">
+          <NavBar className={`${styles.top_margin}`} />
           <div
             className={`${defs.content_width} ${
               styles.top_margin

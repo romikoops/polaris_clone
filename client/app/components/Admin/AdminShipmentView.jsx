@@ -245,7 +245,15 @@ export class AdminShipmentView extends Component {
       newTotal, showEditPrice, currency, showEditTime, newTimes, collapser
     } = this.state
     const hubKeys = schedules[0].hub_route_key.split('-')
-    const hubsObj = { startHub: {}, endHub: {} }
+    const hubsObj = {
+      startHub: {
+        data: locations.origin
+      },
+      endHub: {
+        data: locations.destination
+      }
+    }
+
     hubs.forEach((c) => {
       if (String(c.data.id) === hubKeys[0]) {
         hubsObj.startHub = c

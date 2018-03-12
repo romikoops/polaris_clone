@@ -64,6 +64,7 @@ class OfferCalculator
     determine_longest_trucking_time!
     determine_layovers!
     
+    
     # determine_schedules!
     # add_schedules_charges!
     add_trip_charges! 
@@ -144,6 +145,7 @@ class OfferCalculator
       layovers = origin_layovers + destination_layovers
       trip_layovers = layovers.group_by(&:trip_id)
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
+      
     end
     @itineraries_hash = schedule_obj
   end
@@ -266,7 +268,7 @@ class OfferCalculator
   def set_cargo_charges!(charges, trip, sched_key)
     @cargo_units.each do |cargo_unit|
       path_key = path_key(cargo_unit, trip)
-
+      
       charge_result = send("determine_#{@shipment.load_type}_price",
         @mongo, 
         cargo_unit, 

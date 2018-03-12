@@ -59,10 +59,10 @@ export class AdminClientView extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const shipRows = []
-    const managerOpts = managers.map(m => ({
+    const managerOpts = managers ? managers.map(m => ({
       label: `${m.first_name} ${m.last_name}`,
       value: m.id
-    }))
+    })) : []
     console.log(managerOpts)
     const relManagers = managerAssignments
       ? managerAssignments.map((ma) => {

@@ -220,8 +220,15 @@ export class AdminSchedules extends Component {
     let results = []
     // const results = [...new Set([...filteredByHubs, ...filteredByItinerary])]
     if (filteredByHubs.length > 0 && filteredByItinerary.length > 0) {
-      const tmp = [...filteredByHubs.slice(), ...filteredByItinerary.slice()]
-      results = [...new Set(tmp)]
+      const resultObj = {}
+
+      filteredByHubs.forEach((fh) => {
+        resultObj[fh.id] = fh
+      })
+      filteredByItinerary.forEach((fi) => {
+        resultObj[fi.id] = fi
+      })
+      Object.keys(resultObj).map(x => results.push(resultObj[x]))
     } else if (filteredByHubs.length > 0 && filteredByItinerary.length === 0) {
       results = filteredByHubs
     } else if (filteredByHubs.length === 0 && filteredByItinerary.length > 0) {
@@ -229,6 +236,7 @@ export class AdminSchedules extends Component {
     } else {
       results = allTrips
     }
+
     console.log(results)
     results.forEach((trip, i) => {
       if (i < slimit) {

@@ -300,4 +300,5 @@ class Shipment < ApplicationRecord
     no_trucking_h = { truck_type: '' }
     self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
   end
+
 end

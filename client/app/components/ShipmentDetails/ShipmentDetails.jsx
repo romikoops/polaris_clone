@@ -668,27 +668,28 @@ export class ShipmentDetails extends Component {
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div
-          className={
-            `${defaults.border_divider} layout-row flex-100 ` +
-            'layout-wrap layout-align-center-center'
-          }
-        >
-          <div
+        { user && !user.guest
+          ? <div
             className={
-              `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+              `${defaults.border_divider} layout-row flex-100 ` +
+            'layout-wrap layout-align-center-center'
             }
           >
-            <RoundButton
-              text="Back to Dashboard"
-              handleNext={this.returnToDashboard}
-              iconClass="fa-angle-left"
-              theme={theme}
-              back
-            />
-          </div>
-        </div>
+            <div
+              className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
+              'layout-row flex-none layout-wrap layout-align-start-start'
+              }
+            >
+              <RoundButton
+                text="Back to Dashboard"
+                handleNext={this.returnToDashboard}
+                iconClass="fa-angle-left"
+                theme={theme}
+                back
+              />
+            </div>
+          </div> : '' }
       </div>
     )
   }

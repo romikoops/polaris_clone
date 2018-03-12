@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from './'
 import styles from './Admin.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
+
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminHubs as tooltip } from '../../constants'
@@ -61,29 +61,7 @@ class AdminHubs extends Component {
     const {
       theme, hubs, hub, hubHash, adminDispatch
     } = this.props
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={this.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="New Hub"
-          active
-          handleNext={this.toggleNewHub}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
+
     const title = selectedHub ? (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
         <div className="flex-none layout-row layout-align-start-center">
@@ -92,17 +70,16 @@ class AdminHubs extends Component {
           </div>
           <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         </div>
-        { backButton}
+
       </div>
     ) : (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
         <div className="flex-none layout-row layout-align-start-center">
           <div className="flex-none">
-            <TextHeading theme={theme} size={1} text="Hubs" />
+            <TextHeading theme={theme} size={1} text="Hub Actions" />
           </div>
           <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         </div>
-        {newButton}
       </div>
     )
     return (
@@ -126,6 +103,7 @@ class AdminHubs extends Component {
                 hubHash={hubHash}
                 adminDispatch={adminDispatch}
                 {...props}
+                toggleNewHub={this.toggleNewHub}
                 viewHub={this.viewHub}
               />
             )}

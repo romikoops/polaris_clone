@@ -21,6 +21,7 @@ class Admin::PricingsController < ApplicationController
     @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
     detailed_itineraries = get_itineraries(current_user.tenant_id)
+    
     itineraries = eliminate_user_pricings(@pricings, detailed_itineraries)
     response_handler({userPricings: @pricings, client: @client, detailedItineraries: itineraries})
   end
@@ -128,12 +129,16 @@ class Admin::PricingsController < ApplicationController
   def eliminate_user_pricings(prices, itineraries)
     results = []
     itineraries.each do |itin|
-      prices.each do |k, v|
-        splits = v.split('_')
-        hub1 = splits[0].to_i
-        hub2 = splits[1].to_i
-        if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
-          results.push(itin)
+      if !prices || prices && prices.empty?
+        results.push(itin)
+      else
+        prices.each do |k, v|
+          splits = v.split('_')
+          hub1 = splits[0].to_i
+          hub2 = splits[1].to_i
+          if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+            results.push(itin)
+          end
         end
       end
     end

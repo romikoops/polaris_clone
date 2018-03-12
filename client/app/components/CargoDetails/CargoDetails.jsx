@@ -5,6 +5,7 @@ import styles from './CargoDetails.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
 import FileUploader from '../FileUploader/FileUploader'
 import DocumentsForm from '../Documents/Form'
+import DocumentsMultiForm from '../Documents/MultiForm'
 // import { HSCodeRow } from '../HSCodeRow/HSCodeRow'
 import defaults from '../../styles/default_classes.scss'
 import { converter } from '../../helpers'
@@ -38,14 +39,11 @@ export class CargoDetails extends Component {
     this.setState({ customsView: !this.state.customsView })
   }
   toggleSpecificCustoms (target) {
-    const {
-      setCustomsFee,
-      // customsData,
-      shipmentData
-    } = this.props
+    const { setCustomsFee, customsData, shipmentData } = this.props
     const { customs } = shipmentData
+
     const converted = customs[target].total.value
-    const resp = converted === 0
+    const resp = customsData[target].bool
       ? { bool: false, val: 0 }
       : { bool: true, val: converted, currency: customs[target].total.currency }
 
@@ -136,9 +134,7 @@ export class CargoDetails extends Component {
       eori
     } = this.props
     const { totalGoodsCurrency } = this.state
-    const {
-      dangerousGoods, documents
-    } = shipmentData
+    const { dangerousGoods, documents } = shipmentData
     const DocViewer = ({ doc }) => (
       <div className="flex-100 layout-row layout-align-start-center">
         <p className={`flex-80 ${styles.doc_title}`}>
@@ -257,15 +253,21 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        <div className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}>
-          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+        <div
+          className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}
+        >
+          <div
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}
+          >
             <p className="flex-none">Import</p>
             <h6 className="flex-none center">
               {' '}
               {customsData ? customsData.import.val.toFixed(2) : '18.50'} {user.currency}
             </h6>
           </div>
-          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}>
+          <div
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}
+          >
             <p className="flex-none">Export</p>
             <h6 className="flex-none center">
               {' '}
@@ -277,10 +279,12 @@ export class CargoDetails extends Component {
             <p className="flex-none">Total</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData ? (customsData.import.val + customsData.export.val).toFixed(2) : '18.50'} {user.currency}
+              {customsData
+                ? (customsData.import.val + customsData.export.val).toFixed(2)
+                : '18.50'}{' '}
+              {user.currency}
             </h6>
           </div>
-
         </div>
 
         {/* <HSCodeRow
@@ -378,7 +382,8 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
-              <div className="flex-100 flex-gt-sm-50 layout-row layout-wrap
+              <div
+                className="flex-100 flex-gt-sm-50 layout-row layout-wrap
                   layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap">
@@ -460,7 +465,8 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
               </div>
-              <div className="flex-100 flex-gt-sm-45 offset-gt-sm-5
+              <div
+                className="flex-100 flex-gt-sm-45 offset-gt-sm-5
                   layout-row layout-wrap alyout-align-start-start"
               >
                 <div className="flex-100 layout-row">
@@ -555,7 +561,8 @@ export class CargoDetails extends Component {
                       />
                     </div>
                   </div>
-                  <div className="
+                  <div
+                    className="
                 flex-gt-sm-100
                  layout-row
                  layout-align-start-start
@@ -563,45 +570,32 @@ export class CargoDetails extends Component {
                 "
                   >
                     <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                      <DocumentsForm
+                      <DocumentsMultiForm
                         theme={theme}
                         type="miscellaneous"
                         dispatchFn={this.fileFn}
                         text="Miscellaneous"
-                        multiple
+                        documents={documents.miscellaneous}
                         deleteFn={this.deleteDoc}
                       />
-                    </div>
-                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                      {documents && documents.miscellaneous
-                        ? documents.miscellaneous.map(d => (
-                          <DocumentsForm
-                            theme={theme}
-                            type="miscellaneous"
-                            dispatchFn={this.fileFn}
-                            text="Miscellaneous"
-                            doc={d}
-                            displayOnly
-                            deleteFn={this.deleteDoc}
-                          />
-                        ))
-                        : ''}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
-        <div className={
-          `${styles.insurance_customs_sec} flex-100 ` +
-          'layout-row layout-wrap layout-align-center'
-        }
+        <div
+          className={
+            `${styles.insurance_customs_sec} flex-100 ` +
+            'layout-row layout-wrap layout-align-center'
+          }
         >
           <div className="flex-100 layout-row layout-align-center padd_top">
             <div
-              className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
+              className={`flex-none ${
+                defaults.content_width
+              } layout-row layout-wrap section_padding`}
             >
               <div className="flex-100 layout-row layout-align-start-center">
                 <div className="flex-none">
@@ -619,7 +613,9 @@ export class CargoDetails extends Component {
           </div>
           <div className="flex-100 layout-row layout-align-center padd_top">
             <div
-              className={`flex-none ${defaults.content_width} layout-row layout-wrap section_padding`}
+              className={`flex-none ${
+                defaults.content_width
+              } layout-row layout-wrap section_padding`}
             >
               <div className="flex-100 layout-row layout-align-start-center">
                 <div className="flex-none">

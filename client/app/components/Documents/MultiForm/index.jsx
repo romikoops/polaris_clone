@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch'
 import Truncate from 'react-truncate'
 import { Promise } from 'es6-promise-promise'
 import ReactTooltip from 'react-tooltip'
+
 import { Link } from 'react-router-dom'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../../prop-types'
@@ -10,7 +11,7 @@ import { BASE_URL } from '../../../constants'
 import { authHeader, gradientTextGenerator } from '../../../helpers'
 import styles from './index.scss'
 
-class DocumentsForm extends React.Component {
+class DocumentsMultiForm extends React.Component {
   static handleResponse (response) {
     if (!response.ok) {
       return Promise.reject(response.statusText)
@@ -75,7 +76,7 @@ class DocumentsForm extends React.Component {
         body: formData
       }
       const uploadUrl = BASE_URL + url
-      return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
+      return fetch(uploadUrl, requestOptions).then(DocumentsMultiForm.handleResponse)
     }
     return this.showFileTypeError()
   }
@@ -87,73 +88,60 @@ class DocumentsForm extends React.Component {
     e.preventDefault()
     this.uploaderInput.click()
   }
-  deleteFile (file) {
-    const { deleteFn } = this.props
-    this.setState({ file: null })
-    deleteFn(file)
-  }
   render () {
     const {
       theme,
       type,
       tooltip,
       text,
-      doc,
-      isRequired,
-      displayOnly,
-      multiple,
-      viewer
+      documents,
+      deleteFn
     } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
-    const fileName = doc ? (
-      <p className="flex-none">
-        <Truncate lines={1}>{doc.text} </Truncate>
-      </p>
-    ) : (
-      ''
-    )
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const link = doc.signed_url ? (
-      <Link
-        to={doc.signed_url}
-        className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
-        target="_blank"
-      >
-        <i className="clip fa fa-eye" style={textStyle} />
-      </Link>
-    ) : (
-      ''
-    )
-    const missingFile = isRequired ? (
-      <p className={`${styles.missing}`}>
-        <i className="fa fa-exclamation-triangle" />
-        Missing File
-      </p>
-    ) : (
-      <p className={`${styles.optional}`}>
-        <i className="fa fa-exclamation-triangle" />
-        Optional
-      </p>
-    )
-    const iconRowStyle = viewer && !multiple ? styles.viewer_row : styles.icon_row
+
+    const existingDocuments = documents
+      ? documents.map((d) => {
+        const link = d.signed_url ? (
+          <Link
+            to={d.signed_url}
+            className={`${styles.icon_btn} flex layout-row layout-align-center-center`}
+            target="_blank"
+          >
+            <p className="flex">
+              <Truncate lines={1}>{d.text} </Truncate>
+            </p>
+          </Link>
+        ) : (
+          <p className="flex">
+            <Truncate lines={1}>{d.text} </Truncate>
+          </p>
+        )
+        return (
+          <div className="flex-100 layout-row layout-align-start-center">
+            {link}
+            <div
+              className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
+              onClick={() => deleteFn(d)}
+            >
+              <i className="fa fa-trash" />
+            </div>
+          </div>)
+      })
+      : []
     return (
       <div className={`${styles.form} flex-100 layout-row layout-align-none-center layout-wrap`}>
-        <div className="flex layout-row layout-wrap">
-          <div className={`${styles.form_label} flex-40 layout-row layout-align-start-center`}>
-            <p className="flex-none">{text}</p>
-          </div>
-          <div className="flex-60 layout-row layout-align-center-center">
-            {doc ? fileName : missingFile}
-          </div>
+        <div className={`${styles.form_label} flex-40 layout-row layout-align-start-start`}>
+          <p className="flex-none">{text}</p>
         </div>
-        <div className={`${iconRowStyle} flex-none layout-row layout-align-none-center`}>
-          {displayOnly ? (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
-          ) : (
+        <div className="flex layout-row layout-align-center-center layout-wrap">
+          {existingDocuments}
+          <div className="flex-100 layout-row layout-align-start-center">
+            <p className="flex">Upload another file</p>
             <div
               className={`flex-none layout-row layout-align-end-center ${
                 styles.upload_btn_wrapper
@@ -179,22 +167,7 @@ class DocumentsForm extends React.Component {
                 />
               </form>
             </div>
-          )}
-          {multiple ? (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
-          ) : (
-            <div
-              className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
-              onClick={() => this.deleteFile(doc)}
-            >
-              <i className="fa fa-trash" />
-            </div>
-          )}
-          {viewer && !multiple ? (
-            link
-          ) : (
-            <div className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`} />
-          )}
+          </div>
         </div>
         <div
           className={`${styles.file_error} ${errorStyle} flex-100 layout-row layout-align-center`}
@@ -206,7 +179,7 @@ class DocumentsForm extends React.Component {
   }
 }
 
-DocumentsForm.propTypes = {
+DocumentsMultiForm.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   theme: PropTypes.theme,
@@ -214,26 +187,18 @@ DocumentsForm.propTypes = {
   uploadFn: PropTypes.func,
   tooltip: PropTypes.string,
   text: PropTypes.string,
-  doc: PropTypes.objectOf(PropTypes.any),
-  isRequired: PropTypes.bool,
-  deleteFn: PropTypes.func,
-  displayOnly: PropTypes.bool,
-  multiple: PropTypes.bool,
-  viewer: PropTypes.bool
+  documents: PropTypes.arrayOf(PropTypes.any),
+  deleteFn: PropTypes.func
 }
 
-DocumentsForm.defaultProps = {
+DocumentsMultiForm.defaultProps = {
   uploadFn: null,
   dispatchFn: null,
   theme: null,
   tooltip: '',
   text: '',
-  doc: {},
-  isRequired: false,
-  deleteFn: null,
-  displayOnly: false,
-  multiple: false,
-  viewer: false
+  documents: [],
+  deleteFn: null
 }
 
-export default DocumentsForm
+export default DocumentsMultiForm
