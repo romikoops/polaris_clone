@@ -24,7 +24,6 @@ export default class QuantityInput extends PureComponent {
           pressedDown: false
         })
       }, 300)
-      // do stuff
     } else if (e.key === '.') {
       e.preventDefault()
     }
@@ -42,7 +41,7 @@ export default class QuantityInput extends PureComponent {
 
     return (
       <div className="flex-100 layout-row">
-        <div className="flex-80 layout-row layout-align-center">
+        <div className="flex-100 layout-row layout-align-center">
           <div
             className={
               `${styles.quantity} layout-row flex-100 ` +
@@ -50,6 +49,12 @@ export default class QuantityInput extends PureComponent {
               'layout-wrap layout-align-start-center'
             }
           >
+            <p
+              className="flex-100 layout-row layout-align-center-start"
+              style={{ margin: '0 0 4px 0' }}
+            >
+              Quantity
+            </p>
             <div className="flex-100 layout-row">
               <ValidatedInput
                 onKeyDown={e => this.handleKeyDown(e)}
@@ -59,6 +64,7 @@ export default class QuantityInput extends PureComponent {
                 type="number"
                 min="1"
                 step="any"
+                placeholder="Quantity"
                 onChange={handleDelta}
                 errorStyles={{
                   fontSize: '10px',
@@ -72,17 +78,8 @@ export default class QuantityInput extends PureComponent {
                 nextStageAttempt={nextStageAttempt}
               />
             </div>
-            <hr className="flex-100" />
-            <p
-              className="flex-100 layout-row layout-align-center-start"
-              style={{ margin: 0 }}
-            >
-              Quantity
-            </p>
+            <hr className="flex-70" />
           </div>
-        </div>
-        <div className="flex-20 layout-row layout-align-center-center">
-          <p className="flex-none" style={{ margin: 0 }}>X</p>
         </div>
       </div>
     )

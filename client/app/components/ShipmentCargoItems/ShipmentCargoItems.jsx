@@ -157,7 +157,7 @@ export class ShipmentCargoItems extends Component {
           <div className={
             `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
             `${cargoItemInfoExpanded[i] && styles.expanded} ` +
-            'flex-85 offset-15'
+            'flex-100'
           }
           >
             <div className={
