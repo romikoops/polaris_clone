@@ -35,7 +35,8 @@ export class ChooseRoute extends Component {
       limits: {
         focus: true,
         alt: true
-      }
+      },
+      outerLimit: 10
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
@@ -65,6 +66,14 @@ export class ChooseRoute extends Component {
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
+    this.showMore()
+  }
+  showMore () {
+    const { outerLimit } = this.state
+    this.setState({ outerLimit: outerLimit + 10 })
+    const { shipmentDispatch, req } = this.props
+    req.delay = outerLimit + 10
+    shipmentDispatch.setShipmentDetails(req)
   }
 
   chooseResult (obj) {
@@ -274,7 +283,7 @@ export class ChooseRoute extends Component {
               styles.back_to_dash_sec
             } flex-100 layout-row layout-wrap layout-align-center`}
           >
-            <div className="content_width flex-none layout-row layout-align-start-center">
+            <div className="content_width_booking flex-none layout-row layout-align-start-center">
               <RoundButton
                 theme={theme}
                 text="Back to dashboard"

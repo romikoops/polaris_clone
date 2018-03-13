@@ -43,7 +43,7 @@ export class BookingDetails extends Component {
       shipper: {},
       notifyees: [],
       insurance: {
-        bool: false,
+        bool: null,
         val: 0
       },
       incoterm: '',
@@ -169,7 +169,7 @@ export class BookingDetails extends Component {
 
     if (insurance.bool) {
       this.setState({ insurance: { bool: false, val: 0 } })
-    } else {
+    } else if (!insurance.bool) {
       this.calcInsurance(false, true)
     }
   }

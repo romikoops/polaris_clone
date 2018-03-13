@@ -20,7 +20,7 @@ export function UserMergedShipment ({ ship, viewShipment }) {
         <p className="flex-none">{ship.status}</p>
       </div>
       <div className={`flex-15 layout-row layout-align-start-center ${styles.ship_row_cell}`}>
-        <p className="flex-none">{ship.incoterm}</p>
+        {/* <p className="flex-none">{ship.incoterm}</p> */}
       </div>
       <div className={`flex-15 layout-row layout-align-start-center ${styles.ship_row_cell}`}>
         <p className="flex-none"> Yes </p>

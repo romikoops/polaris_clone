@@ -37,7 +37,11 @@ class PricingSeeder
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
 		  req = {"xlsx" => public_pricings}
 		  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
-	
+			
+			# puts "# Overwrite Local Charges From Sheet"
+			local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+			req = {"xlsx" => local_charges}
+			overwrite_local_charges(req, shipper)
 		  # Overwrite trucking data from excel sheet
 		  puts "# Overwrite trucking data from excel sheet"
 		  ["import", "export"].each do |dir|

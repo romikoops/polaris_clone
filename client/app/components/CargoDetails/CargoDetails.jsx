@@ -134,7 +134,7 @@ export class CargoDetails extends Component {
       eori
     } = this.props
     const { totalGoodsCurrency } = this.state
-    const { dangerousGoods, documents } = shipmentData
+    const { dangerousGoods, documents, shipment } = shipmentData
     const DocViewer = ({ doc }) => (
       <div className="flex-100 layout-row layout-align-start-center">
         <p className={`flex-80 ${styles.doc_title}`}>
@@ -168,10 +168,13 @@ export class CargoDetails extends Component {
             transport industry. will automatically be covered under legal liability standard to the
             transportation industry
             <br />
+            <br />
             How insurance premium is calculated:
             <br />
+            <br />
             Basis of premium calculation CIF + 10% X the actual premium rate (The actual premium
-            rate applied on the total sum of cost of goods + freight + 10% imaginary profit)
+            rate applied on the total sum of cost of goods + freight + 10% margin)
+            <br />
             <br />
             Please contact your local Greencarrier office for more info.
           </p>
@@ -185,6 +188,7 @@ export class CargoDetails extends Component {
         </div>
       </div>
     )
+
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
@@ -216,6 +220,7 @@ export class CargoDetails extends Component {
                   onChange={() => this.toggleSpecificCustoms('export')}
                   checked={customsData.export.bool}
                   theme={theme}
+                  disabled={!shipment.has_pre_carriage}
                 />
               </div>
               <div className="flex-50 layout-row layout-align-space-around-center">
@@ -224,11 +229,12 @@ export class CargoDetails extends Component {
                   onChange={() => this.toggleSpecificCustoms('import')}
                   checked={customsData.import.bool}
                   theme={theme}
+                  disabled={!shipment.has_on_carriage}
                 />
               </div>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+          {/* <div className="flex-100 layout-row layout-wrap layout-align-start-center">
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
               <div className="flex-40 layout-row -alyout-align-start-center">
                 <p className="flex-none">Do you have your own customs credit? </p>
@@ -259,7 +265,7 @@ export class CargoDetails extends Component {
                 VAT will be applied to the final invoice if you do not have customs credit.
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
         <div
           className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}
@@ -380,6 +386,7 @@ export class CargoDetails extends Component {
         </div>
       </div>
     )
+
     return (
       <div className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
@@ -410,7 +417,7 @@ export class CargoDetails extends Component {
                           fontSize: '13px',
                           bottom: '-17px'
                         }}
-                        value={this.props.totalGoodsValue.value}
+                        // value={this.props.totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
                         onChange={this.handleChange}
@@ -478,12 +485,6 @@ export class CargoDetails extends Component {
                 className="flex-100 flex-gt-sm-45 offset-gt-sm-5
                   layout-row layout-wrap alyout-align-start-start"
               >
-                <div className="flex-100 layout-row">
-                  <div className={`flex-none ${styles.f_header}`}>
-                    <TextHeading theme={theme} size={3} text="Required Documents" />
-                  </div>
-                </div>
-
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100 layout-row">
                     <DocumentsForm
@@ -606,16 +607,36 @@ export class CargoDetails extends Component {
                 defaults.content_width
               } layout-row layout-wrap section_padding`}
             >
-              <div className="flex-100 layout-row layout-align-start-center">
-                <div className="flex-none">
+              <div className="flex-100 layout-row layout-align-space-between-start">
+                <div className="flex-none layout-row layout-align-space-around-center">
                   <TextHeading theme={theme} size={2} text="Insurance" />
+                  <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
                 </div>
-                <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
-                <Checkbox
-                  onChange={this.toggleInsurance}
-                  checked={this.props.insurance.bool}
-                  theme={theme}
-                />
+
+                <div className="flex-33 layout-row layout-align-space-around-center layout-wrap">
+                  <div className="flex-100 layout-row layout-align-end-center">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>
+                      {`Yes, I want ${tenant.data.name} to insure my cargo`}
+                    </p>
+                    <Checkbox
+                      onChange={this.toggleInsurance}
+                      checked={this.props.insurance.bool}
+                      theme={theme}
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-end-center">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                      tenant.data.name
+                    } to insure my cargo`}</p>
+                    <Checkbox
+                      onChange={this.toggleInsurance}
+                      checked={
+                        this.props.insurance.bool == null ? null : !this.props.insurance.bool
+                      }
+                      theme={theme}
+                    />
+                  </div>
+                </div>
               </div>
               <div className="flex-100 layout-row layout-align-start-center">
                 <p className="flex-none">
@@ -632,16 +653,41 @@ export class CargoDetails extends Component {
                 defaults.content_width
               } layout-row layout-wrap section_padding`}
             >
-              <div className="flex-100 layout-row layout-align-start-center">
-                <div className="flex-none">
-                  <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
+              <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
+                <div className="flex-none layout-row layout-align-space-around-center">
+                  <TextHeading theme={theme} size={2} text="Customs Handling" />
+                  {/* <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" /> */}
                 </div>
-                <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
-                <Checkbox
-                  onChange={this.toggleCustoms}
-                  checked={this.state.customsView}
-                  theme={theme}
-                />
+
+                <div className="flex-33 layout-wrap layout-row layout-align-space-around-center">
+                  <div className="flex-100 layout-row layout-align-end-center">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>{`Yes, I want ${
+                      tenant.data.name
+                    } to handle my customs`}</p>
+                    <Checkbox
+                      onChange={this.toggleCustoms}
+                      checked={this.state.customsView}
+                      theme={theme}
+                    />
+                  </div>
+                  <div className="flex-100 layout-row layout-align-end-center">
+                    <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                      tenant.data.name
+                    } to handle my customs`}</p>
+                    <Checkbox
+                      onChange={this.toggleCustoms}
+                      checked={this.state.customsView == null ? null : !this.state.customsView}
+                      theme={theme}
+                    />
+                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-align-start-center">
+                  <p className="flex-none">
+                    A documented permission is needed (mandatory) to pass a national border when
+                    exporting or importing. Power of Attorney may be required according to local
+                    regulations.
+                  </p>
+                </div>
               </div>
               {customsBox}
               {noCustomsBox}
@@ -658,7 +704,7 @@ CargoDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleInsurance: PropTypes.func.isRequired,
-  toggleCustomsCredit: PropTypes.func.isRequired,
+  // toggleCustomsCredit: PropTypes.func.isRequired,
   cargoNotes: PropTypes.string.isRequired,
   totalGoodsValue: PropTypes.number.isRequired,
   insurance: PropTypes.shape({
@@ -684,7 +730,7 @@ CargoDetails.propTypes = {
   finishBookingAttempted: PropTypes.bool,
   hsTexts: PropTypes.objectOf(PropTypes.string),
   // handleHsTextChange: PropTypes.func,
-  customsCredit: PropTypes.bool,
+  // customsCredit: PropTypes.bool,
   handleTotalGoodsCurrency: PropTypes.func.isRequired,
   eori: PropTypes.string,
   notes: PropTypes.string,
@@ -697,7 +743,7 @@ CargoDetails.defaultProps = {
   finishBookingAttempted: false,
   hsTexts: {},
   // handleHsTextChange: null,
-  customsCredit: false,
+  // customsCredit: false,
   eori: '',
   notes: '',
   incoterm: ''

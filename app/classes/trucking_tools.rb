@@ -212,7 +212,8 @@ module TruckingTools
       cargo_object[cargo.id]["total_cargo_items"] = cargo_total_items
       if trucking_hub["load_meterage"]
         if (cargo.dimension_z > trucking_hub["load_meterage"]["height_limit"]) || !cargo.stackable
-          load_meter_weight = cargo.volume * trucking_hub["load_meterage"]["ratio"]
+          load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24000
+          load_meter_weight = load_meterage * trucking_hub["load_meterage"]["ratio"]
           trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
           cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
         else

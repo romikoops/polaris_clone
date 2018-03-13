@@ -123,6 +123,7 @@ module PricingTools
 
   def determine_cargo_item_price(client, cargo, pathKey, user, quantity)
     pricing = get_user_price(client, pathKey, user)
+    # byebug
     return nil if pricing.nil?
     totals = {"total" => {}}
     

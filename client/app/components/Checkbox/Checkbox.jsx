@@ -37,6 +37,7 @@ export class Checkbox extends PureComponent {
     }
     const size = this.props.size ? +this.props.size.replace('px', '') : 25
     const iconStyles = Object.assign({ fontSize: `${Math.max(Math.min(size * 0.8, 15), 12)}px` }, checkGradient)
+
     return (
       <div className={`${styles.checkbox} flex-none`} style={border} onClick={this.props.onClick}>
         <label>

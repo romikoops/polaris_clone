@@ -31,7 +31,7 @@ export class UserShipmentView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      // fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
+      fileType: { label: 'Packing Sheet', value: 'packing_sheet' },
       // upUrl: this.props.shipmentData
       //   ? `/shipments/${this.props.shipmentData.shipment.id}/upload/packing_sheet`
       //   : '',
@@ -406,9 +406,6 @@ export class UserShipmentView extends Component {
                 ) : (
                   ''
                 )}
-              </div>
-              <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
-                <i className="fa fa-pencil clip" style={textStyle} />
               </div>
             </div>
           </div>

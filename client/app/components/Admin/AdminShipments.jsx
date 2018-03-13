@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminShipmentView, AdminShipmentsIndex } from './'
-import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { AdminShipmentsGroup } from './Shipments/Group'
@@ -14,7 +13,7 @@ class AdminShipments extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedShipment: false
+      // selectedShipment: false
     }
     this.viewShipment = this.viewShipment.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
@@ -29,12 +28,12 @@ class AdminShipments extends Component {
   viewShipment (shipment) {
     const { adminDispatch } = this.props
     adminDispatch.getShipment(shipment.id, true)
-    this.setState({ selectedShipment: true })
+    // this.setState({ selectedShipment: true })
   }
 
   backToIndex () {
     const { dispatch, history } = this.props
-    this.setState({ selectedShipment: false })
+    // this.setState({ selectedShipment: false })
     dispatch(history.push('/admin/shipments'))
   }
   handleShipmentAction (id, action) {
@@ -43,7 +42,6 @@ class AdminShipments extends Component {
   }
 
   render () {
-    const { selectedShipment } = this.state
     const {
       theme,
       hubs,
@@ -58,24 +56,12 @@ class AdminShipments extends Component {
     if (!shipments || !hubs || !clients) {
       return <h1>NO SHIPMENTS DATA</h1>
     }
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={this.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <TextHeading theme={theme} size={1} text="Shipments" />
-          {selectedShipment ? backButton : ''}
         </div>
         <Switch className="flex">
           <Route
@@ -125,6 +111,7 @@ class AdminShipments extends Component {
                 shipments={shipments}
                 hubHash={hubHash}
                 clients={clients}
+                viewShipment={this.viewShipment}
                 {...props}
               />
             )}
@@ -144,6 +131,7 @@ class AdminShipments extends Component {
                 shipments={shipments}
                 hubHash={hubHash}
                 clients={clients}
+                viewShipment={this.viewShipment}
                 {...props}
               />
             )}
@@ -163,6 +151,7 @@ class AdminShipments extends Component {
                 shipments={shipments}
                 hubHash={hubHash}
                 clients={clients}
+                viewShipment={this.viewShipment}
                 {...props}
               />
             )}
