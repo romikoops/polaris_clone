@@ -513,7 +513,7 @@ export class CargoDetails extends Component {
                   </div>
                 </div>
 
-                <div className="flex-100 layout-row layout-wrap">
+                {/* <div className="flex-100 layout-row layout-wrap">
                   <div className="flex-100 layout-row layout-wrap">
                     <DocumentsForm
                       theme={theme}
@@ -524,7 +524,7 @@ export class CargoDetails extends Component {
                       deleteFn={this.deleteDoc}
                     />
                   </div>
-                </div>
+                </div> */}
                 {dangerousGoods ? (
                   <div className="flex-100 layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-wrap">
