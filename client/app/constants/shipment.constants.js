@@ -52,7 +52,14 @@ export const documentTypes = {
   certificate_of_origin: 'Certificate Of Origin',
   dangerous_goods: 'Dangerous Goods',
   bill_of_lading: 'Bill of Lading',
-  invoice: 'Invoice'
+  invoice: 'Invoice',
+  miscellaneous: 'Miscellaneous'
+}
+export const shipmentStatii = {
+  booking_process_started: 'Booking Process Started',
+  finished: 'Finished',
+  open: 'Open',
+  requested: 'Requested'
 }
 
 export const shipmentConstants = {

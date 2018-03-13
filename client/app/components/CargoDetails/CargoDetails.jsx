@@ -158,14 +158,22 @@ export class CargoDetails extends Component {
           <p className="flex-90">
             <strong>
               {' '}
-              Sign an insurance for the replacement of the goods shipped in case of total or partial
-              loss or damage. The price of the insurance will be determined by the goods value and
-              the transport charges.
+              A cost effective and simple way to cover for physical loss or damage to goods in
+              transit.
             </strong>
           </p>
           <p className="flex-90">
-            Note that if you choose not to pay to insure your shipment, the goods shipped are
-            automatically covered under legal liability standard to the transportation industry.
+            Note that if you choose not to insure the goods it will only be covered by carriers
+            liability to the extent that it is covered under legal liability standard to the
+            transport industry. will automatically be covered under legal liability standard to the
+            transportation industry
+            <br />
+            How insurance premium is calculated:
+            <br />
+            Basis of premium calculation CIF + 10% X the actual premium rate (The actual premium
+            rate applied on the total sum of cost of goods + freight + 10% imaginary profit)
+            <br />
+            Please contact your local Greencarrier office for more info.
           </p>
         </div>
         <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
@@ -390,7 +398,7 @@ export class CargoDetails extends Component {
                   <div className="flex-100">
                     {' '}
                     <div className="flex-none">
-                      <TextHeading theme={theme} size={3} text="Total valued goods" />
+                      <TextHeading theme={theme} size={3} text="Total value of goods" />
                     </div>
                   </div>
                   <div className="flex-100 layout-row">
@@ -402,6 +410,7 @@ export class CargoDetails extends Component {
                           fontSize: '13px',
                           bottom: '-17px'
                         }}
+                        value={this.props.totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
                         onChange={this.handleChange}
@@ -607,6 +616,12 @@ export class CargoDetails extends Component {
                   checked={this.props.insurance.bool}
                   theme={theme}
                 />
+              </div>
+              <div className="flex-100 layout-row layout-align-start-center">
+                <p className="flex-none">
+                  Cargo insurance provides protection against all risks of physical loss or damage
+                  to freight from any external cause during shipping, whether by land, sea or air.
+                </p>
               </div>
               {insuranceBox}
             </div>

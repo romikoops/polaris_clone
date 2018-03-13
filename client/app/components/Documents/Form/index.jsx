@@ -89,6 +89,9 @@ class DocumentsForm extends React.Component {
   }
   deleteFile (file) {
     const { deleteFn } = this.props
+    if (this.uploaderInput.files.length) {
+      this.uploaderInput.files[0] = ''
+    }
     this.setState({ file: null })
     deleteFn(file)
   }

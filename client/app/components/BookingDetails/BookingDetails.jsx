@@ -139,7 +139,11 @@ export class BookingDetails extends Component {
       notifyees: obj.notifyees,
       hsCodes: obj.hsCodes,
       totalGoodsValue: obj.totalGoodsValue,
-      cargoNotes: obj.cargoNotes
+      cargoNotes: obj.cargoNotes,
+      eori: obj.eori,
+      notes: obj.notes,
+      incoterm: obj.incoterm,
+      customsCredit: obj.customsCredit
     })
   }
   toggleAcceptTerms () {

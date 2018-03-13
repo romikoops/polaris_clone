@@ -40,13 +40,18 @@ class NavBar extends Component {
             {`${capitalize(admin.client.client.first_name)}  ${capitalize(admin.client.client.last_name)}`}
           </div>
         )
+      // eslint-disable-next-line no-case-declarations
       case 'shipments':
+        const name =
+          admin.shipment && admin.shipment.shipment
+            ? admin.shipment.shipment.imc_reference
+            : categories[categories.length - 1]
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(admin.shipment.shipment.imc_reference)}`}
+            {`${capitalize(name)}`}
           </div>
         )
       case 'hubs':
@@ -105,13 +110,18 @@ class NavBar extends Component {
             {`${capitalize(users.client.client.first_name)}  ${capitalize(users.client.client.last_name)}`}
           </div>
         )
+      // eslint-disable-next-line no-case-declarations
       case 'shipments':
+        const name =
+          users.shipment && users.shipment.shipment
+            ? users.shipment.shipment.imc_reference
+            : categories[categories.length - 1]
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(users.shipment.shipment.imc_reference)}`}
+            {`${capitalize(name)}`}
           </div>
         )
       case 'hubs':
@@ -196,20 +206,24 @@ class NavBar extends Component {
       <i className="fa fa-home clip" style={iconStyle} />{' '}
     </div>)
     pathPieces.forEach((br, i) => {
-      breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">
-        {' '}
-        <i className="fa fa-angle-double-right clip" style={iconStyle} />{' '}
-      </div>)
-      if (i < lastIndex) {
-        breadcrumbs.push(<div
-          className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
-          onClick={() => this.navLink(pathPieces, i)}
-        >
+      if (br !== 'view') {
+        breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">
           {' '}
-          {capitalize(br)}
+          <i className="fa fa-angle-double-right clip" style={iconStyle} />{' '}
         </div>)
-      } else {
-        breadcrumbs.push(this.finalCell(pathPieces))
+        if (i < lastIndex) {
+          breadcrumbs.push(<div
+            className={`${
+              styles.nav_cell
+            } flex-none layout-row layout-align-center-center pointy`}
+            onClick={() => this.navLink(pathPieces, i)}
+          >
+            {' '}
+            {capitalize(br)}
+          </div>)
+        } else {
+          breadcrumbs.push(this.finalCell(pathPieces))
+        }
       }
     })
 
@@ -230,7 +244,6 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-
   theme: PropTypes.theme,
   location: PropTypes.objectOf(PropTypes.any),
   users: PropTypes.objectOf(PropTypes.any),

@@ -123,7 +123,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Requested Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedRequestedShipments}
         adminDispatch={adminDispatch}
         theme={theme}

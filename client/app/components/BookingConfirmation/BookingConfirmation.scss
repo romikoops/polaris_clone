@@ -104,10 +104,11 @@
     }
     transition: max-height 1s linear;
     max-height: 400px;
-    overflow: hidden;
+    overflow-y: scroll;
     width: 100%;
     &.collapsed {
       max-height: 0;
+      overflow: hidden;
     }
   }
   .heading_style {

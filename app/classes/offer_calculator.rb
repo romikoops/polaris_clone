@@ -342,17 +342,34 @@ class OfferCalculator
         end
       end
 
-      if !raw_totals[svalue["trucking_on"]["currency"]]
-        raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
-      else
-        raw_totals[svalue["trucking_on"]["currency"]] += svalue["trucking_on"]["value"].to_f
+      svalue["trucking_on"].each do |id, charges|
+        if !raw_totals[charges["currency"]]
+          raw_totals[charges["currency"]] = charges["value"].to_f
+        else
+          raw_totals[charges["currency"]] += charges["value"].to_f
+        end
+        
       end
+      svalue["trucking_pre"].each do |id, charges|
+        if !raw_totals[charges["currency"]]
+          raw_totals[charges["currency"]] = charges["value"].to_f
+        else
+          raw_totals[charges["currency"]] += charges["value"].to_f
+        end
+        
+      end
+
+      # if !raw_totals[svalue["trucking_on"]["currency"]]
+      #   raw_totals[svalue["trucking_on"]["currency"]] = svalue["trucking_on"]["value"].to_f
+      # else
+      #   raw_totals[svalue["trucking_on"]["currency"]] += svalue["trucking_on"]["value"].to_f
+      # end
       
-      if !raw_totals[svalue["trucking_pre"]["currency"]]
-        raw_totals[svalue["trucking_pre"]["currency"]] = svalue["trucking_pre"]["value"].to_f
-      else
-        raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
-      end
+      # if !raw_totals[svalue["trucking_pre"]["currency"]]
+      #   raw_totals[svalue["trucking_pre"]["currency"]] = svalue["trucking_pre"]["value"].to_f
+      # else
+      #   raw_totals[svalue["trucking_pre"]["currency"]] += svalue["trucking_pre"]["value"].to_f
+      # end
       converted_totals = sum_and_convert(raw_totals, @user.currency)
       @shipment.schedules_charges[key]["total"] = {value: converted_totals, currency: @user.currency}
       if @total_price[:total] == 0 

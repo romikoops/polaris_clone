@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
-import { moment, documentTypes } from '../../constants'
+import { moment, documentTypes, shipmentStatii } from '../../constants'
 import styles from './BookingConfirmation.scss'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
 // import { Price } from '../Price/Price'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { capitalize, gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator } from '../../helpers'
 // import { Tooltip } from '../Tooltip/Tooltip'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
@@ -158,9 +158,7 @@ export class BookingConfirmation extends Component {
     return resultArray
   }
   render () {
-    const {
-      theme, shipmentData, shipmentDispatch
-    } = this.props
+    const { theme, shipmentData, shipmentDispatch } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
@@ -213,7 +211,9 @@ export class BookingConfirmation extends Component {
               <div className="flex-100">
                 <h3 style={{ fontWeight: 'normal' }}>Notifyee</h3>
               </div>
-              <p style={{ marginTop: 0 }}>{notifyee.first_name} {notifyee.last_name}</p>
+              <p style={{ marginTop: 0 }}>
+                {notifyee.first_name} {notifyee.last_name}
+              </p>
             </div>
           </div>
         ))) ||
@@ -241,7 +241,7 @@ export class BookingConfirmation extends Component {
     const docView = []
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<div className="flex-50 layout-row">
+        docView.push(<div className="flex-50 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -254,27 +254,31 @@ export class BookingConfirmation extends Component {
         </div>)
       })
     }
-    const themeTitled = theme && theme.colors
-      ? { background: theme.colors.primary, color: 'white' }
-      : { background: 'rgba(0,0,0,0.25)', color: 'white' }
+    const themeTitled =
+      theme && theme.colors
+        ? { background: theme.colors.primary, color: 'white' }
+        : { background: 'rgba(0,0,0,0.25)', color: 'white' }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-center-start">
-        <div className={
-          'flex-none layout-row layout-wrap ' +
-          'layout-align-center-start content_width_booking'
-        }
+        <div
+          className="
+          flex-none
+          layout-row
+          layout-wrap
+          layout-align-center-start
+          content_width_booking"
         >
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Overview" />
               <div
@@ -289,41 +293,44 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.overview ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
+              <div
+                className={
+                  `${styles.inner_wrapper} flex-100 ` +
+                  'layout-row layout-wrap layout-align-start-start'
+                }
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-                  <p className={` ${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
-                  <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
+                  <h4 className=" flex-none">Shipment Reference:</h4>
+                  <h4 className="clip flex-none offset-5" style={textStyle}>
                     {shipment.imc_reference}
-                  </p>
+                  </h4>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
                   <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Status:</p>
                   <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
-                    {capitalize(shipment.status)}
+                    {shipmentStatii[shipment.status]}
                   </p>
                 </div>
                 <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
                   <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Created at:</p>
-                  <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>{createdDate}</p>
+                  <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
+                    {createdDate}
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Itinerary" />
               <div
@@ -338,10 +345,10 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.itinerary ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
+              <div
+                className={`${
+                  styles.inner_wrapper
+                } flex-100 layout-row layout-wrap layout-align-start-start`}
               >
                 <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
                 <div
@@ -394,17 +401,17 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
           </div>
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Fares & Fees" />
               <div
@@ -429,10 +436,11 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.charges ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
+              <div
+                className={
+                  `${styles.inner_wrapper} flex-100 ` +
+                  'layout-row layout-wrap layout-align-start-start'
+                }
               >
                 <div
                   className={`${
@@ -475,7 +483,9 @@ export class BookingConfirmation extends Component {
                         </h4>
                       )}
                       <h3 className="flex-100 no_m letter_3 center">
-                        {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value.toFixed(2)}` : 'None'}
+                        {shipment.has_pre_carriage
+                          ? `${feeHash.trucking_pre.value.toFixed(2)}`
+                          : 'None'}
                       </h3>
                     </div>
                   </div>
@@ -498,7 +508,9 @@ export class BookingConfirmation extends Component {
                         </h4>
                       )}
                       <h3 className="flex-100 no_m letter_3 center">
-                        {shipment.has_on_carriage ? `${feeHash.trucking_on.value.toFixed(2)}` : 'None'}
+                        {shipment.has_on_carriage
+                          ? `${feeHash.trucking_on.value.toFixed(2)}`
+                          : 'None'}
                       </h3>
                     </div>
                   </div>
@@ -536,19 +548,15 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">Customs</h5>
                     </div>
                     <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {
-                        feeHash.customs && feeHash.customs.val
-                          ? (
-                            <h4 className="flex-100 no_m letter_3 center">
-                              {feeHash.customs.currency}
-                            </h4>
-                          )
-                          : (
-                            <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                              None
-                            </h4>
-                          )
-                      }
+                      {feeHash.customs && feeHash.customs.val ? (
+                        <h4 className="flex-100 no_m letter_3 center">
+                          {feeHash.customs.currency}
+                        </h4>
+                      ) : (
+                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
+                          None
+                        </h4>
+                      )}
                       <h3 className="flex-100 no_m letter_3 center">
                         {feeHash.customs && feeHash.customs.val
                           ? `${feeHash.customs.val.toFixed(2)}`
@@ -560,17 +568,17 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
           </div>
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Contact Details" />
               <div
@@ -585,17 +593,19 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.contacts ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
-              >
-                <div className={
-                  `${styles.b_summ_top} flex-100 ` +
-                  'layout-row layout-align-space-around-stretch'
+              <div
+                className={
+                  `${styles.inner_wrapper} flex-100 ` +
+                  'layout-row layout-wrap layout-align-start-start'
                 }
+              >
+                <div
+                  className={
+                    `${styles.b_summ_top} flex-100 ` +
+                    'layout-row layout-align-space-around-stretch'
+                  }
                 >
-                  { shipperAndConsignee }
+                  {shipperAndConsignee}
                 </div>
                 <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
                   {' '}
@@ -604,17 +614,17 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
           </div>
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Cargo Details" />
               <div
@@ -629,10 +639,10 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.cargo ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
+              <div
+                className={`${
+                  styles.inner_wrapper
+                } flex-100 layout-row layout-wrap layout-align-start-start`}
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                   {cargoView}
@@ -640,17 +650,17 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
           </div>
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div
               style={themeTitled}
-              className={
-                `${styles.heading_style} flex-100 ` +
-                'layout-row layout-align-space-between-center'
-              }
+              className={`${
+                styles.heading_style
+              } flex-100 layout-row layout-align-space-between-center`}
             >
               <TextHeading theme={theme} color="white" size={3} text="Documents" />
               <div
@@ -665,10 +675,11 @@ export class BookingConfirmation extends Component {
               </div>
             </div>
             <div className={`${collapser.documents ? styles.collapsed : ''} ${styles.main_panel}`}>
-              <div className={
-                `${styles.inner_wrapper} flex-100 ` +
-                'layout-row layout-wrap layout-align-start-start'
-              }
+              <div
+                className={
+                  `${styles.inner_wrapper} flex-100 ` +
+                  'layout-row layout-wrap layout-align-start-start'
+                }
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                   {docView}
@@ -677,10 +688,11 @@ export class BookingConfirmation extends Component {
             </div>
           </div>
 
-          <div className={
-            `${styles.shipment_card} flex-100 ` +
-            'layout-row layout-align-space-between-center layout-wrap'
-          }
+          <div
+            className={
+              `${styles.shipment_card} flex-100 ` +
+              'layout-row layout-align-space-between-center layout-wrap'
+            }
           >
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
               <div

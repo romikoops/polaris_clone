@@ -152,7 +152,9 @@ module TruckingTools
       when 'PER_X_TON'
         return {currency: fee["currency"], value: ((cargo["trucking_chargeable_weight"]/ 1000) / fee["base"]) * fee["value"], key: key}
       when 'PER_SHIPMENT'
-        return {currency: fee["currency"], value: fee["value"], key: key}
+        return {currency: fee["currency"], value: fee["value"] / cargo["total_cargo_items"], key: key}
+      when 'PER_BILL'
+        return {currency: fee["currency"], value: fee["value"] / cargo["total_cargo_items"], key: key}
       when 'PER_ITEM'
         return {currency: fee["currency"], value: fee["value"] * cargo["quantity"], key: key}
       when 'PER_CONTAINER'
@@ -201,14 +203,22 @@ module TruckingTools
     
 
     trucking_hub = retrieve_trucking_hub(hub.nexus, load_type, hub.tenant_id)
+    
     cargo_object = {}
+    cargo_total_items = cargos.map {|c| c.quantity}.sum
     cargos.each do |cargo|
       cargo_object[cargo.id] = cargo.as_json
       cargo_object[cargo.id]["volume"] = cargo.volume
+      cargo_object[cargo.id]["total_cargo_items"] = cargo_total_items
       if trucking_hub["load_meterage"]
         if (cargo.dimension_z > trucking_hub["load_meterage"]["height_limit"]) || !cargo.stackable
           load_meter_weight = cargo.volume * trucking_hub["load_meterage"]["ratio"]
           trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
+          cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
+        else
+          cbm_ratio = trucking_hub["cbm_ratio"] ? trucking_hub["cbm_ratio"] : 333
+          cbm_weight = cargo.volume * cbm_ratio
+          trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
           cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
         end
       else
@@ -226,6 +236,7 @@ module TruckingTools
     end
     trucking_pricings = {}
     cargo_object.each do |key, cargo|
+      
       trucking_pricings[key] = retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
     end
     fees = {}
