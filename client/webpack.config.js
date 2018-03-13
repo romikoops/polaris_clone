@@ -60,7 +60,9 @@ module.exports = {
       })
       : null,
     NodeEnvPlugin.isProduction
-      ? new BabiliPlugin()
+      ? new BabiliPlugin({
+        mangle: false
+      })
       : new BrowserSyncPlugin({
         host: 'localhost',
         port: 3001,
