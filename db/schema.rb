@@ -296,13 +296,13 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.datetime "planned_etd"
     t.integer "itinerary_id"
     t.jsonb "trucking"
-    t.boolean "customs_credit"
+    t.boolean "customs_credit", default: false
     t.jsonb "total_price"
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
-    t.string "notes"
     t.string "direction"
+    t.string "notes"
     t.jsonb "incoterm"
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
@@ -369,8 +369,8 @@ ActiveRecord::Schema.define(version: 20180314172240) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item"
-    t.boolean "container"
+    t.boolean "cargo_item", default: false
+    t.boolean "container", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

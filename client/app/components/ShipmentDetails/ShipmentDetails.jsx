@@ -23,6 +23,7 @@ import { IncotermBox } from '../Incoterm/Box'
 import { Modal } from '../Modal/Modal'
 import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 import { isEmpty } from '../../helpers/objectTools'
+import { Checkbox } from '../Checkbox/Checkbox'
 import '../../styles/select-css-custom.css'
 
 export class ShipmentDetails extends Component {
@@ -34,11 +35,7 @@ export class ShipmentDetails extends Component {
     })
   }
   static errorsExist (errorsObjects) {
-    let returnBool = false
-    errorsObjects.forEach((errorsObj) => {
-      if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true
-    })
-    return returnBool
+    errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
   }
   constructor (props) {
     super(props)
@@ -87,7 +84,8 @@ export class ShipmentDetails extends Component {
       has_pre_carriage: false,
       shipment: props.shipmentData ? props.shipmentData.shipment : {},
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
-      routeSet: false
+      routeSet: false,
+      noDangerousGoodsConfirmed: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -226,7 +224,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    if (suffixName === 'sizeClass') {
+    if (suffixName === 'sizeClass' || typeof value === 'boolean') {
       containers[index][suffixName] = value
     } else {
       containers[index][suffixName] = value ? parseInt(value, 10) : 0
@@ -665,7 +663,55 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
+            {
+              !(
+                this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                this.state.containers.some(container => container.dangerous_goods)
+              )
+                ? (
+                  <div className="flex-50 layout-row layout-align-stretch">
+
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() => this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })}
+                        size="30px"
+                        name="no_dangerous_goods_confirmation"
+                        checked={this.state.noDangerousGoodsConfirmed}
+                      />
+                    </div>
+                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
+                      By clicking this checkbox, you herby confirm that your cargo does not contain
+                      hazardous materials, including (yet not limited to) pure chemicals,
+                      mixtures of substances, manufactured products,
+                      or articles which can pose a risk to people, animals or the environment
+                      if not properly handled in use or in transport.
+                    </p>
+                  </div>
+                )
+                : <div className="flex-50" />
+            }
+            <div className="flex-50 layout-row layout-align-end">
+              <RoundButton
+                text="Get Offers"
+                handleNext={this.handleNextStage}
+                theme={theme}
+                active={
+                  this.state.noDangerousGoodsConfirmed ||
+                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                  this.state.containers.some(container => container.dangerous_goods)
+                }
+                disabled={
+                  !this.state.noDangerousGoodsConfirmed &&
+                  (
+                    !this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                    !this.state.containers.some(container => container.dangerous_goods)
+                  )
+                }
+              />
+            </div>
           </div>
         </div>
         {user && !user.guest ? (
@@ -675,11 +721,10 @@ export class ShipmentDetails extends Component {
               'layout-wrap layout-align-center-center'
             }
           >
-            <div
-              className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
+            <div className={
+              `${styles.btn_sec} ${defaults.content_width} ` +
                 'layout-row flex-none layout-wrap layout-align-start-start'
-              }
+            }
             >
               <RoundButton
                 text="Back to Dashboard"

@@ -10,7 +10,7 @@ class Tenant < ApplicationRecord
   has_many :users
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
-  has_many :tenant_cargo_item_types
+  has_many :tenant_cargo_item_types, dependent: :destroy
   has_many :cargo_item_types, through: :tenant_cargo_item_types
   has_many :itineraries
   has_many :stops, through: :itineraries
