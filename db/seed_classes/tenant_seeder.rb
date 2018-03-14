@@ -699,6 +699,7 @@ class TenantSeeder
       return
     end
 
+    tenant.tenant_cargo_item_types.destroy_all
     cargo_item_types_attr.each do |cargo_item_type_attr|
       if cargo_item_type_attr.is_a? Hash
         cargo_item_type = CargoItemType.find_by(cargo_item_type_attr)
