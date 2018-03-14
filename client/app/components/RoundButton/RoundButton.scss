@@ -7,14 +7,18 @@
     text-align: center;
     color: #FFFFFF;
     border: none;
+    cursor: not-allowed;
     transition: margin 0.2s ease;
     transition: shadow 0.4s ease;
     &:focus {
       outline: none;
     }
-    &:hover {
-      margin: -1px 1px 1px -1px;
-      box-shadow: 1px 1px 1px rgba(black, 0.3);
+    &.clickable {
+      cursor: pointer;
+      &:hover {
+        margin: -1px 1px 1px -1px;
+        box-shadow: 1px 1px 1px rgba(black, 0.3);
+      }
     }
     &:active {
       margin: 0;

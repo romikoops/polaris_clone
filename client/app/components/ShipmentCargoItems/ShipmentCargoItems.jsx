@@ -125,7 +125,7 @@ export class ShipmentCargoItems extends Component {
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
         >
-          <div className="flex-15 layout-row layout-align-center">
+          <div className="flex-10 layout-row layout-align-center">
             <QuantityInput
               i={i}
               cargoItem={cargoItem}
@@ -133,7 +133,7 @@ export class ShipmentCargoItems extends Component {
               nextStageAttempt={nextStageAttempt}
             />
           </div>
-          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-85`}>
+          <div className={`${styles.cargo_item_box} ${styles.cargo_item_inputs} flex-90`}>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               {inputs.colliType}
               {inputs.nonStackable}
@@ -157,7 +157,7 @@ export class ShipmentCargoItems extends Component {
           <div className={
             `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
             `${cargoItemInfoExpanded[i] && styles.expanded} ` +
-            'flex-85 offset-15'
+            'flex-100'
           }
           >
             <div className={
