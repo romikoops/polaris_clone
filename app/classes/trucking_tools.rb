@@ -245,6 +245,12 @@ module TruckingTools
     trucking_pricings.each do |key, pricing|
       fees[key] = calculate_trucking_price(pricing, cargo_object[key], direction)
     end
+    total = {value: 0, currency: ''}
+    fees.each do |key, trucking_fee|
+      total[:value] += trucking_fee[:value]
+      total[:currency] = trucking_fee[:currency]
+    end
+    fees[:total] = total
 
     return fees
     # hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")

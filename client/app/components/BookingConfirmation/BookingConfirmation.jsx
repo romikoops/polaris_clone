@@ -473,9 +473,9 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">Pre Carriage</h5>
                     </div>
                     <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.trucking_pre.currency ? (
+                      {feeHash.trucking_pre.total ? (
                         <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.trucking_pre.currency}
+                          {feeHash.trucking_pre.total.currency}
                         </h4>
                       ) : (
                         <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
@@ -484,7 +484,7 @@ export class BookingConfirmation extends Component {
                       )}
                       <h3 className="flex-100 no_m letter_3 center">
                         {shipment.has_pre_carriage
-                          ? `${feeHash.trucking_pre.value.toFixed(2)}`
+                          ? `${feeHash.trucking_pre.total.value.toFixed(2)}`
                           : 'None'}
                       </h3>
                     </div>
@@ -498,9 +498,9 @@ export class BookingConfirmation extends Component {
                       <h5 className="flex-none letter_3">On Carriage</h5>
                     </div>
                     <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.trucking_on.currency ? (
+                      {feeHash.trucking_on.total ? (
                         <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.trucking_on.currency}
+                          {feeHash.trucking_on.total.currency}
                         </h4>
                       ) : (
                         <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
@@ -509,7 +509,7 @@ export class BookingConfirmation extends Component {
                       )}
                       <h3 className="flex-100 no_m letter_3 center">
                         {shipment.has_on_carriage
-                          ? `${feeHash.trucking_on.value.toFixed(2)}`
+                          ? `${feeHash.trucking_on.total.value.toFixed(2)}`
                           : 'None'}
                       </h3>
                     </div>

@@ -30,9 +30,13 @@ function uploadPricings (file, loadType, open) {
     )
   }
 }
+function closeViewer () {
+  return { type: documentConstants.CLOSE_VIEWER, payload: true }
+}
 
 export const documentActions = {
-  uploadPricings
+  uploadPricings,
+  closeViewer
 }
 
 export default documentActions

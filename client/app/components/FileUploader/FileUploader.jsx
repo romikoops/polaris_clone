@@ -78,7 +78,11 @@ class FileUploader extends React.Component {
       body: formData
     }
     const uploadUrl = BASE_URL + url
-    return fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
+    fetch(uploadUrl, requestOptions).then(FileUploader.handleResponse)
+    if (this.uploaderInput.files.length) {
+      this.uploaderInput.files[0] = ''
+    }
+    return null
     // }
     // return this.showFileTypeError()
   }
@@ -86,22 +90,27 @@ class FileUploader extends React.Component {
     this.setState({ error: true })
     this.alertTimeout = setTimeout(() => this.setState({ error: false }), 5000)
   }
+  clickUploaderInput (e) {
+    e.preventDefault()
+    this.uploaderInput.click()
+  }
   render () {
-    const clickUploaderInput = () => {
-      this.uploaderInput.click()
-    }
     const { theme, type, tooltip } = this.props
     const tooltipId = v4()
     const errorStyle = this.state.error ? styles.error : ''
     console.log(errorStyle)
     return (
-      <div className={`flex-none layout-row ${styles.upload_btn_wrapper} `} data-tip={tooltip} data-for={tooltipId}>
-        <form onSubmit={this.onFormSubmit}>
+      <div
+        className={`flex-none layout-row ${styles.upload_btn_wrapper} `}
+        data-tip={tooltip}
+        data-for={tooltipId}
+      >
+        <form>
           <RoundButton
             text="Upload"
             theme={theme}
             size="small"
-            handleNext={clickUploaderInput}
+            handleNext={e => this.clickUploaderInput(e)}
             active
           />
           <ReactTooltip id={tooltipId} className={styles.tooltip} effect="solid" />

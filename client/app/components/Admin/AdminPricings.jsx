@@ -24,6 +24,7 @@ class AdminPricings extends Component {
     }
     this.viewRoute = this.viewRoute.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
+    this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
   componentDidMount () {
     const { pricingData, loading, adminDispatch } = this.props
@@ -41,6 +42,10 @@ class AdminPricings extends Component {
     const { dispatch, history } = this.props
     this.setState({ selectedPricing: false })
     dispatch(history.push('/admin/routes'))
+  }
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
   }
 
   render () {
@@ -71,7 +76,11 @@ class AdminPricings extends Component {
       </div>
     )
     const uploadStatus = document.viewer ? (
-      <AdminUploadsSuccess theme={theme} data={document.results} />
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
     ) : (
       ''
     )
@@ -192,6 +201,7 @@ AdminPricings.propTypes = {
     route: PropTypes.object,
     routePricingData: PropTypes.object
   }).isRequired,
+  document: PropTypes.objectOf(PropTypes.any).isRequired,
   itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
 }
 

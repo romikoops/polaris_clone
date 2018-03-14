@@ -22,6 +22,12 @@ export default function app (state = {}, action) {
         error: action.payload
       }
     }
+    case documentConstants.CLOSE_VIEWER: {
+      return {
+        ...state,
+        viewer: false
+      }
+    }
 
     default:
       return state

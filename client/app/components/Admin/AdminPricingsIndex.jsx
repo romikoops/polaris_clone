@@ -166,6 +166,10 @@ AdminPricingsIndex.propTypes = {
     getClientPricings: PropTypes.func,
     getRoutePricings: PropTypes.func
   }).isRequired,
+  documentDispatch: PropTypes.shape({
+    closeViewer: PropTypes.func,
+    uploadPricings: PropTypes.func
+  }).isRequired,
   pricingData: PropTypes.shape({
     routes: PropTypes.array
   })
