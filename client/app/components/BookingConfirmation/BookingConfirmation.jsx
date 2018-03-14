@@ -322,7 +322,7 @@ export class BookingConfirmation extends Component {
           </div>
           <div
             className={
-              `${styles.shipment_card} flex-100 ` +
+              `${styles.shipment_card_itinerary} flex-100 ` +
               'layout-row layout-align-space-between-center layout-wrap'
             }
           >

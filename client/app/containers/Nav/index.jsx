@@ -72,11 +72,7 @@ class NavBar extends Component {
             {`${capitalize(admin.itinerary.itinerary.name)}`}
           </div>
         )
-<<<<<<< HEAD
-        // eslint-disable-next-line no-case-declarations
-=======
       // eslint-disable-next-line no-case-declarations
->>>>>>> cd521d4a1c48b7f8c413cf05b649c571f1225009
       case 'pricings':
         if (categories[2] === 'routes') {
           const routeName =
