@@ -124,6 +124,11 @@ module MongoTools
     return resp.first ? resp.first["data"] : []
   end
 
+  def delete_item(table, query)
+    client = init
+    client[table].delete_one(query)
+  end
+
   def drop_table(table)
     client = init
     client[table].drop

@@ -157,15 +157,24 @@ export class AdminPricingRouteView extends Component {
           } flex-100 layout-row layout-wrap layout-align-center-start`}
         >
           <div className="flex-100 layout-row layout-align-start-center">
-            <div className="flex-90 layout-row layout-align-start-center">
+            <div className="flex layout-row layout-align-start-center">
               <i className="fa fa-map-signs clip" style={textStyle} />
               <p className="flex-none offset-5">{hubRoute.name}</p>
             </div>
             <div
-              className="flex-10 layout-row layout-align-center-center"
+              className="flex-5 layout-row layout-align-center-center"
               onClick={() => this.editThis(pricing, hubRoute, transport)}
             >
-              <i className="flex-none fa fa-pencil clip" style={textStyle} />
+              <i className="flex-none fa fa-pencil clip pointy" style={textStyle} />
+            </div>
+            <div
+              className="flex-5 layout-row layout-align-center-center"
+              onClick={() => {
+                console.log('delete')
+                adminActions.deletePricing(pricing)
+              }}
+            >
+              <i className="flex-none fa fa-trash pointy" />
             </div>
           </div>
           <div

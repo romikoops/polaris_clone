@@ -45,8 +45,12 @@ class Admin::PricingsController < ApplicationController
     response_handler(new_pricing)
   end
 
+  def destroy
+    delete_pricing(params[:id])
+    response_handler({})
+  end
+
   def parse_and_update_itinerary_pricing_id(data)
-    
     keys_split = data["id"].split("_")
     itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
     existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
@@ -127,6 +131,7 @@ class Admin::PricingsController < ApplicationController
 
     redirect_to admin_pricings_path
   end
+
   def eliminate_user_pricings(prices, itineraries)
     results = []
     itineraries.each do |itin|
@@ -145,6 +150,7 @@ class Admin::PricingsController < ApplicationController
     end
     return results
   end
+
   private
 
   def require_login_and_role_is_admin
@@ -153,10 +159,10 @@ class Admin::PricingsController < ApplicationController
       redirect_to root_path
     end
   end
+
   def update_params
     params.require(:update).permit(
       :wm, :heavy_wm, :heavy_kg
     )
   end
-
 end
