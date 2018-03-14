@@ -172,7 +172,7 @@ export class CargoDetails extends Component {
     )
     const customsBox = (
       <div
-        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
+        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${styles.costums_box} ${
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
@@ -585,14 +585,19 @@ export class CargoDetails extends Component {
           >
             <div className="flex-100 layout-row layout-align-start-center">
               <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Customs Handling Fee" />
+                <TextHeading theme={theme} size={2} text="Customs Handling" />
               </div>
-              <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
-              <Checkbox
-                onChange={this.toggleCustoms}
-                checked={this.state.customsView}
-                theme={theme}
-              />
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center-space-around">
+              <i>
+                Customs Clearance is the documented permission to pass
+                that a national customs authority grants to
+                imported goods so that they can enter the country
+                or to exported goods so that they can leave the country.
+                The custom clearance is typically given to a shipping agent
+                to prove that all applicable customs duties
+                have been paid and the shipment has been approved.
+              </i>
             </div>
             {customsBox}
             {noCustomsBox}

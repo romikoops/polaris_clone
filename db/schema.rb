@@ -300,12 +300,9 @@ ActiveRecord::Schema.define(version: 20180305150857) do
     t.jsonb "total_goods_value"
     t.integer "trip_id"
     t.string "eori"
-<<<<<<< HEAD
-=======
     t.string "direction"
     t.string "notes"
     t.jsonb "incoterm"
->>>>>>> 72c45e915842c229dc47aa4c9f2dffbadc26155e
   end
 
   create_table "stops", force: :cascade do |t|

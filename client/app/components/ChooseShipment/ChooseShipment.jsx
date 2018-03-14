@@ -5,8 +5,6 @@ import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
-import { Tooltip } from '../Tooltip/Tooltip'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, switchIcon, percentageToHex } from '../../helpers'
 
@@ -87,12 +85,6 @@ export class ChooseShipment extends Component {
           'layout-row layout-align-start-center layout-wrap'
         }
         >
-          <div className={`${styles.header} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none">
-              <TextHeading theme={theme} size={1} text="Choose your shipment type:   " />
-            </div>
-            <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
-          </div>
           <div className="flex-100 layout-row layout-align-space-around-center">
             { directionButtons }
           </div>

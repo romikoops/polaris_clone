@@ -537,11 +537,7 @@ export class ShipmentDetails extends Component {
             <div className="flex-none letter_2 layout-align-space-between-end">
               <TextHeading
                 theme={theme}
-                text={
-                  this.state.has_pre_carriage
-                    ? 'Approximate Pickup Date:'
-                    : 'Approximate Departure Date:'
-                }
+                text="Available Dates"
                 size={3}
               />
             </div>
