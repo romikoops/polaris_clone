@@ -258,6 +258,30 @@ function getPricings (redirect) {
     )
   }
 }
+function deletePricing (pricing) {
+  function request (payload) {
+    return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
+  }
+  function success (payload) {
+    return { type: adminConstants.DELETE_PRICING_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_PRICING_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(pricing))
+    adminService.deletePricing(pricing).then(
+      () => {
+        dispatch(alertActions.success('Deleting Pricing'))
+        dispatch(success(pricing))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function getClientPricings (id, redirect) {
   function request (prData) {
@@ -1176,7 +1200,8 @@ export const adminActions = {
   assignManager,
   editShipmentPrice,
   editShipmentTime,
-  editLocalCharges
+  editLocalCharges,
+  deletePricing
 }
 
 export default adminActions

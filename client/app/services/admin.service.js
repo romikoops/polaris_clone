@@ -194,6 +194,16 @@ function getPricings () {
   return fetch(`${BASE_URL}/admin/pricings`, requestOptions).then(handleResponse)
 }
 
+function deletePricing (pricing) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  return fetch(`${BASE_URL}/admin/pricings/${pricing._id}`, requestOptions).then(handleResponse)
+}
+
 function getClientPricings (id) {
   const requestOptions = {
     method: 'GET',
@@ -408,7 +418,8 @@ export const adminService = {
   editShipmentPrice,
   editShipmentTime,
   editLocalCharges,
-  deleteHub
+  deleteHub,
+  deletePricing
 }
 
 export default adminService

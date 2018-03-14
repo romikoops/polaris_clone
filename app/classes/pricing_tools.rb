@@ -6,6 +6,7 @@ module PricingTools
     client = get_client
     return client
   end
+
   def get_user_price(client, path_key, user)
     path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
     Rails.logger.debug "PATH KEY FOR PRICING #{path_key}"
@@ -16,6 +17,7 @@ module PricingTools
 
     get_item_fn(client, 'pricings', '_id', price_key)
   end
+  
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo = load_type === 'container' ? {
       number_of_items: cargos.length,
@@ -305,6 +307,10 @@ module PricingTools
 
   def update_itinerary_pricing(key, data)
     update_item('itineraryPricings', {_id: key }, data)
+  end
+
+  def delete_pricing(pricing_id)
+    delete_item('pricings', _id: pricing_id)
   end
 end
 

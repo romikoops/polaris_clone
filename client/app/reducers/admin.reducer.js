@@ -492,12 +492,39 @@ export default function admin (state = {}, action) {
       })
       return succPric
     }
-    case adminConstants.GET_PRICINGS_FAILURE: {
+    case adminConstants.GET_PRICING_FAILURE: {
       const errPric = merge({}, state, {
         error: { pricings: action.error },
         loading: false
       })
       return errPric
+    }
+
+    case adminConstants.DELETE_PRICING_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.DELETE_PRICING_SUCCESS: {
+      const { pricings } = state.pricingData
+      // eslint-disable-next-line no-underscore-dangle
+      delete pricings[action.payload._id]
+      return {
+        ...state,
+        pricingData: {
+          ...state.pricingData,
+          pricings
+        },
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
     }
 
     case adminConstants.UPDATE_PRICING_REQUEST:

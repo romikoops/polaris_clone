@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create]
 
-      resources :pricings, only: [:index]
+      resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
       post "pricings/update/:id", to: "pricings#update_price"
