@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { gradientTextGenerator } from '../../helpers/gradient'
 import styles from './TextHeading.scss'
 
 export class TextHeading extends Component {
@@ -11,11 +10,12 @@ export class TextHeading extends Component {
   }
   render () {
     const {
-      text, theme, size, color
+      text, size, color
     } = this.props
     let returnVal
-    const styling = !color && theme
-      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+    const styling = color ? {
+      color: { color }
+    }
       : { color }
     const generalStyle = `${styles.text_style} flex-none ${!color ? 'clip' : ''}`
     if (size) {
@@ -62,12 +62,10 @@ export class TextHeading extends Component {
 
 TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
   size: PropTypes.number.isRequired,
   color: PropTypes.string
 }
 TextHeading.defaultProps = {
-  theme: {},
   color: ''
 }
 export default TextHeading

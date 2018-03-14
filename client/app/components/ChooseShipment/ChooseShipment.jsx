@@ -85,6 +85,7 @@ export class ChooseShipment extends Component {
           'layout-row layout-align-start-center layout-wrap'
         }
         >
+          <div className="flex-10" />
           <div className="flex-100 layout-row layout-align-space-around-center">
             { directionButtons }
           </div>
@@ -121,9 +122,6 @@ export class ChooseShipment extends Component {
               </div>
               <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-center`}>
                 { loadType && direction ? activeBtn : disabledBtn }
-              </div>
-              <div className="flex-100">
-                <hr />
               </div>
             </div>
           </div>

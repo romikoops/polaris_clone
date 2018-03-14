@@ -659,12 +659,7 @@ export class ShipmentDetails extends Component {
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div
-          className={
-            `${defaults.border_divider} layout-row flex-100 ` +
-            'layout-wrap layout-align-center-center'
-          }
-        >
+        <div className="layout-row flex-100 layout-wrap layout-align-center-center">
           <div
             className={
               `${styles.btn_sec} ${defaults.content_width} ` +
