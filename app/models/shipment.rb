@@ -259,7 +259,7 @@ class Shipment < ApplicationRecord
   def self.update_hubs_on_shipments
     ss = Shipment.all
     ss.each do |s|
-      if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"]
+      if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && s.origin_id && s.destination_id
         hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
         if s.origin.location_type
           s.origin_hub_id = s.origin.id
