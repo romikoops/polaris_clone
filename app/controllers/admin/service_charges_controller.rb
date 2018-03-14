@@ -31,7 +31,7 @@ class Admin::ServiceChargesController < ApplicationController
     if params[:file]
       req = {'xlsx' => params[:file]}
       resp = overwrite_local_charges(req, current_user)
-      byebug
+      
       response_handler(resp)
     else
       response_handler(false)
