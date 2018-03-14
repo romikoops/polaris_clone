@@ -20,10 +20,9 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { Modal } from '../Modal/Modal'
-import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 import { isEmpty } from '../../helpers/objectTools'
 import '../../styles/select-css-custom.css'
+import getModals from './getModals'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -87,7 +86,8 @@ export class ShipmentDetails extends Component {
       has_pre_carriage: false,
       shipment: props.shipmentData ? props.shipmentData.shipment : {},
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
-      routeSet: false
+      routeSet: false,
+      modals: getModals(props.theme, props.user, props.tenant, this.toggleModal)
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -379,8 +379,10 @@ export class ShipmentDetails extends Component {
     })
   }
 
-  toggleAlertModal () {
-    this.setState({ alertModalShowing: !this.state.alertModalShowing })
+  toggleModal (name) {
+    const { modals } = this.state
+    modals[name].show = !modals[name].show
+    this.setState({ modals })
   }
 
   render () {
@@ -391,43 +393,11 @@ export class ShipmentDetails extends Component {
       return ''
     }
     const {
-      theme, scope, emails, phones
+      theme, scope
     } = tenant.data
     const { messages } = this.props
     let cargoDetails
-    const alertModalMessage = (
-      <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
-        <span>
-          Hi {user.first_name} {user.last_name},<br />
-          We currently do not offer freight rates for hazardous cargo in our Web Shop. Please
-          contact our customer service department to place an order for your dangerous cargo:<br />
-        </span>
-        <br />
 
-        <span style={{ marginRight: '10px' }}> Contact via phone:</span>
-        <span>{phones.support}</span>
-        <br />
-
-        <span style={{ marginRight: '20px' }}> Contact via mail: </span>
-        <span>
-          <a href={`mailto:${emails.support}?subject=Dangerous Goods Request`}>{emails.support}</a>
-        </span>
-      </p>
-    )
-    const alertModal = this.state.alertModalShowing ? (
-      <Modal
-        component={
-          <AlertModalBody
-            message={alertModalMessage}
-            logo={theme.logoSmall}
-            toggleAlertModal={this.toggleAlertModal}
-          />
-        }
-        parentToggle={this.toggleAlertModal}
-      />
-    ) : (
-      ''
-    )
     if (shipmentData.shipment) {
       if (shipmentData.shipment.load_type === 'container') {
         cargoDetails = (
@@ -439,7 +409,7 @@ export class ShipmentDetails extends Component {
             nextStageAttempt={this.state.nextStageAttempt}
             theme={theme}
             scope={scope}
-            showAlertModal={this.toggleAlertModal}
+            toggleModal={name => this.toggleModal(name)}
           />
         )
       }
@@ -454,7 +424,7 @@ export class ShipmentDetails extends Component {
             theme={theme}
             scope={scope}
             availableCargoItemTypes={shipmentData.cargoItemTypes}
-            showAlertModal={this.toggleAlertModal}
+            toggleModal={name => this.toggleModal(name)}
           />
         )
       }
@@ -618,7 +588,11 @@ export class ShipmentDetails extends Component {
         style={{ minHeight: '1800px' }}
       >
         {flash}
-        {alertModal}
+        {
+          Object.keys(this.state.modals)
+            .filter(modalName => this.state.modals[modalName].show)
+            .map(modalName => this.state.modals[modalName].jsx)
+        }
         <div
           className={`${
             styles.date_sec
@@ -708,12 +682,14 @@ ShipmentDetails.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired
+  user: PropTypes.user.isRequired,
+  theme: PropTypes.theme
 }
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: []
+  messages: [],
+  theme: null
 }
 
 export default ShipmentDetails
