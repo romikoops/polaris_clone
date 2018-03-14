@@ -52,8 +52,8 @@ export class ShipmentContainers extends Component {
   toggleDangerousGoods (i) {
     const event = {
       target: {
-        name: `${i}-dangerousGoods`,
-        value: !this.props.containers[i].dangerousGoods
+        name: `${i}-dangerous_goods`,
+        value: !this.props.containers[i].dangerous_goods
       }
     }
     this.props.handleDelta(event)
@@ -198,7 +198,7 @@ export class ShipmentContainers extends Component {
             </div>
             <Checkbox
               onChange={() => this.toggleDangerousGoods(i)}
-              checked={container ? container.dangerousGoods : false}
+              checked={container ? container.dangerous_goods : false}
               theme={theme}
               size="34px"
               disabled={!scope.dangerous_goods}
@@ -264,7 +264,7 @@ ShipmentContainers.propTypes = {
   theme: PropTypes.theme,
   addContainer: PropTypes.func.isRequired,
   containers: PropTypes.arrayOf(PropTypes.shape({
-    dangerousGoods: PropTypes.bool
+    dangerous_goods: PropTypes.bool
   })),
   deleteItem: PropTypes.func.isRequired,
   handleDelta: PropTypes.func.isRequired,
