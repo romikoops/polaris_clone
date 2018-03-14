@@ -28,10 +28,6 @@ export class AdminUploadsSuccess extends Component {
     shipment.destinationHub = hubsObj[hubKeys[1]] ? hubsObj[hubKeys[1]].name : ''
     return shipment
   }
-  constructor (props) {
-    super(props)
-    this.viewShipment = this.viewShipment.bind(this)
-  }
 
   render () {
     console.log(this.props)

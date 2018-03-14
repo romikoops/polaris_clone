@@ -1098,6 +1098,47 @@ module ExcelTools
       "40HDRY"  => "40 High Cube Dry Container",
       "45HDRY"  => "45 High Cube Dry Container"
     }
+    stats = {
+      type: 'pricings',
+      pricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraryPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      stops: {
+        number_updated: 0,
+        number_created: 0
+      },
+      layovers: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trips: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userAffected: []
+    }
+    results = {
+      pricings: [],
+      itineraryPricings: [],
+      userPricings: [],
+      itineraries: [],
+      stops: [],
+      layovers: [],
+      trips: []
+    }
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
     pricing_rows = first_sheet.parse(
@@ -1239,6 +1280,7 @@ module ExcelTools
     new_hub_route_pricings.each do |key, value|
       update_itinerary_pricing(key, value)
     end
+    return {results: results, stats: stats}
   end
 
   def price_split(basis, string)
