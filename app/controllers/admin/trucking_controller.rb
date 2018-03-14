@@ -110,7 +110,9 @@ class Admin::TruckingController < ApplicationController
   def overwrite_zip_trucking
      if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_trucking_rates(req)
+      ["import", "export"].each do |dir|
+      overwrite_zipcode_weight_trucking_rates(req, current_user, dir)
+      end
       response_handler(true)
     else
       response_handler(false)
@@ -119,7 +121,9 @@ class Admin::TruckingController < ApplicationController
    def overwrite_city_trucking
      if params[:file]
       req = {'xlsx' => params[:file]}
-       overwrite_city_trucking_rates(req)
+      ["import", "export"].each do |dir|
+       overwrite_city_trucking_rates(req, current_user, dir)
+       end
       response_handler(true)
     else
       response_handler(false)

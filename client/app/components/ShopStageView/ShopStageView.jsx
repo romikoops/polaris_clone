@@ -8,70 +8,78 @@ import { gradientTextGenerator } from '../../helpers'
 export class ShopStageView extends Component {
   constructor (props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
   componentWillReceiveProps (nextProps) {
     this.setStageHeader(nextProps.currentStage)
   }
 
   setStageHeader (currentStage) {
-    const { header } = SHIPMENT_STAGES.find(stage => stage.step === currentStage)
+    const { header } = SHIPMENT_STAGES.find(stage => stage.step === currentStage) || {}
     this.setState({ stageHeader: header })
   }
+  handleClickStage (stage) {
+    if (this.props.disabledClick) return
 
-  stageFunction (stage) {
+    this.props.setStage(stage)
+  }
+
+  stageBoxCircle (stage) {
     const { theme } = this.props
-    const gradientStyle =
-      theme && theme.colors
-        ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-        : theme.colors.brightPrimary
-    let stageBox
+    const gradientStyle = theme && theme.colors
+      ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+      : theme.colors.brightPrimary
+
     if (stage.step < this.props.currentStage) {
-      stageBox = (
+      return (
         <div
-          className={`${styles.shop_stage_past} flex-none layout-column layout-align-center-center`}
-          onClick={() => this.props.setStage(stage)}
+          className={
+            `${styles.shop_stage_past} flex-none ` +
+            `${this.props.disabledClick ? '' : 'pointy'} ` +
+            'layout-column layout-align-center-center'
+          }
+          onClick={() => this.handleClickStage(stage)}
         >
           <i className="fa fa-check flex-none clip" style={gradientStyle} />
         </div>
       )
-    } else if (stage.step === this.props.currentStage) {
-      stageBox = (
+    }
+
+    if (stage.step === this.props.currentStage) {
+      return (
         <div className={styles.wrapper_shop_stage_current}>
-          <div
-            className={`${
-              styles.shop_stage_current
-            } flex-none layout-column layout-align-center-center`}
+          <div className={
+            `${styles.shop_stage_current} flex-none ` +
+            'layout-column layout-align-center-center'
+          }
           >
-            <h3 className="flex-none" style={gradientStyle}>
-              {' '}
-              {stage.step}{' '}
-            </h3>
+            <h3 className="flex-none" style={gradientStyle}> {stage.step} </h3>
           </div>
           <div style={gradientStyle} className={styles.shop_stage_current_border} />
         </div>
       )
-    } else {
-      stageBox = (
-        <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`}>
-          <h3 className="flex-none"> {stage.step} </h3>
-        </div>
-      )
     }
-    return stageBox
+
+    return (
+      <div className={`${styles.shop_stage_yet} layout-column layout-align-center-center`}>
+        <h3 className="flex-none"> {stage.step} </h3>
+      </div>
+    )
   }
-  render () {
-    const stageBoxes = []
-    SHIPMENT_STAGES.forEach((stage) => {
-      stageBoxes.push(<div
+
+  stageBox (stage) {
+    return (
+      <div
         key={stage.step}
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
       >
-        {this.stageFunction(stage)}
+        {this.stageBoxCircle(stage)}
         <p className={`flex-none ${styles.stage_text}`}>{stage.text}</p>
-      </div>)
-    })
+      </div>
+    )
+  }
+  render () {
+    const stageBoxes = SHIPMENT_STAGES.map(stage => this.stageBox(stage))
     return (
       <div className={`layout-row flex-100 layout-align-center layout-wrap ${styles.ss_view}`}>
         <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
@@ -105,12 +113,14 @@ ShopStageView.propTypes = {
   theme: PropTypes.theme,
   setStage: PropTypes.func.isRequired,
   currentStage: PropTypes.number,
-  shopType: PropTypes.string.isRequired
+  shopType: PropTypes.string.isRequired,
+  disabledClick: PropTypes.bool
 }
 
 ShopStageView.defaultProps = {
   currentStage: 1,
-  theme: null
+  theme: null,
+  disabledClick: false
 }
 
 export default ShopStageView

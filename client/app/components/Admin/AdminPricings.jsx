@@ -12,8 +12,9 @@ import {
 } from './'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { adminActions } from '../../actions'
+import { adminActions, documentActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminUploadsSuccess } from './Uploads/Success'
 
 class AdminPricings extends Component {
   constructor (props) {
@@ -23,6 +24,7 @@ class AdminPricings extends Component {
     }
     this.viewRoute = this.viewRoute.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
+    this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
   componentDidMount () {
     const { pricingData, loading, adminDispatch } = this.props
@@ -41,6 +43,10 @@ class AdminPricings extends Component {
     this.setState({ selectedPricing: false })
     dispatch(history.push('/admin/routes'))
   }
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
+  }
 
   render () {
     const { selectedPricing } = this.state
@@ -53,7 +59,9 @@ class AdminPricings extends Component {
       adminDispatch,
       clients,
       clientPricings,
-      itineraryPricings
+      itineraryPricings,
+      documentDispatch,
+      document
     } = this.props
     const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
@@ -67,15 +75,26 @@ class AdminPricings extends Component {
         />
       </div>
     )
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
+    ) : (
+      ''
+    )
     const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <TextHeading theme={theme} size={1} text={title} />
           {selectedPricing ? backButton : ''}
         </div>
+
         <Switch className="flex">
           <Route
             exact
@@ -89,7 +108,8 @@ class AdminPricings extends Component {
                 pricingData={pricingData}
                 itineraries={itineraries}
                 {...props}
-                adminTools={adminDispatch}
+                adminDispatch={adminDispatch}
+                documentDispatch={documentDispatch}
               />
             )}
           />
@@ -112,7 +132,7 @@ class AdminPricings extends Component {
               <AdminPricingsRouteIndex
                 theme={theme}
                 hubs={hubs}
-                routes={itineraries || pricingData.itineraries}
+                itineraries={itineraries || pricingData.itineraries}
                 adminTools={adminDispatch}
                 {...props}
               />
@@ -164,10 +184,13 @@ AdminPricings.propTypes = {
     getPricings: PropTypes.func,
     getRoute: PropTypes.func
   }).isRequired,
+  documentDispatch: PropTypes.shape({
+    uploadPricings: PropTypes.func
+  }).isRequired,
   pricingData: PropTypes.shape({
-    routes: PropTypes.array
+    itineraries: PropTypes.array
   }),
-  routes: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
+  itineraries: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
   hubHash: PropTypes.objectOf(PropTypes.hub),
   clients: PropTypes.arrayOf(PropTypes.client),
   clientPricings: PropTypes.shape({
@@ -178,8 +201,8 @@ AdminPricings.propTypes = {
     route: PropTypes.object,
     routePricingData: PropTypes.object
   }).isRequired,
-  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraries: PropTypes.objectOf(PropTypes.any).isRequired
+  document: PropTypes.objectOf(PropTypes.any).isRequired,
+  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminPricings.defaultProps = {
@@ -189,17 +212,19 @@ AdminPricings.defaultProps = {
   pricingData: null,
   hubHash: {},
   clients: [],
-  routes: []
+  itineraries: []
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, admin } = state
+  const {
+    authentication, tenant, admin, document
+  } = state
   const { user, loggedIn } = authentication
   const {
     clients,
     hubs,
     pricingData,
-    routes,
+    itineraries,
     transportCategories,
     clientPricings,
     itineraryPricings,
@@ -214,15 +239,17 @@ function mapStateToProps (state) {
     pricingData,
     transportCategories,
     clientPricings,
-    routes,
+    itineraries,
     clients,
     itineraryPricings,
-    loading
+    loading,
+    document
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    documentDispatch: bindActionCreators(documentActions, dispatch)
   }
 }
 

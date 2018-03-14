@@ -214,6 +214,7 @@ export default function shipment (state = {}, action) {
           docObj[key] = state.response.stage3.documents[key]
         }
       })
+      const stage4 = state.response.stage4.doucments.filter(d => d.id !== action.payload)
       return {
         ...state,
         response: {
@@ -221,6 +222,10 @@ export default function shipment (state = {}, action) {
           stage3: {
             ...state.response.stage3,
             documents: docObj
+          },
+          stage4: {
+            ...state.response.stage4,
+            documents: stage4
           }
         },
         loading: false

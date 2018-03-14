@@ -4,8 +4,13 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role
+  before_validation :set_default_role, :sync_uid
+
   validates :tenant_id, presence: true
+  validates :email, presence: true, uniqueness: {
+    scope: :tenant_id,
+    message: -> _self, _ { "'#{_self.email}' taken for Tenant '#{_self.tenant.subdomain}'" } 
+  }
 
   # Basic associations
   belongs_to :tenant
@@ -118,5 +123,9 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= Role.find_by_name('shipper')
+  end
+
+  def sync_uid
+    self.uid = "#{tenant.id}***#{email}"
   end
 end

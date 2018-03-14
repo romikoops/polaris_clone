@@ -5,12 +5,13 @@ module UsersDeviseTokenAuth
 		skip_before_action :require_non_guest_authentication!
 		
 		def create
-			super
-			if @resource.valid? && !@resource.guest
-				location = Location.create(location_params)
-				location.geocode_from_address_fields!
-				@resource.locations << location unless location.nil?
-				@resource.save
+			super do |resource|
+				unless resource.guest
+					# Create Address
+					location = Location.create(location_params)
+					location.geocode_from_address_fields!
+					resource.locations << location unless location.nil?
+				end
 			end				
 		end
 

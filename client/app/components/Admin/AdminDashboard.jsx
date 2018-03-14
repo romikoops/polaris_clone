@@ -82,7 +82,7 @@ export class AdminDashboard extends Component {
       dashData, clients, hubs, hubHash, adminDispatch, theme
     } = this.props
     // ;
-    if (!dashData) {
+    if (!dashData || !hubs) {
       return <Loading theme={theme} />
     }
     const {
@@ -123,13 +123,14 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Requested Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedRequestedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.requested}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/requested')}
       />
     ) : (
       ''
@@ -146,6 +147,7 @@ export class AdminDashboard extends Component {
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.open}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/open')}
       />
     ) : (
       ''
@@ -162,6 +164,7 @@ export class AdminDashboard extends Component {
         handleClick={this.viewShipment}
         handleShipmentAction={this.handleShipmentAction}
         tooltip={adminTip.finished}
+        seeAll={() => adminDispatch.goTo('/admin/shipments/finished')}
       />
     ) : (
       ''

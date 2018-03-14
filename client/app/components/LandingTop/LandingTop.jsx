@@ -4,13 +4,9 @@ import PropTypes from '../../prop-types'
 import styles from './LandingTop.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import Header from '../Header/Header'
-import { moment } from '../../constants'
 
 const StyledTop = styled.div`
-  background-image: linear-gradient(
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.3)
-    ),
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url(${props => props.bg});
 
   height: 550px;
@@ -25,7 +21,6 @@ export class LandingTop extends Component {
   constructor (props) {
     super(props)
     this.toAccount = this.toAccount.bind(this)
-    this.toBooking = this.toBooking.bind(this)
     this.toAdmin = this.toAdmin.bind(this)
   }
   toAccount () {
@@ -34,42 +29,16 @@ export class LandingTop extends Component {
   toAdmin (target) {
     this.props.toAdmin(true)
   }
-  toBooking () {
-    this.props.goTo('/booking')
-  }
   render () {
-    const { authDispatch, theme, user } = this.props
-    const handleNext = () => {
-      if (this.props.loggedIn) {
-        this.toBooking()
-      } else {
-        const unixTimeStamp = moment()
-          .unix()
-          .toString()
-        const randNum = Math.floor(Math.random() * 100).toString()
-        const randSuffix = unixTimeStamp + randNum
-        const email = `guest${randSuffix}@${this.props.tenant.data.subdomain}.com`
-
-        authDispatch.register(
-          {
-            email,
-            password: 'guestpassword',
-            password_confirmation: 'guestpassword',
-            first_name: 'Guest',
-            last_name: '',
-            tenant_id: this.props.tenant.data.id,
-            guest: true
-          },
-          true
-        )
-      }
-    }
+    const {
+      theme, user, tenant, bookNow
+    } = this.props
     const myAccount = (
       <RoundButton text="My Account" theme={theme} handleNext={() => this.toAccount()} active />
     )
 
     const toAdmin = (
-      <RoundButton text="Admin Dashboard" theme={theme} handleNext={this.toAdmin} active />
+      <RoundButton text="Admin Dashboard" theme={theme} handleNext={() => this.toAdmin()} active />
     )
     const backgroundImage =
       theme && theme.background
@@ -83,22 +52,31 @@ export class LandingTop extends Component {
           <div className={`${styles.top_row} flex-100 layout-row`}>
             <Header user={user} theme={theme} scrollable invert />
           </div>
-          <div className={`flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ${styles.layout_elem} ${styles.responsive}`}>
+          <div
+            className={`flex-100 flex-gt-sm-50 layout-column layout-align-space-around-center ${
+              styles.layout_elem
+            } ${styles.responsive}`}
+          >
             {(user && user.role_id === 2) || !user ? (
-              <RoundButton text="Book Now" theme={theme} handleNext={handleNext} active />
+              <RoundButton text="Book Now" theme={theme} handleNext={bookNow} active />
             ) : (
               ''
             )}
             {user && !user.guest && user.role_id === 2 ? myAccount : ''}
             {user && user.role_id === 1 ? toAdmin : ''}
           </div>
-          <div className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-center ${styles.layout_elem}`}>
+          <div
+            className={`flex-100 flex-gt-sm-50 layout-row layout-align-center-center ${
+              styles.layout_elem
+            }`}
+          >
             <div className={styles.sign_up}>
-              <h2 className="flex-none" >
-                Never spend precious time on transportation again, shipping made simple
+              <h2 className="flex-none">
+                {`Welcome to the ${tenant.data.name} Shop for online freight`}
               </h2>
               <h3 className="flex-none">
-                Enjoy the most advanced and easy to use booking system in the market
+                Enjoy the most advanced and easy to use booking system in the market. Finally,
+                shipping is as simple as it should be.
               </h3>
               <div className="flex-none layout-row layout-align-start-center">
                 <h4 className="flex-none">powered by</h4>
@@ -122,18 +100,15 @@ LandingTop.propTypes = {
   goTo: PropTypes.func.isRequired,
   toAdmin: PropTypes.func.isRequired,
   user: PropTypes.user,
-  loggedIn: PropTypes.bool,
   tenant: PropTypes.tenant,
-  authDispatch: PropTypes.shape({
-    register: PropTypes.func
-  }).isRequired
+  bookNow: PropTypes.func
 }
 
 LandingTop.defaultProps = {
   theme: null,
   user: null,
-  loggedIn: false,
-  tenant: null
+  tenant: null,
+  bookNow: null
 }
 
 export default LandingTop

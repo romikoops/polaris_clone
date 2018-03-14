@@ -524,7 +524,25 @@
     height: 0px !important;
     opacity: 0 !important;
   }
+  .hub_fee_panel_open {
+    height: 300px !important;
+    opacity: 1 !important;
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 100%;
+  }
+  .hub_fee_panel_closed {
+    height: 0px !important;
+    opacity: 0 !important;
+  }
   .add_fee_panel {
+    transition: all 1.2s ease-in-out;
+    border-radius: 10px 10px 0 0;
+    background: whitesmoke;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+   .add_hub_fee_panel {
     transition: all 1.2s ease-in-out;
     border-radius: 10px 10px 0 0;
     background: whitesmoke;
@@ -673,5 +691,13 @@
   }
   .total_row {
     padding: 15px;
+  }
+  .toggle_on {
+    opacity: 1;
+    color: black;
+  }
+  .toggle_off {
+    opacity: 0.75;
+    color: lightgray;
   }
 }

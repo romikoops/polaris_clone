@@ -194,6 +194,16 @@ function getPricings () {
   return fetch(`${BASE_URL}/admin/pricings`, requestOptions).then(handleResponse)
 }
 
+function deletePricing (pricing) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader()
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  return fetch(`${BASE_URL}/admin/pricings/${pricing._id}`, requestOptions).then(handleResponse)
+}
+
 function getClientPricings (id) {
   const requestOptions = {
     method: 'GET',
@@ -314,6 +324,13 @@ function saveNewHub (hub, location) {
   }
   return fetch(`${BASE_URL}/admin/hubs`, requestOptions).then(handleResponse)
 }
+function deleteHub (hubId) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions).then(handleResponse)
+}
 function newRoute (itinerary) {
   const requestOptions = {
     method: 'POST',
@@ -345,6 +362,14 @@ function editShipmentPrice (id, priceObj) {
     body: JSON.stringify({ priceObj })
   }
   return fetch(`${BASE_URL}/admin/shipments/${id}/edit_price`, requestOptions).then(handleResponse)
+}
+function editLocalCharges (id, data) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data })
+  }
+  return fetch(`${BASE_URL}/admin/service_charges/${id}/edit`, requestOptions).then(handleResponse)
 }
 function editShipmentTime (id, timeObj) {
   const requestOptions = {
@@ -391,7 +416,10 @@ export const adminService = {
   assignManager,
   viewTrucking,
   editShipmentPrice,
-  editShipmentTime
+  editShipmentTime,
+  editLocalCharges,
+  deleteHub,
+  deletePricing
 }
 
 export default adminService

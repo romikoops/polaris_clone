@@ -27,7 +27,7 @@ export class AdminSearchableRoutes extends Component {
     if (seeAll) {
       seeAll()
     } else {
-      adminDispatch.goTo('/clients')
+      adminDispatch.goTo('/admin/routes')
     }
   }
   handleClick (itinerary) {
@@ -60,8 +60,8 @@ export class AdminSearchableRoutes extends Component {
       return fuse.search(event.target.value)
     }
 
-    const filteredRoutesOrigin = search('name')
-    const filteredRoutesDestination = search('mode_of_transport')
+    const filteredRoutesOrigin = search(['name'])
+    const filteredRoutesDestination = search(['mode_of_transport'])
 
     let TopRoutes = filteredRoutesDestination.filter(itinerary =>
       filteredRoutesOrigin.includes(itinerary))
@@ -160,7 +160,10 @@ export class AdminSearchableRoutes extends Component {
         </div>
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none layout-row layout-align-center-center" onClick={this.seeAll}>
+            <div
+              className="flex-none layout-row layout-align-center-center pointy"
+              onClick={this.seeAll}
+            >
               <p className="flex-none">See all</p>
             </div>
           </div>

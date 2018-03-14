@@ -16,35 +16,34 @@ export class TextHeading extends Component {
     const styling = color ? {
       color: { color }
     }
-      : { color }
-    const generalStyle = `${styles.text_style} flex-none ${!color ? 'clip' : ''}`
+      : { color: 'black' }
     if (size) {
       switch (size) {
         case 1:
           returnVal = (
 
-            <h1 className={generalStyle} style={styling}>
+            <h1 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h1>
           )
           break
         case 2:
           returnVal = (
-            <h2 className={generalStyle} style={styling}>
+            <h2 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h2>
           )
           break
         case 3:
           returnVal = (
-            <h3 className={generalStyle} style={styling}>
+            <h3 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h3>
           )
           break
         case 4:
           returnVal = (
-            <h4 className={generalStyle} style={styling}>
+            <h4 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h4>
           )

@@ -214,11 +214,11 @@ class Shipment < ApplicationRecord
   end
 
   def etd
-    Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
+    planned_etd
   end
 
   def eta
-    Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
+    planned_eta
   end
 
   def cargo_charges
@@ -256,7 +256,29 @@ class Shipment < ApplicationRecord
     ShipmentMailer.shipper_notification(user, shipment)
     shipper_confirmation_email(user, shipment)
   end
-
+  def self.update_hubs_on_shipments
+    ss = Shipment.all
+    ss.each do |s|
+      if s.origin_id != nil && s.destination_id != nil && s.origin && s.destination
+      if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
+        hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
+        if s.origin.location_type
+          s.origin_hub_id = s.origin.id
+        else
+          s.origin_hub_id = hub_keys[0].to_i
+          s.destination_hub_id = hub_keys[1].to_i
+        end
+        if s.destination.location_type
+          s.destination_hub_id = s.destination.id
+        else
+          
+          s.destination_hub_id = hub_keys[1].to_i
+        end
+        s.save!
+      end
+    end
+    end
+  end
   private
 
   def generate_imc_reference
@@ -300,4 +322,5 @@ class Shipment < ApplicationRecord
     no_trucking_h = { truck_type: '' }
     self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
   end
+  
 end

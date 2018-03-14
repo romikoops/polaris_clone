@@ -5,15 +5,15 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { AdminShipmentView, AdminShipmentsIndex } from './'
-import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminShipmentsGroup } from './Shipments/Group'
 
 class AdminShipments extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedShipment: false
+      // selectedShipment: false
     }
     this.viewShipment = this.viewShipment.bind(this)
     this.backToIndex = this.backToIndex.bind(this)
@@ -28,12 +28,12 @@ class AdminShipments extends Component {
   viewShipment (shipment) {
     const { adminDispatch } = this.props
     adminDispatch.getShipment(shipment.id, true)
-    this.setState({ selectedShipment: true })
+    // this.setState({ selectedShipment: true })
   }
 
   backToIndex () {
     const { dispatch, history } = this.props
-    this.setState({ selectedShipment: false })
+    // this.setState({ selectedShipment: false })
     dispatch(history.push('/admin/shipments'))
   }
   handleShipmentAction (id, action) {
@@ -42,7 +42,6 @@ class AdminShipments extends Component {
   }
 
   render () {
-    const { selectedShipment } = this.state
     const {
       theme,
       hubs,
@@ -57,52 +56,105 @@ class AdminShipments extends Component {
     if (!shipments || !hubs || !clients) {
       return <h1>NO SHIPMENTS DATA</h1>
     }
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={this.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+        >
           <TextHeading theme={theme} size={1} text="Shipments" />
-          {selectedShipment ? backButton : ''}
         </div>
         <Switch className="flex">
           <Route
             exact
             path="/admin/shipments"
-            render={props => (<AdminShipmentsIndex
-              theme={theme}
-              handleShipmentAction={this.handleShipmentAction}
-              clients={clients}
-              hubs={hubs}
-              hubHash={hubHash}
-              shipments={shipments}
-              viewShipment={this.viewShipment}
-              {...props}
-            />)}
+            render={props => (
+              <AdminShipmentsIndex
+                theme={theme}
+                handleShipmentAction={this.handleShipmentAction}
+                clients={clients}
+                hubs={hubs}
+                hubHash={hubHash}
+                shipments={shipments}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
           />
           <Route
             exact
-            path="/admin/shipments/:id"
-            render={props => (<AdminShipmentView
-              theme={theme}
-              adminDispatch={adminDispatch}
-              loading={loading}
-              hubs={hubs}
-              handleShipmentAction={this.handleShipmentAction}
-              shipmentData={shipment}
-              clients={clients}
-              {...props}
-            />)}
+            path="/admin/shipments/view/:id"
+            render={props => (
+              <AdminShipmentView
+                theme={theme}
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipmentData={shipment}
+                clients={clients}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/requested"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Requested"
+                target="requested"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/open"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Open"
+                target="open"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin/shipments/finished"
+            render={props => (
+              <AdminShipmentsGroup
+                theme={theme}
+                title="Finished"
+                target="finished"
+                adminDispatch={adminDispatch}
+                loading={loading}
+                hubs={hubs}
+                handleShipmentAction={this.handleShipmentAction}
+                shipments={shipments}
+                hubHash={hubHash}
+                clients={clients}
+                viewShipment={this.viewShipment}
+                {...props}
+              />
+            )}
           />
         </Switch>
       </div>

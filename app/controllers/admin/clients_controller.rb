@@ -12,7 +12,7 @@ class Admin::ClientsController < ApplicationController
   def show
     client = User.find(params[:id])
     locations = client.locations
-    shipments = client.shipments
+    shipments = client.shipments.where(status: ["requested", "open", "finished"])
     manager_assignments = UserManager.where(user_id: client)
     resp = {client: client, locations: locations, shipments: shipments, managerAssignments: manager_assignments}
     response_handler(resp)

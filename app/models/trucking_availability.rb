@@ -9,7 +9,7 @@ class TruckingAvailability < ApplicationRecord
 
   def self.create_all!
     [true, false].repeated_permutation(given_attribute_names.size).each do |values|
-      create!(given_attribute_names.zip(values).to_h)
+      create(given_attribute_names.zip(values).to_h)
     end
   end
 

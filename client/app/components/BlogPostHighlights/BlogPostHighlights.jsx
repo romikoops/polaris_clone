@@ -17,14 +17,14 @@ export function BlogPostHighlights ({ theme }) {
         'With greater supply and even higher demand, efficiency gains have never been more important',
       text:
         'With the global freight market under pressure from both supply and demand sides, it has become increasingly important to eek out every last bit of productivity from your existing resources',
-      image: 'https://assets.itsmycargo.com/assets/cityimages/shipping-containers_sm.jpg'
+      image: 'https://assets.itsmycargo.com/assets/images/dashboard/freight_455x305.jpg'
     },
     {
       title:
         'Blockchain is coming: How you can begin to get ready for the next big leap in freight',
       text:
         'The global shipping industry is the backbone upon which the modern world is built. However, fraud, theft and other problems continue to drive up prices for consumers around the world. A small group  of companies are working to bring the power and protection of blockchain technologies to the wolrd of freight',
-      image: 'https://assets.itsmycargo.com/assets/cityimages/shipping-containers_sm.jpg'
+      image: 'https://assets.itsmycargo.com/assets/images/dashboard/ship_450x298.jpeg'
     }
   ]
   const postArray = []

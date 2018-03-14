@@ -6,19 +6,20 @@ import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize, gradientTextGenerator, switchIcon, percentageToHex } from '../../helpers'
+import { capitalize, gradientTextGenerator, percentageToHex } from '../../helpers'
+import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ChooseShipment extends Component {
   constructor (props) {
     super(props)
-    const cards = LOAD_TYPES.map(loadType => ({
+    this.state = {}
+    this.cards = LOAD_TYPES.map(loadType => ({
       name: loadType.name,
       img: loadType.img,
       code: loadType.code,
       options: { contained: true },
       handleClick: () => this.setLoadType(loadType.code)
     }))
-    this.state = { cards }
     this.setLoadType = this.setLoadType.bind(this)
     this.setDirection = this.setDirection.bind(this)
     this.nextStep = this.nextStep.bind(this)
@@ -34,12 +35,16 @@ export class ChooseShipment extends Component {
     this.props.selectLoadType({ loadType, direction })
   }
   render () {
-    const { theme, scope, messages } = this.props
+    const { theme, messages } = this.props
     const { loadType, direction } = this.state
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
-    const gradientStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
     const directionButtons = ['import', 'export'].map((dir) => {
       const buttonStyle = direction === dir ? styles.selected : styles.unselected
+      const commercialAction = { import: 'Buying', export: 'Selling' }
       return (
         <div
           className={
@@ -49,12 +54,12 @@ export class ChooseShipment extends Component {
           onClick={() => this.setDirection(dir)}
         >
           <div className="flex-80 layout-row layout-align-space-between-center">
-            <p className="flex-none">{capitalize(dir)}</p>
-            {
-              direction === dir
-                ? <i className="flex-none fa fa-check clip" style={gradientStyle} />
-                : ''
-            }
+            <p className="flex-none"> I am { commercialAction[dir] } ({ capitalize(dir) })</p>
+            {direction === dir ? (
+              <i className="flex-none fa fa-check clip" style={gradientStyle} />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       )
@@ -73,33 +78,45 @@ export class ChooseShipment extends Component {
       <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
     )
 
-    const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
-      .filter(mot => scope.modes_of_transport[mot])
-      .map(mot => switchIcon(mot))
+    // const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
+    //   .filter(mot => scope.modes_of_transport[mot])
+    //   .map(mot => switchIcon(mot))
 
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
         {flash}
-        <div className={
-          `flex-none ${defs.content_width} ` +
-          'layout-row layout-align-start-center layout-wrap'
-        }
+        <div
+          className={
+            `flex-none ${defs.content_width} ` +
+            'layout-row layout-align-start-center layout-wrap'
+          }
         >
-          <div className="flex-10" />
-          <div className="flex-100 layout-row layout-align-space-around-center">
-            { directionButtons }
+          <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading theme={theme} size={4} text="Are you importing or exporting?" />
+            </div>
+            {directionButtons}
           </div>
-          <div className={
-            `flex-100 layout-row ${styles.section} ` +
-            `${direction ? '' : styles.inactive}`
-          }
+          <div
+            className={
+              `flex-100 layout-row layout-wrap ${styles.section} ` +
+              `${direction ? '' : styles.inactive}`
+            }
           >
-            <CardLinkRow theme={theme} cardArray={this.state.cards} selectedType={loadType} />
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading
+                theme={theme}
+                size={4}
+                text="Are you shipping cargo items or containers?"
+              />
+            </div>
+            <CardLinkRow theme={theme} cards={this.cards} selectedType={loadType} />
           </div>
-          <div className={
-            `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
-            `${styles.section} ${direction && loadType ? '' : styles.inactive}`
-          }
+          <div
+            className={
+              `${styles.next_step_sec} flex-100 layout-row layout-align-center ` +
+              `${styles.section} ${direction && loadType ? '' : styles.inactive}`
+            }
           >
             <div
               className={`${styles.mot_sec} flex-80 layout-row layout-wrap layout-align-center`}
@@ -107,21 +124,26 @@ export class ChooseShipment extends Component {
                 color: `${theme && theme.colors.primary + percentageToHex('80%')}`
               }}
             >
-              <div className="flex-100">
-                <hr />
-              </div>
-              <div className="flex-100 layout-row layout-align-center">
+              {/* <div className="flex-100 layout-row layout-align-center">
                 <h3>Search results will include the following modes of transport</h3>
               </div>
-              <div className={
-                `${styles.mot_icons} flex-20 layout-row ` +
-                'layout-align-space-around-center'
-              }
+              <div
+                className={
+                  `${styles.mot_icons} flex-20 layout-row ` + 'layout-align-space-around-center'
+                }
               >
-                { modesOfTransportJSX }
-              </div>
-              <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-center`}>
-                { loadType && direction ? activeBtn : disabledBtn }
+                {modesOfTransportJSX}
+              </div> */}
+              <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
+                <div className="flex-none layout-column layout-align-center-center">
+                  <div className="flex-none layout-row layout-align-center-start">
+                    <p className={styles.mot_note}>
+                    Availabilities will be shown for all applicable<br /> modes of transport for
+                    your shipment
+                    </p>
+                    {loadType && direction ? activeBtn : disabledBtn}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -134,8 +156,7 @@ export class ChooseShipment extends Component {
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
   messages: PropTypes.arrayOf(PropTypes.string),
-  selectLoadType: PropTypes.func.isRequired,
-  scope: PropTypes.objectOf(PropTypes.any).isRequired
+  selectLoadType: PropTypes.func.isRequired
 }
 
 ChooseShipment.defaultProps = {

@@ -35,7 +35,8 @@ export class ChooseRoute extends Component {
       limits: {
         focus: true,
         alt: true
-      }
+      },
+      outerLimit: 10
     }
     this.chooseResult = this.chooseResult.bind(this)
     this.setDuration = this.setDuration.bind(this)
@@ -65,6 +66,14 @@ export class ChooseRoute extends Component {
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
+    this.showMore()
+  }
+  showMore () {
+    const { outerLimit } = this.state
+    this.setState({ outerLimit: outerLimit + 10 })
+    const { shipmentDispatch, req } = this.props
+    req.delay = outerLimit + 10
+    shipmentDispatch.setShipmentDetails(req)
   }
 
   chooseResult (obj) {
@@ -82,7 +91,7 @@ export class ChooseRoute extends Component {
       return ''
     }
     const {
-      shipment, originHubs, destinationHubs, schedules, cargoUnits
+      shipment, originHubs, destinationHubs, schedules
     } = shipmentData
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
     schedules.sort(ChooseRoute.dynamicSort('etd'))
@@ -160,8 +169,6 @@ export class ChooseRoute extends Component {
 
     const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes
     const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes
-    const cargoText = cargoUnits.length > 1 ? 'Cargo Items' : 'Cargo Item'
-    const containerText = cargoUnits.length > 1 ? 'Containers' : 'Container'
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     return (
       <div
@@ -183,22 +190,13 @@ export class ChooseRoute extends Component {
             />
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <TextHeading theme={theme} size={2} text="Choose Departure" />
-              <p className={`flex-none ${styles.one_line_summ}`}>
-                {' '}
-                Shipping {cargoUnits.length} x{' '}
-                {shipment.load_type === 'cargo_item' ? cargoText : containerText} to{' '}
-                {destinationHubs[0].name.split(' ')[0]}
-              </p>
-            </div>
             <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                 <div className="flex-none">
                   <TextHeading
                     theme={theme}
                     size={3}
-                    text="This is the closest departure to the specified pickup date"
+                    text="This is the closest departure to the specified date"
                   />
                 </div>
               </div>
@@ -279,21 +277,25 @@ export class ChooseRoute extends Component {
           </div>
         </div>
 
-        <div
-          className={`${
-            styles.back_to_dash_sec
-          } flex-100 layout-row layout-wrap layout-align-center`}
-        >
-          <div className="content_width flex-none layout-row layout-align-start-center">
-            <RoundButton
-              theme={theme}
-              text="Back to dashboard"
-              back
-              iconClass="fa-angle0-left"
-              handleNext={() => shipmentDispatch.goTo('/account')}
-            />
+        {!user.guest ? (
+          <div
+            className={`${
+              styles.back_to_dash_sec
+            } flex-100 layout-row layout-wrap layout-align-center`}
+          >
+            <div className="content_width_booking flex-none layout-row layout-align-start-center">
+              <RoundButton
+                theme={theme}
+                text="Back to dashboard"
+                back
+                iconClass="fa-angle0-left"
+                handleNext={() => shipmentDispatch.goTo('/account')}
+              />
+            </div>
           </div>
-        </div>
+        ) : (
+          ''
+        )}
       </div>
     )
   }

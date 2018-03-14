@@ -1,12 +1,12 @@
 export const LOAD_TYPES = [
   {
-    name: 'Cargo Item Shipment',
-    img: 'https://assets.itsmycargo.com/assets/images/MoT/parcel.png',
+    name: 'Cargo Item',
+    img: 'https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg',
     code: 'cargoItem'
   },
   {
-    name: 'Full Container Shipment',
-    img: 'https://assets.itsmycargo.com/assets/images/welcome/container.png',
+    name: 'Container',
+    img: 'https://assets.itsmycargo.com/assets/images/icons/container.svg',
     code: 'container'
   }
 ]
@@ -32,9 +32,9 @@ export const SHIPMENT_STAGES = [
   },
   {
     step: 4,
-    text: 'Booking overview & details',
-    header: 'Booking Details',
-    url: '/booking_details'
+    text: 'Final Details',
+    header: 'Final Details',
+    url: '/final_details'
   },
   {
     step: 5,
@@ -52,7 +52,14 @@ export const documentTypes = {
   certificate_of_origin: 'Certificate Of Origin',
   dangerous_goods: 'Dangerous Goods',
   bill_of_lading: 'Bill of Lading',
-  invoice: 'Invoice'
+  invoice: 'Invoice',
+  miscellaneous: 'Miscellaneous'
+}
+export const shipmentStatii = {
+  booking_process_started: 'Booking Process Started',
+  finished: 'Finished',
+  open: 'Open',
+  requested: 'Requested'
 }
 
 export const shipmentConstants = {
@@ -199,6 +206,9 @@ export const chargeGlossary = {
   cbm: 'CBM',
   ton: 'Ton',
   kg: 'Kg',
+  fee: 'Fee',
+  limit: 'Limit',
+  extra: 'Extra',
   min: 'Minimum',
   PER_ITEM: 'Per Item',
   PER_CONTAINER: 'Per Container',

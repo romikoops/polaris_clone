@@ -3,13 +3,12 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import ReactTooltip from 'react-tooltip'
+
 import { AdminRoutesIndex, AdminRouteView, AdminRouteForm } from './'
 import styles from './Admin.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
+
 import { adminActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
-import { adminRoutesTooltips as routeTip } from '../../constants'
 
 class AdminRoutes extends Component {
   constructor (props) {
@@ -53,80 +52,58 @@ class AdminRoutes extends Component {
     const {
       theme, hubs, itinerary, itineraries, hubHash, adminDispatch, loading
     } = this.props
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={this.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>)
-    const newButton = (
-      <div className="flex-none layout-row">
-        <div className={styles.btn_wrapper}>
-          <p data-tip={routeTip.new} data-for="newRouteTip">
-            <RoundButton
-              theme={theme}
-              size="small"
-              text="New Route"
-              active
-              handleNext={this.toggleNewRoute}
-              iconClass="fa-plus"
-            />
-          </p>
-        </div>
-        <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
-      </div>)
+
     const title = selectedRoute ? 'Route Overview' : 'Routes'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-          <TextHeading
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+        >
+          <TextHeading theme={theme} size={1} text={title} />
+        </div>
+
+        {this.state.newRoute ? (
+          <AdminRouteForm
             theme={theme}
-            size={1}
-            text={title}
+            close={this.closeModal}
+            hubs={hubs}
+            saveRoute={this.saveNewRoute}
           />
-          {selectedRoute ? backButton : ''}
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-end-center">
-          {newButton}
-        </div>
-        { this.state.newRoute ? <AdminRouteForm
-          theme={theme}
-          close={this.closeModal}
-          hubs={hubs
-          }
-          saveRoute={this.saveNewRoute}
-        /> : ''}
+        ) : (
+          ''
+        )}
         <Switch className="flex">
           <Route
             exact
             path="/admin/routes"
-            render={props => (<AdminRoutesIndex
-              theme={theme}
-              hubs={hubs}
-              hubHash={hubHash}
-              itineraries={itineraries}
-              adminDispatch={adminDispatch}
-              {...props}
-              viewItinerary={this.viewItinerary}
-              loading={loading}
-            />)}
+            render={props => (
+              <AdminRoutesIndex
+                theme={theme}
+                hubs={hubs}
+                hubHash={hubHash}
+                itineraries={itineraries}
+                adminDispatch={adminDispatch}
+                {...props}
+                viewItinerary={this.viewItinerary}
+                loading={loading}
+                toggleNewRoute={this.toggleNewRoute}
+              />
+            )}
           />
           <Route
             exact
             path="/admin/routes/:id"
-            render={props => (<AdminRouteView
-              theme={theme}
-              hubs={hubs}
-              hubHash={hubHash}
-              itineraryData={itinerary}
-              adminActions={adminDispatch}
-              {...props}
-              loading={loading}
-            />)}
+            render={props => (
+              <AdminRouteView
+                theme={theme}
+                hubs={hubs}
+                hubHash={hubHash}
+                itineraryData={itinerary}
+                adminActions={adminDispatch}
+                {...props}
+                loading={loading}
+              />
+            )}
           />
         </Switch>
       </div>

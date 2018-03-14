@@ -77,7 +77,9 @@ export class ShipmentDetails extends Component {
           payload_in_kg: true,
           dimension_x: true,
           dimension_y: true,
-          dimension_z: true
+          dimension_z: true,
+          cargo_item_type_id: true,
+          quantity: false
         }
       ],
       nextStageAttempt: false,
@@ -132,12 +134,10 @@ export class ShipmentDetails extends Component {
     }
   }
   setIncoTerm (opt) {
+    this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
+    this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
     this.setState({
-      incoterm: {
-        ...this.state.incoterm,
-        key: opt.value,
-        text: opt.label
-      }
+      incoterm: opt
     })
   }
   setTargetAddress (target, address) {
@@ -210,6 +210,7 @@ export class ShipmentDetails extends Component {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
     const { cargoItems, cargoItemsErrors } = this.state
+
     if (!cargoItems[index] || !cargoItemsErrors[index]) return
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
@@ -250,7 +251,9 @@ export class ShipmentDetails extends Component {
       payload_in_kg: true,
       dimension_x: true,
       dimension_y: true,
-      dimension_z: true
+      dimension_z: true,
+      cargo_item_type_id: true,
+      quantity: false
     }
     const { cargoItems, cargoItemsErrors } = this.state
     cargoItems.push(newCargoItem)
@@ -530,6 +533,7 @@ export class ShipmentDetails extends Component {
     //     background-color: #f9f9f9;
     //   }
     // `
+
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
@@ -576,6 +580,7 @@ export class ShipmentDetails extends Component {
             incoterm={this.state.incoterm}
             setIncoTerm={this.setIncoTerm}
             errorStyles={errorStyles}
+            direction={shipmentData.shipment.direction}
             showIncotermError={showIncotermError}
             nextStageAttempt={this.state.nextStageAttempt}
           />
@@ -638,8 +643,8 @@ export class ShipmentDetails extends Component {
               theme={theme}
               preCarriage={this.state.has_pre_carriage}
               onCarriage={this.state.has_on_carriage}
-              originFees
-              destinationFees
+              originFees={this.state.has_pre_carriage}
+              destinationFees={this.state.has_on_carriage}
             />
           </div>
         </div>
@@ -659,22 +664,28 @@ export class ShipmentDetails extends Component {
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        <div className="layout-row flex-100 layout-wrap layout-align-center-center">
-          <div
+        { user && !user.guest
+          ? <div
             className={
-              `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+              `${defaults.border_divider} layout-row flex-100 ` +
+            'layout-wrap layout-align-center-center'
             }
           >
-            <RoundButton
-              text="Back to Dashboard"
-              handleNext={this.returnToDashboard}
-              iconClass="fa-angle-left"
-              theme={theme}
-              back
-            />
-          </div>
-        </div>
+            <div
+              className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
+              'layout-row flex-none layout-wrap layout-align-start-start'
+              }
+            >
+              <RoundButton
+                text="Back to Dashboard"
+                handleNext={this.returnToDashboard}
+                iconClass="fa-angle-left"
+                theme={theme}
+                back
+              />
+            </div>
+          </div> : '' }
       </div>
     )
   }

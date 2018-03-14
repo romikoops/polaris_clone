@@ -9,6 +9,9 @@ module ExcelTools
     mongo = get_client
     defaults = []
     load_type = "lcl"
+    new_trucking_pricings_array = []
+    new_trucking_hubs_array = []
+    new_trucking_queries_array = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -32,7 +35,7 @@ module ExcelTools
       truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
       truckingPricings = []
       (4..num_rows).each do |line|
-        # byebug
+        # 
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
@@ -72,89 +75,136 @@ module ExcelTools
           tmp[:trucking_hub_id] = trucking_table_id
           tmp[:trucking_query_id] = ntp[:_id]
           truckingPricings.push(tmp)
-          # byebug
+          # 
         end
         truckingQueries.push(ntp)
       end
-      # byebug
+      # 
       truckingQueries.each do |k|
-        update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+        # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+        new_trucking_queries_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
       end
       truckingPricings.each do |k|
-        update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        new_trucking_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
       end
-      update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
-
+      new_trucking_hub_obj = {
+        modifier: "zipcode", 
+        tenant_id: user.tenant_id, 
+        nexus_id: nexus.id, 
+        load_type: 'lcl',
+        load_meterage: {
+          active: true,
+          height_limit: 130,
+          ratio: 1850
+        },
+        cbm_ratio: 333
+      }
+      # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
+      new_trucking_hubs_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{trucking_table_id}"
+              },
+              :update => {
+                "$set" => new_trucking_hub_obj
+              }, :upsert => true
+            }
+          }
     end
+    mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
+    mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
+    mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
 
   end
 
-  def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
-    # old_trucking_ids = nil
-    # new_trucking_ids = []
-    mongo = get_client
-    defaults = []
-    xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    xlsx.sheets.each do |sheet_name|
-      first_sheet = xlsx.sheet(sheet_name)
-      nexus = Location.find_by(name: sheet_name, location_type: "nexus")
+  # def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
+    #   # old_trucking_ids = nil
+    #   # new_trucking_ids = []
+    #   mongo = get_client
+    #   defaults = []
+    #   xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    #   xlsx.sheets.each do |sheet_name|
+    #     first_sheet = xlsx.sheet(sheet_name)
+    #     nexus = Location.find_by(name: sheet_name, location_type: "nexus")
 
-      currency_row = first_sheet.row(1)
-      hubs = nexus.hubs
-      header_row = first_sheet.row(2)
-      header_row.shift
-      header_row.shift
-      weight_min_row = first_sheet.row(3)
-      weight_min_row.shift
-      weight_min_row.shift
-      num_rows = first_sheet.last_row
-      header_row.each do |cell|
-        min_max_arr = cell.split(" - ")
-        defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
-      end
-      results = []
-      truckingTable = "#{nexus.id}_#{user.tenant_id}" 
-      (4..num_rows).each do |line|
-        row_data = first_sheet.row(line)
-        zip_code_range_array = row_data.shift.split(" - ")
-        # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
-        row_min_value = row_data.shift
-        # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
-        ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
-        row_data.each_with_index do |val, index|
-          tmp = defaults[index]
-          if row_min_value < weight_min_row[index]
-            min_value = weight_min_row[index]
-          else
-            min_value = row_min_value
-          end
-          tmp[:min_value] = min_value
-          tmp[:value] = val
-          ntp[:rate_table].push(tmp)
+    #     currency_row = first_sheet.row(1)
+    #     hubs = nexus.hubs
+    #     header_row = first_sheet.row(2)
+    #     header_row.shift
+    #     header_row.shift
+    #     weight_min_row = first_sheet.row(3)
+    #     weight_min_row.shift
+    #     weight_min_row.shift
+    #     num_rows = first_sheet.last_row
+    #     header_row.each do |cell|
+    #       min_max_arr = cell.split(" - ")
+    #       defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
+    #     end
+    #     results = []
+    #     truckingTable = "#{nexus.id}_#{user.tenant_id}" 
+    #     (4..num_rows).each do |line|
+    #       row_data = first_sheet.row(line)
+    #       zip_code_range_array = row_data.shift.split(" - ")
+    #       # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
+    #       row_min_value = row_data.shift
+    #       # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+    #       ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
+    #       row_data.each_with_index do |val, index|
+    #         tmp = defaults[index]
+    #         if row_min_value < weight_min_row[index]
+    #           min_value = weight_min_row[index]
+    #         else
+    #           min_value = row_min_value
+    #         end
+    #         tmp[:min_value] = min_value
+    #         tmp[:value] = val
+    #         ntp[:rate_table].push(tmp)
 
-          
+            
 
-          # new_trucking_ids << ntp.id
-        end
-        # p ntp
-        results << ntp
-        # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
-      end
-      # 
-      update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
-      hubs.each do |h|
-        update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
-      end
-    end
+    #         # new_trucking_ids << ntp.id
+    #       end
+    #       # p ntp
+    #       results << ntp
+    #       # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
+    #     end
+    #     # 
+    #     update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
+    #     hubs.each do |h|
+    #       update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
+    #     end
+    #   end
 
-    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
-  end
+    #   # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
+    #   # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+  # end
 
   def overwrite_city_trucking_rates(params, user = current_user, direction)
     
     mongo = get_client
     defaults = []
+     new_trucking_pricings_array = []
+    new_trucking_hubs_array = []
+    new_trucking_queries_array = []
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -216,59 +266,138 @@ module ExcelTools
           HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
         end
       end
-      update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id})
+      new_trucking_hub_obj = {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'}
+      new_trucking_hubs_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{trucking_table_id}"
+              },
+              :update => {
+                "$set" => new_trucking_hub_obj
+              }, :upsert => true
+            }
+          }
+      # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
       truckingQueries.each do |k|
-        update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+        # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+         new_trucking_queries_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
       end
       truckingPricings.each do |k|
-        update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        new_trucking_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
       end
     end
 
-    # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
+    mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
+    mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
+    mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
   end
 
-  def overwrite_service_charges(params, user = current_user)
-    old_ids = ServiceCharge.pluck(:id)
-    new_ids = []
-
+  def overwrite_local_charges(params, user = current_user)
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    first_sheet = xlsx.sheet(xlsx.sheets.first)
-
-    rows = first_sheet.parse
-    rows.each do |r|
-      new_charge = {
-        effective_date: r[0],
-        expiration_date: r[1],
-        hub_code: r[2],
-        terminal_handling_cbm: {currency: r[3], value: r[4], trade_direction: "export"},
-        terminal_handling_ton: {currency: r[3], value: r[5], trade_direction: "export"},
-        terminal_handling_min: {currency: r[3], value: r[6], trade_direction: "export"},
-        lcl_service_cbm: {currency: r[7], value: r[8], trade_direction: "export"},
-        lcl_service_ton: {currency: r[7], value: r[9], trade_direction: "export"},
-        lcl_service_min: {currency: r[7], value: r[10], trade_direction: "export"},
-        isps: {currency: r[11], value: r[12], trade_direction: "export"},
-        exp_declaration: {currency: r[13], value: r[14], trade_direction: "export"},
-        extra_hs_code: {currency: r[15], value: r[16], trade_direction: "export"},
-        doc_fee: {currency: r[17], value: r[18], trade_direction: "export"},
-        liner_service_fee: {currency: r[19], value: r[20], trade_direction: "export"},
-        vgm_fee: {currency: r[21], value: r[22], trade_direction: "export"},
-        documentation_fee: {currency: r[23], value: r[24], trade_direction: "import"},
-        handling_fee: {currency: r[25], value: r[26], trade_direction: "import"},
-        customs_clearance: {currency: r[27], value: r[28], trade_direction: "import"},
-        cfs_terminal_charges: {currency: r[29], value: r[30], trade_direction: "import"}
-      }
-      hub = Hub.find_by("hub_code = ? AND tenant_id = ?", new_charge[:hub_code], user.tenant_id)
-      new_charge.delete(:hub_code)
-      new_charge[:hub_id] = hub.id
-
-      if hub.service_charge
-        hub.service_charge.destroy
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find_by(name: sheet_name, tenant_id: user.tenant_id)
+      if !hub
+        return
       end
-
-      sc = ServiceCharge.create(new_charge)
-      hub.service_charge = sc
+      rows = first_sheet.parse(
+        fee: 'FEE',
+        mot: 'MOT',
+        fee_code: 'FEE_CODE',
+        load_type: 'LOAD_TYPE',
+        direction:	'DIRECTION',
+        currency:	'CURRENCY',
+        rate_basis:	'RATE_BASIS',
+        ton: 'TON',
+        cbm: 'CBM',
+        kg: 'KG',
+        item: 'ITEM',
+        shipment: 'SHIPMENT',
+        bill: 'BILL',
+        container: 'CONTAINER',
+        minimum: 'MINIMUM'
+      )
+      hub_fees = {}
+       customs = {}
+      ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+      hub_fees[lt] = {
+        "import" => {},
+        "export" => {},
+        "mode_of_transport" => rows[0][:mot].downcase,
+        "nexus_id" => hub.nexus.id,
+        "tenant_id" => hub.tenant_id,
+        "hub_id" => hub.id,
+        "load_type" => lt
+      }
+      customs[lt] = {
+        "import" => {}, 
+        "export" => {},
+        "nexus_id" => hub.nexus.id,
+        "tenant_id" => hub.tenant_id,
+        "hub_id" => hub.id,
+        "mode_of_transport" => rows[0][:mot].downcase,
+        "load_type" => lt
+      }
+      end
+      rows.each do |row|
+          case row[:rate_basis]
+          when 'PER_SHIPMENT'
+            charge = {currency: row[:currency], value: row[:shipment], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CONTAINER'
+            charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_BILL'
+            charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM'
+            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_ITEM'
+            charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_TON'
+            charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          when 'PER_CBM_KG'
+            charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+          end
+          if row[:fee_code] != 'CUST'
+            hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+          else
+            customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase)
+          end
+      end
+      # local_charges = []
+      hub_fees.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
+        # local_charges.push(
+        #   {
+        #     :filter => {:_id => lc_id},
+        #     :update => {
+        #       "$set" => 
+        #     }
+        #   }
+        # )
+        update_item('localCharges', {"_id" => lc_id}, v)
+      end
+      customs.each do |k,v|
+        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
+        update_item('customsFees', {"_id" => lc_id}, v)
+      end
     end
   end
 
@@ -385,7 +514,6 @@ module ExcelTools
       
       if locations[row[:from]] && locations[row[:to]]
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
-      
       else
         locations[row[:from]] = Location.find_by_name(row[:from])
         locations[row[:to]] = Location.find_by_name(row[:to])
@@ -564,7 +692,7 @@ module ExcelTools
         'lcl'
       ]
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 40.days
       hubroute.generate_weekly_schedules(row[:mot], row[:effective_date], row[:expiration_date], [1,5], 30, vehicle.id)
 
       lcl_obj = {
@@ -672,7 +800,7 @@ module ExcelTools
     end
   end
 
-  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_lcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     first_sheet = xlsx.sheet(xlsx.sheets.first)
@@ -690,38 +818,54 @@ module ExcelTools
       lcl_rate_min: 'LCL_RATE_MIN',
       lcl_heavy_weight_surcharge_wm: 'LCL_HEAVY_WEIGHT_SURCHARGE_WM',
       lcl_heavy_weight_surcharge_min: 'LCL_HEAVY_WEIGHT_SURCHARGE_MIN',
-      ohc_currency: "OHC_CURRENCY",
-      ohc_cbm: "OHC_CBM",
-      ohc_ton: "OHC_TON",
-      ohc_min: "OHC_MIN",
-      lcls_currency: "LCLS_CURRENCY",
-      lcl_service_cbm: "LCL_SERVICE_CBM",
-      lcl_service_ton: "LCL_SERVICE_TON",
-      lcl_service_min: "LCL_SERVICE_MIN",
-      isps_currency: "ISPS_CURRENCY",
-      isps: "ISPS",
-      exp_currency: "EXP_CURRENCY",
-      exp_declaration: "EXP_DECLARATION",
-      exp_limit: "EXP_LIMIT",
-      exp_extra: "EXP_XTRA",
-      odf_currency: "ODF_CURRENCY",
-      odf: "ODF",
-      ls_currency: "LS_CURRENCY",
-      liner_service_fee: "LINER_SERVICE_FEE",
-      vgm_currency: "VGM_CURRENCY",
-      vgm_fee: "VGM_FEE", 
-      ddf_currency: "DDF_CURRENCY",
-      ddf: "DDF",
-      dhc_currency: "DHC_CURRENCY",
-      dhc: "DHC",
-      customs_currency: "CUSTOMS_CURRENCY",
-      customs_clearance: "CUSTOMS_CLEARANCE",
-      cfs_currency: "CFS_CURRENCY",
-      cfs_terminal_charges: "CFS_TERMINAL_CHARGES",
+      lcl_heavy_weight_watershed_cbm: 'LCL_HEAVY_WEIGHT_WATERSHED_CBM'
+      
     )
+    stats = {
+      type: 'pricings',
+      pricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraryPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      stops: {
+        number_updated: 0,
+        number_created: 0
+      },
+      layovers: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trips: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userAffected: []
+    }
+    results = {
+      pricings: [],
+      itineraryPricings: [],
+      userPricings: [],
+      itineraries: [],
+      stops: [],
+      layovers: [],
+      trips: []
+    }
     new_pricings = []
     new_itinerary_pricings = {}
-
+    pricings_array = []
+    user_pricings_array = []
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
       tenant = user.tenant
@@ -734,8 +878,29 @@ module ExcelTools
       vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
       vehicle      = Vehicle.find_by(name: vehicle_name)
       # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
-      itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
-      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      itinerary = tenant.itineraries.find_by(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+      if !itinerary
+        itinerary = tenant.itineraries.create!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+        stats[:itineraries][:number_created] += 1
+      else
+        stats[:itineraries][:number_updated] += 1
+      end
+      results[:itineraries] << itinerary
+      
+      stops_in_order = hub_ids.map.with_index do |h, i| 
+        temp_stop = itinerary.stops.find_by(hub_id: h, index: i)
+        if temp_stop
+          stats[:stops][:number_updated] += 1
+          results[:stops] << temp_stop
+          temp_stop
+        else
+          temp_stop = itinerary.stops.create!(hub_id: h, index: i)
+          stats[:stops][:number_created] += 1
+          results[:stops] << temp_stop
+          temp_stop
+        end 
+      end
+      
       cargo_classes = [
         'lcl'
       ]
@@ -744,15 +909,21 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
-      itinerary.generate_weekly_schedules(
-        stops_in_order,
-        steps_in_order,
-        row[:effective_date], 
-        row[:expiration_date], 
-        [1, 5],
-        vehicle.id
-      )
+      row[:expiration_date] = row[:effective_date] + 40.days
+      if generate
+        generator_results = itinerary.generate_weekly_schedules(
+          stops_in_order,
+          steps_in_order,
+          row[:effective_date], 
+          row[:expiration_date], 
+          [1, 5],
+          vehicle.id
+        )
+        results[:layovers] = generator_results[:layovers]
+        results[:trips] = generator_results[:trips]
+        stats[:layovers][:number_created] = generator_results[:layovers].length
+        stats[:trips][:number_created] = generator_results[:trips].length
+      end
 
       lcl_obj = {
         BAS: {
@@ -765,72 +936,15 @@ module ExcelTools
           currency: row[:lcl_currency],
           rate: row[:lcl_heavy_weight_surcharge_wm],
           min: row[:lcl_heavy_weight_surcharge_min],
-          rate_basis: 'PER_CBM'
-        },
-        OHC: {
-          currency: row[:ohc_currency],
-          cbm: row[:ohc_cbm],
-          ton: row[:ohc_ton],
-          min: row[:ohc_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        DHC: {
-          currency: row[:dhc_currency],
-          rate: row[:dhc],
-          rate_basis: 'PER_ITEM'
-          # cbm: row[:dhc_cbm],
-          # ton: row[:dhc_ton],
-          # min: row[:dhc_min],
-          # rate_basis: 'PER_CBM_TON'
-        },
-        CUSTOMS: {
-          currency: row[:customs_currency],
-          rate: row[:customs_clearance],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        CFS: {
-          currency: row[:cfs_currency],
-          rate: row[:cfs_terminal_charges],
-          rate_basis: 'PER_CBM'
-        },
-        LS: {
-          currency: row[:ls_currency],
-          rate: row[:liner_service_fee],
-          rate_basis: 'PER_ITEM'
-        },
-        LCLS: {
-          currency: row[:lcls_currency],
-          cbm: row[:lcl_service_cbm],
-          ton: row[:lcl_service_ton],
-          min: row[:lcl_service_min],
-          rate_basis: 'PER_CBM_TON'
-        },
-        ISPS: {
-          currency: row[:isps_currency],
-          rate: row[:isps],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        DDF: {
-          currency: row[:ddf_currency],
-          rate: row[:ddf],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        ODF: {
-          currency: row[:odf_currency],
-          rate: row[:odf],
-          rate_basis: 'PER_SHIPMENT'
-        },
-        
-      }
-      customsObj = {
-          currency: row[:exp_currency],
-          fee: row[:exp_declaration],
-          limit: row[:exp_limit],
-          extra: row[:exp_extra]
+          rate_basis: 'PER_CBM',
+          watershed: row[:lcl_heavy_weight_watershed_cbm]
         }
-      price_obj = {"lcl" =>lcl_obj.to_h}
+      }
 
+      price_obj = {"lcl" =>lcl_obj.to_h}
+      
       if dedicated
+        stats[:userAffected] << user
         cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
 
@@ -845,20 +959,44 @@ module ExcelTools
           
           pricing = { 
             data:      price_obj[cargo_class], 
-            _id:       priceKey,
+            # _id:       priceKey,
             tenant_id: user.tenant_id,
             load_type: cargo_class
           }
-          
-          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          results[:pricings] << pricing
+          stats[:pricings][:number_created] += 1
+          pricings_array.push({
+            :update_one => {
+              :filter => {
+                _id: "#{priceKey}"
+              },
+              :update => {
+                "$set" => pricing
+              }, :upsert => true
+            }
+          })
+          # update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
           
           user_pricing = { pathKey => priceKey}
-          
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
-          update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
+          user_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{user.id}"
+              },
+              :update => {
+                "$set" => user_pricing
+              }, :upsert => true
+            }
+          }
+          results[:userPricings] << user_pricing
+          stats[:userPricings][:number_created] += 1
+          # update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_itinerary_pricings[pathKey] ||= {}
           new_itinerary_pricings[pathKey]["#{user.id}"] = priceKey
+          new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_itinerary_pricings[pathKey]["itinerary_id"]          = itinerary.id
+          new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       else
         cargo_classes.each do |cargo_class|
@@ -875,13 +1013,25 @@ module ExcelTools
 
           pricing = { 
             data:         price_obj[cargo_class], 
-            _id:          priceKey,
+            # _id:          priceKey,
             itinerary_id: itinerary.id,
             tenant_id:    user.tenant_id
           }
+          results[:pricings] << pricing
+          stats[:pricings][:number_created] += 1
+          pricings_array.push({
+            :update_one => {
+              :filter => {
+                _id: "#{priceKey}"
+              },
+              :update => {
+                "$set" => pricing
+              }, :upsert => true
+            }
+          })
 
-          update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
-          update_item_fn(mongo, 'customsFees', {_id: "#{priceKey}"}, customsObj)
+          # update_item_fn(mongo, 'pricings', {_id: "#{priceKey}"}, pricing)
+          
 
           new_itinerary_pricings[pathKey] ||= {}
           new_itinerary_pricings[pathKey]["open"]                  = priceKey
@@ -891,13 +1041,29 @@ module ExcelTools
         end
       end
     end
-
+    itinerary_pricings_array = []
     new_itinerary_pricings.each do |key, value|
-      update_itinerary_pricing(key, value)
+      results[:itineraryPricings] << value
+      stats[:itineraryPricings][:number_created] += 1
+      itinerary_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{key}"
+              },
+              :update => {
+                "$set" => value
+              }, :upsert => true
+            }
+          }
+      # update_itinerary_pricing(key, value)
     end
+    mongo["itineraryPricings"].bulk_write(itinerary_pricings_array)
+    mongo["pricings"].bulk_write(pricings_array)
+    mongo["userPricings"].bulk_write(user_pricings_array)
+    return {results: results, stats: stats}
   end
 
-  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user)
+  def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user, generate = false)
     mongo = get_client
     terms = {
       "BAS" => "Basic Ocean Freight",
@@ -980,8 +1146,10 @@ module ExcelTools
         hub_ids = origin_hub_ids + destination_hub_ids
         vehicle_name = row[:vehicle_type] || "#{row[:mot]}_default"
         vehicle      = Vehicle.find_by(name: vehicle_name)
-        # itinerary = Itinerary.find_or_create_by_hubs(hub_ids, user.tenant_id, row[:mot], vehicle.id, "#{origin.name} - #{destination.name}")
-        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+        itinerary = tenant.itineraries.find_by(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+        if !itinerary
+          itinerary = tenant.itineraries.create!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+        end
       
         new_pricings_aux_data[pricing_key] = {
           itinerary:       itinerary,
@@ -1005,7 +1173,8 @@ module ExcelTools
         steps_in_order << 30
       end
       row[:effective_date] = DateTime.now
-      row[:expiration_date] = row[:effective_date] + 60.days
+      row[:expiration_date] = row[:effective_date] + 40.days
+      if generate
       new_pricings_aux_data[pricing_key][:itinerary].generate_weekly_schedules(
         new_pricings_aux_data[pricing_key][:stops_in_order],
         steps_in_order,
@@ -1014,6 +1183,7 @@ module ExcelTools
         [1, 5],
         vehicle.id
       )
+      end
       cargo_type = row[:cargo_type] == 'FAK' ? nil : row[:cargo_type]
       new_pricings_aux_data[pricing_key][:cargo_type] = cargo_type
 
@@ -1084,5 +1254,16 @@ module ExcelTools
     base_str = cargo_class.dup
     base_str.slice! cargo_class.rindex("f")
     "#{base_str}_rate".to_sym
+  end
+
+  def local_charge_load_setter(all_charges, charge, load_type, direction)
+    if load_type === 'fcl'
+      ['fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+        all_charges[lt][direction][charge[:key]] = charge
+      end
+    else
+      all_charges[load_type][direction][charge[:key]] = charge
+    end
+    return all_charges
   end
 end

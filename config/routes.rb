@@ -5,8 +5,8 @@ Rails.application.routes.draw do
 
   mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
-    registrations: 'users_devise_token_auth/registrations'
-  }
+    registrations: 'users_devise_token_auth/registrations',
+  }, skip: [:omniauth_callbacks]
   
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
@@ -25,12 +25,13 @@ Rails.application.routes.draw do
       resources :hubs, only: [:index, :show, :create] do
         patch "set_status"
       end
+      post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create]
 
-      resources :pricings, only: [:index]
+      resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
       post "pricings/update/:id", to: "pricings#update_price"
@@ -44,18 +45,19 @@ Rails.application.routes.draw do
       resources :clients, only: [:index, :show, :create]
 
       resources :pricings, only: [:index]
-      post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
-      post "pricings/ocean_fcl_pricings/process_csv", to: "pricings#overwrite_fcl_carriage", as: :main_fcl_carriage_pricings_overwrite
+      post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_main_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
+      post "pricings/ocean_fcl_pricings/process_csv", to: "pricings#overwrite_main_fcl_carriage", as: :main_fcl_carriage_pricings_overwrite
       post "pricings/update/:id", to: "pricings#update_price"
 
-      resources :open_pricings, only: [:index]  
-      post "open_pricings/train_and_ocean_pricings/process_csv", 
-        to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
+      resources :open_pricings, only: [:index] 
+      post "open_pricings/ocean_lcl_pricings/process_csv", to: "open_pricings#overwrite_main_lcl_carriage", as: :open_main_lcl_carriage_pricings_overwrite 
+      # post "open_pricings/train_and_ocean_pricings/process_csv", 
+        # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
       resources :service_charges, only: [:index, :update]
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
-
+      post "service_charges/:id/edit", to: "service_charges#edit"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple

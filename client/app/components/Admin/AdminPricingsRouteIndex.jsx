@@ -24,13 +24,13 @@ export class AdminPricingsRouteIndex extends Component {
 
   viewRoute (route) {
     const { adminTools } = this.props
-    adminTools.getRoutePricings(route.id, true)
+    adminTools.getItineraryPricings(route.id, true)
   }
 
   render () {
-    const { theme, hubs, routes } = this.props
+    const { theme, hubs, itineraries } = this.props
     // const { selectedPricing } = this.state;
-    if (!routes) {
+    if (!itineraries) {
       return ''
     }
     if (this.state.redirect) {
@@ -48,8 +48,8 @@ export class AdminPricingsRouteIndex extends Component {
       </div>
     )
     let routesArr
-    if (routes) {
-      routesArr = routes.map(rt => (
+    if (itineraries) {
+      routesArr = itineraries.map(rt => (
         <AdminRouteTile
           key={v4()}
           hubs={hubs}
@@ -76,11 +76,12 @@ export class AdminPricingsRouteIndex extends Component {
           {backButton}
         </div>
         <AdminSearchableRoutes
-          routes={routes}
+          itineraries={itineraries}
           theme={theme}
           hubs={hubs}
           handleClick={this.viewRoute}
           sideScroll={false}
+          seeAll={false}
         />
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -94,7 +95,7 @@ export class AdminPricingsRouteIndex extends Component {
 AdminPricingsRouteIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
-  routes: PropTypes.arrayOf(PropTypes.shape({
+  itineraries: PropTypes.arrayOf(PropTypes.shape({
     id: PropTypes.number
   })),
   adminTools: PropTypes.shape({
@@ -105,7 +106,7 @@ AdminPricingsRouteIndex.propTypes = {
 AdminPricingsRouteIndex.defaultProps = {
   theme: null,
   hubs: [],
-  routes: []
+  itineraries: []
 }
 
 export default AdminPricingsRouteIndex

@@ -154,7 +154,7 @@ export class TruckingFeeSetter extends Component {
       [nameKeys[0]]: {
         ...this.state[nameKeys[0]],
         [nameKeys[1]]: {
-          ...this.state[nameKeys[1]],
+          ...this.state[nameKeys[0]][nameKeys[1]],
           [nameKeys[2]]: value
         }
       }

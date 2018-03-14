@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import PropTypes from '../../prop-types'
+import { moment } from '../../constants'
 import { LandingTop } from '../../components/LandingTop/LandingTop'
-// import {LandingTopAuthed} from '../../components/LandingTopAuthed/LandingTopAuthed';
 import { ActiveRoutes } from '../../components/ActiveRoutes/ActiveRoutes'
 import { BlogPostHighlights } from '../../components/BlogPostHighlights/BlogPostHighlights'
 import styles from './Landing.scss'
@@ -32,6 +32,33 @@ class Landing extends Component {
   shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
     return loading || !(loggingIn || registering)
+  }
+  bookNow () {
+    const {
+      tenant, loggedIn, authDispatch, userDispatch
+    } = this.props
+
+    if (loggedIn) {
+      userDispatch.goTo('/booking')
+    } else {
+      const unixTimeStamp = moment().unix().toString()
+      const randNum = Math.floor(Math.random() * 100).toString()
+      const randSuffix = unixTimeStamp + randNum
+      const email = `guest${randSuffix}@${tenant.data.subdomain}.com`
+
+      authDispatch.register(
+        {
+          email,
+          password: 'guestpassword',
+          password_confirmation: 'guestpassword',
+          first_name: 'Guest',
+          last_name: '',
+          tenant_id: tenant.data.id,
+          guest: true
+        },
+        true
+      )
+    }
   }
 
   showCarousel () {
@@ -67,8 +94,8 @@ class Landing extends Component {
             initialCompName="RegistrationPage"
           />
         }
-        verticalPadding="60px"
-        horizontalPadding="60px"
+        verticalPadding="30px"
+        horizontalPadding="40px"
         parentToggle={this.toggleShowLogin}
       />
     )
@@ -85,6 +112,7 @@ class Landing extends Component {
           loggedIn={loggedIn}
           tenant={tenant}
           authDispatch={authDispatch}
+          bookNow={() => this.bookNow()}
         />
         <div className={`${styles.service_box} layout-row flex-100 layout-wrap`}>
           <div className={`${styles.service_label} layout-row layout-align-center-center flex-100`}>
@@ -113,7 +141,7 @@ class Landing extends Component {
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
               >
                 <i className="fa fa-binoculars" aria-hidden="true" style={textStyle1} />
-                <h3>Transparent </h3>
+                <h3> Full Transparency </h3>
               </div>
               <div
                 className={`flex-none layout-column layout-align-center-center ${styles.service}`}
@@ -128,39 +156,43 @@ class Landing extends Component {
         <BlogPostHighlights theme={theme} />
         <div className={`${styles.btm_promo} flex-100 layout-row`}>
           <div className={`flex-50 ${styles.btm_promo_img}`} />
-          <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-center`}>
-            <div className="flex-80 layout-column layout-align-start-center height_100">
+          <div className={`${styles.btm_promo_text} flex-50 layout-row layout-align-start-start`}>
+            <div className="flex-90 layout-column layout-align-start-start height_100">
               <div className="flex-20 layout-column layout-align-center-start">
-                <h2> Enjoy the most advanced and easy to use booking system on the planet </h2>
+                <h2> There are tons of benefits of managing your logistics online: </h2>
               </div>
-              <div className="flex-65 layout-column layout-align-center-start">
+              <div className="flex-65 layout-column layout-align-start-start">
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Instant Booking </p>
+                  <p> Place bookings from wherever, whenever </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Price Comparison </p>
+                  <p> Get an instant overview of available offers </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Fastest Routes </p>
+                  <p> Reuse old shipments and store addresses </p>
                 </div>
                 <div className="flex layout-row layout-align-start-center">
                   <i className="fa fa-check" />
-                  <p> Real Time Updates </p>
+                  <p> View or download documents when you need them </p>
+                </div>
+                <div className="flex layout-row layout-align-start-center">
+                  <i className="fa fa-check" />
+                  <p> Pull statistics and reports on your logistics </p>
                 </div>
               </div>
-              <div
-                className={`${
-                  styles.btm_promo_btn_wrapper
-                } flex-15 layout-column layout-align-start-left`}
+              <div className={
+                `${styles.btm_promo_btn_wrapper} flex-15 ` +
+                'layout-row layout-align-start-left'
+              }
               >
                 <RoundButton
-                  text="Sign Up"
+                  text="Book Now"
                   theme={theme}
                   active
-                  handleNext={this.toggleShowLogin}
+                  handleNext={() => this.bookNow()}
                 />
               </div>
             </div>

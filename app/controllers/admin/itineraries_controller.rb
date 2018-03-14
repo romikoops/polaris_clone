@@ -14,6 +14,7 @@ class Admin::ItinerariesController < ApplicationController
     itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
     new_itinerary_data["stops"].each_with_index { |h, i|  itinerary.stops.create(hub_id: h, index: i)}
     itinerary.set_scope!
+    current_user.tenant.update_route_details
     response_handler(itinerary)
   end
 

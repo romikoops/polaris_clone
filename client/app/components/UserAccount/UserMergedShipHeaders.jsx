@@ -18,7 +18,7 @@ export function UserMergedShipHeaders (props) {
         <h3 className="flex-none">Status </h3>
       </div>
       <div className="flex-15 layout-row layout-align-start-center">
-        <h3 className="flex-none">Incoterm </h3>
+        {/* <h3 className="flex-none">Incoterm </h3> */}
       </div>
       <div className="flex-15 layout-row layout-align-start-center">
         <h3 className="flex-none">Requires Action </h3>

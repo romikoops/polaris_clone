@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305150857) do
+ActiveRecord::Schema.define(version: 20180314101637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,6 +303,8 @@ ActiveRecord::Schema.define(version: 20180305150857) do
     t.string "direction"
     t.string "notes"
     t.jsonb "incoterm"
+    t.integer "origin_hub_id"
+    t.integer "destination_hub_id"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -414,7 +416,7 @@ ActiveRecord::Schema.define(version: 20180305150857) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "provider", default: "email", null: false
+    t.string "provider", default: "tenant_email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -445,7 +447,7 @@ ActiveRecord::Schema.define(version: 20180305150857) do
     t.string "currency", default: "EUR"
     t.string "vat_number"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true

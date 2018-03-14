@@ -49,6 +49,10 @@ class Itinerary < ApplicationRecord
   end
 
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id)
+    results = {
+      layovers: [],
+      trips: []
+    }
     if start_date.kind_of? Date
       tmp_date = start_date
     else
@@ -65,6 +69,7 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         journey_end = journey_start + steps_in_order.sum.days
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        results[:trips] << trip
         p trip
         stops_in_order.each do |stop|
           if stop.index == 0
@@ -86,11 +91,13 @@ class Itinerary < ApplicationRecord
             }
           end
           layover = trip.layovers.create!(data)
+          results[:layovers] << layover
           p layover
         end
       end
       tmp_date += 1.day
     end
+    return results
   end
 
   def prep_schedules(limit)
@@ -163,6 +170,10 @@ class Itinerary < ApplicationRecord
 
   def routes
     self.stops.order(:index).to_a.combination(2).map do |stop|
+      if  !stop[0].hub || !stop[1].hub
+        stop[0].itinerary.destroy
+        return
+      end
       self.detailed_hash(
         stop,
         nexus_names:        true,

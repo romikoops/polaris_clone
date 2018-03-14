@@ -2,12 +2,11 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './ShipmentContactsBox.scss'
-// import { RoundButton } from '../RoundButton/RoundButton';
 import defs from '../../styles/default_classes.scss'
 import errors from '../../styles/errors.scss'
 import { ContactCard } from '../ContactCard/ContactCard'
 import { capitalize } from '../../helpers/stringTools'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, nameToDisplay } from '../../helpers'
 
 export class ShipmentContactsBox extends Component {
   constructor (props) {
@@ -45,15 +44,16 @@ export class ShipmentContactsBox extends Component {
   }
 
   placeholderCard (type, i) {
-    const errorMessage = (
+    const showError = this.props.finishBookingAttempted && type !== 'notifyee'
+    const requiredSpanStyles = { left: '15px', top: '14px', fontSize: '17px' }
+    const requiredSpan = (
       <span
         className={errors.error_message}
-        style={{ left: '15px', top: '14px', fontSize: '17px' }}
+        style={Object.assign(requiredSpanStyles, showError ? {} : { color: 'inherit' })}
       >
         * Required
       </span>
     )
-    const showError = this.props.finishBookingAttempted && type !== 'notifyee'
     return (
       <div
         className={
@@ -69,9 +69,9 @@ export class ShipmentContactsBox extends Component {
           />
         </div>
         <h3>
-          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(type)}
+          {type === 'notifyee' ? 'Add' : 'Set'} {capitalize(nameToDisplay(type))}
         </h3>
-        {showError ? errorMessage : ''}
+        { type !== 'notifyee' && requiredSpan }
       </div>
     )
   }
@@ -101,7 +101,7 @@ export class ShipmentContactsBox extends Component {
         >
           <div className="flex-75 layout-row layout-align-start-center">
             <i className="fa fa-user flex-none" style={textStyle} />
-            <p className="flex-none">{ capitalize(contactType) }</p>
+            <p className="flex-none">{ capitalize(nameToDisplay(contactType)) }</p>
           </div>
         </div>
         <div className={styles.contact_wrapper}>
@@ -158,7 +158,7 @@ export class ShipmentContactsBox extends Component {
               }
               >
                 <i className="fa fa-users flex-none" style={textStyle} />
-                <p className="flex-none"> Notifyees</p>
+                <p className="flex-none"> Notify (Optional) </p>
               </div>
             </div>
             { notifyeeContacts }

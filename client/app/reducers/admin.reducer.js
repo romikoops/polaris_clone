@@ -176,6 +176,29 @@ export default function admin (state = {}, action) {
       })
       return errHub
     }
+    case adminConstants.DELETE_HUB_REQUEST: {
+      const reqHub = merge({}, state, {
+        loading: true
+      })
+      return reqHub
+    }
+    // eslint-disable-next-line no-case-declarations
+    case adminConstants.DELETE_HUB_SUCCESS:
+      const hubs = state.hubs.filter(x => x.id !== parseInt(action.payload.id, 10))
+      const hub = state.hub.hub.id === parseInt(action.payload.id, 10) ? {} : state.hub
+      return {
+        ...state,
+        hub,
+        hubs,
+        loading: false
+      }
+    case adminConstants.DELETE_HUB_FAILURE: {
+      const errHub = merge({}, state, {
+        error: { hub: action.error },
+        loading: false
+      })
+      return errHub
+    }
     case adminConstants.GET_DASHBOARD_REQUEST: {
       const reqDash = merge({}, state, {
         loading: true
@@ -186,6 +209,7 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         dashboard: action.payload.data,
+        shipments: action.payload.data.shipments,
         loading: false
       }
     case adminConstants.GET_DASHBOARD_FAILURE: {
@@ -468,12 +492,39 @@ export default function admin (state = {}, action) {
       })
       return succPric
     }
-    case adminConstants.GET_PRICINGS_FAILURE: {
+    case adminConstants.GET_PRICING_FAILURE: {
       const errPric = merge({}, state, {
         error: { pricings: action.error },
         loading: false
       })
       return errPric
+    }
+
+    case adminConstants.DELETE_PRICING_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.DELETE_PRICING_SUCCESS: {
+      const { pricings } = state.pricingData
+      // eslint-disable-next-line no-underscore-dangle
+      delete pricings[action.payload._id]
+      return {
+        ...state,
+        pricingData: {
+          ...state.pricingData,
+          pricings
+        },
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: { pricings: action.error },
+        loading: false
+      }
     }
 
     case adminConstants.UPDATE_PRICING_REQUEST:
@@ -663,11 +714,11 @@ export default function admin (state = {}, action) {
       return reqRoutes
     }
     case adminConstants.GET_ROUTES_SUCCESS: {
-      const succRoutes = merge({}, state, {
+      return {
+        ...state,
         itineraries: action.payload.data,
         loading: false
-      })
-      return succRoutes
+      }
     }
     case adminConstants.GET_ROUTES_FAILURE: {
       const errRoutes = merge({}, state, {
@@ -684,11 +735,11 @@ export default function admin (state = {}, action) {
       return reqRoute
     }
     case adminConstants.GET_ROUTE_SUCCESS: {
-      const succRoute = merge({}, state, {
+      return {
+        ...state,
         itinerary: action.payload.data,
         loading: false
-      })
-      return succRoute
+      }
     }
     case adminConstants.GET_ROUTE_FAILURE: {
       const errRoute = merge({}, state, {
@@ -861,6 +912,23 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         error: { route: action.error },
+        loading: false
+      }
+    case adminConstants.EDIT_LOCAL_CHARGES_REQUEST:
+      return state
+    case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS:
+      return {
+        ...state,
+        hub: {
+          ...state.hub,
+          charges: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.EDIT_LOCAL_CHARGES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
         loading: false
       }
     case adminConstants.CLEAR_LOADING:

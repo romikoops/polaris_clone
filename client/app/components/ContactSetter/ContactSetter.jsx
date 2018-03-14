@@ -6,7 +6,7 @@ import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
 import { AddressBook } from '../AddressBook/AddressBook'
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import StageTimeline from '../StageTimeline/StageTimeline'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, nameToDisplay } from '../../helpers'
 
 export class ContactSetter extends Component {
   constructor (props) {
@@ -64,28 +64,33 @@ export class ContactSetter extends Component {
 
     this.props.setContact(contactData, type, index)
 
-    newState.contactData.type = nextType
     if (nextType === 'notifyee') {
-      newState.contactData.index = this.props.notifyees.length
+      this.setState({ showBody: false })
+      return
+
+      // newState.contactData.index = this.props.notifyees.length
     }
+    newState.contactData.type = nextType
 
     this.setState(newState)
   }
 
   setStage (i) {
     const contactType = this.contactTypes[i]
+
     if (contactType === 'notifyee') {
       this.setState({
         contactData: {
           index: 0,
-          type: this.contactTypes[i],
+          type: contactType,
           ...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
         }
       })
     } else {
       this.setState({
         contactData: {
-          type: this.contactTypes[i],
+          type: contactType,
+          ...this.newContactData,
           ...this.props[this.contactTypes[i]]
         }
       })
@@ -155,7 +160,7 @@ export class ContactSetter extends Component {
               <StageTimeline
                 theme={theme}
                 currentStageIndex={stageIndex}
-                stages={this.stages}
+                stages={this.stages.map(nameToDisplay)}
                 setStage={this.setStage}
               />
             </div>

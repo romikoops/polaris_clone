@@ -50,10 +50,10 @@ function getHub (id, redirect) {
     adminService.getHub(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Hubs successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/hubs/${id}`))
         }
-        dispatch(success(data))
       },
       (error) => {
         // ;
@@ -252,6 +252,30 @@ function getPricings (redirect) {
       },
       (error) => {
         // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function deletePricing (pricing) {
+  function request (payload) {
+    return { type: adminConstants.DELETE_PRICING_REQUEST, payload }
+  }
+  function success (payload) {
+    return { type: adminConstants.DELETE_PRICING_SUCCESS, payload }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_PRICING_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(pricing))
+    adminService.deletePricing(pricing).then(
+      () => {
+        dispatch(alertActions.success('Deleting Pricing'))
+        dispatch(success(pricing))
+      },
+      (error) => {
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -483,7 +507,7 @@ function getShipment (id, redirect) {
       (data) => {
         dispatch(alertActions.success('Fetching Shipment successful'))
         if (redirect) {
-          dispatch(push(`/admin/shipments/${id}`))
+          dispatch(push(`/admin/shipments/view/${id}`))
         }
         dispatch(success(data))
       },
@@ -885,6 +909,35 @@ function activateHub (hubId) {
   }
 }
 
+function deleteHub (hubId, redirect) {
+  function request (delHubData) {
+    return { type: adminConstants.DELETE_HUB_REQUEST, payload: delHubData }
+  }
+  function success (delHubData) {
+    return { type: adminConstants.DELETE_HUB_SUCCESS, payload: delHubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_HUB_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteHub(hubId).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Hub successful'))
+        if (redirect) {
+          dispatch(push(`/admin/hubs`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function documentAction (docId, action) {
   function request (docData) {
     return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData }
@@ -980,6 +1033,31 @@ function editShipmentPrice (id, priceObj) {
       (data) => {
         dispatch(alertActions.success('Edit Time successful'))
         dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function editLocalCharges (nexusId, data) {
+  function request (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
+  }
+  function success (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_SUCCESS, payload: chargeData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editShipmentPrice(nexusId, data).then(
+      (resp) => {
+        dispatch(alertActions.success('Edit Local Charges successful'))
+        dispatch(success(resp))
       },
       (error) => {
         dispatch(failure(error))
@@ -1087,6 +1165,7 @@ export const adminActions = {
   updatePricing,
   getClientPricings,
   getItinerary,
+  deleteHub,
   getServiceCharges,
   getPricings,
   getTrucking,
@@ -1120,7 +1199,9 @@ export const adminActions = {
   saveNewTrucking,
   assignManager,
   editShipmentPrice,
-  editShipmentTime
+  editShipmentTime,
+  editLocalCharges,
+  deletePricing
 }
 
 export default adminActions

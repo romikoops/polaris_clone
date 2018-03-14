@@ -164,7 +164,7 @@ export class RouteResult extends Component {
         <div className="flex-25 layout-row layout-wrap">
           <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
             <p className="flex-none">Total price: </p>
-            <Price value={this.props.fees[schedKey].total} user={user} />
+            <Price value={this.props.fees[schedKey].total.value} user={user} />
           </div>
           <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
             <RoundButton

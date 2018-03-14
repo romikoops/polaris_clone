@@ -11,6 +11,7 @@ import {
   UserBilling,
   UserContacts
 } from '../../components/UserAccount'
+import { UserShipmentsGroup } from '../../components/User/Shipments/Group'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
@@ -121,11 +122,15 @@ class UserAccount extends Component {
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="layout-row flex-100 hundred">
-        { loadingScreen }
-        { menu }
+        {loadingScreen}
+        {menu}
         <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
         <div className="layout-row flex layout-wrap layout-align-center">
-          <div className={`${defs.content_width} ${defs.spacing_md_bottom} ${styles.top_margin} layout-row flex-none`}>
+          <div
+            className={`${defs.content_width} ${defs.spacing_md_bottom} ${
+              styles.top_margin
+            } layout-row flex-none`}
+          >
             <div className="layout-row flex-100 ">
               <Switch className="flex">
                 <Route
@@ -208,12 +213,7 @@ class UserAccount extends Component {
                 <Route
                   path="/account/billing"
                   render={props => (
-                    <UserBilling
-                      setNav={this.setNavLink}
-                      theme={theme}
-                      user={user}
-                      {...props}
-                    />
+                    <UserBilling setNav={this.setNavLink} theme={theme} user={user} {...props} />
                   )}
                 />
                 <Route
@@ -232,7 +232,7 @@ class UserAccount extends Component {
                   )}
                 />
                 <Route
-                  path="/account/shipments/:id"
+                  path="/account/shipments/view/:id"
                   render={props => (
                     <UserShipmentView
                       setNav={this.setNavLink}
@@ -242,6 +242,57 @@ class UserAccount extends Component {
                       loading={loading}
                       {...props}
                       shipmentData={shipment}
+                      userDispatch={userDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/account/shipments/open"
+                  render={props => (
+                    <UserShipmentsGroup
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      hubHash={hubHash}
+                      user={user}
+                      target="open"
+                      title="Open"
+                      {...props}
+                      shipments={dashboard.shipments}
+                      userDispatch={userDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/account/shipments/requested"
+                  render={props => (
+                    <UserShipmentsGroup
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      hubHash={hubHash}
+                      user={user}
+                      target="requested"
+                      title="Requested"
+                      {...props}
+                      shipments={dashboard.shipments}
+                      userDispatch={userDispatch}
+                    />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/account/shipments/finished"
+                  render={props => (
+                    <UserShipmentsGroup
+                      setNav={this.setNavLink}
+                      theme={theme}
+                      hubHash={hubHash}
+                      user={user}
+                      target="finished"
+                      title="Finished"
+                      {...props}
+                      shipments={dashboard.shipments}
                       userDispatch={userDispatch}
                     />
                   )}

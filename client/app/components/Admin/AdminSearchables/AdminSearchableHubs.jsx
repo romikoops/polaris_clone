@@ -36,7 +36,7 @@ export class AdminSearchableHubs extends Component {
     if (seeAll) {
       seeAll()
     } else {
-      adminDispatch.goTo('/hubs')
+      adminDispatch.goTo('/admin/hubs')
     }
   }
   handleSearchChange (event) {
@@ -69,7 +69,7 @@ export class AdminSearchableHubs extends Component {
   }
   render () {
     const {
-      theme, seeAll, showTooltip, icon, tooltip
+      theme, seeAll, showTooltip, icon, tooltip, sideScroll
     } = this.props
     const { hubs } = this.state
     let hubsArr
@@ -83,7 +83,7 @@ export class AdminSearchableHubs extends Component {
         showTooltip
       />))
     }
-    const viewType = (hubsArr.length > 3) ? (
+    const viewType = sideScroll ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
         <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
           {hubsArr}
@@ -135,7 +135,7 @@ export class AdminSearchableHubs extends Component {
         {seeAll !== false ? (
           <div className="flex-100 layout-row layout-align-end-center">
             <div
-              className="flex-none layout-row layout-align-center-center"
+              className="flex-none layout-row layout-align-center-center pointy"
               onClick={this.seeAll}
             >
               <p className="flex-none">See all</p>
@@ -159,6 +159,7 @@ AdminSearchableHubs.propTypes = {
   seeAll: PropTypes.func,
   theme: PropTypes.theme,
   showTooltip: PropTypes.bool,
+  sideScroll: PropTypes.bool,
   icon: PropTypes.string,
   tooltip: PropTypes.string
 }
@@ -169,7 +170,8 @@ AdminSearchableHubs.defaultProps = {
   theme: null,
   showTooltip: false,
   icon: '',
-  tooltip: ''
+  tooltip: '',
+  sideScroll: false
 }
 
 export default AdminSearchableHubs

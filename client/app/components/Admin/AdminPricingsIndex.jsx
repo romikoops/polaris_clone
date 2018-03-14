@@ -33,16 +33,24 @@ export class AdminPricingsIndex extends Component {
     this.setState({ redirectClients: true })
   }
   viewClient (client) {
-    const { adminTools } = this.props
-    adminTools.getClientPricings(client.id, true)
+    const { adminDispatch } = this.props
+    adminDispatch.getClientPricings(client.id, true)
   }
   viewRoute (route) {
-    const { adminTools } = this.props
-    adminTools.getItineraryPricings(route.id, true)
+    const { adminDispatch } = this.props
+    adminDispatch.getItineraryPricings(route.id, true)
+  }
+  lclUpload (file) {
+    const { documentDispatch } = this.props
+    documentDispatch.uploadPricings(file, 'lcl', false)
+  }
+  fclUpload (file) {
+    const { documentDispatch } = this.props
+    documentDispatch.uploadPricings(file, 'fcl', false)
   }
   render () {
     const {
-      theme, hubs, pricingData, clients, adminTools
+      theme, hubs, pricingData, clients, adminDispatch
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -68,34 +76,50 @@ export class AdminPricingsIndex extends Component {
           />
         </p>
         <ReactTooltip id="newPriceTip" className={styles.tooltip} effect="solid" />
-      </div>)
+      </div>
+    )
     const { itineraries, detailedItineraries, transportCategories } = pricingData
     const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv'
     const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv'
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+          <div
+            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-100">Upload LCL Pricings Sheet</p>
             <FileUploader
               theme={theme}
               url={lclUrl}
+              dispatchFn={e => this.lclUpload(e)}
               tooltip={priceTip.upload_lcl}
               type="xlsx"
               text="Dedicated Pricings .xlsx"
             />
           </div>
-          <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+          <div
+            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-100">Upload FCL Pricings Sheet</p>
             <FileUploader
               theme={theme}
               url={fclUrl}
+              dispatchFn={e => this.fclUpload(e)}
               tooltip={priceTip.upload_fcl}
               type="xlsx"
-              text="Open Pricings .xlsx"
+              text="FCL Pricings .xlsx"
             />
           </div>
-          <div className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${styles.sec_upload}`}>
+          <div
+            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+              styles.sec_upload
+            }`}
+          >
             <p className={`${styles.new_margin} flex-100`}>New Pricing Creator</p>
             {newButton}
           </div>
@@ -105,7 +129,7 @@ export class AdminPricingsIndex extends Component {
           theme={theme}
           hubs={hubs}
           handleClick={this.viewRoute}
-          seeAll={() => adminTools.goTo('/admin/pricings/routes')}
+          seeAll={() => adminDispatch.goTo('/admin/pricings/routes')}
           tooltip={priceTip.routes}
           showTooltip
         />
@@ -113,19 +137,23 @@ export class AdminPricingsIndex extends Component {
           theme={theme}
           clients={clients}
           handleClick={this.viewClient}
-          seeAll={() => adminTools.goTo('/admin/pricings/clients')}
+          seeAll={() => adminDispatch.goTo('/admin/pricings/clients')}
           tooltip={priceTip.clients}
           showTooltip
         />
-        {newPricing ? <AdminPriceCreator
-          theme={theme}
-          itineraries={itineraries}
-          clients={clients}
-          adminDispatch={adminTools}
-          detailedItineraries={detailedItineraries}
-          transportCategories={transportCategories}
-          closeForm={this.toggleCreator}
-        /> : ''}
+        {newPricing ? (
+          <AdminPriceCreator
+            theme={theme}
+            itineraries={itineraries}
+            clients={clients}
+            adminDispatch={adminDispatch}
+            detailedItineraries={detailedItineraries}
+            transportCategories={transportCategories}
+            closeForm={this.toggleCreator}
+          />
+        ) : (
+          ''
+        )}
       </div>
     )
   }
@@ -134,9 +162,13 @@ AdminPricingsIndex.propTypes = {
   theme: PropTypes.theme,
   hubs: PropTypes.arrayOf(PropTypes.hub),
   clients: PropTypes.arrayOf(PropTypes.client),
-  adminTools: PropTypes.shape({
+  adminDispatch: PropTypes.shape({
     getClientPricings: PropTypes.func,
     getRoutePricings: PropTypes.func
+  }).isRequired,
+  documentDispatch: PropTypes.shape({
+    closeViewer: PropTypes.func,
+    uploadPricings: PropTypes.func
   }).isRequired,
   pricingData: PropTypes.shape({
     routes: PropTypes.array

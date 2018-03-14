@@ -7,15 +7,12 @@ import { withRouter } from 'react-router-dom'
 import { bindActionCreators } from 'redux'
 import { adminActions, userActions } from '../../actions'
 import { adminMenutooltip as menuTip } from '../../constants'
-import { Modal } from '../Modal/Modal'
-import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
 import styles from './SideNav.scss'
 
 class SideNav extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      showModal: false,
       linkTextClass: '',
       linkVisibility: []
     }
@@ -27,13 +24,13 @@ class SideNav extends Component {
         url: '/account/dashboard',
         target: 'dashboard'
       },
-      {
-        key: v4(),
-        icon: 'fa-ship',
-        text: 'Avail. Routes',
-        url: '/chooseroute/chooseroute',
-        target: 'chooseRoutes'
-      },
+      // {
+      //   key: v4(),
+      //   icon: 'fa-ship',
+      //   text: 'Avail. Routes',
+      //   url: '/chooseroute/chooseroute',
+      //   target: 'chooseRoutes'
+      // },
       {
         key: v4(),
         icon: 'fa-ship',
@@ -138,7 +135,6 @@ class SideNav extends Component {
     links.forEach((link, i) => { this.state.linkVisibility[i] = false })
 
     this.linkTextClass = ''
-    this.toggleModal = this.toggleModal.bind(this)
     this.setLinkVisibility = this.setLinkVisibility.bind(this)
     this.handleClickAction = this.handleClickAction.bind(this)
   }
@@ -199,9 +195,9 @@ class SideNav extends Component {
       case 'pricing':
         userDispatch.getPricings(user.id, true)
         break
-      case 'chooseRoutes':
-        this.toggleModal()
-        break
+      // case 'chooseRoutes':
+      //   this.toggleModal()
+      //   break
       case 'shipments':
         userDispatch.getShipments(true)
         break
@@ -230,30 +226,11 @@ class SideNav extends Component {
     if (!this.state.linkVisibility[i] && !this.props.expand) return
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
-
-  toggleModal () {
-    this.setState({ showModal: !this.state.showModal })
-  }
   render () {
     const {
-      theme, user, routes, expand
+      theme, user, expand
     } = this.props
-    const routeModal = (
-      <Modal
-        component={
-          <AvailableRoutes
-            user={user}
-            theme={theme}
-            routes={routes}
-            initialCompName="UserAccount"
-          />
-        }
-        width="48vw"
-        verticalPadding="30px"
-        horizontalPadding="15px"
-        parentToggle={this.toggleModal}
-      />
-    )
+
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? this.adminLinks : this.userLinks
     const textStyle = {
@@ -299,7 +276,6 @@ class SideNav extends Component {
     })
     return (
       <div className={`flex-100 layout-column layout-align-start-start layout-wrap ${styles.side_nav}`}>
-        {this.state.showModal ? routeModal : ''}
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
         <div className="flex layout-row layout-align-center-start layout-wrap">
           {navLinks}
@@ -331,13 +307,11 @@ SideNav.propTypes = {
     getDashboard: PropTypes.func,
     getLocations: PropTypes.func
   }).isRequired,
-  routes: PropTypes.objectOf(PropTypes.any),
   expand: PropTypes.bool
 }
 
 SideNav.defaultProps = {
   theme: null,
-  routes: null,
   expand: false
 }
 
