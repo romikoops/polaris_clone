@@ -8,6 +8,7 @@ import { moment } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './RouteFilterBox.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { Checkbox } from '../Checkbox/Checkbox'
 
 export class RouteFilterBox extends Component {
   constructor (props) {
@@ -16,7 +17,10 @@ export class RouteFilterBox extends Component {
       selectedDay: props.departureDate
         ? moment(props.departureDate).format('DD/MM/YYYY')
         : moment().format('DD/MM/YYYY'),
-      selectedOption: this.props.moT
+      selectedOption: {
+        air: false,
+        ocean: true
+      }
     }
     this.editFilterDay = this.editFilterDay.bind(this)
     this.handleOptionChange = this.handleOptionChange.bind(this)
@@ -29,14 +33,17 @@ export class RouteFilterBox extends Component {
   editFilterDay (event) {
     this.props.setDepartureDate(event.day)
   }
-  handleOptionChange (changeEvent) {
+  handleOptionChange (changeEvent, target) {
     this.setState({
-      selectedOption: changeEvent.target.value
+      selectedOption: {
+        ...this.state.selectedOption,
+        [target]: changeEvent
+      }
     })
-    this.props.setMoT(changeEvent.target.value)
+    this.props.setMoT(changeEvent, target)
   }
   render () {
-    const { theme, pickup } = this.props
+    const { theme, pickup, shipment } = this.props
     const StyledRange = styled.div`
       input[type='range']::-webkit-slider-runnable-track {
         width: 100%;
@@ -71,9 +78,9 @@ export class RouteFilterBox extends Component {
     return (
       <div className={styles.filterbox}>
         <div className={styles.pickup_date}>
-          <p>
+          <div>
             <TextHeading theme={theme} size={4} text={pickup ? 'Pickup Date' : 'Closing Date'} />
-          </p>
+          </div>
           <div className={`flex-none layout-row ${styles.dpb}`}>
             <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
               <i className="flex-none fa fa-calendar" />
@@ -90,30 +97,45 @@ export class RouteFilterBox extends Component {
             />
           </div>
         </div>
+        <div className={styles.haulage}>
+          <div>
+            <TextHeading theme={theme} size={4} text="Haulage" />
+          </div>
+          <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <p className="flex-none five_m">Pre Carriage</p>
+              <p className="flex-none five_m">{shipment.has_pre_carriage ? 'Yes' : 'No'}</p>
+            </div>
+          </div>
+          <div className={`${styles.haulage_option} layout-row layout-wrap flex-none`}>
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <p className="flex-none five_m">On Carriage</p>
+              <p className="flex-none five_m">{shipment.has_on_carriage ? 'Yes' : 'No'}</p>
+            </div>
+          </div>
+        </div>
         <div className={styles.mode_of_transport}>
           <div>
             <TextHeading theme={theme} size={4} text="Mode of transport" />
           </div>
-          <div className="radio">
-            <label>
-              <input
-                type="radio"
-                value="air"
-                checked={this.state.selectedOption === 'air'}
-                onChange={this.handleOptionChange}
-              />
+          <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
+            <Checkbox
+              onChange={e => this.handleOptionChange(e, 'air')}
+              checked={this.state.selectedOption.air}
+              theme={theme}
+            />
+            <label className="flex-none">
               <i className="fa fa-plane" />
               Air
             </label>
           </div>
-          <div className="radio">
-            <label>
-              <input
-                type="radio"
-                value="ocean"
-                checked={this.state.selectedOption === 'ocean'}
-                onChange={this.handleOptionChange}
-              />
+          <div className="radio layout-row layout-align-none-center" style={{ margin: '2px 0' }}>
+            <Checkbox
+              onChange={e => this.handleOptionChange(e, 'ocean')}
+              checked={this.state.selectedOption.ocean}
+              theme={theme}
+            />
+            <label className="flex-none">
               <i className="fa fa-ship" />
               Ocean
             </label>
@@ -141,15 +163,15 @@ RouteFilterBox.propTypes = {
   setMoT: PropTypes.func.isRequired,
   setDepartureDate: PropTypes.func.isRequired,
   durationFilter: PropTypes.number.isRequired,
-  moT: PropTypes.string,
-  pickup: PropTypes.bool
+  pickup: PropTypes.bool,
+  shipment: PropTypes.objectOf(PropTypes.any)
 }
 
 RouteFilterBox.defaultProps = {
   departureDate: 0,
   theme: 0,
-  moT: '',
-  pickup: false
+  pickup: false,
+  shipment: {}
 }
 
 export default RouteFilterBox

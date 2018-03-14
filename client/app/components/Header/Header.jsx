@@ -68,7 +68,7 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, scrollable
+      user, theme, tenant, invert, unread, req, scrollable, noMessages
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -120,7 +120,7 @@ class Header extends Component {
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
-        {mail}
+        {!noMessages ? mail : ''}
       </div>
     )
 
@@ -195,7 +195,8 @@ Header.propTypes = {
   unread: PropTypes.number,
   req: PropTypes.req,
   scrollable: PropTypes.bool,
-  appDispatch: PropTypes.func.isRequired
+  appDispatch: PropTypes.func.isRequired,
+  noMessages: PropTypes.bool
 }
 
 Header.defaultProps = {
@@ -210,7 +211,8 @@ Header.defaultProps = {
   showRegistration: false,
   unread: 0,
   req: null,
-  scrollable: false
+  scrollable: false,
+  noMessages: false
 }
 
 function mapStateToProps (state) {

@@ -39,7 +39,10 @@ super_tenant_data = {
         }
       },
       dangerous_goods: false,
-      cargo_info_level: 'text'
+      cargo_info_level: 'text',
+      has_insurance: true,
+      has_customs: false,
+      incoterm_info_level: 'text'
     }
   }
 super_tenant = Tenant.create!(super_tenant_data)

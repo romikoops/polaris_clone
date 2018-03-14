@@ -134,6 +134,7 @@ export class CargoDetails extends Component {
       eori
     } = this.props
     const { totalGoodsCurrency } = this.state
+    const { scope } = tenant.data
     const { dangerousGoods, documents, shipment } = shipmentData
     const DocViewer = ({ doc }) => (
       <div className="flex-100 layout-row layout-align-start-center">
@@ -595,13 +596,13 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        <div
+        { scope.has_customs || scope.has_insurance ? <div
           className={
             `${styles.insurance_customs_sec} flex-100 ` +
             'layout-row layout-wrap layout-align-center'
           }
         >
-          <div className="flex-100 layout-row layout-align-center padd_top">
+          {scope.has_insurance ? <div className="flex-100 layout-row layout-align-center padd_top">
             <div
               className={`flex-none ${
                 defaults.content_width
@@ -646,8 +647,8 @@ export class CargoDetails extends Component {
               </div>
               {insuranceBox}
             </div>
-          </div>
-          <div className="flex-100 layout-row layout-align-center padd_top">
+          </div> : '' }
+          { scope.has_customs ? <div className="flex-100 layout-row layout-align-center padd_top">
             <div
               className={`flex-none ${
                 defaults.content_width
@@ -692,8 +693,8 @@ export class CargoDetails extends Component {
               {customsBox}
               {noCustomsBox}
             </div>
-          </div>
-        </div>
+          </div> : '' }
+        </div> : '' }
       </div>
     )
   }

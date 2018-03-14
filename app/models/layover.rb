@@ -9,4 +9,16 @@ class Layover < ApplicationRecord
     end
     
   end
+  def self.update_closing_date
+    Layover.all.each do |l|
+      if !l.itinerary
+        l.destroy
+        next
+      end
+      if l.closing_date == nil && l.eta == nil
+        l.closing_date = l.etd - 4.days
+        l.save!
+      end
+    end
+  end
 end

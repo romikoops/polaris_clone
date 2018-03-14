@@ -31,13 +31,18 @@ class NavBar extends Component {
   cellSwitchAdmin (categories) {
     const { admin } = this.props
     switch (categories[1]) {
+      // eslint-disable-next-line no-case-declarations
       case 'clients':
+        const clientName1 =
+          admin.client && admin.client.client
+            ? `${capitalize(admin.client.client.first_name)}  ${capitalize(admin.client.client.last_name)}`
+            : categories[categories.length - 1]
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(admin.client.client.first_name)}  ${capitalize(admin.client.client.last_name)}`}
+            {`${clientName1}`}
           </div>
         )
       // eslint-disable-next-line no-case-declarations

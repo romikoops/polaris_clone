@@ -287,7 +287,7 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    if (!this.state.incoterm && this.props.tenant.data.scope.incoterm_info_level !== 'simple') {
+    if (!this.state.incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
       this.setState({ nextStageAttempt: true })
       ShipmentDetails.scrollTo('incoterms')
       return
@@ -619,6 +619,7 @@ export class ShipmentDetails extends Component {
       >
         {flash}
         {alertModal}
+        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div
           className={`${
             styles.date_sec
@@ -626,7 +627,6 @@ export class ShipmentDetails extends Component {
         >
           {dayPickerSection}
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
@@ -668,17 +668,17 @@ export class ShipmentDetails extends Component {
             <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
           </div>
         </div>
-        { user && !user.guest
-          ? <div
+        {user && !user.guest ? (
+          <div
             className={
               `${defaults.border_divider} layout-row flex-100 ` +
-            'layout-wrap layout-align-center-center'
+              'layout-wrap layout-align-center-center'
             }
           >
             <div
               className={
                 `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+                'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <RoundButton
@@ -689,7 +689,10 @@ export class ShipmentDetails extends Component {
                 back
               />
             </div>
-          </div> : '' }
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     )
   }

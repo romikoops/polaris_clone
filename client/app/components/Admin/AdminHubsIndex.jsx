@@ -7,7 +7,12 @@ import { adminHubs as hubsTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 
 export function AdminHubsIndex ({
-  theme, hubs, viewHub, adminDispatch, toggleNewHub
+  theme,
+  hubs,
+  viewHub,
+  adminDispatch,
+  toggleNewHub,
+  documentDispatch
 }) {
   const hubUrl = '/admin/hubs/process_csv'
   const scUrl = '/admin/service_charges/process_csv'
@@ -28,11 +33,23 @@ export function AdminHubsIndex ({
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
         <div className="flex-33 layout-row layout-align-center-center layout-wrap">
           <p className="flex-100 center">Upload Hubs Sheet</p>
-          <FileUploader theme={theme} url={hubUrl} type="xlsx" text="Hub .xlsx" />
+          <FileUploader
+            theme={theme}
+            url={hubUrl}
+            type="xlsx"
+            text="Hub .xlsx"
+            dispatchFn={documentDispatch.uploadHubs}
+          />
         </div>
         <div className="flex-33 layout-row layout-align-center-center layout-wrap">
           <p className="flex-100 center">Upload Local Charges Sheet</p>
-          <FileUploader theme={theme} url={scUrl} type="xlsx" text="Hub .xlsx" />
+          <FileUploader
+            theme={theme}
+            url={scUrl}
+            type="xlsx"
+            text="Hub .xlsx"
+            dispatchFn={documentDispatch.uploadLocalCharges}
+          />
         </div>
         <div className="flex-33 layout-row layout-align-center-center layout-wrap">
           <p className="flex-100 center">Create New Hub</p>
@@ -60,6 +77,10 @@ AdminHubsIndex.propTypes = {
   toggleNewHub: PropTypes.func.isRequired,
   adminDispatch: PropTypes.shape({
     getHub: PropTypes.func
+  }).isRequired,
+  documentDispatch: PropTypes.shape({
+    closeViewer: PropTypes.func,
+    uploadHubs: PropTypes.func
   }).isRequired
 }
 

@@ -26,8 +26,32 @@ function uploadPricings (file, loadType, open) {
   return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
 }
 
+function uploadHubs (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
+}
+
+function uploadLocalCharges (file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/service_charges/process_csv`, requestOptions).then(handleResponse)
+}
+
 export const documentService = {
-  uploadPricings
+  uploadPricings,
+  uploadHubs,
+  uploadLocalCharges
 }
 
 export default documentService

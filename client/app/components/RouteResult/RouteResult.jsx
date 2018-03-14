@@ -121,11 +121,11 @@ export class RouteResult extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(this.props.pickupDate).format('DD-MM-YYYY')}{' '}
+                  {moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
                 </p>
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(this.props.pickupDate).format('HH:mm')}{' '}
+                  {moment(schedule.closing_date).format('HH:mm')}{' '}
                 </p>
               </div>
             </div>
@@ -184,7 +184,6 @@ RouteResult.propTypes = {
   theme: PropTypes.theme,
   schedule: PropTypes.schedule.isRequired,
   selectResult: PropTypes.func.isRequired,
-  pickupDate: PropTypes.string.isRequired,
   fees: PropTypes.objectOf(PropTypes.shape({
     total: PropTypes.any
   })).isRequired,

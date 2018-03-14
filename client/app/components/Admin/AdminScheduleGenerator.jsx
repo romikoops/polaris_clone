@@ -98,7 +98,13 @@ class AdminScheduleGenerator extends Component {
   genSchedules () {
     const { adminDispatch } = this.props
     const {
-      itinerary, startDate, endDate, weekdays, stopIntervals, vehicleType
+      itinerary,
+      startDate,
+      endDate,
+      weekdays,
+      stopIntervals,
+      vehicleType,
+      closingDateBuffer
     } = this.state
     const ordinalArray = []
     Object.keys(weekdays).forEach((key) => {
@@ -112,17 +118,29 @@ class AdminScheduleGenerator extends Component {
       startDate,
       endDate,
       weekdays: ordinalArray,
-      vehicleTypeId: vehicleType.value
+      vehicleTypeId: vehicleType.value,
+      closing_date: closingDateBuffer
     }
 
     adminDispatch.autoGenSchedules(req)
+  }
+  handleClosingDateChange (e) {
+    const { value } = e.target
+    this.setState({ closingDateBuffer: value })
   }
   render () {
     const {
       theme, hubs, vehicleTypes, itineraries
     } = this.props
     const {
-      weekdays, startDate, endDate, mot, vehicleType, stops, stopIntervals
+      weekdays,
+      startDate,
+      endDate,
+      mot,
+      vehicleType,
+      stops,
+      stopIntervals,
+      closingDateBuffer
     } = this.state
 
     const future = {
@@ -227,17 +245,13 @@ class AdminScheduleGenerator extends Component {
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}>
-            Auto Generate
+              Auto Generate
               <i
                 className="fa fa-info-circle"
                 data-for="autoGenTooltip"
                 data-tip={schedTip.auto_generate}
               />
-              <ReactTooltip
-                className={styles.tooltip}
-                id="autoGenTooltip"
-                effect="solid"
-              />
+              <ReactTooltip className={styles.tooltip} id="autoGenTooltip" effect="solid" />
             </p>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -331,8 +345,34 @@ class AdminScheduleGenerator extends Component {
                 styles.sec_subheader
               }`}
             >
+              <p className={` ${styles.sec_subheader_text} flex-none`}>
+                Set Closing Date <i>(days before departure)</i>
+              </p>
+            </div>
+            <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div className="flex-100 layout-row layout-align-start-center input_box">
+                  <input
+                    type="number"
+                    min="1"
+                    value={closingDateBuffer}
+                    name="closingDatebuffer"
+                    placeholder="Days"
+                    onChange={ev => this.handleClosingDateChange(ev)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_subheader
+              }`}
+            >
               <p className={` ${styles.sec_subheader_text} flex-none`}>Set Departure Days</p>
             </div>
+
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div className="flex-100 layout-row layout-wrap layout-align-center-start">
                 <div className="flex layout-row layout-align-start-center">

@@ -25,18 +25,18 @@ class PricingSeeder
 		  puts "# Overwrite dedicated pricings from excel sheet."
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
 		  req = {"xlsx" => public_pricings}
-		  overwrite_mongo_lcl_pricings(req, dedicated = true, shipper)
+		  overwrite_mongo_lcl_pricings(req, dedicated = true, shipper, true)
 
 		  # Overwrite public pricings from excel sheet
 		  puts "# Overwrite public pricings from excel sheet"
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
 		  req = {"xlsx" => public_pricings} 
-		  overwrite_mongo_lcl_pricings(req, dedicated = false, shipper)
+		  overwrite_mongo_lcl_pricings(req, dedicated = false, shipper, true)
 
 		  puts "# Overwrite MAERSK pricings from excel sheet"
 		  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
 		  req = {"xlsx" => public_pricings}
-		  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
+		  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper, true)
 			
 			# puts "# Overwrite Local Charges From Sheet"
 			local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")

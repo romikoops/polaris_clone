@@ -24,8 +24,13 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id) 
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id)
+    results = {
+      layovers: [],
+      trips: []
+    } 
    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+   results[:trips] << trip
         stops.each do |stop|
           if stop.index == 0
             data = {
@@ -44,11 +49,13 @@ class Itinerary < ApplicationRecord
               stop_id: stop.id
             }
           end
-          trip.layovers.create!(data)
+          layover = trip.layovers.create!(data)
+          results[:layovers] << layover
         end
+      results
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id)
+  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id, closing_date_buffer = 4)
     results = {
       layovers: [],
       trips: []
@@ -67,6 +74,7 @@ class Itinerary < ApplicationRecord
     while tmp_date < end_date_parsed
       if ordinal_array.include?(tmp_date.strftime("%u").to_i)
         journey_start = tmp_date.midday
+        closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         results[:trips] << trip
@@ -78,7 +86,8 @@ class Itinerary < ApplicationRecord
               etd: journey_start,
               stop_index: stop.index,
               itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
+              stop_id: stop.id,
+              closing_date: closing_date
             }
           else 
             journey_start += steps_in_order[stop.index - 1].days

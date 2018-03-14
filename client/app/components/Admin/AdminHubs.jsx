@@ -5,8 +5,8 @@ import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { AdminHubsIndex, AdminHubView, AdminHubForm } from './'
 import styles from './Admin.scss'
-
-import { adminActions } from '../../actions'
+import { AdminUploadsSuccess } from './Uploads/Success'
+import { adminActions, documentActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminHubs as tooltip } from '../../constants'
 import { Tooltip } from '../Tooltip/Tooltip'
@@ -39,7 +39,10 @@ class AdminHubs extends Component {
     adminDispatch.getHub(hub.id, true)
     this.setView()
   }
-
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
+  }
   backToIndex () {
     const { adminDispatch } = this.props
     this.setState({ selectedHub: false })
@@ -59,7 +62,7 @@ class AdminHubs extends Component {
   render () {
     const { selectedHub } = this.state
     const {
-      theme, hubs, hub, hubHash, adminDispatch
+      theme, hubs, hub, hubHash, adminDispatch, document, documentDispatch
     } = this.props
 
     const title = selectedHub ? (
@@ -70,7 +73,6 @@ class AdminHubs extends Component {
           </div>
           <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
         </div>
-
       </div>
     ) : (
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
@@ -82,8 +84,18 @@ class AdminHubs extends Component {
         </div>
       </div>
     )
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
+    ) : (
+      ''
+    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {uploadStatus}
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
           {title}
         </div>
@@ -105,6 +117,7 @@ class AdminHubs extends Component {
                 {...props}
                 toggleNewHub={this.toggleNewHub}
                 viewHub={this.viewHub}
+                documentDispatch={documentDispatch}
               />
             )}
           />
@@ -139,7 +152,11 @@ AdminHubs.propTypes = {
   adminDispatch: PropTypes.shape({
     getHubs: PropTypes.func,
     saveNewHub: PropTypes.func
-  }).isRequired
+  }).isRequired,
+  documentDispatch: PropTypes.shape({
+    uploadPricings: PropTypes.func
+  }).isRequired,
+  document: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 AdminHubs.defaultProps = {
@@ -151,7 +168,9 @@ AdminHubs.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, admin } = state
+  const {
+    authentication, tenant, admin, document
+  } = state
   const { user, loggedIn } = authentication
   const { clients, hubs, hub } = admin
 
@@ -161,12 +180,14 @@ function mapStateToProps (state) {
     loggedIn,
     hubs,
     hub,
-    clients
+    clients,
+    document
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    documentDispatch: bindActionCreators(documentActions, dispatch)
   }
 }
 
