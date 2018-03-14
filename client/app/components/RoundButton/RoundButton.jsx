@@ -1,24 +1,19 @@
 import React from 'react'
-import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import styles from './RoundButton.scss'
 import { gradientCSSGenerator } from '../../helpers'
 
 export function RoundButton ({
-  text, theme, active, back, icon, iconClass, size, handleNext
+  text, theme, active, back, icon, iconClass, size, disabled, handleNext, handleDisabled
 }) {
-  const activeBtnStyle =
+  const activeBtnBackground =
     theme && theme.colors
       ? gradientCSSGenerator(theme.colors.primary, theme.colors.secondary)
       : 'black'
 
-  const btnStyle = active ? activeBtnStyle : {}
+  const btnStyle = active ? { background: activeBtnBackground } : {}
 
   let bStyle
-  const StyledButton = styled.button`
-    background: ${btnStyle};
-  `
-
   if (active) {
     bStyle = styles.active
   } else if (back) {
@@ -53,23 +48,11 @@ export function RoundButton ({
       sizeClass = styles.large
       break
   }
-  const activeButton = (
-    <StyledButton
-      className={`${styles.round_btn} ${bStyle} ${sizeClass}`}
-      onClick={handleNext}
-    >
-      <div className="layout-fill layout-row layout-align-space-around-center">
-        <p className={styles.content}>
-          <span className={styles.icon}>{iconC}</span>
-          {text}
-        </p>
-      </div>
-    </StyledButton>
-  )
-  const inactiveButton = (
+  return (
     <button
-      className={`${styles.round_btn} ${bStyle} ${sizeClass}`}
-      onClick={handleNext}
+      className={`${styles.round_btn} ${bStyle} ${sizeClass} ${!disabled && styles.clickable}`}
+      onClick={disabled ? handleDisabled : handleNext}
+      style={btnStyle}
     >
       <div className="layout-fill layout-row layout-align-space-around-center">
         <p className={styles.content}>
@@ -79,19 +62,19 @@ export function RoundButton ({
       </div>
     </button>
   )
-
-  return active ? activeButton : inactiveButton
 }
 
 RoundButton.propTypes = {
   text: PropTypes.string.isRequired,
   handleNext: PropTypes.func,
+  handleDisabled: PropTypes.func,
   active: PropTypes.bool,
   back: PropTypes.bool,
   theme: PropTypes.theme,
   icon: PropTypes.string,
   iconClass: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 RoundButton.defaultProps = {
@@ -101,7 +84,9 @@ RoundButton.defaultProps = {
   icon: '',
   iconClass: '',
   size: '',
-  handleNext: null
+  handleNext: null,
+  handleDisabled: null,
+  disabled: false
 }
 
 export default RoundButton

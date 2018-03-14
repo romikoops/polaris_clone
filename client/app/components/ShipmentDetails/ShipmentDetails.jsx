@@ -21,6 +21,7 @@ import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
 import { isEmpty } from '../../helpers/objectTools'
+import { Checkbox } from '../Checkbox/Checkbox'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
 
@@ -33,11 +34,7 @@ export class ShipmentDetails extends Component {
     })
   }
   static errorsExist (errorsObjects) {
-    let returnBool = false
-    errorsObjects.forEach((errorsObj) => {
-      if (Object.values(errorsObj).indexOf(true) > -1) returnBool = true
-    })
-    return returnBool
+    errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
   }
   constructor (props) {
     super(props)
@@ -87,7 +84,8 @@ export class ShipmentDetails extends Component {
       shipment: props.shipmentData ? props.shipmentData.shipment : {},
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
-      modals: getModals(props.theme, props.user, props.tenant, this.toggleModal)
+      modals: getModals(props.theme, props.user, props.tenant, this.toggleModal),
+      noDangerousGoodsConfirmed: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -226,7 +224,7 @@ export class ShipmentDetails extends Component {
     const [index, suffixName] = name.split('-')
     const { containers, containersErrors } = this.state
     if (!containers[index] || !containersErrors[index]) return
-    if (suffixName === 'sizeClass') {
+    if (suffixName === 'sizeClass' || typeof value === 'boolean') {
       containers[index][suffixName] = value
     } else {
       containers[index][suffixName] = value ? parseInt(value, 10) : 0
@@ -639,31 +637,80 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            <RoundButton text="Get Offers" handleNext={this.handleNextStage} theme={theme} active />
-          </div>
-        </div>
-        { user && !user.guest
-          ? <div
-            className={
-              `${defaults.border_divider} layout-row flex-100 ` +
-            'layout-wrap layout-align-center-center'
+            {
+              !(
+                this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                this.state.containers.some(container => container.dangerous_goods)
+              )
+                ? (
+                  <div className="flex-50 layout-row layout-align-stretch">
+
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() => this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })}
+                        size="30px"
+                        name="no_dangerous_goods_confirmation"
+                        checked={this.state.noDangerousGoodsConfirmed}
+                      />
+                    </div>
+                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
+                      By clicking this checkbox, you herby confirm that your cargo does not contain
+                      hazardous materials, including (yet not limited to) pure chemicals,
+                      mixtures of substances, manufactured products,
+                      or articles which can pose a risk to people, animals or the environment
+                      if not properly handled in use or in transport.
+                    </p>
+                  </div>
+                )
+                : <div className="flex-50" />
             }
-          >
-            <div
-              className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
-              }
-            >
+            <div className="flex-50 layout-row layout-align-end">
               <RoundButton
-                text="Back to Dashboard"
-                handleNext={this.returnToDashboard}
-                iconClass="fa-angle-left"
+                text="Get Offers"
+                handleNext={this.handleNextStage}
                 theme={theme}
-                back
+                active={
+                  this.state.noDangerousGoodsConfirmed ||
+                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                  this.state.containers.some(container => container.dangerous_goods)
+                }
+                disabled={
+                  !this.state.noDangerousGoodsConfirmed &&
+                  (
+                    !this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                    !this.state.containers.some(container => container.dangerous_goods)
+                  )
+                }
               />
             </div>
-          </div> : '' }
+          </div>
+        </div>
+        {
+          user && !user.guest && (
+            <div className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+              'layout-wrap layout-align-center-center'
+            }
+            >
+              <div className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
+              }
+              >
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
+              </div>
+            </div>
+          )
+        }
       </div>
     )
   }
