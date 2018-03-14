@@ -95,7 +95,12 @@ export class AdminUploadsSuccess extends Component {
     const statView = Object.keys(stats).map(k => (
       <div className="flex-100 layout-row layout-align-space-between-center">
         <div className="flex-none layout-row layout-align-start-center">{k}</div>
-        <div className="flex-none layout-row layout-align-start-center">{stats[k]}</div>
+        <div className="flex-none layout-row layout-align-start-center">{`No created: ${
+          stats[k].number_created
+        }`}</div>
+        <div className="flex-none layout-row layout-align-start-center">{`No updated: ${
+          stats[k].number_updated
+        }`}</div>
       </div>
     ))
     return (
