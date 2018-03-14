@@ -102,8 +102,9 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_lcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_lcl_pricings(req, true)
-      response_handler(true)
+      results = overwrite_mongo_lcl_pricings(req, true)
+      
+      response_handler(results)
     else
       response_handler(false)
     end

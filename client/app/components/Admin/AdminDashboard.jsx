@@ -82,7 +82,7 @@ export class AdminDashboard extends Component {
       dashData, clients, hubs, hubHash, adminDispatch, theme
     } = this.props
     // ;
-    if (!dashData) {
+    if (!dashData || !hubs) {
       return <Loading theme={theme} />
     }
     const {

@@ -60,7 +60,11 @@ class FileUploader extends React.Component {
       if (type) {
         file.doc_type = type
       }
-      return dispatchFn(file)
+      dispatchFn(file)
+      if (this.uploaderInput.files.length) {
+        this.uploaderInput.files[0] = ''
+      }
+      return null
     }
     if (uploadFn) {
       return uploadFn(file, type, url)

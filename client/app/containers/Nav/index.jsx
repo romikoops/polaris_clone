@@ -72,8 +72,13 @@ class NavBar extends Component {
             {`${capitalize(admin.itinerary.itinerary.name)}`}
           </div>
         )
+        // eslint-disable-next-line no-case-declarations
       case 'pricings':
         if (categories[2] === 'routes') {
+          const routeName =
+            admin.itineraryPricings && admin.itineraryPricings.itinerary
+              ? admin.itineraryPricings.itinerary.name
+              : categories[categories.length - 1]
           return (
             <div
               className={`${
@@ -81,16 +86,20 @@ class NavBar extends Component {
               } flex-none layout-row layout-align-center-center pointy`}
             >
               {' '}
-              {`${admin.itineraryPricings.itinerary.name}`}
+              {`${routeName}`}
             </div>
           )
         }
+        const clientName =
+          admin.clientPricings && admin.clientPricings.client
+            ? `${capitalize(admin.clientPricings.client.first_name)}  ${capitalize(admin.clientPricings.client.last_name)}`
+            : categories[categories.length - 1]
         return (
           <div
             className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           >
             {' '}
-            {`${capitalize(admin.clientPricings.client.first_name)}  ${capitalize(admin.clientPricings.client.last_name)}`}
+            {clientName}
           </div>
         )
 

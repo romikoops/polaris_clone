@@ -78,7 +78,7 @@ class Admin extends Component {
   }
   render () {
     const {
-      theme, adminData, adminDispatch, user
+      theme, adminData, adminDispatch, user, documentLoading
     } = this.props
 
     const {
@@ -98,7 +98,7 @@ class Admin extends Component {
         hubHash[hub.data.id] = hub
       })
     }
-    const loadingScreen = loading ? <Loading theme={theme} /> : ''
+    const loadingScreen = loading || documentLoading ? <Loading theme={theme} /> : ''
     const menu = <FloatingMenu Comp={SideNav} theme={theme} user={user} />
     return (
       <div className="flex-100 layout-row layout-align-center-start layout-wrap hundred">
@@ -213,6 +213,7 @@ Admin.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   loggedIn: PropTypes.bool,
+  documentLoading: PropTypes.bool,
   adminData: PropTypes.shape({
     hubs: PropTypes.array,
     serviceCharges: PropTypes.any,
@@ -241,18 +242,21 @@ Admin.propTypes = {
 Admin.defaultProps = {
   theme: {},
   user: {},
+  documentLoading: false,
   loggedIn: false
 }
 
 function mapStateToProps (state) {
   const {
-    users, authentication, tenant, admin
+    users, authentication, tenant, admin, document
   } = state
   const { user, loggedIn } = authentication
+  const documentLoading = document.loading
   return {
     user,
     users,
     tenant,
+    documentLoading,
     theme: tenant.data.theme,
     loggedIn,
     adminData: admin

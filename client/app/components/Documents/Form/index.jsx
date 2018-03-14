@@ -77,6 +77,9 @@ class DocumentsForm extends React.Component {
       const uploadUrl = BASE_URL + url
       return fetch(uploadUrl, requestOptions).then(DocumentsForm.handleResponse)
     }
+    if (this.uploaderInput.files.length) {
+      this.uploaderInput.files[0] = ''
+    }
     return this.showFileTypeError()
   }
   showFileTypeError () {
@@ -164,7 +167,7 @@ class DocumentsForm extends React.Component {
               data-tip={tooltip}
               data-for={tooltipId}
             >
-              <form >
+              <form>
                 <button
                   className={`${styles.icon_btn} flex-none layout-row layout-align-center-center`}
                   onClick={e => this.clickUploaderInput(e)}

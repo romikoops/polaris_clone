@@ -35,7 +35,7 @@ module ExcelTools
       truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
       truckingPricings = []
       (4..num_rows).each do |line|
-        # byebug
+        # 
         row_data = first_sheet.row(line)
         zip_code_range_array = row_data.shift.split(" - ")
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
@@ -75,11 +75,11 @@ module ExcelTools
           tmp[:trucking_hub_id] = trucking_table_id
           tmp[:trucking_query_id] = ntp[:_id]
           truckingPricings.push(tmp)
-          # byebug
+          # 
         end
         truckingQueries.push(ntp)
       end
-      # byebug
+      # 
       truckingQueries.each do |k|
         # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
         new_trucking_queries_array << {
@@ -821,10 +821,51 @@ module ExcelTools
       lcl_heavy_weight_watershed_cbm: 'LCL_HEAVY_WEIGHT_WATERSHED_CBM'
       
     )
+    stats = {
+      type: 'pricings',
+      pricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraryPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      itineraries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      stops: {
+        number_updated: 0,
+        number_created: 0
+      },
+      layovers: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trips: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userPricings: {
+        number_updated: 0,
+        number_created: 0
+      },
+      userAffected: []
+    }
+    results = {
+      pricings: [],
+      itineraryPricings: [],
+      userPricings: [],
+      itineraries: [],
+      stops: [],
+      layovers: [],
+      trips: []
+    }
     new_pricings = []
     new_itinerary_pricings = {}
-          pricings_array = []
-      user_pricings_array = []
+    pricings_array = []
+    user_pricings_array = []
     pricing_rows.each_with_index do |row, index|
       puts "load pricing row #{index}..."
       tenant = user.tenant
@@ -840,8 +881,26 @@ module ExcelTools
       itinerary = tenant.itineraries.find_by(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
       if !itinerary
         itinerary = tenant.itineraries.create!(mode_of_transport: row[:mot], name: "#{origin.name} - #{destination.name}")
+        stats[:itineraries][:number_created] += 1
+      else
+        stats[:itineraries][:number_updated] += 1
       end
-      stops_in_order = hub_ids.map.with_index { |h, i| itinerary.stops.find_or_create_by!(hub_id: h, index: i)  }
+      results[:itineraries] << itinerary
+      
+      stops_in_order = hub_ids.map.with_index do |h, i| 
+        temp_stop = itinerary.stops.find_by(hub_id: h, index: i)
+        if temp_stop
+          stats[:stops][:number_updated] += 1
+          results[:stops] << temp_stop
+          temp_stop
+        else
+          temp_stop = itinerary.stops.create!(hub_id: h, index: i)
+          stats[:stops][:number_created] += 1
+          results[:stops] << temp_stop
+          temp_stop
+        end 
+      end
+      
       cargo_classes = [
         'lcl'
       ]
@@ -852,7 +911,7 @@ module ExcelTools
       row[:effective_date] = DateTime.now
       row[:expiration_date] = row[:effective_date] + 40.days
       if generate
-        itinerary.generate_weekly_schedules(
+        generator_results = itinerary.generate_weekly_schedules(
           stops_in_order,
           steps_in_order,
           row[:effective_date], 
@@ -860,6 +919,10 @@ module ExcelTools
           [1, 5],
           vehicle.id
         )
+        results[:layovers] = generator_results[:layovers]
+        results[:trips] = generator_results[:trips]
+        stats[:layovers][:number_created] = generator_results[:layovers].length
+        stats[:trips][:number_created] = generator_results[:trips].length
       end
 
       lcl_obj = {
@@ -881,6 +944,7 @@ module ExcelTools
       price_obj = {"lcl" =>lcl_obj.to_h}
       
       if dedicated
+        stats[:userAffected] << user
         cargo_classes.each do |cargo_class|
           uuid = SecureRandom.uuid
 
@@ -899,7 +963,8 @@ module ExcelTools
             tenant_id: user.tenant_id,
             load_type: cargo_class
           }
-
+          results[:pricings] << pricing
+          stats[:pricings][:number_created] += 1
           pricings_array.push({
             :update_one => {
               :filter => {
@@ -923,7 +988,8 @@ module ExcelTools
               }, :upsert => true
             }
           }
-          
+          results[:userPricings] << user_pricing
+          stats[:userPricings][:number_created] += 1
           # update_item_fn(mongo, 'userPricings', {_id: "#{user.id}"}, user_pricing)
           
           new_itinerary_pricings[pathKey] ||= {}
@@ -951,6 +1017,8 @@ module ExcelTools
             itinerary_id: itinerary.id,
             tenant_id:    user.tenant_id
           }
+          results[:pricings] << pricing
+          stats[:pricings][:number_created] += 1
           pricings_array.push({
             :update_one => {
               :filter => {
@@ -975,6 +1043,8 @@ module ExcelTools
     end
     itinerary_pricings_array = []
     new_itinerary_pricings.each do |key, value|
+      results[:itineraryPricings] << value
+      stats[:itineraryPricings][:number_created] += 1
       itinerary_pricings_array << {
             :update_one => {
               :filter => {
@@ -990,6 +1060,7 @@ module ExcelTools
     mongo["itineraryPricings"].bulk_write(itinerary_pricings_array)
     mongo["pricings"].bulk_write(pricings_array)
     mongo["userPricings"].bulk_write(user_pricings_array)
+    return {results: results, stats: stats}
   end
 
   def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user, generate = false)

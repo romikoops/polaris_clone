@@ -12,8 +12,9 @@ import {
 } from './'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { adminActions } from '../../actions'
+import { adminActions, documentActions } from '../../actions'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { AdminUploadsSuccess } from './Uploads/Success'
 
 class AdminPricings extends Component {
   constructor (props) {
@@ -53,7 +54,9 @@ class AdminPricings extends Component {
       adminDispatch,
       clients,
       clientPricings,
-      itineraryPricings
+      itineraryPricings,
+      documentDispatch,
+      document
     } = this.props
     const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
@@ -67,15 +70,22 @@ class AdminPricings extends Component {
         />
       </div>
     )
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess theme={theme} data={document.results} />
+    ) : (
+      ''
+    )
     const title = selectedPricing ? 'Pricing Overview' : 'Pricings'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <TextHeading theme={theme} size={1} text={title} />
           {selectedPricing ? backButton : ''}
         </div>
+
         <Switch className="flex">
           <Route
             exact
@@ -89,7 +99,8 @@ class AdminPricings extends Component {
                 pricingData={pricingData}
                 itineraries={itineraries}
                 {...props}
-                adminTools={adminDispatch}
+                adminDispatch={adminDispatch}
+                documentDispatch={documentDispatch}
               />
             )}
           />
@@ -164,6 +175,9 @@ AdminPricings.propTypes = {
     getPricings: PropTypes.func,
     getRoute: PropTypes.func
   }).isRequired,
+  documentDispatch: PropTypes.shape({
+    uploadPricings: PropTypes.func
+  }).isRequired,
   pricingData: PropTypes.shape({
     itineraries: PropTypes.array
   }),
@@ -192,7 +206,9 @@ AdminPricings.defaultProps = {
 }
 
 function mapStateToProps (state) {
-  const { authentication, tenant, admin } = state
+  const {
+    authentication, tenant, admin, document
+  } = state
   const { user, loggedIn } = authentication
   const {
     clients,
@@ -216,12 +232,14 @@ function mapStateToProps (state) {
     itineraries,
     clients,
     itineraryPricings,
-    loading
+    loading,
+    document
   }
 }
 function mapDispatchToProps (dispatch) {
   return {
-    adminDispatch: bindActionCreators(adminActions, dispatch)
+    adminDispatch: bindActionCreators(adminActions, dispatch),
+    documentDispatch: bindActionCreators(documentActions, dispatch)
   }
 }
 

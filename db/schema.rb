@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180308162910) do
+ActiveRecord::Schema.define(version: 20180314101637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -303,6 +303,8 @@ ActiveRecord::Schema.define(version: 20180308162910) do
     t.string "notes"
     t.string "direction"
     t.jsonb "incoterm"
+    t.integer "origin_hub_id"
+    t.integer "destination_hub_id"
   end
 
   create_table "stops", force: :cascade do |t|
