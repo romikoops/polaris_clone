@@ -170,8 +170,9 @@ export class AdminPricingRouteView extends Component {
             <div
               className="flex-5 layout-row layout-align-center-center"
               onClick={() => {
-                console.log('delete')
-                adminActions.deletePricing(pricing)
+                if (window.confirm('Are you sure you want to delete this pricing?')) {
+                  adminActions.deletePricing(pricing)
+                }
               }}
             >
               <i className="flex-none fa fa-trash pointy" />
