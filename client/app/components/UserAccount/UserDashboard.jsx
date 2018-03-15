@@ -256,7 +256,7 @@ export class UserDashboard extends Component {
             defaults.border_divider
           }`}
         >
-          <div className="flex-100 layout-row layout-wrap layout-align-center-center">
+          <div className="flex-100 layout-row layout-wrap layout-align-center-stretch">
             <AdminSearchableClients
               theme={theme}
               clients={contacts}

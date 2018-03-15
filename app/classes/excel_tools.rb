@@ -467,7 +467,7 @@ module ExcelTools
               :filter => {:_id => lc_id},
               :update => {
                 "$set" => v
-              }
+              }, :upsert => true
             }
           }
         )
@@ -484,7 +484,7 @@ module ExcelTools
               :filter => {:_id => lc_id},
               :update => {
                 "$set" => v
-              }
+              }, :upsert => true
             }
           }
         )

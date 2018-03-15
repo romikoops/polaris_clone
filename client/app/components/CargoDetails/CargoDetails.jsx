@@ -192,7 +192,7 @@ export class CargoDetails extends Component {
 
     const customsBox = (
       <div
-        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${styles.costums_box} ${
+        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
@@ -592,16 +592,13 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        <div
-          name="insuranceBox"
+        { scope.has_customs || scope.has_insurance ? <div
           className={
             `${styles.insurance_customs_sec} flex-100 ` +
-            'layout-row layout-wrap layout-align-center-stretch'
+            'layout-row layout-wrap layout-align-center'
           }
         >
-          <div
-            className="flex-100 layout-row layout-wrap layout-align-center-stretch padd_top"
-          >
+          {scope.has_insurance ? <div className="flex-100 layout-row layout-align-center padd_top">
             <div
               className={`flex-none ${
                 defaults.content_width

@@ -157,4 +157,15 @@
     overflow: hidden;
     position: relative;
   }
+  .time_edit_button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .time_save_buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+  }
 }
