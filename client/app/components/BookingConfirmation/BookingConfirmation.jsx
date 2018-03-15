@@ -15,34 +15,9 @@ import { CargoItemGroup } from '../Cargo/Item/Group'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
+import { IncotermRow } from '../Incoterm/Row'
 
 export class BookingConfirmation extends Component {
-  static sumCargoFees (cargos) {
-    let total = 0.0
-    let curr = ''
-    Object.keys(cargos).forEach((k) => {
-      total += parseFloat(cargos[k].total.value)
-      curr = cargos[k].total.currency
-    })
-
-    return { currency: curr, total: total.toFixed(2) }
-  }
-  static sumCustomsFees (cargos) {
-    let total = 0.0
-    let curr = ''
-    const keys = Object.keys(cargos)
-
-    keys.forEach((k) => {
-      if (cargos[k].CUSTOMS && cargos[k].CUSTOMS.value) {
-        total += parseFloat(cargos[k].CUSTOMS.value)
-        curr = cargos[k].CUSTOMS.currency
-      }
-    })
-    if (total === 0.0) {
-      return { currency: '', total: 'None' }
-    }
-    return { currency: curr, total: total.toFixed(2) }
-  }
   constructor (props) {
     super(props)
     this.state = {
@@ -158,7 +133,9 @@ export class BookingConfirmation extends Component {
     return resultArray
   }
   render () {
-    const { theme, shipmentData, shipmentDispatch } = this.props
+    const {
+      theme, shipmentData, shipmentDispatch, tenant
+    } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment,
@@ -363,7 +340,7 @@ export class BookingConfirmation extends Component {
                       </p>
                     </div>
                     {shipment.has_pre_carriage ? (
-                      <div className="flex-100 layout-row layout-align-start-start">
+                      <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
                           {`${locations.origin.street_number} ${locations.origin.street}`} <br />
                           {`${locations.origin.city}`} <br />
@@ -381,7 +358,7 @@ export class BookingConfirmation extends Component {
                       <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
                     </div>
                     {shipment.has_on_carriage ? (
-                      <div className="flex-100 layout-row layout-align-start-start">
+                      <div className="flex-100 layout-row layout-align-center-start">
                         <address className="flex-none">
                           {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
                           <br />
@@ -442,129 +419,26 @@ export class BookingConfirmation extends Component {
                   'layout-row layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={`${
-                    styles.b_summ_top
-                  } flex-100 layout-row layout-align-space-around-center`}
-                >
+                <div className="flex-100 layout-row layout-align-center-center">
                   <div
-                    className={`${
-                      styles.charge_card
-                    } flex-30 layout-row layout-align-start-start layout-wrap`}
+                    className="
+                    flex-none
+                     content_width_booking
+                     layout-row
+                     layout-align-center-center"
                   >
-                    <div className="flex-100 layout-row layout-align-center-center">
-                      <h5 className="flex-none letter_3">Freight</h5>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      <h4 className="flex-100 no_m letter_3 center">
-                        {BookingConfirmation.sumCargoFees(feeHash.cargo).currency}
-                      </h4>
-                      <h3 className="flex-100 no_m letter_3 center">
-                        {BookingConfirmation.sumCargoFees(feeHash.cargo).total}
-                      </h3>
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      styles.charge_card
-                    } flex-30 layout-row layout-align-start-start layout-wrap`}
-                  >
-                    <div className="flex-100 layout-row layout-align-center-center">
-                      <h5 className="flex-none letter_3">Pre Carriage</h5>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.trucking_pre.total ? (
-                        <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.trucking_pre.total.currency}
-                        </h4>
-                      ) : (
-                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                          None
-                        </h4>
-                      )}
-                      <h3 className="flex-100 no_m letter_3 center">
-                        {shipment.has_pre_carriage
-                          ? `${feeHash.trucking_pre.total.value.toFixed(2)}`
-                          : 'None'}
-                      </h3>
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      styles.charge_card
-                    } flex-30 layout-row layout-align-start-start layout-wrap`}
-                  >
-                    <div className="flex-100 layout-row layout-align-center-center">
-                      <h5 className="flex-none letter_3">On Carriage</h5>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.trucking_on.total ? (
-                        <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.trucking_on.total.currency}
-                        </h4>
-                      ) : (
-                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                          None
-                        </h4>
-                      )}
-                      <h3 className="flex-100 no_m letter_3 center">
-                        {shipment.has_on_carriage
-                          ? `${feeHash.trucking_on.total.value.toFixed(2)}`
-                          : 'None'}
-                      </h3>
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      styles.charge_card
-                    } flex-30 layout-row layout-align-start-start layout-wrap`}
-                  >
-                    <div className="flex-100 layout-row layout-align-center-center">
-                      <h5 className="flex-none letter_3">Insurance</h5>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.insurance && feeHash.insurance.val ? (
-                        <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.insurance.currency}
-                        </h4>
-                      ) : (
-                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                          None
-                        </h4>
-                      )}
-                      <h3 className="flex-100 no_m letter_3 center">
-                        {feeHash.insurance && feeHash.insurance.val
-                          ? `${feeHash.insurance.val.toFixed(2)}`
-                          : 'None'}
-                      </h3>
-                    </div>
-                  </div>
-                  <div
-                    className={`${
-                      styles.charge_card
-                    } flex-30 layout-row layout-align-start-start layout-wrap`}
-                  >
-                    <div className="flex-100 layout-row layout-align-center-center">
-                      <h5 className="flex-none letter_3">Customs</h5>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                      {feeHash.customs && feeHash.customs.val ? (
-                        <h4 className="flex-100 no_m letter_3 center">
-                          {feeHash.customs.currency}
-                        </h4>
-                      ) : (
-                        <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                          None
-                        </h4>
-                      )}
-                      <h3 className="flex-100 no_m letter_3 center">
-                        {feeHash.customs && feeHash.customs.val
-                          ? `${feeHash.customs.val.toFixed(2)}`
-                          : 'None'}
-                      </h3>
-                    </div>
+                    <IncotermRow
+                      theme={theme}
+                      preCarriage={shipment.has_pre_carriage}
+                      onCarriage={shipment.has_on_carriage}
+                      originFees={shipment.has_pre_carriage}
+                      destinationFees={shipment.has_on_carriage}
+                      feeHash={feeHash}
+                      tenant={{ data: tenant }}
+                    />
                   </div>
                 </div>
+
               </div>
             </div>
           </div>

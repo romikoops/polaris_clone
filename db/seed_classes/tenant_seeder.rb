@@ -43,6 +43,7 @@ class TenantSeeder
   #     }
   #   },
   #   dangerous_goods: false,
+  # detailed_billing: false,
   # incoterm_info_level: 'text',
   #   cargo_info_level: 'text'
   # },
@@ -166,6 +167,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: true,
@@ -233,6 +235,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: false,
@@ -302,6 +305,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -363,6 +367,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -421,6 +426,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -482,6 +488,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -541,6 +548,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -598,6 +606,7 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
+        detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
@@ -655,6 +664,7 @@ class TenantSeeder
           }
       },
       dangerous_goods: false,
+      detailed_billing: false,
       incoterm_info_level: 'text',
       cargo_info_level: 'hs_codes',
       has_insurance: true,

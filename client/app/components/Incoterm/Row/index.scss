@@ -11,4 +11,15 @@
     -webkit-transform: scaleX(-1);
     -ms-transform: scaleX(-1);
   }
+  .fee_value {
+    font-size: 12px;
+    margin-top: 10px;
+    vertical-align: baseline;
+  }
+  .fee_text {
+    font-size: 14px;
+  }
+  .fee_tile {
+    height: 100px;
+  }
 }

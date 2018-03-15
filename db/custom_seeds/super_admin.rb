@@ -39,6 +39,7 @@ super_tenant_data = {
         }
       },
       dangerous_goods: false,
+      detailed_billing: true,
       cargo_info_level: 'text',
       has_insurance: true,
       has_customs: false,

@@ -21,6 +21,7 @@ import SideNav from '../../components/SideNav/SideNav'
 import { Footer } from '../../components/Footer/Footer'
 import defs from '../../styles/default_classes.scss'
 import styles from './UserAccount.scss'
+import NavBar from '../Nav'
 
 class UserAccount extends Component {
   constructor (props) {
@@ -99,7 +100,14 @@ class UserAccount extends Component {
   }
   render () {
     const {
-      user, theme, users, userDispatch, authDispatch, currencies, appDispatch
+      user,
+      theme,
+      users,
+      userDispatch,
+      authDispatch,
+      currencies,
+      appDispatch,
+      tenant
     } = this.props
     if (!users || !user) {
       return ''
@@ -126,6 +134,7 @@ class UserAccount extends Component {
         {menu}
         <Header theme={theme} shipments={users.dashboard.shipments} scrollable />
         <div className="layout-row flex layout-wrap layout-align-center">
+          <NavBar className={`${styles.top_margin}`} />
           <div
             className={`${defs.content_width} ${defs.spacing_md_bottom} ${
               styles.top_margin
@@ -224,6 +233,7 @@ class UserAccount extends Component {
                       setNav={this.setNavLink}
                       theme={theme}
                       hubs={hubHash}
+                      tenant={tenant}
                       user={user}
                       {...props}
                       shipments={shipments}
@@ -241,6 +251,7 @@ class UserAccount extends Component {
                       user={user}
                       loading={loading}
                       {...props}
+                      tenant={tenant}
                       shipmentData={shipment}
                       userDispatch={userDispatch}
                     />
@@ -322,6 +333,7 @@ UserAccount.propTypes = {
     getDashboard: PropTypes.func,
     getHubs: PropTypes.func
   }).isRequired,
+  tenant: PropTypes.tenant,
   // eslint-disable-next-line react/forbid-prop-types
   authDispatch: PropTypes.any.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
@@ -336,6 +348,7 @@ UserAccount.defaultProps = {
   loggedIn: false,
   shipments: [],
   users: null,
+  tenant: {},
   currencies: []
 }
 

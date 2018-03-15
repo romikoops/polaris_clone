@@ -16,6 +16,7 @@ import FileUploader from '../FileUploader/FileUploader'
 import FileTile from '../FileTile/FileTile'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { IncotermRow } from '../Incoterm/Row'
 
 export class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -92,8 +93,12 @@ export class UserShipmentView extends Component {
           hsCodes: c.hs_codes,
           hsText: c.hs_text,
           cargoType: cargoItemTypes[c.cargo_item_type_id],
-          volume: (parseFloat(c.dimension_y) * parseFloat(c.dimension_x) *
-           parseFloat(c.dimension_y) / 1000000) * parseInt(c.quantity, 10),
+          volume:
+            parseFloat(c.dimension_y) *
+            parseFloat(c.dimension_x) *
+            parseFloat(c.dimension_y) /
+            1000000 *
+            parseInt(c.quantity, 10),
           items: []
         }
         for (let index = 0; index < parseInt(c.quantity, 10); index++) {
@@ -142,14 +147,20 @@ export class UserShipmentView extends Component {
 
   render () {
     const {
-      theme, hubs, shipmentData, user, userDispatch
+      theme, hubs, shipmentData, user, userDispatch, tenant
     } = this.props
 
     if (!shipmentData || !hubs || !user) {
       return <h1>NO DATA</h1>
     }
     const {
-      contacts, shipment, documents, cargoItems, containers, schedules, locations
+      contacts,
+      shipment,
+      documents,
+      cargoItems,
+      containers,
+      schedules,
+      locations
     } = shipmentData
     const { collapser } = this.state
     const docOptions = [
@@ -192,7 +203,10 @@ export class UserShipmentView extends Component {
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
-    const textStyle = theme && theme.colors ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary) : { color: 'black' }
+    const textStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : { color: 'black' }
     const nArray = []
     let cargoView = []
     const docView = []
@@ -277,7 +291,10 @@ export class UserShipmentView extends Component {
       })
     }
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
-    const themeTitled = theme && theme.colors ? { background: theme.colors.primary, color: 'white' } : { background: 'rgba(0,0,0,0.25)', color: 'white' }
+    const themeTitled =
+      theme && theme.colors
+        ? { background: theme.colors.primary, color: 'white' }
+        : { background: 'rgba(0,0,0,0.25)', color: 'white' }
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className={`flex-100 layout-row layout-align-end-center ${styles.sec_title}`}>
@@ -315,9 +332,9 @@ export class UserShipmentView extends Component {
             </div>
           </div>
           <div
-            className={`${
-              collapser.overview ? styles.closed_main_panel : styles.open_main_panel
-            } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
+            className={`${collapser.overview ? styles.closed_main_panel : styles.open_main_panel} ${
+              styles.main_panel
+            } flex-100 layout-row layout-wrap layout-align-start-start`}
           >
             <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
               <p className={` ${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
@@ -448,111 +465,23 @@ export class UserShipmentView extends Component {
               styles.main_panel
             } flex-100 layout-row layout-wrap layout-align-start-start`}
           >
-            <div
-              className={`${
-                styles.b_summ_top
-              } flex-100 layout-row layout-align-space-around-center`}
-            >
+            <div className="flex-100 layout-row layout-align-center-center">
               <div
-                className={`${
-                  styles.charge_card
-                } flex-30 layout-row layout-align-start-start layout-wrap`}
+                className="
+                    flex-none
+                     content_width_booking
+                     layout-row
+                     layout-align-center-center"
               >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <h5 className="flex-none letter_3">Freight</h5>
-                </div>
-                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  <h4 className="flex-100 no_m letter_3 center">
-                    {UserShipmentView.sumCargoFees(feeHash.cargo).currency}
-                  </h4>
-                  <h3 className="flex-100 no_m letter_3 center">
-                    {UserShipmentView.sumCargoFees(feeHash.cargo).total}
-                  </h3>
-                </div>
-              </div>
-              <div
-                className={`${
-                  styles.charge_card
-                } flex-30 layout-row layout-align-start-start layout-wrap`}
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <h5 className="flex-none letter_3">Pre Carriage</h5>
-                </div>
-                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  {feeHash.trucking_pre.currency ? (
-                    <h4 className="flex-100 no_m letter_3 center">
-                      {feeHash.trucking_pre.currency}
-                    </h4>
-                  ) : (
-                    <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      None
-                    </h4>
-                  )}
-                  <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_pre_carriage ? `${feeHash.trucking_pre.value}` : 'None'}
-                  </h3>
-                </div>
-              </div>
-              <div
-                className={`${
-                  styles.charge_card
-                } flex-30 layout-row layout-align-start-start layout-wrap`}
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <h5 className="flex-none letter_3">On Carriage</h5>
-                </div>
-                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  {feeHash.trucking_on.currency ? (
-                    <h4 className="flex-100 no_m letter_3 center">
-                      {feeHash.trucking_on.currency}
-                    </h4>
-                  ) : (
-                    <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      None
-                    </h4>
-                  )}
-                  <h3 className="flex-100 no_m letter_3 center">
-                    {shipment.has_on_carriage ? `${feeHash.trucking_on.value}` : 'None'}
-                  </h3>
-                </div>
-              </div>
-              <div
-                className={`${
-                  styles.charge_card
-                } flex-30 layout-row layout-align-start-start layout-wrap`}
-              >
-                <div className="flex-100 layout-row layout-align-center-center">
-                  <h5 className="flex-none letter_3">Insurance</h5>
-                </div>
-                <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                  {feeHash.insurance && feeHash.insurance.val ? (
-                    <h4 className="flex-100 no_m letter_3 center">{feeHash.insurance.currency}</h4>
-                  ) : (
-                    <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      None
-                    </h4>
-                  )}
-                  <h3 className="flex-100 no_m letter_3 center">
-                    {feeHash.insurance && feeHash.insurance.val
-                      ? `${feeHash.insurance.val.toFixed(2)}`
-                      : 'None'}
-                  </h3>
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-align-center-center layout-wrap">
-                {feeHash.customs && feeHash.customs.val ? (
-                  <h4 className="flex-100 no_m letter_3 center">{feeHash.customs.currency}</h4>
-                ) : (
-                  <h4 className="flex-100 no_m letter_3 center" style={{ opacity: '0' }}>
-                      None
-                  </h4>
-                )}
-
-                <h3 className="flex-100 no_m letter_3 center">
-                  {feeHash.customs && feeHash.customs.val
-                    ? `${feeHash.customs.val.toFixed(2)}`
-                    : 'None'}
-                </h3>
+                <IncotermRow
+                  theme={theme}
+                  preCarriage={shipment.has_pre_carriage}
+                  onCarriage={shipment.has_on_carriage}
+                  originFees={shipment.has_pre_carriage}
+                  destinationFees={shipment.has_on_carriage}
+                  feeHash={feeHash}
+                  tenant={tenant}
+                />
               </div>
             </div>
           </div>
@@ -694,84 +623,6 @@ export class UserShipmentView extends Component {
             </div>
           </div>
         </div>
-
-        {/* <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-            <p className={` ${styles.sec_title_text_normal} flex-none letter_3`}>
-              Shipment status:
-            </p>
-            <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
-              {shipment.status}
-            </p>
-          </div>
-        </div>
-        <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
-          Booking Reference: {shipment.imc_reference}
-        </div>
-        <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-        <div className={`${styles.b_summ} flex-100 section_padding`}>
-          <div className={`${styles.b_summ_top} flex-100 layout-row`}>
-            {shipperContact}
-            {consigneeContact}
-            <div className="flex-33 layout-row layout-align-end">
-              <p> {createdDate} </p>
-            </div>
-          </div>
-          <div className="flex-100 layout-row"> {nArray} </div>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-start-center section_padding">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none letter_3`}>Cargo</p>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            {cargoView}
-          </div>
-        </div>
-        <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none letter_3`}>Documents</p>
-          </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              {docView}
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <div
-                className={`flex-100 layout-row layout-align-space-between-center ${
-                  styles.sec_subheader
-                }`}
-              >
-                <p className={` ${styles.sec_subheader_text} flex-none letter_3`}>
-                  Upload New Document
-                </p>
-              </div>
-              <div className="flex-50 layout-align-start-center layout-row">
-                <StyledSelect
-                  name="file-type"
-                  className={`${styles.select}`}
-                  value={this.state.fileType}
-                  options={docOptions}
-                  onChange={this.setFileType}
-                />
-              </div>
-              <div className="flex-50 layout-align-end-center layout-row">
-                <FileUploader
-                  theme={theme}
-                  url={this.state.upUrl}
-                  type={this.state.fileType.value}
-                  text={this.state.fileType.label}
-                  uploadFn={userDispatch.uploadDocument}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
       </div>
     )
   }
@@ -787,14 +638,16 @@ UserShipmentView.propTypes = {
     deleteDocument: PropTypes.func
   }).isRequired,
   match: PropTypes.match.isRequired,
-  setNav: PropTypes.func.isRequired
+  setNav: PropTypes.func.isRequired,
+  tenant: PropTypes.tenant
 }
 
 UserShipmentView.defaultProps = {
   theme: null,
   hubs: [],
   loading: false,
-  user: null
+  user: null,
+  tenant: {}
 }
 
 export default UserShipmentView

@@ -1136,7 +1136,7 @@ export class ShipmentLocationBox extends Component {
                     id="has_pre_carriage"
                     name="has_pre_carriage"
                     checked={this.props.has_pre_carriage}
-                    // onChange={this.handleTrucking}
+                    onChange={this.handleTrucking}
                   />
                   <label htmlFor="pre-carriage" style={{ marginLeft: '15px' }}>
                     Pre-Carriage
@@ -1189,7 +1189,7 @@ export class ShipmentLocationBox extends Component {
                     id="has_on_carriage"
                     name="has_on_carriage"
                     checked={this.props.has_on_carriage}
-                    // onChange={this.handleTrucking}
+                    onChange={this.handleTrucking}
                   />
                 </div>
               </div>
