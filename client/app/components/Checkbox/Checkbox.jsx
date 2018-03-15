@@ -62,14 +62,16 @@ Checkbox.propTypes = {
   name: PropTypes.string.isRequired,
   theme: PropTypes.theme,
   size: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
-  onClick: PropTypes.func.isRequired
+  onChange: PropTypes.func,
+  onClick: PropTypes.func
 }
 Checkbox.defaultProps = {
   theme: null,
   checked: false,
   disabled: false,
-  size: null
+  size: null,
+  onChange: null,
+  onClick: null
 }
 
 export default Checkbox

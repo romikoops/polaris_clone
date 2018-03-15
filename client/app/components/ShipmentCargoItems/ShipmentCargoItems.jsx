@@ -76,7 +76,7 @@ export class ShipmentCargoItems extends Component {
   }
   render () {
     const {
-      cargoItems, theme, showAlertModal, nextStageAttempt, scope, handleDelta
+      cargoItems, theme, toggleModal, nextStageAttempt, scope, handleDelta
     } = this.props
     const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
@@ -114,7 +114,7 @@ export class ShipmentCargoItems extends Component {
         availableCargoItemTypes,
         numberOptions,
         firstRenderInputs,
-        showAlertModal,
+        toggleModal,
         nextStageAttempt,
         scope
       )
@@ -283,7 +283,7 @@ ShipmentCargoItems.propTypes = {
   })),
   addCargoItem: PropTypes.func.isRequired,
   handleDelta: PropTypes.func.isRequired,
-  showAlertModal: PropTypes.func,
+  toggleModal: PropTypes.func,
   nextStageAttempt: PropTypes.bool,
   scope: PropTypes.shape({
     dangerous_goods: PropTypes.bool
@@ -292,7 +292,7 @@ ShipmentCargoItems.propTypes = {
 
 ShipmentCargoItems.defaultProps = {
   theme: null,
-  showAlertModal: null,
+  toggleModal: null,
   nextStageAttempt: false,
   cargoItems: [],
   availableCargoItemTypes: []

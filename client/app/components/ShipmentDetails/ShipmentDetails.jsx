@@ -84,7 +84,6 @@ export class ShipmentDetails extends Component {
       shipment: props.shipmentData ? props.shipmentData.shipment : {},
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
-      modals: getModals(props.theme, props.user, props.tenant, this.toggleModal),
       noDangerousGoodsConfirmed: false
     }
     this.truckTypes = {
@@ -111,7 +110,6 @@ export class ShipmentDetails extends Component {
     this.deleteCargo = this.deleteCargo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
-    this.toggleAlertModal = this.toggleAlertModal.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
@@ -130,6 +128,18 @@ export class ShipmentDetails extends Component {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (!nextState.modals) {
+      this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
+    }
+    return (
+      nextProps.shipmentData &&
+      nextState.shipment &&
+      nextState.modals &&
+      nextProps.tenant &&
+      nextProps.user
+    )
   }
   setIncoTerm (opt) {
     this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
@@ -387,9 +397,7 @@ export class ShipmentDetails extends Component {
     const {
       tenant, user, shipmentData, shipmentDispatch
     } = this.props
-    if (!shipmentData) {
-      return ''
-    }
+    const { modals } = this.state
     const {
       theme, scope
     } = tenant.data
@@ -587,9 +595,9 @@ export class ShipmentDetails extends Component {
       >
         {flash}
         {
-          Object.keys(this.state.modals)
-            .filter(modalName => this.state.modals[modalName].show)
-            .map(modalName => this.state.modals[modalName].jsx)
+          modals && Object.keys(modals)
+            .filter(modalName => modals[modalName].show)
+            .map(modalName => modals[modalName].jsx)
         }
         <div
           className={`${
@@ -643,7 +651,7 @@ export class ShipmentDetails extends Component {
                 this.state.containers.some(container => container.dangerous_goods)
               )
                 ? (
-                  <div className="flex-50 layout-row layout-align-stretch">
+                  <div className="flex-60 layout-row layout-align-start-center">
 
                     <div className="flex-10 layout-row layout-align-start-start">
                       <Checkbox
@@ -656,18 +664,21 @@ export class ShipmentDetails extends Component {
                         checked={this.state.noDangerousGoodsConfirmed}
                       />
                     </div>
-                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
-                      By clicking this checkbox, you herby confirm that your cargo does not contain
-                      hazardous materials, including (yet not limited to) pure chemicals,
-                      mixtures of substances, manufactured products,
-                      or articles which can pose a risk to people, animals or the environment
-                      if not properly handled in use or in transport.
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                      I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                        dangerous goods
+                      </span>
+                      .
                     </p>
                   </div>
                 )
-                : <div className="flex-50" />
+                : <div className="flex-60" />
             }
-            <div className="flex-50 layout-row layout-align-end">
+            <div className="flex layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}
@@ -729,14 +740,12 @@ ShipmentDetails.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
-  user: PropTypes.user.isRequired,
-  theme: PropTypes.theme
+  user: PropTypes.user.isRequired
 }
 
 ShipmentDetails.defaultProps = {
   prevRequest: null,
-  messages: [],
-  theme: null
+  messages: []
 }
 
 export default ShipmentDetails
