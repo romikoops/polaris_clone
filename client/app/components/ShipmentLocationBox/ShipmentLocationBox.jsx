@@ -922,7 +922,7 @@ export class ShipmentLocationBox extends Component {
             id="origin"
             name="origin"
             className={
-              `flex-none ${styles.input} ` + `${originFieldsHaveErrors ? styles.with_errors : ''}`
+              `flex-none ${styles.input} ${originFieldsHaveErrors ? styles.with_errors : ''}`
             }
             type="string"
             onChange={this.handleAuto}
@@ -942,7 +942,7 @@ export class ShipmentLocationBox extends Component {
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
           className={
-            `${styles.btn_address_form} ` + `${this.props.has_on_carriage ? '' : styles.hidden}`
+            `${styles.btn_address_form} ${this.props.has_on_carriage ? '' : styles.hidden}`
           }
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
@@ -1101,7 +1101,7 @@ export class ShipmentLocationBox extends Component {
         >
           <div
             className={
-              `${defaults.content_width} ${styles.map_container} ` +
+              `${styles.map_container} ` +
               'layout-row flex-none layout-align-start-start'
             }
           >

@@ -43,7 +43,7 @@ class TenantSeeder
   #     }
   #   },
   #   dangerous_goods: false,
-  # incoterm_info_level: 'simple',
+  # incoterm_info_level: 'text',
   #   cargo_info_level: 'text'
   # },
   # # The following data is not a attribute of the Tenant model
@@ -166,8 +166,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'text'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -231,8 +233,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: false,
+        has_customs: false
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -298,8 +302,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -357,8 +363,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -413,8 +421,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -472,8 +482,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -529,8 +541,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -584,8 +598,10 @@ class TenantSeeder
           }
         },
         dangerous_goods: false,
-        incoterm_info_level: 'simple',
-        cargo_info_level: 'hs_codes'
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
       },
       other_data: {
         cargo_item_types: :all,
@@ -639,8 +655,10 @@ class TenantSeeder
           }
       },
       dangerous_goods: false,
-      incoterm_info_level: 'simple',
-      cargo_info_level: 'hs_codes'
+      incoterm_info_level: 'text',
+      cargo_info_level: 'hs_codes',
+      has_insurance: true,
+      has_customs: false
     },
     other_data: {
         cargo_item_types: :all,

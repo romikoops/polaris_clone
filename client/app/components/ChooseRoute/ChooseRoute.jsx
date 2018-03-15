@@ -30,7 +30,9 @@ export class ChooseRoute extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedMoT: 'ocean',
+      selectedMoT: {
+        ocean: true
+      },
       durationFilter: 40,
       limits: {
         focus: true,
@@ -61,8 +63,13 @@ export class ChooseRoute extends Component {
     req.planned_pickup_date = date
     shipmentDispatch.setShipmentDetails(req)
   }
-  setMoT (val) {
-    this.setState({ selectedMoT: val })
+  setMoT (val, target) {
+    this.setState({
+      selectedMoT: {
+        ...this.state.selectedMoT,
+        [target]: val
+      }
+    })
   }
   toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
@@ -103,12 +110,14 @@ export class ChooseRoute extends Component {
     const closestRoute = []
     const focusRoutes = []
     const altRoutes = []
+    const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
+
     schedules.forEach((sched) => {
       console.log(sched)
       if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
         if (
           Math.abs(moment(sched.etd).diff(depDay, 'days')) < smallestDiff &&
-          sched.mode_of_transport === this.state.selectedMoT
+          motKeys.indexOf(sched.mode_of_transport) > -1
         ) {
           smallestDiff = Math.abs(moment(sched.etd).diff(depDay, 'days'))
           idArrays.closest = sched.id
@@ -127,7 +136,7 @@ export class ChooseRoute extends Component {
           />)
         }
         if (
-          sched.mode_of_transport === this.state.selectedMoT &&
+          motKeys.indexOf(sched.mode_of_transport) > -1 &&
           !idArrays.focus.includes(sched.id) &&
           sched.id !== idArrays.closest
         ) {
@@ -146,7 +155,7 @@ export class ChooseRoute extends Component {
             pickupDate={shipment.planned_pickup_date}
           />)
         } else if (
-          sched.mode_of_transport !== this.state.selectedMoT &&
+          motKeys.indexOf(sched.mode_of_transport) < 0 &&
           !idArrays.alternative.includes(sched.id)
         ) {
           idArrays.alternative.push(sched.id)
@@ -186,6 +195,7 @@ export class ChooseRoute extends Component {
               setMoT={this.setMoT}
               moT={this.state.selectedMoT}
               departureDate={depDay}
+              shipment={shipment}
               setDepartureDate={this.setDepartureDate}
             />
           </div>

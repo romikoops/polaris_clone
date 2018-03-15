@@ -2,13 +2,13 @@ import { documentConstants } from '../constants'
 
 export default function app (state = {}, action) {
   switch (action.type) {
-    case documentConstants.UPLOAD_PRICINGS_REQUEST: {
+    case documentConstants.UPLOAD_REQUEST: {
       return {
         ...state,
         loading: true
       }
     }
-    case documentConstants.UPLOAD_PRICINGS_SUCCESS: {
+    case documentConstants.UPLOAD_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -16,7 +16,7 @@ export default function app (state = {}, action) {
         viewer: true
       }
     }
-    case documentConstants.UPLOAD_PRICINGS_FAILURE: {
+    case documentConstants.UPLOAD_FAILURE: {
       return {
         ...state,
         error: action.payload

@@ -2,7 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { BASE_URL, appConstants } from '../constants'
 import { appService } from '../services'
-import { alertActions, shipmentActions, userActions, adminActions, authenticationActions } from './'
+import { alertActions, shipmentActions, userActions, adminActions, authenticationActions, documentActions } from './'
 // import { Promise } from 'es6-promise-promise';
 
 const { fetch } = window
@@ -130,6 +130,7 @@ function clearLoading () {
     dispatch(shipmentActions.clearLoading())
     dispatch(userActions.clearLoading())
     dispatch(adminActions.clearLoading())
+    dispatch(documentActions.clearLoading())
   }
 }
 
