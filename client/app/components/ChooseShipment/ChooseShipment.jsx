@@ -5,10 +5,9 @@ import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
-import { Tooltip } from '../Tooltip/Tooltip'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize, gradientTextGenerator, percentageToHex } from '../../helpers'
+import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ChooseShipment extends Component {
   constructor (props) {
@@ -92,12 +91,6 @@ export class ChooseShipment extends Component {
             'layout-row layout-align-start-center layout-wrap'
           }
         >
-          <div className={`${styles.header} flex-100 layout-row layout-align-start-center`}>
-            <div className="flex-none">
-              <TextHeading theme={theme} size={1} text="Choose your shipment type:   " />
-            </div>
-            <Tooltip theme={theme} icon="fa-info-circle" text="shipment_mots" />
-          </div>
           <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
               <TextHeading theme={theme} size={4} text="Are you importing or exporting?" />
@@ -131,9 +124,6 @@ export class ChooseShipment extends Component {
                 color: `${theme && theme.colors.primary + percentageToHex('80%')}`
               }}
             >
-              <div className="flex-100">
-                <hr />
-              </div>
               {/* <div className="flex-100 layout-row layout-align-center">
                 <h3>Search results will include the following modes of transport</h3>
               </div>
@@ -146,15 +136,14 @@ export class ChooseShipment extends Component {
               </div> */}
               <div className={`${styles.next_step_btn_sec} flex-100 layout-row layout-align-end`}>
                 <div className="flex-none layout-column layout-align-center-center">
-                  {loadType && direction ? activeBtn : disabledBtn}
-                  <p className={`${styles.mot_note} flex-none`}>
+                  <div className="flex-none layout-row layout-align-center-start">
+                    <p className={styles.mot_note}>
                     Availabilities will be shown for all applicable<br /> modes of transport for
                     your shipment
-                  </p>
+                    </p>
+                    {loadType && direction ? activeBtn : disabledBtn}
+                  </div>
                 </div>
-              </div>
-              <div className="flex-100">
-                <hr />
               </div>
             </div>
           </div>

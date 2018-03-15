@@ -327,7 +327,8 @@ export class ShipmentLocationBox extends Component {
       position: location,
       map,
       title: name,
-      icon
+      icon,
+      optimized: false
     })
     markers[target] = marker
     if (markers.origin.title !== undefined) {

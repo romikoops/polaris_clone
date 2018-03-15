@@ -8,7 +8,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { adminClicked as clickTool, cargoClassOptions } from '../../constants'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import AdminHubFees from './Hub/Fees'
+import { AdminHubFees } from './Hub/Fees'
 import { AdminCustomsSetter } from './Customs/Setter'
 
 export class AdminHubView extends Component {

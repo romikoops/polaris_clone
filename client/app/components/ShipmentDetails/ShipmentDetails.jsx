@@ -517,11 +517,7 @@ export class ShipmentDetails extends Component {
             <div className="flex-none letter_2 layout-align-space-between-end">
               <TextHeading
                 theme={theme}
-                text={
-                  this.state.has_pre_carriage
-                    ? 'Approximate Pickup Date:'
-                    : 'Approximate Departure Date:'
-                }
+                text="Available Dates"
                 size={3}
               />
             </div>
@@ -651,7 +647,7 @@ export class ShipmentDetails extends Component {
                 this.state.containers.some(container => container.dangerous_goods)
               )
                 ? (
-                  <div className="flex-60 layout-row layout-align-start-center">
+                  <div className="flex-50 layout-row layout-align-stretch">
 
                     <div className="flex-10 layout-row layout-align-start-start">
                       <Checkbox
@@ -664,21 +660,18 @@ export class ShipmentDetails extends Component {
                         checked={this.state.noDangerousGoodsConfirmed}
                       />
                     </div>
-                    <p style={{ margin: 0, fontSize: '14px' }}>
-                      I hereby confirm that none of the specified cargo units contain{' '}
-                      <span
-                        className="emulate_link blue_link"
-                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                      >
-                        dangerous goods
-                      </span>
-                      .
+                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
+                      By clicking this checkbox, you herby confirm that your cargo does not contain
+                      hazardous materials, including (yet not limited to) pure chemicals,
+                      mixtures of substances, manufactured products,
+                      or articles which can pose a risk to people, animals or the environment
+                      if not properly handled in use or in transport.
                     </p>
                   </div>
                 )
-                : <div className="flex-60" />
+                : <div className="flex-50" />
             }
-            <div className="flex layout-row layout-align-end">
+            <div className="flex-50 layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}
@@ -699,30 +692,29 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user && !user.guest ? (
-          <div
-            className={
+        {
+          user && !user.guest && (
+            <div className={
               `${defaults.border_divider} layout-row flex-100 ` +
               'layout-wrap layout-align-center-center'
             }
-          >
-            <div className={
-              `${styles.btn_sec} ${defaults.content_width} ` +
-                'layout-row flex-none layout-wrap layout-align-start-start'
-            }
             >
-              <RoundButton
-                text="Back to Dashboard"
-                handleNext={this.returnToDashboard}
-                iconClass="fa-angle-left"
-                theme={theme}
-                back
-              />
+              <div className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
+              }
+              >
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
+              </div>
             </div>
-          </div>
-        ) : (
-          ''
-        )}
+          )
+        }
       </div>
     )
   }

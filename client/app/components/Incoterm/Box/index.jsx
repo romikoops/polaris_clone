@@ -146,7 +146,7 @@ export function IncotermBox ({
     <div className="flex-100 layout-row layout-align-end-center layout-wrap">
       <div className="flex-100 layout-row layout-align-end-center">
         <div className="flex-none letter_2">
-          <TextHeading theme={theme} text="Select Incoterm:" size={3} />
+          <TextHeading theme={theme} text="Select Service Level" size={3} />
         </div>
       </div>
       <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>

@@ -192,7 +192,7 @@ export class CargoDetails extends Component {
 
     const customsBox = (
       <div
-        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
+        className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${styles.costums_box} ${
           this.state.customsView ? styles.show : styles.hidden
         }`}
       >
@@ -389,7 +389,7 @@ export class CargoDetails extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap padd_top">
+      <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
             <div className="flex-100 layout-row">
@@ -398,17 +398,17 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
+              <div className="flex-100">
+                {' '}
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={3} text="Total value of goods" />
+                </div>
+              </div>
               <div
                 className="flex-100 flex-gt-sm-50 layout-row layout-wrap
                   layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap">
-                  <div className="flex-100">
-                    {' '}
-                    <div className="flex-none">
-                      <TextHeading theme={theme} size={3} text="Total value of goods" />
-                    </div>
-                  </div>
                   <div className="flex-100 layout-row">
                     <div className="flex-66 layout-row">
                       <FormsyInput
@@ -472,6 +472,7 @@ export class CargoDetails extends Component {
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
                     <textarea
+                      className={styles.textarea_incoterm}
                       name="incoterm"
                       id=""
                       cols="30"
@@ -484,7 +485,7 @@ export class CargoDetails extends Component {
               </div>
               <div
                 className="flex-100 flex-gt-sm-45 offset-gt-sm-5
-                  layout-row layout-wrap alyout-align-start-start"
+                  layout-row layout-wrap layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100 layout-row">
@@ -552,7 +553,6 @@ export class CargoDetails extends Component {
                 ) : (
                   ''
                 )}
-
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                     <div className="flex-100">
@@ -563,6 +563,7 @@ export class CargoDetails extends Component {
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
                       <textarea
+                        className={styles.textarea_margin}
                         name="notes"
                         id=""
                         cols="30"
@@ -572,15 +573,10 @@ export class CargoDetails extends Component {
                       />
                     </div>
                   </div>
-                  <div
-                    className="
-                flex-gt-sm-100
-                 layout-row
-                 layout-align-start-start
-                 layout-wrap
-                "
-                  >
-                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap">
+                    <div className="
+                    flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+                    >
                       <DocumentsMultiForm
                         theme={theme}
                         type="miscellaneous"
@@ -596,13 +592,16 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        { scope.has_customs || scope.has_insurance ? <div
+        <div
+          name="insuranceBox"
           className={
             `${styles.insurance_customs_sec} flex-100 ` +
-            'layout-row layout-wrap layout-align-center'
+            'layout-row layout-wrap layout-align-center-stretch'
           }
         >
-          {scope.has_insurance ? <div className="flex-100 layout-row layout-align-center padd_top">
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-center-stretch padd_top"
+          >
             <div
               className={`flex-none ${
                 defaults.content_width
