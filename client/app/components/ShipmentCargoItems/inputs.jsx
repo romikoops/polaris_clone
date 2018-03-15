@@ -22,7 +22,7 @@ import styles from './ShipmentCargoItems.scss'
  * @param { array } availableCargoItemTypes
  * @param { array } numberOptions
  * @param { bool } firstRenderInputs
- * @param { bool } showAlertModal
+ * @param { func } toggleModal
  * @param { bool } nextStageAttempt
  *
  * @returns { object } JSX for each input
@@ -35,7 +35,7 @@ export default function getInputs (
   availableCargoItemTypes,
   numberOptions,
   firstRenderInputs,
-  showAlertModal,
+  toggleModal,
   nextStageAttempt,
   scope
 ) {
@@ -324,7 +324,7 @@ export default function getInputs (
         theme={theme}
         size="20px"
         disabled={!scope.dangerous_goods}
-        onClick={scope.dangerous_goods ? '' : showAlertModal}
+        onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
       />
     </div>
   )
@@ -343,7 +343,6 @@ export default function getInputs (
         theme={theme}
         size="20px"
         disabled={false}
-        onClick={scope.non_stackable ? '' : showAlertModal}
       />
     </div>
   )

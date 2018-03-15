@@ -2,13 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './AlertModalBody.scss'
 
-export function AlertModalBody ({ message, logo, toggleAlertModal }) {
+export function AlertModalBody (props) {
+  const {
+    message, maxWidth, logo, toggleAlertModal
+  } = props
   return (
     <div
       className="layout row layout-align-center"
-      style={{ maxWidth: '600px', width: '80vw' }}
+      style={{ maxWidth: maxWidth || '600px', width: '80vw' }}
     >
-      <i className={`${styles.exit_icon} fa fa-times`} onClick={() => toggleAlertModal()} />
+      <i className={`${styles.exit_icon} fa fa-times`} onClick={toggleAlertModal} />
 
       <div>
         <div>
@@ -37,7 +40,11 @@ export function AlertModalBody ({ message, logo, toggleAlertModal }) {
 AlertModalBody.propTypes = {
   message: PropTypes.string.isRequired,
   logo: PropTypes.string.isRequired,
-  toggleAlertModal: PropTypes.func.isRequired
+  toggleAlertModal: PropTypes.func.isRequired,
+  maxWidth: PropTypes.string
 }
 
+AlertModalBody.defaultProps = {
+  maxWidth: null
+}
 export default AlertModalBody

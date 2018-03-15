@@ -57,6 +57,9 @@
   .emulate_link {
     cursor: pointer;
     
+    &.blue_link {
+      color: #0645AD;
+    }
     &:hover {
       text-decoration: underline;
     }
@@ -65,6 +68,16 @@
 
 }
 :global {
+  .emulate_link {
+    cursor: pointer;
+    
+    &.blue_link {
+      color: #0645AD;
+    }
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   .content_width {
     width: 95%;
     max-width: 95%;

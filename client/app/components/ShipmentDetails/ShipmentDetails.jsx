@@ -20,11 +20,10 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { Modal } from '../Modal/Modal'
-import { AlertModalBody } from '../AlertModalBody/AlertModalBody'
 import { isEmpty } from '../../helpers/objectTools'
 import { Checkbox } from '../Checkbox/Checkbox'
 import '../../styles/select-css-custom.css'
+import getModals from './getModals'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -111,7 +110,6 @@ export class ShipmentDetails extends Component {
     this.deleteCargo = this.deleteCargo.bind(this)
     this.setIncoTerm = this.setIncoTerm.bind(this)
     this.handleSelectLocation = this.handleSelectLocation.bind(this)
-    this.toggleAlertModal = this.toggleAlertModal.bind(this)
     this.loadPrevReq = this.loadPrevReq.bind(this)
     this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
   }
@@ -130,6 +128,18 @@ export class ShipmentDetails extends Component {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (!nextState.modals) {
+      this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
+    }
+    return (
+      nextProps.shipmentData &&
+      nextState.shipment &&
+      nextState.modals &&
+      nextProps.tenant &&
+      nextProps.user
+    )
   }
   setIncoTerm (opt) {
     this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
@@ -377,55 +387,23 @@ export class ShipmentDetails extends Component {
     })
   }
 
-  toggleAlertModal () {
-    this.setState({ alertModalShowing: !this.state.alertModalShowing })
+  toggleModal (name) {
+    const { modals } = this.state
+    modals[name].show = !modals[name].show
+    this.setState({ modals })
   }
 
   render () {
     const {
       tenant, user, shipmentData, shipmentDispatch
     } = this.props
-    if (!shipmentData) {
-      return ''
-    }
+    const { modals } = this.state
     const {
-      theme, scope, emails, phones
+      theme, scope
     } = tenant.data
     const { messages } = this.props
     let cargoDetails
-    const alertModalMessage = (
-      <p style={{ textAlign: 'justify', lineHeight: '1.5' }}>
-        <span>
-          Hi {user.first_name} {user.last_name},<br />
-          We currently do not offer freight rates for hazardous cargo in our Web Shop. Please
-          contact our customer service department to place an order for your dangerous cargo:<br />
-        </span>
-        <br />
 
-        <span style={{ marginRight: '10px' }}> Contact via phone:</span>
-        <span>{phones.support}</span>
-        <br />
-
-        <span style={{ marginRight: '20px' }}> Contact via mail: </span>
-        <span>
-          <a href={`mailto:${emails.support}?subject=Dangerous Goods Request`}>{emails.support}</a>
-        </span>
-      </p>
-    )
-    const alertModal = this.state.alertModalShowing ? (
-      <Modal
-        component={
-          <AlertModalBody
-            message={alertModalMessage}
-            logo={theme.logoSmall}
-            toggleAlertModal={this.toggleAlertModal}
-          />
-        }
-        parentToggle={this.toggleAlertModal}
-      />
-    ) : (
-      ''
-    )
     if (shipmentData.shipment) {
       if (shipmentData.shipment.load_type === 'container') {
         cargoDetails = (
@@ -437,7 +415,7 @@ export class ShipmentDetails extends Component {
             nextStageAttempt={this.state.nextStageAttempt}
             theme={theme}
             scope={scope}
-            showAlertModal={this.toggleAlertModal}
+            toggleModal={name => this.toggleModal(name)}
           />
         )
       }
@@ -452,7 +430,7 @@ export class ShipmentDetails extends Component {
             theme={theme}
             scope={scope}
             availableCargoItemTypes={shipmentData.cargoItemTypes}
-            showAlertModal={this.toggleAlertModal}
+            toggleModal={name => this.toggleModal(name)}
           />
         )
       }
@@ -616,7 +594,11 @@ export class ShipmentDetails extends Component {
         style={{ minHeight: '1800px' }}
       >
         {flash}
-        {alertModal}
+        {
+          modals && Object.keys(modals)
+            .filter(modalName => modals[modalName].show)
+            .map(modalName => modals[modalName].jsx)
+        }
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div
           className={`${
@@ -670,7 +652,7 @@ export class ShipmentDetails extends Component {
                 this.state.containers.some(container => container.dangerous_goods)
               )
                 ? (
-                  <div className="flex-50 layout-row layout-align-stretch">
+                  <div className="flex-60 layout-row layout-align-start-center">
 
                     <div className="flex-10 layout-row layout-align-start-start">
                       <Checkbox
@@ -683,18 +665,21 @@ export class ShipmentDetails extends Component {
                         checked={this.state.noDangerousGoodsConfirmed}
                       />
                     </div>
-                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
-                      By clicking this checkbox, you herby confirm that your cargo does not contain
-                      hazardous materials, including (yet not limited to) pure chemicals,
-                      mixtures of substances, manufactured products,
-                      or articles which can pose a risk to people, animals or the environment
-                      if not properly handled in use or in transport.
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                      I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                        dangerous goods
+                      </span>
+                      .
                     </p>
                   </div>
                 )
-                : <div className="flex-50" />
+                : <div className="flex-60" />
             }
-            <div className="flex-50 layout-row layout-align-end">
+            <div className="flex layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}

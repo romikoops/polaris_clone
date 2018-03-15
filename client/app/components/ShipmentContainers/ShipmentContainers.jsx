@@ -74,7 +74,7 @@ export class ShipmentContainers extends Component {
 
   render () {
     const {
-      containers, handleDelta, theme, scope
+      containers, handleDelta, theme, scope, toggleModal
     } = this.props
     const { selectors } = this.state
 
@@ -202,7 +202,7 @@ export class ShipmentContainers extends Component {
               theme={theme}
               size="34px"
               disabled={!scope.dangerous_goods}
-              onClick={scope.dangerous_goods ? '' : this.props.showAlertModal}
+              onClick={scope.dangerous_goods ? '' : () => toggleModal('noDangerousGoods')}
             />
           </div>
 
@@ -272,13 +272,13 @@ ShipmentContainers.propTypes = {
   scope: PropTypes.shape({
     dangerous_goods: PropTypes.bool
   }).isRequired,
-  showAlertModal: PropTypes.func
+  toggleModal: PropTypes.func
 }
 
 ShipmentContainers.defaultProps = {
   theme: null,
   nextStageAttempt: false,
-  showAlertModal: null,
+  toggleModal: null,
   containers: []
 }
 
