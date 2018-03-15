@@ -93,6 +93,13 @@ class User < ApplicationRecord
       ['Registration date (oldest first)', 'created_at_asc']
     ]
   end
+  
+  def self.clear_tokens
+    User.all.each do |u|
+      u.tokens = nil
+      u.save!
+    end
+  end
 
   # Instance methods
   def full_name
@@ -118,6 +125,7 @@ class User < ApplicationRecord
   def secondary_locations
     user_locations.where(primary: false).map(&:location)
   end
+  
   
   private
 
