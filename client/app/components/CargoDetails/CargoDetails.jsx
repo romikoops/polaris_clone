@@ -388,7 +388,7 @@ export class CargoDetails extends Component {
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap padd_top">
+      <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
             <div className="flex-100 layout-row">
@@ -592,12 +592,15 @@ export class CargoDetails extends Component {
           </div>
         </div>
         <div
+          name="insuranceBox"
           className={
             `${styles.insurance_customs_sec} flex-100 ` +
-            'layout-row layout-wrap layout-align-center'
+            'layout-row layout-wrap layout-align-center-stretch'
           }
         >
-          <div className="flex-100 layout-row layout-align-center padd_top">
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-center-stretch padd_top"
+          >
             <div
               className={`flex-none ${
                 defaults.content_width

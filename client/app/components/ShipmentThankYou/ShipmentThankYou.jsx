@@ -12,14 +12,13 @@ export class ShipmentThankYou extends Component {
   }
   render () {
     const {
-      theme, shipmentData, tenant, shipmentDispatch
+      theme, shipmentData, shipmentDispatch
     } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment
     } = shipmentData
     if (!shipment) return <h1> Loading</h1>
-    const tenantName = tenant ? tenant.name : ''
     return (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center">
@@ -27,7 +26,7 @@ export class ShipmentThankYou extends Component {
             <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
               <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
                 <p className="flex-100">
-                  Thank you for booking with {tenantName}.
+                  Thank you for your booking request.
                 </p>
               </div>
               <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
@@ -35,10 +34,13 @@ export class ShipmentThankYou extends Component {
               </div>
               <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
                 <p className="flex-100">
-                  We have just sent your order confirmation with all the booking details
-                  to your account e-mail address. Now, our team will review your order
-                  and contact you with any further instructions or simply confirm the
-                  request via e-mail.
+                  Booking request confirmation has been sent to your account email address.
+                </p>
+                <p className="flex-100">
+                  Please note that the rates can be changed withyout prior notice.
+                </p>
+                <p className="flex-100">
+                  Your booking will be confirmed after a review.
                 </p>
                 <p className="flex-100">
                   Do not hesitate to contact us either through the
@@ -69,13 +71,11 @@ ShipmentThankYou.propTypes = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired
 }
 ShipmentThankYou.defaultProps = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
-  shipmentDispatch: null,
-  tenant: {}
+  shipmentDispatch: null
 }
 export default ShipmentThankYou
