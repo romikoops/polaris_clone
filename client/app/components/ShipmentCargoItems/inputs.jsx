@@ -24,6 +24,8 @@ import styles from './ShipmentCargoItems.scss'
  * @param { bool } firstRenderInputs
  * @param { func } toggleModal
  * @param { bool } nextStageAttempt
+ * @param { object } scope
+ * @param { object } maxDimentions
  *
  * @returns { object } JSX for each input
  */
@@ -37,7 +39,8 @@ export default function getInputs (
   firstRenderInputs,
   toggleModal,
   nextStageAttempt,
-  scope
+  scope,
+  maxDimentions
 ) {
   const { handleDelta } = this.props
   const placeholderInput = (
@@ -86,11 +89,13 @@ export default function getInputs (
                 bottom: '-14px'
               }}
               validations={{
-                nonNegative: (values, value) => value > 0
+                nonNegative: (values, value) => value > 0,
+                maxDimention: (values, value) => value < maxDimentions.payloadInKg
               }}
               validationErrors={{
+                isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                isDefaultRequiredValue: 'Must be greater than 0'
+                maxDimention: `Maximum height is ${maxDimentions.payloadInKg}`
               }}
               required
             />
@@ -189,12 +194,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < 1000
+                maxDimention: (values, value) => value < maxDimentions.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: 'Maximum height is 1000'
+                maxDimention: `Maximum height is ${maxDimentions.dimensionZ}`
               }}
               required
             />
@@ -240,12 +245,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < 1000
+                maxDimention: (values, value) => value < maxDimentions.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: 'Maximum length is 1000'
+                maxDimention: `Maximum height is ${maxDimentions.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -291,12 +296,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < 1000
+                maxDimention: (values, value) => value < maxDimentions.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: 'Maximum width is 1000'
+                maxDimention: `Maximum height is ${maxDimentions.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

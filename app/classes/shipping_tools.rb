@@ -49,6 +49,7 @@ module ShippingTools
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
       cargo_item_types: tenant.cargo_item_types,
+      max_dimensions: CargoItem::MAX_DIMENSIONS
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -69,7 +70,7 @@ module ShippingTools
         truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
         originHubs:                 offer_calculation.origin_hubs,
         destinationHubs:            offer_calculation.destination_hubs,
-        cargoUnits:                 cargo_units
+        cargoUnits:                 cargo_units,
       }
     else
       raise ApplicationError::NoRoutes # TBD - Customize Errors
