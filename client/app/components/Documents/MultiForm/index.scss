@@ -32,20 +32,18 @@
     
   }
   .form_label {
-    background: darkgray;
+    background: #a9a9a9c4;
     color: white;
     border-radius: 5px 0 0 5px;
-    // height: 100%;
-    width: 145px;
   }
   .form {
     border-radius: 5px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     border: 0.5px solid rgba($color: #000000, $alpha: 0.25);
     p {
       margin: 5px;
     }
-    // height: 35px;
+    height: 35px;
     font-size: 12px;
   }
   .file_error {
