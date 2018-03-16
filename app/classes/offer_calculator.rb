@@ -11,7 +11,7 @@ class OfferCalculator
     @origin_hubs      = []
     @destination_hubs = []
     @itineraries      = []
-    @itineraries_hash            = {}
+    @itineraries_hash = {}
     @carriage_nexuses = params[:shipment][:carriageNexuses]
     @shipment.has_pre_carriage = params[:shipment][:has_pre_carriage]
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
@@ -200,7 +200,7 @@ class OfferCalculator
       end
     end
     
-    charges.reject!{ |_, charge| charge[:cargo].empty? }
+    charges.reject! { |_, charge| charge[:cargo].empty? }
     
     raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges

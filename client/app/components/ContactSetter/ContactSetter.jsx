@@ -156,7 +156,7 @@ export class ContactSetter extends Component {
             flex-100 layout-row layout-wrap ${styles.body} ${showBody ? '' : styles.hidden}
           `}
           >
-            <div className="flex-100 layout-row layout-align-center-center">
+            <div name="stageTimeline" className="flex-100 layout-row layout-align-center-center">
               <StageTimeline
                 theme={theme}
                 currentStageIndex={stageIndex}

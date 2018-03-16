@@ -1,5 +1,6 @@
 class Shipment < ApplicationRecord
   extend ShippingTools
+  include ActiveModel::Validations
   STATUSES = %w( 
     requested
     booking_process_started
@@ -15,6 +16,8 @@ class Shipment < ApplicationRecord
   { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
     CustomValidations.inclusion(self, attribute, array)
   end
+
+  validates_with MaxAggregateDimensionsValidator
 
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
@@ -92,6 +95,10 @@ class Shipment < ApplicationRecord
 
   def notifyees
     find_contacts("notifyee")
+  end
+
+  def cargo_units
+    self["#{load_type}s"]
   end
 
   def full_haulage_to_string

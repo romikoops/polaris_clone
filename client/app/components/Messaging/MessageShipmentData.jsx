@@ -65,9 +65,8 @@ export class MessageShipmentData extends Component {
     }
     return (
       <div
-        className={`flex-100 layout-row layout-wrap layout-align-center-start ${
-          styles.data_overlay
-        }`}
+        className={`flex-90layout-row layout-wrap layout-align-center-start 
+        ${styles.data_overlay} `}
       >
         <div className={`flex-100 layout-row layout-wrap ${styles.data_box}`}>
           <div className={`flex-100 layout-row layout-align-center-center ${styles.top_row}`}>

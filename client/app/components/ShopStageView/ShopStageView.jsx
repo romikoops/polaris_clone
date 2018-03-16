@@ -3,7 +3,7 @@ import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES } from '../../constants'
-import { gradientTextGenerator } from '../../helpers'
+import { gradientTextGenerator, gradientGenerator } from '../../helpers'
 
 export class ShopStageView extends Component {
   constructor (props) {
@@ -28,6 +28,10 @@ export class ShopStageView extends Component {
     const { theme } = this.props
     const gradientStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+      : theme.colors.brightPrimary
+
+    const gradientCircle = theme && theme.colors
+      ? gradientGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
       : theme.colors.brightPrimary
 
     if (stage.step < this.props.currentStage) {
@@ -55,7 +59,7 @@ export class ShopStageView extends Component {
           >
             <h3 className="flex-none" style={gradientStyle}> {stage.step} </h3>
           </div>
-          <div style={gradientStyle} className={styles.shop_stage_current_border} />
+          <div style={gradientCircle} className={styles.shop_stage_current_border} />
         </div>
       )
     }

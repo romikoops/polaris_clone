@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import Truncate from 'react-truncate'
+import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
-import FileUploader from '../FileUploader/FileUploader'
 import DocumentsForm from '../Documents/Form'
 import DocumentsMultiForm from '../Documents/MultiForm'
 // import { HSCodeRow } from '../HSCodeRow/HSCodeRow'
 import defaults from '../../styles/default_classes.scss'
 import { converter } from '../../helpers'
-import { currencyOptions } from '../../constants'
-import { Tooltip } from '../Tooltip/Tooltip'
+import { currencyOptions, tooltips } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
+import { Tooltip } from '../Tooltip/Tooltip'
 
 export class CargoDetails extends Component {
   constructor (props) {
@@ -189,7 +189,10 @@ export class CargoDetails extends Component {
         </div>
       </div>
     )
-
+    const fadedPreCarriageText = shipment.has_pre_carriage
+      ? '' : styles.faded_text
+    const fadedOnCarriageText = shipment.has_on_carriage
+      ? '' : styles.faded_text
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
@@ -215,8 +218,12 @@ export class CargoDetails extends Component {
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none"> Export Customs: </p>
+              <div
+                className="flex-50 layout-row layout-align-space-around-center"
+                data-tip={tooltips.customs_pre_carriage}
+                data-for="preCarriageTooltip"
+              >
+                <p className={`${fadedPreCarriageText} flex-none`}> Export Customs: </p>
                 <Checkbox
                   onChange={() => this.toggleSpecificCustoms('export')}
                   checked={customsData.export.bool}
@@ -224,14 +231,34 @@ export class CargoDetails extends Component {
                   disabled={!shipment.has_pre_carriage}
                 />
               </div>
-              <div className="flex-50 layout-row layout-align-space-around-center">
-                <p className="flex-none"> Import Customs</p>
+              { !shipment.has_pre_carriage
+                ? <ReactTooltip
+                  id="preCarriageTooltip"
+                  className={styles.tooltip_box}
+                  effect="solid"
+                />
+                : ''
+              }
+              <div
+                className="flex-50 layout-row layout-align-space-around-center"
+                data-tip={tooltips.customs_on_carriage}
+                data-for="onCarriageTooltip"
+              >
+                <p className={`${fadedOnCarriageText} flex-none`}> Import Customs</p>
                 <Checkbox
                   onChange={() => this.toggleSpecificCustoms('import')}
                   checked={customsData.import.bool}
                   theme={theme}
                   disabled={!shipment.has_on_carriage}
                 />
+                { !shipment.has_on_carriage
+                  ? <ReactTooltip
+                    id="onCarriageTooltip"
+                    className={styles.tooltip_box}
+                    effect="solid"
+                  />
+                  : ''
+                }
               </div>
             </div>
           </div>
@@ -325,54 +352,10 @@ export class CargoDetails extends Component {
         <div className="flex-33 no_max layout-row layout-align-center-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
-              <p className={`flex-none ${styles.f_header}`}> Customs Declaration</p>
-            </div>
-            <div className="flex-100">
-              {documents.customs_declaration ? (
-                <DocViewer doc={documents.customs_declaration} />
-              ) : (
-                <FileUploader
-                  theme={theme}
-                  dispatchFn={this.fileFn}
-                  type="customs_declaration"
-                  text="Customs Declaration"
-                />
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="flex-33 no_max layout-row layout-align-center-center">
-          {this.props.totalGoodsValue.value > 20000 ? (
-            <div className="flex-90 layout-row layout-wrap">
-              <div className="flex-100">
-                <p className={`flex-none ${styles.f_header}`}> Customs Value Declaration</p>
-              </div>
-              <div className="flex-100">
-                {documents.customs_value_declaration ? (
-                  <DocViewer doc={documents.customs_value_declaration} />
-                ) : (
-                  <FileUploader
-                    theme={theme}
-                    dispatchFn={this.fileFn}
-                    type="customs_value_declaration"
-                    text="Customs Value Declaration"
-                  />
-                )}
-              </div>
-            </div>
-          ) : (
-            ''
-          )}
-        </div>
-        <div className="flex-33 no_max layout-row layout-align-center-center">
-          <div className="flex-90 layout-row layout-wrap">
-            <div className="flex-100">
-              {/* <TextHeading theme={theme} size={4} text="EORI" /> */}
-              <p className={`flex-none ${styles.f_header}`}>
+              <h3 style={{ 'font-weight': 'normal' }}>
                 {' '}
-                EORI <i>(if applicable)</i>
-              </p>
-              {/* <p className="flex-75 center five_m">(if applicable)</p> */}
+                EORI  <i style={{ 'font-size': '.83em' }}>( if applicable )</i>
+              </h3>
             </div>
             <div className="flex-100 input_box">
               <input
@@ -385,11 +368,69 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
+        <div className="flex-33 no_max layout-row layout-row layout-align-start-start">
+          <div className="flex-90 layout-row layout-wrap">
+            <div className="flex-100">
+              <TextHeading theme={theme} size={3} text="Customs Declaration" />
+            </div>
+            <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
+              <div className="flex-100">
+                {documents.customs_declaration ? (
+                  <DocViewer doc={documents.customs_declaration} />
+                ) : (
+                  <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
+                    <div className="flex-100 layout-row">
+                      <DocumentsForm
+                        theme={theme}
+                        type="customs_declaration"
+                        dispatchFn={this.fileFn}
+                        text="Costums decl."
+                        doc={documents.customs_declaration}
+                        isRequired
+                        deleteFn={this.deleteDoc}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-33 no_max layout-row layout-align-center-end">
+          {this.props.totalGoodsValue.value > 20000 ? (
+            <div className="flex-90 layout-row layout-wrap">
+              <div className="flex-100">
+                <TextHeading theme={theme} size={3} text="Customs Value Declaration" />
+              </div>
+              <div className="flex-100">
+                {documents.customs_value_declaration ? (
+                  <DocViewer doc={documents.customs_value_declaration} />
+                ) : (
+                  <div className="flex-100 layout-row layout-wrap" name="customs_value_declaration">
+                    <div className="flex-100 layout-row">
+                      <DocumentsForm
+                        theme={theme}
+                        type="customs_value_declaration"
+                        text="Customs Val. Decl."
+                        dispatchFn={this.fileFn}
+                        doc={documents.customs_declaration}
+                        isRequired
+                        deleteFn={this.deleteDoc}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     )
 
     return (
-      <div className="flex-100 layout-row layout-wrap padd_top">
+      <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
             <div className="flex-100 layout-row">
@@ -398,17 +439,17 @@ export class CargoDetails extends Component {
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">
+              <div className="flex-100">
+                {' '}
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={3} text="Total value of goods" />
+                </div>
+              </div>
               <div
                 className="flex-100 flex-gt-sm-50 layout-row layout-wrap
                   layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap">
-                  <div className="flex-100">
-                    {' '}
-                    <div className="flex-none">
-                      <TextHeading theme={theme} size={3} text="Total value of goods" />
-                    </div>
-                  </div>
                   <div className="flex-100 layout-row">
                     <div className="flex-66 layout-row">
                       <FormsyInput
@@ -472,6 +513,7 @@ export class CargoDetails extends Component {
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
                     <textarea
+                      className={styles.textarea_incoterm}
                       name="incoterm"
                       id=""
                       cols="30"
@@ -484,7 +526,7 @@ export class CargoDetails extends Component {
               </div>
               <div
                 className="flex-100 flex-gt-sm-45 offset-gt-sm-5
-                  layout-row layout-wrap alyout-align-start-start"
+                  layout-row layout-wrap layout-align-start-start"
               >
                 <div className="flex-100 layout-row layout-wrap" name="packing_sheet">
                   <div className="flex-100 layout-row">
@@ -552,7 +594,6 @@ export class CargoDetails extends Component {
                 ) : (
                   ''
                 )}
-
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                     <div className="flex-100">
@@ -563,6 +604,7 @@ export class CargoDetails extends Component {
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
                       <textarea
+                        className={styles.textarea_margin}
                         name="notes"
                         id=""
                         cols="30"
@@ -572,15 +614,10 @@ export class CargoDetails extends Component {
                       />
                     </div>
                   </div>
-                  <div
-                    className="
-                flex-gt-sm-100
-                 layout-row
-                 layout-align-start-start
-                 layout-wrap
-                "
-                  >
-                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                  <div className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap">
+                    <div className="
+                    flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+                    >
                       <DocumentsMultiForm
                         theme={theme}
                         type="miscellaneous"

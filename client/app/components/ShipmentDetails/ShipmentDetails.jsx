@@ -442,6 +442,7 @@ export class ShipmentDetails extends Component {
             theme={theme}
             scope={scope}
             availableCargoItemTypes={shipmentData.cargoItemTypes}
+            maxDimensions={shipmentData.maxDimensions}
             toggleModal={name => this.toggleModal(name)}
           />
         )
@@ -527,15 +528,7 @@ export class ShipmentDetails extends Component {
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading
-                theme={theme}
-                text={
-                  this.state.has_pre_carriage
-                    ? 'Approximate Pickup Date:'
-                    : 'Approximate Departure Date:'
-                }
-                size={3}
-              />
+              <TextHeading theme={theme} text="Available Dates" size={3} />
             </div>
             <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>
@@ -708,31 +701,37 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user && !user.guest ? (
-          <div
-            className={
-              `${defaults.border_divider} layout-row flex-100 ` +
-              'layout-wrap layout-align-center-center'
-            }
-          >
+        {user &&
+          !user.guest && (
             <div
               className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
-                'layout-row flex-none layout-wrap layout-align-start-start'
+                `${defaults.border_divider} layout-row flex-100 ` +
+                'layout-wrap layout-align-center-center'
               }
             >
-              <RoundButton
-                text="Back to Dashboard"
-                handleNext={this.returnToDashboard}
-                iconClass="fa-angle-left"
-                theme={theme}
-                back
-              />
+              <div
+                className={
+                  `${styles.btn_sec} ${defaults.content_width} ` +
+                  'layout-row flex-none layout-wrap layout-align-start-start'
+                }
+              >
+                <div
+                  className={
+                    `${styles.btn_sec} ${defaults.content_width} ` +
+                    'layout-row flex-none layout-wrap layout-align-start-start'
+                  }
+                >
+                  <RoundButton
+                    text="Back to Dashboard"
+                    handleNext={this.returnToDashboard}
+                    iconClass="fa-angle-left"
+                    theme={theme}
+                    back
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        ) : (
-          ''
-        )}
+          )}
       </div>
     )
   }

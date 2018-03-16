@@ -256,7 +256,8 @@
 .dashboard_top {
     // margin-top: 70px;
     height: 400px;
-    overflow: hidden;
+    overflow-y: hidden; 
+      overflow-x: hidden;
 }
 .dashboard_mid {
     margin-top: 400px;
@@ -280,6 +281,8 @@
     top: 0;
     right: 0;
     z-index: 5;
+    overflow-y: hidden; 
+      overflow-x: hidden;
 }
 .welcome {
     position: absolute;

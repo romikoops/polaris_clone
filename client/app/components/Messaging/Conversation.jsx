@@ -5,6 +5,7 @@ import styles from './Messaging.scss'
 import defStyles from '../../styles/default_classes.scss'
 import { Message, MessageShipmentData } from './'
 import PropTypes from '../../prop-types'
+import menuStyles from './DetailMenu.scss'
 
 export class Conversation extends Component {
   constructor (props) {
@@ -28,11 +29,8 @@ export class Conversation extends Component {
       containerId: 'messageList',
       offset: 50
     })
-    this.scrollToBottom()
   }
-  componentDidUpdate () {
-    this.scrollToBottom()
-  }
+
   handleReplyChange (ev) {
     const { name, value } = ev.target
     this.setState({ [name]: value })
@@ -107,18 +105,16 @@ export class Conversation extends Component {
       user={user}
       closeInfo={this.toggleDetails}
     />)
-    const showDetailView = showDetails ? styles.detail_wrapper_open
-      : styles.detail_wrapper_closed
-    const showMessageView = showDetails ? styles.message_wrapper_closed
-      : styles.message_wrapper_open
     const messageView = (
-      <div className={`${showMessageView} flex-100 layout-column layout-align-start-start`} ref>
+      <div className="flex-100 layout-column layout-align-start-start" ref>
         <div
           id="messageList"
           className={`${styles.message_scroll} 
           flex-70 layout-row layout-align-start-start layout-wrap `}
         >
-          { messages }
+          <div className="flex-70 layout-row layout-align-start-start layout-wrap" >
+            { messages }
+          </div>
 
           <Element name="messagesEnd" />
         </div>
@@ -165,32 +161,36 @@ export class Conversation extends Component {
         <div ref={(el) => { this.el = el }} />
       </div>
     )
+    //  const showDetailView = this.state.showDetails ? styles.detail_wrapper_open
+    //    : styles.detail_wrapper_closed
+    const detailStyle = showDetails ? menuStyles.open : menuStyles.closed
     return (
       <div className={`flex-100 layout-column layout-align-start-start ${styles.convo_wrapper}`}>
         <div
-          className={`${styles.summary_wrapper} ${showDetailView}
-          flex-10 layout-row layout-wrap layout-align-start-center `}
+          className={`${styles.summary_wrapper} 
+          flex-15 layout-row layout-wrap layout-align-start-center `}
           onClick={this.toggleDetails}
         >
-          <div className="flex-70 layout-wrap layout-row layout-align-start-center">
+          <div className="flex-90 layout-wrap layout-row layout-align-start-center">
             <div className="flex-5" />
-            <p className="flex-none">
-              Shipment Reference:
-              <b>
-                {conversation.messages[0].shipmentRef}
-              </b>
-            </p>
+           Shipment Reference:
+            <div className="flex-5" />
+            <b>
+              {conversation.messages[0].shipmentRef}
+            </b>
           </div>
-          <div className="flex-30 layout-align-end-center layout-row">
-            <i>
-              Show Details
-            </i>
+          <div
+            className="flex-100 layout-align-center-center layout-row"
+          >
+            <h4 className="flex-none no_m">Show Details</h4>
             <div className="flex-5" />
             <i className="fa fa-info clip" style={btnStyle} />
           </div>
-          { showDetails ? detailView : '' }
         </div>
-        <div className="flex-90 layout-column layout-align-start-start">
+        <div className={`flex-90 layout-column layout-align-start-start ${menuStyles.menu_content} ${detailStyle}`}>
+          { detailView }
+        </div>
+        <div className={`flex-90 layout-column layout-align-start-start ${styles.messageView}`}>
           { messageView }
         </div>
       </div>
