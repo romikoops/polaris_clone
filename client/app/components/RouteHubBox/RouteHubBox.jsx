@@ -70,10 +70,10 @@ export class RouteHubBox extends Component {
 
     const timeDiff = route && route[0] && route[0].eta ? (
       <div
-        className="flex-65 layout-row layout-wrap layout-align-center-center"
+        className="flex-65 layout-row layout-wrap layout-align-center-stretch"
         style={{ marginTop: '25px' }}
       >
-        <h4 className="flex-100 no_m center" style={{ marginBottom: '10px' }}>
+        <h4 className="no_m center" style={{ marginBottom: '10px' }}>
           {' '}
           Est. Transit Time
         </h4>
@@ -114,7 +114,8 @@ export class RouteHubBox extends Component {
                 <div className="flex-none width_100 layout-row layout-align-center-center">
                   {RouteHubBox.faIcon(route)}
                 </div>
-                <div style={dashedLineStyles} />
+                <div className="flex" style={dashedLineStyles} />
+                <br />
                 {timeDiff}
               </div>
             </div>

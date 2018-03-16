@@ -17,7 +17,7 @@ class Shipment < ApplicationRecord
     CustomValidations.inclusion(self, attribute, array)
   end
 
-  validates_with MaxAggregateDimensionsValidator
+  # validates_with MaxAggregateDimensionsValidator
 
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true

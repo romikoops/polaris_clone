@@ -38,6 +38,8 @@ export const tooltips = {
     'The gross weight is necessary to determine the chargeable weight. Gross weight is the total raw weight of the cargo + the weight of the packaging.',
   dangerous_goods:
     'Dangerous goods, often recognised as hazardous materials, may be pure chemicals, mixtures of substances, manufactured products or articles which can pose a risk to people, animals or the environment if not properly handled in use or in transport.',
+  non_stackable:
+    '', // tooltip Text is missing - ask Clemen or Martin
   customs_clearance:
     'Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country or to exported goods so that they can leave the country. The custom clearance is typically given to a shipping agent to prove that all applicable customs duties have been paid and the shipment has been approved.',
   gross_weight:
@@ -63,7 +65,11 @@ export const tooltips = {
   side_lifter:
     'If you require a side-lifter (SIMA), where the container is lifted down on the ground for loading/unloading, an additional charge will be applied on top of the chassi price. Amount to be added depending on Port of loading/discharge and final stuffing/delivery location.',
   chassis:
-    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.'
+    'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.',
+  customs_pre_carriage:
+    '', // tooltip Text is missing - ask Clemen or Martin
+  customs_on_carriage:
+    '' // tooltip Text is missing - ask Clemen or Martin
 }
 
 // Tool tips menu admin

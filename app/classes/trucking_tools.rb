@@ -88,8 +88,8 @@ module TruckingTools
     case trucking_query["modifier"]
       when 'kg'
         query = [
-                  { "min_weight" => { "$lte" => cargo["trucking_chargeable_weight"]}},
-                  {  "max_weight" => { "$gte" => cargo["trucking_chargeable_weight"] }},
+                  { "min_weight" => { "$lte" => cargo["weight"].to_i}},
+                  {  "max_weight" => { "$gte" => cargo["weight"].to_i }},
                   { 'trucking_query_id' => { "$eq" => trucking_query["_id"]}},
                   { 'type' => { "$eq" => delivery_type}}
                 ]
@@ -145,7 +145,7 @@ module TruckingTools
     extra_fees_results.each do |ek, evalue|
       result["value"] += evalue
     end
-
+    
       if !pricing["min_value"] || (pricing["min_value"] && result["value"] > pricing["min_value"])
   
         return {value: result["value"], currency: result["currency"] }
@@ -158,27 +158,27 @@ module TruckingTools
   def fee_calculator(key, fee, cargo)
     case fee["rate_basis"]
       when 'PER_KG'
-        return {currency: fee["currency"], value: cargo["trucking_chargeable_weight"] * fee["value"], key: key}
+        return {currency: fee["currency"], value: cargo["weight"] * fee["value"], key: key}
       when 'PER_X_KG'
-        return {currency: fee["currency"], value: (cargo["trucking_chargeable_weight"] / fee["base"]) * fee["value"], key: key}
+        return {currency: fee["currency"], value: (cargo["weight"] / fee["base"]) * fee["value"], key: key}
       when 'PER_X_TON'
-        return {currency: fee["currency"], value: ((cargo["trucking_chargeable_weight"]/ 1000) / fee["base"]) * fee["value"], key: key}
+        return {currency: fee["currency"], value: ((cargo["weight"]/ 1000) / fee["base"]) * fee["value"], key: key}
       when 'PER_SHIPMENT'
-        return {currency: fee["currency"], value: fee["value"] / cargo["total_cargo_items"], key: key}
+        return {currency: fee["currency"], value: fee["value"] / cargo["number_of_items"], key: key}
       when 'PER_BILL'
-        return {currency: fee["currency"], value: fee["value"] / cargo["total_cargo_items"], key: key}
+        return {currency: fee["currency"], value: fee["value"] / cargo["number_of_items"], key: key}
       when 'PER_ITEM'
-        return {currency: fee["currency"], value: fee["value"] * cargo["quantity"], key: key}
+        return {currency: fee["currency"], value: fee["value"] * cargo["number_of_items"], key: key}
       when 'PER_CONTAINER'
-        return {currency: fee["currency"], value: fee["value"] * cargo["quantity"], key: key}
+        return {currency: fee["currency"], value: fee["value"] * cargo["number_of_items"], key: key}
       when 'PER_CBM_TON'
         cbm_value = cargo["volume"] * fee["cbm"]
-        ton_value = (cargo["trucking_chargeable_weight"]/ 1000) * fee["ton"]
+        ton_value = (cargo["weight"]/ 1000) * fee["ton"]
         return_value = ton_value > cbm_value ? ton_value : cbm_value
         return {currency: fee["currency"], value: return_value, key: key}
       when 'PER_CBM_KG'
         cbm_value = cargo["volume"] * fee["cbm"]
-        kg_value = cargo["trucking_chargeable_weight"] * fee["kg"]
+        kg_value = cargo["weight"] * fee["kg"]
         return_value = kg_value > cbm_value ? kg_value : cbm_value
         return {currency: fee["currency"], value: return_value, key: key}
       end
@@ -216,31 +216,44 @@ module TruckingTools
 
     trucking_hub = retrieve_trucking_hub(hub.nexus, load_type, hub.tenant_id)
     
-    cargo_object = {}
+    cargo_object = {"stackable" => {
+      "volume" =>0,
+      "weight" => 0,
+      "number_of_items" => 0
+    }, "non_stackable" =>  {
+      "volume" =>0,
+      "weight" => 0,
+      "number_of_items" => 0
+    }}
     cargo_total_items = cargos.map {|c| c.quantity}.sum
     cargos.each do |cargo|
-      cargo_object[cargo.id] = cargo.as_json
-      cargo_object[cargo.id]["volume"] = cargo.volume
-      cargo_object[cargo.id]["total_cargo_items"] = cargo_total_items
       if trucking_hub["load_meterage"]
         if (cargo.dimension_z > trucking_hub["load_meterage"]["height_limit"]) || !cargo.stackable
           load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24000
           load_meter_weight = load_meterage * trucking_hub["load_meterage"]["ratio"]
           trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
-          cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
+          cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight
+          cargo_object["non_stackable"]["volume"] += cargo.volume
+          cargo_object["non_stackable"]["number_of_items"] += 1
+         
         else
           cbm_ratio = trucking_hub["cbm_ratio"] ? trucking_hub["cbm_ratio"] : 333
           cbm_weight = cargo.volume * cbm_ratio
           trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-          cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
+          cargo_object["stackable"]["weight"] += trucking_chargeable_weight
+          cargo_object["stackable"]["volume"] += cargo.volume
+          cargo_object["stackable"]["number_of_items"] += 1
         end
       else
         cbm_ratio = trucking_hub["cbm_ratio"] ? trucking_hub["cbm_ratio"] : 333
         cbm_weight = cargo.volume * cbm_ratio
         trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-        cargo_object[cargo.id]["trucking_chargeable_weight"] = trucking_chargeable_weight.to_f
+        cargo_object["stackable"]["weight"] += trucking_chargeable_weight
+        cargo_object["stackable"]["volume"] += cargo.volume
+        cargo_object["stackable"]["number_of_items"] += 1
+
       end
-      
+
     end
     trucking_query = retrieve_trucking_query(trucking_hub, destination, km, direction)
 
@@ -248,14 +261,16 @@ module TruckingTools
       delivery_type = 'default'
     end
     trucking_pricings = {}
-    cargo_object.each do |key, cargo|
+    cargo_object.each do |stackable_type, cargo_values|
       
-      trucking_pricings[key] = retrieve_trucking_pricing(trucking_query, cargo, delivery_type)
+      trucking_pricings[stackable_type] = retrieve_trucking_pricing(trucking_query, cargo_values, delivery_type)
     end
     fees = {}
     
-    trucking_pricings.each do |key, pricing|
-      fees[key] = calculate_trucking_price(pricing, cargo_object[key], direction)
+    trucking_pricings.each do |key, tp|
+      if  tp
+        fees[key] = calculate_trucking_price(tp, cargo_object[key], direction)
+      end
     end
     total = {value: 0, currency: ''}
     fees.each do |key, trucking_fee|
@@ -265,22 +280,7 @@ module TruckingTools
     fees[:total] = total
 
     return fees
-    # hub_trucking_query = get_item_fn(client, 'truckingHubs', "_id", "#{hub.id}")
-    # p km
-    # if hub && hub.trucking_type
-    #   case hub_trucking_query["type"]
-    #   when 'zipcode'
-    #     if hub_trucking_query["modifier"] == "PER_CBM"
-    #       return calc_by_zipcode_cbm(destination, cargo_item.volume_in_cm3, km, hub_trucking_query["table"], client)
-    #     else
-    #       return calc_by_zipcode_weight(destination, cargo_item.payload_in_kg, km, hub_trucking_query["table"], client)
-    #     end
-    #   when 'city'
-    #     return calc_by_city(hub, destination, km, cargo_item, hub_trucking_query["table"], client, target)
-    #   end
-    # else
-    #   return {value: 1.25 * km, currency: "EUR"}
-    # end
+   
   end
 
   def calc_by_zipcode(destination, cargo_item, km, tpKey, client)

@@ -108,7 +108,6 @@ UserShipmentsGroup.propTypes = {
   shipments: PropTypes.arrayOf(PropTypes.shipment),
   user: PropTypes.clients,
   handleShipmentAction: PropTypes.func.isRequired,
-  viewShipment: PropTypes.func.isRequired,
   hubHash: PropTypes.objectOf(PropTypes.hub),
   userDispatch: PropTypes.objectOf(PropTypes.func)
 }

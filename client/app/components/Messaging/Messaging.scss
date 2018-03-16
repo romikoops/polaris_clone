@@ -31,7 +31,11 @@
     box-shadow: 0 1px 1px 0 rgba(12,13,14,0.75);
     background: #fff;
     padding-left: 15px;
+    element:focus {
+      backrgound: yellow !important;
+    }
   }
+  
   .timestamp {
     font-size: 10px;
   }
@@ -68,37 +72,10 @@
   .user_style {
     right: 5px;
   }
-  // .user_style:after {
-  //   content: '';
-  //   position: absolute;
-  //   right: 0;
-  //   top: 75%;
-  //   width: 0;
-  //   height: 0;
-  //   border: 20px solid transparent;
-  //   // border-left-color: #00aabb;
-  //   border-right: 0;
-  //   border-bottom: 0;
-  //   margin-top: -10px;
-  //   margin-right: -20px;
-  // }
+
   .tenant_style {
     left: 5px;
   }
-  // .tenant_style:after {
-  //   content: '';
-  //   position: absolute;
-  //   left: 0;
-  //   top: 75%;
-  //   width: 0;
-  //   height: 0;
-  //   border: 20px solid transparent;
-  //   // border-right-color: #00aabb;
-  //   border-left: 0;
-  //   border-bottom: 0;
-  //   margin-top: -10px;
-  //   margin-left: -20px;
-  // }
   .show_details {
     width: 100%;
     position: relative;
@@ -151,20 +128,21 @@
     border-radius: 50px;
   }
   .data_overlay {
-    // position: absolute;
-    height: 100%;
-    width: 100%;
+    padding-top: 50px;
+    width: 80%;
+    height: 80%;
     background: #fff;
     border-radius: 10px;
     box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
+    overflow: hidden;
   }
   .data_box {
     position: relative;
     background: #fff;
+    margin-top: 50px;
   }
   .summary {
     position: relative;
-    top:25px;
     // height: 100%;
     background: #fff;
     border-radius: 10px;
@@ -175,22 +153,23 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: 1px 2px 3px 1px rgba(237,234,234,0.5);
-    z-index: 200;
     overflow: hidden;
+    :hover {
+      cursor: pointer;
+    }
   }
+  
   .msg_form {
     padding: 5px;
   }
-  .detail_wrapper_open{
-    height: 100%;
+  .convo_list {
+    position: relative;
+    overflow: scroll;
   }
-  .detail_wrapper_closed {
-    height: 75px;
-  }
-  .message_wraper_open {
 
+  .message_view {
+    position: fixed;
+    z-index: 0;
   }
-  .message_wrapper_closed {
-    height: 250px;
-  }
+
 }

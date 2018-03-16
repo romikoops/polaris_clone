@@ -12,35 +12,34 @@ export class ShipmentThankYou extends Component {
   }
   render () {
     const {
-      theme, shipmentData, tenant, shipmentDispatch, user
+      theme, shipmentData, shipmentDispatch, user
     } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
       shipment
     } = shipmentData
     if (!shipment) return <h1> Loading</h1>
-    const tenantName = tenant ? tenant.name : ''
     return (
       <div className="flex-100 layout-row layout-wrap">
         <div className="flex-100 layout-row layout-wrap layout-align-center">
           <div className={`${defaults.content_width} flex-none  layout-row layout-wrap layout-align-start`}>
             <div className={` ${styles.thank_box} flex-100 layout-row layout-wrap`}>
-              <div className={` ${styles.thank_you} flex-100 layout-row layout-wrap layout-align-start`}>
+              <div className={` ${styles.thank_you} flex-100 layout-row layout-align-start`}>
                 <p className="flex-100">
-                  Thank you for booking with {tenantName}.
+                  Thank you for your booking request.
                 </p>
               </div>
-              <div className={`flex-100 layout-row layout-align-start ${styles.b_ref}`}>
-                <p className="flex-100">Booking Reference: {shipment.imc_reference}</p>
+              <div className={`${styles.b_ref} flex-100 layout-row layout-align-start`}>
+                Booking Reference: {shipment.imc_reference}
               </div>
               <div className={`flex-100 layout-row layout-align-start layout-wrap ${styles.thank_details}`}>
                 <p className="flex-100">
-                  We have just sent your order confirmation with all the booking details
-                  to your account e-mail address. Now, our team will review your order
-                  and contact you with any further instructions or simply confirm the
-                  request via e-mail.
-                </p>
-                <p className="flex-100">
+                  Booking request confirmation has been sent to your account email address.
+                  <br />
+                  Please note that the rates can be changed withyout prior notice.
+                  <br />
+                  Your booking will be confirmed after a review.
+                  <br />
                   Do not hesitate to contact us either through the
                   message center or your account manager
                 </p>
@@ -69,7 +68,6 @@ ShipmentThankYou.propTypes = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: PropTypes.objectOf(PropTypes.any),
-  tenant: PropTypes.objectOf(PropTypes.any),
   setStage: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any)
 }
@@ -77,7 +75,6 @@ ShipmentThankYou.defaultProps = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: null,
-  tenant: {},
   user: {}
 }
 export default ShipmentThankYou

@@ -327,7 +327,8 @@ export class ShipmentLocationBox extends Component {
       position: location,
       map,
       title: name,
-      icon
+      icon,
+      optimized: false
     })
     markers[target] = marker
     if (markers.origin.title !== undefined) {
@@ -721,7 +722,11 @@ export class ShipmentLocationBox extends Component {
     }
     this.setState({
       autoTextOrigin: newData.autoTextOrigin,
-      autoTextDest: newData.autoTextDest
+      autoTextDest: newData.autoTextDest,
+      autoText: {
+        origin: newData.autoTextOrigin,
+        destination: newData.autoTextDest
+      }
     })
     return ''
   }
@@ -921,9 +926,9 @@ export class ShipmentLocationBox extends Component {
           <input
             id="origin"
             name="origin"
-            className={
-              `flex-none ${styles.input} ${originFieldsHaveErrors ? styles.with_errors : ''}`
-            }
+            className={`flex-none ${styles.input} ${
+              originFieldsHaveErrors ? styles.with_errors : ''
+            }`}
             type="string"
             onChange={this.handleAuto}
             value={this.state.autoText.origin}
@@ -941,9 +946,9 @@ export class ShipmentLocationBox extends Component {
     const destFields = (
       <div className={`${styles.address_form_wrapper} ${toggleLogic}`}>
         <div
-          className={
-            `${styles.btn_address_form} ${this.props.has_on_carriage ? '' : styles.hidden}`
-          }
+          className={`${styles.btn_address_form} ${
+            this.props.has_on_carriage ? '' : styles.hidden
+          }`}
           onClick={() => this.changeAddressFormVisibility('destination')}
         >
           <i className={`${styles.down} fa fa-angle-double-down`} />
@@ -1099,12 +1104,7 @@ export class ShipmentLocationBox extends Component {
         <div
           className={`layout-row flex-100 layout-wrap layout-align-center-start ${styles.slbox}`}
         >
-          <div
-            className={
-              `${styles.map_container} ` +
-              'layout-row flex-none layout-align-start-start'
-            }
-          >
+          <div className={`${styles.map_container} layout-row flex-none layout-align-start-start`}>
             {this.state.showModal ? routeModal : ''}
             <div
               className={`flex-100 layout-row layout-wrap layout-align-center-start ${
