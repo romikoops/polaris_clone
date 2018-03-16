@@ -1,6 +1,6 @@
 include ExcelTools
 include MongoTools
-['demo'].each do |sub|
+['greencarrier', 'demo'].each do |sub|
 # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -35,10 +35,10 @@ include MongoTools
   # # req = {"xlsx" => public_pricings}
   # # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
-  # puts "# Overwrite Local Charges From Sheet"
-  # local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
-  # req = {"xlsx" => local_charges}
-  # overwrite_local_charges(req, shipper)
+  puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  req = {"xlsx" => local_charges}
+  overwrite_local_charges(req, shipper)
 
 
   # # # # Overwrite trucking data from excel sheet

@@ -37,46 +37,47 @@ module PricingTools
     charge = get_items_query('localCharges', query).first
     return {} if charge.nil?
     totals = {"total" => {}}
-    charge[direction].each do |k,v|
-      case v["rate_basis"]
+    charge[direction].each do |k,fee|
+      case fee["rate_basis"]
       when "PER_ITEM"
-        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       when "PER_CBM"
-        totals[k] ? totals[k]["value"] += v["value"].to_f * cargo.volume : totals[k] = {"value" => v["value"].to_f * cargo[:volume], "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += fee["value"].to_f * cargo.volume : totals[k] = {"value" => fee["value"].to_f * cargo[:volume], "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       when "PER_CBM_TON"
-        ton = (cargo[:weight] / 1000) * v["ton"]
-        cbm = cargo[:volume] * v["cbm"]
+        ton = (cargo[:weight] / 1000) * fee["ton"]
+        cbm = cargo[:volume] * fee["cbm"]
         tmp = 0
         cbm > ton ? tmp = cbm : tmp = ton
-        tmp > v["min"] ? res = tmp : res = v["min"]
-        totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => v["currency"]}
+        tmp > fee["min"] ? res = tmp : res = fee["min"]
+        totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       when "PER_WM"
         ton = (cargo[:weight] / 1000)
         cbm = cargo[:volume]
         tmp = 0
         cbm > ton ? tmp = cbm : tmp = ton
-        totals[k] ? totals[k]["value"] += tmp : totals[k] = {"value" => tmp, "currency" => v["currency"]}
+        
+        totals[k] ? totals[k]["value"] += tmp * fee["value"] : totals[k] = {"value" => tmp * fee["value"], "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       when "PER_SHIPMENT"
-        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       when "PER_BILL"
-        totals[k] ? totals[k]["value"] += v["value"].to_f : totals[k] = {"value" => v["value"].to_f, "currency" => v["currency"]}
+        totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
         if !totals[k]["currency"]
-          totals[k]["currency"] = v["currency"]
+          totals[k]["currency"] = fee["currency"]
         end
       end
     end
