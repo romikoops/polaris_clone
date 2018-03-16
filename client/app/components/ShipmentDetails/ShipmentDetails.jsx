@@ -133,7 +133,7 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
-    return (
+    return !!(
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -403,38 +403,36 @@ export class ShipmentDetails extends Component {
     } = tenant.data
     const { messages } = this.props
     let cargoDetails
-
-    if (shipmentData.shipment) {
-      if (shipmentData.shipment.load_type === 'container') {
-        cargoDetails = (
-          <ShipmentContainers
-            containers={this.state.containers}
-            addContainer={this.addNewContainer}
-            handleDelta={this.handleContainerChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
-      if (shipmentData.shipment.load_type === 'cargo_item') {
-        cargoDetails = (
-          <ShipmentCargoItems
-            cargoItems={this.state.cargoItems}
-            addCargoItem={this.addNewCargoItem}
-            handleDelta={this.handleCargoItemChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            availableCargoItemTypes={shipmentData.cargoItemTypes}
-            maxDimensions={shipmentData.maxDimensions}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
+    if (!shipmentData.shipment) return ''
+    if (shipmentData.shipment.load_type === 'container') {
+      cargoDetails = (
+        <ShipmentContainers
+          containers={this.state.containers}
+          addContainer={this.addNewContainer}
+          handleDelta={this.handleContainerChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
+    }
+    if (shipmentData.shipment.load_type === 'cargo_item') {
+      cargoDetails = (
+        <ShipmentCargoItems
+          cargoItems={this.state.cargoItems}
+          addCargoItem={this.addNewCargoItem}
+          handleDelta={this.handleCargoItemChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          maxDimensions={shipmentData.maxDimensions}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []

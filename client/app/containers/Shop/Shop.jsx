@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
-import styles from './Shop.scss'
+// import styles from './Shop.scss'
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute'
@@ -14,8 +14,9 @@ import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions } from '../../actions/shipment.actions'
-import { Footer } from '../../components/Footer/Footer'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
+import BookingSummary from '../../components/BookingSummary/BookingSummary'
+import getShipmentData from './getShipmentData'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -35,7 +36,8 @@ class Shop extends Component {
       stageTracker: {},
       shopType: 'Booking',
       fakeLoading: false,
-      showRegistration: false
+      showRegistration: false,
+      shipmentData: {}
     }
     this.selectLoadType = this.selectLoadType.bind(this)
     this.setShipmentData = this.setShipmentData.bind(this)
@@ -52,9 +54,17 @@ class Shop extends Component {
       this.setState({ fakeLoading: true })
       setTimeout(() => this.setState({ fakeLoading: false }), 3000)
     }
+    const { stageTracker } = this.state
+    const response = nextProps.bookingData && nextProps.bookingData.response
+    const shipmentData = getShipmentData(response, stageTracker.stage)
+    if (this.state.shipmentData !== shipmentData) {
+      this.setState({ shipmentData })
+    }
   }
 
-  shouldComponentUpdate (nextProps) {
+  shouldComponentUpdate (nextProps, nextState) {
+    if (!nextState.shipmentData || !nextState.shipmentData.shipment) return false
+
     const { loggingIn, registering, loading } = nextProps
     return loading || !(loggingIn || registering)
   }
@@ -142,22 +152,23 @@ class Shop extends Component {
       currencies,
       dashboard
     } = this.props
-    const { fakeLoading } = this.state
+    const { fakeLoading, shipmentData, req } = this.state
+
     const { theme, scope } = tenant.data
     const { request, response, error } = bookingData
-    const route1 = `${match.url}/:shipmentId/shipment_details`
-    const route2 = `${match.url}/:shipmentId/choose_offer`
-    const route3 = `${match.url}/:shipmentId/final_details`
-    const route4 = `${match.url}/:shipmentId/finish_booking`
-    const route5 = `${match.url}/:shipmentId/thank_you`
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
-    const { req } = this.state
 
     return (
       <div className="layout-row flex-100 layout-wrap">
         {loadingScreen}
         <Header
           theme={this.props.theme}
+          component={
+            <BookingSummary
+              theme={theme}
+              shipmentData={shipmentData}
+            />
+          }
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
@@ -188,14 +199,14 @@ class Shop extends Component {
           )}
         />
         <Route
-          path={route1}
+          path={`${match.url}/:shipmentId/shipment_details`}
           render={props => (
             <ShipmentDetails
               {...props}
               tenant={tenant}
               user={user}
               dashboard={dashboard}
-              shipmentData={response ? response.stage1 : {}}
+              shipmentData={shipmentData}
               prevRequest={request && request.stage2 ? request.stage2 : {}}
               req={request && request.stage1 ? request.stage1 : {}}
               setShipmentDetails={this.setShipmentData}
@@ -207,13 +218,13 @@ class Shop extends Component {
           )}
         />
         <Route
-          path={route2}
+          path={`${match.url}/:shipmentId/choose_offer`}
           render={props => (
             <ChooseRoute
               {...props}
               chooseRoute={this.selectShipmentRoute}
               theme={theme}
-              shipmentData={response && response.stage2 ? response.stage2 : {}}
+              shipmentData={shipmentData}
               prevRequest={request && request.stage3 ? request.stage3 : null}
               req={request && request.stage2 ? request.stage2 : {}}
               user={user}
@@ -225,13 +236,13 @@ class Shop extends Component {
         />
         {response && response.stage3 ? (
           <Route
-            path={route3}
+            path={`${match.url}/:shipmentId/final_details`}
             render={props => (
               <BookingDetails
                 {...props}
                 nextStage={this.setShipmentContacts}
                 theme={theme}
-                shipmentData={response && response.stage3 ? response.stage3 : {}}
+                shipmentData={shipmentData}
                 prevRequest={request && request.stage4 ? request.stage4 : null}
                 currencies={currencies}
                 setStage={this.selectShipmentStage}
@@ -247,35 +258,33 @@ class Shop extends Component {
           ''
         )}
         <Route
-          path={route4}
+          path={`${match.url}/:shipmentId/finish_booking`}
           render={props => (
             <BookingConfirmation
               {...props}
               theme={theme}
               tenant={tenant.data}
               user={user}
-              shipmentData={response ? response.stage4 : {}}
+              shipmentData={shipmentData}
               setStage={this.selectShipmentStage}
               shipmentDispatch={shipmentDispatch}
             />
           )}
         />
         <Route
-          path={route5}
+          path={`${match.url}/:shipmentId/thank_you`}
           render={props => (
             <ShipmentThankYou
               {...props}
               theme={theme}
               tenant={tenant.data}
               user={user}
-              shipmentData={response ? response.stage5 : {}}
+              shipmentData={shipmentData}
               setStage={this.selectShipmentStage}
               shipmentDispatch={shipmentDispatch}
             />
           )}
         />
-        <div className={`${styles.pre_footer_break} flex-100`} />
-        <Footer className="flex-100" theme={theme} tenant={tenant.data} />
       </div>
     )
   }
