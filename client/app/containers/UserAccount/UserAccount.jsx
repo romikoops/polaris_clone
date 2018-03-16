@@ -11,7 +11,8 @@ import {
   UserBilling,
   UserContacts
 } from '../../components/UserAccount'
-import { UserShipmentsGroup } from '../../components/User/Shipments/Group'
+// eslint-disable-next-line import/no-named-as-default
+import UserShipmentsGroup from '../../components/User/Shipments/Group'
 import { userActions, authenticationActions, appActions } from '../../actions'
 import FloatingMenu from '../../components/FloatingMenu/FloatingMenu'
 import PropTypes from '../../prop-types'
