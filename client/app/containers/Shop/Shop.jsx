@@ -36,8 +36,7 @@ class Shop extends Component {
       stageTracker: {},
       shopType: 'Booking',
       fakeLoading: false,
-      showRegistration: false,
-      shipmentData: {}
+      showRegistration: false
     }
     this.selectLoadType = this.selectLoadType.bind(this)
     this.setShipmentData = this.setShipmentData.bind(this)
@@ -54,17 +53,9 @@ class Shop extends Component {
       this.setState({ fakeLoading: true })
       setTimeout(() => this.setState({ fakeLoading: false }), 3000)
     }
-    const { stageTracker } = this.state
-    const response = nextProps.bookingData && nextProps.bookingData.response
-    const shipmentData = getShipmentData(response, stageTracker.stage)
-    if (this.state.shipmentData !== shipmentData) {
-      this.setState({ shipmentData })
-    }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    if (!nextState.shipmentData || !nextState.shipmentData.shipment) return false
-
+  shouldComponentUpdate (nextProps) {
     const { loggingIn, registering, loading } = nextProps
     return loading || !(loggingIn || registering)
   }
@@ -152,11 +143,13 @@ class Shop extends Component {
       currencies,
       dashboard
     } = this.props
-    const { fakeLoading, shipmentData, req } = this.state
-
+    const { fakeLoading, stageTracker } = this.state
     const { theme, scope } = tenant.data
     const { request, response, error } = bookingData
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
+    const { req } = this.state
+
+    const shipmentData = getShipmentData(response, stageTracker.stage)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
