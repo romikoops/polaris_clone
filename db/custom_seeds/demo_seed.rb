@@ -54,5 +54,4 @@ include MongoTools
     overwrite_city_trucking_rates(req, shipper, dir)
   end
   tenant.update_route_details()
-  TenantSeeder.exec()
 end

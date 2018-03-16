@@ -267,8 +267,10 @@ module TruckingTools
     end
     fees = {}
     
-    trucking_pricings.each do |key, pricing|
-      fees[key] = calculate_trucking_price(pricing, cargo_object[key], direction)
+    trucking_pricings.each do |key, tp|
+      if  tp
+        fees[key] = calculate_trucking_price(tp, cargo_object[key], direction)
+      end
     end
     total = {value: 0, currency: ''}
     fees.each do |key, trucking_fee|
