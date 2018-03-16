@@ -7,6 +7,7 @@ export function getSubdomain () {
     host.split('.')[0] === 'www' ||
     host.split('.')[0] === 'react' ||
     host.split('.')[0] === 'dev' ||
+    host.split('.')[0] === '192' ||
     host.includes('localhost')
   ) {
     return 'demo'

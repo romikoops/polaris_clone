@@ -54,8 +54,11 @@ export function ConvoTile ({
     return <i className={icon} style={color} />
   }
   const showStatus = shipmentStatus()
+
   const ConvoView = (
-    <ConvoTileDiv className={`flex layout-row layout-align-center-start-space-between pointy layout-wrap ${styles.convo_tile}`}>
+    <ConvoTileDiv
+      className={`flex layout-row layout-align-center-start-space-between pointy layout-wrap ${styles.convo_tile} `}
+    >
       <div className="flex-95 layout-row layout-align-start-center">
         <div className="flex-15-layout-row-layout-align-start-center">
           { shipment.convoKey ? <i className={`flex-none clip fa ${shipment.icon}`} style={iconStyle} />

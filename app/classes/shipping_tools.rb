@@ -302,6 +302,7 @@ module ShippingTools
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => cargoKey}]).first
     destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => cargoKey}]).first
+    
     customs_fee = {
       import: calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user),
       export: calc_customs_fees(origin_customs_fee["import"], cargos, shipment.load_type, current_user)

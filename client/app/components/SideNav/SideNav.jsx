@@ -275,7 +275,7 @@ class SideNav extends Component {
       )
     })
     return (
-      <div className={`flex-100 layout-column layout-align-start-start layout-wrap ${styles.side_nav}`}>
+      <div className={`flex-100 layout-column layout-align-start-stretch layout-wrap ${styles.side_nav}`}>
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
         <div className="flex layout-row layout-align-center-start layout-wrap">
           {navLinks}

@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { gradientTextGenerator } from '../../helpers/gradient'
 import styles from './TextHeading.scss'
 
 export class TextHeading extends Component {
@@ -11,40 +10,40 @@ export class TextHeading extends Component {
   }
   render () {
     const {
-      text, theme, size, color
+      text, size, color
     } = this.props
     let returnVal
-    const styling = !color && theme
-      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
-      : { color }
-    const generalStyle = `${styles.text_style} flex-none ${!color ? 'clip' : ''}`
+    const styling = color ? {
+      color: { color }
+    }
+      : { color: 'black' }
     if (size) {
       switch (size) {
         case 1:
           returnVal = (
 
-            <h1 className={generalStyle} style={styling}>
+            <h1 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h1>
           )
           break
         case 2:
           returnVal = (
-            <h2 className={generalStyle} style={styling}>
+            <h2 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h2>
           )
           break
         case 3:
           returnVal = (
-            <h3 className={generalStyle} style={styling}>
+            <h3 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h3>
           )
           break
         case 4:
           returnVal = (
-            <h4 className={generalStyle} style={styling}>
+            <h4 className={`${styles.text_style} flex-none`} style={styling}>
               {text}
             </h4>
           )
@@ -62,12 +61,10 @@ export class TextHeading extends Component {
 
 TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
-  theme: PropTypes.theme,
   size: PropTypes.number.isRequired,
   color: PropTypes.string
 }
 TextHeading.defaultProps = {
-  theme: {},
   color: ''
 }
 export default TextHeading
