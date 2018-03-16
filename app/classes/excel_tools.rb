@@ -88,7 +88,22 @@ module ExcelTools
               currency: currency_row[3],
               base: 100
             }
+            
           }
+          if  direction == 'export'
+            tmp[:fees][:congestion] = {
+              value: 15,
+              rate_basis: 'PER_ITEM',
+              currency: currency_row[3]
+            }
+          end
+          if  direction == 'import'
+            tmp[:fees][:congestion] = {
+              value: 15,
+              rate_basis: 'PER_ITEM',
+              currency: currency_row[3]
+            }
+          end
           tmp[:direction] = direction
           tmp[:type] = "default"
           tmp[:_id] = SecureRandom.uuid
@@ -288,11 +303,17 @@ module ExcelTools
           tmp = defaults[i - 3].clone
           tmp[:_id] = SecureRandom.uuid
           tmp[:type] = "default"
+          tmp[:cbm_ratio] = 250
           tmp[:fees] = {
             base_rate: {
               kg: row_data[i],
               cbm: row_data[7],
               rate_basis: 'PER_CBM_KG',
+              currency: "CNY"
+            },
+            vat: {
+             value: 0.06,
+              rate_basis: 'PERCENTAGE',
               currency: "CNY"
             }
           }
@@ -405,7 +426,8 @@ module ExcelTools
           shipment: 'SHIPMENT',
           bill: 'BILL',
           container: 'CONTAINER',
-          minimum: 'MINIMUM'
+          minimum: 'MINIMUM',
+          wm: 'WM'
         )
         
         ['lcl', 'fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
@@ -441,7 +463,7 @@ module ExcelTools
             when 'PER_KG'
               charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             when 'PER_WM'
-              charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+              charge = {currency: row[:currency], value: row[:wm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             when 'PER_ITEM'
               charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             when 'PER_CBM_TON'
@@ -462,12 +484,11 @@ module ExcelTools
 
         local_charges.push(
           {
-            :update_one => 
+            :replace_one => 
             {
               :filter => {:_id => lc_id},
-              :update => {
-                "$set" => v
-              }, :upsert => true
+              :replacement =>  v,
+              :upsert => true
             }
           }
         )
@@ -479,12 +500,11 @@ module ExcelTools
         lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
          customs_fees.push(
            {
-            :update_one => 
+            :replace_one => 
             {
               :filter => {:_id => lc_id},
-              :update => {
-                "$set" => v
-              }, :upsert => true
+              :replacement =>  v,
+              :upsert => true
             }
           }
         )
