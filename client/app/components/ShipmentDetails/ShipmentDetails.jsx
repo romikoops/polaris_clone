@@ -654,7 +654,7 @@ export class ShipmentDetails extends Component {
               this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
               this.state.containers.some(container => container.dangerous_goods)
             ) ? (
-                <div className="flex-60 layout-row layout-align-start-center">
+                <div className="flex-50 layout-row layout-align-start-center">
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
                       theme={theme}
@@ -669,7 +669,7 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <p style={{ margin: 0, fontSize: '14px' }}>
-                  I hereby confirm that none of the specified cargo units contain{' '}
+                    I hereby confirm that none of the specified cargo units contain{' '}
                     <span
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
@@ -680,7 +680,7 @@ export class ShipmentDetails extends Component {
                   </p>
                 </div>
               ) : (
-                <div className="flex-60" />
+                <div className="flex-50" />
               )}
             <div className="flex layout-row layout-align-end">
               <RoundButton
