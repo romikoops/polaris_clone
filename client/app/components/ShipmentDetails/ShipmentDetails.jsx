@@ -630,6 +630,7 @@ export class ShipmentDetails extends Component {
               onCarriage={this.state.has_on_carriage}
               originFees={this.state.has_pre_carriage}
               destinationFees={this.state.has_on_carriage}
+              tenant={tenant}
             />
           </div>
         </div>

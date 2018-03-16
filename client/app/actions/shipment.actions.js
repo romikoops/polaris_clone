@@ -3,11 +3,11 @@ import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
 import { alertActions, userActions } from './'
-import { getSubdomain } from '../helpers/subdomain'
+// import { getSubdomain } from '../helpers/subdomain'
 
-const subdomainKey = getSubdomain()
-const cookieKey = `${subdomainKey}_user`
-const userData = JSON.parse(window.localStorage.getItem(cookieKey))
+// const subdomainKey = getSubdomain()
+// const cookieKey = `${subdomainKey}_user`
+// const userData = JSON.parse(window.localStorage.getItem(cookieKey))
 function newShipment (type) {
   function request (shipmentData) {
     return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
@@ -369,9 +369,9 @@ function deleteDocument (id) {
   }
 }
 
-function toDashboard () {
+function toDashboard (id) {
   return (dispatch) => {
-    dispatch(userActions.getDashboard(userData.id, true))
+    dispatch(userActions.getDashboard(id, true))
   }
 }
 

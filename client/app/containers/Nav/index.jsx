@@ -13,6 +13,9 @@ class NavBar extends Component {
   static goBack () {
     history.goBack()
   }
+  static goForward () {
+    history.go(1)
+  }
   constructor (props) {
     super(props)
     this.state = {}
@@ -219,7 +222,7 @@ class NavBar extends Component {
       <i className="fa fa-home clip" style={iconStyle} />{' '}
     </div>)
     pathPieces.forEach((br, i) => {
-      if (br !== 'view') {
+      if (br !== 'view' && i > 0) {
         breadcrumbs.push(<div className="flex-none layout-row layout-align-center-center pointy">
           {' '}
           <i className="fa fa-angle-double-right clip" style={iconStyle} />{' '}
@@ -244,12 +247,22 @@ class NavBar extends Component {
       <div className={`${styles.nav_bar} flex-100 layout-row layout-align-space-between-center`}>
         <div className="flex layout-row layout-align-start-center">{breadcrumbs}</div>
         <div
-          className={`${styles.nav_cell} flex-none layout-row layout-align-center-center`}
+          className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
           onClick={() => NavBar.goBack()}
         >
-          <i className="flex-none fa fa-arrow-left" />
-          <div className="flex-5" />
-          <p className="flex-none">Back</p>
+          <i className="flex-none fa fa-chevron-left" />
+          <p className="flex-none center" style={{ paddingLeft: '10px' }}>
+            Back
+          </p>
+        </div>
+        <div
+          className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
+          onClick={() => NavBar.goForward()}
+        >
+          <p className="flex-none center" style={{ paddingRight: '10px' }}>
+            Forward
+          </p>
+          <i className="flex-none fa fa-chevron-right" />
         </div>
       </div>
     )

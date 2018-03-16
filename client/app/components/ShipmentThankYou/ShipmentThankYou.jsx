@@ -12,7 +12,7 @@ export class ShipmentThankYou extends Component {
   }
   render () {
     const {
-      theme, shipmentData, tenant, shipmentDispatch
+      theme, shipmentData, tenant, shipmentDispatch, user
     } = this.props
     if (!shipmentData) return <h1>Loading</h1>
     const {
@@ -55,7 +55,7 @@ export class ShipmentThankYou extends Component {
                   text="Back to dashboard"
                   back
                   iconClass="fa-angle0-left"
-                  handleNext={() => shipmentDispatch.toDashboard()}
+                  handleNext={() => shipmentDispatch.toDashboard(user.id)}
                 />
               </div>
             </div>
@@ -70,12 +70,14 @@ ShipmentThankYou.propTypes = {
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: PropTypes.objectOf(PropTypes.any),
   tenant: PropTypes.objectOf(PropTypes.any),
-  setStage: PropTypes.func.isRequired
+  setStage: PropTypes.func.isRequired,
+  user: PropTypes.objectOf(PropTypes.any)
 }
 ShipmentThankYou.defaultProps = {
   theme: PropTypes.objectOf(PropTypes.any),
   shipmentData: PropTypes.objectOf(PropTypes.any),
   shipmentDispatch: null,
-  tenant: {}
+  tenant: {},
+  user: {}
 }
 export default ShipmentThankYou

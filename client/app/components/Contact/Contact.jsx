@@ -11,7 +11,7 @@ export default function Contact (props) {
         <i className={` ${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
       </div>
       <div className="flex-90 layout-row layout-wrap layout-align-start-start">
-        <h3 style={{ fontWeight: 'normal' }}>{ nameToDisplay(contactType) }</h3>
+        <h3 style={{ fontWeight: 'normal' }}>{nameToDisplay(contactType)}</h3>
         <div className="flex-100 layout-row layout-align-space-between-start">
           <div className="flex-60 layout-row layout-wrap layout-align-center-start">
             <p className={`${styles.contact_text} flex-100`}>
@@ -22,17 +22,16 @@ export default function Contact (props) {
             <p className={`${styles.contact_text} flex-100`}>{contact.data.phone}</p>
           </div>
           <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
-            <p className={`${styles.contact_text} flex-100 center`}>Address</p>
+            <p className={`${styles.contact_text} ${styles.address_buffer} flex-100 center`}>
+              Address
+            </p>
+
             <address className={` ${styles.address} flex-100 center`}>
               {contact.location
                 ? `${contact.location.street} ${contact.location.street_number}`
                 : ''}{' '}
               <br />
-              {
-                contact.location
-                  ? `${contact.location.zip_code} ${contact.location.city}`
-                  : ''
-              }
+              {contact.location ? `${contact.location.zip_code} ${contact.location.city}` : ''}
               <br />
               {contact.location ? `${contact.location.country}` : ''}
             </address>

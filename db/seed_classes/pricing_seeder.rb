@@ -22,21 +22,11 @@ class PricingSeeder
 
 		  ### Overwrite dedicated pricings from excel sheet.
 		  ### If dedicated == true, shipper.id is automatically inserted.
-		  puts "# Overwrite dedicated pricings from excel sheet."
-		  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-		  req = {"xlsx" => public_pricings}
-		  overwrite_mongo_lcl_pricings(req, dedicated = true, shipper, true)
 
-		  # Overwrite public pricings from excel sheet
-		  puts "# Overwrite public pricings from excel sheet"
-		  public_pricings = File.open("#{Rails.root}/db/dummydata/new_public_ocean_ptp_rates.xlsx")
-		  req = {"xlsx" => public_pricings} 
-		  overwrite_mongo_lcl_pricings(req, dedicated = false, shipper, true)
-
-		  puts "# Overwrite MAERSK pricings from excel sheet"
-		  public_pricings = File.open("#{Rails.root}/db/dummydata/mini_MAERSK_FCL.xlsx")
+		  puts "# Overwrite freight rates (fcl and lcl) from excel sheet"
+		  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
 		  req = {"xlsx" => public_pricings}
-		  overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper, true)
+		  overwrite_freight_rates(req, shipper, true)
 			
 			# puts "# Overwrite Local Charges From Sheet"
 			local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")

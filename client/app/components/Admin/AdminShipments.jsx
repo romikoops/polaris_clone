@@ -50,7 +50,8 @@ class AdminShipments extends Component {
       shipment,
       loading,
       adminDispatch,
-      hubHash
+      hubHash,
+      tenant
     } = this.props
     // ;
     if (!shipments || !hubs || !clients) {
@@ -92,6 +93,7 @@ class AdminShipments extends Component {
                 handleShipmentAction={this.handleShipmentAction}
                 shipmentData={shipment}
                 clients={clients}
+                tenant={tenant}
                 {...props}
               />
             )}
@@ -173,6 +175,7 @@ AdminShipments.propTypes = {
     getShipments: PropTypes.func
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
+  tenant: PropTypes.tenant,
   history: PropTypes.history.isRequired
 }
 
@@ -183,6 +186,7 @@ AdminShipments.defaultProps = {
   shipment: null,
   clients: [],
   loading: false,
+  tenant: {},
   hubHash: null
 }
 
