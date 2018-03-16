@@ -49,6 +49,7 @@ module ShippingTools
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
       cargo_item_types: tenant.cargo_item_types,
+      max_dimensions: CargoItem::MAX_DIMENSIONS
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
@@ -58,23 +59,18 @@ module ShippingTools
 
     offer_calculation.calc_offer!
 
-    if offer_calculation.shipment.save
-      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
-      return {
-        shipment:                   offer_calculation.shipment,
-        total_price:                offer_calculation.total_price,
-        has_pre_carriage:           offer_calculation.has_pre_carriage,
-        has_on_carriage:            offer_calculation.has_on_carriage,
-        schedules:                  offer_calculation.schedules,
-        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-        originHubs:                 offer_calculation.origin_hubs,
-        destinationHubs:            offer_calculation.destination_hubs,
-        cargoUnits:                 cargo_units
-      }
-    else
-      raise ApplicationError::NoRoutes # TBD - Customize Errors
-    end
-
+    offer_calculation.shipment.save!
+    return {
+      shipment:                   offer_calculation.shipment,
+      total_price:                offer_calculation.total_price,
+      has_pre_carriage:           offer_calculation.has_pre_carriage,
+      has_on_carriage:            offer_calculation.has_on_carriage,
+      schedules:                  offer_calculation.schedules,
+      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculation.origin_hubs,
+      destinationHubs:            offer_calculation.destination_hubs,
+      cargoUnits:                 offer_calculation.shipment.cargo_units,
+    }
   end
 
   def create_document(file, shipment, type, user) 

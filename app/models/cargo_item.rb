@@ -1,16 +1,28 @@
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
-    air: 0.167,
-    rail: 0.55,
-    ocean: 1.0,
-    trucking: 0.333
-  }
+    air:      "0.167",
+    rail:     "0.550",
+    ocean:    "1.000",
+    trucking: "0.333"
+  }.map_values { |v| BigDecimal.new(v) }
+
+  MAX_DIMENSIONS = {
+    dimension_x:   "590.0",
+    dimension_y:   "234.2",
+    dimension_z:   "228.0",
+    payload_in_kg: "21_770.0"
+  }.map_values { |v| BigDecimal.new(v) }
+
   belongs_to :shipment
 
-  validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_x,   presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_y,   presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_z,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+  MAX_DIMENSIONS.each do |attribute, max_dimension|
+    validates attribute,
+      presence: true,
+      numericality: {
+        greater_than_or_equal_to: 0,
+        less_than_or_equal_to: max_dimension
+      }
+  end
 
   # Class Methods
   def self.extract(cargo_items_attributes)

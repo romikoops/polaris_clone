@@ -430,6 +430,7 @@ export class ShipmentDetails extends Component {
             theme={theme}
             scope={scope}
             availableCargoItemTypes={shipmentData.cargoItemTypes}
+            maxDimensions={shipmentData.maxDimensions}
             toggleModal={name => this.toggleModal(name)}
           />
         )
