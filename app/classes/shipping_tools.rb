@@ -58,7 +58,6 @@ module ShippingTools
     offer_calculation = OfferCalculator.new(shipment, params, current_user)
 
     offer_calculation.calc_offer!
-    byebug
 
     offer_calculation.shipment.save!
     return {
