@@ -334,7 +334,7 @@ export default function getInputs (
     >
       <div className="layout-row flex-65 layout-wrap layout-align-start-center">
         <p className={`${styles.input_label} flex-none`}> Non Stackable </p>
-        <Tooltip theme={theme} icon="fa-info-circle" text="dangerous_goods" />
+        <Tooltip theme={theme} icon="fa-info-circle" text="non_stackable" />
       </div>
       <Checkbox
         name={`${i}-stackable`}
