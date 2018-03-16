@@ -4,11 +4,10 @@ class Hub < ApplicationRecord
   belongs_to :nexus, class_name: "Location"
   belongs_to :location
   belongs_to :trucking_availability
-  has_many :hub_routes
-  has_many :schedules, through: :hub_routes
-  has_many :routes, through: :hub_routes
-  has_many :stops
+
+  has_many :stops,    dependent: :destroy
   has_many :layovers, through: :stops
+
   has_one :service_charge
 
   before_validation :set_trucking_availability
