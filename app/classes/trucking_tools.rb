@@ -118,10 +118,16 @@ module TruckingTools
   def calculate_trucking_price(pricing, cargo, direction)
     fees = {}
     result = {}
-    
+    total_fees = {}
     pricing["fees"].each do |k, fee|
-      results = fee_calculator(k, fee, cargo)
-      fees[k] = results
+      if fee["rate_basis"] != 'PERCENTAGE'
+        results = fee_calculator(k, fee, cargo)
+         fees[k] = results
+      else
+        total_fees[k] = fee
+      end
+      
+     
     end
     fees.each do |k, v|
 
@@ -132,7 +138,13 @@ module TruckingTools
       end
       result["currency"] = v[:currency]
     end
-    
+    extra_fees_results = {}
+    total_fees.each do |tk, tfee|
+      extra_fees_results[tk] = tfee["value"] * result["value"]
+    end
+    extra_fees_results.each do |ek, evalue|
+      result["value"] += evalue
+    end
 
       if !pricing["min_value"] || (pricing["min_value"] && result["value"] > pricing["min_value"])
   

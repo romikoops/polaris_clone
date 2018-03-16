@@ -303,11 +303,17 @@ module ExcelTools
           tmp = defaults[i - 3].clone
           tmp[:_id] = SecureRandom.uuid
           tmp[:type] = "default"
+          tmp[:cbm_ratio] = 250
           tmp[:fees] = {
             base_rate: {
               kg: row_data[i],
               cbm: row_data[7],
               rate_basis: 'PER_CBM_KG',
+              currency: "CNY"
+            },
+            vat: {
+             value: 0.06,
+              rate_basis: 'PERCENTAGE',
               currency: "CNY"
             }
           }
