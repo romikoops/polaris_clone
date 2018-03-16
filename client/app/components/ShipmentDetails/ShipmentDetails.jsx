@@ -153,9 +153,23 @@ export class ShipmentDetails extends Component {
   }
 
   loadPrevReq (obj) {
+    const newCargoItemsErrors = obj.cargo_items_attributes.map(cia => ({
+      payload_in_kg: true,
+      dimension_x: true,
+      dimension_y: true,
+      dimension_z: true,
+      cargo_item_type_id: true,
+      quantity: false
+    }))
+    const newContainerErrors = obj.containers_attributes.map(cia => ({
+      payload_in_kg: true
+    }))
+
     this.setState({
       cargoItems: obj.cargo_items_attributes,
       containers: obj.containers_attributes,
+      cargoItemsErrors: newCargoItemsErrors,
+      containersErrors: newContainerErrors,
       selectedDay: obj.planned_pickup_date,
       origin: {
         fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
@@ -398,9 +412,7 @@ export class ShipmentDetails extends Component {
       tenant, user, shipmentData, shipmentDispatch
     } = this.props
     const { modals } = this.state
-    const {
-      theme, scope
-    } = tenant.data
+    const { theme, scope } = tenant.data
     const { messages } = this.props
     let cargoDetails
 
@@ -594,11 +606,10 @@ export class ShipmentDetails extends Component {
         style={{ minHeight: '1800px' }}
       >
         {flash}
-        {
-          modals && Object.keys(modals)
+        {modals &&
+          Object.keys(modals)
             .filter(modalName => modals[modalName].show)
-            .map(modalName => modals[modalName].jsx)
-        }
+            .map(modalName => modals[modalName].jsx)}
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
         <div
           className={`${
@@ -646,39 +657,38 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            {
-              !(
-                this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                this.state.containers.some(container => container.dangerous_goods)
-              )
-                ? (
-                  <div className="flex-60 layout-row layout-align-start-center">
-
-                    <div className="flex-10 layout-row layout-align-start-start">
-                      <Checkbox
-                        theme={theme}
-                        onChange={() => this.setState({
+            {!(
+              this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+              this.state.containers.some(container => container.dangerous_goods)
+            ) ? (
+                <div className="flex-60 layout-row layout-align-start-center">
+                  <div className="flex-10 layout-row layout-align-start-start">
+                    <Checkbox
+                      theme={theme}
+                      onChange={() =>
+                        this.setState({
                           noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                        })}
-                        size="30px"
-                        name="no_dangerous_goods_confirmation"
-                        checked={this.state.noDangerousGoodsConfirmed}
-                      />
-                    </div>
-                    <p style={{ margin: 0, fontSize: '14px' }}>
-                      I hereby confirm that none of the specified cargo units contain{' '}
-                      <span
-                        className="emulate_link blue_link"
-                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                      >
-                        dangerous goods
-                      </span>
-                      .
-                    </p>
+                        })
+                      }
+                      size="30px"
+                      name="no_dangerous_goods_confirmation"
+                      checked={this.state.noDangerousGoodsConfirmed}
+                    />
                   </div>
-                )
-                : <div className="flex-60" />
-            }
+                  <p style={{ margin: 0, fontSize: '14px' }}>
+                  I hereby confirm that none of the specified cargo units contain{' '}
+                    <span
+                      className="emulate_link blue_link"
+                      onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                    >
+                    dangerous goods
+                    </span>
+                  .
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-60" />
+              )}
             <div className="flex layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
@@ -691,10 +701,8 @@ export class ShipmentDetails extends Component {
                 }
                 disabled={
                   !this.state.noDangerousGoodsConfirmed &&
-                  (
-                    !this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                    !this.state.containers.some(container => container.dangerous_goods)
-                  )
+                  (!this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                    !this.state.containers.some(container => container.dangerous_goods))
                 }
               />
             </div>
@@ -707,10 +715,11 @@ export class ShipmentDetails extends Component {
               'layout-wrap layout-align-center-center'
             }
           >
-            <div className={
-              `${styles.btn_sec} ${defaults.content_width} ` +
+            <div
+              className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
                 'layout-row flex-none layout-wrap layout-align-start-start'
-            }
+              }
             >
               <RoundButton
                 text="Back to Dashboard"

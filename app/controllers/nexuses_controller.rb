@@ -31,7 +31,6 @@ class NexusesController < ApplicationController
 	def trucking_availability
 		nexus = Location.find(params[:nexus_id])
 		trucking_availability = nexus.trucking_availability(params[:tenant_id])
-		
 		response_handler(truckingAvailable: trucking_availability[params[:load_type]])
 	end
 

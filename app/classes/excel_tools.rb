@@ -468,13 +468,17 @@ module ExcelTools
               charge = {currency: row[:currency], value: row[:item], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             when 'PER_CBM_TON'
               charge = {currency: row[:currency], cbm: row[:cbm], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            when 'PER_SHIPMENT_CONTAINER'
+              charge = {currency: row[:currency], shipment: row[:shipment], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            when 'PER_BILL_CONTAINER'
+              charge = {currency: row[:currency], bill: row[:bill], container: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             when 'PER_CBM_KG'
               charge = {currency: row[:currency], cbm: row[:cbm], kg: row[:kg], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
             end
             if row[:fee_code] != 'CUST'
-              hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase)
+              hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase, sheet_name)
             else
-              customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase)
+              customs= local_charge_load_setter(customs, charge, row[:load_type].downcase, row[:direction].downcase, sheet_name)
             end
         end
       end
@@ -734,7 +738,7 @@ module ExcelTools
       hubs: [],
       nexuses: []
     }
-    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', trucking_type: 'TRUCKING_METHOD', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', hub_address_details: 'ADDRESS_DETAILS', photo: 'PHOTO')
+    hub_rows = first_sheet.parse( hub_status: 'STATUS', hub_type: 'TYPE', hub_name: 'NAME', hub_code: 'CODE', trucking_type: 'TRUCKING_METHOD', hub_operator: 'OPERATOR', latitude: 'LATITUDE', longitude: 'LONGITUDE', country: 'COUNTRY', geocoded_address: 'FULL_ADDRESS', photo: 'PHOTO')
 
     hub_type_name = {
       "ocean" => "Port",
@@ -744,15 +748,24 @@ module ExcelTools
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
-      nexus = Location.find_or_create_by(
+      nexus = Location.find_by(
         name:          hub_row[:hub_name], 
         location_type: "nexus", 
-        photo:         hub_row[:photo],
-        latitude:      hub_row[:latitude], 
-        longitude:     hub_row[:longitude],
-        country:       hub_row[:country], 
-        city:          hub_row[:hub_name]
+        country:       hub_row[:country]
       )
+      if !nexus
+        nexus = Location.create!(
+          name:          hub_row[:hub_name], 
+          location_type: "nexus",
+          latitude:      hub_row[:latitude], 
+          longitude:     hub_row[:longitude], 
+          photo:         hub_row[:photo], 
+          country:       hub_row[:country],
+          city:          hub_row[:hub_name],
+          geocoded_address: hub_row[:geocoded_address]
+        )
+      end
+      
       location = Location.find_or_create_by(
         name:          hub_row[:hub_name], 
         latitude:      hub_row[:latitude], 
@@ -1283,7 +1296,9 @@ module ExcelTools
       hw_threshold: 'HW_THRESHOLD',
       hw_rate_basis: 'HW_RATE_BASIS',
       min_range: 'MIN_RANGE',
-      max_range: 'MAX_RANGE'
+      max_range: 'MAX_RANGE',
+      transit_time: 'TRANSIT TIME',
+      carrier: 'CARRIER'
     )
     tenant = user.tenant
     new_hub_route_pricings = {}
@@ -1322,12 +1337,16 @@ module ExcelTools
           aux_data[pricing_key][:vehicle] = Vehicle.find_by_name("#{row[:mot]}_default")
         end
       end
+      if !aux_data[pricing_key][:transit_time]
+        aux_data[pricing_key][:transit_time] = row[:transit_time]
+      end
       if !aux_data[pricing_key][:origin]
         aux_data[pricing_key][:origin] = Location.find_by(name: row[:origin], location_type: 'nexus')
       end
       if !aux_data[pricing_key][:destination]
         aux_data[pricing_key][:destination] = Location.find_by(name: row[:destination], location_type: 'nexus')
       end
+      
       if !aux_data[pricing_key][:origin_hub_ids]
         aux_data[pricing_key][:origin_hub_ids] = aux_data[pricing_key][:origin].hubs_by_type(row[:mot], user.tenant_id).ids
       end
@@ -1360,10 +1379,10 @@ module ExcelTools
           temp_stop
         end 
       end
-      
+     
       steps_in_order = []
       aux_data[pricing_key][:stops_in_order].length.times do 
-        steps_in_order << 35
+        steps_in_order << aux_data[pricing_key][:transit_time].to_i
       end
       row[:effective_date] = DateTime.now
       row[:expiration_date] = row[:effective_date] + 40.days
@@ -1395,6 +1414,7 @@ module ExcelTools
         new_pricings[pricing_key][cargo_type][:data][row[:fee]][:hw_rate_basis] = row[:hw_rate_basis]
       end
       if row[:min_range]
+        new_pricings[pricing_key][cargo_type][:data][row[:fee]].delete("rate")
         if !new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range]
           new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range] = []
         end
@@ -1764,11 +1784,16 @@ module ExcelTools
     "#{base_str}_rate".to_sym
   end
 
-  def local_charge_load_setter(all_charges, charge, load_type, direction)
+  def local_charge_load_setter(all_charges, charge, load_type, direction, test)
     p charge
     p all_charges
     if load_type === 'fcl'
       ['fcl_20', 'fcl_40', 'fcl_40hq'].each do |lt|
+        p test
+        p all_charges[lt]
+        p  all_charges[lt][direction]
+        p charge 
+        p test
         all_charges[lt][direction][charge[:key]] = charge
       end
     else

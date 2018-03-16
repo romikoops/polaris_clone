@@ -31,7 +31,8 @@ export class ChooseRoute extends Component {
     super(props)
     this.state = {
       selectedMoT: {
-        ocean: true
+        ocean: true,
+        air: true
       },
       durationFilter: 40,
       limits: {
@@ -107,11 +108,11 @@ export class ChooseRoute extends Component {
       focus: [],
       alternative: []
     }
-    const closestRoute = []
+    let closestRoute = []
     const focusRoutes = []
     const altRoutes = []
     const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
-
+    const closestMots = {}
     schedules.forEach((sched) => {
       console.log(sched)
       if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
@@ -121,19 +122,7 @@ export class ChooseRoute extends Component {
         ) {
           smallestDiff = Math.abs(moment(sched.etd).diff(depDay, 'days'))
           idArrays.closest = sched.id
-          closestRoute.push(<RouteResult
-            key={v4()}
-            selectResult={this.chooseResult}
-            theme={this.props.theme}
-            originHubs={originHubs}
-            destinationHubs={destinationHubs}
-            fees={shipment.schedules_charges}
-            schedule={sched}
-            user={user}
-            pickup={shipment.has_pre_carriage}
-            loadType={shipment.load_type}
-            pickupDate={shipment.planned_pickup_date}
-          />)
+          closestMots[sched.mode_of_transport] = sched
         }
         if (
           motKeys.indexOf(sched.mode_of_transport) > -1 &&
@@ -175,6 +164,22 @@ export class ChooseRoute extends Component {
         }
       }
     })
+    closestRoute = Object
+      .values(closestMots)
+      .map(value =>
+        (<RouteResult
+          key={v4()}
+          selectResult={this.chooseResult}
+          theme={this.props.theme}
+          originHubs={originHubs}
+          destinationHubs={destinationHubs}
+          fees={shipment.schedules_charges}
+          schedule={value}
+          user={user}
+          pickup={shipment.has_pre_carriage}
+          loadType={shipment.load_type}
+          pickupDate={shipment.planned_pickup_date}
+        />))
 
     const limitedFocus = limits.focus ? focusRoutes.slice(0, 3) : focusRoutes
     const limitedAlts = limits.alt ? altRoutes.slice(0, 3) : altRoutes

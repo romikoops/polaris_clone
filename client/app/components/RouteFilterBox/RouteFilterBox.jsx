@@ -5,7 +5,6 @@ import { formatDate, parseDate } from 'react-day-picker/moment'
 import PropTypes from '../../prop-types'
 import '../../styles/day-picker-custom.css'
 import { moment } from '../../constants'
-import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './RouteFilterBox.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -151,7 +150,6 @@ export class RouteFilterBox extends Component {
             <p>100 days</p>
           </div>
         </StyledRange>
-        <RoundButton size="full" text="save filter" theme={theme} active />
       </div>
     )
   }
