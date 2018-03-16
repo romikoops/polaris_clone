@@ -662,12 +662,15 @@ export class ShipmentDetails extends Component {
                         checked={this.state.noDangerousGoodsConfirmed}
                       />
                     </div>
-                    <p className="flex-80" style={{ fontSize: '10.5px', textAlign: 'justify', margin: 0 }}>
-                      By clicking this checkbox, you herby confirm that your cargo does not contain
-                      hazardous materials, including (yet not limited to) pure chemicals,
-                      mixtures of substances, manufactured products,
-                      or articles which can pose a risk to people, animals or the environment
-                      if not properly handled in use or in transport.
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                      I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                        dangerous goods
+                      </span>
+                      .
                     </p>
                   </div>
                 )

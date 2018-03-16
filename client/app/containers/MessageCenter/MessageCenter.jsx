@@ -67,13 +67,13 @@ class MessageCenter extends Component {
     let tmpShipment = {}
     let shipment = {}
     if (shipments && convoKey) {
-      if (shipments.requested.length > 0 && tmpShipment.length === undefined) {
+      if (shipments.requested.length > 0 && tmpShipment === undefined) {
         tmpShipment = shipments.requested.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.open.length > 0 && tmpShipment.length === undefined) {
+      if (shipments.open.length > 0 && tmpShipment === undefined) {
         tmpShipment = shipments.open.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.finished.length > 0 && tmpShipment.length === undefined) {
+      if (shipments.finished.length > 0 && tmpShipment === undefined) {
         tmpShipment = shipments.finished.filter(shp => (shp.imc_reference === convoKey))
       }
     }

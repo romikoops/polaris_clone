@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Truncate from 'react-truncate'
 import ReactTooltip from 'react-tooltip'
-import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
 import { Checkbox } from '../Checkbox/Checkbox'
@@ -191,9 +190,9 @@ export class CargoDetails extends Component {
       </div>
     )
     const fadedPreCarriageText = shipment.has_pre_carriage
-      ? 'flex-none' : `${styles.faded_text} flex-none`
+      ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage
-      ? 'flex-none' : `${styles.faded_text} flex-none`
+      ? '' : styles.faded_text
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
@@ -203,7 +202,7 @@ export class CargoDetails extends Component {
         <div className="flex-80 layout-row layout-wrap">
           <p className="flex-90">
             <strong>
-              {' '}import { v4 } from 'node-uuid'
+              {' '}
               When you ship goods from outside the European Union (EU), you may be charged customs
               duty and/or VAT. You can either handle the customs on your own, or have Greencarrier
               handle it for you.
@@ -224,7 +223,7 @@ export class CargoDetails extends Component {
                 data-tip={tooltips.customs_pre_carriage}
                 data-for="preCarriageTooltip"
               >
-                <p className={fadedPreCarriageText}> Export Customs: </p>
+                <p className={`${fadedPreCarriageText} flex-none`}> Export Customs: </p>
                 <Checkbox
                   onChange={() => this.toggleSpecificCustoms('export')}
                   checked={customsData.export.bool}
@@ -245,7 +244,7 @@ export class CargoDetails extends Component {
                 data-tip={tooltips.customs_on_carriage}
                 data-for="onCarriageTooltip"
               >
-                <p className={fadedOnCarriageText}> Import Customs</p>
+                <p className={`${fadedOnCarriageText} flex-none`}> Import Customs</p>
                 <Checkbox
                   onChange={() => this.toggleSpecificCustoms('import')}
                   checked={customsData.import.bool}
