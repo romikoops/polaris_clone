@@ -9,7 +9,7 @@ include MongoTools
 			tenant.trips.destroy_all
 			tenant.layovers.destroy_all
 		  tenant.hubs.destroy_all
-  Overwrite hubs from excel sheet
+  #Overwrite hubs from excel sheet
   puts "# Overwrite hubs from excel sheet"
   hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
   req = {"xlsx" => hubs}
