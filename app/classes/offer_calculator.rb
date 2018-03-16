@@ -149,7 +149,6 @@ class OfferCalculator
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
-      byebug
 
       # destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).order(:etd).uniq
       

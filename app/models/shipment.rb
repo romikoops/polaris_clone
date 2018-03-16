@@ -97,6 +97,10 @@ class Shipment < ApplicationRecord
     find_contacts("notifyee")
   end
 
+  def cargo_units
+    self["#{load_type}s"]
+  end
+
   def full_haulage_to_string
     self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
   end
