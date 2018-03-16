@@ -1,16 +1,16 @@
 class CargoItem < ApplicationRecord
   EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
-    air: "0.167",
-    rail: "0.550",
-    ocean: "1",
+    air:      "0.167",
+    rail:     "0.550",
+    ocean:    "1.000",
     trucking: "0.333"
   }.map_values { |v| BigDecimal.new(v) }
 
   MAX_DIMENSIONS = {
-    dimension_x: "590.0",
-    dimension_y: "234.2",
-    dimension_z: "228.0",
-    payload_in_kg: "21.770"
+    dimension_x:   "590.0",
+    dimension_y:   "234.2",
+    dimension_z:   "228.0",
+    payload_in_kg: "21_770.0"
   }.map_values { |v| BigDecimal.new(v) }
 
   belongs_to :shipment
