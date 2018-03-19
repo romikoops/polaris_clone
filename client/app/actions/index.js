@@ -7,7 +7,7 @@ export * from './shipment.actions'
 export * from './admin.actions'
 export * from './app.actions'
 export * from './messaging.actions'
-export { default as bookingSummary } from './bookingSummary.actions'
+export { default as bookingSummaryActions } from './bookingSummary.actions'
 export * from './document.actions'
 
 export function filterTable (filter) {

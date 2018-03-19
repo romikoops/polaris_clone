@@ -145,7 +145,7 @@ export class ShipmentDetails extends Component {
     const {
       shipment, cargoItems, containers, selectedDay, origin, destination
     } = this.state
-    this.props.bookingSummaryDispatch({
+    this.props.bookingSummaryDispatch.update({
       shipment, cargoItems, containers, selectedDay, origin, destination
     })
   }

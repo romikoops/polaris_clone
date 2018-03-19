@@ -1,6 +1,14 @@
 import { bookingSummaryConstants } from '../constants'
 
-export default function update (data) {
+function update (data) {
+  console.log(data)
+  if (data.modeOfTransport) {
+    const { modeOfTransport } = data
+    return (dispatch) => {
+      dispatch({ type: bookingSummaryConstants.UPDATE, payload: { modeOfTransport } })
+    }
+  }
+
   const payload = {
     totalVolume: 0,
     totalWeight: 0,
@@ -31,3 +39,9 @@ export default function update (data) {
   }
   return dispatch => dispatch({ type: bookingSummaryConstants.UPDATE, payload })
 }
+
+const bookingSummaryActions = {
+  update
+}
+
+export default bookingSummaryActions

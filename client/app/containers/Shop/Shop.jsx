@@ -48,7 +48,6 @@ class Shop extends Component {
     this.toggleShowRegistration = this.toggleShowRegistration.bind(this)
     this.hideRegistration = this.hideRegistration.bind(this)
   }
-
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {
       this.setState({ fakeLoading: true })
@@ -115,7 +114,7 @@ class Shop extends Component {
   }
 
   selectShipmentRoute (obj) {
-    const { shipmentDispatch, bookingData } = this.props
+    const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
     const { schedule, total } = obj
     const shipmentData = bookingData.response.stage2
     const req = {
@@ -129,6 +128,7 @@ class Shop extends Component {
       return
     }
     this.hideRegistration()
+    bookingSummaryDispatch.update({ modeOfTransport: schedule.mode_of_transport })
     shipmentDispatch.setShipmentRoute(req)
   }
 
