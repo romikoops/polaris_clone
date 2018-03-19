@@ -7,6 +7,10 @@ export default function update (data) {
     hubs: {
       origin: '',
       destination: ''
+    },
+    trucking: {
+      pre_carriage: { trucktype: '' },
+      on_carriage: { trucktype: '' }
     }
   }
   if (data.shipment.load_type === 'container') {
@@ -23,6 +27,7 @@ export default function update (data) {
       origin: data.origin.hub_name,
       destination: data.destination.hub_name
     }
+    payload.trucking = data.shipment.trucking
   }
   return dispatch => dispatch({ type: bookingSummaryConstants.UPDATE, payload })
 }
