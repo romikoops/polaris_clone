@@ -1,11 +1,13 @@
 class Itinerary < ApplicationRecord
-  has_many :stops
-  has_many :layovers
-  has_many :shipments
-  has_many :trips
-  belongs_to :mot_scope, optional: true
   extend ItineraryTools
   include ItineraryTools
+
+  has_many :stops,     dependent: :destroy
+  has_many :layovers,  dependent: :destroy
+  has_many :shipments, dependent: :destroy
+  has_many :trips,     dependent: :destroy
+  belongs_to :mot_scope, optional: true
+
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
     stops = tenant.stops
@@ -29,30 +31,30 @@ class Itinerary < ApplicationRecord
       layovers: [],
       trips: []
     } 
-   trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
-   results[:trips] << trip
-        stops.each do |stop|
-          if stop.index == 0
-            data = {
-              eta: nil,
-              etd: start_date,
-              stop_index: stop.index,
-              itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
-            }
-          else 
-            data = {
-              eta: end_date,
-              etd: nil,
-              stop_index: stop.index,
-              itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
-            }
-          end
-          layover = trip.layovers.create!(data)
-          results[:layovers] << layover
-        end
-      results
+    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+    results[:trips] << trip
+    stops.each do |stop|
+      if stop.index == 0
+        data = {
+          eta: nil,
+          etd: start_date,
+          stop_index: stop.index,
+          itinerary_id: stop.itinerary_id,
+          stop_id: stop.id
+        }
+      else 
+        data = {
+          eta: end_date,
+          etd: nil,
+          stop_index: stop.index,
+          itinerary_id: stop.itinerary_id,
+          stop_id: stop.id
+        }
+      end
+      layover = trip.layovers.create!(data)
+      results[:layovers] << layover
+    end
+    results
   end
 
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id, closing_date_buffer = 4)
