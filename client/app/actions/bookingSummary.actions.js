@@ -20,7 +20,7 @@ export default function update (data) {
       payload.totalVolume += cargoItem.quantity * ['x', 'y', 'z'].reduce((product, coordinate) => (
         product * cargoItem[`dimension_${coordinate}`]
       ), 1) / 1000000
-      payload.totalWeight += cargoItem.payload_in_kg
+      payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
     })
     payload.selectedDay = data.selectedDay
     payload.hubs = {

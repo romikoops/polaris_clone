@@ -23,7 +23,6 @@ function BookingSummary (props) {
   //   .filter(mot => scope.modes_of_transport[mot])
   // const icons = modesOfTransport.map(mot => switchIcon(mot))
   const icon = modeOfTransport ? switchIcon(modeOfTransport) : ' '
-  console.log(trucking)
   return (
     <div className={`${styles.booking_summary} flex-50 layout-row`}>
       <div className={`${styles.route_sec} flex-40 layout-column layout-align-stretch`}>
@@ -68,11 +67,15 @@ function BookingSummary (props) {
       </div>
       <div className="flex layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">Total Weight</h4>
-        <p className="flex-50 layout-row layout-align-center-start">{ totalWeight } kg</p>
+        <p className="flex-50 layout-row layout-align-center-start">
+          { totalWeight.toFixed(1) } kg
+        </p>
       </div>
       <div className="flex layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
-        <p className="flex-50 layout-row layout-align-center-start">{ totalVolume } m³</p>
+        <p className="flex-50 layout-row layout-align-center-start">
+          { totalVolume.toFixed(1) } m³
+        </p>
       </div>
     </div>
   )

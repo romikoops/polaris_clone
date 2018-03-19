@@ -166,6 +166,7 @@ class Shop extends Component {
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
+          scrollable
         />
 
         <ShopStageView
