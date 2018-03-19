@@ -6,6 +6,7 @@ import { history, capitalize } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
+import DocumentsSelector from '../../components/Documents/Selector'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -16,7 +17,7 @@ export class AdminTruckingView extends Component {
     super(props)
     this.state = {
       currentQuery: false,
-      queryFilter: 'either'
+      queryFilter: { value: 'either', label: 'Import/Export' }
     }
     this.viewQuery = this.viewQuery.bind(this)
     this.setQueryFilter = this.setQueryFilter.bind(this)
@@ -35,7 +36,13 @@ export class AdminTruckingView extends Component {
 
   cellGenerator (truckingHub, queries) {
     const { queryFilter } = this.state
-    const filteredQueries = queryFilter.value === 'either' ? queries : queries.filter(q => q.query.direction === queryFilter.value)
+    const filteredQueries =
+      queryFilter.value === 'either'
+        ? queries
+        : queries.filter(q => q.query.direction === queryFilter.value)
+    if (!truckingHub) {
+      return ''
+    }
     switch (truckingHub.modifier) {
       case 'zipcode':
         return filteredQueries.map(q => (
@@ -85,8 +92,20 @@ export class AdminTruckingView extends Component {
         return []
     }
   }
+  toggleNew () {
+    this.setState({ newRow: !this.state.newRow })
+  }
+  handleUpload (file, dir, type) {
+    const { adminDispatch, truckingDetail } = this.props
+    const { hub } = truckingDetail
+    const url =
+      type === 'city'
+        ? `/admin/trucking/trucking_city_pricings/${hub.id}`
+        : `/admin/trucking/trucking_zip_pricings/${hub.id}`
+    adminDispatch.uploadTrucking(url, file, dir)
+  }
   render () {
-    const { theme, truckingDetail, nexuses } = this.props
+    const { theme, truckingDetail, adminDispatch } = this.props
     if (!truckingDetail) {
       return ''
     }
@@ -95,27 +114,27 @@ export class AdminTruckingView extends Component {
       { value: 'export', label: 'Export' },
       { value: 'import', label: 'Import' }
     ]
-    const { currentQuery, queryFilter } = this.state
-    const { truckingHub, truckingQueries } = truckingDetail
-    const nexus = nexuses.filter(n => n.id === truckingHub.nexus_id)[0]
+    const { currentQuery, queryFilter, newRow } = this.state
+    const { truckingHub, truckingQueries, hub } = truckingDetail
+    // const nexus = truckingHub ? nexuses.filter(n => n.id === truckingHub.nexus_id)[0] : {}
     const textStyle = {
       background:
         theme && theme.colors
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    const backButton = (
+    const newButton = (
       <div className="flex-none layout-row">
         <RoundButton
           theme={theme}
           size="small"
-          text="Back"
-          handleNext={AdminTruckingView.backToIndex}
-          iconClass="fa-chevron-left"
+          active
+          text="New"
+          handleNext={() => this.toggleNew()}
+          iconClass="fa-plus"
         />
       </div>
     )
-    console.log(nexus)
     const displayPanel = (
       <TruckingDisplayPanel
         theme={theme}
@@ -139,15 +158,59 @@ export class AdminTruckingView extends Component {
         </div>
       </div>
     )
+    const uploadOptions = [
+      { value: 'import', label: 'Import Only' },
+      { value: 'export', label: 'Export Only' },
+      { value: 'either', label: 'Import/Export' }
+    ]
+
+    const panelStyle = newRow ? styles.showPanel : styles.hidePanel
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            {nexus.name}
+            {hub.name}
           </p>
-          {backButton}
+          {newButton}
+        </div>
+        <div
+          className={`${panelStyle} ${
+            styles.panelDefault
+          } flex-100 layout-row layout-align-space-between-center`}
+        >
+          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
+            <p className="flex-90 center">Create New Trucking Pricing</p>
+            <RoundButton
+              theme={theme}
+              size="small"
+              active
+              text="New Pricing"
+              handleNext={() => adminDispatch.goTo('/admin/trucking/new/creator')}
+              iconClass="fa-plus"
+            />
+          </div>
+          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
+            <p className="flex-90 center">Upload Trucking City Sheet</p>
+            <DocumentsSelector
+              theme={theme}
+              dispatchFn={(file, dir) => this.handleUpload(file, dir, 'city')}
+              type="xlsx"
+              text="Routes .xlsx"
+              options={uploadOptions}
+            />
+          </div>
+          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
+            <p className="flex-90 center">Upload Trucking Zip Code Sheet</p>
+            <DocumentsSelector
+              theme={theme}
+              dispatchFn={(file, dir) => this.handleUpload(file, dir, 'zip')}
+              type="xlsx"
+              text="Routes .xlsx"
+              options={uploadOptions}
+            />
+          </div>
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
@@ -166,7 +229,9 @@ export class AdminTruckingView extends Component {
 }
 AdminTruckingView.propTypes = {
   theme: PropTypes.theme,
-  nexuses: PropTypes.objectOf(PropTypes.object),
+  adminDispatch: PropTypes.shape({
+    uploadTrucking: PropTypes.func
+  }).isRequired,
   truckingDetail: PropTypes.shape({
     truckingHub: PropTypes.object,
     pricing: PropTypes.object
@@ -175,7 +240,6 @@ AdminTruckingView.propTypes = {
 
 AdminTruckingView.defaultProps = {
   theme: null,
-  nexuses: null,
   truckingDetail: null
 }
 

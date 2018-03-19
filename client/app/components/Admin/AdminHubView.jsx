@@ -16,7 +16,8 @@ export class AdminHubView extends Component {
     super(props)
     this.state = {
       currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
-      currentCustomsLoadType: { value: 'lcl', label: 'Lcl' }
+      currentCustomsLoadType: { value: 'lcl', label: 'Lcl' },
+      editedHub: { data: {}, location: {} }
     }
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
@@ -34,6 +35,13 @@ export class AdminHubView extends Component {
     }
     if (!this.state.currentFee && this.props.hubData && this.props.hubData.customs) {
       this.filterChargesByLoadType({ value: 'lcl' }, 'customs')
+    }
+  }
+  componentWillReceiveProps (nextProps) {
+    if (!this.state.editedHub.data.name) {
+      this.setState({
+        editedHub: { data: nextProps.hubData.hub, location: nextProps.hubData.location }
+      })
     }
   }
 
@@ -66,20 +74,54 @@ export class AdminHubView extends Component {
       })
     }
   }
+  toggleEdit () {
+    const { editing } = this.state
+    if (!editing) {
+      this.setState({
+        editing: true
+      })
+    } else {
+      this.setState({ editing: false })
+    }
+  }
+  handleEdit (e) {
+    const { name, value } = e.target
+    const nameKeys = name.split('-')
+    this.setState({
+      editedHub: {
+        ...this.state.editedHub,
+        [nameKeys[0]]: {
+          ...this.state.editedHub[nameKeys[0]],
+          [nameKeys[1]]: value
+        }
+      }
+    })
+  }
+  saveEdit () {
+    const { adminActions, hubData } = this.props
+    const { editedHub } = this.state
+    adminActions.editHub(hubData.hub.id, editedHub)
+  }
   render () {
     const {
       theme, hubData, hubs, hubHash, adminActions
     } = this.props
     const {
-      currentCustomsLoadType, currentFeeLoadType, currentFee, currentCustoms
+      currentCustomsLoadType,
+      currentFeeLoadType,
+      currentFee,
+      currentCustoms,
+      editing,
+      editedHub
     } = this.state
     if (!hubData) {
       return ''
     }
 
     const {
-      hub, relatedHubs, routes, schedules
+      hub, relatedHubs, routes, schedules, location
     } = hubData
+
     const textStyle = {
       background:
         theme && theme.colors
@@ -99,7 +141,7 @@ export class AdminHubView extends Component {
       }
     })
     const activate = (
-      <div className="flex-none layout-row">
+      <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
           theme={theme}
           size="small"
@@ -110,8 +152,20 @@ export class AdminHubView extends Component {
         />
       </div>
     )
+    const editBtn = (
+      <div className={`${styles.action_btn} flex-none layout-row`}>
+        <RoundButton
+          theme={theme}
+          size="small"
+          text="Edit"
+          active
+          handleNext={() => this.toggleEdit()}
+          iconClass="fa-pencil"
+        />
+      </div>
+    )
     const deactivate = (
-      <div className="flex-none layout-row">
+      <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
           theme={theme}
           size="small"
@@ -122,7 +176,7 @@ export class AdminHubView extends Component {
       </div>
     )
     const deleteBtn = (
-      <div className="flex-none layout-row">
+      <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
           theme={theme}
           size="small"
@@ -139,6 +193,124 @@ export class AdminHubView extends Component {
         <AdminLayoverRow key={v4()} schedule={sched} hub={hub} theme={theme} itinerary={tmpItin} />
       )
     })
+    const editBox = (
+      <div className="flex-40 layout-row layout-align-start-center layout-wrap">
+        <div className="flex-100 layout-row layout-align-start-center input_box">
+          <input
+            type="text"
+            name="data-name"
+            onChange={e => this.handleEdit(e)}
+            value={editedHub.data.name}
+          />
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center input_box">
+            <input
+              type="text"
+              className="flex-33"
+              name="location-street_number"
+              placeholder="Street Number"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.street_number}
+            />
+            <input
+              type="text"
+              className="flex-66"
+              name="location-street"
+              placeholder="Street"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.street}
+            />
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
+            <input
+              type="text"
+              className="flex-100"
+              name="location-city"
+              placeholder="City"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.city}
+            />
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
+            <input
+              type="text"
+              className="flex-100"
+              name="location-zip_code"
+              placeholder="Zipcode"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.zip_code}
+            />
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center input_box_full">
+            <input
+              type="text"
+              className="flex-100"
+              placeholder="Country"
+              name="location-country"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.country}
+            />
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-50 layout-row layout-align-start-center">
+            <input
+              type="text"
+              className="flex-100"
+              placeholder="Latitude"
+              name="location-latitude"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.latitude}
+            />
+          </div>
+          <div className="flex-100 layout-row layout-align-start-center">
+            <input
+              type="text"
+              className="flex-100"
+              placeholder="Longitude"
+              name="location-longitude"
+              onChange={e => this.handleEdit(e)}
+              value={editedHub.location.longitude}
+            />
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-end-center">
+          <div className={`${styles.action_btn} flex-none layout-row`}>
+            <RoundButton
+              theme={theme}
+              size="small"
+              text="Save"
+              handleNext={() => this.saveEdit()}
+              iconClass="fa-floppy-o"
+            />
+          </div>
+        </div>
+      </div>
+    )
+    const detailsBox = (
+      <div className="flex-40 layout-row layout-align-start-center layout-wrap">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <p className="flex-none"> {hub.name}</p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">
+          <address className="flex-none">
+            {`${location.street_number} ${location.street}`} <br />
+            {location.city} <br />
+            {location.zip_code} <br />
+            {location.country} <br />
+          </address>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-50 layout-row layout-align-start-center">
+            <p className="flex-none">{`Latitude ${location.latitude}`} </p>
+          </div>
+          <div className="flex-100 layout-row layout-align-start-center">
+            <p className="flex-none"> {`Longitude: ${location.longitude}`} </p>
+          </div>
+        </div>
+      </div>
+    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -147,8 +319,21 @@ export class AdminHubView extends Component {
           <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
             {hub.name}
           </p>
-          {hub.hub_status === 'active' ? deactivate : activate}
-          {deleteBtn}
+        </div>
+        <div className="flex-100 layout-row layout-align-space-between-start">
+          {editing ? editBox : detailsBox}
+
+          <div className="
+            flex-20
+            layout-column
+            layout-wrap
+            layout-align-space-between-end
+            height_100"
+          >
+            {hub.hub_status === 'active' ? deactivate : activate}
+            {editBtn}
+            {deleteBtn}
+          </div>
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -231,7 +416,8 @@ AdminHubView.propTypes = {
     routes: PropTypes.array,
     schedules: PropTypes.array,
     charges: PropTypes.array,
-    customs: PropTypes.array
+    customs: PropTypes.array,
+    location: PropTypes.objectOf(PropTypes.any)
   }),
   loading: PropTypes.bool,
   match: PropTypes.match.isRequired,

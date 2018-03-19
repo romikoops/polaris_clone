@@ -176,6 +176,181 @@ module ExcelTools
     mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
+   def overwrite_zipcode_trucking_rates_by_hub(params, user = current_user, hub_id, direction)
+    # old_trucking_ids = nil
+    # new_trucking_ids = []
+    mongo = get_client
+    stats = {
+      type: 'trucking',
+      trucking_hubs: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_queries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_pricings: {
+        number_updated: 0,
+        number_created: 0
+      }
+    }
+    results = {
+      trucking_hubs: [],
+      trucking_queries: [],
+      trucking_pricings: []
+    }
+    defaults = []
+    load_type = "lcl"
+    new_trucking_pricings_array = []
+    new_trucking_hubs_array = []
+    new_trucking_queries_array = []
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find(hub_id)
+      nexus = hub.nexus
+
+      currency_row = first_sheet.row(1)
+      hubs = nexus.hubs
+      header_row = first_sheet.row(2)
+      header_row.shift
+      header_row.shift
+      weight_min_row = first_sheet.row(3)
+      weight_min_row.shift
+      weight_min_row.shift
+      num_rows = first_sheet.last_row
+      header_row.each do |cell|
+        min_max_arr = cell.split(" - ")
+        defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
+      end
+      trucking_table_id = "#{hub.id}_#{load_type}_#{user.tenant_id}" 
+      truckingQueries = []
+      truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
+      truckingPricings = []
+      (4..num_rows).each do |line|
+        # 
+        row_data = first_sheet.row(line)
+        zip_code_range_array = row_data.shift.split(" - ")
+        # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
+        row_min_value = row_data.shift
+        # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        ntp = {
+          trucking_hub_id: trucking_table_id,
+          tenant_id: user.tenant_id,
+          nexus_id: nexus.id,
+          direction: direction,
+          _id: SecureRandom.uuid,
+          modifier: 'kg',
+          zipcode: {
+            lower_zip: zip_code_range_array[0].to_i,
+            upper_zip: zip_code_range_array[1].to_i
+          }
+        }
+        row_data.each_with_index do |val, index|
+          tmp = defaults[index].clone
+          if row_min_value < weight_min_row[index]
+            min_value = weight_min_row[index]
+          else
+            min_value = row_min_value
+          end
+          tmp[:min_value] = min_value
+          tmp[:fees] = {  
+            base_rate: {
+              value: val,
+              rate_basis: 'PER_X_KG',
+              currency: currency_row[3],
+              base: 100
+            }
+            
+          }
+          if  direction == 'export'
+            tmp[:fees][:congestion] = {
+              value: 15,
+              rate_basis: 'PER_ITEM',
+              currency: currency_row[3]
+            }
+          end
+          if  direction == 'import'
+            tmp[:fees][:congestion] = {
+              value: 15,
+              rate_basis: 'PER_ITEM',
+              currency: currency_row[3]
+            }
+          end
+          tmp[:direction] = direction
+          tmp[:type] = "default"
+          tmp[:_id] = SecureRandom.uuid
+          tmp[:trucking_hub_id] = trucking_table_id
+          tmp[:trucking_query_id] = ntp[:_id]
+          truckingPricings.push(tmp)
+          results[:trucking_pricings] << tmp
+          stats[:trucking_pricings][:number_updated] += 1
+          # 
+        end
+        truckingQueries.push(ntp)
+        results[:trucking_queries] << ntp
+        stats[:trucking_queries][:number_updated] += 1
+      end
+      # 
+      truckingQueries.each do |k|
+        # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+        new_trucking_queries_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
+      end
+      truckingPricings.each do |k|
+        # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        new_trucking_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
+      end
+      new_trucking_hub_obj = {
+        modifier: "zipcode", 
+        tenant_id: user.tenant_id, 
+        nexus_id: nexus.id, 
+        load_type: 'lcl',
+        hub_id: hub_id,
+        load_meterage: {
+          active: true,
+          height_limit: 130,
+          ratio: 1850
+        },
+        cbm_ratio: 333
+      }
+      results[:trucking_hubs] << new_trucking_hub_obj
+      stats[:trucking_hubs][:number_updated] += 1
+      # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
+      new_trucking_hubs_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{trucking_table_id}"
+              },
+              :update => {
+                "$set" => new_trucking_hub_obj
+              }, :upsert => true
+            }
+          }
+    end
+    mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
+    mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
+    mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
+    return {results: results, stats: stats}
+  end
 
   # def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
     #   # old_trucking_ids = nil

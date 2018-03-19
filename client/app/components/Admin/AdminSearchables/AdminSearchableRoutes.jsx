@@ -75,7 +75,7 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs, theme, seeAll, limit, showTooltip, tooltip, icon
+      hubs, theme, seeAll, limit, showTooltip, tooltip, icon, adminDispatch
     } = this.props
     const { itineraries } = this.state
     let itinerariesArr
@@ -89,6 +89,7 @@ export class AdminSearchableRoutes extends Component {
               hubs={hubs}
               itinerary={rt}
               theme={theme}
+              adminDispatch={adminDispatch}
               handleClick={this.handleClick}
             />
           )

@@ -700,4 +700,23 @@
     opacity: 0.75;
     color: lightgray;
   }
+  .action_btn {
+    padding: 15px 0;
+  }
+  .icon_btn_delete {
+    height: 30px;
+    width: 30px;
+    i {
+      color: darkred;
+      font-size: 18px;
+    }
+  }
+  .icon_btn_view {
+    height: 30px;
+    width: 30px;
+    i {
+      color: darkgreen;
+      font-size: 18px;
+    }
+  }
 }

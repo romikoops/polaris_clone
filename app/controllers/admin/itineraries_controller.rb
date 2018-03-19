@@ -17,7 +17,10 @@ class Admin::ItinerariesController < ApplicationController
     current_user.tenant.update_route_details
     response_handler(itinerary)
   end
-
+  def destroy
+    itinerary = Itinerary.find(params[:id]).destroy
+    response_handler(true)
+  end
   def stops
     itinerary = Itinerary.find(params[:id])
     stops = itinerary.stops.order(:index)

@@ -63,6 +63,32 @@ function getHub (id, redirect) {
     )
   }
 }
+function editHub (id, object) {
+  function request (hubData) {
+    return { type: adminConstants.EDIT_HUB_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.EDIT_HUB_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_HUB_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editHub(id, object).then(
+      (data) => {
+        dispatch(alertActions.success('Editing Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function wizardHubs (file) {
   function request (hubData) {
@@ -938,6 +964,35 @@ function deleteHub (hubId, redirect) {
   }
 }
 
+function deleteItinerary (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_ITINERARY_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_ITINERARY_SUCCESS, payload: deleted.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_ITINERARY_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteItinerary(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Itinerary successful'))
+        if (redirect) {
+          dispatch(push(`/admin/routes`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function documentAction (docId, action) {
   function request (docData) {
     return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData }
@@ -1145,6 +1200,32 @@ function viewTrucking (truckingHub) {
   }
 }
 
+function uploadTrucking (url, file, direction) {
+  function request (truckingData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPLOAD_TRUCKING_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadTrucking(url, file, direction).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
 }
@@ -1163,6 +1244,7 @@ export const adminActions = {
   getItineraries,
   updateServiceCharge,
   updatePricing,
+  deleteItinerary,
   getClientPricings,
   getItinerary,
   deleteHub,
@@ -1175,6 +1257,7 @@ export const adminActions = {
   getSchedules,
   getDashboard,
   goTo,
+  uploadTrucking,
   autoGenSchedules,
   getVehicleTypes,
   getShipments,
@@ -1201,7 +1284,8 @@ export const adminActions = {
   editShipmentPrice,
   editShipmentTime,
   editLocalCharges,
-  deletePricing
+  deletePricing,
+  editHub
 }
 
 export default adminActions

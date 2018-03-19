@@ -32,6 +32,10 @@ export function AdminHubsIndex ({
     <div className="flex-100 layout-row layout-wrap layout-align-start-start">
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
         <div className="flex-33 layout-row layout-align-center-center layout-wrap">
+          <p className="flex-100 center">Create New Hub</p>
+          {newButton}
+        </div>
+        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
           <p className="flex-100 center">Upload Hubs Sheet</p>
           <FileUploader
             theme={theme}
@@ -50,10 +54,6 @@ export function AdminHubsIndex ({
             text="Hub .xlsx"
             dispatchFn={documentDispatch.uploadLocalCharges}
           />
-        </div>
-        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
-          <p className="flex-100 center">Create New Hub</p>
-          {newButton}
         </div>
       </div>
       <AdminSearchableHubs

@@ -817,6 +817,30 @@ export default function admin (state = {}, action) {
         loading: false
       })
 
+    case adminConstants.EDIT_HUB_REQUEST:
+      return merge({}, state, {
+        loading: true
+      })
+    case adminConstants.EDIT_HUB_SUCCESS: {
+      const newHubs = state.hubs.filter(x => x.id !== action.payload.hub.id)
+      newHubs.push({ data: action.payload.hub, location: action.payload.location })
+      return {
+        ...state,
+        loading: false,
+        hubs: newHubs,
+        hub: {
+          ...state.hub,
+          hub: action.payload.hub,
+          location: action.payload.location
+        }
+      }
+    }
+    case adminConstants.EDIT_HUB_FAILURE:
+      return merge({}, state, {
+        error: { hubs: action.error },
+        loading: false
+      })
+
     case adminConstants.NEW_TRUCKING_REQUEST:
       return merge({}, state, {
         loading: true
@@ -926,6 +950,21 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.EDIT_LOCAL_CHARGES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.UPLOAD_TRUCKING_REQUEST:
+      return state
+    case adminConstants.UPLOAD_TRUCKING_SUCCESS:
+      return {
+        ...state,
+        trucking: action.payload,
+        loading: false
+      }
+    case adminConstants.UPLOAD_TRUCKING_FAILURE:
       return {
         ...state,
         error: { hub: action.error },
