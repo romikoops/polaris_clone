@@ -25,6 +25,7 @@ import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
 import NavBar from '../Nav'
+import { AdminSchedulesRoute } from '../../components/Admin/Schedules/Route'
 
 class Admin extends Component {
   constructor (props) {
@@ -89,7 +90,8 @@ class Admin extends Component {
       shipments,
       clients,
       dashboard,
-      loading
+      loading,
+      itinerarySchedules
     } = adminData
 
     const hubHash = {}
@@ -149,6 +151,18 @@ class Admin extends Component {
                       hubs={hubHash}
                       adminDispatch={adminDispatch}
                       scheduleData={schedules}
+                    />
+                  )}
+                />
+                <Route
+                  path="/admin/schedules/:id"
+                  render={props => (
+                    <AdminSchedulesRoute
+                      theme={theme}
+                      {...props}
+                      hubs={hubHash}
+                      adminDispatch={adminDispatch}
+                      scheduleData={itinerarySchedules}
                     />
                   )}
                 />

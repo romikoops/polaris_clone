@@ -1200,6 +1200,35 @@ function viewTrucking (truckingHub) {
   }
 }
 
+function loadItinerarySchedules (id, redirect) {
+  function request (truckingData) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.loadItinerarySchedules(id).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Schedules successful'))
+        dispatch(success(data))
+        if (redirect) {
+          dispatch(push(`/admin/schedules/${id}`))
+        }
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function uploadTrucking (url, file, direction) {
   function request (truckingData) {
     return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: truckingData }
@@ -1285,7 +1314,8 @@ export const adminActions = {
   editShipmentTime,
   editLocalCharges,
   deletePricing,
-  editHub
+  editHub,
+  loadItinerarySchedules
 }
 
 export default adminActions

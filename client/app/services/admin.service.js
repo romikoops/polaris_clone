@@ -406,6 +406,14 @@ function uploadTrucking (url, file, direction) {
   return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
 }
 
+function loadItinerarySchedules (id) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
+}
+
 export const adminService = {
   getHubs,
   getHub,
@@ -418,6 +426,7 @@ export const adminService = {
   getServiceCharges,
   getPricings,
   getShipment,
+  loadItinerarySchedules,
   getSchedules,
   getTrucking,
   getClientPricings,

@@ -12,6 +12,7 @@ import AdminScheduleGenerator from './AdminScheduleGenerator'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminSchedules as schedTip } from '../../constants'
 import '../../styles/select-css-custom.css'
+import { AdminSearchableRoutes } from './AdminSearchables'
 
 export class AdminSchedules extends Component {
   static dynamicSort (property) {
@@ -38,105 +39,21 @@ export class AdminSchedules extends Component {
         mot: false,
         sort: false
       },
-      motFilter: { value: false, label: false },
-      sortFilter: { value: false, label: false },
-      hubFilter: { value: false, label: false },
+
       panelViewer: {}
     }
     this.toggleView = this.toggleView.bind(this)
-    this.setMoTFilter = this.setMoTFilter.bind(this)
-    this.setSortFilter = this.setSortFilter.bind(this)
-    this.setHubFilter = this.setHubFilter.bind(this)
-    this.toggleShowPanel = this.toggleShowPanel.bind(this)
-    this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
   }
 
-  setMoTFilter (mot) {
-    if (!mot) {
-      this.setState({
-        motFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          mot: false
-        }
-      })
-    } else {
-      this.setState({
-        motFilter: mot,
-        filters: {
-          ...this.state.filters,
-          mot: true
-        }
-      })
-    }
-  }
-  setSortFilter (sorter) {
-    if (!sorter) {
-      this.setState({
-        sortFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          sort: false
-        }
-      })
-    } else {
-      this.setState({
-        sortFilter: sorter,
-        filters: {
-          ...this.state.filters,
-          sort: true
-        }
-      })
-    }
-  }
-  setHubFilter (hub) {
-    if (!hub) {
-      this.setState({
-        hubFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          hub: false
-        }
-      })
-    } else {
-      this.setState({
-        hubFilter: hub,
-        filters: {
-          ...this.state.filters,
-          hub: true
-        }
-      })
-    }
-  }
-  setItineraryFilter (itinerary) {
-    if (!itinerary) {
-      this.setState({
-        itineraryFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          itinerary: false
-        }
-      })
-    } else {
-      this.setState({
-        itineraryFilter: itinerary,
-        filters: {
-          ...this.state.filters,
-          itinerary: true
-        }
-      })
-    }
-  }
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
   getItinerariesForHub (hub) {
-    const filteredItineraries =
-    this.props.scheduleData.detailedItineraries.filter((itinerary) => {
+    const filteredItineraries = this.props.scheduleData.detailedItineraries.filter((itinerary) => {
       if (!itinerary) {
         return false
       }
-      return (itinerary.origin_hub_id === hub.id) || (itinerary.destination_hub_id === hub.id)
+      return itinerary.origin_hub_id === hub.id || itinerary.destination_hub_id === hub.id
     })
     return filteredItineraries.map(x => x.id)
   }
@@ -154,28 +71,20 @@ export class AdminSchedules extends Component {
       }
     })
   }
+  viewSchedules (itinerary) {
+    const { adminDispatch } = this.props
+    adminDispatch.loadItinerarySchedules(itinerary.id, true)
+  }
   render () {
     const {
       theme, hubs, scheduleData, adminDispatch, limit
     } = this.props
-    const {
-      filters, hubFilter, sortFilter, panelViewer, motFilter, itineraryFilter
-    } = this.state
+
     if (!scheduleData || !hubs) {
       return ''
     }
-
-    const filterMoTOptions = [
-      { value: 'rail', label: 'Rail' },
-      { value: 'air', label: 'Air' },
-      { value: 'ocean', label: 'Ocean' }
-    ]
-    const filterSortOptions = [
-      { value: 'start_date', label: 'ETA' },
-      { value: 'end_date', label: 'ETD' }
-    ]
     const {
-      itineraries, air, train, ocean, itineraryLayovers
+      itineraries
     } = scheduleData
     const { showList } = this.state
     const trainUrl = '/admin/train_schedules/process_csv'
@@ -184,171 +93,56 @@ export class AdminSchedules extends Component {
     const truckUrl = '/admin/truck_schedules/process_csv'
     const tripArr = []
     const slimit = limit || 10
-    let allTrips
-    switch (motFilter.value) {
-      case 'ocean':
-        allTrips = ocean
-        break
-      case 'air':
-        allTrips = air
-        break
-      case 'rail':
-        allTrips = train
-        break
-      case false:
-        allTrips = [...air, ...ocean, ...train]
-        break
-      default:
-        allTrips = [...air, ...ocean, ...train]
-        break
-    }
-    let itineraryIds
-    let filteredByHubs = []
-    let filteredByItinerary = []
-
-    if (filters.sort) {
-      allTrips.sort(AdminSchedules.dynamicSort(sortFilter.value))
-    }
-    if (filters.itinerary) {
-      filteredByItinerary = allTrips.filter(x => x.itinerary_id === itineraryFilter.value)
-    }
-    if (filters.hub) {
-      itineraryIds = this.getItinerariesForHub(hubFilter.value)
-      filteredByHubs = allTrips.filter(x => itineraryIds.includes(x.itinerary_id))
-    }
-
-    let results = []
-    // const results = [...new Set([...filteredByHubs, ...filteredByItinerary])]
-    if (filteredByHubs.length > 0 && filteredByItinerary.length > 0) {
-      const resultObj = {}
-
-      filteredByHubs.forEach((fh) => {
-        resultObj[fh.id] = fh
-      })
-      filteredByItinerary.forEach((fi) => {
-        resultObj[fi.id] = fi
-      })
-      Object.keys(resultObj).map(x => results.push(resultObj[x]))
-    } else if (filteredByHubs.length > 0 && filteredByItinerary.length === 0) {
-      results = filteredByHubs
-    } else if (filteredByHubs.length === 0 && filteredByItinerary.length > 0) {
-      results = filteredByItinerary
-    } else {
-      results = allTrips
-    }
-
-    console.log(results)
-    results.forEach((trip, i) => {
-      if (i < slimit) {
-        tripArr.push(<AdminTripPanel
-          key={v4()}
-          trip={trip}
-          showPanel={panelViewer[trip.id]}
-          toggleShowPanel={this.toggleShowPanel}
-          layovers={itineraryLayovers}
-          adminDispatch={adminDispatch}
-          itinerary={this.getItinerary(trip)}
-          hubs={hubs}
-          theme={theme}
-        />)
-      }
-    })
-
-    const StyledSelect = styled(Select)`
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
-    const hubList = []
-    Object.keys(hubs).forEach((key) => {
-      hubList.push({ value: hubs[key].data, label: hubs[key].data.name })
-    })
-    const itineraryList = []
-    itineraries.forEach((itinerary) => {
-      itineraryList.push({ value: itinerary.id, label: itinerary.name })
-    })
     const listView = (
-      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <div
-          className="flex-100 layout-row layout-align-start-center"
-          style={{ marginBottom: '25px' }}
-        >
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="mot-filter"
-              placeholder="Filter by: MoT"
-              className={`${styles.select}`}
-              value={this.state.motFilter}
-              options={filterMoTOptions}
-              onChange={this.setMoTFilter}
-            />
-          </div>
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="sort-filter"
-              placeholder="Sort by: Time"
-              className={`${styles.select}`}
-              value={this.state.sortFilter}
-              options={filterSortOptions}
-              onChange={this.setSortFilter}
-            />
-          </div>
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="hub-filter"
-              placeholder="Filter by: Hub"
-              className={`${styles.select}`}
-              value={this.state.hubFilter}
-              options={hubList}
-              onChange={this.setHubFilter}
-            />
-          </div>
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="itinerary-filter"
-              placeholder="Filter by: Itinerary"
-              className={`${styles.select}`}
-              value={this.state.itineraryFilter}
-              options={itineraryList}
-              onChange={ev => this.setItineraryFilter(ev)}
-            />
-          </div>
-        </div>
-        {tripArr}
-      </div>
+      <AdminSearchableRoutes
+        itineraries={itineraries}
+        theme={theme}
+        hubs={hubs}
+        limit={40}
+        adminDispatch={adminDispatch}
+        sideScroll={false}
+        handleClick={e => this.viewSchedules(e)}
+        showTooltip
+        seeAll={false}
+      />
     )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`} >
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+          >
             <p className={` ${styles.sec_header_text} flex-none`}>Excel Uploads</p>
           </div>
-          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
+          <div
+            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-80">Upload Train Schedules Sheet</p>
             <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx" />
           </div>
-          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
+          <div
+            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-80">Upload Air Schedules Sheet</p>
             <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx" />
           </div>
-          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
+          <div
+            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-80">Upload Vessel Schedules Sheet</p>
             <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx" />
           </div>
-          <div className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${styles.sec_upload}`} >
+          <div
+            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
+              styles.sec_upload
+            }`}
+          >
             <p className="flex-80">Upload Trucking Schedules Sheet</p>
             <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx" />
           </div>
@@ -363,22 +157,23 @@ export class AdminSchedules extends Component {
         text="Back to list"
         size="small"
         iconClass="fa-th-list"
-        handleNext={this.toggleView}
+        handleNext={() => this.toggleView()}
         back
       />
     )
     const newButton = (
-      <div data-for="tooltipId" data-tip={schedTip.upload_excel} >
+      <div data-for="tooltipId" data-tip={schedTip.upload_excel}>
         <RoundButton
           theme={theme}
           text="New Upload"
           active
           size="small"
           iconClass="fa-plus"
-          handleNext={this.toggleView}
+          handleNext={() => this.toggleView()}
         />
         <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
-      </div>)
+      </div>
+    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div

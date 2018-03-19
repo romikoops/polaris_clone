@@ -970,6 +970,21 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST:
+      return state
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_SUCCESS:
+      return {
+        ...state,
+        itinerarySchedules: action.payload,
+        loading: false
+      }
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
     case adminConstants.CLEAR_LOADING:
       return {
         ...state,
