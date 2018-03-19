@@ -654,15 +654,13 @@ export class ShipmentDetails extends Component {
               this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
               this.state.containers.some(container => container.dangerous_goods)
             ) ? (
-                <div className="flex-50 layout-row layout-align-start-center">
+                <div className="flex-60 layout-row layout-align-start-center">
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
                       theme={theme}
-                      onChange={() =>
-                        this.setState({
-                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                        })
-                      }
+                      onChange={() => this.setState({
+                        noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                      })}
                       size="30px"
                       name="no_dangerous_goods_confirmation"
                       checked={this.state.noDangerousGoodsConfirmed}
@@ -680,7 +678,7 @@ export class ShipmentDetails extends Component {
                   </p>
                 </div>
               ) : (
-                <div className="flex-50" />
+                <div className="flex-60" />
               )}
             <div className="flex layout-row layout-align-end">
               <RoundButton
