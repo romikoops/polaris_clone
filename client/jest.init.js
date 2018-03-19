@@ -11,3 +11,11 @@ Enzyme.configure({ adapter: new Adapter() })
 expect.extend({
   toBeType
 })
+
+const matchMediaPolyfill = () => ({
+  matches: false,
+  addListener: () => {},
+  removeListener: () => {}
+})
+
+window.matchMedia = window.matchMedia || matchMediaPolyfill
