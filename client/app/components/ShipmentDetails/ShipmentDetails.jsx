@@ -141,6 +141,15 @@ export class ShipmentDetails extends Component {
       nextProps.user
     )
   }
+  componentDidUpdate () {
+    const {
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    } = this.state
+    this.props.bookingSummaryDispatch({
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    })
+  }
+
   setIncoTerm (opt) {
     this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
     this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
@@ -409,11 +418,10 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch
+      tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
     const { modals } = this.state
     const { theme, scope } = tenant.data
-    const { messages } = this.props
     let cargoDetails
     if (!shipmentData.shipment) return ''
     if (shipmentData.shipment.load_type === 'container') {
@@ -670,9 +678,9 @@ export class ShipmentDetails extends Component {
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
                     >
-                    dangerous goods
+                      dangerous goods
                     </span>
-                  .
+                    .
                   </p>
                 </div>
               ) : (
@@ -744,6 +752,9 @@ ShipmentDetails.propTypes = {
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
+  }).isRequired,
+  bookingSummaryDispatch: PropTypes.shape({
+    update: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired

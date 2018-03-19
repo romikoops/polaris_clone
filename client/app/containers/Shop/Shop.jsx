@@ -14,6 +14,7 @@ import Loading from '../../components/Loading/Loading'
 import { BookingDetails } from '../../components/BookingDetails/BookingDetails'
 import { BookingConfirmation } from '../../components/BookingConfirmation/BookingConfirmation'
 import { shipmentActions } from '../../actions/shipment.actions'
+import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
 import getShipmentData from './getShipmentData'
@@ -139,7 +140,7 @@ class Shop extends Component {
       tenant,
       user,
       shipmentDispatch,
-      nexusDispatch,
+      bookingSummaryDispatch,
       currencies,
       dashboard
     } = this.props
@@ -206,7 +207,7 @@ class Shop extends Component {
               setStage={this.selectShipmentStage}
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
-              nexusDispatch={nexusDispatch}
+              bookingSummaryDispatch={bookingSummaryDispatch}
             />
           )}
         />
@@ -310,6 +311,9 @@ Shop.propTypes = {
     newShipment: PropTypes.func,
     setShipmentDetails: PropTypes.func,
     setShipmentContacts: PropTypes.func
+  }).isRequired,
+  bookingSummaryDispatch: PropTypes.shape({
+    update: PropTypes.func
   }).isRequired
 }
 
@@ -347,7 +351,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    shipmentDispatch: bindActionCreators(shipmentActions, dispatch)
+    shipmentDispatch: bindActionCreators(shipmentActions, dispatch),
+    bookingSummaryDispatch: bindActionCreators(bookingSummaryActions, dispatch)
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Shop))
