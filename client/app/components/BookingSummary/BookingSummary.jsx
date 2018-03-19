@@ -1,33 +1,63 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 
 // import styles from './BookingSummary.scss'
 
-export default class BookingSummary extends Component {
-  shouldComponentUpdate (nextProps) {
-    return !!(nextProps.shipmentData && nextProps.shipmentData.shipment)
-  }
-  render () {
-    const { theme, shipmentData } = this.props
-    console.log(theme)
-    console.log(shipmentData)
-    console.log(shipmentData.shipment)
-    if (!shipmentData || !shipmentData.shipment) return ''
-    return (
-      <div className="flex-50 layout-row">
-        { shipmentData.shipment.origin_hub_id }
-        { shipmentData.shipment.destination_hub_id }
-      </div>
-    )
-  }
+function BookingSummary (props) {
+  const {
+    theme, scope, totalWeight, totalVolume, selectedDay, hubs
+  } = props
+  console.log(theme)
+  console.log(scope)
+  return (
+    <div className="flex-50 layout-row">
+      { totalWeight }
+      { totalVolume }
+      { selectedDay }
+      { hubs.origin }
+      { hubs.destination }
+    </div>
+  )
 }
 
 BookingSummary.propTypes = {
   theme: PropTypes.theme,
-  shipmentData: PropTypes.shipmentData
+  scope: PropTypes.objectOf(PropTypes.any),
+  totalWeight: PropTypes.number,
+  totalVolume: PropTypes.number,
+  selectedDay: PropTypes.string,
+  hubs: PropTypes.shape({
+    origin: PropTypes.string,
+    destination: PropTypes.string
+  })
 }
 
 BookingSummary.defaultProps = {
   theme: null,
-  shipmentData: null
+  scope: null,
+  totalWeight: 0,
+  totalVolume: 0,
+  selectedDay: null,
+  hubs: {
+    origin: '',
+    destination: ''
+  }
 }
+
+function mapStateToProps (state) {
+  const {
+    tenant, bookingSummary
+  } = state
+  const {
+    theme, scope
+  } = tenant.data
+  return {
+    ...bookingSummary,
+    theme,
+    scope
+  }
+}
+
+export default withRouter(connect(mapStateToProps)(BookingSummary))
