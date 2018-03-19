@@ -604,6 +604,10 @@ export class ShipmentLocationBox extends Component {
           const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
+          tmpAddress.nexusName = nexusName
+          this.setState({ [target]: tmpAddress })
+          this.props.setTargetAddress(target, tmpAddress)
+
           let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
           if (this.state.availableOrigins) originOptions = this.state.availableOrigins
           const originOptionNames = originOptions.map(option => option.label)
@@ -636,6 +640,10 @@ export class ShipmentLocationBox extends Component {
           const { nexus, truckingOptions } = response.data
           const nexusName = nexus ? nexus.name : ''
 
+          tmpAddress.nexusName = nexusName
+          this.setState({ [target]: tmpAddress })
+          this.props.setTargetAddress(target, tmpAddress)
+
           let destinationOptions =
             allNexuses && allNexuses.destinations ? allNexuses.destinations : []
           if (this.state.availableDestinations) {
@@ -664,8 +672,6 @@ export class ShipmentLocationBox extends Component {
       })
     }
 
-    this.setState({ [target]: tmpAddress })
-    this.props.setTargetAddress(target, tmpAddress)
     this.setState({
       autoText: { [target]: place.formatted_address }
     })

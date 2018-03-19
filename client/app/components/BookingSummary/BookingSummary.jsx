@@ -7,7 +7,7 @@ import { dashedGradient, switchIcon } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, hubs, trucking, modeOfTransport
+    theme, totalWeight, totalVolume, nexuses, hubs, trucking, modeOfTransport
   } = props
   const dashedLineStyles = {
     marginTop: '6px',
@@ -46,20 +46,24 @@ function BookingSummary (props) {
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
           <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {hubs.origin} </h4>
+            <h4> {trucking.pre_carriage.truck_type ? nexuses.origin : hubs.origin} </h4>
             <p className={styles.trucking_elem}>
               {
-                hubs.origin &&
-                  `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
+                (
+                  (nexuses.origin && trucking.pre_carriage.truck_type) ||
+                  (hubs.origin && !trucking.pre_carriage.truck_type)
+                ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
               }
             </p>
           </div>
           <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {hubs.destination} </h4>
+            <h4> {trucking.on_carriage.truck_type ? nexuses.destination : hubs.destination} </h4>
             <p className={styles.trucking_elem}>
               {
-                hubs.destination &&
-                  `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
+                (
+                  (nexuses.destination && trucking.on_carriage.truck_type) ||
+                  (hubs.destination && !trucking.on_carriage.truck_type)
+                ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
               }
             </p>
           </div>
@@ -86,6 +90,10 @@ BookingSummary.propTypes = {
   modeOfTransport: PropTypes.string,
   totalWeight: PropTypes.number,
   totalVolume: PropTypes.number,
+  nexuses: PropTypes.shape({
+    origin: PropTypes.string,
+    destination: PropTypes.string
+  }),
   hubs: PropTypes.shape({
     origin: PropTypes.string,
     destination: PropTypes.string
@@ -101,6 +109,10 @@ BookingSummary.defaultProps = {
   modeOfTransport: '',
   totalWeight: 0,
   totalVolume: 0,
+  nexuses: {
+    origin: '',
+    destination: ''
+  },
   hubs: {
     origin: '',
     destination: ''

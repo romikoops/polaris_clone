@@ -47,6 +47,8 @@ class Shop extends Component {
     this.selectShipmentStageAndGo = this.selectShipmentStageAndGo.bind(this)
     this.toggleShowRegistration = this.toggleShowRegistration.bind(this)
     this.hideRegistration = this.hideRegistration.bind(this)
+
+    props.bookingSummaryDispatch.update()
   }
   componentWillReceiveProps (nextProps) {
     if (Shop.statusRequested(nextProps) && !Shop.statusRequested(this.props)) {

@@ -1,17 +1,13 @@
 import { bookingSummaryConstants } from '../constants'
 
 function update (data) {
-  console.log(data)
-  if (data.modeOfTransport) {
-    const { modeOfTransport } = data
-    return (dispatch) => {
-      dispatch({ type: bookingSummaryConstants.UPDATE, payload: { modeOfTransport } })
-    }
-  }
-
   const payload = {
     totalVolume: 0,
     totalWeight: 0,
+    nexuses: {
+      origin: '',
+      destination: ''
+    },
     hubs: {
       origin: '',
       destination: ''
@@ -21,6 +17,17 @@ function update (data) {
       on_carriage: { trucktype: '' }
     }
   }
+  if (!data) {
+    return dispatch => dispatch({ type: bookingSummaryConstants.UPDATE, payload })
+  }
+
+  if (data.modeOfTransport) {
+    const { modeOfTransport } = data
+    return (dispatch) => {
+      dispatch({ type: bookingSummaryConstants.UPDATE, payload: { modeOfTransport } })
+    }
+  }
+
   if (data.shipment.load_type === 'container') {
     console.log('TBD')
   } else {
@@ -31,6 +38,10 @@ function update (data) {
       payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
     })
     payload.selectedDay = data.selectedDay
+    payload.nexuses = {
+      origin: data.origin.nexusName,
+      destination: data.destination.nexusName
+    }
     payload.hubs = {
       origin: data.origin.hub_name,
       destination: data.destination.hub_name
