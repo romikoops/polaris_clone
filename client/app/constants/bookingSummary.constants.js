@@ -1,5 +1,5 @@
 const bookingSummaryConstants = {
-  UPDATE: 'UPDATE'
+  UPDATE: 'UPDATE_BOOKING_SUMMARY'
 }
 
 export default bookingSummaryConstants
