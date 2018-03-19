@@ -649,7 +649,7 @@ export class ShipmentDetails extends Component {
                 this.state.containers.some(container => container.dangerous_goods)
               )
                 ? (
-                  <div className="flex-50 layout-row layout-align-stretch">
+                  <div className="flex-60 layout-row layout-align-stretch">
 
                     <div className="flex-10 layout-row layout-align-start-start">
                       <Checkbox
@@ -674,9 +674,9 @@ export class ShipmentDetails extends Component {
                     </p>
                   </div>
                 )
-                : <div className="flex-50" />
+                : <div className="flex-40" />
             }
-            <div className="flex-50 layout-row layout-align-end">
+            <div className="flex-40 layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}
