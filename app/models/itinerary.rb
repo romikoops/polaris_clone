@@ -119,9 +119,10 @@ class Itinerary < ApplicationRecord
     end
     trip_layovers.each do |l_arr|
       if l_arr.length > 1
-        layovers_combinations = l_arr.map.with_index { |l, i| 
+        layovers_combinations = []
+        l_arr.each_with_index { |l, i| 
           if l_arr[i + 1]
-            return [l, l_arr[i + 1]]
+            layovers_combinations << [l, l_arr[i + 1]]
           end  
         }
         layovers_combinations.each do |lc|
@@ -134,7 +135,8 @@ class Itinerary < ApplicationRecord
             tenant_id: self.tenant_id, 
             trip_id: lc[0].trip_id, 
             origin_layover_id: lc[0].id,
-            destination_layover_id: lc[1].id
+            destination_layover_id: lc[1].id,
+            closing_date: lc[0].closing_date
             })
         end
       end

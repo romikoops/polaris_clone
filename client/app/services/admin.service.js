@@ -420,6 +420,16 @@ function loadItinerarySchedules (id) {
   }
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
+function saveItineraryNotes (id, notes) {
+  const formData = new FormData()
+  formData.append('notes', notes)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions).then(handleResponse)
+}
 
 export const adminService = {
   getHubs,
@@ -444,6 +454,7 @@ export const adminService = {
   getVehicleTypes,
   getShipments,
   getClients,
+  saveItineraryNotes,
   getItineraryPricings,
   wizardHubs,
   wizardSCharge,

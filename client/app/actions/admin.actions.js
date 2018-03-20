@@ -769,12 +769,12 @@ function getItineraries (redirect) {
   }
 }
 
-function getLayovers (itineraryId) {
+function getLayovers (itineraryId, target) {
   function request (layovers) {
     return { type: adminConstants.GET_LAYOVERS_REQUEST, payload: layovers }
   }
   function success (layovers) {
-    return { type: adminConstants.GET_LAYOVERS_SUCCESS, payload: layovers }
+    return { type: adminConstants.GET_LAYOVERS_SUCCESS, payload: { layovers, target } }
   }
   function failure (error) {
     return { type: adminConstants.GET_LAYOVERS_FAILURE, error }
@@ -785,7 +785,32 @@ function getLayovers (itineraryId) {
     adminService.getLayovers(itineraryId).then(
       (data) => {
         dispatch(alertActions.success('Fetching Layovers successful'))
-        dispatch(success(data))
+        dispatch(success(data.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function saveItineraryNotes (itineraryId, notes) {
+  function request (itinerary) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_REQUEST, payload: itinerary }
+  }
+  function success (itinerary) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_SUCCESS, payload: itinerary }
+  }
+  function failure (error) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+    adminService.saveItineraryNotes(itineraryId, notes).then(
+      (data) => {
+        dispatch(alertActions.success('Saving Itinerary Notes successful'))
+        dispatch(success(data.data))
       },
       (error) => {
         // ;
@@ -1344,7 +1369,8 @@ export const adminActions = {
   deletePricing,
   editHub,
   loadItinerarySchedules,
-  deleteTrip
+  deleteTrip,
+  saveItineraryNotes
 }
 
 export default adminActions

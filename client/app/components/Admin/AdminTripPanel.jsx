@@ -37,7 +37,7 @@ export class AdminTripPanel extends Component {
   }
   showPanel () {
     const { trip, toggleShowPanel } = this.props
-    toggleShowPanel(trip.id)
+    toggleShowPanel(trip.trip_id)
   }
   deleteTrip (id) {
     const { adminDispatch } = this.props
@@ -68,7 +68,7 @@ export class AdminTripPanel extends Component {
         theme={theme}
         heading="Are you sure?"
         text="This will delete the schedule and all related data"
-        confirm={() => this.deleteTrip(trip.id)}
+        confirm={() => this.deleteTrip(trip.trip_id)}
         deny={() => this.closeConfirm()}
       />
     ) : (
@@ -98,11 +98,11 @@ export class AdminTripPanel extends Component {
       : moment(startTime).subtract(4, 'days')
     const panelStyle = showPanel ? styles.panel_open : ''
     const layoverArray =
-      layovers && layovers[trip.id]
-        ? layovers[trip.id].map(l => <AdminLayoverTile layoverData={l} theme={theme} />)
+      layovers && layovers[trip.trip_id]
+        ? layovers[trip.trip_id].map(l => <AdminLayoverTile layoverData={l} theme={theme} />)
         : []
     return (
-      <div key={trip.id} className={`flex-100 layout-row layout-wrap ${styles.route_result}`}>
+      <div key={trip.trip_id} className={`flex-100 layout-row layout-wrap ${styles.route_result}`}>
         {confimPrompt}
         <div className="flex-100 layout-row layout-wrap relative">
           <div

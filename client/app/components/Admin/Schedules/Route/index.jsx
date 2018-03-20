@@ -83,7 +83,7 @@ export class AdminSchedulesRoute extends Component {
   }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
-      this.props.adminDispatch.getLayovers(id)
+      this.props.adminDispatch.getLayovers(id, 'schedules')
     }
     this.setState({
       panelViewer: {
@@ -96,7 +96,9 @@ export class AdminSchedulesRoute extends Component {
     const {
       theme, hubs, scheduleData, adminDispatch, limit
     } = this.props
-    const { filters, sortFilter, panelViewer } = this.state
+    const {
+      filters, sortFilter, panelViewer, showList
+    } = this.state
     if (!scheduleData || !hubs) {
       return ''
     }
@@ -106,7 +108,6 @@ export class AdminSchedulesRoute extends Component {
       { value: 'end_date', label: 'ETD' }
     ]
     const { itinerary, schedules, itineraryLayovers } = scheduleData
-    const { showList } = this.state
     const tripArr = []
     const slimit = limit || 10
 

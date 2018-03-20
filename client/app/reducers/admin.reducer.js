@@ -888,16 +888,29 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_LAYOVERS_REQUEST:
       return state
     case adminConstants.GET_LAYOVERS_SUCCESS:
+      if (action.payload.target === 'schedules') {
+        return {
+          ...state,
+          schedules: {
+            ...state.schedules,
+            itineraryLayovers: {
+              [action.payload.data[0].layover.trip_id]: action.payload.layovers
+            }
+          },
+          loading: false
+        }
+      }
       return {
         ...state,
-        schedules: {
-          ...state.schedules,
-          itineraryLayovers: {
-            [action.payload.data[0].layover.trip_id]: action.payload.data
+        itinerary: {
+          ...state.itinerary,
+          layovers: {
+            [action.payload.layovers[0].layover.trip_id]: action.payload.layovers
           }
         },
         loading: false
       }
+
     case adminConstants.GET_LAYOVERS_FAILURE:
       return {
         ...state,
@@ -921,6 +934,25 @@ export default function admin (state = {}, action) {
         error: { route: action.error },
         loading: false
       }
+
+    case adminConstants.SAVE_ITINERARY_NOTES_REQUEST:
+      return state
+    case adminConstants.SAVE_ITINERARY_NOTES_SUCCESS:
+      return {
+        ...state,
+        itinerary: {
+          ...state.itinerary,
+          itinerary: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.SAVE_ITINERARY_NOTES_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
     case adminConstants.EDIT_SHIPMENT_TIME_REQUEST:
       return state
     case adminConstants.EDIT_SHIPMENT_TIME_SUCCESS:
