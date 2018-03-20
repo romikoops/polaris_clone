@@ -78,10 +78,6 @@ export class ChooseShipment extends Component {
       <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
     )
 
-    // const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
-    //   .filter(mot => scope.modes_of_transport[mot])
-    //   .map(mot => switchIcon(mot))
-
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
         {flash}

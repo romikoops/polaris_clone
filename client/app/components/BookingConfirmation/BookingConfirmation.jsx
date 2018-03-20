@@ -367,9 +367,6 @@ export class BookingConfirmation extends Component {
                       ''
                     )}
                   </div>
-                  <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
-                    <i className="fa fa-pencil clip" style={textStyle} />
-                  </div>
                 </div>
               </div>
             </div>

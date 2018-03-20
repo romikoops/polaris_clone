@@ -602,7 +602,7 @@ export class CargoDetails extends Component {
                       <Checkbox
                         onChange={this.toggleInsurance}
                         checked={
-                          this.props.insurance.bool == null ? null : !this.props.insurance.bool
+                          !this.props.insurance.bool ? true : !this.props.insurance.bool
                         }
                         theme={theme}
                       />

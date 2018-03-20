@@ -39,7 +39,7 @@ export const tooltips = {
   dangerous_goods:
     'Dangerous goods, often recognised as hazardous materials, may be pure chemicals, mixtures of substances, manufactured products or articles which can pose a risk to people, animals or the environment if not properly handled in use or in transport.',
   non_stackable:
-    '', // tooltip Text is missing - ask Clemen or Martin
+    'Sometimes cargo comes in shapes and sizes that is impossible to stack. It may also be cargo of fragile nature. When cargo is non-stackable, additional charges incur to cover for the excess free space in the container.',
   customs_clearance:
     'Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country or to exported goods so that they can leave the country. The custom clearance is typically given to a shipping agent to prove that all applicable customs duties have been paid and the shipment has been approved.',
   gross_weight:
