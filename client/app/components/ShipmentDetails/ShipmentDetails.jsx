@@ -502,33 +502,6 @@ export class ShipmentDetails extends Component {
     const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
     const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
 
-    // const backgroundColor = value => (!value && this.state.
-    // nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
-    // const placeholderColorOverwrite = value =>
-    //   (!value && this.state.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
-    // const StyledSelect = styled(Select)`
-    //   .Select-control {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2 !important;
-    //   }
-    //   .Select-menu-outer {
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-value {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-placeholder {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     ${props => placeholderColorOverwrite(props.value)};
-    //   }
-    //   .Select-option {
-    //     background-color: #f9f9f9;
-    //   }
-    // `
-
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
@@ -626,7 +599,9 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +

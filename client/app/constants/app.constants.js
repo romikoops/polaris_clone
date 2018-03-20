@@ -29,7 +29,7 @@ export const tooltips = {
   weight:
     'The weight of the cargo is needed as containers have a maximum weight load. Containers are consolidated with other LCL shipments and the weight cannot exceed the maximum. Furthermore, weight also determines the price.',
   insurance:
-    'Sign an insurance your shipment for the replacement of the goods shipped in case of total or partial loss or damage. Note that if you choose not to pay to insure your shipment, the goods shipped are automatically covered under legal liability standard to the transportation industry.',
+    'Sign an insurance for your shipment for the replacement of the goods shipped in case of total or partial loss or damage. Note that if you choose not to pay to insure your shipment, the goods shipped are automatically covered under legal liability standard to the transportation industry.',
   has_pre_carriage:
     'Pre-Carriage is the term given to any inland movement that takes place prior to the good or container being delivered to the port/terminal.',
   has_on_carriage:
@@ -49,9 +49,9 @@ export const tooltips = {
   weight_class:
     'The net weight is the total weight of the cargo after it has been packed into a container – but excluding the tare weight of the container.',
   total_price: 'Total Price includes all associated costs incl. service charges.',
-  shipper:
+  sender:
     'Shipper (or Consignor) is the person or company who is usually the supplier or owner of commodities shipped.',
-  consignee:
+  receiver:
     "Consignee is the party shown on the bill of lading or air waybill to whom the shipment is consigned. Need not always be the buyer, and in some countries will be the buyer's bank.",
   notifyee:
     'Notifyee is the person or company to be advised by the carrier upon arrival of the goods at the destination port.',

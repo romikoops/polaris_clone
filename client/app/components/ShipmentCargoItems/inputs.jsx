@@ -113,6 +113,14 @@ export default function getInputs (
     cargoItem &&
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
+  function calcQuantityValue (value) {
+    console.log(cargoItem)
+    if (!cargoItem) {
+      return value
+    }
+    return value * cargoItem.quantity
+  }
+
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">
       <div className="layout-row flex-40 layout-align-center" >
@@ -121,7 +129,7 @@ export default function getInputs (
 
       <div className="flex">
         <p className={styles.input_label}>
-          { volume }
+          { calcQuantityValue(volume) }
           <span>m</span>
           <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
         </p>
@@ -150,7 +158,9 @@ export default function getInputs (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value}`}>
-          { cargoItem && chargeableWeight(mot) } kg
+          { cargoItem && chargeableWeight(mot)
+            ? calcQuantityValue(chargeableWeight(mot))
+            : cargoItem && chargeableWeight(mot) } kg
         </p>
       </div>
     )

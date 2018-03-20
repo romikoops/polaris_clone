@@ -297,6 +297,7 @@ export class CargoDetails extends Component {
         </div>
       </div>
     )
+    const textComp = (<b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>)
     const noCustomsBox = (
       <div
         className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${
@@ -306,13 +307,11 @@ export class CargoDetails extends Component {
         <div className="flex-33 no_max layout-row layout-align-start-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
-              <h3 style={{ 'font-weight': 'normal' }}>
-                {' '}
-                EORI  <i style={{ 'font-size': '.83em' }}>( if applicable )</i>
-              </h3>
+              <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
             </div>
             <div className="flex-100 input_box">
               <input
+                className={styles.EORI_input}
                 type="text"
                 name="eori"
                 value={eori}
@@ -322,7 +321,7 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        <div className="flex-33 no_max layout-row layout-row layout-align-start-start">
+        <div className="flex-33 no_max layout-row layout-align-start-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
               <TextHeading theme={theme} size={3} text="Customs Declaration" />
@@ -333,17 +332,15 @@ export class CargoDetails extends Component {
                   <DocViewer doc={documents.customs_declaration} />
                 ) : (
                   <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
-                    <div className="flex-100 layout-row">
-                      <DocumentsForm
-                        theme={theme}
-                        type="customs_declaration"
-                        dispatchFn={this.fileFn}
-                        text="Costums decl."
-                        doc={documents.customs_declaration}
-                        isRequired
-                        deleteFn={this.deleteDoc}
-                      />
-                    </div>
+                    <DocumentsForm
+                      theme={theme}
+                      type="customs_declaration"
+                      dispatchFn={this.fileFn}
+                      text="Customs decl."
+                      doc={documents.customs_declaration}
+                      isRequired
+                      deleteFn={this.deleteDoc}
+                    />
                   </div>
                 )}
               </div>
@@ -361,17 +358,15 @@ export class CargoDetails extends Component {
                   <DocViewer doc={documents.customs_value_declaration} />
                 ) : (
                   <div className="flex-100 layout-row layout-wrap" name="customs_value_declaration">
-                    <div className="flex-100 layout-row">
-                      <DocumentsForm
-                        theme={theme}
-                        type="customs_value_declaration"
-                        text="Customs Val. Decl."
-                        dispatchFn={this.fileFn}
-                        doc={documents.customs_declaration}
-                        isRequired
-                        deleteFn={this.deleteDoc}
-                      />
-                    </div>
+                    <DocumentsForm
+                      theme={theme}
+                      type="customs_value_declaration"
+                      text="Customs Val. Decl."
+                      dispatchFn={this.fileFn}
+                      doc={documents.customs_declaration}
+                      isRequired
+                      deleteFn={this.deleteDoc}
+                    />
                   </div>
                 )}
               </div>
