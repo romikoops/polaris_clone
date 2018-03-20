@@ -1,8 +1,83 @@
 :local {
+  // Banner
+
+  .banner_content {
+    z-index: 3;
+  }
+  .fade {
+    color: lightgrey;
+    height: 100%;
+    width: 100%;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    position: absolute;
+    z-index: 2;
+    background: rgba(0,10,4,0.60);
+  }
+  .shop_banner {
+    height: 124px;
+    // background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
+    background-image: url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg');
+    background-size: cover;
+    background-position: 0% 15%;
+    background-repeat: no-repeat;
+    position: relative;
+    text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
+  }
+  .shop_banner h3 {
+    height: 41px;
+    color: #FFFFFF;
+    font-size: 30px;
+    line-height: 35px;
+  }
+  .shop_banner p {
+    height: 34px;
+    width: 198px;
+    color: #FFFFFF;
+    font-size: 25px;
+    line-height: 29px;
+  }
+  .shop_banner i {
+    height: 20px;
+    width: 20px;
+    color: #FFFFFF;
+    font-size: 20px;
+    margin: 0px 18px;
+  }
+
+
+  // Stage Row
+
+  .stage_row {
+    height: 72px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid rgba(black, 0.2); 
+    box-shadow: 0 -1px 2px 0 rgba(0, 0, 0, 0.2);
+    z-index: 500;
+  }
+  .line_box {
+    position: relative;
+    height: 100%;
+  }
+  .line {
+    position: absolute;
+    height: 1px;
+    width: 710px;
+    border-top: 2px solid #4A4A4A;
+    top: 24px;
+    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+      margin-left: 50px;
+    }
+  }
   .shop_stage {
     border-radius: 50% !important;
-    height: 75px !important;
-    width: 75px !important;
+    height: 27px !important;
+    width: 27px !important;
     border: 2px solid darkslategrey;
     position: relative;
     i {
@@ -13,12 +88,10 @@
       font-weight: normal;
     }
   }
-
   .stage_box {
-    padding-top: 33px;
     min-width: 171px;
+    padding: 11px 0;
   }
-
   .shop_stage_past {
     @extend .shop_stage;
     background-color: #4A4A4A;
@@ -26,25 +99,24 @@
     width: 100%;
   }
   .shop_stage_past i {
-    font-size: 30px;
+    font-size: 13px;
   }
-
   .shop_stage_yet {
     @extend .shop_stage;
-    background: #FFFFFF;
+    background: white;
     height: 100%;
     width: 100%;
     border-color: darkslategrey;
     color: darkslategrey;
   }
   .shop_stage_yet h3, .shop_stage_current h3 {
-    font-size: 30px;
+    font-size: 13px;
     margin: 0;
   }
   .wrapper_shop_stage_current {
     position: relative;    
-    height: 75px !important;
-    width: 75px !important;
+    height: 27px !important;
+    width: 27px !important;
   }
   .shop_stage_current {
     position: absolute;
@@ -73,93 +145,9 @@
     border-radius: 50%;
     color: transparent;
   }
-  
   .stage_text  {
-    height: 22px;
     color: #212121;
-
-    // font-family: ".SF NS Display";
-    font-size: 16px;
-    line-height: 18px;
-  }
-  .banner_content {
-    z-index:3;
-  }
-  .fade {
-    height: 100%;
-    width: 100%;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
-    position: absolute;
-    z-index: 2;
-    background: rgba(0,10,4,0.60);
-  }
-  .shop_banner {
-    height: 124px;
-    // background-image: url('https://assets.itsmycargo.com/assets/images/welcome/header.jpg');
-    background-image: url('https://assets.itsmycargo.com/assets/cityimages/ssview_container_yard.jpg');
-    background-size: cover;
-    background-position: 0% 15%;
-    background-repeat: no-repeat;
-    position: relative;
-    text-shadow: 1px 1.5px 0 rgba(0, 0, 0, 0.4);
-  }
-  .shop_banner h3 {
-
-    height: 41px;
-    color: #FFFFFF;
-    // font-family: ".SF NS Display";
-    font-size: 30px;
-    line-height: 35px;
-
-  }
-  .shop_banner p {
-    height: 34px;
-    width: 198px;
-    color: #FFFFFF;
-    // font-family: ".SF NS Display";
-    font-size: 25px;
-    line-height: 29px;
-  }
-  .shop_banner i {
-    height: 20px;
-    width: 20px;
-    color: #FFFFFF;
-    font-size: 20px;
-    margin: 0px 18px;
-  }
-
-  .fade {
-    color: lightgrey;
-  }
-
-  .header {
-    color: floralwhite;
-  }
-  .stage_row {
-    height: 130px;
-    box-shadow: 0 2px 4px 0 rgba(black, 0.1);
-  }
-  .ss_view {
-    margin-top: 100px;
-    height: 260px;
-  }
-  .line_box {
-    position: relative;
-    transform: scale(0.8);
-    padding-bottom: 10px;
-  }
-  .line {
-    position: absolute;
-    height:1px;
-    width: 739px;
-    border-top: 3px solid #4A4A4A;
-    margin-top: 70.5px;
-    @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-      margin-left: 50px;
-    }
-    
+    font-size: 15px;
+    margin: 3px 0 0 0;
   }
 }

@@ -21,15 +21,17 @@ Rails.application.routes.draw do
       resources :trucking, only: [:index, :create, :show]
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
+      post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
+      post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
       
-      resources :hubs, only: [:index, :show, :create] do
+      resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
       end
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
       post "user_managers/assign", to: "user_managers#assign"
-      resources :itineraries, only: [:index, :show, :create]
+      resources :itineraries, only: [:index, :show, :create, :destroy]
 
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
@@ -63,7 +65,7 @@ Rails.application.routes.draw do
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
       post "shipments/:id/edit_price", to: "shipments#edit_price"
        post "shipments/:id/edit_time", to: "shipments#edit_time"
-      resources :schedules, only: [:index]
+      resources :schedules, only: [:index, :show]
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 
         as: :schedules_train_overwrite

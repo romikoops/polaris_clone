@@ -62,6 +62,7 @@ export class AdminRoutesIndex extends Component {
           theme={theme}
           hubs={hubs}
           limit={40}
+          showDelete
           adminDispatch={adminDispatch}
           sideScroll={false}
           handleClick={viewItinerary}

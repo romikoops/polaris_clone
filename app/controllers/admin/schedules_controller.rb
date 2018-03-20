@@ -14,6 +14,12 @@ class Admin::SchedulesController < ApplicationController
     detailed_itineraries = get_itineraries(current_user.tenant_id)
     response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, detailedItineraries: detailed_itineraries})
   end
+  def show
+    itinerary = Itinerary.find(params[:id])
+    schedules = itinerary.trips.limit(20).order(:start_date)
+
+    response_handler({schedules: schedules, itinerary: itinerary})
+  end
   def auto_generate_schedules
     tenant = Tenant.find(current_user.tenant_id)
     mot = params[:mot]

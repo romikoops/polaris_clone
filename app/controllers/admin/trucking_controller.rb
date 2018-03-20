@@ -12,11 +12,17 @@ class Admin::TruckingController < ApplicationController
   end
 
   def show
-    trucking_hub = get_item("truckingHubs", "_id", params[:id])
-    trucking_queries = get_items("truckingQueries", "trucking_hub_id", params[:id])
-    trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+    trucking_hub = get_item("truckingHubs", "hub_id", params[:id])
+    hub = Hub.find(params[:id])
+    trucking_queries = []
+    trucking_pricings = []
+    if trucking_hub
+      trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
+      trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+    end
     
-    response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings)
+    
+    response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
   end
   def create
     data = params[:obj][:data].as_json
@@ -123,6 +129,45 @@ class Admin::TruckingController < ApplicationController
       req = {'xlsx' => params[:file]}
       ["import", "export"].each do |dir|
        overwrite_city_trucking_rates(req, current_user, dir)
+       end
+      response_handler(true)
+    else
+      response_handler(false)
+    end
+  end
+  def overwrite_zip_trucking_by_hub
+    data = params
+     if data["file"]
+      
+      if  data["direction"] == 'either'
+        direction_array = ["import", "export"]
+      else
+        direction_array = [data["direction"]]
+      end
+      req = {'xlsx' => data["file"]}
+      direction_array.each do |dir|
+        overwrite_zipcode_trucking_rates_by_hub(req, current_user, data["id"], dir)
+      end
+      trucking_hub = get_item("truckingHubs", "hub_id", data["id"])
+      hub = Hub.find(data["id"])
+      trucking_queries = []
+      trucking_pricings = []
+      if trucking_hub
+        trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
+        trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+      end
+      
+      
+      response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
+    else
+      response_handler(false)
+    end
+  end
+   def overwrite_city_trucking_by_hub
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+      ["import", "export"].each do |dir|
+       overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], dir)
        end
       response_handler(true)
     else

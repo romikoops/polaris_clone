@@ -47,8 +47,8 @@ export class RouteSelector extends Component {
       return fuse.search(event.target.value)
     }
 
-    const filteredRoutesOrigin = search('origin_nexus')
-    const filteredRoutesDestination = search('destination_nexus')
+    const filteredRoutesOrigin = search('originNexus')
+    const filteredRoutesDestination = search('destinationNexus')
 
     let TopRoutes = filteredRoutesDestination.filter(route => filteredRoutesOrigin.includes(route))
 
@@ -64,7 +64,7 @@ export class RouteSelector extends Component {
   render () {
     const { theme } = this.props
     const routes = this.state.routes ? this.state.routes : this.props.routes
-    console.log(routes)
+    // console.log(routes)
     if (!routes) {
       console.log('(!) No Routes Found (!)')
       return (

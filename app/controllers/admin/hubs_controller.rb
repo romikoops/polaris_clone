@@ -24,11 +24,12 @@ class Admin::HubsController < ApplicationController
   def show
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
+    location = hub.location
     layovers = hub.layovers.limit(20)
     routes = get_itineraries_for_hub(hub)
     customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
-    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs}
+    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
     response_handler(resp)
   end
   def set_status
@@ -40,6 +41,15 @@ class Admin::HubsController < ApplicationController
     hub = Hub.find(params[:hub_id])
     hub.destroy!
     response_handler({id: params[:hub_id]})
+  end
+  def update
+    hub = Hub.find(params[:id])
+    location = hub.location
+    new_loc = params[:location].as_json
+    new_hub = params[:data].as_json
+    hub.update_attributes(new_hub)
+    location.update_attributes(new_loc)
+    response_handler({hub: hub, location: location})
   end
   def overwrite
     if params[:file]
