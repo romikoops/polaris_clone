@@ -1212,7 +1212,6 @@ function loadItinerarySchedules (id, redirect) {
   }
   return (dispatch) => {
     dispatch(request())
-
     adminService.loadItinerarySchedules(id).then(
       (data) => {
         dispatch(alertActions.success('Fetch Schedules successful'))

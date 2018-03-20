@@ -26,6 +26,7 @@ const currencyOpts = currencyOptions
 export class AdminPriceEditor extends Component {
   static selectFromOptions (options, value) {
     let result
+    console.log(value)
     options.forEach((op) => {
       if (op.value === value) {
         result = op
@@ -68,15 +69,17 @@ export class AdminPriceEditor extends Component {
       Object.keys(pricing.data[key]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
+          newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
+            opts,
+            pricing.data[key][chargeKey]
+          )
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
+          newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
+            opts,
+            pricing.data[key][chargeKey]
+          )
         }
-        newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
-          opts,
-          pricing.data[key][chargeKey]
-        )
       })
     })
     this.setState({ selectOptions: newObj })

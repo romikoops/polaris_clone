@@ -408,7 +408,7 @@ function uploadTrucking (url, file, direction) {
 
 function loadItinerarySchedules (id) {
   const requestOptions = {
-    method: 'POST',
+    method: 'GET',
     headers: { ...authHeader(), 'Content-Type': 'application/json' }
   }
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)

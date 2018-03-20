@@ -4,13 +4,13 @@ import Select from 'react-select'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
 import styled from 'styled-components'
-import FileUploader from '../../../FileUploader/FileUploader'
+// import FileUploader from '../../../FileUploader/FileUploader'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import styles from '../../Admin.scss'
-import { AdminTripPanel } from './'
+import { AdminTripPanel } from '../../AdminTripPanel'
 // import AdminScheduleGenerator from './AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
-import { adminSchedulesRoute as schedTip } from '../../../../constants'
+// import { adminSchedulesRoute as schedTip } from '../../../../constants'
 import '../../../../styles/select-css-custom.css'
 
 export class AdminSchedulesRoute extends Component {
@@ -38,38 +38,15 @@ export class AdminSchedulesRoute extends Component {
         mot: false,
         sort: false
       },
-      motFilter: { value: false, label: false },
       sortFilter: { value: false, label: false },
-      hubFilter: { value: false, label: false },
       panelViewer: {}
     }
     this.toggleView = this.toggleView.bind(this)
-    this.setMoTFilter = this.setMoTFilter.bind(this)
     this.setSortFilter = this.setSortFilter.bind(this)
-    this.setHubFilter = this.setHubFilter.bind(this)
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
     this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
   }
 
-  setMoTFilter (mot) {
-    if (!mot) {
-      this.setState({
-        motFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          mot: false
-        }
-      })
-    } else {
-      this.setState({
-        motFilter: mot,
-        filters: {
-          ...this.state.filters,
-          mot: true
-        }
-      })
-    }
-  }
   setSortFilter (sorter) {
     if (!sorter) {
       this.setState({
@@ -85,44 +62,6 @@ export class AdminSchedulesRoute extends Component {
         filters: {
           ...this.state.filters,
           sort: true
-        }
-      })
-    }
-  }
-  setHubFilter (hub) {
-    if (!hub) {
-      this.setState({
-        hubFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          hub: false
-        }
-      })
-    } else {
-      this.setState({
-        hubFilter: hub,
-        filters: {
-          ...this.state.filters,
-          hub: true
-        }
-      })
-    }
-  }
-  setItineraryFilter (itinerary) {
-    if (!itinerary) {
-      this.setState({
-        itineraryFilter: { value: false, label: false },
-        filters: {
-          ...this.state.filters,
-          itinerary: false
-        }
-      })
-    } else {
-      this.setState({
-        itineraryFilter: itinerary,
-        filters: {
-          ...this.state.filters,
-          itinerary: true
         }
       })
     }
@@ -158,57 +97,25 @@ export class AdminSchedulesRoute extends Component {
       theme, hubs, scheduleData, adminDispatch, limit
     } = this.props
     const {
-      filters, hubFilter, sortFilter, panelViewer, motFilter, itineraryFilter
+      filters, sortFilter, panelViewer
     } = this.state
     if (!scheduleData || !hubs) {
       return ''
     }
 
-    const filterMoTOptions = [
-      { value: 'rail', label: 'Rail' },
-      { value: 'air', label: 'Air' },
-      { value: 'ocean', label: 'Ocean' }
-    ]
     const filterSortOptions = [
       { value: 'start_date', label: 'ETA' },
       { value: 'end_date', label: 'ETD' }
     ]
-    const {
-      itineraries, air, train, ocean, itineraryLayovers
-    } = scheduleData
+    const { itinerary, schedules, itineraryLayovers } = scheduleData
     const { showList } = this.state
-    const trainUrl = '/admin/train_schedules/process_csv'
-    const vesUrl = '/admin/vessel_schedules/process_csv'
-    const airUrl = '/admin/air_schedules/process_csv'
-    const truckUrl = '/admin/truck_schedules/process_csv'
     const tripArr = []
     const slimit = limit || 10
-    let allTrips
-    switch (motFilter.value) {
-      case 'ocean':
-        allTrips = ocean
-        break
-      case 'air':
-        allTrips = air
-        break
-      case 'rail':
-        allTrips = train
-        break
-      case false:
-        allTrips = [...air, ...ocean, ...train]
-        break
-      default:
-        allTrips = [...air, ...ocean, ...train]
-        break
-    }
-    let itineraryIds
-    const filteredByHubs = []
-    const filteredByItinerary = []
 
     if (filters.sort) {
-      allTrips.sort(AdminSchedulesRoute.dynamicSort(sortFilter.value))
+      schedules.sort(AdminSchedulesRoute.dynamicSort(sortFilter.value))
     }
-    const results = allTrips
+    const results = schedules
 
     console.log(results)
     results.forEach((trip, i) => {
@@ -220,7 +127,7 @@ export class AdminSchedulesRoute extends Component {
           toggleShowPanel={this.toggleShowPanel}
           layovers={itineraryLayovers}
           adminDispatch={adminDispatch}
-          itinerary={this.getItinerary(trip)}
+          itinerary={itinerary}
           hubs={hubs}
           theme={theme}
         />)
@@ -245,30 +152,12 @@ export class AdminSchedulesRoute extends Component {
         background-color: #f9f9f9;
       }
     `
-    const hubList = []
-    Object.keys(hubs).forEach((key) => {
-      hubList.push({ value: hubs[key].data, label: hubs[key].data.name })
-    })
-    const itineraryList = []
-    itineraries.forEach((itinerary) => {
-      itineraryList.push({ value: itinerary.id, label: itinerary.name })
-    })
     const listView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div
           className="flex-100 layout-row layout-align-start-center"
           style={{ marginBottom: '25px' }}
         >
-          <div className="flex-25 layout-row layout-align-start-center">
-            <StyledSelect
-              name="mot-filter"
-              placeholder="Filter by: MoT"
-              className={`${styles.select}`}
-              value={this.state.motFilter}
-              options={filterMoTOptions}
-              onChange={this.setMoTFilter}
-            />
-          </div>
           <div className="flex-25 layout-row layout-align-start-center">
             <StyledSelect
               name="sort-filter"
@@ -283,50 +172,6 @@ export class AdminSchedulesRoute extends Component {
         {tripArr}
       </div>
     )
-    // const genView = (
-    //   <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-    //     <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-    //       <div
-    //         className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-    //       >
-    //         <p className={` ${styles.sec_header_text} flex-none`}>Excel Uploads</p>
-    //       </div>
-    //       <div
-    //         className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-    //           styles.sec_upload
-    //         }`}
-    //       >
-    //         <p className="flex-80">Upload Train Schedules Sheet</p>
-    //         <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx" />
-    //       </div>
-    //       <div
-    //         className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-    //           styles.sec_upload
-    //         }`}
-    //       >
-    //         <p className="flex-80">Upload Air Schedules Sheet</p>
-    //         <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx" />
-    //       </div>
-    //       <div
-    //         className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-    //           styles.sec_upload
-    //         }`}
-    //       >
-    //         <p className="flex-80">Upload Vessel Schedules Sheet</p>
-    //         <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx" />
-    //       </div>
-    //       <div
-    //         className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-    //           styles.sec_upload
-    //         }`}
-    //       >
-    //         <p className="flex-80">Upload Trucking Schedules Sheet</p>
-    //         <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx" />
-    //       </div>
-    //     </div>
-    //     <AdminScheduleGenerator theme={theme} itineraries={itineraries} />
-    //   </div>
-    // )
 
     const backButton = (
       <RoundButton
@@ -339,7 +184,10 @@ export class AdminSchedulesRoute extends Component {
       />
     )
     const newButton = (
-      <div data-for="tooltipId" data-tip={schedTip.upload_excel}>
+      <div
+        data-for="tooltipId"
+        // data-tip={schedTip.upload_excel}
+      >
         <RoundButton
           theme={theme}
           text="New Upload"

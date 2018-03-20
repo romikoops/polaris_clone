@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Select from 'react-select'
+
 import ReactTooltip from 'react-tooltip'
-import { v4 } from 'node-uuid'
-import styled from 'styled-components'
+
 import FileUploader from '../FileUploader/FileUploader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './Admin.scss'
-import { AdminTripPanel } from './'
+
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminSchedules as schedTip } from '../../constants'
@@ -34,12 +33,6 @@ export class AdminSchedules extends Component {
     super(props)
     this.state = {
       showList: true,
-      filters: {
-        hub: false,
-        mot: false,
-        sort: false
-      },
-
       panelViewer: {}
     }
     this.toggleView = this.toggleView.bind(this)
@@ -91,14 +84,13 @@ export class AdminSchedules extends Component {
     const vesUrl = '/admin/vessel_schedules/process_csv'
     const airUrl = '/admin/air_schedules/process_csv'
     const truckUrl = '/admin/truck_schedules/process_csv'
-    const tripArr = []
-    const slimit = limit || 10
     const listView = (
       <AdminSearchableRoutes
         itineraries={itineraries}
         theme={theme}
         hubs={hubs}
-        limit={40}
+        limit={limit || 40}
+        heading="Schedules by route:"
         adminDispatch={adminDispatch}
         sideScroll={false}
         handleClick={e => this.viewSchedules(e)}

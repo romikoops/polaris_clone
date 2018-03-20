@@ -16,7 +16,7 @@ class Admin::SchedulesController < ApplicationController
   end
   def show
     itinerary = Itinerary.find(params[:id])
-    schedules = itinerary.flat_map{ |it| it.trips.limit(10).order(:start_date)}
+    schedules = itinerary.trips.limit(20).order(:start_date)
 
     response_handler({schedules: schedules, itinerary: itinerary})
   end

@@ -143,6 +143,7 @@ class Admin extends Component {
                   )}
                 />
                 <Route
+                  exact
                   path="/admin/schedules"
                   render={props => (
                     <AdminSchedules
@@ -155,6 +156,7 @@ class Admin extends Component {
                   )}
                 />
                 <Route
+                  exact
                   path="/admin/schedules/:id"
                   render={props => (
                     <AdminSchedulesRoute

@@ -50,10 +50,13 @@ export default class AdminItineraryRow extends Component {
   closeConfirm () {
     this.setState({ confirm: false })
   }
+  doNothing () {
+    console.log(this.props)
+  }
 
   render () {
     const { confirm } = this.state
-    const { itinerary, theme } = this.props
+    const { itinerary, theme, showDelete } = this.props
     const iconStyle = gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     const confimPrompt = confirm ? (
       <AdminPromptConfirm
@@ -72,6 +75,7 @@ export default class AdminItineraryRow extends Component {
         className={`flex-100 layout-row layout-align-space-between-center pointy ${
           styles.itinerary_row
         }`}
+        onClick={showDelete ? () => this.doNothing() : () => this.selectItinerary()}
       >
         {confimPrompt}
         <div className="flex-none layout-row layout-align-start-center">
@@ -86,18 +90,28 @@ export default class AdminItineraryRow extends Component {
               {itinerary.mode_of_transport ? capitalize(itinerary.mode_of_transport) : ''}
             </p>
           </div>
-          <div
-            className={`${styles.icon_btn_view} flex-none layout-row layout-align-center-center`}
-            onClick={() => this.selectItinerary()}
-          >
-            <i className="fa fa-eye flex-none" />
-          </div>
-          <div
-            className={`${styles.icon_btn_delete} flex-none layout-row layout-align-center-center`}
-            onClick={() => this.confirmDelete()}
-          >
-            <i className="fa fa-times flex-none" />
-          </div>
+          {showDelete ? (
+            <div className="flex-none layout-row layout-align-space-around-center">
+              <div
+                className={`${
+                  styles.icon_btn_view
+                } flex-none layout-row layout-align-center-center`}
+                onClick={() => this.selectItinerary()}
+              >
+                <i className="fa fa-eye flex-none" />
+              </div>
+              <div
+                className={`${
+                  styles.icon_btn_delete
+                } flex-none layout-row layout-align-center-center`}
+                onClick={() => this.confirmDelete()}
+              >
+                <i className="fa fa-times flex-none" />
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
         </div>
       </div>
     )
@@ -106,7 +120,12 @@ export default class AdminItineraryRow extends Component {
 AdminItineraryRow.propTypes = {
   theme: PropTypes.theme.isRequired,
   handleClick: PropTypes.func.isRequired,
-  itinerary: PropTypes.objectOf(PropTypes.any).isRequired
+  itinerary: PropTypes.objectOf(PropTypes.any).isRequired,
+  showDelete: PropTypes.bool,
+  adminDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
-AdminItineraryRow.defaultPropTypes = {}
+AdminItineraryRow.defaultProps = {
+  showDelete: false,
+  adminDispatch: {}
+}
