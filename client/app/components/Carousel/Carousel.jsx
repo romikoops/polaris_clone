@@ -18,7 +18,7 @@ export function Carousel ({ slides, noSlides, fade }) {
     infinite: true,
     slidesToShow: slideNumber,
     speed: 2000,
-    arrows: true
+    arrows: false
   }
   const slideCountStyle = noSlides === 1 ? styles.one_slide : ''
   const StyledSlider = styled.div`
