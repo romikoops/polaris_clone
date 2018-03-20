@@ -133,7 +133,7 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
-    return (
+    return !!(
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -141,6 +141,15 @@ export class ShipmentDetails extends Component {
       nextProps.user
     )
   }
+  componentDidUpdate () {
+    const {
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    } = this.state
+    this.props.bookingSummaryDispatch.update({
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    })
+  }
+
   setIncoTerm (opt) {
     this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
     this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
@@ -409,44 +418,41 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch
+      tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
     const { modals } = this.state
     const { theme, scope } = tenant.data
-    const { messages } = this.props
     let cargoDetails
-
-    if (shipmentData.shipment) {
-      if (shipmentData.shipment.load_type === 'container') {
-        cargoDetails = (
-          <ShipmentContainers
-            containers={this.state.containers}
-            addContainer={this.addNewContainer}
-            handleDelta={this.handleContainerChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
-      if (shipmentData.shipment.load_type === 'cargo_item') {
-        cargoDetails = (
-          <ShipmentCargoItems
-            cargoItems={this.state.cargoItems}
-            addCargoItem={this.addNewCargoItem}
-            handleDelta={this.handleCargoItemChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            availableCargoItemTypes={shipmentData.cargoItemTypes}
-            maxDimensions={shipmentData.maxDimensions}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
+    if (!shipmentData.shipment) return ''
+    if (shipmentData.shipment.load_type === 'container') {
+      cargoDetails = (
+        <ShipmentContainers
+          containers={this.state.containers}
+          addContainer={this.addNewContainer}
+          handleDelta={this.handleContainerChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
+    }
+    if (shipmentData.shipment.load_type === 'cargo_item') {
+      cargoDetails = (
+        <ShipmentCargoItems
+          cargoItems={this.state.cargoItems}
+          addCargoItem={this.addNewCargoItem}
+          handleDelta={this.handleCargoItemChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          maxDimensions={shipmentData.maxDimensions}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
@@ -672,9 +678,9 @@ export class ShipmentDetails extends Component {
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
                     >
-                    dangerous goods
+                      dangerous goods
                     </span>
-                  .
+                    .
                   </p>
                 </div>
               ) : (
@@ -746,6 +752,9 @@ ShipmentDetails.propTypes = {
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
+  }).isRequired,
+  bookingSummaryDispatch: PropTypes.shape({
+    update: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired
