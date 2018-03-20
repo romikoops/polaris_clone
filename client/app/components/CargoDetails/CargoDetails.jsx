@@ -214,11 +214,6 @@ export class CargoDetails extends Component {
           </p>
           <div className="flex-100 layout-row layout-align-start-start">
             <div className="flex-100 layout-row layout-align-start-center">
-              <p className={`${fadedPreCarriageText} flex-100`}>
-                Customs is not necessary for a Port-to-Port shipment
-              </p>
-            </div>
-            <div className="flex-100 layout-row layout-align-start-center">
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
             <div className="flex-100 layout-row layout-align-start-center">

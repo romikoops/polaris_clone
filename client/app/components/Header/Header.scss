@@ -2,15 +2,16 @@
   @import '../../styles/defaults';
 
   .header {
-    height: 70px;
+    min-height: 70px;
     width: 100vw !important; 
     z-index: 20 !important;
     transition: all 0.5s ease;
     border-bottom: 1px solid rgb(230, 230, 230);
     box-shadow: 0 0 5px rgba(black, 0.2);
     background-color: white;
+
     &.inverted {
-      box-shadow: none;
+      box-shadow: unset;
       border-color: transparent;
       background-color: transparent;      
     }
@@ -22,7 +23,6 @@
     &.scrolled {
       background-color: white;
       color: black !important;
-      box-shadow: 0 0 5px rgba(black, 0.2);
       border-color: rgb(230, 230, 230);
     }
   }

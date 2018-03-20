@@ -276,6 +276,8 @@ export class BookingDetails extends Component {
     const {
       theme, shipmentData, shipmentDispatch, currencies, user, tenant
     } = this.props
+    if (!shipmentData) return ''
+
     const {
       shipment,
       hubs,
@@ -286,6 +288,8 @@ export class BookingDetails extends Component {
       // cargoItems,
       // locations
     } = shipmentData
+    if (!shipment || !hubs) return ''
+
     const {
       consignee, shipper, notifyees, customs, customsCredit, eori
     } = this.state

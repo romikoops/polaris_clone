@@ -56,6 +56,12 @@ export class ChooseRoute extends Component {
     setStage(3)
     console.log('######### MOUNTED ###########')
   }
+  shouldComponentUpdate () {
+    return !!(
+      this.props.shipmentData &&
+      this.props.shipmentData.shipment
+    )
+  }
   setDuration (val) {
     this.setState({ durationFilter: val })
   }
@@ -91,16 +97,16 @@ export class ChooseRoute extends Component {
     const {
       shipmentData, messages, user, shipmentDispatch, theme
     } = this.props
+    if (!shipmentData) return ''
 
     const { limits } = this.state
 
     let smallestDiff = 100
-    if (!shipmentData) {
-      return ''
-    }
     const {
       shipment, originHubs, destinationHubs, schedules
     } = shipmentData
+    if (!schedules) return ''
+
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
     schedules.sort(ChooseRoute.dynamicSort('etd'))
     const idArrays = {
@@ -114,7 +120,6 @@ export class ChooseRoute extends Component {
     const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
     const closestMots = {}
     schedules.forEach((sched) => {
-      console.log(sched)
       if (Math.abs(moment(sched.etd).diff(sched.eta, 'days')) <= this.state.durationFilter) {
         if (
           Math.abs(moment(sched.etd).diff(depDay, 'days')) < smallestDiff &&
