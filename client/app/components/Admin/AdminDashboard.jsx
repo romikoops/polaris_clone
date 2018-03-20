@@ -140,7 +140,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Open Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedOpenShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -157,7 +157,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Finished Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedFinishedShipments}
         adminDispatch={adminDispatch}
         theme={theme}

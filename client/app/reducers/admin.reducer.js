@@ -985,6 +985,24 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+
+    case adminConstants.DELETE_TRIP_REQUEST:
+      return state
+    case adminConstants.DELETE_TRIP_SUCCESS:
+      return {
+        ...state,
+        itinerarySchedules: {
+          ...state.itinerarySchedules,
+          schedules: state.itinerarySchedules.schedules.filter(x => x.id !== action.payload)
+        },
+        loading: false
+      }
+    case adminConstants.DELETE_TRIP_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
     case adminConstants.CLEAR_LOADING:
       return {
         ...state,

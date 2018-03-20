@@ -394,6 +394,13 @@ function deleteItinerary (id) {
   }
   return fetch(`${BASE_URL}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
+function deleteTrip (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
+}
 function uploadTrucking (url, file, direction) {
   const formData = new FormData()
   formData.append('file', file)
@@ -417,6 +424,7 @@ function loadItinerarySchedules (id) {
 export const adminService = {
   getHubs,
   getHub,
+  deleteTrip,
   getItineraries,
   deleteItinerary,
   uploadTrucking,

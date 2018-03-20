@@ -993,6 +993,35 @@ function deleteItinerary (id, redirect) {
   }
 }
 
+function deleteTrip (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_TRIP_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_TRIP_SUCCESS, payload: id }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_TRIP_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteTrip(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Trip successful'))
+        if (redirect) {
+          dispatch(push(`/admin/schedules`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function documentAction (docId, action) {
   function request (docData) {
     return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData }
@@ -1314,7 +1343,8 @@ export const adminActions = {
   editLocalCharges,
   deletePricing,
   editHub,
-  loadItinerarySchedules
+  loadItinerarySchedules,
+  deleteTrip
 }
 
 export default adminActions

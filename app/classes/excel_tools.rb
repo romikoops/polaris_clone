@@ -851,6 +851,58 @@ module ExcelTools
       end
     end
   end
+  def overwrite_schedules_by_itinerary(params, user = current_user)
+    locations = {}
+    stats = {
+      type: 'schedules',
+      layovers: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trips: {
+        number_updated: 0,
+        number_created: 0
+      }
+    }
+    results = {
+      layovers: [],
+      trips: []
+    }
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    first_sheet = xlsx.sheet(xlsx.sheets.first)
+    schedules = first_sheet.parse(
+      vessel: 'VESSEL', 
+      call_sign: 'VOYAGE_CODE', 
+      from: 'FROM', 
+      to: 'TO', 
+      eta: 'ETA', 
+      etd: 'ETD')
+    schedules.each do |row|
+      itinerary = params["itinerary"]
+
+      tenant = Tenant.find(current_user.tenant_id)
+     
+      tenant_vehicle = TenantVehicle.find_by(
+          tenant_id: user.tenant_id, 
+          mode_of_transport: itinerary.mode_of_transport
+        )
+      startDate = row[:etd]
+      endDate =  row[:eta]
+      
+      stops = itinerary.stops.order(:index)
+      
+      if itinerary
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
+        results[:trips] = generator_results[:trips]
+        results[:layovers] = generator_results[:layovers]
+        stats[:trips][:number_created] = generator_results[:trips]
+        stats[:layovers][:number_created] = generator_results[:layovers]
+        return {results: results, stats: stats}
+      else
+        raise "Route cannot be found!"
+      end
+    end
+  end
 
   def overwrite_train_schedules(params, user = current_user)
     data_box = {}

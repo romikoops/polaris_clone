@@ -4,6 +4,7 @@ import styles from './AdminTripPanel.scss'
 import { moment } from '../../constants'
 import { AdminLayoverTile } from './'
 import { gradientTextGenerator } from '../../helpers'
+import AdminPromptConfirm from './Prompt/Confirm'
 
 export class AdminTripPanel extends Component {
   static switchIcon (itinerary) {
@@ -26,71 +27,99 @@ export class AdminTripPanel extends Component {
   }
 
   static dashedGradient (color1, color2) {
-    return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${
-      color1
-    }, ${color2})`
+    return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
   constructor (props) {
     super(props)
-    this.showPanel = this.showPanel.bind(this)
+    this.state = {
+      confirm: false
+    }
   }
   showPanel () {
     const { trip, toggleShowPanel } = this.props
     toggleShowPanel(trip.id)
   }
+  deleteTrip (id) {
+    const { adminDispatch } = this.props
+    adminDispatch.deleteTrip(id)
+    this.closeConfirm()
+  }
+  confirmDelete () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+  doNothing () {
+    console.log(this.props)
+  }
   render () {
     const {
       theme, trip, itinerary, layovers, showPanel
     } = this.props
+    const { confirm } = this.state
     if (!trip || !itinerary) {
       return ''
     }
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text="This will delete the schedule and all related data"
+        confirm={() => this.deleteTrip(trip.id)}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const hubNames = itinerary.name.split(' - ')
     // const originHub = hubs[hubKeys[0]].data;
     // const destHub = hubs[hubKeys[1]].data;
-    const gradientFontStyle = theme && theme.colors
-      ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-      : { color: 'black' }
+    const gradientFontStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+        : { color: 'black' }
     const dashedLineStyles = {
       marginTop: '6px',
       height: '2px',
       width: '100%',
       background:
-                theme && theme.colors
-                  ? AdminTripPanel.dashedGradient(
-                    theme.colors.primary,
-                    theme.colors.secondary
-                  )
-                  : 'black',
+        theme && theme.colors
+          ? AdminTripPanel.dashedGradient(theme.colors.primary, theme.colors.secondary)
+          : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
     const startTime = trip.eta ? trip.eta : trip.start_date
     const endTime = trip.etd ? trip.etd : trip.end_date
+    const closingDate = layovers[0]
+      ? layovers[0].closing_date
+      : moment(startTime).subtract(4, 'days')
     const panelStyle = showPanel ? styles.panel_open : ''
-    const layoverArray = layovers && layovers[trip.id] ? layovers[trip.id]
-      .map(l => <AdminLayoverTile layoverData={l} theme={theme} />) : []
+    const layoverArray =
+      layovers && layovers[trip.id]
+        ? layovers[trip.id].map(l => <AdminLayoverTile layoverData={l} theme={theme} />)
+        : []
     return (
-      <div
-        key={trip.id}
-        className={`flex-100 layout-row layout-wrap ${styles.route_result}`}
-      >
-        <div className="flex-100 layout-row layout-wrap" onClick={this.showPanel}>
+      <div key={trip.id} className={`flex-100 layout-row layout-wrap ${styles.route_result}`}>
+        {confimPrompt}
+        <div className="flex-100 layout-row layout-wrap relative">
           <div
-            className={`flex-40 layout-row layout-align-start-center ${
-              styles.top_row
-            }`}
+            className={`flex-40 layout-row layout-align-start-center ${styles.top_row}`}
+            onClick={() => this.showPanel()}
           >
             <div className={`${styles.header_hub}`}>
-              <i
-                className={`fa fa-map-marker ${
-                  styles.map_marker
-                }`}
-              />
+              <i className={`fa fa-map-marker ${styles.map_marker}`} />
               <div className="flex-100 layout-row">
                 <h4 className="flex-100"> {hubNames[0]} </h4>
               </div>
             </div>
-            <div className={`${styles.connection_graphics}`}>
+            <div
+              className={`${
+                styles.connection_graphics
+              } flex-none layout-column layout-align-center-center`}
+            >
               <div className="flex-none layout-row layout-align-center-center">
                 {AdminTripPanel.switchIcon(itinerary)}
               </div>
@@ -104,15 +133,35 @@ export class AdminTripPanel extends Component {
             </div>
           </div>
           <div className="flex-60 layout-row layout-align-start-center">
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center" />
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+            <div
+              className="flex-33 layout-wrap layout-row layout-align-center-center"
+              onClick={() => this.showPanel()}
+            >
               <div className="flex-100 layout-row">
-                <h4
-                  className={styles.date_title}
-                  style={gradientFontStyle}
-                >
+                <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                                    Date of Departure
+                  Closing Date
+                </h4>
+              </div>
+              <div className="flex-100 layout-row">
+                <p className={`flex-none ${styles.sched_elem}`}>
+                  {' '}
+                  {moment(closingDate).format('YYYY-MM-DD')}{' '}
+                </p>
+                <p className={`flex-none ${styles.sched_elem}`}>
+                  {' '}
+                  {moment(closingDate).format('HH:mm')}{' '}
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-33 layout-wrap layout-row layout-align-center-center"
+              onClick={() => this.showPanel()}
+            >
+              <div className="flex-100 layout-row">
+                <h4 className={styles.date_title} style={gradientFontStyle}>
+                  {' '}
+                  Date of Departure
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -126,14 +175,14 @@ export class AdminTripPanel extends Component {
                 </p>
               </div>
             </div>
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+            <div
+              className="flex-33 layout-wrap layout-row layout-align-center-center"
+              onClick={() => this.showPanel()}
+            >
               <div className="flex-100 layout-row">
-                <h4
-                  className={styles.date_title}
-                  style={gradientFontStyle}
-                >
+                <h4 className={styles.date_title} style={gradientFontStyle}>
                   {' '}
-                                    ETA terminal
+                  ETA terminal
                 </h4>
               </div>
               <div className="flex-100 layout-row">
@@ -148,10 +197,20 @@ export class AdminTripPanel extends Component {
               </div>
             </div>
           </div>
+          <div
+            className={`${
+              styles.delete_btn
+            } flex-none layout-row layout-align-center-center pointy`}
+            onClick={() => this.confirmDelete()}
+          >
+            <i className="flex-none fa fa-trash" />
+          </div>
         </div>
         <div className={`flex-100 layout-row layout-wrap ${panelStyle} ${styles.layover_panel}`}>
           <div className="flex-100 layout-row layout-align-start-center">
-            <h4 className="flex-none clip" style={gradientFontStyle}>Stops</h4>
+            <h4 className="flex-none clip" style={gradientFontStyle}>
+              Stops
+            </h4>
           </div>
           {layoverArray}
         </div>
@@ -165,7 +224,8 @@ AdminTripPanel.propTypes = {
   showPanel: PropTypes.bool,
   itinerary: PropTypes.objectOf(PropTypes.any),
   layovers: PropTypes.arrayOf(PropTypes.any),
-  toggleShowPanel: PropTypes.func
+  toggleShowPanel: PropTypes.func,
+  adminDispatch: PropTypes.objectOf(PropTypes.func)
 }
 AdminTripPanel.defaultProps = {
   theme: {},
@@ -173,7 +233,8 @@ AdminTripPanel.defaultProps = {
   showPanel: false,
   itinerary: {},
   layovers: [],
-  toggleShowPanel: null
+  toggleShowPanel: null,
+  adminDispatch: {}
 }
 
 export default AdminTripPanel

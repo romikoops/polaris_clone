@@ -1,5 +1,5 @@
 class Trip < ApplicationRecord
-  has_many :layovers
+  has_many :layovers, dependent: :destroy
   belongs_to :vehicle
   belongs_to :itinerary
   def self.update_times
