@@ -166,6 +166,7 @@ export class ShipmentCargoItems extends Component {
               'layout-wrap layout-align-start'
             }
             >
+              {inputs.total}
               {inputs.volume}
               {inputs.chargeableWeight}
             </div>

@@ -164,12 +164,6 @@ export class CargoDetails extends Component {
             </strong>
           </p>
           <p className="flex-90">
-            Note that if you choose not to insure the goods it will only be covered by carriers
-            liability to the extent that it is covered under legal liability standard to the
-            transport industry. will automatically be covered under legal liability standard to the
-            transportation industry
-            <br />
-            <br />
             How insurance premium is calculated:
             <br />
             <br />
@@ -180,12 +174,16 @@ export class CargoDetails extends Component {
             Please contact your local Greencarrier office for more info.
           </p>
         </div>
-        <div className={` ${styles.prices} flex-20 layout-row layout-wrap`}>
-          <h5 className="flex-100"> Price </h5>
-          <h6 className="flex-100">
-            {' '}
-            {insurance.val.toFixed(2)} {user.currency}
-          </h6>
+        <div className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}>
+          <div
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
+          >
+            <p className="flex-none end">Insurance Price</p>
+            <h6 className="flex-none end">
+              {' '}
+              {insurance.val.toFixed(2)} {user.currency}
+            </h6>
+          </div>
         </div>
       </div>
     )
@@ -193,6 +191,7 @@ export class CargoDetails extends Component {
       ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage
       ? '' : styles.faded_text
+
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
@@ -214,6 +213,11 @@ export class CargoDetails extends Component {
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
           <div className="flex-100 layout-row layout-align-start-start">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <p className={`${fadedPreCarriageText} flex-100`}>
+                Customs is not necessary for a Port-to-Port shipment
+              </p>
+            </div>
             <div className="flex-100 layout-row layout-align-start-center">
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
@@ -262,44 +266,12 @@ export class CargoDetails extends Component {
               </div>
             </div>
           </div>
-          {/* <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-            <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-              <div className="flex-40 layout-row -alyout-align-start-center">
-                <p className="flex-none">Do you have your own customs credit? </p>
-                <Tooltip theme={theme} icon="fa-info-circle" text="customs_credit" />
-              </div>
-              <div className="flex-15 layout-row layout-align-start-center">
-                <Checkbox
-                  onChange={this.props.toggleCustomsCredit}
-                  checked={this.props.customsCredit}
-                  theme={theme}
-                />
-                <div className="flex-5" />
-                <p className="flex-30">Yes</p>
-              </div>
-              <div className="flex-15 layout-row layout-align-start-center">
-                <Checkbox
-                  onChange={this.props.toggleCustomsCredit}
-                  checked={!this.props.customsCredit}
-                  theme={theme}
-                />
-                <div className="flex-5" />
-                <p className="flex-30">No</p>
-              </div>
-            </div>
-            <div className="flex-80 layout-row layout-wrap layout-align-start-center">
-              <p className="flex-90">
-                <b>Note</b> that an additional outlay fee of 4.5% of the overall customs value incl.
-                VAT will be applied to the final invoice if you do not have customs credit.
-              </p>
-            </div>
-          </div> */}
         </div>
         <div
           className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}
         >
           <div
-            className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
           >
             <p className="flex-none">Import</p>
             <h6 className="flex-none center">
@@ -308,7 +280,7 @@ export class CargoDetails extends Component {
             </h6>
           </div>
           <div
-            className={`${styles.customs_prices} flex-100 layout-row  layout-align-center-start`}
+            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
           >
             <p className="flex-none">Export</p>
             <h6 className="flex-none center">
@@ -317,7 +289,7 @@ export class CargoDetails extends Component {
             </h6>
           </div>
 
-          <div className={`${styles.customs_total} flex-100 layout-row  layout-align-center-start`}>
+          <div className={`${styles.customs_total} flex-100 layout-row  layout-align-end-center`}>
             <p className="flex-none">Total</p>
             <h6 className="flex-none center">
               {' '}
@@ -328,19 +300,6 @@ export class CargoDetails extends Component {
             </h6>
           </div>
         </div>
-
-        {/* <HSCodeRow
-          className="flex-100"
-          containers={containers}
-          cargoItems={cargoItems}
-          theme={theme}
-          tenant={tenant}
-          setCode={setHsCode}
-          handleHsTextChange={handleHsTextChange}
-          deleteCode={deleteCode}
-          hsCodes={hsCodes}
-          hsTexts={hsTexts}
-        /> */}
       </div>
     )
     const noCustomsBox = (
@@ -349,7 +308,7 @@ export class CargoDetails extends Component {
           !this.state.customsView ? styles.show : ''
         }`}
       >
-        <div className="flex-33 no_max layout-row layout-align-center-center">
+        <div className="flex-33 no_max layout-row layout-align-start-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
               <h3 style={{ 'font-weight': 'normal' }}>
@@ -396,7 +355,7 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        <div className="flex-33 no_max layout-row layout-align-center-end">
+        <div className="flex-33 no_max layout-row layout-align-end-center">
           {this.props.totalGoodsValue.value > 20000 ? (
             <div className="flex-90 layout-row layout-wrap">
               <div className="flex-100">
@@ -459,7 +418,6 @@ export class CargoDetails extends Component {
                           fontSize: '13px',
                           bottom: '-17px'
                         }}
-                        // value={this.props.totalGoodsValue.value}
                         type="number"
                         name="totalGoodsValue"
                         onChange={this.handleChange}
@@ -490,7 +448,7 @@ export class CargoDetails extends Component {
                       <TextHeading
                         theme={theme}
                         size={3}
-                        text="Number and kind of packages, description of goods (optional)"
+                        text="Description of goods (optional)"
                       />
                     </div>
                   </div>
@@ -553,31 +511,8 @@ export class CargoDetails extends Component {
                       isRequired
                       deleteFn={this.deleteDoc}
                     />
-                    {/* {documents.commercial_invoice ? (
-                      <DocViewer doc={documents.commercial_invoice} />
-                    ) : (
-                      <FileUploader
-                        theme={theme}
-                        type="commercial_invoice"
-                        dispatchFn={this.fileFn}
-                        text="Commercial Invoice"
-                      />
-                    )} */}
                   </div>
                 </div>
-
-                {/* <div className="flex-100 layout-row layout-wrap">
-                  <div className="flex-100 layout-row layout-wrap">
-                    <DocumentsForm
-                      theme={theme}
-                      type="certificate_of_origin"
-                      dispatchFn={this.fileFn}
-                      text="Certificate of Origin"
-                      doc={documents.certificate_of_origin}
-                      deleteFn={this.deleteDoc}
-                    />
-                  </div>
-                </div> */}
                 {dangerousGoods ? (
                   <div className="flex-100 layout-row layout-wrap">
                     <div className="flex-100 layout-row layout-wrap">
@@ -652,39 +587,62 @@ export class CargoDetails extends Component {
                 </div>
 
                 <div className="flex-33 layout-row layout-align-space-around-center layout-wrap">
-                  <div className="flex-100 layout-row layout-align-end-center">
-                    <p className="flex-none" style={{ marginRight: '5px' }}>
-                      {`Yes, I want ${tenant.data.name} to insure my cargo`}
-                    </p>
-                    <Checkbox
-                      onChange={this.toggleInsurance}
-                      checked={this.props.insurance.bool}
-                      theme={theme}
-                    />
+                  <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+                    <div className="flex-90 layout-row layout-align-start-center">
+                      <p className="flex-none layout-align-start-center">
+                        {`Yes, I want ${tenant.data.name} to insure my cargo`}
+                      </p>
+                    </div>
+                    <div className="flex-10 layout-row layout-align-end-center">
+                      <Checkbox
+                        onChange={this.toggleInsurance}
+                        checked={this.props.insurance.bool}
+                        theme={theme}
+                      />
+                    </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-end-center">
-                    <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                      tenant.data.name
-                    } to insure my cargo`}</p>
-                    <Checkbox
-                      onChange={this.toggleInsurance}
-                      checked={
-                        this.props.insurance.bool == null ? null : !this.props.insurance.bool
-                      }
-                      theme={theme}
-                    />
+                    <div className="flex-90 layout-row layout-align-start-center">
+                      <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                        tenant.data.name
+                      } to insure my cargo`}
+                      </p>
+                    </div>
+                    <div className="flex-10 layout-row layout-align-end-center">
+                      <Checkbox
+                        onChange={this.toggleInsurance}
+                        checked={
+                          this.props.insurance.bool == null ? null : !this.props.insurance.bool
+                        }
+                        theme={theme}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="flex-100 layout-row layout-align-start-center">
-                <p className="flex-none">
+                <p className="flex-100">
                   Cargo insurance provides protection against all risks of physical loss or damage
                   to freight from any external cause during shipping, whether by land, sea or air.
                 </p>
               </div>
+              { !this.state.insuranceView
+                ? <div className="flex-100 layout-row layout-align-start-center">
+                  <p className="flex-100">
+                    <b>
+                      Note that if you choose not to insure the goods
+                      it will only be covered by carriers
+                      liability to the extent that it is covered
+                      under legal liability standard to the
+                      transport industry.
+                    </b>
+                  </p>
+                </div>
+                : '' }
               {insuranceBox}
             </div>
-          </div> : '' }
+          </div>
+            : '' }
           { scope.has_customs ? <div className="flex-100 layout-row layout-align-center padd_top">
             <div
               className={`flex-none ${
@@ -694,29 +652,39 @@ export class CargoDetails extends Component {
               <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
                 <div className="flex-none layout-row layout-align-space-around-center">
                   <TextHeading theme={theme} size={2} text="Customs Handling" />
-                  {/* <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" /> */}
+                  <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                 </div>
 
                 <div className="flex-33 layout-wrap layout-row layout-align-space-around-center">
                   <div className="flex-100 layout-row layout-align-end-center">
-                    <p className="flex-none" style={{ marginRight: '5px' }}>{`Yes, I want ${
-                      tenant.data.name
-                    } to handle my customs`}</p>
-                    <Checkbox
-                      onChange={this.toggleCustoms}
-                      checked={this.state.customsView}
-                      theme={theme}
-                    />
+                    <div className="flex-90 layout-row layout-align-start-center">
+                      <p className="flex-none" style={{ marginRight: '5px' }}>{`Yes, I want ${
+                        tenant.data.name
+                      } to handle my customs`}
+                      </p>
+                    </div>
+                    <div className="flex-10 layout-row layout-align-end-center">
+                      <Checkbox
+                        onChange={this.toggleCustoms}
+                        checked={this.state.customsView}
+                        theme={theme}
+                      />
+                    </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-end-center">
-                    <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                      tenant.data.name
-                    } to handle my customs`}</p>
-                    <Checkbox
-                      onChange={this.toggleCustoms}
-                      checked={this.state.customsView == null ? null : !this.state.customsView}
-                      theme={theme}
-                    />
+                    <div className="flex-90 layout-row layout-align-start-center">
+                      <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                        tenant.data.name
+                      } to handle my customs`}
+                      </p>
+                    </div>
+                    <div className="flex-10 layout-row layout-align-end-center">
+                      <Checkbox
+                        onChange={this.toggleCustoms}
+                        checked={this.state.customsView == null ? null : !this.state.customsView}
+                        theme={theme}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-center">

@@ -73,7 +73,7 @@
     }
   }
   .cargo_item_box {
-    border: 1px solid rgba(black, 0.08);
+    border: 0.2px solid rgba(black, 0.08);
   }
   .cargo_item_inputs {
     background: rgba(black, 0.005);    
@@ -99,7 +99,6 @@
   }
   .cargo_item_info {
     background: rgba(black, 0.02);    
-    padding: 0 20px;
     border-radius: 0 0 1px 1px;
     height: 0px;
     overflow: hidden;
@@ -139,5 +138,16 @@
     p.chargeable_weight_value {
       margin: 0 0 0 5px;
     }
+  }
+  .total {
+  width: 100%;
+  position: relative;
+  background: darkgrey;
+  box-shadow: 0 0 2px rgba(darkgrey, 0.3);
+  border: 1px solid rgba(black, 0.08);
+  color: white;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: 1.3px;
   }
 }

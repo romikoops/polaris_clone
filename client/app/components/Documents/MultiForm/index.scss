@@ -32,11 +32,14 @@
     
   }
   .form_label {
-    background: darkgray;
+    background: #a9a9a9c4;
     color: white;
     border-radius: 5px 0 0 5px;
+    padding-left: 5px;
+    max-width: 40%;
+    width: 100%;
     // height: 100%;
-    width: 145px;
+    // width: 145px;
   }
   .form {
     border-radius: 5px;
@@ -45,7 +48,7 @@
     p {
       margin: 5px;
     }
-    // height: 35px;
+    height: 35px;
     font-size: 12px;
   }
   .file_error {

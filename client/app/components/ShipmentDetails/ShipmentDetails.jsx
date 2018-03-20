@@ -650,37 +650,40 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            {!(
-              this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-              this.state.containers.some(container => container.dangerous_goods)
-            ) ? (
-                <div className="flex-60 layout-row layout-align-start-center">
-                  <div className="flex-10 layout-row layout-align-start-start">
-                    <Checkbox
-                      theme={theme}
-                      onChange={() => this.setState({
-                        noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                      })}
-                      size="30px"
-                      name="no_dangerous_goods_confirmation"
-                      checked={this.state.noDangerousGoodsConfirmed}
-                    />
+            {
+              !(
+                this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                this.state.containers.some(container => container.dangerous_goods)
+              )
+                ? (
+                  <div className="flex-60 layout-row layout-align-stretch">
+
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() => this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })}
+                        size="30px"
+                        name="no_dangerous_goods_confirmation"
+                        checked={this.state.noDangerousGoodsConfirmed}
+                      />
+                    </div>
+                    <p style={{ margin: 0, fontSize: '14px' }}>
+                      I hereby confirm that none of the specified cargo units contain{' '}
+                      <span
+                        className="emulate_link blue_link"
+                        onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                      >
+                        dangerous goods
+                      </span>
+                      .
+                    </p>
                   </div>
-                  <p style={{ margin: 0, fontSize: '14px' }}>
-                    I hereby confirm that none of the specified cargo units contain{' '}
-                    <span
-                      className="emulate_link blue_link"
-                      onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                    >
-                    dangerous goods
-                    </span>
-                  .
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-60" />
-              )}
-            <div className="flex layout-row layout-align-end">
+                )
+                : <div className="flex-40" />
+            }
+            <div className="flex-40 layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}

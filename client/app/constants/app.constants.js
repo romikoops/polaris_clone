@@ -67,9 +67,9 @@ export const tooltips = {
   chassis:
     'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.',
   customs_pre_carriage:
-    '', // tooltip Text is missing - ask Clemen or Martin
+    'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:
-    '' // tooltip Text is missing - ask Clemen or Martin
+    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).'
 }
 
 // Tool tips menu admin

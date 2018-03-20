@@ -129,6 +129,14 @@ export default function getInputs (
     </div>
   )
 
+  inputs.total = (
+    <div className={`${styles.total} flex-10 layout-row layout-wrap layout-align-center-center`}>
+      <div className="layout-row flex-40 layout-align-center" >
+        <p className={`${styles.input_label} flex-none`}> Total: </p>
+      </div>
+    </div>
+  )
+
   function chargeableWeight (mot) {
     const effectiveKgPerCubicMeter = {
       air: 167,
@@ -149,8 +157,8 @@ export default function getInputs (
   }
   inputs.chargeableWeight = (
     <div className={
-      `${styles.chargeable_weight} layout-row flex-70 ` +
-      'layout-wrap layout-align-start-center'
+      `${styles.chargeable_weight} layout-row flex-60 ` +
+      'layout-wrap layout-align-end-center'
     }
     >
       <div className="layout-row flex-35 layout-wrap layout-align-start-center" >
