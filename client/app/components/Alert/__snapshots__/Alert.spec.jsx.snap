@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow 1`] = `
+<Container>
+  <Sticky
+    bottomOffset={0}
+    disableCompensation={false}
+    disableHardwareAcceleration={false}
+    relative={false}
+    topOffset={0}
+  />
+</Container>
+`;
