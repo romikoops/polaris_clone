@@ -19,6 +19,7 @@ const matchMediaPolyfill = () => ({
 })
 
 window.matchMedia = window.matchMedia || matchMediaPolyfill
+window.scrollTo = () => { }
 
 class LocalStorageMock {
   constructor () {

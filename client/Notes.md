@@ -53,7 +53,7 @@ Warning: Functions are not valid as a React child. This may happen if you return
 
 ## AlertModalBody
 
-- Test complete
+[X] Test complete
 
 ## AvailableRoutes
 
@@ -71,4 +71,35 @@ Warning: Functions are not valid as a React child. This may happen if you return
 
 ## Button
 
-- Test complete
+[X] Test complete
+
+## BookingConfirmation
+
+`
+const {
+  shipment,
+  schedules,
+  locations,
+  shipper,
+  consignee,
+  notifyees,
+  cargoItems,
+  containers,
+  documents
+} = shipmentData
+`
+
+while prop-types defines `shipmentData` like this
+
+`
+PropTypes.shipmentData = PropTypes.shape({
+  contacts: PropTypes.array,
+  shipment: PropTypes.object,
+  documents: PropTypes.array,
+  cargoItems: PropTypes.array,
+  containers: PropTypes.array,
+  schedules: PropTypes.array
+})
+`
+
+- Too big therefore only single basic test

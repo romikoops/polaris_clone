@@ -1,4 +1,4 @@
-const identity = () => {}
+export const identity = () => {}
 
 export const theme = {
   colors: {
@@ -34,13 +34,33 @@ export const req = {
   shipment: {}
 }
 
+const schedulesInShipmentData = [
+  { hub_route_key: 'FOO_HUB_ROUTE_KEY' }
+]
+
+const shipmentInShipmentData = {
+  schedules_charges: {
+    [schedulesInShipmentData[0].hub_route_key]: {
+      foo: 'FOO_ROUTE_KEY'
+    }
+  },
+  total_price: {
+    value: 12,
+    currency: 'USD'
+  }
+}
+
 export const shipmentData = {
   contacts: [],
-  shipment: {},
+  shipment: shipmentInShipmentData,
   documents: [],
   cargoItems: [],
   containers: [],
-  schedules: []
+  schedules: schedulesInShipmentData,
+  locations: {
+    startHub: 'FOO_START_HUB',
+    endHub: 'FOO_END_HUB'
+  }
 }
 
 export const match = {
