@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { AlertModalBody } from './AlertModalBody'
 
 const propsBase = {
@@ -34,10 +34,4 @@ test('click on icon calls props.toggleAlertModal', () => {
   expect(props.toggleAlertModal).not.toHaveBeenCalled()
   wrapper.find('i').first().simulate('click')
   expect(props.toggleAlertModal).toHaveBeenCalled()
-})
-
-test('shallow', () => {
-  const wrapper = shallow(<AlertModalBody {...propsBase} />)
-
-  expect(wrapper).toMatchSnapshot()
 })

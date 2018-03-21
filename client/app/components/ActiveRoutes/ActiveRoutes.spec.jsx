@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, render, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 import { ActiveRoutes } from './ActiveRoutes'
 
@@ -15,7 +15,7 @@ test('has multiple div and h2', () => {
 
 test('its text content contains specific parts', () => {
   const props = {}
-  const wrapper = render(<ActiveRoutes {...props} />)
+  const wrapper = mount(<ActiveRoutes {...props} />)
   const text = wrapper.text()
 
   const expectedParts = [
@@ -28,11 +28,4 @@ test('its text content contains specific parts', () => {
   expectedParts.forEach((singlePart) => {
     expect(text.includes(singlePart)).toBeTruthy()
   })
-})
-
-test('shallow', () => {
-  const props = {}
-  const wrapper = shallow(<ActiveRoutes {...props} />)
-
-  expect(wrapper).toMatchSnapshot()
 })

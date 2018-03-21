@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 jest.mock('../Price/Price', () => {
   const Price = () => <div />
@@ -25,10 +25,4 @@ test('text content', () => {
   const expectedResult = 'Best DealCheapest RouteFastest route'
 
   expect(wrapper.text()).toBe(expectedResult)
-})
-
-test('shallow', () => {
-  const wrapper = shallow(<BestRoutesBox {...propsBase} />)
-
-  expect(wrapper).toMatchSnapshot()
 })

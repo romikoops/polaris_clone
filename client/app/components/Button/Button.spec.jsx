@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, render, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 import Button from './Button'
 
@@ -17,16 +17,7 @@ test('it renders with spaces around props.text', () => {
   const props = {
     text: 'foo'
   }
-  const wrapper = render(<Button {...props} />)
+  const wrapper = mount(<Button {...props} />)
 
   expect(wrapper.text()).toEqual(` ${props.text} `)
-})
-
-test('shallow', () => {
-  const props = {
-    text: 'foo'
-  }
-  const wrapper = shallow(<Button {...props} />)
-
-  expect(wrapper).toMatchSnapshot()
 })

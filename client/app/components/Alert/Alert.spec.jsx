@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { Alert } from './Alert'
 
 const message = 'bar_message'
@@ -53,10 +53,4 @@ test('click calls onClose function', () => {
   expect(props.onClose).not.toHaveBeenCalled()
   wrapper.find('i.fa').first().simulate('click')
   expect(props.onClose).toHaveBeenCalled()
-})
-
-test('shallow', () => {
-  const wrapper = shallow(<Alert {...propsBase} />)
-
-  expect(wrapper).toMatchSnapshot()
 })

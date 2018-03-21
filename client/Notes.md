@@ -1,5 +1,7 @@
 # Notes
 
+- Use generic file for mocked props
+
 ## ActiveRoutes
 
 It exports both default and named
@@ -38,3 +40,9 @@ Warning: Functions are not valid as a React child. This may happen if you return
         in WrapperComponent
 
 `
+
+## BlogPostHighlights
+
+- Uses default export
+
+- Component is build with three smaller components. These components should be outside of the component, so they can be exported and tested.
