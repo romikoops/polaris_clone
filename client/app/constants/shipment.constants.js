@@ -2,7 +2,7 @@ export const LOAD_TYPES = [
   {
     name: 'Cargo Item',
     img: 'https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg',
-    code: 'cargoItem'
+    code: 'cargo_item'
   },
   {
     name: 'Container',
