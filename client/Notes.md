@@ -4,14 +4,24 @@
 
 ## ActiveRoutes
 
-It exports both default and named
+- It exports both default and named
+
+- Test should mock Carousel component
 
 ## AddressBook
+
+Test is running with this warning:
 
 `
 Warning: Failed prop type: Property `contacts` of component `AddressBook` has invalid PropType notation inside arrayOf.
         in AddressBook
 `
+
+- Test complete
+
+## Admin
+
+- Waiting for all other unit tests to be ready
 
 ## Alert
 
@@ -41,8 +51,24 @@ Warning: Functions are not valid as a React child. This may happen if you return
 
 `
 
-## BlogPostHighlights
+## AlertModalBody
+
+- Test complete
+
+## AvailableRoutes
+
+- Not suitable for unit testing
+
+## BestRoutesBox
 
 - Uses default export
 
 - Component is build with three smaller components. These components should be outside of the component, so they can be exported and tested.
+
+## BlogPostHighlights
+
+- Basic test only
+
+## Button
+
+- Test complete
