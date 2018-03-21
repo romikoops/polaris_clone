@@ -1,4 +1,4 @@
 class HubTrucking < ApplicationRecord
-  has_many :trucking_pricings
+  belongs_to :trucking_pricing
   has_one :courier
 end
