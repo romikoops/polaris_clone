@@ -248,7 +248,7 @@ module ExcelTools
         end
 
         if hub_truckings[0].trucking_pricing_id
-          trucking_pricing = hub_trucking[0].trucking_pricing
+          trucking_pricing = hub_truckings[0].trucking_pricing
         else
           trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []})
         end
