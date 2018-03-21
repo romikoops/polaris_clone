@@ -45,7 +45,7 @@ export const tooltips = {
   gross_weight:
     'The gross weight is necessary to determine the chargeable weight. Gross weight is the total raw weight of the cargo + the weight of the packaging.',
   size_class:
-    'Choose the type of container that best accommodates your needs. Dry containers are suitable for most types of cargo, whereas high cube containers ensure that you gain an extra foot in height compared with dry containers. In general, high cube containers are ideal for light, voluminous or bulky cargo. 45 ft Pallet Wide High Cube containers are ideal for the transport of euro-pallet goods, as these containers are slightly wider.',
+    'Choose the type of container that best accommodates your needs. Dry containers are suitable for most types of cargo, whereas high cube containers ensure that you gain an extra foot in height compared with dry containers. In general, high cube containers are ideal for light, voluminous or bulky cargo. 45 ft Pallet Wide High Cube containers are ideal for the transport of euro-pallet goods, as these containers are slightly wider. The following are the inner dimensions of each container: 20’GP - 5.900m x 2.350m x 2.393m; 40’GP - 12.036m x 2.350m x 2.392m; 40’HC - 12.036m x 2.350m x 2.697m',
   weight_class:
     'The net weight is the total weight of the cargo after it has been packed into a container – but excluding the tare weight of the container.',
   total_price: 'Total Price includes all associated costs incl. service charges.',
