@@ -4,11 +4,11 @@ import Select from 'react-select'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
 import styled from 'styled-components'
-// import FileUploader from '../../../FileUploader/FileUploader'
+import FileUploader from '../../../FileUploader/FileUploader'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import styles from '../../Admin.scss'
 import { AdminTripPanel } from '../../AdminTripPanel'
-// import AdminScheduleGenerator from './AdminScheduleGenerator'
+import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 // import { adminSchedulesRoute as schedTip } from '../../../../constants'
 import '../../../../styles/select-css-custom.css'
@@ -83,7 +83,7 @@ export class AdminSchedulesRoute extends Component {
   }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
-      this.props.adminDispatch.getLayovers(id)
+      this.props.adminDispatch.getLayovers(id, 'schedules')
     }
     this.setState({
       panelViewer: {
@@ -97,7 +97,7 @@ export class AdminSchedulesRoute extends Component {
       theme, hubs, scheduleData, adminDispatch, limit
     } = this.props
     const {
-      filters, sortFilter, panelViewer
+      filters, sortFilter, panelViewer, showList
     } = this.state
     if (!scheduleData || !hubs) {
       return ''
@@ -108,7 +108,6 @@ export class AdminSchedulesRoute extends Component {
       { value: 'end_date', label: 'ETD' }
     ]
     const { itinerary, schedules, itineraryLayovers } = scheduleData
-    const { showList } = this.state
     const tripArr = []
     const slimit = limit || 10
 
@@ -133,6 +132,27 @@ export class AdminSchedulesRoute extends Component {
         />)
       }
     })
+    const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
+    const genView = (
+      <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+          >
+            <p className={` ${styles.sec_header_text} flex-none`}>Excel Uploads</p>
+          </div>
+          <div
+            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
+              styles.sec_upload
+            }`}
+          >
+            <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
+            <FileUploader theme={theme} url={uploadUrl} type="xlsx" text="Train Schedules .xlsx" />
+          </div>
+        </div>
+        <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
+      </div>
+    )
 
     const StyledSelect = styled(Select)`
       .Select-control {
@@ -207,7 +227,7 @@ export class AdminSchedulesRoute extends Component {
           <TextHeading theme={theme} size={1} text="Schedules" />
           {showList ? newButton : backButton}
         </div>
-        {listView}
+        {showList ? listView : genView}
       </div>
     )
   }

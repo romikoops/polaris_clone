@@ -305,7 +305,7 @@ module ShippingTools
     
     customs_fee = {
       import: calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user),
-      export: calc_customs_fees(origin_customs_fee["import"], cargos, shipment.load_type, current_user)
+      export: calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user)
     }
     hubs = { 
       startHub: { data: @origin,      location: @origin.nexus },

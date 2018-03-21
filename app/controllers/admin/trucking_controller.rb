@@ -165,11 +165,24 @@ class Admin::TruckingController < ApplicationController
   end
    def overwrite_city_trucking_by_hub
      if params[:file]
+      if  params["direction"] == 'either'
+        direction_array = ["import", "export"]
+      else
+        direction_array = [params["direction"]]
+      end
       req = {'xlsx' => params[:file]}
-      ["import", "export"].each do |dir|
+      direction_array.each do |dir|
        overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], dir)
-       end
-      response_handler(true)
+      end
+      trucking_hub = get_item("truckingHubs", "hub_id", params["id"])
+      hub = Hub.find(params["id"])
+      trucking_queries = []
+      trucking_pricings = []
+      if trucking_hub
+        trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
+        trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+      end
+      response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
     else
       response_handler(false)
     end

@@ -99,7 +99,7 @@ class AdminRoutes extends Component {
                 hubs={hubs}
                 hubHash={hubHash}
                 itineraryData={itinerary}
-                adminActions={adminDispatch}
+                adminDispatch={adminDispatch}
                 {...props}
                 loading={loading}
               />

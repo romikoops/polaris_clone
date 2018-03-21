@@ -78,7 +78,10 @@ export default class AdminItineraryRow extends Component {
         onClick={showDelete ? () => this.doNothing() : () => this.selectItinerary()}
       >
         {confimPrompt}
-        <div className="flex-none layout-row layout-align-start-center">
+        <div
+          className="flex-none layout-row layout-align-start-center"
+          onClick={() => this.selectItinerary()}
+        >
           <i style={iconStyle} className={`clip fa fa-flag ${styles.icon_buffer}`} />
           <div className="flex-5" />
           <p className="flex-none">{itinerary.name}</p>

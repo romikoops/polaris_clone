@@ -1,5 +1,7 @@
 class TruckingPricing < ApplicationRecord
   has_many :shipments
+  belongs_to :courier
+  has_many :hub_trucking
   extend MongoTools
   # Validations
 

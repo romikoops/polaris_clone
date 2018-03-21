@@ -12,10 +12,16 @@ import { moment, BASE_URL, adminSchedules as schedTip } from '../../constants'
 import { adminActions } from '../../actions'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { authHeader } from '../../helpers'
+import { authHeader, capitalize } from '../../helpers'
 import styles from './Admin.scss'
 
 class AdminScheduleGenerator extends Component {
+  static camelToCaps (string) {
+    return string
+      .split('_')
+      .map(x => capitalize(x))
+      .join(' ')
+  }
   constructor (props) {
     super(props)
     console.log(props)
@@ -45,6 +51,16 @@ class AdminScheduleGenerator extends Component {
     this.genSchedules = this.genSchedules.bind(this)
     this.getStopsForItinerary = this.getStopsForItinerary.bind(this)
   }
+  componentWillMount () {
+    if (this.props.itinerary) {
+      const { itinerary } = this.props
+      this.setItinerary({
+        value: itinerary.id,
+        label: `${itinerary.name} (${itinerary.mode_of_transport})`,
+        mot: itinerary.mode_of_transport
+      })
+    }
+  }
   componentDidMount () {
     const { hubs, vehicleTypes, adminDispatch } = this.props
     if (vehicleTypes.length < 1) {
@@ -54,6 +70,7 @@ class AdminScheduleGenerator extends Component {
       adminDispatch.getHubs(false)
     }
   }
+
   setItinerary (ev) {
     this.getStopsForItinerary(ev.value)
     this.setState({ itinerary: ev, mot: ev.mot })
@@ -159,14 +176,14 @@ class AdminScheduleGenerator extends Component {
         if (vt.mode_of_transport === mot) {
           vehicleTypeOptions.push({
             value: vt.id,
-            label: vt.name ? vt.name : `${vt.mode_of_transport}_default`
+            label: AdminScheduleGenerator.camelToCaps(vt.name ? vt.name : `${vt.mode_of_transport}_default`)
           })
         }
         if (vt.is_default && !vehicleType && vt.mode_of_transport === mot) {
           this.setState({
             vehicleType: {
               value: vt.id,
-              label: vt.name ? vt.name : `${vt.mode_of_transport}_default`
+              label: AdminScheduleGenerator.camelToCaps(vt.name ? vt.name : `${vt.mode_of_transport}_default`)
             }
           })
         }
@@ -204,7 +221,7 @@ class AdminScheduleGenerator extends Component {
     const vehicleSelect = mot ? (
       <StyledSelect
         name="mot-type"
-        className={`${styles.select}`}
+        className={`${styles.select} flex-100`}
         value={this.state.vehicleType}
         options={vehicleTypeOptions}
         onChange={this.setVehicleType}
@@ -263,10 +280,10 @@ class AdminScheduleGenerator extends Component {
               <p className={` ${styles.sec_subheader_text} flex-none`}>Set Route</p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <div className="flex-60 layout-row layout-align-start-center">
+              <div className="flex-50 layout-row layout-align-start-center">
                 <StyledSelect
                   name="startDate"
-                  className={`${styles.select}`}
+                  className={`${styles.select} flex-100`}
                   value={this.state.itinerary}
                   options={itineraryList}
                   onChange={this.setItinerary}
@@ -283,7 +300,7 @@ class AdminScheduleGenerator extends Component {
               <p className={` ${styles.sec_subheader_text} flex-none`}>Set Vehicle Type</p>
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-              <div className="flex-60 layout-row layout-align-start-center">{vehicleSelect}</div>
+              <div className="flex-50 layout-row layout-align-start-center">{vehicleSelect}</div>
             </div>
           </div>
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -310,7 +327,7 @@ class AdminScheduleGenerator extends Component {
             </div>
             <div className="layout-row flex-100 layout-wrap layout-align-start-center">
               <div
-                className={`flex-40 layout-row layout-wrap layout-align-center-start ${
+                className={`flex-40 layout-row layout-wrap layout-align-start-center ${
                   styles.dpb_picker
                 }`}
               >
@@ -324,7 +341,7 @@ class AdminScheduleGenerator extends Component {
                 />
               </div>
               <div
-                className={`flex-40 layout-row layout-wrap layout-align-center-start ${
+                className={`flex-40 layout-row layout-wrap layout-align-start-center ${
                   styles.dpb_picker
                 }`}
               >
@@ -468,6 +485,7 @@ AdminScheduleGenerator.propTypes = {
     getVehicleTypes: PropTypes.func,
     getHubs: PropTypes.func
   }).isRequired,
+  itinerary: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.arrayOf(PropTypes.any),
   vehicleTypes: PropTypes.arrayOf(PropTypes.vehicleType)
 }
@@ -476,7 +494,8 @@ AdminScheduleGenerator.defaultProps = {
   theme: null,
   hubs: [],
   vehicleTypes: [],
-  itineraries: []
+  itineraries: [],
+  itinerary: {}
 }
 
 function mapDispatchToProps (dispatch) {

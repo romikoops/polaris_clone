@@ -146,9 +146,10 @@ export class BookingConfirmation extends Component {
       notifyees,
       cargoItems,
       containers,
-      documents
+      documents,
+      cargoItemTypes
     } = shipmentData
-    if (!shipment || !locations) return <h1> Loading</h1>
+    if (!shipment || !locations || !cargoItemTypes) return <h1> Loading</h1>
     const { acceptTerms, collapser } = this.state
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 

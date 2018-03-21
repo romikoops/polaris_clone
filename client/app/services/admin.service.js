@@ -394,6 +394,13 @@ function deleteItinerary (id) {
   }
   return fetch(`${BASE_URL}/admin/itineraries/${id}`, requestOptions).then(handleResponse)
 }
+function deleteTrip (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
+}
 function uploadTrucking (url, file, direction) {
   const formData = new FormData()
   formData.append('file', file)
@@ -413,10 +420,21 @@ function loadItinerarySchedules (id) {
   }
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
+function saveItineraryNotes (id, notes) {
+  const formData = new FormData()
+  formData.append('notes', notes)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions).then(handleResponse)
+}
 
 export const adminService = {
   getHubs,
   getHub,
+  deleteTrip,
   getItineraries,
   deleteItinerary,
   uploadTrucking,
@@ -436,6 +454,7 @@ export const adminService = {
   getVehicleTypes,
   getShipments,
   getClients,
+  saveItineraryNotes,
   getItineraryPricings,
   wizardHubs,
   wizardSCharge,

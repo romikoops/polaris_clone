@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create, :destroy]
+      post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
 
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
@@ -65,7 +66,7 @@ Rails.application.routes.draw do
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
       post "shipments/:id/edit_price", to: "shipments#edit_price"
        post "shipments/:id/edit_time", to: "shipments#edit_time"
-      resources :schedules, only: [:index, :show]
+      resources :schedules, only: [:index, :show, :destroy]
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 
         as: :schedules_train_overwrite
