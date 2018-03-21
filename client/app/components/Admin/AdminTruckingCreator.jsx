@@ -257,9 +257,8 @@ export class AdminTruckingCreator extends Component {
     const { name, value } = event.target
     const nameKeys = name.split('-')
     const cells = [...this.state.cells]
-    cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table[parseInt(nameKeys[2], 10)].fees[
-      nameKeys[3]
-    ][nameKeys[4]] = +value
+    cells[parseInt(nameKeys[0], 10)][nameKeys[1]].table[parseInt(nameKeys[2], 10)]
+      .fees[nameKeys[3]][nameKeys[4]] = +value
     this.setState({
       cells
     })
@@ -342,7 +341,7 @@ export class AdminTruckingCreator extends Component {
   }
 
   render () {
-    const { theme, hub } = this.props
+    const { theme } = this.props
     const {
       nexus,
       rateBasis,
@@ -574,6 +573,7 @@ export class AdminTruckingCreator extends Component {
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
           {selectLoadType}
           {selectCountry}
+          {selectTruckingBasis}
           {selectDirection}
           {/* {steps.truckingBasis === true && steps.cellSteps === false
             ? setcellSteps
@@ -617,13 +617,11 @@ AdminTruckingCreator.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   closeForm: PropTypes.func.isRequired,
-  nexuses: PropTypes.arrayOf(PropTypes.any),
   hub: PropTypes.hub
 }
 AdminTruckingCreator.defaultProps = {
   theme: {},
-  hub: {},
-  nexuses: []
+  hub: {}
 }
 
 export default AdminTruckingCreator

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180320143832) do
+ActiveRecord::Schema.define(version: 20180321152629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,13 @@ ActiveRecord::Schema.define(version: 20180320143832) do
     t.jsonb "unit_price"
   end
 
+  create_table "couriers", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "currencies", force: :cascade do |t|
     t.jsonb "today"
     t.jsonb "yesterday"
@@ -108,6 +115,16 @@ ActiveRecord::Schema.define(version: 20180320143832) do
     t.integer "trucking_option_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "hub_truckings", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "trucking_destination_id"
+    t.integer "courier_id"
+    t.string "load_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "trucking_pricing_id"
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -376,6 +393,15 @@ ActiveRecord::Schema.define(version: 20180320143832) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trucking_destinations", force: :cascade do |t|
+    t.string "zipcode"
+    t.string "country_code"
+    t.string "city_name"
+    t.integer "distance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "trucking_options", force: :cascade do |t|
     t.integer "nexus_id"
     t.integer "tenant_id"
@@ -386,18 +412,10 @@ ActiveRecord::Schema.define(version: 20180320143832) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "tenant_id"
-    t.integer "nexus_id"
-    t.integer "upper_zip"
-    t.integer "lower_zip"
-    t.jsonb "rate_table", default: [], array: true
-    t.string "currency"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "province"
-    t.string "city"
-    t.string "rate_type"
-    t.string "dist_hub", default: [], array: true
+    t.string "direction"
+    t.jsonb "export"
+    t.jsonb "import"
+    t.integer "courier_id"
   end
 
   create_table "user_locations", force: :cascade do |t|

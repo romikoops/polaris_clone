@@ -176,7 +176,7 @@ module ExcelTools
     mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
-   def overwrite_zipcode_trucking_rates_by_hub(params, user = current_user, hub_id, direction)
+   def overwrite_zipcode_trucking_rates_by_hub(params, user = current_user, hub_id, courier_name, direction)
     # old_trucking_ids = nil
     # new_trucking_ids = []
     mongo = get_client
@@ -200,6 +200,7 @@ module ExcelTools
       trucking_queries: [],
       trucking_pricings: []
     }
+    courier = Courier.find_or_create_by(name: courier_name)
     defaults = []
     load_type = "lcl"
     new_trucking_pricings_array = []
@@ -225,7 +226,7 @@ module ExcelTools
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
       trucking_table_id = "#{hub.id}_#{load_type}_#{user.tenant_id}" 
-      truckingQueries = []
+      truckingDestinations = []
       truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
       truckingPricings = []
       (4..num_rows).each do |line|
@@ -235,6 +236,22 @@ module ExcelTools
         # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
         row_min_value = row_data.shift
         # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
+        zip_codes = []
+        hub_truckings = []
+        tmp_zip = zip_code_range_array[0].to_i
+        while tmp_zip <= zip_code_range_array[1].to_i
+          td = TruckingDestination.find_by!(zipcode: tmp_zip, country_code: 'SE')
+          zip_codes << td
+          hub_truckings << HubTrucking.find_or_create_by!(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type)
+          tmp_zip += 1
+          p tmp_zip
+        end
+
+        if hub_truckings[0].trucking_pricing_id
+          trucking_pricing = hub_trucking[0].trucking_pricing
+        else
+          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []})
+        end
         ntp = {
           trucking_hub_id: trucking_table_id,
           tenant_id: user.tenant_id,
@@ -283,72 +300,76 @@ module ExcelTools
           tmp[:_id] = SecureRandom.uuid
           tmp[:trucking_hub_id] = trucking_table_id
           tmp[:trucking_query_id] = ntp[:_id]
-          truckingPricings.push(tmp)
+          trucking_pricing[direction]["table"].push(tmp)
           results[:trucking_pricings] << tmp
           stats[:trucking_pricings][:number_updated] += 1
-          # 
+          trucking_pricing.save!
+          hub_truckings.each do |ht|
+            ht.trucking_pricing_id = trucking_pricing.id
+            ht.save!
+          end
         end
-        truckingQueries.push(ntp)
+        # truckingQueries.push(ntp)
         results[:trucking_queries] << ntp
         stats[:trucking_queries][:number_updated] += 1
       end
       # 
-      truckingQueries.each do |k|
-        # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
-        new_trucking_queries_array << {
-            :update_one => {
-              :filter => {
-                _id: "#{k[:_id]}"
-              },
-              :update => {
-                "$set" => k
-              }, :upsert => true
-            }
-          }
-      end
-      truckingPricings.each do |k|
-        # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
-        new_trucking_pricings_array << {
-            :update_one => {
-              :filter => {
-                _id: "#{k[:_id]}"
-              },
-              :update => {
-                "$set" => k
-              }, :upsert => true
-            }
-          }
-      end
-      new_trucking_hub_obj = {
-        modifier: "zipcode", 
-        tenant_id: user.tenant_id, 
-        nexus_id: nexus.id, 
-        load_type: 'lcl',
-        hub_id: hub_id,
-        load_meterage: {
-          active: true,
-          height_limit: 130,
-          ratio: 1850
-        },
-        cbm_ratio: 333
-      }
-      results[:trucking_hubs] << new_trucking_hub_obj
-      stats[:trucking_hubs][:number_updated] += 1
+      # truckingQueries.each do |k|
+      #   # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+      #   new_trucking_queries_array << {
+      #       :update_one => {
+      #         :filter => {
+      #           _id: "#{k[:_id]}"
+      #         },
+      #         :update => {
+      #           "$set" => k
+      #         }, :upsert => true
+      #       }
+      #     }
+      # end
+      # truckingPricings.each do |k|
+      #   # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+      #   new_trucking_pricings_array << {
+      #       :update_one => {
+      #         :filter => {
+      #           _id: "#{k[:_id]}"
+      #         },
+      #         :update => {
+      #           "$set" => k
+      #         }, :upsert => true
+      #       }
+      #     }
+      # end
+      # new_trucking_hub_obj = {
+      #   modifier: "zipcode", 
+      #   tenant_id: user.tenant_id, 
+      #   nexus_id: nexus.id, 
+      #   load_type: 'lcl',
+      #   hub_id: hub_id,
+      #   load_meterage: {
+      #     active: true,
+      #     height_limit: 130,
+      #     ratio: 1850
+      #   },
+      #   cbm_ratio: 333
+      # }
+      # results[:trucking_hubs] << new_trucking_hub_obj
+      # stats[:trucking_hubs][:number_updated] += 1
       # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
-      new_trucking_hubs_array << {
-            :update_one => {
-              :filter => {
-                _id: "#{trucking_table_id}"
-              },
-              :update => {
-                "$set" => new_trucking_hub_obj
-              }, :upsert => true
-            }
-          }
+      # new_trucking_hubs_array << {
+      #       :update_one => {
+      #         :filter => {
+      #           _id: "#{trucking_table_id}"
+      #         },
+      #         :update => {
+      #           "$set" => new_trucking_hub_obj
+      #         }, :upsert => true
+      #       }
+      #     }
     end
-    mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
-    mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
-    mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
+    # mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
+    # mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
+    # mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
 
