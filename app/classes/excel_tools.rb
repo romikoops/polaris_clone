@@ -225,10 +225,7 @@ module ExcelTools
         min_max_arr = cell.split(" - ")
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
-      trucking_table_id = "#{hub.id}_#{load_type}_#{user.tenant_id}" 
-      truckingDestinations = []
-      truckingTable = "#{nexus.id}_#{load_type}_#{user.tenant_id}"
-      truckingPricings = []
+
       (4..num_rows).each do |line|
         # 
         row_data = first_sheet.row(line)
@@ -242,7 +239,7 @@ module ExcelTools
         while tmp_zip <= zip_code_range_array[1].to_i
           td = TruckingDestination.find_by!(zipcode: tmp_zip, country_code: 'SE')
           zip_codes << td
-          hub_truckings << HubTrucking.find_or_create_by!(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type)
+          hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type)
           tmp_zip += 1
           p tmp_zip
         end
@@ -252,18 +249,7 @@ module ExcelTools
         else
           trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []})
         end
-        ntp = {
-          trucking_hub_id: trucking_table_id,
-          tenant_id: user.tenant_id,
-          nexus_id: nexus.id,
-          direction: direction,
-          _id: SecureRandom.uuid,
-          modifier: 'kg',
-          zipcode: {
-            lower_zip: zip_code_range_array[0].to_i,
-            upper_zip: zip_code_range_array[1].to_i
-          }
-        }
+       
         row_data.each_with_index do |val, index|
           tmp = defaults[index].clone
           if row_min_value < weight_min_row[index]
@@ -297,9 +283,6 @@ module ExcelTools
           end
           tmp[:direction] = direction
           tmp[:type] = "default"
-          tmp[:_id] = SecureRandom.uuid
-          tmp[:trucking_hub_id] = trucking_table_id
-          tmp[:trucking_query_id] = ntp[:_id]
           trucking_pricing[direction]["table"].push(tmp)
           results[:trucking_pricings] << tmp
           stats[:trucking_pricings][:number_updated] += 1
@@ -309,67 +292,11 @@ module ExcelTools
             ht.save!
           end
         end
-        # truckingQueries.push(ntp)
-        results[:trucking_queries] << ntp
         stats[:trucking_queries][:number_updated] += 1
       end
-      # 
-      # truckingQueries.each do |k|
-      #   # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
-      #   new_trucking_queries_array << {
-      #       :update_one => {
-      #         :filter => {
-      #           _id: "#{k[:_id]}"
-      #         },
-      #         :update => {
-      #           "$set" => k
-      #         }, :upsert => true
-      #       }
-      #     }
-      # end
-      # truckingPricings.each do |k|
-      #   # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
-      #   new_trucking_pricings_array << {
-      #       :update_one => {
-      #         :filter => {
-      #           _id: "#{k[:_id]}"
-      #         },
-      #         :update => {
-      #           "$set" => k
-      #         }, :upsert => true
-      #       }
-      #     }
-      # end
-      # new_trucking_hub_obj = {
-      #   modifier: "zipcode", 
-      #   tenant_id: user.tenant_id, 
-      #   nexus_id: nexus.id, 
-      #   load_type: 'lcl',
-      #   hub_id: hub_id,
-      #   load_meterage: {
-      #     active: true,
-      #     height_limit: 130,
-      #     ratio: 1850
-      #   },
-      #   cbm_ratio: 333
-      # }
-      # results[:trucking_hubs] << new_trucking_hub_obj
-      # stats[:trucking_hubs][:number_updated] += 1
-      # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "zipcode", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
-      # new_trucking_hubs_array << {
-      #       :update_one => {
-      #         :filter => {
-      #           _id: "#{trucking_table_id}"
-      #         },
-      #         :update => {
-      #           "$set" => new_trucking_hub_obj
-      #         }, :upsert => true
-      #       }
-      #     }
+    
     end
-    # mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
-    # mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
-    # mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
+
     return {results: results, stats: stats}
   end
 
@@ -556,6 +483,7 @@ module ExcelTools
       trucking_table_id = "#{hub.id}_lcl_#{user.tenant_id}"  
       weight_cat_row = first_sheet.row(2)
       num_rows = first_sheet.last_row
+      trucking_destinations = []
       [3,4,5,6].each do |i|
         min_max_arr = weight_cat_row[i].split(" - ")
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
@@ -564,11 +492,10 @@ module ExcelTools
         row_data = first_sheet.row(line)
         new_pricing = {}
 
-        new_pricing[:city] = {
-          province: row_data[0].downcase,
-          city: row_data[1].downcase,
-          dist_hub: row_data[2].split(' , ')
-      }
+        trucking_destinations << {
+          city_name: row_data[1].downcase,
+          country_code: 'CN'
+        }
         new_pricing[:currency] = "CNY"
         new_pricing[:tenant_id] = user.tenant_id
         new_pricing[:nexus_id] = nexus.id
