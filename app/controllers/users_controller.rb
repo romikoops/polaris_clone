@@ -65,7 +65,7 @@ class UsersController < ApplicationController
 
   def currencies
     currency = current_user ? current_user.currency : "EUR"
-    results = get_currency_array(current_user.currency)
+    results = get_currency_array(currency)
     response_handler(results)
   end
   def set_currency

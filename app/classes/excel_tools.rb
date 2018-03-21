@@ -352,68 +352,6 @@ module ExcelTools
     return {results: results, stats: stats}
   end
 
-  # def overwrite_zipcode_cbm_trucking_rates(params, user = current_user)
-    #   # old_trucking_ids = nil
-    #   # new_trucking_ids = []
-    #   mongo = get_client
-    #   defaults = []
-    #   xlsx = Roo::Spreadsheet.open(params['xlsx'])
-    #   xlsx.sheets.each do |sheet_name|
-    #     first_sheet = xlsx.sheet(sheet_name)
-    #     nexus = Location.find_by(name: sheet_name, location_type: "nexus")
-
-    #     currency_row = first_sheet.row(1)
-    #     hubs = nexus.hubs
-    #     header_row = first_sheet.row(2)
-    #     header_row.shift
-    #     header_row.shift
-    #     weight_min_row = first_sheet.row(3)
-    #     weight_min_row.shift
-    #     weight_min_row.shift
-    #     num_rows = first_sheet.last_row
-    #     header_row.each do |cell|
-    #       min_max_arr = cell.split(" - ")
-    #       defaults.push({min: min_max_arr[0].to_i, max: min_max_arr[1].to_i, value: nil, min_value: nil})
-    #     end
-    #     results = []
-    #     truckingTable = "#{nexus.id}_#{user.tenant_id}" 
-    #     (4..num_rows).each do |line|
-    #       row_data = first_sheet.row(line)
-    #       zip_code_range_array = row_data.shift.split(" - ")
-    #       # zip_code_range = (zip_code_range_array[0].to_i..zip_code_range_array[1].to_i)
-    #       row_min_value = row_data.shift
-    #       # ntp = TruckingPricing.new(currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i)
-    #       ntp = {currency: currency_row[3], tenant_id: user.tenant_id, nexus_id: nexus.id, lower_zip: zip_code_range_array[0].to_i, upper_zip: zip_code_range_array[1].to_i, rate_table: []}
-    #       row_data.each_with_index do |val, index|
-    #         tmp = defaults[index]
-    #         if row_min_value < weight_min_row[index]
-    #           min_value = weight_min_row[index]
-    #         else
-    #           min_value = row_min_value
-    #         end
-    #         tmp[:min_value] = min_value
-    #         tmp[:value] = val
-    #         ntp[:rate_table].push(tmp)
-
-            
-
-    #         # new_trucking_ids << ntp.id
-    #       end
-    #       # p ntp
-    #       results << ntp
-    #       # update_array_fn(mongo, 'truckingTables', {_id: truckingTable}, ntp)
-    #     end
-    #     # 
-    #     update_array_fn(mongo,  'truckingTables', {_id: truckingTable}, results)
-    #     hubs.each do |h|
-    #       update_item_fn(mongo, 'truckingHubs', {_id: "#{h.id}"}, {type: "zipcode", table: truckingTable, tenant_id: user.tenant_id, nexus_id: nexus.id})
-    #     end
-    #   end
-
-    #   # kicked_trucking_ids = old_trucking_ids - new_trucking_ids
-    #   # TruckingPricing.where(id: kicked_trucking_ids).destroy_all
-  # end
-
   def overwrite_city_trucking_rates(params, user = current_user, direction)
     
     mongo = get_client
@@ -513,6 +451,150 @@ module ExcelTools
         end
       end
       new_trucking_hub_obj = {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'}
+      new_trucking_hubs_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{trucking_table_id}"
+              },
+              :update => {
+                "$set" => new_trucking_hub_obj
+              }, :upsert => true
+            }
+          }
+          results[:trucking_hubs] << new_trucking_hub_obj
+      stats[:trucking_hubs][:number_updated] += 1
+      # update_item_fn(mongo, 'truckingHubs', {_id: trucking_table_id}, {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'})
+      truckingQueries.each do |k|
+        # update_item_fn(mongo,  'truckingQueries', {_id: k[:_id]}, k)
+         new_trucking_queries_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
+      end
+      truckingPricings.each do |k|
+        # update_item_fn(mongo,  'truckingPricings', {_id: k[:_id]}, k)
+        new_trucking_pricings_array << {
+            :update_one => {
+              :filter => {
+                _id: "#{k[:_id]}"
+              },
+              :update => {
+                "$set" => k
+              }, :upsert => true
+            }
+          }
+      end
+    end
+
+    mongo["truckingHubs"].bulk_write(new_trucking_hubs_array)
+    mongo["truckingPricings"].bulk_write(new_trucking_pricings_array)
+    mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
+    return {stats: stats, results: results}
+  end
+  def overwrite_city_trucking_rates_by_hub(params, user = current_user, hub_id, direction)
+    
+    mongo = get_client
+    defaults = []
+    stats = {
+      type: 'trucking',
+      trucking_hubs: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_queries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_pricings: {
+        number_updated: 0,
+        number_created: 0
+      }
+    }
+    results = {
+      trucking_hubs: [],
+      trucking_queries: [],
+      trucking_pricings: []
+    }
+     new_trucking_pricings_array = []
+    new_trucking_hubs_array = []
+    new_trucking_queries_array = []
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find(hub_id)
+      nexus = hub.nexus
+      truckingPricings = []
+      truckingQueries = []
+      hubs = nexus.hubs
+      trucking_table_id = "#{hub.id}_lcl_#{user.tenant_id}"  
+      weight_cat_row = first_sheet.row(2)
+      num_rows = first_sheet.last_row
+      [3,4,5,6].each do |i|
+        min_max_arr = weight_cat_row[i].split(" - ")
+        defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
+      end
+      (3..num_rows).each do |line|
+        row_data = first_sheet.row(line)
+        new_pricing = {}
+
+        new_pricing[:city] = {
+          province: row_data[0].downcase,
+          city: row_data[1].downcase,
+          dist_hub: row_data[2].split(' , ')
+      }
+        new_pricing[:currency] = "CNY"
+        new_pricing[:tenant_id] = user.tenant_id
+        new_pricing[:nexus_id] = nexus.id
+        new_pricing[:hub_id] = hub.id
+        new_pricing[:trucking_hub_id] = trucking_table_id
+        new_pricing[:delivery_eta_in_days] = row_data[10]
+        new_pricing[:modifier] = 'kg'
+        new_pricing[:direction] = direction
+        ntp = new_pricing
+        ntp[:_id] = SecureRandom.uuid
+        [3,4,5,6].each do |i|
+          tmp = defaults[i - 3].clone
+          tmp[:_id] = SecureRandom.uuid
+          tmp[:type] = "default"
+          tmp[:cbm_ratio] = 250
+          tmp[:fees] = {
+            base_rate: {
+              kg: row_data[i],
+              cbm: row_data[7],
+              rate_basis: 'PER_CBM_KG',
+              currency: "CNY"
+            },
+            vat: {
+             value: 0.06,
+              rate_basis: 'PERCENTAGE',
+              currency: "CNY"
+            }
+          }
+          if  direction === 'export'
+            tmp[:fees][:PUF] = {value: row_data[8], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+          else
+            tmp[:fees][:DLF] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
+          end
+          tmp[:trucking_query_id] = ntp[:_id]
+         
+          truckingPricings.push(tmp)
+          results[:trucking_pricings] << tmp
+          stats[:trucking_pricings][:number_updated] += 1
+        end
+        truckingQueries << ntp
+        results[:trucking_queries] << ntp
+        stats[:trucking_queries][:number_updated] += 1
+        new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
+        new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city][:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
+        HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
+      end
+      new_trucking_hub_obj = {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, hub_id: hub.id, load_type: 'lcl'}
       new_trucking_hubs_array << {
             :update_one => {
               :filter => {
