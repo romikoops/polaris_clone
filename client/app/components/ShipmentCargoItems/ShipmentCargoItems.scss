@@ -73,7 +73,8 @@
     }
   }
   .cargo_item_box {
-    border: 0.2px solid rgba(black, 0.08);
+    border: 1px solid rgba(black, 0.08);
+    box-shadow: 0 0 2px rgba(darkgrey, 0.3);
   }
   .cargo_item_inputs {
     background: rgba(black, 0.005);    
@@ -143,8 +144,6 @@
   width: 100%;
   position: relative;
   background: darkgrey;
-  box-shadow: 0 0 2px rgba(darkgrey, 0.3);
-  border: 1px solid rgba(black, 0.08);
   color: white;
   font-size: 16px;
   font-weight: 650;

@@ -151,7 +151,7 @@ export class ShipmentCargoItems extends Component {
             </div>
           </div>
           <div className={
-            `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
+            `${styles.cargo_item_info} ` +
             `${cargoItemInfoExpanded[i] && styles.expanded} ` +
             'flex-100'
           }
@@ -162,8 +162,10 @@ export class ShipmentCargoItems extends Component {
             }
             >
               {inputs.total}
-              {inputs.volume}
-              {inputs.chargeableWeight}
+              <div className={`${styles.cargo_item_box} flex layout-row`}>
+                {inputs.volume}
+                {inputs.chargeableWeight}
+              </div>
             </div>
           </div>
 

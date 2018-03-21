@@ -138,8 +138,8 @@ export default function getInputs (
   )
 
   inputs.total = (
-    <div className={`${styles.total} flex-10 layout-row layout-wrap layout-align-center-center`}>
-      <div className="layout-row flex-40 layout-align-center" >
+    <div className={`${styles.total} flex-10 layout-row layout-wrap layout-align-center-stretch`}>
+      <div className={`${styles.cargo_item_box} layout-row flex-100 layout-align-center-center`}>
         <p className={`${styles.input_label} flex-none`}> Total: </p>
       </div>
     </div>
