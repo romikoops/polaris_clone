@@ -5,6 +5,8 @@ class TruckingDestination < ApplicationRecord
       message: 'is a duplicate (all attributes match an existing record in the DB)'
     }
 
+  # The following methods are just here temporarily for testing
+
   def self.test
     TruckingPricing.find_by_sql("
       SELECT * FROM trucking_pricings
