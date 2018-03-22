@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180322113638) do
+ActiveRecord::Schema.define(version: 20180322132718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,7 +122,6 @@ ActiveRecord::Schema.define(version: 20180322113638) do
     t.integer "hub_id"
     t.integer "trucking_destination_id"
     t.integer "courier_id"
-    t.string "load_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "trucking_pricing_id"
@@ -424,6 +423,11 @@ ActiveRecord::Schema.define(version: 20180322113638) do
     t.jsonb "export"
     t.jsonb "import"
     t.integer "courier_id"
+    t.string "load_type"
+    t.string "truck_type"
+    t.jsonb "load_meterage"
+    t.integer "cbm_ratio"
+    t.string "modifier"
   end
 
   create_table "user_locations", force: :cascade do |t|

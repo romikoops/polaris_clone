@@ -173,7 +173,7 @@ class OfferCalculator
 
       charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
       
-      set_trucking_charges!(charges, sched, sched_key)
+      set_trucking_charges!(charges, sched, sched_key, @shipment)
       set_cargo_charges!(charges, sched, sched_key)
     end
     @shipment.schedules_charges = charges
@@ -287,7 +287,8 @@ class OfferCalculator
         cargo_unit, 
         path_key, 
         @user, 
-        @cargo_units.length
+        @cargo_units.length,
+        @shipment.planned_pickup_date
       )
        Rails.logger.info "CHARGE RESULT"
        Rails.logger.info charge_result
@@ -314,7 +315,7 @@ class OfferCalculator
     km = google_directions.distance_in_km
     truck_type = direction == 'export' ? @shipment.trucking["pre_carriage"]["truck_type"] : @shipment.trucking["on_carriage"]["truck_type"]
 
-    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, truck_type)
+    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, truck_type, @user)
      
   end
   

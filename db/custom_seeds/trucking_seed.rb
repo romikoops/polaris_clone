@@ -1,9 +1,5 @@
-start_zip = 10_000
-end_zip = 49_805
-zips = []
-tmp_zip = start_zip
-while tmp_zip <= end_zip
-  zips << {zipcode: tmp_zip, country_code: 'SE'}
-  tmp_zip += 1
+zips = (10_000..98_999).map do |zip|
+	{ zipcode: zip, country_code: 'SE' }
 end
-TruckingDestination.create!(zips)
+
+TruckingDestination.create(zips)
