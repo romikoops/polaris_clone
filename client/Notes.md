@@ -103,3 +103,7 @@ PropTypes.shipmentData = PropTypes.shape({
 `
 
 - Too big therefore only single basic test
+
+## BookingDetails
+
+- Too big therefore only single basic test
