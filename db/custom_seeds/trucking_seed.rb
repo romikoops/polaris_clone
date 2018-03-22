@@ -1,5 +1,5 @@
-start_zip = 49806
-end_zip = 98999
+start_zip = 10_000
+end_zip = 49_805
 zips = []
 tmp_zip = start_zip
 while tmp_zip <= end_zip

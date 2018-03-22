@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180321152629) do
+ActiveRecord::Schema.define(version: 20180322113638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "cargo_item_types", force: :cascade do |t|
     t.decimal "dimension_x"
@@ -324,6 +325,13 @@ ActiveRecord::Schema.define(version: 20180321152629) do
     t.jsonb "incoterm"
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
+  end
+
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
   create_table "stops", force: :cascade do |t|
