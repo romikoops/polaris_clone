@@ -239,7 +239,7 @@ module ExcelTools
         while tmp_zip <= zip_code_range_array[1].to_i
           td = TruckingDestination.find_by!(zipcode: tmp_zip, country_code: 'SE')
           zip_codes << td
-          hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type)
+          hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
           tmp_zip += 1
           p tmp_zip
         end
@@ -247,7 +247,7 @@ module ExcelTools
         if hub_truckings[0].trucking_pricing_id
           trucking_pricing = hub_truckings[0].trucking_pricing
         else
-          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []})
+          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type)
         end
        
         row_data.each_with_index do |val, index|
