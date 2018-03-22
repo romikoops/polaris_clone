@@ -18,6 +18,7 @@ jest.mock('../ContactSetter/ContactSetter', () => ({
   // eslint-disable-next-line react/prop-types
   ContactSetter: ({ children }) => <div>{children}</div>
 }))
+// eslint-disable-next-line
 import { BookingDetails } from './BookingDetails'
 
 const propsBase = {
@@ -43,6 +44,6 @@ const propsBase = {
 test('CargoDetails component is called with user mock', () => {
   const wrapper = mount(<BookingDetails {...propsBase} />)
   const CargoDetails = wrapper.find('CargoDetails').first()
-  
+
   expect(CargoDetails.prop('user')).toBe(user)
 })

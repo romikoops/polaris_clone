@@ -107,3 +107,11 @@ PropTypes.shipmentData = PropTypes.shape({
 ## BookingDetails
 
 - Too big therefore only single basic test
+
+## CacheClearer
+
+- Component is exported already wrapped, so no test at this moment
+
+## CardLink
+
+- Not very sure what to test, so there is only one test with component's text content.
