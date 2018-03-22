@@ -1,3 +1,4 @@
+  include ExcelTools
   tenant = Tenant.find_by_subdomain('demo')
   shipper = tenant.users.where(role_id: 2).first 
   hub = tenant.hubs.find_by_name("Gothenburg Port")
