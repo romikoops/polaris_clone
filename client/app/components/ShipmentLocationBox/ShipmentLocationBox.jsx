@@ -585,6 +585,8 @@ export class ShipmentLocationBox extends Component {
         tmpAddress.country = ac.long_name
       }
     })
+    tmpAddress.latitude = place.geometry.location.lat()
+    tmpAddress.longitude = place.geometry.location.lng()
     tmpAddress.fullAddress = place.formatted_address
     setTimeout(() => {
       if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)

@@ -1,4 +1,4 @@
-start_zip = 49806
+start_zip = 10000
 end_zip = 98999
 zips = []
 tmp_zip = start_zip
