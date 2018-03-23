@@ -15,9 +15,6 @@ function findNexus (lat, lng, callback) {
 }
 
 function findAvailability (lat, lng, tenantId, loadType, availableNexusesIds, callback) {
-  console.log(tenantId)
-  console.log(loadType)
-  console.log(availableNexusesIds)
   fetch(
     `${BASE_URL}/trucking_availability?` +
       `lat=${lat}&lng=${lng}&` +

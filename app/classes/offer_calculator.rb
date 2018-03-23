@@ -294,7 +294,6 @@ class OfferCalculator
   def determine_trucking_options!
     load_type = @shipment.load_type 
     if @shipment.has_pre_carriage
-
       trucking_pricings_by_hub = TruckingPricing.find_by_filter(
         location: @shipment.origin, 
         load_type: load_type, 
@@ -327,13 +326,12 @@ class OfferCalculator
   def determine_trucking_fees(location, hub, target, direction)
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
-    carriage = direction == "import" ? "trucking_on" : "trucking_pre"
+    carriage = direction == "import" ? "on_carriage" : "pre_carriage"
     trucking_pricing = @trucking_data[carriage][hub.id]
     price_results = calc_trucking_price(trucking_pricing, @cargo_units, km, direction)
   end
   
   def convert_currencies!
-
     @shipment.schedules_charges.each do |key, svalue|
       raw_totals = {}
       svalue["cargo"].each do |id, charges|

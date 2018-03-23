@@ -231,7 +231,7 @@ class Itinerary < ApplicationRecord
   end
 
   def self.for_locations(shipment, trucking_data)
-    if  trucking_data && trucking_data["pre_carriage"]
+    if trucking_data && trucking_data["pre_carriage"]
       start_hub_ids = trucking_data["pre_carriage"].keys
       start_hubs = start_hub_ids.map {|id| Hub.find(id)}
     else
