@@ -315,11 +315,10 @@ class Location < ApplicationRecord
 
   def get_zip_code
     if self.zip_code
-      return self.zip_code.gsub(' ', '')
+      self.zip_code.gsub(' ', '')
     else
-      self.geocoded_address
       self.reverse_geocode
-      return self.zip_code.gsub(' ', '')
+      self.zip_code.try(:gsub, ' ', '')
     end
   end
 

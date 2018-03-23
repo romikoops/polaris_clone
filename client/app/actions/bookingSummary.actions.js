@@ -38,9 +38,9 @@ function update (data) {
       payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
     })
     payload.selectedDay = data.selectedDay
-    payload.nexuses = {
-      origin: data.origin.nexusName,
-      destination: data.destination.nexusName
+    payload.cities = {
+      origin: data.origin.city,
+      destination: data.destination.city
     }
     payload.hubs = {
       origin: data.origin.hub_name,

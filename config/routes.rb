@@ -104,9 +104,10 @@ Rails.application.routes.draw do
       post "confirm_shipment",   as: :confirm_booking
     end
 
+    resources :trucking_availability, only: [:index]
+
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
-    get 'trucking_availability', to: 'nexuses#trucking_availability'
 
     resources :contacts, only: [:index, :show, :create, :update]
     post 'contacts/update_contact/:id', to: 'contacts#update_contact'
