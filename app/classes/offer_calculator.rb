@@ -1,5 +1,5 @@
 class OfferCalculator
-  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay
+  attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay, :trucking_data
   include CurrencyTools
   include PricingTools
   include MongoTools
@@ -18,7 +18,7 @@ class OfferCalculator
     @shipment.trucking = trucking_params(params).to_h
     @delay = params[:shipment][:delay]
     @shipment.incoterm = params[:shipment][:incoterm]
-    
+    @trucking_data = @shipment.schedules_charges
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
