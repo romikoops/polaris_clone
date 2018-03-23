@@ -115,3 +115,7 @@ PropTypes.shipmentData = PropTypes.shape({
 ## CardLink
 
 - Not very sure what to test, so there is only one test with component's text content.
+
+## CardLinkRow
+
+- Basic test as the component is just a wrapper around list of CardLink components.

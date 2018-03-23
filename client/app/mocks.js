@@ -1,4 +1,4 @@
-export const identity = () => {}
+export const identity = input => input
 
 export const theme = {
   colors: {
