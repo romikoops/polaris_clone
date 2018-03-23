@@ -78,6 +78,11 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
+        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        if trip_check
+          tmp_date += 1.day
+          next
+        end
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         results[:trips] << trip
         p trip
@@ -225,28 +230,24 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def self.for_locations(shipment, carriage_nexuses)
-    if  carriage_nexuses && carriage_nexuses["preCarriage"]
-      start_city = Location.find(carriage_nexuses["preCarriage"])
+  def self.for_locations(shipment, trucking_data)
+    if  trucking_data && trucking_data["pre_carriage"]
+      start_hub_ids = trucking_data["pre_carriage"].keys
+      start_hubs = start_hub_ids.map {|id| Hub.find(id)}
     else
       start_city = Location.find(shipment.origin_id)
-      #  OLD redundant code
-      # start_city, start_city_dist = shipment.origin.closest_location_with_distance
+      start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
+      start_hub_ids = start_hubs.ids
     end
-    if  carriage_nexuses && carriage_nexuses["onCarriage"]
-      end_city = Location.find(carriage_nexuses["onCarriage"])
+    if  trucking_data && trucking_data["on_carriage"]
+      end_hub_ids = trucking_data["on_carriage"].keys
+      end_hubs = end_hub_ids.map {|id| Hub.find(id)}
     else
       end_city = Location.find(shipment.destination_id)
-      #  OLD redundant code
-      # end_city, end_city_dist = shipment.destination.closest_location_with_distance
+      end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
+      end_hub_ids = end_hubs.ids
     end
-    # if start_city_dist > radius || end_city_dist > radius
-    #   start_city = end_city = nil
-    # end
-    start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
-    end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
-    start_hub_ids = start_hubs.ids
-    end_hub_ids = end_hubs.ids
+    
 
     query = "
       SELECT * FROM itineraries

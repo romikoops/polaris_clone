@@ -202,7 +202,7 @@ module ExcelTools
     }
     courier = Courier.find_or_create_by(name: courier_name)
     defaults = []
-    load_type = "lcl"
+    load_type = "cargo_item"
     new_trucking_pricings_array = []
     new_trucking_hubs_array = []
     new_trucking_queries_array = []
@@ -475,7 +475,7 @@ module ExcelTools
       trucking_queries: [],
       trucking_pricings: []
     }
-   load_type = 'lcl'
+   load_type = 'cargo_item'
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -574,7 +574,7 @@ module ExcelTools
       trucking_pricings: []
     }
     
-    load_type = 'fcl'
+    load_type = 'container'
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)

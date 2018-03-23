@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Truncate from 'react-truncate'
 import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import styles from './CargoDetails.scss'
@@ -136,19 +135,6 @@ export class CargoDetails extends Component {
     const { totalGoodsCurrency } = this.state
     const { scope } = tenant.data
     const { dangerousGoods, documents, shipment } = shipmentData
-    const DocViewer = ({ doc }) => (
-      <div className="flex-100 layout-row layout-align-start-center">
-        <p className={`flex-80 ${styles.doc_title}`}>
-          <Truncate lines={1}>{doc.text} </Truncate>
-        </p>
-        <div
-          className="flex-20 layout-row layout-align-center-center"
-          onClick={() => this.deleteDoc(doc.doc_type)}
-        >
-          <i className="fa fa-trash" />
-        </div>
-      </div>
-    )
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
@@ -374,24 +360,18 @@ export class CargoDetails extends Component {
               <TextHeading theme={theme} size={3} text="Customs Declaration" />
             </div>
             <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
-              <div className="flex-100">
-                {documents.customs_declaration ? (
-                  <DocViewer doc={documents.customs_declaration} />
-                ) : (
-                  <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
-                    <div className="flex-100 layout-row">
-                      <DocumentsForm
-                        theme={theme}
-                        type="customs_declaration"
-                        dispatchFn={this.fileFn}
-                        text="Costums decl."
-                        doc={documents.customs_declaration}
-                        isRequired
-                        deleteFn={this.deleteDoc}
-                      />
-                    </div>
-                  </div>
-                )}
+              <div className="flex-100 layout-row layout-wrap" name="customs_declaration">
+                <div className="flex-100 layout-row">
+                  <DocumentsForm
+                    theme={theme}
+                    type="customs_declaration"
+                    dispatchFn={this.fileFn}
+                    text="Customs decl."
+                    doc={documents.customs_declaration}
+                    isRequired
+                    deleteFn={this.deleteDoc}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -402,24 +382,18 @@ export class CargoDetails extends Component {
               <div className="flex-100">
                 <TextHeading theme={theme} size={3} text="Customs Value Declaration" />
               </div>
-              <div className="flex-100">
-                {documents.customs_value_declaration ? (
-                  <DocViewer doc={documents.customs_value_declaration} />
-                ) : (
-                  <div className="flex-100 layout-row layout-wrap" name="customs_value_declaration">
-                    <div className="flex-100 layout-row">
-                      <DocumentsForm
-                        theme={theme}
-                        type="customs_value_declaration"
-                        text="Customs Val. Decl."
-                        dispatchFn={this.fileFn}
-                        doc={documents.customs_declaration}
-                        isRequired
-                        deleteFn={this.deleteDoc}
-                      />
-                    </div>
-                  </div>
-                )}
+              <div className="flex-100 layout-row layout-wrap" name="customs_value_declaration">
+                <div className="flex-100 layout-row">
+                  <DocumentsForm
+                    theme={theme}
+                    type="customs_value_declaration"
+                    text="Customs Val. Decl."
+                    dispatchFn={this.fileFn}
+                    doc={documents.customs_declaration}
+                    isRequired
+                    deleteFn={this.deleteDoc}
+                  />
+                </div>
               </div>
             </div>
           ) : (

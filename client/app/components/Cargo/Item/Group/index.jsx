@@ -147,7 +147,7 @@ export class CargoItemGroup extends Component {
       <div className={`${styles.info} layout-row flex-100 layout-wrap layout-align-center`}>
         <div className="flex-100 layout-row layout-align-space-between-center">
           <div className="flex-40 layout-row layout-align-start-center">
-            <h5 className="flex-none">Cargo Group</h5>
+            <h5 className="flex-none">Cargo Unit</h5>
             <div className="flex-5" />
             <p className="flex-none">{group.groupAlias}</p>
           </div>

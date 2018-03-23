@@ -66,7 +66,7 @@ export class BookingConfirmation extends Component {
           dimension_z: parseFloat(c.dimension_z) * parseInt(c.quantity, 10),
           dimension_x: parseFloat(c.dimension_x) * parseInt(c.quantity, 10),
           payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
-          quantity: 1,
+          quantity: c.quantity,
           groupAlias: groupCount,
           cargo_group_id: c.id,
           chargeable_weight: parseFloat(c.chargeable_weight) * parseInt(c.quantity, 10),
@@ -114,7 +114,7 @@ export class BookingConfirmation extends Component {
           payload_in_kg: parseFloat(c.payload_in_kg) * parseInt(c.quantity, 10),
           tare_weight: parseFloat(c.tare_weight) * parseInt(c.quantity, 10),
           gross_weight: parseFloat(c.gross_weight) * parseInt(c.quantity, 10),
-          quantity: 1,
+          quantity: c.quantity,
           groupAlias: groupCount,
           cargo_group_id: c.id,
           hsCodes: c.hs_codes,
@@ -158,9 +158,6 @@ export class BookingConfirmation extends Component {
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
-    // const brightGradientStyle = theme
-    //   ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-    //   : { color: 'black' }
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -200,7 +197,7 @@ export class BookingConfirmation extends Component {
       notifyeesJSX.push(<div className="flex-40" />)
     }
     const acceptedBtn = (
-      <div className="flex-none layout-row">
+      <div className="flex-none layout-row layout-align-end-end">
         <RoundButton
           theme={theme}
           text="Finish Booking"
@@ -210,7 +207,7 @@ export class BookingConfirmation extends Component {
       </div>
     )
     const nonAcceptedBtn = (
-      <div className="flex-none layout-row">
+      <div className="flex-none layout-row layout-align-end-end">
         <RoundButton theme={theme} text="Finish Booking" handleNext={e => e.preventDefault()} />
       </div>
     )
@@ -593,7 +590,7 @@ export class BookingConfirmation extends Component {
                     <div className="flex-100 layout-row layout-align-start-center">
                       <TextHeading theme={theme} text="By checking this box" size={4} />
                     </div>
-                    <div className="flex-100 layout-row layout-align-start-center">
+                    <div className="flex-100 layout-row layout-align-start-start">
                       <ul className={`flex-100 ${styles.terms_list}`}>
                         <li>you verify that all the information provided above is true</li>
                         <li>
@@ -610,7 +607,7 @@ export class BookingConfirmation extends Component {
                   </div>
                 </div>
               </div>
-              <div className="flex-33 layout-row layout-align-end-center">
+              <div className="flex-33 layout-row layout-align-end-end height_100">
                 {acceptTerms ? acceptedBtn : nonAcceptedBtn}
               </div>
             </div>

@@ -103,6 +103,29 @@ export class AdminShipmentRow extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
+    const showButtons = shipment.status === 'requested'
+    const btnRow = (
+      <div
+        className={`flex-none layout-column layout-align-space-between-center ${styles.btn_row}`}
+      >
+        <div className="flex-30 layout-row layout-align-center-center" onClick={this.handleAccept}>
+          <div className={`flex-none layout-row layout-align-center-center ${styles.grant}`}>
+            <i className="flex-none fa fa-check" />
+          </div>
+        </div>
+        <div className="flex-30 layout-row layout-align-center-center" onClick={this.handleEdit}>
+          <div className={`flex-none layout-row layout-align-center-center ${styles.edit}`}>
+            <i className="flex-none fa fa-pencil" />
+          </div>
+        </div>
+
+        <div className="flex-30 layout-row layout-align-center-center" onClick={this.handleIgnore}>
+          <div className={`flex-none layout-row layout-align-center-center ${styles.deny}`}>
+            <i className="fa fa-close" />
+          </div>
+        </div>
+      </div>
+    )
 
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
@@ -110,6 +133,12 @@ export class AdminShipmentRow extends Component {
           className={`${styles.port_box} flex-25 layout-row layout-wrap`}
           onClick={this.selectShipment}
         >
+          <div className="flex-100 layout-row layout-align-center-center">
+            <h5 className="flex-none no_m">
+              {' '}
+              {`Booking Placed at: ${moment(shipment.booking_placed_at).format('DD/MM/YYYY HH:mm')}`}
+            </h5>
+          </div>
           <div className={`${styles.hub_half} flex-100 layout-row layout-align-center-center`}>
             <div className="flex-10 layout-row layout-align-center-center">
               <i className={`flex-none fa fa-map-marker ${styles.map_marker}`} />
@@ -150,6 +179,19 @@ export class AdminShipmentRow extends Component {
             <div className="flex-50 layout-row layout-align-start-center">
               <h4 className="flex-none no_m letter_3"> {`Ref: ${shipment.imc_reference}`}</h4>
             </div>
+
+            <div className="flex-50 layout-row layout-align-end-center">
+              <h4 className="flex-none letter_3 no_m">
+                {' '}
+                {`${AdminShipmentRow.calcCargoLoad(feeHash, shipment.load_type)} `}
+              </h4>
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-none-center">
+            <div className={`${styles.user_info} flex-50 layout-row layout-align-start-center`}>
+              <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle} />
+              <h4 className="flex-none letter_3"> {shipment.clientName} </h4>
+            </div>
             <div className="flex-50 layout-row layout-align-end-center">
               <h4 className="flex-none letter_3 no_m">
                 {' '}
@@ -157,22 +199,11 @@ export class AdminShipmentRow extends Component {
               </h4>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-none-center">
-            <div className={`${styles.user_info} flex-50 layout-row layout-align-start-center`}>
-              <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle} />
-              <p className="flex-none letter_3"> {shipment.clientName} </p>
-            </div>
-            <div className="flex-50 layout-row layout-align-end-center">
-              <p className="flex-none letter_3 no_m">
-                {' '}
-                {`${AdminShipmentRow.calcCargoLoad(feeHash, shipment.load_type)} `}
-              </p>
-            </div>
-          </div>
+
           <div className="flex-100 layout-row layout-align-none-center">
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>Pickup Date</h4>
+                <h4 className={styles.date_title}>{shipment.has_pre_carriage ? 'Pickup Date' : 'Closing Date'}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
@@ -222,38 +253,14 @@ export class AdminShipmentRow extends Component {
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}{'  Days'}
+                  {moment(shipment.planned_eta).diff(shipment.planned_etd, 'days')}
+                  {'  Days'}
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div
-          className={`flex-none layout-column layout-align-space-between-center ${styles.btn_row}`}
-        >
-          <div
-            className="flex-30 layout-row layout-align-center-center"
-            onClick={this.handleAccept}
-          >
-            <div className={`flex-none layout-row layout-align-center-center ${styles.grant}`}>
-              <i className="flex-none fa fa-check" />
-            </div>
-          </div>
-          <div className="flex-30 layout-row layout-align-center-center" onClick={this.handleEdit}>
-            <div className={`flex-none layout-row layout-align-center-center ${styles.edit}`}>
-              <i className="flex-none fa fa-pencil" />
-            </div>
-          </div>
-
-          <div
-            className="flex-30 layout-row layout-align-center-center"
-            onClick={this.handleIgnore}
-          >
-            <div className={`flex-none layout-row layout-align-center-center ${styles.deny}`}>
-              <i className="fa fa-close" />
-            </div>
-          </div>
-        </div>
+        {showButtons ? btnRow : ''}
       </div>
     )
   }

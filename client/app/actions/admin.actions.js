@@ -532,10 +532,10 @@ function getShipment (id, redirect) {
     adminService.getShipment(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipment successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/shipments/view/${id}`))
         }
-        dispatch(success(data))
       },
       (error) => {
         // ;

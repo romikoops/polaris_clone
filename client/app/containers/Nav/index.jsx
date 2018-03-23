@@ -51,7 +51,7 @@ class NavBar extends Component {
       // eslint-disable-next-line no-case-declarations
       case 'shipments':
         const name =
-          admin.shipment && admin.shipment.shipment
+          admin.shipment && admin.shipment.shipment && admin.shipment.shipment.imc_reference
             ? admin.shipment.shipment.imc_reference
             : categories[categories.length - 1]
         return (

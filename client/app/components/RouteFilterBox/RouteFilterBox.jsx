@@ -17,7 +17,7 @@ export class RouteFilterBox extends Component {
         ? moment(props.departureDate).format('DD/MM/YYYY')
         : moment().format('DD/MM/YYYY'),
       selectedOption: {
-        air: false,
+        air: true,
         ocean: true
       }
     }

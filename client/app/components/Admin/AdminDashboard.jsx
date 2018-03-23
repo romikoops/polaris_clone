@@ -101,21 +101,21 @@ export class AdminDashboard extends Component {
     const mergedOpenShipments =
       shipments && shipments.open
         ? shipments.open
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedFinishedShipments =
       shipments && shipments.finished
         ? shipments.finished
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 

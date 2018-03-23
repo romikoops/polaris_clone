@@ -79,7 +79,7 @@ class Hub < ApplicationRecord
   end
 
   def lat_lng_string
-    "#{latitude},#{longitude}"
+    "#{location.latitude},#{location.longitude}"
   end
 
   def distance_to(loc)

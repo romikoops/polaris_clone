@@ -665,7 +665,7 @@
     width: 60px;
   }
   .main_panel {
-    overflow:hidden;
+    
     transition: all 1.5s linear;
     padding: 15px;
   }
@@ -676,6 +676,7 @@
   .main_panel.closed_main_panel {
     padding: 0 !important;
     opacity: 0;
+    overflow:hidden;
   }
   .open_main_panel {
     max-height: none;

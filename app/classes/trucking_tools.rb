@@ -141,8 +141,7 @@ module TruckingTools
   end
 
 
-  def calc_trucking_price(destination, cargos, km, hub, target, load_type, direction, delivery_type, user)
-    trucking_pricing = retrieve_trucking_pricing(destination, user, load_type, delivery_type, hub)
+  def calc_trucking_price(trucking_pricing, cargos, km, direction)
     cargo_object = {
       "stackable" => {
         "volume" =>0,
@@ -183,9 +182,6 @@ module TruckingTools
       end
     end
 
-    if delivery_type == "" && load_type == 'cargo_item'
-      delivery_type = 'default'
-    end
     trucking_pricings = {}
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)

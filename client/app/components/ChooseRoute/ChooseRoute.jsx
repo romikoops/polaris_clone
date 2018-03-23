@@ -54,7 +54,6 @@ export class ChooseRoute extends Component {
     }
     window.scrollTo(0, 0)
     setStage(3)
-    console.log('######### MOUNTED ###########')
   }
   shouldComponentUpdate () {
     return !!(
@@ -87,7 +86,7 @@ export class ChooseRoute extends Component {
     this.setState({ outerLimit: outerLimit + 10 })
     const { shipmentDispatch, req } = this.props
     req.delay = outerLimit + 10
-    shipmentDispatch.setShipmentDetails(req)
+    shipmentDispatch.setShipmentDetails(req, false)
   }
 
   chooseResult (obj) {

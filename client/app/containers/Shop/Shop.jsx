@@ -69,7 +69,7 @@ class Shop extends Component {
 
   setShipmentData (data) {
     const { shipmentDispatch } = this.props
-    shipmentDispatch.setShipmentDetails(data)
+    shipmentDispatch.setShipmentDetails(data, true)
   }
 
   setShipmentContacts (data) {

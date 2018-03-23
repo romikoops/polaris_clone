@@ -129,7 +129,7 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: "#0EAF50",
+          primary: "#0db14b",
           secondary: "#008ACB",
           brightPrimary: "#06CA52",
           brightSecondary: "#0CA7F7"

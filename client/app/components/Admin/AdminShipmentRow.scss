@@ -6,10 +6,10 @@
     padding: 10px 13px;
     height: 150px;
     position: relative;
-    h4, p {
+    h4, p, h5 {
       margin: 0;
     }
-    h4 {
+    h4, h5 {
       font-weight: normal;
     }
   }
@@ -111,7 +111,7 @@
     }
   }
 
-  h4.date_title {
+  h4.date_title, h5.date_title {
     text-shadow: 1px 1px rgba(black, .14);
     opacity: .7;
     margin-bottom: 8px;

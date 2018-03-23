@@ -362,10 +362,7 @@ export class AdminShipmentView extends Component {
           consigneeContact = (
             <div className="flex-45 layout-row">
               <div className="flex-15 layout-column layout-align-start-center">
-                <i
-                  className={` ${styles.icon} fa fa-envelope-open-o flex-none`}
-                  style={textStyle}
-                />
+                <i className={` ${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <p className="flex-100">Consignee</p>
@@ -530,17 +527,18 @@ export class AdminShipmentView extends Component {
               className="flex-100 layout-row layout-align-space-between-center"
               style={{ position: 'relative' }}
             >
-              <div className="flex-40 layout-row layout-wrap layout-align-center-center">
+              <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                   <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
                   <p className="flex-none letter_3">{` ${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}</p>
                 </div>
                 {shipment.has_pre_carriage ? (
-                  <div className="flex-100 layout-row layout-align-start-start">
+                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">With Pickup From:</p>
                     <address className="flex-none">
-                      {`${locations.origin.street_number} ${locations.origin.street}`} <br />
+                      {`${locations.origin.street_number} ${locations.origin.street}`},
                       {`${locations.origin.city}`} <br />
-                      {`${locations.origin.zip_code}`} <br />
+                      {`${locations.origin.zip_code}`},
                       {`${locations.origin.country}`} <br />
                     </address>
                   </div>
@@ -548,18 +546,18 @@ export class AdminShipmentView extends Component {
                   ''
                 )}
               </div>
-              <div className="flex-40 layout-row layout-wrap layout-align-center-center">
+              <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                 <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                   <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
                   <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
                 </div>
                 {shipment.has_on_carriage ? (
-                  <div className="flex-100 layout-row layout-align-start-start">
+                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                    <p className="flex-100">With Delivery To:</p>
                     <address className="flex-none">
-                      {`${locations.destination.street_number} ${locations.destination.street}`}{' '}
-                      <br />
+                      {`${locations.destination.street_number} ${locations.destination.street}`} ,
                       {`${locations.destination.city}`} <br />
-                      {`${locations.destination.zip_code}`} <br />
+                      {`${locations.destination.zip_code}`},
                       {`${locations.destination.country}`} <br />
                     </address>
                   </div>

@@ -18,7 +18,7 @@ class OfferCalculator
     @shipment.trucking = trucking_params(params).to_h
     @delay = params[:shipment][:delay]
     @shipment.incoterm = params[:shipment][:incoterm]
-    @trucking_data = @shipment.schedules_charges
+    @trucking_data = {}
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
@@ -30,7 +30,6 @@ class OfferCalculator
     @shipment.send(plural_load_type).destroy_all
     @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
     @shipment.send("#{plural_load_type}=", @cargo_units)
-
     @shipment.planned_pickup_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
@@ -51,6 +50,7 @@ class OfferCalculator
   end
 
   def calc_offer!
+    determine_trucking_options!
     determine_itinerary!
     # determine_route! 
     determine_hubs!
@@ -86,14 +86,8 @@ class OfferCalculator
 
   private
 
-  def determine_route!
-    @shipment.route = Route.for_locations(@shipment)
-    
-    raise ApplicationError::NoRoute unless @shipment.route    
-  end
-
   def determine_itinerary!
-    data  = Itinerary.for_locations(@shipment, @carriage_nexuses)
+    data  = Itinerary.for_locations(@shipment, @trucking_data)
     @itineraries = data[:itineraries]
     @origin_hubs = data[:origin_hubs]
     @destination_hubs = data[:destination_hubs]
@@ -139,26 +133,17 @@ class OfferCalculator
   def determine_layovers!
     delay = @delay ? @delay.to_i : 10
     schedule_obj = {}
-    # all_hubs = @origin_hubs.ids + @destination_hubs.ids
     @itineraries.each do |itin|
       destination_stop = itin.stops.where(hub_id: @destination_hubs).first
-      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("etd > ? AND etd < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
+      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("closing_date > ? AND closing_date < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
       trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|
         return_hash[ol.trip_id] = [
           ol,
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
-
-      # destination_layovers = itin.stops.where(hub_id: @destination_hubs).first.layovers.where("eta > ? AND eta < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + 2.months).order(:etd).uniq
-      
-      # layovers = origin_layovers + destination_layovers
-      # trip_layovers = layovers.group_by(&:trip_id)
-      # 
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
-      
     end
-    # 
     @itineraries_hash = schedule_obj
   end
 
@@ -182,7 +167,6 @@ class OfferCalculator
   def add_trip_charges!
     charges = {}
     @total_price[:cargo] = { value: 0, currency: '' }
-    
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
       
@@ -208,7 +192,7 @@ class OfferCalculator
 
   def set_trucking_charges!(charges, trip, sched_key)
     if @shipment.has_pre_carriage
-      charges[sched_key][:trucking_pre] = determine_trucking_options(
+      charges[sched_key][:trucking_pre] = determine_trucking_fees(
         @shipment.origin, 
         trip[0].stop.hub,
         'origin',
@@ -218,7 +202,7 @@ class OfferCalculator
     end
     
     if @shipment.has_on_carriage
-      charges[sched_key][:trucking_on] = determine_trucking_options(
+      charges[sched_key][:trucking_on] = determine_trucking_fees(
         @shipment.destination, 
         trip[1].stop.hub,
         'destination',
@@ -290,9 +274,6 @@ class OfferCalculator
         @cargo_units.length,
         @shipment.planned_pickup_date
       )
-       Rails.logger.info "CHARGE RESULT"
-       Rails.logger.info charge_result
-       
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end
@@ -310,13 +291,45 @@ class OfferCalculator
     "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
   end
 
-  def determine_trucking_options(origin, hub, target, direction)
-    google_directions = GoogleDirections.new(origin.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
-    km = google_directions.distance_in_km
-    truck_type = direction == 'export' ? @shipment.trucking["pre_carriage"]["truck_type"] : @shipment.trucking["on_carriage"]["truck_type"]
+  def determine_trucking_options!
+    load_type = @shipment.load_type 
+    if @shipment.has_pre_carriage
 
-    price_results = calc_trucking_price(origin, @cargo_units, km, hub, target, @shipment.load_type, direction, truck_type, @user)
-     
+      trucking_pricings_by_hub = TruckingPricing.find_by_filter(
+        location: @shipment.origin, 
+        load_type: load_type, 
+        tenant_id: @user.tenant_id, 
+        truck_type: @shipment.trucking["pre_carriage"]["truck_type"]
+      )
+      trucking_pricings_by_hub.each do |tp|
+        if !@trucking_data["pre_carriage"]
+          @trucking_data["pre_carriage"] = {}
+        end
+        @trucking_data["pre_carriage"][tp.hub_truckings.first.hub_id] = tp
+      end
+    end
+    if @shipment.has_on_carriage
+
+      trucking_pricings_by_hub = TruckingPricing.find_by_filter(
+        location: @shipment.destination, 
+        load_type: load_type, 
+        tenant_id: @user.tenant_id, 
+        truck_type: @shipment.trucking["on_carriage"]["truck_type"]
+      )
+      trucking_pricings_by_hub.each do |tp|
+        if !@trucking_data["on_carriage"]
+          @trucking_data["on_carriage"] = {}
+        end
+        @trucking_data["on_carriage"][tp.hub_truckings.first.hub_id] = tp
+      end
+    end
+  end
+  def determine_trucking_fees(location, hub, target, direction)
+    google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
+    km = google_directions.distance_in_km
+    carriage = direction == "import" ? "trucking_on" : "trucking_pre"
+    trucking_pricing = @trucking_data[carriage][hub.id]
+    price_results = calc_trucking_price(trucking_pricing, @cargo_units, km, direction)
   end
   
   def convert_currencies!
