@@ -1,9 +1,11 @@
-start_zip = 10000
-end_zip = 98999
-zips = []
-tmp_zip = start_zip
-while tmp_zip <= end_zip
-  zips << {zipcode: tmp_zip, country_code: 'SE'}
-  tmp_zip += 1
+puts "Creating trucking destinations for zipcodes..."
+zips = (10_000..98_999).map do |zip|
+	{ zipcode: zip, country_code: 'SE' }
 end
-TruckingDestination.create!(zips)
+TruckingDestination.create(zips)
+
+puts "Creating trucking destinations for Km..."
+kms = (0..3_000).map do |km|
+	{ distance: km }
+end
+TruckingDestination.create(kms)

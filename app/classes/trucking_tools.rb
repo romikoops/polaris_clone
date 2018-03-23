@@ -32,7 +32,7 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
-  def retrieve_trucking_pricing(location, user, load_type, delivery_type)
+  def retrieve_trucking_pricing(location, user, load_type, delivery_type, hub)
     lt = load_type == 'cargo_item' ? 'lcl' : 'fcl'
     sql = "SELECT * FROM trucking_pricings
         JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
@@ -42,6 +42,7 @@ module TruckingTools
         JOIN  tenants                ON hubs.tenant_id                        = tenants.id
         WHERE tenants.id = #{user.tenant_id}
         AND trucking_pricings.load_type = '#{lt}'
+        AND hub.id = #{hub.id}
         AND (
           (
             (trucking_destinations.zipcode IS NOT NULL)
@@ -55,14 +56,14 @@ module TruckingTools
         # 
     result = TruckingPricing.find_by_sql(sql)
   end
-  def calculate_trucking_price(pricing, cargo, direction)
+  def calculate_trucking_price(pricing, cargo, direction, km)
     fees = {}
     result = {}
     total_fees = {}
     return {} if pricing.empty?
     pricing["fees"].each do |k, fee|
       if fee["rate_basis"] != 'PERCENTAGE'
-        results = fee_calculator(k, fee, cargo)
+        results = fee_calculator(k, fee, cargo, km)
          fees[k] = results
       else
         total_fees[k] = fee
@@ -93,12 +94,14 @@ module TruckingTools
       end
 
   end
-  def fee_calculator(key, fee, cargo)
+  def fee_calculator(key, fee, cargo, km)
     case fee["rate_basis"]
       when 'PER_KG'
         return {currency: fee["currency"], value: cargo["weight"] * fee["value"], key: key}
       when 'PER_X_KG'
         return {currency: fee["currency"], value: (cargo["weight"] / fee["base"]) * fee["value"], key: key}
+      when 'PER_X_KM'
+        return {currency: fee["currency"], value: ((km / fee["x_base"]) * fee["rate"]) + fee["base_value"], key: key}
       when 'PER_X_TON'
         return {currency: fee["currency"], value: ((cargo["weight"]/ 1000) / fee["base"]) * fee["value"], key: key}
       when 'PER_SHIPMENT'
@@ -125,6 +128,7 @@ module TruckingTools
   def filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     return {} if cargo_values["weight"] == 0
     trucking_pricing[direction]["table"].each do |tr|
+      
       case trucking_pricing.modifier
       when 'kg'
         if cargo_values["weight"] <= tr["max_weight"] && cargo_values["weight"] >= tr["min_weight"]
@@ -138,7 +142,7 @@ module TruckingTools
 
 
   def calc_trucking_price(destination, cargos, km, hub, target, load_type, direction, delivery_type, user)
-    trucking_pricing = retrieve_trucking_pricing(destination, user, load_type, delivery_type)[0]
+    trucking_pricing = retrieve_trucking_pricing(destination, user, load_type, delivery_type, hub)
     cargo_object = {
       "stackable" => {
         "volume" =>0,
@@ -176,9 +180,7 @@ module TruckingTools
         cargo_object["stackable"]["weight"] += trucking_chargeable_weight
         cargo_object["stackable"]["volume"] += cargo.volume
         cargo_object["stackable"]["number_of_items"] += 1
-
       end
-
     end
 
     if delivery_type == "" && load_type == 'cargo_item'
@@ -186,14 +188,12 @@ module TruckingTools
     end
     trucking_pricings = {}
     cargo_object.each do |stackable_type, cargo_values|
-      
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     end
     fees = {}
-    
     trucking_pricings.each do |key, tp|
       if  tp
-        fees[key] = calculate_trucking_price(tp, cargo_object[key], direction)
+        fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km)
       end
     end
     total = {value: 0, currency: ''}
@@ -204,9 +204,7 @@ module TruckingTools
       end
     end
     fees[:total] = total
-
     return fees
-   
   end
 
   def calc_by_zipcode(destination, cargo_item, km, tpKey, client)

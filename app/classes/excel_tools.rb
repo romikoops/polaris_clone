@@ -239,7 +239,7 @@ module ExcelTools
         while tmp_zip <= zip_code_range_array[1].to_i
           td = TruckingDestination.find_by!(zipcode: tmp_zip, country_code: 'SE')
           zip_codes << td
-          hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type)
+          hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
           tmp_zip += 1
           p tmp_zip
         end
@@ -247,7 +247,7 @@ module ExcelTools
         if hub_truckings[0].trucking_pricing_id
           trucking_pricing = hub_truckings[0].trucking_pricing
         else
-          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []})
+          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type)
         end
        
         row_data.each_with_index do |val, index|
@@ -452,6 +452,7 @@ module ExcelTools
   end
   def overwrite_city_trucking_rates_by_hub(params, user = current_user, hub_id, courier_name, direction)
     courier = Courier.find_or_create_by(name: courier_name)
+    p direction
     mongo = get_client
     defaults = []
     stats = {
@@ -493,17 +494,16 @@ module ExcelTools
       (3..num_rows).each do |line|
         row_data = first_sheet.row(line)
         new_pricing = {}
-        td = TruckingDestination.find_or_create_by!(city_name: row_data[1].downcase, country_code: 'CN')
-        hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, load_type: load_type, courier_id: courier.id)
+        td = TruckingDestination.find_or_create_by!(city_name: Location.get_trucking_city("#{row_data[1]}, #{row_data[0]}"), country_code: 'CN')
+        hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
         
         
-        new_pricing["export"] = {"table" => []}
-        new_pricing["import"] = {"table" => []}
+        new_pricing[direction] = {"table" => []}
         ntp = new_pricing
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3].clone
           tmp[:delivery_eta_in_days] = row_data[10]
-          tmp[:modifier] = 'kg'
+          ntp[:modifier] = 'kg'
           tmp[:type] = "default"
           tmp[:cbm_ratio] = 250
           tmp[:fees] = {
@@ -524,12 +524,19 @@ module ExcelTools
           else
             tmp[:fees][:DLF] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           end
+          ntp[:load_type] = load_type
           ntp[direction]["table"] << tmp
           stats[:trucking_pricings][:number_updated] += 1
         end
-        trucking_pricing = courier.trucking_pricings.create!(ntp)
-        hub_trucking.trucking_pricing_id = trucking_pricing.id
-        hub_trucking.save!
+        if hub_trucking.trucking_pricing_id
+          trucking_pricing = TruckingPricing.find(hub_trucking.trucking_pricing_id)
+          trucking_pricing.update_attributes(ntp)
+        else
+          trucking_pricing = courier.trucking_pricings.create!(ntp)
+          hub_trucking.trucking_pricing_id = trucking_pricing.id
+          hub_trucking.save!
+        end
+        
         # results[:trucking_queries] << ntp
         stats[:trucking_queries][:number_updated] += 1
         # new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
@@ -540,7 +547,137 @@ module ExcelTools
     end
     return {stats: stats, results: results}
   end
+  def overwrite_distance_trucking_rates_by_hub(params, user = current_user, hub_id, courier_name, direction, country_code)
 
+     courier = Courier.find_or_create_by(name: courier_name)
+    p direction
+    mongo = get_client
+    defaults = []
+    stats = {
+      type: 'trucking',
+      trucking_hubs: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_queries: {
+        number_updated: 0,
+        number_created: 0
+      },
+      trucking_pricings: {
+        number_updated: 0,
+        number_created: 0
+      }
+    }
+    results = {
+      trucking_hubs: [],
+      trucking_queries: [],
+      trucking_pricings: []
+    }
+    
+    load_type = 'fcl'
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find(hub_id)
+      nexus = hub.nexus
+      hub_truckings = []
+      trucking_destinations = []
+      hubs = nexus.hubs
+      rows = first_sheet.parse(
+        currency: 'CURRENCY',
+        truck_type: 'TRUCK_TYPE',
+        fee: 'FEE',
+        rate: 'RATE',
+        rate_basis: 'RATE_BASIS',
+        range: 'RANGE',
+        rate_min: 'RATE_MIN',
+        rate_base_value: 'RATE_BASE_VALUE',
+        x_base: 'X_BASE',
+        )
+      new_pricings_data = {}
+      aux_data = {}
+      hub_truckings = {}
+      trucking_destinations = {}
+      trucking_pricings = {}
+      rows.each do |row|
+        range_values = row[:range].split('-').map{|r| r.to_i}
+        range_key = "#{row[:range]}_#{row[:truck_type]}"
+        if !hub_truckings[range_key]
+          hub_truckings[range_key] = []
+        end
+        if !trucking_destinations[range_key]
+          trucking_destinations[range_key] = []
+        end
+        if !new_pricings_data[range_key]
+          new_pricings_data[range_key] = {}
+
+          (range_values[0]...range_values[1]).each do |dist|
+            td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
+            trucking_destinations[range_key] << td
+            hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
+            hub_truckings[range_key] << hub_trucking
+          end
+         if !aux_data[range_key]
+          aux_data[range_key] = {}
+         end
+          if  hub_truckings[range_key][0].trucking_pricing_id
+            trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
+          else
+            trucking_pricings[range_key] = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
+          end
+          ntp = {
+            fees: {}
+          }
+          case row[:rate_basis]
+          when 'PER_CONTAINER'
+            ntp[:fees][row[:fee]] = {
+              rate_basis: 'PER_CONTAINER',
+              rate: row[:rate],
+              currency: row[:currency]
+            }
+          when 'PERCENTAGE'
+            ntp[:fees][row[:fee]] = {
+              rate_basis: 'PERCENTAGE',
+              value: row[:rate],
+              currency: row[:currency]
+            }
+          when 'PER_X_KM'
+            ntp[:fees][row[:fee]] = {
+              rate_basis: 'PER_X_KM',
+              rate: row[:rate],
+              rate_base_value: row[:rate_base_value],
+              x_base: row[:x_base],
+              currency: row[:currency]
+            }
+          end
+          trucking_pricings[range_key][direction]["table"] << ntp
+          stats[:trucking_pricings][:number_updated] += 1
+        end
+      end
+      hub_truckings.each do |r_key, hts|
+        hts.each do |ht|
+          if !ht.trucking_pricing_id
+            ht.trucking_pricing_id = trucking_pricings[r_key].id
+          end
+          ht.save!
+        end
+      end
+      trucking_pricings.each do |r_key, tp|
+        tp.save!
+      end
+      stats[:trucking_queries][:number_updated] += 1
+      tenant = user.tenant
+    update_type = load_type === 'lcl' ? :cargo_item : :container
+    TruckingAvailability.update_hubs_trucking_availability!(tenant, [{        
+      values: [nexus.name],
+      options: {
+        load_type: update_type
+      }
+    }])
+    nexus.update_trucking_availability!({id: tenant.id})
+    end
+    return {stats: stats, results: results}
+  end
   def overwrite_local_charges(params, user = current_user)
     mongo = get_client
     stats = {

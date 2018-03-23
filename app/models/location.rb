@@ -19,12 +19,12 @@ class Location < ApplicationRecord
 
   # Geocoding
   geocoded_by :geocoded_address
+
   reverse_geocoded_by :latitude, :longitude do |location, results|
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
         address_component["types"] == ["premise"]
       end || {}
-
       location.premise          = premise_data["long_name"]
       location.street_number    = geo.street_number
       location.street           = geo.route
@@ -76,6 +76,12 @@ class Location < ApplicationRecord
     self.geocode
     self.save!
     self
+  end
+  def self.get_trucking_city(string)
+    l = new(geocoded_address: string)
+    l.geocode
+    l.reverse_geocode
+    return l.city
   end
 
   def self.geocode_all_from_address_fields!(options = {})
