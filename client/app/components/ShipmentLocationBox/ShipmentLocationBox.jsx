@@ -9,15 +9,15 @@ import '../../styles/select-css-custom.css'
 import styles from './ShipmentLocationBox.scss'
 import errorStyles from '../../styles/errors.scss'
 import defaults from '../../styles/default_classes.scss'
-import { colorSVG, authHeader } from '../../helpers'
+import { colorSVG } from '../../helpers'
 import { mapStyling } from '../../constants/map.constants'
 import { Modal } from '../Modal/Modal'
 import { AvailableRoutes } from '../AvailableRoutes/AvailableRoutes'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
-import { BASE_URL } from '../../constants'
+import addressFromPlace from './addressFromPlace'
+import getRequests from './getRequests'
 
-const { fetch } = window
 const mapStyle = {
   width: '100%',
   height: '600px',
@@ -97,7 +97,9 @@ export class ShipmentLocationBox extends Component {
       truckingOptions: {
         onCarriage: true,
         preCarriage: true
-      }
+      },
+      oSelect: '',
+      dSelect: ''
     }
 
     this.isOnFocus = {
@@ -123,7 +125,6 @@ export class ShipmentLocationBox extends Component {
     this.handleAddressFormFocus = this.handleAddressFormFocus.bind(this)
     this.handleSwap = this.handleSwap.bind(this)
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
-    this.updateTruckingOptions = this.updateTruckingOptions.bind(this)
   }
 
   componentDidMount () {
@@ -161,14 +162,7 @@ export class ShipmentLocationBox extends Component {
     return tmpCoord
   }
   setDestHub (event) {
-    this.scopeNexusOptions(event ? event.label : '', 'origin')
-
-    this.setState({
-      truckingOptions: {
-        ...this.state.truckingOptions,
-        onCarriage: true
-      }
-    })
+    this.scopeNexusOptions(event && event.value ? [event.value.id] : [], 'origin')
 
     if (event) {
       const destination = {
@@ -187,6 +181,10 @@ export class ShipmentLocationBox extends Component {
       this.setState({ dSelect, destination })
     } else {
       this.setState({
+        truckingOptions: {
+          ...this.state.truckingOptions,
+          preCarriage: true
+        },
         dSelect: '',
         destination: {}
       })
@@ -271,13 +269,7 @@ export class ShipmentLocationBox extends Component {
     }
   }
   setOriginHub (event) {
-    this.scopeNexusOptions(event ? event.label : '', 'destination')
-    this.setState({
-      truckingOptions: {
-        ...this.state.truckingOptions,
-        preCarriage: true
-      }
-    })
+    this.scopeNexusOptions(event && event.value ? event.value.id : '', 'destination')
     if (event) {
       const origin = {
         ...this.state.origin,
@@ -295,6 +287,10 @@ export class ShipmentLocationBox extends Component {
       this.setState({ oSelect, origin })
     } else {
       this.setState({
+        truckingOptions: {
+          ...this.state.truckingOptions,
+          preCarriage: true
+        },
         oSelect: '',
         origin: {}
       })
@@ -354,46 +350,6 @@ export class ShipmentLocationBox extends Component {
     }
   }
 
-  updateTruckingOptions (target, nexus, tenantId, loadType, nexusOptions) {
-    fetch(
-      `${BASE_URL}/trucking_availability?` +
-        `nexus_id=${nexus.id}&` +
-        `tenant_id=${tenantId}&` +
-        `load_type=${loadType}`,
-      {
-        method: 'GET',
-        headers: authHeader()
-      }
-    ).then((promise) => {
-      promise.json().then((response) => {
-        const prefix = target === 'origin' ? 'pre' : 'on'
-        const { truckingAvailable } = response.data
-
-        if (!truckingAvailable) {
-          const nexusOption = nexusOptions.find(option => option.label === nexus.name)
-          target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
-
-          this.handleTrucking({
-            target: {
-              name: `has_${prefix}_carriage`,
-              checked: false
-            }
-          })
-          this.setState({
-            autoText: { [target]: '' }
-          })
-        }
-
-        this.setState({
-          truckingOptions: {
-            ...this.state.truckingOptions,
-            [`${prefix}Carriage`]: truckingAvailable
-          }
-        })
-      })
-    })
-  }
-
   selectedRoute (route) {
     const origin = {
       city: '',
@@ -414,6 +370,7 @@ export class ShipmentLocationBox extends Component {
     this.setState({ locationFromModal: !this.state.locationFromModal })
     this.setHubsFromRoute(route)
   }
+
   initMap () {
     const mapsOptions = {
       center: {
@@ -527,24 +484,14 @@ export class ShipmentLocationBox extends Component {
       }
     })
   }
-  scopeNexusOptions (userInput, target) {
-    fetch(
-      `${BASE_URL}/nexuses?` +
-        `itinerary_ids=${this.props.routeIds}&` +
-        `target=${target}&` +
-        `user_input=${userInput}`,
-      {
-        method: 'GET',
-        headers: authHeader()
+
+  scopeNexusOptions (nexusIds, target) {
+    getRequests.nexuses(nexusIds, target, this.props.routeIds, (data) => {
+      if (Object.values(data)[0].length > 0) {
+        this.setState(data)
+      } else {
+        target === 'origin' ? this.setDestHub() : this.setOriginHub()
       }
-    ).then((promise) => {
-      promise.json().then((response) => {
-        if (Object.values(response.data)[0].length > 0) {
-          this.setState(response.data)
-        } else {
-          target === 'origin' ? this.setDestHub() : this.setOriginHub()
-        }
-      })
     })
   }
 
@@ -554,39 +501,8 @@ export class ShipmentLocationBox extends Component {
   }
 
   selectLocation (place, target) {
-    const tmpAddress = {
-      number: '',
-      street: '',
-      zipCode: '',
-      city: '',
-      country: '',
-      fullAddress: ''
-    }
-    // ;
-    place.address_components.forEach((ac) => {
-      if (ac.types.includes('street_number')) {
-        tmpAddress.number = ac.long_name
-      }
+    const counterpart = target === 'origin' ? 'destination' : 'origin'
 
-      if (ac.types.includes('route') || ac.types.includes('premise')) {
-        tmpAddress.street = ac.long_name
-      }
-
-      if (ac.types.includes('administrative_area_level_1')) {
-        tmpAddress.city = ac.long_name
-      }
-
-      if (ac.types.includes('postal_code')) {
-        tmpAddress.zipCode = ac.long_name
-      }
-
-      if (ac.types.includes('country')) {
-        tmpAddress.country = ac.long_name
-      }
-    })
-    tmpAddress.latitude = place.geometry.location.lat()
-    tmpAddress.longitude = place.geometry.location.lng()
-    tmpAddress.fullAddress = place.formatted_address
     setTimeout(() => {
       if (!this.isOnFocus[target]) this.changeAddressFormVisibility(target, false)
     }, 6000)
@@ -596,87 +512,67 @@ export class ShipmentLocationBox extends Component {
     const lng = place.geometry.location.lng()
 
     const tenantId = this.props.shipment.shipment.tenant_id
-    if (target === 'origin') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
-        method: 'GET',
-        headers: authHeader()
-      }).then((promise) => {
-        promise.json().then((response) => {
-          const { nexus, truckingOptions } = response.data
-          const nexusName = nexus ? nexus.name : ''
+    const loadType = this.props.shipment.shipment.load_type
 
-          tmpAddress.nexusName = nexusName
-          this.setState({ [target]: tmpAddress })
-          this.props.setTargetAddress(target, tmpAddress)
+    const prefix = target === 'origin' ? 'pre' : 'on'
 
-          let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
-          if (this.state.availableOrigins) originOptions = this.state.availableOrigins
-          const originOptionNames = originOptions.map(option => option.label)
-          const originFieldsHaveErrors = !originOptionNames.includes(nexusName)
-          if (nexus) this.props.handleCarriageNexuses('preCarriage', nexus.id)
-          if (truckingOptions) {
-            this.setState({
-              truckingOptions: {
-                ...this.state.truckingOptions,
-                preCarriage: true
-              }
-            })
-          } else if (!originFieldsHaveErrors) {
-            const loadType = this.props.shipment.shipment.load_type
-            this.updateTruckingOptions(target, nexus, tenantId, loadType, originOptions)
+    let availableNexuses = allNexuses && allNexuses[`${target}s`] ? allNexuses[`${target}s`] : []
+    const stateAvailableNexuses = this.state[`available${capitalize(target)}s`]
+    if (stateAvailableNexuses) availableNexuses = stateAvailableNexuses
+    const availableNexusesIds = availableNexuses.map(availableNexus => availableNexus.value.id)
+
+    getRequests.findAvailability(
+      lat, lng, tenantId, loadType, availableNexusesIds,
+      (truckingAvailable, nexusIds) => {
+        if (!truckingAvailable) {
+          getRequests.findNexus(lat, lng, (nexus) => {
+            let nexusOption
+            if (nexus) {
+              nexusOption = availableNexuses.find(option => option.label === nexus.name)
+            }
+            if (nexusOption) {
+              this.handleTrucking({
+                target: {
+                  name: `has_${prefix}_carriage`,
+                  checked: false
+                }
+              })
+              this.setState({
+                autoText: { [target]: '' }
+              })
+            }
+            target === 'origin' ? this.setOriginHub(nexusOption) : this.setDestHub(nexusOption)
+
+            const fieldsHaveErrors = !nexusOption
+            this.setState({ [`${target}FieldsHaveErrors`]: fieldsHaveErrors })
+            const addressFormsHaveErrors =
+              fieldsHaveErrors || this.state[`${counterpart}FieldsHaveErrors`]
+            this.props.handleSelectLocation(addressFormsHaveErrors)
+          })
+        } else {
+          this.setState({ [`${target}FieldsHaveErrors`]: false })
+          this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
+
+          this.scopeNexusOptions(nexusIds, counterpart)
+        }
+
+        this.setState({
+          truckingOptions: {
+            ...this.state.truckingOptions,
+            [`${prefix}Carriage`]: truckingAvailable
           }
-
-          this.setState({ originFieldsHaveErrors })
-          const addressFormsHaveErrors =
-            originFieldsHaveErrors || this.state.destinationFieldsHaveErrors
-          this.props.handleSelectLocation(addressFormsHaveErrors)
         })
-      })
-    } else if (target === 'destination') {
-      fetch(`${BASE_URL}/find_nexus?lat=${lat}&lng=${lng}&tenant_id=${tenantId}`, {
-        method: 'GET',
-        headers: authHeader()
-      }).then((promise) => {
-        promise.json().then((response) => {
-          const { nexus, truckingOptions } = response.data
-          const nexusName = nexus ? nexus.name : ''
+      }
+    )
 
-          tmpAddress.nexusName = nexusName
-          this.setState({ [target]: tmpAddress })
-          this.props.setTargetAddress(target, tmpAddress)
-
-          let destinationOptions =
-            allNexuses && allNexuses.destinations ? allNexuses.destinations : []
-          if (this.state.availableDestinations) {
-            destinationOptions = this.state.availableDestinations
-          }
-          const destinationOptionNames = destinationOptions.map(option => option.label)
-          const destinationFieldsHaveErrors = !destinationOptionNames.includes(nexusName)
-          if (nexus) this.props.handleCarriageNexuses('onCarriage', nexus.id)
-          if (truckingOptions) {
-            this.setState({
-              truckingOptions: {
-                ...this.state.truckingOptions,
-                onCarriage: true
-              }
-            })
-          } else if (!destinationFieldsHaveErrors) {
-            const loadType = this.props.shipment.shipment.load_type
-            this.updateTruckingOptions(target, nexus, tenantId, loadType, destinationOptions)
-          }
-
-          this.setState({ destinationFieldsHaveErrors })
-          const addressFormsHaveErrors =
-            this.state.originFieldsHaveErrors || destinationFieldsHaveErrors
-          this.props.handleSelectLocation(addressFormsHaveErrors)
-        })
-      })
-    }
-
+    const address = addressFromPlace(place)
     this.setState({
+      [target]: address,
       autoText: { [target]: place.formatted_address }
     })
+    this.props.setTargetAddress(target, address)
   }
+
   resetAuto (target) {
     const tmpAddress = {
       number: '',
@@ -1238,8 +1134,7 @@ ShipmentLocationBox.propTypes = {
   routeIds: PropTypes.arrayOf(PropTypes.number),
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
-  }),
-  handleCarriageNexuses: PropTypes.func.isRequired
+  })
 }
 
 ShipmentLocationBox.defaultProps = {

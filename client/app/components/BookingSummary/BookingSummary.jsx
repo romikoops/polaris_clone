@@ -1,13 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import Truncate from 'react-truncate'
 import PropTypes from '../../prop-types'
 import styles from './BookingSummary.scss'
 import { dashedGradient, switchIcon } from '../../helpers'
 
 function BookingSummary (props) {
   const {
-    theme, totalWeight, totalVolume, nexuses, hubs, trucking, modeOfTransport
+    theme, totalWeight, totalVolume, cities, hubs, trucking, modeOfTransport
   } = props
   const dashedLineStyles = {
     marginTop: '6px',
@@ -46,22 +47,26 @@ function BookingSummary (props) {
         </div>
         <div className="flex-50 layout-row layout-align-space-between">
           <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {trucking.pre_carriage.truck_type ? nexuses.origin : hubs.origin} </h4>
+            <h4>
+              <Truncate lines={1}>
+                {trucking.pre_carriage.truck_type ? cities.origin : hubs.origin}
+              </Truncate>
+            </h4>
             <p className={styles.trucking_elem}>
               {
                 (
-                  (nexuses.origin && trucking.pre_carriage.truck_type) ||
+                  (cities.origin && trucking.pre_carriage.truck_type) ||
                   (hubs.origin && !trucking.pre_carriage.truck_type)
                 ) && `${(trucking.pre_carriage.truck_type ? 'with' : 'without')} pick-up`
               }
             </p>
           </div>
           <div className={`flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            <h4> {trucking.on_carriage.truck_type ? nexuses.destination : hubs.destination} </h4>
+            <h4> {trucking.on_carriage.truck_type ? cities.destination : hubs.destination} </h4>
             <p className={styles.trucking_elem}>
               {
                 (
-                  (nexuses.destination && trucking.on_carriage.truck_type) ||
+                  (cities.destination && trucking.on_carriage.truck_type) ||
                   (hubs.destination && !trucking.on_carriage.truck_type)
                 ) && `${(trucking.on_carriage.truck_type ? 'with' : 'without')} delivery`
               }
@@ -90,7 +95,7 @@ BookingSummary.propTypes = {
   modeOfTransport: PropTypes.string,
   totalWeight: PropTypes.number,
   totalVolume: PropTypes.number,
-  nexuses: PropTypes.shape({
+  cities: PropTypes.shape({
     origin: PropTypes.string,
     destination: PropTypes.string
   }),
@@ -109,7 +114,7 @@ BookingSummary.defaultProps = {
   modeOfTransport: '',
   totalWeight: 0,
   totalVolume: 0,
-  nexuses: {
+  cities: {
     origin: '',
     destination: ''
   },
