@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import PropTypes from '../../prop-types'
 import { ChooseShipment } from '../../components/ChooseShipment/ChooseShipment'
 import Header from '../../components/Header/Header'
-// import styles from './Shop.scss'
+import styles from './Shop.scss'
 import { ShopStageView } from '../../components/ShopStageView/ShopStageView'
 import { ShipmentDetails } from '../../components/ShipmentDetails/ShipmentDetails'
 import { ChooseRoute } from '../../components/ChooseRoute/ChooseRoute'
@@ -156,6 +156,7 @@ class Shop extends Component {
 
     return (
       <div className="layout-row flex-100 layout-wrap">
+        <div className={styles.pusher_top} />
         {loadingScreen}
         <Header
           theme={this.props.theme}
@@ -172,9 +173,7 @@ class Shop extends Component {
         />
 
         <ShopStageView
-          className="flex-100"
           shopType={this.state.shopType}
-          match={match}
           theme={theme}
           currentStage={this.state.stageTracker.stage}
           setStage={this.selectShipmentStageAndGo}
@@ -282,6 +281,7 @@ class Shop extends Component {
             />
           )}
         />
+        <div className={styles.pusher_bottom} />
       </div>
     )
   }

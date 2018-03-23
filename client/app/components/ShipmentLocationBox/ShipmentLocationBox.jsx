@@ -349,9 +349,8 @@ export class ShipmentLocationBox extends Component {
       (!markers.origin.title && markers.destination.title)
     ) {
       map.setCenter(bounds.getCenter())
-      map.setZoom(14)
     } else {
-      map.fitBounds(bounds)
+      map.fitBounds(bounds, { top: 20 })
     }
   }
 
