@@ -127,3 +127,7 @@ PropTypes.shipmentData = PropTypes.shape({
 ## Carousel
 
 [X] Test complete
+
+## Checkbox
+
+[X] Test complete

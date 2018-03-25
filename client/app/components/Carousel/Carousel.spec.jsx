@@ -65,5 +65,6 @@ test('subheader in slides is correctly rendered', () => {
   const subheaderSecond = wrapper.find('h5.slick_country').at(1)
 
   expect(subheaderFirst.text().includes(slideFirst.subheader)).toBeTruthy()
+
   expect(subheaderSecond.text().includes(slideSecond.subheader)).toBeTruthy()
 })
