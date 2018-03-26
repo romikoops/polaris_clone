@@ -118,7 +118,7 @@ class Itinerary < ApplicationRecord
 
   def prep_schedules(limit)
     schedules = []
-    trip_layovers = self.trips.map { |t| t.layovers  }
+    trip_layovers = self.trips.order(:start_date).map { |t| t.layovers  }
     if limit
       trip_layovers = trip_layovers[0...limit]
     end

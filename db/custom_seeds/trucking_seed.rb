@@ -1,5 +1,6 @@
 puts "Creating trucking destinations for zipcodes..."
-zips = (10_000..98_999).map do |zip|
+# zips = (10_000..98_999).map do |zip|
+zips = (80928..98_999).map do |zip|
 	{ zipcode: zip, country_code: 'SE' }
 end
 TruckingDestination.create(zips)
