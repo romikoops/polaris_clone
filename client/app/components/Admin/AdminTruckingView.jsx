@@ -30,6 +30,7 @@ export class AdminTruckingView extends Component {
     super(props)
     this.state = {
       currentQuery: false,
+      filteredTruckingPricings: [],
       queryFilter: { value: 'either', label: 'Import/Export' }
     }
     this.viewQuery = this.viewQuery.bind(this)
