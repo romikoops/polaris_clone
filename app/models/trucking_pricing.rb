@@ -61,18 +61,53 @@ class TruckingPricing < ApplicationRecord
     TruckingPricing.where(id: ids)
   end
 
+
+  def self.find_by_hub_ids(args = {})
+    hub_ids = args[:hub_ids]
+    raise ArgumentError, "Must provide hub_ids" if hub_ids.nil?
+    raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
+
+    result = ActiveRecord::Base.connection.exec_query("
+      SELECT trucking_pricings.id, (
+        CASE
+          WHEN MAX(trucking_destinations.zipcode) != '0'
+            THEN ('zipcode', MIN(trucking_destinations.zipcode), MAX(trucking_destinations.zipcode))
+          WHEN MAX(trucking_destinations.distance) != '0'
+            THEN ('distance', MIN(trucking_destinations.distance), MAX(trucking_destinations.distance))
+          ELSE
+            ('city', MAX(trucking_destinations.city_name))
+        END
+      ) AS filter
+      FROM  trucking_pricings
+      JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
+      JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
+      JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
+      JOIN  locations             ON hubs.location_id                      = locations.id
+      JOIN  tenants               ON hubs.tenant_id                        = tenants.id
+      WHERE tenants.id = #{args[:tenant_id]}
+      AND   hubs.id IN #{hub_ids.sql_format}
+      GROUP BY trucking_pricings.id
+    ")
+
+    result.each_with_object({}) do |row, h|
+      filter = parse_sql_array(row["filter"])
+      h[row["id"]] = {
+        "trucking_pricing"  => find(row["id"]),
+        filter.first => filter[1..-1]
+      }
+    end
+  end
+
   # Instance Methods
   def nexus_id
-    nexus_result = ActiveRecord::Base.connection.execute("
+    ActiveRecord::Base.connection.execute("
       SELECT locations.id FROM locations
       JOIN hubs ON hubs.nexus_id = locations.id
       JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
       WHERE trucking_pricings.id = #{self.id}
       LIMIT 1
-    ")
-    return nexus_result.values.first.try(:first)
-
+    ").values.first.try(:first)
   end
 
   def hub_id
@@ -102,4 +137,9 @@ class TruckingPricing < ApplicationRecord
   def self.nexuses_condition(args)
     args[:nexus_ids] ? "AND locations.id IN #{args[:nexus_ids].sql_format}" : ""
   end
+
+  def self.parse_sql_array(str)
+    str.gsub(/\(|\)|\"/, "").split(",")
+  end
+
 end
