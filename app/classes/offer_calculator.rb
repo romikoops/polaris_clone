@@ -298,7 +298,7 @@ class OfferCalculator
         location: @shipment.origin, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["pre_carriage"]["truck_type"]
+        truck_type: @shipment.trucking["pre_carriage"]["truck_type"] != '' ? shipment.trucking["pre_carriage"]["truck_type"] : 'default'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["pre_carriage"]
@@ -312,7 +312,7 @@ class OfferCalculator
         location: @shipment.destination, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["on_carriage"]["truck_type"]
+        truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]

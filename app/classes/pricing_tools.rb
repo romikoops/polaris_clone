@@ -16,19 +16,15 @@ module PricingTools
     price_key        = path_pricing[path_pricing_key]    
 
     pricing = get_item_fn(client, 'pricings', '_id', price_key)
-    final_pricing = false
+    final_pricing = pricing
     if pricing["exceptions"].length > 0
       pricing["exceptions"].each do |ex|
         if ex["effective_date"] <= shipment_date && ex["expiration_date"] >= shipment_date
           final_pricing = ex
         end
       end
-      if !final_pricing
-        final_pricing = pricing
-      end
-    else
-      return pricing
     end
+    return final_pricing
   end
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
@@ -77,8 +73,8 @@ module PricingTools
           cbm = cargo[:volume]
           tmp = 0
           cbm > ton ? tmp = cbm : tmp = ton
-          
-          totals[k] ? totals[k]["value"] += tmp * fee["value"] : totals[k] = {"value" => tmp * fee["value"], "currency" => fee["currency"]}
+          final = min > tmp ? min : tmp
+          totals[k] ? totals[k]["value"] += final * fee["value"] : totals[k] = {"value" => final * fee["value"], "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = fee["currency"]
           end

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import Fuse from 'fuse.js'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { history, capitalize } from '../../helpers'
@@ -11,6 +12,18 @@ import DocumentsSelector from '../../components/Documents/Selector'
 export class AdminTruckingView extends Component {
   static backToIndex () {
     history.goBack()
+  }
+  static getTruckingPricingKey (truckingPricing) {
+    if (truckingPricing.zipcode) {
+      return truckingPricing.zipcode
+    }
+    if (truckingPricing.city_name) {
+      return truckingPricing.city_name
+    }
+    if (truckingPricing.distance) {
+      return truckingPricing.distance
+    }
+    return ''
   }
 
   constructor (props) {
@@ -95,6 +108,9 @@ export class AdminTruckingView extends Component {
   toggleNew () {
     this.setState({ newRow: !this.state.newRow })
   }
+  selectTruckingPricing (truckingPricing) {
+    this.setState({ currentTruckingPricing: truckingPricing })
+  }
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
@@ -103,6 +119,34 @@ export class AdminTruckingView extends Component {
         ? `/admin/trucking/trucking_city_pricings/${hub.id}`
         : `/admin/trucking/trucking_zip_pricings/${hub.id}`
     adminDispatch.uploadTrucking(url, file, dir)
+  }
+  handleSearchChange (event) {
+    if (event.target.value === '') {
+      this.setState({
+        truckingPricings: this.props.truckingDetail.truckingPricings
+      })
+      return
+    }
+    const search = (key) => {
+      const options = {
+        shouldSort: true,
+        tokenize: true,
+        threshold: 0.2,
+        location: 0,
+        distance: 50,
+        maxPatternLength: 32,
+        minMatchCharLength: 5,
+        keys: key
+      }
+      const fuse = new Fuse(this.props.truckingDetail.truckingPricings, options)
+      return fuse.search(event.target.value)
+    }
+
+    const filteredTruckingPricings = search(['zipcode', 'city_name', 'distance'])
+    // ;
+    this.setState({
+      truckingPricings: filteredTruckingPricings
+    })
   }
   render () {
     const { theme, truckingDetail, adminDispatch } = this.props
@@ -114,7 +158,14 @@ export class AdminTruckingView extends Component {
       { value: 'export', label: 'Export' },
       { value: 'import', label: 'Import' }
     ]
-    const { currentQuery, queryFilter, newRow } = this.state
+    const {
+      currentQuery,
+      queryFilter,
+      newRow,
+      truckingPricings,
+      searchFilter,
+      currentTruckingPricing
+    } = this.state
     const { truckingHub, truckingQueries, hub } = truckingDetail
     // const nexus = truckingHub ? nexuses.filter(n => n.id === truckingHub.nexus_id)[0] : {}
     const textStyle = {
@@ -138,7 +189,7 @@ export class AdminTruckingView extends Component {
     const displayPanel = (
       <TruckingDisplayPanel
         theme={theme}
-        truckingInstance={currentQuery}
+        truckingInstance={currentTruckingPricing}
         truckingHub={truckingHub}
         closeView={this.closeQueryView}
       />
@@ -163,6 +214,15 @@ export class AdminTruckingView extends Component {
       { value: 'export', label: 'Export Only' },
       { value: 'either', label: 'Import/Export' }
     ]
+    const searchResults = truckingPricings.map(tp => (
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+        key={v4()}
+        onClick={() => this.selectTruckingPricing(tp)}
+      >
+        <p className="flex-none"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
+      </div>
+    ))
 
     const panelStyle = newRow ? styles.showPanel : styles.hidePanel
     return (
@@ -219,6 +279,21 @@ export class AdminTruckingView extends Component {
             <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
           </div>
           <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+            <div className="flex-25 layout-row layout-align-center-start layout-wrap">
+              <div className="flex-100 layout-row layout-alignstart-center input_box_full">
+                <input
+                  type="text"
+                  value={searchFilter}
+                  onCHange={e => this.handleSearchChange(e)}
+                />
+              </div>
+              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                {searchResults}
+              </div>
+            </div>
+            <div className="flex-75 layout-row layout-align-start-start layout-wrap">
+              {truckView}
+            </div>
             {currentQuery ? '' : queryFilterRow}
             {truckView}
           </div>
@@ -234,6 +309,7 @@ AdminTruckingView.propTypes = {
   }).isRequired,
   truckingDetail: PropTypes.shape({
     truckingHub: PropTypes.object,
+    truckingPricings: PropTypes.array,
     pricing: PropTypes.object
   })
 }

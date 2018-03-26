@@ -172,12 +172,22 @@ export class AdminDashboard extends Component {
 
     if (air) {
       air.forEach((asched) => {
-        schedArr.push(<AdminTripPanel key={v4()} trip={asched} itinerary={itineraries.filter(it => it.id === asched.itinerary_id)[0]} theme={theme} />)
+        schedArr.push(<AdminTripPanel
+          key={v4()}
+          trip={asched}
+          itinerary={itineraries.filter(it => it.id === asched.itinerary_id)[0]}
+          theme={theme}
+        />)
       })
     }
     if (ocean) {
       ocean.forEach((osched) => {
-        schedArr.push(<AdminTripPanel key={v4()} trip={osched} itinerary={itineraries.filter(it => it.id === osched.itinerary_id)[0]} theme={theme} />)
+        schedArr.push(<AdminTripPanel
+          key={v4()}
+          trip={osched}
+          itinerary={itineraries.filter(it => it.id === osched.itinerary_id)[0]}
+          theme={theme}
+        />)
       })
     }
     const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('etd')).slice(0, 5)
