@@ -11,7 +11,7 @@ class TruckingPricing < ApplicationRecord
   def self.update_data
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      tp.truck_type =  "default" if tp.load_type != 'container'
+      tp.truck_type = "default" if tp.load_type != 'container'
       tp.save!
     end
   end
@@ -24,8 +24,8 @@ class TruckingPricing < ApplicationRecord
     zipcode   = args[:zipcode]   || args[:location].try(:get_zip_code)
     city_name = args[:city_name] || args[:location].try(:city)
 
-    find_by_sql("
-      SELECT * FROM trucking_pricings
+    ids = ActiveRecord::Base.connection.execute("
+      SELECT trucking_pricings.id FROM trucking_pricings
       JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
       JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
@@ -54,7 +54,9 @@ class TruckingPricing < ApplicationRecord
           )
         )
       )
-    ")
+    ").values.flatten
+    
+    TruckingPricing.where(id: ids)
   end
 
   # Instance Methods
@@ -68,6 +70,16 @@ class TruckingPricing < ApplicationRecord
       LIMIT 1
     ").values.first.first
   end
+
+  # def hub_id
+  #   ActiveRecord::Base.connection.execute("
+  #     SELECT hubs.id FROM hubs
+  #     JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
+  #     JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
+  #     WHERE trucking_pricings.id = #{self.id}
+  #     LIMIT 1
+  #   ").values.first.first
+  # end
 
   private
 

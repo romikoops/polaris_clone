@@ -2,7 +2,7 @@ class TruckingAvailabilityController < ApplicationController
 	def index
 		trucking_pricings = TruckingPricing.find_by_filter(
 			tenant_id: params[:tenant_id],
-			load_type: params[:load_type] == "cargo_item" ? "lcl" : "fcl",
+			load_type: params[:load_type],
 			location:  Location.new(latitude: params[:lat], longitude: params[:lng]),
 			nexus_ids: params[:nexus_ids].split(',').map(&:to_i)
 		)
