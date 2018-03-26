@@ -131,3 +131,12 @@ PropTypes.shipmentData = PropTypes.shape({
 ## Checkbox
 
 [X] Test complete
+
+## Contact
+
+- ! Uses default export
+
+- props.contact.data is prop type `contact` but it is not declared as such
+- props.contact.location is prop type `location` but it is not declared as such
+
+[X] Test complete
