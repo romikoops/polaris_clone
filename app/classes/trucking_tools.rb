@@ -61,6 +61,7 @@ module TruckingTools
     result = {}
     total_fees = {}
     return {} if pricing.empty?
+    byebug
     pricing["fees"].each do |k, fee|
       if fee["rate_basis"] != 'PERCENTAGE'
         results = fee_calculator(k, fee, cargo, km)
@@ -111,7 +112,7 @@ module TruckingTools
       when 'PER_ITEM'
         return {currency: fee["currency"], value: fee["value"] * cargo["number_of_items"], key: key}
       when 'PER_CONTAINER'
-        return {currency: fee["currency"], value: fee["value"] * cargo["number_of_items"], key: key}
+        return {currency: fee["currency"], value: fee["rate"] * cargo["number_of_items"], key: key}
       when 'PER_CBM_TON'
         cbm_value = cargo["volume"] * fee["cbm"]
         ton_value = (cargo["weight"]/ 1000) * fee["ton"]
@@ -139,10 +140,8 @@ module TruckingTools
       end
     end
   end
-
-
-  def calc_trucking_price(trucking_pricing, cargos, km, direction)
-    cargo_object = {
+  def get_cargo_item_object(trucking_pricing, cargos)
+     cargo_object = {
       "stackable" => {
         "volume" =>0,
         "weight" => 0,
@@ -181,7 +180,24 @@ module TruckingTools
         cargo_object["stackable"]["number_of_items"] += 1
       end
     end
+    return cargo_object
+  end
 
+  def get_container_object(containers)
+
+    cargo_total_items = containers.map {|c| c.quantity}.sum
+    containers.each_with_object({}) do |cargo, cargo_object|
+      cargo_object["container_#{cargo.id}"] = {
+        "weight" => cargo.payload_in_kg,
+        "number_of_items" => cargo.quantity
+      }
+    end
+
+  end
+
+  def calc_trucking_price(trucking_pricing, cargos, km, direction)
+    cargo_object = trucking_pricing.load_type == 'container' ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
+    byebug
     trucking_pricings = {}
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)

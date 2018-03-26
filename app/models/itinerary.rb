@@ -247,9 +247,6 @@ class Itinerary < ApplicationRecord
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
-
-    byebug
-
     query = "
       SELECT * FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id}

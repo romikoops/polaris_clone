@@ -207,8 +207,8 @@ module PricingTools
     return totals
   end
 
-  def determine_container_price(client, container, pathKey, user, quantity)
-    pricing = get_user_price(client, pathKey, user)
+  def determine_container_price(client, container, pathKey, user, quantity, shipment_date)
+    pricing = get_user_price(client, pathKey, user, shipment_date)
     return nil if pricing.nil?
     totals = {"total" => {}}
     

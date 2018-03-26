@@ -10,7 +10,7 @@ class TruckingPricing < ApplicationRecord
   # Class methods
   def self.update_data
     TruckingPricing.all.each do |tp|
-      tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
+      # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
       # tp.truck_type =  "default" if tp.load_type != 'container'
       tp.truck_type = "side_lifter" if tp.truck_type == "sima"
 

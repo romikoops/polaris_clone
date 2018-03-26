@@ -15,7 +15,7 @@ class Admin::TruckingController < ApplicationController
     hub = Hub.find(params[:id])
     results = {}
     trucking_pricings = hub.trucking_pricings
-    trucking_pricing.each do |tp|
+    trucking_pricings.each do |tp|
       tds = tp.trucking_destinations
       if tds.first.zipcode && tds.first.city_name.nil? 
         tds.order(:zipcode)
@@ -27,7 +27,8 @@ class Admin::TruckingController < ApplicationController
       end
       results[tds_key] = tp
     end
-    response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
+    byebug
+    response_handler(hub: hub, truckingPricings: results)
   end
   def create
     data = params[:obj][:data].as_json

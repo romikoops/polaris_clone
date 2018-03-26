@@ -601,6 +601,7 @@ module ExcelTools
       rows.each do |row|
         range_values = row[:range].split('-').map{|r| r.to_i}
         range_key = "#{row[:range]}_#{row[:truck_type]}"
+        p range_key
         if !hub_truckings[range_key]
           hub_truckings[range_key] = []
         end
@@ -608,7 +609,7 @@ module ExcelTools
           trucking_destinations[range_key] = []
         end
         if !new_pricings_data[range_key]
-          new_pricings_data[range_key] = {}
+          new_pricings_data[range_key] = { fees: {}}
 
           (range_values[0]...range_values[1]).each do |dist|
             td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
@@ -616,32 +617,35 @@ module ExcelTools
             hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
             hub_truckings[range_key] << hub_trucking
           end
-         if !aux_data[range_key]
-          aux_data[range_key] = {}
-         end
+          if !aux_data[range_key]
+            aux_data[range_key] = {}
+          end
           if  hub_truckings[range_key][0].trucking_pricing_id
+            p hub_truckings[range_key][0].trucking_pricing_id
             trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
+            trucking_pricings[range_key][direction]["table"] = []
           else
             trucking_pricings[range_key] = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
           end
+        end
           ntp = {
             fees: {}
           }
           case row[:rate_basis]
           when 'PER_CONTAINER'
-            ntp[:fees][row[:fee]] = {
+            new_pricings_data[range_key][:fees][row[:fee]] = {
               rate_basis: 'PER_CONTAINER',
               rate: row[:rate],
               currency: row[:currency]
             }
           when 'PERCENTAGE'
-            ntp[:fees][row[:fee]] = {
+            new_pricings_data[range_key][:fees][row[:fee]] = {
               rate_basis: 'PERCENTAGE',
               value: row[:rate],
               currency: row[:currency]
             }
           when 'PER_X_KM'
-            ntp[:fees][row[:fee]] = {
+            new_pricings_data[range_key][:fees][row[:fee]] = {
               rate_basis: 'PER_X_KM',
               rate: row[:rate],
               rate_base_value: row[:rate_base_value],
@@ -649,11 +653,12 @@ module ExcelTools
               currency: row[:currency]
             }
           end
-          trucking_pricings[range_key][direction]["table"] << ntp
           stats[:trucking_pricings][:number_updated] += 1
-        end
+          
       end
-      byebug
+      new_pricings_data.each do |range_key, fees|
+        trucking_pricings[range_key][direction]["table"] << fees
+      end
       hub_truckings.each do |r_key, hts|
         hts.each do |ht|
           if !ht.trucking_pricing_id

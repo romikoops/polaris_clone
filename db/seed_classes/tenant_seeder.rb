@@ -238,8 +238,8 @@ class TenantSeeder
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
-        has_insurance: false,
-        has_customs: false
+        has_insurance: true,
+        has_customs: true
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
