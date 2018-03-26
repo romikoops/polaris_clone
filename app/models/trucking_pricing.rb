@@ -3,7 +3,7 @@ class TruckingPricing < ApplicationRecord
   belongs_to :courier
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings
-
+  has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
   # Validations
 
@@ -12,7 +12,7 @@ class TruckingPricing < ApplicationRecord
     TruckingPricing.all.each do |tp|
       tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
       # tp.truck_type =  "default" if tp.load_type != 'container'
-      # tp.save!
+      tp.save!
     end
   end
 
@@ -24,8 +24,8 @@ class TruckingPricing < ApplicationRecord
     zipcode   = args[:zipcode]   || args[:location].try(:get_zip_code)
     city_name = args[:city_name] || args[:location].try(:city)
 
-    find_by_sql("
-      SELECT * FROM trucking_pricings
+    ids = ActiveRecord::Base.connection.execute("
+      SELECT trucking_pricings.id FROM trucking_pricings
       JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
       JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
@@ -54,7 +54,9 @@ class TruckingPricing < ApplicationRecord
           )
         )
       )
-    ")
+    ").values.flatten
+    
+    TruckingPricing.where(id: ids)
   end
 
   # Instance Methods
@@ -67,11 +69,18 @@ class TruckingPricing < ApplicationRecord
       WHERE trucking_pricings.id = #{self.id}
       LIMIT 1
     ")
-    if !nexus_result.values.empty?
-      return nexus_result.values.first.first
-    else 
-      return {}
-    end
+    return nexus_result.values.first.try(:first)
+
+  end
+
+  def hub_id
+    ActiveRecord::Base.connection.execute("
+      SELECT hubs.id FROM hubs
+      JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
+      JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
+      WHERE trucking_pricings.id = #{self.id}
+      LIMIT 1
+    ").values.first.try(:first)
   end
 
   private

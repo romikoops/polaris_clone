@@ -6,7 +6,6 @@ class TruckingAvailabilityController < ApplicationController
 			location:  Location.new(latitude: params[:lat], longitude: params[:lng]),
 			nexus_ids: params[:nexus_ids].split(',').map(&:to_i)
 		)
-			byebug
 		nexus_ids = trucking_pricings.map(&:nexus_id).uniq
 		response = {
 			trucking_available: !trucking_pricings.empty?, nexus_ids: nexus_ids

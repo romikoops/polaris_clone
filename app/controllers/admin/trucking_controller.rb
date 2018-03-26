@@ -12,16 +12,21 @@ class Admin::TruckingController < ApplicationController
   end
 
   def show
-    trucking_hub = get_item("truckingHubs", "hub_id", params[:id])
     hub = Hub.find(params[:id])
-    trucking_queries = []
-    trucking_pricings = []
-    if trucking_hub
-      trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
-      trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
+    results = {}
+    trucking_pricings = hub.trucking_pricings
+    trucking_pricing.each do |tp|
+      tds = tp.trucking_destinations
+      if tds.first.zipcode && tds.first.city_name.nil? 
+        tds.order(:zipcode)
+        tds_key = "#{tds.first.zipcode} - #{tds.last.zipcode}"
+      elsif tds.first.zipcode.nil? && tds.first.city_name
+        tds_key = "#{tds.first.city_name} - #{tds.first.country_code}"
+      elsif ds.first.zipcode.nil? && tds.first.city_name.nil? && tds.first.distance
+        tds_key = "#{tds.first.distance} - #{tds.last.distance} km"
+      end
+      results[tds_key] = tp
     end
-    
-    
     response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
   end
   def create

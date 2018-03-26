@@ -23,10 +23,10 @@ include MongoTools
 #   # overwrite_mongo_lcl_pricings(req, dedicated = true, shipper, true)
 
 #   # # # # # Overwrite public pricings from excel sheet
-  puts "# Overwrite public pricings from excel sheet"
-  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, true)
+  # puts "# Overwrite public pricings from excel sheet"
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
   # Overwrite public pricings from excel sheet
 
 
@@ -55,12 +55,12 @@ include MongoTools
   #   req = {"xlsx" => trucking}
   #   overwrite_distance_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir, 'SE')
   # end
-  # ["import", "export"].each do |dir|
-  #   hub = tenant.hubs.find_by_name("Shanghai Port")
-  #   trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
-  #   req = {"xlsx" => trucking}
-  #   overwrite_city_trucking_rates_by_hub(req, shipper,  hub.id, 'Globelink LTL', dir)
-  # end
+  ["import", "export"].each do |dir|
+    hub = tenant.hubs.find_by_name("Shanghai Port")
+    trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")
+    req = {"xlsx" => trucking}
+    overwrite_city_trucking_rates_by_hub(req, shipper,  hub.id, 'Globelink LTL', dir)
+  end
   
   # tenant.update_route_details()
 end

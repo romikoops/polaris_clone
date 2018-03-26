@@ -185,7 +185,7 @@ class OfferCalculator
     end
     
     charges.reject! { |_, charge| charge[:cargo].empty? }
-    
+
     raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges
   end
@@ -300,7 +300,6 @@ class OfferCalculator
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["pre_carriage"]["truck_type"]
       )
-      byebug
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["pre_carriage"]
           @trucking_data["pre_carriage"] = {}
@@ -309,14 +308,12 @@ class OfferCalculator
       end
     end
     if @shipment.has_on_carriage
-
       trucking_pricings_by_hub = TruckingPricing.find_by_filter(
         location: @shipment.destination, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["on_carriage"]["truck_type"]
       )
-      byebug
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]
           @trucking_data["on_carriage"] = {}
