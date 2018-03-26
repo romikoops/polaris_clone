@@ -11,7 +11,8 @@ class TruckingPricing < ApplicationRecord
   def self.update_data
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      tp.truck_type = "default" if tp.load_type != 'container'
+      # tp.truck_type = "default" if tp.load_type != 'container'
+      tp.truck_type = "side_lifter" if tp.truck_type == "sima"
       tp.save!
     end
   end
@@ -48,14 +49,14 @@ class TruckingPricing < ApplicationRecord
             trucking_destinations.distance = (
               SELECT ROUND(ST_Distance(
                 ST_Point(locations.longitude, locations.latitude)::geography,
-                ST_Point(#{latitude}, #{longitude})::geography
-              ) / 1000)
+                ST_Point(#{longitude}, #{latitude})::geography
+              ) / 500)
             )
           )
         )
       )
     ").values.flatten
-    
+
     TruckingPricing.where(id: ids)
   end
 
