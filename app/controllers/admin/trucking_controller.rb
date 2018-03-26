@@ -13,21 +13,7 @@ class Admin::TruckingController < ApplicationController
 
   def show
     hub = Hub.find(params[:id])
-    results = {}
-    trucking_pricings = hub.trucking_pricings
-    trucking_pricings.each do |tp|
-      tds = tp.trucking_destinations
-      if tds.first.zipcode && tds.first.city_name.nil? 
-        tds.order(:zipcode)
-        tds_key = "#{tds.first.zipcode} - #{tds.last.zipcode}"
-      elsif tds.first.zipcode.nil? && tds.first.city_name
-        tds_key = "#{tds.first.city_name} - #{tds.first.country_code}"
-      elsif ds.first.zipcode.nil? && tds.first.city_name.nil? && tds.first.distance
-        tds_key = "#{tds.first.distance} - #{tds.last.distance} km"
-      end
-      results[tds_key] = tp
-    end
-    byebug
+    results = TruckingPricing.find_by_hub_ids(hub_ids: [params[:id]], tenant_id: current_user.tenant_id)
     response_handler(hub: hub, truckingPricings: results)
   end
   def create

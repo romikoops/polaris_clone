@@ -15,13 +15,13 @@ export class AdminTruckingView extends Component {
   }
   static getTruckingPricingKey (truckingPricing) {
     if (truckingPricing.zipcode) {
-      return truckingPricing.zipcode
+      return truckingPricing.zipcode.join(' - ')
     }
     if (truckingPricing.city_name) {
       return truckingPricing.city_name
     }
     if (truckingPricing.distance) {
-      return truckingPricing.distance
+      return truckingPricing.distance.join(' - ')
     }
     return ''
   }
@@ -36,6 +36,11 @@ export class AdminTruckingView extends Component {
     this.setQueryFilter = this.setQueryFilter.bind(this)
     this.cellGenerator = this.cellGenerator.bind(this)
     this.closeQueryView = this.closeQueryView.bind(this)
+  }
+  componentWillMount () {
+    if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
+      this.handleSearchChange({ target: { value: '' } })
+    }
   }
   setQueryFilter (selection) {
     this.setState({ queryFilter: selection })
@@ -123,7 +128,7 @@ export class AdminTruckingView extends Component {
   handleSearchChange (event) {
     if (event.target.value === '') {
       this.setState({
-        truckingPricings: this.props.truckingDetail.truckingPricings
+        filteredTruckingPricings: this.props.truckingDetail.truckingPricings
       })
       return
     }
@@ -145,7 +150,7 @@ export class AdminTruckingView extends Component {
     const filteredTruckingPricings = search(['zipcode', 'city_name', 'distance'])
     // ;
     this.setState({
-      truckingPricings: filteredTruckingPricings
+      filteredTruckingPricings
     })
   }
   render () {
@@ -162,7 +167,7 @@ export class AdminTruckingView extends Component {
       currentQuery,
       queryFilter,
       newRow,
-      truckingPricings,
+      filteredTruckingPricings,
       searchFilter,
       currentTruckingPricing
     } = this.state
@@ -214,7 +219,7 @@ export class AdminTruckingView extends Component {
       { value: 'export', label: 'Export Only' },
       { value: 'either', label: 'Import/Export' }
     ]
-    const searchResults = truckingPricings.map(tp => (
+    const searchResults = filteredTruckingPricings.map(tp => (
       <div
         className="flex-100 layout-row layout-align-start-center"
         key={v4()}
