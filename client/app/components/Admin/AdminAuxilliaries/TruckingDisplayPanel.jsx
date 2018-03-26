@@ -38,13 +38,13 @@ export class TruckingDisplayPanel extends Component {
       }
     })
   }
-  handleViewToggle (value) {
+  handleDirectionToggle (value) {
     this.setState({ directionBool: !this.state.directionBool })
   }
 
   render () {
-    const { theme, truckingInstance, truckingHub } = this.props
-    const { truckingPricings } = truckingInstance
+    const { theme, truckingInstance } = this.props
+    const { truckingPricing } = truckingInstance
     const { directionBool } = this.state
     const keyObj = {}
     const directionKey = directionBool ? 'import' : 'export'
@@ -68,6 +68,7 @@ export class TruckingDisplayPanel extends Component {
         background: rgba(0, 0, 0, 0.5) !important;
       }
     `
+    let modifier = ''
     if (truckingInstance.zipcode) {
       [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.zipcode
     } else if (truckingInstance.city) {
@@ -75,26 +76,33 @@ export class TruckingDisplayPanel extends Component {
     } else if (truckingInstance.distance) {
       [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.distance
     }
+    if (truckingInstance.zipcode) {
+      modifier = 'Zipcode'
+    } else if (truckingInstance.city) {
+      modifier = 'City'
+    } else if (truckingInstance.distance) {
+      modifier = 'Distance'
+    }
 
     switch (truckingInstance.modifier) {
       case 'kg':
-        keyObj.cellUpperKey = 'max_weight'
-        keyObj.cellLowerKey = 'min_weight'
+        keyObj.cellUpperKey = 'Max Weight'
+        keyObj.cellLowerKey = 'Min Weight'
         break
       case 'cbm':
-        keyObj.cellUpperKey = 'max_cbm'
-        keyObj.cellLowerKey = 'min_cbm'
+        keyObj.cellUpperKey = 'Max Cbm'
+        keyObj.cellLowerKey = 'Min Cbm'
         break
       case 'distance':
-        keyObj.cellUpperKey = 'max_km'
-        keyObj.cellLowerKey = 'min_km'
+        keyObj.cellUpperKey = 'Max Km'
+        keyObj.cellLowerKey = 'Min Km'
         break
       default:
         break
     }
 
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const pricings = truckingPricings[directionKey]
+    const pricings = truckingPricing[directionKey].table
     const pricingTables = pricings.map((pricing) => {
       const pricingCells = Object.keys(pricing.fees).map((pk) => {
         const pr = pricing.fees[pk]
@@ -127,7 +135,7 @@ export class TruckingDisplayPanel extends Component {
             >
               <p className={`flex-100 ${styles.trucking_cell_label}`}>Modifier</p>
               <p className="flex-100 clip " style={textStyle}>
-                {capitalize(truckingInstance.modifier)}
+                {capitalize(truckingPricing.modifier)}
               </p>
             </div>
             <div
@@ -183,17 +191,6 @@ export class TruckingDisplayPanel extends Component {
     return (
       <div className="flex-100 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-end-center">
-          <div className="flex-30 layout-row layout-align-end-center">
-            <p className="flex-none">Toggle Import/Export View</p>
-            <div className="flex-5" />
-            <Toggle
-              className="flex-none"
-              id="unitView"
-              name="unitView"
-              checked={directionBool}
-              onChange={e => this.handleDirectionToggle(e)}
-            />
-          </div>
           <div
             className="flex-none layout-row layout-align-center-center"
             onClick={this.props.closeView}
@@ -202,18 +199,29 @@ export class TruckingDisplayPanel extends Component {
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
             <h4 className="flex-none clip" style={textStyle}>
-              {capitalize(truckingHub.modifier)}
+              {capitalize(modifier)}
             </h4>
             <div className="flex-5" />
-            {truckingHub.modifier === 'city' ? (
+            {modifier === 'City' ? (
               <p className="flex-none">
-                {`${capitalize([keyObj.lowerKey])} - ${capitalize([keyObj.upperKey])}`}
+                {`${capitalize(keyObj.upperKey)}`}
               </p>
             ) : (
-              <p className="flex-none">{`${[keyObj.lowerKey]} - ${[keyObj.upperKey]}`}</p>
+              <p className="flex-none">{`${keyObj.lowerKey} - ${keyObj.upperKey}`}</p>
             )}
+            <div className="flex-30 layout-row layout-align-end-center">
+              <p className="flex-none">Toggle Import/Export View</p>
+              <div className="flex-5" />
+              <Toggle
+                className="flex-none"
+                id="unitView"
+                name="unitView"
+                checked={directionBool}
+                onChange={e => this.handleDirectionToggle(e)}
+              />
+            </div>
           </div>
           {pricingTables}
         </div>
@@ -225,7 +233,6 @@ export class TruckingDisplayPanel extends Component {
 TruckingDisplayPanel.propTypes = {
   theme: PropTypes.theme,
   truckingInstance: PropTypes.objectOf(PropTypes.any).isRequired,
-  truckingHub: PropTypes.objectOf(PropTypes.any).isRequired,
   closeView: PropTypes.func.isRequired
 }
 TruckingDisplayPanel.defaultProps = {
