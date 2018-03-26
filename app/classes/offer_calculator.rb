@@ -300,6 +300,7 @@ class OfferCalculator
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["pre_carriage"]["truck_type"]
       )
+      byebug
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["pre_carriage"]
           @trucking_data["pre_carriage"] = {}
@@ -315,6 +316,7 @@ class OfferCalculator
         tenant_id: @user.tenant_id, 
         truck_type: @shipment.trucking["on_carriage"]["truck_type"]
       )
+      byebug
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]
           @trucking_data["on_carriage"] = {}

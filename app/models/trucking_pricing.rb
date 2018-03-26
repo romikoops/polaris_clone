@@ -10,9 +10,9 @@ class TruckingPricing < ApplicationRecord
   # Class methods
   def self.update_data
     TruckingPricing.all.each do |tp|
-      # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      tp.truck_type =  "default" if tp.load_type != 'container'
-      tp.save!
+      tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
+      # tp.truck_type =  "default" if tp.load_type != 'container'
+      # tp.save!
     end
   end
 
@@ -59,14 +59,19 @@ class TruckingPricing < ApplicationRecord
 
   # Instance Methods
   def nexus_id
-    ActiveRecord::Base.connection.execute("
+    nexus_result = ActiveRecord::Base.connection.execute("
       SELECT locations.id FROM locations
       JOIN hubs ON hubs.nexus_id = locations.id
       JOIN hub_truckings ON hub_truckings.hub_id = hubs.id
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
       WHERE trucking_pricings.id = #{self.id}
       LIMIT 1
-    ").values.first.first
+    ")
+    if !nexus_result.values.empty?
+      return nexus_result.values.first.first
+    else 
+      return {}
+    end
   end
 
   private

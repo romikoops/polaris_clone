@@ -71,6 +71,15 @@ class NavBar extends Component {
             {`${admin.hub.hub.name}`}
           </div>
         )
+      case 'trucking':
+        return (
+          <div
+            className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
+          >
+            {' '}
+            {`${admin.truckingDetail.hub ? admin.truckingDetail.hub.name : ''}`}
+          </div>
+        )
       case 'routes':
         return (
           <div

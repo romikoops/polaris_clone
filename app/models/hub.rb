@@ -10,7 +10,6 @@ class Hub < ApplicationRecord
 
   has_one :service_charge
 
-  before_validation :set_trucking_availability
 
   MOT_HUB_NAME = {
     "ocean" => "Port",
