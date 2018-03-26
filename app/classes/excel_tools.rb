@@ -611,21 +611,34 @@ module ExcelTools
         if !new_pricings_data[range_key]
           new_pricings_data[range_key] = { fees: {}}
 
-          (range_values[0]...range_values[1]).each do |dist|
-            td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
-            trucking_destinations[range_key] << td
-            hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
-            hub_truckings[range_key] << hub_trucking
-          end
+
+          td = TruckingDestination.find_or_create_by!(distance: range_values[0], country_code: country_code)
+          trucking_destinations[range_key] << td
+          hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
+          hub_truckings[range_key] << hub_trucking
           if !aux_data[range_key]
             aux_data[range_key] = {}
           end
-          if  hub_truckings[range_key][0].trucking_pricing_id
+          if  hub_truckings[range_key][0].trucking_pricing_id && hub_truckings[range_key][0].trucking_pricing.load_type == row[:truck_type]
             p hub_truckings[range_key][0].trucking_pricing_id
             trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
             trucking_pricings[range_key][direction]["table"] = []
+            ((range_values[0] + 1)...range_values[1]).each do |dist|
+              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
+              trucking_destinations[range_key] << td
+              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id, trucking_pricing_id: trucking_pricings[range_key])
+              hub_truckings[range_key] << hub_trucking
+            end
           else
             trucking_pricings[range_key] = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
+            trucking_destinations[range_key] = []
+            hub_truckings[range_key] = []
+            (range_values[0]...range_values[1]).each do |dist|
+              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
+              trucking_destinations[range_key] << td
+              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id, trucking_pricing_id: trucking_pricings[range_key])
+              hub_truckings[range_key] << hub_trucking
+            end
           end
         end
           ntp = {

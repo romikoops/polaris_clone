@@ -3,7 +3,6 @@ class Hub < ApplicationRecord
   belongs_to :tenant
   belongs_to :nexus, class_name: "Location"
   belongs_to :location
-  belongs_to :trucking_availability
 
   has_many :stops,    dependent: :destroy
   has_many :layovers, through: :stops
