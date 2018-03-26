@@ -3,16 +3,17 @@ class TruckingPricing < ApplicationRecord
   belongs_to :courier
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings
-
+  has_many :trucking_destinations, through: :hub_truckings
   extend MongoTools
   # Validations
 
   # Class methods
   def self.update_data
     TruckingPricing.all.each do |tp|
-      # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      # tp.truck_type = "default" if tp.load_type != 'container'
+      tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
+      # tp.truck_type =  "default" if tp.load_type != 'container'
       tp.truck_type = "side_lifter" if tp.truck_type == "sima"
+
       tp.save!
     end
   end
@@ -106,7 +107,7 @@ class TruckingPricing < ApplicationRecord
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
       WHERE trucking_pricings.id = #{self.id}
       LIMIT 1
-    ").values.first.first
+    ").values.first.try(:first)
   end
 
   def hub_id
@@ -116,7 +117,7 @@ class TruckingPricing < ApplicationRecord
       JOIN trucking_pricings ON hub_truckings.trucking_pricing_id = trucking_pricings.id
       WHERE trucking_pricings.id = #{self.id}
       LIMIT 1
-    ").values.first.first
+    ").values.first.try(:first)
   end
 
   private

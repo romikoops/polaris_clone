@@ -500,6 +500,7 @@ module ExcelTools
         
         new_pricing[direction] = {"table" => []}
         ntp = new_pricing
+        ntp[:truck_type] = 'default'
         [3,4,5,6].each do |i|
           tmp = defaults[i - 3].clone
           tmp[:delivery_eta_in_days] = row_data[10]
@@ -580,8 +581,6 @@ module ExcelTools
       first_sheet = xlsx.sheet(sheet_name)
       hub = Hub.find(hub_id)
       nexus = hub.nexus
-      hub_truckings = []
-      trucking_destinations = []
       hubs = nexus.hubs
       rows = first_sheet.parse(
         currency: 'CURRENCY',
@@ -654,6 +653,7 @@ module ExcelTools
           stats[:trucking_pricings][:number_updated] += 1
         end
       end
+      byebug
       hub_truckings.each do |r_key, hts|
         hts.each do |ht|
           if !ht.trucking_pricing_id
@@ -666,15 +666,6 @@ module ExcelTools
         tp.save!
       end
       stats[:trucking_queries][:number_updated] += 1
-      tenant = user.tenant
-    update_type = load_type === 'lcl' ? :cargo_item : :container
-    TruckingAvailability.update_hubs_trucking_availability!(tenant, [{        
-      values: [nexus.name],
-      options: {
-        load_type: update_type
-      }
-    }])
-    nexus.update_trucking_availability!({id: tenant.id})
     end
     return {stats: stats, results: results}
   end
