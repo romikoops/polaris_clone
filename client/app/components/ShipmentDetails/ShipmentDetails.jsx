@@ -507,7 +507,7 @@ export class ShipmentDetails extends Component {
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text="Available Dates" size={3} />
+              <TextHeading theme={theme} text="Cargo Ready Date" size={3} />
             </div>
             <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>

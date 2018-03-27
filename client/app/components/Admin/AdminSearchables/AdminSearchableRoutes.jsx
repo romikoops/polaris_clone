@@ -87,9 +87,9 @@ export class AdminSearchableRoutes extends Component {
       showDelete
     } = this.props
     const { itineraries } = this.state
-    let itinerariesArr
+    let itinerariesArr = []
     const viewLimit = limit || 15
-    if (itineraries) {
+    if (itineraries && itineraries.length > 0) {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (
@@ -106,7 +106,7 @@ export class AdminSearchableRoutes extends Component {
         }
         return ''
       })
-    } else if (this.props.itineraries) {
+    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (

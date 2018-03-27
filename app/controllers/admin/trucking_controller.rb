@@ -163,7 +163,7 @@ class Admin::TruckingController < ApplicationController
         direction_array = [params["direction"]]
       end
       req = {'xlsx' => params[:file]}
-      byebug
+      
       direction_array.each do |dir|
        overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], 'Globelink', dir)
       end

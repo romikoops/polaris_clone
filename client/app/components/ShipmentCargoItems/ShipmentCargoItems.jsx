@@ -12,7 +12,7 @@ export class ShipmentCargoItems extends Component {
     super(props)
     this.state = {
       cargoItemTypes: [],
-      cargoItemInfoExpanded: []
+      cargoItemInfoExpanded: [true]
     }
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
@@ -31,8 +31,10 @@ export class ShipmentCargoItems extends Component {
     })
   }
   addNewCargo () {
+    const { cargoItemInfoExpanded } = this.state
+    cargoItemInfoExpanded.push(true)
     this.props.addCargoItem()
-    this.setState({ firstRenderInputs: true })
+    this.setState({ firstRenderInputs: true, cargoItemInfoExpanded })
   }
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
@@ -75,7 +77,13 @@ export class ShipmentCargoItems extends Component {
   }
   render () {
     const {
-      cargoItems, theme, toggleModal, nextStageAttempt, scope, handleDelta, maxDimensions
+      cargoItems,
+      theme,
+      toggleModal,
+      nextStageAttempt,
+      scope,
+      handleDelta,
+      maxDimensions
     } = this.props
     const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
@@ -119,9 +127,7 @@ export class ShipmentCargoItems extends Component {
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
         >
-          <div
-            className="flex-10 layout-row layout-align-center"
-          >
+          <div className="flex-10 layout-row layout-align-center">
             <QuantityInput
               i={i}
               cargoItem={cargoItem}
@@ -150,16 +156,17 @@ export class ShipmentCargoItems extends Component {
               <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
             </div>
           </div>
-          <div className={
-            `${styles.cargo_item_info} ` +
-            `${cargoItemInfoExpanded[i] && styles.expanded} ` +
-            'flex-100'
-          }
-          >
-            <div className={
-              `${styles.inner_cargo_item_info} layout-row ` +
-              'layout-wrap layout-align-start'
+          <div
+            className={
+              `${styles.cargo_item_info} ` +
+              `${cargoItemInfoExpanded[i] && styles.expanded} ` +
+              'flex-100'
             }
+          >
+            <div
+              className={
+                `${styles.inner_cargo_item_info} layout-row layout-wrap layout-align-start`
+              }
             >
               {inputs.total}
               <div className={`${styles.cargo_item_box} flex layout-row`}>
@@ -191,8 +198,7 @@ export class ShipmentCargoItems extends Component {
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div
           className={
-            `layout-row flex-none ${defs.content_width} ` +
-            'layout-wrap layout-align-center-center'
+            `layout-row flex-none layout-wrap layout-align-center-center ${defs.content_width} `
           }
         >
           <TextHeading theme={theme} text="Cargo Units" size={3} />
@@ -214,7 +220,7 @@ export class ShipmentCargoItems extends Component {
               </div>
             </div>
             <div className={`flex-100 ${styles.new_container_placeholder}`}>
-              { generateCargoItem(null, -1) }
+              {generateCargoItem(null, -1)}
             </div>
           </div>
         </div>
