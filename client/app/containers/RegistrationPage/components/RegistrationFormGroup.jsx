@@ -38,7 +38,12 @@ export default function RegistrationFormGroup (props) {
 
   return (
     <div className={`flex-${flex || '100'} offset-${offset || 0}`}>
-      <label htmlFor={field}>{humanizeSnakeCase(field)}</label>
+      <label
+        className={styles.registration_form_label}
+        htmlFor={field}
+      >
+        {humanizeSnakeCase(field)}
+      </label>
       <FormsyInput
         type={type || 'text'}
         className={styles.form_control}
@@ -70,9 +75,9 @@ RegistrationFormGroup.propTypes = {
   theme: PropTypes.theme,
   handleFocus: PropTypes.func.isRequired,
   focus: PropTypes.objectOf(PropTypes.string).isRequired,
-  submitAttempted: PropTypes.bool.isRequired,
-  validations: PropTypes.objectOf(PropTypes.string).isRequired,
-  validationErrors: PropTypes.objectOf(PropTypes.string).isRequired
+  submitAttempted: PropTypes.bool,
+  validations: PropTypes.objectOf(PropTypes.any),
+  validationErrors: PropTypes.objectOf(PropTypes.string)
 }
 
 RegistrationFormGroup.defaultProps = {
@@ -81,5 +86,8 @@ RegistrationFormGroup.defaultProps = {
   minLength: '',
   type: '',
   required: true,
-  theme: null
+  theme: null,
+  submitAttempted: false,
+  validations: {},
+  validationErrors: {}
 }

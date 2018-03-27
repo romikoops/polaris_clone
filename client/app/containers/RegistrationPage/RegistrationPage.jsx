@@ -1,4 +1,5 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
@@ -7,6 +8,7 @@ import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { Alert } from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
 import RegistrationFormGroup from './components/RegistrationFormGroup'
+import TermsAndConditionsSummary from './components/TermsAndConditionsSummary'
 import styles from './RegistrationPage.scss'
 
 class RegistrationPage extends React.Component {
@@ -28,7 +30,8 @@ class RegistrationPage extends React.Component {
     super(props)
     this.state = {
       focus: {},
-      alertVisible: false
+      alertVisible: false,
+      termsAndConditionsAccepted: false
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -61,25 +64,33 @@ class RegistrationPage extends React.Component {
     })
   }
 
+  handleChangeTermsAndConditionsAccepted () {
+    this.setState({
+      termsAndConditionsAccepted: !this.state.termsAndConditionsAccepted
+    })
+  }
+
   handleSubmit (model) {
+    if (!this.state.termsAndConditionsAccepted) return
     const user = Object.assign({}, model)
     user.tenant_id = this.props.tenant.data.id
     user.guest = false
 
-    const { dispatch, req } = this.props
+    const { req, authenticationDispatch } = this.props
     if (req) {
-      dispatch(authenticationActions.updateUser(this.props.user, user, req))
+      authenticationDispatch.updateUser(this.props.user, user, req)
     } else {
-      dispatch(authenticationActions.register(user))
+      authenticationDispatch.authenticationActions.register(user)
     }
   }
 
   handleInvalidSubmit () {
+    if (!this.state.termsAndConditionsAccepted) return
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
 
   render () {
-    const { registering, theme } = this.props
+    const { registering, theme, authenticationDispatch } = this.props
     const alert = this.state.alertVisible ? (
       <Alert
         message={{ type: 'error', text: 'Email has already been taken' }}
@@ -170,8 +181,19 @@ class RegistrationPage extends React.Component {
             <RegistrationFormGroup field="phone" minLength="8" {...sharedProps} />
           </div>
         </div>
+        <TermsAndConditionsSummary
+          theme={theme}
+          handleChange={() => this.handleChangeTermsAndConditionsAccepted()}
+          accepted={this.state.termsAndConditionsAccepted}
+          goToTermsAndConditions={() => authenticationDispatch.goTo('/terms_and_conditions', true)}
+        />
         <div className={`${styles.form_group_submit_btn} layout-row layout-align-center`}>
-          <RoundButton text="Register new account" theme={theme} active />
+          <RoundButton
+            text="Register new account"
+            theme={theme}
+            active={this.state.termsAndConditionsAccepted}
+            disabled={!this.state.termsAndConditionsAccepted}
+          />
           <div className={styles.spinner}>{ registering && <LoadingSpinner /> }</div>
         </div>
       </Formsy>
@@ -182,14 +204,15 @@ class RegistrationPage extends React.Component {
 RegistrationPage.propTypes = {
   tenant: PropTypes.tenant,
   registrationAttempt: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   req: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
-  registering: PropTypes.bool
+  registering: PropTypes.bool,
+  authenticationDispatch: PropTypes.objectOf(PropTypes.any).isRequired
 }
+
 RegistrationPage.defaultProps = {
   tenant: null,
   registrationAttempt: false,
@@ -207,6 +230,12 @@ function mapStateToProps (state) {
   }
 }
 
-const connectedRegistrationPage = connect(mapStateToProps)(RegistrationPage)
+function mapDispatchToProps (dispatch) {
+  return {
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+const connectedRegistrationPage = connect(mapStateToProps, mapDispatchToProps)(RegistrationPage)
 export { connectedRegistrationPage as RegistrationPage }
 export default connectedRegistrationPage
