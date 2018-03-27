@@ -106,8 +106,7 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_lcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      results = overwrite_freight_rates(params, current_user,false)
-      
+      results = overwrite_freight_rates(req, current_user,false)
       response_handler(results)
     else
       response_handler(false)
@@ -117,7 +116,7 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_fcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      results = overwrite_freight_rates(params, current_user,false)
+      results = overwrite_freight_rates(req, current_user,false)
       response_handler(results)
     else
       response_handler(false)
