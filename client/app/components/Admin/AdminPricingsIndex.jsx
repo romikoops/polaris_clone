@@ -80,7 +80,7 @@ export class AdminPricingsIndex extends Component {
     )
     const { itineraries, detailedItineraries, transportCategories } = pricingData
     const lclUrl = '/admin/pricings/ocean_lcl_pricings/process_csv'
-    const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv'
+    // const fclUrl = '/admin/pricings/ocean_fcl_pricings/process_csv'
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -90,7 +90,7 @@ export class AdminPricingsIndex extends Component {
               styles.sec_upload
             }`}
           >
-            <p className="flex-100">Upload LCL Pricings Sheet</p>
+            <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
             <FileUploader
               theme={theme}
               url={lclUrl}
@@ -100,7 +100,7 @@ export class AdminPricingsIndex extends Component {
               text="Dedicated Pricings .xlsx"
             />
           </div>
-          <div
+          {/* <div
             className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
               styles.sec_upload
             }`}
@@ -114,7 +114,7 @@ export class AdminPricingsIndex extends Component {
               type="xlsx"
               text="FCL Pricings .xlsx"
             />
-          </div>
+          </div> */}
           <div
             className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
               styles.sec_upload

@@ -138,7 +138,7 @@ class Admin::TruckingController < ApplicationController
       end
       req = {'xlsx' => data["file"]}
       direction_array.each do |dir|
-        overwrite_zipcode_trucking_rates_by_hub(req, current_user, data["id"], dir)
+        overwrite_zipcode_trucking_rates_by_hub(req, current_user, data["id"], 'Greencarrier LTL', dir)
       end
       trucking_hub = get_item("truckingHubs", "hub_id", data["id"])
       hub = Hub.find(data["id"])
@@ -163,18 +163,14 @@ class Admin::TruckingController < ApplicationController
         direction_array = [params["direction"]]
       end
       req = {'xlsx' => params[:file]}
+      byebug
       direction_array.each do |dir|
-       overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], dir)
+       overwrite_city_trucking_rates_by_hub(req, current_user, params[:id], 'Globelink', dir)
       end
-      trucking_hub = get_item("truckingHubs", "hub_id", params["id"])
       hub = Hub.find(params["id"])
-      trucking_queries = []
-      trucking_pricings = []
-      if trucking_hub
-        trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
-        trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
-      end
-      response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
+      results = TruckingPricing.find_by_hub_ids(hub_ids: [params[:id]], tenant_id: current_user.tenant_id)
+      response_handler(hub: hub, truckingPricings: results)
+
     else
       response_handler(false)
     end
