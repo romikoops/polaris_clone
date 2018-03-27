@@ -30,7 +30,6 @@ export class ShipmentCargoItems extends Component {
       newCargoItem: { ...this.state.newCargoItem, [name]: value }
     })
   }
-
   addNewCargo () {
     this.props.addCargoItem()
     this.setState({ firstRenderInputs: true })
@@ -98,12 +97,6 @@ export class ShipmentCargoItems extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-
-    // const generateSeparator = () => (
-    //   <div key={v4()} className={`${styles.separator} flex-100`}>
-    //     <hr />
-    //   </div>
-    // )
     const generateCargoItem = (cargoItem, i) => {
       const inputs = getInputs.call(
         this,
@@ -126,7 +119,9 @@ export class ShipmentCargoItems extends Component {
           className="layout-row flex-100 layout-wrap layout-align-stretch"
           style={{ position: 'relative', margin: '30px 0' }}
         >
-          <div className="flex-10 layout-row layout-align-center">
+          <div
+            className="flex-10 layout-row layout-align-center"
+          >
             <QuantityInput
               i={i}
               cargoItem={cargoItem}
@@ -156,7 +151,7 @@ export class ShipmentCargoItems extends Component {
             </div>
           </div>
           <div className={
-            `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
+            `${styles.cargo_item_info} ` +
             `${cargoItemInfoExpanded[i] && styles.expanded} ` +
             'flex-100'
           }
@@ -166,8 +161,11 @@ export class ShipmentCargoItems extends Component {
               'layout-wrap layout-align-start'
             }
             >
-              {inputs.volume}
-              {inputs.chargeableWeight}
+              {inputs.total}
+              <div className={`${styles.cargo_item_box} flex layout-row`}>
+                {inputs.volume}
+                {inputs.chargeableWeight}
+              </div>
             </div>
           </div>
 
@@ -185,28 +183,7 @@ export class ShipmentCargoItems extends Component {
 
     if (cargoItems) {
       cargoItems.forEach((cargoItem, i) => {
-        // if (!cargoItemTypes[i]) {
-        //   // Set a default cargo item type as the select box value
-
-        //   // Define labels of the default cargo item types in order of priority
-        //   const defaultTypeLabels = ['Pallet', '100.0cm × 120.0cm Pallet: Europe, Asia']
-
-        //   // Try to find one of the labels in the available cargo item types
-        //   let defaultType
-        //   defaultTypeLabels.find(defaultTypeLabel => (
-        //     defaultType = availableCargoItemTypes.find(cargoItemType => (
-        //       cargoItemType.label === defaultTypeLabel
-        //     ))
-        //   ))
-
-        //   // In case none of the defaultTypeLabels match the available
-        //   // cargo item types, set the default to the first available.
-        //   defaultType = defaultType || availableCargoItemTypes[0]
-
-        //   this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
-        // }
         cargosAdded.push(generateCargoItem(cargoItem, i))
-        // cargosAdded.push(generateSeparator())
       })
     }
 

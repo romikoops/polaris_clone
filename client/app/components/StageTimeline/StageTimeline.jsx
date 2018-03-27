@@ -51,6 +51,7 @@ export default class StageTimeline extends Component {
   render () {
     const { theme } = this.props
     const currentStage = index => index === this.props.currentStageIndex
+    console.log(this.props.stages)
     const stageBoxes = this.props.stages.map((stage, i) => (
       <div
         key={v4()}
