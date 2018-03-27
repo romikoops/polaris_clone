@@ -80,7 +80,7 @@ module ItineraryTools
 
   def get_itineraries(tenant_id)
     resp = get_item("itineraryOptions", "id", tenant_id)
-    return resp["data"]
+    return resp ? resp["data"] : {}
   end
 
   def get_scoped_itineraries(tenant_id, mot_scope_ids)

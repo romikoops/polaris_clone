@@ -32,7 +32,7 @@ export default class AdminLayoverRow extends Component {
     const {
       theme, schedule, hub, itinerary
     } = this.props
-    if (!schedule || !hub) {
+    if (!schedule || !hub || !itinerary) {
       return ''
     }
     const gradientFontStyle =

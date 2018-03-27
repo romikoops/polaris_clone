@@ -2,7 +2,7 @@ export const LOAD_TYPES = [
   {
     name: 'Cargo Item',
     img: 'https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg',
-    code: 'cargoItem'
+    code: 'cargo_item'
   },
   {
     name: 'Container',
@@ -201,6 +201,7 @@ export const chargeGlossary = {
   rate_basis: 'Rate Basis',
   base_rate: 'Base Rate',
   base: 'Base',
+  congestion: 'Congestion Charge',
   rate: 'Rate',
   currency: 'Currency',
   cbm: 'CBM',
@@ -218,6 +219,7 @@ export const chargeGlossary = {
   FSC: 'Fuel Surcharge',
   ULT: 'Loading/Unloading Time',
   VAT: 'VAT',
+  vat: 'VAT',
   CCC: 'Congestion Charge',
   DLF: 'Delivery Fee',
   PUF: 'Pickup Fee',

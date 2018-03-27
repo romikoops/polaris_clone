@@ -36,7 +36,7 @@ function newShipment (type) {
   }
 }
 
-function setShipmentDetails (data) {
+function setShipmentDetails (data, redirect) {
   function request (shipmentData) {
     return {
       type: shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST,
@@ -58,7 +58,9 @@ function setShipmentDetails (data) {
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
-        dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
+        }
         dispatch(alertActions.success('Set Shipment Details successful'))
       },
       (error) => {

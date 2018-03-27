@@ -6,15 +6,18 @@ import defs from '../../styles/default_classes.scss'
 import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
-import { capitalize, gradientTextGenerator, percentageToHex } from '../../helpers'
+import {
+  capitalize, gradientTextGenerator, percentageToHex, humanizedMotAndLoadType
+} from '../../helpers'
 import { TextHeading } from '../TextHeading/TextHeading'
 
 export class ChooseShipment extends Component {
   constructor (props) {
     super(props)
     this.state = {}
+
     this.cards = LOAD_TYPES.map(loadType => ({
-      name: loadType.name,
+      name: humanizedMotAndLoadType(props.scope, loadType.code),
       img: loadType.img,
       code: loadType.code,
       options: { contained: true },
@@ -78,10 +81,6 @@ export class ChooseShipment extends Component {
       <RoundButton theme={theme} size="small" text="Next Step" iconClass="fa-chevron-right" />
     )
 
-    // const modesOfTransportJSX = Object.keys(scope.modes_of_transport)
-    //   .filter(mot => scope.modes_of_transport[mot])
-    //   .map(mot => switchIcon(mot))
-
     return (
       <div className={`${styles.card_link_row} layout-row flex-100 layout-align-center`}>
         {flash}
@@ -138,8 +137,8 @@ export class ChooseShipment extends Component {
                 <div className="flex-none layout-column layout-align-center-center">
                   <div className="flex-none layout-row layout-align-center-start">
                     <p className={styles.mot_note}>
-                    Availabilities will be shown for all applicable<br /> modes of transport for
-                    your shipment
+                      Availabilities will be shown for all applicable<br /> modes of transport for
+                      your shipment
                     </p>
                     {loadType && direction ? activeBtn : disabledBtn}
                   </div>
@@ -156,7 +155,8 @@ export class ChooseShipment extends Component {
 ChooseShipment.propTypes = {
   theme: PropTypes.theme,
   messages: PropTypes.arrayOf(PropTypes.string),
-  selectLoadType: PropTypes.func.isRequired
+  selectLoadType: PropTypes.func.isRequired,
+  scope: PropTypes.objectOf(PropTypes.any).isRequired
 }
 
 ChooseShipment.defaultProps = {

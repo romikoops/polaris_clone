@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Toggle from 'react-toggle'
+import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
 import { chargeGlossary } from '../../../constants'
 import { capitalize, gradientTextGenerator } from '../../../helpers'
@@ -36,48 +38,73 @@ export class TruckingDisplayPanel extends Component {
       }
     })
   }
+  handleDirectionToggle (value) {
+    this.setState({ directionBool: !this.state.directionBool })
+  }
 
   render () {
-    const { theme, truckingInstance, truckingHub } = this.props
-
-    const { query, pricings } = truckingInstance
+    const { theme, truckingInstance } = this.props
+    const { truckingPricing } = truckingInstance
+    const { directionBool } = this.state
     const keyObj = {}
+    const directionKey = directionBool ? 'import' : 'export'
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    switch (truckingHub.modifier) {
-      case 'zipcode':
-        keyObj.upperKey = 'upper_zip'
-        keyObj.lowerKey = 'lower_zip'
-        break
-      case 'city':
-        keyObj.upperKey = 'city'
-        keyObj.lowerKey = 'province'
-        break
-      case 'distance':
-        keyObj.upperKey = 'upper_distance'
-        keyObj.lowerKey = 'lower_distance'
-        break
-      default:
-        break
+    const toggleCSS = `
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          ${theme.colors.brightPrimary} 0%,
+          ${theme.colors.brightSecondary} 100%
+        ) !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: rgba(0, 0, 0, 0.75);
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    `
+    let modifier = ''
+    if (truckingInstance.zipcode) {
+      [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.zipcode
+    } else if (truckingInstance.city) {
+      [keyObj.upperKey] = truckingInstance.city
+    } else if (truckingInstance.distance) {
+      [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.distance
     }
-    switch (query.modifier) {
+    if (truckingInstance.zipcode) {
+      modifier = 'Zipcode'
+    } else if (truckingInstance.city) {
+      modifier = 'City'
+    } else if (truckingInstance.distance) {
+      modifier = 'Distance'
+    }
+
+    switch (truckingInstance.modifier) {
       case 'kg':
-        keyObj.cellUpperKey = 'max_weight'
-        keyObj.cellLowerKey = 'min_weight'
+        keyObj.cellUpperKey = 'Max Weight'
+        keyObj.cellLowerKey = 'Min Weight'
         break
       case 'cbm':
-        keyObj.cellUpperKey = 'max_cbm'
-        keyObj.cellLowerKey = 'min_cbm'
+        keyObj.cellUpperKey = 'Max Cbm'
+        keyObj.cellLowerKey = 'Min Cbm'
         break
       case 'distance':
-        keyObj.cellUpperKey = 'max_km'
-        keyObj.cellLowerKey = 'min_km'
+        keyObj.cellUpperKey = 'Max Km'
+        keyObj.cellLowerKey = 'Min Km'
         break
       default:
         break
     }
+    const headerStyle = {
+      background: theme && theme.colors ? theme.colors.primary : 'rgba(0,0,0,0.75)'
+    }
+    const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
+    const pricings = truckingPricing[directionKey].table
     const pricingTables = pricings.map((pricing) => {
       const pricingCells = Object.keys(pricing.fees).map((pk) => {
         const pr = pricing.fees[pk]
@@ -102,6 +129,7 @@ export class TruckingDisplayPanel extends Component {
             className={`${
               styles.trucking_fee_header
             } flex-100 layout-row layout-align-start-center`}
+            style={headerStyle}
           >
             <div
               className={`flex-15 layout-row layout-align-start-center layout-wrap ${
@@ -110,7 +138,7 @@ export class TruckingDisplayPanel extends Component {
             >
               <p className={`flex-100 ${styles.trucking_cell_label}`}>Modifier</p>
               <p className="flex-100 clip " style={textStyle}>
-                {capitalize(query.modifier)}
+                {capitalize(truckingPricing.modifier)}
               </p>
             </div>
             <div
@@ -174,25 +202,33 @@ export class TruckingDisplayPanel extends Component {
           </div>
         </div>
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
             <h4 className="flex-none clip" style={textStyle}>
-              {capitalize(truckingHub.modifier)}
+              {capitalize(modifier)}
             </h4>
             <div className="flex-5" />
-            {truckingHub.modifier === 'city' ? (
+            {modifier === 'City' ? (
               <p className="flex-none">
-                {`${capitalize(query[truckingHub.modifier][keyObj.lowerKey])} - ${capitalize(query[truckingHub.modifier][keyObj.upperKey])}`}
+                {`${capitalize(keyObj.upperKey)}`}
               </p>
             ) : (
-              <p className="flex-none">
-                {`${query[truckingHub.modifier][keyObj.lowerKey]} - ${
-                  query[truckingHub.modifier][keyObj.upperKey]
-                }`}
-              </p>
+              <p className="flex-none">{`${keyObj.lowerKey} - ${keyObj.upperKey}`}</p>
             )}
+            <div className="flex-30 layout-row layout-align-end-center">
+              <p className="flex-none">Toggle Import/Export View</p>
+              <div className="flex-5" />
+              <Toggle
+                className="flex-none"
+                id="unitView"
+                name="unitView"
+                checked={directionBool}
+                onChange={e => this.handleDirectionToggle(e)}
+              />
+            </div>
           </div>
           {pricingTables}
         </div>
+        {styleTagJSX}
       </div>
     )
   }
@@ -200,7 +236,6 @@ export class TruckingDisplayPanel extends Component {
 TruckingDisplayPanel.propTypes = {
   theme: PropTypes.theme,
   truckingInstance: PropTypes.objectOf(PropTypes.any).isRequired,
-  truckingHub: PropTypes.objectOf(PropTypes.any).isRequired,
   closeView: PropTypes.func.isRequired
 }
 TruckingDisplayPanel.defaultProps = {

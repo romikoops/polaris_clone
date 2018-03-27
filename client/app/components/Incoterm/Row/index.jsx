@@ -11,7 +11,8 @@ export function IncotermRow ({
   originFees,
   destinationFees,
   feeHash,
-  tenant
+  tenant,
+  firstStep
 }) {
   const sumCargoFees = (cargos) => {
     let total = 0.0
@@ -274,9 +275,9 @@ export function IncotermRow ({
   )
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
-      {customsFeesTile} {preCarriageFeesTile} {originFeesTile}
+      { firstStep ? '' : customsFeesTile } {preCarriageFeesTile} {originFeesTile}
       {freightFeesTile} {destinationFeesTile}
-      {onCarriageFeesTile} {insuranceFeesTile}
+      {onCarriageFeesTile} { firstStep ? '' : insuranceFeesTile}
     </div>
   )
 }
@@ -289,7 +290,8 @@ IncotermRow.propTypes = {
   destinationFees: PropTypes.bool,
   feeHash: PropTypes.objectOf(PropTypes.any),
   tenant: PropTypes.tenant,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired
+  shipment: PropTypes.objectOf(PropTypes.any).isRequired,
+  firstStep: PropTypes.bool
 }
 
 IncotermRow.defaultProps = {
@@ -299,7 +301,8 @@ IncotermRow.defaultProps = {
   originFees: false,
   destinationFees: false,
   feeHash: {},
-  tenant: {}
+  tenant: {},
+  firstStep: false
 }
 
 export default IncotermRow

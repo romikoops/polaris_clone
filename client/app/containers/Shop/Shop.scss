@@ -1,11 +1,12 @@
-@import '../../styles/defaults';
 :local {
-	.main_content {
-		min-height: calc(100vh - 275px);
+	.pusher_bottom {
+		content: ' ';
+		height: 72px; // Shop Stage footer height
+		width: 100%;
 	}
-	.footer {
-		width: 100vw;
-		height: 100vh;
-		background-color: blue;
+	.pusher_top {
+		content: ' ';
+		height: 100px; // Header height
+		width: 100%;
 	}
 }

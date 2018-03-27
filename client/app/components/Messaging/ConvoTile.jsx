@@ -37,6 +37,7 @@ export function ConvoTile ({
   const shipmentStatus = () => {
     const color = { color: '' }
     let icon = ''
+    console.log(shipment)
     switch (shipment.status) {
       case 'requested':
         icon = 'fa fa-hourglass-half'
@@ -54,7 +55,7 @@ export function ConvoTile ({
     return <i className={icon} style={color} />
   }
   const showStatus = shipmentStatus()
-
+  console.log(shipment.status)
   const ConvoView = (
     <ConvoTileDiv
       className={`flex layout-row layout-align-center-start-space-between pointy layout-wrap ${styles.convo_tile} `}

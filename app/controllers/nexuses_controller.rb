@@ -13,25 +13,7 @@ class NexusesController < ApplicationController
 		nexus_data = geocoded_location.closest_location_with_distance
 		nexus = nexus_data.first if nexus_data.last <= 200
 
-		if nexus.nil?
-			city = geocoded_location.reverse_geocode.city.downcase
-			
-			trucking_options_are_available = city.split.any? do |word|
-				nexus_data.first.trucking_options(params[:tenant_id]).include?(word)
-			end
-
-			if trucking_options_are_available
-				return response_handler(nexus: nexus_data.first, truckingOptions: true)
-			end
-		end
-
 		response_handler(nexus: nexus)
-	end
-
-	def trucking_availability
-		nexus = Location.find(params[:nexus_id])
-		trucking_availability = nexus.trucking_availability(params[:tenant_id])
-		response_handler(truckingAvailable: trucking_availability[params[:load_type]])
 	end
 
 	private
@@ -43,22 +25,18 @@ class NexusesController < ApplicationController
 		#      target #=> "origin",      counterpart #=> "destination" 
 		#  or  target #=> "destination", counterpart #=> "origin" 
 
-		user_input 			= params[:user_input]
+		nexus_ids 			= params[:nexus_ids].split(",").map(&:to_i)
 		target 					= params[:target]
 		counterpart     = target == "destination" ? "origin" : "destination"
 
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
 		itineraries   = retrieve_route_options(current_user.tenant_id, itinerary_ids)
 
-		if user_input.blank?
+		if nexus_ids.blank? || nexus_ids.empty?
 			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq
 		end
 
-		nexus = Location.geocoded_location user_input
-		nexus_data = nexus.closest_location_with_distance
-		nexus = nexus_data.first if nexus_data.last <= 200
-
-		itineraries.select { |itinerary| itinerary["#{counterpart}_nexus_id"] == nexus.id }
+		itineraries.select { |itinerary| nexus_ids.include? itinerary["#{counterpart}_nexus_id"] }
 			.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq
 	end
 

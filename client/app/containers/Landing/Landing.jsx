@@ -15,6 +15,7 @@ import { userActions, adminActions, authenticationActions } from '../../actions'
 import { LoginRegistrationWrapper } from '../../components/LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../../components/Modal/Modal'
 import { gradientTextGenerator } from '../../helpers'
+import { Footer } from '../../components/Footer/Footer'
 
 class Landing extends Component {
   constructor (props) {
@@ -198,6 +199,7 @@ class Landing extends Component {
             </div>
           </div>
         </div>
+        <Footer theme={theme} tenant={tenant.data} />
       </div>
     )
   }

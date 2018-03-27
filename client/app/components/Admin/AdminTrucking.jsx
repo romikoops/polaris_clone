@@ -91,6 +91,7 @@ class AdminTrucking extends Component {
               <AdminTruckingCreator
                 theme={theme}
                 nexuses={nexuses}
+                hub={truckingDetail.hub}
                 adminDispatch={adminDispatch}
                 closeForm={this.toggleCreator}
               />
