@@ -136,7 +136,14 @@ PropTypes.shipmentData = PropTypes.shape({
 
 - ! Uses default export
 
-- props.contact.data is prop type `contact` but it is not declared as such
-- props.contact.location is prop type `location` but it is not declared as such
+- props.contact.data is PropType `contact` but it is not declared as such
+
+- props.contact.location is PropType `location` but it is not declared as such
+
+[X] Test complete
+
+## ContactCard
+
+- props.contactData.contact is very similar to PropType `user` but is using `firstName` instead of `first_name`
 
 [X] Test complete
