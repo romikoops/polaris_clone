@@ -6,10 +6,8 @@ import styles from './BookingConfirmation.scss'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { RoundButton } from '../RoundButton/RoundButton'
 import defaults from '../../styles/default_classes.scss'
-// import { Price } from '../Price/Price'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
-// import { Tooltip } from '../Tooltip/Tooltip'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
@@ -157,9 +155,7 @@ export class BookingConfirmation extends Component {
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
-    // const brightGradientStyle = theme
-    //   ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-    //   : { color: 'black' }
+
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -370,9 +366,6 @@ export class BookingConfirmation extends Component {
                     ) : (
                       ''
                     )}
-                  </div>
-                  <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
-                    <i className="fa fa-pencil clip" style={textStyle} />
                   </div>
                 </div>
               </div>

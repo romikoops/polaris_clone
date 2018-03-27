@@ -502,33 +502,6 @@ export class ShipmentDetails extends Component {
     const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
     const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
 
-    // const backgroundColor = value => (!value && this.state.
-    // nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
-    // const placeholderColorOverwrite = value =>
-    //   (!value && this.state.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
-    // const StyledSelect = styled(Select)`
-    //   .Select-control {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2 !important;
-    //   }
-    //   .Select-menu-outer {
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-value {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-placeholder {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     ${props => placeholderColorOverwrite(props.value)};
-    //   }
-    //   .Select-option {
-    //     background-color: #f9f9f9;
-    //   }
-    // `
-
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
@@ -575,23 +548,6 @@ export class ShipmentDetails extends Component {
             showIncotermError={showIncotermError}
             nextStageAttempt={this.state.nextStageAttempt}
           />
-          {/* <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none letter_2">
-              <TextHeading theme={theme} text="Select Incoterm:" size={3} />
-            </div>
-          </div>
-          <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
-            <StyledSelect
-              name="incoterms"
-              className={styles.select}
-              value={this.state.incoterm}
-              options={incoterms}
-              onChange={this.setIncoTerm}
-            />
-            <span className={errorStyles.error_message}>
-              {showIncotermError ? 'Must not be blank' : ''}
-            </span>
-          </div> */}
         </div>
       </div>
     )
@@ -620,8 +576,8 @@ export class ShipmentDetails extends Component {
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${showTruckingDetails ? styles.visible : ''} ` +
-            'layout-wrap layout-align-center'
+              `${showTruckingDetails ? styles.visible : ''} ` +
+              'layout-wrap layout-align-center'
           }
         >
           <TruckingDetails
@@ -643,7 +599,9 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -653,7 +611,7 @@ export class ShipmentDetails extends Component {
           <div
             className={
               `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+            'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
             {!(
