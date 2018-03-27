@@ -50,10 +50,10 @@ include MongoTools
     # overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   # end
   hub = tenant.hubs.find_by_name("Gothenburg Port")
-  ["import", "export"].each do |dir|
+  ["export"].each do |dir|
     trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_distance_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir, 'SE')
+    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   end
   # ["import", "export"].each do |dir|
   #   hub = tenant.hubs.find_by_name("Shanghai Port")

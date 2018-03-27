@@ -12,7 +12,7 @@ class TruckingPricing < ApplicationRecord
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
       # tp.truck_type =  "default" if tp.load_type != 'container'
-      tp.truck_type = "side_lifter" if tp.truck_type == "sima"
+      tp.truck_type = "chassis" if tp.truck_type == "chassi"
 
       tp.save!
     end

@@ -5,7 +5,7 @@ import Toggle from 'react-toggle'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { history, capitalize } from '../../helpers'
+import { history } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 // import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -33,12 +33,9 @@ export class AdminTruckingView extends Component {
     this.state = {
       loadTypeBool: false,
       filteredTruckingPricings: [],
-      searchFilter: '',
-      queryFilter: { value: 'either', label: 'Import/Export' }
+      searchFilter: ''
     }
     this.viewQuery = this.viewQuery.bind(this)
-    this.setQueryFilter = this.setQueryFilter.bind(this)
-    this.cellGenerator = this.cellGenerator.bind(this)
     this.closeQueryView = this.closeQueryView.bind(this)
   }
   componentWillMount () {
@@ -46,9 +43,7 @@ export class AdminTruckingView extends Component {
       this.handleSearchChange({ target: { value: '' } })
     }
   }
-  setQueryFilter (selection) {
-    this.setState({ queryFilter: selection })
-  }
+
   viewQuery (query) {
     this.setState({ currentTruckingPricing: query })
   }
@@ -61,64 +56,6 @@ export class AdminTruckingView extends Component {
     return pricings.filter(pr => pr.truckingPricing.load_type === loadTypeKey)
   }
 
-  cellGenerator (truckingHub, queries) {
-    const { queryFilter } = this.state
-    const filteredQueries =
-      queryFilter.value === 'either'
-        ? queries
-        : queries.filter(q => q.query.direction === queryFilter.value)
-    if (!truckingHub) {
-      return ''
-    }
-    switch (truckingHub.modifier) {
-      case 'zipcode':
-        return filteredQueries.map(q => (
-          <div
-            key={v4()}
-            className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
-              styles.trucking_display_cell
-            }`}
-            onClick={() => this.viewQuery(q)}
-          >
-            <p className="flex-100">Zipcode range</p>
-            <p className="flex-100">{`${q.query.zipcode.lower_zip} - ${
-              q.query.zipcode.upper_zip
-            }`}</p>
-          </div>
-        ))
-      case 'city':
-        return filteredQueries.map(q => (
-          <div
-            key={v4()}
-            className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
-              styles.trucking_display_cell
-            }`}
-            onClick={() => this.viewQuery(q)}
-          >
-            <p className="flex-100">City</p>
-            <p className="flex-100">{`${capitalize(q.query.city.city)}, ${capitalize(q.query.city.province)}`}</p>
-          </div>
-        ))
-      case 'distance':
-        return filteredQueries.map(q => (
-          <div
-            key={v4()}
-            className={`flex-20 layout-row layout-align-center-center pointy layout-wrap ${
-              styles.trucking_display_cell
-            }`}
-            onClick={() => this.viewQuery(q)}
-          >
-            <p className="flex-100">Distances</p>
-            <p className="flex-100">{`${q.query.distance.lower_distance} - ${
-              q.query.distance.upper_distance
-            }`}</p>
-          </div>
-        ))
-
-      default:
-        return []
-    }
-  }
   toggleNew () {
     this.setState({ newRow: !this.state.newRow })
   }
@@ -143,7 +80,7 @@ export class AdminTruckingView extends Component {
     if (event.target.value === '') {
       this.setState({
         filteredTruckingPricings:
-          this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
+        this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
       })
       return
     }
@@ -239,19 +176,24 @@ export class AdminTruckingView extends Component {
       { value: 'export', label: 'Export Only' },
       { value: 'either', label: 'Import/Export' }
     ]
-    const searchResults = filteredTruckingPricings.length > 0 ? filteredTruckingPricings.map(tp => (
-      <div
-        className="flex-100 layout-row layout-align-start-center"
-        key={v4()}
-        onClick={() => this.selectTruckingPricing(tp)}
-      >
-        <p className="flex-none"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
-      </div>
-    )) : (
-      <div className="flex-100 layout-row layout-align-center-center">
-        <p className="flex-none">No truckings available</p>
-      </div>
-    )
+    const searchResults =
+      filteredTruckingPricings.length > 0 ? (
+        filteredTruckingPricings.map(tp => (
+          <div
+            className={`flex-100 layout-row layout-align-center-center pointy layout-wrap ${
+              styles.trucking_display_cell
+            }`}
+            key={v4()}
+            onClick={() => this.selectTruckingPricing(tp)}
+          >
+            <p className="flex-none"> {AdminTruckingView.getTruckingPricingKey(tp)}</p>
+          </div>
+        ))
+      ) : (
+        <div className="flex-100 layout-row layout-align-center-center">
+          <p className="flex-none">No truckings available</p>
+        </div>
+      )
 
     const panelStyle = newRow ? styles.showPanel : styles.hidePanel
     return (
@@ -326,10 +268,15 @@ export class AdminTruckingView extends Component {
                 <input
                   type="text"
                   value={searchFilter}
+                  placeholder="Search Trucking Zones"
                   onChange={e => this.handleSearchChange(e)}
                 />
               </div>
-              <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+              <div
+                className={`flex-100 layout-row layout-align-center-start layout-wrap ${
+                  styles.trucking_search_results
+                }`}
+              >
                 {searchResults}
               </div>
             </div>

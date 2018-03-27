@@ -100,7 +100,9 @@ export class TruckingDisplayPanel extends Component {
       default:
         break
     }
-
+    const headerStyle = {
+      background: theme && theme.colors ? theme.colors.primary : 'rgba(0,0,0,0.75)'
+    }
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const pricings = truckingPricing[directionKey].table
     const pricingTables = pricings.map((pricing) => {
@@ -127,6 +129,7 @@ export class TruckingDisplayPanel extends Component {
             className={`${
               styles.trucking_fee_header
             } flex-100 layout-row layout-align-start-center`}
+            style={headerStyle}
           >
             <div
               className={`flex-15 layout-row layout-align-start-center layout-wrap ${
