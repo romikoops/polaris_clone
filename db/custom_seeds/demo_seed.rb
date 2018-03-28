@@ -1,6 +1,6 @@
 include ExcelTools
 include MongoTools
-['greencarrier'].each do |sub|
+['demo'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -25,9 +25,9 @@ include MongoTools
 #   # # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, false)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, false)
 
   # Overwrite public pricings from excel sheet
 
@@ -46,18 +46,18 @@ include MongoTools
   # # # # # Overwrite trucking data from excel sheet
 
   # puts "# Overwrite trucking data from excel sheet"
-  # hub = tenant.hubs.find_by_name("Gothenburg Port")
-  # ["import", "export"].each do |dir|
-  #   trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-  #   req = {"xlsx" => trucking}
-    # overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
-  # end
   hub = tenant.hubs.find_by_name("Gothenburg Port")
-  ["export"].each do |dir|
-    trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
+  ["import", "export"].each do |dir|
+    trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+    split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir)
   end
+  # hub = tenant.hubs.find_by_name("Gothenburg Port")
+  # ["export"].each do |dir|
+  #   trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
+  #   req = {"xlsx" => trucking}
+  #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+  # end
   # ["import", "export"].each do |dir|
   #   hub = tenant.hubs.find_by_name("Shanghai Port")
   #   trucking = File.open("#{Rails.root}/db/dummydata/shanghai_trucking.xlsx")

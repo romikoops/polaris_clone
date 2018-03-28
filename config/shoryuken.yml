@@ -1,0 +1,11 @@
+aws:
+  receive_message:
+    attribute_names:
+    - ApproximateReceiveCount
+    - SentTimestamp
+  region: eu-central-1
+
+concurrency: 25
+pidfile: tmp/pids/shoryuken.pid
+queues:
+  - excel_worker

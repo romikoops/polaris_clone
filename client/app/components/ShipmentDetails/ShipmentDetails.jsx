@@ -146,7 +146,12 @@ export class ShipmentDetails extends Component {
       shipment, cargoItems, containers, selectedDay, origin, destination
     } = this.state
     this.props.bookingSummaryDispatch.update({
-      shipment, cargoItems, containers, selectedDay, origin, destination
+      shipment,
+      cargoItems,
+      containers,
+      selectedDay,
+      origin,
+      destination
     })
   }
 
@@ -498,7 +503,12 @@ export class ShipmentDetails extends Component {
       ),
       name: 'dayPicker'
     }
-
+    const dayPickerToolip = this.state.has_pre_carriage
+      ? 'planned_pickup_date'
+      : 'planned_dropoff_date'
+    const dayPickerText = this.state.has_pre_carriage
+      ? 'Cargo Ready Date'
+      : 'Available at appointed terminal'
     const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
     const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
 
@@ -507,9 +517,9 @@ export class ShipmentDetails extends Component {
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text="Cargo Ready Date" size={3} />
+              <TextHeading theme={theme} text={dayPickerText} size={3} />
             </div>
-            <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
+            <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
           </div>
           <div
             name="dayPicker"
@@ -577,8 +587,8 @@ export class ShipmentDetails extends Component {
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-              `${showTruckingDetails ? styles.visible : ''} ` +
-              'layout-wrap layout-align-center'
+            `${showTruckingDetails ? styles.visible : ''} ` +
+            'layout-wrap layout-align-center'
           }
         >
           <TruckingDetails
@@ -600,9 +610,7 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
-          {cargoDetails}
-        </div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -612,7 +620,7 @@ export class ShipmentDetails extends Component {
           <div
             className={
               `${styles.btn_sec} ${defaults.content_width} ` +
-            'layout-row flex-none layout-wrap layout-align-start-start'
+              'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
             {!(
@@ -623,23 +631,25 @@ export class ShipmentDetails extends Component {
                   <div className="flex-10 layout-row layout-align-start-start">
                     <Checkbox
                       theme={theme}
-                      onChange={() => this.setState({
-                        noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                      })}
+                      onChange={() =>
+                        this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })
+                      }
                       size="30px"
                       name="no_dangerous_goods_confirmation"
                       checked={this.state.noDangerousGoodsConfirmed}
                     />
                   </div>
                   <p style={{ margin: 0, fontSize: '14px' }}>
-                    I hereby confirm that none of the specified cargo units contain{' '}
+                  I hereby confirm that none of the specified cargo units contain{' '}
                     <span
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
                     >
-                      dangerous goods
+                    dangerous goods
                     </span>
-                    .
+                  .
                   </p>
                 </div>
               ) : (
