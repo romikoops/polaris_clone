@@ -1,6 +1,6 @@
 include ExcelTools
 include MongoTools
-['demo'].each do |sub|
+['greencarrier'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -24,9 +24,11 @@ include MongoTools
 
 #   # # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, false)
+
   # Overwrite public pricings from excel sheet
 
 
@@ -42,6 +44,7 @@ include MongoTools
 
 
   # # # # # Overwrite trucking data from excel sheet
+
   # puts "# Overwrite trucking data from excel sheet"
   # hub = tenant.hubs.find_by_name("Gothenburg Port")
   # ["import", "export"].each do |dir|
@@ -50,10 +53,10 @@ include MongoTools
     # overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   # end
   hub = tenant.hubs.find_by_name("Gothenburg Port")
-  ["import", "export"].each do |dir|
+  ["export"].each do |dir|
     trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_distance_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir, 'SE')
+    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   end
   # ["import", "export"].each do |dir|
   #   hub = tenant.hubs.find_by_name("Shanghai Port")
@@ -63,4 +66,5 @@ include MongoTools
   # end
   
   # tenant.update_route_details()
+
 end

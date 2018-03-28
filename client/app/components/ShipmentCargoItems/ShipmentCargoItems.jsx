@@ -12,7 +12,7 @@ export class ShipmentCargoItems extends Component {
     super(props)
     this.state = {
       cargoItemTypes: [],
-      cargoItemInfoExpanded: []
+      cargoItemInfoExpanded: [true]
     }
     this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
@@ -30,10 +30,11 @@ export class ShipmentCargoItems extends Component {
       newCargoItem: { ...this.state.newCargoItem, [name]: value }
     })
   }
-
   addNewCargo () {
+    const { cargoItemInfoExpanded } = this.state
+    cargoItemInfoExpanded.push(true)
     this.props.addCargoItem()
-    this.setState({ firstRenderInputs: true })
+    this.setState({ firstRenderInputs: true, cargoItemInfoExpanded })
   }
   handleCargoItemType (event) {
     const index = event.name.split('-')[0]
@@ -76,7 +77,13 @@ export class ShipmentCargoItems extends Component {
   }
   render () {
     const {
-      cargoItems, theme, toggleModal, nextStageAttempt, scope, handleDelta, maxDimensions
+      cargoItems,
+      theme,
+      toggleModal,
+      nextStageAttempt,
+      scope,
+      handleDelta,
+      maxDimensions
     } = this.props
     const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
@@ -98,12 +105,6 @@ export class ShipmentCargoItems extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-
-    // const generateSeparator = () => (
-    //   <div key={v4()} className={`${styles.separator} flex-100`}>
-    //     <hr />
-    //   </div>
-    // )
     const generateCargoItem = (cargoItem, i) => {
       const inputs = getInputs.call(
         this,
@@ -155,19 +156,23 @@ export class ShipmentCargoItems extends Component {
               <i className={`${cargoItemInfoExpanded[i] && styles.rotated} fa fa-chevron-right`} />
             </div>
           </div>
-          <div className={
-            `${styles.cargo_item_box} ${styles.cargo_item_info} ` +
-            `${cargoItemInfoExpanded[i] && styles.expanded} ` +
-            'flex-100'
-          }
-          >
-            <div className={
-              `${styles.inner_cargo_item_info} layout-row ` +
-              'layout-wrap layout-align-start'
+          <div
+            className={
+              `${styles.cargo_item_info} ` +
+              `${cargoItemInfoExpanded[i] && styles.expanded} ` +
+              'flex-100'
             }
+          >
+            <div
+              className={
+                `${styles.inner_cargo_item_info} layout-row layout-wrap layout-align-start`
+              }
             >
-              {inputs.volume}
-              {inputs.chargeableWeight}
+              {inputs.total}
+              <div className={`${styles.cargo_item_box} flex layout-row`}>
+                {inputs.volume}
+                {inputs.chargeableWeight}
+              </div>
             </div>
           </div>
 
@@ -185,28 +190,7 @@ export class ShipmentCargoItems extends Component {
 
     if (cargoItems) {
       cargoItems.forEach((cargoItem, i) => {
-        // if (!cargoItemTypes[i]) {
-        //   // Set a default cargo item type as the select box value
-
-        //   // Define labels of the default cargo item types in order of priority
-        //   const defaultTypeLabels = ['Pallet', '100.0cm × 120.0cm Pallet: Europe, Asia']
-
-        //   // Try to find one of the labels in the available cargo item types
-        //   let defaultType
-        //   defaultTypeLabels.find(defaultTypeLabel => (
-        //     defaultType = availableCargoItemTypes.find(cargoItemType => (
-        //       cargoItemType.label === defaultTypeLabel
-        //     ))
-        //   ))
-
-        //   // In case none of the defaultTypeLabels match the available
-        //   // cargo item types, set the default to the first available.
-        //   defaultType = defaultType || availableCargoItemTypes[0]
-
-        //   this.handleCargoItemType(Object.assign({ name: `${i}-colliType` }, defaultType))
-        // }
         cargosAdded.push(generateCargoItem(cargoItem, i))
-        // cargosAdded.push(generateSeparator())
       })
     }
 
@@ -214,8 +198,7 @@ export class ShipmentCargoItems extends Component {
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div
           className={
-            `layout-row flex-none ${defs.content_width} ` +
-            'layout-wrap layout-align-center-center'
+            `layout-row flex-none layout-wrap layout-align-center-center ${defs.content_width} `
           }
         >
           <TextHeading theme={theme} text="Cargo Units" size={3} />
@@ -237,7 +220,7 @@ export class ShipmentCargoItems extends Component {
               </div>
             </div>
             <div className={`flex-100 ${styles.new_container_placeholder}`}>
-              { generateCargoItem(null, -1) }
+              {generateCargoItem(null, -1)}
             </div>
           </div>
         </div>

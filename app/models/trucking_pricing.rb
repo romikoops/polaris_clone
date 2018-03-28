@@ -12,7 +12,7 @@ class TruckingPricing < ApplicationRecord
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
       # tp.truck_type =  "default" if tp.load_type != 'container'
-      tp.truck_type = "side_lifter" if tp.truck_type == "sima"
+      tp.truck_type = "chassis" if tp.truck_type == "chassi"
 
       tp.save!
     end
@@ -87,12 +87,13 @@ class TruckingPricing < ApplicationRecord
       WHERE tenants.id = #{args[:tenant_id]}
       AND   hubs.id IN #{hub_ids.sql_format}
       GROUP BY trucking_pricings.id
+      ORDER BY MAX(trucking_destinations.zipcode), MAX(trucking_destinations.distance), MAX(trucking_destinations.city_name)
     ")
 
-    result.each_with_object({}) do |row, h|
+    result.map do |row|
       filter = parse_sql_array(row["filter"])
-      h[row["id"]] = {
-        "trucking_pricing"  => find(row["id"]),
+      {
+        "truckingPricing"  => find(row["id"]),
         filter.first => filter[1..-1]
       }
     end

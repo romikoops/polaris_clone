@@ -507,7 +507,7 @@ export class ShipmentDetails extends Component {
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text="Available Dates" size={3} />
+              <TextHeading theme={theme} text="Cargo Ready Date" size={3} />
             </div>
             <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>
@@ -549,23 +549,6 @@ export class ShipmentDetails extends Component {
             nextStageAttempt={this.state.nextStageAttempt}
             firstStep
           />
-          {/* <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none letter_2">
-              <TextHeading theme={theme} text="Select Incoterm:" size={3} />
-            </div>
-          </div>
-          <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
-            <StyledSelect
-              name="incoterms"
-              className={styles.select}
-              value={this.state.incoterm}
-              options={incoterms}
-              onChange={this.setIncoTerm}
-            />
-            <span className={errorStyles.error_message}>
-              {showIncotermError ? 'Must not be blank' : ''}
-            </span>
-          </div> */}
         </div>
       </div>
     )
@@ -594,8 +577,8 @@ export class ShipmentDetails extends Component {
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${showTruckingDetails ? styles.visible : ''} ` +
-            'layout-wrap layout-align-center'
+              `${showTruckingDetails ? styles.visible : ''} ` +
+              'layout-wrap layout-align-center'
           }
         >
           <TruckingDetails
@@ -617,7 +600,9 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -627,7 +612,7 @@ export class ShipmentDetails extends Component {
           <div
             className={
               `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+            'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
             {!(

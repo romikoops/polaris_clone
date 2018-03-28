@@ -73,6 +73,7 @@ module PricingTools
           cbm = cargo[:volume]
           tmp = 0
           cbm > ton ? tmp = cbm : tmp = ton
+          min = fee["min"] ? fee["min"] : 0
           final = min > tmp ? min : tmp
           totals[k] ? totals[k]["value"] += final * fee["value"] : totals[k] = {"value" => final * fee["value"], "currency" => fee["currency"]}
           if !totals[k]["currency"]

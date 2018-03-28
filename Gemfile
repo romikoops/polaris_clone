@@ -24,7 +24,8 @@ gem 'bootstrap-sass', '~> 3.3.5.1'
 gem 'sidekiq'
 
 gem 'awesome_print'
-
+gem 'shoryuken'
+gem 'aws-sdk-sqs'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 

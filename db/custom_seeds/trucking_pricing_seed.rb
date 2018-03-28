@@ -1,5 +1,5 @@
   include ExcelTools
-  tenant = Tenant.find_by_subdomain('demo')
+  tenant = Tenant.find_by_subdomain('greencarrier')
   shipper = tenant.users.where(role_id: 2).first 
   hub = tenant.hubs.find_by_name("Gothenburg Port")
   ["import", "export"].each do |dir|

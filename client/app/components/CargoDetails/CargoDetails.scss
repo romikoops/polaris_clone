@@ -26,7 +26,8 @@
   .prices h5, .prices h6{
     color: #39393A;
     font-size: 16px; 
-    line-height: 18px;
+    line-height: 20px;
+    top: 0px;
   }
   .box_content {
     transition: all 1s ease;
@@ -100,5 +101,12 @@
   }
   .faded_text {
     color: rgba(0,0,0,0.35);
+  }
+  .EORI_input {
+    border-radius: 5px;
+    margin-bottom: 25px;
+    border: 0.5px solid rgba($color: #000000, $alpha: 0.25);
+    height: 35px;
+    font-size: 12px;
   }
 }

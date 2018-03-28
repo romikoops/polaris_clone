@@ -64,20 +64,29 @@ class MessageCenter extends Component {
   }
   filterShipments (convoKey) {
     const { shipments } = this.props.users.dashboard
+    const { messageDispatch } = this.props
+    console.log(shipments)
     let tmpShipment = {}
     let shipment = {}
     if (shipments && convoKey) {
-      if (shipments.requested.length > 0 && tmpShipment === undefined) {
+      if (shipments.requested.length > 0) {
         tmpShipment = shipments.requested.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.open.length > 0 && tmpShipment === undefined) {
+      if (shipments.open.length > 0) {
         tmpShipment = shipments.open.filter(shp => (shp.imc_reference === convoKey))
       }
-      if (shipments.finished.length > 0 && tmpShipment === undefined) {
+      if (shipments.finished.length > 0) {
         tmpShipment = shipments.finished.filter(shp => (shp.imc_reference === convoKey))
       }
     }
-
+    if (shipments.requested.length < 1 &&
+        shipments.open.length < 1 &&
+        shipments.finished.length < 1) {
+      console.log('dsfds')
+      const ld = messageDispatch.getShipment(convoKey)
+      console.log(ld)
+      console.log('sdf')
+    }
     tmpShipment.length > 0
       ? shipment = {
         convoKey,
@@ -91,6 +100,7 @@ class MessageCenter extends Component {
         status: tmpShipment[0].status
       }
       : shipment = {}
+    console.log(shipments)
     return shipment
   }
   render () {

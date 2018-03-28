@@ -36,7 +36,7 @@ export class ShipmentThankYou extends Component {
                 <p className="flex-100">
                   Booking request confirmation has been sent to your account email address.
                   <br />
-                  Please note that the rates can be changed withyout prior notice.
+                  Please note that the rates can be changed without prior notice.
                   <br />
                   Your booking will be confirmed after a review.
                   <br />

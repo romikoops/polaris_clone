@@ -263,6 +263,7 @@ class OfferCalculator
   end
 
   def set_cargo_charges!(charges, trip, sched_key)
+    total_units = @cargo_units.map {|cu| cu.quantity}.sum
     @cargo_units.each do |cargo_unit|
       path_key = path_key(cargo_unit, trip)
       
@@ -271,7 +272,7 @@ class OfferCalculator
         cargo_unit, 
         path_key, 
         @user, 
-        @cargo_units.length,
+        total_units,
         @shipment.planned_pickup_date
       )
       if charge_result
