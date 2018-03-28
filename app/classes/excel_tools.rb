@@ -193,6 +193,7 @@ module ExcelTools
             ratio: 1850,
             height_limit: 130
           },
+          courier: courier,
           modifier: 'kg'
         )
         trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
@@ -215,7 +216,7 @@ module ExcelTools
             }
           })
         end
-
+        trucking_pricing_should_update = nil
         zip_code_range.each do |zipcode|
           p zipcode
           trucking_destination = TruckingDestination.find_by!(zipcode: zipcode, country_code: 'SE')
@@ -234,18 +235,20 @@ module ExcelTools
           ).first
 
           if hub_trucking.nil?
+            trucking_pricing.save!
             HubTrucking.create(
               trucking_destination: trucking_destination,
               trucking_pricing: trucking_pricing,
               hub_id: hub_id
             )
           else
-            hub_trucking.trucking_pricing.update(
-              direction => { "table" => trucking_pricing[direction]["table"] }
-            )
-            break
+            trucking_pricing_should_update = hub_trucking.trucking_pricing
           end
         end
+        
+        trucking_pricing_should_update.try(:update,
+          direction => { "table" => trucking_pricing[direction]["table"] }
+        )
 
       #  zip_code_range_array = row_data.shift.split(" - ")
        
