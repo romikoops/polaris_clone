@@ -8,7 +8,7 @@ class TruckingPricingSeeder
 			hub = tenant.hubs.find_by_name("Gothenburg Port")
 			DIRECTIONS.each do |dir|
 			  trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-			  req = 
+			  req = {"xlsx" => trucking}
 			  overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
 			end
 
