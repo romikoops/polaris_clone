@@ -23,6 +23,7 @@ class AdminHubs extends Component {
     this.toggleNewHub = this.toggleNewHub.bind(this)
     this.saveNewHub = this.saveNewHub.bind(this)
     this.closeModal = this.closeModal.bind(this)
+    this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
     this.setView = this.setView.bind(this)
   }
   componentDidMount () {

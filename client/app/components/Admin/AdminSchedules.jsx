@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 import ReactTooltip from 'react-tooltip'
-
+import { documentActions } from '../../actions'
 import FileUploader from '../FileUploader/FileUploader'
 import { RoundButton } from '../RoundButton/RoundButton'
 import styles from './Admin.scss'
-
+import { AdminUploadsSuccess } from './Uploads/Success'
 import AdminScheduleGenerator from './AdminScheduleGenerator'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { adminSchedules as schedTip } from '../../constants'
@@ -64,21 +65,23 @@ export class AdminSchedules extends Component {
       }
     })
   }
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
+  }
   viewSchedules (itinerary) {
     const { adminDispatch } = this.props
     adminDispatch.loadItinerarySchedules(itinerary.id, true)
   }
   render () {
     const {
-      theme, hubs, scheduleData, adminDispatch, limit
+      theme, hubs, scheduleData, adminDispatch, limit, document
     } = this.props
 
     if (!scheduleData || !hubs) {
       return ''
     }
-    const {
-      itineraries
-    } = scheduleData
+    const { itineraries } = scheduleData
     const { showList } = this.state
     const trainUrl = '/admin/train_schedules/process_csv'
     const vesUrl = '/admin/vessel_schedules/process_csv'
@@ -98,8 +101,18 @@ export class AdminSchedules extends Component {
         seeAll={false}
       />
     )
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
+    ) : (
+      ''
+    )
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+        {uploadStatus}
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
@@ -191,16 +204,32 @@ AdminSchedules.propTypes = {
     itineraryIds: PropTypes.Array,
     itineraries: PropTypes.objectOf(PropTypes.any).isRequired
   }),
+  document: PropTypes.objectOf(PropTypes.any),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
-  limit: PropTypes.number
+  limit: PropTypes.number,
+  documentDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 AdminSchedules.defaultProps = {
   theme: null,
   hubs: [],
   scheduleData: null,
-  limit: 0
+  limit: 0,
+  document: {},
+  documentDispatch: {}
+}
+function mapStateToProps (state) {
+  const { document } = state
+
+  return {
+    document
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    documentDispatch: bindActionCreators(documentActions, dispatch)
+  }
 }
 
-export default AdminSchedules
+export default connect(mapStateToProps, mapDispatchToProps)(AdminSchedules)

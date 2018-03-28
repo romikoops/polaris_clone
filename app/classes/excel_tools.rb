@@ -1147,14 +1147,18 @@ module ExcelTools
         )
       startDate = row[:etd]
       endDate =  row[:eta]
-      
+      p row[:from]
+      p row[:to]
       if locations[row[:from]] && locations[row[:to]]
         itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
       else
-        locations[row[:from]] = Location.find_by_name(row[:from])
-        locations[row[:to]] = Location.find_by_name(row[:to])
-
-        itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+        locations[row[:from]] = Location.find_by(name: "#{row[:from]}", location_type: 'nexus')
+        locations[row[:to]] = Location.find_by(name: "#{row[:to]}", location_type: 'nexus')
+        if locations[row[:from]] && locations[row[:to]]
+          itinerary = tenant.itineraries.find_or_create_by!(mode_of_transport: row[:mode_of_transport], name: "#{locations[row[:from]].name} - #{locations[row[:to]].name}")
+        else
+          next
+        end
       end
       origin_hub_ids = locations[row[:from]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
       destination_hub_ids = locations[row[:to]].hubs_by_type(row[:mode_of_transport], user.tenant_id).ids
@@ -1328,21 +1332,46 @@ module ExcelTools
       )
       hub_code = hub_row[:hub_code] unless hub_row[:hub_code].blank?
       
-      hub = nexus.hubs.find_or_create_by!(
+      hub = nexus.hubs.find_by(
         nexus_id:      nexus.id, 
         location_id:   location.id, 
         tenant_id:     user.tenant_id, 
-        hub_type:      hub_row[:hub_type], 
-        trucking_type: hub_row[:trucking_type], 
-        latitude:      hub_row[:latitude], 
-        longitude:     hub_row[:longitude], 
+        hub_type:      hub_row[:hub_type],
         name:          "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", 
         photo:         hub_row[:photo]
       )
+      if hub
+         hub.update_attributes(
+          nexus_id:      nexus.id, 
+          location_id:   location.id, 
+          tenant_id:     user.tenant_id, 
+          hub_type:      hub_row[:hub_type], 
+          trucking_type: hub_row[:trucking_type], 
+          latitude:      hub_row[:latitude], 
+          longitude:     hub_row[:longitude], 
+          name:          "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", 
+          photo:         hub_row[:photo]
+        )
+        results[:hubs] << hub
+        stats[:hubs][:number_updated] += 1
+      else
+         hub = nexus.hubs.create!(
+          nexus_id:      nexus.id, 
+          location_id:   location.id, 
+          tenant_id:     user.tenant_id, 
+          hub_type:      hub_row[:hub_type], 
+          trucking_type: hub_row[:trucking_type], 
+          latitude:      hub_row[:latitude], 
+          longitude:     hub_row[:longitude], 
+          name:          "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}", 
+          photo:         hub_row[:photo]
+        )
+        results[:hubs] << hub
+        stats[:hubs][:number_created] += 1
+      end
       results[:nexuses] << nexus
       stats[:nexuses][:number_updated] += 1
-      results[:hubs] << hub
-      stats[:hubs][:number_updated] += 1
+      
       hub.generate_hub_code!(user.tenant_id) unless hub.hub_code
       hub
     end
