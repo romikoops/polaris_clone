@@ -71,7 +71,7 @@ module TruckingTools
         total_fees[k] = fee
       end
     end
-    byebug
+    
     fees.each do |k, v|
       if !result["value"]
         result["value"] = v[:value]
@@ -199,7 +199,7 @@ module TruckingTools
 
   def calc_trucking_price(trucking_pricing, cargos, km, direction)
     cargo_object = trucking_pricing.load_type == 'container' ? get_container_object(cargos) : get_cargo_item_object(trucking_pricing, cargos)
-    byebug
+    
     trucking_pricings = {}
     cargo_object.each do |stackable_type, cargo_values|
       trucking_pricings[stackable_type] = filter_trucking_pricings(trucking_pricing, cargo_values, direction)
@@ -211,7 +211,7 @@ module TruckingTools
         fees[key] = calculate_trucking_price(tp, cargo_object[key], direction, km)
       end
     end
-    byebug
+    
     total = {value: 0, currency: ''}
     fees.each do |key, trucking_fee|
       unless trucking_fee.empty?
@@ -219,7 +219,7 @@ module TruckingTools
         total[:currency] = trucking_fee[:currency]
       end
     end
-    byebug
+    
     fees[:total] = total
     return fees
   end

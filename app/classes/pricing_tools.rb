@@ -16,7 +16,7 @@ module PricingTools
     price_key        = path_pricing[path_pricing_key]    
 
     pricing = get_item_fn(client, 'pricings', '_id', price_key)
-    byebug
+    
     final_pricing = pricing
     if pricing["exceptions"].length > 0
       pricing["exceptions"].each do |ex|
