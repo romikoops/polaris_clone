@@ -176,6 +176,199 @@ module ExcelTools
     mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
+  def handle_zipcode_sections(rows, user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, currency)
+    hub = Hub.find(hub_id)
+    courier = Courier.find_or_create_by(name: courier_name)
+    rows.each do |row_data|
+      zip_code_range_array = row_data.shift.split(" - ")
+        zip_code_range = (zip_code_range_array[0].to_i...zip_code_range_array[1].to_i)
+        
+        row_min_value = row_data.shift
+        
+        trucking_pricing = TruckingPricing.new(
+          export: { table: [] },
+          import: { table: [] },
+          load_type: load_type,
+          load_meterage: {
+            ratio: 1850,
+            height_limit: 130
+          },
+          courier: courier,
+          modifier: 'kg',
+          truck_type: 'default'
+        )
+        trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
+          defaults[i].clone.merge({
+            min_value: [weight_min_row[i], row_min_value].max,
+            fees: {
+              base_rate: {
+                value: val,
+                rate_basis: 'PER_X_KG',
+                currency: currency,
+                base: 100
+              },
+              congestion: {
+                value: 15,
+                rate_basis: 'PER_ITEM',
+                currency: currency
+              }
+            }
+          })
+        end
+        trucking_pricing_should_update = nil
+        zip_code_range.each do |zipcode|
+          p zipcode
+          trucking_destination = TruckingDestination.find_by!(zipcode: zipcode, country_code: 'SE')
+          trucking_pricing_ids = TruckingPricing.where(
+            load_type: load_type,
+            truck_type: 'default',
+            load_meterage: {
+              ratio: 1850,
+              height_limit: 130
+            },
+            modifier: 'kg'
+          ).ids
+          hub_trucking = HubTrucking.where(              
+            trucking_destination: trucking_destination,
+            trucking_pricing_id: trucking_pricing_ids,
+            hub_id: hub_id
+          ).first
+
+          if hub_trucking.nil?
+            trucking_pricing.save!
+            HubTrucking.create(
+              trucking_destination: trucking_destination,
+              trucking_pricing: trucking_pricing,
+              hub_id: hub_id
+            )
+          else
+            trucking_pricing_should_update = hub_trucking.trucking_pricing
+          end
+        end
+        
+        trucking_pricing_should_update.try(:update,
+          direction => { "table" => trucking_pricing[direction]["table"] }
+        )
+
+      #  zip_code_range_array = row_data.shift.split(" - ")
+       
+      #   row_min_value = row_data.shift
+      #   zip_codes = []
+      #   hub_truckings = []
+      #   tmp_zip = zip_code_range_array[0].to_i
+      #   while tmp_zip <= zip_code_range_array[1].to_i
+      #     td = TruckingDestination.find_by!(zipcode: tmp_zip, country_code: 'SE')
+      #     zip_codes << td
+      #     hub_truckings << HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
+      #     tmp_zip += 1
+          
+      #   end
+
+      #   if hub_truckings[0].trucking_pricing_id
+      #     trucking_pricing = hub_truckings[0].trucking_pricing
+      #   else
+      #     trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type)
+      #   end
+      #  p trucking_pricing.id
+      #  byebug
+      #   row_data.each_with_index do |val, index|
+      #     tmp = defaults[index].clone
+      #     if row_min_value < weight_min_row[index]
+      #       min_value = weight_min_row[index]
+      #     else
+      #       min_value = row_min_value
+      #     end
+      #     tmp[:min_value] = min_value
+      #     tmp[:fees] = {  
+      #       base_rate: {
+      #         value: val,
+      #         rate_basis: 'PER_X_KG',
+      #         currency: currency,
+      #         base: 100
+      #       }
+            
+      #     }
+
+      #       tmp[:fees][:congestion] = {
+      #         value: 15,
+      #         rate_basis: 'PER_ITEM',
+      #         currency: currency
+      #       }
+
+      #     tmp[:direction] = direction
+      #     tmp[:type] = "default"
+      #     trucking_pricing["load_meterage"] = {
+      #       ratio: 1850,
+      #       height_limit: 130
+      #     }
+      #     trucking_pricing[:modifier] = 'kg'
+      #     trucking_pricing[direction]["table"].push(tmp)
+      #     trucking_pricing.save!
+      #     hub_truckings.each do |ht|
+      #       ht.trucking_pricing_id = trucking_pricing.id
+      #       ht.save!
+      #     end
+      #   end
+        
+      end
+  end
+  def split_zip_code_sections(params, user = current_user, hub_id, courier_name, direction)
+    defaults = []
+    test_array = []
+    load_type = "cargo_item"
+    no_of_jobs = 10
+    xlsx = Roo::Spreadsheet.open(params['xlsx'])
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      num_rows = first_sheet.last_row
+      rows_per_job = ((num_rows - 4)/no_of_jobs).to_i
+
+      rows_for_job = []
+      (0...no_of_jobs-1).each do |index|
+        tmp_array = []
+        start_row = 4 + (index * rows_per_job)
+        end_row = 3 + ((index + 1) * rows_per_job)
+        (start_row...end_row).each do |row_no|
+          tmp_array.push(first_sheet.row(row_no))
+        end
+        
+        rows_for_job << tmp_array
+      end
+      currency_row = first_sheet.row(1)
+      currency = currency_row[3]
+      header_row = first_sheet.row(2)
+      header_row.shift
+      header_row.shift
+      weight_min_row = first_sheet.row(3)
+      weight_min_row.shift
+      weight_min_row.shift
+      
+      header_row.each do |cell|
+        min_max_arr = cell.split(" - ")
+        defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
+      end
+      
+      rows_for_job.each do |rfj|
+        job_id = SecureRandom.uuid
+       update_item("jobs", {_id: job_id}, {completed: false, created: DateTime.now})
+        worker_obj = {
+          defaults: defaults,
+          weight_min_row: weight_min_row,
+          rows_for_job: rfj.clone(),
+          hub_id: hub_id,
+          courier_name: courier_name,
+          load_type: load_type,
+          currency: currency,
+          direction: direction,
+          user_id: user.id,
+          job_id: job_id
+        }
+        ExcelWorker.perform_async(worker_obj)
+        
+      end
+    end
+    # handle_zipcode_sections(test_array[0][:rows_for_job], user, test_array[0][:direction], test_array[0][:hub_id], test_array[0][:courier_name], test_array[0][:load_type], test_array[0][:defaults], test_array[0][:weight_min_row], test_array[0][:currency])
+  end
    def overwrite_zipcode_trucking_rates_by_hub(params, user = current_user, hub_id, courier_name, direction)
     # old_trucking_ids = nil
     # new_trucking_ids = []
@@ -209,6 +402,9 @@ module ExcelTools
     xlsx = Roo::Spreadsheet.open(params['xlsx'])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
+      num_rows = first_sheet.last_row
+      
+
       hub = Hub.find(hub_id)
       nexus = hub.nexus
 
@@ -220,7 +416,7 @@ module ExcelTools
       weight_min_row = first_sheet.row(3)
       weight_min_row.shift
       weight_min_row.shift
-      num_rows = first_sheet.last_row
+      
       header_row.each do |cell|
         min_max_arr = cell.split(" - ")
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})

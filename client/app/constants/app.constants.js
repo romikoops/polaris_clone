@@ -19,8 +19,8 @@ export const tooltips = {
   pickup_location:
     'Please specify the exact address of the pickup location and double-check for certainty.',
   start_port_location: 'This is the start port of your shipment.',
-  planned_pickup_date:
-    'The pickup date is the date on which the good or container are ready to get picked up at the designated address provided below.',
+  planned_pickup_date: 'Date states when cargo is ready for pickup',
+  planned_dropoff_date: 'Date states when you chose to deliver cargo to Greencarrier appointed terminal',
   shipper_name: 'Example: John Smith, ItsMyCargo IVS.',
   shipper_street:
     'Example Tranehavegaard, 15. Note the address of the shipper is not always the same as the pick up location.',

@@ -16,6 +16,7 @@ module PricingTools
     price_key        = path_pricing[path_pricing_key]    
 
     pricing = get_item_fn(client, 'pricings', '_id', price_key)
+    
     final_pricing = pricing
     if pricing["exceptions"].length > 0
       pricing["exceptions"].each do |ex|
@@ -29,10 +30,10 @@ module PricingTools
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo = load_type === 'container' ? {
-      number_of_items: cargos.length,
+      number_of_items: cargos.map{|c| c.quantity}.sum,
       weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
     } : {
-      number_of_items: cargos.length,
+      number_of_items: cargos.map{|c| c.quantity}.sum,
       volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
       weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
     }
