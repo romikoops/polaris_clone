@@ -2149,6 +2149,8 @@ module ExcelTools
       mongo["itineraryPricings"].bulk_write(itinerary_pricings_to_write)
       mongo["pricings"].bulk_write(pricings_to_write)
       mongo["userPricings"].bulk_write(user_pricings_to_write)
+      sleep(5)
+      tenant.update_route_details()
       return {results: results, stats: stats}
   end
   def overwrite_mongo_maersk_fcl_pricings(params, dedicated, user = current_user, generate = false)
