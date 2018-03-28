@@ -3,31 +3,30 @@ import { v4 } from 'node-uuid'
 import styles from '../RegistrationPage.scss'
 import { Checkbox } from '../../../components/Checkbox/Checkbox'
 import PropTypes from '../../../prop-types'
+import termsAndConditionsSummaryBullets from '../../../static/termsAndConditionsSummaryBullets'
 
 export default function TermsAndConditionsSummary (props) {
   const {
-    theme, handleChange, accepted, goToTermsAndConditions
+    theme, handleChange, accepted, goToTermsAndConditions, tenant
   } = props
-  const bulletTexts = [
-    'Exporting or importing company must be registered and approved by local country ' +
-    'authorities. Financial rating will be checked and evaluated before arranging the shipment.',
 
-    'After sending your booking request, the request will be reviewed by Greencarrier ' +
-    'and confirmation will be sent.',
-
-    'Pricing in booking request is only valid for commercial cargo. ' +
-    'Personal effect shipments are not accepted. ' +
-    'Restricted cargo, weapons, explosives, temperature control and live animals are not accepted.'
-  ]
-
+  const subdomain = tenant && tenant.data && tenant.data.subdomain
+  const bulletTexts = termsAndConditionsSummaryBullets[subdomain] || []
   const bullets = bulletTexts.map(bulletText => <li key={v4()}> { bulletText } </li>)
+  const bulletsJSX = bullets.length > 0
+    ? (
+      <div>
+        <h3> Before registering your account, please consider the following: </h3>
+        <ul>
+          {bullets}
+        </ul>
+      </div>
+    )
+    : ''
 
   return (
     <div className={styles.terms_and_conditions_summary}>
-      <h3> Before registering your account, please consider the following: </h3>
-      <ul>
-        {bullets}
-      </ul>
+      {bulletsJSX}
       <div className="flex-90 layout-row layout-align-center-center">
         <div className="flex-5 layout-row layout-align-start-start">
           <Checkbox
@@ -58,6 +57,7 @@ export default function TermsAndConditionsSummary (props) {
 
 TermsAndConditionsSummary.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.tenant,
   handleChange: PropTypes.func.isRequired,
   accepted: PropTypes.bool,
   goToTermsAndConditions: PropTypes.func.isRequired
@@ -65,5 +65,6 @@ TermsAndConditionsSummary.propTypes = {
 
 TermsAndConditionsSummary.defaultProps = {
   theme: null,
+  tenant: null,
   accepted: PropTypes.false
 }

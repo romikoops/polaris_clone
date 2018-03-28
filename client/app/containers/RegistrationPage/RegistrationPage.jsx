@@ -90,7 +90,9 @@ class RegistrationPage extends React.Component {
   }
 
   render () {
-    const { registering, theme, authenticationDispatch } = this.props
+    const {
+      registering, theme, tenant, authenticationDispatch
+    } = this.props
     const alert = this.state.alertVisible ? (
       <Alert
         message={{ type: 'error', text: 'Email has already been taken' }}
@@ -183,6 +185,7 @@ class RegistrationPage extends React.Component {
         </div>
         <TermsAndConditionsSummary
           theme={theme}
+          tenant={tenant}
           handleChange={() => this.handleChangeTermsAndConditionsAccepted()}
           accepted={this.state.termsAndConditionsAccepted}
           goToTermsAndConditions={() => authenticationDispatch.goTo('/terms_and_conditions', true)}

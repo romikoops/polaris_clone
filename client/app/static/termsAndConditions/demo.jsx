@@ -32,11 +32,9 @@ const demo = (
       <br />
       <br />
 
-      https://fiata.com/membership/search-association-members
-      <br />
-      <br />
-
-      I have read and accept the terms and conditions of Greencarrier
+      <a href="https://fiata.com/membership/search-association-members" target="_blank">
+        https://fiata.com/membership/search-association-members
+      </a>
     </p>
   </div>
 )
