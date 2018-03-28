@@ -11,11 +11,12 @@ import Admin from '../Admin/Admin'
 import AdminShipmentAction from '../../components/Redirects/AdminShipmentAction'
 import { SignOut } from '../../components/SignOut/SignOut'
 import Loading from '../../components/Loading/Loading'
+import TermsAndConditions from '../../components/TermsAndConditions/TermsAndConditions'
 import { appActions } from '../../actions'
 import { PrivateRoute, AdminPrivateRoute } from '../../routes/index'
 import { getSubdomain } from '../../helpers'
 import MessageCenter from '../../containers/MessageCenter/MessageCenter'
-// import SideNav from '../../components/SideNav/SideNav';
+
 class App extends Component {
   componentDidMount () {
     const { appDispatch } = this.props
@@ -49,6 +50,17 @@ class App extends Component {
           )}
           <Switch className="flex">
             <Route exact path="/" render={props => <Landing theme={theme} {...props} />} />
+            <Route
+              exact
+              path="/terms_and_conditions"
+              render={props => (
+                <TermsAndConditions
+                  tenant={tenant}
+                  user={user}
+                  theme={theme}
+                />
+              )}
+            />
             <PrivateRoute
               path="/booking"
               component={Shop}

@@ -133,7 +133,7 @@ export class ShipmentDetails extends Component {
     if (!nextState.modals) {
       this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
     }
-    return (
+    return !!(
       nextProps.shipmentData &&
       nextState.shipment &&
       nextState.modals &&
@@ -141,6 +141,15 @@ export class ShipmentDetails extends Component {
       nextProps.user
     )
   }
+  componentDidUpdate () {
+    const {
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    } = this.state
+    this.props.bookingSummaryDispatch.update({
+      shipment, cargoItems, containers, selectedDay, origin, destination
+    })
+  }
+
   setIncoTerm (opt) {
     this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
     this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
@@ -409,44 +418,41 @@ export class ShipmentDetails extends Component {
 
   render () {
     const {
-      tenant, user, shipmentData, shipmentDispatch
+      tenant, user, shipmentData, shipmentDispatch, messages
     } = this.props
     const { modals } = this.state
     const { theme, scope } = tenant.data
-    const { messages } = this.props
     let cargoDetails
-
-    if (shipmentData.shipment) {
-      if (shipmentData.shipment.load_type === 'container') {
-        cargoDetails = (
-          <ShipmentContainers
-            containers={this.state.containers}
-            addContainer={this.addNewContainer}
-            handleDelta={this.handleContainerChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
-      if (shipmentData.shipment.load_type === 'cargo_item') {
-        cargoDetails = (
-          <ShipmentCargoItems
-            cargoItems={this.state.cargoItems}
-            addCargoItem={this.addNewCargoItem}
-            handleDelta={this.handleCargoItemChange}
-            deleteItem={this.deleteCargo}
-            nextStageAttempt={this.state.nextStageAttempt}
-            theme={theme}
-            scope={scope}
-            availableCargoItemTypes={shipmentData.cargoItemTypes}
-            maxDimensions={shipmentData.maxDimensions}
-            toggleModal={name => this.toggleModal(name)}
-          />
-        )
-      }
+    if (!shipmentData.shipment) return ''
+    if (shipmentData.shipment.load_type === 'container') {
+      cargoDetails = (
+        <ShipmentContainers
+          containers={this.state.containers}
+          addContainer={this.addNewContainer}
+          handleDelta={this.handleContainerChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
+    }
+    if (shipmentData.shipment.load_type === 'cargo_item') {
+      cargoDetails = (
+        <ShipmentCargoItems
+          cargoItems={this.state.cargoItems}
+          addCargoItem={this.addNewCargoItem}
+          handleDelta={this.handleCargoItemChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          maxDimensions={shipmentData.maxDimensions}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
     }
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
@@ -496,39 +502,12 @@ export class ShipmentDetails extends Component {
     const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
     const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
 
-    // const backgroundColor = value => (!value && this.state.
-    // nextStageAttempt ? '#FAD1CA' : '#F9F9F9')
-    // const placeholderColorOverwrite = value =>
-    //   (!value && this.state.nextStageAttempt ? 'color: rgb(211, 104, 80);' : '')
-    // const StyledSelect = styled(Select)`
-    //   .Select-control {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2 !important;
-    //   }
-    //   .Select-menu-outer {
-    //     box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-value {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     border: 1px solid #f2f2f2;
-    //   }
-    //   .Select-placeholder {
-    //     background-color: ${props => backgroundColor(props.value)};
-    //     ${props => placeholderColorOverwrite(props.value)};
-    //   }
-    //   .Select-option {
-    //     background-color: #f9f9f9;
-    //   }
-    // `
-
     const dayPickerSection = (
       <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
         <div className="layout-row flex-50 layout-align-start-center layout-wrap">
           <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
             <div className="flex-none letter_2 layout-align-space-between-end">
-              <TextHeading theme={theme} text="Available Dates" size={3} />
+              <TextHeading theme={theme} text="Cargo Ready Date" size={3} />
             </div>
             <Tooltip theme={theme} text="planned_pickup_date" icon="fa-info-circle" />
           </div>
@@ -568,24 +547,8 @@ export class ShipmentDetails extends Component {
             direction={shipmentData.shipment.direction}
             showIncotermError={showIncotermError}
             nextStageAttempt={this.state.nextStageAttempt}
+            firstStep
           />
-          {/* <div className="flex-100 layout-row layout-align-end-center">
-            <div className="flex-none letter_2">
-              <TextHeading theme={theme} text="Select Incoterm:" size={3} />
-            </div>
-          </div>
-          <div className="flex-80" name="incoterms" style={{ position: 'relative' }}>
-            <StyledSelect
-              name="incoterms"
-              className={styles.select}
-              value={this.state.incoterm}
-              options={incoterms}
-              onChange={this.setIncoTerm}
-            />
-            <span className={errorStyles.error_message}>
-              {showIncotermError ? 'Must not be blank' : ''}
-            </span>
-          </div> */}
         </div>
       </div>
     )
@@ -614,8 +577,8 @@ export class ShipmentDetails extends Component {
         <div
           className={
             `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
-            `${showTruckingDetails ? styles.visible : ''} ` +
-            'layout-wrap layout-align-center'
+              `${showTruckingDetails ? styles.visible : ''} ` +
+              'layout-wrap layout-align-center'
           }
         >
           <TruckingDetails
@@ -637,7 +600,9 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -647,7 +612,7 @@ export class ShipmentDetails extends Component {
           <div
             className={
               `${styles.btn_sec} ${defaults.content_width} ` +
-              'layout-row flex-none layout-wrap layout-align-start-start'
+            'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
             {!(
@@ -672,9 +637,9 @@ export class ShipmentDetails extends Component {
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
                     >
-                    dangerous goods
+                      dangerous goods
                     </span>
-                  .
+                    .
                   </p>
                 </div>
               ) : (
@@ -746,6 +711,9 @@ ShipmentDetails.propTypes = {
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
+  }).isRequired,
+  bookingSummaryDispatch: PropTypes.shape({
+    update: PropTypes.func
   }).isRequired,
   tenant: PropTypes.tenant.isRequired,
   user: PropTypes.user.isRequired

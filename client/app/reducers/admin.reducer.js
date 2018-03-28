@@ -817,6 +817,30 @@ export default function admin (state = {}, action) {
         loading: false
       })
 
+    case adminConstants.EDIT_HUB_REQUEST:
+      return merge({}, state, {
+        loading: true
+      })
+    case adminConstants.EDIT_HUB_SUCCESS: {
+      const newHubs = state.hubs.filter(x => x.id !== action.payload.hub.id)
+      newHubs.push({ data: action.payload.hub, location: action.payload.location })
+      return {
+        ...state,
+        loading: false,
+        hubs: newHubs,
+        hub: {
+          ...state.hub,
+          hub: action.payload.hub,
+          location: action.payload.location
+        }
+      }
+    }
+    case adminConstants.EDIT_HUB_FAILURE:
+      return merge({}, state, {
+        error: { hubs: action.error },
+        loading: false
+      })
+
     case adminConstants.NEW_TRUCKING_REQUEST:
       return merge({}, state, {
         loading: true
@@ -864,16 +888,29 @@ export default function admin (state = {}, action) {
     case adminConstants.GET_LAYOVERS_REQUEST:
       return state
     case adminConstants.GET_LAYOVERS_SUCCESS:
+      if (action.payload.target === 'schedules') {
+        return {
+          ...state,
+          schedules: {
+            ...state.schedules,
+            itineraryLayovers: {
+              [action.payload.data[0].layover.trip_id]: action.payload.layovers
+            }
+          },
+          loading: false
+        }
+      }
       return {
         ...state,
-        schedules: {
-          ...state.schedules,
-          itineraryLayovers: {
-            [action.payload.data[0].layover.trip_id]: action.payload.data
+        itinerary: {
+          ...state.itinerary,
+          layovers: {
+            [action.payload.layovers[0].layover.trip_id]: action.payload.layovers
           }
         },
         loading: false
       }
+
     case adminConstants.GET_LAYOVERS_FAILURE:
       return {
         ...state,
@@ -897,6 +934,25 @@ export default function admin (state = {}, action) {
         error: { route: action.error },
         loading: false
       }
+
+    case adminConstants.SAVE_ITINERARY_NOTES_REQUEST:
+      return state
+    case adminConstants.SAVE_ITINERARY_NOTES_SUCCESS:
+      return {
+        ...state,
+        itinerary: {
+          ...state.itinerary,
+          itinerary: action.payload
+        },
+        loading: false
+      }
+    case adminConstants.SAVE_ITINERARY_NOTES_FAILURE:
+      return {
+        ...state,
+        error: { route: action.error },
+        loading: false
+      }
+
     case adminConstants.EDIT_SHIPMENT_TIME_REQUEST:
       return state
     case adminConstants.EDIT_SHIPMENT_TIME_SUCCESS:
@@ -926,6 +982,54 @@ export default function admin (state = {}, action) {
         loading: false
       }
     case adminConstants.EDIT_LOCAL_CHARGES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.UPLOAD_TRUCKING_REQUEST:
+      return state
+    case adminConstants.UPLOAD_TRUCKING_SUCCESS:
+      return {
+        ...state,
+        trucking: action.payload,
+        loading: false
+      }
+    case adminConstants.UPLOAD_TRUCKING_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST:
+      return state
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_SUCCESS:
+      return {
+        ...state,
+        itinerarySchedules: action.payload,
+        loading: false
+      }
+    case adminConstants.LOAD_ITINERARY_SCHEDULES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.DELETE_TRIP_REQUEST:
+      return state
+    case adminConstants.DELETE_TRIP_SUCCESS:
+      return {
+        ...state,
+        itinerarySchedules: {
+          ...state.itinerarySchedules,
+          schedules: state.itinerarySchedules.schedules.filter(x => x.id !== action.payload)
+        },
+        loading: false
+      }
+    case adminConstants.DELETE_TRIP_FAILURE:
       return {
         ...state,
         error: { hub: action.error },

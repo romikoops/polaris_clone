@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180314172240) do
+ActiveRecord::Schema.define(version: 20180323144835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "cargo_item_types", force: :cascade do |t|
     t.decimal "dimension_x"
@@ -74,6 +75,13 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.jsonb "unit_price"
   end
 
+  create_table "couriers", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "currencies", force: :cascade do |t|
     t.jsonb "today"
     t.jsonb "yesterday"
@@ -110,6 +118,15 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "hub_truckings", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "trucking_destination_id"
+    t.integer "courier_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "trucking_pricing_id"
+  end
+
   create_table "hubs", force: :cascade do |t|
     t.integer "tenant_id"
     t.integer "location_id"
@@ -135,6 +152,7 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.integer "tenant_id"
     t.integer "mot_scope_id"
     t.jsonb "hubs", default: [], array: true
+    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -306,6 +324,14 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.jsonb "incoterm"
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
+    t.datetime "booking_placed_at"
+  end
+
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
   create_table "stops", force: :cascade do |t|
@@ -375,6 +401,15 @@ ActiveRecord::Schema.define(version: 20180314172240) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "trucking_destinations", force: :cascade do |t|
+    t.string "zipcode"
+    t.string "country_code"
+    t.string "city_name"
+    t.integer "distance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "trucking_options", force: :cascade do |t|
     t.integer "nexus_id"
     t.integer "tenant_id"
@@ -385,18 +420,15 @@ ActiveRecord::Schema.define(version: 20180314172240) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "tenant_id"
-    t.integer "nexus_id"
-    t.integer "upper_zip"
-    t.integer "lower_zip"
-    t.jsonb "rate_table", default: [], array: true
-    t.string "currency"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "province"
-    t.string "city"
-    t.string "rate_type"
-    t.string "dist_hub", default: [], array: true
+    t.string "direction"
+    t.jsonb "export"
+    t.jsonb "import"
+    t.integer "courier_id"
+    t.string "load_type"
+    t.string "truck_type"
+    t.jsonb "load_meterage"
+    t.integer "cbm_ratio"
+    t.string "modifier"
   end
 
   create_table "user_locations", force: :cascade do |t|

@@ -7,12 +7,14 @@ import { AdminHubTile } from '../'
 import { Tooltip } from '../../Tooltip/Tooltip'
 import { TextHeading } from '../../TextHeading/TextHeading'
 import { adminClicked as clickTip, adminTrucking as truckTip } from '../../../constants'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class AdminSearchableHubs extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      hubs: props.hubs
+      hubs: props.hubs,
+      selectedMot: {}
     }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -23,13 +25,9 @@ export class AdminSearchableHubs extends Component {
       this.handleSearchChange({ target: { value: '' } })
     }
   }
-  handleClick (hub) {
-    const { handleClick, adminDispatch } = this.props
-    if (handleClick) {
-      handleClick(hub)
-    } else {
-      adminDispatch.getHub(hub.id, true)
-    }
+  setHubFilter (e) {
+    this.setState({ selectedMot: e })
+    // this.handleSearchChange({ target: { value: '' } })
   }
   seeAll () {
     const { seeAll, adminDispatch } = this.props
@@ -39,10 +37,11 @@ export class AdminSearchableHubs extends Component {
       adminDispatch.goTo('/admin/hubs')
     }
   }
+
   handleSearchChange (event) {
     if (event.target.value === '') {
       this.setState({
-        hubs: this.props.hubs
+        hubs: this.filterHubsByType(this.props.hubs)
       })
       return
     }
@@ -64,24 +63,42 @@ export class AdminSearchableHubs extends Component {
     const filteredHubNames = search('data.name')
     // ;
     this.setState({
-      hubs: filteredHubNames
+      hubs: this.filterHubsByType(filteredHubNames)
     })
+  }
+  handleClick (hub) {
+    const { handleClick, adminDispatch } = this.props
+    if (handleClick) {
+      handleClick(hub)
+    } else {
+      adminDispatch.getHub(hub.id, true)
+    }
+  }
+
+  filterHubsByType (array) {
+    const { selectedMot } = this.state
+    if (selectedMot.value) {
+      return array.filter(x => x.data.hub_type === selectedMot.value)
+    }
+    return array
   }
   render () {
     const {
       theme, seeAll, showTooltip, icon, tooltip, sideScroll
     } = this.props
-    const { hubs } = this.state
+    const { hubs, selectedMot } = this.state
     let hubsArr
     if (hubs) {
-      hubsArr = hubs.map(hub => (<AdminHubTile
-        key={v4()}
-        hub={hub}
-        theme={theme}
-        handleClick={this.handleClick}
-        tooltip={clickTip.related}
-        showTooltip
-      />))
+      hubsArr = this.filterHubsByType(hubs).map(hub => (
+        <AdminHubTile
+          key={v4()}
+          hub={hub}
+          theme={theme}
+          handleClick={this.handleClick}
+          tooltip={clickTip.related}
+          showTooltip
+        />
+      ))
     }
     const viewType = sideScroll ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
@@ -94,41 +111,54 @@ export class AdminSearchableHubs extends Component {
         <div className="layout-row flex-none layout-align-start-center layout-wrap">{hubsArr}</div>
       </div>
     )
+    const motOptions = [
+      { label: 'Ocean', value: 'ocean' },
+      { label: 'Rail', value: 'rail' },
+      { label: 'Air', value: 'air' }
+    ]
     return (
-      <div className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`} >
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.searchable_header}`} >
+      <div
+        className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
+      >
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${
+            styles.searchable_header
+          }`}
+        >
           <div className="flex-60 layput-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
-              <div className="flex-none layout-row layout-align-start-center" >
-                <div className="flex-none" >
-                  <TextHeading
-                    theme={theme}
-                    size={1}
-                    text="Hubs"
-                  />
+              <div className="flex-none layout-row layout-align-start-center">
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={1} text="Hubs" />
                 </div>
-                { showTooltip ? <Tooltip
-                  icon="na-info-circle"
-                  theme={theme}
-                  text={truckTip.hubs}
-                  toolText
-                /> : '' }
-                { icon ? <Tooltip
-                  theme={theme}
-                  icon={icon}
-                  text={tooltip}
-                  toolText
-                /> : '' }
+                {showTooltip ? (
+                  <Tooltip icon="na-info-circle" theme={theme} text={truckTip.hubs} toolText />
+                ) : (
+                  ''
+                )}
+                {icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : ''}
               </div>
             </div>
           </div>
-          <div className={`${styles.input_box} flex-40 layput-row layout-align-start-center`}>
-            <input
-              type="text"
-              name="search"
-              placeholder="Search hubs"
-              onChange={this.handleSearchChange}
-            />
+          <div className="flex-40 layout-row layout-align-start-center">
+            <div className="flex-33 layout-row layout-align-center-center">
+              <NamedSelect
+                className={styles.select}
+                options={motOptions}
+                onChange={e => this.setHubFilter(e)}
+                value={selectedMot}
+                placeholder="Set MoT"
+                name="motFilter"
+              />
+            </div>
+            <div className="flex-66 layout-row layout-align-center-center input_box_full">
+              <input
+                type="text"
+                name="search"
+                placeholder="Search hubs"
+                onChange={this.handleSearchChange}
+              />
+            </div>
           </div>
         </div>
         {viewType}

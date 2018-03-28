@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from 'prop-types'
 import defaults from '../../styles/default_classes.scss'
-import { AdminScheduleLine } from './'
+import { AdminTripPanel } from './'
 import {
   AdminSearchableRoutes,
   AdminSearchableHubs,
@@ -86,7 +86,7 @@ export class AdminDashboard extends Component {
       return <Loading theme={theme} />
     }
     const {
-      routes, shipments, air, ocean
+      routes, shipments, air, ocean, itineraries
     } = dashData
     const clientHash = {}
 
@@ -101,21 +101,21 @@ export class AdminDashboard extends Component {
     const mergedOpenShipments =
       shipments && shipments.open
         ? shipments.open
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedFinishedShipments =
       shipments && shipments.finished
         ? shipments.finished
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
     const mergedRequestedShipments =
       shipments && shipments.requested
         ? shipments.requested
-          .sort(AdminDashboard.dynamicSort('updated_at'))
+          .sort(AdminDashboard.dynamicSort('-updated_at'))
           .map(sh => AdminDashboard.prepShipment(sh, clientHash, hubHash))
         : false
 
@@ -140,7 +140,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Open Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedOpenShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -157,7 +157,7 @@ export class AdminDashboard extends Component {
       <AdminSearchableShipments
         title="Finished Shipments"
         limit={3}
-        hubs={hubs}
+        hubs={hubHash}
         shipments={mergedFinishedShipments}
         adminDispatch={adminDispatch}
         theme={theme}
@@ -172,12 +172,22 @@ export class AdminDashboard extends Component {
 
     if (air) {
       air.forEach((asched) => {
-        schedArr.push(<AdminScheduleLine key={v4()} schedule={asched} hubs={hubs} theme={theme} />)
+        schedArr.push(<AdminTripPanel
+          key={v4()}
+          trip={asched}
+          itinerary={itineraries.filter(it => it.id === asched.itinerary_id)[0]}
+          theme={theme}
+        />)
       })
     }
     if (ocean) {
       ocean.forEach((osched) => {
-        schedArr.push(<AdminScheduleLine key={v4()} schedule={osched} hubs={hubs} theme={theme} />)
+        schedArr.push(<AdminTripPanel
+          key={v4()}
+          trip={osched}
+          itinerary={itineraries.filter(it => it.id === osched.itinerary_id)[0]}
+          theme={theme}
+        />)
       })
     }
     const shortSchedArr = schedArr.sort(AdminDashboard.dynamicSort('etd')).slice(0, 5)

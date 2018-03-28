@@ -75,12 +75,21 @@ export class AdminSearchableRoutes extends Component {
   }
   render () {
     const {
-      hubs, theme, seeAll, limit, showTooltip, tooltip, icon
+      hubs,
+      theme,
+      seeAll,
+      limit,
+      showTooltip,
+      tooltip,
+      icon,
+      adminDispatch,
+      heading,
+      showDelete
     } = this.props
     const { itineraries } = this.state
-    let itinerariesArr
+    let itinerariesArr = []
     const viewLimit = limit || 15
-    if (itineraries) {
+    if (itineraries && itineraries.length > 0) {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (
@@ -89,13 +98,15 @@ export class AdminSearchableRoutes extends Component {
               hubs={hubs}
               itinerary={rt}
               theme={theme}
+              showDelete={showDelete}
+              adminDispatch={adminDispatch}
               handleClick={this.handleClick}
             />
           )
         }
         return ''
       })
-    } else if (this.props.itineraries) {
+    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
       itinerariesArr = itineraries.map((rt, i) => {
         if (i <= viewLimit) {
           return (
@@ -104,6 +115,7 @@ export class AdminSearchableRoutes extends Component {
               hubs={hubs}
               itinerary={rt}
               theme={theme}
+              showDelete={showDelete}
               handleClick={this.handleClick}
             />
           )
@@ -136,7 +148,7 @@ export class AdminSearchableRoutes extends Component {
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none">
-                  <TextHeading theme={theme} size={1} text="Routes" />
+                  <TextHeading theme={theme} size={3} text={heading} />
                 </div>
                 {icon && showTooltip ? (
                   <Tooltip theme={theme} icon={icon} text={tooltip} toolText />
@@ -187,7 +199,9 @@ AdminSearchableRoutes.propTypes = {
   hubs: PropTypes.arrayOf(PropTypes.hub).isRequired,
   showTooltip: PropTypes.bool,
   icon: PropTypes.string,
-  tooltip: PropTypes.string
+  tooltip: PropTypes.string,
+  heading: PropTypes.string,
+  showDelete: PropTypes.bool
 }
 
 AdminSearchableRoutes.defaultProps = {
@@ -198,7 +212,9 @@ AdminSearchableRoutes.defaultProps = {
   itineraries: [],
   icon: '',
   tooltip: '',
-  showTooltip: false
+  showTooltip: false,
+  heading: 'Routes',
+  showDelete: false
 }
 
 export default AdminSearchableRoutes

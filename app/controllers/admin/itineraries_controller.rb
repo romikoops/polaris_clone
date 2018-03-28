@@ -17,22 +17,29 @@ class Admin::ItinerariesController < ApplicationController
     current_user.tenant.update_route_details
     response_handler(itinerary)
   end
-
+  def destroy
+    itinerary = Itinerary.find(params[:id]).destroy
+    response_handler(true)
+  end
   def stops
     itinerary = Itinerary.find(params[:id])
     stops = itinerary.stops.order(:index)
     response_handler(stops)
   end
-
+  def edit_notes
+    itinerary = Itinerary.find(params[:id])
+    itinerary.notes = params[:notes]
+    itinerary.save!
+    response_handler(itinerary)
+  end
   def show
     itinerary = Itinerary.find(params[:id])
     pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id)
     hubs = itinerary.hubs
     detailed_itineraries = get_itinerary_options(itinerary)
-
-    schedules = itinerary.prep_schedules(20)
-     
-    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules}
+    stops = itinerary.stops.order(:index)
+    schedules = itinerary.prep_schedules(10)
+    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops}
     response_handler(resp)
   end
 

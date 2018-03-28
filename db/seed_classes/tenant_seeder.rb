@@ -129,7 +129,7 @@ class TenantSeeder
     {
       theme: {
         colors: {
-          primary: "#0EAF50",
+          primary: "#0db14b",
           secondary: "#008ACB",
           brightPrimary: "#06CA52",
           brightSecondary: "#0CA7F7"
@@ -238,8 +238,8 @@ class TenantSeeder
         detailed_billing: false,
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
-        has_insurance: false,
-        has_customs: false
+        has_insurance: true,
+        has_customs: true
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes

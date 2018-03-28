@@ -63,6 +63,32 @@ function getHub (id, redirect) {
     )
   }
 }
+function editHub (id, object) {
+  function request (hubData) {
+    return { type: adminConstants.EDIT_HUB_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.EDIT_HUB_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_HUB_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editHub(id, object).then(
+      (data) => {
+        dispatch(alertActions.success('Editing Hubs successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function wizardHubs (file) {
   function request (hubData) {
@@ -506,10 +532,10 @@ function getShipment (id, redirect) {
     adminService.getShipment(id).then(
       (data) => {
         dispatch(alertActions.success('Fetching Shipment successful'))
+        dispatch(success(data))
         if (redirect) {
           dispatch(push(`/admin/shipments/view/${id}`))
         }
-        dispatch(success(data))
       },
       (error) => {
         // ;
@@ -743,12 +769,12 @@ function getItineraries (redirect) {
   }
 }
 
-function getLayovers (itineraryId) {
+function getLayovers (itineraryId, target) {
   function request (layovers) {
     return { type: adminConstants.GET_LAYOVERS_REQUEST, payload: layovers }
   }
   function success (layovers) {
-    return { type: adminConstants.GET_LAYOVERS_SUCCESS, payload: layovers }
+    return { type: adminConstants.GET_LAYOVERS_SUCCESS, payload: { layovers, target } }
   }
   function failure (error) {
     return { type: adminConstants.GET_LAYOVERS_FAILURE, error }
@@ -759,7 +785,32 @@ function getLayovers (itineraryId) {
     adminService.getLayovers(itineraryId).then(
       (data) => {
         dispatch(alertActions.success('Fetching Layovers successful'))
-        dispatch(success(data))
+        dispatch(success(data.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function saveItineraryNotes (itineraryId, notes) {
+  function request (itinerary) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_REQUEST, payload: itinerary }
+  }
+  function success (itinerary) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_SUCCESS, payload: itinerary }
+  }
+  function failure (error) {
+    return { type: adminConstants.SAVE_ITINERARY_NOTES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+    adminService.saveItineraryNotes(itineraryId, notes).then(
+      (data) => {
+        dispatch(alertActions.success('Saving Itinerary Notes successful'))
+        dispatch(success(data.data))
       },
       (error) => {
         // ;
@@ -927,6 +978,64 @@ function deleteHub (hubId, redirect) {
         dispatch(alertActions.success('Deleting Hub successful'))
         if (redirect) {
           dispatch(push(`/admin/hubs`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function deleteItinerary (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_ITINERARY_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_ITINERARY_SUCCESS, payload: deleted.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_ITINERARY_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteItinerary(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Itinerary successful'))
+        if (redirect) {
+          dispatch(push(`/admin/routes`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function deleteTrip (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_TRIP_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_TRIP_SUCCESS, payload: id }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_TRIP_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteTrip(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Trip successful'))
+        if (redirect) {
+          dispatch(push(`/admin/schedules`))
         }
         dispatch(success(data))
       },
@@ -1145,6 +1254,60 @@ function viewTrucking (truckingHub) {
   }
 }
 
+function loadItinerarySchedules (id, redirect) {
+  function request (truckingData) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.LOAD_ITINERARY_SCHEDULES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+    adminService.loadItinerarySchedules(id).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Schedules successful'))
+        dispatch(success(data))
+        if (redirect) {
+          dispatch(push(`/admin/schedules/${id}`))
+        }
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function uploadTrucking (url, file, direction) {
+  function request (truckingData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_REQUEST, payload: truckingData }
+  }
+  function success (truckingData) {
+    return { type: adminConstants.UPLOAD_TRUCKING_SUCCESS, payload: truckingData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPLOAD_TRUCKING_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.uploadTrucking(url, file, direction).then(
+      (data) => {
+        dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
 }
@@ -1163,6 +1326,7 @@ export const adminActions = {
   getItineraries,
   updateServiceCharge,
   updatePricing,
+  deleteItinerary,
   getClientPricings,
   getItinerary,
   deleteHub,
@@ -1175,6 +1339,7 @@ export const adminActions = {
   getSchedules,
   getDashboard,
   goTo,
+  uploadTrucking,
   autoGenSchedules,
   getVehicleTypes,
   getShipments,
@@ -1201,7 +1366,11 @@ export const adminActions = {
   editShipmentPrice,
   editShipmentTime,
   editLocalCharges,
-  deletePricing
+  deletePricing,
+  editHub,
+  loadItinerarySchedules,
+  deleteTrip,
+  saveItineraryNotes
 }
 
 export default adminActions

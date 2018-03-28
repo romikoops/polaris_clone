@@ -51,7 +51,7 @@ class NavBar extends Component {
       // eslint-disable-next-line no-case-declarations
       case 'shipments':
         const name =
-          admin.shipment && admin.shipment.shipment
+          admin.shipment && admin.shipment.shipment && admin.shipment.shipment.imc_reference
             ? admin.shipment.shipment.imc_reference
             : categories[categories.length - 1]
         return (
@@ -69,6 +69,15 @@ class NavBar extends Component {
           >
             {' '}
             {`${admin.hub.hub.name}`}
+          </div>
+        )
+      case 'trucking':
+        return (
+          <div
+            className={`${styles.nav_cell} flex-none layout-row layout-align-center-center pointy`}
+          >
+            {' '}
+            {`${admin.truckingDetail.hub ? admin.truckingDetail.hub.name : ''}`}
           </div>
         )
       case 'routes':

@@ -1,11 +1,13 @@
 class Itinerary < ApplicationRecord
-  has_many :stops
-  has_many :layovers
-  has_many :shipments
-  has_many :trips
-  belongs_to :mot_scope, optional: true
   extend ItineraryTools
   include ItineraryTools
+
+  has_many :stops,     dependent: :destroy
+  has_many :layovers,  dependent: :destroy
+  has_many :shipments, dependent: :destroy
+  has_many :trips,     dependent: :destroy
+  belongs_to :mot_scope, optional: true
+
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
     stops = tenant.stops
@@ -29,30 +31,30 @@ class Itinerary < ApplicationRecord
       layovers: [],
       trips: []
     } 
-   trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
-   results[:trips] << trip
-        stops.each do |stop|
-          if stop.index == 0
-            data = {
-              eta: nil,
-              etd: start_date,
-              stop_index: stop.index,
-              itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
-            }
-          else 
-            data = {
-              eta: end_date,
-              etd: nil,
-              stop_index: stop.index,
-              itinerary_id: stop.itinerary_id,
-              stop_id: stop.id
-            }
-          end
-          layover = trip.layovers.create!(data)
-          results[:layovers] << layover
-        end
-      results
+    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+    results[:trips] << trip
+    stops.each do |stop|
+      if stop.index == 0
+        data = {
+          eta: nil,
+          etd: start_date,
+          stop_index: stop.index,
+          itinerary_id: stop.itinerary_id,
+          stop_id: stop.id
+        }
+      else 
+        data = {
+          eta: end_date,
+          etd: nil,
+          stop_index: stop.index,
+          itinerary_id: stop.itinerary_id,
+          stop_id: stop.id
+        }
+      end
+      layover = trip.layovers.create!(data)
+      results[:layovers] << layover
+    end
+    results
   end
 
   def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id, closing_date_buffer = 4)
@@ -76,6 +78,11 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
+        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        if trip_check
+          tmp_date += 1.day
+          next
+        end
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         results[:trips] << trip
         p trip
@@ -111,15 +118,16 @@ class Itinerary < ApplicationRecord
 
   def prep_schedules(limit)
     schedules = []
-    trip_layovers = self.trips.map { |t| t.layovers  }
+    trip_layovers = self.trips.order(:start_date).map { |t| t.layovers  }
     if limit
       trip_layovers = trip_layovers[0...limit]
     end
     trip_layovers.each do |l_arr|
       if l_arr.length > 1
-        layovers_combinations = l_arr.map.with_index { |l, i| 
+        layovers_combinations = []
+        l_arr.each_with_index { |l, i| 
           if l_arr[i + 1]
-            return [l, l_arr[i + 1]]
+            layovers_combinations << [l, l_arr[i + 1]]
           end  
         }
         layovers_combinations.each do |lc|
@@ -132,7 +140,8 @@ class Itinerary < ApplicationRecord
             tenant_id: self.tenant_id, 
             trip_id: lc[0].trip_id, 
             origin_layover_id: lc[0].id,
-            destination_layover_id: lc[1].id
+            destination_layover_id: lc[1].id,
+            closing_date: lc[0].closing_date
             })
         end
       end
@@ -221,29 +230,23 @@ class Itinerary < ApplicationRecord
     end
   end
 
-  def self.for_locations(shipment, carriage_nexuses)
-    if  carriage_nexuses && carriage_nexuses["preCarriage"]
-      start_city = Location.find(carriage_nexuses["preCarriage"])
+  def self.for_locations(shipment, trucking_data)
+    if trucking_data && trucking_data["pre_carriage"]
+      start_hub_ids = trucking_data["pre_carriage"].keys
+      start_hubs = start_hub_ids.map {|id| Hub.find(id)}
     else
       start_city = Location.find(shipment.origin_id)
-      #  OLD redundant code
-      # start_city, start_city_dist = shipment.origin.closest_location_with_distance
+      start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
+      start_hub_ids = start_hubs.ids
     end
-    if  carriage_nexuses && carriage_nexuses["onCarriage"]
-      end_city = Location.find(carriage_nexuses["onCarriage"])
+    if trucking_data && trucking_data["on_carriage"]
+      end_hub_ids = trucking_data["on_carriage"].keys
+      end_hubs = end_hub_ids.map {|id| Hub.find(id)}
     else
       end_city = Location.find(shipment.destination_id)
-      #  OLD redundant code
-      # end_city, end_city_dist = shipment.destination.closest_location_with_distance
+      end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
+      end_hub_ids = end_hubs.ids
     end
-    # if start_city_dist > radius || end_city_dist > radius
-    #   start_city = end_city = nil
-    # end
-    start_hubs = start_city.hubs.where(tenant_id: shipment.tenant_id)
-    end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
-    start_hub_ids = start_hubs.ids
-    end_hub_ids = end_hubs.ids
-
     query = "
       SELECT * FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id}

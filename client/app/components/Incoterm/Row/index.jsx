@@ -11,7 +11,8 @@ export function IncotermRow ({
   originFees,
   destinationFees,
   feeHash,
-  tenant
+  tenant,
+  firstStep
 }) {
   const sumCargoFees = (cargos) => {
     let total = 0.0
@@ -40,86 +41,151 @@ export function IncotermRow ({
   const onCarriageStyle = onCarriage ? selectedStyle : deselectedStyle
   const originDocumentStyle = originFees ? selectedStyle : deselectedStyle
   const destinationDocumentStyle = destinationFees ? selectedStyle : deselectedStyle
-  const customsStyle = feeHash && feeHash.customs && feeHash.customs.total
-    ? selectedStyle : deselectedStyle
-  const insuranceStyle = feeHash && feeHash.insurance && feeHash.insurance.total
-    ? selectedStyle : deselectedStyle
+  const customsStyle =
+    feeHash && feeHash.customs && feeHash.customs.total ? selectedStyle : deselectedStyle
+  const insuranceStyle =
+    feeHash && feeHash.insurance && feeHash.insurance.total ? selectedStyle : deselectedStyle
   const freightStyle = selectedStyle
 
-  const freightFeesValue = feeHash && feeHash.cargo ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
-      <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).currency}</p>
-      <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).total}</p>
-    </div>
-  ) : ''
-  const originFeesValue = feeHash && feeHash.export ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
-      {feeHash.export.total ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.export.total.currency}</p>
-      ) : ''}
-      <p className="flex-none no_m letter_3 center">
-        {feeHash.export.total ? `${feeHash.export.total.value.toFixed(2)}` : 'None'}
-      </p>
-    </div>
-  ) : ''
-  const destinationFeesValue = feeHash && feeHash.import ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
-      {feeHash.import.total ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.import.total.currency}</p>
-      ) : ''}
-      <p className="flex-none no_m letter_3 center">
-        {feeHash.import.total ? `${feeHash.import.total.value.toFixed(2)}` : 'None'}
-      </p>
-    </div>
-  ) : ''
-  const preCarriageFeesValue = feeHash && feeHash.trucking_pre ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
-      {feeHash.trucking_pre.total ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.trucking_pre.total.currency}</p>
-      ) : ''}
-      <p className="flex-none no_m letter_3 center">
-        {preCarriage ? `${feeHash.trucking_pre.total.value.toFixed(2)}` : 'None'}
-      </p>
-    </div>
-  ) : ''
-  const onCarriageFeesValue = feeHash && feeHash.trucking_on ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
-      {feeHash.trucking_on.total ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.trucking_on.total.currency}</p>
-      ) : ''}
-      <p className="flex-none no_m letter_3 center">
-        {onCarriage ? `${feeHash.trucking_on.total.value.toFixed(2)}` : 'None'}
-      </p>
-    </div>
-  ) : ''
+  const freightFeesValue =
+    feeHash && feeHash.cargo ? (
+      <div
+        className={`${
+          styles.fee_value
+        } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+      >
+        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).currency}</p>
+        <p className="flex-none no_m letter_3 center">{sumCargoFees(feeHash.cargo).total}</p>
+      </div>
+    ) : (
+      ''
+    )
+  const originFeesValue =
+    feeHash && feeHash.export ? (
+      <div
+        className={`${
+          styles.fee_value
+        } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+      >
+        {feeHash.export.total ? (
+          <p className="flex-none no_m letter_3 center">{feeHash.export.total.currency}</p>
+        ) : (
+          ''
+        )}
+        <p className="flex-none no_m letter_3 center">
+          {feeHash.export.total ? `${feeHash.export.total.value.toFixed(2)}` : 'None'}
+        </p>
+      </div>
+    ) : (
+      ''
+    )
+  const destinationFeesValue =
+    feeHash && feeHash.import ? (
+      <div
+        className={`${
+          styles.fee_value
+        } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+      >
+        {feeHash.import.total ? (
+          <p className="flex-none no_m letter_3 center">{feeHash.import.total.currency}</p>
+        ) : (
+          ''
+        )}
+        <p className="flex-none no_m letter_3 center">
+          {feeHash.import.total ? `${feeHash.import.total.value.toFixed(2)}` : 'None'}
+        </p>
+      </div>
+    ) : (
+      ''
+    )
+  const preCarriageFeesValue =
+    feeHash && feeHash.trucking_pre ? (
+      <div
+        className={`${
+          styles.fee_value
+        } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+      >
+        {feeHash.trucking_pre.total ? (
+          <p className="flex-none no_m letter_3 center">{feeHash.trucking_pre.total.currency}</p>
+        ) : (
+          ''
+        )}
+        <p className="flex-none no_m letter_3 center">
+          {feeHash.trucking_pre.total
+            ? `${parseInt(feeHash.trucking_pre.total.value, 10).toFixed(2)}`
+            : 'None'}
+        </p>
+      </div>
+    ) : (
+      ''
+    )
+  const onCarriageFeesValue =
+    feeHash && feeHash.trucking_on ? (
+      <div
+        className={`${
+          styles.fee_value
+        } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+      >
+        {feeHash.trucking_on.total ? (
+          <p className="flex-none no_m letter_3 center">{feeHash.trucking_on.total.currency}</p>
+        ) : (
+          ''
+        )}
+        <p className="flex-none no_m letter_3 center">
+          {feeHash.trucking_on.total
+            ? `${parseInt(feeHash.trucking_on.total.value, 10).toFixed(2)}`
+            : 'None'}
+        </p>
+      </div>
+    ) : (
+      ''
+    )
   const insuranceFeesValue = feeHash ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
       {feeHash.insurance && feeHash.insurance.val ? (
         <p className="flex-none no_m letter_3 center">{feeHash.insurance.currency}</p>
-      ) : ''}
+      ) : (
+        ''
+      )}
       <p className="flex-none no_m letter_3 center">
         {feeHash.insurance && feeHash.insurance.val
           ? `${feeHash.insurance.val.toFixed(2)}`
           : 'None'}
       </p>
     </div>
-  ) : ''
+  ) : (
+    ''
+  )
   const customsFeesValue = feeHash ? (
-    <div className={`${styles.fee_value} flex-none width_100 layout-row layout-align-center-center layout-wrap`}>
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
       {feeHash.customs && feeHash.customs.val ? (
         <p className="flex-none no_m letter_3 center">{feeHash.customs.currency}</p>
-      ) : ''}
+      ) : (
+        ''
+      )}
       <p className="flex-none no_m letter_3 center">
         {feeHash.customs && feeHash.customs.val ? `${feeHash.customs.val.toFixed(2)}` : 'None'}
       </p>
     </div>
-  ) : ''
+  ) : (
+    ''
+  )
   const preCarriageFeesTile = (
     <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-truck clip flex-none" style={preCarriageStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
         <p className="flex-none no_m">Pre-Carriage</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? preCarriageFeesValue : ''}
@@ -130,7 +196,9 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className={`fa fa-truck clip flex-none ${styles.dest_truck}`} style={onCarriageStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
         <p className="flex-none no_m">On-Carriage</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? onCarriageFeesValue : ''}
@@ -141,8 +209,12 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-file-text clip flex-none" style={originDocumentStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
-        <p className="flex-none no_m center">Origin <br /> Documentation</p>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
+        <p className="flex-none no_m center">
+          Origin <br /> Documentation
+        </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? originFeesValue : ''}
     </div>
@@ -152,8 +224,12 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-file-text-o clip flex-none" style={destinationDocumentStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
-        <p className="flex-none no_m center">Destination <br /> Documentation</p>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
+        <p className="flex-none no_m center">
+          Destination <br /> Documentation
+        </p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? destinationFeesValue : ''}
     </div>
@@ -163,7 +239,9 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-ship clip flex-none" style={freightStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
         <p className="flex-none no_m">Freight</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? freightFeesValue : ''}
@@ -174,7 +252,9 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-id-card clip flex-none" style={customsStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
         <p className="flex-none no_m">Customs</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? customsFeesValue : ''}
@@ -185,7 +265,9 @@ export function IncotermRow ({
       <div className="flex layout-row layout-align-center-start width_100">
         <i className="fa fa-umbrella clip flex-none" style={insuranceStyle} />
       </div>
-      <div className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}>
+      <div
+        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
+      >
         <p className="flex-none no_m">Insurance</p>
       </div>
       {scope.detailed_billing && feeHash.cargo ? insuranceFeesValue : ''}
@@ -193,9 +275,9 @@ export function IncotermRow ({
   )
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
-      {customsFeesTile} {preCarriageFeesTile} {originFeesTile}
+      { firstStep ? '' : customsFeesTile } {preCarriageFeesTile} {originFeesTile}
       {freightFeesTile} {destinationFeesTile}
-      {onCarriageFeesTile} {insuranceFeesTile}
+      {onCarriageFeesTile} { firstStep ? '' : insuranceFeesTile}
     </div>
   )
 }
@@ -208,7 +290,8 @@ IncotermRow.propTypes = {
   destinationFees: PropTypes.bool,
   feeHash: PropTypes.objectOf(PropTypes.any),
   tenant: PropTypes.tenant,
-  shipment: PropTypes.objectOf(PropTypes.any).isRequired
+  shipment: PropTypes.objectOf(PropTypes.any).isRequired,
+  firstStep: PropTypes.bool
 }
 
 IncotermRow.defaultProps = {
@@ -218,7 +301,8 @@ IncotermRow.defaultProps = {
   originFees: false,
   destinationFees: false,
   feeHash: {},
-  tenant: {}
+  tenant: {},
+  firstStep: false
 }
 
 export default IncotermRow

@@ -6,6 +6,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { gradientTextGenerator } from '../../helpers'
+import { countries } from '../../constants'
 import {
   TruckingCitySetter,
   TruckingDistanceSetter,
@@ -88,6 +89,11 @@ export class AdminTruckingCreator extends Component {
     this.handleInputDisplays = this.handleInputDisplays.bind(this)
     this.setFeeSchema = this.setFeeSchema.bind(this)
     this.saveGlobalFees = this.saveGlobalFees.bind(this)
+  }
+  componentWillMount () {
+    if (this.props.hub) {
+      this.setState({ hub: this.props.hub })
+    }
   }
   setFeeSchema (fees) {
     this.setState({
@@ -307,7 +313,14 @@ export class AdminTruckingCreator extends Component {
   saveEdit () {
     console.log(this.state)
     const {
-      cells, nexus, currency, truckingBasis, stepBasis, loadType, direction
+      cells,
+      nexus,
+      currency,
+      truckingBasis,
+      stepBasis,
+      loadType,
+      direction,
+      hub
     } = this.state
     const data = cells.map((c) => {
       const tc = Object.assign({}, c)
@@ -318,6 +331,7 @@ export class AdminTruckingCreator extends Component {
     const meta = {
       modifier: truckingBasis.value,
       nexus_id: nexus.value.id,
+      hub_id: hub.id,
       loadType: loadType.value,
       direction: direction.value,
       subModifier: stepBasis.value
@@ -327,7 +341,7 @@ export class AdminTruckingCreator extends Component {
   }
 
   render () {
-    const { theme, nexuses } = this.props
+    const { theme } = this.props
     const {
       nexus,
       rateBasis,
@@ -345,7 +359,8 @@ export class AdminTruckingCreator extends Component {
       stepBasis,
       feeSchema,
       cellUpperKey,
-      cellLowerKey
+      cellLowerKey,
+      country
     } = this.state
     const textStyle =
       theme && theme.colors
@@ -362,24 +377,7 @@ export class AdminTruckingCreator extends Component {
       { value: 'either', label: 'Either' }
     ]
     const loadTypeOpts = [{ value: 'lcl', label: 'LCL' }, { value: 'fcl', label: 'FCL' }]
-    const nexusOpts = AdminTruckingCreator.prepForSelect(nexuses, 'name', false, false)
-    const selectNexus = (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className="flex-100 layout-row layout-align-start-center">
-          <h4 className="flex-100 letter_3">Select a City</h4>
-          <div className="flex-75 layout-row">
-            <NamedSelect
-              name="nexus"
-              classes={`${styles.select}`}
-              value={nexus}
-              options={nexusOpts}
-              className="flex-100"
-              onChange={this.handleTopLevelSelect}
-            />
-          </div>
-        </div>
-      </div>
-    )
+
     const selectDirection = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center">
@@ -390,6 +388,23 @@ export class AdminTruckingCreator extends Component {
               classes={`${styles.select}`}
               value={direction}
               options={directionOpts}
+              className="flex-100"
+              onChange={this.handleTopLevelSelect}
+            />
+          </div>
+        </div>
+      </div>
+    )
+    const selectCountry = (
+      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        <div className="flex-100 layout-row layout-align-start-center">
+          <h4 className="flex-100 letter_3">Select a Destination Country</h4>
+          <div className="flex-75 layout-row">
+            <NamedSelect
+              name="country"
+              classes={`${styles.select}`}
+              value={country}
+              options={countries}
               className="flex-100"
               onChange={this.handleTopLevelSelect}
             />
@@ -481,7 +496,8 @@ export class AdminTruckingCreator extends Component {
           onValidSubmit={this.addWeightStep}
           className="flex-100 layout-row layout-align-start-center"
         >
-          <div className="
+          <div
+            className="
             flex-33
             layout-row
             layout-row
@@ -497,7 +513,8 @@ export class AdminTruckingCreator extends Component {
               placeholder="Lower Limit"
             />
           </div>
-          <div className="
+          <div
+            className="
             flex-33
             layout-row
             layout-row
@@ -554,8 +571,8 @@ export class AdminTruckingCreator extends Component {
     const contextPanel = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          {selectNexus}
           {selectLoadType}
+          {selectCountry}
           {selectTruckingBasis}
           {selectDirection}
           {/* {steps.truckingBasis === true && steps.cellSteps === false
@@ -600,10 +617,11 @@ AdminTruckingCreator.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
   closeForm: PropTypes.func.isRequired,
-  nexuses: PropTypes.arrayOf(PropTypes.any).isRequired
+  hub: PropTypes.hub
 }
 AdminTruckingCreator.defaultProps = {
-  theme: {}
+  theme: {},
+  hub: {}
 }
 
 export default AdminTruckingCreator

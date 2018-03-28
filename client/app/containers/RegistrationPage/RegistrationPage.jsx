@@ -1,4 +1,5 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Formsy from 'formsy-react'
 import PropTypes from '../../prop-types'
@@ -6,25 +7,11 @@ import { authenticationActions } from '../../actions'
 import { RoundButton } from '../../components/RoundButton/RoundButton'
 import { Alert } from '../../components/Alert/Alert'
 import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner'
-import { humanizeSnakeCase } from '../../helpers'
+import RegistrationFormGroup from './components/RegistrationFormGroup'
+import TermsAndConditionsSummary from './components/TermsAndConditionsSummary'
 import styles from './RegistrationPage.scss'
-import FormsyInput from '../../components/FormsyInput/FormsyInput'
 
 class RegistrationPage extends React.Component {
-  static mergeMinLengthValidations (minLength, validations, validationErrors) {
-    const returnObj = {}
-    returnObj.validations = Object.assign(minLength ? { minLength } : {}, validations || {})
-
-    const minLengthErrors = {
-      isDefaultRequiredValue: `Min. ${minLength} characters`,
-      minLength: `Min. ${minLength} characters`
-    }
-    returnObj.validationErrors = Object.assign(
-      minLength ? minLengthErrors : {},
-      validationErrors || {}
-    )
-    return returnObj
-  }
   static mapInputs (inputs) {
     const locationInputs = ['street', 'number', 'zip_code', 'city', 'country']
     const model = { location: {} }
@@ -43,14 +30,13 @@ class RegistrationPage extends React.Component {
     super(props)
     this.state = {
       focus: {},
-      alertVisible: false
+      alertVisible: false,
+      termsAndConditionsAccepted: false
     }
 
-    this.handleFocus = this.handleFocus.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.hideAlert = this.hideAlert.bind(this)
-    this.generateFormGroup = this.generateFormGroup.bind(this)
   }
 
   componentWillMount () {
@@ -78,67 +64,35 @@ class RegistrationPage extends React.Component {
     })
   }
 
+  handleChangeTermsAndConditionsAccepted () {
+    this.setState({
+      termsAndConditionsAccepted: !this.state.termsAndConditionsAccepted
+    })
+  }
+
   handleSubmit (model) {
+    if (!this.state.termsAndConditionsAccepted) return
     const user = Object.assign({}, model)
     user.tenant_id = this.props.tenant.data.id
     user.guest = false
 
-    const { dispatch, req } = this.props
+    const { req, authenticationDispatch } = this.props
     if (req) {
-      dispatch(authenticationActions.updateUser(this.props.user, user, req))
+      authenticationDispatch.updateUser(this.props.user, user, req)
     } else {
-      dispatch(authenticationActions.register(user))
+      authenticationDispatch.authenticationActions.register(user)
     }
   }
 
   handleInvalidSubmit () {
+    if (!this.state.termsAndConditionsAccepted) return
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
   }
 
-  generateFormGroup (args) {
-    const {
-      field, flex, offset, minLength, type, required
-    } = args
-    const { theme } = this.props
-    const focusStyles = {
-      borderColor: theme && theme.colors ? theme.colors.primary : 'black',
-      borderWidth: '1.5px',
-      borderRadius: '2px',
-      margin: '-1px 0 29px 0'
-    }
-
-    let { validations, validationErrors } = args
-    if (minLength) {
-      ({ validations, validationErrors } =
-        RegistrationPage.mergeMinLengthValidations(minLength, validations, validationErrors))
-    }
-
-    return (
-      <div className={`flex-${flex || '100'} offset-${offset || 0}`}>
-        <label htmlFor={field}>{humanizeSnakeCase(field)}</label>
-        <FormsyInput
-          type={type || 'text'}
-          className={styles.form_control}
-          onFocus={this.handleFocus}
-          onBlur={this.handleFocus}
-          name={field}
-          id={field}
-          submitAttempted={this.state.submitAttempted}
-          validations={validations}
-          validationErrors={validationErrors}
-          errorMessageStyles={{
-            fontSize: '12px',
-            bottom: '-19px'
-          }}
-          required={required == null ? true : required}
-        />
-        <hr style={this.state.focus[field] ? focusStyles : {}} />
-      </div>
-    )
-  }
-
   render () {
-    const { registering, theme } = this.props
+    const {
+      registering, theme, tenant, authenticationDispatch
+    } = this.props
     const alert = this.state.alertVisible ? (
       <Alert
         message={{ type: 'error', text: 'Email has already been taken' }}
@@ -148,6 +102,12 @@ class RegistrationPage extends React.Component {
     ) : (
       ''
     )
+    const sharedProps = {
+      handleFocus: e => this.handleFocus(e),
+      focus: this.state.focus,
+      submitAttempted: this.state.submitAttempted,
+      theme
+    }
     return (
       <Formsy
         className={styles.registration_form}
@@ -162,61 +122,81 @@ class RegistrationPage extends React.Component {
             <div className="flex-100">
               <h3>Account Details</h3>
             </div>
-            {
-              this.generateFormGroup({
-                field: 'email',
-                minLength: 2,
-                validations: { matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i },
-                validationErrors: { matchRegexp: 'Invalid email' }
-              })
-            }
-            { this.generateFormGroup({ field: 'password', minLength: 8, type: 'password' }) }
-            {
-              this.generateFormGroup({
-                field: 'confirm_password',
-                validations: { equalsField: 'password' },
-                validationErrors: {
-                  equalsField: 'Must match password'
-                },
-                type: 'password',
-                required: false
-              })
-            }
+            <RegistrationFormGroup
+              field="email"
+              minLength="2"
+              validations={{ matchRegexp: /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i }}
+              validationErrors={{ matchRegexp: 'Invalid email' }}
+              {...sharedProps}
+            />
+
+            <RegistrationFormGroup
+              field="password"
+              minLength="8"
+              type="password"
+              {...sharedProps}
+            />
+            <RegistrationFormGroup
+              field="confirm_password"
+              validations={{ equalsField: 'password' }}
+              validationErrors={{ equalsField: 'Must match password' }}
+              type="password"
+              required={false}
+              {...sharedProps}
+            />
             <div className="flex-100">
               <h3>Address Details</h3>
             </div>
-            { this.generateFormGroup({ field: 'street', minLength: 2, flex: 70 }) }
-            {
-              this.generateFormGroup({
-                field: 'number', minLength: 1, flex: 25, offset: 5
-              })
-            }
-            { this.generateFormGroup({ field: 'zip_code', minLength: 4, flex: 30 }) }
-            {
-              this.generateFormGroup({
-                field: 'city', minLength: 2, flex: 30, offset: 5
-              })
-            }
-            {
-              this.generateFormGroup({
-                field: 'country', minLength: 3, flex: 30, offset: 5
-              })
-            }
+            <RegistrationFormGroup field="street" minLength="2" flex="70" {...sharedProps} />
+            <RegistrationFormGroup
+              field="number"
+              minLength="1"
+              flex="25"
+              offset="5"
+              {...sharedProps}
+            />
+            <RegistrationFormGroup field="zip_code" minLength="4" flex="30" {...sharedProps} />
+            <RegistrationFormGroup
+              field="city"
+              minLength="2"
+              flex="30"
+              offset="5"
+              {...sharedProps}
+            />
+            <RegistrationFormGroup
+              field="country"
+              minLength="3"
+              flex="30"
+              offset="5"
+              {...sharedProps}
+            />
           </div>
           <div className="offset-10 flex-45 layout-row layout-wrap">
             <div className="flex-100">
               <h3>Company Details</h3>
             </div>
-            { this.generateFormGroup({ field: 'company_name', minLength: 8 }) }
-            { this.generateFormGroup({ field: 'VAT_number', minLength: 5 }) }
+            <RegistrationFormGroup field="company_name" minLength="8" {...sharedProps} />
+            <RegistrationFormGroup field="VAT_number" minLength="5" {...sharedProps} />
             <div className={styles.pusher} />
-            { this.generateFormGroup({ field: 'first_name', minLength: 2 }) }
-            { this.generateFormGroup({ field: 'last_name', minLength: 2 }) }
-            { this.generateFormGroup({ field: 'phone', minLength: 8 }) }
+            <RegistrationFormGroup field="first_name" minLength="2" {...sharedProps} />
+            <RegistrationFormGroup field="last_name" minLength="2" {...sharedProps} />
+            <RegistrationFormGroup field="phone" minLength="8" {...sharedProps} />
           </div>
         </div>
+        <TermsAndConditionsSummary
+          theme={theme}
+          tenant={tenant}
+          handleChange={() => this.handleChangeTermsAndConditionsAccepted()}
+          accepted={this.state.termsAndConditionsAccepted}
+          goToTermsAndConditions={() => authenticationDispatch.goTo('/terms_and_conditions', true)}
+        />
         <div className={`${styles.form_group_submit_btn} layout-row layout-align-center`}>
-          <RoundButton text="Register new account" theme={theme} active />
+          <RoundButton
+            text="Register new account"
+            theme={theme}
+            active={this.state.termsAndConditionsAccepted}
+            disabled={!this.state.termsAndConditionsAccepted}
+          />
           <div className={styles.spinner}>{ registering && <LoadingSpinner /> }</div>
         </div>
       </Formsy>
@@ -227,14 +207,15 @@ class RegistrationPage extends React.Component {
 RegistrationPage.propTypes = {
   tenant: PropTypes.tenant,
   registrationAttempt: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   req: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
   user: PropTypes.any,
   theme: PropTypes.theme,
-  registering: PropTypes.bool
+  registering: PropTypes.bool,
+  authenticationDispatch: PropTypes.objectOf(PropTypes.any).isRequired
 }
+
 RegistrationPage.defaultProps = {
   tenant: null,
   registrationAttempt: false,
@@ -252,6 +233,12 @@ function mapStateToProps (state) {
   }
 }
 
-const connectedRegistrationPage = connect(mapStateToProps)(RegistrationPage)
+function mapDispatchToProps (dispatch) {
+  return {
+    authenticationDispatch: bindActionCreators(authenticationActions, dispatch)
+  }
+}
+
+const connectedRegistrationPage = connect(mapStateToProps, mapDispatchToProps)(RegistrationPage)
 export { connectedRegistrationPage as RegistrationPage }
 export default connectedRegistrationPage

@@ -68,14 +68,10 @@ export class RouteOption extends Component {
         </div>
         <div className={`flex-100 layout-row layout-align-space-between ${styles.top_row}`}>
           <div className={` flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            {/* <div className="flex-100 layout-row"> */}
             <h4 className="flex-100"> {originNexus} </h4>
-            {/* </div> */}
           </div>
           <div className={` flex-50 layout-row layout-align-center-center ${styles.header_hub}`}>
-            {/* <div className="flex-100 layout-row"> */}
             <h4 className="flex-100"> {destinationNexus} </h4>
-            {/* </div> */}
           </div>
         </div>
       </div>

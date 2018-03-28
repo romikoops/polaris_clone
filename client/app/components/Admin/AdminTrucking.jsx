@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
 import PropTypes from '../../prop-types'
 import { AdminTruckingIndex, AdminTruckingView, AdminTruckingCreator } from './'
-import { RoundButton } from '../RoundButton/RoundButton'
+// import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
 import { history } from '../../helpers'
 import { Tooltip } from '../Tooltip/Tooltip'
@@ -24,9 +24,9 @@ class AdminTrucking extends Component {
     this.viewTrucking = this.viewTrucking.bind(this)
     this.toggleCreator = this.toggleCreator.bind(this)
   }
-  viewTrucking (truckingNexusId) {
+  viewTrucking (hub) {
     const { adminDispatch } = this.props
-    adminDispatch.viewTrucking(truckingNexusId)
+    adminDispatch.viewTrucking(hub.id)
     this.setState({ selectedRoute: true })
   }
   toggleCreator () {
@@ -36,23 +36,13 @@ class AdminTrucking extends Component {
   render () {
     const { selectedRoute } = this.state
     const {
-      theme, adminDispatch, trucking, loading, truckingDetail
+      theme, adminDispatch, trucking, loading, truckingDetail, hubs
     } = this.props
     if (!trucking) {
       return ''
     }
     const { truckingNexuses, nexuses } = trucking
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={AdminTrucking.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
+
     const title = selectedRoute ? 'Trucking Overview' : 'Trucking'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -63,7 +53,6 @@ class AdminTrucking extends Component {
             </div>
             <Tooltip icon="fa-info-circle" theme={theme} text={truckTip.manage} toolText />
           </div>
-          {selectedRoute ? backButton : ''}
         </div>
         <Switch className="flex">
           <Route
@@ -74,6 +63,7 @@ class AdminTrucking extends Component {
                 theme={theme}
                 truckingNexuses={truckingNexuses}
                 {...props}
+                hubs={hubs}
                 adminDispatch={adminDispatch}
                 loading={loading}
                 viewTrucking={this.viewTrucking}
@@ -101,6 +91,7 @@ class AdminTrucking extends Component {
               <AdminTruckingCreator
                 theme={theme}
                 nexuses={nexuses}
+                hub={truckingDetail.hub}
                 adminDispatch={adminDispatch}
                 closeForm={this.toggleCreator}
               />

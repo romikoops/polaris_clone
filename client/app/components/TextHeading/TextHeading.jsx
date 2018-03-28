@@ -10,7 +10,7 @@ export class TextHeading extends Component {
   }
   render () {
     const {
-      text, size, color
+      text, size, color, Comp
     } = this.props
     let returnVal
     const styling = color ? {
@@ -23,28 +23,28 @@ export class TextHeading extends Component {
           returnVal = (
 
             <h1 className={`${styles.text_style} flex-none`} style={styling}>
-              {text}
+              {text}{' '}{Comp}
             </h1>
           )
           break
         case 2:
           returnVal = (
             <h2 className={`${styles.text_style} flex-none`} style={styling}>
-              {text}
+              {text}{' '}{Comp}
             </h2>
           )
           break
         case 3:
           returnVal = (
             <h3 className={`${styles.text_style} flex-none`} style={styling}>
-              {text}
+              {text}{' '}{Comp}
             </h3>
           )
           break
         case 4:
           returnVal = (
             <h4 className={`${styles.text_style} flex-none`} style={styling}>
-              {text}
+              {text}{' '}{Comp}
             </h4>
           )
           break
@@ -62,9 +62,11 @@ export class TextHeading extends Component {
 TextHeading.propTypes = {
   text: PropTypes.string.isRequired,
   size: PropTypes.number.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  Comp: PropTypes.Component
 }
 TextHeading.defaultProps = {
-  color: ''
+  color: '',
+  Comp: undefined
 }
 export default TextHeading

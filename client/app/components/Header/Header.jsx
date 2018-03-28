@@ -68,7 +68,7 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, scrollable, noMessages
+      user, theme, tenant, invert, unread, req, scrollable, noMessages, component
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -169,6 +169,7 @@ class Header extends Component {
               onClick={this.goHome}
             />
           </div>
+          { component }
           <div className="flex layout-row layout-align-end-center">
             {rightCorner}
             { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
@@ -196,7 +197,8 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
-  noMessages: PropTypes.bool
+  noMessages: PropTypes.bool,
+  component: PropTypes.node
 }
 
 Header.defaultProps = {
@@ -212,7 +214,8 @@ Header.defaultProps = {
   unread: 0,
   req: null,
   scrollable: false,
-  noMessages: false
+  noMessages: false,
+  component: null
 }
 
 function mapStateToProps (state) {

@@ -85,7 +85,7 @@ export class ShopStageView extends Component {
   render () {
     const stageBoxes = SHIPMENT_STAGES.map(stage => this.stageBox(stage))
     return (
-      <div className={`layout-row flex-100 layout-align-center layout-wrap ${styles.ss_view}`}>
+      <div className="layout-row flex-100 layout-align-center layout-wrap">
         <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
           <div className={styles.fade} />
           <div
@@ -99,11 +99,11 @@ export class ShopStageView extends Component {
           </div>
         </div>
         <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
-          <div className={`layout-row ${defs.content_width} layout-align-start-center`}>
+          <div className="layout-row layout-align-start-center">
             <div
-              className={` ${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}
+              className={`${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}
             >
-              <div className={` ${styles.line} flex-none`} />
+              <div className={`${styles.line} flex-none`} />
               {stageBoxes}
             </div>
           </div>

@@ -29,7 +29,7 @@ export const tooltips = {
   weight:
     'The weight of the cargo is needed as containers have a maximum weight load. Containers are consolidated with other LCL shipments and the weight cannot exceed the maximum. Furthermore, weight also determines the price.',
   insurance:
-    'Sign an insurance your shipment for the replacement of the goods shipped in case of total or partial loss or damage. Note that if you choose not to pay to insure your shipment, the goods shipped are automatically covered under legal liability standard to the transportation industry.',
+    'Sign an insurance for your shipment for the replacement of the goods shipped in case of total or partial loss or damage. Note that if you choose not to pay to insure your shipment, the goods shipped are automatically covered under legal liability standard to the transportation industry.',
   has_pre_carriage:
     'Pre-Carriage is the term given to any inland movement that takes place prior to the good or container being delivered to the port/terminal.',
   has_on_carriage:
@@ -39,19 +39,19 @@ export const tooltips = {
   dangerous_goods:
     'Dangerous goods, often recognised as hazardous materials, may be pure chemicals, mixtures of substances, manufactured products or articles which can pose a risk to people, animals or the environment if not properly handled in use or in transport.',
   non_stackable:
-    '', // tooltip Text is missing - ask Clemen or Martin
+    'Sometimes cargo comes in shapes and sizes that is impossible to stack. It may also be cargo of fragile nature. When cargo is non-stackable, additional charges incur to cover for the excess free space in the container.',
   customs_clearance:
     'Customs Clearance is the documented permission to pass that a national customs authority grants to imported goods so that they can enter the country or to exported goods so that they can leave the country. The custom clearance is typically given to a shipping agent to prove that all applicable customs duties have been paid and the shipment has been approved.',
   gross_weight:
     'The gross weight is necessary to determine the chargeable weight. Gross weight is the total raw weight of the cargo + the weight of the packaging.',
   size_class:
-    'Choose the type of container that best accommodates your needs. Dry containers are suitable for most types of cargo, whereas high cube containers ensure that you gain an extra foot in height compared with dry containers. In general, high cube containers are ideal for light, voluminous or bulky cargo. 45 ft Pallet Wide High Cube containers are ideal for the transport of euro-pallet goods, as these containers are slightly wider.',
+    'Choose the type of container that best accommodates your needs. Dry containers are suitable for most types of cargo, whereas high cube containers ensure that you gain an extra foot in height compared with dry containers. In general, high cube containers are ideal for light, voluminous or bulky cargo. 45 ft Pallet Wide High Cube containers are ideal for the transport of euro-pallet goods, as these containers are slightly wider. The following are the inner dimensions of each container: 20’GP - 5.900m x 2.350m x 2.393m; 40’GP - 12.036m x 2.350m x 2.392m; 40’HC - 12.036m x 2.350m x 2.697m',
   weight_class:
     'The net weight is the total weight of the cargo after it has been packed into a container – but excluding the tare weight of the container.',
   total_price: 'Total Price includes all associated costs incl. service charges.',
-  shipper:
+  sender:
     'Shipper (or Consignor) is the person or company who is usually the supplier or owner of commodities shipped.',
-  consignee:
+  receiver:
     "Consignee is the party shown on the bill of lading or air waybill to whom the shipment is consigned. Need not always be the buyer, and in some countries will be the buyer's bank.",
   notifyee:
     'Notifyee is the person or company to be advised by the carrier upon arrival of the goods at the destination port.',
@@ -67,9 +67,9 @@ export const tooltips = {
   chassis:
     'If you do not require any assistance with loading/unloading the container on the delivery/pickup address.',
   customs_pre_carriage:
-    '', // tooltip Text is missing - ask Clemen or Martin
+    'Export Customs is not applicable for shipments without delivery to the port (pre-carriage).',
   customs_on_carriage:
-    '' // tooltip Text is missing - ask Clemen or Martin
+    'Import Customs is not applicable for shipments without delivery from the port (on-carriage).'
 }
 
 // Tool tips menu admin

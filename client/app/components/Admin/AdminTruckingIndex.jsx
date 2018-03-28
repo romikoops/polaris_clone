@@ -4,7 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 // import {v4} from 'node-uuid';
 import FileUploader from '../../components/FileUploader/FileUploader'
-import { AdminSearchableTruckings } from './AdminSearchables'
+import { AdminSearchableHubs } from './AdminSearchables'
 import { RoundButton } from '../RoundButton/RoundButton'
 
 export class AdminTruckingIndex extends Component {
@@ -20,16 +20,16 @@ export class AdminTruckingIndex extends Component {
   }
   render () {
     const {
-      theme, viewTrucking, truckingNexuses, adminDispatch
+      theme, viewTrucking, truckingNexuses, adminDispatch, hubs
     } = this.props
     if (!truckingNexuses) {
       return ''
     }
-    const cityUrl = '/admin/trucking/trucking_city_pricings'
-    const zipUrl = '/admin/trucking/trucking_zip_pricings'
+    // const cityUrl = '/admin/trucking/trucking_city_pricings'
+    // const zipUrl = '/admin/trucking/trucking_zip_pricings'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
+        {/* <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
         >
           <div className="flex-33 layout-row layout-wrap layout-align-center-center">
@@ -51,10 +51,10 @@ export class AdminTruckingIndex extends Component {
               iconClass="fa-plus"
             />
           </div>
-        </div>
-        <AdminSearchableTruckings
+        </div> */}
+        <AdminSearchableHubs
           theme={theme}
-          truckings={truckingNexuses}
+          hubs={hubs}
           adminDispatch={adminDispatch}
           sideScroll={false}
           handleClick={viewTrucking}
@@ -67,6 +67,7 @@ AdminTruckingIndex.propTypes = {
   theme: PropTypes.theme,
   viewTrucking: PropTypes.func.isRequired,
   loading: PropTypes.bool,
+  hubs: PropTypes.arrayOf(PropTypes.hub),
   adminDispatch: PropTypes.shape({
     getTrucking: PropTypes.func
   }).isRequired,
@@ -78,7 +79,8 @@ AdminTruckingIndex.propTypes = {
 AdminTruckingIndex.defaultProps = {
   theme: null,
   loading: false,
-  truckingNexuses: []
+  truckingNexuses: [],
+  hubs: []
 }
 
 export default AdminTruckingIndex

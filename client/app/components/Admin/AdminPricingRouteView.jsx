@@ -3,7 +3,6 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from './'
 import styles from './Admin.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import {
   CONTAINER_DESCRIPTIONS,
@@ -100,17 +99,6 @@ export class AdminPricingRouteView extends Component {
           })`
           : 'black'
     }
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={AdminPricingRouteView.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
     const RPBInner = ({ hubRoute, pricing, transport }) => {
       const panel = []
       let gloss
@@ -123,7 +111,7 @@ export class AdminPricingRouteView extends Component {
       Object.keys(pricing.data).forEach((key) => {
         const cells = []
         Object.keys(pricing.data[key]).forEach((chargeKey) => {
-          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis' && chargeKey !== 'range') {
             cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
               <p className="flex-none">{chargeGloss[chargeKey]}</p>
               <p className="flex">
@@ -295,7 +283,6 @@ export class AdminPricingRouteView extends Component {
           <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
             {itinerary.name}
           </p>
-          {backButton}
         </div>
         <RouteHubBox hubs={routeBoxHubs} itinerary={detailedItineraries} theme={theme} />
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
