@@ -147,3 +147,7 @@ PropTypes.shipmentData = PropTypes.shape({
 - props.contactData.contact is very similar to PropType `user` but is using `firstName` instead of `first_name`
 
 [X] Test complete
+
+## ContainerDetails
+
+[X] Test complete
