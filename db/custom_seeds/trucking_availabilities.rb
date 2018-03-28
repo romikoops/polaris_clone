@@ -1,1 +1,0 @@
-TruckingAvailability.create_all!

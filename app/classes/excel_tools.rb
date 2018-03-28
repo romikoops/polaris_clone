@@ -594,10 +594,6 @@ module ExcelTools
         results[:trucking_queries] << ntp
         stats[:trucking_queries][:number_updated] += 1
         new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
-        new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city][:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
-        hubs.each do |hub|
-          HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
-        end
       end
       new_trucking_hub_obj = {modifier: "city", tenant_id: user.tenant_id, nexus_id: nexus.id, load_type: 'lcl'}
       new_trucking_hubs_array << {
@@ -738,12 +734,9 @@ module ExcelTools
         # results[:trucking_queries] << ntp
         stats[:trucking_queries][:number_updated] += 1
         # new_trucking_location = Location.from_short_name("#{new_pricing[:city][:city]} ,#{new_pricing[:city][:province]}", 'trucking_option')
-        # new_trucking_option = TruckingOption.create(nexus_id: nexus.id, city_name: new_pricing[:city][:city], location_id: new_trucking_location.id, tenant_id: user.tenant_id)
-        # HubTruckingOption.create(hub_id: hub.id, trucking_option_id: new_trucking_option.id)
-      end
-     
+      end     
     end
-    return {stats: stats, results: results}
+    return {stats: stats, results: results }
   end
   def overwrite_distance_trucking_rates_by_hub(params, user = current_user, hub_id, courier_name, direction, country_code)
 

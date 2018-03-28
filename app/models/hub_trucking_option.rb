@@ -1,2 +1,0 @@
-class HubTruckingOption < ApplicationRecord
-end

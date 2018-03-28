@@ -46,6 +46,7 @@ include MongoTools
   # # # # # Overwrite trucking data from excel sheet
 
   # puts "# Overwrite trucking data from excel sheet"
+
   # hub = tenant.hubs.find_by_name("Gothenburg Port")
   # ["import", "export"].each do |dir|
   #   trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
