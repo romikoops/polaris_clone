@@ -25,9 +25,9 @@ include MongoTools
 #   # # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
 
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, false)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
   # Overwrite public pricings from excel sheet
 
@@ -46,12 +46,12 @@ include MongoTools
   # # # # # Overwrite trucking data from excel sheet
 
   # puts "# Overwrite trucking data from excel sheet"
-  hub = tenant.hubs.find_by_name("Gothenburg Port")
-  ["import", "export"].each do |dir|
-    trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-    req = {"xlsx" => trucking}
-    split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir)
-  end
+  # hub = tenant.hubs.find_by_name("Gothenburg Port")
+  # ["import", "export"].each do |dir|
+  #   trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+  #   req = {"xlsx" => trucking}
+  #   split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir)
+  # end
   # hub = tenant.hubs.find_by_name("Gothenburg Port")
   # ["export"].each do |dir|
   #   trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")

@@ -194,7 +194,8 @@ module ExcelTools
             height_limit: 130
           },
           courier: courier,
-          modifier: 'kg'
+          modifier: 'kg',
+          truck_type: 'default'
         )
         trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
           defaults[i].clone.merge({
@@ -210,9 +211,7 @@ module ExcelTools
                 value: 15,
                 rate_basis: 'PER_ITEM',
                 currency: currency
-              },
-              direction: direction,
-              type: "default"
+              }
             }
           })
         end
@@ -222,6 +221,7 @@ module ExcelTools
           trucking_destination = TruckingDestination.find_by!(zipcode: zipcode, country_code: 'SE')
           trucking_pricing_ids = TruckingPricing.where(
             load_type: load_type,
+            truck_type: 'default',
             load_meterage: {
               ratio: 1850,
               height_limit: 130

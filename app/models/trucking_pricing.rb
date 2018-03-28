@@ -11,8 +11,25 @@ class TruckingPricing < ApplicationRecord
   def self.update_data
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
+      # tp.import = tp.export if tp.import == {"table" => []}
       # tp.truck_type =  "default" if tp.load_type != 'container'
-      tp.truck_type = "chassis" if tp.truck_type == "chassi"
+      # tp.truck_type = "chassis" if tp.truck_type == "chassi"
+      if tp.export
+        tp.export["table"].each do |cell|
+          if cell
+            cell["fees"].delete("type")
+            cell["fees"].delete("direction")
+          end
+        end
+      end
+      if tp.import
+        tp.import["table"].each do |cell|
+          if cell
+            cell["fees"].delete("type")
+            cell["fees"].delete("direction")
+          end
+        end
+      end
 
       tp.save!
     end
