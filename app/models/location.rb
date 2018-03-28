@@ -12,9 +12,6 @@ class Location < ApplicationRecord
   has_many :routes
   has_many :stops, through: :hubs
 
-  
-  has_many :nexus_trucking_availabilities, foreign_key: "nexus_id"
-
   scope :nexus, -> { where(location_type: "nexus") }
 
   # Geocoding
@@ -77,6 +74,7 @@ class Location < ApplicationRecord
     self.save!
     self
   end
+
   def self.get_trucking_city(string)
     l = new(geocoded_address: string)
     l.geocode
@@ -158,6 +156,7 @@ class Location < ApplicationRecord
   def hubs_by_type(hub_type, tenant_id)
     hubs.where(hub_type: hub_type, tenant_id: tenant_id)
   end
+  
   def hubs_by_type_seeder(hub_type, tenant_id)
     hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
     if hubs.length < 1
@@ -225,71 +224,6 @@ class Location < ApplicationRecord
     lowest_distance = distances.reject(&:nan?).min
     return locations[distances.find_index(lowest_distance)], lowest_distance
   end
-
-  def trucking_availability(tenant_id)
-    return nil unless location_type == "nexus"
-    
-    nexus_trucking_availabilities.find_by(tenant_id: tenant_id).try(:trucking_availability)
-  end
-
-  def hub_trucking_availabilities(tenant_id)
-    TruckingAvailability.find_by_sql("
-      SELECT container, cargo_item FROM trucking_availabilities
-      JOIN hubs ON hubs.trucking_availability_id = trucking_availabilities.id
-      WHERE hubs.tenant_id = #{tenant_id}
-    ")
-  end
-
-  def trucking_availability_attributes(tenant_id)
-    ActiveRecord::Base.connection.execute("
-      SELECT
-        sums.container_sum  > 0 AS container, 
-        sums.cargo_item_sum > 0 AS cargo_item
-      FROM (
-        SELECT
-        SUM(CASE WHEN container  THEN 1 ELSE 0 END) AS container_sum,
-        SUM(CASE WHEN cargo_item THEN 1 ELSE 0 END) AS cargo_item_sum
-        FROM trucking_availabilities
-        JOIN hubs ON hubs.trucking_availability_id = trucking_availabilities.id
-        WHERE hubs.nexus_id = #{self.id} AND hubs.tenant_id = #{tenant_id}
-      ) AS sums
-    ").first
-  end
-
-  def update_trucking_availability!(filter = {})
-    Tenant.where(filter).each do |tenant|
-      trucking_availability = TruckingAvailability.find_by(
-        trucking_availability_attributes(tenant.id)
-      )
-
-      next if trucking_availability.nil? # No hubs
-
-      nexus_trucking_availability = NexusTruckingAvailability.find_or_initialize_by(
-        nexus: self,
-        tenant: tenant
-      )
-      nexus_trucking_availability.assign_attributes(trucking_availability: trucking_availability)
-      nexus_trucking_availability.save!
-    end
-  end
-
-  def self.update_all_trucking_availabilities
-    where(location_type: "nexus").each(&:update_trucking_availability!)
-  end
-
-  def trucking_options(tenant_id)
-    return nil unless location_type == "nexus"
-    
-    ActiveRecord::Base.connection.exec_query("
-      SELECT DISTINCT city_name FROM trucking_options
-      JOIN  hub_trucking_options ON hub_trucking_options.trucking_option_id = trucking_options.id
-      JOIN  hubs                 ON hub_trucking_options.hub_id             = hubs.id
-      WHERE hubs.tenant_id = #{tenant_id}
-      AND   hubs.nexus_id  = #{self.id}
-    ").rows.flatten
-  end
-    
-
 
   def closest_hubs
     hubs = Location.where(location_type: "nexus")
