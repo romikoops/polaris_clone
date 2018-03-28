@@ -127,12 +127,22 @@ function updateUser (user, req, shipmentReq) {
   }
 }
 
+function goTo (path, newTab) {
+  if (newTab) {
+    return () => window.open(path, '_blank')
+  }
+  return (dispatch) => {
+    dispatch(push(path))
+  }
+}
+
 export const authenticationActions = {
   login,
   logout,
   register,
   updateUser,
-  setUser
+  setUser,
+  goTo
 }
 
 export default authenticationActions
