@@ -158,4 +158,16 @@ Should it be tested?
 
 ## FloatingMenu 
 
-`PropTypes.oneOfType([ PropTypes.node, PropTypes.func ])`
+Require `PropTypes.oneOfType([ PropTypes.node, PropTypes.func ])`
+
+## FormsyInput
+
+The whole exported component is wrapped in library
+
+## Header
+
+Besides too large, the base component is not exported
+
+## HsCodeViewer
+
+Basic test as underlying list of elements should be tested separately.
