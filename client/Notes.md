@@ -151,3 +151,11 @@ PropTypes.shipmentData = PropTypes.shape({
 ## ContainerDetails
 
 [X] Test complete
+
+## FlashMessages
+
+Should it be tested?
+
+## FloatingMenu 
+
+`PropTypes.oneOfType([ PropTypes.node, PropTypes.func ])`
