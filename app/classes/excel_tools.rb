@@ -699,7 +699,7 @@ module ExcelTools
         row_data = first_sheet.row(line)
         new_pricing = {}
         td = TruckingDestination.find_or_create_by!(city_name: Location.get_trucking_city("#{row_data[1]}, #{row_data[0]}"), country_code: 'CN')
-        hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
+        hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
         
         
         new_pricing[direction] = {"table" => []}
@@ -815,7 +815,7 @@ module ExcelTools
 
           td = TruckingDestination.find_or_create_by!(distance: range_values[0], country_code: country_code)
           trucking_destinations[range_key] << td
-          hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, courier_id: courier.id)
+          hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
           hub_truckings[range_key] << hub_trucking
           if !aux_data[range_key]
             aux_data[range_key] = {}
