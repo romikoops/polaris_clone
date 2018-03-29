@@ -156,7 +156,7 @@ props.shipmentData has additional property `cargoItemTypes` that is not declared
 
 ## FlashMessages
 
-Should it be tested?
+Should it be tested? (no)
 
 ## FloatingMenu 
 
@@ -175,3 +175,7 @@ Besides too large, the base component is not exported
 Basic test as underlying list of elements should be tested separately.
 
 ## LandingTop
+
+tenant PropType uses additional property path `data.name`
+
+[X] Test complete
