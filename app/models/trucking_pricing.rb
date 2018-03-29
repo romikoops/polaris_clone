@@ -61,7 +61,8 @@ class TruckingPricing < ApplicationRecord
     ft.trucking_pricings.each do |tp|
       temp_tp = tp.as_json
       temp_tp.delete("id")
-      hub_id = tp.hub_id
+      hub_id = Hub.find_by(name: Hub.find(tp.hub_id).name, tenant_id: tt.id).id
+
       tp["tenant_id"] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
