@@ -1,6 +1,7 @@
 class TruckingPricing < ApplicationRecord
   has_many :shipments
   belongs_to :courier
+  belongs_to :tenant
   has_many :hub_truckings, dependent: :destroy
   has_many :hubs, through: :hub_truckings
   has_many :trucking_destinations, through: :hub_truckings
@@ -10,10 +11,23 @@ class TruckingPricing < ApplicationRecord
   # Class methods
   def self.update_data
     TruckingPricing.all.each do |tp|
+      hub_id = tp.hub_id
+      if hub_id
+        hub = Hub.find(hub_id)
+        if hub
+          t = hub.tenant
+          tp.tenant_id = t.id
+        else
+          next
+        end
+      else
+        next
+      end
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
       tp.export = tp.import if tp.export == {"table" => []}
+      tp.import = tp.export if tp.import == {"table" => []}
       # tp.truck_type =  "default" if tp.load_type != 'container'
-      # tp.truck_type = "chassis" if tp.truck_type == "chassi"
+      tp.truck_type = "chassis" if tp.truck_type == "chassi"
       # if tp.export
       #   tp.export["table"].each do |cell|
       #     if cell && cell["fees"]["congestion"]
@@ -39,6 +53,25 @@ class TruckingPricing < ApplicationRecord
         tp.cbm_ratio = 250
       end
       tp.save!
+    end
+  end
+  def self.copy_to_tenant(from_tenant, to_tenant)
+    ft = Tenant.find_by_subdomain(from_tenant)
+    tt = Tenant.find_by_subdomain(to_tenant)
+    ft.trucking_pricings.each do |tp|
+      temp_tp = tp.as_json
+      temp_tp.delete("id")
+      hub_id = tp.hub_id
+      tp["tenant_id"] = tt.id
+      ntp = TruckingPricing.create!(temp_tp)
+      hts = tp.hub_truckings
+      nhts = hts.map do |ht| 
+        temp_ht = ht.as_json
+        temp_ht.delete("id")
+        temp_ht["hub_id"] = hub_id
+        temp_ht["trucking_pricing_id"] = ntp.id
+        HubTrucking.create!(temp_ht)
+      end
     end
   end
 
