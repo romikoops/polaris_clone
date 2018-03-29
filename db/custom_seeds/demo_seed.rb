@@ -45,12 +45,12 @@ include MongoTools
 
   # # # # # Overwrite trucking data from excel sheet
 
-  # puts "# Overwrite trucking data from excel sheet"
+  # puts "# Overwrite trucking data from excel sheet" (params, user = current_user, hub_id, courier_name, direction, country_code)
   hub = tenant.hubs.find_by_name("Gothenburg Port")
   ["import", "export"].each do |dir|
     trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
     req = {"xlsx" => trucking}
-    overwrite_distance_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+    overwrite_distance_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir, "SE")
   end
   ["import", "export"].each do |dir|
     hub = tenant.hubs.find_by_name("Shanghai Port")
