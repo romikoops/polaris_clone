@@ -176,7 +176,7 @@ module ExcelTools
     mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
-  def handle_zipcode_sections(rows, user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, currency)
+  def handle_zipcode_sections(rows, user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, meta)
     hub = Hub.find(hub_id)
     courier = Courier.find_or_create_by(name: courier_name)
     rows.each do |row_data|
@@ -188,14 +188,14 @@ module ExcelTools
         trucking_pricing = TruckingPricing.new(
           export: { table: [] },
           import: { table: [] },
-          load_type: load_type,
+          load_type: meta[:load_type],
           load_meterage: {
-            ratio: 1950,
+            ratio:  meta[:load_meterage_ratio],
             height_limit: 130
           },
-          cbm_ratio: 280,
+          cbm_ratio:  meta[:cbm_ratio],
           courier: courier,
-          modifier: 'kg',
+          modifier:  meta[:modifier],
           truck_type: 'default'
         )
         trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
@@ -205,13 +205,13 @@ module ExcelTools
               base_rate: {
                 value: val,
                 rate_basis: 'PER_X_KG',
-                currency: currency,
+                currency: meta[:currency],
                 base: 100
               },
               congestion: {
                 value: 15,
                 rate_basis: 'PER_SHIPMENT',
-                currency: currency
+                currency: meta[:currency]
               }
             }
           })
@@ -224,10 +224,10 @@ module ExcelTools
             load_type: load_type,
             truck_type: 'default',
             load_meterage: {
-              ratio: 1850,
+              ratio: meta[:load_meterage_ratio],
               height_limit: 130
             },
-            modifier: 'kg'
+            modifier: meta[:modifier]
           ).ids
           hub_trucking = HubTrucking.where(              
             trucking_destination: trucking_destination,
@@ -335,8 +335,12 @@ module ExcelTools
         
         rows_for_job << tmp_array
       end
-      currency_row = first_sheet.row(1)
-      currency = currency_row[3]
+      meta_row = first_sheet.row(1)
+      currency = meta_row[3]
+      base = meta_row[11]
+      modifier = meta_row[9]
+      cbm_ratio = meta_row[7]
+      load_meterage_ratio = meta_row[5]
       header_row = first_sheet.row(2)
       header_row.shift
       header_row.shift
@@ -359,10 +363,16 @@ module ExcelTools
           hub_id: hub_id,
           courier_name: courier_name,
           load_type: load_type,
-          currency: currency,
           direction: direction,
           user_id: user.id,
-          job_id: job_id
+          job_id: job_id,
+          meta: {
+            load_type: load_type,
+            currency: currency,
+            cbm_ratio: cbm_ratio,
+            load_meterage_ratio: load_meterage_ratio,
+            base: base
+          }
         }
         ExcelWorker.perform_async(worker_obj)
         
