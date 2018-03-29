@@ -11,7 +11,7 @@ class TruckingPricing < ApplicationRecord
   def self.update_data
     TruckingPricing.all.each do |tp|
       # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      # tp.import = tp.export if tp.import == {"table" => []}
+      tp.export = tp.import if tp.export == {"table" => []}
       # tp.truck_type =  "default" if tp.load_type != 'container'
       # tp.truck_type = "chassis" if tp.truck_type == "chassi"
       # if tp.export
@@ -34,8 +34,10 @@ class TruckingPricing < ApplicationRecord
       # end
       if tp.load_meterage
         tp.load_meterage["ratio"] = 1950
+        tp.cbm_ratio = 280
+      else
+        tp.cbm_ratio = 250
       end
-      tp.cbm_ratio = 280
       tp.save!
     end
   end

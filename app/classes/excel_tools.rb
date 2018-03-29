@@ -1129,7 +1129,7 @@ module ExcelTools
       from: 'FROM', 
       to: 'TO', 
       eta: 'ETA', 
-      etd: 'ETS',
+      etd: 'ETD',
       closing_date: 'CLOSING_DATE',
       service_level: 'SERVICE_LEVEL'
     )
@@ -1169,7 +1169,7 @@ module ExcelTools
       stops = itinerary.stops.order(:index)
       
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, closing_date)
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, row[:closing_date])
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
         stats[:trips][:number_created] = generator_results[:trips]

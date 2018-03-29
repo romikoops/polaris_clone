@@ -35,7 +35,8 @@ export class AdminHubForm extends Component {
       country: '',
       fullAddress: ''
     }
-    // ;
+    // eslint-disable-next-line no-debugger
+    debugger
     place.address_components.forEach((ac) => {
       if (ac.types.includes('street_number')) {
         tmpAddress.number = ac.long_name
