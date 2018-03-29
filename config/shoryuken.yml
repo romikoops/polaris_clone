@@ -3,11 +3,11 @@ aws:
   secret_access_key: <% ENV["AWS_SECRET"] %>
   receive_message:
     attribute_names:
-    - ApproximateReceiveCount
-    - SentTimestamp
+      - ApproximateReceiveCount
+      - SentTimestamp
   region: eu-central-1
 
 concurrency: 25
 pidfile: tmp/pids/shoryuken.pid
 queues:
-  - excel_worker
+  - https://sqs.eu-central-1.amazonaws.com/003688427525/excel_worker
