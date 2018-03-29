@@ -12,9 +12,10 @@ class OverhaulTruckingPricings < ActiveRecord::Migration[5.1]
     remove_column :trucking_pricings, :city
     remove_column :trucking_pricings, :rate_type
     remove_column :trucking_pricings, :dist_hub
-    add_column :trucking_pricings, :hub_id, :integer
-    add_column :trucking_pricings, :trucking_destination_id, :integer
+    add_column :trucking_pricings, :export, :jsonb
+    add_column :trucking_pricings, :import, :jsonb
     add_column :trucking_pricings, :courier_id, :integer
-    add_column :trucking_pricings, :fees, :jsonb
+    add_column :trucking_pricings, :direction, :string
+    add_column :trucking_pricings, :load_type, :string
   end
 end
