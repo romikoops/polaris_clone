@@ -37,9 +37,11 @@ jest.mock('../Incoterm/Row', () => {
 // eslint-disable-next-line
 import { BookingConfirmation } from './BookingConfirmation'
 
+const cargoItemTypes = {}
+
 const propsBase = {
   theme,
-  shipmentData,
+  shipmentData: { ...shipmentData, cargoItemTypes },
   setStage: identity,
   tenant,
   shipmentDispatch: {

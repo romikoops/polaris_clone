@@ -108,6 +108,8 @@ PropTypes.shipmentData = PropTypes.shape({
 
 - Too big therefore only single basic test
 
+props.shipmentData has additional property `cargoItemTypes` that is not declared in its PropType
+
 ## CacheClearer
 
 - Component is exported already wrapped, so no test at this moment
@@ -171,3 +173,5 @@ Besides too large, the base component is not exported
 ## HsCodeViewer
 
 Basic test as underlying list of elements should be tested separately.
+
+## LandingTop
