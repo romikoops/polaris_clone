@@ -190,9 +190,10 @@ module ExcelTools
           import: { table: [] },
           load_type: load_type,
           load_meterage: {
-            ratio: 1850,
+            ratio: 1950,
             height_limit: 130
           },
+          cbm_ratio: 280,
           courier: courier,
           modifier: 'kg',
           truck_type: 'default'
@@ -480,7 +481,7 @@ module ExcelTools
           tmp[:direction] = direction
           tmp[:type] = "default"
           trucking_pricing["load_meterage"] = {
-            ratio: 1850,
+            ratio: 1950,
             height_limit: 130
           }
           trucking_pricing[:modifier] = 'kg'

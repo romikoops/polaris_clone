@@ -62,7 +62,8 @@ include MongoTools
   ["import", "export"].each do |dir|
     trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
     req = {"xlsx" => trucking}
-    split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir)
+    # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
+    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   end
   
   

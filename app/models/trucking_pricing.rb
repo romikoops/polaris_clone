@@ -14,25 +14,28 @@ class TruckingPricing < ApplicationRecord
       # tp.import = tp.export if tp.import == {"table" => []}
       # tp.truck_type =  "default" if tp.load_type != 'container'
       # tp.truck_type = "chassis" if tp.truck_type == "chassi"
-      if tp.export
-        tp.export["table"].each do |cell|
-          if cell && cell["fees"]["congestion"]
-            cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-            # cell["fees"].delete("type")
-            # cell["fees"].delete("direction")
-          end
-        end
+      # if tp.export
+      #   tp.export["table"].each do |cell|
+      #     if cell && cell["fees"]["congestion"]
+      #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
+      #       # cell["fees"].delete("type")
+      #       # cell["fees"].delete("direction")
+      #     end
+      #   end
+      # end
+      # if tp.import
+      #   tp.import["table"].each do |cell|
+      #     if cell && cell["fees"]["congestion"]
+      #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
+      #       # cell["fees"].delete("type")
+      #       # cell["fees"].delete("direction")
+      #     end
+      #   end
+      # end
+      if tp.load_meterage
+        tp.load_meterage["ratio"] = 1950
       end
-      if tp.import
-        tp.import["table"].each do |cell|
-          if cell && cell["fees"]["congestion"]
-            cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-            # cell["fees"].delete("type")
-            # cell["fees"].delete("direction")
-          end
-        end
-      end
-
+      tp.cbm_ratio = 280
       tp.save!
     end
   end
