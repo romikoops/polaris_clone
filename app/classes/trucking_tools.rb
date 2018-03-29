@@ -108,9 +108,9 @@ module TruckingTools
       when 'PER_X_TON'
         return {currency: fee["currency"], value: ((cargo["weight"]/ 1000) / fee["base"]) * fee["value"], key: key}
       when 'PER_SHIPMENT'
-        return {currency: fee["currency"], value: fee["value"] / cargo["number_of_items"], key: key}
+        return {currency: fee["currency"], value: fee["value"], key: key}
       when 'PER_BILL'
-        return {currency: fee["currency"], value: fee["value"] / cargo["number_of_items"], key: key}
+        return {currency: fee["currency"], value: fee["value"], key: key}
       when 'PER_ITEM'
         return {currency: fee["currency"], value: fee["value"] * cargo["number_of_items"], key: key}
       when 'PER_CONTAINER'

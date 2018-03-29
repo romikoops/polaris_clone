@@ -209,7 +209,7 @@ module ExcelTools
               },
               congestion: {
                 value: 15,
-                rate_basis: 'PER_ITEM',
+                rate_basis: 'PER_SHIPMENT',
                 currency: currency
               }
             }
