@@ -102,6 +102,7 @@ module TruckingTools
       when 'PER_KG'
         return {currency: fee["currency"], value: cargo["weight"] * fee["value"], key: key}
       when 'PER_X_KG'
+        byebug
         return {currency: fee["currency"], value: (cargo["weight"] / fee["base"]) * fee["value"], key: key}
       when 'PER_X_KM'
         return {currency: fee["currency"], value: ((km / fee["x_base"]) * fee["rate"]) + fee["base_value"], key: key}
@@ -182,6 +183,7 @@ module TruckingTools
         cargo_object["stackable"]["number_of_items"] += cargo.quantity
       end
     end
+    byebug
     return cargo_object
   end
 

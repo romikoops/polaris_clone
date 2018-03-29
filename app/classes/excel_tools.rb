@@ -1136,7 +1136,7 @@ module ExcelTools
       row[:mode_of_transport] = "ocean"
 
       tenant = Tenant.find(current_user.tenant_id)
-     
+     service_level = row[:service_level] ? row[:service_level] : 'default'
       tenant_vehicle = TenantVehicle.find_by(
           tenant_id: user.tenant_id, 
           mode_of_transport: row[:mode_of_transport],
