@@ -1128,7 +1128,10 @@ module ExcelTools
       from: 'FROM', 
       to: 'TO', 
       eta: 'ETA', 
-      etd: 'ETS')
+      etd: 'ETS',
+      closing_date: 'CLOSING_DATE',
+      service_level: 'SERVICE_LEVEL'
+    )
     schedules.each do |row|
       row[:mode_of_transport] = "ocean"
 
@@ -1136,8 +1139,12 @@ module ExcelTools
      
       tenant_vehicle = TenantVehicle.find_by(
           tenant_id: user.tenant_id, 
-          mode_of_transport: row[:mode_of_transport]
+          mode_of_transport: row[:mode_of_transport],
+          name: row[:service_level]
         )
+        if !tenant_vehicle
+          tenant_vehicle =  Vehicle.create_from_name(service_level, row[:mode_of_transport], user.tenant_id)
+        end
       startDate = row[:etd]
       endDate =  row[:eta]
       p row[:from]
@@ -1161,7 +1168,7 @@ module ExcelTools
       stops = itinerary.stops.order(:index)
       
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, closing_date)
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
         stats[:trips][:number_created] = generator_results[:trips]
