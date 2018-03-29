@@ -1210,22 +1210,26 @@ module ExcelTools
       itinerary = params["itinerary"]
 
       tenant = Tenant.find(current_user.tenant_id)
-     
+     service_level = row[:service_level] ? row[:service_level] : 'default'
       tenant_vehicle = TenantVehicle.find_by(
           tenant_id: user.tenant_id, 
-          mode_of_transport: itinerary.mode_of_transport
+          mode_of_transport: row[:mode_of_transport],
+          name: row[:service_level]
         )
+        if !tenant_vehicle
+          tenant_vehicle =  Vehicle.create_from_name(service_level, row[:mode_of_transport], user.tenant_id)
+        end
       startDate = row[:etd]
       endDate =  row[:eta]
       
       stops = itinerary.stops.order(:index)
       
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, row[:closing_date])
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
-        stats[:trips][:number_created] = generator_results[:trips]
-        stats[:layovers][:number_created] = generator_results[:layovers]
+        stats[:trips][:number_created] = generator_results[:trips].count
+        stats[:layovers][:number_created] = generator_results[:layovers].count
         return {results: results, stats: stats}
       else
         raise "Route cannot be found!"

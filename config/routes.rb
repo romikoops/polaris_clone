@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       post "shipments/:id/edit_price", to: "shipments#edit_price"
        post "shipments/:id/edit_time", to: "shipments#edit_time"
       resources :schedules, only: [:index, :show, :destroy]
+      post "schedules/overwrite/:id", to: "schedules#schedules_by_itinerary"
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 
         as: :schedules_train_overwrite

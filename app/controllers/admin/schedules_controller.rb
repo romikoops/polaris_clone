@@ -44,11 +44,11 @@ class Admin::SchedulesController < ApplicationController
     layovers = trip.layovers.order(:stop_index).map { |l| {layover: l, stop: l.stop, hub: l.stop.hub}  }
     response_handler(layovers)
   end
-  def overwrite_schedules_by_itinerary
+  def schedules_by_itinerary
     if params[:file]
       itinerary = Itinerary.find(params[:id])
       req = {'xlsx' => params[:file], 'itinerary' => itinerary}
-      results = overwrite_schedules_by_itinerary(req)
+      results = overwrite_schedules_by_itinerary(req, current_user)
       response_handler(results)
     else
       response_handler(false)
