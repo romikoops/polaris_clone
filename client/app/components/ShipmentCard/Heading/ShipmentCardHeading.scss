@@ -1,0 +1,16 @@
+:local {	
+  .heading {
+    background: lightgrey;
+    padding: 5px 15px;
+    h3, p {
+      margin: 5px;
+    }
+    border-radius: 5px 5px 0 0;
+    i {
+    	transition: all 0.3s ease; 
+    	&.collapsed {
+    		transform: rotate(-90deg);
+    	}
+    }
+  }
+}
