@@ -179,3 +179,11 @@ Basic test as underlying list of elements should be tested separately.
 tenant PropType uses additional property path `data.name`
 
 [X] Test complete
+
+## LoadingBox
+
+Should it be tested as there is no behaviour, no props defining content, rather just static rendering. In this case snapshot testing looks like better test solution.
+
+## LoginRegistrationWrapper
+
+[X] Test complete
