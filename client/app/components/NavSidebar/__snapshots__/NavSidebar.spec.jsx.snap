@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-center"
+  style={
+    Object {
+      "height": "55px",
+    }
+  }
+>
+  <AdminNavItem
+    iconClass="FOO_ICON"
+    key="123"
+    navFn={[Function]}
+    target="FOO_TARGET"
+    text="FOO_TEXT"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+    url="FOO_URL"
+  />
+</div>
+`;

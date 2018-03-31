@@ -206,3 +206,9 @@ should be:
 `
     return <div key={op.key} onClick={op.select}>{op.key}</div>
 `
+
+[X] Test complete
+
+## NavSidebar
+
+[X] Test complete
