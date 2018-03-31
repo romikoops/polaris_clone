@@ -193,3 +193,16 @@ Should it be tested as there is no behaviour, no props defining content, rather 
 Cannot proceed with test due to
 
 `gMaps.places.Autocomplete is not a constructor`
+
+## NavDropdown
+
+Line 37: missing key as div property
+
+`
+    return <div onClick={op.select}>{op.key}</div>
+`
+
+should be:
+`
+    return <div key={op.key} onClick={op.select}>{op.key}</div>
+`
