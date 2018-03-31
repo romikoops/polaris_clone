@@ -187,3 +187,9 @@ Should it be tested as there is no behaviour, no props defining content, rather 
 ## LoginRegistrationWrapper
 
 [X] Test complete
+
+## Maps
+
+Cannot proceed with test due to
+
+`gMaps.places.Autocomplete is not a constructor`
