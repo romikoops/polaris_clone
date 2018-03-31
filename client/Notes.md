@@ -212,3 +212,7 @@ should be:
 ## NavSidebar
 
 [X] Test complete
+
+## Price
+
+[X] Test complete
