@@ -216,3 +216,7 @@ should be:
 ## Price
 
 [X] Test complete
+
+## QuantityInput
+
+[X] Test complete
