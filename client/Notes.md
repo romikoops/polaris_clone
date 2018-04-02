@@ -257,3 +257,13 @@ Fat component, so only snapshot testing
 Fat component, so only snapshot testing
 
 !! PropTypes.schedule has additional undeclared properties
+
+## RouteSelector
+
+Fat component, so only snapshot testing
+
+Line 77 causes:
+
+`
+Failed prop type: Invalid prop `routeSelected` of type `function` supplied to `RouteOption`, expected `boolean`.
+`
