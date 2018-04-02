@@ -234,3 +234,16 @@ Line 132:
 `
 Failed prop type: The prop `name` is marked as required in `Checkbox`, but its value is `undefined`
 `
+
+## RouteHubBox
+
+Fat component, so only snapshot testing
+
+!! Mismatch in PropTypes:
+
+`hubs` is declared as `hubs: PropTypes.arrayOf(PropTypes.hub)` but then we have this evaluation:
+
+`
+const { theme, hubs, route } = this.props
+const { startHub, endHub } = hubs
+`
