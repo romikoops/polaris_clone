@@ -1,0 +1,483 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.pickup is false 1`] = `
+<div
+  className="filterbox"
+>
+  <div
+    className="pickup_date"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Closing Date"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row dpb"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center dpb_icon"
+      >
+        <i
+          className="flex-none fa fa-calendar"
+        />
+      </div>
+      <DayPickerInput
+        className="dpb_picker"
+        classNames={
+          Object {
+            "container": "DayPickerInput",
+            "overlay": "DayPickerInput-Overlay",
+            "overlayWrapper": "DayPickerInput-OverlayWrapper",
+          }
+        }
+        clickUnselectsDay={false}
+        component="input"
+        dayPickerProps={
+          Object {
+            "disabledDays": Object {
+              "before": 2018-04-09T07:21:24.000Z,
+            },
+            "month": 2018-03-31T21:00:00.000Z,
+            "name": "dayPicker",
+          }
+        }
+        format="DD/MM/YYYY"
+        formatDate={[Function]}
+        hideOnDayClick={true}
+        inputProps={Object {}}
+        keepFocus={true}
+        onDayChange={[Function]}
+        overlayComponent={[Function]}
+        parseDate={[Function]}
+        placeholder="DD/MM/YYYY"
+        showOverlay={false}
+        value="02/04/2018"
+      />
+    </div>
+  </div>
+  <div
+    className="haulage"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Haulage"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          Pre Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          On Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="mode_of_transport"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Mode of transport"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={true}
+        disabled={false}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none"
+      >
+        <i
+          className="fa fa-plane"
+        />
+        Air
+      </label>
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={true}
+        disabled={false}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none"
+      >
+        <i
+          className="fa fa-ship"
+        />
+        Ocean
+      </label>
+    </div>
+  </div>
+  <styled.div
+    className="transit_time"
+  >
+    <p>
+      <TextHeading
+        color=""
+        size={4}
+        text="Transit Time"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </p>
+    <input
+      onChange={[Function]}
+      type="range"
+      value={1}
+    />
+    <div
+      className="transit_time_labels"
+    >
+      <p>
+        20 days
+      </p>
+      <p>
+        100 days
+      </p>
+    </div>
+  </styled.div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="filterbox"
+>
+  <div
+    className="pickup_date"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Pickup Date"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-none layout-row dpb"
+    >
+      <div
+        className="flex-none layout-row layout-align-center-center dpb_icon"
+      >
+        <i
+          className="flex-none fa fa-calendar"
+        />
+      </div>
+      <DayPickerInput
+        className="dpb_picker"
+        classNames={
+          Object {
+            "container": "DayPickerInput",
+            "overlay": "DayPickerInput-Overlay",
+            "overlayWrapper": "DayPickerInput-OverlayWrapper",
+          }
+        }
+        clickUnselectsDay={false}
+        component="input"
+        dayPickerProps={
+          Object {
+            "disabledDays": Object {
+              "before": 2018-04-09T07:21:24.000Z,
+            },
+            "month": 2018-03-31T21:00:00.000Z,
+            "name": "dayPicker",
+          }
+        }
+        format="DD/MM/YYYY"
+        formatDate={[Function]}
+        hideOnDayClick={true}
+        inputProps={Object {}}
+        keepFocus={true}
+        onDayChange={[Function]}
+        overlayComponent={[Function]}
+        parseDate={[Function]}
+        placeholder="DD/MM/YYYY"
+        showOverlay={false}
+        value="02/04/2018"
+      />
+    </div>
+  </div>
+  <div
+    className="haulage"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Haulage"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          Pre Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+    <div
+      className="haulage_option layout-row layout-wrap flex-none"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <p
+          className="flex-none five_m"
+        >
+          On Carriage
+        </p>
+        <p
+          className="flex-none five_m"
+        >
+          No
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    className="mode_of_transport"
+  >
+    <div>
+      <TextHeading
+        color=""
+        size={4}
+        text="Mode of transport"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={true}
+        disabled={false}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none"
+      >
+        <i
+          className="fa fa-plane"
+        />
+        Air
+      </label>
+    </div>
+    <div
+      className="radio layout-row layout-align-none-center"
+      style={
+        Object {
+          "margin": "2px 0",
+        }
+      }
+    >
+      <Checkbox
+        checked={true}
+        disabled={false}
+        onChange={[Function]}
+        onClick={null}
+        size={null}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+      <label
+        className="flex-none"
+      >
+        <i
+          className="fa fa-ship"
+        />
+        Ocean
+      </label>
+    </div>
+  </div>
+  <styled.div
+    className="transit_time"
+  >
+    <p>
+      <TextHeading
+        color=""
+        size={4}
+        text="Transit Time"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </p>
+    <input
+      onChange={[Function]}
+      type="range"
+      value={1}
+    />
+    <div
+      className="transit_time_labels"
+    >
+      <p>
+        20 days
+      </p>
+      <p>
+        100 days
+      </p>
+    </div>
+  </styled.div>
+</div>
+`;

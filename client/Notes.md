@@ -224,3 +224,13 @@ should be:
 ## RoundButton
 
 [X] Test complete
+
+## RouteFilterBox
+
+Fat component, so only snapshot testing
+
+Line 132:
+
+`
+Failed prop type: The prop `name` is marked as required in `Checkbox`, but its value is `undefined`
+`
