@@ -247,3 +247,7 @@ Fat component, so only snapshot testing
 const { theme, hubs, route } = this.props
 const { startHub, endHub } = hubs
 `
+
+## RouteOption
+
+Fat component, so only snapshot testing
