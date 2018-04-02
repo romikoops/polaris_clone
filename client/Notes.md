@@ -271,3 +271,7 @@ Failed prop type: Invalid prop `routeSelected` of type `function` supplied to `R
 ## ShipmentCargoItems
 
 Really fat component, so only basic snapshot testing
+
+## ShipmentContactForm
+
+Basic snapshot testing with lots of warnings

@@ -1,0 +1,331 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <div
+    className="flex-none content_width layout-row layout-wrap"
+  >
+    <[object Object]
+      className="flex-100 layout-row layout-wrap layout-align-start-start"
+      mapping={[Function]}
+      name="form"
+      onInvalidSubmit={[Function]}
+      onValidSubmit={[Function]}
+      style={
+        Object {
+          "padding": "8px 20px",
+        }
+      }
+    >
+      <h3>
+        Company Details
+      </h3>
+      <[object Object]
+        className="input"
+        errorMessageStyles={
+          Object {
+            "bottom": "-19px",
+            "fontSize": "12px",
+          }
+        }
+        name="companyName"
+        placeholder="Company Name"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Minimum 2 characters",
+            "minLength": "Minimum 2 characters",
+          }
+        }
+        validations="minLength:2"
+        value="FOO_COMPANY"
+        wrapperClassName="wrapper_input flex-95"
+      />
+      <[object Object]
+        className="input"
+        errorMessageStyles={
+          Object {
+            "bottom": "-19px",
+            "fontSize": "12px",
+          }
+        }
+        name="firstName"
+        placeholder="First Name"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Minimum 2 characters",
+            "minLength": "Minimum 2 characters",
+          }
+        }
+        validations="minLength:2"
+        wrapperClassName="wrapper_input flex-45"
+      />
+      <[object Object]
+        className="input"
+        errorMessageStyles={
+          Object {
+            "bottom": "-19px",
+            "fontSize": "12px",
+          }
+        }
+        name="lastName"
+        placeholder="Last Name"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Minimum 2 characters",
+            "minLength": "Minimum 2 characters",
+          }
+        }
+        validations="minLength:2"
+        wrapperClassName="wrapper_input offset-5 flex-45"
+      />
+      <[object Object]
+        className="input"
+        errorMessageStyles={
+          Object {
+            "bottom": "-19px",
+            "fontSize": "12px",
+          }
+        }
+        name="email"
+        placeholder="Email"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Must not be blank",
+            "matchRegexp": "Invalid email",
+          }
+        }
+        validations={
+          Object {
+            "matchRegexp": /\\^\\(\\[\\^@\\\\s\\]\\+\\)@\\(\\(\\?:\\[-a-z0-9\\]\\+\\\\\\.\\)\\+\\[a-z\\]\\{2,\\}\\)\\$/i,
+          }
+        }
+        wrapperClassName="wrapper_input flex-45"
+      />
+      <[object Object]
+        className="input"
+        errorMessageStyles={
+          Object {
+            "bottom": "-19px",
+            "fontSize": "12px",
+          }
+        }
+        name="phone"
+        placeholder="Phone"
+        required={true}
+        submitAttempted={false}
+        type="text"
+        validationErrors={
+          Object {
+            "isDefaultRequiredValue": "Minimum 4 characters",
+            "minLength": "Minimum 4 characters",
+          }
+        }
+        validations="minLength:4"
+        wrapperClassName="wrapper_input offset-5 flex-45"
+      />
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-start"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap"
+        >
+          <h3
+            className="flex-40"
+          >
+            Address Details
+          </h3>
+          <div
+            className="offset-5 flex-55"
+          >
+            <[object Object]
+              handlePlaceChange={[Function]}
+              hideMap={true}
+              inputStyles={
+                Object {
+                  "background": "white",
+                  "marginTop": "9px",
+                  "width": "96%",
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <[object Object]
+          className="input"
+          errorMessageStyles={
+            Object {
+              "bottom": "-19px",
+              "fontSize": "12px",
+            }
+          }
+          name="location-street"
+          placeholder="Street"
+          required={true}
+          submitAttempted={false}
+          type="text"
+          validationErrors={
+            Object {
+              "isDefaultRequiredValue": "Minimum 2 characters",
+              "minLength": "Minimum 2 characters",
+            }
+          }
+          validations="minLength:2"
+          value="FOO_STREET"
+          wrapperClassName="wrapper_input flex-75"
+        />
+        <[object Object]
+          className="input"
+          errorMessageStyles={
+            Object {
+              "bottom": "-19px",
+              "fontSize": "12px",
+            }
+          }
+          name="location-streetNumber"
+          placeholder="Number"
+          required={true}
+          submitAttempted={false}
+          type="text"
+          validationErrors={
+            Object {
+              "isDefaultRequiredValue": "Must not be blank",
+            }
+          }
+          wrapperClassName="wrapper_input offset-5 flex-15"
+        />
+        <[object Object]
+          className="input"
+          errorMessageStyles={
+            Object {
+              "bottom": "-19px",
+              "fontSize": "12px",
+            }
+          }
+          name="location-zipCode"
+          placeholder="Postal Code"
+          required={true}
+          submitAttempted={false}
+          type="text"
+          validationErrors={
+            Object {
+              "isDefaultRequiredValue": "Minimum 4 characters",
+              "minLength": "Minimum 4 characters",
+            }
+          }
+          validations="minLength:4"
+          wrapperClassName="wrapper_input flex-25"
+        />
+        <[object Object]
+          className="input"
+          errorMessageStyles={
+            Object {
+              "bottom": "-19px",
+              "fontSize": "12px",
+            }
+          }
+          name="location-city"
+          placeholder="City"
+          required={true}
+          submitAttempted={false}
+          type="text"
+          validationErrors={
+            Object {
+              "isDefaultRequiredValue": "Minimum 2 characters",
+              "minLength": "Minimum 2 characters",
+            }
+          }
+          validations="minLength:2"
+          value="FOO_CITY"
+          wrapperClassName="wrapper_input offset-5 flex-30"
+        />
+        <[object Object]
+          className="input"
+          errorMessageStyles={
+            Object {
+              "bottom": "-19px",
+              "fontSize": "12px",
+            }
+          }
+          name="location-country"
+          placeholder="Country"
+          required={true}
+          submitAttempted={false}
+          type="text"
+          validationErrors={
+            Object {
+              "isDefaultRequiredValue": "Minimum 3 characters",
+              "minLength": "Minimum 3 characters",
+            }
+          }
+          validations="minLength:3"
+          value="Germany"
+          wrapperClassName="wrapper_input offset-5 flex-30"
+        />
+        <[object Object]
+          name="location-geocodedAddress"
+          placeholder=""
+          type="hidden"
+          wrapperClassName="flex-100"
+        />
+      </div>
+      <div
+        className="layout-row layout-align-space-between"
+        style={
+          Object {
+            "width": "97.5%",
+          }
+        }
+      >
+        <RoundButton
+          active={true}
+          size="small"
+          text="Set FOO_TYPE"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <RoundButton
+          handleNext={[Function]}
+          size="small"
+          text="Done"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </[object Object]>
+  </div>
+</div>
+`;

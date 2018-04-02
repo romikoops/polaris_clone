@@ -4,6 +4,8 @@
 
 - try to sort property keys alphabetically
 
+- skip empty lines between mock declaration, if they are more than 2
+
 ## Shallow rendering
 
 Use the following pattern:
