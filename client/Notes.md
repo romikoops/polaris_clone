@@ -275,3 +275,18 @@ Really fat component, so only basic snapshot testing
 ## ShipmentContactForm
 
 Basic snapshot testing with lots of warnings
+
+## ShipmentContactBox
+
+Snapshot testing
+
+!! Create unneccessary closures
+
+`
+<ContactCard
+  ...
+  select={() => this.setContactForEdit(notifyee, 'notifyee', i)}
+  ...
+  removeFunc={() => this.props.removeNotifyee(i)}
+/>
+`
