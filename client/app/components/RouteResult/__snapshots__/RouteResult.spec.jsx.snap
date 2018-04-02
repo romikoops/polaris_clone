@@ -1,0 +1,473 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.pickup is false 1`] = `
+<div
+  className="flex-100 layout-row route_result"
+  key="555777"
+>
+  <div
+    className="flex-75 layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center top_row"
+    >
+      <div
+        className="flex-80 layout-row layout-align-start-center hubs_row"
+      >
+        <div
+          className="header_hub"
+        >
+          <i
+            className="fa fa-map-marker map_marker"
+          />
+          <div
+            className="flex-100 layout-row"
+          >
+            <h4
+              className="flex-100"
+            >
+               
+               
+            </h4>
+          </div>
+        </div>
+        <div
+          className="connection_graphics"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-ship"
+            />
+          </div>
+          <div
+            style={
+              Object {
+                "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+                "backgroundSize": "16px 2px, 100% 2px",
+                "height": "2px",
+                "marginTop": "6px",
+                "width": "100%",
+              }
+            }
+          />
+        </div>
+        <div
+          className="header_hub"
+        >
+          <i
+            className="fa fa-flag-o flag"
+          />
+          <div
+            className="flex-100 layout-row"
+          >
+            <h4
+              className="flex-100"
+            >
+               
+               
+            </h4>
+          </div>
+          <div
+            className="flex-100"
+          >
+            <p
+              className="flex-100"
+            >
+               
+               
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-20 layout-row layout-align-start-center load_type"
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+            Closing Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            20:50
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            18:20
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            23:37
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-25 layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <p
+        className="flex-none"
+      >
+        Total price: 
+      </p>
+      <Price
+        scale=""
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+          }
+        }
+        value={12}
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        size="full"
+        text="Choose"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow rendering 1`] = `
+<div
+  className="flex-100 layout-row route_result"
+  key="555777"
+>
+  <div
+    className="flex-75 layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-start-center top_row"
+    >
+      <div
+        className="flex-80 layout-row layout-align-start-center hubs_row"
+      >
+        <div
+          className="header_hub"
+        >
+          <i
+            className="fa fa-map-marker map_marker"
+          />
+          <div
+            className="flex-100 layout-row"
+          >
+            <h4
+              className="flex-100"
+            >
+               
+               
+            </h4>
+          </div>
+        </div>
+        <div
+          className="connection_graphics"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center"
+          >
+            <i
+              className="fa fa-ship"
+            />
+          </div>
+          <div
+            style={
+              Object {
+                "background": "linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, #333, #fafafa)",
+                "backgroundSize": "16px 2px, 100% 2px",
+                "height": "2px",
+                "marginTop": "6px",
+                "width": "100%",
+              }
+            }
+          />
+        </div>
+        <div
+          className="header_hub"
+        >
+          <i
+            className="fa fa-flag-o flag"
+          />
+          <div
+            className="flex-100 layout-row"
+          >
+            <h4
+              className="flex-100"
+            >
+               
+               
+            </h4>
+          </div>
+          <div
+            className="flex-100"
+          >
+            <p
+              className="flex-100"
+            >
+               
+               
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-20 layout-row layout-align-start-center load_type"
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+            Pickup Date
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            20:50
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             Date of Departure
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            18:20
+             
+          </p>
+        </div>
+      </div>
+      <div
+        className="flex-33 layout-wrap layout-row layout-align-center-center"
+      >
+        <div
+          className="flex-100 layout-row"
+        >
+          <h4
+            className="date_title"
+          >
+             ETA terminal
+          </h4>
+        </div>
+        <div
+          className="flex-100 layout-row"
+        >
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            28-03-2018
+             
+          </p>
+          <p
+            className="flex-none sched_elem"
+          >
+             
+            23:37
+             
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="flex-25 layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <p
+        className="flex-none"
+      >
+        Total price: 
+      </p>
+      <Price
+        scale=""
+        user={
+          Object {
+            "company_name": "FOO_COMPANY",
+            "email": "foo@bar.baz",
+            "first_name": "John",
+            "guest": false,
+            "last_name": "Doe",
+            "phone": "6345789",
+          }
+        }
+        value={12}
+      />
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <RoundButton
+        active={true}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass=""
+        size="full"
+        text="Choose"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;

@@ -251,3 +251,9 @@ const { startHub, endHub } = hubs
 ## RouteOption
 
 Fat component, so only snapshot testing
+
+## RouteResult
+
+Fat component, so only snapshot testing
+
+!! PropTypes.schedule has additional undeclared properties
