@@ -267,3 +267,7 @@ Line 77 causes:
 `
 Failed prop type: Invalid prop `routeSelected` of type `function` supplied to `RouteOption`, expected `boolean`.
 `
+
+## ShipmentCargoItems
+
+Really fat component, so only basic snapshot testing

@@ -4,6 +4,26 @@
 
 - try to sort property keys alphabetically
 
+## Shallow rendering
+
+Use the following pattern:
+
+`
+const createShallow = propsInput => shallow(<Component {...propsInput} />)
+
+test('shallow rendering', () => {
+  expect(createShallow(propsBase)).toMatchSnapshot()
+})
+
+test('props.ready is true', () => {
+  const props = {
+    ...propsBase,
+    ready: true
+  }
+  expect(createShallow(props)).toMatchSnapshot()
+})
+`
+
 ## Naming conventions
 
 ### dom
