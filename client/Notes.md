@@ -304,3 +304,11 @@ Not full PropType for `container` as these three properties are used without dec
 ? What is the reason for different cases of variables ?
 
 [X] Test complete
+
+## ShipmentDetails
+
+Basic snapshot test
+
+- Forced to use emtpy object as `shipmentData`
+
+- prop.prevRequest.shipment

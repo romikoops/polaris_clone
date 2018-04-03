@@ -1,0 +1,377 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
+  style={
+    Object {
+      "minHeight": "1800px",
+    }
+  }
+>
+  <FlashMessages
+    messages={
+      Array [
+        "FOO_MESSAGE",
+        "BAR_MESSAGE",
+      ]
+    }
+  />
+  <div
+    className="layout-row flex-100 layout-wrap map_cont"
+  >
+    <[object Object]
+      component={[Function]}
+      destination={
+        Object {
+          "fullAddress": "destination_user_input",
+          "hub_id": 12,
+        }
+      }
+      handleAddressChange={[Function]}
+      handleCarriageNexuses={[Function]}
+      handleChangeCarriage={[Function]}
+      handleSelectLocation={[Function]}
+      has_on_carriage={false}
+      has_pre_carriage={false}
+      nextStageAttempt={false}
+      origin={
+        Object {
+          "fullAddress": "origin_user_input",
+          "hub_id": 1,
+        }
+      }
+      prevRequest={
+        Object {
+          "shipment": Object {
+            "cargo_items_attributes": Array [],
+            "clientName": "FOO_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "destination_id": 12,
+            "destination_user_input": "destination_user_input",
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "incoterm": "incoterm",
+            "load_type": "cargo_item",
+            "origin_id": 1,
+            "origin_user_input": "origin_user_input",
+            "planned_etd": 789,
+            "planned_pickup_date": "planned_pickup_date",
+            "schedule_set": Array [],
+            "status": "FOO_STATUS",
+            "trucking": "trucking",
+          },
+        }
+      }
+      routeIds={Array []}
+      setTargetAddress={[Function]}
+      shipment={
+        Object {
+          "shipment": Object {
+            "cargo_items_attributes": Array [],
+            "clientName": "FOO_CLIENT_NAME",
+            "containers_attributes": Array [],
+            "destination_id": 12,
+            "destination_user_input": "destination_user_input",
+            "has_on_carriage": false,
+            "has_pre_carriage": false,
+            "id": 654,
+            "imc_reference": "FOO_IMC_REFERENCE",
+            "incoterm": "incoterm",
+            "load_type": "cargo_item",
+            "origin_id": 1,
+            "origin_user_input": "origin_user_input",
+            "planned_etd": 789,
+            "planned_pickup_date": "planned_pickup_date",
+            "schedule_set": Array [],
+            "status": "FOO_STATUS",
+            "trucking": "trucking",
+          },
+        }
+      }
+      shipmentDispatch={
+        Object {
+          "getDashboard": [Function],
+          "goTo": [Function],
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <div
+    className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="content_width layout-row flex-none layout-align-start-center"
+    >
+      <div
+        className="layout-row flex-50 layout-align-start-center layout-wrap"
+      >
+        <div
+          className="bottom_margin flex-100 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-none letter_2 layout-align-space-between-end"
+          >
+            <TextHeading
+              size={3}
+              text="Available at appointed terminal"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <Tooltip
+            icon="fa-info-circle"
+            text="planned_dropoff_date"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-none layout-row dpb "
+          name="dayPicker"
+        >
+          <div
+            className="flex-none layout-row layout-align-center-center dpb_icon"
+          >
+            <i
+              className="flex-none fa fa-calendar"
+            />
+          </div>
+          <[object Object]
+            dayPickerProps={
+              Object {
+                "disabledDays": Object {
+                  "before": 1970-01-01T00:00:00.019Z,
+                },
+                "month": 1920-06-30T21:00:00.000Z,
+                "name": "dayPicker",
+              }
+            }
+            format="DD/MM/YYYY"
+            name="dayPicker"
+            onDayChange={[Function]}
+            placeholder="DD/MM/YYYY"
+            value={19}
+          />
+          <span
+            className="error_message"
+          />
+        </div>
+      </div>
+      <div
+        className="flex-50 layout-row layout-wrap layout-align-end-center"
+      >
+        <IncotermBox
+          errorStyles={null}
+          firstStep={true}
+          incoterm="incoterm"
+          nextStageAttempt={false}
+          onCarriage={false}
+          preCarriage={false}
+          setIncoTerm={[Function]}
+          showIncotermError={false}
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="border_divider trucking_sec layout-row flex-100  layout-wrap layout-align-center"
+  >
+    <[object Object]
+      handleTruckingDetailsChange={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      truckTypes={
+        Array [
+          "default",
+        ]
+      }
+      trucking="trucking"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center"
+  >
+    <div
+      className="flex-none content_width_booking layout-row layout-align-center-center"
+    >
+      <IncotermRow
+        destinationFees={false}
+        onCarriage={false}
+        originFees={false}
+        preCarriage={false}
+        tenant={
+          Object {
+            "data": Object {
+              "id": 123,
+              "subdomain": "foosubdomain",
+              "theme": Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              },
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="layout-row flex-100 layout-wrap cargo_sec"
+  >
+    <ShipmentCargoItems
+      addCargoItem={[Function]}
+      cargoItems={Array []}
+      deleteItem={[Function]}
+      handleDelta={[Function]}
+      nextStageAttempt={false}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      toggleModal={[Function]}
+    />
+  </div>
+  <div
+    className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+    >
+      <div
+        className="flex-60 layout-row layout-align-start-center"
+      >
+        <div
+          className="flex-10 layout-row layout-align-start-start"
+        >
+          <Checkbox
+            checked={false}
+            name="no_dangerous_goods_confirmation"
+            onChange={[Function]}
+            size="30px"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <p
+          style={
+            Object {
+              "fontSize": "14px",
+              "margin": 0,
+            }
+          }
+        >
+          I hereby confirm that none of the specified cargo units contain
+           
+          <span
+            className="emulate_link blue_link"
+            onClick={[Function]}
+          >
+            dangerous goods
+          </span>
+          .
+        </p>
+      </div>
+      <div
+        className="flex layout-row layout-align-end"
+      >
+        <RoundButton
+          active={false}
+          disabled={true}
+          handleNext={[Function]}
+          text="Get Offers"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="border_divider layout-row flex-100 layout-wrap layout-align-center-center"
+  >
+    <div
+      className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+    >
+      <div
+        className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
+      >
+        <RoundButton
+          back={true}
+          handleNext={[Function]}
+          iconClass="fa-angle-left"
+          text="Back to Dashboard"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
