@@ -1,2 +1,0 @@
-class TruckingOption < ApplicationRecord
-end

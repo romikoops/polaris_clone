@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180323144835) do
+ActiveRecord::Schema.define(version: 20180329125202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,10 +121,9 @@ ActiveRecord::Schema.define(version: 20180323144835) do
   create_table "hub_truckings", force: :cascade do |t|
     t.integer "hub_id"
     t.integer "trucking_destination_id"
-    t.integer "courier_id"
+    t.integer "trucking_pricing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "trucking_pricing_id"
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -395,8 +394,8 @@ ActiveRecord::Schema.define(version: 20180323144835) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item", default: false
-    t.boolean "container", default: false
+    t.boolean "cargo_item"
+    t.boolean "container"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -420,15 +419,15 @@ ActiveRecord::Schema.define(version: 20180323144835) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.string "direction"
     t.jsonb "export"
     t.jsonb "import"
     t.integer "courier_id"
+    t.string "direction"
     t.string "load_type"
-    t.string "truck_type"
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
     t.string "modifier"
+    t.integer "tenant_id"
   end
 
   create_table "user_locations", force: :cascade do |t|

@@ -16,8 +16,9 @@ module PricingTools
     price_key        = path_pricing[path_pricing_key]    
 
     pricing = get_item_fn(client, 'pricings', '_id', price_key)
+    
     final_pricing = pricing
-    if pricing["exceptions"].length > 0
+    if pricing["exceptions"] && pricing["exceptions"].length > 0
       pricing["exceptions"].each do |ex|
         if ex["effective_date"] <= shipment_date && ex["expiration_date"] >= shipment_date
           final_pricing = ex
@@ -29,12 +30,12 @@ module PricingTools
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
     cargo = load_type === 'container' ? {
-      number_of_items: cargos.length,
-      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+      number_of_items: cargos.map{|c| c.quantity}.sum,
+      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
     } : {
-      number_of_items: cargos.length,
-      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
-      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+      number_of_items: cargos.map{|c| c.quantity}.sum,
+      volume: cargos.map { |cargo| cargo.volume * cargo.quantity }.sum.to_d,
+      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
     }
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
     query = [
@@ -49,12 +50,12 @@ module PricingTools
     charge[direction].each do |k,fee|
       case fee["rate_basis"]
         when "PER_ITEM"
-          totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
+          totals[k] ? totals[k]["value"] += fee["value"].to_d : totals[k] = {"value" => fee["value"].to_d, "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = fee["currency"]
           end
         when "PER_CBM"
-          totals[k] ? totals[k]["value"] += fee["value"].to_f * cargo.volume : totals[k] = {"value" => fee["value"].to_f * cargo[:volume], "currency" => fee["currency"]}
+          totals[k] ? totals[k]["value"] += fee["value"].to_d * cargo.volume : totals[k] = {"value" => fee["value"].to_d * cargo[:volume], "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = fee["currency"]
           end
@@ -98,12 +99,12 @@ module PricingTools
 
   def calc_customs_fees(charge, cargos, load_type, user)
     cargo = load_type === 'container' ? {
-      number_of_items: cargos.length,
-      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+      number_of_items: cargos.map{|c|c.quantity}.sum,
+      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
     } : {
-      number_of_items: cargos.length,
-      volume: cargos.map { |cargo| cargo.volume }.sum.to_f,
-      weight: cargos.map { |cargo| cargo.payload_in_kg }.sum.to_f
+      number_of_items: cargos.map{|c|c.quantity}.sum,
+      volume: cargos.map { |cargo| cargo.volume * cargo.quantity }.sum.to_d,
+      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
     }
     
     return {} if charge.nil?
@@ -111,12 +112,12 @@ module PricingTools
     charge.each do |k,v|
       case v["rate_basis"]
         when "PER_ITEM"
-          totals[k] ? totals[k]["value"] += v["value"].to_i : totals[k] = {"value" => v["value"].to_i, "currency" => v["currency"]}
+          totals[k] ? totals[k]["value"] += v["value"].to_d : totals[k] = {"value" => v["value"].to_d, "currency" => v["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = v["currency"]
           end
         when "PER_CBM"
-          totals[k] ? totals[k]["value"] += v["value"].to_i * cargo.volume : totals[k] = {"value" => v["value"].to_i * cargo[:volume], "currency" => v["currency"]}
+          totals[k] ? totals[k]["value"] += v["value"].to_d * cargo.volume : totals[k] = {"value" => v["value"].to_d * cargo[:volume], "currency" => v["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = v["currency"]
           end
@@ -127,11 +128,12 @@ module PricingTools
           cbm > ton ? tmp = cbm : tmp = ton
           tmp > v["min"] ? res = tmp : res = v["min"]
           totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => v["currency"]}
+          
           if !totals[k]["currency"]
             totals[k]["currency"] = v["currency"]
           end
         when "PER_SHIPMENT"
-          totals[k] ? totals[k]["value"] += v["value"].to_i : totals[k] = {"value" => v["value"].to_i, "currency" => v["currency"]}
+          totals[k] ? totals[k]["value"] += v["value"].to_i : totals[k] = {"value" => v["value"].to_d, "currency" => v["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = v["currency"]
           end
@@ -159,13 +161,13 @@ module PricingTools
       else
         case fee["rate_basis"]
         when "PER_ITEM"
-          totals[k] ? totals[k]["value"] += fee["rate"].to_i : totals[k] = {"value" => fee["rate"].to_i, "currency" => fee["currency"]}
+          totals[k] ? totals[k]["value"] += fee["rate"].to_d * cargo.quantity : totals[k] = {"value" => fee["rate"].to_d * cargo.quantity, "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = fee["currency"]
           end
         when "PER_CBM"
 
-          totals[k] ? totals[k]["value"] += fee["rate"].to_i * cargo.volume : totals[k] = {"value" => fee["rate"].to_i * cargo.volume, "currency" => fee["currency"]}
+          totals[k] ? totals[k]["value"] += fee["rate"].to_d * cargo.quantity * cargo.volume : totals[k] = {"value" => fee["rate"].to_d * cargo.quantity * cargo.volume, "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = fee["currency"]
           end
@@ -174,13 +176,13 @@ module PricingTools
           cbm = cargo.volume
           tmp = 0
           cbm > ton ? tmp = cbm : tmp = ton
-          totals[k] ? totals[k]["value"] += tmp * fee["rate"].to_i : totals[k] = {"value" => tmp * fee["rate"].to_i, "currency" => fee["currency"]}
+          totals[k] ? totals[k]["value"] += tmp * fee["rate"].to_d * cargo.quantity : totals[k] = {"value" => tmp * fee["rate"].to_d * cargo.quantity, "currency" => fee["currency"]}
           if !totals[k]["currency"]
             totals[k]["currency"] = v["currency"]
           end
         when "PER_CBM_TON"
-          ton = cargo.payload_in_tons * fee["ton"]
-          cbm = cargo.volume * fee["cbm"]
+          ton = cargo.payload_in_tons * fee["ton"] * cargo.quantity
+          cbm = cargo.volume * fee["cbm"] * cargo.quantity
           tmp = 0
           cbm > ton ? tmp = cbm : tmp = ton
           tmp > fee["min"] ? res = tmp : res = fee["min"]
@@ -199,7 +201,7 @@ module PricingTools
     
     converted = sum_and_convert_cargo(totals, user.currency)
     cargo.unit_price = {value: converted, currency: user.currency}
-    totals["total"] = {value: converted * cargo.quantity, currency: user.currency}
+    totals["total"] = {value: converted , currency: user.currency}
     
     return totals
   end
@@ -343,11 +345,14 @@ module PricingTools
 
   def handle_heavy_weight(fee, cargo)
     result = {}
-    
+    ton = (cargo.payload_in_kg / 1000)
+    cbm = cargo.volume
+    tmp = 0
+    cbm > ton ? tmp = cbm : tmp = ton
     if fee["hw_threshold"]
       ratio = cargo.payload_in_kg / cargo.volume
       if ratio > fee["hw_threshold"]
-        min_value = fee["rate"].to_i * cargo.volume > fee["min"] ? fee["rate"].to_i * cargo.volume : fee["min"]
+        min_value = fee["rate"].to_i * tmp * cargo.quantity > fee["min"] ? fee["rate"].to_i * tmp * cargo.quantity : fee["min"]
         result = {"value" => min_value, "currency" => fee["currency"]}
       else
         result = {"value" => 0, "currency" => fee["currency"]}
@@ -355,7 +360,7 @@ module PricingTools
     elsif fee["range"]
       fee["range"].each do |fee_range|
         if cargo.payload_in_kg > fee_range["min"] && cargo.payload_in_kg < fee_range["max"]
-          result = {"value" => fee_range["rate"], "currency" => fee["currency"]}
+          result = {"value" => fee_range["rate"] * cargo.quantity, "currency" => fee["currency"]}
         end
       end
       if result.empty?

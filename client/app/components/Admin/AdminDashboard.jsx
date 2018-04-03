@@ -170,7 +170,7 @@ export class AdminDashboard extends Component {
       ''
     )
 
-    if (air) {
+    if (air && itineraries) {
       air.forEach((asched) => {
         schedArr.push(<AdminTripPanel
           key={v4()}
@@ -180,7 +180,7 @@ export class AdminDashboard extends Component {
         />)
       })
     }
-    if (ocean) {
+    if (ocean && itineraries) {
       ocean.forEach((osched) => {
         schedArr.push(<AdminTripPanel
           key={v4()}

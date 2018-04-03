@@ -92,7 +92,7 @@ export function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.import.total ? `${feeHash.import.total.value.toFixed(2)}` : 'None'}
+          {feeHash.import.total ? `${parseFloat(feeHash.import.total.value).toFixed(2)}` : 'None'}
         </p>
       </div>
     ) : (
@@ -112,7 +112,7 @@ export function IncotermRow ({
         )}
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_pre.total
-            ? `${parseInt(feeHash.trucking_pre.total.value, 10).toFixed(2)}`
+            ? `${parseFloat(feeHash.trucking_pre.total.value).toFixed(2)}`
             : 'None'}
         </p>
       </div>
@@ -133,7 +133,7 @@ export function IncotermRow ({
         )}
         <p className="flex-none no_m letter_3 center">
           {feeHash.trucking_on.total
-            ? `${parseInt(feeHash.trucking_on.total.value, 10).toFixed(2)}`
+            ? `${parseFloat(feeHash.trucking_on.total.value).toFixed(2)}`
             : 'None'}
         </p>
       </div>
@@ -153,7 +153,7 @@ export function IncotermRow ({
       )}
       <p className="flex-none no_m letter_3 center">
         {feeHash.insurance && feeHash.insurance.val
-          ? `${feeHash.insurance.val.toFixed(2)}`
+          ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
           : 'None'}
       </p>
     </div>
@@ -172,7 +172,7 @@ export function IncotermRow ({
         ''
       )}
       <p className="flex-none no_m letter_3 center">
-        {feeHash.customs && feeHash.customs.val ? `${feeHash.customs.val.toFixed(2)}` : 'None'}
+        {feeHash.customs && feeHash.customs.val ? `${parseFloat(feeHash.customs.val).toFixed(2)}` : 'None'}
       </p>
     </div>
   ) : (

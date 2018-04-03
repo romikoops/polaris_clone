@@ -16,6 +16,7 @@ class Admin::TruckingController < ApplicationController
     results = TruckingPricing.find_by_hub_ids(hub_ids: [params[:id]], tenant_id: current_user.tenant_id)
     response_handler(hub: hub, truckingPricings: results)
   end
+
   def create
     data = params[:obj][:data].as_json
     meta = params[:obj][:meta].as_json
@@ -61,8 +62,8 @@ class Admin::TruckingController < ApplicationController
       query_holder[dir][k][:_id] = SecureRandom.uuid
       truckingQueries << query_holder[dir][k]
     end
-    data.each do |d|
-        
+
+    data.each do |d|    
         d.each do |dk, dv|
           query = query_holder[dir][dk]
           
@@ -92,17 +93,8 @@ class Admin::TruckingController < ApplicationController
       update_item('truckingQueries', {_id: k[:_id]}, k)
     end
     update_item('truckingHubs', {_id: truckingHubId}, {type: "#{meta["type"]}", load_type: meta["loadType"], modifier: "#{meta["modifier"]}", tenant_id: current_user.tenant_id, nexus_id: meta["nexus_id"]})
-    tenant = current_user.tenant
-    nexus = Location.find(meta["nexus_id"])
-    update_type = meta["loadtype"] === 'lcl' ? :cargo_item : :container
-    TruckingAvailability.update_hubs_trucking_availability!(tenant, [{        
-      values: [nexus.name],
-      options: {
-        load_type: update_type
-      }
-    }])
-    nexus.update_trucking_availability!({id: tenant.id})
-    response_handler({truckingHubId: truckingHubId})
+    
+    response_handler(truckingHubId: truckingHubId)
   end
 
   def overwrite_zip_trucking
@@ -116,8 +108,9 @@ class Admin::TruckingController < ApplicationController
       response_handler(false)
     end
   end
-   def overwrite_city_trucking
-     if params[:file]
+
+  def overwrite_city_trucking
+    if params[:file]
       req = {'xlsx' => params[:file]}
       ["import", "export"].each do |dir|
        overwrite_city_trucking_rates(req, current_user, dir)
@@ -127,6 +120,7 @@ class Admin::TruckingController < ApplicationController
       response_handler(false)
     end
   end
+
   def overwrite_zip_trucking_by_hub
     data = params
      if data["file"]
@@ -148,15 +142,15 @@ class Admin::TruckingController < ApplicationController
         trucking_queries = get_items("truckingQueries", "trucking_hub_id", trucking_hub["_id"])
         trucking_pricings = trucking_queries.map {|tq| {query: tq, pricings: get_items("truckingPricings", "trucking_query_id", tq[:_id])}}
       end
-      
-      
+          
       response_handler(truckingHub: trucking_hub, truckingQueries: trucking_pricings, hub: hub)
     else
       response_handler(false)
     end
   end
-   def overwrite_city_trucking_by_hub
-     if params[:file]
+
+  def overwrite_city_trucking_by_hub
+    if params[:file]
       if  params["direction"] == 'either'
         direction_array = ["import", "export"]
       else
@@ -185,5 +179,4 @@ class Admin::TruckingController < ApplicationController
       redirect_to root_path
     end
   end
-  
 end

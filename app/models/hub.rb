@@ -17,6 +17,16 @@ class Hub < ApplicationRecord
     "rail"  => "Railway Station"    
   }
 
+  def self.update_all!
+    # This is a temporary method used for quick fixes in development
+
+    hubs = Hub.all
+    hubs.each do |h|
+      h.nexus_id = h.location_id
+      h.save!
+    end
+  end
+
   def self.create_from_nexus(nexus, mot, tenant_id)    
     nexus.hubs.find_or_create_by(
       nexus_id: nexus.id,
@@ -29,12 +39,22 @@ class Hub < ApplicationRecord
     )
   end
 
-  def self.update_all!
-    hubs = Hub.all
-    hubs.each do |h|
-      h.nexus_id = h.location_id
-      h.save!
+  def self.ports
+    self.where(hub_type: "ocean")
+  end
+
+  def self.prepped(user)
+    where(tenant_id: user.tenant_id).map do |hub|
+      { data: hub, location: hub.nexus }
     end
+  end
+
+  def self.air_ports
+    self.where(hub_type: "air")
+  end
+
+  def self.rail
+    self.where(hub_type: "rail")
   end
 
   def generate_hub_code!(tenant_id)
@@ -45,36 +65,6 @@ class Hub < ApplicationRecord
     code = letters + type_letter + num.to_s
     self.hub_code = code
     self.save
-  end
-
-  def self.ports
-    self.where(hub_type: "ocean")
-  end
-
-  def self.prepped_ports
-    ports = self.where(hub_type: "ocean")
-    resp = []
-    ports.each do |po|
-      resp << {data: po, location: po.nexus}
-    end
-    resp
-  end
-
-  def self.prepped(user)
-    hubs = self.where(tenant_id: user.tenant_id)
-    resp = []
-    hubs.each do |po|
-      resp << {data: po, location: po.nexus}
-    end
-    resp
-  end
-
-  def self.air_ports
-    self.where(hub_type: "air")
-  end
-
-  def self.rail
-    self.where(hub_type: "rail")
   end
 
   def lat_lng_string
@@ -95,14 +85,5 @@ class Hub < ApplicationRecord
       raise "Location contains invalid hub status!"
     end
     self.save!
-  end
-
-  private
-
-  def set_trucking_availability
-    self.trucking_availability ||= TruckingAvailability.find_or_create_by(
-      cargo_item: false,
-      container: false
-    )
   end
 end

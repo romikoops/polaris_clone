@@ -50,41 +50,10 @@ class TenantSeeder
   # # The following data is not a attribute of the Tenant model
   # # only being used for seeding purposes
   # other_data: {
-  #   trucking_availability: [
-  #     # values
-  #     #   an array (a list) of the values that match your upload_mode
-  #     #   by default the upload_mode is :nexus_names (name of the city) 
-  #     #
-  #     # options
-  #     #     if you would like to list hubs with trucking available rather than cities
-  #     #   (example: 'Hamburg Airport'), you can set the option upload_mode to :hub_names
-  #     #     if you would like to list cities or hubs with only trucking available only
-  #     #   for a particular load type you can set the option load_type to
-  #     #   :container or :cargo_item. By default you set both available
-  #     #  
-  #     # You can are able to set as many availability setting as you deem fit
-  #     # Here is an example:
-  #     #     
-  #     {        
-  #       values: ['Gothenburg', 'Shanghai']
-  #     },
-  #     {        
-  #       values: ['Rotterdam Port'],
-  #       options: {
-  #         upload_mode: :hub_names,
-  #         load_type: :container
-  #       }
-  #     },
-  #     {        
-  #       values: ['Mumbai'],
-  #       options: {
-  #         load_type: :cargo_item
-  #       }
-  #     }   
-  #   ],
+  #
   #   # Cargo item types can be set in one of the 3 following ways:
   #   #   1. Choose a default option (Either :all, or :no_dimensions)
-  #   #   2. An array (a list) of categories with no dimentions or area.
+  #   #   2. An array (a list) of categories with no dimensions or area.
   #   #   3. An array (a list) of hashes (key/value pair groups) 
   #    
   #    
@@ -176,11 +145,6 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai']
-          }   
-        ],
         cargo_item_types: [
           "Pallet",
           "Carton",
@@ -244,14 +208,6 @@ class TenantSeeder
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
       other_data: {
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ],
         cargo_item_types: [
           "Pallet",
           "Carton",
@@ -312,15 +268,7 @@ class TenantSeeder
         has_customs: false
       },
       other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
+        cargo_item_types: :all
       }
     },
     {
@@ -374,15 +322,7 @@ class TenantSeeder
         has_customs: false
       },
       other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
+        cargo_item_types: :all
       }
     },
     {
@@ -433,15 +373,7 @@ class TenantSeeder
         has_customs: false
       },
       other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
+        cargo_item_types: :all
       }
     },
     {
@@ -495,15 +427,7 @@ class TenantSeeder
         has_customs: false
       },
       other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
+        cargo_item_types: :all
       }
     },
     {
@@ -555,15 +479,7 @@ class TenantSeeder
         has_customs: false
       },
       other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
+        cargo_item_types: :all
       }
     },
     {
@@ -614,74 +530,58 @@ class TenantSeeder
       },
       other_data: {
         cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
-            }
-          }   
-        ]
       }
     },
     {
-    theme: {
-      colors: {
-        primary: "##373838",
-        secondary: "#CCCCCC",
-        brightPrimary: "#E9E9E9",
-        brightSecondary: "#54DC84"
+      theme: {
+        colors: {
+          primary: "##373838",
+          secondary: "#CCCCCC",
+          brightPrimary: "#E9E9E9",
+          brightSecondary: "#54DC84"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/gw.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/images/logos/gw.png"
       },
-      logoLarge: "https://assets.itsmycargo.com/assets/images/logos/gw.png",
-      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/gw.png"
-    },
-    addresses: {
-      main:"Krohnskamp 22, 22301 Hamburg, Deutschland"
-    },
-    phones:{
-      main:"+ 49 172 543 0 576",
-      support: "+ 49 172 543 0 576"
-    },
-    emails: {
-      sales: "jan.glembocki@gw-freight.com",
-      support: "support@gw-freight.com"
-    },
-    subdomain: "gwforwarding",
-    name: "GW Forwarding",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
-        },
-        air: {
-          container: false,
-          cargo_item: true
-        },
-        rail: {
+      addresses: {
+        main:"Krohnskamp 22, 22301 Hamburg, Deutschland"
+      },
+      phones:{
+        main:"+ 49 172 543 0 576",
+        support: "+ 49 172 543 0 576"
+      },
+      emails: {
+        sales: "jan.glembocki@gw-freight.com",
+        support: "support@gw-freight.com"
+      },
+      subdomain: "gwforwarding",
+      name: "GW Forwarding",
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
             container: false,
-            cargo_item: false
-          }
-      },
-      dangerous_goods: false,
-      detailed_billing: false,
-      incoterm_info_level: 'text',
-      cargo_info_level: 'hs_codes',
-      has_insurance: true,
-      has_customs: false
-    },
-    other_data: {
-        cargo_item_types: :all,
-        trucking_availability: [
-          {        
-            values: ['Gothenburg', 'Shanghai'],
-            options: {
-              load_type: :cargo_item
+            cargo_item: true
+          },
+          rail: {
+              container: false,
+              cargo_item: false
             }
-          }   
-        ]
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'hs_codes',
+        has_insurance: true,
+        has_customs: false
+      },
+      other_data: {
+        cargo_item_types: :all
       }
-  }
+    }
   ]
 
 
@@ -694,10 +594,7 @@ class TenantSeeder
       tenant.save!
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
-      TruckingAvailability.update_hubs_trucking_availability!(tenant, other_data[:trucking_availability])  
     end
-
-    Location.update_all_trucking_availabilities
   end
 
   private

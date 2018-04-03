@@ -35,7 +35,6 @@ class VehicleSeeder
 		          cargo_class: cargo_class,
 		          vehicle: vehicle
 		        )
-
 		        puts transport_category.errors.full_messages unless transport_category.save
 		      end
 		    end

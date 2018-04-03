@@ -134,6 +134,7 @@ class OfferCalculator
     delay = @delay ? @delay.to_i : 10
     schedule_obj = {}
     @itineraries.each do |itin|
+      
       destination_stop = itin.stops.where(hub_id: @destination_hubs).first
       origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("closing_date > ? AND closing_date < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
       trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|
@@ -167,6 +168,7 @@ class OfferCalculator
   def add_trip_charges!
     charges = {}
     @total_price[:cargo] = { value: 0, currency: '' }
+    
     @itineraries_hash.select! do |itinerary_id, trips|
       trip = trips.values.first
       

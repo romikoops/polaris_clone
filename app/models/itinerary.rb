@@ -26,7 +26,7 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id)
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date)
     results = {
       layovers: [],
       trips: []
@@ -36,6 +36,7 @@ class Itinerary < ApplicationRecord
     stops.each do |stop|
       if stop.index == 0
         data = {
+          closing_date: closing_date,
           eta: nil,
           etd: start_date,
           stop_index: stop.index,
