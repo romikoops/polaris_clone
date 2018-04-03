@@ -290,3 +290,17 @@ Snapshot testing
   removeFunc={() => this.props.removeNotifyee(i)}
 />
 `
+
+## ShipmentContainers
+
+Not full PropType for `container` as these three properties are used without declaring:
+
+- payload_in_kg
+
+- tareWeight
+
+- quantity
+
+? What is the reason for different cases of variables ?
+
+[X] Test complete

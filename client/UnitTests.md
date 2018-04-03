@@ -6,6 +6,16 @@
 
 - skip empty lines between mock declaration, if they are more than 2
 
+- empty line before return can be skipped inside `jest.mock` declaration
+
+```javascript
+jest.mock('../Checkbox/Checkbox', () => {
+  return {
+    Checkbox: ({ children }) => <div>{children}</div>
+  }
+})
+```
+
 ## Shallow rendering
 
 Use the following pattern:
