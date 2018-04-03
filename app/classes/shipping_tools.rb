@@ -130,7 +130,7 @@ module ShippingTools
       end
     end
     
-    if shipment_data[:customs][:total][:val] > 0
+    if shipment_data[:customs][:total][:val].to_d > 0
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
         shipment.schedules_charges[key][:customs] = {val: shipment_data[:customs][:total][:val], currency: shipment_data[:customs][:total][:currency]}
