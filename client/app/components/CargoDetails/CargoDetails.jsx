@@ -257,7 +257,7 @@ export class CargoDetails extends Component {
             <p className="flex-none">Import</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData ? customsData.import.val.toFixed(2) : '18.50'} {user.currency}
+              {customsData ? parseFloat(customsData.import.val).toFixed(2) : '18.50'} {user.currency}
             </h6>
           </div>
           <div
@@ -266,7 +266,7 @@ export class CargoDetails extends Component {
             <p className="flex-none">Export</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData ? customsData.export.val.toFixed(2) : '18.50'} {user.currency}
+              {customsData ? parseFloat(customsData.export.val).toFixed(2) : '18.50'} {user.currency}
             </h6>
           </div>
 
@@ -275,7 +275,7 @@ export class CargoDetails extends Component {
             <h6 className="flex-none center">
               {' '}
               {customsData
-                ? (customsData.import.val + customsData.export.val).toFixed(2)
+                ? parseFloat(customsData.import.val + customsData.export.val).toFixed(2)
                 : '18.50'}{' '}
               {user.currency}
             </h6>
