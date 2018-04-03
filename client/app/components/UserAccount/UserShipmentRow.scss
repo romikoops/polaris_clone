@@ -1,21 +1,24 @@
 :local {
+  
   .route_result {
     background-color: #FCFCFC;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.17);
     margin: 10px 0;
-    padding: 25px 36px;
+    padding: 10px 13px;
+    height: 150px;
     position: relative;
-    h4, p {
+    h4, p, h5 {
       margin: 0;
     }
-    h4 {
+    h4, h5 {
       font-weight: normal;
     }
   }
   .deny {
-    // border: 2px solid #DA2C29;
+    border: 1px solid #DA2C29;
     border-radius: 5px;
-    height: 30px;
+     height: 30px;
+    width: 30px;
   }
   .deny p {
     font-size: 12px;
@@ -26,24 +29,37 @@
     color: #DA2C29;
   }
 
-  .pending {
-    // border: 2px solid #F8660B;
+  .edit {
+    border: 1px solid #FF8800;
     border-radius: 5px;
     height: 30px;
+    width: 30px;
   }
-  .pending p {
+  .edit p {
     font-size: 12px;
-    color: #F8660B;
+    color: #FF8800;
   }
-  .pending i {
+  .edit i {
     font-size: 12px;
-    color: #F8660B;
+    color: #FF8800;
+  }
+  .close_x {
+    // position: absolute;
+    // height: 20px;
+    width: 100%;
+    width: 20px;
+    top: 10px;
+    right: 10px;
+    i {
+      color: #C60B05;
+    }
   }
 
   .grant {
-    // border: 2px solid #12B415;
+    border: 1px solid #12B415;
     border-radius: 5px;
-    height: 30px;
+     height: 30px;
+    width: 30px;
   }
   .grant p {
     font-size: 12px;
@@ -53,9 +69,13 @@
     font-size: 12px;
     color: #12B415;
   }
-
+  .btn_row {
+    padding: 5px;
+    width: 50px;
+    height: 100%;
+  }
   .top_row {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   .header_hub {
     position: relative;
@@ -77,6 +97,9 @@
     margin: -41px 27px 0 10px;
     width: 110px;
   }
+  .right_row {
+    padding-left: 10px;
+  }
   .user_info {
     i {
        -webkit-background-clip: text !important;
@@ -89,13 +112,11 @@
     }
   }
 
-  h4.date_title {
-   
+  h4.date_title, h5.date_title {
     text-shadow: 1px 1px rgba(black, .14);
-    // opacity: .7;
+    opacity: .7;
     margin-bottom: 8px;
     font-size: 14px;
-    color: black;
   }
   p.sched_elem {
     margin-right: 10px;
@@ -109,5 +130,12 @@
     span.total_price_currency {
       font-size: 22px;
     }
+  }
+  .hub_mid_line {
+    width: 100%;
+  }
+  .port_box, .main_info {
+    padding: 10px;
+    border-right: 1px solid rgba(0,0,0,0.17);
   }
 }

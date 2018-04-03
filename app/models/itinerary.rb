@@ -30,7 +30,12 @@ class Itinerary < ApplicationRecord
     results = {
       layovers: [],
       trips: []
-    } 
+    }
+    trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+    if trip_check
+      p "REJECTED"
+      return results
+    end
     trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
     results[:trips] << trip
     stops.each do |stop|
@@ -81,6 +86,7 @@ class Itinerary < ApplicationRecord
         journey_end = journey_start + steps_in_order.sum.days
         trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         if trip_check
+          p "REJECTED"
           tmp_date += 1.day
           next
         end

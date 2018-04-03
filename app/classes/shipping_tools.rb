@@ -216,6 +216,7 @@ module ShippingTools
   def confirm_booking(params)
     shipment = Shipment.find(params[:shipment_id])
     shipment.status = "requested"
+    shipment.booking_placed_at = DateTime.now
     shipment.save!
     message = {
       title: 'Booking Received',

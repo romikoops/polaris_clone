@@ -41,7 +41,9 @@ export class RouteResult extends Component {
     const {
       theme, schedule, user, pickup
     } = this.props
+
     const schedKey = schedule.hub_route_key
+
     const hubKeyArr = schedKey.split('-')
     let originHub = {}
     let destHub = {}

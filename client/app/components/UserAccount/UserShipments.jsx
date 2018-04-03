@@ -90,7 +90,7 @@ export class UserShipments extends Component {
           }
         >
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Open Shipments</p>
           </div>
@@ -98,7 +98,7 @@ export class UserShipments extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Requested Shipments</p>
           </div>
@@ -106,7 +106,7 @@ export class UserShipments extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Finished Shipments</p>
           </div>

@@ -73,6 +73,10 @@
     // font-family: ".SF NS Display";
     font-size: 16px;
     line-height: 23px;
+    font-style: normal;
+  }
+  .itinerary_address {
+    font-style: normal;
   }
   .btn_sec{
     padding: 100px 0 70px 0;
@@ -694,5 +698,14 @@
   .trucking_search_results {
     height: 500px;
     overflow-y: scroll;
+  }
+  .no_doc {
+    font-size: 12px;
+    i {
+      color: red;
+    }
+    p {
+      margin-left: 10px;
+    }
   }
 }

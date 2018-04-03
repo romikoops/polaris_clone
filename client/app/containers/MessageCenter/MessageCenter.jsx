@@ -34,6 +34,12 @@ class MessageCenter extends Component {
     this.filterShipments = this.filterShipments.bind(this)
     this.setSelected = this.setSelected.bind(this)
   }
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.shipments && !nextProps.loading) {
+      const { messageDispatch, conversations } = this.props
+      messageDispatch.getShipments(Object.keys(conversations))
+    }
+  }
   setSelected (key) {
     this.setState({ key })
   }
@@ -63,8 +69,7 @@ class MessageCenter extends Component {
     return hub.filter(name => name !== '')
   }
   filterShipments (convoKey) {
-    const { shipments } = this.props.users.dashboard
-    const { messageDispatch } = this.props
+    const { shipments, messageDispatch } = this.props
     console.log(shipments)
     let tmpShipment = {}
     let shipment = {}
@@ -79,7 +84,7 @@ class MessageCenter extends Component {
         tmpShipment = shipments.finished.filter(shp => (shp.imc_reference === convoKey))
       }
     }
-    if (shipments.requested.length < 1 &&
+    if (shipments && shipments.requested.length < 1 &&
         shipments.open.length < 1 &&
         shipments.finished.length < 1) {
       console.log('dsfds')
@@ -207,13 +212,15 @@ MessageCenter.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   shipment: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
-  conversations: PropTypes.object
+  conversations: PropTypes.object,
+  shipments: PropTypes.arrayOf(PropTypes.object)
 }
 
 MessageCenter.defaultProps = {
   theme: null,
   user: null,
   tenant: null,
+  shipments: [],
   loading: false,
   clients: null,
   shipment: null,
@@ -227,7 +234,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const {
-    conversations, unread, shipment, loading
+    conversations, unread, shipment, loading, shipments
   } = messaging
   const { clients } = admin
   return {
@@ -240,6 +247,7 @@ function mapStateToProps (state) {
     unread,
     shipment,
     clients,
+    shipments,
     loading
   }
 }

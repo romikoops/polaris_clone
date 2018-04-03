@@ -31,10 +31,10 @@ export class AdminHubView extends Component {
     }
     this.props.setView()
     if (!this.state.currentFee && this.props.hubData && this.props.hubData.charges) {
-      this.filterChargesByLoadType({ value: 'lcl' }, 'fees')
+      this.filterChargesByLoadType({ value: 'lcl', label: 'Lcl' }, 'fees')
     }
-    if (!this.state.currentFee && this.props.hubData && this.props.hubData.customs) {
-      this.filterChargesByLoadType({ value: 'lcl' }, 'customs')
+    if (!this.state.currentCustoms && this.props.hubData && this.props.hubData.customs) {
+      this.filterChargesByLoadType({ value: 'lcl', label: 'Lcl' }, 'customs')
     }
   }
   componentWillReceiveProps (nextProps) {

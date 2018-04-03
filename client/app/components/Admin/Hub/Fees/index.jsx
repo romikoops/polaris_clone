@@ -306,11 +306,16 @@ export class AdminHubFees extends Component {
     if (!charges || (charges && !charges[direction])) {
       return ''
     }
+    const dnrKeys = ['currency',
+      'rate_basis',
+      'key',
+      'name'
+    ]
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []
       Object.keys(charges[direction][key]).forEach((chargeKey) => {
-        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+        if (!dnrKeys.includes(chargeKey)) {
           cells.push(<div
             key={chargeKey}
             className={`flex layout-row layout-align-none-center layout-wrap ${

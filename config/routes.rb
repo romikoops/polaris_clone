@@ -137,6 +137,7 @@ Rails.application.routes.draw do
     post 'messaging/send' => "notifications#send_message"
 
     post 'messaging/data' => "notifications#shipment_data"
+    post 'messaging/shipments' => "notifications#shipments_data"
     post 'messaging/mark' => "notifications#mark_as_read"
 end
 
