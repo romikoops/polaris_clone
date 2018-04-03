@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
-// import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails'
 import { CargoItemGroup } from '../Cargo/Item/Group'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
-// import { ContainerDetails } from '../ContainerDetails/ContainerDetails'
 import FileTile from '../FileTile/FileTile'
 import PropTypes from '../../prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -13,9 +11,9 @@ import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
 import { moment, currencyOptions } from '../../constants'
 import { capitalize, gradientTextGenerator } from '../../helpers'
 import styles from './Admin.scss'
-import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { IncotermRow } from '../Incoterm/Row'
+import ShipmentCard from '../ShipmentCard/ShipmentCard'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -245,7 +243,6 @@ export class AdminShipmentView extends Component {
       schedules,
       locations
     } = shipmentData
-    // ;
     const {
       newTotal, showEditPrice, currency, showEditTime, newTimes, collapser
     } = this.state
@@ -439,411 +436,297 @@ export class AdminShipmentView extends Component {
         ''
       )
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
-    const newFeeStyle = showEditPrice ? styles.showPanel : styles.hidePanel
-    const newTimeStyle = showEditTime ? styles.showPanel : styles.hidePanel
-    const themeTitled =
-      theme && theme.colors
-        ? { background: theme.colors.primary, color: 'white' }
-        : { background: 'rgba(0,0,0,0.25)', color: 'white' }
+    const saveSection = (
+      <div className={`${styles.time_edit_button}`}>
+        {
+          showEditTime
+            ? (
+              <div className="flex-100 layout-row layout-align-space-between">
+                <div onClick={this.saveNewTime}>
+                  <i className="fa fa-check clip pointy" style={textStyle} />
+                </div>
+                <div onClick={this.toggleEditTime}>
+                  <i className="fa fa-times pointy" style={{ color: 'red' }} />
+                </div>
+              </div>
+            )
+            : (
+              <div className="flex-100 layout-row layout-align-end">
+                <div onClick={this.toggleEditTime}>
+                  <i className="fa fa-pencil clip pointy" style={textStyle} />
+                </div>
+              </div>
+            )
+        }
+      </div>
+    )
+
+    const etdJSX = showEditTime
+      ? (
+        <div className="flex-100 layout-row">
+          <div className="flex-65 layout-row input_box_full">
+            <DayPickerInput
+              name="dayPicker"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              formatDate={formatDate}
+              parseDate={parseDate}
+              value={newTimes.etd.day}
+              onDayChange={e => this.handleDayChange(e, 'etd')}
+              dayPickerProps={dayPickerProps}
+            />
+          </div>
+          <div className="flex-35 layout-row input_box_full">
+            <input
+              type="time"
+              value={newTimes.etd.time}
+              onChange={e => this.handleTimeChange(e, 'etd')}
+            />
+          </div>
+        </div>
+      )
+      : (
+        <p className="flex-none letter_3">
+          {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+        </p>
+      )
+
+    const etaJSX = showEditTime
+      ? (
+        <div className="flex-100 layout-row">
+          <div className="flex-65 layout-row input_box_full">
+            <DayPickerInput
+              name="dayPicker"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              formatDate={formatDate}
+              parseDate={parseDate}
+              value={newTimes.eta.day}
+              onDayChange={e => this.handleDayChange(e, 'eta')}
+              dayPickerProps={dayPickerProps}
+            />
+          </div>
+          <div className="flex-35 layout-row input_box_full">
+            <input
+              type="time"
+              value={newTimes.eta.time}
+              onChange={e => this.handleTimeChange(e, 'eta')}
+            />
+          </div>
+        </div>
+      )
+      : (
+        <p className="flex-none letter_3">
+          {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
+        </p>
+      )
+
+    const totalPrice = showEditPrice
+      ? (
+        <div className="flex-30 layout-row">
+          <div className="flex-40 layout-row input_box_full">
+            <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
+          </div>
+          <div className="offset-5 flex-35 layout-row input_box_full">
+            <NamedSelect
+              name=""
+              className="flex-100"
+              placeholder="Currency"
+              options={currencyOptions}
+              value={currency}
+              onChange={this.handleCurrencySelect}
+            />
+          </div>
+          <div className="flex layout-row layout-align-space-around-center">
+            <div onClick={this.saveNewPrice}>
+              <i className="fa fa-check clip pointy" style={textStyle} />
+            </div>
+            <div onClick={this.toggleEditPrice}>
+              <i className="fa fa-times pointy" style={{ color: 'red' }} />
+            </div>
+          </div>
+        </div>
+      )
+      : (
+        <div className="flex-30 layout-row layout-align-end-center">
+          <h3 className="flex-none letter_3">
+            {parseFloat(shipment.total_price.value).toFixed(2)}
+            {' '}
+            {shipment.total_price.currency}
+          </h3>
+          <div
+            className="flex-20 layout-row layout-align-center-center pointy"
+            onClick={this.toggleEditPrice}
+          >
+            <i className="fa fa-pencil clip" style={textStyle} />
+          </div>
+        </div>
+      )
+
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${
-            styles.shipment_card
-          }`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Overview" />
+        <ShipmentCard
+          headingText="Overview"
+          theme={theme}
+          collapsed={collapser.overview}
+          handleCollapser={() => this.handleCollapser('overview')}
+          content={
+            <div className="flex-100">
+              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                <p className={`${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
+                <p className={`${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
+                  {shipment.imc_reference}
+                </p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                <p className={`${styles.sec_subtitle_text_normal} flex-none`}>Status:</p>
+                <p className={`${styles.sec_subtitle_text} flex-none offset-5 `}>
+                  {capitalize(shipment.status)}
+                </p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
+                <p className={`${styles.sec_subtitle_text_normal} flex-none`}>Created at:</p>
+                <p className={`${styles.sec_subtitle_text} flex-none offset-5`}>{createdDate}</p>
+              </div>
+              {acceptDeny}
+            </div>
+          }
+        />
+        <ShipmentCard
+          headingText="Itinerary"
+          theme={theme}
+          collapsed={collapser.itinerary}
+          handleCollapser={() => this.handleCollapser('itinerary')}
+          content={
             <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('overview')}
-            >
-              {collapser.overview ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${collapser.overview ? styles.closed_main_panel : styles.open_main_panel} ${
-              styles.main_panel
-            } flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
-            <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-              <p className={` ${styles.sec_title_text_normal} flex-none`}>Shipment:</p>
-              <p className={` ${styles.sec_title_text} flex-none offset-5`} style={textStyle}>
-                {shipment.imc_reference}
-              </p>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-              <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Status:</p>
-              <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>
-                {capitalize(shipment.status)}
-              </p>
-            </div>
-            <div className="flex-100 layout-row layout-wrap layout-align-space-between-start">
-              <p className={` ${styles.sec_subtitle_text_normal} flex-none`}>Created at:</p>
-              <p className={` ${styles.sec_subtitle_text} flex-none offset-5 `}>{createdDate}</p>
-            </div>
-            {acceptDeny}
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.shipment_card
-          } flex-100 layout-row layout-align-start-center layout-wrap`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Itinerary" />
-            <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('itinerary')}
-            >
-              {collapser.itinerary ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${
-              collapser.itinerary ? styles.closed_main_panel : styles.open_main_panel
-            } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
-            <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-            <div
-              className="flex-100 layout-row layout-align-space-between-center"
+              className="flex-100 layout-row layout-wrap"
               style={{ position: 'relative' }}
             >
-              <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                  <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
-                  <p className="flex-none letter_3">{` ${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}</p>
-                </div>
-                {shipment.has_pre_carriage ? (
-                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                    <p className="flex-100">With Pickup From:</p>
-                    <address className="flex-none">
-                      {`${locations.origin.street_number} ${locations.origin.street}`},
-                      {`${locations.origin.city}`} <br />
-                      {`${locations.origin.zip_code}`},
-                      {`${locations.origin.country}`} <br />
-                    </address>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              <div className="flex-40 layout-row layout-wrap layout-align-center-start">
-                <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                  <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
-                  <p className="flex-none letter_3">{`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}</p>
-                </div>
-                {shipment.has_on_carriage ? (
-                  <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                    <p className="flex-100">With Delivery To:</p>
-                    <address className="flex-none">
-                      {`${locations.destination.street_number} ${locations.destination.street}`} ,
-                      {`${locations.destination.city}`} <br />
-                      {`${locations.destination.zip_code}`},
-                      {`${locations.destination.country}`} <br />
-                    </address>
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              <div className={`${styles.time_edit_button}`} onClick={this.toggleEditTime}>
-                <i className="fa fa-pencil clip" style={textStyle} />
-              </div>
-            </div>
-            <div
-              className={`flex-100 layout-row layout-align-space-between-center layout-wrap ${
-                styles.panelDefault
-              } ${newTimeStyle}`}
-            >
-              <div className="flex-40 layout-row layout-align-center-center">
-                <div className="flex-65 layout-row input_box_full">
-                  <DayPickerInput
-                    name="dayPicker"
-                    placeholder="DD/MM/YYYY"
-                    format="DD/MM/YYYY"
-                    formatDate={formatDate}
-                    parseDate={parseDate}
-                    value={newTimes.etd.day}
-                    onDayChange={e => this.handleDayChange(e, 'etd')}
-                    dayPickerProps={dayPickerProps}
-                  />
-                </div>
-                <div className="flex-35 layout-row input_box_full">
-                  <input
-                    type="time"
-                    value={newTimes.etd.time}
-                    onChange={e => this.handleTimeChange(e, 'etd')}
-                  />
-                </div>
-              </div>
-              <div className="flex-40 layout-row layout-align-center-center">
-                <div className="flex-65 layout-row input_box_full">
-                  <DayPickerInput
-                    name="dayPicker"
-                    placeholder="DD/MM/YYYY"
-                    format="DD/MM/YYYY"
-                    formatDate={formatDate}
-                    parseDate={parseDate}
-                    value={newTimes.eta.day}
-                    onDayChange={e => this.handleDayChange(e, 'eta')}
-                    dayPickerProps={dayPickerProps}
-                  />
-                </div>
-                <div className="flex-35 layout-row input_box_full">
-                  <input
-                    type="time"
-                    value={newTimes.eta.time}
-                    onChange={e => this.handleTimeChange(e, 'eta')}
-                  />
-                </div>
-              </div>
+              { saveSection }
+              <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
               <div
-                className="flex-100 layout-row layout-align-end-center"
-                style={{ height: '50px' }}
+                className="flex-100 layout-row layout-align-space-between-center"
               >
-                <div
-                  className="flex-10 layout-row layout-align-center-center pointy"
-                  onClick={this.saveNewTime}
-                >
-                  <i className="fa fa-check clip" style={textStyle} />
+                <div className="flex-40 layout-row layout-wrap layout-align-center-start">
+                  <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                    <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
+                    {etdJSX}
+                  </div>
+                  {shipment.has_pre_carriage ? (
+                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                      <p className="flex-100">With Pickup From:</p>
+                      <address className="flex-none">
+                        {`${locations.origin.street_number} ${locations.origin.street}`},
+                        {`${locations.origin.city}`} <br />
+                        {`${locations.origin.zip_code}`},
+                        {`${locations.origin.country}`} <br />
+                      </address>
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
-                <div
-                  className="flex-10 layout-row layout-align-center-center pointy"
-                  onClick={this.toggleEditTime}
-                >
-                  <i className="fa fa-times" style={{ color: 'red' }} />
+                <div className="flex-40 layout-row layout-wrap layout-align-center-start">
+                  <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                    <p className="flex-100 center letter_3"> Expected Time of Arrival:</p>
+                    {etaJSX}
+                  </div>
+                  {shipment.has_on_carriage ? (
+                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+                      <p className="flex-100">With Delivery To:</p>
+                      <address className="flex-none">
+                        {`${locations.destination.street_number} ${locations.destination.street}`} ,
+                        {`${locations.destination.city}`} <br />
+                        {`${locations.destination.zip_code}`},
+                        {`${locations.destination.country}`} <br />
+                      </address>
+                    </div>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.shipment_card
-          } flex-100 layout-row layout-align-start-center layout-wrap`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Fares & Fees" />
-            <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('charges')}
-            >
-              {collapser.charges ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${
-              styles.total_row
-            } flex-100 layout-row layout-wrap layout-align-space-around-center`}
-          >
-            <h3 className="flex-70 letter_3">Shipment Total:</h3>
-            <div className="flex-30 layout-row layout-align-end-center">
-              <h3 className="flex-none letter_3">{`${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)} `}</h3>
+          }
+        />
+        <ShipmentCard
+          headingText="Fares & Fees"
+          theme={theme}
+          collapsed={collapser.charges}
+          handleCollapser={() => this.handleCollapser('charges')}
+          content={
+            <div className="flex-100">
               <div
-                className="flex-20 layout-row layout-align-center-center pointy"
-                onClick={this.toggleEditPrice}
+                className={`${
+                  styles.total_row
+                } flex-100 layout-row layout-wrap layout-align-space-around-center`}
               >
-                <i className="fa fa-pencil clip" style={textStyle} />
+                <h3 className="flex-70 letter_3">Shipment Total:</h3>
+                { totalPrice }
               </div>
-            </div>
-          </div>
 
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${
-              styles.panelDefault
-            } ${newFeeStyle}`}
-          >
-            <div className="flex-30 layout-align-start-center">
-              <p className="flex-none">Set new total price:</p>
+              <div className="flex-100 layout-row layout-align-center-center">
+                <div
+                  className="flex-none content_width_booking layout-row layout-align-center-center"
+                >
+                  <IncotermRow
+                    theme={theme}
+                    preCarriage={shipment.has_pre_carriage}
+                    onCarriage={shipment.has_on_carriage}
+                    originFees={shipment.has_pre_carriage}
+                    destinationFees={shipment.has_on_carriage}
+                    feeHash={feeHash}
+                    tenant={tenant}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="flex-40 layout-row layout-align-end-center">
-              <div className="flex-40 layout-row input_box_full">
-                <NamedSelect
-                  name=""
-                  options={currencyOptions}
-                  value={currency}
-                  onChange={this.handleCurrencySelect}
-                />
-              </div>
-              <div className="flex-40 layout-row input_box_full">
-                <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
-              </div>
-              <div
-                className="flex-15 layout-row layout-align-center-center pointy"
-                onClick={this.saveNewPrice}
+          }
+        />
+        <ShipmentCard
+          headingText="Contact Details"
+          theme={theme}
+          collapsed={collapser.contacts}
+          handleCollapser={() => this.handleCollapser('contacts')}
+          content={
+            <div className="flex-100 layout-row layout-wrap">
+              <div className={
+                `${styles.b_summ_top} flex-100 ` +
+                'layout-row layout-align-space-around-center'
+              }
               >
-                <i className="fa fa-check clip" style={textStyle} />
+                {shipperContact}
+                {consigneeContact}
               </div>
-              <div
-                className="flex-15 layout-row layout-align-center-center pointy"
-                onClick={this.toggleEditPrice}
-              >
-                <i className="fa fa-times" style={{ color: 'red' }} />
-              </div>
-            </div>
-          </div>
-          <div
-            className={`${collapser.charges ? styles.closed_main_panel : styles.open_main_panel} ${
-              styles.main_panel
-            } flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
-            <div className="flex-100 layout-row layout-align-center-center">
-              <div
-                className="
-                    flex-none
-                     content_width_booking
-                     layout-row
-                     layout-align-center-center"
-              >
-                <IncotermRow
-                  theme={theme}
-                  preCarriage={shipment.has_pre_carriage}
-                  onCarriage={shipment.has_on_carriage}
-                  originFees={shipment.has_pre_carriage}
-                  destinationFees={shipment.has_on_carriage}
-                  feeHash={feeHash}
-                  tenant={tenant}
-                />
+              <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
+                {' '}
+                {nArray}{' '}
               </div>
             </div>
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.shipment_card
-          } flex-100 layout-row layout-align-start-center layout-wrap`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Contact Details" />
-            <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('contacts')}
-            >
-              {collapser.contacts ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${collapser.contacts ? styles.closed_main_panel : styles.open_main_panel} ${
-              styles.main_panel
-            } flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
-            <div
-              className={`${
-                styles.b_summ_top
-              } flex-100 layout-row layout-align-space-around-center`}
-            >
-              {shipperContact}
-              {consigneeContact}
-            </div>
-            <div className="flex-100 layout-row layout-align-space-around-center layout-wrap">
-              {' '}
-              {nArray}{' '}
-            </div>
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.shipment_card
-          } flex-100 layout-row layout-align-start-center layout-wrap`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Cargo Details" />
-            <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('cargo')}
-            >
-              {collapser.cargo ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${collapser.cargo ? styles.closed_main_panel : styles.open_main_panel} ${
-              styles.main_panel
-            } flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
+          }
+        />
+        <ShipmentCard
+          headingText="Cargo Details"
+          theme={theme}
+          collapsed={collapser.cargo}
+          handleCollapser={() => this.handleCollapser('cargo')}
+          content={
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
               {cargoView}
             </div>
-          </div>
-        </div>
-        <div
-          className={`${
-            styles.shipment_card
-          } flex-100 layout-row layout-align-start-center layout-wrap`}
-        >
-          <div
-            style={themeTitled}
-            className={`${
-              styles.heading_style
-            } flex-100 layout-row layout-align-space-between-center`}
-          >
-            <TextHeading theme={theme} color="white" size={3} text="Documents" />
-            <div
-              className="flex-10 layout-row layout-align-center-center"
-              onClick={() => this.handleCollapser('documents')}
-            >
-              {collapser.documents ? (
-                <i className="fa fa-chevron-down pointy" />
-              ) : (
-                <i className="fa fa-chevron-up pointy" />
-              )}
-            </div>
-          </div>
-          <div
-            className={`${
-              collapser.documents ? styles.closed_main_panel : styles.open_main_panel
-            } ${styles.main_panel} flex-100 layout-row layout-wrap layout-align-start-start`}
-          >
+          }
+        />
+        <ShipmentCard
+          headingText="Documents"
+          theme={theme}
+          collapsed={collapser.documents}
+          handleCollapser={() => this.handleCollapser('documents')}
+          content={
             <div className="flex-100 layout-row layout-wrap layout-align-start-center">
               {docView}
             </div>
-          </div>
-        </div>
+          }
+        />
       </div>
     )
   }

@@ -109,17 +109,11 @@ export default function getInputs (
     </div>
   )
 
-  const volume =
+  const unitVolume =
     cargoItem &&
     cargoItem.dimension_x * cargoItem.dimension_y * cargoItem.dimension_z / 100 ** 3
 
-  function calcQuantityValue (value) {
-    console.log(cargoItem)
-    if (!cargoItem) {
-      return value
-    }
-    return value * cargoItem.quantity
-  }
+  const volume = cargoItem && (unitVolume * cargoItem.quantity).toFixed(3)
 
   inputs.volume = (
     <div className="flex-30 layout-row layout-wrap layout-align-center-center">
@@ -129,7 +123,7 @@ export default function getInputs (
 
       <div className="flex">
         <p className={styles.input_label}>
-          { calcQuantityValue(volume) }
+          { volume }
           <span>m</span>
           <sup style={{ marginLeft: '1px', fontSize: '10px', height: '17px' }}>3</sup>
         </p>
@@ -151,16 +145,17 @@ export default function getInputs (
       rail: 550,
       ocean: 1000
     }
-    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
+    const unitChargeableWeight =
+      Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
+
+    return (unitChargeableWeight * cargoItem.quantity).toFixed(1)
   }
   function chargeableWeightElemJSX (mot) {
     return (
       <div className="flex-33 layout-row">
         { switchIcon(mot) }
         <p className={`${styles.chargeable_weight_value}`}>
-          { cargoItem && chargeableWeight(mot)
-            ? calcQuantityValue(chargeableWeight(mot))
-            : cargoItem && chargeableWeight(mot) } kg
+          { cargoItem && chargeableWeight(mot) } kg
         </p>
       </div>
     )

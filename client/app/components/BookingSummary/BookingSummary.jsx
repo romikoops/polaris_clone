@@ -83,7 +83,7 @@ function BookingSummary (props) {
       <div className="flex layout-column layout-align-stretch">
         <h4 className="flex-50 layout-row layout-align-center-center">Total Volume</h4>
         <p className="flex-50 layout-row layout-align-center-start">
-          { totalVolume.toFixed(1) } m³
+          { totalVolume.toFixed(3) } m³
         </p>
       </div>
     </div>
