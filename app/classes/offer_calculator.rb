@@ -25,11 +25,17 @@ class OfferCalculator
     @current_eta_in_search = DateTime.new()
     @total_price = { total:0, currency: "EUR" }
 
-    cargo_unit_const = @shipment.load_type.camelize.constantize
-    plural_load_type = @shipment.load_type.pluralize
-    @shipment.send(plural_load_type).destroy_all
-    @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
-    @shipment.send("#{plural_load_type}=", @cargo_units)
+    if params[:aggregated]
+      @shipment.aggregated_cargos = AggregatedCargo.extract(params)
+    else    
+      cargo_unit_const = @shipment.load_type.camelize.constantize
+      plural_load_type = @shipment.load_type.pluralize
+      @shipment.send(plural_load_type).destroy_all
+      @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
+      @shipment.send("#{plural_load_type}=", @cargo_units)
+    end
+
+
     @shipment.planned_pickup_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
@@ -325,6 +331,7 @@ class OfferCalculator
       end
     end
   end
+  
   def determine_trucking_fees(location, hub, target, direction)
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km

@@ -43,6 +43,7 @@ class Shipment < ApplicationRecord
   belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
+  has_many :aggregated_cargos
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

@@ -29,14 +29,13 @@ module PricingTools
   end
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
-    cargo = load_type === 'container' ? {
-      number_of_items: cargos.map{|c| c.quantity}.sum,
-      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
-    } : {
-      number_of_items: cargos.map{|c| c.quantity}.sum,
-      volume: cargos.map { |cargo| cargo.volume * cargo.quantity }.sum.to_d,
-      weight: cargos.map { |cargo| cargo.payload_in_kg * cargo.quantity }.sum.to_d
-    }
+    cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
+      return_h[:number_of_items] += cargo_unit.quantity unless cargo_unit.quantity.nil?
+      return_h[:volume]          += cargo_unit.volume   unless cargo_unit.volume.nil?
+      
+      return_h[:weight] += cargo_unit.weight || cargo_unit.payload_in_kg * cargo.quantity
+    end
+
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
     query = [
       {"tenant_id" => hub.tenant_id},
@@ -47,54 +46,31 @@ module PricingTools
     charge = get_items_query('localCharges', query).first
     return {} if charge.nil?
     totals = {"total" => {}}
-    charge[direction].each do |k,fee|
-      case fee["rate_basis"]
-        when "PER_ITEM"
-          totals[k] ? totals[k]["value"] += fee["value"].to_d : totals[k] = {"value" => fee["value"].to_d, "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
-        when "PER_CBM"
-          totals[k] ? totals[k]["value"] += fee["value"].to_d * cargo.volume : totals[k] = {"value" => fee["value"].to_d * cargo[:volume], "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
-        when "PER_CBM_TON"
-          ton = (cargo[:weight] / 1000) * fee["ton"]
-          cbm = cargo[:volume] * fee["cbm"]
-          tmp = 0
-          cbm > ton ? tmp = cbm : tmp = ton
-          min = fee["min"] ? fee["min"] : 0
-          tmp > min ? res = tmp : res = min
-          totals[k] ? totals[k]["value"] += res : totals[k] = {"value" => res, "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
-        when "PER_WM"
-          ton = (cargo[:weight] / 1000)
-          cbm = cargo[:volume]
-          tmp = 0
-          cbm > ton ? tmp = cbm : tmp = ton
-          min = fee["min"] ? fee["min"] : 0
-          final = min > tmp ? min : tmp
-          totals[k] ? totals[k]["value"] += final * fee["value"] : totals[k] = {"value" => final * fee["value"], "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
-        when "PER_SHIPMENT"
-          totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
-        when "PER_BILL"
-          totals[k] ? totals[k]["value"] += fee["value"].to_f : totals[k] = {"value" => fee["value"].to_f, "currency" => fee["currency"]}
-          if !totals[k]["currency"]
-            totals[k]["currency"] = fee["currency"]
-          end
+    charge[direction].each do |k, fee|
+      totals[k]             ||= {"value" => 0, "currency" => fee["currency"]}
+      totals[k]["currency"] ||= fee["currency"] 
+
+      totals[k]["value"] += case fee["rate_basis"]
+      when "PER_ITEM", "PER_SHIPMENT", "PER_BILL"
+        fee["value"].to_d
+      when "PER_CBM"
+        fee["value"].to_d * cargo.volume
+      when "PER_CBM_TON"
+        cbm = cargo[:volume] * fee["cbm"]
+        ton = (cargo[:weight] / 1000) * fee["ton"]
+        min = fee["min"] || 0
+
+        [cbm, ton, min].max
+      when "PER_WM"
+        cbm = cargo[:volume]
+        ton = (cargo[:weight] / 1000)
+        min = fee["min"] || 0
+
+        [cbm, ton, min].max * fee["value"]
       end
     end
     converted = sum_and_convert_cargo(totals, user.currency)
-    totals["total"] = {value: converted, currency: user.currency}
+    totals["total"] = { value: converted, currency: user.currency}
     return totals
   end
 
