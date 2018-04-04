@@ -15,6 +15,35 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { Tooltip } from '../Tooltip/Tooltip'
 
 export class CargoDetails extends Component {
+  static displayCustomsFee (customsData, target, customs) {
+    if (target === 'total') {
+      let newTotal = 0
+      if (customsData.import.bool) {
+        newTotal += parseFloat(customs.import.total.value)
+      }
+      if (customsData.export.bool) {
+        newTotal += parseFloat(customs.export.total.value)
+      }
+      return `${newTotal.toFixed(2)} ${customs.total.total.currency}`
+    }
+    if (customsData[target].bool) {
+      if (customs) {
+        const fee = customs[target]
+        if (fee && !fee.unknown && fee.total.value) {
+          return `${parseFloat(fee.total.value).toFixed(2)} ${fee.total.currency}`
+        }
+        return 'Price subject to local regulations'
+      }
+    }
+    if (customs.import.total.currency) {
+      const { currency } = customs.import.total
+      return `0 ${currency}`
+    } else if (customs.export.total.currency) {
+      const { currency } = customs.export.total
+      return `0 ${currency}`
+    }
+    return '0 EUR'
+  }
   constructor (props) {
     super(props)
     this.state = {
@@ -41,10 +70,14 @@ export class CargoDetails extends Component {
     const { setCustomsFee, customsData, shipmentData } = this.props
     const { customs } = shipmentData
 
-    const converted = customs[target].total.value
+    const converted = customs[target].unknown ? 0 : customs[target].total.value
     const resp = customsData[target].bool
       ? { bool: false, val: 0 }
-      : { bool: true, val: converted, currency: customs[target].total.currency }
+      : {
+        bool: true,
+        val: converted,
+        currency: customs[target].unknown ? 'EUR' : customs[target].total.currency
+      }
 
     // if (customsData && customsData[target].val && customsData[target].val !== converted) {
     setCustomsFee(target, resp)
@@ -120,7 +153,7 @@ export class CargoDetails extends Component {
     const {
       shipmentData,
       theme,
-      insurance,
+      // insurance,
       // hsCodes,
       // hsTexts,
       // handleHsTextChange,
@@ -128,13 +161,14 @@ export class CargoDetails extends Component {
       // deleteCode,
       customsData,
       finishBookingAttempted,
-      user,
       tenant,
       eori
     } = this.props
     const { totalGoodsCurrency } = this.state
     const { scope } = tenant.data
-    const { dangerousGoods, documents, shipment } = shipmentData
+    const {
+      dangerousGoods, documents, shipment, customs
+    } = shipmentData
     const insuranceBox = (
       <div
         className={`flex-100 layout-row  ${styles.box_content} ${
@@ -160,7 +194,8 @@ export class CargoDetails extends Component {
             Please contact your local Greencarrier office for more info.
           </p>
         </div>
-        <div className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}>
+        {/* <div className={` ${styles.prices} flex-20
+          layout-row layout-wrap layout-align-start-start`}>
           <div
             className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
           >
@@ -170,13 +205,11 @@ export class CargoDetails extends Component {
               {insurance.val.toFixed(2)} {user.currency}
             </h6>
           </div>
-        </div>
+        </div> */}
       </div>
     )
-    const fadedPreCarriageText = shipment.has_pre_carriage
-      ? '' : styles.faded_text
-    const fadedOnCarriageText = shipment.has_on_carriage
-      ? '' : styles.faded_text
+    const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
+    const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
 
     const customsBox = (
       <div
@@ -216,14 +249,15 @@ export class CargoDetails extends Component {
                   disabled={!shipment.has_pre_carriage}
                 />
               </div>
-              { !shipment.has_pre_carriage
-                ? <ReactTooltip
+              {!shipment.has_pre_carriage ? (
+                <ReactTooltip
                   id="preCarriageTooltip"
                   className={styles.tooltip_box}
                   effect="solid"
                 />
-                : ''
-              }
+              ) : (
+                ''
+              )}
               <div
                 className="flex-50 layout-row layout-align-space-around-center"
                 data-tip={tooltips.customs_on_carriage}
@@ -236,14 +270,15 @@ export class CargoDetails extends Component {
                   theme={theme}
                   disabled={!shipment.has_on_carriage}
                 />
-                { !shipment.has_on_carriage
-                  ? <ReactTooltip
+                {!shipment.has_on_carriage ? (
+                  <ReactTooltip
                     id="onCarriageTooltip"
                     className={styles.tooltip_box}
                     effect="solid"
                   />
-                  : ''
-                }
+                ) : (
+                  ''
+                )}
               </div>
             </div>
           </div>
@@ -251,22 +286,18 @@ export class CargoDetails extends Component {
         <div
           className={` ${styles.prices} flex-20 layout-row layout-wrap layout-align-start-start`}
         >
-          <div
-            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
-          >
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}>
             <p className="flex-none">Import</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData ? parseFloat(customsData.import.val).toFixed(2) : '18.50'} {user.currency}
+              {CargoDetails.displayCustomsFee(customsData, 'import', customs)}
             </h6>
           </div>
-          <div
-            className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}
-          >
+          <div className={`${styles.customs_prices} flex-100 layout-row  layout-align-end-center`}>
             <p className="flex-none">Export</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData ? parseFloat(customsData.export.val).toFixed(2) : '18.50'} {user.currency}
+              {CargoDetails.displayCustomsFee(customsData, 'export', customs)}
             </h6>
           </div>
 
@@ -274,16 +305,15 @@ export class CargoDetails extends Component {
             <p className="flex-none">Total</p>
             <h6 className="flex-none center">
               {' '}
-              {customsData
-                ? parseFloat(customsData.import.val + customsData.export.val).toFixed(2)
-                : '18.50'}{' '}
-              {user.currency}
+              {CargoDetails.displayCustomsFee(customsData, 'total', customs)}
             </h6>
           </div>
         </div>
       </div>
     )
-    const textComp = (<b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>)
+    const textComp = (
+      <b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>
+    )
     const noCustomsBox = (
       <div
         className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${
@@ -413,11 +443,7 @@ export class CargoDetails extends Component {
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading
-                        theme={theme}
-                        size={3}
-                        text="Description of goods (optional)"
-                      />
+                      <TextHeading theme={theme} size={3} text="Description of goods (optional)" />
                     </div>
                   </div>
                   <div className="flex-100">
@@ -518,7 +544,8 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap">
-                    <div className="
+                    <div
+                      className="
                     flex-100 layout-row layout-align-start-start-space-around layout-wrap"
                     >
                       <DocumentsMultiForm
@@ -536,40 +563,44 @@ export class CargoDetails extends Component {
             </div>
           </div>
         </div>
-        { scope.has_customs || scope.has_insurance ? <div
-          className={
-            `${styles.insurance_customs_sec} flex-100 ` +
-            'layout-row layout-wrap layout-align-center'
-          }
-        >
-          {scope.has_insurance ? <div className="flex-100 layout-row layout-align-center padd_top">
-            <div
-              className={`flex-none ${
-                defaults.content_width
-              } layout-row layout-wrap section_padding`}
-            >
-              <div className="flex-100 layout-row layout-align-space-between-start">
-                <div className="flex-none layout-row layout-align-space-around-center">
-                  <TextHeading theme={theme} size={2} text="Insurance" />
-                  <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
-                </div>
+        {scope.has_customs || scope.has_insurance ? (
+          <div
+            className={
+              `${styles.insurance_customs_sec} flex-100 ` +
+              'layout-row layout-wrap layout-align-center'
+            }
+          >
+            {scope.has_insurance ? (
+              <div className="flex-100 layout-row layout-align-center padd_top">
+                <div
+                  className={`flex-none ${
+                    defaults.content_width
+                  } layout-row layout-wrap section_padding`}
+                >
+                  <div className="flex-100 layout-row layout-align-space-between-start">
+                    <div className="flex-none layout-row layout-align-space-around-center">
+                      <TextHeading theme={theme} size={2} text="Insurance" />
+                      <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
+                    </div>
 
-                <div className="flex-33 layout-row layout-align-space-around-center layout-wrap">
-                  <div className="flex-100 layout-row layout-wrap layout-align-end-center">
-                    <div className="flex-90 layout-row layout-align-start-center">
-                      <p className="flex-none layout-align-start-center">
-                        {`Yes, I want ${tenant.data.name} to insure my cargo`}
-                      </p>
-                    </div>
-                    <div className="flex-10 layout-row layout-align-end-center">
-                      <Checkbox
-                        onChange={this.toggleInsurance}
-                        checked={this.props.insurance.bool}
-                        theme={theme}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-end-center">
+                    <div
+                      className="flex-33 layout-row layout-align-space-around-center layout-wrap"
+                    >
+                      <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+                        <div className="flex-90 layout-row layout-align-start-center">
+                          <p className="flex-none layout-align-start-center">
+                            {`Yes, I want ${tenant.data.name} to insure my cargo`}
+                          </p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-end-center">
+                          <Checkbox
+                            onChange={this.toggleInsurance}
+                            checked={this.props.insurance.bool}
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
+                      {/* <div className="flex-100 layout-row layout-align-end-center">
                     <div className="flex-90 layout-row layout-align-start-center">
                       <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
                         tenant.data.name
@@ -585,61 +616,66 @@ export class CargoDetails extends Component {
                         theme={theme}
                       />
                     </div>
+                  </div> */}
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-align-start-center">
-                <p className="flex-100">
-                  Cargo insurance provides protection against all risks of physical loss or damage
-                  to freight from any external cause during shipping, whether by land, sea or air.
-                </p>
-              </div>
-              { !this.state.insuranceView
-                ? <div className="flex-100 layout-row layout-align-start-center">
-                  <p className="flex-100">
-                    <b>
-                      Note that if you choose not to insure the goods
-                      it will only be covered by carriers
-                      liability to the extent that it is covered
-                      under legal liability standard to the
-                      transport industry.
-                    </b>
-                  </p>
-                </div>
-                : '' }
-              {insuranceBox}
-            </div>
-          </div>
-            : '' }
-          { scope.has_customs ? <div className="flex-100 layout-row layout-align-center padd_top">
-            <div
-              className={`flex-none ${
-                defaults.content_width
-              } layout-row layout-wrap section_padding`}
-            >
-              <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
-                <div className="flex-none layout-row layout-align-space-around-center">
-                  <TextHeading theme={theme} size={2} text="Customs Handling" />
-                  <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
-                </div>
-
-                <div className="flex-33 layout-wrap layout-row layout-align-space-around-center">
-                  <div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-90 layout-row layout-align-start-center">
-                      <p className="flex-none" style={{ marginRight: '5px' }}>{`Yes, I want ${
-                        tenant.data.name
-                      } to handle my customs`}
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <p className="flex-100">
+                      Cargo insurance provides protection against all risks of physical loss or
+                      damage to freight from any external cause during shipping, whether by land,
+                      sea or air.
+                    </p>
+                  </div>
+                  {!this.state.insuranceView ? (
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <p className="flex-100">
+                        <b>
+                          Note that if you choose not to insure the goods it will only be covered by
+                          carriers liability to the extent that it is covered under legal liability
+                          standard to the transport industry.
+                        </b>
                       </p>
                     </div>
-                    <div className="flex-10 layout-row layout-align-end-center">
-                      <Checkbox
-                        onChange={this.toggleCustoms}
-                        checked={this.state.customsView}
-                        theme={theme}
-                      />
+                  ) : (
+                    ''
+                  )}
+                  {insuranceBox}
+                </div>
+              </div>
+            ) : (
+              ''
+            )}
+            {scope.has_customs ? (
+              <div className="flex-100 layout-row layout-align-center padd_top">
+                <div
+                  className={`flex-none ${
+                    defaults.content_width
+                  } layout-row layout-wrap section_padding`}
+                >
+                  <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
+                    <div className="flex-none layout-row layout-align-space-around-center">
+                      <TextHeading theme={theme} size={2} text="Customs Handling" />
+                      <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                     </div>
-                  </div>
-                  <div className="flex-100 layout-row layout-align-end-center">
+
+                    <div
+                      className="flex-33 layout-wrap layout-row layout-align-space-around-center"
+                    >
+                      <div className="flex-100 layout-row layout-align-end-center">
+                        <div className="flex-90 layout-row layout-align-start-center">
+                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                            {`Yes, I want ${tenant.data.name} to handle my customs`}
+                          </p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-end-center">
+                          <Checkbox
+                            onChange={this.toggleCustoms}
+                            checked={this.state.customsView}
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
+                      {/* <div className="flex-100 layout-row layout-align-end-center">
                     <div className="flex-90 layout-row layout-align-start-center">
                       <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
                         tenant.data.name
@@ -653,21 +689,27 @@ export class CargoDetails extends Component {
                         theme={theme}
                       />
                     </div>
+                  </div> */}
+                    </div>
+                    <div className="flex-100 layout-row layout-align-start-center">
+                      <p className="flex-none">
+                        A documented permission is needed (mandatory) to pass a national border when
+                        exporting or importing. Power of Attorney may be required according to local
+                        regulations.
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex-100 layout-row layout-align-start-center">
-                  <p className="flex-none">
-                    A documented permission is needed (mandatory) to pass a national border when
-                    exporting or importing. Power of Attorney may be required according to local
-                    regulations.
-                  </p>
+                  {customsBox}
+                  {noCustomsBox}
                 </div>
               </div>
-              {customsBox}
-              {noCustomsBox}
-            </div>
-          </div> : '' }
-        </div> : '' }
+            ) : (
+              ''
+            )}
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     )
   }
@@ -693,9 +735,6 @@ CargoDetails.propTypes = {
     deleteDocument: PropTypes.func,
     uploadDocument: PropTypes.func
   }).isRequired,
-  user: PropTypes.user.isRequired,
-  // deleteCode: PropTypes.func.isRequired,
-  // setHsCode: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string,
     rate: PropTypes.number

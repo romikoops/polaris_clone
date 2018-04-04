@@ -2,7 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
-import { alertActions, userActions } from './'
+import { alertActions, userActions, appActions } from './'
 // import { getSubdomain } from '../helpers/subdomain'
 
 // const subdomainKey = getSubdomain()
@@ -370,6 +370,15 @@ function deleteDocument (id) {
     )
   }
 }
+function updateCurrency (currency, req) {
+  return (dispatch) => {
+    dispatch(appActions.setCurrency(currency))
+    setTimeout(() => {
+      dispatch(setShipmentDetails(req, false))
+      dispatch(alertActions.success('Updating Currency successful'))
+    }, 100)
+  }
+}
 
 function toDashboard (id) {
   return (dispatch) => {
@@ -404,6 +413,7 @@ export const shipmentActions = {
   toDashboard,
   clearLoading,
   acceptShipment,
+  updateCurrency,
   delete: _delete
 }
 

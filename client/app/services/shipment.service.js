@@ -98,6 +98,15 @@ function acceptShipment (id) {
   const url = `${BASE_URL}/shipments/${id}/confirm_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
+function updateCurrency (currency) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ currency })
+  }
+  const url = `${BASE_URL}/currencies/set`
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 function deleteDocument (documentId) {
   const requestOptions = {
@@ -117,7 +126,8 @@ export const shipmentService = {
   getStoredShipment,
   setShipmentContacts,
   uploadDocument,
-  acceptShipment
+  acceptShipment,
+  updateCurrency
 }
 
 export default shipmentService

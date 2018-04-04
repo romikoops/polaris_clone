@@ -138,7 +138,7 @@ export class UserDashboard extends Component {
                   handleNext={this.startBooking}
                   active
                   size="large"
-                  text="Make a Booking"
+                  text="Find Rates"
                   iconClass="fa-archive"
                 />
               </div>
