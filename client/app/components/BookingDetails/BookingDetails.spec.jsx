@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 
 import {
   theme,
@@ -10,6 +10,14 @@ import {
   user
 } from '../../mocks'
 
+jest.mock('react-scroll', () => ({
+  // eslint-disable-next-line react/prop-types
+  default: ({ children }) => <div>{children}</div>
+}))
+jest.mock('formsy-react', () => ({
+  // eslint-disable-next-line react/prop-types
+  default: ({ children }) => <div>{children}</div>
+}))
 jest.mock('../CargoDetails/CargoDetails', () => ({
   // eslint-disable-next-line react/prop-types
   CargoDetails: ({ children }) => <div>{children}</div>
@@ -18,13 +26,26 @@ jest.mock('../ContactSetter/ContactSetter', () => ({
   // eslint-disable-next-line react/prop-types
   ContactSetter: ({ children }) => <div>{children}</div>
 }))
+jest.mock('../RouteHubBox/RouteHubBox', () => ({
+  // eslint-disable-next-line react/prop-types
+  RouteHubBox: ({ children }) => <div>{children}</div>
+}))
+jest.mock('../RoundButton/RoundButton', () => ({
+  // eslint-disable-next-line react/prop-types
+  RoundButton: ({ children }) => <button>{children}</button>
+}))
 // eslint-disable-next-line
 import { BookingDetails } from './BookingDetails'
+
+const edittedShipmentData = {
+  ...shipmentData,
+  hubs: {}
+}
 
 const propsBase = {
   theme,
   tenant,
-  shipmentData,
+  shipmentData: edittedShipmentData,
   nextStage: identity,
   prevRequest: {
     shipment
@@ -41,9 +62,6 @@ const propsBase = {
   user
 }
 
-test('CargoDetails component is called with user mock', () => {
-  const wrapper = mount(<BookingDetails {...propsBase} />)
-  const CargoDetails = wrapper.find('CargoDetails').first()
-
-  expect(CargoDetails.prop('user')).toBe(user)
+test('shallow render', () => {
+  expect(shallow(<BookingDetails {...propsBase} />)).toMatchSnapshot()
 })

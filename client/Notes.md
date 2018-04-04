@@ -106,9 +106,13 @@ PropTypes.shipmentData = PropTypes.shape({
 
 ## BookingDetails
 
-- Too big therefore only single basic test
+props.shipmentData has additional properties not declared in its PropType:
 
-props.shipmentData has additional property `cargoItemTypes` that is not declared in its PropType
+- cargoItemTypes
+
+- hubs
+
+[X] Test complete
 
 ## CacheClearer
 

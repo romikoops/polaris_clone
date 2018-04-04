@@ -1,0 +1,217 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  style={
+    Object {
+      "paddingTop": "60px",
+    }
+  }
+>
+  <RouteHubBox
+    hubs={Object {}}
+    route={
+      Array [
+        Object {
+          "hub_route_key": "FOO_HUB_ROUTE_KEY",
+        },
+      ]
+    }
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <div
+    className="wrapper_contact_setter flex-100 layout-row"
+  >
+    <ContactSetter
+      contacts={Array []}
+      finishBookingAttempted={false}
+      removeNotifyee={[Function]}
+      setContact={[Function]}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <[object Object]
+    onInvalidSubmit={[Function]}
+    onValidSubmit={[Function]}
+  >
+    <CargoDetails
+      currencies={
+        Array [
+          Object {
+            "key": "USD",
+            "rate": 1.05,
+          },
+        ]
+      }
+      customsData={
+        Object {
+          "export": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "import": Object {
+            "bool": false,
+            "val": 0,
+          },
+          "total": Object {
+            "val": 0,
+          },
+        }
+      }
+      deleteCode={[Function]}
+      finishBookingAttempted={false}
+      handleChange={[Function]}
+      handleHsTextChange={[Function]}
+      handleInsurance={[Function]}
+      handleTotalGoodsCurrency={[Function]}
+      hsTexts={Object {}}
+      insurance={
+        Object {
+          "bool": null,
+          "val": 0,
+        }
+      }
+      setCustomsFee={[Function]}
+      setHsCode={[Function]}
+      shipmentData={
+        Object {
+          "cargoItems": Array [],
+          "contacts": Array [],
+          "containers": Array [],
+          "documents": Array [],
+          "hubs": Object {},
+          "locations": Object {
+            "endHub": "FOO_END_HUB",
+            "startHub": "FOO_START_HUB",
+          },
+          "schedules": Array [
+            Object {
+              "hub_route_key": "FOO_HUB_ROUTE_KEY",
+            },
+          ],
+          "shipment": Object {
+            "schedules_charges": Object {
+              "FOO_HUB_ROUTE_KEY": Object {
+                "foo": "FOO_ROUTE_KEY",
+              },
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+          },
+        }
+      }
+      shipmentDispatch={
+        Object {
+          "toDashboard": [Function],
+        }
+      }
+      tenant={
+        Object {
+          "data": Object {
+            "id": 123,
+            "subdomain": "foosubdomain",
+            "theme": Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            },
+          },
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      toggleCustomsCredit={[Function]}
+      user={
+        Object {
+          "company_name": "FOO_COMPANY",
+          "email": "foo@bar.baz",
+          "first_name": "John",
+          "guest": false,
+          "last_name": "Doe",
+          "phone": "6345789",
+        }
+      }
+    />
+    <div
+      className="btn_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none  layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="flex-50 layout-row layout-align-start-center"
+        />
+        <div
+          className="flex-50 layout-row layout-align-end-center"
+        >
+          <div
+            className="flex-none layout-row"
+          >
+            <RoundButton
+              active={true}
+              text="Review Booking"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      className="sec_break flex-100"
+    />
+    <div
+      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none content-width layout-row layout-align-start-center"
+      >
+        <RoundButton
+          back={true}
+          handleNext={[Function]}
+          iconClass="fa-angle-left"
+          text="Back to dashboard"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </[object Object]>
+</div>
+`;
