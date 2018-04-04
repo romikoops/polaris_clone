@@ -1,0 +1,39 @@
+:local {
+  .note_card {
+    margin: 5px;
+    border-radius: 10px;
+    width: 250px;
+  }
+  .urgent {
+    
+    border: 1px solid darkred;
+    box-shadow: 1px 0 0 1px darkred;
+    i {
+      color: darkred;
+    }
+  }
+  .important {
+    
+    border: 1px solid rgb(243, 133, 6);
+    box-shadow: 1px 0 0 1px rgb(243, 133, 6);
+    i {
+      color:  rgb(243, 133, 6);
+    }
+  }
+  .notification {
+    
+    border: 1px solid darkgoldenrod;
+    box-shadow: 1px 0 0 1px darkgoldenrod;
+    i {
+      color:  darkgoldenrod;
+    }
+  }
+  .alert {
+    
+    border: 1px solid darkgreen;
+    box-shadow: 1px 0 0 1px darkgreen;
+    i {
+      color:  darkgreen;
+    }
+  }
+}

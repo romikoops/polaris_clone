@@ -31,8 +31,8 @@ export class AdminHubTile extends Component {
       return ''
     }
     const bg1 =
-      hub && hub.location && hub.location.photo
-        ? { backgroundImage: `url(${hub.location.photo})` }
+      hub && hub.data && hub.data.photo
+        ? { backgroundImage: `url(${hub.data.photo})` }
         : {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/aerial_port_sm.jpg")'

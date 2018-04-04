@@ -223,6 +223,13 @@ export const chargeGlossary = {
   CCC: 'Congestion Charge',
   DLF: 'Delivery Fee',
   PUF: 'Pickup Fee',
+  OHC: 'Origin Handling Costs',
+  DHC: 'Destination Handling Costs',
+  ISPS: 'ISPS Fee',
+  DDF: 'Destination Document Fee',
+  ODF: 'Origin Document Fee',
+  ENS: 'Entry Summary Declaration',
+  TRF: 'Telex Release Fee',
   OMR: 'Over Max Rate',
   PCR: 'Per CMB Rate',
   PWF: 'Waiting Fee',
@@ -237,7 +244,16 @@ export const chargeGlossary = {
   province: 'Province',
   value: 'Rate',
   delivery_fee: 'Delivery Fee',
-  pickup_fee: 'Pickup Fee'
+  pickup_fee: 'Pickup Fee',
+  THC: 'Terminal Handling Fee',
+  DOC: 'Documentation Fee',
+  SC: 'Service Charge',
+  HDL: 'Handling Fee',
+  HDF: 'Harbour Dues',
+  CGT: 'Congestion Tax',
+  FDC: 'Fairways Due Charge',
+  VGM: 'Verified Gross Mass',
+  CUST: 'Customs Fee'
 }
 
 export const incoterms = [

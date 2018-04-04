@@ -1308,6 +1308,32 @@ function uploadTrucking (url, file, direction) {
   }
 }
 
+function newHubImage (id, file) {
+  function request (hubData) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.newHubImage(id, file).then(
+      (data) => {
+        dispatch(success(data))
+        dispatch(alertActions.success('Uploading Image successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
 }
@@ -1323,6 +1349,7 @@ function goTo (path) {
 }
 export const adminActions = {
   getHubs,
+  newHubImage,
   getItineraries,
   updateServiceCharge,
   updatePricing,

@@ -1,6 +1,4 @@
 aws:
-  access_key_id: <% ENV["AWS_KEY"] %>
-  secret_access_key: <% ENV["AWS_SECRET"] %>
   receive_message:
     attribute_names:
       - ApproximateReceiveCount
