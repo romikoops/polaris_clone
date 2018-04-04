@@ -320,3 +320,7 @@ Basic snapshot test
 ## ShipmentLocationBox
 
 Basic snapshot test
+
+## ShipmentSummaryBox
+
+Test cannot proceed due to static method is `undefined` issue

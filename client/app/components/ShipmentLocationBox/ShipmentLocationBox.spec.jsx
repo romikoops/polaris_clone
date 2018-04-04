@@ -49,10 +49,6 @@ jest.mock('../RoundButton/RoundButton', () => ({
   // eslint-disable-next-line react/prop-types
   RoundButton: ({ children }) => <div>{children}</div>
 }))
-jest.mock('../ShipmentLocationBox/ShipmentLocationBox', () => ({
-  // eslint-disable-next-line react/prop-types
-  ShipmentLocationBox: ({ children }) => <div>{children}</div>
-}))
 jest.mock('../ShipmentContainers/ShipmentContainers', () => ({
   // eslint-disable-next-line react/prop-types
   ShipmentContainers: ({ children }) => <div>{children}</div>
