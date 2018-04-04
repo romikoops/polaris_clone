@@ -316,3 +316,7 @@ Basic snapshot test
 - Forced to use emtpy object as `shipmentData`
 
 - prop.prevRequest.shipment
+
+## ShipmentLocationBox
+
+Basic snapshot test
