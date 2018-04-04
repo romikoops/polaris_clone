@@ -81,13 +81,13 @@ class NotificationsController < ApplicationController
       shipment = Shipment.find_by_imc_reference(k)
       case shipment.status
       when "requested"
-        results.requested << shipment
+        results[:requested] << shipment
       when "accepted" || "in_progress"
-        results.open << shipment
+        results[:open] << shipment
       when "declined" || "finished"
-        results.finished << shipment
+        results[:finished] << shipment
       when "ignored"
-        results.ignored << shipment
+        results[:ignored] << shipment
       end
     end
     response_handler(results)
