@@ -73,7 +73,7 @@ export function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.export.total ? `${feeHash.export.total.value.toFixed(2)}` : 'None'}
+          {feeHash.export.total ? `${parseFloat(feeHash.export.total.value).toFixed(2)}` : 'None'}
         </p>
       </div>
     ) : (

@@ -444,7 +444,7 @@ module ExcelTools
         if hub_truckings[0].trucking_pricing_id
           trucking_pricing = hub_truckings[0].trucking_pricing
         else
-          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type)
+          trucking_pricing = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: { table: []}, import: { table: []}, load_type: load_type)
         end
        
         row_data.each_with_index do |val, index|
@@ -720,6 +720,7 @@ module ExcelTools
             tmp[:fees][:DLF] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           end
           ntp[:load_type] = load_type
+          ntp[:tenant_id] = hub.tenant_id
           ntp[direction]["table"] << tmp
           stats[:trucking_pricings][:number_updated] += 1
         end
@@ -821,7 +822,7 @@ module ExcelTools
               hub_truckings[range_key] << hub_trucking
             end
           else
-            trucking_pricings[range_key] = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
+            trucking_pricings[range_key] = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
             trucking_destinations[range_key] = []
             hub_truckings[range_key] = []
             (range_values[0]...range_values[1]).each do |dist|

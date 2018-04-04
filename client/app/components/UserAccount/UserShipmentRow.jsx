@@ -95,65 +95,40 @@ export class UserShipmentRow extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
-    const pendingRow = (
-      <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-        <div className="flex-none layout-row layout-align-start-end">
-          <p className="flex-none">Status: </p>
-        </div>
-        <div className={`flex-40 layout-row layout-align-center-end ${styles.pending}`}>
-          <i className="flex-none fa fa-clock-o" />
-          <p className="flex-none">Pending</p>
-        </div>
-      </div>
-    )
-    const acceptedRow = (
-      <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-        <div className="flex-none layout-row layout-align-start-end">
-          <p className="flex-none">Status: </p>
-        </div>
-        <div className={`flex-40 layout-row layout-align-center-end ${styles.grant}`}>
-          <i className="flex-none fa fa-check" />
-          <p className="flex-none">Accepted</p>
-        </div>
-      </div>
-    )
-    const deniedRow = (
-      <div className="flex-50 layout-row layout-align-end-end layout-wrap">
-        <div className="flex-none layout-row layout-align-start-end">
-          <p className="flex-none">Status: </p>
-        </div>
-        <div className={`flex-40 layout-row layout-align-center-end ${styles.deny}`}>
-          <i className="flex-none fa fa-trash" />
-          <p className="flex-none">Denied</p>
-        </div>
-      </div>
-    )
+    // const pendingRow = (
+    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+    //     <div className="flex-none layout-row layout-align-start-end">
+    //       <p className="flex-none">Status: </p>
+    //     </div>
+    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.pending}`}>
+    //       <i className="flex-none fa fa-clock-o" />
+    //       <p className="flex-none">Pending</p>
+    //     </div>
+    //   </div>
+    // )
+    // const acceptedRow = (
+    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+    //     <div className="flex-none layout-row layout-align-start-end">
+    //       <p className="flex-none">Status: </p>
+    //     </div>
+    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.grant}`}>
+    //       <i className="flex-none fa fa-check" />
+    //       <p className="flex-none">Accepted</p>
+    //     </div>
+    //   </div>
+    // )
+    // const deniedRow = (
+    //   <div className="flex-50 layout-row layout-align-end-end layout-wrap">
+    //     <div className="flex-none layout-row layout-align-start-end">
+    //       <p className="flex-none">Status: </p>
+    //     </div>
+    //     <div className={`flex-40 layout-row layout-align-center-end ${styles.deny}`}>
+    //       <i className="flex-none fa fa-trash" />
+    //       <p className="flex-none">Denied</p>
+    //     </div>
+    //   </div>
+    // )
     const feeHash = shipment.schedules_charges[shipment.schedule_set[0].hub_route_key]
-    const nadaRow = <div className="flex-50 layout-row layout-align-end-end layout-wrap" />
-    let statusRow
-    switch (shipment.status) {
-      case 'pending':
-        statusRow = pendingRow
-        break
-      case 'requested':
-        statusRow = pendingRow
-        break
-      case 'denied':
-        statusRow = deniedRow
-        break
-      case 'accepted':
-        statusRow = acceptedRow
-        break
-      case 'confirmed':
-        statusRow = acceptedRow
-        break
-      case 'in_progress':
-        statusRow = acceptedRow
-        break
-      default:
-        statusRow = nadaRow
-        break
-    }
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
         <div
@@ -222,7 +197,7 @@ export class UserShipmentRow extends Component {
             <div className="flex-50 layout-row layout-align-end-center">
               <h4 className="flex-none letter_3 no_m">
                 {' '}
-                {`Total: ${shipment.total_price.currency} ${shipment.total_price.value.toFixed(2)}`}
+                {`Total: ${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)}`}
               </h4>
             </div>
           </div>
@@ -290,92 +265,6 @@ export class UserShipmentRow extends Component {
           </div>
         </div>
       </div>
-
-      // <div
-      //   key={v4()}
-      //   className={`flex-100 layout-row ${styles.route_result}`}
-      //   onClick={this.selectShipment}
-      // >
-      //   <div className="flex-100 layout-row layout-wrap">
-      //     <div
-      //       className={`flex-40 layout-row layout-align-start-center layout-wrap ${styles.top_row}`}
-      //     >
-      //       <div className={`flex ${styles.header_hub}`}>
-      //         <i className={`fa fa-map-marker ${styles.map_marker}`} />
-      //         <div className="flex-100 layout-row">
-      //           <h4 className="flex-100"> {originHub.name} </h4>
-      //         </div>
-      //         <div className="flex-100">
-      //           <p className="flex-100"> {originHub.hub_code ? originHub.hub_code : ''} </p>
-      //         </div>
-      //       </div>
-      //       <div className={`${styles.connection_graphics}`}>
-      //         <div className="flex-none layout-row layout-align-center-center">
-      //           {UserShipmentRow.switchIcon(schedule)}
-      //         </div>
-      //         <div style={dashedLineStyles} />
-      //       </div>
-      //       <div className={`${styles.header_hub}`}>
-      //         <i className={`fa fa-flag-o ${styles.flag}`} />
-      //         <div className="flex-100 layout-row">
-      //           <h4 className="flex-100"> {destHub.name} </h4>
-      //         </div>
-      //         <div className="flex-100">
-      //           <p className="flex-100"> {destHub.hub_code ? destHub.hub_code : ''} </p>
-      //         </div>
-      //       </div>
-      //     </div>
-      //     <div className="flex-60 layout-row layout-align-start-center layout-wrap">
-      //       <div className={`flex-100 layout-row layout-align-start-center ${styles.action_bar}`}>
-      //         <div
-      //           className={`flex-33 layout-row layout-align-start-start layout-wrap ${
-      //             styles.user_info
-      //           }`}
-      //           onClick={this.selectShipment}
-      //         >
-      //           <i className={`flex-none fa fa-user ${styles.flag}`} style={gradientFontStyle} />
-      //           <p className="flex-none"> {`${user.first_name} ${user.last_name}`} </p>
-      //         </div>
-      //         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-      //           <div className="flex-100 layout-row">
-      //             <h4 className={styles.date_title}> Date of Departure</h4>
-      //           </div>
-      //           <div className="flex-100 layout-row">
-      //             <p className={`flex-none ${styles.sched_elem}`}>
-      //               {' '}
-      //               {moment(shipment.planned_etd).format('YYYY-MM-DD')}{' '}
-      //             </p>
-      //             <p className={`flex-none ${styles.sched_elem}`}>
-      //               {' '}
-      //               {moment(shipment.planned_etd).format('HH:mm')}{' '}
-      //             </p>
-      //           </div>
-      //         </div>
-      //         <div className="flex-33 layout-wrap layout-row layout-align-center-center">
-      //           <div className="flex-100 layout-row">
-      //             <h4 className={styles.date_title}> ETA terminal</h4>
-      //           </div>
-      //           <div className="flex-100 layout-row">
-      //             <p className={`flex-none ${styles.sched_elem}`}>
-      //               {' '}
-      //               {moment(shipment.planned_eta).format('YYYY-MM-DD')}{' '}
-      //             </p>
-      //             <p className={`flex-none ${styles.sched_elem}`}>
-      //               {' '}
-      //               {moment(shipment.planned_eta).format('HH:mm')}{' '}
-      //             </p>
-      //           </div>
-      //         </div>
-      //       </div>
-      //     </div>
-      //     <div className="flex-100 layout-row layout-align-end-center">
-      //       <div className={`flex-50 layout-row layout-align-start-end ${styles.ref_row}`}>
-      //         <p className="flex-none">Ref: {shipment.imc_reference}</p>
-      //       </div>
-      //       {statusRow}
-      //     </div>
-      //   </div>
-      // </div>
     )
   }
 }

@@ -195,7 +195,7 @@ export class AdminShipmentRow extends Component {
             <div className="flex-50 layout-row layout-align-end-center">
               <h4 className="flex-none letter_3 no_m">
                 {' '}
-                {`Total: ${shipment.total_price.currency} ${shipment.total_price.value.toFixed(2)}`}
+                {`Total: ${shipment.total_price.currency} ${parseFloat(shipment.total_price.value).toFixed(2)}`}
               </h4>
             </div>
           </div>

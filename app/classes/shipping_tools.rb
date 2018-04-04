@@ -293,7 +293,9 @@ module ShippingTools
     cargo_items = shipment.cargo_items
     containers = shipment.containers
     if containers.length > 0
-      cargoKey = containers.first.size_class
+      cargoKey = containers.first.size_class.dup
+      customsKey = cargoKey.dup
+      customsKey.slice! customsKey.rindex("f")
       cargos = containers
     else
       cargoKey = 'lcl'
@@ -301,12 +303,13 @@ module ShippingTools
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
-    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => cargoKey}]).first
-    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => cargoKey}]).first
-    
+    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => customsKey}]).first
+    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => customsKey}]).first
+    import_fees = destination_customs_fee ? destination_customs_fee["import"] : {}
+    export_fees = origin_customs_fee ? origin_customs_fee["export"] : {}
     customs_fee = {
-      import: calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user),
-      export: calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user)
+      import: calc_customs_fees(import_fees, cargos, shipment.load_type, current_user),
+      export: calc_customs_fees(export_fees, cargos, shipment.load_type, current_user)
     }
     hubs = { 
       startHub: { data: @origin,      location: @origin.nexus },

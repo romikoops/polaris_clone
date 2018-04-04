@@ -9,6 +9,7 @@ module CurrencyTools
     else 
       rates = cached_rates
     end
+    # byebug
     return rates
   end
 
@@ -53,8 +54,9 @@ module CurrencyTools
 
   def refresh_rates(base)
     curr_obj = Currency.find_by_base(base)
-    rates = JSON.parse(HTTP.get("http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}").to_s)
-    # rates = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)
+    # rates = JSON.parse(HTTP.get("http://data.fixer.io/latest?access_key=#{ENV['FIXER_API_KEY']}&base=#{base}").to_s)
+    # byebug
+    rates = JSON.parse(HTTP.get("https://api.fixer.io/latest?base=#{base}").to_s)
     if !curr_obj
       curr_obj = Currency.create(today: rates["rates"], base: base)
     else
