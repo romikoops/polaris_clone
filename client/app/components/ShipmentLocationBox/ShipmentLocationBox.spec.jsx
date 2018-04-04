@@ -117,6 +117,20 @@ const propsBase = {
 
 const createShallow = propsInput => shallow(<ShipmentLocationBox {...propsInput} />)
 
+let originalDate
+
+beforeEach(() => {
+  // eslint-disable-next-line no-global-assign
+  originalDate = Date
+  // eslint-disable-next-line no-global-assign
+  Date = () => 1462361249717
+})
+
+afterEach(() => {
+  // eslint-disable-next-line no-global-assign
+  Date = originalDate
+})
+
 test('shallow rendering', () => {
   expect(createShallow(propsBase)).toMatchSnapshot()
 })

@@ -9,7 +9,6 @@ exports[`props.pickup is false 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Closing Date"
         theme={
@@ -32,37 +31,23 @@ exports[`props.pickup is false 1`] = `
           className="flex-none fa fa-calendar"
         />
       </div>
-      <DayPickerInput
+      <[object Object]
         className="dpb_picker"
-        classNames={
-          Object {
-            "container": "DayPickerInput",
-            "overlay": "DayPickerInput-Overlay",
-            "overlayWrapper": "DayPickerInput-OverlayWrapper",
-          }
-        }
-        clickUnselectsDay={false}
-        component="input"
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "before": 2018-04-09T07:21:24.000Z,
+              "before": Date {},
             },
-            "month": 2018-03-31T21:00:00.000Z,
+            "month": Date {},
             "name": "dayPicker",
           }
         }
         format="DD/MM/YYYY"
         formatDate={[Function]}
-        hideOnDayClick={true}
-        inputProps={Object {}}
-        keepFocus={true}
         onDayChange={[Function]}
-        overlayComponent={[Function]}
         parseDate={[Function]}
         placeholder="DD/MM/YYYY"
-        showOverlay={false}
-        value="02/04/2018"
+        value={19}
       />
     </div>
   </div>
@@ -71,7 +56,6 @@ exports[`props.pickup is false 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Haulage"
         theme={
@@ -126,7 +110,6 @@ exports[`props.pickup is false 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Mode of transport"
         theme={
@@ -149,10 +132,7 @@ exports[`props.pickup is false 1`] = `
     >
       <Checkbox
         checked={true}
-        disabled={false}
         onChange={[Function]}
-        onClick={null}
-        size={null}
         theme={
           Object {
             "colors": Object {
@@ -181,10 +161,7 @@ exports[`props.pickup is false 1`] = `
     >
       <Checkbox
         checked={true}
-        disabled={false}
         onChange={[Function]}
-        onClick={null}
-        size={null}
         theme={
           Object {
             "colors": Object {
@@ -209,7 +186,6 @@ exports[`props.pickup is false 1`] = `
   >
     <p>
       <TextHeading
-        color=""
         size={4}
         text="Transit Time"
         theme={
@@ -250,7 +226,6 @@ exports[`shallow rendering 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Pickup Date"
         theme={
@@ -273,37 +248,23 @@ exports[`shallow rendering 1`] = `
           className="flex-none fa fa-calendar"
         />
       </div>
-      <DayPickerInput
+      <[object Object]
         className="dpb_picker"
-        classNames={
-          Object {
-            "container": "DayPickerInput",
-            "overlay": "DayPickerInput-Overlay",
-            "overlayWrapper": "DayPickerInput-OverlayWrapper",
-          }
-        }
-        clickUnselectsDay={false}
-        component="input"
         dayPickerProps={
           Object {
             "disabledDays": Object {
-              "before": 2018-04-09T07:21:24.000Z,
+              "before": Date {},
             },
-            "month": 2018-03-31T21:00:00.000Z,
+            "month": Date {},
             "name": "dayPicker",
           }
         }
         format="DD/MM/YYYY"
         formatDate={[Function]}
-        hideOnDayClick={true}
-        inputProps={Object {}}
-        keepFocus={true}
         onDayChange={[Function]}
-        overlayComponent={[Function]}
         parseDate={[Function]}
         placeholder="DD/MM/YYYY"
-        showOverlay={false}
-        value="02/04/2018"
+        value={19}
       />
     </div>
   </div>
@@ -312,7 +273,6 @@ exports[`shallow rendering 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Haulage"
         theme={
@@ -367,7 +327,6 @@ exports[`shallow rendering 1`] = `
   >
     <div>
       <TextHeading
-        color=""
         size={4}
         text="Mode of transport"
         theme={
@@ -390,10 +349,7 @@ exports[`shallow rendering 1`] = `
     >
       <Checkbox
         checked={true}
-        disabled={false}
         onChange={[Function]}
-        onClick={null}
-        size={null}
         theme={
           Object {
             "colors": Object {
@@ -422,10 +378,7 @@ exports[`shallow rendering 1`] = `
     >
       <Checkbox
         checked={true}
-        disabled={false}
         onChange={[Function]}
-        onClick={null}
-        size={null}
         theme={
           Object {
             "colors": Object {
@@ -450,7 +403,6 @@ exports[`shallow rendering 1`] = `
   >
     <p>
       <TextHeading
-        color=""
         size={4}
         text="Transit Time"
         theme={
