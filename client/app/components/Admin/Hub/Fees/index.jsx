@@ -9,8 +9,6 @@ import {
   // cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  fclChargeGlossary,
-  lclChargeGlossary,
   chargeGlossary,
   rateBasises,
   lclPricingSchema,
@@ -20,8 +18,6 @@ import {
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
-const fclChargeGloss = fclChargeGlossary
-const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -274,7 +270,7 @@ export class AdminHubFees extends Component {
     } = this.state
     const panel = []
     const viewPanel = []
-    let gloss
+    // let gloss
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background: linear-gradient(
@@ -297,11 +293,12 @@ export class AdminHubFees extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    if (loadType.includes('lcl')) {
-      gloss = lclChargeGloss
-    } else {
-      gloss = fclChargeGloss
-    }
+    // if (loadType.includes('lcl')) {
+    //   gloss = lclChargeGloss
+    // } else {
+    //   gloss = fclChargeGloss
+    // }
+    const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
       return ''

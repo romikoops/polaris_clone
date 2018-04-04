@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329125202) do
+ActiveRecord::Schema.define(version: 20180404091854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -121,9 +121,10 @@ ActiveRecord::Schema.define(version: 20180329125202) do
   create_table "hub_truckings", force: :cascade do |t|
     t.integer "hub_id"
     t.integer "trucking_destination_id"
-    t.integer "trucking_pricing_id"
+    t.integer "courier_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "trucking_pricing_id"
   end
 
   create_table "hubs", force: :cascade do |t|
@@ -151,7 +152,6 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.integer "tenant_id"
     t.integer "mot_scope_id"
     t.jsonb "hubs", default: [], array: true
-    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -200,6 +200,17 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.integer "trucking_availability_id"
     t.integer "nexus_id"
     t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.integer "hub_id"
+    t.integer "trucking_pricing_id"
+    t.string "body"
+    t.string "header"
+    t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -394,8 +405,8 @@ ActiveRecord::Schema.define(version: 20180329125202) do
   end
 
   create_table "trucking_availabilities", force: :cascade do |t|
-    t.boolean "cargo_item"
-    t.boolean "container"
+    t.boolean "cargo_item", default: false
+    t.boolean "container", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -419,11 +430,12 @@ ActiveRecord::Schema.define(version: 20180329125202) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
+    t.string "direction"
     t.jsonb "export"
     t.jsonb "import"
     t.integer "courier_id"
-    t.string "direction"
     t.string "load_type"
+    t.string "truck_type"
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
     t.string "modifier"

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
         patch "set_status"
       end
       post "hubs/:hub_id/delete", to: "hubs#delete"
+      post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
       post "user_managers/assign", to: "user_managers#assign"

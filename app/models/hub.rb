@@ -9,6 +9,7 @@ class Hub < ApplicationRecord
   has_many :hub_truckings
   has_many :trucking_pricings, through: :hub_truckings
   has_one :service_charge
+  has_many :notes,     dependent: :destroy
 
 
   MOT_HUB_NAME = {

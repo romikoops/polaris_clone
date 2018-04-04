@@ -9,8 +9,6 @@ import {
   // cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  fclChargeGlossary,
-  lclChargeGlossary,
   chargeGlossary,
   rateBasises,
   customsFeeSchema,
@@ -18,15 +16,9 @@ import {
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
-const fclChargeGloss = fclChargeGlossary
-const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
-// const cargoClassOpts = cargoClassOptions
-// const lclSchema = lclPricingSchema
-// const fclSchema = fclPricingSchema
-// const cargoGloss = cargoGlossary
 
 export class AdminCustomsSetter extends Component {
   static selectFromOptions (options, value) {
@@ -259,7 +251,7 @@ export class AdminCustomsSetter extends Component {
   }
 
   render () {
-    const { theme, loadType } = this.props
+    const { theme } = this.props
 
     const textStyle = {
       background:
@@ -272,7 +264,6 @@ export class AdminCustomsSetter extends Component {
     } = this.state
     const panel = []
     const viewPanel = []
-    let gloss
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background: linear-gradient(
@@ -295,11 +286,8 @@ export class AdminCustomsSetter extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    if (loadType.includes('lcl')) {
-      gloss = lclChargeGloss
-    } else {
-      gloss = fclChargeGloss
-    }
+
+    const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
       return ''
@@ -532,13 +520,11 @@ layout-align-end-center layout-row"
 AdminCustomsSetter.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  charges: PropTypes.objectOf(PropTypes.any),
-  loadType: PropTypes.string
+  charges: PropTypes.objectOf(PropTypes.any)
 }
 AdminCustomsSetter.defaultProps = {
   theme: {},
-  charges: {},
-  loadType: 'lcl'
+  charges: {}
 }
 
 export default AdminCustomsSetter

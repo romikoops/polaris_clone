@@ -7,6 +7,7 @@ class Itinerary < ApplicationRecord
   has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
   belongs_to :mot_scope, optional: true
+  has_many :notes,     dependent: :destroy
 
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
