@@ -8,8 +8,6 @@ Rails.application.routes.draw do
     registrations: 'users_devise_token_auth/registrations',
   }, skip: [:omniauth_callbacks]
   
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
   resources :subdomain, only: [:show] do
     namespace :admin do
       resources :shipments do

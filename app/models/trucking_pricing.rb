@@ -61,8 +61,9 @@ class TruckingPricing < ApplicationRecord
     ft.trucking_pricings.each do |tp|
       temp_tp = tp.as_json
       temp_tp.delete("id")
-      hub_id = tp.hub_id
-      tp["tenant_id"] = tt.id
+      hub_id = Hub.find_by(name: Hub.find(tp.hub_id).name, tenant_id: tt.id).id
+
+      temp_tp["tenant_id"] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
       nhts = hts.map do |ht| 
@@ -71,6 +72,19 @@ class TruckingPricing < ApplicationRecord
         temp_ht["hub_id"] = hub_id
         temp_ht["trucking_pricing_id"] = ntp.id
         HubTrucking.create!(temp_ht)
+      end
+    end
+  end
+  def self.fix_hub_truckings(subd)
+    t = Tenant.find_by_subdomain(subd)
+    t.trucking_pricings.map do |tp|
+      hub = Hub.find(tp.hub_id)
+      if hub.tenant_id != t.id
+        new_hub = Hub.find_by(name: hub.name, tenant_id: t.id)
+        tp.hub_truckings.each do |ht|
+          ht.hub_id = new_hub.id
+          ht.save!
+        end
       end
     end
   end

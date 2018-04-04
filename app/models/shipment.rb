@@ -259,8 +259,8 @@ class Shipment < ApplicationRecord
   def self.test_email
     user = User.find_by_email("demo@demo.com")
     shipment = user.shipments.find_by(status: "requested")
-    ShipmentMailer.tenant_notification(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_now
+    ShipmentMailer.shipper_notification(user, shipment).deliver_now
     shipper_confirmation_email(user, shipment)
   end
   def self.update_hubs_on_shipments
