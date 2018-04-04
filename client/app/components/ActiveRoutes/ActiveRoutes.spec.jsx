@@ -20,8 +20,7 @@ test('its text content contains specific parts', () => {
 
   const expectedParts = [
     'Available',
-    'Previous',
-    'Next',
+    'Destinations',
     'China'
   ]
 
