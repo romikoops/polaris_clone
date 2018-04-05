@@ -50,7 +50,9 @@ export default function getInputs (
     />
   )
   const inputs = {}
-  const showColliTypeErrors = !firstRenderInputs && nextStageAttempt && !cargoItemTypes[i]
+  const showColliTypeErrors =
+    !firstRenderInputs && nextStageAttempt &&
+    (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >

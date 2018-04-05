@@ -34,7 +34,7 @@ export class ShipmentDetails extends Component {
     })
   }
   static errorsExist (errorsObjects) {
-    errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
+    return errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
   }
   constructor (props) {
     super(props)
@@ -343,6 +343,7 @@ export class ShipmentDetails extends Component {
     //   (2) ShipmentDetails.errorsExist(this.state.containersErrors) //=> true
     // So it will break out of the function and set nextStage attempt to true,
     // in case one of them returns false
+
     if (
       ShipmentDetails.errorsExist(this.state.cargoItemsErrors) &&
       ShipmentDetails.errorsExist(this.state.containersErrors)
