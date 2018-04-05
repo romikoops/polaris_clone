@@ -62,6 +62,10 @@ export class ShipmentDetails extends Component {
           stackable: true
         }
       ],
+      aggregatedCargo: {
+        weight: 0,
+        volume: 0
+      },
       routes: {},
       containersErrors: [
         {
@@ -78,6 +82,11 @@ export class ShipmentDetails extends Component {
           quantity: false
         }
       ],
+      aggregatedCargoErrors: {
+        weight: true,
+        volume: true
+      },
+      aggregated: false,
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
@@ -272,6 +281,10 @@ export class ShipmentDetails extends Component {
     this.setState({ containers, containersErrors })
   }
 
+  toggleAggregatedCargo () {
+    this.setState(prevState => ({ aggregated: !prevState.aggregated }))
+  }
+
   addNewCargoItem () {
     const newCargoItem = {
       payload_in_kg: 0,
@@ -360,6 +373,8 @@ export class ShipmentDetails extends Component {
     data.shipment.destination_id = this.state.destination.hub_id
     data.shipment.cargo_items_attributes = this.state.cargoItems
     data.shipment.containers_attributes = this.state.containers
+    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
+
     data.shipment.has_on_carriage = this.state.has_on_carriage
     data.shipment.has_pre_carriage = this.state.has_pre_carriage
     data.shipment.planned_pickup_date = this.state.selectedDay
@@ -390,7 +405,7 @@ export class ShipmentDetails extends Component {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${truckingKey}-`
     } else if (!shipment.trucking[truckingKey].truck_type) {
-      // Set first truckType if carriage is toggled on and truckType is empty
+      // Set first truckType, if carriage is toggled on and truckType is empty
       const truckType = this.truckTypes[this.state.shipment.load_type][0]
       artificialEvent.target.id = `${truckingKey}-${truckType}`
     }

@@ -25,8 +25,8 @@ class OfferCalculator
     @current_eta_in_search = DateTime.new()
     @total_price = { total:0, currency: "EUR" }
     byebug
-    if params[:aggregated_cargos]
-      @shipment.aggregated_cargos = AggregatedCargo.extract(aggregated_cargos_params)
+    if params[:aggregated_cargo_attributes]
+      @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params)
     else    
       cargo_unit_const = @shipment.load_type.camelize.constantize
       plural_load_type = @shipment.load_type.pluralize
@@ -433,11 +433,7 @@ class OfferCalculator
     end
   end
 
-  def aggregated_cargos_params(params)
-    params.require(:shipment).permit(
-      aggregated_cargos_attributes: [
-        :weight, :volume
-      ]
-    )[:aggregated_cargos_attributes]
+  def aggregated_cargo_params(params)
+    params.require(:shipment).require(:aggregated_cargo_attributes).permit(:weight, :volume)
   end
 end
