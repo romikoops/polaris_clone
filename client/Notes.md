@@ -373,3 +373,14 @@ Too small, testing makes little sense
 - theme.colors.brightSecondary
 
 [X] Test complete
+
+## TermsAndConditions
+
+Small component, skip testing
+
+! Default export
+
+## TextHeading
+
+[X] Test complete
+
