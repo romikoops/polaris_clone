@@ -121,6 +121,7 @@ export class ShipmentContainers extends Component {
       return (
         <div
           key={i}
+          name={`${i}-container`}
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           style={{ position: 'relative' }}
         >

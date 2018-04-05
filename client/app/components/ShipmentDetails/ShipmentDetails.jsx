@@ -20,7 +20,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, camelize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
@@ -31,11 +31,11 @@ export class ShipmentDetails extends Component {
     Scroll.scroller.scrollTo(target, {
       duration: 800,
       smooth: true,
-      offset: -50
+      offset: -180
     })
   }
-  static errorsExist (errorsObjects) {
-    errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
+  static errorsAt (errorsObjects) {
+    return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
   constructor (props) {
     super(props)
@@ -333,6 +333,15 @@ export class ShipmentDetails extends Component {
   }
 
   handleNextStage () {
+    if (
+      isEmpty(this.state.origin) ||
+      isEmpty(this.state.destination) ||
+      this.state.AddressFormsHaveErrors
+    ) {
+      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo('map')
+      return
+    }
     if (!this.state.selectedDay) {
       this.setState({ nextStageAttempt: true })
       ShipmentDetails.scrollTo('dayPicker')
@@ -344,26 +353,14 @@ export class ShipmentDetails extends Component {
       ShipmentDetails.scrollTo('incoterms')
       return
     }
-    if (
-      isEmpty(this.state.origin) ||
-      isEmpty(this.state.destination) ||
-      this.state.AddressFormsHaveErrors
-    ) {
+
+    const { shipment } = this.state
+    const loadType = camelize(shipment.load_type)
+    const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+    if (errorIdx > -1) {
       this.setState({ nextStageAttempt: true })
-      ShipmentDetails.scrollTo('map')
-      return
-    }
-    // This was implemented under the assuption that in
-    // the initial state the following return values apply:
-    //   (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) //=> true
-    //   (2) ShipmentDetails.errorsExist(this.state.containersErrors) //=> true
-    // So it will break out of the function and set nextStage attempt to true,
-    // in case one of them returns false
-    if (
-      ShipmentDetails.errorsExist(this.state.cargoItemsErrors) &&
-      ShipmentDetails.errorsExist(this.state.containersErrors)
-    ) {
-      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+
       return
     }
 
