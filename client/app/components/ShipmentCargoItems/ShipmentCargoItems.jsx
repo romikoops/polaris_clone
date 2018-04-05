@@ -14,7 +14,6 @@ export class ShipmentCargoItems extends Component {
       cargoItemTypes: [],
       cargoItemInfoExpanded: [true]
     }
-    this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
     this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this)
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
@@ -24,12 +23,6 @@ export class ShipmentCargoItems extends Component {
     this.setState({ firstRenderInputs: bool })
   }
 
-  handleCargoChange (event) {
-    const { name, value } = event.target
-    this.setState({
-      newCargoItem: { ...this.state.newCargoItem, [name]: value }
-    })
-  }
   addNewCargo () {
     const { cargoItemInfoExpanded } = this.state
     cargoItemInfoExpanded.push(true)

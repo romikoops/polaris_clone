@@ -2,12 +2,12 @@ import React from 'react'
 import PropTypes from '../../../prop-types'
 import { ValidatedInput } from '../../ValidatedInput/ValidatedInput'
 
-function ShipmentAggregatedCargoInput ({
+export default function ShipmentAggregatedCargoInput ({
   value, name, handleDelta, nextStageAttempt
 }) {
   return (
     <ValidatedInput
-      wrapperClassName="flex-55"
+      wrapperClassName="flex"
       name={name}
       value={value}
       type="number"
@@ -35,13 +35,12 @@ function ShipmentAggregatedCargoInput ({
 ShipmentAggregatedCargoInput.propTypes = {
   value: PropTypes.number,
   name: PropTypes.string,
-  handleDelta: PropTypes.func,
+  handleDelta: PropTypes.func.isRequired,
   nextStageAttempt: PropTypes.bool
 }
 
 ShipmentAggregatedCargoInput.defaultProps = {
   value: 0,
   name: '',
-  handleDelta: null,
   nextStageAttempt: false
 }

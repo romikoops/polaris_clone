@@ -16,7 +16,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
-import { ShipmentAggregatedCargo } from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
+import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
@@ -252,6 +252,16 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  handleAggregatedCargoChange (event, hasError) {
+    const { name, value } = event.target
+    const { aggregatedCargo, aggregatedCargoErrors } = this.state
+
+    if (!aggregatedCargo || !aggregatedCargoErrors) return
+    aggregatedCargo[name] = value ? +value : 0
+    if (hasError !== undefined) aggregatedCargoErrors[name] = hasError
+    this.setState({ aggregatedCargo, aggregatedCargoErrors })
+  }
+
   handleCargoItemChange (event, hasError) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
@@ -447,7 +457,7 @@ export class ShipmentDetails extends Component {
       cargoDetails = (
         <ShipmentAggregatedCargo
           aggregatedCargo={this.state.aggregatedCargo}
-          handleDelta={this.handleAggregatedCargoChange}
+          handleDelta={(event, hasError) => this.handleAggregatedCargoChange(event, hasError)}
           nextStageAttempt={this.state.nextStageAttempt}
           theme={theme}
           scope={scope}
@@ -633,7 +643,14 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
+          <div className="content_width_booking">
+            <div onClick={() => this.toggleAggregatedCargo()} >
+              Toggle
+            </div>
+          </div>
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
