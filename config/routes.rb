@@ -8,8 +8,6 @@ Rails.application.routes.draw do
     registrations: 'users_devise_token_auth/registrations',
   }, skip: [:omniauth_callbacks]
   
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
   resources :subdomain, only: [:show] do
     namespace :admin do
       resources :shipments do
@@ -28,6 +26,7 @@ Rails.application.routes.draw do
         patch "set_status"
       end
       post "hubs/:hub_id/delete", to: "hubs#delete"
+      post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
 
       post "user_managers/assign", to: "user_managers#assign"

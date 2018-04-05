@@ -91,8 +91,8 @@ function register (user, redirect) {
   }
 }
 function setUser (user) {
-  window.localStorage.setItem(cookieKey, JSON.stringify(user))
-  return { type: authenticationConstants.SET_USER, user }
+  window.localStorage.setItem(cookieKey, JSON.stringify(user.data))
+  return { type: authenticationConstants.SET_USER, user: user.data }
 }
 
 function updateUser (user, req, shipmentReq) {

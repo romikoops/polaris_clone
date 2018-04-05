@@ -1002,6 +1002,27 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+    case adminConstants.UPLOAD_HUB_IMAGE_REQUEST:
+      return state
+    // eslint-disable-next-line no-case-declarations
+    case adminConstants.UPLOAD_HUB_IMAGE_SUCCESS:
+      const hubsArr = state.hubs.filter(h => h.id !== action.payload.id)
+      hubsArr.push(action.payload)
+      return {
+        ...state,
+        hub: {
+          ...this.state.hub,
+          hub: action.payload
+        },
+        hubs: hubsArr,
+        loading: false
+      }
+    case adminConstants.UPLOAD_HUB_IMAGE_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
 
     case adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST:
       return state

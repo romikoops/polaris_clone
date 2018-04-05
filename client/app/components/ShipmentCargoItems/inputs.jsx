@@ -50,7 +50,9 @@ export default function getInputs (
     />
   )
   const inputs = {}
-  const showColliTypeErrors = !firstRenderInputs && nextStageAttempt && !cargoItemTypes[i]
+  const showColliTypeErrors =
+    !firstRenderInputs && nextStageAttempt &&
+    (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
@@ -145,10 +147,8 @@ export default function getInputs (
       rail: 550,
       ocean: 1000
     }
-    const unitChargeableWeight =
-      Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
 
-    return (unitChargeableWeight * cargoItem.quantity).toFixed(1)
+    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
   }
   function chargeableWeightElemJSX (mot) {
     return (

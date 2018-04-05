@@ -4,15 +4,16 @@ import PropTypes from '../../prop-types'
 import { RouteFilterBox } from '../RouteFilterBox/RouteFilterBox'
 // import { BestRoutesBox } from '../BestRoutesBox/BestRoutesBox'
 import { RouteResult } from '../RouteResult/RouteResult'
-import { moment } from '../../constants'
+import { currencyOptions } from '../../constants'
 import styles from './ChooseRoute.scss'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import defs from '../../styles/default_classes.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
+import { NamedSelect } from '../NamedSelect/NamedSelect'
 
 export class ChooseRoute extends Component {
-  static dynamicSort(property) {
+  static dynamicSort (property) {
     let sortOrder = 1
     let prop
     if (property[0] === '-') {
@@ -27,7 +28,7 @@ export class ChooseRoute extends Component {
       return result2 * sortOrder
     }
   }
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       selectedMoT: {
@@ -47,7 +48,7 @@ export class ChooseRoute extends Component {
     this.setMoT = this.setMoT.bind(this)
     this.toggleLimits = this.toggleLimits.bind(this)
   }
-  componentDidMount() {
+  componentDidMount () {
     const { prevRequest, setStage } = this.props
     if (prevRequest && prevRequest.shipment) {
       // this.loadPrevReq(prevRequest.shipment);
@@ -55,18 +56,18 @@ export class ChooseRoute extends Component {
     window.scrollTo(0, 0)
     setStage(3)
   }
-  shouldComponentUpdate() {
+  shouldComponentUpdate () {
     return !!(this.props.shipmentData && this.props.shipmentData.shipment)
   }
-  setDuration(val) {
+  setDuration (val) {
     this.setState({ durationFilter: val })
   }
-  setDepartureDate(date) {
+  setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
     req.planned_pickup_date = date
     shipmentDispatch.setShipmentDetails(req)
   }
-  setMoT(val, target) {
+  setMoT (val, target) {
     this.setState({
       selectedMoT: {
         ...this.state.selectedMoT,
@@ -74,11 +75,17 @@ export class ChooseRoute extends Component {
       }
     })
   }
-  toggleLimits(target) {
+  toggleLimits (target) {
     this.setState({ limits: { ...this.state.limits, [target]: !this.state.limits[target] } })
     this.showMore()
   }
-  showMore() {
+  handleCurrencyUpdate (e) {
+    const { value } = e
+    const { shipmentDispatch, req } = this.props
+    this.setState({ currentCurrency: e })
+    shipmentDispatch.updateCurrency(value, req)
+  }
+  showMore () {
     const { outerLimit } = this.state
     this.setState({ outerLimit: outerLimit + 10 })
     const { shipmentDispatch, req } = this.props
@@ -86,45 +93,43 @@ export class ChooseRoute extends Component {
     shipmentDispatch.setShipmentDetails(req, false)
   }
 
-  chooseResult(obj) {
+  chooseResult (obj) {
     this.props.chooseRoute(obj)
   }
-  render() {
-    const { shipmentData, messages, user, shipmentDispatch, theme } = this.props
+  render () {
+    const {
+      shipmentData, messages, user, shipmentDispatch, theme
+    } = this.props
     if (!shipmentData) return ''
 
-    const { limits } = this.state
+    const { limits, currentCurrency } = this.state
 
-    let smallestDiff = 100
-    const { shipment, originHubs, destinationHubs, schedules } = shipmentData
+    const {
+      shipment, originHubs, destinationHubs, schedules
+    } = shipmentData
     if (!schedules) return ''
 
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
     schedules.sort(ChooseRoute.dynamicSort('-closing_date'))
-    const idArrays = {
-      closest: '',
-      focus: [],
-      alternative: []
-    }
-    let closestRoutes = []
+    const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []
     const mKeys = ['rail', 'ocean', 'air', 'truck']
     const motKeys = Object.keys(this.state.selectedMoT).filter(k => this.state.selectedMoT[k])
     const noMotKeys = Object.keys(this.state.selectedMoT).filter(k => !this.state.selectedMoT[k])
     const scheduleObj = {}
-    mKeys.forEach(mk => {
+    mKeys.forEach((mk) => {
       scheduleObj[mk] = schedules.filter(s => s.mode_of_transport === mk)
       scheduleObj[mk].sort(ChooseRoute.dynamicSort('closing_date'))
     })
-    motKeys.forEach(key => {
+    motKeys.forEach((key) => {
       const topSched = scheduleObj[key].shift()
       if (topSched) {
         closestRoutes.push(topSched)
       }
       focusRoutes.push(...scheduleObj[key])
     })
-    noMotKeys.forEach(key => {
+    noMotKeys.forEach((key) => {
       altRoutes.push(...scheduleObj[key])
     })
     const altRoutestoRender = altRoutes.map(s => (
@@ -172,76 +177,6 @@ export class ChooseRoute extends Component {
         pickupDate={shipment.planned_pickup_date}
       />
     ))
-    // const closestMots = {}
-    // schedules.forEach(sched => {
-    //   if (Math.abs(moment(depDay).diff(sched.eta, 'days')) <= this.state.durationFilter) {
-    //     if (
-    //       Math.abs(moment(depDay).diff(sched.eta, 'days')) < smallestDiff &&
-    //       motKeys.indexOf(sched.mode_of_transport) > -1
-    //     ) {
-    //       smallestDiff = Math.abs(moment(depDay).diff(sched.eta, 'days'))
-    //       idArrays.closest = sched.id
-    //       closestMots[sched.mode_of_transport] = sched
-    //     }
-    //     if (
-    //       motKeys.indexOf(sched.mode_of_transport) > -1 &&
-    //       !idArrays.focus.includes(sched.id) &&
-    //       sched.id !== idArrays.closest
-    //     ) {
-    //       idArrays.focus.push(sched.id)
-    //       focusRoutes.push(
-    //         <RouteResult
-    //           key={v4()}
-    //           selectResult={this.chooseResult}
-    //           theme={this.props.theme}
-    //           originHubs={originHubs}
-    //           destinationHubs={destinationHubs}
-    //           fees={shipment.schedules_charges}
-    //           schedule={sched}
-    //           user={user}
-    //           pickup={shipment.has_pre_carriage}
-    //           loadType={shipment.load_type}
-    //           pickupDate={shipment.planned_pickup_date}
-    //         />
-    //       )
-    //     } else if (
-    //       motKeys.indexOf(sched.mode_of_transport) < 0 &&
-    //       !idArrays.alternative.includes(sched.id)
-    //     ) {
-    //       idArrays.alternative.push(sched.id)
-    //       altRoutes.push(
-    //         <RouteResult
-    //           key={v4()}
-    //           selectResult={this.chooseResult}
-    //           theme={this.props.theme}
-    //           originHubs={originHubs}
-    //           destinationHubs={destinationHubs}
-    //           fees={shipment.schedules_charges}
-    //           schedule={sched}
-    //           user={user}
-    //           pickup={shipment.has_pre_carriage}
-    //           loadType={shipment.load_type}
-    //           pickupDate={shipment.planned_pickup_date}
-    //         />
-    //       )
-    //     }
-    //   }
-    // })
-    // closestRoute = Object.values(closestMots).map(value => (
-    //   <RouteResult
-    //     key={v4()}
-    //     selectResult={this.chooseResult}
-    //     theme={this.props.theme}
-    //     originHubs={originHubs}
-    //     destinationHubs={destinationHubs}
-    //     fees={shipment.schedules_charges}
-    //     schedule={value}
-    //     user={user}
-    //     pickup={shipment.has_pre_carriage}
-    //     loadType={shipment.load_type}
-    //     pickupDate={shipment.planned_pickup_date}
-    //   />
-    // ))
 
     const limitedFocus = limits.focus ? focusRoutes.slice(0, 5) : focusRoutes
     const limitedAlts = limits.alt ? altRoutes.slice(0, 5) : altRoutes
@@ -268,12 +203,24 @@ export class ChooseRoute extends Component {
           </div>
           <div className="flex-75 offset-5 layout-row layout-wrap">
             <div className="flex-100 layout-row layout-wrap">
-              <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
+              <div
+                className={`flex-100 layout-row layout-align-space-between-center ${
+                  styles.route_header
+                }`}
+              >
                 <div className="flex-none">
                   <TextHeading
                     theme={theme}
                     size={3}
                     text="This is the closest departure to the specified date"
+                  />
+                </div>
+                <div className="flex-30 layout-row layout-align-end-center">
+                  <NamedSelect
+                    className="flex-100"
+                    options={currencyOptions}
+                    value={currentCurrency}
+                    onChange={e => this.handleCurrencyUpdate(e)}
                   />
                 </div>
               </div>

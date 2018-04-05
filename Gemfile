@@ -21,8 +21,6 @@ gem 'sass-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
 
-gem 'sidekiq'
-
 gem 'awesome_print'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'

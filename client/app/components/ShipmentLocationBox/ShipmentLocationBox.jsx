@@ -522,7 +522,11 @@ export class ShipmentLocationBox extends Component {
     const availableNexusesIds = availableNexuses.map(availableNexus => availableNexus.value.id)
 
     getRequests.findAvailability(
-      lat, lng, tenantId, loadType, availableNexusesIds,
+      lat,
+      lng,
+      tenantId,
+      loadType,
+      availableNexusesIds,
       (truckingAvailable, nexusIds) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
@@ -1060,14 +1064,9 @@ export class ShipmentLocationBox extends Component {
               </div>
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
-                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
-                  {this.props.has_on_carriage ? destAuto : ''}
-                  {displayLocationOptions('destination')}
-                  {destFields}
-                </div>
                 <div
                   className={
-                    'flex-45 layout-row layout-align-end ' +
+                    'flex-45 layout-row layout-align-start ' +
                     `${styles.toggle_box} ` +
                     `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                   }
@@ -1093,6 +1092,11 @@ export class ShipmentLocationBox extends Component {
                     checked={this.props.has_on_carriage}
                     onChange={this.handleTrucking}
                   />
+                </div>
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
+                  {this.props.has_on_carriage ? destAuto : ''}
+                  {displayLocationOptions('destination')}
+                  {destFields}
                 </div>
               </div>
             </div>

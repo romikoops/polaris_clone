@@ -50,7 +50,8 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
-  # config.active_job.queue_adapter     = :resque
+  config.active_job.queue_adapter     = :shoryuken
+  config.action_mailer.deliver_later_queue_name = 'https://sqs.eu-central-1.amazonaws.com/003688427525/mailers'
   # config.active_job.queue_name_prefix = "imcr_#{Rails.env}"
   config.action_mailer.perform_caching = false
 

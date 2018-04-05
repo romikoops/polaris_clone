@@ -122,11 +122,8 @@ export class BookingConfirmation extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoContainerGroup
-        group={cargoGroups[k]}
-        theme={theme}
-        hsCodes={hsCodes}
-      />)
+      resultArray
+        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
     })
     return resultArray
   }
@@ -152,7 +149,14 @@ export class BookingConfirmation extends Component {
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 
     let cargoView
-
+    const defaultTerms = [
+      'You verify that all the information provided above is true',
+      `You agree to our Terms and Conditions and the General Conditions of the
+                          Nordic Association of Freight Forwarders (NSAB) and those of 
+                          {tenant.name}`,
+      'You agree to pay the price of the shipment as stated above upon arrival of the invoice'
+    ]
+    const terms = tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
@@ -227,6 +231,7 @@ export class BookingConfirmation extends Component {
         </div>)
       })
     }
+    const termBullets = terms.map(t => <li> {t}</li>)
     const themeTitled =
       theme && theme.colors
         ? { background: theme.colors.primary, color: 'white' }
@@ -431,7 +436,6 @@ export class BookingConfirmation extends Component {
                     />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -586,23 +590,12 @@ export class BookingConfirmation extends Component {
                       <TextHeading theme={theme} text="By checking this box" size={4} />
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start">
-                      <ul className={`flex-100 ${styles.terms_list}`}>
-                        <li>you verify that all the information provided above is true</li>
-                        <li>
-                          you agree to our Terms and Conditions and the General Conditions of the
-                          Nordic Association of Freight Forwarders (NSAB) and those of{' '}
-                          {this.props.tenant.name}
-                        </li>
-                        <li>
-                          you agree to pay the price of the shipment as stated above upon arrival of
-                          the invoice
-                        </li>
-                      </ul>
+                      <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex-33 layout-row layout-align-end-end height_100">
+              <div className="flex-33 layout-row layout-align-end-end height_100" style={{ height: '150px', marginBottom: '15px' }}>
                 {acceptTerms ? acceptedBtn : nonAcceptedBtn}
               </div>
             </div>

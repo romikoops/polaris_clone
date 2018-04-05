@@ -19,7 +19,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
-      to: 'mailtests@itsmycargo.com',
+      to: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -34,7 +34,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: 'mailtests@itsmycargo.com',
+      to: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -53,7 +53,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: 'mailtests@itsmycargo.com',
+      to: 'warwick@itsmycargo.com',
       subject: 'Your booking through ItsMyCargo'
     )
   end

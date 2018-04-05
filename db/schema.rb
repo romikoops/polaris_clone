@@ -141,7 +141,6 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.string "mode_of_transport"
     t.integer "tenant_id"
     t.integer "mot_scope_id"
-    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -182,6 +181,17 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.integer "hub_id"
+    t.integer "trucking_pricing_id"
+    t.string "body"
+    t.string "header"
+    t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

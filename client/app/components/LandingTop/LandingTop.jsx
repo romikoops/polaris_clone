@@ -58,7 +58,7 @@ export class LandingTop extends Component {
             } ${styles.responsive}`}
           >
             {(user && user.role_id === 2) || !user ? (
-              <RoundButton text="Book Now" theme={theme} handleNext={bookNow} active />
+              <RoundButton text="Find Rates" theme={theme} handleNext={bookNow} active />
             ) : (
               ''
             )}

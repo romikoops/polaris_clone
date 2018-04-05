@@ -299,17 +299,27 @@ module ShippingTools
       cargos = containers
     else
       cargoKey = 'lcl'
+      customsKey = 'lcl'
       cargos = cargo_items
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
     origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => customsKey}]).first
     destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => customsKey}]).first
-    import_fees = destination_customs_fee ? destination_customs_fee["import"] : {}
-    export_fees = origin_customs_fee ? origin_customs_fee["export"] : {}
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user) : {unknown: true}
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user) : {unknown: true}
+    total_fees = {total: {value: 0, currency: current_user.currency}}
+    if import_fees["total"] && import_fees["total"][:value]
+      total_fees[:total][:value] += import_fees["total"][:value]
+    end
+    if export_fees["total"] && export_fees["total"][:value]
+      total_fees[:total][:value] += export_fees["total"][:value]
+    end
+    
     customs_fee = {
-      import: calc_customs_fees(import_fees, cargos, shipment.load_type, current_user),
-      export: calc_customs_fees(export_fees, cargos, shipment.load_type, current_user)
+      import: destination_customs_fee ? import_fees : {unknown: true},
+      export: origin_customs_fee ? export_fees : {unknown: true},
+      total: total_fees
     }
     hubs = { 
       startHub: { data: @origin,      location: @origin.nexus },
