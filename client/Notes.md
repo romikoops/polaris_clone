@@ -347,3 +347,29 @@ Also ESLint rule 'no-magic-numbers' seems good fit for avoiding such cases.
 ## ShopStageView
 
 [X] Test complete
+
+## SideNav
+
+! Testing not possibe as only wrapped component is exported
+
+## SignIn
+
+Too small, testing makes little sense
+
+## SignOut
+
+Too small, testing makes little sense
+
+## StageTimeline
+
+! Default export
+
+! stages: PropTypes.arrayOf(Number) is not correct, as later its members are passed to `capitalize`
+
+! PropType.theme uses undeclared properties:
+
+- theme.colors.brightPrimary
+
+- theme.colors.brightSecondary
+
+[X] Test complete
