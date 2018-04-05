@@ -342,3 +342,8 @@ componentDidMount () {
 `
 
 Deconstruction of `props` seems unnecessary.
+Also ESLint rule 'no-magic-numbers' seems good fit for avoiding such cases.
+
+## ShopStageView
+
+[X] Test complete

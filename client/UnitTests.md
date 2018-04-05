@@ -2,6 +2,10 @@
 
 ## Small rules
 
+- refer to props in test description with `props.` prepend
+
+- if description is too long, `props.` prepend can be skipped
+
 - try to sort property keys alphabetically
 
 - skip empty lines between mock declaration, if they are more than 2

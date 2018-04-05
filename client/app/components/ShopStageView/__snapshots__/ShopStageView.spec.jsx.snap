@@ -1,0 +1,162 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-row flex-100 layout-align-center layout-wrap"
+>
+  <div
+    className="shop_banner layout-row flex-100 layout-align-center"
+  >
+    <div
+      className="fade"
+    />
+    <div
+      className="layout-row content_width layout-wrap layout-align-start-center banner_content"
+    >
+      <h3
+        className="flex-none header"
+      >
+         
+        FOO_SHOP_TYPE
+         
+      </h3>
+      <i
+        className="fa fa-chevron-right fade"
+      />
+      <p
+        className="flex-none fade"
+      >
+         
+         
+      </p>
+    </div>
+  </div>
+  <div
+    className="stage_row layout-row flex-100 layout-align-center"
+  >
+    <div
+      className="layout-row layout-align-start-center"
+    >
+      <div
+        className="line_box layout-row layout-wrap layout-align-center flex-none"
+      >
+        <div
+          className="line flex-none"
+        />
+        <div
+          className="stage_box flex-none layout-column layout-align-start-center"
+          key="1"
+        >
+          <div
+            className="wrapper_shop_stage_current"
+          >
+            <div
+              className="shop_stage_current flex-none layout-column layout-align-center-center"
+            >
+              <h3
+                className="flex-none"
+              >
+                 
+                1
+                 
+              </h3>
+            </div>
+            <div
+              className="shop_stage_current_border"
+            />
+          </div>
+          <p
+            className="flex-none stage_text"
+          >
+            Choose shipment type
+          </p>
+        </div>
+        <div
+          className="stage_box flex-none layout-column layout-align-start-center"
+          key="2"
+        >
+          <div
+            className="shop_stage_yet layout-column layout-align-center-center"
+          >
+            <h3
+              className="flex-none"
+            >
+               
+              2
+               
+            </h3>
+          </div>
+          <p
+            className="flex-none stage_text"
+          >
+            Shipment Details
+          </p>
+        </div>
+        <div
+          className="stage_box flex-none layout-column layout-align-start-center"
+          key="3"
+        >
+          <div
+            className="shop_stage_yet layout-column layout-align-center-center"
+          >
+            <h3
+              className="flex-none"
+            >
+               
+              3
+               
+            </h3>
+          </div>
+          <p
+            className="flex-none stage_text"
+          >
+            Choose Offer
+          </p>
+        </div>
+        <div
+          className="stage_box flex-none layout-column layout-align-start-center"
+          key="4"
+        >
+          <div
+            className="shop_stage_yet layout-column layout-align-center-center"
+          >
+            <h3
+              className="flex-none"
+            >
+               
+              4
+               
+            </h3>
+          </div>
+          <p
+            className="flex-none stage_text"
+          >
+            Final Details
+          </p>
+        </div>
+        <div
+          className="stage_box flex-none layout-column layout-align-start-center"
+          key="5"
+        >
+          <div
+            className="shop_stage_yet layout-column layout-align-center-center"
+          >
+            <h3
+              className="flex-none"
+            >
+               
+              5
+               
+            </h3>
+          </div>
+          <p
+            className="flex-none stage_text"
+          >
+            Booking Confirmation
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

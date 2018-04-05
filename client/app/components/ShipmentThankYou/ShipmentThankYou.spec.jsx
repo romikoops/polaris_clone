@@ -17,7 +17,6 @@ const propsBase = {
   user
 }
 
-// eslint-disable-next-line
 test('shallow rendering', () => {
   expect(shallow(<ShipmentThankYou {...propsBase} />)).toMatchSnapshot()
 })
