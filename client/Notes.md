@@ -384,3 +384,6 @@ Small component, skip testing
 
 [X] Test complete
 
+## Tooltip
+
+[X] Test complete
