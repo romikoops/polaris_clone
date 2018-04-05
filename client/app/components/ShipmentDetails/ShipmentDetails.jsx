@@ -362,14 +362,23 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    const { shipment } = this.state
-    const loadType = camelize(shipment.load_type)
-    const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
-    if (errorIdx > -1) {
-      this.setState({ nextStageAttempt: true })
-      ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+    if (this.state.aggregated) {
+      const test = false
+      if (test) {
+        this.setState({ nextStageAttempt: true })
 
-      return
+        return
+      }
+    } else {
+      const { shipment } = this.state
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+      if (errorIdx > -1) {
+        this.setState({ nextStageAttempt: true })
+        ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+
+        return
+      }
     }
 
     const data = { shipment: this.state.shipment }
