@@ -16,6 +16,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
+import { ShipmentAggregatedCargo } from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
@@ -441,7 +442,18 @@ export class ShipmentDetails extends Component {
     const { theme, scope } = tenant.data
     let cargoDetails
     if (!shipmentData.shipment) return ''
-    if (shipmentData.shipment.load_type === 'container') {
+
+    if (this.state.aggregated) {
+      cargoDetails = (
+        <ShipmentAggregatedCargo
+          aggregatedCargo={this.state.aggregatedCargo}
+          handleDelta={this.handleAggregatedCargoChange}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+        />
+      )
+    } else if (shipmentData.shipment.load_type === 'container') {
       cargoDetails = (
         <ShipmentContainers
           containers={this.state.containers}
@@ -454,8 +466,7 @@ export class ShipmentDetails extends Component {
           toggleModal={name => this.toggleModal(name)}
         />
       )
-    }
-    if (shipmentData.shipment.load_type === 'cargo_item') {
+    } else if (shipmentData.shipment.load_type === 'cargo_item') {
       cargoDetails = (
         <ShipmentCargoItems
           cargoItems={this.state.cargoItems}
