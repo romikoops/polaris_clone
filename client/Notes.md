@@ -323,4 +323,22 @@ Basic snapshot test
 
 ## ShipmentSummaryBox
 
-Test cannot proceed due to static method is `undefined` issue
+Test cannot proceed due to static method is `undefined` issue. 
+
+Even using `Sinon` didn't help and only workable solution is the two static methods to be moved outside of the component as separate functions.
+
+## ShipmentThankYou
+
+Snapshot test
+
+! `props.setStage` is left untested as it is unclear what this code does:
+
+`
+componentDidMount () {
+  const { setStage } = this.props
+  setStage(6)
+  window.scrollTo(0, 0)
+}
+`
+
+Deconstruction of `props` seems unnecessary.
