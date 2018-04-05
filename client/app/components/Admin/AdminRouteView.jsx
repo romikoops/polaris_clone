@@ -189,7 +189,7 @@ export class AdminRouteView extends Component {
             {editNotes ? (
               <NotesWriter theme={theme} targetId={itinerary.id} />
             ) : (
-              <NotesRow notes={notes} />
+              <NotesRow notes={notes} theme={theme} />
             )}
           </div>
         </div>

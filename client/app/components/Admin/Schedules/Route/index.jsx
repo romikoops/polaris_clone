@@ -160,7 +160,6 @@ class AdminSchedulesRoute extends Component {
     // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        {uploadStatus}
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
@@ -252,6 +251,7 @@ class AdminSchedulesRoute extends Component {
     )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >

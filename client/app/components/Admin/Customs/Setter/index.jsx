@@ -286,7 +286,7 @@ export class AdminCustomsSetter extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-
+    const dnrKeys = ['currency', 'key', 'name']
     const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
@@ -295,79 +295,83 @@ export class AdminCustomsSetter extends Component {
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []
+
       Object.keys(charges[direction][key]).forEach((chargeKey) => {
-        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className={`flex-95 layout-row ${styles.editor_input}`}>
-              <input
-                type="number"
-                value={charges[direction][key][chargeKey]}
-                onChange={this.handleChange}
-                name={`${direction}-${key}-${chargeKey}`}
-              />
-            </div>
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">
-              {charges[direction][key][chargeKey]} {charges[direction][key].currency}
-            </p>
-          </div>)
-        } else if (chargeKey === 'rate_basis') {
-          cells.push(<div
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <NamedSelect
-              name={`${direction}-${key}-${chargeKey}`}
-              classes={`${styles.select}`}
-              value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
-              options={rateOpts}
-              className="flex-100"
-              onChange={this.handleSelect}
-            />
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
-          </div>)
-        } else if (chargeKey === 'currency') {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className="flex-95 layout-row">
+        if (!dnrKeys.includes(chargeKey)) {
+          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                <input
+                  type="number"
+                  value={charges[direction][key][chargeKey]}
+                  onChange={this.handleChange}
+                  name={`${direction}-${key}-${chargeKey}`}
+                />
+              </div>
+            </div>)
+            viewCells.push(<div
+              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <p className="flex">
+                {charges[direction][key][chargeKey]} {charges[direction][key].currency}
+              </p>
+            </div>)
+          } else if (chargeKey === 'rate_basis') {
+            cells.push(<div
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
               <NamedSelect
-                name={`${direction}-${key}-currency`}
+                name={`${direction}-${key}-${chargeKey}`}
                 classes={`${styles.select}`}
-                value={selectOptions ? selectOptions[direction][key].currency : ''}
-                options={currencyOpts}
+                value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
+                options={rateOpts}
                 className="flex-100"
                 onChange={this.handleSelect}
               />
-            </div>
-          </div>)
+            </div>)
+            viewCells.push(<div
+              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
+            </div>)
+          } else if (chargeKey === 'currency') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <div className="flex-95 layout-row">
+                <NamedSelect
+                  name={`${direction}-${key}-currency`}
+                  classes={`${styles.select}`}
+                  value={selectOptions ? selectOptions[direction][key].currency : ''}
+                  options={currencyOpts}
+                  className="flex-100"
+                  onChange={this.handleSelect}
+                />
+              </div>
+            </div>)
+          }
         }
       })
+
       panel.push(<div
         key={key}
         className="

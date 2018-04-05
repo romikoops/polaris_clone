@@ -28,7 +28,7 @@ Rails.application.routes.draw do
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
-
+      
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create, :destroy]
       post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
@@ -44,7 +44,7 @@ Rails.application.routes.draw do
       get "itineraries/:id/layovers", to: "schedules#layovers"
       get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
-      resources :clients, only: [:index, :show, :create]
+      resources :clients, only: [:index, :show, :create, :destroy]
 
       resources :pricings, only: [:index]
       post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_main_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
@@ -92,7 +92,7 @@ Rails.application.routes.draw do
       resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
       post "locations/:location_id/edit", to: "user_locations#edit"
     end
-
+    post "notes/fetch", to: "notes#get_notes"
     resources :shipments, only: [:index, :new, :show, :create] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking

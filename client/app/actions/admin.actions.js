@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux'
 import { adminConstants } from '../constants/admin.constants'
 import { adminService } from '../services/admin.service'
-import { alertActions } from './'
+import { alertActions, documentActions } from './'
 // import { Promise } from 'es6-promise-promise';
 
 function getHubs (redirect) {
@@ -682,6 +682,7 @@ function autoGenSchedules (data) {
       (schedData) => {
         dispatch(alertActions.success('Generating Schedules successful'))
         dispatch(success(schedData))
+        dispatch(documentActions.setStats(schedData.data.stats))
       },
       (error) => {
         // ;
@@ -704,6 +705,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function successFinished (shipmentData) {
+    return {
+      type: adminConstants.FINISHED_SHIPMENT_SUCCESS,
+      payload: shipmentData
+    }
+  }
   function successDeny (shipmentData) {
     return {
       type: adminConstants.DENY_SHIPMENT_SUCCESS,
@@ -721,6 +728,8 @@ function confirmShipment (id, action, redirect) {
 
         if (action === 'accept') {
           dispatch(successAccept(shipmentData))
+        } else if (action === 'finished') {
+          dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
           dispatch(getShipments(false))
@@ -1036,6 +1045,35 @@ function deleteTrip (id, redirect) {
         dispatch(alertActions.success('Deleting Trip successful'))
         if (redirect) {
           dispatch(push(`/admin/schedules`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function deleteClient (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_CLIENT_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_CLIENT_SUCCESS, payload: id }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_CLIENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteClient(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Client successful'))
+        if (redirect) {
+          dispatch(push(`/admin/clients`))
         }
         dispatch(success(data))
       },
@@ -1397,6 +1435,7 @@ export const adminActions = {
   editHub,
   loadItinerarySchedules,
   deleteTrip,
+  deleteClient,
   saveItineraryNotes
 }
 

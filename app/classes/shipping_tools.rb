@@ -217,6 +217,7 @@ module ShippingTools
     shipment = Shipment.find(params[:shipment_id])
     shipment.status = "requested"
     shipment.booking_placed_at = DateTime.now
+    byebug
     shipment.save!
     message = {
       title: 'Booking Received',

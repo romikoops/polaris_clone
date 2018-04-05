@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import styles from './AdminShipmentRow.scss'
 import { moment } from '../../constants'
 import { gradientTextGenerator } from '../../helpers'
+import AdminPromptConfirm from './Prompt/Confirm'
 
 export class AdminShipmentRow extends Component {
   static switchIcon (sched, style) {
@@ -45,6 +46,9 @@ export class AdminShipmentRow extends Component {
 
   constructor (props) {
     super(props)
+    this.state = {
+      confirm: false
+    }
     this.selectShipment = this.selectShipment.bind(this)
     this.handleDeny = this.handleDeny.bind(this)
     this.handleAccept = this.handleAccept.bind(this)
@@ -68,15 +72,25 @@ export class AdminShipmentRow extends Component {
   handleIgnore () {
     const { shipment, handleAction } = this.props
     handleAction(shipment.id, 'ignore')
+    this.closeConfirm()
   }
 
   handleEdit () {
     const { shipment, handleSelect } = this.props
     handleSelect(shipment)
   }
+  confirmDelete () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
 
   render () {
     const { theme, shipment, hubs } = this.props
+    const { confirm } = this.state
     if (shipment.schedule_set.length < 1) {
       return ''
     }
@@ -119,16 +133,31 @@ export class AdminShipmentRow extends Component {
           </div>
         </div>
 
-        <div className="flex-30 layout-row layout-align-center-center" onClick={this.handleIgnore}>
+        <div
+          className="flex-30 layout-row layout-align-center-center"
+          onClick={() => this.confirmDelete()}
+        >
           <div className={`flex-none layout-row layout-align-center-center ${styles.deny}`}>
             <i className="fa fa-close" />
           </div>
         </div>
       </div>
     )
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text={`This will reject the requested shipment ${shipment.imc_reference}. This shipment can be still be recovered after being ignored`}
+        confirm={() => this.handleIgnore()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
 
     return (
       <div key={v4()} className={`flex-100 layout-row pointy ${styles.route_result}`}>
+        {confimPrompt}
         <div
           className={`${styles.port_box} flex-25 layout-row layout-wrap`}
           onClick={this.selectShipment}
@@ -203,7 +232,9 @@ export class AdminShipmentRow extends Component {
           <div className="flex-100 layout-row layout-align-none-center">
             <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}>{shipment.has_pre_carriage ? 'Pickup Date' : 'Closing Date'}</h4>
+                <h4 className={styles.date_title}>
+                  {shipment.has_pre_carriage ? 'Pickup Date' : 'Closing Date'}
+                </h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>

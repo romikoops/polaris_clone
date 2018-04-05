@@ -117,6 +117,10 @@ export class AdminShipmentView extends Component {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'accept')
   }
+  handleFinished () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'finished')
+  }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
   }
@@ -186,7 +190,8 @@ export class AdminShipmentView extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
+      resultArray
+        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
     })
     return resultArray
   }
@@ -237,7 +242,8 @@ export class AdminShipmentView extends Component {
       cargoItems,
       containers,
       schedules,
-      locations
+      locations,
+      accountHolder
     } = shipmentData
     const {
       newTotal, showEditPrice, currency, showEditTime, newTimes, collapser
@@ -287,6 +293,48 @@ export class AdminShipmentView extends Component {
     const nArray = []
     let cargoView = []
     const docView = []
+    const accountHolderBox = accountHolder ? (
+      <div className="flex-50 layout-row" style={{ marginLeft: '2.5%' }}>
+        <div className="flex-15 layout-column layout-align-start-center">
+          <i className={`${styles.icon} fa fa-id-card-o flex-none`} style={textStyle} />
+        </div>
+        <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100">
+            <p className="flex-100">Account Holder</p>
+          </div>
+          <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-address-book-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">
+                {accountHolder.first_name} {accountHolder.last_name}
+              </p>
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-building-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.company_name}</p>{' '}
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-envelope-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.email}</p>{' '}
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-mobile flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.phone}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      ''
+    )
     let shipperContact = ''
     let consigneeContact = ''
     if (contacts) {
@@ -403,7 +451,7 @@ export class AdminShipmentView extends Component {
     if (documents) {
       documents.forEach((doc) => {
         docChecker[doc.doc_type] = true
-        docView.push(<FileTile key={doc.id} doc={doc} theme={theme} adminDispatch={adminDispatch} isAdmin />)
+        docView.push(<FileTile doc={doc} theme={theme} adminDispatch={adminDispatch} isAdmin />)
       })
     }
     Object.keys(docChecker).forEach((key) => {
@@ -418,7 +466,7 @@ export class AdminShipmentView extends Component {
         </div>)
       }
     })
-    const acceptDeny =
+    const actionsBox =
       shipment && shipment.status === 'requested' ? (
         <div className="flex-100 layout-row layout-align-space-between-center">
           <div className="flex-40 layout-row layout-align-start-center">
@@ -447,8 +495,25 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
       ) : (
-        ''
+        <div className="flex-100 layout-row layout-align-space-between-center">
+          <div className="flex-40 layout-row layout-align-start-center">
+            <h4 className="flex-none letter_3">Actions</h4>
+          </div>
+          <div className="flex-30 layout-row layout-align-end-center">
+            <div className="flex-none layout-row">
+              <RoundButton
+                theme={theme}
+                size="small"
+                text="Finished"
+                iconClass="fa-check"
+                active
+                handleNext={() => this.handleFinished()}
+              />
+            </div>
+          </div>
+        </div>
       )
+    const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const saveSection = (
       <div className={`${styles.time_edit_button}`}>
@@ -667,7 +732,9 @@ export class AdminShipmentView extends Component {
               </div>
 
               <div className="flex-100 layout-row layout-align-center-center">
-                <div className="flex-none content_width_booking layout-row layout-align-center-center">
+                <div
+                  className="flex-none content_width_booking layout-row layout-align-center-center"
+                >
                   <IncotermRow
                     theme={theme}
                     preCarriage={shipment.has_pre_carriage}
@@ -690,9 +757,14 @@ export class AdminShipmentView extends Component {
           content={
             <div className="flex-100 layout-row layout-wrap">
               <div
-                className={
-                  `${styles.b_summ_top} flex-100 ` + 'layout-row layout-align-space-around-center'
-                }
+                className={`layout-row layout-align-start-center ${styles.b_summ_top} flex-100 `}
+              >
+                {accountHolderBox}
+              </div>
+              <div
+                className={`layout-row layout-align-space-around-center ${
+                  styles.b_summ_top
+                } flex-100 `}
               >
                 {shipperContact}
                 {consigneeContact}

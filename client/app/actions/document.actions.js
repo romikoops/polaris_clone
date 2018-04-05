@@ -139,6 +139,10 @@ function uploadLocalCharges (file) {
     )
   }
 }
+
+function setStats (stats) {
+  return { type: documentConstants.UPLOAD_SUCCESS, payload: stats }
+}
 function closeViewer () {
   return { type: documentConstants.CLOSE_VIEWER, payload: true }
 }
@@ -151,6 +155,7 @@ export const documentActions = {
   closeViewer,
   clearLoading,
   uploadHubs,
+  setStats,
   uploadLocalCharges,
   uploadSchedules,
   uploadItinerarySchedules

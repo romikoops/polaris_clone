@@ -17,7 +17,7 @@ import { shipmentActions } from '../../actions/shipment.actions'
 import bookingSummaryActions from '../../actions/bookingSummary.actions'
 import { ShipmentThankYou } from '../../components/ShipmentThankYou/ShipmentThankYou'
 import BookingSummary from '../../components/BookingSummary/BookingSummary'
-import getShipmentData from './getShipmentData'
+import stageActions from './stageActions'
 
 class Shop extends Component {
   static statusRequested (props) {
@@ -114,6 +114,30 @@ class Shop extends Component {
       showMessages: !this.state.showMessages
     })
   }
+  determineForwardFunction (stage) {
+    const { bookingData, shipmentDispatch } = this.props
+    const { request } = bookingData
+    const req = request[`stage${stage}`]
+    switch (stage) {
+      case 1:
+        shipmentDispatch.newShipment(req)
+        break
+      case 2:
+        shipmentDispatch.setShipmentDetails(req, true)
+        break
+      case 3:
+        shipmentDispatch.setShipmentRoute(req)
+        break
+      case 4:
+        shipmentDispatch.setShipmentContacts(req)
+        break
+      case 5:
+        shipmentDispatch.acceptShipment(req)
+        break
+      default:
+        break
+    }
+  }
 
   selectShipmentRoute (obj) {
     const { shipmentDispatch, bookingSummaryDispatch, bookingData } = this.props
@@ -152,7 +176,7 @@ class Shop extends Component {
     const loadingScreen = loading || fakeLoading ? <Loading theme={theme} /> : ''
     const { req } = this.state
 
-    const shipmentData = getShipmentData(response, stageTracker.stage)
+    const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
 
     return (
       <div className="layout-row flex-100 layout-wrap">
@@ -160,12 +184,7 @@ class Shop extends Component {
         {loadingScreen}
         <Header
           theme={this.props.theme}
-          component={
-            <BookingSummary
-              theme={theme}
-              shipmentData={shipmentData}
-            />
-          }
+          component={<BookingSummary theme={theme} shipmentData={shipmentData} />}
           showMessages={this.toggleShowMessages}
           showRegistration={this.state.showRegistration}
           req={req}
@@ -178,6 +197,8 @@ class Shop extends Component {
           currentStage={this.state.stageTracker.stage}
           setStage={this.selectShipmentStageAndGo}
           disabledClick={Shop.statusRequested(this.props)}
+          goForward={() => this.determineForwardFunction(stageTracker.stage)}
+          hasNextStage={stageActions.hasNextStage(response, stageTracker.stage)}
         />
         <Route
           exact

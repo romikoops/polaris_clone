@@ -7,7 +7,8 @@ class Shipment < ApplicationRecord
     pending
     confirmed
     declined
-    ignored
+    ignored,
+    finished
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   DIRECTIONS = %w(import export)
@@ -203,6 +204,11 @@ class Shipment < ApplicationRecord
 
   def accept!
     self.update_attributes(status: "confirmed")
+    self.save!
+  end
+
+  def finished!
+    self.update_attributes(status: "finished")
     self.save!
   end
 

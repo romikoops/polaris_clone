@@ -10,6 +10,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { AdminHubFees } from './Hub/Fees'
 import { AdminCustomsSetter } from './Customs/Setter'
+import AdminPromptConfirm from './Prompt/Confirm'
 
 export class AdminHubView extends Component {
   constructor (props) {
@@ -39,11 +40,6 @@ export class AdminHubView extends Component {
   getItineraryFromLayover (id) {
     const { routes } = this.props.hubData
     return routes.filter(x => x.id === id)[0]
-  }
-  deleteHub () {
-    const { hubData, adminActions } = this.props
-    const { hub } = hubData
-    adminActions.deleteHub(hub.id, true)
   }
   toggleHubActive () {
     const { hubData, adminActions } = this.props
@@ -80,6 +76,21 @@ export class AdminHubView extends Component {
       })
     }
   }
+  deleteHub (id) {
+    const { hubData, adminActions } = this.props
+    const { hub } = hubData
+    adminActions.deleteHub(hub.id, true)
+    this.closeConfirm()
+  }
+  confirmDelete () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+
   toggleEdit () {
     const { editing } = this.state
     if (!editing) {
@@ -129,7 +140,8 @@ export class AdminHubView extends Component {
       currentFee,
       currentCustoms,
       editing,
-      editedHub
+      editedHub,
+      confirm
     } = this.state
     if (!hubData) {
       return ''
@@ -157,6 +169,17 @@ export class AdminHubView extends Component {
         />)
       }
     })
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text={`This will delete the hub ${hub.name} and all related data`}
+        confirm={() => this.deleteHub(hub.id)}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const activate = (
       <div className={`${styles.action_btn} flex-none layout-row`}>
         <RoundButton
@@ -198,7 +221,7 @@ export class AdminHubView extends Component {
           theme={theme}
           size="small"
           text="Delete"
-          handleNext={() => this.deleteHub()}
+          handleNext={() => this.confirmDelete()}
           iconClass="fa-trash"
         />
       </div>
@@ -443,6 +466,7 @@ export class AdminHubView extends Component {
           </div>
           {schedArr}
         </div>
+        {confimPrompt}
       </div>
     )
   }

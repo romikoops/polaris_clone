@@ -56,8 +56,19 @@ class Admin::ShipmentsController < ApplicationController
       @documents << tmp
     end
     locations = {origin: @shipment.origin, destination: @shipment.destination}
-    p @shipment.id
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes, locations: locations, cargoItemTypes: cargo_item_types}
+    account_holder = @shipment.user
+    resp = {
+      shipment: @shipment,
+      cargoItems: @cargo_items,
+      containers: @containers,
+      contacts: @contacts,
+      documents: @documents,
+      schedules: @schedules,
+      hsCodes: hsCodes,
+      locations: locations,
+      cargoItemTypes: cargo_item_types,
+      accountHolder: account_holder
+    }
     response_handler(resp)
   end
 
@@ -108,7 +119,7 @@ class Admin::ShipmentsController < ApplicationController
         shipper_confirmation_email(@shipment.user, @shipment)
         message = {
           title: 'Booking Accepted',
-          message: "Your booking has been accepted! If you have any further questions or edis to your booking please contact the support department.",
+          message: "Your booking has been accepted! If you have any further questions or edits to your booking please contact the support department.",
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
@@ -117,7 +128,7 @@ class Admin::ShipmentsController < ApplicationController
         @shipment.decline!
         message = {
           title: 'Booking Declined',
-          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and gods type. For more info contact us through the support channels.",
+          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and goods type. For more info contact us through the support channels.",
           shipmentRef: @shipment.imc_reference
         }
         add_message_to_convo(@shipment.user, message, true)
@@ -125,6 +136,9 @@ class Admin::ShipmentsController < ApplicationController
       when "ignore"
         @shipment.ignore!
         response_handler({})
+      when "finished"
+        @shipment.finished!
+        response_handler(@shipment)
       else
         raise "Unknown action!"
       end
