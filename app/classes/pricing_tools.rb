@@ -32,7 +32,7 @@ module PricingTools
       return_h[:number_of_items] += cargo_unit.quantity unless cargo_unit.quantity.nil?
       return_h[:volume]          += cargo_unit.volume   unless cargo_unit.volume.nil?
       
-      return_h[:weight] += cargo_unit.weight || cargo_unit.payload_in_kg * cargo.quantity
+      return_h[:weight]          += (cargo_unit.try(:weight) || cargo_unit.payload_in_kg)
     end
 
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
@@ -60,8 +60,7 @@ module PricingTools
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       return_h[:number_of_items] += cargo_unit.quantity unless cargo_unit.quantity.nil?
       return_h[:volume]          += cargo_unit.volume   unless cargo_unit.volume.nil?
-      
-      return_h[:weight] += cargo_unit.weight || cargo_unit.payload_in_kg * cargo.quantity
+      return_h[:weight]          += (cargo_unit.try(:weight) || cargo_unit.payload_in_kg)
     end
 
     return {} if charge.nil?

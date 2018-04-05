@@ -271,8 +271,9 @@ export class ShipmentDetails extends Component {
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
     } else {
-      cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+      cargoItems[index][suffixName] = value ? +value : 0
     }
+
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -373,6 +374,7 @@ export class ShipmentDetails extends Component {
       const { shipment } = this.state
       const loadType = camelize(shipment.load_type)
       const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+
       if (errorIdx > -1) {
         this.setState({ nextStageAttempt: true })
         ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
