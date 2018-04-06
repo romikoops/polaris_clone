@@ -73,7 +73,7 @@ class Hub < ApplicationRecord
   end
 
   def distance_to(loc)
-    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [self.latitude, self.longitude])
+    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [self.location.latitude, self.location.longitude])
   end
 
   def toggle_hub_status!

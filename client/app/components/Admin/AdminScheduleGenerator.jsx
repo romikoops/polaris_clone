@@ -24,7 +24,6 @@ class AdminScheduleGenerator extends Component {
   }
   constructor (props) {
     super(props)
-    console.log(props)
     this.state = {
       startDate: moment()
         .add(10, 'd')
