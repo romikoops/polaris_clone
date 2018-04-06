@@ -199,6 +199,9 @@ module ExcelTools
           truck_type: 'default'
         )
         trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
+          if !val || !weight_min_row[i]
+            next
+          end
           defaults[i].clone.merge({
             min_value: [weight_min_row[i], row_min_value].max,
             fees: {
@@ -338,6 +341,7 @@ module ExcelTools
       meta_row = first_sheet.row(1)
       currency = meta_row[3]
       base = meta_row[11]
+      fuel_charge = meta_row[13]
       modifier = meta_row[9]
       cbm_ratio = meta_row[7]
       load_meterage_ratio = meta_row[5]
@@ -349,6 +353,9 @@ module ExcelTools
       weight_min_row.shift
       
       header_row.each do |cell|
+         if !cell
+          next
+        end
         min_max_arr = cell.split(" - ")
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
@@ -370,6 +377,7 @@ module ExcelTools
             load_type: load_type,
             currency: currency,
             cbm_ratio: cbm_ratio,
+            fuel_charge: fuel_charge,
             load_meterage_ratio: load_meterage_ratio,
             base: base
           }
@@ -429,6 +437,9 @@ module ExcelTools
       weight_min_row.shift
       
       header_row.each do |cell|
+        if !cell
+          next
+        end
         min_max_arr = cell.split(" - ")
         defaults.push({min_weight: min_max_arr[0].to_i, max_weight: min_max_arr[1].to_i, value: nil, min_value: nil})
       end
@@ -458,6 +469,9 @@ module ExcelTools
         end
        
         row_data.each_with_index do |val, index|
+          if !val || !weight_min_row[index]
+            next
+          end
           tmp = defaults[index].clone
           if row_min_value < weight_min_row[index]
             min_value = weight_min_row[index]
@@ -474,6 +488,7 @@ module ExcelTools
             }
             
           }
+          
           if  direction == 'export'
             tmp[:fees][:congestion] = {
               value: 15,

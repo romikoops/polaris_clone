@@ -28,7 +28,6 @@ class Admin::ItinerariesController < ApplicationController
   end
   def edit_notes
     itinerary = Itinerary.find(params[:id])
-    byebug
     itinerary.notes.create!(body: params[:notes][:body], header: params[:notes][:header], level: params[:notes][:level])
     response_handler(itinerary)
   end
