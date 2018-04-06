@@ -7,7 +7,8 @@ class Shipment < ApplicationRecord
     pending
     confirmed
     declined
-    ignored
+    ignored,
+    finished
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
   DIRECTIONS = %w(import export)
@@ -206,6 +207,11 @@ class Shipment < ApplicationRecord
     self.save!
   end
 
+  def finished!
+    self.update_attributes(status: "finished")
+    self.save!
+  end
+
   def decline!
     self.update_attributes(status: "declined")
     self.save!
@@ -259,8 +265,8 @@ class Shipment < ApplicationRecord
   def self.test_email
     user = User.find_by_email("demo@demo.com")
     shipment = user.shipments.find_by(status: "requested")
-    ShipmentMailer.tenant_notification(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_now
+    ShipmentMailer.shipper_notification(user, shipment).deliver_now
     shipper_confirmation_email(user, shipment)
   end
   def self.update_hubs_on_shipments

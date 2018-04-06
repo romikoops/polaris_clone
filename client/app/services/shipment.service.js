@@ -76,6 +76,15 @@ function setShipmentContacts (data) {
   const url = `${BASE_URL}/shipments/${data.shipment.id}/update`
   return fetch(url, requestOptions).then(handleResponse)
 }
+function getNotes (noteIds) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(noteIds)
+  }
+  const url = `${BASE_URL}/notes/fetch`
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 function uploadDocument (doc, type, url) {
   const formData = new FormData()
@@ -98,6 +107,15 @@ function acceptShipment (id) {
   const url = `${BASE_URL}/shipments/${id}/confirm_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
+function updateCurrency (currency) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ currency })
+  }
+  const url = `${BASE_URL}/currencies/set`
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 function deleteDocument (documentId) {
   const requestOptions = {
@@ -117,7 +135,9 @@ export const shipmentService = {
   getStoredShipment,
   setShipmentContacts,
   uploadDocument,
-  acceptShipment
+  acceptShipment,
+  updateCurrency,
+  getNotes
 }
 
 export default shipmentService

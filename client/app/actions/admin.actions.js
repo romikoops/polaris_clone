@@ -1,7 +1,7 @@
 import { push } from 'react-router-redux'
 import { adminConstants } from '../constants/admin.constants'
 import { adminService } from '../services/admin.service'
-import { alertActions } from './'
+import { alertActions, documentActions } from './'
 // import { Promise } from 'es6-promise-promise';
 
 function getHubs (redirect) {
@@ -682,6 +682,7 @@ function autoGenSchedules (data) {
       (schedData) => {
         dispatch(alertActions.success('Generating Schedules successful'))
         dispatch(success(schedData))
+        dispatch(documentActions.setStats(schedData.data.stats))
       },
       (error) => {
         // ;
@@ -704,6 +705,12 @@ function confirmShipment (id, action, redirect) {
       payload: shipmentData
     }
   }
+  function successFinished (shipmentData) {
+    return {
+      type: adminConstants.FINISHED_SHIPMENT_SUCCESS,
+      payload: shipmentData
+    }
+  }
   function successDeny (shipmentData) {
     return {
       type: adminConstants.DENY_SHIPMENT_SUCCESS,
@@ -721,6 +728,8 @@ function confirmShipment (id, action, redirect) {
 
         if (action === 'accept') {
           dispatch(successAccept(shipmentData))
+        } else if (action === 'finished') {
+          dispatch(successFinished(shipmentData))
         } else {
           dispatch(successDeny(shipmentData))
           dispatch(getShipments(false))
@@ -1047,6 +1056,35 @@ function deleteTrip (id, redirect) {
   }
 }
 
+function deleteClient (id, redirect) {
+  function request (deleted) {
+    return { type: adminConstants.DELETE_CLIENT_REQUEST, payload: deleted }
+  }
+  function success (deleted) {
+    return { type: adminConstants.DELETE_CLIENT_SUCCESS, payload: id }
+  }
+  function failure (error) {
+    return { type: adminConstants.DELETE_CLIENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.deleteClient(id).then(
+      (data) => {
+        dispatch(alertActions.success('Deleting Client successful'))
+        if (redirect) {
+          dispatch(push(`/admin/clients`))
+        }
+        dispatch(success(data))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function documentAction (docId, action) {
   function request (docData) {
     return { type: adminConstants.DOCUMENT_ACTION_REQUEST, payload: docData }
@@ -1308,6 +1346,32 @@ function uploadTrucking (url, file, direction) {
   }
 }
 
+function newHubImage (id, file) {
+  function request (hubData) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPLOAD_HUB_IMAGE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.newHubImage(id, file).then(
+      (data) => {
+        dispatch(success(data))
+        dispatch(alertActions.success('Uploading Image successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
 }
@@ -1323,6 +1387,7 @@ function goTo (path) {
 }
 export const adminActions = {
   getHubs,
+  newHubImage,
   getItineraries,
   updateServiceCharge,
   updatePricing,
@@ -1370,6 +1435,7 @@ export const adminActions = {
   editHub,
   loadItinerarySchedules,
   deleteTrip,
+  deleteClient,
   saveItineraryNotes
 }
 

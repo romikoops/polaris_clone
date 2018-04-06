@@ -1,6 +1,4 @@
 aws:
-  access_key_id: <% ENV["AWS_KEY"] %>
-  secret_access_key: <% ENV["AWS_SECRET"] %>
   receive_message:
     attribute_names:
       - ApproximateReceiveCount
@@ -11,3 +9,4 @@ concurrency: 25
 pidfile: tmp/pids/shoryuken.pid
 queues:
   - https://sqs.eu-central-1.amazonaws.com/003688427525/excel_worker
+  - https://sqs.eu-central-1.amazonaws.com/003688427525/mailers

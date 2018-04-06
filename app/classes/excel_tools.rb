@@ -176,7 +176,7 @@ module ExcelTools
     mongo["truckingQueries"].bulk_write(new_trucking_queries_array)
     return {results: results, stats: stats}
   end
-  def handle_zipcode_sections(rows, user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, currency)
+  def handle_zipcode_sections(rows, user, direction, hub_id, courier_name, load_type, defaults, weight_min_row, meta)
     hub = Hub.find(hub_id)
     courier = Courier.find_or_create_by(name: courier_name)
     rows.each do |row_data|
@@ -188,14 +188,14 @@ module ExcelTools
         trucking_pricing = TruckingPricing.new(
           export: { table: [] },
           import: { table: [] },
-          load_type: load_type,
+          load_type: meta[:load_type],
           load_meterage: {
-            ratio: 1950,
+            ratio:  meta[:load_meterage_ratio],
             height_limit: 130
           },
-          cbm_ratio: 280,
+          cbm_ratio:  meta[:cbm_ratio],
           courier: courier,
-          modifier: 'kg',
+          modifier:  meta[:modifier],
           truck_type: 'default'
         )
         trucking_pricing[direction]["table"] = row_data.map.with_index do |val, i|
@@ -205,13 +205,13 @@ module ExcelTools
               base_rate: {
                 value: val,
                 rate_basis: 'PER_X_KG',
-                currency: currency,
+                currency: meta[:currency],
                 base: 100
               },
               congestion: {
                 value: 15,
                 rate_basis: 'PER_SHIPMENT',
-                currency: currency
+                currency: meta[:currency]
               }
             }
           })
@@ -224,10 +224,10 @@ module ExcelTools
             load_type: load_type,
             truck_type: 'default',
             load_meterage: {
-              ratio: 1850,
+              ratio: meta[:load_meterage_ratio],
               height_limit: 130
             },
-            modifier: 'kg'
+            modifier: meta[:modifier]
           ).ids
           hub_trucking = HubTrucking.where(              
             trucking_destination: trucking_destination,
@@ -335,8 +335,12 @@ module ExcelTools
         
         rows_for_job << tmp_array
       end
-      currency_row = first_sheet.row(1)
-      currency = currency_row[3]
+      meta_row = first_sheet.row(1)
+      currency = meta_row[3]
+      base = meta_row[11]
+      modifier = meta_row[9]
+      cbm_ratio = meta_row[7]
+      load_meterage_ratio = meta_row[5]
       header_row = first_sheet.row(2)
       header_row.shift
       header_row.shift
@@ -359,10 +363,16 @@ module ExcelTools
           hub_id: hub_id,
           courier_name: courier_name,
           load_type: load_type,
-          currency: currency,
           direction: direction,
           user_id: user.id,
-          job_id: job_id
+          job_id: job_id,
+          meta: {
+            load_type: load_type,
+            currency: currency,
+            cbm_ratio: cbm_ratio,
+            load_meterage_ratio: load_meterage_ratio,
+            base: base
+          }
         }
         ExcelWorker.perform_async(worker_obj)
         
@@ -444,7 +454,7 @@ module ExcelTools
         if hub_truckings[0].trucking_pricing_id
           trucking_pricing = hub_truckings[0].trucking_pricing
         else
-          trucking_pricing = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type)
+          trucking_pricing = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: { table: []}, import: { table: []}, load_type: load_type)
         end
        
         row_data.each_with_index do |val, index|
@@ -720,6 +730,7 @@ module ExcelTools
             tmp[:fees][:DLF] = {value: row_data[9], currency: new_pricing[:currency], rate_basis: 'PER_SHIPMENT' }
           end
           ntp[:load_type] = load_type
+          ntp[:tenant_id] = hub.tenant_id
           ntp[direction]["table"] << tmp
           stats[:trucking_pricings][:number_updated] += 1
         end
@@ -821,7 +832,7 @@ module ExcelTools
               hub_truckings[range_key] << hub_trucking
             end
           else
-            trucking_pricings[range_key] = courier.trucking_pricings.create!(export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
+            trucking_pricings[range_key] = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: { table: []}, import: { table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: 'unit')
             trucking_destinations[range_key] = []
             hub_truckings[range_key] = []
             (range_values[0]...range_values[1]).each do |dist|
@@ -1210,22 +1221,26 @@ module ExcelTools
       itinerary = params["itinerary"]
 
       tenant = Tenant.find(current_user.tenant_id)
-     
+     service_level = row[:service_level] ? row[:service_level] : 'default'
       tenant_vehicle = TenantVehicle.find_by(
           tenant_id: user.tenant_id, 
-          mode_of_transport: itinerary.mode_of_transport
+          mode_of_transport: row[:mode_of_transport],
+          name: row[:service_level]
         )
+        if !tenant_vehicle
+          tenant_vehicle =  Vehicle.create_from_name(service_level, row[:mode_of_transport], user.tenant_id)
+        end
       startDate = row[:etd]
       endDate =  row[:eta]
       
       stops = itinerary.stops.order(:index)
       
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id)
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, row[:closing_date])
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
-        stats[:trips][:number_created] = generator_results[:trips]
-        stats[:layovers][:number_created] = generator_results[:layovers]
+        stats[:trips][:number_created] = generator_results[:trips].count
+        stats[:layovers][:number_created] = generator_results[:layovers].count
         return {results: results, stats: stats}
       else
         raise "Route cannot be found!"

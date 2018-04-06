@@ -42,6 +42,21 @@ class Admin::HubsController < ApplicationController
     hub.destroy!
     response_handler({id: params[:hub_id]})
   end
+  def update_image
+    hub = Hub.find(params[:hub_id])
+    file = params[:file]
+    s3 = Aws::S3::Client.new(
+        access_key_id: ENV['AWS_KEY'],
+        secret_access_key: ENV['AWS_SECRET'],
+        region: "eu-central-1"
+      )
+     objKey = 'images/' + hub.tenant_id.to_s + "/" + file.original_filename
+    awsurl = "https://assets.itsmycargo.com/" + objKey
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'public-read')
+    hub.photo = awsurl
+    hub.save!
+    response_handler(hub)
+  end
   def update
     hub = Hub.find(params[:id])
     location = hub.location

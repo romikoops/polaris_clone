@@ -131,7 +131,7 @@ class OfferCalculator
   end
 
   def determine_layovers!
-    delay = @delay ? @delay.to_i : 10
+    delay = @delay ? @delay.to_i : 20
     schedule_obj = {}
     @itineraries.each do |itin|
       

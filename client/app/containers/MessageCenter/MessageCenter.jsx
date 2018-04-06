@@ -13,13 +13,17 @@ class MessageCenter extends Component {
   static transportationIcon (type) {
     let icon = ''
     switch (type) {
-      case 'ocean': icon = 'fa-ship'
+      case 'ocean':
+        icon = 'fa-ship'
         break
-      case 'air': icon = 'fa-plane'
+      case 'air':
+        icon = 'fa-plane'
         break
-      case 'truck': icon = 'fa-truck'
+      case 'truck':
+        icon = 'fa-truck'
         break
-      default: break
+      default:
+        break
     }
     return icon
   }
@@ -33,6 +37,18 @@ class MessageCenter extends Component {
     this.filterHubs = this.filterHubs.bind(this)
     this.filterShipments = this.filterShipments.bind(this)
     this.setSelected = this.setSelected.bind(this)
+  }
+  componentWillMount () {
+    if (!this.props.shipments || (this.props.shipments && this.props.shipments.length === 0)) {
+      const { messageDispatch, conversations } = this.props
+      messageDispatch.getShipments(Object.keys(conversations))
+    }
+  }
+  componentWillReceiveProps (nextProps) {
+    if (!nextProps.shipments && !nextProps.loading) {
+      const { messageDispatch, conversations } = this.props
+      messageDispatch.getShipments(Object.keys(conversations))
+    }
   }
   setSelected (key) {
     this.setState({ key })
@@ -63,32 +79,37 @@ class MessageCenter extends Component {
     return hub.filter(name => name !== '')
   }
   filterShipments (convoKey) {
-    const { shipments } = this.props.users.dashboard
-    const { messageDispatch } = this.props
+    const { shipments, messageDispatch } = this.props
     console.log(shipments)
-    let tmpShipment = {}
+    let tmpShipment = []
     let shipment = {}
     if (shipments && convoKey) {
-      if (shipments.requested.length > 0) {
-        tmpShipment = shipments.requested.filter(shp => (shp.imc_reference === convoKey))
+      if (shipments.requested && shipments.requested.length > 0) {
+        tmpShipment = shipments.requested.filter(shp => shp.imc_reference === convoKey)
       }
-      if (shipments.open.length > 0) {
-        tmpShipment = shipments.open.filter(shp => (shp.imc_reference === convoKey))
+      if (shipments.open && shipments.open.length > 0) {
+        tmpShipment = shipments.open.filter(shp => shp.imc_reference === convoKey)
       }
-      if (shipments.finished.length > 0) {
-        tmpShipment = shipments.finished.filter(shp => (shp.imc_reference === convoKey))
+      if (shipments.finished && shipments.finished.length > 0) {
+        tmpShipment = shipments.finished.filter(shp => shp.imc_reference === convoKey)
       }
     }
-    if (shipments.requested.length < 1 &&
-        shipments.open.length < 1 &&
-        shipments.finished.length < 1) {
+    if (
+      shipments &&
+      shipments.requested &&
+      shipments.requested.length < 1 &&
+      shipments.open &&
+      shipments.finished &&
+      shipments.open.length < 1 &&
+      shipments.finished.length < 1
+    ) {
       console.log('dsfds')
       const ld = messageDispatch.getShipment(convoKey)
       console.log(ld)
       console.log('sdf')
     }
     tmpShipment.length > 0
-      ? shipment = {
+      ? (shipment = {
         convoKey,
         transportType: tmpShipment[0].schedule_set[0].mode_of_transport,
         icon: MessageCenter.transportationIcon(tmpShipment[0].schedule_set[0].mode_of_transport),
@@ -98,9 +119,9 @@ class MessageCenter extends Component {
         etd: moment(tmpShipment.planned_et).format('YYYY-MM-DD'),
         totalPrice: Number.parseFloat(tmpShipment[0].total_price, 10).toFixed(2),
         status: tmpShipment[0].status
-      }
-      : shipment = {}
-    console.log(shipments)
+      })
+      : (shipment = {})
+    console.log(shipment)
     return shipment
   }
   render () {
@@ -118,7 +139,7 @@ class MessageCenter extends Component {
       return ''
     }
     let convoKeys = {}
-    convoKeys = Object.keys(conversations)
+    convoKeys = conversations ? Object.keys(conversations) : []
 
     const convos = convoKeys.map((ms) => {
       const { key } = this.state
@@ -168,7 +189,9 @@ class MessageCenter extends Component {
           <div className="flex-10 width_100 layout-row layout-align-space-between-center">
             <h3 className="flex-none letter_3" style={textStyle}>
               Message Center:
-              <p>{user.last_name}, {user.first_name}</p>
+              <p>
+                {user.last_name}, {user.first_name}
+              </p>
             </h3>
             <div
               className="flex-10 layout-row layout-align-center-center"
@@ -178,10 +201,16 @@ class MessageCenter extends Component {
             </div>
           </div>
           <div className="flex-90 width_100 layout-row layout-align-start-start">
-            <div className={`flex-30 layout-row layout-wrap layout-align-center-start scroll ${styles.convo_list}`}>
+            <div
+              className={`flex-30 layout-row layout-wrap layout-align-center-start scroll ${
+                styles.convo_list
+              }`}
+            >
               {convos}
             </div>
-            <div className={`flex-70 layout-column layout-align-start-start ${styles.message_list}`} >
+            <div
+              className={`flex-70 layout-column layout-align-start-start ${styles.message_list}`}
+            >
               {messageView}
             </div>
           </div>
@@ -207,13 +236,15 @@ MessageCenter.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   shipment: PropTypes.any,
   // eslint-disable-next-line react/forbid-prop-types
-  conversations: PropTypes.object
+  conversations: PropTypes.object,
+  shipments: PropTypes.arrayOf(PropTypes.object)
 }
 
 MessageCenter.defaultProps = {
   theme: null,
   user: null,
   tenant: null,
+  shipments: [],
   loading: false,
   clients: null,
   shipment: null,
@@ -227,7 +258,7 @@ function mapStateToProps (state) {
   } = state
   const { user, loggedIn } = authentication
   const {
-    conversations, unread, shipment, loading
+    conversations, unread, shipment, loading, shipments
   } = messaging
   const { clients } = admin
   return {
@@ -240,6 +271,7 @@ function mapStateToProps (state) {
     unread,
     shipment,
     clients,
+    shipments,
     loading
   }
 }

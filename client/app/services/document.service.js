@@ -37,6 +37,28 @@ function uploadHubs (file) {
   return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
 
+function uploadSchedules (file, target) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/${target}_schedules/process_csv`, requestOptions).then(handleResponse)
+}
+
+function uploadItinerarySchedules (file, target) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/schedules/overwrite/${target}`, requestOptions).then(handleResponse)
+}
+
 function uploadLocalCharges (file) {
   const formData = new FormData()
   formData.append('file', file)
@@ -51,7 +73,9 @@ function uploadLocalCharges (file) {
 export const documentService = {
   uploadPricings,
   uploadHubs,
-  uploadLocalCharges
+  uploadLocalCharges,
+  uploadSchedules,
+  uploadItinerarySchedules
 }
 
 export default documentService

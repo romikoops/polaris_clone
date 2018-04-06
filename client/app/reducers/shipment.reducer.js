@@ -264,6 +264,28 @@ export default function shipment (state = {}, action) {
           return user
         })
       }
+    case shipmentConstants.SHIPMENT_GET_NOTES_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_GET_NOTES_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: {
+            ...state.response.stage1,
+            notes: action.payload
+          }
+        },
+        loading: false
+      }
+    case shipmentConstants.SHIPMENT_GET_NOTES_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage1: [action.error]
+        }
+      }
     default:
       return state
   }

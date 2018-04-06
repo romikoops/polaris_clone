@@ -9,8 +9,6 @@ import {
   // cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  fclChargeGlossary,
-  lclChargeGlossary,
   chargeGlossary,
   rateBasises,
   customsFeeSchema,
@@ -18,15 +16,9 @@ import {
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
-const fclChargeGloss = fclChargeGlossary
-const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
-// const cargoClassOpts = cargoClassOptions
-// const lclSchema = lclPricingSchema
-// const fclSchema = fclPricingSchema
-// const cargoGloss = cargoGlossary
 
 export class AdminCustomsSetter extends Component {
   static selectFromOptions (options, value) {
@@ -259,7 +251,7 @@ export class AdminCustomsSetter extends Component {
   }
 
   render () {
-    const { theme, loadType } = this.props
+    const { theme } = this.props
 
     const textStyle = {
       background:
@@ -272,7 +264,6 @@ export class AdminCustomsSetter extends Component {
     } = this.state
     const panel = []
     const viewPanel = []
-    let gloss
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background: linear-gradient(
@@ -295,11 +286,8 @@ export class AdminCustomsSetter extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    if (loadType.includes('lcl')) {
-      gloss = lclChargeGloss
-    } else {
-      gloss = fclChargeGloss
-    }
+    const dnrKeys = ['currency', 'key', 'name']
+    const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
       return ''
@@ -307,79 +295,83 @@ export class AdminCustomsSetter extends Component {
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []
+
       Object.keys(charges[direction][key]).forEach((chargeKey) => {
-        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className={`flex-95 layout-row ${styles.editor_input}`}>
-              <input
-                type="number"
-                value={charges[direction][key][chargeKey]}
-                onChange={this.handleChange}
-                name={`${direction}-${key}-${chargeKey}`}
-              />
-            </div>
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">
-              {charges[direction][key][chargeKey]} {charges[direction][key].currency}
-            </p>
-          </div>)
-        } else if (chargeKey === 'rate_basis') {
-          cells.push(<div
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <NamedSelect
-              name={`${direction}-${key}-${chargeKey}`}
-              classes={`${styles.select}`}
-              value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
-              options={rateOpts}
-              className="flex-100"
-              onChange={this.handleSelect}
-            />
-          </div>)
-          viewCells.push(<div
-            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
-          </div>)
-        } else if (chargeKey === 'currency') {
-          cells.push(<div
-            key={chargeKey}
-            className={`flex layout-row layout-align-none-center layout-wrap ${
-              styles.price_cell
-            }`}
-          >
-            <p className="flex-100">{chargeGloss[chargeKey]}</p>
-            <div className="flex-95 layout-row">
+        if (!dnrKeys.includes(chargeKey)) {
+          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <div className={`flex-95 layout-row ${styles.editor_input}`}>
+                <input
+                  type="number"
+                  value={charges[direction][key][chargeKey]}
+                  onChange={this.handleChange}
+                  name={`${direction}-${key}-${chargeKey}`}
+                />
+              </div>
+            </div>)
+            viewCells.push(<div
+              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <p className="flex">
+                {charges[direction][key][chargeKey]} {charges[direction][key].currency}
+              </p>
+            </div>)
+          } else if (chargeKey === 'rate_basis') {
+            cells.push(<div
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
               <NamedSelect
-                name={`${direction}-${key}-currency`}
+                name={`${direction}-${key}-${chargeKey}`}
                 classes={`${styles.select}`}
-                value={selectOptions ? selectOptions[direction][key].currency : ''}
-                options={currencyOpts}
+                value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
+                options={rateOpts}
                 className="flex-100"
                 onChange={this.handleSelect}
               />
-            </div>
-          </div>)
+            </div>)
+            viewCells.push(<div
+              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
+            </div>)
+          } else if (chargeKey === 'currency') {
+            cells.push(<div
+              key={chargeKey}
+              className={`flex layout-row layout-align-none-center layout-wrap ${
+                styles.price_cell
+              }`}
+            >
+              <p className="flex-100">{chargeGloss[chargeKey]}</p>
+              <div className="flex-95 layout-row">
+                <NamedSelect
+                  name={`${direction}-${key}-currency`}
+                  classes={`${styles.select}`}
+                  value={selectOptions ? selectOptions[direction][key].currency : ''}
+                  options={currencyOpts}
+                  className="flex-100"
+                  onChange={this.handleSelect}
+                />
+              </div>
+            </div>)
+          }
         }
       })
+
       panel.push(<div
         key={key}
         className="
@@ -532,13 +524,11 @@ layout-align-end-center layout-row"
 AdminCustomsSetter.propTypes = {
   theme: PropTypes.theme,
   adminDispatch: PropTypes.objectOf(PropTypes.func).isRequired,
-  charges: PropTypes.objectOf(PropTypes.any),
-  loadType: PropTypes.string
+  charges: PropTypes.objectOf(PropTypes.any)
 }
 AdminCustomsSetter.defaultProps = {
   theme: {},
-  charges: {},
-  loadType: 'lcl'
+  charges: {}
 }
 
 export default AdminCustomsSetter

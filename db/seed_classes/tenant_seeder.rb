@@ -120,6 +120,7 @@ class TenantSeeder
       },
       subdomain: "greencarrier",
       name: "Greencarrier",
+      currency: 'USD',
       scope: {
         modes_of_transport: {
           ocean: {
@@ -140,7 +141,13 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'text',
         has_insurance: true,
-        has_customs: true
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Greencarrier is to discuss the validity of the presented prices with the product owners."
+
+        ]
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -203,7 +210,12 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: true
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Demo is to discuss the validity of the presented prices with the product owners."
+        ]
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -265,7 +277,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all
@@ -319,7 +332,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all
@@ -370,7 +384,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all
@@ -424,7 +439,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all
@@ -476,7 +492,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all
@@ -526,7 +543,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all,
@@ -576,7 +594,8 @@ class TenantSeeder
         incoterm_info_level: 'text',
         cargo_info_level: 'hs_codes',
         has_insurance: true,
-        has_customs: false
+        has_customs: false,
+        terms: []
       },
       other_data: {
         cargo_item_types: :all

@@ -62,4 +62,14 @@
     min-height: 550px;
     padding-top: 50px;
   }
+  .open_notes {
+    height: 250px;
+  }
+  .closed_notes {
+    height: 0;
+  }
+  .note_box {
+    overflow: hidden;
+    transition: all 1250ms ease-in-out;
+  }
 }

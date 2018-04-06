@@ -2,7 +2,7 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { shipmentConstants } from '../constants'
 import { shipmentService } from '../services'
-import { alertActions, userActions } from './'
+import { alertActions, userActions, appActions } from './'
 // import { getSubdomain } from '../helpers/subdomain'
 
 // const subdomainKey = getSubdomain()
@@ -370,6 +370,41 @@ function deleteDocument (id) {
     )
   }
 }
+function getNotes (noteIds) {
+  function request (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_REQUEST, payload: noteData }
+  }
+  function success (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_SUCCESS, payload: noteData }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getNotes(noteIds).then(
+      (response) => {
+        dispatch(alertActions.success('Fetching Notes successful'))
+        dispatch(success(response.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function updateCurrency (currency, req) {
+  return (dispatch) => {
+    dispatch(appActions.setCurrency(currency))
+    setTimeout(() => {
+      dispatch(setShipmentDetails(req, false))
+      dispatch(alertActions.success('Updating Currency successful'))
+    }, 100)
+  }
+}
 
 function toDashboard (id) {
   return (dispatch) => {
@@ -401,9 +436,11 @@ export const shipmentActions = {
   fetchShipmentIfNeeded,
   getAll,
   goTo,
+  getNotes,
   toDashboard,
   clearLoading,
   acceptShipment,
+  updateCurrency,
   delete: _delete
 }
 

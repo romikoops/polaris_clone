@@ -27,13 +27,13 @@ class Admin::SchedulesController < ApplicationController
     stops = itinerary.stops.order(:index)
     closing_date_buffer = params[:closing_date].to_i
     vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
-    itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
+    resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
     train_schedules = tenant.itineraries.where(mode_of_transport: 'train').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     # 
-    response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries})
+    response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, stats: resp})
   end
   def destroy
     Trip.find(params[:id]).destroy
@@ -44,11 +44,11 @@ class Admin::SchedulesController < ApplicationController
     layovers = trip.layovers.order(:stop_index).map { |l| {layover: l, stop: l.stop, hub: l.stop.hub}  }
     response_handler(layovers)
   end
-  def overwrite_schedules_by_itinerary
+  def schedules_by_itinerary
     if params[:file]
       itinerary = Itinerary.find(params[:id])
       req = {'xlsx' => params[:file], 'itinerary' => itinerary}
-      results = overwrite_schedules_by_itinerary(req)
+      results = overwrite_schedules_by_itinerary(req, current_user)
       response_handler(results)
     else
       response_handler(false)

@@ -5,6 +5,7 @@ import PropTypes from '../../prop-types'
 import { AdminPriceEditor } from './'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
+import AdminPromptConfirm from './Prompt/Confirm'
 import {
   CONTAINER_DESCRIPTIONS,
   fclChargeGlossary,
@@ -65,17 +66,49 @@ export class AdminPricingClientView extends Component {
       editorBool: false
     })
   }
+  deletePricing () {
+    const { adminActions } = this.props
+    const { pricingToDelete } = this.state
+    adminActions.deletePricing(pricingToDelete)
+    this.closeConfirm()
+  }
+  confirmDelete (pricing) {
+    this.setState({
+      confirm: true,
+      pricingToDelete: pricing
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+
   render () {
     const {
       theme, pricingData, clientPricings, adminActions
     } = this.props
     const {
-      editorBool, editTransport, editPricing, editHubRoute
+      editorBool,
+      editTransport,
+      editPricing,
+      editHubRoute,
+      confirm,
+      pricingToDelete
     } = this.state
 
     if (!pricingData || !clientPricings) {
       return ''
     }
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text="This will delete the pricing immediately and all related data"
+        confirm={() => this.deletePricing(pricingToDelete)}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const {
       routes, pricings, hubRoutes, transportCategories
     } = pricingData
@@ -254,13 +287,14 @@ export class AdminPricingClientView extends Component {
           const gKey = `${hr.id}_${tr.id}`
           const pricing = pricingsObj[uPriceObj[gKey]]
           if (pricing) {
-            innerInner.push(<RPBInner
-              key={v4()}
-              hubRoute={hr}
-              transport={tr}
-              pricing={pricing}
-              them={theme}
-            />)
+            innerInner
+              .push(<RPBInner
+                key={v4()}
+                hubRoute={hr}
+                transport={tr}
+                pricing={pricing}
+                theme={theme}
+              />)
           }
         })
         return innerInner
@@ -302,6 +336,7 @@ export class AdminPricingClientView extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {confimPrompt}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >

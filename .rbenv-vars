@@ -17,6 +17,7 @@ RDS_DB_USERNAME=imcdab
 RDS_DB_PASSWORD=Sh1pmetimb3rs
 RDS_HOSTNAME=ebdb.cvwyyvbuvazx.us-east-1.rds.amazonaws.com
 RDS_PORT=5432
+FIXER_API_KEY=6985c41eadad14bbab851c518745c236
 TEST=test
 
 # RAILS_SERVE_STATIC_FILES=true

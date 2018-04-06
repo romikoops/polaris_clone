@@ -7,6 +7,8 @@ import { gradientTextGenerator } from '../../helpers'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import AdminPromptConfirm from './Prompt/Confirm'
+import NotesWriter from '../../containers/Notes/Writer'
+import NotesRow from '../Notes/Row'
 
 export class AdminRouteView extends Component {
   constructor (props) {
@@ -14,19 +16,10 @@ export class AdminRouteView extends Component {
     this.state = {
       scheduleLimit: 20,
       panelViewer: {},
-      confirm: false
+      confirm: false,
+      editNotes: false
     }
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
-  }
-  componentWillMount () {
-    if (this.props.itineraryData.itinerary.notes) {
-      this.setState({ itineraryNotes: this.props.itineraryData.itinerary.notes })
-    }
-  }
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.itineraryData.itinerary.notes) {
-      this.setState({ itineraryNotes: nextProps.itineraryData.itinerary.notes })
-    }
   }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
@@ -54,16 +47,6 @@ export class AdminRouteView extends Component {
         break
     }
   }
-  handleItineraryNotes (e) {
-    const { value } = e.target
-    this.setState({ itineraryNotes: value })
-  }
-  saveItineraryNotes () {
-    const { itineraryNotes } = this.state
-    const { adminDispatch, itineraryData } = this.props
-    const { itinerary } = itineraryData
-    adminDispatch.saveItineraryNotes(itinerary.id, itineraryNotes)
-  }
   deleteItinerary (id) {
     const { adminDispatch } = this.props
     adminDispatch.deleteItinerary(id)
@@ -80,6 +63,9 @@ export class AdminRouteView extends Component {
   doNothing () {
     console.log(this.props)
   }
+  toggleNotesEdit () {
+    this.setState({ editNotes: !this.state.editNotes })
+  }
   render () {
     const {
       theme, itineraryData, hubHash, adminDispatch
@@ -88,9 +74,11 @@ export class AdminRouteView extends Component {
     if (!itineraryData) {
       return ''
     }
-    const { panelViewer, itineraryNotes, confirm } = this.state
     const {
-      itinerary, hubs, schedules, layovers
+      panelViewer, confirm, editNotes
+    } = this.state
+    const {
+      itinerary, hubs, schedules, layovers, notes
     } = itineraryData
     const textStyle =
       theme && theme.colors
@@ -185,28 +173,24 @@ export class AdminRouteView extends Component {
           </div>
           {schedArr}
         </div>
-        <div className="layout-row flex-100 layout-wrap layout-align-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none`}> Comments </p>
+        <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-space-between-center">
+            <div className="flex-60 layout-row layout-align-start-cetner">
+              <p className="flex-none">Notes</p>
+            </div>
+            <div
+              className="flex-10 layout-row alyout-align-center-center"
+              onClick={() => this.toggleNotesEdit()}
+            >
+              <i className="fa fa-pencil clip" style={textStyle} />
+            </div>
           </div>
-          <div className="flex-100 input_box_full" style={{ margin: '10px 0' }}>
-            <textarea
-              rows="10"
-              cols="100"
-              value={itineraryNotes}
-              onChange={e => this.handleItineraryNotes(e)}
-            />
-          </div>
-          <div className="flex-100" style={{ margin: '20px 0' }}>
-            <RoundButton
-              theme={theme}
-              text="save"
-              size="small"
-              handleNext={() => this.saveItineraryNotes()}
-              active
-            />
+          <div className="flex-100 layout-row">
+            {editNotes ? (
+              <NotesWriter theme={theme} targetId={itinerary.id} />
+            ) : (
+              <NotesRow notes={notes} theme={theme} />
+            )}
           </div>
         </div>
       </div>

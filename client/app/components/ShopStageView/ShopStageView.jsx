@@ -3,9 +3,12 @@ import styles from './ShopStageView.scss'
 import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES } from '../../constants'
-import { gradientTextGenerator, gradientGenerator } from '../../helpers'
+import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
 
 export class ShopStageView extends Component {
+  static goBack () {
+    history.goBack()
+  }
   constructor (props) {
     super(props)
     this.state = {}
@@ -26,13 +29,15 @@ export class ShopStageView extends Component {
 
   stageBoxCircle (stage) {
     const { theme } = this.props
-    const gradientStyle = theme && theme.colors
-      ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-      : theme.colors.brightPrimary
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+        : theme.colors.brightPrimary
 
-    const gradientCircle = theme && theme.colors
-      ? gradientGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
-      : theme.colors.brightPrimary
+    const gradientCircle =
+      theme && theme.colors
+        ? gradientGenerator(theme.colors.brightPrimary, theme.colors.brightSecondary)
+        : theme.colors.brightPrimary
 
     if (stage.step < this.props.currentStage) {
       return (
@@ -52,12 +57,15 @@ export class ShopStageView extends Component {
     if (stage.step === this.props.currentStage) {
       return (
         <div className={styles.wrapper_shop_stage_current}>
-          <div className={
-            `${styles.shop_stage_current} flex-none ` +
-            'layout-column layout-align-center-center'
-          }
+          <div
+            className={`layout-column layout-align-center-center ${
+              styles.shop_stage_current
+            } flex-none `}
           >
-            <h3 className="flex-none" style={gradientStyle}> {stage.step} </h3>
+            <h3 className="flex-none" style={gradientStyle}>
+              {' '}
+              {stage.step}{' '}
+            </h3>
           </div>
           <div style={gradientCircle} className={styles.shop_stage_current_border} />
         </div>
@@ -83,7 +91,57 @@ export class ShopStageView extends Component {
     )
   }
   render () {
+    const { theme, hasNextStage } = this.props
     const stageBoxes = SHIPMENT_STAGES.map(stage => this.stageBox(stage))
+    const gradientStyle =
+      theme && theme.colors
+        ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+        : theme.colors.primary
+
+    const gradientCircle =
+      theme && theme.colors
+        ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+        : theme.colors.primary
+    const backBtn = (
+      <div
+        className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
+        onClick={() => ShopStageView.goBack()}
+      >
+        <div className={styles.wrapper_shop_stage_current}>
+          <div
+            className={`layout-column layout-align-center-center ${
+              styles.shop_stage_current
+            } flex-none `}
+          >
+            <i className="flex-none fa fa-chevron-left clip" style={gradientStyle} />
+          </div>
+          <div style={gradientCircle} className={styles.shop_stage_current_border} />
+        </div>
+        <p className={`flex-none ${styles.stage_text}`}>Previous Step</p>
+      </div>
+    )
+    const fwdBtn = hasNextStage ? (
+      <div
+        className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
+        onClick={() => this.props.goForward()}
+      >
+        <div className={styles.wrapper_shop_stage_current}>
+          <div
+            className={`layout-column layout-align-center-center ${
+              styles.shop_stage_current
+            } flex-none `}
+          >
+            <i className="flex-none fa fa-chevron-right clip" style={gradientStyle} />
+          </div>
+          <div style={gradientCircle} className={styles.shop_stage_current_border} />
+        </div>
+        <p className={`flex-none ${styles.stage_text}`}>Next Step</p>
+      </div>
+    ) : (
+      <div
+        className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
+      />
+    )
     return (
       <div className="layout-row flex-100 layout-align-center layout-wrap">
         <div className={`${styles.shop_banner} layout-row flex-100 layout-align-center`}>
@@ -99,6 +157,7 @@ export class ShopStageView extends Component {
           </div>
         </div>
         <div className={`${styles.stage_row} layout-row flex-100 layout-align-center`}>
+          {backBtn}
           <div className="layout-row layout-align-start-center">
             <div
               className={`${styles.line_box} layout-row layout-wrap layout-align-center flex-none`}
@@ -107,6 +166,7 @@ export class ShopStageView extends Component {
               {stageBoxes}
             </div>
           </div>
+          {fwdBtn}
         </div>
       </div>
     )
@@ -118,13 +178,17 @@ ShopStageView.propTypes = {
   setStage: PropTypes.func.isRequired,
   currentStage: PropTypes.number,
   shopType: PropTypes.string.isRequired,
-  disabledClick: PropTypes.bool
+  disabledClick: PropTypes.bool,
+  hasNextStage: PropTypes.bool,
+  goForward: PropTypes.func
 }
 
 ShopStageView.defaultProps = {
   currentStage: 1,
   theme: null,
-  disabledClick: false
+  disabledClick: false,
+  hasNextStage: false,
+  goForward: null
 }
 
 export default ShopStageView

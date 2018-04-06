@@ -9,6 +9,7 @@ class Hub < ApplicationRecord
   has_many :hub_truckings
   has_many :trucking_pricings, through: :hub_truckings
   has_one :service_charge
+  has_many :notes,     dependent: :destroy
 
 
   MOT_HUB_NAME = {
@@ -72,7 +73,7 @@ class Hub < ApplicationRecord
   end
 
   def distance_to(loc)
-    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [self.latitude, self.longitude])
+    Geocoder::Calculations.distance_between([loc.latitude, loc.longitude], [self.location.latitude, self.location.longitude])
   end
 
   def toggle_hub_status!

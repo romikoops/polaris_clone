@@ -112,6 +112,33 @@ function getShipment (ref) {
   }
 }
 
+function getShipments (keys) {
+  function request (shipData) {
+    return { type: messagingConstants.GET_SHIPMENTS_DATA_REQUEST, payload: shipData }
+  }
+  function success (shipData) {
+    return { type: messagingConstants.GET_SHIPMENTS_DATA_SUCCESS, payload: shipData.data }
+  }
+  function failure (error) {
+    return { type: messagingConstants.GET_SHIPMENTS_DATA_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    messagingService.getShipmentsData(keys).then(
+      (data) => {
+        dispatch(alertActions.success('Fetching Data successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function markAsRead (ref) {
   function request (convoData) {
     return { type: messagingConstants.MARK_AS_READ_REQUEST, payload: convoData }
@@ -149,7 +176,8 @@ export const messagingActions = {
   getShipment,
   markAsRead,
   getAdminConversations,
-  showMessageCenter
+  showMessageCenter,
+  getShipments
 }
 
 export default messagingActions

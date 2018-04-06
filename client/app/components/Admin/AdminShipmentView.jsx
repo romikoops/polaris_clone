@@ -8,7 +8,7 @@ import FileTile from '../FileTile/FileTile'
 import PropTypes from '../../prop-types'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
-import { moment, currencyOptions } from '../../constants'
+import { moment, currencyOptions, documentTypes } from '../../constants'
 import { capitalize, gradientTextGenerator } from '../../helpers'
 import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
@@ -117,6 +117,10 @@ export class AdminShipmentView extends Component {
     const { shipmentData, handleShipmentAction } = this.props
     handleShipmentAction(shipmentData.shipment.id, 'accept')
   }
+  handleFinished () {
+    const { shipmentData, handleShipmentAction } = this.props
+    handleShipmentAction(shipmentData.shipment.id, 'finished')
+  }
   toggleEditPrice () {
     this.setState({ showEditPrice: !this.state.showEditPrice })
   }
@@ -186,11 +190,8 @@ export class AdminShipmentView extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoContainerGroup
-        group={cargoGroups[k]}
-        theme={theme}
-        hsCodes={hsCodes}
-      />)
+      resultArray
+        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
     })
     return resultArray
   }
@@ -241,7 +242,8 @@ export class AdminShipmentView extends Component {
       cargoItems,
       containers,
       schedules,
-      locations
+      locations,
+      accountHolder
     } = shipmentData
     const {
       newTotal, showEditPrice, currency, showEditTime, newTimes, collapser
@@ -291,6 +293,48 @@ export class AdminShipmentView extends Component {
     const nArray = []
     let cargoView = []
     const docView = []
+    const accountHolderBox = accountHolder ? (
+      <div className="flex-50 layout-row" style={{ marginLeft: '2.5%' }}>
+        <div className="flex-15 layout-column layout-align-start-center">
+          <i className={`${styles.icon} fa fa-id-card-o flex-none`} style={textStyle} />
+        </div>
+        <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100">
+            <p className="flex-100">Account Holder</p>
+          </div>
+          <div className="flex-100 layout-row layout-wrap">
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-address-book-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">
+                {accountHolder.first_name} {accountHolder.last_name}
+              </p>
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-building-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.company_name}</p>{' '}
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-envelope-o flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.email}</p>{' '}
+            </div>
+            <div className="flex-50 layout-row layout-align-space-around-center">
+              <div className="flex-20 layout-row layout-align-center-center">
+                <i className="fa clip fa-mobile flex-none" style={textStyle} />
+              </div>
+              <p className="flex-80">{accountHolder.phone}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      ''
+    )
     let shipperContact = ''
     let consigneeContact = ''
     if (contacts) {
@@ -393,18 +437,36 @@ export class AdminShipmentView extends Component {
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
     }
+    const docChecker = {
+      packing_sheet: false,
+      commercial_invoice: false,
+      customs_declaration: false,
+      customs_value_declaration: false,
+      eori: false,
+      certificate_of_origin: false,
+      dangerous_goods: false,
+      bill_of_lading: false,
+      invoice: false
+    }
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<FileTile
-          key={doc.id}
-          doc={doc}
-          theme={theme}
-          adminDispatch={adminDispatch}
-          isAdmin
-        />)
+        docChecker[doc.doc_type] = true
+        docView.push(<FileTile doc={doc} theme={theme} adminDispatch={adminDispatch} isAdmin />)
       })
     }
-    const acceptDeny =
+    Object.keys(docChecker).forEach((key) => {
+      if (!docChecker[key]) {
+        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+          <div className="flex-none layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ban" />
+          </div>
+          <div className="flex layout-align-start-center layout-row">
+            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          </div>
+        </div>)
+      }
+    })
+    const actionsBox =
       shipment && shipment.status === 'requested' ? (
         <div className="flex-100 layout-row layout-align-space-between-center">
           <div className="flex-40 layout-row layout-align-start-center">
@@ -433,135 +495,140 @@ export class AdminShipmentView extends Component {
           </div>
         </div>
       ) : (
-        ''
+        <div className="flex-100 layout-row layout-align-space-between-center">
+          <div className="flex-40 layout-row layout-align-start-center">
+            <h4 className="flex-none letter_3">Actions</h4>
+          </div>
+          <div className="flex-30 layout-row layout-align-end-center">
+            <div className="flex-none layout-row">
+              <RoundButton
+                theme={theme}
+                size="small"
+                text="Finished"
+                iconClass="fa-check"
+                active
+                handleNext={() => this.handleFinished()}
+              />
+            </div>
+          </div>
+        </div>
       )
+    const acceptDeny = shipment && shipment.status === 'finished' ? '' : actionsBox
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const saveSection = (
       <div className={`${styles.time_edit_button}`}>
-        {
-          showEditTime
-            ? (
-              <div className="flex-100 layout-row layout-align-space-between">
-                <div onClick={this.saveNewTime}>
-                  <i className="fa fa-check clip pointy" style={textStyle} />
-                </div>
-                <div onClick={this.toggleEditTime}>
-                  <i className="fa fa-times pointy" style={{ color: 'red' }} />
-                </div>
-              </div>
-            )
-            : (
-              <div className="flex-100 layout-row layout-align-end">
-                <div onClick={this.toggleEditTime}>
-                  <i className="fa fa-pencil clip pointy" style={textStyle} />
-                </div>
-              </div>
-            )
-        }
-      </div>
-    )
-
-    const etdJSX = showEditTime
-      ? (
-        <div className="flex-100 layout-row">
-          <div className="flex-65 layout-row input_box_full">
-            <DayPickerInput
-              name="dayPicker"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-              formatDate={formatDate}
-              parseDate={parseDate}
-              value={newTimes.etd.day}
-              onDayChange={e => this.handleDayChange(e, 'etd')}
-              dayPickerProps={dayPickerProps}
-            />
-          </div>
-          <div className="flex-35 layout-row input_box_full">
-            <input
-              type="time"
-              value={newTimes.etd.time}
-              onChange={e => this.handleTimeChange(e, 'etd')}
-            />
-          </div>
-        </div>
-      )
-      : (
-        <p className="flex-none letter_3">
-          {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
-        </p>
-      )
-
-    const etaJSX = showEditTime
-      ? (
-        <div className="flex-100 layout-row">
-          <div className="flex-65 layout-row input_box_full">
-            <DayPickerInput
-              name="dayPicker"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-              formatDate={formatDate}
-              parseDate={parseDate}
-              value={newTimes.eta.day}
-              onDayChange={e => this.handleDayChange(e, 'eta')}
-              dayPickerProps={dayPickerProps}
-            />
-          </div>
-          <div className="flex-35 layout-row input_box_full">
-            <input
-              type="time"
-              value={newTimes.eta.time}
-              onChange={e => this.handleTimeChange(e, 'eta')}
-            />
-          </div>
-        </div>
-      )
-      : (
-        <p className="flex-none letter_3">
-          {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
-        </p>
-      )
-
-    const totalPrice = showEditPrice
-      ? (
-        <div className="flex-30 layout-row">
-          <div className="flex-40 layout-row input_box_full">
-            <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
-          </div>
-          <div className="offset-5 flex-35 layout-row input_box_full">
-            <NamedSelect
-              name=""
-              className="flex-100"
-              placeholder="Currency"
-              options={currencyOptions}
-              value={currency}
-              onChange={this.handleCurrencySelect}
-            />
-          </div>
-          <div className="flex layout-row layout-align-space-around-center">
-            <div onClick={this.saveNewPrice}>
+        {showEditTime ? (
+          <div className="flex-100 layout-row layout-align-space-between">
+            <div onClick={this.saveNewTime}>
               <i className="fa fa-check clip pointy" style={textStyle} />
             </div>
-            <div onClick={this.toggleEditPrice}>
+            <div onClick={this.toggleEditTime}>
               <i className="fa fa-times pointy" style={{ color: 'red' }} />
             </div>
           </div>
+        ) : (
+          <div className="flex-100 layout-row layout-align-end">
+            <div onClick={this.toggleEditTime}>
+              <i className="fa fa-pencil clip pointy" style={textStyle} />
+            </div>
+          </div>
+        )}
+      </div>
+    )
+
+    const etdJSX = showEditTime ? (
+      <div className="flex-100 layout-row">
+        <div className="flex-65 layout-row input_box_full">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.etd.day}
+            onDayChange={e => this.handleDayChange(e, 'etd')}
+            dayPickerProps={dayPickerProps}
+          />
         </div>
-      )
-      : (
-        <div className="flex-30 layout-row layout-align-end-center">
-          <h3 className="flex-none letter_3">
-            {parseFloat(shipment.total_price.value).toFixed(2)}
-            {' '}
-            {shipment.total_price.currency}
-          </h3>
-          <div
-            className="flex-20 layout-row layout-align-center-center pointy"
-            onClick={this.toggleEditPrice}
-          >
-            <i className="fa fa-pencil clip" style={textStyle} />
+        <div className="flex-35 layout-row input_box_full">
+          <input
+            type="time"
+            value={newTimes.etd.time}
+            onChange={e => this.handleTimeChange(e, 'etd')}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className="flex-none letter_3">
+        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const etaJSX = showEditTime ? (
+      <div className="flex-100 layout-row">
+        <div className="flex-65 layout-row input_box_full">
+          <DayPickerInput
+            name="dayPicker"
+            placeholder="DD/MM/YYYY"
+            format="DD/MM/YYYY"
+            formatDate={formatDate}
+            parseDate={parseDate}
+            value={newTimes.eta.day}
+            onDayChange={e => this.handleDayChange(e, 'eta')}
+            dayPickerProps={dayPickerProps}
+          />
+        </div>
+        <div className="flex-35 layout-row input_box_full">
+          <input
+            type="time"
+            value={newTimes.eta.time}
+            onChange={e => this.handleTimeChange(e, 'eta')}
+          />
+        </div>
+      </div>
+    ) : (
+      <p className="flex-none letter_3">
+        {`${moment(shipment.planned_eta).format('DD/MM/YYYY | HH:mm')}`}
+      </p>
+    )
+
+    const totalPrice = showEditPrice ? (
+      <div className="flex-30 layout-row">
+        <div className="flex-40 layout-row input_box_full">
+          <input type="number" value={newTotal} onChange={this.handleNewTotalChange} />
+        </div>
+        <div className="offset-5 flex-35 layout-row input_box_full">
+          <NamedSelect
+            name=""
+            className="flex-100"
+            placeholder="Currency"
+            options={currencyOptions}
+            value={currency}
+            onChange={this.handleCurrencySelect}
+          />
+        </div>
+        <div className="flex layout-row layout-align-space-around-center">
+          <div onClick={this.saveNewPrice}>
+            <i className="fa fa-check clip pointy" style={textStyle} />
+          </div>
+          <div onClick={this.toggleEditPrice}>
+            <i className="fa fa-times pointy" style={{ color: 'red' }} />
           </div>
         </div>
-      )
+      </div>
+    ) : (
+      <div className="flex-30 layout-row layout-align-end-center">
+        <h3 className="flex-none letter_3">
+          {parseFloat(shipment.total_price.value).toFixed(2)} {shipment.total_price.currency}
+        </h3>
+        <div
+          className="flex-20 layout-row layout-align-center-center pointy"
+          onClick={this.toggleEditPrice}
+        >
+          <i className="fa fa-pencil clip" style={textStyle} />
+        </div>
+      </div>
+    )
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -598,27 +665,24 @@ export class AdminShipmentView extends Component {
           collapsed={collapser.itinerary}
           handleCollapser={() => this.handleCollapser('itinerary')}
           content={
-            <div
-              className="flex-100 layout-row layout-wrap"
-              style={{ position: 'relative' }}
-            >
-              { saveSection }
+            <div className="flex-100 layout-row layout-wrap" style={{ position: 'relative' }}>
+              {saveSection}
               <RouteHubBox hubs={hubsObj} route={schedules} theme={theme} />
-              <div
-                className="flex-100 layout-row layout-align-space-between-center"
-              >
+              <div className="flex-100 layout-row layout-align-space-between-center">
                 <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">
                     <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
                     {etdJSX}
                   </div>
                   {shipment.has_pre_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                      <p className="flex-100">With Pickup From:</p>
-                      <address className="flex-none">
-                        {`${locations.origin.street_number} ${locations.origin.street}`},
-                        {`${locations.origin.city}`} <br />
-                        {`${locations.origin.zip_code}`},
+                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                      <div className="flex-100 layout-row layout-align-center-center">
+                        <p className="flex-none">With Pickup From:</p>
+                      </div>
+                      <address className={` ${styles.itinerary_address} flex-none`}>
+                        {`${locations.origin.street_number} ${locations.origin.street}`}, <br />
+                        {`${locations.origin.city}, ${' '} `}
+                        {`${locations.origin.zip_code}, `}
                         {`${locations.origin.country}`} <br />
                       </address>
                     </div>
@@ -632,12 +696,14 @@ export class AdminShipmentView extends Component {
                     {etaJSX}
                   </div>
                   {shipment.has_on_carriage ? (
-                    <div className="flex-100 layout-row layout-align-start-start layout-wrap">
-                      <p className="flex-100">With Delivery To:</p>
-                      <address className="flex-none">
-                        {`${locations.destination.street_number} ${locations.destination.street}`} ,
-                        {`${locations.destination.city}`} <br />
-                        {`${locations.destination.zip_code}`},
+                    <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+                      <div className="flex-100 layout-row layout-align-center-center">
+                        <p className="flex-none">With Delivery To:</p>
+                      </div>
+                      <address className={` ${styles.itinerary_address} flex-none`}>
+                        {`${locations.destination.street_number} ${locations.destination.street}`} ,<br />
+                        {`${locations.destination.city}, ${' '} `}
+                        {`${locations.destination.zip_code}, `}
                         {`${locations.destination.country}`} <br />
                       </address>
                     </div>
@@ -662,7 +728,7 @@ export class AdminShipmentView extends Component {
                 } flex-100 layout-row layout-wrap layout-align-space-around-center`}
               >
                 <h3 className="flex-70 letter_3">Shipment Total:</h3>
-                { totalPrice }
+                {totalPrice}
               </div>
 
               <div className="flex-100 layout-row layout-align-center-center">
@@ -690,10 +756,15 @@ export class AdminShipmentView extends Component {
           handleCollapser={() => this.handleCollapser('contacts')}
           content={
             <div className="flex-100 layout-row layout-wrap">
-              <div className={
-                `${styles.b_summ_top} flex-100 ` +
-                'layout-row layout-align-space-around-center'
-              }
+              <div
+                className={`layout-row layout-align-start-center ${styles.b_summ_top} flex-100 `}
+              >
+                {accountHolderBox}
+              </div>
+              <div
+                className={`layout-row layout-align-space-around-center ${
+                  styles.b_summ_top
+                } flex-100 `}
               >
                 {shipperContact}
                 {consigneeContact}

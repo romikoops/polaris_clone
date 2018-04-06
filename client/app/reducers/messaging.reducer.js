@@ -67,6 +67,23 @@ export default function messaging (state = {}, action) {
         ...state,
         loading: true
       }
+    case messagingConstants.GET_SHIPMENTS_DATA_SUCCESS:
+      return {
+        ...state,
+        shipments: action.payload,
+        loading: false
+      }
+    case messagingConstants.GET_SHIPMENTS_DATA_ERROR:
+      return {
+        ...state,
+        error: action.payload,
+        loading: false
+      }
+    case messagingConstants.GET_SHIPMENTS_DATA_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
     case messagingConstants.MARK_AS_READ_SUCCESS:
       return {
         ...state,

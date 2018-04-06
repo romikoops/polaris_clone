@@ -175,7 +175,7 @@ export class ShipmentLocationBox extends Component {
       const lat = event.value.latitude
       const lng = event.value.longitude
       const dSelect = event
-
+      this.props.setNotesIds([event.value.id], 'destination')
       this.props.setTargetAddress('destination', destination)
       this.setMarker({ lat, lng }, destination.hub_name, 'destination')
       this.setState({ dSelect, destination })
@@ -188,7 +188,7 @@ export class ShipmentLocationBox extends Component {
         dSelect: '',
         destination: {}
       })
-
+      this.props.setNotesIds(null, 'destination')
       this.state.markers.destination.setMap(null)
       this.props.setTargetAddress('destination', {})
     }
@@ -285,6 +285,7 @@ export class ShipmentLocationBox extends Component {
       this.props.setTargetAddress('origin', origin)
       this.setMarker({ lat, lng }, origin.hub_name, 'origin')
       this.setState({ oSelect, origin })
+      this.props.setNotesIds([event.value.id], 'origin')
     } else {
       this.setState({
         truckingOptions: {
@@ -294,6 +295,7 @@ export class ShipmentLocationBox extends Component {
         oSelect: '',
         origin: {}
       })
+      this.props.setNotesIds(false, 'origin')
       this.state.markers.origin.setMap(null)
       this.props.setTargetAddress('origin', {})
     }
@@ -522,7 +524,11 @@ export class ShipmentLocationBox extends Component {
     const availableNexusesIds = availableNexuses.map(availableNexus => availableNexus.value.id)
 
     getRequests.findAvailability(
-      lat, lng, tenantId, loadType, availableNexusesIds,
+      lat,
+      lng,
+      tenantId,
+      loadType,
+      availableNexusesIds,
       (truckingAvailable, nexusIds) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
@@ -552,7 +558,7 @@ export class ShipmentLocationBox extends Component {
         } else {
           this.setState({ [`${target}FieldsHaveErrors`]: false })
           this.props.handleSelectLocation(this.state[`${counterpart}FieldsHaveErrors`])
-
+          this.props.setNotesIds(nexusIds, target)
           this.scopeNexusOptions(nexusIds, counterpart)
         }
 
@@ -1060,14 +1066,9 @@ export class ShipmentLocationBox extends Component {
               </div>
 
               <div className="flex-45 layout-row layout-wrap layout-align-end-start">
-                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
-                  {this.props.has_on_carriage ? destAuto : ''}
-                  {displayLocationOptions('destination')}
-                  {destFields}
-                </div>
                 <div
                   className={
-                    'flex-45 layout-row layout-align-end ' +
+                    'flex-45 layout-row layout-align-start ' +
                     `${styles.toggle_box} ` +
                     `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                   }
@@ -1094,6 +1095,11 @@ export class ShipmentLocationBox extends Component {
                     onChange={this.handleTrucking}
                   />
                 </div>
+                <div className={`flex-55 layout-row layout-wrap ${styles.search_box}`}>
+                  {this.props.has_on_carriage ? destAuto : ''}
+                  {displayLocationOptions('destination')}
+                  {destFields}
+                </div>
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap layout-align-center-start">
@@ -1113,6 +1119,7 @@ ShipmentLocationBox.propTypes = {
   gMaps: PropTypes.gMaps.isRequired,
   theme: PropTypes.theme,
   user: PropTypes.user,
+  setNotesIds: PropTypes.func,
   shipment: PropTypes.shipment,
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
@@ -1142,6 +1149,7 @@ ShipmentLocationBox.defaultProps = {
   theme: null,
   user: null,
   shipment: null,
+  setNotesIds: null,
   routeIds: [],
   prevRequest: null,
   selectedRoute: null,
