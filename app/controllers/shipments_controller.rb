@@ -59,7 +59,7 @@ class ShipmentsController < ApplicationController
       shipment:         shipment,
       cargoItems:       shipment.cargo_items,
       containers:       shipment.containers,
-      aggregatedCargo: shipment.aggregated_cargo,
+      aggregatedCargo:  shipment.aggregated_cargo,
       contacts:         contacts,
       documents:        documents,
       schedules:        shipment.schedule_set,
