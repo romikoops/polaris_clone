@@ -26,7 +26,7 @@ class OfferCalculator
     @total_price = { total:0, currency: "EUR" }
 
     if params[:shipment][:aggregated_cargo_attributes]
-      @shipment.aggregated_cargo.destroy
+      @shipment.aggregated_cargo.try(:destroy)
       @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params(params))
       @cargo_units = [@shipment.aggregated_cargo]
     else    
