@@ -260,6 +260,7 @@ class OfferCalculator
         end
       end
     end
+    byebug
     
     @schedules = schedules
   end

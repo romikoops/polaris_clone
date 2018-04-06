@@ -23,7 +23,7 @@ export class AdminHubView extends Component {
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
   }
-  componentDidMount () {
+  componentWillMount () {
     this.checkAndSetCharges(this.props)
   }
   componentWillReceiveProps (nextProps) {
@@ -65,13 +65,13 @@ export class AdminHubView extends Component {
     if (target === 'customs') {
       const filteredCustoms = this.props.hubData.customs.filter(x => x.load_type === e.value)[0]
       this.setState({
-        currentCustoms: filteredCustoms,
+        currentCustoms: filteredCustoms || {},
         currentCustomsLoadType: e
       })
     } else {
       const filteredCharges = this.props.hubData.charges.filter(x => x.load_type === e.value)[0]
       this.setState({
-        currentFee: filteredCharges,
+        currentFee: filteredCharges || {},
         currentFeeLoadType: e
       })
     }

@@ -158,6 +158,7 @@ module PricingTools
           totals[k] ? totals[k]["value"] += result["value"] : totals[k] = result
       elsif fee["rate_basis"].include?('RANGE')
         result = handle_range_fee(fee, cargo)
+        
         totals[k] ? totals[k]["value"] += result["value"] : totals[k] = result
       else
         case fee["rate_basis"]
@@ -338,7 +339,8 @@ module PricingTools
       when 'PER_KG_RANGE'
         fee["range"].each do |range|
           if range["min"] <= cargo.payload_in_kg && range["max"] >= cargo.payload_in_kg
-            return {"currency" => fee["currency"], "value" => range["rate"] * cargo.payload_in_kg}
+            
+            return {"currency" => fee["currency"], "value" => range["rate"] * cargo.payload_in_kg * cargo.quantity}
           end
         end
     end
