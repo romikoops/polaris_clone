@@ -205,17 +205,17 @@ module ShippingTools
     }
 
     return {
-      shipment:       shipment,
-      cargoItems:     cargo_items     || nil,
-      containers:     containers      || nil, 
-      aggregateCargo: aggregated_cargo || nil, 
-      schedules:      shipment.schedule_set,
-      locations:      locations,
-      consignee:      consignee,
-      notifyees:      notifyees,
-      shipper:        shipper,
-      documents:      documents,
-      cargoItemTypes: cargo_item_types
+      shipment:        shipment,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil, 
+      aggregatedCargo: aggregated_cargo || nil, 
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      consignee:       consignee,
+      notifyees:       notifyees,
+      shipper:         shipper,
+      documents:       documents,
+      cargoItemTypes:  cargo_item_types
     }
   end
 
