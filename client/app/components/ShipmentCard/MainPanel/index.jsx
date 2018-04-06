@@ -15,7 +15,7 @@ export default class ShipmentCardMainPanel extends React.PureComponent {
   }
   updateHeight () {
     const panelHeight = this.panel.clientHeight
-    if (panelHeight !== this.state.panelHeight) {
+    if (panelHeight > this.state.panelHeight || !this.state.panelHeight) {
       this.setState({ panelHeight: this.panel.clientHeight })
     }
   }
