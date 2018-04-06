@@ -312,6 +312,7 @@ export const currencyOptions = [
 
 export const rateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_WM', label: 'Per W/M' },
   { value: 'PER_CONTAINER', label: 'Per Container' },
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
@@ -322,6 +323,7 @@ export const rateBasises = [
 ]
 export const truckingRateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_WM', label: 'Per W/M' },
   { value: 'PER_CONTAINER', label: 'Per Container' },
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
@@ -329,7 +331,9 @@ export const truckingRateBasises = [
   { value: 'PER_CBM', label: 'Per cbm' },
   { value: 'PER_TON', label: 'Per ton' },
   { value: 'PER_KG', label: 'Per kg' },
+  { value: 'PER_KM', label: 'Per km' },
   { value: 'PER_X_KG', label: 'Per (x) kg´s', base: 10 },
+  { value: 'PER_X_KM', label: 'Per (x) km´s', base: 10 },
   { value: 'PERCENTAGE', label: 'Percentage' }
 ]
 

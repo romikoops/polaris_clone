@@ -3,14 +3,24 @@ import PropTypes from 'prop-types'
 import Toggle from 'react-toggle'
 import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
-import { chargeGlossary } from '../../../constants'
+import { chargeGlossary, currencyOptions, truckingRateBasises } from '../../../constants'
 import { capitalize, gradientTextGenerator } from '../../../helpers'
+import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class TruckingDisplayPanel extends Component {
+  // static selectFromOptions (options, value) {
+  //   let result
+  //   options.forEach((op) => {
+  //     if (op.value === value) {
+  //       result = op
+  //     }
+  //   })
+  //   return result || options[0]
+  // }
   static cellDisplayGenerator (fee) {
     const fields = Object.keys(fee).map((fk) => {
       const feeValue = fk !== 'currency' && fk !== 'rate_basis' ? fee[fk].toFixed(2) : fee[fk]
-      return (
+      const displayCell = (
         <div className="flex-20 layout-row layout-wrap">
           <div className="flex-100 layout-align-start-center">
             <p className="flex-none no_m">{chargeGlossary[fk]}</p>
@@ -20,16 +30,58 @@ export class TruckingDisplayPanel extends Component {
           </div>
         </div>
       )
+      return displayCell
     })
     return fields
   }
   constructor (props) {
     super(props)
     this.state = {
-      shrinkView: {}
+      shrinkView: {},
+      selectOptions: {},
+      editor: {}
     }
     this.shrinkPanel = this.shrinkPanel.bind(this)
   }
+  // componentWillMount () {
+  //   this.setAllFromOptions()
+  // }
+  // setAllFromOptions () {
+  //   const { truckingInstance } = this.props
+  //   const { truckingPricing } = truckingInstance
+  //   const { directionBool } = this.state
+  //   const directionKey = directionBool ? 'import' : 'export'
+  //   const newObj = { data: {} }
+  //   const tmpObj = {}
+  //   truckingPricing[directionKey].table.forEach((pricing) => {
+  //     Object.keys(pricing.data).forEach((key) => {
+  //       if (!newObj.data[key]) {
+  //         newObj.data[key] = {}
+  //       }
+  //       if (!tmpObj[key]) {
+  //         tmpObj[key] = {}
+  //       }
+  //       let opts
+  //       Object.keys(pricing.data[key]).forEach((chargeKey) => {
+  //         if (chargeKey === 'currency') {
+  //           opts = currencyOpts.slice()
+  //           newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
+  //             opts,
+  //             pricing.data[key][chargeKey]
+  //           )
+  //         } else if (chargeKey === 'rate_basis') {
+  //           opts = rateOpts.slice()
+  //           newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
+  //             opts,
+  //             pricing.data[key][chargeKey]
+  //           )
+  //         }
+  //       })
+  //     })
+  //   })
+
+  //   this.setState({ selectOptions: newObj })
+  // }
   shrinkPanel (key) {
     this.setState({
       shrinkView: {
@@ -42,10 +94,64 @@ export class TruckingDisplayPanel extends Component {
     this.setState({ directionBool: !this.state.directionBool })
   }
 
+  cellEditorGenerator (fee) {
+    const { selectOptions } = this.state
+    const cells = []
+    Object.keys(fee).forEach((chargeKey) => {
+      if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+        cells.push(<div
+          key={chargeKey}
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <div className={`flex-95 layout-row ${styles.editor_input}`}>
+            <input
+              type="number"
+              value={fee[chargeKey]}
+              onChange={this.handleChange}
+              name={`${fee.key}-${chargeKey}`}
+            />
+          </div>
+        </div>)
+      } else if (chargeKey === 'rate_basis') {
+        cells.push(<div
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <NamedSelect
+            name={`${fee.key}-${chargeKey}`}
+            classes={`${styles.select}`}
+            value={selectOptions ? selectOptions.data[fee.key][chargeKey] : ''}
+            options={truckingRateBasises}
+            className="flex-100"
+            onChange={this.handleSelect}
+          />
+        </div>)
+      } else if (chargeKey === 'currency') {
+        cells.push(<div
+          key={chargeKey}
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <div className="flex-95 layout-row">
+            <NamedSelect
+              name={`${fee.key}-currency`}
+              classes={`${styles.select}`}
+              value={selectOptions ? selectOptions.data[fee.key].currency : ''}
+              options={currencyOptions}
+              className="flex-100"
+              onChange={this.handleSelect}
+            />
+          </div>
+        </div>)
+      }
+    })
+  }
+
   render () {
     const { theme, truckingInstance } = this.props
     const { truckingPricing } = truckingInstance
-    const { directionBool } = this.state
+    const { directionBool, editor } = this.state
     const keyObj = {}
     const directionKey = directionBool ? 'import' : 'export'
     const textStyle =
@@ -105,7 +211,8 @@ export class TruckingDisplayPanel extends Component {
     }
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const pricings = truckingPricing[directionKey].table
-    const pricingTables = pricings.map((pricing) => {
+    const pricingTables = pricings.map((pricing, i) => {
+      const editable = editor[i]
       const pricingCells = Object.keys(pricing.fees).map((pk) => {
         const pr = pricing.fees[pk]
         return (
@@ -115,7 +222,7 @@ export class TruckingDisplayPanel extends Component {
                 <p className="flex-none no_m">{chargeGlossary[pk]}:</p>
               </div>
             </div>
-            {TruckingDisplayPanel.cellDisplayGenerator(pr)}
+            {TruckingDisplayPanel.cellDisplayGenerator(pr, editable)}
           </div>
         )
       })
@@ -208,9 +315,7 @@ export class TruckingDisplayPanel extends Component {
             </h4>
             <div className="flex-5" />
             {modifier === 'City' ? (
-              <p className="flex-none">
-                {`${capitalize(keyObj.upperKey)}`}
-              </p>
+              <p className="flex-none">{`${capitalize(keyObj.upperKey)}`}</p>
             ) : (
               <p className="flex-none">{`${keyObj.lowerKey} - ${keyObj.upperKey}`}</p>
             )}
