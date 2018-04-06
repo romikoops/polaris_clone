@@ -17,7 +17,7 @@
   "devDependencies": {
     "@babel/preset-env": "7.0.0-beta.39",
     "babel-core": "^7.0.0-0",
-    "init-puppeteer": "https://github.com/selfrefactor/init-puppeteer#2.2.0",
+    "init-puppeteer": "https://github.com/selfrefactor/init-puppeteer#3.0.0",
     "jest": "^22.4.3",
     "puppeteer": "^1.2.0"
   }

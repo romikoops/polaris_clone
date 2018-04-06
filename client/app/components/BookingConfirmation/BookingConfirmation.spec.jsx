@@ -39,11 +39,18 @@ import { BookingConfirmation } from './BookingConfirmation'
 
 const cargoItemTypes = {}
 
+const edittedTenant = {
+  ...tenant,
+  scope: {
+    terms: ['FOO_TERM', 'BAR_TERM']
+  }
+}
+
 const propsBase = {
   theme,
   shipmentData: { ...shipmentData, cargoItemTypes },
   setStage: identity,
-  tenant,
+  tenant: edittedTenant,
   shipmentDispatch: {
     toDashboard: identity
   }

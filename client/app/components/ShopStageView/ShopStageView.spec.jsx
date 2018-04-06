@@ -1,12 +1,6 @@
 import * as React from 'react'
 import { shallow, mount } from 'enzyme'
 import { identity, theme } from '../../mocks'
-
-jest.mock('../../helpers', () => ({
-  gradientGenerator: x => x,
-  gradientTextGenerator: x => x
-}))
-// eslint-disable-next-line import/first
 import { ShopStageView } from './ShopStageView'
 
 const createWrapper = propsInput => mount(<ShopStageView {...propsInput} />)

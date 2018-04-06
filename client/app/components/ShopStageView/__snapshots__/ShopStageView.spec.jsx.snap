@@ -35,6 +35,40 @@ exports[`shallow rendering 1`] = `
     className="stage_row layout-row flex-100 layout-align-center"
   >
     <div
+      className="stage_box flex-none layout-column layout-align-start-center"
+      onClick={[Function]}
+    >
+      <div
+        className="wrapper_shop_stage_current"
+      >
+        <div
+          className="layout-column layout-align-center-center shop_stage_current flex-none "
+        >
+          <i
+            className="flex-none fa fa-chevron-left clip"
+            style={
+              Object {
+                "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+              }
+            }
+          />
+        </div>
+        <div
+          className="shop_stage_current_border"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <p
+        className="flex-none stage_text"
+      >
+        Previous Step
+      </p>
+    </div>
+    <div
       className="layout-row layout-align-start-center"
     >
       <div
@@ -51,10 +85,15 @@ exports[`shallow rendering 1`] = `
             className="wrapper_shop_stage_current"
           >
             <div
-              className="shop_stage_current flex-none layout-column layout-align-center-center"
+              className="layout-column layout-align-center-center shop_stage_current flex-none "
             >
               <h3
                 className="flex-none"
+                style={
+                  Object {
+                    "background": "-webkit-linear-gradient(left, undefined,undefined)",
+                  }
+                }
               >
                  
                 1
@@ -63,6 +102,11 @@ exports[`shallow rendering 1`] = `
             </div>
             <div
               className="shop_stage_current_border"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, undefined,undefined)",
+                }
+              }
             />
           </div>
           <p
@@ -157,6 +201,9 @@ exports[`shallow rendering 1`] = `
         </div>
       </div>
     </div>
+    <div
+      className="stage_box flex-none layout-column layout-align-start-center"
+    />
   </div>
 </div>
 `;

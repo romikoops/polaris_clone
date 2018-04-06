@@ -56,7 +56,7 @@ test('when user.role_id is 2', () => {
   const dom = createWrapper(props)
 
   const firstButton = dom.find('RoundButton').first()
-  expect(firstButton.prop('text')).toBe('Book Now')
+  expect(firstButton.prop('text')).toBe('Find Rates')
 
   const secondButton = dom.find('RoundButton').last()
   expect(secondButton.prop('text')).toBe('My Account')

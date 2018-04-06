@@ -319,7 +319,11 @@ Basic snapshot test
 
 ## ShipmentLocationBox
 
-Basic snapshot test
+Skipped because mocking is over the acceptable level of complexity with line 324:
+
+`
+const marker = new this.props.gMaps.Marker({
+`
 
 ## ShipmentSummaryBox
 

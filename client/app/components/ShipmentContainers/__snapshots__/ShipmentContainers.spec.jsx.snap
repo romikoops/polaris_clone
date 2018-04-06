@@ -18,6 +18,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
       <div
         className="layout-row flex-100 layout-wrap layout-align-start-center"
         key="0"
+        name="0-container"
         style={
           Object {
             "position": "relative",
@@ -324,6 +325,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
         <div
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           key="-1"
+          name="-1-container"
           style={
             Object {
               "position": "relative",
@@ -591,6 +593,7 @@ exports[`props.nextStageAttempt is true 1`] = `
       <div
         className="layout-row flex-100 layout-wrap layout-align-start-center"
         key="0"
+        name="0-container"
         style={
           Object {
             "position": "relative",
@@ -897,6 +900,7 @@ exports[`props.nextStageAttempt is true 1`] = `
         <div
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           key="-1"
+          name="-1-container"
           style={
             Object {
               "position": "relative",
@@ -1164,6 +1168,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
       <div
         className="layout-row flex-100 layout-wrap layout-align-start-center"
         key="0"
+        name="0-container"
         style={
           Object {
             "position": "relative",
@@ -1470,6 +1475,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
         <div
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           key="-1"
+          name="-1-container"
           style={
             Object {
               "position": "relative",
@@ -1737,6 +1743,7 @@ exports[`shallow rendering 1`] = `
       <div
         className="layout-row flex-100 layout-wrap layout-align-start-center"
         key="0"
+        name="0-container"
         style={
           Object {
             "position": "relative",
@@ -2043,6 +2050,7 @@ exports[`shallow rendering 1`] = `
         <div
           className="layout-row flex-100 layout-wrap layout-align-start-center"
           key="-1"
+          name="-1-container"
           style={
             Object {
               "position": "relative",
