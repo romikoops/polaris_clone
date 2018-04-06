@@ -66,6 +66,7 @@ exports[`shallow rendering 1`] = `
         }
       }
       routeIds={Array []}
+      setNotesIds={[Function]}
       setTargetAddress={[Function]}
       shipment={
         Object {
@@ -106,6 +107,25 @@ exports[`shallow rendering 1`] = `
         }
       }
     />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center closed_notes note_box"
+  >
+    <div
+      className="flex-none content_width_booking layout-row layout-align-start-center"
+    >
+      <NotesRow
+        notes={Array []}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
   </div>
   <div
     className="date_sec layout-row flex-100 layout-wrap layout-align-center-center"

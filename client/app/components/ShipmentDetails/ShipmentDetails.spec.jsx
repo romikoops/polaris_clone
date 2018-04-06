@@ -13,9 +13,17 @@ jest.mock('../../constants', () => {
 
   return { moment }
 })
+jest.mock('../../helpers', () => ({
+  isEmpty: () => true,
+  camelize: x => x
+}))
 jest.mock('../Checkbox/Checkbox', () => ({
   // eslint-disable-next-line react/prop-types
   Checkbox: ({ children }) => <div>{children}</div>
+}))
+jest.mock('./getModals', () => ({
+  // eslint-disable-next-line react/prop-types
+  default: ({ children }) => <div>{children}</div>
 }))
 jest.mock('../Incoterm/Box', () => ({
   // eslint-disable-next-line react/prop-types
