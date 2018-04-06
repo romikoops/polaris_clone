@@ -6,6 +6,7 @@ import styles from './CargoItemGroup.scss'
 import PropTypes from '../../../../prop-types'
 import { HsCodeViewer } from '../../../HsCodes/HsCodeViewer'
 import { gradientTextGenerator } from '../../../../helpers'
+import CargoItemGroupAggregated from './Aggregated'
 
 export class CargoItemGroup extends Component {
   constructor (props) {
@@ -96,7 +97,6 @@ export class CargoItemGroup extends Component {
       </div>
     ))
     const unitStyle = unitView ? styles.open_panel : styles.closed_panel
-    const summStyle = unitView ? styles.closed_panel : styles.open_panel
     const unitViewer = (
       <div
         className={`${unitStyle} ${
@@ -104,43 +104,6 @@ export class CargoItemGroup extends Component {
         } flex-100 layout-row layout-wrap layout-align-none-center layout-wrap`}
       >
         {unitArr}
-      </div>
-    )
-    const summViewer = (
-      <div
-        className={`${summStyle} ${
-          styles.panel
-        } flex-100 layout-row layout-wrap layout-align-start-center`}
-      >
-        <div
-          className={`${
-            styles.detailed_row
-          } flex-100 layout-row layout-wrap layout-align-none-center`}
-        >
-          <h4 className="flex-none"> Aggregate Values:</h4>
-        </div>
-        <div
-          className={`${
-            styles.detailed_row
-          } flex-100 layout-row layout-wrap layout-align-none-center`}
-        >
-          <div className="flex-33 layout-row layout-align-space-around">
-            <p className="flex-none">Gross Weight</p>
-            <p className="flex-none">{group.payload_in_kg} kg</p>
-          </div>
-
-          <div className="flex-33 layout-row layout-align-space-around">
-            <p className="flex-none">Volume</p>
-            <p className="flex-none">
-              {group.volume.toFixed(2)} m<sup>3</sup>
-            </p>
-          </div>
-          <div className="flex-33 layout-row layout-align-space-around">
-            <p className="flex-none">Chargeable Weight</p>
-            <p className="flex-none">{(group.chargeable_weight * 1000).toFixed(2)} kg</p>
-          </div>
-        </div>
-        <hr className="flex-100" />
       </div>
     )
     return (
@@ -184,7 +147,7 @@ export class CargoItemGroup extends Component {
         </div>
         <div className="flex-100 layout-row layout-align-none-start layout-wrap">
           {unitViewer}
-          {summViewer}
+          <CargoItemGroupAggregated group={group} />
         </div>
         <hr className="flex-100" />
         {viewHSCodes ? (

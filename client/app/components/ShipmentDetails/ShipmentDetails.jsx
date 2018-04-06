@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
+import Toggle from 'react-toggle'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -16,6 +17,7 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
+import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
@@ -25,6 +27,7 @@ import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
+import toggleCSS from './toggleCSS'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -64,6 +67,10 @@ export class ShipmentDetails extends Component {
           stackable: true
         }
       ],
+      aggregatedCargo: {
+        weight: 0,
+        volume: 0
+      },
       routes: {},
       containersErrors: [
         {
@@ -80,6 +87,11 @@ export class ShipmentDetails extends Component {
           quantity: false
         }
       ],
+      aggregatedCargoErrors: {
+        weight: true,
+        volume: true
+      },
+      aggregated: false,
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
@@ -146,15 +158,18 @@ export class ShipmentDetails extends Component {
   }
   componentDidUpdate () {
     const {
-      shipment, cargoItems, containers, selectedDay, origin, destination
+      shipment, cargoItems, containers, aggregatedCargo,
+      selectedDay, origin, destination, aggregated
     } = this.state
     this.props.bookingSummaryDispatch.update({
       shipment,
       cargoItems,
+      aggregatedCargo,
       containers,
       selectedDay,
       origin,
-      destination
+      destination,
+      aggregated
     })
   }
 
@@ -180,6 +195,10 @@ export class ShipmentDetails extends Component {
   }
   setTargetAddress (target, address) {
     this.setState({ [target]: { ...this.state[target], ...address } })
+  }
+
+  setAggregatedCargo (bool) {
+    this.setState({ aggregated: bool })
   }
 
   loadPrevReq (obj) {
@@ -258,6 +277,16 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  handleAggregatedCargoChange (event, hasError) {
+    const { name, value } = event.target
+    const { aggregatedCargo, aggregatedCargoErrors } = this.state
+
+    if (!aggregatedCargo || !aggregatedCargoErrors) return
+    aggregatedCargo[name] = value ? +value : 0
+    if (hasError !== undefined) aggregatedCargoErrors[name] = hasError
+    this.setState({ aggregatedCargo, aggregatedCargoErrors })
+  }
+
   handleCargoItemChange (event, hasError) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
@@ -267,8 +296,9 @@ export class ShipmentDetails extends Component {
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
     } else {
-      cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+      cargoItems[index][suffixName] = value ? +value : 0
     }
+
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -286,6 +316,10 @@ export class ShipmentDetails extends Component {
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
+  }
+
+  toggleAggregatedCargo () {
+    this.setState(prevState => ({ aggregated: !prevState.aggregated }))
   }
 
   addNewCargoItem () {
@@ -354,14 +388,24 @@ export class ShipmentDetails extends Component {
       return
     }
 
-    const { shipment } = this.state
-    const loadType = camelize(shipment.load_type)
-    const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
-    if (errorIdx > -1) {
-      this.setState({ nextStageAttempt: true })
-      ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+    if (this.state.aggregated) {
+      const test = false
+      if (test) {
+        this.setState({ nextStageAttempt: true })
 
-      return
+        return
+      }
+    } else {
+      const { shipment } = this.state
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+
+      if (errorIdx > -1) {
+        this.setState({ nextStageAttempt: true })
+        ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+
+        return
+      }
     }
 
     const data = { shipment: this.state.shipment }
@@ -376,6 +420,8 @@ export class ShipmentDetails extends Component {
     data.shipment.destination_id = this.state.destination.hub_id
     data.shipment.cargo_items_attributes = this.state.cargoItems
     data.shipment.containers_attributes = this.state.containers
+    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
+
     data.shipment.has_on_carriage = this.state.has_on_carriage
     data.shipment.has_pre_carriage = this.state.has_pre_carriage
     data.shipment.planned_pickup_date = this.state.selectedDay
@@ -406,7 +452,7 @@ export class ShipmentDetails extends Component {
       // Set truckType to '', if carriage is toggled off
       artificialEvent.target.id = `${truckingKey}-`
     } else if (!shipment.trucking[truckingKey].truck_type) {
-      // Set first truckType if carriage is toggled on and truckType is empty
+      // Set first truckType, if carriage is toggled on and truckType is empty
       const truckType = this.truckTypes[this.state.shipment.load_type][0]
       artificialEvent.target.id = `${truckingKey}-${truckType}`
     }
@@ -442,8 +488,18 @@ export class ShipmentDetails extends Component {
     const { theme, scope } = tenant.data
     let cargoDetails
     if (!shipmentData.shipment) return ''
-    const { notes } = shipmentData
-    if (shipmentData.shipment.load_type === 'container') {
+
+    if (this.state.aggregated) {
+      cargoDetails = (
+        <ShipmentAggregatedCargo
+          aggregatedCargo={this.state.aggregatedCargo}
+          handleDelta={(event, hasError) => this.handleAggregatedCargoChange(event, hasError)}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+        />
+      )
+    } else if (shipmentData.shipment.load_type === 'container') {
       cargoDetails = (
         <ShipmentContainers
           containers={this.state.containers}
@@ -456,8 +512,7 @@ export class ShipmentDetails extends Component {
           toggleModal={name => this.toggleModal(name)}
         />
       )
-    }
-    if (shipmentData.shipment.load_type === 'cargo_item') {
+    } else if (shipmentData.shipment.load_type === 'cargo_item') {
       cargoDetails = (
         <ShipmentCargoItems
           cargoItems={this.state.cargoItems}
@@ -580,7 +635,11 @@ export class ShipmentDetails extends Component {
     const truckTypes = this.truckTypes[this.state.shipment.load_type]
     const showTruckingDetails =
       truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
+    const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
+
+    const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
+
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
@@ -630,7 +689,42 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
+          {
+            shipmentData.shipment.load_type === 'cargo_item' && (
+              <div className="content_width_booking layout-row layout-align-center">
+                <div className={
+                  `${styles.toggle_aggregated_sec} ` +
+                  'flex-50 layout-row layout-align-space-around-center'
+                }
+                >
+                  <h3
+                    className={this.state.aggregated ? 'pointy' : ''}
+                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                    onClick={() => this.setAggregatedCargo(false)}
+                  >
+                    Cargo Units
+                  </h3>
+                  <Toggle
+                    className="flex-none aggregated_cargo"
+                    id="aggregated_cargo"
+                    name="aggregated_cargo"
+                    checked={this.state.aggregated}
+                    onChange={() => this.toggleAggregatedCargo()}
+                  />
+                  <h3
+                    className={this.state.aggregated ? '' : 'pointy'}
+                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                    onClick={() => this.setAggregatedCargo(true)}
+                  >
+                    Total Dimensions
+                  </h3>
+                </div>
+              </div>
+            )
+          }
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -694,12 +788,17 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user &&
-          !user.guest && (
+        {user && !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+              'layout-wrap layout-align-center-center'
+            }
+          >
             <div
               className={
-                `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <div
@@ -708,23 +807,18 @@ export class ShipmentDetails extends Component {
                   'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={
-                    `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                  }
-                >
-                  <RoundButton
-                    text="Back to Dashboard"
-                    handleNext={this.returnToDashboard}
-                    iconClass="fa-angle-left"
-                    theme={theme}
-                    back
-                  />
-                </div>
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
+        {styleTagJSX}
       </div>
     )
   }

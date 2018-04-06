@@ -3,7 +3,6 @@ import PropTypes from '../../prop-types'
 import styles from './ShipmentCargoItems.scss'
 import defs from '../../styles/default_classes.scss'
 import QuantityInput from '../QuantityInput/QuantityInput'
-import { TextHeading } from '../TextHeading/TextHeading'
 import '../../styles/select-css-custom.css'
 import getInputs from './inputs'
 
@@ -14,7 +13,6 @@ export class ShipmentCargoItems extends Component {
       cargoItemTypes: [],
       cargoItemInfoExpanded: [true]
     }
-    this.handleCargoChange = this.handleCargoChange.bind(this)
     this.addNewCargo = this.addNewCargo.bind(this)
     this.setFirstRenderInputs = this.setFirstRenderInputs.bind(this)
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
@@ -24,12 +22,6 @@ export class ShipmentCargoItems extends Component {
     this.setState({ firstRenderInputs: bool })
   }
 
-  handleCargoChange (event) {
-    const { name, value } = event.target
-    this.setState({
-      newCargoItem: { ...this.state.newCargoItem, [name]: value }
-    })
-  }
   addNewCargo () {
     const { cargoItemInfoExpanded } = this.state
     cargoItemInfoExpanded.push(true)
@@ -202,7 +194,6 @@ export class ShipmentCargoItems extends Component {
             `layout-row flex-none layout-wrap layout-align-center-center ${defs.content_width} `
           }
         >
-          <TextHeading theme={theme} text="Cargo Units" size={3} />
           <div className="layout-row flex-100 layout-wrap layout-align-start-center">
             {cargosAdded}
           </div>
