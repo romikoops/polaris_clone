@@ -690,35 +690,39 @@ export class ShipmentDetails extends Component {
           </div>
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          <div className="content_width_booking layout-row layout-align-center">
-            <div className={
-              `${styles.toggle_aggregated_sec} ` +
-              'flex-50 layout-row layout-align-space-around-center'
-            }
-            >
-              <h3
-                className={this.state.aggregated ? 'pointy' : ''}
-                style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
-                onClick={() => this.setAggregatedCargo(false)}
-              >
-                Units Details
-              </h3>
-              <Toggle
-                className="flex-none aggregated_cargo"
-                id="aggregated_cargo"
-                name="aggregated_cargo"
-                checked={this.state.aggregated}
-                onChange={() => this.toggleAggregatedCargo()}
-              />
-              <h3
-                className={this.state.aggregated ? '' : 'pointy'}
-                style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
-                onClick={() => this.setAggregatedCargo(true)}
-              >
-                Total Dimensions
-              </h3>
-            </div>
-          </div>
+          {
+            shipmentData.shipment.load_type === 'cargo_item' && (
+              <div className="content_width_booking layout-row layout-align-center">
+                <div className={
+                  `${styles.toggle_aggregated_sec} ` +
+                  'flex-50 layout-row layout-align-space-around-center'
+                }
+                >
+                  <h3
+                    className={this.state.aggregated ? 'pointy' : ''}
+                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                    onClick={() => this.setAggregatedCargo(false)}
+                  >
+                    Cargo Units
+                  </h3>
+                  <Toggle
+                    className="flex-none aggregated_cargo"
+                    id="aggregated_cargo"
+                    name="aggregated_cargo"
+                    checked={this.state.aggregated}
+                    onChange={() => this.toggleAggregatedCargo()}
+                  />
+                  <h3
+                    className={this.state.aggregated ? '' : 'pointy'}
+                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                    onClick={() => this.setAggregatedCargo(true)}
+                  >
+                    Total Dimensions
+                  </h3>
+                </div>
+              </div>
+            )
+          }
           {cargoDetails}
         </div>
         <div
