@@ -145,6 +145,7 @@ export class AdminTruckingView extends Component {
         theme={theme}
         truckingInstance={currentTruckingPricing}
         closeView={this.closeQueryView}
+        adminDispatch={adminDispatch}
       />
     )
     const toggleCSS = `

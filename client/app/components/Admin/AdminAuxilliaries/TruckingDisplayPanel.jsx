@@ -3,20 +3,25 @@ import PropTypes from 'prop-types'
 import Toggle from 'react-toggle'
 import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
-import { chargeGlossary, currencyOptions, truckingRateBasises } from '../../../constants'
+import {
+  chargeGlossary,
+  currencyOptions,
+  truckingRateBasises,
+  rateBasisSchema
+} from '../../../constants'
 import { capitalize, gradientTextGenerator } from '../../../helpers'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
 export class TruckingDisplayPanel extends Component {
-  // static selectFromOptions (options, value) {
-  //   let result
-  //   options.forEach((op) => {
-  //     if (op.value === value) {
-  //       result = op
-  //     }
-  //   })
-  //   return result || options[0]
-  // }
+  static selectFromOptions (options, value) {
+    let result
+    options.forEach((op) => {
+      if (op.value === value) {
+        result = op
+      }
+    })
+    return result || options[0]
+  }
   static cellDisplayGenerator (fee) {
     const fields = Object.keys(fee).map((fk) => {
       const feeValue = fk !== 'currency' && fk !== 'rate_basis' ? fee[fk].toFixed(2) : fee[fk]
@@ -39,49 +44,49 @@ export class TruckingDisplayPanel extends Component {
     this.state = {
       shrinkView: {},
       selectOptions: {},
-      editor: {}
+      editor: {},
+      pricing: {}
     }
     this.shrinkPanel = this.shrinkPanel.bind(this)
   }
-  // componentWillMount () {
-  //   this.setAllFromOptions()
-  // }
-  // setAllFromOptions () {
-  //   const { truckingInstance } = this.props
-  //   const { truckingPricing } = truckingInstance
-  //   const { directionBool } = this.state
-  //   const directionKey = directionBool ? 'import' : 'export'
-  //   const newObj = { data: {} }
-  //   const tmpObj = {}
-  //   truckingPricing[directionKey].table.forEach((pricing) => {
-  //     Object.keys(pricing.data).forEach((key) => {
-  //       if (!newObj.data[key]) {
-  //         newObj.data[key] = {}
-  //       }
-  //       if (!tmpObj[key]) {
-  //         tmpObj[key] = {}
-  //       }
-  //       let opts
-  //       Object.keys(pricing.data[key]).forEach((chargeKey) => {
-  //         if (chargeKey === 'currency') {
-  //           opts = currencyOpts.slice()
-  //           newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
-  //             opts,
-  //             pricing.data[key][chargeKey]
-  //           )
-  //         } else if (chargeKey === 'rate_basis') {
-  //           opts = rateOpts.slice()
-  //           newObj.data[key][chargeKey] = AdminPriceEditor.selectFromOptions(
-  //             opts,
-  //             pricing.data[key][chargeKey]
-  //           )
-  //         }
-  //       })
-  //     })
-  //   })
-
-  //   this.setState({ selectOptions: newObj })
-  // }
+  componentWillMount () {
+    this.setAllFromOptions()
+  }
+  setAllFromOptions () {
+    const { truckingInstance } = this.props
+    const { truckingPricing } = truckingInstance
+    const { directionBool } = this.state
+    const directionKey = directionBool ? 'import' : 'export'
+    const newObj = { data: {} }
+    const tmpObj = {}
+    truckingPricing[directionKey].table.forEach((pricing) => {
+      Object.keys(pricing.fees).forEach((key) => {
+        if (!newObj[key]) {
+          newObj[key] = {}
+        }
+        if (!tmpObj[key]) {
+          tmpObj[key] = {}
+        }
+        let opts
+        Object.keys(pricing.fees[key]).forEach((chargeKey) => {
+          if (chargeKey === 'currency') {
+            opts = currencyOptions.slice()
+            newObj[key][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+              opts,
+              pricing.fees[key][chargeKey]
+            )
+          } else if (chargeKey === 'rate_basis') {
+            opts = truckingRateBasises.slice()
+            newObj[key][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+              opts,
+              pricing.fees[key][chargeKey]
+            )
+          }
+        })
+      })
+    })
+    this.setState({ selectOptions: newObj })
+  }
   shrinkPanel (key) {
     this.setState({
       shrinkView: {
@@ -93,9 +98,77 @@ export class TruckingDisplayPanel extends Component {
   handleDirectionToggle (value) {
     this.setState({ directionBool: !this.state.directionBool })
   }
+  toggleEdit (i) {
+    const { editor, pricing } = this.state
+    let tmpPricing
+    if (!pricing.modifier) {
+      const { truckingInstance } = this.props
+      const { truckingPricing } = truckingInstance
+      tmpPricing = truckingPricing
+    } else {
+      tmpPricing = pricing
+    }
+    editor[i] = !editor[i]
+    this.setState({ editor, pricing: tmpPricing })
+  }
+  handleSelect (selection, i, directionKey) {
+    const nameKeys = selection.name.split('-')
+    if (nameKeys[1] === 'rate_basis') {
+      const price = this.state.pricing[directionKey].table[i].fees[nameKeys[0]]
+      const newSchema = rateBasisSchema[selection.value]
+      Object.keys(newSchema).forEach((k) => {
+        if (price[k] && newSchema[k] && k !== 'rate_basis') {
+          newSchema[k] = price[k]
+        }
+      })
+      const tmpPricing = this.state.pricing
+      tmpPricing[directionKey].table[i].fees[nameKeys[0]] = newSchema
 
-  cellEditorGenerator (fee) {
-    const { selectOptions } = this.state
+      this.setState({
+        pricing: tmpPricing,
+        selectOptions: {
+          ...this.state.selectOptions,
+          [nameKeys[0]]: {
+            ...this.state.selectOptions[nameKeys[0]],
+            [nameKeys[1]]: selection
+          }
+        }
+      })
+    } else {
+      const tmpPricing = this.state.pricing
+      tmpPricing[directionKey].table[i].fees[nameKeys[0]][nameKeys[1]] = selection.value
+      this.setState({
+        pricing: tmpPricing,
+        selectOptions: {
+          ...this.state.selectOptions,
+          [nameKeys[0]]: {
+            ...this.state.selectOptions[nameKeys[0]],
+            [nameKeys[1]]: selection
+          }
+        }
+      })
+    }
+  }
+  handleChange (event, i, directionKey) {
+    const { name, value } = event.target
+    const { pricing } = this.state
+    const nameKeys = name.split('-')
+    pricing[directionKey].table[i].fees[nameKeys[0]][nameKeys[1]] = parseFloat(value)
+
+    this.setState({
+      pricing
+    })
+  }
+  saveEdit () {
+    const { pricing } = this.state
+    const { adminDispatch } = this.props
+    adminDispatch.editTruckingPrice(pricing)
+    this.toggleEdit()
+  }
+
+  cellEditorGenerator (feeKey, directionKey, i) {
+    const { selectOptions, pricing } = this.state
+    const fee = pricing[directionKey].table[i].fees[feeKey]
     const cells = []
     Object.keys(fee).forEach((chargeKey) => {
       if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
@@ -108,8 +181,8 @@ export class TruckingDisplayPanel extends Component {
             <input
               type="number"
               value={fee[chargeKey]}
-              onChange={this.handleChange}
-              name={`${fee.key}-${chargeKey}`}
+              onChange={e => this.handleChange(e, i, directionKey)}
+              name={`${feeKey}-${chargeKey}`}
             />
           </div>
         </div>)
@@ -121,10 +194,10 @@ export class TruckingDisplayPanel extends Component {
           <NamedSelect
             name={`${fee.key}-${chargeKey}`}
             classes={`${styles.select}`}
-            value={selectOptions ? selectOptions.data[fee.key][chargeKey] : ''}
+            value={selectOptions ? selectOptions[feeKey][chargeKey] : ''}
             options={truckingRateBasises}
             className="flex-100"
-            onChange={this.handleSelect}
+            onChange={e => this.handleSelect(e, i, directionKey)}
           />
         </div>)
       } else if (chargeKey === 'currency') {
@@ -137,15 +210,16 @@ export class TruckingDisplayPanel extends Component {
             <NamedSelect
               name={`${fee.key}-currency`}
               classes={`${styles.select}`}
-              value={selectOptions ? selectOptions.data[fee.key].currency : ''}
+              value={selectOptions ? selectOptions[feeKey].currency : ''}
               options={currencyOptions}
               className="flex-100"
-              onChange={this.handleSelect}
+              onChange={e => this.handleSelect(e, i, directionKey)}
             />
           </div>
         </div>)
       }
     })
+    return cells
   }
 
   render () {
@@ -174,6 +248,7 @@ export class TruckingDisplayPanel extends Component {
         background: rgba(0, 0, 0, 0.5) !important;
       }
     `
+
     let modifier = ''
     if (truckingInstance.zipcode) {
       [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.zipcode
@@ -190,18 +265,18 @@ export class TruckingDisplayPanel extends Component {
       modifier = 'Distance'
     }
 
-    switch (truckingInstance.modifier) {
+    switch (truckingPricing.modifier) {
       case 'kg':
-        keyObj.cellUpperKey = 'Max Weight'
-        keyObj.cellLowerKey = 'Min Weight'
+        keyObj.cellUpperKey = 'max_weight'
+        keyObj.cellLowerKey = 'min_weight'
         break
       case 'cbm':
-        keyObj.cellUpperKey = 'Max Cbm'
-        keyObj.cellLowerKey = 'Min Cbm'
+        keyObj.cellUpperKey = 'max_cbm'
+        keyObj.cellLowerKey = 'min_cbm'
         break
       case 'distance':
-        keyObj.cellUpperKey = 'Max Km'
-        keyObj.cellLowerKey = 'Min Km'
+        keyObj.cellUpperKey = 'max_km'
+        keyObj.cellLowerKey = 'min_km'
         break
       default:
         break
@@ -222,10 +297,36 @@ export class TruckingDisplayPanel extends Component {
                 <p className="flex-none no_m">{chargeGlossary[pk]}:</p>
               </div>
             </div>
-            {TruckingDisplayPanel.cellDisplayGenerator(pr, editable)}
+            {editable
+              ? this.cellEditorGenerator(pk, directionKey, i)
+              : TruckingDisplayPanel.cellDisplayGenerator(pr)}
           </div>
         )
       })
+      const startEdit = (
+        <div
+          className="flex-20 layout-row layout-align-end-center"
+          onClick={() => this.toggleEdit(i)}
+        >
+          <i className="fa fa-pencil " style={{ color: 'white' }} />
+        </div>
+      )
+      const saveClose = (
+        <div className="flex-20 layout-row layout-align-end-center">
+          <div
+            className="flex-50 layout-row layout-align-end-center"
+            onClick={() => this.saveEdit(i)}
+          >
+            <i className="fa fa-floppy-o " style={{ color: 'white' }} />
+          </div>
+          <div
+            className="flex-50 layout-row layout-align-end-center"
+            onClick={() => this.toggleEdit(i)}
+          >
+            <i className="fa fa-times " style={{ color: 'red' }} />
+          </div>
+        </div>
+      )
       return (
         <div
           className={`flex-100 layout-row layout-align-start-center layout-wrap ${
@@ -282,6 +383,7 @@ export class TruckingDisplayPanel extends Component {
             ) : (
               ''
             )}
+            {editable ? saveClose : startEdit}
           </div>
           <div
             className={`${
@@ -341,9 +443,11 @@ export class TruckingDisplayPanel extends Component {
 TruckingDisplayPanel.propTypes = {
   theme: PropTypes.theme,
   truckingInstance: PropTypes.objectOf(PropTypes.any).isRequired,
-  closeView: PropTypes.func.isRequired
+  closeView: PropTypes.func.isRequired,
+  adminDispatch: PropTypes.func
 }
 TruckingDisplayPanel.defaultProps = {
-  theme: {}
+  theme: {},
+  adminDispatch: null
 }
 export default TruckingDisplayPanel

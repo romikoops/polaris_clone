@@ -665,6 +665,33 @@ function getDashboard (redirect) {
   }
 }
 
+function editTruckingPrice (price) {
+  function request (dashData) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_REQUEST, payload: dashData }
+  }
+  function success (dashData) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_SUCCESS, payload: dashData }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editTruckingPrice(price).then(
+      (data) => {
+        dispatch(alertActions.success('Editing Trucking Price successful'))
+        dispatch(success(data.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
 function autoGenSchedules (data) {
   function request (schedData) {
     return { type: adminConstants.GENERATE_SCHEDULES_REQUEST, payload: schedData }
@@ -1436,7 +1463,8 @@ export const adminActions = {
   loadItinerarySchedules,
   deleteTrip,
   deleteClient,
-  saveItineraryNotes
+  saveItineraryNotes,
+  editTruckingPrice
 }
 
 export default adminActions

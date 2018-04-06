@@ -438,24 +438,53 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.GENERATE_SCHEDULES_REQUEST: {
-      const reqGenSched = merge({}, state, {
+      return {
+        ...state,
         loading: true
-      })
-      return reqGenSched
+      }
     }
     case adminConstants.GENERATE_SCHEDULES_SUCCESS: {
-      const succGenSched = merge({}, state, {
+      return {
+        ...state,
         schedules: action.payload.data,
         loading: false
-      })
-      return succGenSched
+      }
     }
     case adminConstants.GENERATE_SCHEDULES_FAILURE: {
-      const errGenSched = merge({}, state, {
+      return {
         error: { schedules: action.error },
         loading: false
-      })
-      return errGenSched
+      }
+    }
+
+    case adminConstants.EDIT_TRUCKING_PRICE_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.EDIT_TRUCKING_PRICE_SUCCESS: {
+      const otps = state.truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id === action.payload.id)[0]
+      const tps = state.truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id !== action.payload.id)
+      otps.truckingPricing = action.payload
+      tps.push(otps)
+      return {
+        ...state,
+        truckingDetail: {
+          ...state.truckingDetail,
+          truckingPricings: tps
+        },
+        loading: false
+      }
+    }
+    case adminConstants.EDIT_TRUCKING_PRICE_FAILURE: {
+      return {
+        ...state,
+        error: { schedules: action.error },
+        loading: false
+      }
     }
 
     case adminConstants.GET_TRUCKING_REQUEST: {
