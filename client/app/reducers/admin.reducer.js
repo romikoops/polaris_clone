@@ -331,6 +331,48 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
+    case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
+      const req =
+        state.shipments && state.shipments.requested
+          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const dashReq =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
+          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
+      const dashFinished =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
+          ? state.dashboard.shipments.finished
+          : []
+      finished.push(action.payload)
+      dashFinished.push(action.payload)
+      const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
+      if (shipment) {
+        shipment.status = 'finished'
+      }
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            ...state.dashboard.shipments,
+            open: dashFinished,
+            requested: dashReq
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          finished,
+          requested: req
+        },
+        shipment: {
+          ...state.shipment,
+          shipment
+        },
+        loading: false
+      }
+    }
     case adminConstants.CONFIRM_SHIPMENT_FAILURE: {
       const errConfShip = merge({}, state, {
         error: { shipments: action.error },
@@ -1036,6 +1078,23 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.DELETE_CLIENT_REQUEST:
+      return state
+    case adminConstants.DELETE_CLIENT_SUCCESS: {
+      const clients = state.clients.filter(client => client.id !== action.payload)
+      return {
+        ...state,
+        clients,
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_CLIENT_FAILURE:
+      return {
+        ...state,
+        error: { clients: action.error },
         loading: false
       }
 

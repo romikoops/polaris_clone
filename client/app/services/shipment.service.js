@@ -76,6 +76,15 @@ function setShipmentContacts (data) {
   const url = `${BASE_URL}/shipments/${data.shipment.id}/update`
   return fetch(url, requestOptions).then(handleResponse)
 }
+function getNotes (noteIds) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(noteIds)
+  }
+  const url = `${BASE_URL}/notes/fetch`
+  return fetch(url, requestOptions).then(handleResponse)
+}
 
 function uploadDocument (doc, type, url) {
   const formData = new FormData()
@@ -127,7 +136,8 @@ export const shipmentService = {
   setShipmentContacts,
   uploadDocument,
   acceptShipment,
-  updateCurrency
+  updateCurrency,
+  getNotes
 }
 
 export default shipmentService

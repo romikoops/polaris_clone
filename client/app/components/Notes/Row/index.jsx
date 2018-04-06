@@ -3,9 +3,9 @@ import PropTypes from '../../../prop-types'
 import NotesCard from '../Card'
 import styles from './index.scss'
 
-const NotesRow = ({ notes }) => {
+const NotesRow = ({ notes, theme }) => {
   const noteCards = notes.map(n =>
-    <NotesCard note={n} />)
+    <NotesCard note={n} theme={theme} />)
   return (
     <div className="layout-row flex-100 layout-wrap layout-align-center">
       <div
@@ -22,11 +22,13 @@ const NotesRow = ({ notes }) => {
 }
 
 NotesRow.propTypes = {
-  notes: PropTypes.arrayOf(PropTypes.any)
+  notes: PropTypes.arrayOf(PropTypes.any),
+  theme: PropTypes.theme
 }
 
 NotesRow.defaultProps = {
-  notes: []
+  notes: [],
+  theme: {}
 }
 
 export default NotesRow

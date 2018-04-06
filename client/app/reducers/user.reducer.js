@@ -81,8 +81,8 @@ export default function users (state = initialState, action) {
         ...state,
         dashboard: {
           ...state.dashboard,
-          locations: state.dashboard.locations.filter(item =>
-            item.location.id !== parseInt(action.payload.id, 10))
+          locations: state.dashboard.locations
+            .filter(item => item.location.id !== parseInt(action.payload.id, 10))
         },
         loading: false
       }
@@ -159,11 +159,11 @@ export default function users (state = initialState, action) {
       return reqShips
     }
     case userConstants.GET_SHIPMENTS_SUCCESS: {
-      const succShips = merge({}, state, {
+      return {
+        ...state,
         shipments: action.payload.data,
         loading: false
-      })
-      return succShips
+      }
     }
     case userConstants.GET_SHIPMENTS_FAILURE: {
       const errShips = merge({}, state, {
@@ -200,11 +200,11 @@ export default function users (state = initialState, action) {
       return reqShip
     }
     case userConstants.USER_GET_SHIPMENT_SUCCESS: {
-      const succShip = merge({}, state, {
+      return {
+        ...state,
         shipment: action.payload.data,
         loading: false
-      })
-      return succShip
+      }
     }
     case userConstants.USER_GET_SHIPMENT_FAILURE: {
       const errShip = merge({}, state, {
@@ -221,11 +221,11 @@ export default function users (state = initialState, action) {
       return reqDash
     }
     case userConstants.GET_DASHBOARD_SUCCESS: {
-      const succDash = merge({}, state, {
+      return {
+        ...state,
         dashboard: action.payload.data,
         loading: false
-      })
-      return succDash
+      }
     }
     case userConstants.GET_DASHBOARD_FAILURE: {
       const errDash = merge({}, state, {
@@ -242,11 +242,11 @@ export default function users (state = initialState, action) {
       return reqContact
     }
     case userConstants.GET_CONTACT_SUCCESS: {
-      const succContact = merge({}, state, {
+      return {
+        ...state,
         contactData: action.payload.data,
         loading: false
-      })
-      return succContact
+      }
     }
     case userConstants.GET_CONTACT_FAILURE: {
       const errContact = merge({}, state, {
@@ -263,11 +263,11 @@ export default function users (state = initialState, action) {
       return reqNewContact
     }
     case userConstants.NEW_CONTACT_SUCCESS: {
-      const succNewContact = merge({}, state, {
+      return {
+        ...state,
         contactData: action.payload.data,
         loading: false
-      })
-      return succNewContact
+      }
     }
     case userConstants.NEW_CONTACT_FAILURE: {
       const errNewContact = merge({}, state, {
@@ -286,11 +286,11 @@ export default function users (state = initialState, action) {
     case userConstants.NEW_ALIAS_SUCCESS: {
       const { aliases } = state.dashboard
       aliases.push(action.payload.data)
-      const succNewAlias = merge({}, state, {
+      return {
+        ...state,
         contactData: aliases,
         loading: false
-      })
-      return succNewAlias
+      }
     }
     case userConstants.NEW_ALIAS_FAILURE: {
       const errNewAlias = merge({}, state, {
@@ -307,8 +307,8 @@ export default function users (state = initialState, action) {
       return reqDeleteAlias
     }
     case userConstants.DELETE_ALIAS_SUCCESS: {
-      const aliasless = state.dashboard.aliases.filter(x =>
-        x.id !== parseInt(action.payload.data, 10))
+      const aliasless = state.dashboard.aliases
+        .filter(x => x.id !== parseInt(action.payload.data, 10))
       return {
         ...state,
         dashboard: {
@@ -333,13 +333,14 @@ export default function users (state = initialState, action) {
     case userConstants.UPLOAD_DOCUMENT_SUCCESS: {
       const docs = state.shipment.documents
       docs.push(action.payload)
-      const succDocUpload = merge({}, state, {
+      return {
+        ...state,
         shipment: {
+          ...state.shipment,
           documents: docs
         },
         loading: false
-      })
-      return succDocUpload
+      }
     }
     case userConstants.UPLOAD_DOCUMENT_FAILURE: {
       const errDocUpload = merge({}, state, {
@@ -354,13 +355,14 @@ export default function users (state = initialState, action) {
       return reqDocDelete
     }
     case userConstants.DELETE_DOCUMENT_SUCCESS: {
-      const succDocDelete = merge({}, state, {
+      return {
+        ...state,
         shipment: {
+          ...state.shipment,
           documents: state.shipment.documents.filter(item => item.id !== action.payload)
         },
         loading: false
-      })
-      return succDocDelete
+      }
     }
     case userConstants.DELETE_DOCUMENT_FAILURE: {
       const errDocDelete = merge({}, state, {

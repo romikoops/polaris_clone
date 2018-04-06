@@ -216,6 +216,17 @@ export class BookingConfirmation extends Component {
 
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const docView = []
+    const docChecker = {
+      packing_sheet: false,
+      commercial_invoice: false,
+      customs_declaration: false,
+      customs_value_declaration: false,
+      eori: false,
+      certificate_of_origin: false,
+      dangerous_goods: false,
+      bill_of_lading: false,
+      invoice: false
+    }
     if (documents) {
       documents.forEach((doc) => {
         docView.push(<div className="flex-50 layout-row" style={{ padding: '10px' }}>
@@ -231,6 +242,18 @@ export class BookingConfirmation extends Component {
         </div>)
       })
     }
+    Object.keys(docChecker).forEach((key) => {
+      if (!docChecker[key]) {
+        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+          <div className="flex-none layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ban" />
+          </div>
+          <div className="flex layout-align-start-center layout-row">
+            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          </div>
+        </div>)
+      }
+    })
     const termBullets = terms.map(t => <li> {t}</li>)
     const themeTitled =
       theme && theme.colors

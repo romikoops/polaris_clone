@@ -110,7 +110,7 @@ export class ChooseRoute extends Component {
     if (!schedules) return ''
 
     const depDay = shipment ? shipment.planned_pickup_date : new Date()
-    schedules.sort(ChooseRoute.dynamicSort('-closing_date'))
+    schedules.sort(ChooseRoute.dynamicSort('closing_date'))
     const closestRoutes = []
     const focusRoutes = []
     const altRoutes = []

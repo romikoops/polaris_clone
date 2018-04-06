@@ -331,6 +331,14 @@ function deleteHub (hubId) {
   }
   return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions).then(handleResponse)
 }
+
+function deleteClient (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/clients/${id}`, requestOptions).then(handleResponse)
+}
 function editHub (hubId, object) {
   const requestOptions = {
     method: 'PATCH',
@@ -485,7 +493,8 @@ export const adminService = {
   editLocalCharges,
   deleteHub,
   deletePricing,
-  editHub
+  editHub,
+  deleteClient
 }
 
 export default adminService

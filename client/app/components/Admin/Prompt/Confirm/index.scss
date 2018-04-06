@@ -7,7 +7,7 @@
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 50;
+    z-index: 60;
     // background: rgba(0,0,0,0.25);
   }
   .confirm_fade{
@@ -18,13 +18,13 @@
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 51;
+    z-index: 61;
     background: rgba(0,0,0,0.25);
   }
   .confirm_box {
     width: 450px;
     height: 300px;
-    z-index: 52;
+    z-index: 62;
     padding: 25px;
     border-radius: 10px;
     position: relative;

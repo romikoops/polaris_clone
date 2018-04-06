@@ -69,6 +69,16 @@ class Itinerary < ApplicationRecord
       layovers: [],
       trips: []
     }
+    stats = {
+      layovers: {
+        number_created: 0,
+        number_updated: 0
+      },
+      trips: {
+        number_created: 0,
+        number_updated: 0
+      }
+    }
     if start_date.kind_of? Date
       tmp_date = start_date
     else
@@ -89,10 +99,12 @@ class Itinerary < ApplicationRecord
         if trip_check
           p "REJECTED"
           tmp_date += 1.day
+          stats[:trips][:number_updated] += 1
           next
         end
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         results[:trips] << trip
+        stats[:trips][:number_created] += 1
         p trip
         stops_in_order.each do |stop|
           if stop.index == 0
@@ -116,12 +128,13 @@ class Itinerary < ApplicationRecord
           end
           layover = trip.layovers.create!(data)
           results[:layovers] << layover
+          stats[:layovers][:number_created] += 1
           p layover
         end
       end
       tmp_date += 1.day
     end
-    return results
+    return {results: results, stats: stats}
   end
 
   def prep_schedules(limit)

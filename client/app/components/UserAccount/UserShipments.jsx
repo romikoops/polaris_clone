@@ -7,6 +7,21 @@ import defaults from '../../styles/default_classes.scss'
 import { TextHeading } from '../TextHeading/TextHeading'
 
 export class UserShipments extends Component {
+  static dynamicSort (property) {
+    let sortOrder = 1
+    let prop
+    if (property[0] === '-') {
+      sortOrder = -1
+      prop = property.substr(1)
+    } else {
+      prop = property
+    }
+    return (a, b) => {
+      const result1 = a[prop] < b[prop] ? -1 : a[prop] > b[prop]
+      const result2 = result1 ? 1 : 0
+      return result2 * sortOrder
+    }
+  }
   constructor (props) {
     super(props)
     this.viewShipment = this.viewShipment.bind(this)
@@ -33,7 +48,7 @@ export class UserShipments extends Component {
     }
     const openShipments =
       shipments && shipments.open.length !== 0 ? (
-        shipments.open.map(ship => (
+        shipments.open.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
           <UserShipmentRow
             key={v4()}
             shipment={ship}
@@ -49,7 +64,7 @@ export class UserShipments extends Component {
       )
     const reqShipments =
       shipments && shipments.requested.length !== 0 ? (
-        shipments.requested.map(ship => (
+        shipments.requested.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
           <UserShipmentRow
             key={v4()}
             shipment={ship}
@@ -65,7 +80,7 @@ export class UserShipments extends Component {
       )
     const finishedShipments =
       shipments && shipments.finished.length !== 0 ? (
-        shipments.finished.map(ship => (
+        shipments.finished.sort(UserShipments.dynamicSort('booking_placed_at')).map(ship => (
           <UserShipmentRow
             key={v4()}
             shipment={ship}
@@ -85,12 +100,14 @@ export class UserShipments extends Component {
           <TextHeading theme={theme} size={1} text="Shipments" />
         </div>
         <div
-          className={
-            `flex-100 layout-row layout-wrap layout-align-start-center ${defaults.border_divider}`
-          }
+          className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+            defaults.border_divider
+          }`}
         >
           <div
-            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${
+              styles.sec_header
+            }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Open Shipments</p>
           </div>
@@ -98,7 +115,9 @@ export class UserShipments extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${
+              styles.sec_header
+            }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Requested Shipments</p>
           </div>
@@ -106,7 +125,9 @@ export class UserShipments extends Component {
         </div>
         <div className="flex-100 layout-row layout-wrap layout-align-start-center">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center section_padding ${styles.sec_header}`}
+            className={`flex-100 layout-row layout-align-space-between-center section_padding ${
+              styles.sec_header
+            }`}
           >
             <p className={` ${styles.sec_header_text} flex-none`}> Finished Shipments</p>
           </div>

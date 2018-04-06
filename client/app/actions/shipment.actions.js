@@ -370,6 +370,32 @@ function deleteDocument (id) {
     )
   }
 }
+function getNotes (noteIds) {
+  function request (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_REQUEST, payload: noteData }
+  }
+  function success (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_SUCCESS, payload: noteData }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getNotes(noteIds).then(
+      (response) => {
+        dispatch(alertActions.success('Fetching Notes successful'))
+        dispatch(success(response.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function updateCurrency (currency, req) {
   return (dispatch) => {
     dispatch(appActions.setCurrency(currency))
@@ -410,6 +436,7 @@ export const shipmentActions = {
   fetchShipmentIfNeeded,
   getAll,
   goTo,
+  getNotes,
   toDashboard,
   clearLoading,
   acceptShipment,

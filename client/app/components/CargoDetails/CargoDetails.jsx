@@ -390,9 +390,19 @@ export class CargoDetails extends Component {
       <div name="cargoDetailsBox" className="flex-100 layout-row layout-wrap padd_top">
         <div className="flex-100 layout-row layout-align-center">
           <div className={`flex-none ${defaults.content_width} layout-row layout-wrap`}>
-            <div className="flex-100 layout-row">
-              <div className="flex-none">
-                <TextHeading theme={theme} size={2} text="Cargo Details" />
+            <div className="flex-100 layout-row layout-align-space-between-center">
+              <div className="flex-45 layout-align-start-center layout-row">
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={2} text="Cargo Details" />
+                </div>
+              </div>
+              <div className="flex-45 layout-align-start-center layout-row">
+                <div className="flex-none">
+                  <TextHeading theme={theme} size={2} text="Shipment Documents " />
+                </div>
+                <div className="flex-none" style={{ marginLeft: '10px' }}>
+                  <p className="flex-none">( if available )</p>
+                </div>
               </div>
             </div>
             <div className="flex-100 layout-row layout-wrap">

@@ -46,6 +46,12 @@
     font-size: 20px;
     margin: 0px 18px;
   }
+  .back_button {
+    width: 150px;
+    i, p {
+      margin: 0 10px;
+    }
+  }
 
 
   // Stage Row
@@ -81,6 +87,7 @@
     border: 2px solid darkslategrey;
     position: relative;
     i {
+      background-clip: text !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;      
     }
@@ -129,6 +136,7 @@
     background: white;
     h3 {
       margin: 0;
+      background-clip: text !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;      
     }
