@@ -10,6 +10,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
@@ -141,6 +142,7 @@ export class BookingConfirmation extends Component {
       notifyees,
       cargoItems,
       containers,
+      aggregatedCargo,
       documents,
       cargoItemTypes
     } = shipmentData
@@ -148,7 +150,6 @@ export class BookingConfirmation extends Component {
     const { acceptTerms, collapser } = this.state
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 
-    let cargoView
     const defaultTerms = [
       'You verify that all the information provided above is true',
       `You agree to our Terms and Conditions and the General Conditions of the
@@ -163,11 +164,16 @@ export class BookingConfirmation extends Component {
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
+
+    let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
     }
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
+    }
+    if (aggregatedCargo) {
+      cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
     }
 
     const shipperAndConsignee = [

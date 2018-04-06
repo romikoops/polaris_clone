@@ -5,6 +5,7 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from '../Admin/Admin.scss'
 import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 // import { ContainerDetails } from '../ContainerDetails/ContainerDetails'
 // import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails'
@@ -18,6 +19,25 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { IncotermRow } from '../Incoterm/Row'
 import ShipmentCard from '../ShipmentCard/ShipmentCard'
+
+const StyledSelect = styled(Select)`
+  .Select-control {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2 !important;
+  }
+  .Select-menu-outer {
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2;
+  }
+  .Select-value {
+    background-color: #f9f9f9;
+    border: 1px solid #f2f2f2;
+  }
+  .Select-option {
+    background-color: #f9f9f9;
+  }
+`
 
 export class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -157,6 +177,7 @@ export class UserShipmentView extends Component {
       documents,
       cargoItems,
       containers,
+      aggregatedCargo,
       schedules,
       locations,
       accountHolder
@@ -181,24 +202,6 @@ export class UserShipmentView extends Component {
         hubsObj.endHub = c
       }
     })
-    const StyledSelect = styled(Select)`
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -207,7 +210,6 @@ export class UserShipmentView extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const nArray = []
-    let cargoView = []
     const docView = []
     let shipperContact = ''
     let consigneeContact = ''
@@ -287,12 +289,18 @@ export class UserShipmentView extends Component {
         }
       })
     }
+    let cargoView = ''
+
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
     }
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
     }
+    if (aggregatedCargo) {
+      cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
+    }
+
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false,

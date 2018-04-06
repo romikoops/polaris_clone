@@ -143,7 +143,7 @@ module ShippingTools
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
     cargo_item_types = {}
     if shipment.cargo_items
-      @cargo_items = shipment.cargo_items.map do |cargo_item|
+      cargo_items = shipment.cargo_items.map do |cargo_item|
         hs_code_hashes = hsCodes[cargo_item.id.to_s]
         
         if hs_code_hashes
@@ -163,7 +163,7 @@ module ShippingTools
     end
 
     if shipment.containers
-      @containers = shipment.containers
+      containers = shipment.containers
       shipment.containers.map do |container|
         hs_code_hashes = hsCodes[container.id.to_s]
         
@@ -178,6 +178,11 @@ module ShippingTools
           container.save!
         end
       end
+    end
+
+    if shipment.aggregated_cargo
+      aggregated_cargo = shipment.aggregated_cargo
+      aggregated_cargo.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
     end
 
     documents = shipment.documents.map do |doc|
@@ -200,16 +205,17 @@ module ShippingTools
     }
 
     return {
-      shipment:   shipment,
-      schedules:  shipment.schedule_set,
-      locations:  locations,
-      consignee:  consignee,
-      notifyees:  notifyees,
-      shipper:    shipper,
-      cargoItems: @cargo_items,
-      containers: @containers, 
-      documents:  documents,
-      cargoItemTypes: cargo_item_types
+      shipment:        shipment,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil, 
+      aggregatedCargo: aggregated_cargo || nil, 
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      consignee:       consignee,
+      notifyees:       notifyees,
+      shipper:         shipper,
+      documents:       documents,
+      cargoItemTypes:  cargo_item_types
     }
   end
 

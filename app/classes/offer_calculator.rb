@@ -25,11 +25,19 @@ class OfferCalculator
     @current_eta_in_search = DateTime.new()
     @total_price = { total:0, currency: "EUR" }
 
-    cargo_unit_const = @shipment.load_type.camelize.constantize
-    plural_load_type = @shipment.load_type.pluralize
-    @shipment.send(plural_load_type).destroy_all
-    @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
-    @shipment.send("#{plural_load_type}=", @cargo_units)
+    if params[:shipment][:aggregated_cargo_attributes]
+      @shipment.aggregated_cargo.try(:destroy)
+      @shipment.aggregated_cargo = AggregatedCargo.new(aggregated_cargo_params(params))
+      @cargo_units = [@shipment.aggregated_cargo]
+    else    
+      cargo_unit_const = @shipment.load_type.camelize.constantize
+      plural_load_type = @shipment.load_type.pluralize
+      @shipment.send(plural_load_type).destroy_all
+      @cargo_units = cargo_unit_const.extract(send("#{plural_load_type}_params", params))
+      @shipment.send("#{plural_load_type}=", @cargo_units)
+    end
+
+
     @shipment.planned_pickup_date = Chronic.parse(
       params[:shipment][:planned_pickup_date], 
       endian_precedence: :little
@@ -260,13 +268,12 @@ class OfferCalculator
         end
       end
     end
-    byebug
-    
     @schedules = schedules
   end
 
   def set_cargo_charges!(charges, trip, sched_key)
-    total_units = @cargo_units.map {|cu| cu.quantity}.sum
+    total_units = @cargo_units.reduce(0) { |sum, cargo_unit| sum += cargo_unit.try(:quantity).to_i }
+
     @cargo_units.each do |cargo_unit|
       path_key = path_key(cargo_unit, trip)
       
@@ -281,14 +288,12 @@ class OfferCalculator
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end
-    end
-    
+    end    
   end
 
   def path_key(cargo_unit, trip)
-    transport_category_name = cargo_unit.cargo_class ? cargo_unit.cargo_class : 'any'
     transport_category = trip[0].trip.vehicle.transport_categories.find_by(
-      name: transport_category_name, 
+      name: 'any',
       cargo_class: cargo_unit.try(:size_class) || 'lcl'
     )
 
@@ -326,6 +331,7 @@ class OfferCalculator
       end
     end
   end
+  
   def determine_trucking_fees(location, hub, target, direction)
     google_directions = GoogleDirections.new(location.lat_lng_string, hub.lat_lng_string, @shipment.planned_pickup_date.to_i)
     km = google_directions.distance_in_km
@@ -425,5 +431,9 @@ class OfferCalculator
     )[:containers_attributes].map do |container_attributes|
       container_attributes.to_h.deep_transform_keys { |k| k.to_s.underscore }
     end
+  end
+
+  def aggregated_cargo_params(params)
+    params.require(:shipment).require(:aggregated_cargo_attributes).permit(:weight, :volume)
   end
 end

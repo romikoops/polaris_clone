@@ -10,10 +10,14 @@ export default class ShipmentCardMainPanel extends React.PureComponent {
   componentDidMount () {
     this.updateHeight()
   }
+  componentDidUpdate () {
+    this.updateHeight()
+  }
   updateHeight () {
-    this.setState({
-      panelHeight: this.panel.clientHeight
-    })
+    const panelHeight = this.panel.clientHeight
+    if (panelHeight > this.state.panelHeight || !this.state.panelHeight) {
+      this.setState({ panelHeight: this.panel.clientHeight })
+    }
   }
   render () {
     const { collapsed, content } = this.props

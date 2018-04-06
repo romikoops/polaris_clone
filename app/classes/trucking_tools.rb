@@ -155,17 +155,38 @@ module TruckingTools
         "number_of_items" => 0
       }
     }
-    cargo_total_items = cargos.map {|c| c.quantity}.sum
+    # cargo_total_items = cargos.map {|c| c.quantity}.sum
     cargos.each do |cargo|
+      
       if trucking_pricing.load_meterage
-        if (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"]) || !cargo.stackable
-          load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24000
+        if cargo.is_a? AggregatedCargo
+          load_meterage = (cargo.volume / 1.3) / 2.4
           load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
-          trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
-          cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-          cargo_object["non_stackable"]["volume"] += cargo.volume * cargo.quantity
-          cargo_object["non_stackable"]["number_of_items"] += cargo.quantity
-         
+          trucking_chargeable_weight = load_meter_weight > cargo.weight ? load_meter_weight : cargo.weight
+          cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight
+          cargo_object["non_stackable"]["volume"] += cargo.volume
+        else
+          if (cargo.dimension_z > trucking_pricing.load_meterage["height_limit"]) || !cargo.stackable
+            load_meterage = (cargo.dimension_x * cargo.dimension_y) / 24000
+            load_meter_weight = load_meterage * trucking_pricing.load_meterage["ratio"]
+            trucking_chargeable_weight = load_meter_weight > cargo.payload_in_kg ? load_meter_weight : cargo.payload_in_kg
+            cargo_object["non_stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
+            cargo_object["non_stackable"]["volume"] += cargo.volume * cargo.quantity
+            cargo_object["non_stackable"]["number_of_items"] += cargo.quantity
+          
+          else
+            cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
+            cbm_weight = cargo.volume * cbm_ratio
+            trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
+            cargo_object["stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
+            cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
+            cargo_object["stackable"]["number_of_items"] += cargo.quantity
+          end
+        end
+      else
+        if cargo.is_a? AggregatedCargo
+          cargo_object["non_stackable"]["weight"] += cargo.weight
+          cargo_object["non_stackable"]["volume"] += cargo.volume
         else
           cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
           cbm_weight = cargo.volume * cbm_ratio
@@ -174,13 +195,6 @@ module TruckingTools
           cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
           cargo_object["stackable"]["number_of_items"] += cargo.quantity
         end
-      else
-        cbm_ratio = trucking_pricing["cbm_ratio"] ? trucking_pricing["cbm_ratio"] : 333
-        cbm_weight = cargo.volume * cbm_ratio
-        trucking_chargeable_weight = cbm_weight > cargo.payload_in_kg ? cbm_weight : cargo.payload_in_kg
-        cargo_object["stackable"]["weight"] += trucking_chargeable_weight * cargo.quantity
-        cargo_object["stackable"]["volume"] += cargo.volume * cargo.quantity
-        cargo_object["stackable"]["number_of_items"] += cargo.quantity
       end
     end
     

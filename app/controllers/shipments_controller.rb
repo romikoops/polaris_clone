@@ -38,18 +38,17 @@ class ShipmentsController < ApplicationController
 
   def show
     shipment = Shipment.find(params[:id])
-    cargo_item_types = {}
-    cargo_items = shipment.cargo_items
-    cargo_items.map { |ci| cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)}
-    
-    containers = shipment.containers
 
-    shipment_contacts = shipment.shipment_contacts
+    cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
+      return_h[cargo_item_type.id] = cargo_item_type
+    end
 
-    contacts = shipment_contacts.map do |sc|
+    contacts = shipment.shipment_contacts.map do |sc|
       { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
-    locations = {origin: shipment.origin, destination: shipment.destination}
+
+    locations = { origin: shipment.origin, destination: shipment.destination }
+  
     documents = shipment.documents.map do |doc|
       tmp_doc = doc.as_json
       tmp_doc["signed_url"] = doc.get_signed_url
@@ -57,14 +56,15 @@ class ShipmentsController < ApplicationController
     end
 
     response_handler(
-      shipment:   shipment,
-      cargoItems: cargo_items,
-      containers: containers,
-      contacts:   contacts,
-      documents:  documents,
-      schedules:  shipment.schedule_set,
-      cargoItemTypes: cargo_item_types,
-      locations: locations 
+      shipment:         shipment,
+      cargoItems:       shipment.cargo_items,
+      containers:       shipment.containers,
+      aggregatedCargo:  shipment.aggregated_cargo,
+      contacts:         contacts,
+      documents:        documents,
+      schedules:        shipment.schedule_set,
+      locations:        locations,
+      cargoItemTypes:   cargo_item_types
     )
   end
 
@@ -87,7 +87,7 @@ class ShipmentsController < ApplicationController
     resp = confirm_booking(params)
     tenant_notification_email(resp.user, resp)
     shipper_notification_email(resp.user, resp)
-    response_handler({shipment: resp})
+    response_handler(shipment: resp)
   end
 
   def update

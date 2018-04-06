@@ -1,6 +1,6 @@
 include ExcelTools
 include MongoTools
-['demo'].each do |sub|
+['greencarrier'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -27,7 +27,7 @@ include MongoTools
 
   public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
   req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, true)
+  overwrite_freight_rates(req, shipper, false)
 
   # # # Overwrite public pricings from excel sheet
 
