@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
+import Toggle from 'react-toggle'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -26,6 +27,7 @@ import { Checkbox } from '../Checkbox/Checkbox'
 import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
+import toggleCSS from './toggleCSS'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -193,6 +195,10 @@ export class ShipmentDetails extends Component {
   }
   setTargetAddress (target, address) {
     this.setState({ [target]: { ...this.state[target], ...address } })
+  }
+
+  setAggregatedCargo (bool) {
+    this.setState({ aggregated: bool })
   }
 
   loadPrevReq (obj) {
@@ -631,6 +637,9 @@ export class ShipmentDetails extends Component {
       truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
     const { notes } = shipmentData
     const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
+
+    const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
+
     return (
       <div
         className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
@@ -681,9 +690,33 @@ export class ShipmentDetails extends Component {
           </div>
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          <div className="content_width_booking">
-            <div onClick={() => this.toggleAggregatedCargo()} >
-              Toggle
+          <div className="content_width_booking layout-row layout-align-center">
+            <div className={
+              `${styles.toggle_aggregated_sec} ` +
+              'flex-50 layout-row layout-align-space-around-center'
+            }
+            >
+              <h3
+                className={this.state.aggregated ? 'pointy' : ''}
+                style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                onClick={() => this.setAggregatedCargo(false)}
+              >
+                Units Details
+              </h3>
+              <Toggle
+                className="flex-none aggregated_cargo"
+                id="aggregated_cargo"
+                name="aggregated_cargo"
+                checked={this.state.aggregated}
+                onChange={() => this.toggleAggregatedCargo()}
+              />
+              <h3
+                className={this.state.aggregated ? '' : 'pointy'}
+                style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                onClick={() => this.setAggregatedCargo(true)}
+              >
+                Total Dimensions
+              </h3>
             </div>
           </div>
           {cargoDetails}
@@ -751,12 +784,17 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user &&
-          !user.guest && (
+        {user && !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+              'layout-wrap layout-align-center-center'
+            }
+          >
             <div
               className={
-                `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <div
@@ -765,23 +803,18 @@ export class ShipmentDetails extends Component {
                   'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={
-                    `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                  }
-                >
-                  <RoundButton
-                    text="Back to Dashboard"
-                    handleNext={this.returnToDashboard}
-                    iconClass="fa-angle-left"
-                    theme={theme}
-                    back
-                  />
-                </div>
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
+        {styleTagJSX}
       </div>
     )
   }
