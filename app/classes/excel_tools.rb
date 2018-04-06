@@ -1999,10 +1999,10 @@ module ExcelTools
           [1, 5],
           aux_data[pricing_key][:vehicle].id
         )
-        results[:layovers] = generator_results[:layovers]
-        results[:trips] = generator_results[:trips]
-        stats[:layovers][:number_created] = generator_results[:layovers].length
-        stats[:trips][:number_created] = generator_results[:trips].length
+        results[:layovers] = generator_results[:results][:layovers]
+        results[:trips] = generator_results[:results][:trips]
+        stats[:layovers][:number_created] = generator_results[:results][:layovers].length
+        stats[:trips][:number_created] = generator_results[:results][:trips].length
       end
       if row[:nested] && row[:nested] != ''
         nested_key = "#{effective_date.to_i.to_s}_#{aux_data[pricing_key][:itinerary].id}"
