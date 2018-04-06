@@ -156,15 +156,18 @@ export class ShipmentDetails extends Component {
   }
   componentDidUpdate () {
     const {
-      shipment, cargoItems, containers, selectedDay, origin, destination
+      shipment, cargoItems, containers, aggregatedCargo,
+      selectedDay, origin, destination, aggregated
     } = this.state
     this.props.bookingSummaryDispatch.update({
       shipment,
       cargoItems,
+      aggregatedCargo,
       containers,
       selectedDay,
       origin,
-      destination
+      destination,
+      aggregated
     })
   }
 

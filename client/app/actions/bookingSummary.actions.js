@@ -31,12 +31,17 @@ function update (data) {
   if (data.shipment.load_type === 'container') {
     console.log('TBD')
   } else {
-    data.cargoItems.forEach((cargoItem) => {
-      payload.totalVolume += cargoItem.quantity * ['x', 'y', 'z'].reduce((product, coordinate) => (
-        product * cargoItem[`dimension_${coordinate}`]
-      ), 1) / 1000000
-      payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
-    })
+    if (data.aggregated) {
+      payload.totalVolume = data.aggregatedCargo.volume
+      payload.totalWeight = data.aggregatedCargo.weight
+    } else {
+      data.cargoItems.forEach((cargoItem) => {
+        payload.totalVolume += cargoItem.quantity * ['x', 'y', 'z'].reduce((product, coordinate) => (
+          product * cargoItem[`dimension_${coordinate}`]
+        ), 1) / 1000000
+        payload.totalWeight += cargoItem.quantity * cargoItem.payload_in_kg
+      })
+    }
     payload.selectedDay = data.selectedDay
     payload.cities = {
       origin: data.origin.city,
