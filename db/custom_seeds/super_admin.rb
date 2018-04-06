@@ -43,7 +43,8 @@ super_tenant_data = {
       cargo_info_level: 'text',
       has_insurance: true,
       has_customs: false,
-      incoterm_info_level: 'text'
+      incoterm_info_level: 'text',
+      terms: []
     }
   }
 super_tenant = Tenant.create!(super_tenant_data)
