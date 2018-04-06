@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20180404143414) do
   create_table "aggregated_cargos", force: :cascade do |t|
     t.decimal "weight"
     t.decimal "volume"
+    t.decimal "chargeable_weight"
     t.integer "shipment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
