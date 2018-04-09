@@ -61,8 +61,12 @@ export class AdminHubForm extends Component {
     tmpAddress.longitude = place.geometry.location.lng()
     tmpAddress.fullAddress = place.formatted_address
     tmpAddress.geocoded_address = place.formatted_address
-    this.setState({ location: tmpAddress })
     this.setState({
+      location: tmpAddress,
+      hub: {
+        ...this.state.hub,
+        name: tmpAddress.city
+      },
       autocomplete: { ...this.state.autocomplete, location: true }
     })
   }
@@ -95,9 +99,18 @@ export class AdminHubForm extends Component {
     })
   }
   handleHubType (ev) {
+    const { hub } = this.state
+    let newName
+    if (hub.name) {
+      newName = `${hub.name} ${ev.label}`
+    } else {
+      newName = ''
+    }
+
     this.setState({
       hub: {
         ...this.state.hub,
+        name: newName,
         hubType: ev.value
       }
     })

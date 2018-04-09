@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminRoutesTooltips as routeTip } from '../../constants'
 import styles from './Admin.scss'
-import FileUploader from '../../components/FileUploader/FileUploader'
+// import FileUploader from '../../components/FileUploader/FileUploader'
 import { AdminSearchableRoutes } from './AdminSearchables'
 
 export class AdminRoutesIndex extends Component {
@@ -26,21 +26,21 @@ export class AdminRoutesIndex extends Component {
       return ''
     }
 
-    const hubUrl = '/admin/itineraries/process_csv'
+    // const hubUrl = '/admin/itineraries/process_csv'
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
         >
           <div className="flex-33 layout-column layout-align-center-center">
-            <p className="flex-none">Upload Routes Sheet</p>
+            {/* <p className="flex-none">Upload Routes Sheet</p>
             <FileUploader
               theme={theme}
               url={hubUrl}
               type="xlsx"
               text="Routes .xlsx"
               tooltip={routeTip.upload}
-            />
+            /> */}
           </div>
           <div className="flex-33 layout-column layout-align-center-center">
             <p data-tip={routeTip.new} data-for="newRouteTip" className="flex-none">

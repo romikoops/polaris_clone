@@ -10,10 +10,10 @@ include MongoTools
 # 			tenant.layovers.destroy_all
 # 		  tenant.hubs.destroy_all
 #   #Overwrite hubs from excel sheet
-  puts "# Overwrite hubs from excel sheet"
-  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  req = {"xlsx" => hubs}
-  overwrite_hubs(req, shipper)
+  # puts "# Overwrite hubs from excel sheet"
+  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  # req = {"xlsx" => hubs}
+  # overwrite_hubs(req, shipper)
 
 #   # ### Overwrite dedicated pricings from excel sheet.
 #   ## If dedicated == true, shipper.id is automatically inserted.
@@ -23,11 +23,11 @@ include MongoTools
 #   # overwrite_mongo_lcl_pricings(req, dedicated = true, shipper, true)
 
 #   # # # # # Overwrite public pricings from excel sheet
-  puts "# Overwrite public pricings from excel sheet"
+  # puts "# Overwrite public pricings from excel sheet"
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, false)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
 
   # # # Overwrite public pricings from excel sheet
 
@@ -37,10 +37,10 @@ include MongoTools
   # # req = {"xlsx" => public_pricings}
   # # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
-  puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
-  req = {"xlsx" => local_charges}
-  overwrite_local_charges(req, shipper)
+  # puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  # req = {"xlsx" => local_charges}
+  # overwrite_local_charges(req, shipper)
 
 
   # # # # # Overwrite trucking data from excel sheet
@@ -58,15 +58,18 @@ include MongoTools
   #   req = {"xlsx" => trucking}
   #   overwrite_city_trucking_rates_by_hub(req, shipper,  hub.id, 'Globelink LTL', dir)
   # end
-  # hub = tenant.hubs.find_by_name("Gothenburg Port")
-  # ["import", "export"].each do |dir|
-  #   trucking = File.open("#{Rails.root}/db/dummydata/Stockholm_Trucking_Rates.xlsx")
-  #   req = {"xlsx" => trucking}
-  #   split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
-  #   # overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
-  # end
+  hub = tenant.hubs.find_by_name("Stockholm Airport")
+  ["import", "export"].each do |dir|
+    trucking = File.open("#{Rails.root}/db/dummydata/Stockholm_Trucking_Rates.xlsx")
+    req = {"xlsx" => trucking}
+    # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
+    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+  end
+  # options = {
+  #   tenant_id: tenant.id
+  # }
+  # write_pricings_to_sheet(options)
   
-  
-  tenant.update_route_details()
+  # tenant.update_route_details()
 
 end
