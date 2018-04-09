@@ -12,7 +12,6 @@ class TruckingPricingSeeder
 			  overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
 			end
 
-			hub = tenant.hubs.find_by_name("Gothenburg Port")
 			DIRECTIONS.each do |dir|
 			  trucking = File.open("#{Rails.root}/db/dummydata/FTL_DISTANCE_SHEET.xlsx")
 			  req = {"xlsx" => trucking}

@@ -147,7 +147,17 @@ class TenantSeeder
           "You agree to the presented terms and conditions.",
           "Greencarrier is to discuss the validity of the presented prices with the product owners."
 
-        ]
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -215,7 +225,17 @@ class TenantSeeder
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
           "Demo is to discuss the validity of the presented prices with the product owners."
-        ]
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'mandatory',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'mandatory'      
+          }
+        }
       },
       # The following data is not a attribute of the Tenant model
       # only being used for seeding purposes
@@ -278,7 +298,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all
@@ -333,7 +363,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all
@@ -385,7 +425,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all
@@ -440,7 +490,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all
@@ -493,7 +553,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all
@@ -544,7 +614,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all,
@@ -595,7 +675,17 @@ class TenantSeeder
         cargo_info_level: 'hs_codes',
         has_insurance: true,
         has_customs: false,
-        terms: []
+        terms: [],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
       },
       other_data: {
         cargo_item_types: :all

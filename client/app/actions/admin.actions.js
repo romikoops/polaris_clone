@@ -247,7 +247,6 @@ function getServiceCharges (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -259,7 +258,6 @@ function getPricings (redirect) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -277,7 +275,6 @@ function getPricings (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
