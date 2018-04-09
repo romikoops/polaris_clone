@@ -10,18 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180213115524) do
+ActiveRecord::Schema.define(version: 20180329125202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "cargo_item_types", force: :cascade do |t|
-    t.integer "dimension_x"
-    t.integer "dimension_y"
+    t.decimal "dimension_x"
+    t.decimal "dimension_y"
     t.string "description"
     t.string "area"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "category"
   end
 
   create_table "cargo_items", force: :cascade do |t|
@@ -36,11 +38,15 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
     t.integer "cargo_item_type_id"
-    t.string "cargo_group_id"
+    t.string "customs_text"
+    t.decimal "chargeable_weight"
+    t.boolean "stackable", default: true
+    t.integer "quantity"
+    t.jsonb "unit_price"
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.integer "shipper_id"
+    t.integer "user_id"
     t.integer "location_id"
     t.string "company_name"
     t.string "first_name"
@@ -64,7 +70,16 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.boolean "dangerous_goods"
     t.string "cargo_class"
     t.string "hs_codes", default: [], array: true
-    t.string "cargo_group_id"
+    t.string "customs_text"
+    t.integer "quantity"
+    t.jsonb "unit_price"
+  end
+
+  create_table "couriers", force: :cascade do |t|
+    t.string "name"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "currencies", force: :cascade do |t|
@@ -96,6 +111,22 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.string "name"
   end
 
+  create_table "hub_trucking_options", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "trucking_option_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "hub_truckings", force: :cascade do |t|
+    t.integer "hub_id"
+    t.integer "trucking_destination_id"
+    t.integer "courier_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "trucking_pricing_id"
+  end
+
   create_table "hubs", force: :cascade do |t|
     t.integer "tenant_id"
     t.integer "location_id"
@@ -110,6 +141,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.string "trucking_type"
     t.string "photo"
     t.integer "nexus_id"
+    t.integer "trucking_availability_id"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -120,6 +152,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.integer "tenant_id"
     t.integer "mot_scope_id"
     t.jsonb "hubs", default: [], array: true
+    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -131,6 +164,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.datetime "updated_at", null: false
     t.integer "itinerary_id"
     t.integer "trip_id"
+    t.datetime "closing_date"
   end
 
   create_table "locations", force: :cascade do |t|
@@ -159,6 +193,14 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nexus_trucking_availabilities", force: :cascade do |t|
+    t.integer "trucking_availability_id"
+    t.integer "nexus_id"
+    t.integer "tenant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -247,8 +289,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
   end
 
   create_table "shipments", force: :cascade do |t|
-    t.integer "shipper_id"
-    t.integer "shipper_location_id"
+    t.integer "user_id"
     t.integer "origin_id"
     t.integer "destination_id"
     t.integer "route_id"
@@ -261,8 +302,6 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.decimal "pre_carriage_distance_km"
     t.boolean "has_on_carriage"
     t.decimal "on_carriage_distance_km"
-    t.decimal "total_price"
-    t.decimal "total_goods_value"
     t.string "cargo_notes"
     t.string "haulage"
     t.string "hs_code", default: [], array: true
@@ -271,10 +310,28 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.datetime "updated_at", null: false
     t.jsonb "schedule_set", default: [], array: true
     t.integer "tenant_id"
-    t.string "incoterm"
     t.datetime "planned_eta"
     t.datetime "planned_etd"
     t.integer "itinerary_id"
+    t.jsonb "trucking"
+    t.boolean "customs_credit", default: false
+    t.jsonb "total_price"
+    t.jsonb "total_goods_value"
+    t.integer "trip_id"
+    t.string "eori"
+    t.string "direction"
+    t.string "notes"
+    t.jsonb "incoterm"
+    t.integer "origin_hub_id"
+    t.integer "destination_hub_id"
+    t.datetime "booking_placed_at"
+  end
+
+  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
+    t.string "auth_name", limit: 256
+    t.integer "auth_srid"
+    t.string "srtext", limit: 2048
+    t.string "proj4text", limit: 2048
   end
 
   create_table "stops", force: :cascade do |t|
@@ -283,6 +340,15 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.integer "index"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "tenant_cargo_item_types", force: :cascade do |t|
+    t.bigint "tenant_id"
+    t.bigint "cargo_item_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
+    t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|
@@ -328,19 +394,42 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.integer "vehicle_id"
   end
 
-  create_table "trucking_pricings", force: :cascade do |t|
-    t.integer "tenant_id"
-    t.integer "nexus_id"
-    t.integer "upper_zip"
-    t.integer "lower_zip"
-    t.jsonb "rate_table", default: [], array: true
-    t.string "currency"
+  create_table "trucking_availabilities", force: :cascade do |t|
+    t.boolean "cargo_item", default: false
+    t.boolean "container", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "province"
-    t.string "city"
-    t.string "rate_type"
-    t.string "dist_hub", default: [], array: true
+  end
+
+  create_table "trucking_destinations", force: :cascade do |t|
+    t.string "zipcode"
+    t.string "country_code"
+    t.string "city_name"
+    t.integer "distance"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_options", force: :cascade do |t|
+    t.integer "nexus_id"
+    t.integer "tenant_id"
+    t.string "city_name"
+    t.integer "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trucking_pricings", force: :cascade do |t|
+    t.string "direction"
+    t.jsonb "export"
+    t.jsonb "import"
+    t.integer "courier_id"
+    t.string "load_type"
+    t.string "truck_type"
+    t.jsonb "load_meterage"
+    t.integer "cbm_ratio"
+    t.string "modifier"
+    t.integer "tenant_id"
   end
 
   create_table "user_locations", force: :cascade do |t|
@@ -361,7 +450,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "provider", default: "email", null: false
+    t.string "provider", default: "tenant_email", null: false
     t.string "uid", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -390,8 +479,9 @@ ActiveRecord::Schema.define(version: 20180213115524) do
     t.bigint "role_id"
     t.boolean "guest", default: false
     t.string "currency", default: "EUR"
+    t.string "vat_number"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
@@ -405,5 +495,7 @@ ActiveRecord::Schema.define(version: 20180213115524) do
   end
 
   add_foreign_key "routes", "mot_scopes"
+  add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
+  add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"
 end
