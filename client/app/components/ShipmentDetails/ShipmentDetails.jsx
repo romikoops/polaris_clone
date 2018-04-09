@@ -147,9 +147,6 @@ export class ShipmentDetails extends Component {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
     }
-    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
-      this.presetMandatoryCarriage()
-    }
   }
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.modals) {
@@ -163,6 +160,11 @@ export class ShipmentDetails extends Component {
       nextProps.user &&
       nextProps.shipmentData.maxDimensions
     )
+  }
+  componentWillUpdate () {
+    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+      this.presetMandatoryCarriage()
+    }
   }
   componentDidUpdate () {
     const {
