@@ -32,37 +32,13 @@ module TruckingTools
     total_price = trucking_rules_price_machine.total_price
     total_price.round(2)
   end
-  def retrieve_trucking_pricing(location, user, load_type, delivery_type, hub)
-    lt = load_type == 'cargo_item' ? 'lcl' : 'fcl'
-    sql = "SELECT * FROM trucking_pricings
-        JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-        JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-        JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-        JOIN  locations             ON hubs.location_id                      = locations.id
-        JOIN  tenants                ON hubs.tenant_id                        = tenants.id
-        WHERE tenants.id = #{user.tenant_id}
-        AND trucking_pricings.load_type = '#{lt}'
-        AND hub.id = #{hub.id}
-        AND (
-          (
-            (trucking_destinations.zipcode IS NOT NULL)
-            AND (trucking_destinations.zipcode = '#{location.get_zip_code}')
-          ) OR (
-            (trucking_destinations.city_name IS NOT NULL)
-            AND (trucking_destinations.city_name = '#{location.city}')
-          )
-        )
-        "
-        # 
-    result = TruckingPricing.find_by_sql(sql)
-  end
+
   def calculate_trucking_price(pricing, cargo, direction, km)
     fees = {}
     result = {}
     total_fees = {}
     
     return {} if pricing.empty?
-    
     pricing["fees"].each do |k, fee|
       if fee["rate_basis"] != 'PERCENTAGE'
         results = fee_calculator(k, fee, cargo, km)
@@ -132,7 +108,6 @@ module TruckingTools
   def filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     return {} if cargo_values["weight"] == 0
     trucking_pricing[direction]["table"].each do |tr|
-      
       case trucking_pricing.modifier
       when 'kg'
         if cargo_values["weight"] <= tr["max_weight"] && cargo_values["weight"] >= tr["min_weight"]
@@ -142,7 +117,9 @@ module TruckingTools
         return tr
       end
     end
+    {}
   end
+
   def get_cargo_item_object(trucking_pricing, cargos)
      cargo_object = {
       "stackable" => {
