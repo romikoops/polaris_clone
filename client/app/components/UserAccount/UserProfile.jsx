@@ -328,7 +328,7 @@ export class UserProfile extends Component {
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
     const newButton = (
-      <div className="flex-none layout-row">
+      <div className="flex-none layout-row layout-align-end-center">
         <RoundButton
           theme={theme}
           size="small"
@@ -485,15 +485,15 @@ export class UserProfile extends Component {
               )}
             </div>
             <div className="flex-50 layout-row layout-align-end-center layout-wrap">
-              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
-                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
                   <h3 className="flex-none"> Currency Settings:</h3>
                 </div>
-                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
                   <p className="flex-none">Current Selection: {user.currency}</p>
                 </div>
               </div>
-              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
                 <StyledSelect
                   name="currency"
                   className={`${styles.select}`}
@@ -502,7 +502,7 @@ export class UserProfile extends Component {
                   onChange={this.setCurrency}
                   clearable={false}
                 />
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.btn_row}`}>
+                <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
                   <RoundButton
                     theme={theme}
                     size="small"
