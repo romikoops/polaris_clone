@@ -161,7 +161,6 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.integer "tenant_id"
     t.integer "mot_scope_id"
     t.jsonb "hubs", default: [], array: true
-    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
