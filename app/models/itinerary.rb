@@ -262,12 +262,13 @@ class Itinerary < ApplicationRecord
     end
     if trucking_data && trucking_data["on_carriage"]
       end_hub_ids = trucking_data["on_carriage"].keys
-      end_hubs = end_hub_ids.map {|id| Hub.find(id)}
+      end_hubs = end_hub_ids.map { |id| Hub.find(id) }
     else
       end_city = Location.find(shipment.destination_id)
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
+
     query = "
       SELECT * FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id}
