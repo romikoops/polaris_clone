@@ -10,10 +10,13 @@ class Tenant < ApplicationRecord
   has_many :users
   has_many :tenant_vehicles
   has_many :vehicles, through: :tenant_vehicles
+  has_many :tenant_cargo_item_types, dependent: :destroy
+  has_many :cargo_item_types, through: :tenant_cargo_item_types
   has_many :itineraries
   has_many :stops, through: :itineraries
   has_many :trips, through: :itineraries
   has_many :layovers, through: :stops
+  has_many :trucking_pricings
     
   validates :scope, presence: true, scope: true
 
@@ -28,7 +31,6 @@ class Tenant < ApplicationRecord
 
       itinerary.routes
     end
-    # put_item('itinerarieOptions', {id: self.id, data: detailed_itineraries})
     update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
   end
 
@@ -38,6 +40,7 @@ class Tenant < ApplicationRecord
     mot = load_type_filter("cargo_item", mot) if args[:only_cargo_item]
     MotScope.find_by(mot_scope_attributes(mot))
   end
+
   def self.update_hs_codes
     data = get_all_items('hsCodes')
     data.each do |datum|
@@ -56,6 +59,7 @@ class Tenant < ApplicationRecord
       h[k] = v.each_with_object({}) { |(_k, _v), _h| _h[_k] = _k != load_type ? false : _v }
     end
   end
+  
   def self.update_web
     web_data = [
       {subdomain: "greencarrier", cloudfront: 'E1HIJBT7WVXAP3'},
@@ -90,4 +94,5 @@ class Tenant < ApplicationRecord
       h.merge v.each_with_object({}) { |(_k, _v), _h| _h["#{k}_#{_k}"] = _v }
     end
   end
+  
 end

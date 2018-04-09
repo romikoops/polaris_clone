@@ -1,5 +1,5 @@
 class ScopeValidator < ActiveModel::EachValidator
-  SCOPES             = %w(dangerous_goods modes_of_transport) 
+  SCOPES             = %w(cargo_info_level dangerous_goods detailed_billing has_customs has_insurance incoterm_info_level modes_of_transport terms ) 
   LOAD_TYPES         = %w(cargo_item container)
   MODES_OF_TRANSPORT = %w(ocean rail air)
 
@@ -12,8 +12,8 @@ class ScopeValidator < ActiveModel::EachValidator
 
     value.deep_stringify_keys!
     
-    unless value.deep_values.all? { |value| is_a_boolean?(value) }
-      add_error('last level values must be Boolean')
+    unless value.deep_values.all? { |value| is_a_boolean?(value) || value.is_a?(String) }
+      add_error('last level values must be Boolean or String')
     end
 
   	add_error("must have the following scopes: #{SCOPES.log_format}") unless value.keys.sort == SCOPES

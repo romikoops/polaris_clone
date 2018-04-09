@@ -1,40 +1,38 @@
 class Shipment < ApplicationRecord
   extend ShippingTools
-  STATUSES = %w(
+  include ActiveModel::Validations
+  STATUSES = %w( 
     requested
     booking_process_started
     pending
     confirmed
     declined
-    ignored
+    ignored,
+    finished
   )
   LOAD_TYPES = TransportCategory::LOAD_TYPES
-  
-  # Validations 
-  validates :status, 
-    inclusion: { 
-      in: STATUSES, 
-      message: "must be included in #{STATUSES.log_format}" 
-    },
-    allow_nil: true
-  validates :load_type, 
-    inclusion: { 
-      in: LOAD_TYPES, 
-      message: "must be included in #{LOAD_TYPES.log_format}" 
-    },
-    allow_nil: true
+  DIRECTIONS = %w(import export)
+
+  # Validations
+  { status: STATUSES, load_type: LOAD_TYPES, direction: DIRECTIONS }.each do |attribute, array|
+    CustomValidations.inclusion(self, attribute, array)
+  end
+
+  # validates_with MaxAggregateDimensionsValidator
+
   validate :planned_pickup_date_is_a_datetime?
   validates :pre_carriage_distance_km, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
   validates :on_carriage_distance_km,  numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :total_price,              numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+  
+  # validates :total_goods_value,        numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
 
   # ActiveRecord Callbacks
   before_create :assign_uuid
   before_create :generate_imc_reference
+  before_create :set_default_trucking
 
   # Basic associations
-  belongs_to :shipper, class_name: "User", optional: true
+  belongs_to :user, optional: true
   belongs_to :consignee, optional: true
   belongs_to :tenant, optional: true
   has_many :documents
@@ -46,7 +44,8 @@ class Shipment < ApplicationRecord
   belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
-  belongs_to :shipper_location, class_name: "Location", optional: true
+  has_many :cargo_item_types, through: :cargo_items
+  has_one :aggregated_cargo
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
@@ -80,6 +79,31 @@ class Shipment < ApplicationRecord
   end
 
   # Instance methods
+
+  def import?
+    direction == "import"
+  end
+
+  def export?
+    direction == "export"
+  end
+
+  def shipper
+    find_contacts("shipper").first
+  end
+
+  def consignee
+    find_contacts("consignee").first
+  end
+
+  def notifyees
+    find_contacts("notifyee")
+  end
+
+  def cargo_units
+    self["#{load_type}s"]
+  end
+
   def full_haulage_to_string
     self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
   end
@@ -185,6 +209,11 @@ class Shipment < ApplicationRecord
     self.save!
   end
 
+  def finished!
+    self.update_attributes(status: "finished")
+    self.save!
+  end
+
   def decline!
     self.update_attributes(status: "declined")
     self.save!
@@ -199,20 +228,12 @@ class Shipment < ApplicationRecord
     raise "Not implemented"
   end
 
-  def notifyees
-    shipment_contacts.where(contact_type: "notifyee").map(&:contact)
-  end    
-
-  def consignee
-    shipment_contacts.find_by(contact_type: "consignee").contact
-  end    
-
   def etd
-    Schedule.find(schedule_set.first["id"]).etd unless schedule_set.empty?
+    planned_etd
   end
 
   def eta
-    Schedule.find(schedule_set.last["id"]).eta unless schedule_set.empty?
+    planned_eta
   end
 
   def cargo_charges
@@ -246,11 +267,33 @@ class Shipment < ApplicationRecord
   def self.test_email
     user = User.find_by_email("demo@demo.com")
     shipment = user.shipments.find_by(status: "requested")
-    ShipmentMailer.tenant_notification(user, shipment)
-    ShipmentMailer.shipper_notification(user, shipment)
+    ShipmentMailer.tenant_notification(user, shipment).deliver_now
+    ShipmentMailer.shipper_notification(user, shipment).deliver_now
     shipper_confirmation_email(user, shipment)
   end
-
+  def self.update_hubs_on_shipments
+    ss = Shipment.all
+    ss.each do |s|
+      if s.origin_id != nil && s.destination_id != nil && s.origin && s.destination
+      if s.schedule_set && s.schedule_set[0] && s.schedule_set[0]["hub_route_key"] && 
+        hub_keys = s.schedule_set[0]["hub_route_key"].split("-")
+        if s.origin.location_type
+          s.origin_hub_id = s.origin.id
+        else
+          s.origin_hub_id = hub_keys[0].to_i
+          s.destination_hub_id = hub_keys[1].to_i
+        end
+        if s.destination.location_type
+          s.destination_hub_id = s.destination.id
+        else
+          
+          s.destination_hub_id = hub_keys[1].to_i
+        end
+        s.save!
+      end
+    end
+    end
+  end
   private
 
   def generate_imc_reference
@@ -275,8 +318,24 @@ class Shipment < ApplicationRecord
     self.uuid = SecureRandom.uuid
   end
 
+  def find_contacts(type)
+    Contact.find_by_sql("
+      SELECT * FROM contacts
+      JOIN  shipment_contacts ON shipment_contacts.contact_id   = contacts.id
+      JOIN  shipments         ON shipments.id                   = shipment_contacts.shipment_id
+      WHERE shipments.id = #{self.id}
+      AND   shipment_contacts.contact_type = '#{type}'
+    ")    
+  end
+
   def planned_pickup_date_is_a_datetime?
     return if planned_pickup_date.nil?
     errors.add(:planned_pickup_date, 'must be a DateTime') unless planned_pickup_date.is_a?(ActiveSupport::TimeWithZone) 
   end
+
+  def set_default_trucking
+    no_trucking_h = { truck_type: '' }
+    self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
+  end
+  
 end

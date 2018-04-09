@@ -1,7 +1,7 @@
-export * from './user.service';
-export * from './authentication.service';
-export * from './shipment.service';
-export * from './admin.service';
-export * from './app.service';
-export * from './nexus.service';
-export * from './messaging.service';
+export { default as userService } from './user.service'
+export { default as authenticationService } from './authentication.service'
+export { default as shipmentService } from './shipment.service'
+export { default as adminService } from './admin.service'
+export { default as appService } from './app.service'
+export { default as messagingService } from './messaging.service'
+export { default as documentService } from './document.service'

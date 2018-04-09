@@ -1,0 +1,51 @@
+:local {
+  .trucking_details {
+    // needs a fixed height for the animation
+    // 2 or 3 px smaller than the height of the section,
+    // in order to have to box-shadow visible
+    height: 187px;
+
+    background: #EDEDED;
+    box-shadow: 0px 1px 4px rgba(100, 100, 100, 0.5);    
+    border-radius: 0 0 3px 3px;
+    padding: 20px 30px;
+    h3 {
+      margin: 0 0 22px 0;
+    }
+    h5 {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 5px 0;
+    }
+    .form_group {
+      position: relative;
+      padding: 8px 0;
+      label {
+        margin-left: 7px;
+      }
+      input {
+        margin: 3px;
+      }
+      .tooltip {
+        height: 25px;
+        margin-left: 4px;
+        display: inline-block;
+      }
+    }
+    .carriage_sec {
+      position: relative;
+      .overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        cursor: not-allowed;
+        z-index: 20;
+      }
+      &.disabled {
+        opacity: 0.4;
+      }
+    }
+  }
+}

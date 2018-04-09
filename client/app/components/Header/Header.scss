@@ -2,27 +2,38 @@
   @import '../../styles/defaults';
 
   .header {
-    position: relative;
-    height: 70px;
-    width: 100vw; 
-    z-index: 20 !important;
-  }
-  
-  .header_scrollable {
-    background-color: rgba(255,255,255,1);
-    width: 100vw !important;
-    position: fixed !important;
-    height: 70px !important;
-    overflow-y: visible !important;
-    z-index: 200 !important;
-  }  
+    min-height: 70px;
+    width: 100vw !important; 
+    z-index: 500 !important;
+    transition: all 0.5s ease;
+    border-bottom: 1px solid rgb(230, 230, 230);
+    box-shadow: 0 0 5px rgba(black, 0.2);
+    background-color: white;
 
+    &.inverted {
+      box-shadow: unset;
+      border-color: transparent;
+      background-color: transparent;      
+    }
+    &.scrollable {
+      position: fixed;
+      left: 0;
+      right: 0;      
+    }
+    &.scrolled {
+      background-color: white;
+      color: black !important;
+      border-color: rgb(230, 230, 230);
+    }
+  }
   img.logo {
     height: 50px;
+    cursor: pointer;
   }
   img.wide_logo {
     width: 170px;
     height: auto;
+    cursor: pointer;
   }
   .signin {
     height: 22px;
@@ -59,5 +70,8 @@
     i {
       font-size: 18px;
     }
+  }
+  .logo {
+    margin-left: calc(100vw / 12);
   }
 }

@@ -2,16 +2,19 @@ class Admin::ClientsController < ApplicationController
   before_action :require_login_and_role_is_admin
 
   def index
-    role = Role.find_by_name('shipper')
-    @clients = User.where(tenant_id: current_user.tenant_id, role_id: role.id, guest: false)
-    response_handler(@clients)
+    shipper_role = Role.find_by_name('shipper')
+    manager_role = Role.find_by_name('sub_admin')
+    clients = User.where(tenant_id: current_user.tenant_id, role_id: shipper_role.id, guest: false)
+    managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
+    response_handler({clients: clients, managers: managers})
   end
 
   def show
-    @client = User.find(params[:id])
-    @locations = @client.locations
-    @shipments = @client.shipments
-    resp = {client: @client, locations: @locations, shipments: @shipments}
+    client = User.find(params[:id])
+    locations = client.locations
+    shipments = client.shipments.where(status: ["requested", "open", "finished"])
+    manager_assignments = UserManager.where(user_id: client)
+    resp = {client: client, locations: locations, shipments: shipments, managerAssignments: manager_assignments}
     response_handler(resp)
   end
 
@@ -29,6 +32,10 @@ class Admin::ClientsController < ApplicationController
     new_user = current_user.tenant.users.create!(user_data)
 
     response_handler(new_user)
+  end
+  def destroy
+    User.find(params[:id]).destroy
+    response_handler(params[:id])
   end
 
   private

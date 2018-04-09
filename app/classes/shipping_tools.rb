@@ -3,13 +3,23 @@ module ShippingTools
   include MongoTools
   include NotificationTools
 
-  def new_shipment(load_type)
-    shipment = Shipment.create(
-      shipper_id: current_user.id, 
+  def new_shipment(obj)
+    tenant = current_user.tenant
+    load_type = obj["loadType"].underscore
+    direction = obj["direction"]
+    shipment = Shipment.new(
+      user_id: current_user.id, 
       status: "booking_process_started", 
-      load_type: load_type, 
-      tenant_id: current_user.tenant_id
+      load_type: load_type,
+      direction: direction,
+      tenant_id: tenant.id
     )
+    unless shipment.save
+      puts shipment.errors.full_messages
+      
+      # TBD - Create custom errors (ApplicationError)
+      shipment.save!
+    end
 
     shipment.send("#{load_type}s").create if shipment.send("#{load_type}s").empty?
 
@@ -18,30 +28,30 @@ module ShippingTools
     mot_scope_args = { ("only_" + load_type).to_sym => true }
     mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
     itineraries = Itinerary.mot_scoped(current_user.tenant_id, mot_scope_ids)
-    # byebug
     origins = []
     destinations = []
-    cargo_item_types = CargoItemType.all
     itineraries.map! do |itinerary|
       origins << { 
-        value: Location.find(itinerary["origin_nexus_id"]), 
+        value: origin = Location.find(itinerary["origin_nexus_id"]), 
         label: itinerary["origin_nexus"] 
       }
       destinations << { 
-        value: Location.find(itinerary["destination_nexus_id"]), 
+        value: destination = Location.find(itinerary["destination_nexus_id"]), 
         label: itinerary["destination_nexus"] 
       }
 
       itinerary["dedicated"] = true if itinerary_ids_dedicated.include?(itinerary["id"])
       itinerary
     end
+
     return {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },
       itineraries:    itineraries,
-      cargoItemTypes: cargo_item_types
-    }
-  end 
+      cargo_item_types: tenant.cargo_item_types,
+      max_dimensions: CargoItem::MAX_DIMENSIONS
+    }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
+  end
 
   def get_shipment_offer(session, params, load_type)
     shipment = Shipment.find(params[:shipment_id])
@@ -49,23 +59,18 @@ module ShippingTools
 
     offer_calculation.calc_offer!
 
-    if offer_calculation.shipment.save
-      cargo_units = offer_calculation.shipment.load_type == 'cargo_item' ? offer_calculation.shipment.cargo_items : offer_calculation.shipment.containers
-      return {
-        shipment:                   offer_calculation.shipment,
-        total_price:                offer_calculation.total_price,
-        has_pre_carriage:           offer_calculation.has_pre_carriage,
-        has_on_carriage:            offer_calculation.has_on_carriage,
-        schedules:                  offer_calculation.schedules,
-        truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-        originHubs:                 offer_calculation.origin_hubs,
-        destinationHubs:            offer_calculation.destination_hubs,
-        cargoUnits:                 cargo_units
-      }
-    else
-      raise ApplicationError::NoRoutes # TBD - Customize Errors
-    end
-
+    offer_calculation.shipment.save!
+    return {
+      shipment:                   offer_calculation.shipment,
+      total_price:                offer_calculation.total_price,
+      has_pre_carriage:           offer_calculation.has_pre_carriage,
+      has_on_carriage:            offer_calculation.has_on_carriage,
+      schedules:                  offer_calculation.schedules,
+      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculation.origin_hubs,
+      destinationHubs:            offer_calculation.destination_hubs,
+      cargoUnits:                 offer_calculation.shipment.cargo_units,
+    }
   end
 
   def create_document(file, shipment, type, user) 
@@ -73,105 +78,162 @@ module ShippingTools
   end
 
   def update_shipment(session, params)
-    @shipment = Shipment.find(params[:shipment_id])
+    tenant = current_user.tenant
+    shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
 
     hsCodes = shipment_data[:hsCodes].as_json
-    @shipment.assign_attributes(
-      status: "requested", 
+    hsTexts = shipment_data[:hsTexts].as_json
+    shipment.assign_attributes(
       total_goods_value: shipment_data[:totalGoodsValue], 
       cargo_notes: shipment_data[:cargoNotes]
     )
+
+    if shipment_data[:incoterm]
+      shipment.incoterm = { text: shipment_data[:incoterm] }.to_json
+    end
 
     # Shipper
     resource = shipment_data.require(:shipper)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
     contact = current_user.contacts.find_or_create_by(
-      contact_params(resource, contact_location.id).merge({ alias: true })
+      contact_params(resource, contact_location.id).merge(alias: shipment.export?)
     )
-    @shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
-    user_location = current_user.user_locations.find_or_create_by(location_id: contact_location.id)
-    user_location.update_attributes!(primary: true) if user_location.id == 1
-    @shipment.shipper_location = contact_location
+    shipment.shipment_contacts.find_or_create_by(contact_id: contact.id, contact_type: 'shipper')
     shipper = { data: contact, location: contact_location }
+    UserLocation.create(user: current_user, location: contact_location) if shipment.export?
 
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by(contact_params(resource, contact_location.id))
-    @shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
+    contact = current_user.contacts.find_or_create_by(
+      contact_params(resource, contact_location.id).merge(alias: shipment.import?)
+    )
+    shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
     consignee = { data: contact, location: contact_location }
+    UserLocation.create(user: current_user, location: contact_location) if shipment.import?
 
     # Notifyees
     notifyees = shipment_data[:notifyees].try(:map) do |resource|
       contact = current_user.contacts.find_or_create_by!(contact_params(resource))
-      @shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
+      shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'notifyee')
       contact
     end || []
 
-    ## TODO Adjust for multiple schedules
+    # TBD - Adjust for itinerary logic
     if shipment_data[:insurance][:bool]
-      @shipment.schedule_set.each do |ss|
+      shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
-        @shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-        @shipment.schedules_charges[key]["total"] += shipment_data[:insurance][:val]
-        @shipment.total_price = @shipment.schedules_charges[key]["total"]
-      end
-    end
-    if @shipment.cargo_items
-      @cargos = @shipment.cargo_items
-      @shipment.cargo_items.map do |ci|
-        if hsCodes[ci.cargo_group_id.to_s]
-          hsCodes[ci.cargo_group_id.to_s].each do |hs|
-            ci.hs_codes << hs["value"]
-          end
-          ci.save!
-        end
-      end
-    end
-    if @shipment.containers
-      @containers = @shipment.containers
-      @shipment.containers.map do |cn|
-        if hsCodes[cn.cargo_group_id.to_s]
-          hsCodes[cn.cargo_group_id.to_s].each do |hs|
-            cn.hs_codes << hs["value"]
-          end
-          cn.save!
-        end
+        shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val].to_d, currency: "EUR"}
+        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:insurance][:val].to_d ? shipment_data[:insurance][:val].to_d : 0
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end
     
-    @schedules = []
-    @shipment.schedule_set.each do |ss|
-      @schedules.push(ss)
+    if shipment_data[:customs][:total][:val].to_d > 0
+      shipment.schedule_set.each do |ss|
+        key = ss["hub_route_key"]
+        shipment.schedules_charges[key][:customs] = {val: shipment_data[:customs][:total][:val].to_d, currency: shipment_data[:customs][:total][:currency]}
+        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:customs][:total][:val].to_d ? shipment_data[:customs][:total][:val].to_d : 0
+        shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
+      end
     end
-    @shipment.planned_etd = @schedules.first["etd"]
-    @shipment.planned_eta = @schedules.last["eta"]
-    @shipment.save!
-    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
-    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
-    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
+    shipment.customs_credit = shipment_data[:customsCredit]
+    shipment.notes = shipment_data["notes"]
+    shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
+    cargo_item_types = {}
+    if shipment.cargo_items
+      cargo_items = shipment.cargo_items.map do |cargo_item|
+        hs_code_hashes = hsCodes[cargo_item.id.to_s]
+        
+        if hs_code_hashes
+          cargo_item.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          cargo_item.save!
+        end
+        hs_text = hsTexts[cargo_item.id.to_s]
+        
+        if hs_text
+          cargo_item.customs_text = hs_text
+          cargo_item.save!
+        end
+        cargo_item_types[cargo_item.cargo_item_type_id] = CargoItemType.find(cargo_item.cargo_item_type_id)
+        cargo_item.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+        cargo_item
+      end
+    end
 
+    if shipment.containers
+      containers = shipment.containers
+      shipment.containers.map do |container|
+        hs_code_hashes = hsCodes[container.id.to_s]
+        
+        if hs_code_hashes
+          container.hs_codes = hs_code_hashes.map { |hs_code_hash| hs_code_hash["value"] }
+          container.save!
+        end
+        hs_text = hsTexts[container.id.to_s]
+        
+        if hs_text
+          container.customs_text = hs_text
+          container.save!
+        end
+      end
+    end
+
+    if shipment.aggregated_cargo
+      aggregated_cargo = shipment.aggregated_cargo
+      aggregated_cargo.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
+    end
+
+    documents = shipment.documents.map do |doc|
+      tmp = doc.as_json
+      tmp["signed_url"] =  doc.get_signed_url
+      tmp
+    end
+
+    shipment.planned_etd = shipment.schedule_set.first["etd"]
+    shipment.planned_eta = shipment.schedule_set.last["eta"]
+    shipment.save!
+
+    origin_hub      = Layover.find(shipment.schedule_set.first["origin_layover_id"]).stop.hub
+    destination_hub = Layover.find(shipment.schedule_set.first["destination_layover_id"]).stop.hub
+    locations = {
+      startHub:    { data: origin_hub, location: origin_hub.nexus },
+      endHub:      { data: destination_hub, location: destination_hub.nexus },
+      origin:      shipment.origin,
+      destination: shipment.destination
+    }
+
+    return {
+      shipment:        shipment,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil, 
+      aggregatedCargo: aggregated_cargo || nil, 
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      consignee:       consignee,
+      notifyees:       notifyees,
+      shipper:         shipper,
+      documents:       documents,
+      cargoItemTypes:  cargo_item_types
+    }
+  end
+
+  def confirm_booking(params)
+    shipment = Shipment.find(params[:shipment_id])
+    shipment.status = "requested"
+    shipment.booking_placed_at = DateTime.now
+    shipment.save!
     message = {
       title: 'Booking Received',
       message: "
         Thank you for making your booking through #{current_user.tenant.name}. 
         You will be notified upon confirmation of the order.
       ", 
-      shipmentRef: @shipment.imc_reference
+      shipmentRef: shipment.imc_reference
     }
     add_message_to_convo(current_user, message, true)
-
-    return {
-      shipment:   @shipment,
-      schedules:  @schedules,
-      hubs:       hubs,
-      consignee:  consignee,
-      notifyees:  notifyees,
-      shipper:    shipper,
-      cargoItems: @cargos,
-      containers: @containers
-    }
+    return shipment
   end
 
   def contact_location_params(resource)
@@ -191,59 +253,97 @@ module ShippingTools
     @user_locations = current_user.user_locations.map do |uloc|
       { 
         location: uloc.location.attributes, 
-        contact: current_user.attributes
+        contact:  current_user.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
 
     @contacts = current_user.contacts.map do |contact|
       { 
         location: contact.location.try(:attributes) || {},
-        contact: contact.attributes
+        contact:  contact.attributes
       }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
     end
-    @shipment = Shipment.find(params[:shipment_id])
-    @shipment.shipper_id = params[:shipment][:shipper_id]
-    @shipment.total_price = params[:total]
+    shipment = Shipment.find(params[:shipment_id])
+    shipment.user_id = params[:shipment][:user_id]
+    shipment.customs_credit = params[:shipment][:customsCredit]
+    shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
-    # byebug
-    params[:schedules].each do |sched|
-      @shipment.schedule_set << sched
+
+    # params[:schedules].each do |sched|
+      shipment.schedule_set = params[:schedules]
+    # end
+
+    shipment.trip_id = params[:schedules][0]["trip_id"]
+    case shipment.load_type
+    when 'lcl'
+      @dangerous = false
+      res = shipment.cargo_items.where(dangerous_goods: true)
+      if res.length > 0
+        @dangerous = true
+      end
+    when 'fcl'
+      @dangerous = false
+      res = shipment.containers.where(dangerous_goods: true)
+      if res.length > 0
+        @dangerous = true
+      end
     end
-    case @shipment.load_type
-      when 'lcl'
-        @dangerous = false
-        res = @shipment.cargo_items.where(dangerous_goods: true)
-        if res.length > 0
-          @dangerous = true
-        end
-      when 'fcl'
-        @dangerous = false
-        res = @shipment.containers.where(dangerous_goods: true)
-        if res.length > 0
-          @dangerous = true
-        end
-    end
-    @shipment.save!
-    @origin = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
-    @destination =  Layover.find(@schedules.first["destination_layover_id"]).stop.hub
+    shipment.save!
+    @origin      = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
+    @destination = Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     documents = {}
-    @shipment.documents.each do |doc|
+    shipment.documents.each do |doc|
       documents[doc.doc_type] = doc
     end
     hub_route = @schedules.first["hub_route_id"]
-    cargo_items = @shipment.cargo_items
-    containers = @shipment.containers
+    cargo_items = shipment.cargo_items
+    containers = shipment.containers
     if containers.length > 0
-      cargoKey = containers.first.size_class
+      cargoKey = containers.first.size_class.dup
+      customsKey = cargoKey.dup
+      customsKey.slice! customsKey.rindex("f")
+      cargos = containers
     else
       cargoKey = 'lcl'
+      customsKey = 'lcl'
+      cargos = cargo_items
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
-    customs_fee = get_item('customsFees', '_id', priceKey)
-    # @schedules = params[:schedules]
-    hubs = {startHub: {data: @origin, location: @origin.nexus}, endHub: {data: @destination, location: @destination.nexus}}
-    return {shipment: @shipment, hubs: hubs, contacts: @contacts, userLocations: @user_locations, schedules: @schedules, dangerousGoods: @dangerous, documents: documents, containers: containers, cargoItems: cargo_items, customs: customs_fee, locations: {origin: @shipment.origin, destination: @shipment.destination}}
+    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => customsKey}]).first
+    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => customsKey}]).first
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user) : {unknown: true}
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user) : {unknown: true}
+    total_fees = {total: {value: 0, currency: current_user.currency}}
+    if import_fees["total"] && import_fees["total"][:value]
+      total_fees[:total][:value] += import_fees["total"][:value]
+    end
+    if export_fees["total"] && export_fees["total"][:value]
+      total_fees[:total][:value] += export_fees["total"][:value]
+    end
+    
+    customs_fee = {
+      import: destination_customs_fee ? import_fees : {unknown: true},
+      export: origin_customs_fee ? export_fees : {unknown: true},
+      total: total_fees
+    }
+    hubs = { 
+      startHub: { data: @origin,      location: @origin.nexus },
+      endHub:   { data: @destination, location: @destination.nexus }
+    }
+    return {
+      shipment:       shipment,
+      hubs:           hubs,
+      contacts:       @contacts,
+      userLocations:  @user_locations,
+      schedules:      @schedules,
+      dangerousGoods: @dangerous,
+      documents:      documents,
+      containers:     containers,
+      cargoItems:     cargo_items,
+      customs:        customs_fee,
+      locations:      { origin: shipment.origin, destination: shipment.destination }
+    }
   end
 
   def get_shipment_pdf(params)
@@ -314,4 +414,6 @@ module ShippingTools
     end
     results
   end
+
+  
 end

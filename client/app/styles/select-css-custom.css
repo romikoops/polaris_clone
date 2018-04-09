@@ -304,13 +304,13 @@
 .Select-option.is-selected {
   background-color: #f5faff;
   /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.9);
+  /* background-color: rgba(0, 126, 255, 0.9); */
   color: #333;
 }
 .Select-option.is-focused {
   background-color: #ebf5ff;
   /* Fallback color for IE 8 */
-  background-color: rgba(0, 126, 255, 0.9);
+  /* background-color: rgba(0, 126, 255, 0.9); */
   color: #333;
 }
 .Select-option.is-disabled {

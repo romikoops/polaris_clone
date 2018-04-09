@@ -37,30 +37,39 @@ class ShipmentsController < ApplicationController
   end
 
   def show
-    @shipment = Shipment.find(params[:id])
-    @cargo_items = @shipment.cargo_items
-    @containers = @shipment.containers
-    @shipment_contacts = @shipment.shipment_contacts
-    @contacts = []
-    @shipment_contacts.each do |sc|
-      @contacts.push({contact: sc.contact, type: sc.contact_type, location: sc.contact.location})
+    shipment = Shipment.find(params[:id])
+
+    cargo_item_types = shipment.cargo_item_types.each_with_object({}) do |cargo_item_type, return_h|
+      return_h[cargo_item_type.id] = cargo_item_type
     end
-    @schedules = []
-    @shipment.schedule_set.each do |ss|
-      @schedules.push(Schedule.find(ss['id']))
+
+    contacts = shipment.shipment_contacts.map do |sc|
+      { contact: sc.contact, type: sc.contact_type, location: sc.contact.location }
     end
-    @documents = []
-    @shipment.documents.each do |doc|
-      tmp = doc.as_json
-      tmp["signed_url"] =  doc.get_signed_url
-      @documents << tmp
+
+    locations = { origin: shipment.origin, destination: shipment.destination }
+  
+    documents = shipment.documents.map do |doc|
+      tmp_doc = doc.as_json
+      tmp_doc["signed_url"] = doc.get_signed_url
+      tmp_doc
     end
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules}
-    response_handler(resp)
+
+    response_handler(
+      shipment:         shipment,
+      cargoItems:       shipment.cargo_items,
+      containers:       shipment.containers,
+      aggregatedCargo:  shipment.aggregated_cargo,
+      contacts:         contacts,
+      documents:        documents,
+      schedules:        shipment.schedule_set,
+      locations:        locations,
+      cargoItemTypes:   cargo_item_types
+    )
   end
 
   def create
-    resp = new_shipment(params[:loadType].underscore)
+    resp = new_shipment(params[:details])
     response_handler(resp)
   end
 
@@ -73,14 +82,16 @@ class ShipmentsController < ApplicationController
     resp = finish_shipment_booking(params)
     response_handler(resp)
   end
+  
+  def confirm_shipment
+    resp = confirm_booking(params)
+    tenant_notification_email(resp.user, resp)
+    shipper_notification_email(resp.user, resp)
+    response_handler(shipment: resp)
+  end
 
   def update
     resp = update_shipment(session, params)
-    
-    shipment = resp[:shipment]
-    tenant_notification_email(shipment.shipper, shipment)
-    shipper_notification_email(shipment.shipper, shipment)
-
     response_handler(resp)
   end
 

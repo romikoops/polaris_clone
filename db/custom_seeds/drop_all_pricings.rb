@@ -6,8 +6,12 @@ PRICING_TABLES = %w(
 	pricings
 	routeOptions
 	truckingHubs
-	truckingTables
+	truckingPricings
+	truckingQueries
+	localCharges
 	userPricings
+	itineraryPricings
+	itineraryOptions
 )
 
 PRICING_TABLES.each { |table| drop_table table }

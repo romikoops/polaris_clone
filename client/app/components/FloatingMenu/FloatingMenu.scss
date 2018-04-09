@@ -1,63 +1,51 @@
 :local {
-  .wrapper {
-    width: 150px;
-    height: max-content;
-    min-height: 500px;
-    position: relative;
-    top: 20px;
-    left: 50px;
+  $menu-width-expanded: 200px;
+  $menu-width-collapsed: 50px;
+  .floating_menu {
+    position: fixed;
+    left: 0;
+    top: 70px;
+    bottom: 0;
     z-index: 50;
-  }
-  .icon_circle {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    i {
-      font-size: 20px;
-      height: 20px;
-      width: 20px;
+    background: rgb(240, 240, 240);
+    padding-top: 10px;
+    width: $menu-width-expanded;
+    box-shadow: 1px 0 1px rgba(black, 0.25);
+    overflow: hidden;
+    transition: all 0.8s ease;
+    &.collapsed {
+      width: $menu-width-collapsed;
+      .collapse_prompt {
+        i {
+          transform: rotate(180deg)
+        }
+      }
+    }
+    .menu_content {
+      padding: 0 10px;
+    }
+    hr {
+      border-top: 1px solid rgba(black, 0.2);
+      margin: -2px;
+    }
+    .collapse_prompt {
+      width: $menu-width-expanded;
+      i {
+        font-size: 28px;
+        margin: 0 20px 2px 5px;
+        transition: all 0.8s ease;
+      }
+      p {
+        margin: 0;
+      }
+      padding: 10px;
     }
   }
-  .menu_content {
-    *{
-      transition: all 0.75s linear;
-      overflow: hidden;
-    }
-    transition: all 0.75s linear;
-    h3 {
-      transition: all 0.75s linear;
-    }
-
-  }
-  .open {
-    height: 100%;
-    *{
-      opacity: 1;
-    }
-    .nav_text {
-      width: 150px;
-      opacity: 1;
-      letter-spacing: 2px;
-    }
-    i {
-      width: 20px;
-    }
-  }
-  .closed {
-     height: 0px !important;
-    .nav_icon {
-      width: 20px !important;
-    }
-
-    *:not(.nav_icon) {
-      opacity: 0 !important;
-      width: 0;
-      overflow: hidden;
-    }
-    .nav_text {
-      opacity: 0 !important;
-      width: 0;
-      overflow: hidden;
+  .pusher {
+    width: $menu-width-expanded;
+    transition: all 0.8s ease;
+    &.collapsed {
+      width: $menu-width-collapsed;
     }
   }
 }

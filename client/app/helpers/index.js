@@ -1,12 +1,17 @@
 // export * from './fake-backend';
-export * from './history';
-export * from './store';
-export * from './auth-header';
-export * from './localStorage';
-export * from './subdomain';
-export * from './gradient';
-export * from './isEmpty';
-export * from './currencyConverter';
-export * from './svgColourer';
-export * from './stringTools';
-export * from './dimentionToPx';
+export * from './history'
+export * from './store'
+export * from './auth-header'
+export * from './localStorage'
+export * from './subdomain'
+export * from './gradient'
+export * from './isEmpty'
+export * from './currencyConverter'
+export * from './svgColourer'
+export * from './stringTools'
+export * from './dimentionToPx'
+export * from './switchIcon'
+export { default as percentageToHex } from './percentageToHex'
+export { default as nameToDisplay } from './nameToDisplay'
+export { default as dashedGradient } from './dashedGradient'
+export { default as humanizedMotAndLoadType } from './humanizedMotAndLoadType'

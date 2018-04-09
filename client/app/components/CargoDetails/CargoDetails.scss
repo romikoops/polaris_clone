@@ -26,7 +26,8 @@
   .prices h5, .prices h6{
     color: #39393A;
     font-size: 16px; 
-    line-height: 18px;
+    line-height: 20px;
+    top: 0px;
   }
   .box_content {
     transition: all 1s ease;
@@ -55,9 +56,57 @@
   .no_customs_box.show {
     visibility: visible;
     opacity: 1;
-    height: 87.83px;
+    height: 140px;
   }
   .show {
     height: 250px;
+  }
+  .customs_prices{
+    margin: 10px 0;
+    p {
+      font-size: 12px;
+      margin: 3px;
+      border-bottom: 0.5px solid rgba(0,0,0,0.25);
+    }
+    h6 {
+      margin: 5px;
+       font-size: 14px;
+    }
+  }
+  .customs_total{
+    margin: 15px 0;
+    p {
+      font-size: 14px;
+      margin: 3px;
+      border-bottom: 1px solid rgba(0,0,0,0.25);
+    }
+    h6 {
+      margin: 5px;
+      font-size: 16px;
+    }
+  }
+  .insurance_customs_sec {
+    background: rgba(200, 200, 200, .1);
+    box-shadow: 0 0 10px rgb(200, 200, 200);
+    padding: 30px 0 50px 0;
+    margin: 80px 0 30px 0;
+    width: 100vw !important;
+    max-width: 100vw !important;   
+  }
+  .textarea_margin {
+    margin-bottom: 34px;
+  }
+  .textarea_incoterm {
+    height: 90px;
+  }
+  .faded_text {
+    color: rgba(0,0,0,0.35);
+  }
+  .EORI_input {
+    border-radius: 5px;
+    margin-bottom: 25px;
+    border: 0.5px solid rgba($color: #000000, $alpha: 0.25);
+    height: 35px;
+    font-size: 12px;
   }
 }

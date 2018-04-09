@@ -1,4 +1,30 @@
 :local {
+  .next_step_sec {
+    margin-bottom: 40px;
+    .mot_sec {
+      color: white;
+      border-radius: 5px;
+      .mot_icons {
+        padding: 10px 0;
+        margin-bottom: 10px;      
+        i {
+          text-shadow: 1px 1px 5px rgba(black, 0.40);
+          font-size: 35px;
+          padding: 10px;
+        }
+      }
+      h3 {
+        color: black;
+        font-weight: normal;
+      }
+      hr {
+        border-color: rgba(0, 0, 0, 0.1);
+      }
+    }
+    .next_step_btn_sec {
+      margin-bottom: 20px;
+    }
+  }
   .card_link {
     width: 420px;
     height: 270px;
@@ -6,6 +32,13 @@
   }
   .card_link_row {
     margin-bottom: 77px;
+  }
+  .section {
+    transition: all 0.8s ease;
+    &.inactive {    
+      filter: grayscale(30%);
+      opacity: 0.3;
+    }
   }
 
   .card_img {
@@ -17,6 +50,12 @@
   .card_action {
     width: 100%;
     background: whitesmoke;
+  }
+  .mot_note {
+    color: rgba(0,0,0,0.66);
+    font-size: 12px;
+    margin: 4px;
+    margin-right: 20px;
   }
   .card_action p {
     height: 24px;
@@ -37,5 +76,24 @@
       font-size: 21px;
       line-height: 24px;
     }
+  }
+  
+  .direction_card {
+    height: 100px;
+    border-radius: 5px;
+    margin-right: 20px;
+    min-width: 400px;
+    max-width: 453.63px;
+    margin-bottom: 50px;
+    box-shadow: 1px 1.5px 6px rgba(black, 0.12);
+    cursor: pointer;
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+  .selected {
+    -webkit-box-shadow: 0px 0px 33px -7px rgba(0,0,0,0.66);
+    -moz-box-shadow: 0px 0px 33px -7px rgba(0,0,0,0.66);
+    box-shadow: 0px 0px 33px -7px rgba(0,0,0,0.66);
   }
 }

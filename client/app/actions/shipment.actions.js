@@ -1,411 +1,447 @@
-import { shipmentConstants } from '../constants';
-import { shipmentService } from '../services';
-import { alertActions, userActions } from './';
-import { Promise } from 'es6-promise-promise';
-import { push } from 'react-router-redux';
-import { getSubdomain } from '../helpers/subdomain';
-const subdomainKey = getSubdomain();
-const cookieKey = subdomainKey + '_user';
-const userData = JSON.parse(localStorage.getItem(cookieKey));
-function newShipment(type) {
-    function request(shipmentData) {
-        return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData };
-    }
-    function success(shipmentData) {
-        return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request(type));
-        shipmentService.newShipment(type).then(
-            resp => {
-                const shipmentData = resp.data;
-                dispatch(
-                    alertActions.success('Fetching New Shipment successful')
-                );
-                dispatch(
-                    push(
-                        '/booking/' + shipmentData.shipment.id + '/shipment_details'
-                    )
-                );
-                dispatch(success(shipmentData));
-            },
-            error => {
-                error.then(data => {
-                    dispatch(failure({ type: 'error', text: data.message }));
-                });
-            }
-        );
-    };
+import { Promise } from 'es6-promise-promise'
+import { push } from 'react-router-redux'
+import { shipmentConstants } from '../constants'
+import { shipmentService } from '../services'
+import { alertActions, userActions, appActions } from './'
+// import { getSubdomain } from '../helpers/subdomain'
+
+// const subdomainKey = getSubdomain()
+// const cookieKey = `${subdomainKey}_user`
+// const userData = JSON.parse(window.localStorage.getItem(cookieKey))
+function newShipment (type) {
+  function request (shipmentData) {
+    return { type: shipmentConstants.NEW_SHIPMENT_REQUEST, shipmentData }
+  }
+  function success (shipmentData) {
+    return { type: shipmentConstants.NEW_SHIPMENT_SUCCESS, shipmentData }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.NEW_SHIPMENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(type))
+    shipmentService.newShipment(type).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(alertActions.success('Fetching New Shipment successful'))
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/shipment_details`))
+      },
+      (error) => {
+        error.then((data) => {
+          dispatch(failure({ type: 'error', text: data.message }))
+        })
+      }
+    )
+  }
 }
 
-function setShipmentDetails(data) {
-    function request(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST,
-            shipmentData
-        };
+function setShipmentDetails (data, redirect) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST,
+      shipmentData
     }
-    function success(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS,
-            shipmentData
-        };
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS,
+      shipmentData
     }
-    function failure(error) {
-        return { type: shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request(data));
-        shipmentService.setShipmentDetails(data).then(
-            resp => {
-                const shipmentData = resp.data;
-                dispatch(success(shipmentData));
-                dispatch(
-                    push(
-                        '/booking/' + shipmentData.shipment.id + '/choose_route'
-                    )
-                );
-                dispatch(
-                    alertActions.success('Set Shipment Details successful')
-                );
-            },
-            error => {
-                error.then(data => {
-                    dispatch(failure({
-                        type: 'error',
-                        text: data.message || data.error
-                    }));
-                    if (data.error) console.error(data.exception);
-                });
-            }
-        );
-    };
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(data))
+    shipmentService.setShipmentDetails(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        if (redirect) {
+          dispatch(push(`/booking/${shipmentData.shipment.id}/choose_offer`))
+        }
+        dispatch(alertActions.success('Set Shipment Details successful'))
+      },
+      (error) => {
+        error.then((newData) => {
+          dispatch(failure({
+            type: 'error',
+            text: newData.message || newData.error
+          }))
+          if (newData.error) console.error(newData.exception)
+        })
+      }
+    )
+  }
 }
 
-function setShipmentRoute(data) {
-    function request(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST,
-            shipmentData
-        };
+function setShipmentRoute (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST,
+      shipmentData
     }
-    function success(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS,
-            shipmentData
-        };
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS,
+      shipmentData
     }
-    function failure(error) {
-        return { type: shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request(data));
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(data))
 
-        shipmentService.setShipmentRoute(data).then(
-            resp => {
-                const shipmentData = resp.data;
-                dispatch(success(shipmentData));
-                dispatch(
-                    push(
-                        '/booking/' +
-                            shipmentData.shipment.id +
-                            '/booking_details'
-                    )
-                );
-                dispatch(alertActions.success('Set Shipment Route successful'));
-            },
-            error => {
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
+    shipmentService.setShipmentRoute(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/final_details`))
+        dispatch(alertActions.success('Set Shipment Route successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
 }
 
-function setShipmentContacts(data) {
-    function request(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST,
-            shipmentData
-        };
+function setShipmentContacts (data) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST,
+      shipmentData
     }
-    function success(shipmentData) {
-        return {
-            type: shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS,
-            shipmentData
-        };
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS,
+      shipmentData
     }
-    function failure(error) {
-        return { type: shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request(data));
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(data))
 
-        shipmentService.setShipmentContacts(data).then(
-            resp => {
-                const shipmentData = resp.data;
-                dispatch(success(shipmentData));
-                dispatch(
-                    push(
-                        '/booking/' +
-                            shipmentData.shipment.id +
-                            '/finish_booking'
-                    )
-                );
-                dispatch(
-                    alertActions.success('Set Shipment Contacts successful')
-                );
-            },
-            error => {
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
+    shipmentService.setShipmentContacts(data).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${shipmentData.shipment.id}/finish_booking`))
+        dispatch(alertActions.success('Set Shipment Contacts successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function acceptShipment (id) {
+  function request (shipmentData) {
+    return {
+      type: shipmentConstants.ACCEPT_SHIPMENT_REQUEST,
+      shipmentData
+    }
+  }
+  function success (shipmentData) {
+    return {
+      type: shipmentConstants.ACCEPT_SHIPMENT_SUCCESS,
+      shipmentData
+    }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.ACCEPT_SHIPMENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request(id))
+
+    shipmentService.acceptShipment(id).then(
+      (resp) => {
+        const shipmentData = resp.data
+        dispatch(success(shipmentData))
+        dispatch(push(`/booking/${id}/thank_you`))
+        dispatch(alertActions.success('Confirm Shipment successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
 }
 
-function getAll() {
-    function request() {
-        return { type: shipmentConstants.GETALL_REQUEST };
-    }
-    function success(shipments) {
-        return { type: shipmentConstants.GETALL_SUCCESS, shipments };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.GETALL_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
+function getAll () {
+  function request () {
+    return { type: shipmentConstants.GETALL_REQUEST }
+  }
+  function success (shipments) {
+    return { type: shipmentConstants.GETALL_SUCCESS, shipments }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GETALL_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
 
-        shipmentService
-            .getAll()
-            .then(
-                shipments => dispatch(success(shipments)),
-                error => dispatch(failure(error))
-            );
-    };
+    shipmentService
+      .getAll()
+      .then(shipments => dispatch(success(shipments)), error => dispatch(failure(error)))
+  }
 }
 
-function getShipments() {
-    function request() {
-        return { type: shipmentConstants.GETALL_REQUEST };
-    }
-    function success(shipments) {
-        return { type: shipmentConstants.GETALL_SUCCESS, shipments };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.GETALL_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
+function getShipments () {
+  function request () {
+    return { type: shipmentConstants.GETALL_REQUEST }
+  }
+  function success (shipments) {
+    return { type: shipmentConstants.GETALL_SUCCESS, shipments }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GETALL_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
 
-        shipmentService
-            .getAll()
-            .then(
-                shipments => dispatch(success(shipments)),
-                error => dispatch(failure(error))
-            );
-    };
+    shipmentService
+      .getAll()
+      .then(shipments => dispatch(success(shipments)), error => dispatch(failure(error)))
+  }
 }
 
-function getShipment(id) {
-    function request(reqId) {
-        return { type: shipmentConstants.GET_SHIPMENT_REQUEST, reqId };
-    }
-    function success(shipment) {
-        return { type: shipmentConstants.GET_SHIPMENT_SUCCESS, shipment };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.GET_SHIPMENT_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
+function getShipment (id) {
+  function request (reqId) {
+    return { type: shipmentConstants.GET_SHIPMENT_REQUEST, reqId }
+  }
+  function success (shipment) {
+    return { type: shipmentConstants.GET_SHIPMENT_SUCCESS, shipment }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.GET_SHIPMENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
 
-        shipmentService
-            .getShipment(id)
-            .then(
-                shipment => dispatch(success(shipment)),
-                error => dispatch(failure(error))
-            );
-    };
+    shipmentService
+      .getShipment(id)
+      .then(shipment => dispatch(success(shipment)), error => dispatch(failure(error)))
+  }
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
-    function request(reqId) {
-        return { type: shipmentConstants.DELETE_REQUEST, reqId };
-    }
-    function success(respId) {
-        return { type: shipmentConstants.DELETE_SUCCESS, respId };
-    }
-    function failure(id, error) {
-        return { type: shipmentConstants.DELETE_FAILURE, id, error };
-    }
-    return dispatch => {
-        dispatch(request(id));
-        shipmentService.delete(id).then(
-            userData => {
-                dispatch(success(userData.id));
-            },
-            error => {
-                dispatch(failure(id, error));
-            }
-        );
-    };
+// eslint-disable-next-line no-underscore-dangle
+function _delete (id) {
+  function request (reqId) {
+    return { type: shipmentConstants.DELETE_REQUEST, reqId }
+  }
+  function success (respId) {
+    return { type: shipmentConstants.DELETE_SUCCESS, respId }
+  }
+  function failure (newId, error) {
+    return { type: shipmentConstants.DELETE_FAILURE, id: newId, error }
+  }
+  return (dispatch) => {
+    dispatch(request(id))
+    shipmentService.delete(id).then(
+      (newUserData) => {
+        dispatch(success(newUserData.id))
+      },
+      (error) => {
+        dispatch(failure(id, error))
+      }
+    )
+  }
 }
 
-function fetchShipment(id) {
-    function request(shipId) {
-        return { type: shipmentConstants.FETCH_SHIPMENT_REQUEST, shipId };
+function fetchShipment (id) {
+  function request (shipId) {
+    return { type: shipmentConstants.FETCH_SHIPMENT_REQUEST, shipId }
+  }
+  function success (shipId, data) {
+    return { type: shipmentConstants.FETCH_SHIPMENT_SUCCESS, shipId, data }
+  }
+  function failure (shipId, error) {
+    return {
+      type: shipmentConstants.FETCH_SHIPMENT_FAILURE,
+      shipId,
+      error
     }
-    function success(shipId, data) {
-        return { type: shipmentConstants.FETCH_SHIPMENT_SUCCESS, shipId, data };
-    }
-    function failure(shipId, error) {
-        return {
-            type: shipmentConstants.FETCH_SHIPMENT_FAILURE,
-            shipId,
-            error
-        };
-    }
-    return dispatch => {
-        dispatch(request(id));
-        return fetch(`http://localhost:3000/shipments/${id}`)
-            .then(response => response.json())
-            .then(
-                json => dispatch(success(id, json)),
-                error => {
-                    dispatch(failure(id, error));
-                }
-            );
-    };
-}
-
-function shouldFetchShipment(state, id) {
-    const shipment = state.shipment.data;
-    if (!shipment) {
-        return true;
-    }
-    if (shipment && shipment.id !== id) {
-        return true;
-    }
-    if (shipment.isFetching) {
-        return false;
-    }
-    return shipment.didInvalidate;
-}
-function fetchShipmentIfNeeded(id) {
-    // Note that the function also receives getState()
-    // which lets you choose what to dispatch next.
-
-    // This is useful for avoiding a network request if
-    // a cached value is already available.
-
-    return (dispatch, getState) => {
-        if (shouldFetchShipment(getState(), id)) {
-            // Dispatch a thunk from thunk!
-            return dispatch(getShipment(id));
+  }
+  return (dispatch) => {
+    dispatch(request(id))
+    return window
+      .fetch(`http://localhost:3000/shipments/${id}`)
+      .then(response => response.json())
+      .then(
+        json => dispatch(success(id, json)),
+        (error) => {
+          dispatch(failure(id, error))
         }
-
-        // Let the calling code know there's nothing to wait for.
-        return Promise.resolve();
-    };
+      )
+  }
 }
 
-function uploadDocument(doc, type, url) {
-    function request(file) {
-        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST, payload: file };
-    }
-    function success(file) {
-        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS, payload: file.data };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
-
-        shipmentService.uploadDocument(doc, type, url).then(
-            data => {
-                dispatch(
-                    alertActions.success('Uploading Document successful')
-                );
-                console.log(data);
-                dispatch(success(data));
-            },
-            error => {
-                // ;
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
+function shouldFetchShipment (state, id) {
+  const shipment = state.shipment.data
+  if (!shipment) {
+    return true
+  }
+  if (shipment && shipment.id !== id) {
+    return true
+  }
+  if (shipment.isFetching) {
+    return false
+  }
+  return shipment.didInvalidate
 }
-function deleteDocument(id) {
-    function request(deleteId) {
-        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST, payload: deleteId };
-    }
-    function success(deleteId) {
-        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS, payload: deleteId };
-    }
-    function failure(error) {
-        return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE, error };
-    }
-    return dispatch => {
-        dispatch(request());
+function fetchShipmentIfNeeded (id) {
+  // Note that the function also receives getState()
+  // which lets you choose what to dispatch next.
 
-        shipmentService.deleteDocument(id).then(
-            data => {
-                dispatch(
-                    alertActions.success('Deleting Document successful')
-                );
-                console.log(data);
-                dispatch(success(id));
-            },
-            error => {
-                // ;
-                dispatch(failure(error));
-                dispatch(alertActions.error(error));
-            }
-        );
-    };
+  // This is useful for avoiding a network request if
+  // a cached value is already available.
+
+  return (dispatch, getState) => {
+    if (shouldFetchShipment(getState(), id)) {
+      // Dispatch a thunk from thunk!
+      return dispatch(getShipment(id))
+    }
+
+    // Let the calling code know there's nothing to wait for.
+    return Promise.resolve()
+  }
 }
 
-function toDashboard() {
-    return dispatch => {
-        dispatch(userActions.getDashboard(userData.id, true));
-    };
+function uploadDocument (doc, type, url) {
+  function request (file) {
+    return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST, payload: file }
+  }
+  function success (file) {
+    return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS, payload: file.data }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.uploadDocument(doc, type, url).then(
+      (data) => {
+        dispatch(alertActions.success('Uploading Document successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function deleteDocument (id) {
+  function request (deleteId) {
+    return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST, payload: deleteId }
+  }
+  function success (deleteId) {
+    return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS, payload: deleteId }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.deleteDocument(id).then(
+      () => {
+        dispatch(alertActions.success('Deleting Document successful'))
+        dispatch(success(id))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function getNotes (noteIds) {
+  function request (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_REQUEST, payload: noteData }
+  }
+  function success (noteData) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_SUCCESS, payload: noteData }
+  }
+  function failure (error) {
+    return { type: shipmentConstants.SHIPMENT_GET_NOTES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    shipmentService.getNotes(noteIds).then(
+      (response) => {
+        dispatch(alertActions.success('Fetching Notes successful'))
+        dispatch(success(response.data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function updateCurrency (currency, req) {
+  return (dispatch) => {
+    dispatch(appActions.setCurrency(currency))
+    setTimeout(() => {
+      dispatch(setShipmentDetails(req, false))
+      dispatch(alertActions.success('Updating Currency successful'))
+    }, 100)
+  }
 }
 
-function clearLoading() {
-    return { type: shipmentConstants.CLEAR_LOADING, payload: null };
+function toDashboard (id) {
+  return (dispatch) => {
+    dispatch(userActions.getDashboard(id, true))
+  }
 }
 
-function goTo(path) {
-    return dispatch => {
-        dispatch(push(path));
-    };
+function clearLoading () {
+  return { type: shipmentConstants.CLEAR_LOADING, payload: null }
 }
 
+function goTo (path) {
+  return (dispatch) => {
+    dispatch(push(path))
+  }
+}
 
 export const shipmentActions = {
-    newShipment,
-    setShipmentRoute,
-    setShipmentDetails,
-    setShipmentContacts,
-    fetchShipment,
-    getShipments,
-    uploadDocument,
-    getShipment,
-    deleteDocument,
-    shouldFetchShipment,
-    fetchShipmentIfNeeded,
-    getAll,
-    goTo,
-    toDashboard,
-    clearLoading,
-    delete: _delete
-};
+  newShipment,
+  setShipmentRoute,
+  setShipmentDetails,
+  setShipmentContacts,
+  fetchShipment,
+  getShipments,
+  uploadDocument,
+  getShipment,
+  deleteDocument,
+  shouldFetchShipment,
+  fetchShipmentIfNeeded,
+  getAll,
+  goTo,
+  getNotes,
+  toDashboard,
+  clearLoading,
+  acceptShipment,
+  updateCurrency,
+  delete: _delete
+}
+
+export default shipmentActions

@@ -4,8 +4,13 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role
+  before_validation :set_default_role, :sync_uid, :set_default_currency
+
   validates :tenant_id, presence: true
+  validates :email, presence: true, uniqueness: {
+    scope: :tenant_id,
+    message: -> _self, _ { "'#{_self.email}' taken for Tenant '#{_self.tenant.subdomain}'" } 
+  }
 
   # Basic associations
   belongs_to :tenant
@@ -14,7 +19,7 @@ class User < ApplicationRecord
   has_many :user_locations, dependent: :destroy
   has_many :locations, through: :user_locations
 
-  has_many :shipments, foreign_key: "shipper_id"
+  has_many :shipments
   has_many :receivable_shipments, foreign_key: "consignee_id"
 
   # belongs_to :notifying_shipment, class_name: "Shipment"
@@ -23,9 +28,11 @@ class User < ApplicationRecord
   has_many :routes, foreign_key: :customer_id
   has_many :pricings, foreign_key: :customer_id
 
-  has_many :contacts, foreign_key: :shipper_id
+  has_many :contacts
   has_many :consignees, through: :contacts
   has_many :notifyees, through: :contacts
+
+  has_many :user_managers
 
   # Devise
   # Include default devise modules. Others available are:
@@ -86,6 +93,13 @@ class User < ApplicationRecord
       ['Registration date (oldest first)', 'created_at_asc']
     ]
   end
+  
+  def self.clear_tokens
+    User.all.each do |u|
+      u.tokens = nil
+      u.save!
+    end
+  end
 
   # Instance methods
   def full_name
@@ -104,26 +118,26 @@ class User < ApplicationRecord
     created_at.to_date.to_s(:long)
   end
 
-  def main_location
-    u_loc = user_locations.where(primary: true).first
-    if !u_loc 
-      return Location.new(street: "",
-          zip_code: "",
-          city: "",
-          country: "")
-    else
-      return u_loc.location
-    end
-    
+  def primary_location
+    user_locations.where(primary: true).first.try(:location)
   end
 
   def secondary_locations
     user_locations.where(primary: false).map(&:location)
   end
   
+  
   private
 
   def set_default_role
     self.role ||= Role.find_by_name('shipper')
+  end
+
+  def set_default_currency
+    self.currency ||= self.tenant.currency
+  end
+
+  def sync_uid
+    self.uid = "#{tenant.id}***#{email}"
   end
 end

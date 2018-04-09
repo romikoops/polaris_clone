@@ -13,7 +13,7 @@ class Admin::HubsController < ApplicationController
   end
   def create
     new_loc = Location.create_and_geocode(params[:location].as_json)
-    new_nexus = Location.from_short_name("#{params[:location][:city]}, #{params[:location][:country]}")
+    new_nexus = Location.from_short_name("#{params[:location][:city]}, #{params[:location][:country]}", 'nexus')
     hub = params[:hub].as_json
     hub["tenant_id"] = current_user.tenant_id
     hub["location_id"] = new_loc.id
@@ -24,9 +24,12 @@ class Admin::HubsController < ApplicationController
   def show
     hub = Hub.find(params[:id])
     related_hubs = hub.nexus.hubs
+    location = hub.location
     layovers = hub.layovers.limit(20)
-    routes = get_itineraries_for_hub(hub)  
-    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers}
+    routes = get_itineraries_for_hub(hub)
+    customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
+    charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
+    resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
     response_handler(resp)
   end
   def set_status
@@ -34,15 +37,43 @@ class Admin::HubsController < ApplicationController
     hub.toggle_hub_status!
     response_handler(hub)
   end
-
+  def delete
+    hub = Hub.find(params[:hub_id])
+    hub.destroy!
+    response_handler({id: params[:hub_id]})
+  end
+  def update_image
+    hub = Hub.find(params[:hub_id])
+    file = params[:file]
+    s3 = Aws::S3::Client.new(
+        access_key_id: ENV['AWS_KEY'],
+        secret_access_key: ENV['AWS_SECRET'],
+        region: "eu-central-1"
+      )
+     objKey = 'images/' + hub.tenant_id.to_s + "/" + file.original_filename
+    awsurl = "https://assets.itsmycargo.com/" + objKey
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'public-read')
+    hub.photo = awsurl
+    hub.save!
+    response_handler(hub)
+  end
+  def update
+    hub = Hub.find(params[:id])
+    location = hub.location
+    new_loc = params[:location].as_json
+    new_hub = params[:data].as_json
+    hub.update_attributes(new_hub)
+    location.update_attributes(new_loc)
+    response_handler({hub: hub, location: location})
+  end
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}
-      hubs = overwrite_hubs(req)
-      resp = []
-      hubs.each do |po|
-        resp << {data: po, location: po.location}
-      end
+      resp = overwrite_hubs(req)
+      # resp = []
+      # hubs.each do |po|
+      #   resp << {data: po, location: po.location}
+      # end
       response_handler(resp)
     else
       response_handler(false)

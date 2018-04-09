@@ -1,209 +1,292 @@
-import { shipmentConstants } from '../constants';
-import merge from 'lodash/merge';
-export function shipment(state = {}, action) {
-    switch (action.type) {
-        case shipmentConstants.CLEAR_LOADING:
-            return {
-               ...state,
-                loading: false
-            };
-        case shipmentConstants.NEW_SHIPMENT_REQUEST:
-            return {
-                request: {
-                    stage1: action.shipmentData
-                },
-                loading: true
-            };
-        case shipmentConstants.NEW_SHIPMENT_SUCCESS:
-            const resp1 = merge({}, state, {
-                response: {
-                    stage1: action.shipmentData
-                },
-                activeShipment: action.shipmentData.shipment.id,
-                loading: false
-            });
-            return resp1;
-        case shipmentConstants.NEW_SHIPMENT_FAILURE:
-            const err1 = merge({}, state, {
-                error: { stage1: [ action.error ] },
-                loading: false
-            });
-            return err1;
+import { shipmentConstants } from '../constants'
 
-        case shipmentConstants.GET_SHIPMENT_REQUEST:
-            return {
-                loading: true
-            };
-        case shipmentConstants.GET_SHIPMENT_SUCCESS:
-            return action.shipmentData;
-        case shipmentConstants.GET_SHIPMENT_FAILURE:
-            const errG = merge({}, state, {
-                error: { get: [ action.error ] },
-                loading: false
-            });
-            return errG;
+export default function shipment (state = {}, action) {
+  switch (action.type) {
+    case shipmentConstants.CLEAR_LOADING:
+      return {
+        ...state,
+        loading: false
+      }
+    case shipmentConstants.NEW_SHIPMENT_REQUEST:
+      return {
+        request: {
+          stage1: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.NEW_SHIPMENT_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: action.shipmentData
+        },
+        activeShipment: action.shipmentData.shipment.id,
+        loading: false
+      }
+    case shipmentConstants.NEW_SHIPMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.errors,
+          stage1: [action.error]
+        },
+        loading: false
+      }
 
-        case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
-            const req2 = merge({}, state, {
-                request: { stage2: action.shipmentData },
-                loading: true
-            });
-            return req2;
-        case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
-            const resp2 = merge({}, state, {
-                response: { stage2: action.shipmentData },
-                loading: false,
-                activeShipment: action.shipmentData.shipment.id
-            });
-            return resp2;
-        // return {
-        //    response: { ...state.response, stage2: action.shipmentData}
-        // };
-        // return  Object.assign({}, state.shipment, action.shipmentData);
-        case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
-            const err2 = merge({}, state, {
-                error: { stage2: [ action.error ] },
-                loading: false
-            });
-            return err2;
-        case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
-            const req3 = merge({}, state, {
-                request: { stage3: action.shipmentData },
-                loading: true
-            });
-            return req3;
-        case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
-            const resp3 = merge({}, state, {
-                response: { stage3: action.shipmentData },
-                loading: false,
-                activeShipment: action.shipmentData.shipment.id
-            });
-            return resp3;
-        case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
-            const err3 = merge({}, state, {
-                error: { stage3: [ action.error ] },
-                loading: false
-            });
-            return err3;
-        case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
-            const req4 = merge({}, state, {
-                request: { stage4: action.shipmentData },
-                loading: true
-            });
-            return req4;
-        case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
-            const resp4 = merge({}, state, {
-                response: {
-                    stage1: {},
-                    stage2: {},
-                    stage3: {},
-                    stage4: action.shipmentData
-                },
-                loading: false,
-                activeShipment: action.shipmentData.shipment.id
-            });
-            return resp4;
-        case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
-            const err4 = merge({}, state, {
-                error: { stage3: [ action.error ] },
-                loading: false
-            });
-            return err4;
+    case shipmentConstants.GET_SHIPMENT_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case shipmentConstants.GET_SHIPMENT_SUCCESS:
+      return action.shipmentData
+    case shipmentConstants.GET_SHIPMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.errors,
+          get: [action.error]
+        },
+        loading: false
+      }
 
-        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
-            const reqDocUpload = merge({}, state, {
-            });
-            return reqDocUpload;
-        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS:
-            const docs = state.response.stage3.documents;
-            docs[action.payload.doc_type] = action.payload;
-            const succDocUpload = merge({}, state, {
-                response: {
-                    stage3: {
-                        documents: docs
-                    }
-                },
-                loading: false
-            });
-            return succDocUpload;
-        case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE:
-            const errDocUpload = merge({}, state, {
-                error: { hubs: action.error }
-            });
-            return errDocUpload;
+    case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
+      return {
+        ...state,
+        request: {
+          ...state.request,
+          stage2: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage2: action.shipmentData
+        },
+        loading: false,
+        activeShipment: action.shipmentData.shipment.id
+      }
+    case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage2: [action.error]
+        },
+        loading: false
+      }
+    case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
+      return {
+        ...state,
+        request: {
+          ...state.request,
+          stage3: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage3: action.shipmentData
+        },
+        loading: false,
+        activeShipment: action.shipmentData.shipment.id
+      }
+    case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage3: [action.error]
+        },
+        loading: false
+      }
+    case shipmentConstants.SET_SHIPMENT_CONTACTS_REQUEST:
+      return {
+        ...state,
+        request: {
+          ...state.request,
+          stage4: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.SET_SHIPMENT_CONTACTS_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage4: action.shipmentData
+        },
+        loading: false,
+        activeShipment: action.shipmentData.shipment.id
+      }
+    case shipmentConstants.SET_SHIPMENT_CONTACTS_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage3: [action.error]
+        },
+        loading: false
+      }
 
+    case shipmentConstants.ACCEPT_SHIPMENT_REQUEST:
+      return {
+        ...state,
+        request: {
+          ...state.request,
+          stage5: action.shipmentData
+        },
+        loading: true
+      }
+    case shipmentConstants.ACCEPT_SHIPMENT_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage5: action.shipmentData
+        },
+        loading: false,
+        activeShipment: action.shipmentData.shipment.id
+      }
+    case shipmentConstants.ACCEPT_SHIPMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage3: [action.error]
+        },
+        loading: false
+      }
 
-        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
-            const reqDocDelete = merge({}, state, {
-            });
-            return reqDocDelete;
-        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS:
-            const docObj = {};
-            Object.keys(state.response.stage3.documents).forEach((key) => {
-                if (state.response.stage3.documents[key].id !== action.payload) {
-                    docObj[key] = state.response.stage3.documents[key];
-                }
-            });
-            // const succDocDelete = merge({}, state, {
-            //     response: {
-            //         stage3: {
-            //             documents: docObj
-            //         }
-            //     },
-            //     loading: false
-            // });
-            const succDocDelete = {
-                ...state,
-                response: {
-                    ...state.response,
-                    stage3: {
-                        ...state.response.stage3,
-                        documents: docObj
-                    }
-                },
-                loading: false
-            };
-            return succDocDelete;
-        case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE:
-            const errDocDelete = merge({}, state, {
-                error: { hubs: action.error }
-            });
-            return errDocDelete;
+    case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_SUCCESS: {
+      const docs = state.response.stage3.documents
+      if (action.payload.doc_type === 'miscellaneous') {
+        let miscArr
+        if (!docs.miscellaneous) {
+          miscArr = [action.payload]
+        } else {
+          miscArr = docs.miscellaneous
+          miscArr.push(action.payload)
+        }
+        docs.miscellaneous = miscArr
+      } else {
+        docs[action.payload.doc_type] = action.payload
+      }
 
-
-        case shipmentConstants.DELETE_REQUEST:
-            // add 'deleting:true' property to user being deleted
-            return {
-                ...state,
-                items: state.items.map(
-                    user =>
-                        user.id === action.id
-                            ? { ...user, deleting: true }
-                            : user
-                )
-            };
-        case shipmentConstants.DELETE_SUCCESS:
-            // remove deleted user from state
-            return {
-                items: state.items.filter(user => user.id !== action.id)
-            };
-        case shipmentConstants.DELETE_FAILURE:
-            // remove 'deleting:true' property and add 'deleteError:[error]' property to user
-            return {
-                ...state,
-                items: state.items.map(user => {
-                    if (user.id === action.id) {
-                        // make copy of user without 'deleting:true' property
-                        const { deleting, ...userCopy } = user;
-                        console.log(deleting);
-                        // return copy of user with 'deleteError:[error]' property
-                        return { ...userCopy, deleteError: [ action.error ] };
-                    }
-
-                    return user;
-                })
-            };
-        default:
-            return state;
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage3: {
+            ...state.response.stage3,
+            documents: docs
+          }
+        },
+        loading: false
+      }
     }
+    case shipmentConstants.SHIPMENT_UPLOAD_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          hubs: action.error
+        }
+      }
+
+    case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_SUCCESS: {
+      const docObj = {}
+      Object.keys(state.response.stage3.documents).forEach((key) => {
+        if (key === 'miscellaneous') {
+          docObj[key] = state.response.stage3.documents[key].filter(d => d.id !== action.payload)
+        } else if (state.response.stage3.documents[key].id !== action.payload) {
+          docObj[key] = state.response.stage3.documents[key]
+        }
+      })
+      const stage4 = state.response.stage4.doucments.filter(d => d.id !== action.payload)
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage3: {
+            ...state.response.stage3,
+            documents: docObj
+          },
+          stage4: {
+            ...state.response.stage4,
+            documents: stage4
+          }
+        },
+        loading: false
+      }
+    }
+    case shipmentConstants.SHIPMENT_DELETE_DOCUMENT_FAILURE:
+      return {
+        ...state,
+        error: { hubs: action.error }
+      }
+
+    case shipmentConstants.DELETE_REQUEST:
+      // add 'deleting:true' property to user being deleted
+      return {
+        ...state,
+        items: state.items.map(user => (user.id === action.id ? { ...user, deleting: true } : user))
+      }
+    case shipmentConstants.DELETE_SUCCESS:
+      // remove deleted user from state
+      return {
+        items: state.items.filter(user => user.id !== action.id)
+      }
+    case shipmentConstants.DELETE_FAILURE:
+      // remove 'deleting:true' property and add 'deleteError:[error]' property to user
+      return {
+        ...state,
+        items: state.items.map((user) => {
+          if (user.id === action.id) {
+            // make copy of user without 'deleting:true' property
+            const { deleting, ...userCopy } = user
+            console.log(deleting)
+            // return copy of user with 'deleteError:[error]' property
+            return { ...userCopy, deleteError: [action.error] }
+          }
+
+          return user
+        })
+      }
+    case shipmentConstants.SHIPMENT_GET_NOTES_REQUEST:
+      return state
+    case shipmentConstants.SHIPMENT_GET_NOTES_SUCCESS:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          stage1: {
+            ...state.response.stage1,
+            notes: action.payload
+          }
+        },
+        loading: false
+      }
+    case shipmentConstants.SHIPMENT_GET_NOTES_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          stage1: [action.error]
+        }
+      }
+    default:
+      return state
+  }
 }

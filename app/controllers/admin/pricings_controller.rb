@@ -21,6 +21,7 @@ class Admin::PricingsController < ApplicationController
     @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
     detailed_itineraries = get_itineraries(current_user.tenant_id)
+    
     itineraries = eliminate_user_pricings(@pricings, detailed_itineraries)
     response_handler({userPricings: @pricings, client: @client, detailedItineraries: itineraries})
   end
@@ -39,8 +40,57 @@ class Admin::PricingsController < ApplicationController
     data.delete("subdomain_id")
     data.delete("action")
     resp = update_pricing(params[:id], data)
+    parse_and_update_itinerary_pricing_id(data)
     new_pricing = get_item("pricings", "_id", params[:id])
     response_handler(new_pricing)
+  end
+
+  def destroy
+    delete_pricing(params[:id])
+    response_handler({})
+  end
+
+  def parse_and_update_itinerary_pricing_id(data)
+    keys_split = data["id"].split("_")
+    itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
+    existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
+    
+    if  !existing_itinerary
+      new_itinerary = {
+        tenant_id: current_user.tenant_id,
+        transport_category_id: data["transport_category_id"],
+        itinerary_id: data["itinerary_id"]
+      }
+      if data["id"].include?("fcl")
+        if keys_split.length == 7
+          new_itinerary["#{keys_split[6]}"] = data["id"]
+        else
+          new_itinerary["open"] = data["id"]    
+        end
+      else
+        if keys_split.length == 6
+          new_itinerary["#{keys_split[5]}"] = data["id"]
+        else
+          new_itinerary["open"] = data["id"]    
+        end
+      end
+      update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
+    else
+      if data["id"].include?("fcl")
+        if keys_split.length == 7
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
+        else
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
+        end
+      else
+        if keys_split.length == 6
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
+        else
+          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
+        end
+      end
+    end
+    current_user.tenant.update_route_details
   end
 
   # def overwrite_main_carriage
@@ -56,8 +106,8 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_lcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_lcl_pricings(req, true)
-      response_handler(true)
+      results = overwrite_freight_rates(req, current_user,false)
+      response_handler(results)
     else
       response_handler(false)
     end
@@ -66,8 +116,8 @@ class Admin::PricingsController < ApplicationController
   def overwrite_main_fcl_carriage
     if params[:file]  && params[:file] !='null'
       req = {'xlsx' => params[:file]}
-      overwrite_mongo_fcl_pricings(req, true)
-      response_handler(true)
+      results = overwrite_freight_rates(req, current_user,false)
+      response_handler(results)
     else
       response_handler(false)
     end
@@ -80,20 +130,26 @@ class Admin::PricingsController < ApplicationController
 
     redirect_to admin_pricings_path
   end
+
   def eliminate_user_pricings(prices, itineraries)
     results = []
     itineraries.each do |itin|
-      prices.each do |k, v|
-        splits = v.split('_')
-        hub1 = splits[0].to_i
-        hub2 = splits[1].to_i
-        if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
-          results.push(itin)
+      if !prices || prices && prices.empty?
+        results.push(itin)
+      else
+        prices.each do |k, v|
+          splits = v.split('_')
+          hub1 = splits[0].to_i
+          hub2 = splits[1].to_i
+          if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+            results.push(itin)
+          end
         end
       end
     end
     return results
   end
+
   private
 
   def require_login_and_role_is_admin
@@ -102,10 +158,10 @@ class Admin::PricingsController < ApplicationController
       redirect_to root_path
     end
   end
+
   def update_params
     params.require(:update).permit(
       :wm, :heavy_wm, :heavy_kg
     )
   end
-
 end

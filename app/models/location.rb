@@ -4,17 +4,24 @@ class Location < ApplicationRecord
   has_many :shipments
   has_many :contacts
 
+  has_many :hubs do
+    def tenant_id(tenant_id)
+      where(tenant_id: tenant_id)
+    end
+  end
   has_many :routes
-  has_many :hubs
   has_many :stops, through: :hubs
+
+  scope :nexus, -> { where(location_type: "nexus") }
+
   # Geocoding
   geocoded_by :geocoded_address
+
   reverse_geocoded_by :latitude, :longitude do |location, results|
     if geo = results.first
       premise_data = geo.address_components.find do |address_component|
         address_component["types"] == ["premise"]
-      end
-
+      end || {}
       location.premise          = premise_data["long_name"]
       location.street_number    = geo.street_number
       location.street           = geo.route
@@ -36,21 +43,24 @@ class Location < ApplicationRecord
     end
   end
 
-  def self.from_short_name(input)
-    newname = input.split(" ,")[0]
-    location = Location.new(geocoded_address: input)
-    location.geocode
-    location.reverse_geocode
-    location.name = newname
-    location.location_type = 'nexus'
-    hl = location.as_json
-    hl.each do |k, v|
-      if !v
-        hl.delete(k)        
-      end
-    end
-    nl = Location.find_or_create_by!(hl)
-    return nl
+  def self.from_short_name(input, location_type)
+    city, country = *input.split(" ,")
+    location = Location.find_by(city: city, country: country) 
+    return location unless location.nil?
+
+    temp_location = Location.new(geocoded_address: input)
+    temp_location.geocode
+    temp_location.reverse_geocode
+    
+    location = Location.find_by(city: temp_location.city, country: temp_location.country) 
+    return location unless location.nil?
+
+    location = temp_location
+
+    location.name = city
+    location.location_type = location_type
+    location.save!
+    location
   end
 
   def set_geocoded_address_from_fields!
@@ -61,9 +71,15 @@ class Location < ApplicationRecord
   def geocode_from_address_fields!
     self.set_geocoded_address_from_fields!
     self.geocode
-    self.reverse_geocode
     self.save!
     self
+  end
+
+  def self.get_trucking_city(string)
+    l = new(geocoded_address: string)
+    l.geocode
+    l.reverse_geocode
+    return l.city
   end
 
   def self.geocode_all_from_address_fields!(options = {})
@@ -81,8 +97,9 @@ class Location < ApplicationRecord
 
   def self.create_and_geocode(raw_location_params)
     location_params = location_params(raw_location_params)
-    location = Location.find_or_initialize_by(location_params)
+    location = Location.find_or_create_by(location_params)
     location.geocode_from_address_fields! if location.geocoded_address.nil?
+    
     location
   end
 
@@ -90,7 +107,7 @@ class Location < ApplicationRecord
     location = Location.new(geocoded_address: user_input)
     location.geocode
     location.reverse_geocode
-    
+    location.save!
     location
   end
 
@@ -138,6 +155,26 @@ class Location < ApplicationRecord
 
   def hubs_by_type(hub_type, tenant_id)
     hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+  end
+  
+  def hubs_by_type_seeder(hub_type, tenant_id)
+    hubs = self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+    if hubs.length < 1
+      case hub_type
+      when 'ocean'
+        name = "#{self.name} Port"
+      when 'air'
+        name = "#{self.name} Airport"
+      when 'rail'
+        name = "#{self.name} Railyard"
+      else
+        name = self.name
+      end
+      hub =  self.hubs.create!(hub_type: hub_type, tenant_id: tenant_id, name: name, latitude: self.latitude, longitude: self.longitude, location_id: self.id, nexus_id: self.id)
+      return self.hubs.where(hub_type: hub_type, tenant_id: tenant_id)
+    else
+      hubs
+    end
   end
 
   def pretty_hub_type
@@ -212,11 +249,10 @@ class Location < ApplicationRecord
 
   def get_zip_code
     if self.zip_code
-      return self.zip_code
+      self.zip_code.gsub(' ', '')
     else
-      self.geocoded_address
       self.reverse_geocode
-      return self.zip_code
+      self.zip_code.try(:gsub, ' ', '')
     end
   end
 

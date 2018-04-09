@@ -5,11 +5,9 @@ Rails.application.routes.draw do
 
   mount_devise_token_auth_for 'User', at: 'subdomain/:subdomain_id/auth', controllers: {
     sessions:      'users_devise_token_auth/sessions',
-    registrations: 'users_devise_token_auth/registrations'
-  }
+    registrations: 'users_devise_token_auth/registrations',
+  }, skip: [:omniauth_callbacks]
   
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
   resources :subdomain, only: [:show] do
     namespace :admin do
       resources :shipments do
@@ -18,18 +16,25 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :trucking, only: [:index, :create]
+      resources :trucking, only: [:index, :create, :show]
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
+      post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
+      post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
+      post "trucking/:id/edit", to: "trucking#edit"
       
-      resources :hubs, only: [:index, :show, :create] do
+      resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
       end
+      post "hubs/:hub_id/delete", to: "hubs#delete"
+      post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
+      
+      post "user_managers/assign", to: "user_managers#assign"
+      resources :itineraries, only: [:index, :show, :create, :destroy]
+      post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
 
-      resources :itineraries, only: [:index, :show, :create]
-
-      resources :pricings, only: [:index]
+      resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
       post "pricings/update/:id", to: "pricings#update_price"
@@ -40,26 +45,30 @@ Rails.application.routes.draw do
       get "itineraries/:id/layovers", to: "schedules#layovers"
       get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
-      resources :clients, only: [:index, :show, :create]
+      resources :clients, only: [:index, :show, :create, :destroy]
+
 
       resources :pricings, only: [:index]
-      post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
-      post "pricings/ocean_fcl_pricings/process_csv", to: "pricings#overwrite_fcl_carriage", as: :main_fcl_carriage_pricings_overwrite
+      post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_main_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
+      post "pricings/ocean_fcl_pricings/process_csv", to: "pricings#overwrite_main_fcl_carriage", as: :main_fcl_carriage_pricings_overwrite
       post "pricings/update/:id", to: "pricings#update_price"
 
-      resources :open_pricings, only: [:index]  
-      post "open_pricings/train_and_ocean_pricings/process_csv", 
-        to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
+      resources :open_pricings, only: [:index] 
+      post "open_pricings/ocean_lcl_pricings/process_csv", to: "open_pricings#overwrite_main_lcl_carriage", as: :open_main_lcl_carriage_pricings_overwrite 
+      # post "open_pricings/train_and_ocean_pricings/process_csv", 
+        # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
       resources :service_charges, only: [:index, :update]
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
-
+      post "service_charges/:id/edit", to: "service_charges#edit"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
-
-      resources :schedules, only: [:index]
+      post "shipments/:id/edit_price", to: "shipments#edit_price"
+       post "shipments/:id/edit_time", to: "shipments#edit_time"
+      resources :schedules, only: [:index, :show, :destroy]
+      post "schedules/overwrite/:id", to: "schedules#schedules_by_itinerary"
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 
         as: :schedules_train_overwrite
@@ -85,7 +94,7 @@ Rails.application.routes.draw do
       resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
       post "locations/:location_id/edit", to: "user_locations#edit"
     end
-
+    post "notes/fetch", to: "notes#get_notes"
     resources :shipments, only: [:index, :new, :show, :create] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking
@@ -94,7 +103,10 @@ Rails.application.routes.draw do
       post "set_haulage",        as: :set_haulage
       post "finish_booking",     as: :finish_booking
       post "update",             as: :update_booking
+      post "confirm_shipment",   as: :confirm_booking
     end
+
+    resources :trucking_availability, only: [:index]
 
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
@@ -126,6 +138,7 @@ Rails.application.routes.draw do
     post 'messaging/send' => "notifications#send_message"
 
     post 'messaging/data' => "notifications#shipment_data"
+    post 'messaging/shipments' => "notifications#shipments_data"
     post 'messaging/mark' => "notifications#mark_as_read"
 end
 

@@ -40,6 +40,7 @@
   }
   .sec_title_text {
     margin: 0;
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 30px;
@@ -52,10 +53,14 @@
     font-size: 8px;
   }
   .clip {
+  
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
   .icon {
+  
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
     font-size: 24px !important;
@@ -68,6 +73,10 @@
     // font-family: ".SF NS Display";
     font-size: 16px;
     line-height: 23px;
+    font-style: normal;
+  }
+  .itinerary_address {
+    font-style: normal;
   }
   .btn_sec{
     padding: 100px 0 70px 0;
@@ -98,14 +107,14 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 10;
+    z-index: 80;
     background: rgba(2,3,1,0.25);
   }
   .new_contact_content {
     width: 650px;
     height: 550px;
     position: relative;
-    z-index: 20;
+    z-index: 85;
     border-radius: 5px;
     background: #ffffff;
     padding: 15px;
@@ -181,6 +190,7 @@
     z-index: 4;
   }
   .content i, .content h3, .content p {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
@@ -199,6 +209,7 @@
 
   }
   .sched_selector i, .sched_selector p {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   
@@ -263,6 +274,7 @@
     width: calc(50% - 10px);
   }
   .price_card .title {
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
   }
@@ -278,7 +290,7 @@
   }
   .slider_inner {
     margin-right: 15px;
-    position: absolute;
+    position: relative;
     width: max-content;
     min-width: 100%;
   }
@@ -353,11 +365,14 @@
     width: 75vw;
     min-width: 800px;
     max-width: 95%;
-    height: 95%;
+    height: 50%;
     z-index: 52;
+    padding: 25px;
+    border-radius: 10px;
+    position: relative;
     background: #FFFFFF;
     box-shadow: 3px 3px 4px rgba(0,0,0,0.45);
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
   .editor_input input{
     height: 34px !important;
@@ -388,10 +403,14 @@
   }
   .trucking_cell {
     padding: 4px;
+    // background: lightgrey;
     p {
       margin: 0;
       font-size: 12px;
     }
+  }
+  .fee_subtitle {
+    font-size: 10px;
   }
   .trucking_cell_label {
     font-size: 10px;
@@ -445,6 +464,7 @@
   .form_padding {
     padding: 0 15px;
   }
+
   .input {
     margin: 0 15px 30px 15px;
     height: 36.91px;
@@ -496,6 +516,51 @@
   .overflow_hidden {
     overflow: hidden;
   }
+  .fee_panel_open {
+    height: 300px !important;
+    opacity: 1 !important;
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 100%;
+  }
+  .fee_panel_closed {
+    height: 0px !important;
+    opacity: 0 !important;
+  }
+  .hub_fee_panel_open {
+    height: 300px !important;
+    opacity: 1 !important;
+    position: absolute;
+    bottom: 0;
+    right:0;
+    width: 100%;
+  }
+  .hub_fee_panel_closed {
+    height: 0px !important;
+    opacity: 0 !important;
+  }
+  .add_fee_panel {
+    transition: all 1.2s ease-in-out;
+    border-radius: 10px 10px 0 0;
+    background: whitesmoke;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+   .add_hub_fee_panel {
+    transition: all 1.2s ease-in-out;
+    border-radius: 10px 10px 0 0;
+    background: whitesmoke;
+    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+  }
+  .editor_scroll {
+    height: 100%;
+    overflow-y: scroll;
+  }
+  .panel_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
   .btn_wrapper {
     position: relative !important;
     display: inline-block !important;
@@ -503,11 +568,198 @@
     text-align: center !important;
     align-content: center !important;
   }
-  .top_margin {
-    margin-top: -20px !important;
+  .new_margin {
+  margin-bottom: 0px !important;
+  padding-bottom: 0px
+   
   }
   .tooltip{
     max-width: 150px !important;
     text-align: left !important;
+  }
+  .price_cell_row {
+    padding: 5px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+  }
+  .add_price_cell{
+    padding: 5px;
+    // border-radius: 10px;
+    width: 32%;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+  }
+  .add_price_button{
+    border-radius: 15px;
+    width: 95%;
+     &:focus {
+      outline: none;
+    }
+    &:hover {
+      margin: -1px 1px 1px -1px;
+      box-shadow: 1px 1px 1px rgba(black, 0.3);
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+  .trucking_display_cell{
+    border-radius: 4px;
+    margin: 5px;
+    width: 95%;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+     &:focus {
+      outline: none;
+    }
+    &:hover {
+      // margin: -1px 1px 1px -1px;
+      box-shadow: 1px 1px 1px rgba(black, 0.7);
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+    p {
+      margin: 4px;
+      text-align: center;
+    }
+  }
+  .trucking_inner_row {
+    border-radius: 4px;
+    margin: 5px;
+    box-shadow: 2px 2px 5px 2px rgba(black, 0.3);
+  }
+  .trucking_fee_header {
+    // border-radius: 5px;
+    // background: lightgray;
+    color: white;
+    box-shadow: 1px 1px 1px rgba(black, 0.3);
+  }
+  .trucking_fee_breakdown{
+    border-radius: 0 0 5px 5px;
+  }
+  .contact_text{
+    margin: 3px;
+  }
+  .showPanel {
+    height: 100px;
+    overflow: visible !important;
+  }
+  .hidePanel {
+    height: 0px;
+  }
+  .panelDefault {
+    transition: all 1.5s linear;
+    overflow: hidden;
+    position: relative;
+  }
+  .time_edit_button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+  }
+  .time_save_buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+  }
+  .total_row {
+    padding: 15px;
+  }
+  .toggle_on {
+    opacity: 1;
+    color: black;
+  }
+  .toggle_off {
+    opacity: 0.75;
+    color: lightgray;
+  }
+  .action_btn {
+    padding: 15px 0;
+  }
+  .icon_btn_delete {
+    height: 30px;
+    width: 30px;
+    i {
+      color: darkred;
+      font-size: 18px;
+    }
+  }
+  .icon_btn_view {
+    height: 30px;
+    width: 30px;
+    i {
+      color: darkgreen;
+      font-size: 18px;
+    }
+  }
+  .trucking_search_results {
+    height: 500px;
+    overflow-y: scroll;
+  }
+  .no_doc {
+    font-size: 12px;
+    i {
+      color: red;
+    }
+    p {
+      margin-left: 10px;
+    }
+  }
+  .hub_edit_box {
+    input {
+      margin: 5px;
+    }
+  }
+  .upload_image {
+    width: 200px;
+    height: 200px;
+    color: darkslategray;
+    border-radius: 10px;
+    position: relative;
+    border: 1px solid rgba(47, 79, 79, 0.5);
+    box-shadow: 1px 0 0 1px rgba(47, 79, 79, 0.5);
+    i {
+      font-size: 32px;
+      color: darkslategray;
+    }
+  }
+  .upload_title {
+    position: absolute;
+    top: 15px;
+    width: 100%;
+    text-align: center;
+  }
+  .upload_btn_wrapper {
+    position: relative;
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+  }
+  .upload_btn_wrapper input[type=file] { 
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+  .upload_btn_wrapper form {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+  .tooltip {
+    max-width: 150px !important;
+    text-align: left !important;
+  }
+  .error {
+    height: 40px !important;
+    
+  }
+  .file_error {
+    overflow: hidden;
+    height: 0px;
+    font-size: 10px;
+    transition: all 2s linear;
   }
 }

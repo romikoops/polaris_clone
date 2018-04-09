@@ -19,12 +19,20 @@ class Admin::ServiceChargesController < ApplicationController
     @sc.save!
     response_handler(@sc)
   end
+  def edit
+    data = params[:data].as_json
+    id = data["_id"]
+    data.delete("_id")
+    update_item('localCharges', {"_id" => id}, data)
+    response_handler(data)
+  end
 
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}
-      overwrite_service_charges(req)
-      response_handler(true)
+      resp = overwrite_local_charges(req, current_user)
+      
+      response_handler(resp)
     else
       response_handler(false)
     end

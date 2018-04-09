@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329125202) do
+ActiveRecord::Schema.define(version: 20180404143414) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aggregated_cargos", force: :cascade do |t|
+    t.decimal "weight"
+    t.decimal "volume"
+    t.decimal "chargeable_weight"
+    t.integer "shipment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "cargo_item_types", force: :cascade do |t|
     t.decimal "dimension_x"
@@ -201,6 +210,17 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.integer "trucking_availability_id"
     t.integer "nexus_id"
     t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.integer "hub_id"
+    t.integer "trucking_pricing_id"
+    t.string "body"
+    t.string "header"
+    t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

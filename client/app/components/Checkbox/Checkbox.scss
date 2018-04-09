@@ -14,7 +14,7 @@
     border: 1px solid rgb(240, 240, 240);
     border-radius: 3px;
     input {
-      display: none;
+      display: none !important;
     }
 
     input {
@@ -31,6 +31,7 @@
         transition: all 0.3s ease;
         box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
         border-radius: 3px;
+        cursor: pointer;
         i {
           -webkit-background-clip: text !important;
           -webkit-text-fill-color: transparent !important;
@@ -40,21 +41,21 @@
           transform: scale(0.7);
         }
         i.show {
+          text-align: center;
           visibility: visible;
           opacity: 1;
           z-index: 5;
           transform: scale(1);
           @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-            position: relative;
             right: 8px;
           }
         }
       }
-      &:checked {
-        + span {
-          border-width: $checkboxSize / 2;
-        }
-      }
+      // &:checked {
+      //   + span {
+      //     border-width: $checkboxSize / 2;
+      //   }
+      // }
       &:disabled {
         + span {
           background: $disabledBG;

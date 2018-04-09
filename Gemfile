@@ -13,7 +13,7 @@ gem 'pg', '~> 0.21'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
-gem 'devise_token_auth'
+gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
 
 gem 'sprockets-rails', require: 'sprockets/railtie'
@@ -21,8 +21,9 @@ gem 'sass-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
 
-gem 'sidekiq'
-
+gem 'awesome_print'
+gem 'shoryuken'
+gem 'aws-sdk-sqs'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 
@@ -41,7 +42,8 @@ gem 'rack-cors'
 # Use geocoder for backend geocoding
 gem 'geocoder'
 
-gem 'remote_syslog_logger'
+# gem 'remote_syslog_logger'
+gem "sentry-raven"
 
 # Use Nokogiri for XML-parsing
 gem 'nokogiri'
@@ -90,7 +92,7 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
 
-group :development do
+group :development, :staging do
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

@@ -25,12 +25,15 @@ class Admin::ShipmentsController < ApplicationController
     @cargo_items = @shipment.cargo_items
     @containers = @shipment.containers
     hs_codes = []
+    cargo_item_types = {}
+
     @cargo_items.each do |ci|
       if ci && ci.hs_codes
         ci.hs_codes.each do |hs|
           hs_codes << hs
         end
       end
+      cargo_item_types[ci.cargo_item_type_id] = CargoItemType.find(ci.cargo_item_type_id)
     end
     @containers.each do |cn|
       if cn && cn.hs_codes
@@ -52,9 +55,53 @@ class Admin::ShipmentsController < ApplicationController
       tmp["signed_url"] =  doc.get_signed_url
       @documents << tmp
     end
-    p @shipment.id
-    resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hsCodes: hsCodes}
+    locations = {origin: @shipment.origin, destination: @shipment.destination}
+    account_holder = @shipment.user
+    resp = {
+      shipment: @shipment,
+      cargoItems: @cargo_items,
+      containers: @containers,
+      aggregatedCargo: @shipment.aggregated_cargo,
+      contacts: @contacts,
+      documents: @documents,
+      schedules: @schedules,
+      hsCodes: hsCodes,
+      locations: locations,
+      cargoItemTypes: cargo_item_types,
+      accountHolder: account_holder
+    }
     response_handler(resp)
+  end
+
+  def edit_price
+    shipment = Shipment.find(params[:id])
+    shipment.total_price = {value: params[:priceObj]["value"], currency: params[:priceObj]["currency"]}
+    shipment.save!
+    message = {
+        title: 'Shipment Price Change',
+        message: "Your shipment #{shipment.imc_reference} has an updated price. Your new total is #{params[:priceObj]["currency"]} #{params[:priceObj]["value"]}. For any issues, please contact your support agent.",
+        shipmentRef: shipment.imc_reference
+      }
+      add_message_to_convo(shipment.user, message, true)
+    response_handler(shipment)
+  end
+
+  def edit_time
+    shipment = Shipment.find(params[:id])
+    new_etd = DateTime.parse(params[:timeObj]["newEtd"])
+    new_eta = DateTime.parse(params[:timeObj]["newEta"])
+    shipment.planned_eta = new_eta
+    shipment.planned_etd = new_etd
+    shipment.schedule_set[0]["eta"] = new_eta
+    shipment.schedule_set[0]["etd"] = new_etd
+    shipment.save!
+    message = {
+        title: 'Shipment Schedule Updated',
+        message: "Your shipment #{shipment.imc_reference} has an updated schedule. Your new estimated departure is #{params[:timeObj]["newEtd"]}, estimated to arrive at #{params[:timeObj]["newEta"]}. For any issues, please contact your support agent.",
+        shipmentRef: shipment.imc_reference
+      }
+      add_message_to_convo(shipment.user, message, true)
+    response_handler(shipment)
   end
 
   def edit
@@ -70,26 +117,29 @@ class Admin::ShipmentsController < ApplicationController
       case params[:shipment_action]
       when "accept"
         @shipment.accept!
-        shipper_confirmation_email(@shipment.shipper, @shipment)
+        shipper_confirmation_email(@shipment.user, @shipment)
         message = {
           title: 'Booking Accepted',
-          message: "Your booking has been accepted! If you have any further questions or edis to your booking please contact the support department.",
+          message: "Your booking has been accepted! If you have any further questions or edits to your booking please contact the support department.",
           shipmentRef: @shipment.imc_reference
         }
-        add_message_to_convo(@shipment.shipper, message, true)
+        add_message_to_convo(@shipment.user, message, true)
         response_handler(@shipment)
       when "decline"
         @shipment.decline!
         message = {
           title: 'Booking Declined',
-          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and gods type. For more info contact us through the support channels.",
+          message: "Your booking has been declined! This could be due to a number of reasons including cargo size/weight and goods type. For more info contact us through the support channels.",
           shipmentRef: @shipment.imc_reference
         }
-        add_message_to_convo(@shipment.shipper, message, true)
+        add_message_to_convo(@shipment.user, message, true)
         response_handler(@shipment)
       when "ignore"
         @shipment.ignore!
         response_handler({})
+      when "finished"
+        @shipment.finished!
+        response_handler(@shipment)
       else
         raise "Unknown action!"
       end

@@ -1,29 +1,35 @@
 class CargoItem < ApplicationRecord
-  belongs_to :shipment
+  EFFECTIVE_TONNAGE_PER_CUBIC_METER = {
+    air:      "0.167",
+    rail:     "0.550",
+    ocean:    "1.000",
+    trucking: "0.333"
+  }.map_values { |v| BigDecimal.new(v) }
 
-  validates :payload_in_kg, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_x,   presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_y,   presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :dimension_z,   presence: true, numericality: { greater_than_or_equal_to: 0 }
+  MAX_DIMENSIONS = {
+    dimension_x:   "590.0",
+    dimension_y:   "234.2",
+    dimension_z:   "228.0",
+    payload_in_kg: "21_770.0"
+  }.map_values { |v| BigDecimal.new(v) }
+
+  belongs_to :shipment
+  belongs_to :cargo_item_type
+
+  MAX_DIMENSIONS.each do |attribute, max_dimension|
+    validates attribute,
+      presence: true,
+      numericality: {
+        greater_than_or_equal_to: 0,
+        less_than_or_equal_to: max_dimension
+      }
+  end
 
   # Class Methods
-  def self.extract(params)
-    cargos = []
-    params.each do |value|
-      
-      payload_in_kg = value["payload_in_kg"].to_d
-      dimension_x = value["dimension_x"].to_d
-      dimension_y = value["dimension_y"].to_d
-      dimension_z = value["dimension_z"].to_d
-      quantity = value["quantity"].to_i
-      cargo_group_id = SecureRandom.uuid
-      unless value["_destroy"] == "1"
-        quantity.times do
-          cargos << CargoItem.new(payload_in_kg: payload_in_kg, dimension_x: dimension_x, dimension_y: dimension_y, dimension_z: dimension_z, cargo_item_type_id: value["cargo_item_type_id"], cargo_group_id: cargo_group_id)
-        end
-      end
+  def self.extract(cargo_items_attributes)
+    cargo_items_attributes.map do |cargo_item_attributes|
+      new(cargo_item_attributes)
     end
-    cargos
   end
 
   # Instance Methods
@@ -35,11 +41,15 @@ class CargoItem < ApplicationRecord
     payload_in_kg / 1000    
   end
 
+  def set_chargeable_weight!(mot = "ocean")
+    self.chargeable_weight =
+      [volume * EFFECTIVE_TONNAGE_PER_CUBIC_METER[mot.to_sym], payload_in_tons].max
+    
+    save!
+  end
+
   def weight_or_volume
-    if volume > payload_in_tons
-      volume
-    else
-      payload_in_tons
-    end
+    # Keeping this alias method temporarily
+    chargeable_weight
   end
 end

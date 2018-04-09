@@ -14,24 +14,32 @@ class Admin::ItinerariesController < ApplicationController
     itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
     new_itinerary_data["stops"].each_with_index { |h, i|  itinerary.stops.create(hub_id: h, index: i)}
     itinerary.set_scope!
+    current_user.tenant.update_route_details
     response_handler(itinerary)
   end
-
+  def destroy
+    itinerary = Itinerary.find(params[:id]).destroy
+    response_handler(true)
+  end
   def stops
     itinerary = Itinerary.find(params[:id])
     stops = itinerary.stops.order(:index)
     response_handler(stops)
   end
-
+  def edit_notes
+    itinerary = Itinerary.find(params[:id])
+    itinerary.notes.create!(body: params[:notes][:body], header: params[:notes][:header], level: params[:notes][:level])
+    response_handler(itinerary)
+  end
   def show
     itinerary = Itinerary.find(params[:id])
     pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id)
     hubs = itinerary.hubs
     detailed_itineraries = get_itinerary_options(itinerary)
-
-    schedules = itinerary.prep_schedules(20)
-     
-    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules}
+    stops = itinerary.stops.order(:index)
+    schedules = itinerary.prep_schedules(10)
+    notes = itinerary.notes
+    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops, notes: notes}
     response_handler(resp)
   end
 

@@ -1,0 +1,851 @@
+import React, { Component } from 'react'
+import * as Scroll from 'react-scroll'
+import Toggle from 'react-toggle'
+// import Select from 'react-select'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+// import styled from 'styled-components'
+import PropTypes from '../../prop-types'
+import GmapsLoader from '../../hocs/GmapsLoader'
+import styles from './ShipmentDetails.scss'
+import errorStyles from '../../styles/errors.scss'
+import defaults from '../../styles/default_classes.scss'
+import { moment } from '../../constants'
+import '../../styles/day-picker-custom.css'
+import TruckingDetails from '../TruckingDetails/TruckingDetails'
+import { RoundButton } from '../RoundButton/RoundButton'
+import { Tooltip } from '../Tooltip/Tooltip'
+import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
+import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
+import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
+import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
+import { TextHeading } from '../TextHeading/TextHeading'
+import { FlashMessages } from '../FlashMessages/FlashMessages'
+import { IncotermRow } from '../Incoterm/Row'
+import { IncotermBox } from '../Incoterm/Box'
+import { isEmpty, camelize } from '../../helpers'
+import { Checkbox } from '../Checkbox/Checkbox'
+import NotesRow from '../Notes/Row'
+import '../../styles/select-css-custom.css'
+import getModals from './getModals'
+import toggleCSS from './toggleCSS'
+
+export class ShipmentDetails extends Component {
+  static scrollTo (target) {
+    Scroll.scroller.scrollTo(target, {
+      duration: 800,
+      smooth: true,
+      offset: -180
+    })
+  }
+  static errorsAt (errorsObjects) {
+    return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
+  }
+  constructor (props) {
+    super(props)
+    this.state = {
+      origin: {},
+      noteIds: {},
+      destination: {},
+      containers: [
+        {
+          payload_in_kg: 0,
+          sizeClass: '',
+          tareWeight: 0,
+          quantity: 1,
+          dangerous_goods: false
+        }
+      ],
+      cargoItems: [
+        {
+          payload_in_kg: 0,
+          dimension_x: 0,
+          dimension_y: 0,
+          dimension_z: 0,
+          quantity: 1,
+          cargo_item_type_id: '',
+          dangerous_goods: false,
+          stackable: true
+        }
+      ],
+      aggregatedCargo: {
+        weight: 0,
+        volume: 0
+      },
+      routes: {},
+      containersErrors: [
+        {
+          payload_in_kg: true
+        }
+      ],
+      cargoItemsErrors: [
+        {
+          payload_in_kg: true,
+          dimension_x: true,
+          dimension_y: true,
+          dimension_z: true,
+          cargo_item_type_id: true,
+          quantity: false
+        }
+      ],
+      aggregatedCargoErrors: {
+        weight: true,
+        volume: true
+      },
+      aggregated: false,
+      nextStageAttempt: false,
+      has_on_carriage: false,
+      has_pre_carriage: false,
+      shipment: props.shipmentData ? props.shipmentData.shipment : {},
+      allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
+      routeSet: false,
+      noDangerousGoodsConfirmed: false
+    }
+    this.truckTypes = {
+      container: ['side_lifter', 'chassis'],
+      cargo_item: ['default']
+    }
+
+    if (this.props.shipmentData && this.props.shipmentData.shipment) {
+      this.state.selectedDay = this.props.shipmentData.shipment.planned_pickup_date
+      this.state.has_on_carriage = this.props.shipmentData.shipment.has_on_carriage
+      this.state.has_pre_carriage = this.props.shipmentData.shipment.has_pre_carriage
+    }
+
+    this.handleAddressChange = this.handleAddressChange.bind(this)
+    this.handleDayChange = this.handleDayChange.bind(this)
+    this.handleNextStage = this.handleNextStage.bind(this)
+    this.addNewCargoItem = this.addNewCargoItem.bind(this)
+    this.addNewContainer = this.addNewContainer.bind(this)
+    this.setTargetAddress = this.setTargetAddress.bind(this)
+    this.handleChangeCarriage = this.handleChangeCarriage.bind(this)
+    this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
+    this.handleContainerChange = this.handleContainerChange.bind(this)
+    this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
+    this.deleteCargo = this.deleteCargo.bind(this)
+    this.setIncoTerm = this.setIncoTerm.bind(this)
+    this.handleSelectLocation = this.handleSelectLocation.bind(this)
+    this.loadPrevReq = this.loadPrevReq.bind(this)
+    this.handleCarriageNexuses = this.handleCarriageNexuses.bind(this)
+  }
+  componentWillMount () {
+    const { prevRequest, setStage } = this.props
+    if (prevRequest && prevRequest.shipment) {
+      this.loadPrevReq(prevRequest.shipment)
+    }
+    setStage(2)
+  }
+  componentDidMount () {
+    window.scrollTo(0, 0)
+  }
+  componentWillReceiveProps (nextProps) {
+    if (!this.state.shipment) {
+      const { shipment } = nextProps.shipmentData
+      this.setState({ shipment })
+    }
+  }
+  shouldComponentUpdate (nextProps, nextState) {
+    if (!nextState.modals) {
+      this.setState({ modals: getModals(nextProps, name => this.toggleModal(name)) })
+    }
+    return !!(
+      nextProps.shipmentData &&
+      nextState.shipment &&
+      nextState.modals &&
+      nextProps.tenant &&
+      nextProps.user &&
+      nextProps.shipmentData.maxDimensions
+    )
+  }
+  componentDidUpdate () {
+    const {
+      shipment, cargoItems, containers, aggregatedCargo,
+      selectedDay, origin, destination, aggregated
+    } = this.state
+    this.props.bookingSummaryDispatch.update({
+      shipment,
+      cargoItems,
+      aggregatedCargo,
+      containers,
+      selectedDay,
+      origin,
+      destination,
+      aggregated
+    })
+  }
+
+  setIncoTerm (opt) {
+    this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
+    this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
+    this.setState({
+      incoterm: opt
+    })
+  }
+  setNotesIds (ids, target) {
+    const { noteIds } = this.state
+    const { shipmentDispatch, shipmentData } = this.props
+    if (!noteIds.itineraries) {
+      const { itineraries } = shipmentData
+      noteIds.itineraries = itineraries
+    }
+    noteIds[target] = ids
+    if (noteIds.origin && noteIds.destination) {
+      shipmentDispatch.getNotes(noteIds)
+    }
+    this.setState({ noteIds })
+  }
+  setTargetAddress (target, address) {
+    this.setState({ [target]: { ...this.state[target], ...address } })
+  }
+
+  setAggregatedCargo (bool) {
+    this.setState({ aggregated: bool })
+  }
+
+  loadPrevReq (obj) {
+    const newCargoItemsErrors = obj.cargo_items_attributes.map(cia => ({
+      payload_in_kg: true,
+      dimension_x: true,
+      dimension_y: true,
+      dimension_z: true,
+      cargo_item_type_id: true,
+      quantity: false
+    }))
+    const newContainerErrors = obj.containers_attributes.map(cia => ({
+      payload_in_kg: true
+    }))
+
+    this.setState({
+      cargoItems: obj.cargo_items_attributes,
+      containers: obj.containers_attributes,
+      cargoItemsErrors: newCargoItemsErrors,
+      containersErrors: newContainerErrors,
+      selectedDay: obj.planned_pickup_date,
+      origin: {
+        fullAddress: obj.origin_user_input ? obj.origin_user_input : '',
+        hub_id: obj.origin_id
+      },
+      destination: {
+        fullAddress: obj.destination_user_input ? obj.destination_user_input : '',
+        hub_id: obj.destination_id
+      },
+      has_on_carriage: obj.has_on_carriage,
+      has_pre_carriage: obj.has_pre_carriage,
+      trucking: obj.trucking,
+      incoterm: obj.incoterm,
+      routeSet: true
+    })
+  }
+
+  newContainerGrossWeight () {
+    const container = this.state.containers.new
+    return container.type ? container.tare_weight + container.weight : 0
+  }
+
+  handleDayChange (selectedDay) {
+    this.setState({ selectedDay })
+  }
+  deleteCargo (target, index) {
+    const cargoArr = this.state[target]
+    const errorsArr = this.state[`${target}Errors`]
+    cargoArr.splice(index, 1)
+    errorsArr.splice(index, 1)
+    this.setState({ [target]: cargoArr })
+    this.setState({ [`${target}Errors`]: errorsArr })
+  }
+  handleSelectLocation (bool) {
+    this.setState({
+      AddressFormsHaveErrors: bool
+    })
+  }
+  handleAddressChange (event) {
+    const eventKeys = event.target.name.split('-')
+    const key1 = eventKeys[0]
+    const key2 = eventKeys[1]
+    const val = event.target.value
+    const addObj = this.state[key1]
+    addObj[key2] = val
+    let { fullAddress } = this.state[key1]
+
+    if (fullAddress) {
+      fullAddress = `${addObj.number} ${addObj.street} ${addObj.city} ${addObj.zipCode} ${
+        addObj.country
+      }`
+    }
+    this.setState({
+      ...this.state,
+      [key1]: { ...this.state[key1], [key2]: val, fullAddress }
+    })
+  }
+
+  handleAggregatedCargoChange (event, hasError) {
+    const { name, value } = event.target
+    const { aggregatedCargo, aggregatedCargoErrors } = this.state
+
+    if (!aggregatedCargo || !aggregatedCargoErrors) return
+    aggregatedCargo[name] = value ? +value : 0
+    if (hasError !== undefined) aggregatedCargoErrors[name] = hasError
+    this.setState({ aggregatedCargo, aggregatedCargoErrors })
+  }
+
+  handleCargoItemChange (event, hasError) {
+    const { name, value } = event.target
+    const [index, suffixName] = name.split('-')
+    const { cargoItems, cargoItemsErrors } = this.state
+
+    if (!cargoItems[index] || !cargoItemsErrors[index]) return
+    if (typeof value === 'boolean') {
+      cargoItems[index][suffixName] = value
+    } else {
+      cargoItems[index][suffixName] = value ? +value : 0
+    }
+
+    if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
+    this.setState({ cargoItems, cargoItemsErrors })
+  }
+
+  handleContainerChange (event, hasError) {
+    const { name, value } = event.target
+    const [index, suffixName] = name.split('-')
+    const { containers, containersErrors } = this.state
+    if (!containers[index] || !containersErrors[index]) return
+    if (suffixName === 'sizeClass' || typeof value === 'boolean') {
+      containers[index][suffixName] = value
+    } else {
+      containers[index][suffixName] = value ? parseInt(value, 10) : 0
+    }
+    if (hasError !== undefined) containersErrors[index][suffixName] = hasError
+
+    this.setState({ containers, containersErrors })
+  }
+
+  toggleAggregatedCargo () {
+    this.setState(prevState => ({ aggregated: !prevState.aggregated }))
+  }
+
+  addNewCargoItem () {
+    const newCargoItem = {
+      payload_in_kg: 0,
+      dimension_x: 0,
+      dimension_y: 0,
+      dimension_z: 0,
+      quantity: 1,
+      cargo_item_type_id: '',
+      dangerous_goods: false,
+      stackable: true
+    }
+    const newErrors = {
+      payload_in_kg: true,
+      dimension_x: true,
+      dimension_y: true,
+      dimension_z: true,
+      cargo_item_type_id: true,
+      quantity: false
+    }
+    const { cargoItems, cargoItemsErrors } = this.state
+    cargoItems.push(newCargoItem)
+    cargoItemsErrors.push(newErrors)
+    this.setState({ cargoItems, cargoItemsErrors })
+  }
+
+  addNewContainer () {
+    const newContainer = {
+      payload_in_kg: 0,
+      sizeClass: '',
+      tareWeight: 0,
+      quantity: 1,
+      dangerous_goods: false
+    }
+
+    const newErrors = {
+      payload_in_kg: true
+    }
+
+    const { containers, containersErrors } = this.state
+    containers.push(newContainer)
+    containersErrors.push(newErrors)
+    this.setState({ containers, containersErrors })
+  }
+
+  handleNextStage () {
+    if (
+      isEmpty(this.state.origin) ||
+      isEmpty(this.state.destination) ||
+      this.state.AddressFormsHaveErrors
+    ) {
+      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo('map')
+      return
+    }
+    if (!this.state.selectedDay) {
+      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo('dayPicker')
+      return
+    }
+
+    if (!this.state.incoterm && this.props.tenant.data.scope.incoterm_info_level === 'full') {
+      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo('incoterms')
+      return
+    }
+
+    if (this.state.aggregated) {
+      const test = false
+      if (test) {
+        this.setState({ nextStageAttempt: true })
+
+        return
+      }
+    } else {
+      const { shipment } = this.state
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+
+      if (errorIdx > -1) {
+        this.setState({ nextStageAttempt: true })
+        ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+
+        return
+      }
+    }
+
+    const data = { shipment: this.state.shipment }
+
+    data.shipment.origin_user_input = this.state.origin.fullAddress
+      ? this.state.origin.fullAddress
+      : ''
+    data.shipment.destination_user_input = this.state.destination.fullAddress
+      ? this.state.destination.fullAddress
+      : ''
+    data.shipment.origin_id = this.state.origin.hub_id
+    data.shipment.destination_id = this.state.destination.hub_id
+    data.shipment.cargo_items_attributes = this.state.cargoItems
+    data.shipment.containers_attributes = this.state.containers
+    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
+
+    data.shipment.has_on_carriage = this.state.has_on_carriage
+    data.shipment.has_pre_carriage = this.state.has_pre_carriage
+    data.shipment.planned_pickup_date = this.state.selectedDay
+    data.shipment.incoterm = this.state.incoterm
+    data.shipment.carriageNexuses = this.state.carriageNexuses
+    this.props.setShipmentDetails(data)
+  }
+  handleCarriageNexuses (target, id) {
+    this.setState({
+      carriageNexuses: {
+        ...this.state.carriageNexuses,
+        [target]: id
+      }
+    })
+  }
+  returnToDashboard () {
+    this.props.shipmentDispatch.getDashboard(true)
+  }
+
+  handleChangeCarriage (target, value) {
+    this.setState({ [target]: value })
+
+    // Upate trucking details according to toggle
+    const truckingKey = target.replace('has_', '')
+    const { shipment } = this.state
+    const artificialEvent = { target: {} }
+    if (!value) {
+      // Set truckType to '', if carriage is toggled off
+      artificialEvent.target.id = `${truckingKey}-`
+    } else if (!shipment.trucking[truckingKey].truck_type) {
+      // Set first truckType, if carriage is toggled on and truckType is empty
+      const truckType = this.truckTypes[this.state.shipment.load_type][0]
+      artificialEvent.target.id = `${truckingKey}-${truckType}`
+    }
+    if (!artificialEvent.target.id) return
+    this.handleTruckingDetailsChange(artificialEvent)
+  }
+
+  handleTruckingDetailsChange (event) {
+    const [carriage, truckType] = event.target.id.split('-')
+    const { shipment } = this.state
+    this.setState({
+      shipment: {
+        ...shipment,
+        trucking: {
+          ...shipment.trucking,
+          [carriage]: { truck_type: truckType }
+        }
+      }
+    })
+  }
+
+  toggleModal (name) {
+    const { modals } = this.state
+    modals[name].show = !modals[name].show
+    this.setState({ modals })
+  }
+
+  render () {
+    const {
+      tenant, user, shipmentData, shipmentDispatch, messages
+    } = this.props
+    const { modals } = this.state
+    const { theme, scope } = tenant.data
+    let cargoDetails
+    if (!shipmentData.shipment) return ''
+
+    if (this.state.aggregated) {
+      cargoDetails = (
+        <ShipmentAggregatedCargo
+          aggregatedCargo={this.state.aggregatedCargo}
+          handleDelta={(event, hasError) => this.handleAggregatedCargoChange(event, hasError)}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+        />
+      )
+    } else if (shipmentData.shipment.load_type === 'container') {
+      cargoDetails = (
+        <ShipmentContainers
+          containers={this.state.containers}
+          addContainer={this.addNewContainer}
+          handleDelta={this.handleContainerChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
+    } else if (shipmentData.shipment.load_type === 'cargo_item') {
+      cargoDetails = (
+        <ShipmentCargoItems
+          cargoItems={this.state.cargoItems}
+          addCargoItem={this.addNewCargoItem}
+          handleDelta={this.handleCargoItemChange}
+          deleteItem={this.deleteCargo}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          maxDimensions={shipmentData.maxDimensions}
+          toggleModal={name => this.toggleModal(name)}
+        />
+      )
+    }
+
+    const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
+
+    const mapBox = (
+      <GmapsLoader
+        theme={theme}
+        setTargetAddress={this.setTargetAddress}
+        allNexuses={shipmentData.allNexuses}
+        component={ShipmentLocationBox}
+        handleChangeCarriage={this.handleChangeCarriage}
+        has_on_carriage={this.state.has_on_carriage}
+        has_pre_carriage={this.state.has_pre_carriage}
+        origin={this.state.origin}
+        destination={this.state.destination}
+        nextStageAttempt={this.state.nextStageAttempt}
+        handleAddressChange={this.handleAddressChange}
+        shipment={shipmentData}
+        routeIds={routeIds}
+        setNotesIds={(e, t) => this.setNotesIds(e, t)}
+        handleCarriageNexuses={this.handleCarriageNexuses}
+        shipmentDispatch={shipmentDispatch}
+        prevRequest={this.props.prevRequest}
+        handleSelectLocation={this.handleSelectLocation}
+      />
+    )
+    const formattedSelectedDay = this.state.selectedDay
+      ? moment(this.state.selectedDay).format('DD/MM/YYYY')
+      : ''
+    const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days')
+          .format())
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
+    const dayPickerToolip = this.state.has_pre_carriage
+      ? 'planned_pickup_date'
+      : 'planned_dropoff_date'
+    const dayPickerText = this.state.has_pre_carriage
+      ? 'Cargo Ready Date'
+      : 'Available at appointed terminal'
+    const showDayPickerError = this.state.nextStageAttempt && !this.state.selectedDay
+    const showIncotermError = this.state.nextStageAttempt && !this.state.incoterm
+
+    const dayPickerSection = (
+      <div className={`${defaults.content_width} layout-row flex-none layout-align-start-center`}>
+        <div className="layout-row flex-50 layout-align-start-center layout-wrap">
+          <div className={`${styles.bottom_margin} flex-100 layout-row layout-align-start-center`}>
+            <div className="flex-none letter_2 layout-align-space-between-end">
+              <TextHeading theme={theme} text={dayPickerText} size={3} />
+            </div>
+            <Tooltip theme={theme} text={dayPickerToolip} icon="fa-info-circle" />
+          </div>
+          <div
+            name="dayPicker"
+            className={
+              `flex-none layout-row ${styles.dpb} ` +
+              `${showDayPickerError ? styles.with_errors : ''}`
+            }
+          >
+            <div className={`flex-none layout-row layout-align-center-center ${styles.dpb_icon}`}>
+              <i className="flex-none fa fa-calendar" />
+            </div>
+            <DayPickerInput
+              name="dayPicker"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              value={formattedSelectedDay}
+              onDayChange={this.handleDayChange}
+              dayPickerProps={dayPickerProps}
+            />
+            <span className={errorStyles.error_message}>
+              {showDayPickerError ? 'Must not be blank' : ''}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-50 layout-row layout-wrap layout-align-end-center">
+          <IncotermBox
+            theme={theme}
+            preCarriage={this.state.has_pre_carriage}
+            onCarriage={this.state.has_on_carriage}
+            tenantScope={scope}
+            incoterm={this.state.incoterm}
+            setIncoTerm={this.setIncoTerm}
+            errorStyles={errorStyles}
+            direction={shipmentData.shipment.direction}
+            showIncotermError={showIncotermError}
+            nextStageAttempt={this.state.nextStageAttempt}
+            firstStep
+          />
+        </div>
+      </div>
+    )
+    const truckTypes = this.truckTypes[this.state.shipment.load_type]
+    const showTruckingDetails =
+      truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
+    const { notes } = shipmentData
+    const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
+
+    const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
+
+    return (
+      <div
+        className="layout-row flex-100 layout-wrap no_max SHIP_DETAILS layout-align-start-start"
+        style={{ minHeight: '1800px' }}
+      >
+        {flash}
+        {modals &&
+          Object.keys(modals)
+            .filter(modalName => modals[modalName].show)
+            .map(modalName => modals[modalName].jsx)}
+        <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
+        <div className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${styles.note_box}`}>
+          <div className="flex-none content_width_booking layout-row layout-align-start-center">
+            <NotesRow notes={notes} theme={theme} />
+          </div>
+        </div>
+        <div
+          className={`${
+            styles.date_sec
+          } layout-row flex-100 layout-wrap layout-align-center-center`}
+        >
+          {dayPickerSection}
+        </div>
+        <div
+          className={
+            `${defaults.border_divider} ${styles.trucking_sec} layout-row flex-100 ` +
+            `${showTruckingDetails ? styles.visible : ''} ` +
+            'layout-wrap layout-align-center'
+          }
+        >
+          <TruckingDetails
+            theme={theme}
+            trucking={this.state.shipment.trucking}
+            truckTypes={truckTypes}
+            handleTruckingDetailsChange={this.handleTruckingDetailsChange}
+          />
+        </div>
+        <div className="flex-100 layout-row layout-align-center-center">
+          <div className="flex-none content_width_booking layout-row layout-align-center-center">
+            <IncotermRow
+              theme={theme}
+              preCarriage={this.state.has_pre_carriage}
+              onCarriage={this.state.has_on_carriage}
+              originFees={this.state.has_pre_carriage}
+              destinationFees={this.state.has_on_carriage}
+              tenant={tenant}
+            />
+          </div>
+        </div>
+        <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
+          {
+            shipmentData.shipment.load_type === 'cargo_item' && (
+              <div className="content_width_booking layout-row layout-align-center">
+                <div className={
+                  `${styles.toggle_aggregated_sec} ` +
+                  'flex-50 layout-row layout-align-space-around-center'
+                }
+                >
+                  <h3
+                    className={this.state.aggregated ? 'pointy' : ''}
+                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                    onClick={() => this.setAggregatedCargo(false)}
+                  >
+                    Cargo Units
+                  </h3>
+                  <Toggle
+                    className="flex-none aggregated_cargo"
+                    id="aggregated_cargo"
+                    name="aggregated_cargo"
+                    checked={this.state.aggregated}
+                    onChange={() => this.toggleAggregatedCargo()}
+                  />
+                  <h3
+                    className={this.state.aggregated ? '' : 'pointy'}
+                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                    onClick={() => this.setAggregatedCargo(true)}
+                  >
+                    Total Dimensions
+                  </h3>
+                </div>
+              </div>
+            )
+          }
+          {cargoDetails}
+        </div>
+        <div
+          className={
+            `${defaults.border_divider} layout-row flex-100 ` +
+            'layout-wrap layout-align-center-center'
+          }
+        >
+          <div
+            className={
+              `${styles.btn_sec} ${defaults.content_width} ` +
+              'layout-row flex-none layout-wrap layout-align-start-start'
+            }
+          >
+            {!(
+              this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+              this.state.containers.some(container => container.dangerous_goods)
+            ) ? (
+                <div className="flex-60 layout-row layout-align-start-center">
+                  <div className="flex-10 layout-row layout-align-start-start">
+                    <Checkbox
+                      theme={theme}
+                      onChange={() =>
+                        this.setState({
+                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                        })
+                      }
+                      size="30px"
+                      name="no_dangerous_goods_confirmation"
+                      checked={this.state.noDangerousGoodsConfirmed}
+                    />
+                  </div>
+                  <p style={{ margin: 0, fontSize: '14px' }}>
+                  I hereby confirm that none of the specified cargo units contain{' '}
+                    <span
+                      className="emulate_link blue_link"
+                      onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                    >
+                    dangerous goods
+                    </span>
+                  .
+                  </p>
+                </div>
+              ) : (
+                <div className="flex-60" />
+              )}
+            <div className="flex layout-row layout-align-end">
+              <RoundButton
+                text="Get Offers"
+                handleNext={this.handleNextStage}
+                theme={theme}
+                active={
+                  this.state.noDangerousGoodsConfirmed ||
+                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                  this.state.containers.some(container => container.dangerous_goods)
+                }
+                disabled={
+                  !this.state.noDangerousGoodsConfirmed &&
+                  (!this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                    !this.state.containers.some(container => container.dangerous_goods))
+                }
+              />
+            </div>
+          </div>
+        </div>
+        {user && !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+              'layout-wrap layout-align-center-center'
+            }
+          >
+            <div
+              className={
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
+              }
+            >
+              <div
+                className={
+                  `${styles.btn_sec} ${defaults.content_width} ` +
+                  'layout-row flex-none layout-wrap layout-align-start-start'
+                }
+              >
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
+              </div>
+            </div>
+          </div>
+        )}
+        {styleTagJSX}
+      </div>
+    )
+  }
+}
+
+ShipmentDetails.propTypes = {
+  shipmentData: PropTypes.shipmentData.isRequired,
+  setShipmentDetails: PropTypes.func.isRequired,
+  messages: PropTypes.arrayOf(PropTypes.string),
+  setStage: PropTypes.func.isRequired,
+  prevRequest: PropTypes.shape({
+    shipment: PropTypes.shipment
+  }),
+  shipmentDispatch: PropTypes.shape({
+    goTo: PropTypes.func,
+    getDashboard: PropTypes.func
+  }).isRequired,
+  bookingSummaryDispatch: PropTypes.shape({
+    update: PropTypes.func
+  }).isRequired,
+  tenant: PropTypes.tenant.isRequired,
+  user: PropTypes.user.isRequired
+}
+
+ShipmentDetails.defaultProps = {
+  prevRequest: null,
+  messages: []
+}
+
+export default ShipmentDetails

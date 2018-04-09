@@ -1,5 +1,5 @@
 class Contact < ApplicationRecord
-  belongs_to :shipper, class_name: "User"
+  belongs_to :user
   has_many :shipment_contacts
   belongs_to :location, optional: true
 

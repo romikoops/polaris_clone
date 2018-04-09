@@ -1,0 +1,78 @@
+:local {
+  .button {
+    margin: 5px;
+    border-radius: 10px;
+  }
+  .urgent {
+    @extend .button;
+    border: 1px solid darkred;
+    box-shadow: 1px 0 0 1px darkred;
+    i {
+      color: darkred;
+    }
+  }
+  .important {
+    @extend .button;
+    border: 1px solid rgb(243, 133, 6);
+    box-shadow: 1px 0 0 1px rgb(243, 133, 6);
+    i {
+      color:  rgb(243, 133, 6);
+    }
+  }
+  .notification {
+    @extend .button;
+    border: 1px solid darkgoldenrod;
+    box-shadow: 1px 0 0 1px darkgoldenrod;
+    i {
+      color:  darkgoldenrod;
+    }
+  }
+  .alert {
+    @extend .button;
+    border: 1px solid darkgreen;
+    box-shadow: 1px 0 0 1px darkgreen;
+    i {
+      color:  darkgreen;
+    }
+  }
+  .urgent_selected {
+    @extend .button;
+    border: 1px solid darkred;
+    background: darkred;
+    box-shadow: 1px 0 0 1px darkred;
+    color: white;
+    i {
+      color: white;
+    }
+  }
+  .important_selected {
+    @extend .button;
+    border: 1px solid rgb(243, 133, 6);
+    background: rgb(243, 133, 6);
+    box-shadow: 1px 0 0 1px rgb(243, 133, 6);
+    color: white;
+    i {
+      color:  white;
+    }
+  }
+  .notification_selected {
+    @extend .button;
+    border: 1px solid darkgoldenrod;
+    background: darkgoldenrod;
+    box-shadow: 1px 0 0 1px darkgoldenrod;
+    color: white;
+    i {
+      color:  white;
+    }
+  }
+  .alert_selected {
+    @extend .button;
+    border: 1px solid darkgreen;
+    background: darkgreen;
+    box-shadow: 1px 0 0 1px darkgreen;
+    color: white;
+    i {
+      color:  white;
+    }
+  }
+}
