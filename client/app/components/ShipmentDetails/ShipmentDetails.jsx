@@ -557,6 +557,10 @@ export class ShipmentDetails extends Component {
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
 
+    const mandatoryTrucking = {
+      onCarriage: scope.carriage_options.on_carriage[shipmentData.shipment.direction] === 'mandatory',
+      preCarriage: scope.carriage_options.pre_carriage[shipmentData.shipment.direction] === 'mandatory'
+    }
     const mapBox = (
       <GmapsLoader
         theme={theme}
@@ -570,13 +574,14 @@ export class ShipmentDetails extends Component {
         destination={this.state.destination}
         nextStageAttempt={this.state.nextStageAttempt}
         handleAddressChange={this.handleAddressChange}
-        shipment={shipmentData}
+        shipmentData={shipmentData}
         routeIds={routeIds}
         setNotesIds={(e, t) => this.setNotesIds(e, t)}
         handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
+        mandatoryTrucking={mandatoryTrucking}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
