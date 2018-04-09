@@ -1,6 +1,6 @@
 include ExcelTools
 include MongoTools
-['greencarrier'].each do |sub|
+['demo'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -58,17 +58,17 @@ include MongoTools
   #   req = {"xlsx" => trucking}
   #   overwrite_city_trucking_rates_by_hub(req, shipper,  hub.id, 'Globelink LTL', dir)
   # end
-  hub = tenant.hubs.find_by_name("Stockholm Airport")
-  ["import", "export"].each do |dir|
-    trucking = File.open("#{Rails.root}/db/dummydata/Stockholm_Trucking_Rates.xlsx")
-    req = {"xlsx" => trucking}
-    # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
-    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
-  end
-  # options = {
-  #   tenant_id: tenant.id
-  # }
-  # write_pricings_to_sheet(options)
+  # hub = tenant.hubs.find_by_name("Stockholm Airport")
+  # ["import", "export"].each do |dir|
+  #   trucking = File.open("#{Rails.root}/db/dummydata/Stockholm_Trucking_Rates.xlsx")
+  #   req = {"xlsx" => trucking}
+  #   # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
+  #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+  # end
+  options = {
+    tenant_id: tenant.id
+  }
+  write_pricings_to_sheet(options)
   
   # tenant.update_route_details()
 

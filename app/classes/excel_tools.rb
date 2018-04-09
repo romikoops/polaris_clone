@@ -1,4 +1,3 @@
-require 'write_xlsx'
 module ExcelTools
   include ImageTools
   include MongoTools
@@ -1486,7 +1485,7 @@ module ExcelTools
       hw_rate_basis: 'HW_RATE_BASIS',
       min_range: 'MIN_RANGE',
       max_range: 'MAX_RANGE',
-      transit_time: 'TRANSIT TIME',
+      transit_time: 'TRANSIT_TIME',
       carrier: 'CARRIER',
       nested: 'NESTED',
       wm_rate: 'WM_RATE'
@@ -1801,20 +1800,20 @@ module ExcelTools
   def write_pricings_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
     pricings = get_tenant_pricings(tenant.id)
-    # byebug
     aux_data = {
       itineraries: {},
       nexuses: {},
       vehicle: {},
       transit_times: {}
     }
-    workbook = WriteXLSX.new("tmp/pricings_#{DateTime.now.strftime('%Y-%M-%D')}.xlsx")
+    dir = "tmp/pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
     header_format = workbook.add_format
     header_format.set_bold
-    header_values = %w(CUSTOMER_ID	NESTED	CARRIER	MOT	CARGO_TYPE	EFFECTIVE_DATE	EXPIRATION_DATE	ORIGIN	DESTINATION	TRANSIT TIME	WM_RATE	VEHICLE	FEE	CURRENCY	RATE_BASIS	RATE_MIN	RATE	HW_THRESHOLD	HW_RATE_BASIS	MIN_RANGE	MAX_RANGE)
-    header_values.each_with_index { |hv, i| worksheet.write(1, i + 1, hv, header_format)}
-    row = 2
+    header_values = %w(CUSTOMER_ID	NESTED	CARRIER	MOT	CARGO_TYPE	EFFECTIVE_DATE	EXPIRATION_DATE	ORIGIN	DESTINATION	TRANSIT_TIME	WM_RATE	VEHICLE	FEE	CURRENCY	RATE_BASIS	RATE_MIN	RATE	HW_THRESHOLD	HW_RATE_BASIS	MIN_RANGE	MAX_RANGE)
+    header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format)}
+    row = 1
     pricings.each_with_index do |pricing, i|
       if pricing[:expiration_date] < DateTime.now
         next
@@ -1852,7 +1851,7 @@ module ExcelTools
           
         end
         # byebug
-        diff = (destination_layover.eta - origin_layover.etd).to_i
+        diff = ((destination_layover.eta - origin_layover.etd) / 86400).to_i
         aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"] = diff
         current_transit_time = aux_data[:transit_times]["#{pricing_key_components[0]}_#{pricing_key_components[1]}"]
       else
@@ -1866,55 +1865,84 @@ module ExcelTools
         current_vehicle = aux_data[:vehicle][pricing_key_components[2]]
       end
       pricing[:data].each do | key, fee |
-        if !fee[:range] || fee[:range].length < 1
-          worksheet.write(4, row, current_itinerary.mode_of_transport)
-          worksheet.write(5, row, pricing[:load_type])
-          worksheet.write(6, row, pricing[:effective_date])
-          worksheet.write(7, row, pricing[:expiration_date])
-          worksheet.write(8, row, current_origin.name)
-          worksheet.write(9, row, current_destination.name)
-          worksheet.write(10, row, current_transit_time)
-          worksheet.write(11, row, pricing[:wm_rate])
-          worksheet.write(12, row, current_vehicle.name)
-          worksheet.write(13, row, key)
-          worksheet.write(14, row, fee[:currency])
-          worksheet.write(15, row, fee[:rate_basis])
-          worksheet.write(16, row, fee[:min])
-          worksheet.write(17, row, fee[:rate])
-          if fee[:hw_threshold]
-            worksheet.write(18, row, fee[:hw_threshold])
-          end
-          if fee[:hw_rate_basis]
-            worksheet.write(19, row, fee[:hw_rate_basis])
-          end
-          row += 1
-        else
-          fee[:range].each do |range_fee|
-            worksheet.write(4, row, current_itinerary.mode_of_transport)
-            worksheet.write(5, row, pricing[:load_type])
-            worksheet.write(6, row, pricing[:effective_date])
-            worksheet.write(7, row, pricing[:expiration_date])
-            worksheet.write(8, row, current_origin.name)
-            worksheet.write(9, row, current_destination.name)
-            worksheet.write(10, row, current_transit_time)
-            worksheet.write(11, row, pricing[:wm_rate])
-            worksheet.write(12, row, current_vehicle.name)
-            worksheet.write(13, row, key)
-            worksheet.write(14, row, fee[:currency])
-            worksheet.write(15, row, fee[:rate_basis])
-            worksheet.write(16, row, fee[:min])
-            worksheet.write(17, row, range_fee[:rate])
+        if fee[:range] && fee[:range].length > 0
+         fee[:range].each do |range_fee|
+            worksheet.write(row, 3, current_itinerary.mode_of_transport)
+            worksheet.write(row, 4, pricing[:load_type])
+            worksheet.write(row, 5, pricing[:effective_date])
+            worksheet.write(row, 6, pricing[:expiration_date])
+            worksheet.write(row, 7, current_origin.name)
+            worksheet.write(row, 8, current_destination.name)
+            worksheet.write(row, 9, current_transit_time)
+            worksheet.write(row, 10, pricing[:wm_rate])
+            worksheet.write(row, 11, current_vehicle.name)
+            worksheet.write(row, 12, key)
+            worksheet.write(row, 13, fee[:currency])
+            worksheet.write(row, 14, fee[:rate_basis])
+            worksheet.write(row, 15, fee[:min])
+            worksheet.write(row, 16, range_fee[:rate])
             if fee[:hw_threshold]
-              worksheet.write(18, row, fee[:hw_threshold])
+              worksheet.write(row, 17, fee[:hw_threshold])
             end
             if fee[:hw_rate_basis]
-              worksheet.write(19, row, fee[:hw_rate_basis])
+              worksheet.write(row, 18, fee[:hw_rate_basis])
             end
-            worksheet.write(20, row, range_fee[:min])
-            worksheet.write(21, row, range_fee[:max])
+            worksheet.write(row, 19, range_fee[:min])
+            worksheet.write(row, 20, range_fee[:max])
             row += 1
           end
-          
+        else
+           worksheet.write(row, 3, current_itinerary.mode_of_transport)
+          worksheet.write(row, 4, pricing[:load_type])
+          worksheet.write(row, 5, pricing[:effective_date])
+          worksheet.write(row, 6, pricing[:expiration_date])
+          worksheet.write(row, 7, current_origin.name)
+          worksheet.write(row, 8, current_destination.name)
+          worksheet.write(row, 9, current_transit_time)
+          worksheet.write(row, 10, pricing[:wm_rate])
+          worksheet.write(row, 11, current_vehicle.name)
+          worksheet.write(row, 12, key)
+          worksheet.write(row, 13, fee[:currency])
+          worksheet.write(row, 14, fee[:rate_basis])
+          worksheet.write(row, 15, fee[:min])
+          worksheet.write(row, 16, fee[:rate])
+          if fee[:hw_threshold]
+            worksheet.write(row, 17, fee[:hw_threshold])
+          end
+          if fee[:hw_rate_basis]
+            worksheet.write(row, 18, fee[:hw_rate_basis])
+          end
+          row += 1
+           
+        end
+        
+      end
+      if pricing[:exceptions] && pricing[:exceptions].length > 0
+        pricing[:exceptions].each do |ex_pricing|
+          ex_pricing[:data].each do | key, fee |
+            worksheet.write(row, 1, 'TRUE')
+            worksheet.write(row, 3, current_itinerary.mode_of_transport)
+            worksheet.write(row, 4, pricing[:load_type])
+            worksheet.write(row, 5, ex_pricing[:effective_date])
+            worksheet.write(row, 6, ex_pricing[:expiration_date])
+            worksheet.write(row, 7, current_origin.name)
+            worksheet.write(row, 8, current_destination.name)
+            worksheet.write(row, 9, current_transit_time)
+            worksheet.write(row, 10, pricing[:wm_rate])
+            worksheet.write(row, 11, current_vehicle.name)
+            worksheet.write(row, 12, key)
+            worksheet.write(row, 13, fee[:currency])
+            worksheet.write(row, 14, fee[:rate_basis])
+            worksheet.write(row, 15, fee[:min])
+            worksheet.write(row, 16, fee[:rate])
+            if fee[:hw_threshold]
+              worksheet.write(row, 17, fee[:hw_threshold])
+            end
+            if fee[:hw_rate_basis]
+              worksheet.write(row, 18, fee[:hw_rate_basis])
+            end
+            row += 1
+          end
         end
       end
     end
