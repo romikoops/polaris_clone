@@ -35,7 +35,7 @@ class Itinerary < ApplicationRecord
     trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
     if trip_check
       p "REJECTED"
-      return results
+      # return results
     end
     trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
     results[:trips] << trip
@@ -58,7 +58,7 @@ class Itinerary < ApplicationRecord
           stop_id: stop.id
         }
       end
-      layover = trip.layovers.create!(data)
+      layover = trip.layovers.find_or_create_by!(data)
       results[:layovers] << layover
     end
     results

@@ -229,8 +229,8 @@ class AdminScheduleGenerator extends Component {
       ''
     )
 
-    const stopIntervalInputs = stops
-      ? stops.map((s, i) =>
+    const stopIntervalInputs = stops && stops.length > 0 ? (
+      stops.map((s, i) =>
         (stops[i + 1] ? (
           <div key={s.id} className="flex-none layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
@@ -252,8 +252,24 @@ class AdminScheduleGenerator extends Component {
         ) : (
           ''
         )))
-      : ''
-
+    ) : (
+      <p className="flex-none">
+        There are no stops available on this route. Please add some on the Routes page or upload a
+        new Pricing for the route
+      </p>
+    )
+    const actionButton =
+      stops && stops.length > 0 ? (
+        <RoundButton
+          text="Generate"
+          handleNext={this.genSchedules}
+          iconClass="fa-plus-o"
+          theme={theme}
+          active
+        />
+      ) : (
+        <RoundButton text="Generate" iconClass="fa-plus-o" theme={theme} disabled />
+      )
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -463,13 +479,7 @@ class AdminScheduleGenerator extends Component {
                 styles.btn_sec
               } layout-row content_width  flex-none layout-wrap layout-align-start-start`}
             >
-              <RoundButton
-                text="Generate"
-                handleNext={this.genSchedules}
-                iconClass="fa-plus-o"
-                theme={theme}
-                active
-              />
+              {actionButton}
             </div>
           </div>
         </div>

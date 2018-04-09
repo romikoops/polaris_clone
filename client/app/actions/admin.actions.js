@@ -1225,7 +1225,7 @@ function editLocalCharges (nexusId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editShipmentPrice(nexusId, data).then(
+    adminService.editLocalCharges(nexusId, data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))

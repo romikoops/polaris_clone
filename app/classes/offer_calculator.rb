@@ -151,6 +151,7 @@ class OfferCalculator
           Layover.find_by(trip_id: ol.trip_id, stop_id: destination_stop.id)
         ]
       end
+      
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
     @itineraries_hash = schedule_obj
@@ -195,7 +196,7 @@ class OfferCalculator
     end
     
     charges.reject! { |_, charge| charge[:cargo].empty? }
-
+    
     raise ApplicationError::NoSchedulesCharges if charges.empty?
     @shipment.schedules_charges = charges
   end
