@@ -1,6 +1,7 @@
 class Document < ApplicationRecord
   belongs_to :shipment
   belongs_to :user
+  belongs_to :tenant
 
   def self.new_upload(file, shipment, type, user)
     s3 = Aws::S3::Client.new(
