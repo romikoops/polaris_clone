@@ -65,10 +65,18 @@ include MongoTools
   #   # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
   #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   # end
-  options = {
-    tenant_id: tenant.id
-  }
-  write_pricings_to_sheet(options)
+
+  hub = tenant.hubs.find_by_name("Gothenburg Port")
+  ["import", "export"].each do |dir|
+    trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+    req = {"xlsx" => trucking}
+    # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
+    overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+  end
+  # options = {
+  #   tenant_id: tenant.id
+  # }
+  # write_pricings_to_sheet(options)
   
   # tenant.update_route_details()
 

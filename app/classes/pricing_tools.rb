@@ -246,10 +246,12 @@ module PricingTools
 
   def fee_value(fee, cargo_hash)
     case fee["rate_basis"]
-    when "PER_ITEM", "PER_CONTAINER", "PER_SHIPMENT", "PER_BILL"
+    when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
+    when "PER_ITEM", "PER_CONTAINER"
+      fee["value"].to_d * cargo_hash[:quantity]
     when "PER_CBM"
-      fee["value"].to_d * cargo.volume
+      fee["value"].to_d * cargo_hash[:volume]
     when "PER_CBM_TON"
       cbm = cargo_hash[:volume] * fee["cbm"]
       ton = (cargo_hash[:weight] / 1000) * fee["ton"]
@@ -257,11 +259,10 @@ module PricingTools
 
       [cbm, ton, min].max
     when "PER_WM"
-      cbm = cargo_hash[:volume]
-      ton = (cargo_hash[:weight] / 1000)
+      cbm = cargo_hash[:volume] * (fee["value"] || fee["rate"])
+      ton = (cargo_hash[:weight] / 1000) * (fee["value"] || fee["rate"])
       min = fee["min"] || 0
-
-      [cbm, ton, min].max * (fee["value"] || fee["rate"])
+      [cbm, ton, min].max 
     when /RANGE/
       handle_range_fee(fee, cargo)
     end
@@ -269,8 +270,9 @@ module PricingTools
 
   def get_cargo_hash(cargo)
     {    
-      volume: cargo.volume,
-      weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1)    
+      volume: cargo.volume  * (cargo.try(:quantity) || 1),
+      weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
+      quantity: cargo.try(:quantity) || 1  
     }
   end
 end

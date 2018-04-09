@@ -1501,7 +1501,7 @@ module ExcelTools
     itinerary_pricings_to_write = []
     customer = false
     pricing_rows.each do |row|
-      pricing_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}"
+      pricing_key = "#{row[:origin].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:destination].gsub(/\s+/, "").gsub(/,+/, "")}_#{row[:mot]}"
       if !new_pricings[pricing_key]
         new_pricings[pricing_key] = {
           
@@ -1527,11 +1527,11 @@ module ExcelTools
         aux_data[pricing_key] = {}
       end
       if !aux_data[pricing_key][:vehicle]
-        vehicle = Vehicle.find_by_name(row[:vehicle])
+        vehicle = Vehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
         if  vehicle
           aux_data[pricing_key][:vehicle] = vehicle
         else
-          aux_data[pricing_key][:vehicle] = Vehicle.find_by_name("#{row[:mot]}_default")
+          aux_data[pricing_key][:vehicle] = Vehicle.find_by(name: "#{row[:mot]}_default", mode_of_transport: row[:mot])
         end
       end
       if !aux_data[pricing_key][:transit_time]
