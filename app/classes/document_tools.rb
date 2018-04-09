@@ -35,7 +35,8 @@ module DocumentTools
       vehicle: {},
       transit_times: {}
     }
-    dir = "tmp/pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    filename = DateTime.now.strftime('%Y-%m-%d')
+    dir = "tmp/pricings_#{filename}.xlsx"
     workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
     header_format = workbook.add_format
@@ -183,8 +184,8 @@ module DocumentTools
       region: ENV['AWS_REGION']
     )
     file = open(dir)
-    byebug
-    objKey = 'documents/' + tenant.subdomain + "/downloads/pricings" + file.name
+    # byebug
+    objKey = 'documents/' + tenant.subdomain + "/downloads/pricings" + filename
 		
     awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
     s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'private')
