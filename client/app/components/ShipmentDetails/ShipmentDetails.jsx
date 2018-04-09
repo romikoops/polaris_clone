@@ -95,10 +95,11 @@ export class ShipmentDetails extends Component {
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
-      shipment: props.shipmentData ? props.shipmentData.shipment : {},
+      shipment: props.shipmentData ? props.shipmentData.shipment : null,
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
-      noDangerousGoodsConfirmed: false
+      noDangerousGoodsConfirmed: false,
+      mandatoryCarriageIsPreset: false
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -132,6 +133,10 @@ export class ShipmentDetails extends Component {
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
+    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+      this.presetMandatoryCarriage()
+    }
+
     setStage(2)
   }
   componentDidMount () {
@@ -141,6 +146,9 @@ export class ShipmentDetails extends Component {
     if (!this.state.shipment) {
       const { shipment } = nextProps.shipmentData
       this.setState({ shipment })
+    }
+    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+      this.presetMandatoryCarriage()
     }
   }
   shouldComponentUpdate (nextProps, nextState) {
@@ -199,6 +207,17 @@ export class ShipmentDetails extends Component {
 
   setAggregatedCargo (bool) {
     this.setState({ aggregated: bool })
+  }
+
+  presetMandatoryCarriage () {
+    const { scope } = this.props.tenant.data
+    Object.keys(scope.carriage_options).forEach((carriage) => {
+      const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
+      if (carriageOptionScope === 'mandatory') {
+        this.handleChangeCarriage(`has_${carriage}`, true, { force: true })
+      }
+    })
+    this.setState({ mandatoryCarriageIsPreset: true })
   }
 
   loadPrevReq (obj) {
@@ -441,20 +460,27 @@ export class ShipmentDetails extends Component {
     this.props.shipmentDispatch.getDashboard(true)
   }
 
-  handleChangeCarriage (target, value) {
+  handleChangeCarriage (target, value, options) {
+    const carriage = target.replace('has_', '')
+
+    // Break out of function, in case the change should not apply, based on the tenant scope.
+    const { scope } = this.props.tenant.data
+    const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
+    const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
+    if (!changeShouldApply) return
+
     this.setState({ [target]: value })
 
     // Upate trucking details according to toggle
-    const truckingKey = target.replace('has_', '')
     const { shipment } = this.state
     const artificialEvent = { target: {} }
     if (!value) {
       // Set truckType to '', if carriage is toggled off
-      artificialEvent.target.id = `${truckingKey}-`
-    } else if (!shipment.trucking[truckingKey].truck_type) {
+      artificialEvent.target.id = `${carriage}-`
+    } else if (!shipment.trucking[carriage].truck_type) {
       // Set first truckType, if carriage is toggled on and truckType is empty
       const truckType = this.truckTypes[this.state.shipment.load_type][0]
-      artificialEvent.target.id = `${truckingKey}-${truckType}`
+      artificialEvent.target.id = `${carriage}-${truckType}`
     }
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
