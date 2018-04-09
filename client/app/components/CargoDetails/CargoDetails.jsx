@@ -47,8 +47,8 @@ export class CargoDetails extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      insuranceView: false,
-      customsView: false,
+      insuranceView: null,
+      customsView: null,
       totalGoodsCurrency: { value: 'EUR', label: 'EUR' }
     }
     this.toggleInsurance = this.toggleInsurance.bind(this)
@@ -610,23 +610,23 @@ export class CargoDetails extends Component {
                           />
                         </div>
                       </div>
-                      {/* <div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-90 layout-row layout-align-start-center">
-                      <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                        tenant.data.name
-                      } to insure my cargo`}
-                      </p>
-                    </div>
-                    <div className="flex-10 layout-row layout-align-end-center">
-                      <Checkbox
-                        onChange={this.toggleInsurance}
-                        checked={
-                          !this.props.insurance.bool ? true : !this.props.insurance.bool
-                        }
-                        theme={theme}
-                      />
-                    </div>
-                  </div> */}
+                      <div className="flex-100 layout-row layout-align-end-center">
+                        <div className="flex-90 layout-row layout-align-start-center">
+                          <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                            tenant.data.name
+                          } to insure my cargo`}
+                          </p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-end-center">
+                          <Checkbox
+                            onChange={this.toggleInsurance}
+                            checked={
+                              this.props.insurance.bool === null ? null : !this.props.insurance.bool
+                            }
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-center">
@@ -685,21 +685,23 @@ export class CargoDetails extends Component {
                           />
                         </div>
                       </div>
-                      {/* <div className="flex-100 layout-row layout-align-end-center">
-                    <div className="flex-90 layout-row layout-align-start-center">
-                      <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                        tenant.data.name
-                      } to handle my customs`}
-                      </p>
-                    </div>
-                    <div className="flex-10 layout-row layout-align-end-center">
-                      <Checkbox
-                        onChange={this.toggleCustoms}
-                        checked={this.state.customsView == null ? null : !this.state.customsView}
-                        theme={theme}
-                      />
-                    </div>
-                  </div> */}
+                      <div className="flex-100 layout-row layout-align-end-center">
+                        <div className="flex-90 layout-row layout-align-start-center">
+                          <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
+                            tenant.data.name
+                          } to handle my customs`}
+                          </p>
+                        </div>
+                        <div className="flex-10 layout-row layout-align-end-center">
+                          <Checkbox
+                            onChange={this.toggleCustoms}
+                            checked={this.state.customsView === null
+                              ? null : !this.state.customsView
+                            }
+                            theme={theme}
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-center">
                       <p className="flex-none">

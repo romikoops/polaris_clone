@@ -4,7 +4,7 @@ class Location < ApplicationRecord
   has_many :shipments
   has_many :contacts
 
-  has_many :hubs do
+  has_many :hubs, foreign_key: :nexus_id do
     def tenant_id(tenant_id)
       where(tenant_id: tenant_id)
     end
@@ -45,14 +45,14 @@ class Location < ApplicationRecord
 
   def self.from_short_name(input, location_type)
     city, country = *input.split(" ,")
-    location = Location.find_by(city: city, country: country) 
+    location = Location.find_by(city: city, country: country, location_type: location_type) 
     return location unless location.nil?
 
     temp_location = Location.new(geocoded_address: input)
     temp_location.geocode
     temp_location.reverse_geocode
     
-    location = Location.find_by(city: temp_location.city, country: temp_location.country) 
+    location = Location.find_by(city: temp_location.city, country: temp_location.country, location_type: location_type) 
     return location unless location.nil?
 
     location = temp_location
