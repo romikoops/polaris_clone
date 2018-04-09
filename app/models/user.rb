@@ -134,7 +134,7 @@ class User < ApplicationRecord
   end
 
   def set_default_currency
-    self.currency ||= self.tenant.currency
+   self.currency = self.tenant.currency
   end
 
   def sync_uid
