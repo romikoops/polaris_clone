@@ -1,5 +1,5 @@
 class DocumentsController < ApplicationController
-	skip_before_action :require_authentication!, only: :dowload_redirect, :delete
+	skip_before_action :require_authentication!
   include ExcelTools
 	def	download_redirect
 		@url = Document.get_file_url(params[:document_id])
