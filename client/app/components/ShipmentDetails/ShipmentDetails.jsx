@@ -28,6 +28,7 @@ import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
 import toggleCSS from './toggleCSS'
+import getOffersBtnIsActive from './getOffersBtnIsActive'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -99,6 +100,7 @@ export class ShipmentDetails extends Component {
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
       noDangerousGoodsConfirmed: false,
+      stackeableGoodsConfirmed: false,
       mandatoryCarriageIsPreset: false
     }
     this.truckTypes = {
@@ -725,7 +727,7 @@ export class ShipmentDetails extends Component {
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
           {
             shipmentData.shipment.load_type === 'cargo_item' && (
-              <div className="content_width_booking layout-row layout-align-center">
+              <div className="content_width_booking layout-row layout-wrap layout-align-center">
                 <div className={
                   `${styles.toggle_aggregated_sec} ` +
                   'flex-50 layout-row layout-align-space-around-center'
@@ -753,9 +755,39 @@ export class ShipmentDetails extends Component {
                     Total Dimensions
                   </h3>
                 </div>
+
+                {
+                  this.state.aggregated && (
+                    <div
+                      className="flex-100 layout-row layout-align-center"
+                      style={{ padding: '10px 0 20px 0' }}
+                    >
+                      <div className="flex-60 layout-row layout-align-center-center">
+                        <div className="flex-10 layout-row layout-align-start-start">
+                          <Checkbox
+                            theme={theme}
+                            onChange={() =>
+                              this.setState({
+                                stackeableGoodsConfirmed: !this.state.stackeableGoodsConfirmed
+                              })
+                            }
+                            size="30px"
+                            name="stackeable_goods_confirmation"
+                            checked={this.state.stackeableGoodsConfirmed}
+                          />
+                        </div>
+                        <p style={{ margin: 0, fontSize: '14px' }}>
+                          I hereby confirm that my cargo consists of
+                          stackable items exclusively.
+                        </p>
+                      </div>
+                    </div>
+                  )
+                }
               </div>
             )
           }
+
           {cargoDetails}
         </div>
         <div
@@ -789,12 +821,12 @@ export class ShipmentDetails extends Component {
                     />
                   </div>
                   <p style={{ margin: 0, fontSize: '14px' }}>
-                  I hereby confirm that none of the specified cargo units contain{' '}
+                    I hereby confirm that none of the specified cargo units contain{' '}
                     <span
                       className="emulate_link blue_link"
                       onClick={() => this.toggleModal('dangerousGoodsInfo')}
                     >
-                    dangerous goods
+                      dangerous goods
                     </span>
                   .
                   </p>
@@ -807,16 +839,8 @@ export class ShipmentDetails extends Component {
                 text="Get Offers"
                 handleNext={this.handleNextStage}
                 theme={theme}
-                active={
-                  this.state.noDangerousGoodsConfirmed ||
-                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                  this.state.containers.some(container => container.dangerous_goods)
-                }
-                disabled={
-                  !this.state.noDangerousGoodsConfirmed &&
-                  (!this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                    !this.state.containers.some(container => container.dangerous_goods))
-                }
+                active={getOffersBtnIsActive(this.state)}
+                disabled={!getOffersBtnIsActive(this.state)}
               />
             </div>
           </div>
