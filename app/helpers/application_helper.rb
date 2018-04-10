@@ -10,7 +10,7 @@ module ApplicationHelper
     if currency.nil?
       ("%.2f" % price)
     else
-      number_to_currency(price, unit: currency, format: "%u %n")
+      number_to_currency(price, unit: currency, format: "%n %u")
     end
   end
 

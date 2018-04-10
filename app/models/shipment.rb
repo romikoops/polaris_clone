@@ -101,7 +101,15 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_units
-    self["#{load_type}s"]
+    send("#{load_type}s")
+  end
+
+  def has_dangerous_goods?
+    _aggregated_cargo = self.aggregated_cargo
+    _cargo_units      = cargo_units
+    return _aggregated_cargo.dangerous_goods? unless _aggregated_cargo.nil?
+    return _cargo_units.any? { |cargo_unit| cargo_unit.dangerous_goods } unless _cargo_units.nil?
+    nil  
   end
 
   def full_haulage_to_string

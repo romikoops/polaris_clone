@@ -23,7 +23,7 @@ module TruckingTools
   end
 
   def price_lcl(km, cargo_item)
-    self.price_per_km * km * 1 ########
+    self.price_per_km * km * 1
   end
 
   def total_price(km, weight_in_tons, volume_in_cm3, units)
@@ -73,6 +73,7 @@ module TruckingTools
       end
 
   end
+
   def fee_calculator(key, fee, cargo, km)
     case fee["rate_basis"]
       when 'PER_KG'

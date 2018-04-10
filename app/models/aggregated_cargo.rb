@@ -7,4 +7,8 @@ class AggregatedCargo < ApplicationRecord
 	  
 	  save!
 	end
+
+	def dangerous_goods?
+		false
+	end
 end
