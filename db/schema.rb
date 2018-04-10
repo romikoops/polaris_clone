@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180409160159) do
+ActiveRecord::Schema.define(version: 20180410093242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -276,6 +276,8 @@ ActiveRecord::Schema.define(version: 20180409160159) do
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
     t.datetime "booking_placed_at"
+    t.jsonb "insurance"
+    t.jsonb "customs"
   end
 
   create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|

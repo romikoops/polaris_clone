@@ -124,8 +124,14 @@ module ShippingTools
     if shipment_data[:insurance][:bool]
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
-        shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val].to_d, currency: "EUR"}
-        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:insurance][:val].to_d ? shipment_data[:insurance][:val].to_d : 0
+        insurance = { val: shipment_data[:insurance][:val].to_d, currency: "EUR" }
+        shipment.schedules_charges[key][:insurance] = insurance
+        shipment.insurance = insurance
+
+        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d 
+        total_value = previous_total_value + (shipment_data[:insurance][:val].to_d || 0)
+        shipment.schedules_charges[key]["total"]["value"] = total_value
+
         shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end
@@ -133,7 +139,13 @@ module ShippingTools
     if shipment_data[:customs][:total][:val].to_d > 0
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
-        shipment.schedules_charges[key][:customs] = {val: shipment_data[:customs][:total][:val].to_d, currency: shipment_data[:customs][:total][:currency]}
+        customs = {
+          val: shipment_data[:customs][:total][:val].to_d,
+          currency: shipment_data[:customs][:total][:currency]
+        }
+        shipment.schedules_charges[key][:customs] = customs
+        shipment.customs = customs
+
         shipment.schedules_charges[key]["total"]["value"] += shipment_data[:customs][:total][:val].to_d ? shipment_data[:customs][:total][:val].to_d : 0
         shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end

@@ -112,6 +112,14 @@ class Shipment < ApplicationRecord
     nil  
   end
 
+  def has_customs?
+    !!customs
+  end
+
+  def has_insurance?
+    !!insurance
+  end
+
   def full_haulage_to_string
     self.origin.geocoded_address + " \u2192 " + self.route.stops_as_string + " \u2192 " + self.destination.geocoded_address
   end
@@ -247,12 +255,6 @@ class Shipment < ApplicationRecord
   def cargo_charges
     schedule_set.reduce({}) do |cargo_charges, schedule|
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
-    end
-  end
-
-  def insurance
-    schedule_set.reduce(0) do |insurance_value, schedule|
-      insurance_value += schedules_charges[schedule["hub_route_key"]].dig("insurance", "val").to_f
     end
   end
 

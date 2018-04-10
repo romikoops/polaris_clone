@@ -2,7 +2,8 @@ class ShipmentsController < ApplicationController
   include ShippingTools
   include MongoTools
 
-  skip_before_action :require_non_guest_authentication!, except: [:finish_booking, :upload_document]
+  skip_before_action :require_non_guest_authentication!,
+    except: [:finish_booking, :upload_document]
 
   def index
     @shipper = current_user
@@ -10,12 +11,11 @@ class ShipmentsController < ApplicationController
     @requested_shipments = @shipper.shipments.where(status: "requested")
     @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
     @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
-    resp = {
+    response_handler(
       requested: @requested_shipments,
       open: @open_shipments,
       finished: @finished_shipments
-    }
-    response_handler(resp)
+    )
   end
 
   def new 
