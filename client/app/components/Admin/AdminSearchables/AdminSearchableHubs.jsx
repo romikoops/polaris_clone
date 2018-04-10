@@ -132,11 +132,11 @@ export class AdminSearchableHubs extends Component {
                   <TextHeading theme={theme} size={1} text="Hubs" />
                 </div>
                 {showTooltip ? (
-                  <Tooltip icon="na-info-circle" theme={theme} text={truckTip.hubs} toolText />
+                  <Tooltip icon="na-info-circle" theme={theme} toolText={truckTip.hubs} />
                 ) : (
                   ''
                 )}
-                {icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : ''}
+                {icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : ''}
               </div>
             </div>
           </div>

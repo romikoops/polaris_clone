@@ -247,7 +247,6 @@ function getServiceCharges (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -259,7 +258,6 @@ function getPricings (redirect) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -277,7 +275,6 @@ function getPricings (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -1228,7 +1225,7 @@ function editLocalCharges (nexusId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editShipmentPrice(nexusId, data).then(
+    adminService.editLocalCharges(nexusId, data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))

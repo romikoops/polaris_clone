@@ -130,7 +130,13 @@ class DocumentsSelector extends React.Component {
           </form>)
           : (
             <div className="flex-100 layout-row layout-align-center-center">
-              <NamedSelect theme={theme} options={options} value={selected} className="flex-100" onChange={e => this.handleSelected(e)} />
+              <NamedSelect
+                theme={theme}
+                options={options}
+                value={selected}
+                className="flex-100"
+                onChange={e => this.handleSelected(e)}
+              />
             </div>
           )
         }

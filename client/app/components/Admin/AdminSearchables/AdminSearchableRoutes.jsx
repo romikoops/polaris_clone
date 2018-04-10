@@ -148,10 +148,10 @@ export class AdminSearchableRoutes extends Component {
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none">
-                  <TextHeading theme={theme} size={3} text={heading} />
+                  <TextHeading theme={theme} size={2} text={heading} />
                 </div>
                 {icon && showTooltip ? (
-                  <Tooltip theme={theme} icon={icon} text={tooltip} toolText />
+                  <Tooltip theme={theme} icon={icon} toolText={tooltip} />
                 ) : (
                   ''
                 )}
