@@ -28,7 +28,9 @@ import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
 import toggleCSS from './toggleCSS'
-import getOffersBtnIsActive from './getOffersBtnIsActive'
+import getOffersBtnIsActive, {
+  noDangerousGoodsCondition, stackableGoodsCondition
+} from './getOffersBtnIsActive'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -100,8 +102,12 @@ export class ShipmentDetails extends Component {
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
       noDangerousGoodsConfirmed: false,
-      stackeableGoodsConfirmed: false,
-      mandatoryCarriageIsPreset: false
+      stackableGoodsConfirmed: false,
+      mandatoryCarriageIsPreset: false,
+      shakeClass: {
+        noDangerousGoodsConfirmed: '',
+        stackableGoodsConfirmed: ''
+      }
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -490,6 +496,23 @@ export class ShipmentDetails extends Component {
     this.handleTruckingDetailsChange(artificialEvent)
   }
 
+  handleNextStageDisabled () {
+    this.setState(prevState => ({
+      shakeClass: {
+        noDangerousGoodsConfirmed: noDangerousGoodsCondition(prevState) ? '' : 'apply_shake',
+        stackableGoodsConfirmed: stackableGoodsCondition(prevState) ? '' : 'apply_shake'
+      }
+    }))
+    setTimeout(() => {
+      this.setState({
+        shakeClass: {
+          noDangerousGoodsConfirmed: '',
+          stackableGoodsConfirmed: ''
+        }
+      })
+    }, 1000)
+  }
+
   handleTruckingDetailsChange (event) {
     const [carriage, truckType] = event.target.id.split('-')
     const { shipment } = this.state
@@ -527,6 +550,7 @@ export class ShipmentDetails extends Component {
           nextStageAttempt={this.state.nextStageAttempt}
           theme={theme}
           scope={scope}
+          stackableGoodsConfirmed={this.state.stackableGoodsConfirmed}
         />
       )
     } else if (shipmentData.shipment.load_type === 'container') {
@@ -755,35 +779,6 @@ export class ShipmentDetails extends Component {
                     Total Dimensions
                   </h3>
                 </div>
-
-                {
-                  this.state.aggregated && (
-                    <div
-                      className="flex-100 layout-row layout-align-center"
-                      style={{ padding: '10px 0 20px 0' }}
-                    >
-                      <div className="flex-60 layout-row layout-align-center-center">
-                        <div className="flex-10 layout-row layout-align-start-start">
-                          <Checkbox
-                            theme={theme}
-                            onChange={() =>
-                              this.setState({
-                                stackeableGoodsConfirmed: !this.state.stackeableGoodsConfirmed
-                              })
-                            }
-                            size="30px"
-                            name="stackeable_goods_confirmation"
-                            checked={this.state.stackeableGoodsConfirmed}
-                          />
-                        </div>
-                        <p style={{ margin: 0, fontSize: '14px' }}>
-                          I hereby confirm that my cargo consists of
-                          stackable items exclusively.
-                        </p>
-                      </div>
-                    </div>
-                  )
-                }
               </div>
             )
           }
@@ -802,42 +797,88 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            {!(
-              this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-              this.state.containers.some(container => container.dangerous_goods)
-            ) ? (
-                <div className="flex-60 layout-row layout-align-start-center">
-                  <div className="flex-10 layout-row layout-align-start-start">
-                    <Checkbox
-                      theme={theme}
-                      onChange={() =>
-                        this.setState({
-                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                        })
-                      }
-                      size="30px"
-                      name="no_dangerous_goods_confirmation"
-                      checked={this.state.noDangerousGoodsConfirmed}
-                    />
+
+            <div className="flex-60 layout-row layout-wrap layout-align-start-center">
+              {
+                this.state.aggregated && (
+                  <div
+                    className={
+                      `${this.state.shakeClass.stackableGoodsConfirmed} flex-100 ` +
+                      'layout-row layout-align-start-center'
+                    }
+                    style={{ marginBottom: '15px' }}
+                  >
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() =>
+                          this.setState({
+                            stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
+                          })
+                        }
+                        size="30px"
+                        name="stackable_goods_confirmation"
+                        checked={this.state.stackableGoodsConfirmed}
+                      />
+                    </div>
+                    <div className="flex">
+                      <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
+                        I hereby confirm that my cargo consists of
+                        stackable items exclusively.
+                        <br />
+                        <span style={{ fontSize: '11px', width: '100%' }}>
+                          (Should you wish to ship non-stackable cargo,
+                          please select {'\'Cargo Units\''})
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                  <p style={{ margin: 0, fontSize: '14px' }}>
-                    I hereby confirm that none of the specified cargo units contain{' '}
-                    <span
-                      className="emulate_link blue_link"
-                      onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                    >
-                      dangerous goods
-                    </span>
-                  .
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-60" />
-              )}
+                )
+              }
+              {
+                !(
+                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                  this.state.containers.some(container => container.dangerous_goods)
+                ) && (
+                  <div className={
+                    `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+                    'layout-row layout-align-start-center'
+                  }
+                  >
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() =>
+                          this.setState({
+                            noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                          })
+                        }
+                        size="30px"
+                        name="no_dangerous_goods_confirmation"
+                        checked={this.state.noDangerousGoodsConfirmed}
+                      />
+                    </div>
+                    <div className="flex">
+                      <p style={{ margin: 0, fontSize: '14px' }}>
+                        I hereby confirm that none of the specified cargo units contain{' '}
+                        <span
+                          className="emulate_link blue_link"
+                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                        >
+                          dangerous goods
+                        </span>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
+            </div>
             <div className="flex layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}
+                handleDisabled={() => this.handleNextStageDisabled()}
                 theme={theme}
                 active={getOffersBtnIsActive(this.state)}
                 disabled={!getOffersBtnIsActive(this.state)}

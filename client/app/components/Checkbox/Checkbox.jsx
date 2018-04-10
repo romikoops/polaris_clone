@@ -39,7 +39,11 @@ export class Checkbox extends PureComponent {
     const iconStyles = Object.assign({ fontSize: `${Math.max(Math.min(size * 0.8, 15), 12)}px` }, checkGradient)
 
     return (
-      <div className={`${styles.checkbox} flex-none`} style={border} onClick={this.props.onClick}>
+      <div
+        className={`${styles.checkbox} ${this.props.className} flex-none`}
+        style={border}
+        onClick={this.props.onClick}
+      >
         <label>
           <input
             type="checkbox"
@@ -63,7 +67,8 @@ Checkbox.propTypes = {
   theme: PropTypes.theme,
   size: PropTypes.string,
   onChange: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
+  className: PropTypes.string
 }
 Checkbox.defaultProps = {
   theme: null,
@@ -71,7 +76,8 @@ Checkbox.defaultProps = {
   disabled: false,
   size: null,
   onChange: null,
-  onClick: null
+  onClick: null,
+  className: ''
 }
 
 export default Checkbox

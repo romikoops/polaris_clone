@@ -8,7 +8,10 @@ export default function ShipmentAggregatedCargo ({
 }) {
   const sharedProps = { handleDelta, nextStageAttempt }
   return (
-    <div className="layout-row layout-wrap layout-align-center content_width_booking">
+    <div
+      className="layout-row layout-wrap layout-align-center content_width_booking"
+      style={{ padding: '30px 0 70px 0' }}
+    >
       <div className={`${styles.input_box} flex-45 layout-row`}>
         <div className="flex-25 layout-row layout-align-center-center">
           Total Volume
@@ -47,6 +50,7 @@ ShipmentAggregatedCargo.propTypes = {
   }),
   handleDelta: PropTypes.func.isRequired,
   nextStageAttempt: PropTypes.bool
+  // stackeableGoodsConfirmed: PropTypes.bool
 }
 
 ShipmentAggregatedCargo.defaultProps = {
@@ -56,4 +60,5 @@ ShipmentAggregatedCargo.defaultProps = {
     weight: 0
   },
   nextStageAttempt: false
+  // stackeableGoodsConfirmed: false
 }
