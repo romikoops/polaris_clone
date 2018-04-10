@@ -146,7 +146,11 @@ module ShippingTools
         shipment.schedules_charges[key][:customs] = customs
         shipment.customs = customs
 
-        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:customs][:total][:val].to_d ? shipment_data[:customs][:total][:val].to_d : 0
+        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d 
+        total_value = previous_total_value + (shipment_data[:customs][:total][:val].to_d || 0)
+        shipment.schedules_charges[key]["total"]["value"] = total_value
+
+
         shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end

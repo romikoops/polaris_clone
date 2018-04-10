@@ -53,8 +53,14 @@
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Pricing Details:</span></h6>
       <p>
-        <span class="bold">Overall Rate:</span> <span><%= format_to_price(@shipment.total_price["value"], @shipment.total_price["currency"]) %></span><br>  
-        <span class="bold">Service Charges (included):</span> <span><%= format_to_price(@shipment.total_price["value"], @shipment.total_price["currency"]) %></span><br>
+        <span class="bold">Overall Rate:</span>
+        <span>
+          <%= format_to_price(@shipment.total_price) %>
+        </span><br>  
+        <span class="bold">Service Charges (included):</span>
+        <span>
+          <%= format_to_price(@shipment.total_price) %>
+        </span><br>
         <span class="bold">Discount:</span> <span>None</span>
       </p>
     </callout>
@@ -68,14 +74,16 @@
       <p>
         <span class="bold">Hazardous Goods:</span>
         <span>
-          <%= @shipment.has_dangerous_goods? ? 'None' : 'Yes' %>            
+          <%= @shipment.has_dangerous_goods? ? 'Yes' : 'None' %>            
         </span><br>  
-        <span class="bold">Customs</span>
+        <span class="bold">Customs:</span>
         <span>
-
-          <%= @shipment.customs.nil? ? 'Clear' : @shipment.customs %>            
+          <%= @shipment.has_customs? ? format_to_price(@shipment.customs) : 'Has Clearance' %>
         </span><br>
-        <span class="bold">Insurance:</span> <span>None</span>
+        <span class="bold">Insurance:</span>
+        <span>
+          <%= @shipment.has_insurance? ? format_to_price(@shipment.insurance) : 'None' %>
+        </span>
       </p>
     </callout>
   </columns>
