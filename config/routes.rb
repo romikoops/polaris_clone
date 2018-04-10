@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
+      get  "pricings/download",  to: "pricings#download_pricings"
       post "pricings/update/:id", to: "pricings#update_price"
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite

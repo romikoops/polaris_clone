@@ -36,6 +36,13 @@ function uploadHubs (file) {
   }
   return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
+function downloadPricings () {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  return fetch(`${BASE_URL}/admin/pricings/download`, requestOptions).then(handleResponse)
+}
 
 function uploadSchedules (file, target) {
   const formData = new FormData()
@@ -75,6 +82,7 @@ export const documentService = {
   uploadHubs,
   uploadLocalCharges,
   uploadSchedules,
+  downloadPricings,
   uploadItinerarySchedules
 }
 

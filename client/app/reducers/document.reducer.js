@@ -22,6 +22,28 @@ export default function app (state = {}, action) {
         error: action.payload
       }
     }
+    case documentConstants.DOWNLOAD_PRICINGS_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case documentConstants.DOWNLOAD_PRICINGS_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        downloadUrls: {
+          ...state.downloadUrls,
+          pricing: action.payload
+        }
+      }
+    }
+    case documentConstants.DOWNLOAD_PRICINGS_FAILURE: {
+      return {
+        ...state,
+        error: action.payload
+      }
+    }
     case documentConstants.CLOSE_VIEWER: {
       return {
         ...state,

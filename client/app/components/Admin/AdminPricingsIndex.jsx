@@ -6,6 +6,7 @@ import { AdminPriceCreator } from './'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { AdminSearchableRoutes, AdminSearchableClients } from './AdminSearchables'
 import FileUploader from '../../components/FileUploader/FileUploader'
+import DocumentsDownloader from '../../components/Documents/Downloader'
 import { adminPricing as priceTip } from '../../constants'
 
 import styles from './Admin.scss'
@@ -100,21 +101,7 @@ export class AdminPricingsIndex extends Component {
               text="Dedicated Pricings .xlsx"
             />
           </div>
-          {/* <div
-            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
-              styles.sec_upload
-            }`}
-          >
-            <p className="flex-100">Upload FCL Pricings Sheet</p>
-            <FileUploader
-              theme={theme}
-              url={fclUrl}
-              dispatchFn={e => this.fclUpload(e)}
-              tooltip={priceTip.upload_fcl}
-              type="xlsx"
-              text="FCL Pricings .xlsx"
-            />
-          </div> */}
+
           <div
             className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
               styles.sec_upload
@@ -122,6 +109,17 @@ export class AdminPricingsIndex extends Component {
           >
             <p className={`${styles.new_margin} flex-100`}>New Pricing Creator</p>
             {newButton}
+          </div>
+          <div
+            className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+              styles.sec_upload
+            }`}
+          >
+            <p className="flex-100">Download Pricings Sheet</p>
+            <DocumentsDownloader
+              theme={theme}
+              target="pricing"
+            />
           </div>
         </div>
         <AdminSearchableRoutes

@@ -35,8 +35,8 @@ module DocumentTools
       vehicle: {},
       transit_times: {}
     }
-    filename = DateTime.now.strftime('%Y-%m-%d')
-    dir = "tmp/pricings_#{filename}.xlsx"
+    filename = "pricings_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    dir = "tmp/#{filename}"
     workbook = WriteXLSX.new(dir)
     worksheet = workbook.add_worksheet
     header_format = workbook.add_format
@@ -185,11 +185,11 @@ module DocumentTools
     )
     file = open(dir)
     # byebug
-    objKey = 'documents/' + tenant.subdomain + "/downloads/pricings" + filename
+    objKey = 'documents/' + tenant.subdomain + "/downloads/pricings/" + filename
 		
     awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
-    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'private')
-    tenant.documents.create(url: awsurl, text: file.name)
-		return get_file_url(objKey)
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'pricings_sheet')
+		return new_doc.get_signed_url
   end
 end

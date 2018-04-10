@@ -58,6 +58,32 @@ function uploadHubs (file) {
     )
   }
 }
+function downloadPricings () {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_PRICINGS_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_PRICINGS_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_PRICINGS_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadPricings().then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function uploadSchedules (file, target) {
   function request (uploadData) {
     return { type: documentConstants.UPLOAD_REQUEST, payload: uploadData }
@@ -156,6 +182,7 @@ export const documentActions = {
   clearLoading,
   uploadHubs,
   setStats,
+  downloadPricings,
   uploadLocalCharges,
   uploadSchedules,
   uploadItinerarySchedules

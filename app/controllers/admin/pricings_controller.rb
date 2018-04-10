@@ -2,6 +2,7 @@ class Admin::PricingsController < ApplicationController
   include ExcelTools
   include PricingTools
   include ItineraryTools
+  include DocumentTools
 
   before_action :require_login_and_role_is_admin
 
@@ -102,6 +103,10 @@ class Admin::PricingsController < ApplicationController
   #     response_handler(false)
   #   end
   # end
+  def download_pricings
+    url = write_pricings_to_sheet(tenant_id: current_user.tenant_id)
+    response_handler({url: url})
+  end
 
   def overwrite_main_lcl_carriage
     if params[:file]  && params[:file] !='null'
