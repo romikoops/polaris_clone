@@ -391,3 +391,13 @@ Small component, skip testing
 ## Tooltip
 
 [X] Test complete
+
+## UserAccount
+
+### UserContactsView
+
+Basic snapshot test
+
+### UserDashboard
+
+Basic snapshot test
