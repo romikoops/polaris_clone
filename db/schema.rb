@@ -280,13 +280,6 @@ ActiveRecord::Schema.define(version: 20180410093242) do
     t.jsonb "customs"
   end
 
-  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
-    t.string "auth_name", limit: 256
-    t.integer "auth_srid"
-    t.string "srtext", limit: 2048
-    t.string "proj4text", limit: 2048
-  end
-
   create_table "stops", force: :cascade do |t|
     t.integer "hub_id"
     t.integer "itinerary_id"
