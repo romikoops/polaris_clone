@@ -35,7 +35,7 @@ class Itinerary < ApplicationRecord
     trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
     if trip_check
       p "REJECTED"
-      return results
+      # return results
     end
     trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
     results[:trips] << trip
@@ -58,7 +58,7 @@ class Itinerary < ApplicationRecord
           stop_id: stop.id
         }
       end
-      layover = trip.layovers.create!(data)
+      layover = trip.layovers.find_or_create_by!(data)
       results[:layovers] << layover
     end
     results
@@ -262,12 +262,13 @@ class Itinerary < ApplicationRecord
     end
     if trucking_data && trucking_data["on_carriage"]
       end_hub_ids = trucking_data["on_carriage"].keys
-      end_hubs = end_hub_ids.map {|id| Hub.find(id)}
+      end_hubs = end_hub_ids.map { |id| Hub.find(id) }
     else
       end_city = Location.find(shipment.destination_id)
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
+
     query = "
       SELECT * FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id}

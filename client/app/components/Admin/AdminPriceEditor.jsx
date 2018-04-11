@@ -27,8 +27,6 @@ const currencyOpts = currencyOptions
 export class AdminPriceEditor extends Component {
   static selectFromOptions (options, value) {
     let result
-    console.log(value)
-
     options.forEach((op) => {
       if (op.value === value) {
         result = op

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import Toggle from 'react-toggle'
-import ReactTooltip from 'react-tooltip'
 import styled from 'styled-components'
 import PropTypes from '../../prop-types'
 import '../../styles/react-toggle.scss'
@@ -17,6 +16,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { capitalize } from '../../helpers/stringTools'
 import addressFromPlace from './addressFromPlace'
 import getRequests from './getRequests'
+import TruckingTooltip from './TruckingTooltip'
 
 const mapStyle = {
   width: '100%',
@@ -513,8 +513,8 @@ export class ShipmentLocationBox extends Component {
     const lat = place.geometry.location.lat()
     const lng = place.geometry.location.lng()
 
-    const tenantId = this.props.shipment.shipment.tenant_id
-    const loadType = this.props.shipment.shipment.load_type
+    const tenantId = this.props.shipmentData.shipment.tenant_id
+    const loadType = this.props.shipmentData.shipment.load_type
 
     const prefix = target === 'origin' ? 'pre' : 'on'
 
@@ -692,7 +692,9 @@ export class ShipmentLocationBox extends Component {
     /* eslint-enable camelcase */
   }
   render () {
-    const { allNexuses, shipmentDispatch } = this.props
+    const {
+      allNexuses, shipmentDispatch, mandatoryTrucking, shipmentData
+    } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
     let destinationOptions = allNexuses && allNexuses.destinations ? allNexuses.destinations : []
@@ -964,7 +966,8 @@ export class ShipmentLocationBox extends Component {
       }
       return ''
     }
-    const { theme, user, shipment } = this.props
+    const { theme, user } = this.props
+    const { shipment } = shipmentData
     const errorClass =
       originFieldsHaveErrors || destinationFieldsHaveErrors ? styles.with_errors : ''
     const routeModal = (
@@ -973,7 +976,7 @@ export class ShipmentLocationBox extends Component {
           <AvailableRoutes
             user={user}
             theme={theme}
-            routes={shipment.itineraries}
+            routes={shipmentData.itineraries}
             routeSelected={this.selectedRoute}
             userDispatch={shipmentDispatch}
             initialCompName="UserAccount"
@@ -997,7 +1000,6 @@ export class ShipmentLocationBox extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-
     return (
       <div className="layout-row flex-100 layout-wrap layout-align-center-center">
         <div className="layout-row flex-100 layout-wrap layout-align-center-center">
@@ -1028,17 +1030,15 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                   }
                 >
-                  {!truckingOptions.preCarriage ? (
-                    <div>
-                      <ReactTooltip effect="solid" />
-                      <div
-                        className={styles.toggle_box_overlay}
-                        data-tip={`Pre-Carriage is not available in ${this.state.oSelect.label}`}
-                      />
-                    </div>
-                  ) : (
-                    ''
-                  )}
+
+                  <TruckingTooltip
+                    truckingOptions={truckingOptions}
+                    mandatoryTrucking={mandatoryTrucking}
+                    carriage="preCarriage"
+                    hubName={this.state.oSelect.label}
+                    direction={shipment.direction}
+                  />
+
                   <Toggle
                     className="flex-none"
                     id="has_pre_carriage"
@@ -1073,17 +1073,14 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.onCarriage ? styles.not_available : ''}`
                   }
                 >
-                  {!truckingOptions.onCarriage ? (
-                    <div>
-                      <ReactTooltip effect="solid" />
-                      <div
-                        className={styles.toggle_box_overlay}
-                        data-tip={`On-Carriage is not available in ${this.state.dSelect.label}`}
-                      />
-                    </div>
-                  ) : (
-                    ''
-                  )}
+                  <TruckingTooltip
+                    truckingOptions={truckingOptions}
+                    mandatoryTrucking={mandatoryTrucking}
+                    carriage="onCarriage"
+                    hubName={this.state.dSelect.label}
+                    direction={shipment.direction}
+                  />
+
                   <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
                     On-Carriage
                   </label>
@@ -1120,7 +1117,7 @@ ShipmentLocationBox.propTypes = {
   theme: PropTypes.theme,
   user: PropTypes.user,
   setNotesIds: PropTypes.func,
-  shipment: PropTypes.shipment,
+  shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   handleChangeCarriage: PropTypes.func.isRequired,
@@ -1141,14 +1138,15 @@ ShipmentLocationBox.propTypes = {
   routeIds: PropTypes.arrayOf(PropTypes.number),
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
-  })
+  }),
+  mandatoryTrucking: PropTypes.objectOf(PropTypes.bool).isRequired
 }
 
 ShipmentLocationBox.defaultProps = {
   nextStageAttempt: false,
   theme: null,
   user: null,
-  shipment: null,
+  shipmentData: null,
   setNotesIds: null,
   routeIds: [],
   prevRequest: null,

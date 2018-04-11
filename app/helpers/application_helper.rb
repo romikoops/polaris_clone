@@ -6,14 +6,36 @@ module ApplicationHelper
     "data:#{asset.content_type};base64,#{Rack::Utils.escape(base64)}"
   end
 
-  def format_to_price(price, currency = nil)
-    if currency.nil?
-      ("%.2f" % price)
-    else
-      number_to_currency(price, unit: currency, format: "%u %n")
+  def format_to_price(*args)
+    # There are 3 ways of calling this helper:
+    # 
+    #    1. format_to_price({
+    #         "value"    => 1.231234,
+    #         "currency" => "EUR"
+    #       })                                 #=> "1.23 EUR"
+    # 
+    #    2. format_to_price(2.231234, "EUR")   #=> "1.23 EUR"
+    #
+    #    3. format_to_price(2.231234)          #=> "1.23"
+
+    price, currency = args
+
+    if valid_price_hash?(args)
+      price    = args.first["val"] || args.first["value"]
+      currency = args.first["currency"]
     end
+
+    return ("%.2f" % price) if currency.nil?
+    
+    number_to_currency(price, unit: currency, format: "%n %u")
   end
 
+  def valid_price_hash?(args)
+    args.size == 1                             &&
+    args.first.is_a?(Hash)                     &&
+    (args.first["val"] || args.first["value"]) &&
+    args.first["currency"]
+  end
   def trunc(text)
     truncate(text, length: 50, separator: /\w/, omission: "...")
   end

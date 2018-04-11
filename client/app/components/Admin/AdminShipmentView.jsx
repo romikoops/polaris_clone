@@ -3,6 +3,7 @@ import { v4 } from 'node-uuid'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import { formatDate, parseDate } from 'react-day-picker/moment'
 import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import FileTile from '../FileTile/FileTile'
 import PropTypes from '../../prop-types'
@@ -241,6 +242,7 @@ export class AdminShipmentView extends Component {
       documents,
       cargoItems,
       containers,
+      aggregatedCargo,
       schedules,
       locations,
       accountHolder
@@ -291,7 +293,6 @@ export class AdminShipmentView extends Component {
         : { color: 'black' }
 
     const nArray = []
-    let cargoView = []
     const docView = []
     const accountHolderBox = accountHolder ? (
       <div className="flex-50 layout-row" style={{ marginLeft: '2.5%' }}>
@@ -431,12 +432,17 @@ export class AdminShipmentView extends Component {
         }
       })
     }
+    let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
     }
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
     }
+    if (aggregatedCargo) {
+      cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
+    }
+
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false,

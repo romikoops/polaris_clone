@@ -61,6 +61,7 @@ class Admin::ShipmentsController < ApplicationController
       shipment: @shipment,
       cargoItems: @cargo_items,
       containers: @containers,
+      aggregatedCargo: @shipment.aggregated_cargo,
       contacts: @contacts,
       documents: @documents,
       schedules: @schedules,

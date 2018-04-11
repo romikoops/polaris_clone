@@ -447,11 +447,21 @@ function saveItineraryNotes (id, notes) {
   return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions).then(handleResponse)
 }
 
+function editTruckingPrice (pricing) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pricing })
+  }
+  return fetch(`${BASE_URL}/admin/trucking/${pricing.id}/edit`, requestOptions).then(handleResponse)
+}
+
 export const adminService = {
   getHubs,
   getHub,
   deleteTrip,
   getItineraries,
+  editTruckingPrice,
   deleteItinerary,
   uploadTrucking,
   getItinerary,

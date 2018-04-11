@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180404143414) do
+ActiveRecord::Schema.define(version: 20180410093242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20180404143414) do
   create_table "aggregated_cargos", force: :cascade do |t|
     t.decimal "weight"
     t.decimal "volume"
+    t.decimal "chargeable_weight"
     t.integer "shipment_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -108,6 +109,7 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.datetime "updated_at", null: false
     t.string "approved"
     t.jsonb "approval_details"
+    t.integer "tenant_id"
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -274,13 +276,8 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
     t.datetime "booking_placed_at"
-  end
-
-  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
-    t.string "auth_name", limit: 256
-    t.integer "auth_srid"
-    t.string "srtext", limit: 2048
-    t.string "proj4text", limit: 2048
+    t.jsonb "insurance"
+    t.jsonb "customs"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -362,6 +359,7 @@ ActiveRecord::Schema.define(version: 20180404143414) do
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
+    t.string "truck_type"
   end
 
   create_table "user_locations", force: :cascade do |t|

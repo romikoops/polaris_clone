@@ -383,11 +383,11 @@ class AdminClients extends Component {
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-none layout-row">
+            <div className="flex-none layout-row layout-align-start-center">
               <div className="flex-none">
                 <TextHeading theme={theme} size={1} text="Clients" />
               </div>
-              <Tooltip icon="fa-info-circle" theme={theme} text={clientTip.change} toolText />
+              <Tooltip icon="fa-info-circle" theme={theme} toolText={clientTip.change} />
             </div>
             {newButton}
           </div>

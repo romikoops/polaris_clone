@@ -1,4 +1,7 @@
 class NotesController < ApplicationController
+  skip_before_action :require_authentication!
+  skip_before_action :require_non_guest_authentication!
+
   def get_notes
     notes = []
     origins = params[:origin]
@@ -14,7 +17,9 @@ class NotesController < ApplicationController
     end
     response_handler(notes)
   end
+
   private
+
   def transform_note(itinerary, note)
     return if !note
     nt = note.as_json

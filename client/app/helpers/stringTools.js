@@ -9,3 +9,7 @@ export function camelize (str) {
 export function humanizeSnakeCase (str) {
   return str.split('_').map(capitalize).join(' ')
 }
+
+export function capitalizeAndDashifyCamelCase (str) {
+  return str.split(/(?=[A-Z])/).map(capitalize).join('-')
+}

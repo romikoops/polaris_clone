@@ -44,6 +44,8 @@ class Shipment < ApplicationRecord
   belongs_to :itinerary, optional: true
   has_many :containers
   has_many :cargo_items
+  has_many :cargo_item_types, through: :cargo_items
+  has_one :aggregated_cargo
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
@@ -99,7 +101,23 @@ class Shipment < ApplicationRecord
   end
 
   def cargo_units
-    self["#{load_type}s"]
+    send("#{load_type}s")
+  end
+
+  def has_dangerous_goods?
+    _aggregated_cargo = self.aggregated_cargo
+    _cargo_units      = cargo_units
+    return _aggregated_cargo.dangerous_goods? unless _aggregated_cargo.nil?
+    return _cargo_units.any? { |cargo_unit| cargo_unit.dangerous_goods } unless _cargo_units.nil?
+    nil  
+  end
+
+  def has_customs?
+    !!customs
+  end
+
+  def has_insurance?
+    !!insurance
   end
 
   def full_haulage_to_string
@@ -237,12 +255,6 @@ class Shipment < ApplicationRecord
   def cargo_charges
     schedule_set.reduce({}) do |cargo_charges, schedule|
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
-    end
-  end
-
-  def insurance
-    schedule_set.reduce(0) do |insurance_value, schedule|
-      insurance_value += schedules_charges[schedule["hub_route_key"]].dig("insurance", "val").to_f
     end
   end
 

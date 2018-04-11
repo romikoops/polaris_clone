@@ -247,7 +247,6 @@ function getServiceCharges (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -259,7 +258,6 @@ function getPricings (redirect) {
     return { type: adminConstants.GET_PRICINGS_REQUEST, payload: prData }
   }
   function success (prData) {
-    // ;
     return { type: adminConstants.GET_PRICINGS_SUCCESS, payload: prData }
   }
   function failure (error) {
@@ -277,7 +275,6 @@ function getPricings (redirect) {
         dispatch(success(data))
       },
       (error) => {
-        // ;
         dispatch(failure(error))
         dispatch(alertActions.error(error))
       }
@@ -655,6 +652,33 @@ function getDashboard (redirect) {
           dispatch(push('/admin/dashboard'))
         }
         dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+
+function editTruckingPrice (price) {
+  function request (dashData) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_REQUEST, payload: dashData }
+  }
+  function success (dashData) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_SUCCESS, payload: dashData }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_TRUCKING_PRICE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editTruckingPrice(price).then(
+      (data) => {
+        dispatch(alertActions.success('Editing Trucking Price successful'))
+        dispatch(success(data.data))
       },
       (error) => {
         // ;
@@ -1201,7 +1225,7 @@ function editLocalCharges (nexusId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editShipmentPrice(nexusId, data).then(
+    adminService.editLocalCharges(nexusId, data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))
@@ -1436,7 +1460,8 @@ export const adminActions = {
   loadItinerarySchedules,
   deleteTrip,
   deleteClient,
-  saveItineraryNotes
+  saveItineraryNotes,
+  editTruckingPrice
 }
 
 export default adminActions

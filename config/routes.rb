@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
       post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
+      post "trucking/:id/edit", to: "trucking#edit"
       
       resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
@@ -45,6 +46,7 @@ Rails.application.routes.draw do
       get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
       resources :clients, only: [:index, :show, :create, :destroy]
+
 
       resources :pricings, only: [:index]
       post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_main_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
