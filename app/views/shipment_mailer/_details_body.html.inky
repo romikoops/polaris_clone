@@ -1,6 +1,6 @@
 <row>
   <columns>
-    <h5><span class="bold">Shipment | Reference Number: <%= @shipment.imc_reference %></span></h5>
+    <h5><span class="bold">Shipment ID: <%= @shipment.imc_reference %></span></h5>
   </columns>
 </row>
 
@@ -100,11 +100,14 @@
         <span class="bold">Insurance:</span>
         <span>
           <%= @shipment.has_insurance? ? format_to_price(@shipment.insurance) : 'None' %>
-        </span><br>
-        <span class="bold">Non-Stackable:</span>
-        <span>
-          <%= @shipment.has_non_stackable_cargo? ? 'Yes' : 'No' %>
         </span>
+        <% if @shipment.load_type == 'cargo_item' %>
+          <br>
+          <span class="bold">Non-Stackable:</span>
+          <span>
+            <%= @shipment.has_non_stackable_cargo? ? 'Yes' : 'No' %>
+          </span>
+        <% end %>
       </p>
     </callout>
   </columns>

@@ -15,12 +15,22 @@
 <row>
   <columns>
     <p>
-			<%= greeting_text %>
+      <%= greeting_text %>
     </p>
   </columns>
 </row>
 
 <%= render "details_body" %>
+
+<% unless closing_text.nil? %>
+  <row>
+    <columns>
+      <p>
+        <%= closing_text %>
+      </p>
+    </columns>
+  </row>
+<% end %>
 
 <row>
   <columns>      
