@@ -609,6 +609,9 @@ GEM
     crass (1.0.3)
     css_parser (1.6.0)
       addressable
+    debase (0.2.2)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.2)
     devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -719,6 +722,8 @@ GEM
     roo (2.7.1)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
+    ruby-debug-ide (0.6.1)
+      rake (>= 0.8.1)
     ruby_dep (1.5.0)
     rubyzip (1.2.1)
     sass (3.5.6)
@@ -783,6 +788,7 @@ DEPENDENCIES
   bootstrap-sass (~> 3.3.5.1)
   byebug
   chronic
+  debase
   devise_token_auth (~> 0.1.43)
   filterrific
   geocoder
@@ -800,6 +806,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 5.1.4)
   roo
+  ruby-debug-ide
   sass-rails
   sentry-raven
   shoryuken
