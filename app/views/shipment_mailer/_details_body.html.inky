@@ -61,8 +61,16 @@
       <h6><span class="bold">Shipment Details:</span></h6>
       <p>
         <span class="bold">Mode of transport:</span> <span>Ocean</span><br>  
-        <span class="bold">Pre- and On-Carriage:</span> <span>None</span><br>
-        <span class="bold">Type of transport:</span> <span>FCL – 20’ dry container</span>
+        <span class="bold">Pre-Carriage:</span> <span>
+          <%= @shipment.has_pre_carriage? ? 'Yes' : 'None' %>
+        </span><br>
+        <span class="bold">On-Carriage:</span> <span>
+          <%= @shipment.has_on_carriage? ? 'Yes' : 'None' %>
+        </span><br>
+        <span class="bold">Type of transport:</span>
+        <span>
+          <%= @shipment.transport_category.humanize %>
+        </span>
       </p>
     </callout>
   </columns>
