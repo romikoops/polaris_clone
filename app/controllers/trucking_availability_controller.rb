@@ -10,7 +10,6 @@ class TruckingAvailabilityController < ApplicationController
 		response = {
 			trucking_available: !trucking_pricings.empty?, nexus_ids: nexus_ids
 		}.deep_transform_keys { |k| k.to_s.camelize(:lower) }
-		byebug
 		response_handler(response)
 	end
 end

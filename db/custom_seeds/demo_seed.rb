@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['easyshipping'].each do |sub|
+['demo'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -67,10 +67,10 @@ include MongoTools
   #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   # end
 
-  hub = tenant.hubs.find_by_name("Copenhagen Port")
+  hub = tenant.hubs.find_by_name("Shanghai Port")
   # ["import"].each do |dir|
     # trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-    trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
+    trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
     req = {"xlsx" => trucking}
   #   # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
   #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)

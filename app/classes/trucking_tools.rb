@@ -28,10 +28,10 @@ module TruckingTools
     fees = {}
     result = {}
     total_fees = {}
-    
-    return {} if pricing.empty?
     byebug
-    pricing["fees"].each do |k, fee|
+    return {} if pricing.empty?
+    pricing.deep_symbolize_keys
+    pricing[:fees].each do |k, fee|
       if fee["rate_basis"] != 'PERCENTAGE'
         results = fee_calculator(k, fee, cargo, km)
          fees[k] = results
@@ -95,23 +95,43 @@ module TruckingTools
         kg_value = cargo["weight"] * fee["kg"]
         return_value = kg_value > cbm_value ? kg_value : cbm_value
         return {currency: fee["currency"], value: return_value, key: key}
-      end
+    end
   end
  
   def filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     return {} if cargo_values["weight"] == 0
+    byebug
     trucking_pricing[direction]["table"].each do |tr|
       case trucking_pricing.modifier
       when 'kg'
-        if cargo_values["weight"] <= tr["max_kg"] && cargo_values["weight"] >= tr["min_kg"]
-          return tr
+        tr["rates"]["kg"].each do |rate|
+          if cargo_values["weight"] <= rate["max_kg"] && cargo_values["weight"] >= rate["min_kg"]
+            byebug
+            return {rate: rate, fees: tr["fees"] }
+          end
         end
       when 'cbm'
-        if cargo_values["volume"] <= tr["max_cbm"] && cargo_values["weight"] >= tr["min_cbm"]
-          return tr
+        tr["rates"]["kg"].each do |rate|
+          if cargo_values["volume"] <= rate["max_cbm"] && cargo_values["volume"] >= rate["min_cbm"]
+            return {rate: rate, fees: tr["fees"] }
+          end
         end
+      when 'cbm_kg'
+        result = {rate_basis: 'PER_CBM_KG'}
+        
+        tr["rates"]["kg"].each do |rate|
+          if cargo_values["weight"] <= rate["max_kg"] && cargo_values["weight"] >= rate["min_kg"]
+            result["kg"] = rate["rate"]["value"]
+          end
+        end
+        tr["rates"]["cbm"].each do |rate|
+          if cargo_values["volume"] <= rate["max_cbm"] && cargo_values["volume"] >= rate["min_cbm"]
+            result["cbm"] = rate["rate"]["value"]
+          end
+        end
+        return {rate: result, fees: tr["fees"] }
       when 'unit'
-        return tr
+        return {rate: tr["rates"]["unit"], fees: tr["fees"]}
       end
     end
   end
