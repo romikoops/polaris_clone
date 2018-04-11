@@ -7,18 +7,6 @@ exports[`shallow rendering 1`] = `
   <div
     className="layout-row flex-none layout-wrap layout-align-center-center content_width "
   >
-    <TextHeading
-      size={3}
-      text="Cargo Units"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-    />
     <div
       className="layout-row flex-100 layout-wrap layout-align-start-center"
     >
@@ -116,6 +104,7 @@ exports[`shallow rendering 1`] = `
               </div>
               <Checkbox
                 checked={true}
+                className=""
                 disabled={false}
                 name="0-stackable"
                 onChange={[Function]}
@@ -160,6 +149,7 @@ exports[`shallow rendering 1`] = `
               </div>
               <Checkbox
                 checked={false}
+                className=""
                 disabled={true}
                 name="0-dangerous_goods"
                 onChange={[Function]}
@@ -220,13 +210,13 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimention": "Maximum height is undefined",
+                      "maxDimension": "Maximum height is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
                   validations={
                     Object {
-                      "maxDimention": [Function],
+                      "maxDimension": [Function],
                       "nonNegative": [Function],
                     }
                   }
@@ -276,13 +266,13 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimention": "Maximum height is undefined",
+                      "maxDimension": "Maximum height is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
                   validations={
                     Object {
-                      "maxDimention": [Function],
+                      "maxDimension": [Function],
                       "nonNegative": [Function],
                     }
                   }
@@ -325,13 +315,13 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimention": "Maximum height is undefined",
+                      "maxDimension": "Maximum height is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
                   validations={
                     Object {
-                      "maxDimention": [Function],
+                      "maxDimension": [Function],
                       "nonNegative": [Function],
                     }
                   }
@@ -374,13 +364,13 @@ exports[`shallow rendering 1`] = `
                   validationErrors={
                     Object {
                       "isDefaultRequiredValue": "Must be greater than 0",
-                      "maxDimention": "Maximum height is undefined",
+                      "maxDimension": "Maximum height is undefined",
                       "nonNegative": "Must be greater than 0",
                     }
                   }
                   validations={
                     Object {
-                      "maxDimention": [Function],
+                      "maxDimension": [Function],
                       "nonNegative": [Function],
                     }
                   }
@@ -618,6 +608,7 @@ exports[`shallow rendering 1`] = `
                 </div>
                 <Checkbox
                   checked={false}
+                  className=""
                   disabled={false}
                   name="-1-stackable"
                   onChange={[Function]}
@@ -662,6 +653,7 @@ exports[`shallow rendering 1`] = `
                 </div>
                 <Checkbox
                   checked={false}
+                  className=""
                   disabled={true}
                   name="-1-dangerous_goods"
                   onChange={[Function]}
