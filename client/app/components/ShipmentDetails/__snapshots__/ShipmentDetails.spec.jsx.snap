@@ -32,8 +32,14 @@ exports[`shallow rendering 1`] = `
       handleCarriageNexuses={[Function]}
       handleChangeCarriage={[Function]}
       handleSelectLocation={[Function]}
-      has_on_carriage={false}
+      has_on_carriage={true}
       has_pre_carriage={false}
+      mandatoryTrucking={
+        Object {
+          "onCarriage": true,
+          "preCarriage": false,
+        }
+      }
       nextStageAttempt={false}
       origin={
         Object {
@@ -49,6 +55,7 @@ exports[`shallow rendering 1`] = `
             "containers_attributes": Array [],
             "destination_id": 12,
             "destination_user_input": "destination_user_input",
+            "direction": "FOO_DIRECTION",
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "id": 654,
@@ -61,14 +68,16 @@ exports[`shallow rendering 1`] = `
             "planned_pickup_date": "planned_pickup_date",
             "schedule_set": Array [],
             "status": "FOO_STATUS",
-            "trucking": "trucking",
+            "trucking": Object {
+              "on_carriage": Object {},
+            },
           },
         }
       }
       routeIds={Array []}
       setNotesIds={[Function]}
       setTargetAddress={[Function]}
-      shipment={
+      shipmentData={
         Object {
           "shipment": Object {
             "cargo_items_attributes": Array [],
@@ -76,6 +85,7 @@ exports[`shallow rendering 1`] = `
             "containers_attributes": Array [],
             "destination_id": 12,
             "destination_user_input": "destination_user_input",
+            "direction": "FOO_DIRECTION",
             "has_on_carriage": false,
             "has_pre_carriage": false,
             "id": 654,
@@ -88,7 +98,9 @@ exports[`shallow rendering 1`] = `
             "planned_pickup_date": "planned_pickup_date",
             "schedule_set": Array [],
             "status": "FOO_STATUS",
-            "trucking": "trucking",
+            "trucking": Object {
+              "on_carriage": Object {},
+            },
           },
         }
       }
@@ -96,14 +108,6 @@ exports[`shallow rendering 1`] = `
         Object {
           "getDashboard": [Function],
           "goTo": [Function],
-        }
-      }
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
         }
       }
     />
@@ -116,14 +120,7 @@ exports[`shallow rendering 1`] = `
     >
       <NotesRow
         notes={Array []}
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
-            },
-          }
-        }
+        theme={Object {}}
       />
     </div>
   </div>
@@ -145,27 +142,11 @@ exports[`shallow rendering 1`] = `
             <TextHeading
               size={3}
               text="Available at appointed terminal"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
             />
           </div>
           <Tooltip
             icon="fa-info-circle"
             text="planned_dropoff_date"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
           />
         </div>
         <div
@@ -204,19 +185,24 @@ exports[`shallow rendering 1`] = `
         className="flex-50 layout-row layout-wrap layout-align-end-center"
       >
         <IncotermBox
+          direction="FOO_DIRECTION"
           errorStyles={null}
           firstStep={true}
           incoterm="incoterm"
           nextStageAttempt={false}
-          onCarriage={false}
+          onCarriage={true}
           preCarriage={false}
           setIncoTerm={[Function]}
           showIncotermError={false}
-          theme={
+          tenantScope={
             Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
+              "carriage_options": Object {
+                "on_carriage": Object {
+                  "FOO_DIRECTION": "mandatory",
+                },
+                "pre_carriage": Object {
+                  "FOO_DIRECTION": "optional",
+                },
               },
             }
           }
@@ -229,20 +215,18 @@ exports[`shallow rendering 1`] = `
   >
     <[object Object]
       handleTruckingDetailsChange={[Function]}
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
       truckTypes={
         Array [
           "default",
         ]
       }
-      trucking="trucking"
+      trucking={
+        Object {
+          "on_carriage": Object {
+            "truck_type": "default",
+          },
+        }
+      }
     />
   </div>
   <div
@@ -252,29 +236,23 @@ exports[`shallow rendering 1`] = `
       className="flex-none content_width_booking layout-row layout-align-center-center"
     >
       <IncotermRow
-        destinationFees={false}
-        onCarriage={false}
+        destinationFees={true}
+        onCarriage={true}
         originFees={false}
         preCarriage={false}
         tenant={
           Object {
             "data": Object {
-              "id": 123,
-              "subdomain": "foosubdomain",
-              "theme": Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
+              "scope": Object {
+                "carriage_options": Object {
+                  "on_carriage": Object {
+                    "FOO_DIRECTION": "mandatory",
+                  },
+                  "pre_carriage": Object {
+                    "FOO_DIRECTION": "optional",
+                  },
                 },
               },
-            },
-          }
-        }
-        theme={
-          Object {
-            "colors": Object {
-              "primary": "#333",
-              "secondary": "#fafafa",
             },
           }
         }
@@ -282,19 +260,66 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <div
-    className="layout-row flex-100 layout-wrap cargo_sec"
+    className="layout-row flex-100 layout-wrap layout-align-center cargo_sec"
   >
+    <div
+      className="content_width_booking layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="toggle_aggregated_sec flex-50 layout-row layout-align-space-around-center"
+      >
+        <h3
+          className=""
+          onClick={[Function]}
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          Cargo Units
+        </h3>
+        <Toggle
+          checked={false}
+          className="flex-none aggregated_cargo"
+          icons={
+            Object {
+              "checked": <Unknown />,
+              "unchecked": <Unknown />,
+            }
+          }
+          id="aggregated_cargo"
+          name="aggregated_cargo"
+          onChange={[Function]}
+        />
+        <h3
+          className="pointy"
+          onClick={[Function]}
+          style={
+            Object {
+              "opacity": 0.4,
+            }
+          }
+        >
+          Total Dimensions
+        </h3>
+      </div>
+    </div>
     <ShipmentCargoItems
       addCargoItem={[Function]}
       cargoItems={Array []}
       deleteItem={[Function]}
       handleDelta={[Function]}
       nextStageAttempt={false}
-      theme={
+      scope={
         Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "FOO_DIRECTION": "mandatory",
+            },
+            "pre_carriage": Object {
+              "FOO_DIRECTION": "optional",
+            },
           },
         }
       }
@@ -308,44 +333,44 @@ exports[`shallow rendering 1`] = `
       className="btn_sec content_width layout-row flex-none layout-wrap layout-align-start-start"
     >
       <div
-        className="flex-60 layout-row layout-align-start-center"
+        className="flex-60 layout-row layout-wrap layout-align-start-center"
       >
         <div
-          className="flex-10 layout-row layout-align-start-start"
+          className=" flex-100 layout-row layout-align-start-center"
         >
-          <Checkbox
-            checked={false}
-            name="no_dangerous_goods_confirmation"
-            onChange={[Function]}
-            size="30px"
-            theme={
-              Object {
-                "colors": Object {
-                  "primary": "#333",
-                  "secondary": "#fafafa",
-                },
-              }
-            }
-          />
-        </div>
-        <p
-          style={
-            Object {
-              "fontSize": "14px",
-              "margin": 0,
-            }
-          }
-        >
-          I hereby confirm that none of the specified cargo units contain
-           
-          <span
-            className="emulate_link blue_link"
-            onClick={[Function]}
+          <div
+            className="flex-10 layout-row layout-align-start-start"
           >
-            dangerous goods
-          </span>
-          .
-        </p>
+            <Checkbox
+              checked={false}
+              name="no_dangerous_goods_confirmation"
+              onChange={[Function]}
+              size="30px"
+            />
+          </div>
+          <div
+            className="flex"
+          >
+            <p
+              style={
+                Object {
+                  "fontSize": "14px",
+                  "margin": 0,
+                }
+              }
+            >
+              I hereby confirm that none of the specified cargo units contain
+               
+              <span
+                className="emulate_link blue_link"
+                onClick={[Function]}
+              >
+                dangerous goods
+              </span>
+              .
+            </p>
+          </div>
+        </div>
       </div>
       <div
         className="flex layout-row layout-align-end"
@@ -353,16 +378,9 @@ exports[`shallow rendering 1`] = `
         <RoundButton
           active={false}
           disabled={true}
+          handleDisabled={[Function]}
           handleNext={[Function]}
           text="Get Offers"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
         />
       </div>
     </div>
@@ -381,14 +399,6 @@ exports[`shallow rendering 1`] = `
           handleNext={[Function]}
           iconClass="fa-angle-left"
           text="Back to Dashboard"
-          theme={
-            Object {
-              "colors": Object {
-                "primary": "#333",
-                "secondary": "#fafafa",
-              },
-            }
-          }
         />
       </div>
     </div>

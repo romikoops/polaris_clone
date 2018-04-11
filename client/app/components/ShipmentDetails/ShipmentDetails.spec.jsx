@@ -77,7 +77,7 @@ jest.mock('../TextHeading/TextHeading', () => ({
 // eslint-disable-next-line import/first
 import { ShipmentDetails } from './ShipmentDetails'
 
-const edittedShipment = {
+const editedShipment = {
   ...shipment,
   cargo_items_attributes: [],
   containers_attributes: [],
@@ -85,21 +85,38 @@ const edittedShipment = {
   origin_user_input: 'origin_user_input',
   destination_user_input: 'destination_user_input',
   incoterm: 'incoterm',
-  trucking: 'trucking',
+  trucking: { on_carriage: {} },
   origin_id: 1,
   destination_id: 12,
   has_on_carriage: false,
   has_pre_carriage: false,
-  load_type: 'cargo_item'
+  load_type: 'cargo_item',
+  direction: 'FOO_DIRECTION'
+}
+
+const editedTenant = {
+  ...tenant,
+  data: {
+    scope: {
+      carriage_options: {
+        on_carriage: {
+          FOO_DIRECTION: 'mandatory'
+        },
+        pre_carriage: {
+          FOO_DIRECTION: 'optional'
+        }
+      }
+    }
+  }
 }
 
 const propsBase = {
-  shipmentData: { shipment: edittedShipment },
+  shipmentData: { shipment: editedShipment },
   setShipmentDetails: identity,
   messages: ['FOO_MESSAGE', 'BAR_MESSAGE'],
   setStage: identity,
   prevRequest: {
-    shipment: edittedShipment
+    shipment: editedShipment
   },
   shipmentDispatch: {
     goTo: identity,
@@ -108,7 +125,7 @@ const propsBase = {
   bookingSummaryDispatch: {
     update: identity
   },
-  tenant,
+  tenant: editedTenant,
   user
 }
 
