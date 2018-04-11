@@ -7,13 +7,18 @@
 <row>
   <columns>
     <p class="text-center">
-      <span class="bold">Departure:</span> 
+      <span class="bold">
+        <%= @shipment.has_pre_carriage? ? 'Pickup Date:' : 'Latest Port Delivery Date:' %>
+      </span> 
       <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span>
     </p>
   </columns>
   <columns>
     <p class="text-center">
-      <span class="bold">ETA:</span>
+      <span class="bold">
+        <% arrival_place = @shipment.has_on_carriage? ? 'Delivery Address' : 'Port' %>
+        <%= "ETA at #{arrival_place}:" %>
+      </span>
       <span><%= formatted_datetime(@shipment.eta) %></span>
     </p>
   </columns>
@@ -24,7 +29,13 @@
     <callout class="Light Gray" style="height: 145px;">
       <h6><span class="bold">From:</span></h6>
       <p>
-        <span><%= @shipment.origin.city_country %></span>
+        <% if @shipment.has_pre_carriage? %>
+          <% @shipment.origin.geocoded_address.split(", ").each do |address_elem| %>
+            <span><%= address_elem %></span><br/>
+          <% end %>  
+        <% else %>
+          <span><%= @shipment.origin.city_country %></span>
+        <% end %>
       </p>
     </callout>
   </columns>
@@ -32,7 +43,13 @@
     <callout class="Light Gray" style="height: 145px;">
       <h6><span class="bold">To:</span class="bold"></span></h6>
       <p>
-        <span><%= @shipment.destination.city_country %></span>
+        <% if @shipment.has_on_carriage? %>
+          <% @shipment.destination.geocoded_address.split(", ").each do |address_elem| %>
+            <span><%= address_elem %></span><br/>
+          <% end %>  
+        <% else %>
+          <span><%= @shipment.destination.city_country %></span>
+        <% end %>
       </p>
     </callout>
   </columns>
@@ -83,6 +100,10 @@
         <span class="bold">Insurance:</span>
         <span>
           <%= @shipment.has_insurance? ? format_to_price(@shipment.insurance) : 'None' %>
+        </span><br>
+        <span class="bold">Non-Stackable:</span>
+        <span>
+          <%= @shipment.has_non_stackable_cargo? ? 'Yes' : 'No' %>
         </span>
       </p>
     </callout>
