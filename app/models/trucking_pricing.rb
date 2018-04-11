@@ -106,7 +106,7 @@ class TruckingPricing < ApplicationRecord
       JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
       JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
       JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-      JOIN  locations             ON hubs.location_id                      = locations.id
+      JOIN  locations             ON hubs.nexus_id                         = locations.id
       JOIN  tenants               ON hubs.tenant_id                        = tenants.id
       WHERE tenants.id = #{args[:tenant_id]}
       AND trucking_pricings.load_type = '#{args[:load_type]}'

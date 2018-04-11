@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['demo'].each do |sub|
+['easyshipping'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first

@@ -298,7 +298,7 @@ class OfferCalculator
       cargo_class: cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-      byebug
+      
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 

@@ -24,7 +24,7 @@ class Admin::SchedulesController < ApplicationController
     mot = params[:mot]
     itinerary = Itinerary.find(params[:itinerary])
     stops = itinerary.stops.order(:index)
-    byebug
+    
     closing_date_buffer = params[:closing_date].to_i
     vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
     resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
@@ -47,6 +47,7 @@ class Admin::SchedulesController < ApplicationController
     Trip.find(params[:id]).destroy
     response_handler(true)
   end
+  
   def layovers
     trip = Trip.find(params[:id])
     layovers = trip.layovers.order(:stop_index).map { |l| {layover: l, stop: l.stop, hub: l.stop.hub}  }
