@@ -51,20 +51,19 @@ export class CargoDetails extends Component {
       customsView: null,
       totalGoodsCurrency: { value: 'EUR', label: 'EUR' }
     }
-    this.toggleInsurance = this.toggleInsurance.bind(this)
-    this.toggleCustoms = this.toggleCustoms.bind(this)
+
     this.handleChange = this.handleChange.bind(this)
     this.handleTotalGoodsCurrency = this.handleTotalGoodsCurrency.bind(this)
     this.fileFn = this.fileFn.bind(this)
     this.deleteDoc = this.deleteDoc.bind(this)
     this.calcCustomsFee = this.calcCustomsFee.bind(this)
   }
-  toggleInsurance () {
-    this.setState({ insuranceView: !this.state.insuranceView })
-    this.props.handleInsurance()
+  toggleInsurance (bool) {
+    this.setState({ insuranceView: bool })
+    this.props.handleInsurance(bool)
   }
-  toggleCustoms () {
-    this.setState({ customsView: !this.state.customsView })
+  toggleCustoms (bool) {
+    this.setState({ customsView: bool })
   }
   toggleSpecificCustoms (target) {
     const { setCustomsFee, customsData, shipmentData } = this.props
@@ -604,7 +603,7 @@ export class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
-                            onChange={this.toggleInsurance}
+                            onChange={() => this.toggleInsurance(true)}
                             checked={this.props.insurance.bool}
                             theme={theme}
                           />
@@ -619,7 +618,7 @@ export class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
-                            onChange={this.toggleInsurance}
+                            onChange={() => this.toggleInsurance(false)}
                             checked={
                               this.props.insurance.bool === null ? null : !this.props.insurance.bool
                             }
@@ -679,7 +678,7 @@ export class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
-                            onChange={this.toggleCustoms}
+                            onChange={() => this.toggleCustoms(true)}
                             checked={this.state.customsView}
                             theme={theme}
                           />
@@ -694,7 +693,7 @@ export class CargoDetails extends Component {
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
-                            onChange={this.toggleCustoms}
+                            onChange={() => this.toggleCustoms(false)}
                             checked={this.state.customsView === null
                               ? null : !this.state.customsView
                             }

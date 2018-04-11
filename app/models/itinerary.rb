@@ -27,17 +27,17 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date)
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
       trips: []
     }
-    trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+    trip_check = self.trips.find_by(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
     if trip_check
       p "REJECTED"
       # return results
     end
-    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
     results[:trips] << trip
     stops.each do |stop|
       if stop.index == 0

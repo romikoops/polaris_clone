@@ -22,23 +22,23 @@ export default function app (state = {}, action) {
         error: action.payload
       }
     }
-    case documentConstants.DOWNLOAD_PRICINGS_REQUEST: {
+    case documentConstants.DOWNLOAD_REQUEST: {
       return {
         ...state,
         loading: true
       }
     }
-    case documentConstants.DOWNLOAD_PRICINGS_SUCCESS: {
+    case documentConstants.DOWNLOAD_SUCCESS: {
       return {
         ...state,
         loading: false,
         downloadUrls: {
           ...state.downloadUrls,
-          pricing: action.payload
+          [action.payload.key]: action.payload.url
         }
       }
     }
-    case documentConstants.DOWNLOAD_PRICINGS_FAILURE: {
+    case documentConstants.DOWNLOAD_FAILURE: {
       return {
         ...state,
         error: action.payload

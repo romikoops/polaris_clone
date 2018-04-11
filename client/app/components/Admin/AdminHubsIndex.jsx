@@ -5,6 +5,7 @@ import { AdminSearchableHubs } from './AdminSearchables'
 import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminHubs as hubsTip } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
+import DocumentsDownloader from '../../components/Documents/Downloader'
 
 export function AdminHubsIndex ({
   theme,
@@ -28,6 +29,7 @@ export function AdminHubsIndex ({
       />
     </div>
   )
+
   return (
     <div className="flex-100 layout-row layout-wrap layout-align-start-start">
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
@@ -55,6 +57,30 @@ export function AdminHubsIndex ({
             dispatchFn={documentDispatch.uploadLocalCharges}
           />
         </div>
+      </div>
+      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
+        <div
+          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+            styles.sec_upload
+          }`}
+        >
+          <p className="flex-100">Download Hubs Sheet</p>
+          <DocumentsDownloader theme={theme} target="hubs" />
+        </div>
+
+        <div
+          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+            styles.sec_upload
+          }`}
+        >
+          <p className="flex-100">Download Local Charges Sheet</p>
+          <DocumentsDownloader theme={theme} target="local_charges" />
+        </div>
+        <div
+          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+            styles.sec_upload
+          }`}
+        />
       </div>
       <AdminSearchableHubs
         theme={theme}

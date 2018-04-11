@@ -60,18 +60,96 @@ function uploadHubs (file) {
 }
 function downloadPricings () {
   function request (downloadData) {
-    return { type: documentConstants.DOWNLOAD_PRICINGS_REQUEST, payload: downloadData }
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
   }
   function success (downloadData) {
-    return { type: documentConstants.DOWNLOAD_PRICINGS_SUCCESS, payload: downloadData.data }
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
   }
   function failure (error) {
-    return { type: documentConstants.DOWNLOAD_PRICINGS_FAILURE, error }
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request())
 
     documentService.downloadPricings().then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function downloadLocalCharges () {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadLocalCharges().then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function downloadSchedules (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadSchedules(options).then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Successful successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function downloadHubs () {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadHubs().then(
       (data) => {
         dispatch(alertActions.success('Downloading Successful successful'))
         dispatch(success(data))
@@ -178,6 +256,9 @@ function clearLoading () {
 
 export const documentActions = {
   uploadPricings,
+  downloadLocalCharges,
+  downloadSchedules,
+  downloadHubs,
   closeViewer,
   clearLoading,
   uploadHubs,

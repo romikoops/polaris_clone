@@ -105,7 +105,7 @@ class Admin::PricingsController < ApplicationController
   # end
   def download_pricings
     url = write_pricings_to_sheet(tenant_id: current_user.tenant_id)
-    response_handler({url: url})
+    response_handler({url: url, key: 'pricing'})
   end
 
   def overwrite_main_lcl_carriage

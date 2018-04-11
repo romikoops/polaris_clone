@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
-      
+      get  "hubs/sheet/download",  to: "hubs#download_hubs"
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create, :destroy]
       post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
       post "service_charges/:id/edit", to: "service_charges#edit"
+      get  "service_charges/download",  to: "service_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
@@ -81,7 +82,7 @@ Rails.application.routes.draw do
         as: :schedules_air_overwrite
       post 'schedules/auto_generate', 
         to: 'schedules#auto_generate_schedules'
-      
+      post  "schedules/download",  to: "schedules#download_schedules"
       get 'hubs',      to: 'hubs#index'
       get 'dashboard', to: 'dashboard#index'
     end

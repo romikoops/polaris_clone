@@ -23,10 +23,19 @@ class DocumentsDownloader extends React.Component {
   }
 
   requestDocument () {
-    const { target, documentDispatch } = this.props
+    const { target, documentDispatch, options } = this.props
     switch (target) {
       case 'pricing':
         documentDispatch.downloadPricings()
+        break
+      case 'hubs':
+        documentDispatch.downloadHubs()
+        break
+      case 'local_charges':
+        documentDispatch.downloadLocalCharges()
+        break
+      case 'schedules':
+        documentDispatch.downloadSchedules(options)
         break
 
       default:
@@ -39,7 +48,7 @@ class DocumentsDownloader extends React.Component {
     const { downloadUrls, target } = this.props
 
     if (downloadUrls[target]) {
-      window.open(downloadUrls[target].url, '_blank')
+      window.open(downloadUrls[target], '_blank')
     }
     // this.setState({ requested: false })
   }
@@ -99,7 +108,8 @@ DocumentsDownloader.propTypes = {
   tooltip: PropTypes.string,
   // viewer: PropTypes.bool,
   target: PropTypes.string,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  options: PropTypes.objectOf(PropTypes.any)
 }
 
 DocumentsDownloader.defaultProps = {
@@ -108,7 +118,8 @@ DocumentsDownloader.defaultProps = {
   theme: null,
   tooltip: '',
   target: '',
-  loading: false
+  loading: false,
+  options: {}
 }
 
 function mapStateToProps (state) {
