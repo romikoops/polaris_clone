@@ -413,3 +413,7 @@ Basic snapshot test
 ### UserProfile
 
 Basic snapshot test
+
+### UserShipmentRow
+
+Basic snapshot test
