@@ -1,6 +1,7 @@
 class Admin::ServiceChargesController < ApplicationController
   include ExcelTools
   include Response
+  include DocumentTools
   before_action :require_login_and_role_is_admin
 
   
@@ -26,7 +27,10 @@ class Admin::ServiceChargesController < ApplicationController
     update_item('localCharges', {"_id" => id}, data)
     response_handler(data)
   end
-
+  def download_local_charges
+    url = write_local_charges_to_sheet(tenant_id: current_user.tenant_id)
+    response_handler({url: url, key: 'local_charges'})
+  end
   def overwrite
     if params[:file]
       req = {'xlsx' => params[:file]}

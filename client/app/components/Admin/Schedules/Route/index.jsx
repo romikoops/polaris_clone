@@ -14,6 +14,7 @@ import styles from '../../Admin.scss'
 import { AdminTripPanel } from '../../AdminTripPanel'
 import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
+import DocumentsDownloader from '../../../Documents/Downloader'
 // import { adminSchedulesRoute as schedTip } from '../../../../constants'
 import '../../../../styles/select-css-custom.css'
 
@@ -235,18 +236,34 @@ class AdminSchedulesRoute extends Component {
     )
     const newButton = (
       <div
-        data-for="tooltipId"
-        // data-tip={schedTip.upload_excel}
+        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
+          styles.sec_upload
+        }`}
       >
+        <p className="flex-100">Create/ Upload Schedules</p>
         <RoundButton
           theme={theme}
-          text="New Upload"
+          text="New"
           active
           size="small"
           iconClass="fa-plus"
           handleNext={this.toggleView}
         />
         <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
+      </div>
+    )
+    const download = (
+      <div
+        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
+          styles.sec_upload
+        }`}
+      >
+        <p className="flex-100">Download Schedules Sheet</p>
+        <DocumentsDownloader
+          theme={theme}
+          target="schedules"
+          options={{ itinerary_id: itinerary.id }}
+        />
       </div>
     )
     return (
@@ -256,6 +273,7 @@ class AdminSchedulesRoute extends Component {
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <TextHeading theme={theme} size={1} text="Schedules" />
+          {download}
           {showList ? newButton : backButton}
         </div>
         {showList ? listView : genView}
