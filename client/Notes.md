@@ -409,3 +409,7 @@ Basic snapshot test
 ! Wrong PropType.locations
 
 ! One failing test that is skipped
+
+### UserProfile
+
+Basic snapshot test

@@ -18,7 +18,7 @@ import { UserLocations } from './UserLocations'
 
 const createWrapper = propsInput => mount(<UserLocations {...propsInput} />)
 
-const edittedLocationPrimary = {
+const editedLocationPrimary = {
   location,
   user: {
     ...user,
@@ -26,7 +26,7 @@ const edittedLocationPrimary = {
   }
 }
 
-const edittedLocation = {
+const editedLocation = {
   location,
   user: {
     ...user,
@@ -43,7 +43,7 @@ const propsBase = {
     newUserLocation: identity,
     destroyLocation: identity
   },
-  locations: [edittedLocation, edittedLocationPrimary]
+  locations: [editedLocation, editedLocationPrimary]
 }
 
 test('shallow render', () => {
