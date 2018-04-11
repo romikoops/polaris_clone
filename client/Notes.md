@@ -401,3 +401,11 @@ Basic snapshot test
 ### UserDashboard
 
 Basic snapshot test
+
+### UserLocations
+
+Basic snapshot test
+
+! Wrong PropType.locations
+
+! One failing test that is skipped
