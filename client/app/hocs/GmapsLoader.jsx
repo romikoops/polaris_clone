@@ -33,7 +33,7 @@ export default function GmapsLoader (props) {
             setNotesIds={(e, t) => props.setNotesIds(e, t)}
             handleSelectLocation={props.handleSelectLocation}
             handleCarriageNexuses={props.handleCarriageNexuses}
-            mandatoryTrucking={props.mandatoryTrucking}
+            scope={props.scope}
           />
         )
       }
@@ -68,7 +68,7 @@ GmapsLoader.propTypes = {
   routeIds: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired,
   handleCarriageNexuses: PropTypes.func.isRequired,
-  mandatoryTrucking: PropTypes.objectOf(PropTypes.bool).isRequired
+  scope: PropTypes.scope.isRequired
 }
 
 GmapsLoader.defaultProps = {

@@ -228,12 +228,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'optional'      
           }
         }
       },
@@ -367,10 +367,10 @@ class TenantSeeder
         carriage_options: {
           on_carriage: {
             import: 'optional',
-            export: 'optional'
+            export: 'disabled'
           },
           pre_carriage: {
-            import: 'optional',
+            import: 'disabled',
             export: 'optional'      
           }
         }

@@ -693,7 +693,7 @@ export class ShipmentLocationBox extends Component {
   }
   render () {
     const {
-      allNexuses, shipmentDispatch, mandatoryTrucking, shipmentData
+      allNexuses, shipmentDispatch, scope, shipmentData
     } = this.props
 
     let originOptions = allNexuses && allNexuses.origins ? allNexuses.origins : []
@@ -1033,10 +1033,10 @@ export class ShipmentLocationBox extends Component {
 
                   <TruckingTooltip
                     truckingOptions={truckingOptions}
-                    mandatoryTrucking={mandatoryTrucking}
                     carriage="preCarriage"
                     hubName={this.state.oSelect.label}
                     direction={shipment.direction}
+                    scope={scope}
                   />
 
                   <Toggle
@@ -1075,10 +1075,10 @@ export class ShipmentLocationBox extends Component {
                 >
                   <TruckingTooltip
                     truckingOptions={truckingOptions}
-                    mandatoryTrucking={mandatoryTrucking}
                     carriage="onCarriage"
                     hubName={this.state.dSelect.label}
                     direction={shipment.direction}
+                    scope={scope}
                   />
 
                   <label htmlFor="on-carriage" style={{ marginRight: '15px' }}>
@@ -1139,7 +1139,7 @@ ShipmentLocationBox.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.shipment
   }),
-  mandatoryTrucking: PropTypes.objectOf(PropTypes.bool).isRequired
+  scope: PropTypes.scope.isRequired
 }
 
 ShipmentLocationBox.defaultProps = {
