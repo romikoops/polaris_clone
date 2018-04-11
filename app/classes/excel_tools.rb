@@ -346,7 +346,7 @@ module ExcelTools
       zones[row_data[0]] = [] unless zones[row_data[0]]
 
       if row_data[1] && !row_data[2]
-        zones[row_data[0]] << {id: row_data[1], country: row_data[2]}
+        zones[row_data[0]] << {id: row_data[1], country: row_data[3]}
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete!(" ").split("-")
         zones[row_data[0]] << {min: range[0].to_d, max: range[1].to_d, country: row_data[3]}
