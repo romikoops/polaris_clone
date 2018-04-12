@@ -275,22 +275,24 @@ module ShippingTools
 
     shipment.trip_id = params[:schedules][0]["trip_id"]
     case shipment.load_type
-    when 'lcl'
+    when 'cargo_item'
       @dangerous = false
       res = shipment.cargo_items.where(dangerous_goods: true)
       if res.length > 0
         @dangerous = true
       end
-    when 'fcl'
+    when 'container'
       @dangerous = false
       res = shipment.containers.where(dangerous_goods: true)
       if res.length > 0
         @dangerous = true
       end
     end
-    shipment.save!
     @origin      = Layover.find(@schedules.first["origin_layover_id"]).stop.hub
     @destination = Layover.find(@schedules.first["destination_layover_id"]).stop.hub
+    shipment.origin_hub = @origin
+    shipment.destination_hub = @destination
+    shipment.save!
     documents = {}
     shipment.documents.each do |doc|
       documents[doc.doc_type] = doc

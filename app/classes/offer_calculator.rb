@@ -298,7 +298,7 @@ class OfferCalculator
       cargo_class: cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-      byebug
+      
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 
@@ -309,7 +309,8 @@ class OfferCalculator
         location: @shipment.origin, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["pre_carriage"]["truck_type"] != '' ? shipment.trucking["pre_carriage"]["truck_type"] : 'default'
+        truck_type: @shipment.trucking["pre_carriage"]["truck_type"] != '' ? shipment.trucking["pre_carriage"]["truck_type"] : 'default',
+        direction: 'export'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["pre_carriage"]
@@ -323,7 +324,8 @@ class OfferCalculator
         location: @shipment.destination, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default'
+        truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default',
+        direction: 'import'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]

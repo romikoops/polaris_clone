@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180410114152) do
+ActiveRecord::Schema.define(version: 20180412080147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -276,6 +276,8 @@ ActiveRecord::Schema.define(version: 20180410114152) do
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
     t.datetime "booking_placed_at"
+    t.jsonb "insurance"
+    t.jsonb "customs"
   end
 
   create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
@@ -357,8 +359,6 @@ ActiveRecord::Schema.define(version: 20180410114152) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.jsonb "export"
-    t.jsonb "import"
     t.integer "courier_id"
     t.string "direction"
     t.string "load_type"
@@ -367,6 +367,10 @@ ActiveRecord::Schema.define(version: 20180410114152) do
     t.string "modifier"
     t.integer "tenant_id"
     t.string "truck_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.jsonb "rates"
+    t.jsonb "fees"
   end
 
   create_table "user_locations", force: :cascade do |t|
