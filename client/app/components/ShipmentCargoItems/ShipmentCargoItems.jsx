@@ -18,6 +18,16 @@ export class ShipmentCargoItems extends Component {
     this.handleCargoItemType = this.handleCargoItemType.bind(this)
   }
 
+  componentWillMount () {
+    const { cargoItems } = this.props
+    const cargoItemTypes = cargoItems.map(cargoItem => (
+      this.props.availableCargoItemTypes.find(cargoItemType => (
+        +cargoItemType.key === +cargoItem.cargo_item_type_id
+      ))
+    ))
+    const cargoItemInfoExpanded = cargoItems.map(() => true)
+    this.setState({ cargoItemTypes, cargoItemInfoExpanded })
+  }
   setFirstRenderInputs (bool) {
     this.setState({ firstRenderInputs: bool })
   }
@@ -75,18 +85,11 @@ export class ShipmentCargoItems extends Component {
       nextStageAttempt,
       scope,
       handleDelta,
-      maxDimensions
+      maxDimensions,
+      availableCargoItemTypes
     } = this.props
     const { cargoItemTypes, firstRenderInputs, cargoItemInfoExpanded } = this.state
     const cargosAdded = []
-    const availableCargoItemTypes = this.props.availableCargoItemTypes
-      ? this.props.availableCargoItemTypes.map(cargoItemType => ({
-        label: cargoItemType.description,
-        key: cargoItemType.id,
-        dimension_x: cargoItemType.dimension_x,
-        dimension_y: cargoItemType.dimension_y
-      }))
-      : []
     const numberOptions = []
     for (let i = 1; i <= 20; i++) {
       numberOptions.push({ label: i, value: i })

@@ -31,6 +31,7 @@ import toggleCSS from './toggleCSS'
 import getOffersBtnIsActive, {
   noDangerousGoodsCondition, stackableGoodsCondition
 } from './getOffersBtnIsActive'
+import formatCargoItemTypes from './formatCargoItemTypes'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -232,15 +233,15 @@ export class ShipmentDetails extends Component {
 
   loadPrevReq (obj) {
     const newCargoItemsErrors = obj.cargo_items_attributes.map(cia => ({
-      payload_in_kg: true,
-      dimension_x: true,
-      dimension_y: true,
-      dimension_z: true,
-      cargo_item_type_id: true,
+      payload_in_kg: false,
+      dimension_x: false,
+      dimension_y: false,
+      dimension_z: false,
+      cargo_item_type_id: false,
       quantity: false
     }))
     const newContainerErrors = obj.containers_attributes.map(cia => ({
-      payload_in_kg: true
+      payload_in_kg: false
     }))
 
     this.setState({
@@ -540,7 +541,7 @@ export class ShipmentDetails extends Component {
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
-    if (!shipmentData.shipment) return ''
+    if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
 
     if (this.state.aggregated) {
       cargoDetails = (
@@ -576,7 +577,7 @@ export class ShipmentDetails extends Component {
           nextStageAttempt={this.state.nextStageAttempt}
           theme={theme}
           scope={scope}
-          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          availableCargoItemTypes={formatCargoItemTypes(shipmentData.cargoItemTypes)}
           maxDimensions={shipmentData.maxDimensions}
           toggleModal={name => this.toggleModal(name)}
         />

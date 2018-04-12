@@ -99,3 +99,4 @@ class ShipmentsController < ApplicationController
     get_shipment_pdf(params)
   end
 end
+    byebug
