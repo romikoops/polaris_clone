@@ -154,15 +154,16 @@
   <columns small="4" style="width: 50%;">
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Customer Details:</span></h6>
-      <p class="bold"><%= @user.full_name_and_company %></p>
       <row>
         <columns small="6" style="width: 45%;">         
+          <p class="bold"><%= @user.full_name %></p>
           <p class="bold">
             <span class="bold">Phone:</span><br/>
             <span class="bold">Email:</span>
           </p>
         </columns>
         <columns small="6" style="width: 55%;">
+          <p class="bold"><%= @user.company_name %></p>
           <p>
             <span><%= @user.phone %></span><br>
             <span><%= @user.email %></span>

@@ -22,7 +22,7 @@
 
 <%= render "details_body" %>
 
-<% unless closing_text.nil? %>
+<% if defined? closing_text %>
   <row>
     <columns>
       <p>

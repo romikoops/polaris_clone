@@ -45,12 +45,13 @@ class Document < ApplicationRecord
       content_type: 'application/pdf', 
       acl: 'private'
     )
-    shipment.documents.create!(
+    Document.create!(
       url: obj_key, 
-      shipment_id: shipment['uuid'], 
+      shipment: shipment, 
       text: file_name, 
       doc_type: type, 
-      user_id: user.id
+      user: user,
+      tenant: user.tenant
     )
   end
 
