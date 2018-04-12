@@ -596,10 +596,10 @@ module ExcelTools
           next
         end
         if !defaults[mod_key]
-          defaults[mod_key] = []
+          defaults[mod_key] = {}
         end
         min_max_arr = cell.split(" - ")
-        defaults[mod_key].push({"min_#{mod_key}": min_max_arr[0].to_i, "max_#{mod_key}": min_max_arr[1].to_i, value: nil, min_value: nil}.symbolize_keys)
+        defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_i, "max_#{mod_key}": min_max_arr[1].to_i, min_value: nil}.symbolize_keys
       end
     end
 
@@ -611,59 +611,49 @@ module ExcelTools
         row_truck_type = 'default'
       end
       row_min_value = row_data.shift
-      trucking_pricing_by_zone[row_zone] = TruckingPricing.new(
-        export: { table: [] },
-        import: { table: [] },
-        load_type: load_type,
-        load_meterage: {
-          ratio:  load_meterage_ratio,
-          height_limit: 130
-        },
-        cbm_ratio:  cbm_ratio,
-        courier: courier,
-        modifier:  modifier,
-        truck_type: row_truck_type,
-        tenant_id: tenant.id
-      )
-      
       %w(import export).each do |direction|
-        trucking_pricing_by_zone[row_zone][direction]["table"] = row_data.map.with_index do |val, i|
-          if !val
-            next
-          end
-          w_min = weight_min_row[i] || 0
-          r_min = row_min_value || 0
-          rates = {}
-          modifier_indexes.each do |mod_key, mod_indexes|
-            rates[mod_key] = []
-            mod_indexes.each_with_index do |mod_index, index_index|
-              if mod_index == i
-                mod_cell = defaults[mod_key][index_index].clone.merge({
-                  min_value: [w_min, r_min].max,
-                  rate: {
-                    value: val,
-                    rate_basis: rate_basis,
-                    currency: currency,
-                    base: base
-                  }
-                })
-              
-              rates[mod_key] << mod_cell
-              end
+        trucking_pricing_by_zone[row_zone] = TruckingPricing.new(
+          rates: {},
+          fees: {},
+          direction: direction,
+          load_type: load_type,
+          load_meterage: {
+            ratio:  load_meterage_ratio,
+            height_limit: 130
+          },
+          cbm_ratio:  cbm_ratio,
+          courier: courier,
+          modifier:  modifier,
+          truck_type: row_truck_type,
+          tenant_id: tenant.id
+        )
+        modifier_indexes.each do |mod_key, mod_indexes|
+          trucking_pricing_by_zone[row_zone].rates[mod_key] = mod_indexes.map do |m_index|
+            val = row_data[m_index]
+            if !val
+              next
             end
+            w_min = weight_min_row[m_index] || 0
+            r_min = row_min_value || 0
+            mod_cell = defaults[mod_key][m_index].clone.merge({
+              min_value: [w_min, r_min].max,
+              rate: {
+                value: val,
+                rate_basis: rate_basis,
+                currency: currency,
+                base: base
+              }
+            })
           end
-          cell = {
-            min_value: [w_min, r_min].max,
-            fees: {},
-            rates: rates
-          }
-          charges.each do |k, fee|
-            if fee[:direction] == direction
-              cell[:fees][k] = fee
-            end
-          end
-          cell
         end
+
+        charges.each do |k, fee|
+          if fee[:direction] == direction
+            fee.delete("direction")
+            trucking_pricing_by_zone[row_zone][:fees][k] = fee
+          end
+        end
+        awesome_print trucking_pricing_by_zone[row_zone]
       end
       trucking_pricing_should_update = nil
       zones.each do |key, identifiers|
@@ -679,7 +669,6 @@ module ExcelTools
             else
               trucking_destination = TruckingDestination.find_or_create_by!(identifier => id.to_s, country_code: ident[:country])
             end
-            
             trucking_pricing_ids = TruckingPricing.where(
               load_type: load_type,
               truck_type: row_truck_type,

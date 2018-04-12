@@ -101,37 +101,36 @@ module TruckingTools
   def filter_trucking_pricings(trucking_pricing, cargo_values, direction)
     return {} if cargo_values["weight"] == 0
     byebug
-    trucking_pricing[direction]["table"].each do |tr|
+    trucking_pricing["rates"].each do |tr|
       case trucking_pricing.modifier
       when 'kg'
-        tr["rates"]["kg"].each do |rate|
+        trucking_pricing["rates"]["kg"].each do |rate|
           if cargo_values["weight"] <= rate["max_kg"] && cargo_values["weight"] >= rate["min_kg"]
             byebug
-            return {rate: rate, fees: tr["fees"] }
+            return {rate: rate, fees: trucking_pricing["fees"] }
           end
         end
       when 'cbm'
-        tr["rates"]["kg"].each do |rate|
+        trucking_pricing["rates"]["kg"].each do |rate|
           if cargo_values["volume"] <= rate["max_cbm"] && cargo_values["volume"] >= rate["min_cbm"]
-            return {rate: rate, fees: tr["fees"] }
+            return {rate: rate, fees: trucking_pricing["fees"] }
           end
         end
       when 'cbm_kg'
         result = {rate_basis: 'PER_CBM_KG'}
-        
-        tr["rates"]["kg"].each do |rate|
+        trucking_pricing["rates"]["kg"].each do |rate|
           if cargo_values["weight"] <= rate["max_kg"] && cargo_values["weight"] >= rate["min_kg"]
             result["kg"] = rate["rate"]["value"]
           end
         end
-        tr["rates"]["cbm"].each do |rate|
+        trucking_pricing["rates"]["cbm"].each do |rate|
           if cargo_values["volume"] <= rate["max_cbm"] && cargo_values["volume"] >= rate["min_cbm"]
             result["cbm"] = rate["rate"]["value"]
           end
         end
-        return {rate: result, fees: tr["fees"] }
+        return {rate: result, fees: trucking_pricing["fees"] }
       when 'unit'
-        return {rate: tr["rates"]["unit"], fees: tr["fees"]}
+        return {rate: trucking_pricing["rates"][0], fees: trucking_pricing["fees"]}
       end
     end
   end

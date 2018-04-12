@@ -67,17 +67,25 @@ include MongoTools
   #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
   # end
 
-  hub = tenant.hubs.find_by_name("Shanghai Port")
-  # ["import"].each do |dir|
-    # trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
-    trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-    req = {"xlsx" => trucking}
-  #   # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
-  #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # hub = tenant.hubs.find_by_name("Shanghai Port")
+  # # ["import"].each do |dir|
+  #   # trucking = File.open("#{Rails.root}/db/dummydata/5_trucking_rates_per_city.xlsx")
+  #   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  #   req = {"xlsx" => trucking}
+  # #   # split_zip_code_sections(req, shipper, hub.id, 'GC Trucking', dir) 
+  # #   overwrite_zipcode_trucking_rates_by_hub(req, shipper, hub.id, 'GC Trucking', dir)
+  #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # end
  
-  
+  # hub = tenant.hubs.find_by_name("Shanghai Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+
+  hub = tenant.hubs.find_by_name("Copenhagen Port")
+  trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # tenant.update_route_details()
 
 end

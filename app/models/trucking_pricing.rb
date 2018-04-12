@@ -100,6 +100,7 @@ class TruckingPricing < ApplicationRecord
     longitude = args[:longitude] || args[:location].try(:longitude) || 0
     zipcode   = args[:zipcode]   || args[:location].try(:get_zip_code)
     city_name = args[:city_name] || args[:location].try(:city)
+    direction = args[:direction]
 
     ids = ActiveRecord::Base.connection.execute("
       SELECT trucking_pricings.id FROM trucking_pricings
@@ -110,6 +111,7 @@ class TruckingPricing < ApplicationRecord
       JOIN  tenants               ON hubs.tenant_id                        = tenants.id
       WHERE tenants.id = #{args[:tenant_id]}
       AND trucking_pricings.load_type = '#{args[:load_type]}'
+      AND trucking_pricings.direction = '#{direction}'
       #{truck_type_condition(args)}
       #{nexuses_condition(args)}
       AND (
