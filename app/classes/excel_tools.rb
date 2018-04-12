@@ -471,9 +471,7 @@ module ExcelTools
         identifiers.each do |ident|
           awesome_print ident
           ids = ident[:min] && ident[:max] ? (ident[:min].to_i...ident[:max].to_i) : [ident[:id]]
-          
           ids.each do |id|
-            byebug
             if identifier == 'city_name'
               trucking_destination = TruckingDestination.find_or_create_by!(identifier => Location.get_trucking_city("#{id}, #{ident[:country]}"), country_code: ident[:country])
             else
