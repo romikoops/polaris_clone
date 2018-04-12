@@ -20,7 +20,7 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sass-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
-
+gem 'rufo'
 gem 'awesome_print'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'

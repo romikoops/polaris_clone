@@ -517,7 +517,6 @@ export class ShipmentLocationBox extends Component {
     const loadType = this.props.shipmentData.shipment.load_type
 
     const prefix = target === 'origin' ? 'pre' : 'on'
-    const direction = target === 'origin' ? 'export' : 'import'
     let availableNexuses = allNexuses && allNexuses[`${target}s`] ? allNexuses[`${target}s`] : []
     const stateAvailableNexuses = this.state[`available${capitalize(target)}s`]
     if (stateAvailableNexuses) availableNexuses = stateAvailableNexuses
@@ -529,7 +528,7 @@ export class ShipmentLocationBox extends Component {
       tenantId,
       loadType,
       availableNexusesIds,
-      direction,
+      prefix,
       (truckingAvailable, nexusIds) => {
         if (!truckingAvailable) {
           getRequests.findNexus(lat, lng, (nexus) => {
