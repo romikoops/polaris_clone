@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180410114152) do
+ActiveRecord::Schema.define(version: 20180411151633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,8 @@ ActiveRecord::Schema.define(version: 20180410114152) do
     t.datetime "booking_placed_at"
     t.jsonb "insurance"
     t.jsonb "customs"
+    t.bigint "transport_category_id"
+    t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -426,5 +428,8 @@ ActiveRecord::Schema.define(version: 20180410114152) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "shipments", "transport_categories"
+  add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
+  add_foreign_key "users", "roles"
 end
