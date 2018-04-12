@@ -1,0 +1,1161 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.loading is true 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center sec_title"
+  >
+    <RoundButton
+      back={true}
+      handleNext={[Function]}
+      iconClass="fa-angle-left"
+      size="small"
+      text="Back"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_title_text_normal flex-none"
+          >
+            Shipment:
+          </p>
+          <p
+            className="sec_title_text flex-none offset-5"
+            style="#333"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Status:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5 "
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Created at:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5"
+          />
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Overview"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <RouteHubBox
+          hubs={
+            Object {
+              "endHub": Object {},
+              "startHub": Object {},
+            }
+          }
+          route={
+            Array [
+              Object {
+                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              },
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Departure:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                 undefined
+              </p>
+            </div>
+            
+          </div>
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Arrival:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                undefined
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Itinerary"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+        >
+          <h3
+            className="flex-70 letter_3"
+          >
+            Shipment Total:
+          </h3>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              12.00
+               
+              USD
+            </h3>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermRow
+              destinationFees={undefined}
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              onCarriage={undefined}
+              originFees={undefined}
+              preCarriage={undefined}
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="layout-row layout-align-start-center b_summ_top flex-100 "
+        >
+          
+        </div>
+        <div
+          className="layout-row layout-align-space-around-center b_summ_top flex-100 "
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+        >
+           
+           
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Contact Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      />
+    }
+    handleCollapser={[Function]}
+    headingText="Cargo Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-100 sec_subheader layout-row layout-align-space-between-center"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+          </div>
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <Styled(Component)
+              className="select"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <Unknown
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              type="packing_sheet"
+              uploadFn={undefined}
+              url={undefined}
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Documents"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center sec_title"
+  >
+    <RoundButton
+      back={true}
+      handleNext={[Function]}
+      iconClass="fa-angle-left"
+      size="small"
+      text="Back"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_title_text_normal flex-none"
+          >
+            Shipment:
+          </p>
+          <p
+            className="sec_title_text flex-none offset-5"
+            style="#333"
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Status:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5 "
+          />
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+        >
+          <p
+            className="sec_subtitle_text_normal flex-none"
+          >
+            Created at:
+          </p>
+          <p
+            className="sec_subtitle_text flex-none offset-5"
+          />
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Overview"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <RouteHubBox
+          hubs={
+            Object {
+              "endHub": Object {},
+              "startHub": Object {},
+            }
+          }
+          route={
+            Array [
+              Object {
+                "hub_route_key": "FOO_HUB_ROUTE_KEY",
+              },
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "position": "relative",
+            }
+          }
+        >
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Departure:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                 undefined
+              </p>
+            </div>
+            
+          </div>
+          <div
+            className="flex-40 layout-row layout-wrap layout-align-center-center"
+          >
+            <div
+              className="flex-100 layout-row layout-align-center-start layout-wrap"
+            >
+              <p
+                className="flex-100 center letter_3"
+              >
+                 Expected Time of Arrival:
+              </p>
+              <p
+                className="flex-none letter_3"
+              >
+                undefined
+              </p>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Itinerary"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+        >
+          <h3
+            className="flex-70 letter_3"
+          >
+            Shipment Total:
+          </h3>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <h3
+              className="flex-none letter_3"
+            >
+              12.00
+               
+              USD
+            </h3>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermRow
+              destinationFees={undefined}
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              onCarriage={undefined}
+              originFees={undefined}
+              preCarriage={undefined}
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="layout-row layout-align-start-center b_summ_top flex-100 "
+        >
+          
+        </div>
+        <div
+          className="layout-row layout-align-space-around-center b_summ_top flex-100 "
+        >
+          
+          
+        </div>
+        <div
+          className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+        >
+           
+           
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Contact Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      />
+    }
+    handleCollapser={[Function]}
+    headingText="Cargo Details"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+          <div
+            className="flex-25 layout-row layout-align-start-center no_doc"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-center"
+            >
+              <i
+                className="flex-none fa fa-ban"
+              />
+            </div>
+            <div
+              className="flex layout-align-start-center layout-row"
+            >
+              <p
+                className="flex-none"
+              >
+                undefined: Not Uploaded
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 layout-row layout-wrap layout-align-start-center"
+        >
+          <div
+            className="flex-100 sec_subheader layout-row layout-align-space-between-center"
+          >
+            <p
+              className="sec_subheader_text flex-none letter_3"
+            >
+              Upload New Document
+            </p>
+          </div>
+          <div
+            className="flex-50 layout-align-start-center layout-row"
+          >
+            <Styled(Component)
+              className="select"
+              name="file-type"
+              onChange={[Function]}
+              options={
+                Array [
+                  Object {
+                    "label": "Packing Sheet",
+                    "value": "packing_sheet",
+                  },
+                  Object {
+                    "label": "Commercial Invoice",
+                    "value": "commercial_invoice",
+                  },
+                  Object {
+                    "label": "Customs Declaration",
+                    "value": "customs_declaration",
+                  },
+                  Object {
+                    "label": "Customs Value Declaration",
+                    "value": "customs_value_declaration",
+                  },
+                  Object {
+                    "label": "EORI",
+                    "value": "eori",
+                  },
+                  Object {
+                    "label": "Certificate Of Origin",
+                    "value": "certificate_of_origin",
+                  },
+                  Object {
+                    "label": "Dangerous Goods",
+                    "value": "dangerous_goods",
+                  },
+                ]
+              }
+              value={
+                Object {
+                  "label": "Packing Sheet",
+                  "value": "packing_sheet",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-50 layout-align-end-center layout-row"
+          >
+            <Unknown
+              text="Packing Sheet"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+              type="packing_sheet"
+              uploadFn={undefined}
+              url={undefined}
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Documents"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;

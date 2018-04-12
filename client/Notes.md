@@ -417,3 +417,7 @@ Basic snapshot test
 ### UserShipmentRow
 
 Basic snapshot test
+
+### UserShipmentView
+
+[X] Test complete
