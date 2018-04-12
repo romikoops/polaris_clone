@@ -12,6 +12,8 @@ gem 'rails', '~> 5.1.4'
 gem 'pg', '~> 0.21'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+# Use activerecord-import for bulk insertion
+gem 'activerecord-import'
 
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
@@ -91,6 +93,9 @@ gem 'aws-sdk', '~> 3'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # Better debugging
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 group :development, :staging do
