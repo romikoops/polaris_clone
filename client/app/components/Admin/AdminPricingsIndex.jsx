@@ -7,6 +7,7 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { AdminSearchableRoutes, AdminSearchableClients } from './AdminSearchables'
 import FileUploader from '../../components/FileUploader/FileUploader'
 import { adminPricing as priceTip } from '../../constants'
+import CardPricingIndex from './CardPricingIndex'
 
 import styles from './Admin.scss'
 
@@ -50,7 +51,7 @@ export class AdminPricingsIndex extends Component {
   }
   render () {
     const {
-      theme, hubs, pricingData, clients, adminDispatch
+      theme, hubs, pricingData, clients, adminDispatch, scope
     } = this.props
     const { newPricing } = this.state
     if (!pricingData) {
@@ -91,6 +92,7 @@ export class AdminPricingsIndex extends Component {
             }`}
           >
             <p className="flex-100">Upload FCL/LCL Pricings Sheet</p>
+            <CardPricingIndex theme={theme} scope={scope} />
             <FileUploader
               theme={theme}
               url={lclUrl}
@@ -172,14 +174,16 @@ AdminPricingsIndex.propTypes = {
   }).isRequired,
   pricingData: PropTypes.shape({
     routes: PropTypes.array
-  })
+  }),
+  scope: PropTypes.scope
 }
 
 AdminPricingsIndex.defaultProps = {
   theme: null,
   hubs: [],
   clients: [],
-  pricingData: null
+  pricingData: null,
+  scope: null
 }
 
 export default AdminPricingsIndex
