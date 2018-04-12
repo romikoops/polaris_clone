@@ -360,7 +360,6 @@ ActiveRecord::Schema.define(version: 20180412080147) do
 
   create_table "trucking_pricings", force: :cascade do |t|
     t.integer "courier_id"
-    t.string "direction"
     t.string "load_type"
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
