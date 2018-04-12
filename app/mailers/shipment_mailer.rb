@@ -3,6 +3,8 @@ class ShipmentMailer < ApplicationMailer
   layout 'mailer'
   add_template_helper(ApplicationHelper)
 
+  TESTING_EMAIL = "enter_your_email_here@email.com"
+
   def tenant_notification(user, shipment)
     @user = user
     tenant = user.tenant
@@ -19,7 +21,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: tenant.emails["sales"].blank? ? "itsmycargodev@gmail.com" : tenant.emails["sales"], 
-      to: 'sa_sa_surf_@hotmail.com',
+      to: TESTING_EMAIL,
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -34,7 +36,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: 'sa_sa_surf_@hotmail.com',
+      to: TESTING_EMAIL,
       subject: 'Your booking through ItsMyCargo'
     )
   end
@@ -54,7 +56,7 @@ class ShipmentMailer < ApplicationMailer
 
     mail(
       # to: user.email.blank? ? "itsmycargodev@gmail.com" : user.email, 
-      to: 'sa_sa_surf_@hotmail.com',
+      to: TESTING_EMAIL,
       subject: 'Your booking through ItsMyCargo'
     )
   end
