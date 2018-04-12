@@ -315,7 +315,7 @@ module ExcelTools
       trucking_queries: [],
       trucking_pricings: [],
     }
-    
+
     defaults = {}
     load_type = "cargo_item"
     trucking_pricing_by_zone = {}
@@ -332,8 +332,8 @@ module ExcelTools
     modifier = zone_sheet.row(6)[7]
     rate_basis = zone_sheet.row(7)[7]
     base = zone_sheet.row(8)[7]
-    load_type = zone_sheet.row(9)[7] == 'container' ? 'container' : 'cargo_item'
-    identifier = zone_sheet.row(10)[7] == 'city' ? 'city_name' : zone_sheet.row(10)[7]
+    load_type = zone_sheet.row(9)[7] == "container" ? "container" : "cargo_item"
+    identifier_type = zone_sheet.row(10)[7] == "city" ? "city_name" : zone_sheet.row(10)[7]
     courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7])
     num_rows = zone_sheet.last_row
 
@@ -410,7 +410,7 @@ module ExcelTools
     modifier_row.shift
     modifier_row.shift
     modifier_row.uniq.each do |mod|
-      modifier_indexes[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod}
+      modifier_indexes[mod] = modifier_row.each_index.select { |index| modifier_row[index] == mod }
     end
     header_row = rates_sheet.row(2)
     header_row.shift
@@ -442,6 +442,7 @@ module ExcelTools
       row_truck_type = "default" if !row_truck_type || row_truck_type == ""
 
       row_min_value = row_data.shift
+      
       %w(pre on).each do |direction|
         trucking_pricing_by_zone[row_zone] = TruckingPricing.new(
           rates: {},
@@ -449,14 +450,14 @@ module ExcelTools
           carriage: direction,
           load_type: load_type,
           load_meterage: {
-            ratio:  load_meterage_ratio,
-            height_limit: 130
+            ratio: load_meterage_ratio,
+            height_limit: 130,
           },
-          cbm_ratio:  cbm_ratio,
+          cbm_ratio: cbm_ratio,
           courier: courier,
-          modifier:  modifier,
+          modifier: modifier,
           truck_type: row_truck_type,
-          tenant_id: tenant.id
+          tenant_id: tenant.id,
         )
         modifier_indexes.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_zone].rates[mod_key] = mod_indexes.map do |m_index|
@@ -472,8 +473,8 @@ module ExcelTools
                 value: val,
                 rate_basis: rate_basis,
                 currency: currency,
-                base: base
-              }
+                base: base,
+              },
             })
           end
         end
@@ -488,47 +489,26 @@ module ExcelTools
       end
 
       trucking_pricing_should_update = nil
-      zones.each do |key, identifiers|
-        identifiers.each do |ident|
-          if ident[:min] && ident[:max]
-            ids = (ident[:min].to_i...ident[:max].to_i)
+      zones.each_value do |idents_and_country_objs|
+        idents_and_country_objs.each do |idents_and_country|
+          if idents_and_country[:min] && idents_and_country[:max]
+            ident_values = (idents_and_country[:min].to_i...idents_and_country[:max].to_i)
           else
-            ids = [ident[:id]]
+            ident_values = [idents_and_country[:id]]
           end
-          ids.each do |id|
-            if identifier == 'city_name'
-              trucking_destination = TruckingDestination.find_or_create_by!(identifier => Location.get_trucking_city("#{id.to_s}, #{ident[:country]}"), country_code: ident[:country])
-            else
-              trucking_destination = TruckingDestination.find_or_create_by!(identifier => id.to_s, country_code: ident[:country])
-            end
-            trucking_pricing_ids = TruckingPricing.where(
-              load_type: load_type,
-              truck_type: row_truck_type,
-              load_meterage: {
-                ratio: load_meterage_ratio,
-                height_limit: load_meterage_limit,
-              },
-              modifier: modifier,
-            ).ids
 
-            hub_trucking = HubTrucking.where(
+          ident_values.each do |ident_value|
+            if identifier_type == "city_name"
+              trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => Location.get_trucking_city("#{ident_value.to_s}, #{idents_and_country[:country]}"), country_code: idents_and_country[:country])
+            else
+              trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
+            end
+
+            trucking_pricing_by_zone[row_zone].save!
+            HubTrucking.create(
               trucking_destination: trucking_destination,
-              trucking_pricing_id: trucking_pricing_ids,
+              trucking_pricing: trucking_pricing_by_zone[row_zone],
               hub_id: hub_id,
-            ).first
-
-            if hub_trucking.nil?
-              trucking_pricing_by_zone[row_zone].save!
-              HubTrucking.create(
-                trucking_destination: trucking_destination,
-                trucking_pricing: trucking_pricing_by_zone[row_zone],
-                hub_id: hub_id,
-              )
-            else
-              trucking_pricing_should_update = hub_trucking.trucking_pricing
-            end
-            trucking_pricing_should_update.try(:update,
-              trucking_pricing_by_zone[row_zone].given_attributes
             )
             # stats[:trucking_queries][:number_updated] += 1
           end
@@ -954,7 +934,7 @@ module ExcelTools
       closing_date: "CLOSING_DATE",
       eta: "ETA",
       etd: "ETD",
-      service_level: 'SERVICE_LEVEL'
+      service_level: "SERVICE_LEVEL",
     )
 
     schedules.each do |row|
@@ -962,14 +942,14 @@ module ExcelTools
       service_level = row[:service_level] ? row[:service_level] : "default"
 
       tenant_vehicle = TenantVehicle.find_by(
-          tenant_id: user.tenant_id, 
-          mode_of_transport: itinerary.mode_of_transport,
-          name: row[:service_level]
-        )
-        if !tenant_vehicle
-          tenant_vehicle =  Vehicle.create_from_name(service_level, itinerary.mode_of_transport, user.tenant_id)
-        end
-        
+        tenant_id: user.tenant_id,
+        mode_of_transport: itinerary.mode_of_transport,
+        name: row[:service_level],
+      )
+      if !tenant_vehicle
+        tenant_vehicle = Vehicle.create_from_name(service_level, itinerary.mode_of_transport, user.tenant_id)
+      end
+
       startDate = row[:etd]
       endDate = row[:eta]
 
@@ -1213,10 +1193,10 @@ module ExcelTools
       end
       if !aux_data[pricing_key][:vehicle]
         vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
-        if  vehicle
+        if vehicle
           aux_data[pricing_key][:vehicle] = vehicle
         else
-          aux_data[pricing_key][:vehicle] = Vehicle.create_from_name( row[:vehicle], row[:mot], tenant.id)
+          aux_data[pricing_key][:vehicle] = Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
         end
       end
 
@@ -1383,13 +1363,12 @@ module ExcelTools
         end
       end
     end
-    
+
     new_pricings.each do |itKey, cargo_pricings|
       cargo_pricings.each do |cargo_key, pricing|
-        
         transport_category = aux_data[itKey][:vehicle].vehicle.transport_categories.find_by(
-          name: "any", 
-          cargo_class: cargo_key
+          name: "any",
+          cargo_class: cargo_key,
         )
         tmp_pricing = pricing
         tmp_pricing[:itinerary_id] = aux_data[itKey][:itinerary].id
@@ -1400,26 +1379,26 @@ module ExcelTools
         priceKey = "#{aux_data[itKey][:stops_in_order][0].id}_#{aux_data[itKey][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_key}"
         if aux_data[itKey][:customer]
           priceKey += "_#{aux_data[itKey][:customer]}"
-          user_pricing = { pathKey => priceKey }
+          user_pricing = {pathKey => priceKey}
           pricings_to_write << {
             :update_one => {
               :filter => {
-                _id: priceKey
+                _id: priceKey,
               },
               :update => {
-                "$set" => tmp_pricing
-              }, :upsert => true
-            }
+                "$set" => tmp_pricing,
+              }, :upsert => true,
+            },
           }
           user_pricings_to_write << {
             :update_one => {
               :filter => {
-                _id: "#{aux_data[itKey][:customer]}"
+                _id: "#{aux_data[itKey][:customer]}",
               },
               :update => {
-                "$set" => user_pricing
-              }, :upsert => true
-            }
+                "$set" => user_pricing,
+              }, :upsert => true,
+            },
           }
           results[:userPricings] << user_pricing
           stats[:userPricings][:number_created] += 1
@@ -1427,26 +1406,26 @@ module ExcelTools
           stats[:pricings][:number_created] += 1
           new_itinerary_pricings[pathKey] ||= {}
           new_itinerary_pricings[pathKey]["#{aux_data[itKey][:customer]}"] = priceKey
-          new_itinerary_pricings[pathKey]["itinerary_id"]          = aux_data[itKey][:itinerary].id
-          new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_itinerary_pricings[pathKey]["itinerary_id"] = aux_data[itKey][:itinerary].id
+          new_itinerary_pricings[pathKey]["tenant_id"] = user.tenant_id
           new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
         else
           pricings_to_write << {
             :update_one => {
               :filter => {
-                _id: priceKey
+                _id: priceKey,
               },
               :update => {
-                "$set" => tmp_pricing
-              }, :upsert => true
-            }
+                "$set" => tmp_pricing,
+              }, :upsert => true,
+            },
           }
           results[:pricings] << tmp_pricing
           stats[:pricings][:number_created] += 1
           new_itinerary_pricings[pathKey] ||= {}
-          new_itinerary_pricings[pathKey]["open"]                  = priceKey
-          new_itinerary_pricings[pathKey]["itinerary_id"]          = aux_data[itKey][:itinerary].id
-          new_itinerary_pricings[pathKey]["tenant_id"]             = user.tenant_id
+          new_itinerary_pricings[pathKey]["open"] = priceKey
+          new_itinerary_pricings[pathKey]["itinerary_id"] = aux_data[itKey][:itinerary].id
+          new_itinerary_pricings[pathKey]["tenant_id"] = user.tenant_id
           new_itinerary_pricings[pathKey]["transport_category_id"] = transport_category.id
         end
       end
