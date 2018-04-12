@@ -334,7 +334,6 @@ module ExcelTools
     base = zone_sheet.row(8)[7]
     load_type = zone_sheet.row(9)[7]
     indentifier_key = zone_sheet.row(10)[7]
-
     courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7])
     num_rows = zone_sheet.last_row
 
@@ -342,7 +341,7 @@ module ExcelTools
 
     (2..num_rows).each do |line|
       row_data = zone_sheet.row(line)
-
+      row_data[0] = row_data[0].to_s
       zones[row_data[0]] = [] unless zones[row_data[0]]
 
       if row_data[1] && !row_data[2]
@@ -470,8 +469,8 @@ module ExcelTools
 
       trucking_pricing_should_update = nil
 
-      zones.each do |_key, indentifiers|
-        indentifiers.each do |trucking_dest_data|
+      zones.each_value do |identifiers|
+        identifiers.each do |trucking_dest_data|
           if trucking_dest_data[:min] && trucking_dest_data[:max]
             identifier_values = (trucking_dest_data[:min].to_i...trucking_dest_data[:max].to_i)
           else
