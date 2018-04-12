@@ -60,6 +60,9 @@ class Shipment < ApplicationRecord
     scope status, -> { where(status: status) }
   end
 
+  [:ocean, :air, :rail].each do |mot|
+    scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
+  end
 
   # Class methods
   def self.determine_haulage_from_ids(item_ids)
@@ -127,6 +130,10 @@ class Shipment < ApplicationRecord
     return true unless _aggregated_cargo.nil?
     return _cargo_units.any? { |cargo_unit| !cargo_unit.stackable } unless _cargo_units.nil?
     nil
+  end
+
+  def mode_of_transport
+    itinerary.mode_of_transport
   end
 
   def has_customs?
@@ -295,7 +302,6 @@ class Shipment < ApplicationRecord
         s.planned_eta = scheds.last.eta
         s.save!
       end
-      
     end
   end
 
@@ -372,5 +378,4 @@ class Shipment < ApplicationRecord
     no_trucking_h = { truck_type: '' }
     self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
   end
-  
 end
