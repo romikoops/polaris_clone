@@ -470,10 +470,19 @@ module ExcelTools
           end
         end
         awesome_print trucking_pricing_by_zone[row_key]
+        trucking_pricing_by_zone[row_key].save!
       end
 
       trucking_pricing_should_update = nil
-
+      trucking_pricing_ids = TruckingPricing.where(
+        load_type: load_type,
+        truck_type: row_truck_type,
+        load_meterage: {
+          ratio: load_meterage_ratio,
+          height_limit: load_meterage_limit,
+        },
+        modifier: modifier
+      ).ids
       zones.each_value do |idents_and_country_objs|
         idents_and_country_objs.each do |idents_and_country|
           if idents_and_country[:min] && idents_and_country[:max]
@@ -489,12 +498,22 @@ module ExcelTools
               trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
             end
 
-            trucking_pricing_by_zone[row_key].save!
-            HubTrucking.create(
+            hub_trucking = HubTrucking.where(
               trucking_destination: trucking_destination,
-              trucking_pricing: trucking_pricing_by_zone[row_key],
+              trucking_pricing_id: trucking_pricing_ids,
               hub_id: hub_id,
-            )
+            ).first
+
+            if hub_trucking.nil?
+              HubTrucking.create(
+                trucking_destination: trucking_destination,
+                trucking_pricing: trucking_pricing_by_zone[row_key],
+                hub_id: hub_id,
+              )
+            else
+              trucking_pricing_should_update = hub_trucking.trucking_pricing
+            end
+            trucking_pricing_should_update.try(:update, trucking_pricing_by_zone[row_key].given_attributes)
             # stats[:trucking_queries][:number_updated] += 1
           end
         end
