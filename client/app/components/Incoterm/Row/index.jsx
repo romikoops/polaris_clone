@@ -41,10 +41,11 @@ export function IncotermRow ({
   const onCarriageStyle = onCarriage ? selectedStyle : deselectedStyle
   const originDocumentStyle = originFees ? selectedStyle : deselectedStyle
   const destinationDocumentStyle = destinationFees ? selectedStyle : deselectedStyle
+
   const customsStyle =
-    feeHash && feeHash.customs && feeHash.customs.total ? selectedStyle : deselectedStyle
+    feeHash && feeHash.customs && feeHash.customs.val ? selectedStyle : deselectedStyle
   const insuranceStyle =
-    feeHash && feeHash.insurance && feeHash.insurance.total ? selectedStyle : deselectedStyle
+    feeHash && feeHash.insurance && feeHash.insurance.val ? selectedStyle : deselectedStyle
   const freightStyle = selectedStyle
 
   const freightFeesValue =
@@ -73,7 +74,7 @@ export function IncotermRow ({
           ''
         )}
         <p className="flex-none no_m letter_3 center">
-          {feeHash.export.total ? `${feeHash.export.total.value.toFixed(2)}` : 'None'}
+          {feeHash.export.total ? `${parseFloat(feeHash.export.total.value).toFixed(2)}` : 'None'}
         </p>
       </div>
     ) : (

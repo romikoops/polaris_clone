@@ -7,6 +7,7 @@ class Itinerary < ApplicationRecord
   has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
   belongs_to :mot_scope, optional: true
+  has_many :notes,     dependent: :destroy
 
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
@@ -26,12 +27,17 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date)
+  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
       trips: []
-    } 
-    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id)
+    }
+    trip_check = self.trips.find_by(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
+    if trip_check
+      p "REJECTED"
+      # return results
+    end
+    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
     results[:trips] << trip
     stops.each do |stop|
       if stop.index == 0
@@ -52,7 +58,7 @@ class Itinerary < ApplicationRecord
           stop_id: stop.id
         }
       end
-      layover = trip.layovers.create!(data)
+      layover = trip.layovers.find_or_create_by!(data)
       results[:layovers] << layover
     end
     results
@@ -62,6 +68,16 @@ class Itinerary < ApplicationRecord
     results = {
       layovers: [],
       trips: []
+    }
+    stats = {
+      layovers: {
+        number_created: 0,
+        number_updated: 0
+      },
+      trips: {
+        number_created: 0,
+        number_updated: 0
+      }
     }
     if start_date.kind_of? Date
       tmp_date = start_date
@@ -81,11 +97,14 @@ class Itinerary < ApplicationRecord
         journey_end = journey_start + steps_in_order.sum.days
         trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         if trip_check
+          p "REJECTED"
           tmp_date += 1.day
+          stats[:trips][:number_updated] += 1
           next
         end
         trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
         results[:trips] << trip
+        stats[:trips][:number_created] += 1
         p trip
         stops_in_order.each do |stop|
           if stop.index == 0
@@ -109,12 +128,13 @@ class Itinerary < ApplicationRecord
           end
           layover = trip.layovers.create!(data)
           results[:layovers] << layover
+          stats[:layovers][:number_created] += 1
           p layover
         end
       end
       tmp_date += 1.day
     end
-    return results
+    return {results: results, stats: stats}
   end
 
   def prep_schedules(limit)
@@ -242,12 +262,13 @@ class Itinerary < ApplicationRecord
     end
     if trucking_data && trucking_data["on_carriage"]
       end_hub_ids = trucking_data["on_carriage"].keys
-      end_hubs = end_hub_ids.map {|id| Hub.find(id)}
+      end_hubs = end_hub_ids.map { |id| Hub.find(id) }
     else
       end_city = Location.find(shipment.destination_id)
       end_hubs = end_city.hubs.where(tenant_id: shipment.tenant_id)
       end_hub_ids = end_hubs.ids
     end
+
     query = "
       SELECT * FROM itineraries
       WHERE tenant_id = #{shipment.tenant_id}

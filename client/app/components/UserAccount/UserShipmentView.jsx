@@ -5,11 +5,12 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from '../Admin/Admin.scss'
 import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 // import { ContainerDetails } from '../ContainerDetails/ContainerDetails'
 // import { CargoItemDetails } from '../CargoItemDetails/CargoItemDetails'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
-import { moment } from '../../constants'
+import { moment, documentTypes } from '../../constants'
 import { capitalize, gradientTextGenerator } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
@@ -18,6 +19,25 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { IncotermRow } from '../Incoterm/Row'
 import ShipmentCard from '../ShipmentCard/ShipmentCard'
+
+const StyledSelect = styled(Select)`
+  .Select-control {
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2 !important;
+  }
+  .Select-menu-outer {
+    box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
+    border: 1px solid #f2f2f2;
+  }
+  .Select-value {
+    background-color: #f9f9f9;
+    border: 1px solid #f2f2f2;
+  }
+  .Select-option {
+    background-color: #f9f9f9;
+  }
+`
 
 export class UserShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -137,11 +157,8 @@ export class UserShipmentView extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoContainerGroup
-        group={cargoGroups[k]}
-        theme={theme}
-        hsCodes={hsCodes}
-      />)
+      resultArray
+        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
     })
     return resultArray
   }
@@ -160,8 +177,10 @@ export class UserShipmentView extends Component {
       documents,
       cargoItems,
       containers,
+      aggregatedCargo,
       schedules,
-      locations
+      locations,
+      accountHolder
     } = shipmentData
     const { collapser } = this.state
     const docOptions = [
@@ -183,24 +202,6 @@ export class UserShipmentView extends Component {
         hubsObj.endHub = c
       }
     })
-    const StyledSelect = styled(Select)`
-      .Select-control {
-        background-color: #f9f9f9;
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2 !important;
-      }
-      .Select-menu-outer {
-        box-shadow: 0 2px 3px 0 rgba(237, 234, 234, 0.5);
-        border: 1px solid #f2f2f2;
-      }
-      .Select-value {
-        background-color: #f9f9f9;
-        border: 1px solid #f2f2f2;
-      }
-      .Select-option {
-        background-color: #f9f9f9;
-      }
-    `
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
@@ -209,10 +210,26 @@ export class UserShipmentView extends Component {
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
     const nArray = []
-    let cargoView = []
     const docView = []
     let shipperContact = ''
     let consigneeContact = ''
+
+    const accountHolderBox = accountHolder ? (
+      <div className="flex-50 layout-row">
+        <div className="flex-15 layout-column layout-align-start-center">
+          <i className={`${styles.icon} fa fa-user-circle-o flex-none`} style={textStyle} />
+        </div>
+        <div className="flex-85 layout-row layout-wrap layout-align-start-start">
+          <div className="flex-100">
+            <TextHeading theme={theme} size={3} text="Account Holder" />
+          </div>
+          <p className={`${styles.address} flex-100`}>
+            {accountHolder.first_name} {accountHolder.last_name} <br />
+            {accountHolder.email} {accountHolder.phone} <br />
+          </p>
+        </div>
+      </div>
+    ) : ''
     if (contacts) {
       contacts.forEach((n) => {
         if (n.type === 'notifyee') {
@@ -254,10 +271,7 @@ export class UserShipmentView extends Component {
           consigneeContact = (
             <div className="flex-33 layout-row">
               <div className="flex-15 layout-column layout-align-start-center">
-                <i
-                  className={`${styles.icon} fa fa-envelope-open-o flex-none`}
-                  style={textStyle}
-                />
+                <i className={`${styles.icon} fa fa-envelope-open-o flex-none`} style={textStyle} />
               </div>
               <div className="flex-85 layout-row layout-wrap layout-align-start-start">
                 <div className="flex-100">
@@ -275,22 +289,46 @@ export class UserShipmentView extends Component {
         }
       })
     }
+    let cargoView = ''
+
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
     }
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
     }
+    if (aggregatedCargo) {
+      cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
+    }
+
+    const docChecker = {
+      packing_sheet: false,
+      commercial_invoice: false,
+      customs_declaration: false,
+      customs_value_declaration: false,
+      eori: false,
+      certificate_of_origin: false,
+      dangerous_goods: false,
+      bill_of_lading: false,
+      invoice: false
+    }
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<FileTile
-          key={doc.id}
-          doc={doc}
-          theme={theme}
-          deleteFn={userDispatch.deleteDocument}
-        />)
+        docView.push(<FileTile doc={doc} theme={theme} deleteFn={userDispatch.deleteDocument} />)
       })
     }
+    Object.keys(docChecker).forEach((key) => {
+      if (!docChecker[key]) {
+        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+          <div className="flex-none layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ban" />
+          </div>
+          <div className="flex layout-align-start-center layout-row">
+            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          </div>
+        </div>)
+      }
+    })
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
@@ -392,16 +430,16 @@ export class UserShipmentView extends Component {
           handleCollapser={() => this.handleCollapser('charges')}
           content={
             <div className="flex-100">
-              <div className={
-                `${styles.total_row} flex-100 ` +
-                'layout-row layout-wrap layout-align-space-around-center'
-              }
+              <div
+                className={
+                  `${styles.total_row} flex-100 ` +
+                  'layout-row layout-wrap layout-align-space-around-center'
+                }
               >
                 <h3 className="flex-70 letter_3">Shipment Total:</h3>
                 <div className="flex-30 layout-row layout-align-end-center">
                   <h3 className="flex-none letter_3">
-                    {parseFloat(shipment.total_price.value).toFixed(2)}
-                    {' '}
+                    {parseFloat(shipment.total_price.value).toFixed(2)}{' '}
                     {shipment.total_price.currency}
                   </h3>
                 </div>
@@ -432,10 +470,17 @@ export class UserShipmentView extends Component {
           handleCollapser={() => this.handleCollapser('contacts')}
           content={
             <div className="flex-100 layout-row layout-wrap">
-              <div className={
-                `${styles.b_summ_top} flex-100 ` +
-                'layout-row layout-align-space-around-center'
-              }
+              <div
+                className={`layout-row layout-align-start-center ${
+                  styles.b_summ_top
+                } flex-100 `}
+              >
+                {accountHolderBox}
+              </div>
+              <div
+                className={`layout-row layout-align-space-around-center ${
+                  styles.b_summ_top
+                } flex-100 `}
               >
                 {shipperContact}
                 {consigneeContact}
@@ -471,10 +516,11 @@ export class UserShipmentView extends Component {
                 {docView}
               </div>
               <div className="flex-100 layout-row layout-wrap layout-align-start-center">
-                <div className={
-                  `flex-100 ${styles.sec_subheader} ` +
-                  'layout-row layout-align-space-between-center'
-                }
+                <div
+                  className={
+                    `flex-100 ${styles.sec_subheader} ` +
+                    'layout-row layout-align-space-between-center'
+                  }
                 >
                   <p className={`${styles.sec_subheader_text} flex-none letter_3`}>
                     Upload New Document

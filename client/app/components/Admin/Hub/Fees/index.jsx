@@ -4,13 +4,12 @@ import Toggle from 'react-toggle'
 import styles from '../../Admin.scss'
 import { NamedSelect } from '../../../NamedSelect/NamedSelect'
 import { RoundButton } from '../../../RoundButton/RoundButton'
+import AdminPromptConfirm from '../../Prompt/Confirm'
 import {
   currencyOptions
   // cargoClassOptions
 } from '../../../../constants/admin.constants'
 import {
-  fclChargeGlossary,
-  lclChargeGlossary,
   chargeGlossary,
   rateBasises,
   lclPricingSchema,
@@ -20,8 +19,6 @@ import {
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
-const fclChargeGloss = fclChargeGlossary
-const lclChargeGloss = lclChargeGlossary
 const chargeGloss = chargeGlossary
 const rateOpts = rateBasises
 const currencyOpts = currencyOptions
@@ -240,9 +237,20 @@ export class AdminHubFees extends Component {
     })
     this.setState({ selectOptions: newObj, charges })
   }
+
+  confirmDelete () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
+
   saveEdit () {
     const { charges } = this.state
     this.props.adminDispatch.editLocalCharges(charges.nexus_id, charges)
+    this.closeConfirm()
     this.toggleEdit()
   }
   handleDirectionChange (e) {
@@ -270,11 +278,17 @@ export class AdminHubFees extends Component {
           : 'black'
     }
     const {
-      selectOptions, edit, showPanel, direction, directionBool, charges
+      selectOptions,
+      edit,
+      showPanel,
+      direction,
+      directionBool,
+      charges,
+      confirm
     } = this.state
     const panel = []
     const viewPanel = []
-    let gloss
+    // let gloss
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background: linear-gradient(
@@ -297,20 +311,33 @@ export class AdminHubFees extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    if (loadType.includes('lcl')) {
-      gloss = lclChargeGloss
-    } else {
-      gloss = fclChargeGloss
-    }
+    // if (loadType.includes('lcl')) {
+    //   gloss = lclChargeGloss
+    // } else {
+    //   gloss = fclChargeGloss
+    // }
+    const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
       return ''
     }
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text="These changes will be instantly available in your store"
+        confirm={() => this.saveEdit()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
+    const dnrKeys = ['currency', 'rate_basis', 'key', 'name']
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []
       Object.keys(charges[direction][key]).forEach((chargeKey) => {
-        if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+        if (!dnrKeys.includes(chargeKey)) {
           cells.push(<div
             key={chargeKey}
             className={`flex layout-row layout-align-none-center layout-wrap ${
@@ -382,27 +409,25 @@ export class AdminHubFees extends Component {
           </div>)
         }
       })
-      panel.push(<div
-        key={key}
-        className="flex-100 layout-row layout-align-none-center layout-wrap"
-      >
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
-            styles.price_subheader
-          }`}
-        >
-          <p className="flex-none">
-            {key} - {gloss[key]}
-          </p>
+      panel
+        .push(<div key={key} className="flex-100 layout-row layout-align-none-center layout-wrap">
           <div
-            className="flex-none layout-row layout-align-center-center"
-            onClick={() => this.deleteFee(key)}
+            className={`flex-100 layout-row layout-align-space-between-center ${
+              styles.price_subheader
+            }`}
           >
-            <i className="fa fa-trash clip" style={textStyle} />
+            <p className="flex-none">
+              {key} - {gloss[key]}
+            </p>
+            <div
+              className="flex-none layout-row layout-align-center-center"
+              onClick={() => this.deleteFee(key)}
+            >
+              <i className="fa fa-trash clip" style={textStyle} />
+            </div>
           </div>
-        </div>
-        <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
-      </div>)
+          <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+        </div>)
       viewPanel.push(<div
         className={`flex-100 layout-row layout-align-none-center layout-wrap ${
           styles.expand_panel
@@ -499,7 +524,7 @@ layout-align-end-center layout-row"
                     size="small"
                     text="Save"
                     active
-                    handleNext={this.saveEdit}
+                    handleNext={() => this.confirmDelete()}
                     iconClass="fa-floppy-o"
                   />
                 </div>
@@ -525,6 +550,7 @@ layout-align-end-center layout-row"
           </div>
         </div>
         {styleTagJSX}
+        {confimPrompt}
       </div>
     )
   }

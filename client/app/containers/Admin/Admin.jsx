@@ -8,7 +8,6 @@ import { adminActions } from '../../actions'
 import { Footer } from '../../components/Footer/Footer'
 import {
   AdminDashboard,
-  AdminSchedules,
   AdminServiceCharges,
   SuperAdmin
 } from '../../components/Admin'
@@ -16,6 +15,7 @@ import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
 import AdminHubs from '../../components/Admin/AdminHubs'
 import AdminRoutes from '../../components/Admin/AdminRoutes'
+import AdminSchedules from '../../components/Admin/AdminSchedules'
 import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
@@ -25,7 +25,7 @@ import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
 import NavBar from '../Nav'
-import { AdminSchedulesRoute } from '../../components/Admin/Schedules/Route'
+import AdminSchedulesRoute from '../../components/Admin/Schedules/Route'
 
 class Admin extends Component {
   constructor (props) {

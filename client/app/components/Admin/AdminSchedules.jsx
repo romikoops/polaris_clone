@@ -14,7 +14,7 @@ import { adminSchedules as schedTip } from '../../constants'
 import '../../styles/select-css-custom.css'
 import { AdminSearchableRoutes } from './AdminSearchables'
 
-export class AdminSchedules extends Component {
+class AdminSchedules extends Component {
   static dynamicSort (property) {
     let sortOrder = 1
     let prop
@@ -75,7 +75,7 @@ export class AdminSchedules extends Component {
   }
   render () {
     const {
-      theme, hubs, scheduleData, adminDispatch, limit, document
+      theme, hubs, scheduleData, adminDispatch, limit, document, documentDispatch
     } = this.props
 
     if (!scheduleData || !hubs) {
@@ -83,10 +83,7 @@ export class AdminSchedules extends Component {
     }
     const { itineraries } = scheduleData
     const { showList } = this.state
-    const trainUrl = '/admin/train_schedules/process_csv'
-    const vesUrl = '/admin/vessel_schedules/process_csv'
-    const airUrl = '/admin/air_schedules/process_csv'
-    const truckUrl = '/admin/truck_schedules/process_csv'
+
     const listView = (
       <AdminSearchableRoutes
         itineraries={itineraries}
@@ -125,7 +122,7 @@ export class AdminSchedules extends Component {
             }`}
           >
             <p className="flex-80">Upload Train Schedules Sheet</p>
-            <FileUploader theme={theme} url={trainUrl} type="xlsx" text="Train Schedules .xlsx" />
+            <FileUploader theme={theme} dispatchFn={file => documentDispatch.uploadSchedules(file, 'train')} type="xlsx" text="Train Schedules .xlsx" />
           </div>
           <div
             className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
@@ -133,7 +130,7 @@ export class AdminSchedules extends Component {
             }`}
           >
             <p className="flex-80">Upload Air Schedules Sheet</p>
-            <FileUploader theme={theme} url={airUrl} type="xlsx" text="Air Schedules .xlsx" />
+            <FileUploader theme={theme} dispatchFn={file => documentDispatch.uploadSchedules(file, 'air')} type="xlsx" text="Air Schedules .xlsx" />
           </div>
           <div
             className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
@@ -141,7 +138,7 @@ export class AdminSchedules extends Component {
             }`}
           >
             <p className="flex-80">Upload Vessel Schedules Sheet</p>
-            <FileUploader theme={theme} url={vesUrl} type="xlsx" text="Vessel Schedules .xlsx" />
+            <FileUploader theme={theme} dispatchFn={file => documentDispatch.uploadSchedules(file, 'vessel')} type="xlsx" text="Vessel Schedules .xlsx" />
           </div>
           <div
             className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
@@ -149,7 +146,7 @@ export class AdminSchedules extends Component {
             }`}
           >
             <p className="flex-80">Upload Trucking Schedules Sheet</p>
-            <FileUploader theme={theme} url={truckUrl} type="xlsx" text="Truck Schedules .xlsx" />
+            <FileUploader theme={theme} dispatchFn={file => documentDispatch.uploadSchedules(file, 'truck')} type="xlsx" text="Truck Schedules .xlsx" />
           </div>
         </div>
         <AdminScheduleGenerator theme={theme} itineraries={itineraries} />

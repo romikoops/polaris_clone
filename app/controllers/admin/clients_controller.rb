@@ -33,6 +33,10 @@ class Admin::ClientsController < ApplicationController
 
     response_handler(new_user)
   end
+  def destroy
+    User.find(params[:id]).destroy
+    response_handler(params[:id])
+  end
 
   private
 

@@ -12,6 +12,8 @@ gem 'rails', '~> 5.1.4'
 gem 'pg', '~> 0.21'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+# Use activerecord-import for bulk insertion
+gem 'activerecord-import'
 
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'
@@ -20,8 +22,6 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sass-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
-
-gem 'sidekiq'
 
 gem 'awesome_print'
 gem 'shoryuken'
@@ -63,6 +63,7 @@ gem 'mongo', '~> 2.4'
 
 # Use roo for handling CSV and Excel files
 gem 'roo'
+gem 'write_xlsx'
 
 # Usee http for simple requests
 gem 'http'

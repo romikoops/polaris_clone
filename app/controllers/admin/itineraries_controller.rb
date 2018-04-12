@@ -28,8 +28,7 @@ class Admin::ItinerariesController < ApplicationController
   end
   def edit_notes
     itinerary = Itinerary.find(params[:id])
-    itinerary.notes = params[:notes]
-    itinerary.save!
+    itinerary.notes.create!(body: params[:notes][:body], header: params[:notes][:header], level: params[:notes][:level])
     response_handler(itinerary)
   end
   def show
@@ -39,7 +38,8 @@ class Admin::ItinerariesController < ApplicationController
     detailed_itineraries = get_itinerary_options(itinerary)
     stops = itinerary.stops.order(:index)
     schedules = itinerary.prep_schedules(10)
-    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops}
+    notes = itinerary.notes
+    resp = {hubs: hubs, itinerary: itinerary, hubItinerarys: detailed_itineraries, schedules: schedules, stops: stops, notes: notes}
     response_handler(resp)
   end
 

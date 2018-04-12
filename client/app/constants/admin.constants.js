@@ -35,6 +35,10 @@ export const adminConstants = {
   CONFIRM_SHIPMENT_SUCCESS: 'CONFIRM_SHIPMENT_SUCCESS',
   CONFIRM_SHIPMENT_FAILURE: 'CONFIRM_SHIPMENT_FAILURE',
 
+  FINISHED_SHIPMENT_REQUEST: 'FINISHED_SHIPMENT_REQUEST',
+  FINISHED_SHIPMENT_SUCCESS: 'FINISHED_SHIPMENT_SUCCESS',
+  FINISHED_SHIPMENT_FAILURE: 'FINISHED_SHIPMENT_FAILURE',
+
   DENY_SHIPMENT_REQUEST: 'DENY_SHIPMENT_REQUEST',
   DENY_SHIPMENT_SUCCESS: 'DENY_SHIPMENT_SUCCESS',
   DENY_SHIPMENT_FAILURE: 'DENY_SHIPMENT_FAILURE',
@@ -193,7 +197,19 @@ export const adminConstants = {
 
   SAVE_ITINERARY_NOTES_REQUEST: 'SAVE_ITINERARY_NOTES_REQUEST',
   SAVE_ITINERARY_NOTES_SUCCESS: 'SAVE_ITINERARY_NOTES_SUCCESS',
-  SAVE_ITINERARY_NOTES_FAILURE: 'SAVE_ITINERARY_NOTES_FAILURE'
+  SAVE_ITINERARY_NOTES_FAILURE: 'SAVE_ITINERARY_NOTES_FAILURE',
+
+  UPLOAD_HUB_IMAGE_REQUEST: 'UPLOAD_HUB_IMAGE_REQUEST',
+  UPLOAD_HUB_IMAGE_SUCCESS: 'UPLOAD_HUB_IMAGE_SUCCESS',
+  UPLOAD_HUB_IMAGE_FAILURE: 'UPLOAD_HUB_IMAGE_FAILURE',
+
+  DELETE_CLIENT_REQUEST: 'DELETE_CLIENT_REQUEST',
+  DELETE_CLIENT_SUCCESS: 'DELETE_CLIENT_SUCCESS',
+  DELETE_CLIENT_FAILURE: 'DELETE_CLIENT_FAILURE',
+
+  EDIT_TRUCKING_PRICE_REQUEST: 'EDIT_TRUCKING_PRICE_REQUEST',
+  EDIT_TRUCKING_PRICE_SUCCESS: 'EDIT_TRUCKING_PRICE_SUCCESS',
+  EDIT_TRUCKING_PRICE_FAILURE: 'EDIT_TRUCKING_PRICE_FAILURE'
 }
 
 export const serviceChargeNames = {
@@ -300,6 +316,7 @@ export const currencyOptions = [
 
 export const rateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_WM', label: 'Per W/M' },
   { value: 'PER_CONTAINER', label: 'Per Container' },
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
@@ -310,6 +327,7 @@ export const rateBasises = [
 ]
 export const truckingRateBasises = [
   { value: 'PER_ITEM', label: 'Per Item' },
+  { value: 'PER_WM', label: 'Per W/M' },
   { value: 'PER_CONTAINER', label: 'Per Container' },
   { value: 'PER_SHIPMENT', label: 'Per Shipment' },
   { value: 'PER_CBM_TON', label: 'Per cbm/ton' },
@@ -317,7 +335,9 @@ export const truckingRateBasises = [
   { value: 'PER_CBM', label: 'Per cbm' },
   { value: 'PER_TON', label: 'Per ton' },
   { value: 'PER_KG', label: 'Per kg' },
+  { value: 'PER_KM', label: 'Per km' },
   { value: 'PER_X_KG', label: 'Per (x) kg´s', base: 10 },
+  { value: 'PER_X_KM', label: 'Per (x) km´s', base: 10 },
   { value: 'PERCENTAGE', label: 'Percentage' }
 ]
 

@@ -1,19 +1,24 @@
 <row>
   <columns>
-    <h5><span class="bold">Shipment | Reference Number: <%= @shipment.imc_reference %></span></h5>
+    <h5><span class="bold">Shipment ID: <%= @shipment.imc_reference %></span></h5>
   </columns>
 </row>
 
 <row>
   <columns>
     <p class="text-center">
-      <span class="bold">Departure:</span> 
+      <span class="bold">
+        <%= @shipment.has_pre_carriage? ? 'Pickup Date:' : 'Latest Port Delivery Date:' %>
+      </span> 
       <span><%= formatted_datetime(@shipment.planned_pickup_date) %></span>
     </p>
   </columns>
   <columns>
     <p class="text-center">
-      <span class="bold">ETA:</span>
+      <span class="bold">
+        <% arrival_place = @shipment.has_on_carriage? ? 'Delivery Address' : 'Port' %>
+        <%= "ETA at #{arrival_place}:" %>
+      </span>
       <span><%= formatted_datetime(@shipment.eta) %></span>
     </p>
   </columns>
@@ -24,7 +29,13 @@
     <callout class="Light Gray" style="height: 145px;">
       <h6><span class="bold">From:</span></h6>
       <p>
-        <span><%= @shipment.origin.city_country %></span>
+        <% if @shipment.has_pre_carriage? %>
+          <% @shipment.origin.geocoded_address.split(", ").each do |address_elem| %>
+            <span><%= address_elem %></span><br/>
+          <% end %>  
+        <% else %>
+          <span><%= @shipment.origin.city_country %></span>
+        <% end %>
       </p>
     </callout>
   </columns>
@@ -32,7 +43,13 @@
     <callout class="Light Gray" style="height: 145px;">
       <h6><span class="bold">To:</span class="bold"></span></h6>
       <p>
-        <span><%= @shipment.destination.city_country %></span>
+        <% if @shipment.has_on_carriage? %>
+          <% @shipment.destination.geocoded_address.split(", ").each do |address_elem| %>
+            <span><%= address_elem %></span><br/>
+          <% end %>  
+        <% else %>
+          <span><%= @shipment.destination.city_country %></span>
+        <% end %>
       </p>
     </callout>
   </columns>
@@ -42,21 +59,58 @@
   <columns small="4" style="width: 50%;">
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Shipment Details:</span></h6>
-      <p>
-        <span class="bold">Mode of transport:</span> <span>Ocean</span><br>  
-        <span class="bold">Pre- and On-Carriage:</span> <span>None</span><br>
-        <span class="bold">Type of transport:</span> <span>FCL – 20’ dry container</span>
-      </p>
+      <row>
+        <columns small="6" style="width: 45%;">         
+          <p class="bold">
+            <span>Mode of transport:</span><br>  
+            <span>Pre-Carriage:</span><br>
+            <span>On-Carriage:</span><br>
+            <span>Type of transport:</span>
+          </p>
+        </columns>
+        <columns small="6" style="width: 55%;">
+          <p>          
+            <span>
+              <%= @shipment.mode_of_transport.capitalize %>            
+            </span>
+            <br/>
+            <span>
+              <%= @shipment.has_pre_carriage? ? 'Yes' : 'None' %>
+            </span>
+            <br/>
+            <span>
+              <%= @shipment.has_on_carriage? ? 'Yes' : 'None' %>
+            </span>        
+            <br/>
+            <span>
+              <%= @shipment.transport_category.humanize %>
+            </span>
+          </p>
+        </columns>
+      </row>
     </callout>
   </columns>
   <columns small="4" style="width: 50%;">
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Pricing Details:</span></h6>
-      <p>
-        <span class="bold">Overall Rate:</span> <span><%= format_to_price(@shipment.total_price, "€") %></span><br>  
-        <span class="bold">Service Charges (included):</span> <span><%= format_to_price(@shipment.total_price, "€") %></span><br>
-        <span class="bold">Discount:</span> <span>None</span>
-      </p>
+      <row>
+        <columns small="6" style="width: 45%;">         
+          <p class="bold">
+            <span class="bold">Overall Rate:</span> <br/>
+            <span class="bold">Service Charges:</span>
+          </p>
+        </columns>
+        <columns small="6" style="width: 55%;">
+          <p>
+            <span>
+              <%= format_to_price(@shipment.total_price) %>
+            </span><br>
+            <span>
+              <%= format_to_price(@shipment.total_price) %>
+            </span>
+          </p>
+        </columns>
+      </row>
     </callout>
   </columns>
 </row>
@@ -65,21 +119,57 @@
   <columns small="4" style="width: 50%;">
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Cargo Details:</span></h6>
-      <p>
-        <span class="bold">Hazardous Good:</span> <span>None</span><br>  
-        <span class="bold">Customs Clearance:</span> <span>None</span><br>
-        <span class="bold">Insurance:</span> <span>None</span>
-      </p>
+      <row>
+        <columns small="6" style="width: 45%;">         
+          <p class="bold">          
+            <span class="bold">Hazardous Goods:</span>
+            <br/><span class="bold">Customs:</span>
+            <br/><span class="bold">Insurance:</span>
+            <% if @shipment.load_type == 'cargo_item' %>
+              <br/><span class="bold">Non-Stackable:</span>
+            <% end %>
+          </p>
+        </columns>
+        <columns small="6" style="width: 55%;">
+          <p>          
+            <span>
+              <%= @shipment.has_dangerous_goods? ? 'Yes' : 'None' %>            
+            </span>
+            <br/><span>
+              <%= @shipment.has_customs? ? format_to_price(@shipment.customs) : 'Handled by Shipper' %>
+            </span>
+            <br/><span>
+              <%= @shipment.has_insurance? ? format_to_price(@shipment.insurance) : 'None' %>
+            </span>        
+            <% if @shipment.load_type == 'cargo_item' %>
+              <br/><span>
+                <%= @shipment.has_non_stackable_cargo? ? 'Yes' : 'No' %>
+              </span>
+            <% end %>
+          </p>
+        </columns>
+      </row>
     </callout>
   </columns>
   <columns small="4" style="width: 50%;">
     <callout class="Light Gray" style="height: 160px;">
       <h6><span class="bold">Customer Details:</span></h6>
-      <p>
-        <span class="bold"><%= @user.full_name_and_company %></span> <span> </span><br>    
-        <span class="bold">Phone:</span> <span><%= @user.phone %></span><br>
-        <span class="bold">Email:</span> <span><%= @user.email %></span>
-      </p>
+      <row>
+        <columns small="6" style="width: 45%;">         
+          <p class="bold"><%= @user.full_name %></p>
+          <p class="bold">
+            <span class="bold">Phone:</span><br/>
+            <span class="bold">Email:</span>
+          </p>
+        </columns>
+        <columns small="6" style="width: 55%;">
+          <p class="bold"><%= @user.company_name %></p>
+          <p>
+            <span><%= @user.phone %></span><br>
+            <span><%= @user.email %></span>
+          </p>
+        </columns>
+      </row>
     </callout>
   </columns>
 </row>

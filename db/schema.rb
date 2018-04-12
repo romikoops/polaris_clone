@@ -10,11 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180329125202) do
+ActiveRecord::Schema.define(version: 20180411151633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
+
+  create_table "aggregated_cargos", force: :cascade do |t|
+    t.decimal "weight"
+    t.decimal "volume"
+    t.decimal "chargeable_weight"
+    t.integer "shipment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "cargo_item_types", force: :cascade do |t|
     t.decimal "dimension_x"
@@ -100,6 +109,7 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.datetime "updated_at", null: false
     t.string "approved"
     t.jsonb "approval_details"
+    t.integer "tenant_id"
   end
 
   create_table "hub_truckings", force: :cascade do |t|
@@ -133,7 +143,6 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.string "mode_of_transport"
     t.integer "tenant_id"
     t.integer "mot_scope_id"
-    t.string "notes"
   end
 
   create_table "layovers", force: :cascade do |t|
@@ -174,6 +183,17 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.boolean "air_cargo_item"
     t.boolean "rail_container"
     t.boolean "rail_cargo_item"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.integer "itinerary_id"
+    t.integer "hub_id"
+    t.integer "trucking_pricing_id"
+    t.string "body"
+    t.string "header"
+    t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -256,13 +276,10 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
     t.datetime "booking_placed_at"
-  end
-
-  create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
-    t.string "auth_name", limit: 256
-    t.integer "auth_srid"
-    t.string "srtext", limit: 2048
-    t.string "proj4text", limit: 2048
+    t.jsonb "insurance"
+    t.jsonb "customs"
+    t.bigint "transport_category_id"
+    t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
   create_table "stops", force: :cascade do |t|
@@ -323,6 +340,8 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "vehicle_id"
+    t.string "voyage_code"
+    t.string "vessel"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
@@ -344,6 +363,7 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
+    t.string "truck_type"
   end
 
   create_table "user_locations", force: :cascade do |t|
@@ -408,6 +428,7 @@ ActiveRecord::Schema.define(version: 20180329125202) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "shipments", "transport_categories"
   add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
   add_foreign_key "users", "roles"

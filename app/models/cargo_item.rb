@@ -14,6 +14,7 @@ class CargoItem < ApplicationRecord
   }.map_values { |v| BigDecimal.new(v) }
 
   belongs_to :shipment
+  belongs_to :cargo_item_type
 
   MAX_DIMENSIONS.each do |attribute, max_dimension|
     validates attribute,

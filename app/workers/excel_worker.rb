@@ -2,7 +2,7 @@ class ExcelWorker
   include Shoryuken::Worker
   include ExcelTools
 
-  shoryuken_options queue: "excel_worker", auto_delete: true, body_parser: JSON
+  shoryuken_options queue: "https://sqs.eu-central-1.amazonaws.com/003688427525/excel_worker", auto_delete: true, body_parser: JSON
 
 
   def perform(sqs_msg, body)

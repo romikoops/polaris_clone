@@ -51,7 +51,7 @@ class AdminTrucking extends Component {
             <div className="flex-none">
               <TextHeading theme={theme} size={1} text={title} />
             </div>
-            <Tooltip icon="fa-info-circle" theme={theme} text={truckTip.manage} toolText />
+            <Tooltip icon="fa-info-circle" theme={theme} toolText={truckTip.manage} />
           </div>
         </div>
         <Switch className="flex">

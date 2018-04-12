@@ -124,17 +124,33 @@ module ShippingTools
     if shipment_data[:insurance][:bool]
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
-        shipment.schedules_charges[key][:insurance] = {val: shipment_data[:insurance][:val], currency: "EUR"}
-        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:insurance][:val] ? shipment_data[:insurance][:val] : 0
+        insurance = { val: shipment_data[:insurance][:val].to_d, currency: "EUR" }
+        shipment.schedules_charges[key][:insurance] = insurance
+        shipment.insurance = insurance
+
+        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d 
+        total_value = previous_total_value + (shipment_data[:insurance][:val].to_d || 0)
+        shipment.schedules_charges[key]["total"]["value"] = total_value
+
         shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end
     
-    if shipment_data[:customs][:total][:val] > 0
+    if shipment_data[:customs][:total][:val].to_d > 0
       shipment.schedule_set.each do |ss|
         key = ss["hub_route_key"]
-        shipment.schedules_charges[key][:customs] = {val: shipment_data[:customs][:total][:val], currency: shipment_data[:customs][:total][:currency]}
-        shipment.schedules_charges[key]["total"]["value"] += shipment_data[:customs][:total][:val] ? shipment_data[:customs][:total][:val] : 0
+        customs = {
+          val: shipment_data[:customs][:total][:val].to_d,
+          currency: shipment_data[:customs][:total][:currency]
+        }
+        shipment.schedules_charges[key][:customs] = customs
+        shipment.customs = customs
+
+        previous_total_value = shipment.schedules_charges[key]["total"]["value"].to_d 
+        total_value = previous_total_value + (shipment_data[:customs][:total][:val].to_d || 0)
+        shipment.schedules_charges[key]["total"]["value"] = total_value
+
+
         shipment.total_price = { value: shipment.schedules_charges[key]["total"]["value"], currency: shipment.user.currency }
       end
     end
@@ -143,7 +159,7 @@ module ShippingTools
     shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
     cargo_item_types = {}
     if shipment.cargo_items
-      @cargo_items = shipment.cargo_items.map do |cargo_item|
+      cargo_items = shipment.cargo_items.map do |cargo_item|
         hs_code_hashes = hsCodes[cargo_item.id.to_s]
         
         if hs_code_hashes
@@ -163,7 +179,7 @@ module ShippingTools
     end
 
     if shipment.containers
-      @containers = shipment.containers
+      containers = shipment.containers
       shipment.containers.map do |container|
         hs_code_hashes = hsCodes[container.id.to_s]
         
@@ -178,6 +194,11 @@ module ShippingTools
           container.save!
         end
       end
+    end
+
+    if shipment.aggregated_cargo
+      aggregated_cargo = shipment.aggregated_cargo
+      aggregated_cargo.set_chargeable_weight!(shipment.itinerary.mode_of_transport)
     end
 
     documents = shipment.documents.map do |doc|
@@ -200,22 +221,24 @@ module ShippingTools
     }
 
     return {
-      shipment:   shipment,
-      schedules:  shipment.schedule_set,
-      locations:  locations,
-      consignee:  consignee,
-      notifyees:  notifyees,
-      shipper:    shipper,
-      cargoItems: @cargo_items,
-      containers: @containers, 
-      documents:  documents,
-      cargoItemTypes: cargo_item_types
+      shipment:        shipment,
+      cargoItems:      cargo_items      || nil,
+      containers:      containers       || nil, 
+      aggregatedCargo: aggregated_cargo || nil, 
+      schedules:       shipment.schedule_set,
+      locations:       locations,
+      consignee:       consignee,
+      notifyees:       notifyees,
+      shipper:         shipper,
+      documents:       documents,
+      cargoItemTypes:  cargo_item_types
     }
   end
 
   def confirm_booking(params)
     shipment = Shipment.find(params[:shipment_id])
     shipment.status = "requested"
+    shipment.booking_placed_at = DateTime.now
     shipment.save!
     message = {
       title: 'Booking Received',
@@ -292,20 +315,33 @@ module ShippingTools
     cargo_items = shipment.cargo_items
     containers = shipment.containers
     if containers.length > 0
-      cargoKey = containers.first.size_class
+      cargoKey = containers.first.size_class.dup
+      customsKey = cargoKey.dup
+      customsKey.slice! customsKey.rindex("f")
       cargos = containers
     else
       cargoKey = 'lcl'
+      customsKey = 'lcl'
       cargos = cargo_items
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
-    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => cargoKey}]).first
-    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => cargoKey}]).first
+    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => customsKey}]).first
+    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => customsKey}]).first
+    import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user) : {unknown: true}
+    export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user) : {unknown: true}
+    total_fees = {total: {value: 0, currency: current_user.currency}}
+    if import_fees["total"] && import_fees["total"][:value]
+      total_fees[:total][:value] += import_fees["total"][:value]
+    end
+    if export_fees["total"] && export_fees["total"][:value]
+      total_fees[:total][:value] += export_fees["total"][:value]
+    end
     
     customs_fee = {
-      import: calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user),
-      export: calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user)
+      import: destination_customs_fee ? import_fees : {unknown: true},
+      export: origin_customs_fee ? export_fees : {unknown: true},
+      total: total_fees
     }
     hubs = { 
       startHub: { data: @origin,      location: @origin.nexus },

@@ -41,7 +41,7 @@ export { default as AdminClients } from './AdminClients'
 export * from './AdminClientsIndex'
 export * from './AdminClientView'
 
-export * from './AdminSchedules'
+// export * from './AdminSchedules'
 
 export { default as AdminShipments } from './AdminShipments'
 export * from './AdminShipmentsIndex'

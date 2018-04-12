@@ -7,7 +7,7 @@ import { CardLinkRow } from '../CardLinkRow/CardLinkRow'
 import { LOAD_TYPES } from '../../constants'
 import { RoundButton } from '../RoundButton/RoundButton'
 import {
-  capitalize, gradientTextGenerator, percentageToHex, humanizedMotAndLoadType
+  capitalize, gradientTextGenerator, hexToRGB, humanizedMotAndLoadType
 } from '../../helpers'
 import { TextHeading } from '../TextHeading/TextHeading'
 
@@ -120,7 +120,7 @@ export class ChooseShipment extends Component {
             <div
               className={`${styles.mot_sec} flex-80 layout-row layout-wrap layout-align-center`}
               style={{
-                color: `${theme && theme.colors.primary + percentageToHex('80%')}`
+                color: `${theme && hexToRGB(theme.colors.primary, 0.8)}`
               }}
             >
               {/* <div className="flex-100 layout-row layout-align-center">

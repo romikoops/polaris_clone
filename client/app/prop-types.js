@@ -130,4 +130,25 @@ PropTypes.gMaps = PropTypes.shape({
   InfoWindow: PropTypes.func
 })
 
+PropTypes.modes_of_transport = PropTypes.shape({
+  ocean: PropTypes.objectOf(PropTypes.bool),
+  rail: PropTypes.objectOf(PropTypes.bool),
+  air: PropTypes.objectOf(PropTypes.bool)
+})
+
+PropTypes.scope = PropTypes.shape({
+  cargo_info_level: PropTypes.string,
+  dangerous_goods: PropTypes.bool,
+  detailed_billing: PropTypes.bool,
+  has_customs: PropTypes.bool,
+  has_insurance: PropTypes.bool,
+  incoterm_info_level: PropTypes.string,
+  modes_of_transport: PropTypes.modes_of_transport,
+  terms: PropTypes.arrayOf(PropTypes.string),
+  carriage_options: PropTypes.shape({
+    on_carriage: PropTypes.objectOf(PropTypes.string),
+    pre_carriage: PropTypes.objectOf(PropTypes.string)
+  })
+})
+
 export default PropTypes

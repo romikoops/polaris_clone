@@ -25,7 +25,7 @@ import styles from './ShipmentCargoItems.scss'
  * @param { func } toggleModal
  * @param { bool } nextStageAttempt
  * @param { object } scope
- * @param { object } maxDimentions
+ * @param { object } maxDimensions
  *
  * @returns { object } JSX for each input
  */
@@ -40,7 +40,7 @@ export default function getInputs (
   toggleModal,
   nextStageAttempt,
   scope,
-  maxDimentions
+  maxDimensions
 ) {
   const { handleDelta } = this.props
   const placeholderInput = (
@@ -50,7 +50,9 @@ export default function getInputs (
     />
   )
   const inputs = {}
-  const showColliTypeErrors = !firstRenderInputs && nextStageAttempt && !cargoItemTypes[i]
+  const showColliTypeErrors =
+    !firstRenderInputs && nextStageAttempt &&
+    (!cargoItemTypes[i] || !cargoItemTypes[i].label)
 
   inputs.colliType = (
     <div className="layout-row flex-40 layout-wrap layout-align-start-center colli_type" >
@@ -90,12 +92,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < maxDimentions.payloadInKg
+                maxDimension: (values, value) => value < +maxDimensions.payloadInKg
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: `Maximum height is ${maxDimentions.payloadInKg}`
+                maxDimension: `Maximum height is ${maxDimensions.payloadInKg}`
               }}
               required
             />
@@ -145,10 +147,8 @@ export default function getInputs (
       rail: 550,
       ocean: 1000
     }
-    const unitChargeableWeight =
-      Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg)
 
-    return (unitChargeableWeight * cargoItem.quantity).toFixed(1)
+    return Math.max(volume * effectiveKgPerCubicMeter[mot], cargoItem.payload_in_kg).toFixed(1)
   }
   function chargeableWeightElemJSX (mot) {
     return (
@@ -207,12 +207,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < maxDimentions.dimensionZ
+                maxDimension: (values, value) => value < +maxDimensions.dimensionZ
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: `Maximum height is ${maxDimentions.dimensionZ}`
+                maxDimension: `Maximum height is ${maxDimensions.dimensionZ}`
               }}
               required
             />
@@ -258,12 +258,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < maxDimentions.dimensionX
+                maxDimension: (values, value) => value < +maxDimensions.dimensionX
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: `Maximum height is ${maxDimentions.dimensionX}`
+                maxDimension: `Maximum height is ${maxDimensions.dimensionX}`
               }}
               required
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_x}
@@ -309,12 +309,12 @@ export default function getInputs (
               }}
               validations={{
                 nonNegative: (values, value) => value > 0,
-                maxDimention: (values, value) => value < maxDimentions.dimensionY
+                maxDimension: (values, value) => value < +maxDimensions.dimensionY
               }}
               validationErrors={{
                 isDefaultRequiredValue: 'Must be greater than 0',
                 nonNegative: 'Must be greater than 0',
-                maxDimention: `Maximum height is ${maxDimentions.dimensionY}`
+                maxDimension: `Maximum height is ${maxDimensions.dimensionY}`
               }}
               disabled={cargoItemTypes[i] && !!cargoItemTypes[i].dimension_y}
               required

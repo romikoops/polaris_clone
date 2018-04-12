@@ -6,6 +6,7 @@ import { NamedSelect } from '../NamedSelect/NamedSelect'
 // import styled from 'styled-components';
 import { RoundButton } from '../RoundButton/RoundButton'
 import { currencyOptions } from '../../constants/admin.constants'
+import AdminPromptConfirm from './Prompt/Confirm'
 import {
   fclChargeGlossary,
   lclChargeGlossary,
@@ -26,7 +27,6 @@ const currencyOpts = currencyOptions
 export class AdminPriceEditor extends Component {
   static selectFromOptions (options, value) {
     let result
-    console.log(value)
     options.forEach((op) => {
       if (op.value === value) {
         result = op
@@ -106,15 +106,17 @@ export class AdminPriceEditor extends Component {
       Object.keys(pricing.data[pKey]).forEach((chargeKey) => {
         if (chargeKey === 'currency') {
           opts = currencyOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
+          newObj.data[pKey][chargeKey] = AdminPriceEditor.selectFromOptions(
+            opts,
+            pricing.data[pKey][chargeKey]
+          )
         } else if (chargeKey === 'rate_basis') {
           opts = rateOpts.slice()
-          // this.getOptions(opts, key, chargeKey);
+          newObj.data[pKey][chargeKey] = AdminPriceEditor.selectFromOptions(
+            opts,
+            pricing.data[pKey][chargeKey]
+          )
         }
-        newObj.data[pKey][chargeKey] = AdminPriceEditor.selectFromOptions(
-          opts,
-          pricing.data[pKey][chargeKey]
-        )
       })
     })
     this.setState({ selectOptions: newObj, pricing })
@@ -197,10 +199,19 @@ export class AdminPriceEditor extends Component {
   showAddFeePanel () {
     this.setState({ showPanel: !this.state.showPanel })
   }
+  confirmSave () {
+    this.setState({
+      confirm: true
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
   saveEdit () {
     const req = this.state.pricing
     // eslint-disable-next-line no-underscore-dangle
     this.props.adminTools.updatePricing(this.props.pricing._id, req)
+    this.closeConfirm()
     this.props.closeEdit()
   }
   render () {
@@ -209,7 +220,9 @@ export class AdminPriceEditor extends Component {
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
         : { color: 'black' }
-    const { pricing, selectOptions, showPanel } = this.state
+    const {
+      pricing, selectOptions, showPanel, confirm
+    } = this.state
     const panel = []
     let gloss
     if (pricing.load_type === 'lcl') {
@@ -298,6 +311,17 @@ export class AdminPriceEditor extends Component {
         <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
       </div>)
     })
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text="These changes will be instantly available in your store"
+        confirm={() => this.saveEdit()}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const feeSchema = pricing.load_type === 'lcl' ? lclPricingSchema : fclPricingSchema
     const feesToAdd = Object.keys(feeSchema.data).map((key) => {
       if (!pricing.data[key]) {
@@ -324,6 +348,7 @@ export class AdminPriceEditor extends Component {
           styles.editor_backdrop
         } flex-none layout-row layout-wrap layout-align-center-center`}
       >
+        {confimPrompt}
         <div
           className={` ${
             styles.editor_fade
@@ -372,7 +397,7 @@ export class AdminPriceEditor extends Component {
                 size="small"
                 text="Save"
                 active
-                handleNext={this.saveEdit}
+                handleNext={() => this.confirmSave()}
                 iconClass="fa-floppy-o"
               />
             </div>

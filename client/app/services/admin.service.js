@@ -331,6 +331,14 @@ function deleteHub (hubId) {
   }
   return fetch(`${BASE_URL}/admin/hubs/${hubId}/delete`, requestOptions).then(handleResponse)
 }
+
+function deleteClient (id) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  return fetch(`${BASE_URL}/admin/clients/${id}`, requestOptions).then(handleResponse)
+}
 function editHub (hubId, object) {
   const requestOptions = {
     method: 'PATCH',
@@ -412,6 +420,16 @@ function uploadTrucking (url, file, direction) {
   }
   return fetch(`${BASE_URL}${url}`, requestOptions).then(handleResponse)
 }
+function newHubImage (id, file) {
+  const formData = new FormData()
+  formData.append('file', file)
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader() },
+    body: formData
+  }
+  return fetch(`${BASE_URL}/admin/hubs/${id}/image`, requestOptions).then(handleResponse)
+}
 
 function loadItinerarySchedules (id) {
   const requestOptions = {
@@ -421,14 +439,21 @@ function loadItinerarySchedules (id) {
   return fetch(`${BASE_URL}/admin/schedules/${id}`, requestOptions).then(handleResponse)
 }
 function saveItineraryNotes (id, notes) {
-  const formData = new FormData()
-  formData.append('notes', notes)
   const requestOptions = {
     method: 'POST',
-    headers: { ...authHeader() },
-    body: formData
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ notes })
   }
   return fetch(`${BASE_URL}/admin/itineraries/${id}/edit_notes`, requestOptions).then(handleResponse)
+}
+
+function editTruckingPrice (pricing) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pricing })
+  }
+  return fetch(`${BASE_URL}/admin/trucking/${pricing.id}/edit`, requestOptions).then(handleResponse)
 }
 
 export const adminService = {
@@ -436,6 +461,7 @@ export const adminService = {
   getHub,
   deleteTrip,
   getItineraries,
+  editTruckingPrice,
   deleteItinerary,
   uploadTrucking,
   getItinerary,
@@ -444,6 +470,7 @@ export const adminService = {
   getServiceCharges,
   getPricings,
   getShipment,
+  newHubImage,
   loadItinerarySchedules,
   getSchedules,
   getTrucking,
@@ -476,7 +503,8 @@ export const adminService = {
   editLocalCharges,
   deleteHub,
   deletePricing,
-  editHub
+  editHub,
+  deleteClient
 }
 
 export default adminService

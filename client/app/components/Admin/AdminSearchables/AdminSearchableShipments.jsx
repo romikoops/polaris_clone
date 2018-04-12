@@ -58,11 +58,13 @@ export class AdminSearchableShipments extends Component {
         distance: 50,
         maxPatternLength: 32,
         minMatchCharLength: 5,
+        includeScore: true,
         keys
       }
       const fuse = new Fuse(this.props.shipments, options)
-      console.log(fuse)
-      return fuse.search(event.target.value)
+      const results = fuse.search(event.target.value)
+      const exactResult = results.find(result => result.score === 0)
+      return exactResult ? [exactResult.item] : results.map(result => result.item)
     }
 
     const filteredShipments = search([

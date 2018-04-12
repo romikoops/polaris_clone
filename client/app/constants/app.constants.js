@@ -74,7 +74,6 @@ export const tooltips = {
 
 // Tool tips menu admin
 export const adminMenutooltip = {
-  dashboard: 'Get a quick glance of shipments, hubs, sailing schedules and clients',
   shipments:
     'Effectively manage your shipments. Get an overview of requested, open & finished shipments. In addition, it is possible to accept, edit & decline shipments',
   hubs:
@@ -92,6 +91,7 @@ export const adminMenutooltip = {
 
 // Dashboard
 export const adminDashboard = {
+  dashboard: 'Get a quick glance of shipments, hubs, sailing schedules and clients',
   requested:
     'Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment',
   open:

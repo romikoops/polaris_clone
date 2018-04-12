@@ -8,8 +8,6 @@ Rails.application.routes.draw do
     registrations: 'users_devise_token_auth/registrations',
   }, skip: [:omniauth_callbacks]
   
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
   resources :subdomain, only: [:show] do
     namespace :admin do
       resources :shipments do
@@ -23,13 +21,15 @@ Rails.application.routes.draw do
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
       post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
+      post "trucking/:id/edit", to: "trucking#edit"
       
       resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
       end
       post "hubs/:hub_id/delete", to: "hubs#delete"
+      post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
-
+      get  "hubs/sheet/download",  to: "hubs#download_hubs"
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create, :destroy]
       post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
+      get  "pricings/download",  to: "pricings#download_pricings"
       post "pricings/update/:id", to: "pricings#update_price"
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
@@ -45,7 +46,8 @@ Rails.application.routes.draw do
       get "itineraries/:id/layovers", to: "schedules#layovers"
       get "itineraries/:id/stops", to: "itineraries#stops"
       resources :vehicle_types, only: [:index]
-      resources :clients, only: [:index, :show, :create]
+      resources :clients, only: [:index, :show, :create, :destroy]
+
 
       resources :pricings, only: [:index]
       post "pricings/ocean_lcl_pricings/process_csv", to: "pricings#overwrite_main_lcl_carriage", as: :main_lcl_carriage_pricings_overwrite
@@ -61,12 +63,14 @@ Rails.application.routes.draw do
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
       post "service_charges/:id/edit", to: "service_charges#edit"
+      get  "service_charges/download",  to: "service_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
       post "shipments/:id/edit_price", to: "shipments#edit_price"
        post "shipments/:id/edit_time", to: "shipments#edit_time"
       resources :schedules, only: [:index, :show, :destroy]
+      post "schedules/overwrite/:id", to: "schedules#schedules_by_itinerary"
       post "train_schedules/process_csv", 
         to: "schedules#overwrite_trains", 
         as: :schedules_train_overwrite
@@ -78,7 +82,7 @@ Rails.application.routes.draw do
         as: :schedules_air_overwrite
       post 'schedules/auto_generate', 
         to: 'schedules#auto_generate_schedules'
-      
+      post  "schedules/download",  to: "schedules#download_schedules"
       get 'hubs',      to: 'hubs#index'
       get 'dashboard', to: 'dashboard#index'
     end
@@ -92,7 +96,7 @@ Rails.application.routes.draw do
       resources :locations, controller: :user_locations, only: [:index, :create, :update, :destroy]
       post "locations/:location_id/edit", to: "user_locations#edit"
     end
-
+    post "notes/fetch", to: "notes#get_notes"
     resources :shipments, only: [:index, :new, :show, :create] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking
@@ -136,6 +140,7 @@ Rails.application.routes.draw do
     post 'messaging/send' => "notifications#send_message"
 
     post 'messaging/data' => "notifications#shipment_data"
+    post 'messaging/shipments' => "notifications#shipments_data"
     post 'messaging/mark' => "notifications#mark_as_read"
 end
 

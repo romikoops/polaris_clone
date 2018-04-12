@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {
-  Switch,
-  Route,
-  withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import reactTriggerChange from 'react-trigger-change'
 import PropTypes from '../../prop-types'
-import {
-  AdminClientsIndex,
-  AdminClientView } from './'
+import { AdminClientsIndex, AdminClientView } from './'
 import styles from './Admin.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { adminActions } from '../../actions'
@@ -384,26 +379,17 @@ class AdminClients extends Component {
     )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-
-        <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+        >
           <div className="flex-100 layout-row layout-align-space-between-center">
-            <div className="flex-none layout-row" >
-              <div className="flex-none" >
-                <TextHeading
-                  theme={theme}
-                  size={1}
-                  text="Clients"
-                />
+            <div className="flex-none layout-row layout-align-start-center">
+              <div className="flex-none">
+                <TextHeading theme={theme} size={1} text="Clients" />
               </div>
-              <Tooltip
-                icon="fa-info-circle"
-                theme={theme}
-                text={clientTip.change}
-                toolText
-              />
+              <Tooltip icon="fa-info-circle" theme={theme} toolText={clientTip.change} />
             </div>
-            { newButton }
+            {newButton}
           </div>
         </div>
         {newClientBool ? newClientBox : ''}
@@ -432,6 +418,7 @@ class AdminClients extends Component {
                 hubs={hubs}
                 handleClientAction={this.handleClientAction}
                 clientData={client}
+                adminDispatch={adminDispatch}
                 {...props}
               />
             )}

@@ -331,6 +331,48 @@ export default function admin (state = {}, action) {
         loading: false
       }
     }
+    case adminConstants.FINISHED_SHIPMENT_SUCCESS: {
+      const req =
+        state.shipments && state.shipments.requested
+          ? state.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const dashReq =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.requested
+          ? state.dashboard.shipments.requested.filter(x => x.id !== action.payload.id)
+          : []
+      const finished = state.shipments && state.shipments.finished ? state.shipments.finished : []
+      const dashFinished =
+        state.dashboard && state.dashboard.shipments && state.dashboard.shipments.finished
+          ? state.dashboard.shipments.finished
+          : []
+      finished.push(action.payload)
+      dashFinished.push(action.payload)
+      const shipment = state.shipment && state.shipment.shipment ? state.shipment.shipment : {}
+      if (shipment) {
+        shipment.status = 'finished'
+      }
+      return {
+        ...state,
+        dashboard: {
+          ...state.dashboard,
+          shipments: {
+            ...state.dashboard.shipments,
+            open: dashFinished,
+            requested: dashReq
+          }
+        },
+        shipments: {
+          ...state.shipments,
+          finished,
+          requested: req
+        },
+        shipment: {
+          ...state.shipment,
+          shipment
+        },
+        loading: false
+      }
+    }
     case adminConstants.CONFIRM_SHIPMENT_FAILURE: {
       const errConfShip = merge({}, state, {
         error: { shipments: action.error },
@@ -396,24 +438,53 @@ export default function admin (state = {}, action) {
     }
 
     case adminConstants.GENERATE_SCHEDULES_REQUEST: {
-      const reqGenSched = merge({}, state, {
+      return {
+        ...state,
         loading: true
-      })
-      return reqGenSched
+      }
     }
     case adminConstants.GENERATE_SCHEDULES_SUCCESS: {
-      const succGenSched = merge({}, state, {
+      return {
+        ...state,
         schedules: action.payload.data,
         loading: false
-      })
-      return succGenSched
+      }
     }
     case adminConstants.GENERATE_SCHEDULES_FAILURE: {
-      const errGenSched = merge({}, state, {
+      return {
         error: { schedules: action.error },
         loading: false
-      })
-      return errGenSched
+      }
+    }
+
+    case adminConstants.EDIT_TRUCKING_PRICE_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case adminConstants.EDIT_TRUCKING_PRICE_SUCCESS: {
+      const otps = state.truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id === action.payload.id)[0]
+      const tps = state.truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id !== action.payload.id)
+      otps.truckingPricing = action.payload
+      tps.push(otps)
+      return {
+        ...state,
+        truckingDetail: {
+          ...state.truckingDetail,
+          truckingPricings: tps
+        },
+        loading: false
+      }
+    }
+    case adminConstants.EDIT_TRUCKING_PRICE_FAILURE: {
+      return {
+        ...state,
+        error: { schedules: action.error },
+        loading: false
+      }
     }
 
     case adminConstants.GET_TRUCKING_REQUEST: {
@@ -1002,6 +1073,27 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+    case adminConstants.UPLOAD_HUB_IMAGE_REQUEST:
+      return state
+    // eslint-disable-next-line no-case-declarations
+    case adminConstants.UPLOAD_HUB_IMAGE_SUCCESS:
+      const hubsArr = state.hubs.filter(h => h.id !== action.payload.id)
+      hubsArr.push(action.payload)
+      return {
+        ...state,
+        hub: {
+          ...this.state.hub,
+          hub: action.payload
+        },
+        hubs: hubsArr,
+        loading: false
+      }
+    case adminConstants.UPLOAD_HUB_IMAGE_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
 
     case adminConstants.LOAD_ITINERARY_SCHEDULES_REQUEST:
       return state
@@ -1015,6 +1107,23 @@ export default function admin (state = {}, action) {
       return {
         ...state,
         error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.DELETE_CLIENT_REQUEST:
+      return state
+    case adminConstants.DELETE_CLIENT_SUCCESS: {
+      const clients = state.clients.filter(client => client.id !== action.payload)
+      return {
+        ...state,
+        clients,
+        loading: false
+      }
+    }
+    case adminConstants.DELETE_CLIENT_FAILURE:
+      return {
+        ...state,
+        error: { clients: action.error },
         loading: false
       }
 

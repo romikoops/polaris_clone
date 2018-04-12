@@ -10,6 +10,7 @@ import { TextHeading } from '../TextHeading/TextHeading'
 import { gradientTextGenerator } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
 import { CargoItemGroup } from '../Cargo/Item/Group'
+import CargoItemGroupAggregated from '../Cargo/Item/Group/Aggregated'
 import { CargoContainerGroup } from '../Cargo/Container/Group'
 import DocumentsForm from '../Documents/Form'
 import Contact from '../Contact/Contact'
@@ -122,11 +123,8 @@ export class BookingConfirmation extends Component {
       }
     })
     Object.keys(cargoGroups).forEach((k) => {
-      resultArray.push(<CargoContainerGroup
-        group={cargoGroups[k]}
-        theme={theme}
-        hsCodes={hsCodes}
-      />)
+      resultArray
+        .push(<CargoContainerGroup group={cargoGroups[k]} theme={theme} hsCodes={hsCodes} />)
     })
     return resultArray
   }
@@ -144,6 +142,7 @@ export class BookingConfirmation extends Component {
       notifyees,
       cargoItems,
       containers,
+      aggregatedCargo,
       documents,
       cargoItemTypes
     } = shipmentData
@@ -151,19 +150,30 @@ export class BookingConfirmation extends Component {
     const { acceptTerms, collapser } = this.state
     const hubsObj = { startHub: locations.startHub, endHub: locations.endHub }
 
-    let cargoView
-
+    const defaultTerms = [
+      'You verify that all the information provided above is true',
+      `You agree to our Terms and Conditions and the General Conditions of the
+                          Nordic Association of Freight Forwarders (NSAB) and those of 
+                          {tenant.name}`,
+      'You agree to pay the price of the shipment as stated above upon arrival of the invoice'
+    ]
+    const terms = tenant.scope.terms.length > 0 ? tenant.scope.terms : defaultTerms
     const textStyle = theme
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
     const createdDate = shipment
       ? moment(shipment.updated_at).format('DD-MM-YYYY | HH:mm A')
       : moment().format('DD-MM-YYYY | HH:mm A')
+
+    let cargoView = ''
     if (containers) {
       cargoView = this.prepContainerGroups(containers)
     }
     if (cargoItems.length > 0) {
       cargoView = this.prepCargoItemGroups(cargoItems)
+    }
+    if (aggregatedCargo) {
+      cargoView = <CargoItemGroupAggregated group={aggregatedCargo} />
     }
 
     const shipperAndConsignee = [
@@ -212,6 +222,17 @@ export class BookingConfirmation extends Component {
 
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const docView = []
+    const docChecker = {
+      packing_sheet: false,
+      commercial_invoice: false,
+      customs_declaration: false,
+      customs_value_declaration: false,
+      eori: false,
+      certificate_of_origin: false,
+      dangerous_goods: false,
+      bill_of_lading: false,
+      invoice: false
+    }
     if (documents) {
       documents.forEach((doc) => {
         docView.push(<div className="flex-50 layout-row" style={{ padding: '10px' }}>
@@ -227,6 +248,19 @@ export class BookingConfirmation extends Component {
         </div>)
       })
     }
+    Object.keys(docChecker).forEach((key) => {
+      if (!docChecker[key]) {
+        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+          <div className="flex-none layout-row layout-align-center-center">
+            <i className="flex-none fa fa-ban" />
+          </div>
+          <div className="flex layout-align-start-center layout-row">
+            <p className="flex-none">{`${documentTypes[key]}: Not Uploaded`}</p>
+          </div>
+        </div>)
+      }
+    })
+    const termBullets = terms.map(t => <li> {t}</li>)
     const themeTitled =
       theme && theme.colors
         ? { background: theme.colors.primary, color: 'white' }
@@ -431,7 +465,6 @@ export class BookingConfirmation extends Component {
                     />
                   </div>
                 </div>
-
               </div>
             </div>
           </div>
@@ -586,23 +619,12 @@ export class BookingConfirmation extends Component {
                       <TextHeading theme={theme} text="By checking this box" size={4} />
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start">
-                      <ul className={`flex-100 ${styles.terms_list}`}>
-                        <li>you verify that all the information provided above is true</li>
-                        <li>
-                          you agree to our Terms and Conditions and the General Conditions of the
-                          Nordic Association of Freight Forwarders (NSAB) and those of{' '}
-                          {this.props.tenant.name}
-                        </li>
-                        <li>
-                          you agree to pay the price of the shipment as stated above upon arrival of
-                          the invoice
-                        </li>
-                      </ul>
+                      <ul className={`flex-100 ${styles.terms_list}`}>{termBullets}</ul>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="flex-33 layout-row layout-align-end-end height_100">
+              <div className="flex-33 layout-row layout-align-end-end height_100" style={{ height: '150px', marginBottom: '15px' }}>
                 {acceptTerms ? acceptedBtn : nonAcceptedBtn}
               </div>
             </div>

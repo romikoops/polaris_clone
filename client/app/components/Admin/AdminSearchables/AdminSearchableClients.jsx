@@ -111,7 +111,7 @@ export class AdminSearchableClients extends Component {
                 <div className="flex-none" >
                   <TextHeading theme={theme} size={1} text={title || 'Clients'} />
                 </div>
-                { icon ? <Tooltip theme={theme} icon={icon} text={tooltip} toolText /> : '' }
+                { icon ? <Tooltip theme={theme} icon={icon} toolText={tooltip} /> : '' }
               </div>
             </div>
           </div>

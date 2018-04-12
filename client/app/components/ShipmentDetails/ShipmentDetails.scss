@@ -16,6 +16,14 @@
   .cargo_sec {
     margin-top: 30px;
     min-height: 187px;
+    .toggle_aggregated_sec {
+      height: 60px;
+      border-top: 3px solid rgba(0, 0, 0, 0.2);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+      h3 {
+        font-weight: normal;      
+      }
+    }
   }
   .date_sec {
     min-height: 160px;
@@ -62,4 +70,16 @@
     min-height: 550px;
     padding-top: 50px;
   }
+  .open_notes {
+    height: 250px;
+  }
+  .closed_notes {
+    height: 0;
+  }
+  .note_box {
+    overflow: hidden;
+    transition: all 1250ms ease-in-out;
+  }
+
+
 }

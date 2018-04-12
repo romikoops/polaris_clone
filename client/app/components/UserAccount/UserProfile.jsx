@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Select from 'react-select'
 import PropTypes from '../../prop-types'
 import styles from './UserAccount.scss'
+import defaults from '../../styles/default_classes.scss'
 import { UserLocations } from './'
 import { AdminClientTile } from '../Admin'
 import { RoundButton } from '../RoundButton/RoundButton'
@@ -327,18 +328,7 @@ export class UserProfile extends Component {
     const textStyle = theme && theme.colors
       ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
       : { color: 'black' }
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="New"
-          active
-          handleNext={this.toggleNewAlias}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
+
     const newAliasBox = (
       <div
         className={`flex-none layout-row layout-wrap layout-align-center-center ${
@@ -485,15 +475,15 @@ export class UserProfile extends Component {
               )}
             </div>
             <div className="flex-50 layout-row layout-align-end-center layout-wrap">
-              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
-                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
+                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
                   <h3 className="flex-none"> Currency Settings:</h3>
                 </div>
-                <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+                <div className="flex-100 layout-row layout-align-end-center layout-wrap">
                   <p className="flex-none">Current Selection: {user.currency}</p>
                 </div>
               </div>
-              <div className="flex-75 layout-row layout-align-start-center layout-wrap">
+              <div className="flex-75 layout-row layout-align-end-center layout-wrap">
                 <StyledSelect
                   name="currency"
                   className={`${styles.select}`}
@@ -502,7 +492,7 @@ export class UserProfile extends Component {
                   onChange={this.setCurrency}
                   clearable={false}
                 />
-                <div className={`flex-100 layout-row layout-align-start-center ${styles.btn_row}`}>
+                <div className={`flex-100 layout-row layout-align-end-center ${styles.btn_row} ${styles.btn_alignment}`}>
                   <RoundButton
                     theme={theme}
                     size="small"
@@ -523,9 +513,27 @@ export class UserProfile extends Component {
         >
           <div className="flex-100 layout-row layout-align-space-between-center sec_header">
             <p className="sec_header_text flex-none"> Aliases </p>
-            {newButton}
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+            <div
+              key="addNewAliasButton"
+              className={`${defaults.pointy} ${styles.margin} flex-33`}
+              onClick={this.toggleNewAlias}
+            >
+              <div
+                className={`${styles['location-box']} ${
+                  styles['new-address']
+                } layout-row layout-align-start-center layout-wrap`}
+              >
+                <div className="layout-row layout-align-center flex-100">
+                  <div className={`${styles['plus-icon']}`} />
+                </div>
+
+                <div className="layout-row layout-align-center flex-100">
+                  <h3>Add Alias</h3>
+                </div>
+              </div>
+            </div>
             {contactArr}
           </div>
         </div>

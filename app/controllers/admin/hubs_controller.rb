@@ -2,6 +2,7 @@ class Admin::HubsController < ApplicationController
   include ExcelTools
   include ItineraryTools
   include Response
+  include DocumentTools
   before_action :require_login_and_role_is_admin
 
   
@@ -13,7 +14,7 @@ class Admin::HubsController < ApplicationController
   end
   def create
     new_loc = Location.create_and_geocode(params[:location].as_json)
-    new_nexus = Location.from_short_name("#{params[:location][:city]}, #{params[:location][:country]}", 'nexus')
+    new_nexus = Location.from_short_name("#{params[:location][:city]} ,#{params[:location][:country]}", 'nexus')
     hub = params[:hub].as_json
     hub["tenant_id"] = current_user.tenant_id
     hub["location_id"] = new_loc.id
@@ -32,6 +33,12 @@ class Admin::HubsController < ApplicationController
     resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
     response_handler(resp)
   end
+
+  def download_hubs
+    url = write_hubs_to_sheet(tenant_id: current_user.tenant_id)
+    response_handler({url: url, key: 'hubs'})
+  end
+
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!
@@ -41,6 +48,21 @@ class Admin::HubsController < ApplicationController
     hub = Hub.find(params[:hub_id])
     hub.destroy!
     response_handler({id: params[:hub_id]})
+  end
+  def update_image
+    hub = Hub.find(params[:hub_id])
+    file = params[:file]
+    s3 = Aws::S3::Client.new(
+        access_key_id: ENV['AWS_KEY'],
+        secret_access_key: ENV['AWS_SECRET'],
+        region: "eu-central-1"
+      )
+     objKey = 'images/' + hub.tenant_id.to_s + "/" + file.original_filename
+    awsurl = "https://assets.itsmycargo.com/" + objKey
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: file.content_type, acl: 'public-read')
+    hub.photo = awsurl
+    hub.save!
+    response_handler(hub)
   end
   def update
     hub = Hub.find(params[:id])

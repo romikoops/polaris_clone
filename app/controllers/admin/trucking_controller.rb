@@ -17,6 +17,14 @@ class Admin::TruckingController < ApplicationController
     response_handler(hub: hub, truckingPricings: results)
   end
 
+  def edit
+    tp = TruckingPricing.find(params[:id])
+    ntp = params[:pricing].as_json
+    ntp.delete("id")
+    tp.update_attributes(ntp)
+    response_handler(tp)
+  end
+
   def create
     data = params[:obj][:data].as_json
     meta = params[:obj][:meta].as_json

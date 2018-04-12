@@ -70,4 +70,26 @@ class NotificationsController < ApplicationController
     resp = {shipment: @shipment, cargoItems: @cargo_items, containers: @containers, contacts: @contacts, documents: @documents, schedules: @schedules, hubs: hubs}
     response_handler(resp)
   end
+  def shipments_data
+    results = {
+      requested: [],
+      open: [],
+      finished: [],
+      ignored: []
+    }
+    params[:keys].each do |k|
+      shipment = Shipment.find_by_imc_reference(k)
+      case shipment.status
+      when "requested"
+        results[:requested] << shipment
+      when "accepted" || "in_progress"
+        results[:open] << shipment
+      when "declined" || "finished"
+        results[:finished] << shipment
+      when "ignored"
+        results[:ignored] << shipment
+      end
+    end
+    response_handler(results)
+  end
 end

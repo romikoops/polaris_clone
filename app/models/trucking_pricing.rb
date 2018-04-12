@@ -10,50 +10,54 @@ class TruckingPricing < ApplicationRecord
 
   # Class methods
   def self.update_data
-    TruckingPricing.all.each do |tp|
-      hub_id = tp.hub_id
-      if hub_id
-        hub = Hub.find(hub_id)
-        if hub
-          t = hub.tenant
-          tp.tenant_id = t.id
-        else
-          next
-        end
-      else
-        next
-      end
-      # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
-      tp.export = tp.import if tp.export == {"table" => []}
-      tp.import = tp.export if tp.import == {"table" => []}
-      # tp.truck_type =  "default" if tp.load_type != 'container'
-      tp.truck_type = "chassis" if tp.truck_type == "chassi"
-      # if tp.export
-      #   tp.export["table"].each do |cell|
-      #     if cell && cell["fees"]["congestion"]
-      #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-      #       # cell["fees"].delete("type")
-      #       # cell["fees"].delete("direction")
-      #     end
-      #   end
-      # end
-      # if tp.import
-      #   tp.import["table"].each do |cell|
-      #     if cell && cell["fees"]["congestion"]
-      #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
-      #       # cell["fees"].delete("type")
-      #       # cell["fees"].delete("direction")
-      #     end
-      #   end
-      # end
-      if tp.load_meterage
-        tp.load_meterage["ratio"] = 1950
-        tp.cbm_ratio = 280
-      else
-        tp.cbm_ratio = 250
-      end
-      tp.save!
+    HubTrucking.where(hub_id: 258).each do |ht|
+      ht.hub_id = 411
+      ht.save!
     end
+    # TruckingPricing.where(.each do |tp|
+    #   hub_id = tp.hub_id
+    #   if hub_id
+    #     hub = Hub.find(hub_id)
+    #     if hub
+    #       t = hub.tenant
+    #       tp.tenant_id = t.id
+    #     else
+    #       next
+    #     end
+    #   else
+    #     next
+    #   end
+    #   # tp.load_type = tp.load_type == 'fcl' ? 'container' : 'cargo_item'
+    #   tp.export = tp.import if tp.export == {"table" => []}
+    #   tp.import = tp.export if tp.import == {"table" => []}
+    #   # tp.truck_type =  "default" if tp.load_type != 'container'
+    #   tp.truck_type = "chassis" if tp.truck_type == "chassi"
+    #   # if tp.export
+    #   #   tp.export["table"].each do |cell|
+    #   #     if cell && cell["fees"]["congestion"]
+    #   #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
+    #   #       # cell["fees"].delete("type")
+    #   #       # cell["fees"].delete("direction")
+    #   #     end
+    #   #   end
+    #   # end
+    #   # if tp.import
+    #   #   tp.import["table"].each do |cell|
+    #   #     if cell && cell["fees"]["congestion"]
+    #   #       cell["fees"]["congestion"]["rate_basis"] = "PER_SHIPMENT"
+    #   #       # cell["fees"].delete("type")
+    #   #       # cell["fees"].delete("direction")
+    #   #     end
+    #   #   end
+    #   # end
+    #   if tp.load_meterage
+    #     tp.load_meterage["ratio"] = 1950
+    #     tp.cbm_ratio = 280
+    #   else
+    #     tp.cbm_ratio = 250
+    #   end
+    #   tp.save!
+    # end
   end
   def self.copy_to_tenant(from_tenant, to_tenant)
     ft = Tenant.find_by_subdomain(from_tenant)
@@ -61,8 +65,9 @@ class TruckingPricing < ApplicationRecord
     ft.trucking_pricings.each do |tp|
       temp_tp = tp.as_json
       temp_tp.delete("id")
-      hub_id = tp.hub_id
-      tp["tenant_id"] = tt.id
+      hub_id = Hub.find_by(name: Hub.find(tp.hub_id).name, tenant_id: tt.id).id
+
+      temp_tp["tenant_id"] = tt.id
       ntp = TruckingPricing.create!(temp_tp)
       hts = tp.hub_truckings
       nhts = hts.map do |ht| 
@@ -71,6 +76,19 @@ class TruckingPricing < ApplicationRecord
         temp_ht["hub_id"] = hub_id
         temp_ht["trucking_pricing_id"] = ntp.id
         HubTrucking.create!(temp_ht)
+      end
+    end
+  end
+  def self.fix_hub_truckings(subd)
+    t = Tenant.find_by_subdomain(subd)
+    t.trucking_pricings.map do |tp|
+      hub = Hub.find(tp.hub_id)
+      if hub.tenant_id != t.id
+        new_hub = Hub.find_by(name: hub.name, tenant_id: t.id)
+        tp.hub_truckings.each do |ht|
+          ht.hub_id = new_hub.id
+          ht.save!
+        end
       end
     end
   end

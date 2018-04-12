@@ -4,6 +4,8 @@ import PropTypes from '../../prop-types'
 import { AdminClientTile, AdminPriceEditor } from './'
 import styles from './Admin.scss'
 import { RouteHubBox } from '../RouteHubBox/RouteHubBox'
+import AdminPromptConfirm from './Prompt/Confirm'
+
 import {
   CONTAINER_DESCRIPTIONS,
   fclChargeGlossary,
@@ -62,12 +64,32 @@ export class AdminPricingRouteView extends Component {
   closeClientView () {
     this.setState({ selectedClient: false })
   }
+  deletePricing () {
+    const { adminActions } = this.props
+    const { pricingToDelete } = this.state
+    adminActions.deletePricing(pricingToDelete)
+    this.closeConfirm()
+  }
+  confirmDelete (pricing) {
+    this.setState({
+      confirm: true,
+      pricingToDelete: pricing
+    })
+  }
+  closeConfirm () {
+    this.setState({ confirm: false })
+  }
   render () {
     const {
       theme, pricingData, itineraryPricings, clients, adminActions
     } = this.props
     const {
-      editorBool, editTransport, editPricing, editHubRoute
+      editorBool,
+      editTransport,
+      editPricing,
+      editHubRoute,
+      confirm,
+      pricingToDelete
     } = this.state
     const { selectedClient } = this.state
     console.log(this.props)
@@ -92,11 +114,7 @@ export class AdminPricingRouteView extends Component {
     const textStyle = {
       background:
         theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${
-            theme.colors.primary
-          },${
-            theme.colors.secondary
-          })`
+          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
     const RPBInner = ({ hubRoute, pricing, transport }) => {
@@ -157,11 +175,7 @@ export class AdminPricingRouteView extends Component {
             </div>
             <div
               className="flex-5 layout-row layout-align-center-center"
-              onClick={() => {
-                if (window.confirm('Are you sure you want to delete this pricing?')) {
-                  adminActions.deletePricing(pricing)
-                }
-              }}
+              onClick={() => this.confirmDelete(pricing)}
             >
               <i className="flex-none fa fa-trash pointy" />
             </div>
@@ -194,7 +208,17 @@ export class AdminPricingRouteView extends Component {
         </div>
       )
     }
-
+    const confimPrompt = confirm ? (
+      <AdminPromptConfirm
+        theme={theme}
+        heading="Are you sure?"
+        text="This will delete the pricing immediately and all related data"
+        confirm={() => this.deletePricing(pricingToDelete)}
+        deny={() => this.closeConfirm()}
+      />
+    ) : (
+      ''
+    )
     const RoutePricingBox = ({
       routeData, hrArr, rPriceObj, pricingsObj, transports, userId
     }) => {
@@ -205,13 +229,14 @@ export class AdminPricingRouteView extends Component {
           if (rPriceObj[gKey]) {
             const pricing = pricingsObj[rPriceObj[gKey][userId]]
             if (pricing) {
-              innerInner.push(<RPBInner
-                key={v4()}
-                hubRoute={hr}
-                transport={tr}
-                pricing={pricing}
-                theme={theme}
-              />)
+              innerInner
+                .push(<RPBInner
+                  key={v4()}
+                  hubRoute={hr}
+                  transport={tr}
+                  pricing={pricing}
+                  theme={theme}
+                />)
             }
           }
         })
@@ -315,6 +340,7 @@ export class AdminPricingRouteView extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
             {selectedClient ? clientPriceView : clientsView}
           </div>
+          {confimPrompt}
         </div>
         {editorBool ? (
           <AdminPriceEditor

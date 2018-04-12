@@ -25,13 +25,15 @@ export default function GmapsLoader (props) {
             has_pre_carriage={props.has_pre_carriage}
             origin={props.origin}
             destination={props.destination}
-            shipment={props.shipment}
+            shipmentData={props.shipmentData}
             shipmentDispatch={props.shipmentDispatch}
             nextStageAttempt={props.nextStageAttempt}
             handleAddressChange={props.handleAddressChange}
             routeIds={props.routeIds}
+            setNotesIds={(e, t) => props.setNotesIds(e, t)}
             handleSelectLocation={props.handleSelectLocation}
             handleCarriageNexuses={props.handleCarriageNexuses}
+            scope={props.scope}
           />
         )
       }
@@ -53,25 +55,28 @@ GmapsLoader.propTypes = {
   prevRequest: PropTypes.shape({
     shipment: PropTypes.object
   }),
+  setNotesIds: PropTypes.func,
   shipmentDispatch: PropTypes.shape({
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
   }).isRequired,
   setTargetAddress: PropTypes.func.isRequired,
   handleChangeCarriage: PropTypes.func.isRequired,
-  shipment: PropTypes.shipment,
+  shipmentData: PropTypes.shipmentData,
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired,
-  handleCarriageNexuses: PropTypes.func.isRequired
+  handleCarriageNexuses: PropTypes.func.isRequired,
+  scope: PropTypes.scope.isRequired
 }
 
 GmapsLoader.defaultProps = {
   theme: null,
   routeIds: [],
   prevRequest: null,
-  shipment: null,
+  shipmentData: null,
+  setNotesIds: null,
   has_on_carriage: true,
   has_pre_carriage: true
 }

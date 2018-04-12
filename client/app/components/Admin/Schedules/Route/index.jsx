@@ -4,16 +4,21 @@ import Select from 'react-select'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
 import styled from 'styled-components'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { documentActions } from '../../../../actions'
+import { AdminUploadsSuccess } from './../../Uploads/Success'
 import FileUploader from '../../../FileUploader/FileUploader'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import styles from '../../Admin.scss'
 import { AdminTripPanel } from '../../AdminTripPanel'
 import AdminScheduleGenerator from '../../AdminScheduleGenerator'
 import { TextHeading } from '../../../TextHeading/TextHeading'
+import DocumentsDownloader from '../../../Documents/Downloader'
 // import { adminSchedulesRoute as schedTip } from '../../../../constants'
 import '../../../../styles/select-css-custom.css'
 
-export class AdminSchedulesRoute extends Component {
+class AdminSchedulesRoute extends Component {
   static dynamicSort (property) {
     let sortOrder = 1
     let prop
@@ -45,6 +50,7 @@ export class AdminSchedulesRoute extends Component {
     this.setSortFilter = this.setSortFilter.bind(this)
     this.toggleShowPanel = this.toggleShowPanel.bind(this)
     this.getItinerariesForHub = this.getItinerariesForHub.bind(this)
+    this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
   }
 
   setSortFilter (sorter) {
@@ -66,6 +72,7 @@ export class AdminSchedulesRoute extends Component {
       })
     }
   }
+
   getItinerary (sched) {
     return this.props.scheduleData.itineraries.filter(x => x.id === sched.itinerary_id)[0]
   }
@@ -81,6 +88,10 @@ export class AdminSchedulesRoute extends Component {
   toggleView () {
     this.setState({ showList: !this.state.showList })
   }
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
+  }
   toggleShowPanel (id) {
     if (!this.state.panelViewer[id]) {
       this.props.adminDispatch.getLayovers(id, 'schedules')
@@ -94,7 +105,13 @@ export class AdminSchedulesRoute extends Component {
   }
   render () {
     const {
-      theme, hubs, scheduleData, adminDispatch, limit
+      theme,
+      hubs,
+      scheduleData,
+      adminDispatch,
+      limit,
+      document,
+      documentDispatch
     } = this.props
     const {
       filters, sortFilter, panelViewer, showList
@@ -107,6 +124,15 @@ export class AdminSchedulesRoute extends Component {
       { value: 'start_date', label: 'ETA' },
       { value: 'end_date', label: 'ETD' }
     ]
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={this.closeSuccessDialog}
+      />
+    ) : (
+      ''
+    )
     const { itinerary, schedules, itineraryLayovers } = scheduleData
     const tripArr = []
     const slimit = limit || 10
@@ -132,7 +158,7 @@ export class AdminSchedulesRoute extends Component {
         />)
       }
     })
-    const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
+    // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -147,7 +173,12 @@ export class AdminSchedulesRoute extends Component {
             }`}
           >
             <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
-            <FileUploader theme={theme} url={uploadUrl} type="xlsx" text="Train Schedules .xlsx" />
+            <FileUploader
+              theme={theme}
+              dispatchFn={file => documentDispatch.uploadItinerarySchedules(file, itinerary.id)}
+              type="xlsx"
+              text="Train Schedules .xlsx"
+            />
           </div>
         </div>
         <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
@@ -205,12 +236,14 @@ export class AdminSchedulesRoute extends Component {
     )
     const newButton = (
       <div
-        data-for="tooltipId"
-        // data-tip={schedTip.upload_excel}
+        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
+          styles.sec_upload
+        }`}
       >
+        <p className="flex-100">Create/ Upload Schedules</p>
         <RoundButton
           theme={theme}
-          text="New Upload"
+          text="New"
           active
           size="small"
           iconClass="fa-plus"
@@ -219,12 +252,28 @@ export class AdminSchedulesRoute extends Component {
         <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
       </div>
     )
+    const download = (
+      <div
+        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
+          styles.sec_upload
+        }`}
+      >
+        <p className="flex-100">Download Schedules Sheet</p>
+        <DocumentsDownloader
+          theme={theme}
+          target="schedules"
+          options={{ itinerary_id: itinerary.id }}
+        />
+      </div>
+    )
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+        {uploadStatus}
         <div
           className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
         >
           <TextHeading theme={theme} size={1} text="Schedules" />
+          {download}
           {showList ? newButton : backButton}
         </div>
         {showList ? listView : genView}
@@ -246,14 +295,30 @@ AdminSchedulesRoute.propTypes = {
   }),
   itineraries: PropTypes.objectOf(PropTypes.any).isRequired,
   adminDispatch: PropTypes.func.isRequired,
-  limit: PropTypes.number
+  limit: PropTypes.number,
+  document: PropTypes.objectOf(PropTypes.any),
+  documentDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 AdminSchedulesRoute.defaultProps = {
   theme: null,
   hubs: [],
   scheduleData: null,
-  limit: 0
+  limit: 0,
+  document: {},
+  documentDispatch: {}
+}
+function mapStateToProps (state) {
+  const { document } = state
+
+  return {
+    document
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    documentDispatch: bindActionCreators(documentActions, dispatch)
+  }
 }
 
-export default AdminSchedulesRoute
+export default connect(mapStateToProps, mapDispatchToProps)(AdminSchedulesRoute)

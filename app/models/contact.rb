@@ -75,6 +75,7 @@ class Contact < ApplicationRecord
   end
 
   def full_name_and_company_and_address
-    "#{first_name} #{last_name}\n#{company_name}\n#{location.geocoded_address}"
+    address_if_exists = location.nil? ? "" : "\n#{location.geocoded_address}" 
+    "#{first_name} #{last_name} #{company_name}#{address_if_exists}"
   end
 end

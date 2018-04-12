@@ -4,7 +4,7 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role, :sync_uid
+  before_validation :set_default_role, :sync_uid, :set_default_currency
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
@@ -131,6 +131,10 @@ class User < ApplicationRecord
 
   def set_default_role
     self.role ||= Role.find_by_name('shipper')
+  end
+
+  def set_default_currency
+   self.currency = self.tenant.currency
   end
 
   def sync_uid

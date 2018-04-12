@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import * as Scroll from 'react-scroll'
+import Toggle from 'react-toggle'
 // import Select from 'react-select'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 // import styled from 'styled-components'
@@ -16,30 +17,37 @@ import { Tooltip } from '../Tooltip/Tooltip'
 import { ShipmentLocationBox } from '../ShipmentLocationBox/ShipmentLocationBox'
 import { ShipmentContainers } from '../ShipmentContainers/ShipmentContainers'
 import { ShipmentCargoItems } from '../ShipmentCargoItems/ShipmentCargoItems'
+import ShipmentAggregatedCargo from '../ShipmentAggregatedCargo/ShipmentAggregatedCargo'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { FlashMessages } from '../FlashMessages/FlashMessages'
 import { IncotermRow } from '../Incoterm/Row'
 import { IncotermBox } from '../Incoterm/Box'
-import { isEmpty } from '../../helpers/objectTools'
+import { isEmpty, camelize } from '../../helpers'
 import { Checkbox } from '../Checkbox/Checkbox'
+import NotesRow from '../Notes/Row'
 import '../../styles/select-css-custom.css'
 import getModals from './getModals'
+import toggleCSS from './toggleCSS'
+import getOffersBtnIsActive, {
+  noDangerousGoodsCondition, stackableGoodsCondition
+} from './getOffersBtnIsActive'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
     Scroll.scroller.scrollTo(target, {
       duration: 800,
       smooth: true,
-      offset: -50
+      offset: -180
     })
   }
-  static errorsExist (errorsObjects) {
-    errorsObjects.some(errorsObj => Object.values(errorsObj).some(error => error))
+  static errorsAt (errorsObjects) {
+    return errorsObjects.findIndex(errorsObj => Object.values(errorsObj).some(error => error))
   }
   constructor (props) {
     super(props)
     this.state = {
       origin: {},
+      noteIds: {},
       destination: {},
       containers: [
         {
@@ -62,6 +70,10 @@ export class ShipmentDetails extends Component {
           stackable: true
         }
       ],
+      aggregatedCargo: {
+        weight: 0,
+        volume: 0
+      },
       routes: {},
       containersErrors: [
         {
@@ -78,13 +90,24 @@ export class ShipmentDetails extends Component {
           quantity: false
         }
       ],
+      aggregatedCargoErrors: {
+        weight: true,
+        volume: true
+      },
+      aggregated: false,
       nextStageAttempt: false,
       has_on_carriage: false,
       has_pre_carriage: false,
-      shipment: props.shipmentData ? props.shipmentData.shipment : {},
+      shipment: props.shipmentData ? props.shipmentData.shipment : null,
       allNexuses: props.shipmentData ? props.shipmentData.allNexuses : {},
       routeSet: false,
-      noDangerousGoodsConfirmed: false
+      noDangerousGoodsConfirmed: false,
+      stackableGoodsConfirmed: false,
+      mandatoryCarriageIsPreset: false,
+      shakeClass: {
+        noDangerousGoodsConfirmed: '',
+        stackableGoodsConfirmed: ''
+      }
     }
     this.truckTypes = {
       container: ['side_lifter', 'chassis'],
@@ -118,6 +141,10 @@ export class ShipmentDetails extends Component {
     if (prevRequest && prevRequest.shipment) {
       this.loadPrevReq(prevRequest.shipment)
     }
+    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+      this.presetMandatoryCarriage()
+    }
+
     setStage(2)
   }
   componentDidMount () {
@@ -138,20 +165,29 @@ export class ShipmentDetails extends Component {
       nextState.shipment &&
       nextState.modals &&
       nextProps.tenant &&
-      nextProps.user
+      nextProps.user &&
+      nextProps.shipmentData.maxDimensions
     )
+  }
+  componentWillUpdate () {
+    if (this.state.shipment && !this.state.mandatoryCarriageIsPreset) {
+      this.presetMandatoryCarriage()
+    }
   }
   componentDidUpdate () {
     const {
-      shipment, cargoItems, containers, selectedDay, origin, destination
+      shipment, cargoItems, containers, aggregatedCargo,
+      selectedDay, origin, destination, aggregated
     } = this.state
     this.props.bookingSummaryDispatch.update({
       shipment,
       cargoItems,
+      aggregatedCargo,
       containers,
       selectedDay,
       origin,
-      destination
+      destination,
+      aggregated
     })
   }
 
@@ -162,8 +198,36 @@ export class ShipmentDetails extends Component {
       incoterm: opt
     })
   }
+  setNotesIds (ids, target) {
+    const { noteIds } = this.state
+    const { shipmentDispatch, shipmentData } = this.props
+    if (!noteIds.itineraries) {
+      const { itineraries } = shipmentData
+      noteIds.itineraries = itineraries
+    }
+    noteIds[target] = ids
+    if (noteIds.origin && noteIds.destination) {
+      shipmentDispatch.getNotes(noteIds)
+    }
+    this.setState({ noteIds })
+  }
   setTargetAddress (target, address) {
     this.setState({ [target]: { ...this.state[target], ...address } })
+  }
+
+  setAggregatedCargo (bool) {
+    this.setState({ aggregated: bool })
+  }
+
+  presetMandatoryCarriage () {
+    const { scope } = this.props.tenant.data
+    Object.keys(scope.carriage_options).forEach((carriage) => {
+      const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
+      if (carriageOptionScope === 'mandatory') {
+        this.handleChangeCarriage(`has_${carriage}`, true, { force: true })
+      }
+    })
+    this.setState({ mandatoryCarriageIsPreset: true })
   }
 
   loadPrevReq (obj) {
@@ -242,6 +306,16 @@ export class ShipmentDetails extends Component {
     })
   }
 
+  handleAggregatedCargoChange (event, hasError) {
+    const { name, value } = event.target
+    const { aggregatedCargo, aggregatedCargoErrors } = this.state
+
+    if (!aggregatedCargo || !aggregatedCargoErrors) return
+    aggregatedCargo[name] = value ? +value : 0
+    if (hasError !== undefined) aggregatedCargoErrors[name] = hasError
+    this.setState({ aggregatedCargo, aggregatedCargoErrors })
+  }
+
   handleCargoItemChange (event, hasError) {
     const { name, value } = event.target
     const [index, suffixName] = name.split('-')
@@ -251,8 +325,9 @@ export class ShipmentDetails extends Component {
     if (typeof value === 'boolean') {
       cargoItems[index][suffixName] = value
     } else {
-      cargoItems[index][suffixName] = value ? parseInt(value, 10) : 0
+      cargoItems[index][suffixName] = value ? +value : 0
     }
+
     if (hasError !== undefined) cargoItemsErrors[index][suffixName] = hasError
     this.setState({ cargoItems, cargoItemsErrors })
   }
@@ -270,6 +345,10 @@ export class ShipmentDetails extends Component {
     if (hasError !== undefined) containersErrors[index][suffixName] = hasError
 
     this.setState({ containers, containersErrors })
+  }
+
+  toggleAggregatedCargo () {
+    this.setState(prevState => ({ aggregated: !prevState.aggregated }))
   }
 
   addNewCargoItem () {
@@ -317,6 +396,15 @@ export class ShipmentDetails extends Component {
   }
 
   handleNextStage () {
+    if (
+      isEmpty(this.state.origin) ||
+      isEmpty(this.state.destination) ||
+      this.state.AddressFormsHaveErrors
+    ) {
+      this.setState({ nextStageAttempt: true })
+      ShipmentDetails.scrollTo('map')
+      return
+    }
     if (!this.state.selectedDay) {
       this.setState({ nextStageAttempt: true })
       ShipmentDetails.scrollTo('dayPicker')
@@ -328,27 +416,25 @@ export class ShipmentDetails extends Component {
       ShipmentDetails.scrollTo('incoterms')
       return
     }
-    if (
-      isEmpty(this.state.origin) ||
-      isEmpty(this.state.destination) ||
-      this.state.AddressFormsHaveErrors
-    ) {
-      this.setState({ nextStageAttempt: true })
-      ShipmentDetails.scrollTo('map')
-      return
-    }
-    // This was implemented under the assuption that in
-    // the initial state the following return values apply:
-    //   (1) ShipmentDetails.errorsExist(this.state.cargoItemsErrors) //=> true
-    //   (2) ShipmentDetails.errorsExist(this.state.containersErrors) //=> true
-    // So it will break out of the function and set nextStage attempt to true,
-    // in case one of them returns false
-    if (
-      ShipmentDetails.errorsExist(this.state.cargoItemsErrors) &&
-      ShipmentDetails.errorsExist(this.state.containersErrors)
-    ) {
-      this.setState({ nextStageAttempt: true })
-      return
+
+    if (this.state.aggregated) {
+      const test = false
+      if (test) {
+        this.setState({ nextStageAttempt: true })
+
+        return
+      }
+    } else {
+      const { shipment } = this.state
+      const loadType = camelize(shipment.load_type)
+      const errorIdx = ShipmentDetails.errorsAt(this.state[`${loadType}sErrors`])
+
+      if (errorIdx > -1) {
+        this.setState({ nextStageAttempt: true })
+        ShipmentDetails.scrollTo(`${errorIdx}-${loadType}`)
+
+        return
+      }
     }
 
     const data = { shipment: this.state.shipment }
@@ -363,6 +449,8 @@ export class ShipmentDetails extends Component {
     data.shipment.destination_id = this.state.destination.hub_id
     data.shipment.cargo_items_attributes = this.state.cargoItems
     data.shipment.containers_attributes = this.state.containers
+    data.shipment.aggregated_cargo_attributes = this.state.aggregated && this.state.aggregatedCargo
+
     data.shipment.has_on_carriage = this.state.has_on_carriage
     data.shipment.has_pre_carriage = this.state.has_pre_carriage
     data.shipment.planned_pickup_date = this.state.selectedDay
@@ -382,23 +470,47 @@ export class ShipmentDetails extends Component {
     this.props.shipmentDispatch.getDashboard(true)
   }
 
-  handleChangeCarriage (target, value) {
+  handleChangeCarriage (target, value, options) {
+    const carriage = target.replace('has_', '')
+
+    // Break out of function, in case the change should not apply, based on the tenant scope.
+    const { scope } = this.props.tenant.data
+    const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
+    const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
+    if (!changeShouldApply) return
+
     this.setState({ [target]: value })
 
     // Upate trucking details according to toggle
-    const truckingKey = target.replace('has_', '')
     const { shipment } = this.state
     const artificialEvent = { target: {} }
     if (!value) {
       // Set truckType to '', if carriage is toggled off
-      artificialEvent.target.id = `${truckingKey}-`
-    } else if (!shipment.trucking[truckingKey].truck_type) {
-      // Set first truckType if carriage is toggled on and truckType is empty
+      artificialEvent.target.id = `${carriage}-`
+    } else if (!shipment.trucking[carriage].truck_type) {
+      // Set first truckType, if carriage is toggled on and truckType is empty
       const truckType = this.truckTypes[this.state.shipment.load_type][0]
-      artificialEvent.target.id = `${truckingKey}-${truckType}`
+      artificialEvent.target.id = `${carriage}-${truckType}`
     }
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
+  }
+
+  handleNextStageDisabled () {
+    this.setState(prevState => ({
+      shakeClass: {
+        noDangerousGoodsConfirmed: noDangerousGoodsCondition(prevState) ? '' : 'apply_shake',
+        stackableGoodsConfirmed: stackableGoodsCondition(prevState) ? '' : 'apply_shake'
+      }
+    }))
+    setTimeout(() => {
+      this.setState({
+        shakeClass: {
+          noDangerousGoodsConfirmed: '',
+          stackableGoodsConfirmed: ''
+        }
+      })
+    }, 1000)
   }
 
   handleTruckingDetailsChange (event) {
@@ -429,7 +541,19 @@ export class ShipmentDetails extends Component {
     const { theme, scope } = tenant.data
     let cargoDetails
     if (!shipmentData.shipment) return ''
-    if (shipmentData.shipment.load_type === 'container') {
+
+    if (this.state.aggregated) {
+      cargoDetails = (
+        <ShipmentAggregatedCargo
+          aggregatedCargo={this.state.aggregatedCargo}
+          handleDelta={(event, hasError) => this.handleAggregatedCargoChange(event, hasError)}
+          nextStageAttempt={this.state.nextStageAttempt}
+          theme={theme}
+          scope={scope}
+          stackableGoodsConfirmed={this.state.stackableGoodsConfirmed}
+        />
+      )
+    } else if (shipmentData.shipment.load_type === 'container') {
       cargoDetails = (
         <ShipmentContainers
           containers={this.state.containers}
@@ -442,8 +566,7 @@ export class ShipmentDetails extends Component {
           toggleModal={name => this.toggleModal(name)}
         />
       )
-    }
-    if (shipmentData.shipment.load_type === 'cargo_item') {
+    } else if (shipmentData.shipment.load_type === 'cargo_item') {
       cargoDetails = (
         <ShipmentCargoItems
           cargoItems={this.state.cargoItems}
@@ -475,12 +598,14 @@ export class ShipmentDetails extends Component {
         destination={this.state.destination}
         nextStageAttempt={this.state.nextStageAttempt}
         handleAddressChange={this.handleAddressChange}
-        shipment={shipmentData}
+        shipmentData={shipmentData}
         routeIds={routeIds}
+        setNotesIds={(e, t) => this.setNotesIds(e, t)}
         handleCarriageNexuses={this.handleCarriageNexuses}
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
+        scope={scope}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -565,6 +690,10 @@ export class ShipmentDetails extends Component {
     const truckTypes = this.truckTypes[this.state.shipment.load_type]
     const showTruckingDetails =
       truckTypes.length > 1 && (this.state.has_pre_carriage || this.state.has_on_carriage)
+    const { notes } = shipmentData
+    const noteStyle = notes && notes.length > 0 ? styles.open_notes : styles.closed_notes
+
+    const styleTagJSX = theme ? <style>{toggleCSS(theme)}</style> : ''
 
     return (
       <div
@@ -577,6 +706,11 @@ export class ShipmentDetails extends Component {
             .filter(modalName => modals[modalName].show)
             .map(modalName => modals[modalName].jsx)}
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
+        <div className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${styles.note_box}`}>
+          <div className="flex-none content_width_booking layout-row layout-align-start-center">
+            <NotesRow notes={notes} theme={theme} />
+          </div>
+        </div>
         <div
           className={`${
             styles.date_sec
@@ -610,7 +744,43 @@ export class ShipmentDetails extends Component {
             />
           </div>
         </div>
-        <div className={`layout-row flex-100 layout-wrap ${styles.cargo_sec}`}>{cargoDetails}</div>
+        <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
+          {
+            shipmentData.shipment.load_type === 'cargo_item' && (
+              <div className="content_width_booking layout-row layout-wrap layout-align-center">
+                <div className={
+                  `${styles.toggle_aggregated_sec} ` +
+                  'flex-50 layout-row layout-align-space-around-center'
+                }
+                >
+                  <h3
+                    className={this.state.aggregated ? 'pointy' : ''}
+                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                    onClick={() => this.setAggregatedCargo(false)}
+                  >
+                    Cargo Units
+                  </h3>
+                  <Toggle
+                    className="flex-none aggregated_cargo"
+                    id="aggregated_cargo"
+                    name="aggregated_cargo"
+                    checked={this.state.aggregated}
+                    onChange={() => this.toggleAggregatedCargo()}
+                  />
+                  <h3
+                    className={this.state.aggregated ? '' : 'pointy'}
+                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                    onClick={() => this.setAggregatedCargo(true)}
+                  >
+                    Total Dimensions
+                  </h3>
+                </div>
+              </div>
+            )
+          }
+
+          {cargoDetails}
+        </div>
         <div
           className={
             `${defaults.border_divider} layout-row flex-100 ` +
@@ -623,63 +793,106 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-            {!(
-              this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-              this.state.containers.some(container => container.dangerous_goods)
-            ) ? (
-                <div className="flex-60 layout-row layout-align-start-center">
-                  <div className="flex-10 layout-row layout-align-start-start">
-                    <Checkbox
-                      theme={theme}
-                      onChange={() =>
-                        this.setState({
-                          noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
-                        })
-                      }
-                      size="30px"
-                      name="no_dangerous_goods_confirmation"
-                      checked={this.state.noDangerousGoodsConfirmed}
-                    />
+
+            <div className="flex-60 layout-row layout-wrap layout-align-start-center">
+              {
+                this.state.aggregated && (
+                  <div
+                    className={
+                      `${this.state.shakeClass.stackableGoodsConfirmed} flex-100 ` +
+                      'layout-row layout-align-start-center'
+                    }
+                    style={{ marginBottom: '15px' }}
+                  >
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() =>
+                          this.setState({
+                            stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
+                          })
+                        }
+                        size="30px"
+                        name="stackable_goods_confirmation"
+                        checked={this.state.stackableGoodsConfirmed}
+                      />
+                    </div>
+                    <div className="flex">
+                      <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
+                        I hereby confirm that my cargo consists of
+                        stackable items exclusively.
+                        <br />
+                        <span style={{ fontSize: '11px', width: '100%' }}>
+                          (Should you wish to ship non-stackable cargo,
+                          please select {'\'Cargo Units\''})
+                        </span>
+                      </p>
+                    </div>
                   </div>
-                  <p style={{ margin: 0, fontSize: '14px' }}>
-                  I hereby confirm that none of the specified cargo units contain{' '}
-                    <span
-                      className="emulate_link blue_link"
-                      onClick={() => this.toggleModal('dangerousGoodsInfo')}
-                    >
-                    dangerous goods
-                    </span>
-                  .
-                  </p>
-                </div>
-              ) : (
-                <div className="flex-60" />
-              )}
+                )
+              }
+              {
+                !(
+                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                  this.state.containers.some(container => container.dangerous_goods)
+                ) && (
+                  <div className={
+                    `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+                    'layout-row layout-align-start-center'
+                  }
+                  >
+                    <div className="flex-10 layout-row layout-align-start-start">
+                      <Checkbox
+                        theme={theme}
+                        onChange={() =>
+                          this.setState({
+                            noDangerousGoodsConfirmed: !this.state.noDangerousGoodsConfirmed
+                          })
+                        }
+                        size="30px"
+                        name="no_dangerous_goods_confirmation"
+                        checked={this.state.noDangerousGoodsConfirmed}
+                      />
+                    </div>
+                    <div className="flex">
+                      <p style={{ margin: 0, fontSize: '14px' }}>
+                        I hereby confirm that none of the specified cargo units contain{' '}
+                        <span
+                          className="emulate_link blue_link"
+                          onClick={() => this.toggleModal('dangerousGoodsInfo')}
+                        >
+                          dangerous goods
+                        </span>
+                        .
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
+            </div>
             <div className="flex layout-row layout-align-end">
               <RoundButton
                 text="Get Offers"
                 handleNext={this.handleNextStage}
+                handleDisabled={() => this.handleNextStageDisabled()}
                 theme={theme}
-                active={
-                  this.state.noDangerousGoodsConfirmed ||
-                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                  this.state.containers.some(container => container.dangerous_goods)
-                }
-                disabled={
-                  !this.state.noDangerousGoodsConfirmed &&
-                  (!this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                    !this.state.containers.some(container => container.dangerous_goods))
-                }
+                active={getOffersBtnIsActive(this.state)}
+                disabled={!getOffersBtnIsActive(this.state)}
               />
             </div>
           </div>
         </div>
-        {user &&
-          !user.guest && (
+        {user && !user.guest && (
+          <div
+            className={
+              `${defaults.border_divider} layout-row flex-100 ` +
+              'layout-wrap layout-align-center-center'
+            }
+          >
             <div
               className={
-                `${defaults.border_divider} layout-row flex-100 ` +
-                'layout-wrap layout-align-center-center'
+                `${styles.btn_sec} ${defaults.content_width} ` +
+                'layout-row flex-none layout-wrap layout-align-start-start'
               }
             >
               <div
@@ -688,23 +901,18 @@ export class ShipmentDetails extends Component {
                   'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <div
-                  className={
-                    `${styles.btn_sec} ${defaults.content_width} ` +
-                    'layout-row flex-none layout-wrap layout-align-start-start'
-                  }
-                >
-                  <RoundButton
-                    text="Back to Dashboard"
-                    handleNext={this.returnToDashboard}
-                    iconClass="fa-angle-left"
-                    theme={theme}
-                    back
-                  />
-                </div>
+                <RoundButton
+                  text="Back to Dashboard"
+                  handleNext={this.returnToDashboard}
+                  iconClass="fa-angle-left"
+                  theme={theme}
+                  back
+                />
               </div>
             </div>
-          )}
+          </div>
+        )}
+        {styleTagJSX}
       </div>
     )
   }

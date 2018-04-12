@@ -21,6 +21,7 @@ class ValidatedInputFormsy extends Component {
   componentDidUpdate () {
     if (this.errorsHaveUpdated) return // Break the loop if erros have updated
     const event = { target: { name: this.props.name, value: this.props.getValue() } }
+
     const validationPassed = this.props.isValidValue(event.target.value)
 
     // break out of function if validation did not pass. This assumes default state in
