@@ -442,11 +442,11 @@ module ExcelTools
       row_truck_type = "default" if !row_truck_type || row_truck_type == ""
 
       row_min_value = row_data.shift
-      %w(import export).each do |direction|
+      %w(pre on).each do |direction|
         trucking_pricing_by_zone[row_zone] = TruckingPricing.new(
           rates: {},
           fees: {},
-          direction: direction,
+          carriage: direction,
           load_type: load_type,
           load_meterage: {
             ratio:  load_meterage_ratio,

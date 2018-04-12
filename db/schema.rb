@@ -369,6 +369,7 @@ ActiveRecord::Schema.define(version: 20180412080147) do
     t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
   end
