@@ -325,7 +325,7 @@ module ExcelTools
     rate_basis = zone_sheet.row(7)[7]
     base = zone_sheet.row(8)[7]
     load_type = zone_sheet.row(9)[7] == "container" ? "container" : "cargo_item"
-    identifier = zone_sheet.row(10)[7] == "city" ? "city_name" : zone_sheet.row(10)[7]
+    identifier_type = zone_sheet.row(10)[7] == "city" ? "city_name" : zone_sheet.row(10)[7]
     courier = Courier.find_or_create_by(name: zone_sheet.row(9)[7])
     num_rows = zone_sheet.last_row
     zones = {}
@@ -489,10 +489,10 @@ module ExcelTools
               trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
             end
 
-            trucking_pricing_by_zone[row_zone].save!
+            trucking_pricing_by_zone[row_key].save!
             HubTrucking.create(
               trucking_destination: trucking_destination,
-              trucking_pricing: trucking_pricing_by_zone[row_zone],
+              trucking_pricing: trucking_pricing_by_zone[row_key],
               hub_id: hub_id,
             )
             # stats[:trucking_queries][:number_updated] += 1
