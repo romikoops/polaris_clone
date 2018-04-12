@@ -442,7 +442,6 @@ ActiveRecord::Schema.define(version: 20180412080147) do
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.string "direction"
     t.integer "courier_id"
     t.string "load_type"
     t.string "truck_type"
@@ -452,6 +451,7 @@ ActiveRecord::Schema.define(version: 20180412080147) do
     t.integer "tenant_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string "carriage"
     t.jsonb "rates"
     t.jsonb "fees"
   end
