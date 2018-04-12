@@ -1,23 +1,14 @@
 # Notes
 
-- Use generic file for mocked props
-
 ## ActiveRoutes
 
 - It exports both default and named
 
-- Test should mock Carousel component
+[X] Snapshot test
 
 ## AddressBook
 
-Test is running with this warning:
-
-`
-Warning: Failed prop type: Property `contacts` of component `AddressBook` has invalid PropType notation inside arrayOf.
-        in AddressBook
-`
-
-- Test complete
+[X] Test complete
 
 ## Admin
 

@@ -1,30 +1,18 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
+import { theme } from '../../mocks'
 
+jest.mock('../RouteHubBox/RouteHubBox', () => ({
+  // eslint-disable-next-line react/prop-types
+  Carousel: ({ children }) => <div>{children}</div>
+}))
+// eslint-disable-next-line
 import { ActiveRoutes } from './ActiveRoutes'
 
-test('has multiple div and h2', () => {
-  const props = {
-    text: 'foo'
-  }
-  const wrapper = mount(<ActiveRoutes {...props} />)
+const propsBase = {
+  theme
+}
 
-  expect(wrapper.find('div').length).toBeGreaterThan(30)
-  expect(wrapper.find('h2').length).toBeGreaterThan(10)
-})
-
-test('its text content contains specific parts', () => {
-  const props = {}
-  const wrapper = mount(<ActiveRoutes {...props} />)
-  const text = wrapper.text()
-
-  const expectedParts = [
-    'Available',
-    'Destinations',
-    'China'
-  ]
-
-  expectedParts.forEach((singlePart) => {
-    expect(text.includes(singlePart)).toBeTruthy()
-  })
+test('shallow render', () => {
+  expect(shallow(<ActiveRoutes {...propsBase} />)).toMatchSnapshot()
 })
