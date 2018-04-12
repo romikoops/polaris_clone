@@ -442,7 +442,7 @@ module ExcelTools
       row_truck_type = "default" if !row_truck_type || row_truck_type == ""
 
       row_min_value = row_data.shift
-      
+
       %w(pre on).each do |direction|
         trucking_pricing_by_zone[row_zone] = TruckingPricing.new(
           rates: {},
@@ -459,6 +459,7 @@ module ExcelTools
           truck_type: row_truck_type,
           tenant_id: tenant.id,
         )
+        
         modifier_indexes.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_zone].rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]
