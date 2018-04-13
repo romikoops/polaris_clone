@@ -9,7 +9,7 @@ import {
 } from '../../mocks'
 
 jest.mock('node-uuid', () => ({
-  v4: () => `${Math.random()}`
+  v4: () => 'RANDOM_KEY'
 }))
 jest.mock('../Checkbox/Checkbox', () => ({
   // eslint-disable-next-line react/prop-types

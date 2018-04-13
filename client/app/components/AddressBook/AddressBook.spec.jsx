@@ -1,15 +1,22 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { contact, theme, identity } from '../../mocks'
 
-jest.mock('../ContactCard/ContactCard', () => {
-  const ContactCard = () => <div />
-
-  return {
-    ContactCard
-  }
-})
+jest.mock('node-uuid', () => ({
+  v4: () => 'RANDOM_KEY'
+}))
+jest.mock('../ContactCard/ContactCard', () => ({
+  // eslint-disable-next-line react/prop-types
+  ContactCard: ({ children }) => <div>{children}</div>
+}))
 // eslint-disable-next-line import/first
 import { AddressBook } from './AddressBook'
+
+const propsBase = {
+  contacts: [contact],
+  theme,
+  autofillContact: identity
+}
 
 test('basic mount', () => {
   const props = {
@@ -30,4 +37,8 @@ test('renders empty string when no contact is passed', () => {
   const text = wrapper.text()
 
   expect(text).toBe('')
+})
+
+test('shallow render', () => {
+  expect(shallow(<AddressBook {...propsBase} />)).toMatchSnapshot()
 })

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="
+                contact_scroll flex-100 layout-row layout-wrap layout-align-center-start
+            "
+>
+  <ContactCard
+    key="RANDOM_KEY"
+    popOutHover={true}
+    select={[Function]}
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+</div>
+`;

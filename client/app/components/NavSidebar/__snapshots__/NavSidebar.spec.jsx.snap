@@ -11,7 +11,7 @@ exports[`shallow rendering 1`] = `
 >
   <AdminNavItem
     iconClass="FOO_ICON"
-    key="123"
+    key="RANDOM_KEY"
     navFn={[Function]}
     target="FOO_TARGET"
     text="FOO_TEXT"

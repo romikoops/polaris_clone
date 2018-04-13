@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import { theme, route, identity } from '../../mocks'
 
 jest.mock('node-uuid', () => ({
-  v4: () => 'FOO_KEY'
+  v4: () => 'RANDOM_KEY'
 }))
 // eslint-disable-next-line import/first
 import { RouteSelector } from './RouteSelector'

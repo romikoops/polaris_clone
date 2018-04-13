@@ -9,11 +9,9 @@ jest.mock('../../components/Admin/AdminNavItem', () => {
   return { AdminNavItem }
 })
 
-jest.mock('node-uuid', () => {
-  const v4 = () => 123
-
-  return { v4 }
-})
+jest.mock('node-uuid', () => ({
+  v4: () => 'RANDOM_KEY'
+}))
 
 // eslint-disable-next-line
 import { NavSidebar } from './NavSidebar'
