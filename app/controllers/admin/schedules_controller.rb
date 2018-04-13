@@ -65,9 +65,9 @@ class Admin::SchedulesController < ApplicationController
   end
   def overwrite_trains
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_train_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "rail"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end
@@ -75,18 +75,18 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_vessels
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_vessel_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "ocean"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end
   end
   def overwrite_air
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_air_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "air"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end
