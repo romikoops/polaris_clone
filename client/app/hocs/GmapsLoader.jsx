@@ -20,7 +20,7 @@ export default function GmapsLoader (props) {
             setTargetAddress={props.setTargetAddress}
             theme={props.theme}
             gMaps={googleMaps}
-            handleChangeCarriage={props.handleChangeCarriage}
+            handleCarriageChange={props.handleCarriageChange}
             has_on_carriage={props.has_on_carriage}
             has_pre_carriage={props.has_pre_carriage}
             origin={props.origin}
@@ -61,7 +61,7 @@ GmapsLoader.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   setTargetAddress: PropTypes.func.isRequired,
-  handleChangeCarriage: PropTypes.func.isRequired,
+  handleCarriageChange: PropTypes.func.isRequired,
   shipmentData: PropTypes.shipmentData,
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
