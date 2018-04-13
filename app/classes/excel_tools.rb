@@ -338,7 +338,7 @@ module ExcelTools
         zones[row_data[0]] << {id: row_data[1], country: row_data[3]}
       elsif !row_data[1] && row_data[2]
         range = row_data[2].delete(" ").split("-")
-        zones[row_data[0]] << {min: range[0], max: range[1], country: row_data[3]}
+        zones[row_data[0]] << {min: range[0].to_d, max: range[1].to_d, country: row_data[3]}
       end
     end
     # END Load Zones ------------------------
@@ -423,7 +423,7 @@ module ExcelTools
         next if !cell || !mod_indexes.include?(i)
         defaults[mod_key] = {} unless defaults[mod_key]
         min_max_arr = cell.split(" - ")
-        defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0], "max_#{mod_key}": min_max_arr[1], min_value: nil}.symbolize_keys
+        defaults[mod_key][i] = {"min_#{mod_key}": min_max_arr[0].to_d, "max_#{mod_key}": min_max_arr[1].to_d, min_value: nil}.symbolize_keys
       end
     end
     # END Determine how many columns the modifiers span ------------------------
@@ -508,10 +508,10 @@ module ExcelTools
                   SELECT id, #{identifier_type} FROM trucking_destinations
                   WHERE trucking_destinations.#{identifier_type} IN ('#{ident_values.join("','")}')
               )
-              INSERT INTO trucking_destinations(#{identifier_type})
+              INSERT INTO trucking_destinations(#{identifier_type}, created_at, updated_at)
                   -- insert non-existent ident_values
-                  SELECT ident_value::text
-                  FROM (VALUES (#{ident_values.join("),(")})) AS t(ident_value)
+                  SELECT ident_value::text, cr_at, up_at
+                  FROM (VALUES ('#{ident_values.join("', current_timestamp, current_timestamp),('")}', current_timestamp, current_timestamp)) AS t(ident_value, cr_at, up_at)
                   WHERE ident_value::text NOT IN (
                       SELECT #{identifier_type}
                       FROM existing_identifiers
@@ -524,9 +524,9 @@ module ExcelTools
           t_stamps AS (
               VALUES(current_timestamp)
           )
-        INSERT INTO hub_truckings(hub_id, trucking_destination_id, trucking_pricing_id, created_at, updated_at)
-            (SELECT * FROM tp_ids
-                CROSS JOIN hub_ids
+        INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+            (SELECT * FROM hub_ids
+                CROSS JOIN tp_ids
                 CROSS JOIN td_ids
                 CROSS JOIN t_stamps AS created_ats
                 CROSS JOIN t_stamps AS updated_ats)
@@ -535,52 +535,52 @@ module ExcelTools
       ActiveRecord::Base.connection.execute(insertion_query)
       ############################
 
-      trucking_pricing_should_update = nil
-      trucking_pricing_ids = TruckingPricing.where(
-        load_type: load_type,
-        truck_type: row_truck_type,
-        load_meterage: {
-          ratio: load_meterage_ratio,
-          height_limit: load_meterage_limit,
-        },
-        modifier: modifier
-      ).ids
+    #   trucking_pricing_should_update = nil
+    #   trucking_pricing_ids = TruckingPricing.where(
+    #     load_type: load_type,
+    #     truck_type: row_truck_type,
+    #     load_meterage: {
+    #       ratio: load_meterage_ratio,
+    #       height_limit: load_meterage_limit,
+    #     },
+    #     modifier: modifier
+    #   ).ids
       
-      zones.each_value do |idents_and_country_objs|
-        idents_and_country_objs.each do |idents_and_country|
-          if idents_and_country[:min] && idents_and_country[:max]
-            ident_values = (idents_and_country[:min].to_i..idents_and_country[:max].to_i)
-          else
-            ident_values = [idents_and_country[:id]]
-          end
+    #   zones.each_value do |idents_and_country_objs|
+    #     idents_and_country_objs.each do |idents_and_country|
+    #       if idents_and_country[:min] && idents_and_country[:max]
+    #         ident_values = (idents_and_country[:min].to_i..idents_and_country[:max].to_i)
+    #       else
+    #         ident_values = [idents_and_country[:id]]
+    #       end
 
-          ident_values.each do |ident_value|
-            if identifier_type == "city_name"
-              trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => Location.get_trucking_city("#{ident_value.to_s}, #{idents_and_country[:country]}"), country_code: idents_and_country[:country])
-            else
-              trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
-            end
+    #       ident_values.each do |ident_value|
+    #         if identifier_type == "city_name"
+    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => Location.get_trucking_city("#{ident_value.to_s}, #{idents_and_country[:country]}"), country_code: idents_and_country[:country])
+    #         else
+    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
+    #         end
 
-            hub_trucking = HubTrucking.where(
-              trucking_destination: trucking_destination,
-              trucking_pricing_id: trucking_pricing_ids,
-              hub_id: hub_id,
-            ).first
+    #         hub_trucking = HubTrucking.where(
+    #           trucking_destination: trucking_destination,
+    #           trucking_pricing_id: trucking_pricing_ids,
+    #           hub_id: hub_id,
+    #         ).first
 
-            if hub_trucking.nil?
-              HubTrucking.create(
-                trucking_destination: trucking_destination,
-                trucking_pricing: trucking_pricing_by_zone[row_key],
-                hub_id: hub_id,
-              )
-            else
-              trucking_pricing_should_update = hub_trucking.trucking_pricing
-            end
-            trucking_pricing_should_update.try(:update, trucking_pricing_by_zone[row_key].given_attributes)
-            # stats[:trucking_queries][:number_updated] += 1
-          end
-        end
-      end
+    #         if hub_trucking.nil?
+    #           HubTrucking.create(
+    #             trucking_destination: trucking_destination,
+    #             trucking_pricing: trucking_pricing_by_zone[row_key],
+    #             hub_id: hub_id,
+    #           )
+    #         else
+    #           trucking_pricing_should_update = hub_trucking.trucking_pricing
+    #         end
+    #         trucking_pricing_should_update.try(:update, trucking_pricing_by_zone[row_key].given_attributes)
+    #         # stats[:trucking_queries][:number_updated] += 1
+    #       end
+    #     end
+    #   end
     end
     # END Rates ------------------------
 

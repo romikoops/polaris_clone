@@ -18,7 +18,7 @@ class ApplicationRecord < ActiveRecord::Base
       # when nil
       #   NULL
       when Hash
-        "TO_JSONB('#{val}'::text)"
+        "'#{val.to_json}'::jsonb"
       when String
         "'#{val}'"
       else
