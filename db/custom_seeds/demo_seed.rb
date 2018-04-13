@@ -77,10 +77,10 @@ include MongoTools
   #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # end
  
-  hub = tenant.hubs.find_by_name("Shanghai Port")
-  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-  req = {"xlsx" => trucking}
-  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # hub = tenant.hubs.find_by_name("Shanghai Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
   # hub = tenant.hubs.find_by_name("Gothenburg Port")
   # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
@@ -91,5 +91,11 @@ include MongoTools
   # trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+
+  hub = tenant.hubs.find_by_name("Shenzhen Port")
+  trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+
   # tenant.update_route_details()
 end
