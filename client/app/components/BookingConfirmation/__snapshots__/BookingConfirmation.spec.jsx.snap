@@ -1,0 +1,815 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+>
+  <div
+    className=" flex-none layout-row layout-wrap layout-align-center-start content_width_booking"
+  >
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Overview"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <h4
+              className=" flex-none"
+            >
+              Shipment Reference:
+            </h4>
+            <h4
+              className="clip flex-none offset-5"
+              style={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <p
+              className=" sec_subtitle_text_normal flex-none"
+            >
+              Status:
+            </p>
+            <p
+              className=" sec_subtitle_text flex-none offset-5 "
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-space-between-start"
+          >
+            <p
+              className=" sec_subtitle_text_normal flex-none"
+            >
+              Created at:
+            </p>
+            <p
+              className=" sec_subtitle_text flex-none offset-5 "
+            >
+              13-04-2018 | 11:59 AM
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card_itinerary flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Itinerary"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <RouteHubBox
+            hubs={
+              Object {
+                "endHub": "FOO_END_HUB",
+                "startHub": "FOO_START_HUB",
+              }
+            }
+            route={
+              Array [
+                Object {
+                  "hub_route_key": "FOO_HUB_ROUTE_KEY",
+                },
+              ]
+            }
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+          <div
+            className="flex-100 layout-row layout-align-space-between-center"
+            style={
+              Object {
+                "position": "relative",
+              }
+            }
+          >
+            <div
+              className="flex-40 layout-row layout-wrap layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row layout-align-center-start layout-wrap"
+              >
+                <p
+                  className="flex-100 center letter_3"
+                >
+                   Expected Time of Departure:
+                </p>
+                <p
+                  className="flex-none letter_3"
+                >
+                  13/04/2018 | 11:59
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-40 layout-row layout-wrap layout-align-center-center"
+            >
+              <div
+                className="flex-100 layout-row layout-align-center-start layout-wrap"
+              >
+                <p
+                  className="flex-100 center letter_3"
+                >
+                   Expected Time of Arrival:
+                </p>
+                <p
+                  className="flex-none letter_3"
+                >
+                  13/04/2018 | 11:59
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Fares & Fees"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className="total_row flex-100 layout-row layout-wrap layout-align-space-around-center"
+      >
+        <h3
+          className="flex-70 letter_3"
+        >
+          Shipment Total:
+        </h3>
+        <div
+          className="flex-30 layout-row layout-align-end-center"
+        >
+          <h3
+            className="flex-none letter_3"
+          >
+            USD 12.00 
+          </h3>
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-align-center-center"
+          >
+            <div
+              className=" flex-none content_width_booking layout-row layout-align-center-center"
+            >
+              <IncotermRow
+                feeHash={
+                  Object {
+                    "foo": "FOO_ROUTE_KEY",
+                  }
+                }
+                tenant={
+                  Object {
+                    "data": Object {
+                      "data": Object {
+                        "id": 123,
+                        "subdomain": "foosubdomain",
+                        "theme": Object {
+                          "colors": Object {
+                            "primary": "#333",
+                            "secondary": "#fafafa",
+                          },
+                        },
+                      },
+                      "scope": Object {
+                        "terms": Array [
+                          "FOO_TERM",
+                          "BAR_TERM",
+                        ],
+                      },
+                    },
+                  }
+                }
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Contact Details"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="b_summ_top flex-100 layout-row layout-align-space-around-stretch"
+          >
+            <Component
+              contactType="Shipper"
+              textStyle={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+            <Component
+              contactType="Consignee"
+              textStyle={
+                Object {
+                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+          >
+             
+             
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Cargo Details"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="heading_style flex-100 layout-row layout-align-space-between-center"
+        style={
+          Object {
+            "background": "#333",
+            "color": "white",
+          }
+        }
+      >
+        <TextHeading
+          color="white"
+          size={3}
+          text="Documents"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+        <div
+          className="flex-10 layout-row layout-align-center-center"
+          onClick={[Function]}
+        >
+          <i
+            className="fa fa-chevron-up pointy"
+          />
+        </div>
+      </div>
+      <div
+        className=" main_panel"
+      >
+        <div
+          className="inner_wrapper flex-100 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap layout-align-start-center"
+          >
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Packing Sheet: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Commercial Invoice: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Customs Declaration: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Customs Value Declaration: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  EORI: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Certificate Of Origin: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Dangerous Goods: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Bill of Lading: Not Uploaded
+                </p>
+              </div>
+            </div>
+            <div
+              className="flex-25 layout-row layout-align-start-center no_doc"
+            >
+              <div
+                className="flex-none layout-row layout-align-center-center"
+              >
+                <i
+                  className="flex-none fa fa-ban"
+                />
+              </div>
+              <div
+                className="flex layout-align-start-center layout-row"
+              >
+                <p
+                  className="flex-none"
+                >
+                  Invoice: Not Uploaded
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="shipment_card flex-100 layout-row layout-align-space-between-center layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap layout-align-start-center"
+      >
+        <div
+          className="heading_style flex-100 layout-row layout-align-space-between-center"
+          style={
+            Object {
+              "background": "#333",
+              "color": "white",
+            }
+          }
+        >
+          <TextHeading
+            color="white"
+            size={3}
+            text="Agree and Submit"
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-65 layout-row layout-align-start-center"
+        >
+          <div
+            className="flex-15 layout-row layout-align-center-center"
+          >
+            <Checkbox
+              checked={false}
+              onChange={[Function]}
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex layout-row layout-align-start-center"
+          >
+            <div
+              className="flex-5"
+            />
+            <div
+              className="flex-95 layout-row layout-wrap layout-align-start-center"
+            >
+              <div
+                className="flex-100 layout-row layout-align-start-center"
+              >
+                <TextHeading
+                  color=""
+                  size={4}
+                  text="By checking this box"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start"
+              >
+                <ul
+                  className="flex-100 terms_list"
+                >
+                  <li>
+                     
+                    FOO_TERM
+                  </li>
+                  <li>
+                     
+                    BAR_TERM
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-33 layout-row layout-align-end-end height_100"
+          style={
+            Object {
+              "height": "150px",
+              "marginBottom": "15px",
+            }
+          }
+        >
+          <div
+            className="flex-none layout-row layout-align-end-end"
+          >
+            <RoundButton
+              active={false}
+              back={false}
+              disabled={false}
+              handleDisabled={null}
+              handleNext={[Function]}
+              icon=""
+              iconClass=""
+              size=""
+              text="Finish Booking"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr
+      className="sec_break flex-100"
+    />
+    <div
+      className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+    >
+      <div
+        className="content_width flex-none content-width layout-row layout-align-start-center"
+      >
+        <RoundButton
+          active={false}
+          back={true}
+          disabled={false}
+          handleDisabled={null}
+          handleNext={[Function]}
+          icon=""
+          iconClass="fa-angle-left"
+          size=""
+          text="Back to dashboard"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

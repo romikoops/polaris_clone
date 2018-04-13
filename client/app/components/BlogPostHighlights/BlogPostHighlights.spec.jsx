@@ -1,12 +1,9 @@
 import * as React from 'react'
 import { shallow } from 'enzyme'
 
-jest.mock('react-truncate', () => {
+jest.mock('react-truncate', () =>
   // eslint-disable-next-line react/prop-types
-  const Truncate = ({ children }) => <span>{children}</span>
-
-  return Truncate
-})
+  ({ children }) => <span>{children}</span>)
 jest.mock('../RoundButton/RoundButton', () => {
   const RoundButton = () => <button />
 
