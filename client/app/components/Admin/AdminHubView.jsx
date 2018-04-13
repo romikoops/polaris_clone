@@ -33,7 +33,10 @@ export class AdminHubView extends Component {
       })
     }
     if (this.props.hubData && nextProps.hubData) {
-      if (this.props.hubData.charges !== nextProps.hubData.charges) {
+      if (
+        this.props.hubData.charges !== nextProps.hubData.charges ||
+        this.props.hubData.customs !== nextProps.hubData.customs
+      ) {
         this.checkAndSetCharges(nextProps)
       }
     }
