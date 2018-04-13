@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180412110423) do
+ActiveRecord::Schema.define(version: 20180413095226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,17 @@ ActiveRecord::Schema.define(version: 20180412110423) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "customs_fees", force: :cascade do |t|
+    t.jsonb "import"
+    t.jsonb "export"
+    t.string "mode_of_transport"
+    t.string "load_type"
+    t.integer "hub_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "documents", force: :cascade do |t|
     t.integer "user_id"
     t.integer "shipment_id"
@@ -174,6 +185,17 @@ ActiveRecord::Schema.define(version: 20180412110423) do
     t.integer "itinerary_id"
     t.integer "trip_id"
     t.datetime "closing_date"
+  end
+
+  create_table "local_charges", force: :cascade do |t|
+    t.jsonb "import"
+    t.jsonb "export"
+    t.string "mode_of_transport"
+    t.string "load_type"
+    t.integer "hub_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "locations", force: :cascade do |t|

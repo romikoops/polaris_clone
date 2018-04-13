@@ -197,25 +197,11 @@ module DocumentTools
   def write_local_charges_to_sheet(options)
     tenant = Tenant.find(options[:tenant_id])
     hubs = tenant.hubs
-    load_types = %w(lcl fcl_20 fcl_40 fcl_40hq)
-    mots = %w(ocean air rail)
     results_by_hub = {}
     hubs.each do |hub|
       results_by_hub[hub.name] = []
-      load_types.each do |load_type|
-        mots.each do |mot|
-          query = [
-            {"tenant_id" => tenant.id},
-            {"hub_id" => hub.id},
-            {"load_type" => load_type},
-            {"mode_of_transport" => mot}
-          ]
-          charge = get_items_query('localCharges', query).first
-          if charge
-            results_by_hub[hub.name] << charge
-          end
-        end
-      end
+      results_by_hub[hub.name] += hub.local_charges
+      results_by_hub[hub.name] += hub.customs_fees
     end
 
     aux_data = {
@@ -237,7 +223,9 @@ module DocumentTools
       header_values.each_with_index { |hv, i| worksheet.write(0, i, hv, header_format)}
       results.each do |result|
         %w(import export).each do |dir|
+          result[dir].deep_symbolize_keys!
           result[dir].each do |key, fee|
+            
               worksheet.write(row, 0, fee[:effective_date])
               worksheet.write(row, 1, fee[:expiration_date])
               worksheet.write(row, 2, fee[:name])

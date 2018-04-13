@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Toggle from 'react-toggle'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import '../../../../styles/day-picker-custom.css'
 import styles from '../../Admin.scss'
+import styles2 from './index.scss'
 import { NamedSelect } from '../../../NamedSelect/NamedSelect'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import {
@@ -12,7 +15,8 @@ import {
   chargeGlossary,
   rateBasises,
   customsFeeSchema,
-  rateBasisSchema
+  rateBasisSchema,
+  moment
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
@@ -60,11 +64,11 @@ export class AdminCustomsSetter extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.charges.nexus_id) {
+    if (nextProps.charges.hub_id) {
       this.setAllFromOptions(nextProps.charges)
     }
-    if (!this.state.charges && this.props.charges.nexus_id) {
-      this.setState({ charges: this.props.charges })
+    if (this.state.charges !== nextProps.charges) {
+      this.setState({ charges: nextProps.charges })
     }
   }
 
@@ -87,15 +91,17 @@ export class AdminCustomsSetter extends Component {
         Object.keys(charges[dir][key]).forEach((chargeKey) => {
           if (chargeKey === 'currency') {
             opts = currencyOpts.slice()
-            // this.getOptions(opts, key, chargeKey);
+            newObj[dir][key][chargeKey] = AdminCustomsSetter.selectFromOptions(
+              opts,
+              charges[dir][key][chargeKey]
+            )
           } else if (chargeKey === 'rate_basis') {
             opts = rateOpts.slice()
-            // this.getOptions(opts, key, chargeKey);
+            newObj[dir][key][chargeKey] = AdminCustomsSetter.selectFromOptions(
+              opts,
+              charges[dir][key][chargeKey]
+            )
           }
-          newObj[dir][key][chargeKey] = AdminCustomsSetter.selectFromOptions(
-            opts,
-            charges[dir][key][chargeKey]
-          )
         })
       })
     })
@@ -232,7 +238,7 @@ export class AdminCustomsSetter extends Component {
   }
   saveEdit () {
     const { charges } = this.state
-    this.props.adminDispatch.editLocalCharges(charges.nexus_id, charges)
+    this.props.adminDispatch.editCustomsFees(charges.hub_id, charges)
     this.toggleEdit()
   }
   handleDirectionChange (e) {
@@ -249,7 +255,21 @@ export class AdminCustomsSetter extends Component {
       })
     }
   }
-
+  handleDayChange (e, direction, key, chargeKey) {
+    console.log(e, direction, key, chargeKey)
+    this.setState({
+      charges: {
+        ...this.state.charges,
+        [direction]: {
+          ...this.state.charges[direction],
+          [key]: {
+            ...this.state.charges[direction][key],
+            [chargeKey]: moment(e).format('YYYY/MM/DD')
+          }
+        }
+      }
+    })
+  }
   render () {
     const { theme } = this.props
 
@@ -264,6 +284,22 @@ export class AdminCustomsSetter extends Component {
     } = this.state
     const panel = []
     const viewPanel = []
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days')
+          .format())
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
         background: linear-gradient(
@@ -286,7 +322,7 @@ export class AdminCustomsSetter extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const dnrKeys = ['currency', 'key', 'name']
+    const dnrKeys = ['currency', 'key', 'name', 'effective_date', 'expiration_date']
     const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
@@ -298,77 +334,99 @@ export class AdminCustomsSetter extends Component {
 
       Object.keys(charges[direction][key]).forEach((chargeKey) => {
         if (!dnrKeys.includes(chargeKey)) {
-          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
-            cells.push(<div
-              key={chargeKey}
-              className={`flex layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGloss[chargeKey]}</p>
-              <div className={`flex-95 layout-row ${styles.editor_input}`}>
-                <input
-                  type="number"
-                  value={charges[direction][key][chargeKey]}
-                  onChange={this.handleChange}
-                  name={`${direction}-${key}-${chargeKey}`}
-                />
-              </div>
-            </div>)
-            viewCells.push(<div
-              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGloss[chargeKey]}</p>
-              <p className="flex">
-                {charges[direction][key][chargeKey]} {charges[direction][key].currency}
-              </p>
-            </div>)
-          } else if (chargeKey === 'rate_basis') {
-            cells.push(<div
-              className={`flex layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGloss[chargeKey]}</p>
-              <NamedSelect
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <div className={`flex-95 layout-row ${styles.editor_input}`}>
+              <input
+                type="number"
+                value={charges[direction][key][chargeKey]}
+                onChange={this.handleChange}
                 name={`${direction}-${key}-${chargeKey}`}
+              />
+            </div>
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">
+              {charges[direction][key][chargeKey]} {charges[direction][key].currency}
+            </p>
+          </div>)
+        } else if (chargeKey === 'rate_basis') {
+          cells.push(<div
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <NamedSelect
+              name={`${direction}-${key}-${chargeKey}`}
+              classes={`${styles.select}`}
+              value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
+              options={rateOpts}
+              className="flex-100"
+              onChange={this.handleSelect}
+            />
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
+          </div>)
+        } else if (chargeKey === 'expiration_date' || chargeKey === 'effective_date') {
+          cells.push(<div
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            } ${styles2.dpb}`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <DayPickerInput
+              name="dayPicker"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              value={charges[direction][key][chargeKey]}
+              onDayChange={e => this.handleDayChange(e, direction, key, chargeKey)}
+              dayPickerProps={dayPickerProps}
+            />
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">{moment(charges[direction][key][chargeKey]).format('ll')}</p>
+          </div>)
+        } else if (chargeKey === 'currency') {
+          cells.push(<div
+            key={chargeKey}
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <div className="flex-95 layout-row">
+              <NamedSelect
+                name={`${direction}-${key}-currency`}
                 classes={`${styles.select}`}
-                value={selectOptions ? selectOptions[direction][key][chargeKey] : ''}
-                options={rateOpts}
+                value={selectOptions ? selectOptions[direction][key].currency : ''}
+                options={currencyOpts}
                 className="flex-100"
                 onChange={this.handleSelect}
               />
-            </div>)
-            viewCells.push(<div
-              className={`flex-25 layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGloss[chargeKey]}</p>
-              <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
-            </div>)
-          } else if (chargeKey === 'currency') {
-            cells.push(<div
-              key={chargeKey}
-              className={`flex layout-row layout-align-none-center layout-wrap ${
-                styles.price_cell
-              }`}
-            >
-              <p className="flex-100">{chargeGloss[chargeKey]}</p>
-              <div className="flex-95 layout-row">
-                <NamedSelect
-                  name={`${direction}-${key}-currency`}
-                  classes={`${styles.select}`}
-                  value={selectOptions ? selectOptions[direction][key].currency : ''}
-                  options={currencyOpts}
-                  className="flex-100"
-                  onChange={this.handleSelect}
-                />
-              </div>
-            </div>)
-          }
+            </div>
+          </div>)
         }
       })
 

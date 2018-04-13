@@ -175,6 +175,10 @@ export const adminConstants = {
   EDIT_LOCAL_CHARGES_SUCCESS: 'EDIT_LOCAL_CHARGES_SUCCESS',
   EDIT_LOCAL_CHARGES_FAILURE: 'EDIT_LOCAL_CHARGES_FAILURE',
 
+  EDIT_CUSTOMS_FEES_REQUEST: 'EDIT_CUSTOMS_FEES_REQUEST',
+  EDIT_CUSTOMS_FEES_SUCCESS: 'EDIT_CUSTOMS_FEES_SUCCESS',
+  EDIT_CUSTOMS_FEES_FAILURE: 'EDIT_CUSTOMS_FEES_FAILURE',
+
   DELETE_HUB_REQUEST: 'DELETE_HUB_REQUEST',
   DELETE_HUB_SUCCESS: 'DELETE_HUB_SUCCESS',
   DELETE_HUB_FAILURE: 'DELETE_HUB_FAILURE',
@@ -251,9 +255,9 @@ export const pricingNames = {
 }
 export const cargoClassOptions = [
   { value: 'lcl', label: 'LCL' },
-  { value: 'fcl_20f', label: 'FCL 20ft' },
-  { value: 'fcl_40f', label: 'FCL 40ft' },
-  { value: 'fcl_40f_hq', label: 'FCL 40ft HQ' }
+  { value: 'fcl_20', label: 'FCL 20ft' },
+  { value: 'fcl_40', label: 'FCL 40ft' },
+  { value: 'fcl_40hq', label: 'FCL 40ft HQ' }
 ]
 
 export const moTOptions = [

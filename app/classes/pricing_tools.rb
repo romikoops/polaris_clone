@@ -36,13 +36,7 @@ module PricingTools
     end
 
     lt = load_type == 'cargo_item' ? 'lcl' : cargos[0].size_class
-    query = [
-      {"tenant_id" => hub.tenant_id},
-      {"hub_id" => hub.id},
-      {"load_type" => lt},
-      {"mode_of_transport" => mot}
-    ]
-    charge = get_items_query('localCharges', query).first
+    charge = hub.local_charges.find_by(load_type: lt, mode_of_transport: mot)
     return {} if charge.nil?
     totals = {"total" => {}}
     charge[direction].each do |k, fee|

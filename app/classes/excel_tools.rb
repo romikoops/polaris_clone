@@ -443,7 +443,6 @@ module ExcelTools
           truck_type: row_truck_type,
           tenant_id: tenant.id,
         )
-
         modifier_indexes.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]
@@ -481,7 +480,7 @@ module ExcelTools
           ratio: load_meterage_ratio,
           height_limit: load_meterage_limit,
         },
-        modifier: modifier
+        modifier: modifier,
       ).ids
       zones.each_value do |idents_and_country_objs|
         idents_and_country_objs.each do |idents_and_country|
@@ -771,7 +770,6 @@ module ExcelTools
   end
 
   def overwrite_local_charges(params, user = current_user)
-    mongo = get_client
 
     stats = {
       type: "local_charges",
@@ -790,8 +788,6 @@ module ExcelTools
       customs: [],
     }
 
-    local_charges = []
-    customs_fees = []
     xlsx = Roo::Spreadsheet.open(params["xlsx"])
     xlsx.sheets.each do |sheet_name|
       first_sheet = xlsx.sheet(sheet_name)
@@ -826,7 +822,6 @@ module ExcelTools
             "import" => {},
             "export" => {},
             "mode_of_transport" => rows[0][:mot].downcase,
-            "nexus_id" => hub.nexus.id,
             "tenant_id" => hub.tenant_id,
             "hub_id" => hub.id,
             "load_type" => lt,
@@ -834,7 +829,6 @@ module ExcelTools
           customs[lt] = {
             "import" => {},
             "export" => {},
-            "nexus_id" => hub.nexus.id,
             "tenant_id" => hub.tenant_id,
             "hub_id" => hub.id,
             "mode_of_transport" => rows[0][:mot].downcase,
@@ -880,40 +874,31 @@ module ExcelTools
           end
         end
       end
-
+      
       hub_fees.each do |k, v|
-        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
-        local_charges.push(
-          replace_one: {
-            filter: {_id: lc_id},
-            replacement: v,
-            upsert: true,
-          },
-        )
-
+        lc = hub.local_charges.find_by(mode_of_transport: v["mode_of_transport"], load_type: k)
+        if lc
+          lc.update_attributes(v)
+        else
+          hub.local_charges.create!(v)
+        end
         results[:charges] << v
         stats[:charges][:number_updated] += 1
-        # update_item('localCharges', {"_id" => lc_id}, v)
+
       end
       customs.each do |k, v|
-        lc_id = "#{hub.id}_#{hub.tenant_id}_#{k}"
-        customs_fees.push(
-          replace_one: {
-            filter: {_id: lc_id},
-            replacement: v,
-            upsert: true,
-          },
-        )
+        cf = hub.customs_fees.find_by(mode_of_transport: v["mode_of_transport"], load_type: k)
+        if cf
+          cf.update_attributes(v)
+        else
+          hub.customs_fees.create!(v)
+        end
 
         results[:customs] << v
         stats[:customs][:number_updated] += 1
-        # update_item('customsFees', {"_id" => lc_id}, v)
+
       end
     end
-
-    mongo["localCharges"].bulk_write(local_charges)
-    mongo["customsFees"].bulk_write(customs_fees)
-
     {stats: stats, results: results}
   end
 
