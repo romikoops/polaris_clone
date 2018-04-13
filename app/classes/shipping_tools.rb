@@ -156,7 +156,7 @@ module ShippingTools
     end
     shipment.customs_credit = shipment_data[:customsCredit]
     shipment.notes = shipment_data["notes"]
-    shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
+    
     cargo_item_types = {}
     if shipment.cargo_items
       cargo_items = shipment.cargo_items.map do |cargo_item|
@@ -308,6 +308,7 @@ module ShippingTools
     @destination = Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     shipment.origin_hub = @origin
     shipment.destination_hub = @destination
+    shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
     shipment.save!
     documents = {}
     shipment.documents.each do |doc|
