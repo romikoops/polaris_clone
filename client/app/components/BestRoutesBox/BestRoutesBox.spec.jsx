@@ -1,28 +1,31 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
+import { theme, identity, user, shipmentData } from '../../mocks'
 
-jest.mock('../Price/Price', () => {
-  const Price = () => <div />
+jest.mock('../Price/Price', () => ({
+  // eslint-disable-next-line react/prop-types
+  Price: ({ children }) => <div>{children}</div>
+}))
+jest.mock('../../helpers', () => ({
+  gradientGenerator: x => x
+}))
+jest.mock('../../constants', () => {
+  const moment = x => ({
+    diff: y => x - y
+  })
 
-  return {
-    Price
-  }
+  return { moment }
 })
 // eslint-disable-next-line import/first
 import { BestRoutesBox } from './BestRoutesBox'
 
 const propsBase = {
-  user: {},
-  chooseResult: () => {},
-  shipmentData: {
-    shipment: {},
-    schedules: []
-  }
+  theme,
+  user,
+  chooseResult: identity,
+  shipmentData
 }
 
-test('text content', () => {
-  const wrapper = mount(<BestRoutesBox {...propsBase} />)
-  const expectedResult = 'Best DealCheapest RouteFastest route'
-
-  expect(wrapper.text()).toBe(expectedResult)
+test('shallow render', () => {
+  expect(shallow(<BestRoutesBox {...propsBase} />)).toMatchSnapshot()
 })

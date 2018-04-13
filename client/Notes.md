@@ -56,6 +56,8 @@ Warning: Functions are not valid as a React child. This may happen if you return
 
 - Component is build with three smaller components. These components should be outside of the component, so they can be exported and tested.
 
+[X] Test complete
+
 ## BlogPostHighlights
 
 - Basic test only
