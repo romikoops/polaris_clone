@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="card_link  layout-column flex-100 flex-gt-sm-30 unselected"
+  onClick={[Function]}
+>
+  <div
+    className="card_img flex-85"
+    style={
+      Object {
+        "backgroundImage": "url(FOO_IMAGE)",
+        "backgroundSize": "contain",
+      }
+    }
+  />
+  <div
+    className="card_action flex-15 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-none layout-row layout-align-center-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TEXT
+         
+      </p>
+    </div>
+    <div
+      className="flex-none layout-row layout-align-center-center"
+    />
+  </div>
+</div>
+`;
