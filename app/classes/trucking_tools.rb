@@ -1,27 +1,5 @@
 # frozen_string_literal: true
 
-<<<<<<< HEAD
-  def has_steptable?
-    steptable != nil
-  end
-
-  def price_fcl(km, container_count)
-    self.price_per_km * km * container_count
-  end
-
-  def price_lcl(km, cargo_item)
-    self.price_per_km * km * 1
-  end
-
-  def total_price(km, weight_in_tons, volume_in_cm3, units)
-    trucking_rules_price_machine = TruckingPriceRulesMachine.new(self, km, weight_in_tons, volume_in_cm3, units)
-
-    total_price = trucking_rules_price_machine.total_price
-    total_price.round(2)
-  end
-
-  def calculate_trucking_price(pricing, cargo, direction, km)
-=======
 module TruckingTools
   include MongoTools
   def retrieve_trucking_pricing(location, user, load_type, _delivery_type, hub)
@@ -50,7 +28,6 @@ module TruckingTools
   end
 
   def calculate_trucking_price(pricing, cargo, _direction, km)
->>>>>>> downloaders
     fees = {}
     result = {}
     total_fees = {}

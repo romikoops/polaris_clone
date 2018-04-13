@@ -417,4 +417,13 @@ module MultiTenantTools
       },
     })
   end
+  def download_mongo
+    results = {}
+    %w(customsFees itineraryOptions itineraryPricings localCharges pricings).each do |target|
+      results[target] = $db[target].find({})
+    end
+    File.open("mongo_dump.json","w") do |f|
+      f.write(results.to_json)
+    end
+  end
 end
