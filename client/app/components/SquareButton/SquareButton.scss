@@ -1,0 +1,66 @@
+:local {
+  .square_btn {
+    border-radius: 2px;
+    font-size: 20px;
+    line-height: 21px;
+    text-align: center;
+    border: none;
+    cursor: not-allowed;
+    transition: margin 0.2s ease;
+    transition: shadow 0.4s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    &:focus {
+      outline: none;
+    }
+    &.clickable {
+      cursor: pointer;
+    }
+    &:active {
+      margin: 0;
+      box-shadow: none;
+    }
+  }
+
+  .large {
+    height: 70px;
+    width: 317px;
+  }
+
+  .small {
+    height: 50px;
+    width: 167px;
+    font-size: 18px;
+  }
+
+  .full {
+    height: 50px;
+    width: 100%;
+    font-size: 18px;
+  }
+
+  .neutral {
+    background-color: #D8D8D8;
+    color: #2C2C2C !important;
+  }
+
+  .back {
+    background-color: #787878;
+    color: #FFFFFF !important;
+  }
+  .content {
+    position: relative;
+    margin: 0;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-weight: bold;
+    background: url('https://preview.ibb.co/mqLnBn/chuttersnap_368037_unsplash.jpg');
+  }
+  .icon {
+    position: absolute;
+    left: -30px;
+  }
+  .icon_margin {
+    margin-left: 8px;
+  }
+}

@@ -1,45 +1,55 @@
 @import '../../styles/defaults';
 :local {
-  .sign_up {
+  .banner_text {
     color: white;
     width: 451px;
     h2 {
       font-size: 24px;
       font-weight: normal;
     }
-    h3 {
-      font-size: 18px;
-      font-weight: normal;
+    .wrapper_h3 {
+      margin-bottom: 50px;
+
+      h3 {
+        font-size: 18px;
+        font-weight: normal;
+      }
     }
     h4 {
       font-size: 16px;
       font-weight: normal;
     }
-    @media (min-width: 768px) and (max-width: 1366px) {
-      height: min-content;
-      margin-top: -12vh !important;
+    .wrapper_hr {
+      width: 55%;
+      margin-bottom: 50px;
+      hr {
+        border-color: white;
+        border-width: 0.5px;
+        opacity: 0.8;
+      }
+    }
+    @media (min-width: 768px) {
       h2 {
-        font-size: 24px;
-        font-weight: bold;
+        font-size: 52px;
       }
       h3 {
-        font-size: 18px;
-        font-weight: bold;
+        font-size: 20px;
       }
       h4 {
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 17px;
       }
     }
   }
-
-  .layout_elem {
-    z-index: 1;
-  }
-
-  .top_row {
-    width: 100%;
-    z-index:2;
+  .wrapper_btns {
+    margin-bottom: 50px;
+    a {
+      color: white;
+      cursor: pointer;
+      text-decoration: underline !important;
+      text-transform: uppercase;
+      font-weight: bold;
+      font-size: 20px;
+    }
   }
 
   .wrapper_tenant_logo {
