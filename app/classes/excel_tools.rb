@@ -437,13 +437,18 @@ module ExcelTools
       row_min_value = row_data.shift
       row_key = "#{row_zone_name}_#{row_truck_type}"
 
-      ident_values = zones[row_zone_name].flat_map do |idents_and_country|
+      single_ident_values_and_country = zones[row_zone_name].flat_map do |idents_and_country|
         if idents_and_country[:min] && idents_and_country[:max]
-          (idents_and_country[:min].to_i...idents_and_country[:max].to_i)
+          (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+            {id: ident, country: idents_and_country[:country]}
+          end
         else
-          idents_and_country[:id]
+          idents_and_country
         end
       end
+
+      single_ident_values = single_ident_values_and_country.map { |h| h[:id] }
+      single_country_values = single_ident_values_and_country.map { |h| h[:country] }
       
       %w[pre on].each do |direction|
         trucking_pricing_by_zone[row_key] = TruckingPricing.new(
@@ -505,14 +510,18 @@ module ExcelTools
           ),
           td_ids AS (
               WITH existing_identifiers AS (
+                  -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
                   SELECT id, #{identifier_type} FROM trucking_destinations
-                  WHERE trucking_destinations.#{identifier_type} IN ('#{ident_values.join("','")}')
+                  WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
               )
-              INSERT INTO trucking_destinations(#{identifier_type}, created_at, updated_at)
-                  -- insert non-existent ident_values
-                  SELECT ident_value::text, cr_at, up_at
-                  FROM (VALUES ('#{ident_values.join("', current_timestamp, current_timestamp),('")}', current_timestamp, current_timestamp)) AS t(ident_value, cr_at, up_at)
+              INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
+                  -- insert non-existent trucking_destinations
+                  -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
+                  SELECT ident_value::text, country_code::text, cr_at, up_at
+                  FROM (VALUES #{single_ident_values_and_country.map { |h| "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)" }.join(", ")})
+                          AS t(ident_value, country_code, cr_at, up_at)
                   WHERE ident_value::text NOT IN (
+                      -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
                       SELECT #{identifier_type}
                       FROM existing_identifiers
                   )
