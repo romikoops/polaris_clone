@@ -6,6 +6,9 @@ class CardRoutePricing extends Component {
     super(props)
     // import routes (ツ?)
     // import clients (ツ?)
+
+    // clients: how many clients i have (active) in total for each route?
+    // *OPT* fees: how many different fees?
   }
   render () {
     return (
@@ -15,18 +18,18 @@ class CardRoutePricing extends Component {
       <div className="card-route-pricing">
         <div className="top-routes">
           <div className="">
-            <p>From: <strong><span> (ツ?) </span></strong></p>
-            <p>To: <strong><span> (ツ?) </span></strong></p>
+            <p>From: <strong><span> Stockholm </span></strong></p>
+            <p>To: <strong><span> Guthenberg </span></strong></p>
           </div>
-          <i></i>
+          <i>icon</i>
         </div>
         <div className="bottom-routes">
-          <p><strong> (ツ?) </strong> clients</p>
-          <p><strong> (ツ?) </strong> fees</p>
+          <p><strong> 3 </strong> clients</p>
+          <p><strong> 2 </strong> fees</p>
         </div>
       </div>
       )
   }
 }
 
-export default CardRoutePricing;
+export default CardRoutePricing

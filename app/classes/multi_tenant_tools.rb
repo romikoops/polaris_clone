@@ -19,7 +19,7 @@ module MultiTenantTools
           lnk.content = favicon
         end
       end
-        
+
       s3 = Aws::S3::Client.new(
         access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
@@ -67,7 +67,7 @@ module MultiTenantTools
           cargo_item: true
         },
         air: {
-          container: false,
+          container: true,
           cargo_item: true
         }
       },
@@ -95,7 +95,7 @@ module MultiTenantTools
         lnk.content = favicon
       end
     end
-      
+
       s3 = Aws::S3::Client.new(
         access_key_id: ENV['AWS_KEY'],
         secret_access_key: ENV['AWS_SECRET'],
@@ -136,7 +136,7 @@ module MultiTenantTools
             domain_name: origin_domain,
             origin_path: '',
             s3_origin_config: { origin_access_identity: '' }
-          } 
+          }
         ]
       }
       default_cache_behavior = {
@@ -168,7 +168,7 @@ module MultiTenantTools
           price_class: price_class,
           viewer_certificate: viewer_certificate,
           enabled: true,
-       
+
         custom_error_responses: {
           quantity: 2, # required
           items: [
@@ -269,7 +269,7 @@ module MultiTenantTools
 
       confirmed_at: DateTime.new(2017, 1, 20)
     )
-    
+
     admin.save!
     shipper = tenant.users.new(
       role: Role.find_by_name('shipper'),

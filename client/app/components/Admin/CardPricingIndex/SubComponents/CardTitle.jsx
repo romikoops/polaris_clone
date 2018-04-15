@@ -12,7 +12,7 @@ function CardTitle (props) {
   return (
     <div className="card-title-pricing">
       <div className="center-items">
-        <i className="ooo">{faIcon}</i>
+        <i className={`fa fa-${faIcon}`}></i>
         <div>
           <h5>{titles}</h5>
           <p>Routes</p>
