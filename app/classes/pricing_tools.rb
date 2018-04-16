@@ -85,7 +85,8 @@ module PricingTools
       if fee["hw_rate_basis"]
         totals[k]["value"] += heavy_weight_fee_value(fee, cargo)
       else
-        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))
+        
+        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))["value"]
       end
     end
     
@@ -195,17 +196,14 @@ module PricingTools
     delete_item('pricings', _id: pricing_id)
   end
 
-  def handle_range_fee(fee, cargo)
-    weight_kg = cargo.try(:payload_in_kg) || cargo.try(:weight)
-    quantity  = cargo.try(:quantity) || 1
-
+  def handle_range_fee(fee, cargo_hash)
+    weight_kg = cargo_hash[:weight]
     case fee["rate_basis"]
     when 'PER_KG_RANGE'
       fee_range = fee["range"].find do |range|
-        weight_kg > range["min"] && weight_kg < range["max"]
+        weight_kg >= range["min"] && weight_kg <= range["max"]
       end
-
-      value = fee_range.nil? ? 0 : fee_range["rate"] * quantity
+      value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
       return { "value" => value, "currency" => fee["currency"] }
     end
 
@@ -213,7 +211,7 @@ module PricingTools
   end
 
   def heavy_weight_fee_value(fee, cargo)
-    weight_kg = cargo.try(:payload_in_kg) || cargo.try(:weight)
+    weight_kg = cargo.try(:weight) || cargo.try(:payload_in_kg)
     quantity  = cargo.try(:quantity) || 1
     cbm = cargo.volume
     ton = weight_kg / 1000
@@ -264,7 +262,7 @@ module PricingTools
       min = fee["min"] || 0
       [cbm, ton, min].max 
     when /RANGE/
-      handle_range_fee(fee, cargo)
+      handle_range_fee(fee, cargo_hash)
     end
   end
 
