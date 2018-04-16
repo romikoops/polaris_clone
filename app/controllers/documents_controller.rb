@@ -1,4 +1,4 @@
-class DocumentsController < ApplicationController
+class DocumentsController < ApplicationController # TODO: mongo
 	skip_before_action :require_authentication!
   include DocumentTools
 	def	download_redirect

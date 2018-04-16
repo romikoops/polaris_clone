@@ -6,7 +6,7 @@ class UserLocation < ApplicationRecord
   validates :primary, uniqueness: {
     scope: :user,
     message: "'primary' has already been taken by this User"
-  }, if: -> { primary == true }
+  }, if: -> { primary }
 
   validates :location, uniqueness: { scope: :user }
 
