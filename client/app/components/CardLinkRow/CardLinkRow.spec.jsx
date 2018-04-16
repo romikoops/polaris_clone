@@ -1,11 +1,7 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { CardLinkRow } from './CardLinkRow'
-
-import {
-  theme,
-  identity
-} from '../../mocks'
+import { theme, identity } from '../../mocks'
 
 const cardFirst = {
   name: 'FOO_NAME1',
@@ -32,4 +28,8 @@ test('text content of component is based on props.cards', () => {
   const wrapper = mount(<CardLinkRow {...propsBase} />)
 
   expect(wrapper.text()).toBe(`${cardFirst.name} ${cardSecond.name} `)
+})
+
+test('shallow render', () => {
+  expect(shallow(<CardLinkRow {...propsBase} />)).toMatchSnapshot()
 })
