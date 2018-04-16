@@ -27,6 +27,7 @@ const group = {
   cargoType: {
     category: 'FOO_CATEGORY'
   },
+  volume: 5,
   items: [{
     chargeable_weight: 80,
     dimension_x: 90,

@@ -219,6 +219,7 @@ exports[`props.viewHSCodes is true 1`] = `
           ],
           "quantity": "FOO_QUANTITY",
           "size_class": "dry_goods",
+          "volume": 5,
         }
       }
     />
@@ -480,6 +481,7 @@ exports[`shallow render 1`] = `
           ],
           "quantity": "FOO_QUANTITY",
           "size_class": "dry_goods",
+          "volume": 5,
         }
       }
     />
