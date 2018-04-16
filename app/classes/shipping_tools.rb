@@ -50,7 +50,7 @@ module ShippingTools # TODO: mongo
       itinerary = itinerary.as_json
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
     end
-
+    byebug
     {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },

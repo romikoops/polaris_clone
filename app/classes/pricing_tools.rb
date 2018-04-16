@@ -141,7 +141,7 @@ module PricingTools # TODO: mongo
   end
 
   def get_user_pricings(id)
-    User.find(id: id).pricings.each_with_object({}) do |pricing, return_h|
+    User.find(id).pricings.each_with_object({}) do |pricing, return_h|
       return_h[pricing.route.name] = true # TODO: no route model
     end
 
@@ -170,7 +170,7 @@ module PricingTools # TODO: mongo
   end
 
   def get_itinerary_pricings(itinerary_id)
-    ItineraryPricing.where(itinerary_id: itinerary_id)
+    Itinerary.find(itinerary_id).pricings
     # get_items('itineraryPricings', 'itinerary_id', itinerary_id).to_a
   end
 
@@ -210,7 +210,7 @@ module PricingTools # TODO: mongo
 
   # TODO: duplicated code
   def itinerary_pricing_update(id, data)
-    ItineraryPricing.find(id).update(data)
+    Itinerary.find(id).update(data)
     # update_item('itineraryPricings', {_id: key }, data)
   end
 

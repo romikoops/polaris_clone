@@ -1,17 +1,18 @@
 include MongoTools # TODO: mongo
 
-PRICING_TABLES = %w(
-	customsFees
-	hubRoutePricings
-	pricings
-	routeOptions
-	truckingHubs
-	truckingPricings
-	truckingQueries
-	localCharges
-	userPricings
-	itineraryPricings
-	itineraryOptions
-)
+# TODO: remove
+# PRICING_TABLES = %w(
+# 	customsFees
+# 	hubRoutePricings
+# 	pricings
+# 	routeOptions
+# 	truckingHubs
+# 	truckingPricings
+# 	truckingQueries
+# 	localCharges
+# 	userPricings
+# 	itineraryPricings
+# 	itineraryOptions
+# )
 
-PRICING_TABLES.each { |table| drop_table table }
+#PRICING_TABLES.each { |table| drop_table table }
