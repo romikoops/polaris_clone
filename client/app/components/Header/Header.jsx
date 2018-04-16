@@ -72,7 +72,6 @@ class Header extends Component {
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
-
     const accountLinks = [
       {
         url: '/account',
@@ -108,7 +107,11 @@ class Header extends Component {
     )
 
     let logoUrl = ''
+    let logoDisplay = {
+      display: `${isTop && invert ? 'none' : 'block'}`
+    }
     let logoStyle
+
     if (theme && theme.logoWide) {
       logoUrl = theme.logoWide
       logoStyle = styles.wide_logo
@@ -116,8 +119,9 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-    // this code is provisional
+
     logoUrl = 'https://assets.itsmycargo.com/assets/images/logos/logo_white.png'
+
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -162,6 +166,7 @@ class Header extends Component {
               src={logoUrl}
               className={logoStyle}
               alt=""
+              style={logoDisplay}
               onClick={this.goHome}
             />
           </div>

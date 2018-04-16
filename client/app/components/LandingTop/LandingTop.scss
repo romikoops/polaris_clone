@@ -1,5 +1,9 @@
 @import '../../styles/defaults';
 :local {
+  .tenant_logo_landing {
+      width: 200px;
+      margin-top: 130px;
+    }
   .banner_text {
     color: white;
     width: 451px;
