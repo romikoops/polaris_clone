@@ -91,5 +91,11 @@ include MongoTools
   # trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+
+  # hub = tenant.hubs.find_by_name("Shenzhen Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+
   # tenant.update_route_details()
 end
