@@ -21,6 +21,8 @@ class ApplicationRecord < ActiveRecord::Base
         "'#{val.to_json}'::jsonb"
       when String
         "'#{val}'"
+      when nil
+        "NULL"
       else
         val
       end

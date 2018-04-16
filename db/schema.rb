@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180412080147) do
+ActiveRecord::Schema.define(version: 20180412110423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -278,6 +278,8 @@ ActiveRecord::Schema.define(version: 20180412080147) do
     t.datetime "booking_placed_at"
     t.jsonb "insurance"
     t.jsonb "customs"
+    t.bigint "transport_category_id"
+    t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 
   create_table "spatial_ref_sys", primary_key: "srid", id: :integer, default: nil, force: :cascade do |t|
@@ -356,6 +358,10 @@ ActiveRecord::Schema.define(version: 20180412080147) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
+    t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
+    t.index ["distance"], name: "index_trucking_destinations_on_distance"
+    t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
@@ -435,5 +441,8 @@ ActiveRecord::Schema.define(version: 20180412080147) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "shipments", "transport_categories"
+  add_foreign_key "tenant_cargo_item_types", "cargo_item_types"
   add_foreign_key "tenant_cargo_item_types", "tenants"
+  add_foreign_key "users", "roles"
 end

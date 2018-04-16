@@ -59,6 +59,7 @@ class TruckingPricing < ApplicationRecord
     #   tp.save!
     # end
   end
+
   def self.copy_to_tenant(from_tenant, to_tenant)
     ft = Tenant.find_by_subdomain(from_tenant)
     tt = Tenant.find_by_subdomain(to_tenant)
@@ -79,6 +80,7 @@ class TruckingPricing < ApplicationRecord
       end
     end
   end
+  
   def self.fix_hub_truckings(subd)
     t = Tenant.find_by_subdomain(subd)
     t.trucking_pricings.map do |tp|

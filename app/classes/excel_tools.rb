@@ -500,137 +500,108 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][k] = fee
           end
         end
-      end
 
-      single_ident_values_and_country.map do |idents_and_country|
+        single_ident_values_and_country_with_timestamps =
+          single_ident_values_and_country.map do |h|
+            "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+          end.join(", ")
+
+        tp = trucking_pricing_by_zone[row_key]
+
+        new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
+
         
-      end
-
-      ##
-      # awesome_print trucking_pricing_by_zone[row_key]
-      ##
-      tp = trucking_pricing_by_zone[row_key]
-
-      ############################
-      # INSERT SQL HERE!
-      insertion_query = <<-eos
-        WITH  
-          existing_identifiers AS (
+        # Find or update trucking_destinations
+        td_query = <<-eos
+          WITH  
+            existing_identifiers AS (
               SELECT id, #{identifier_type}, country_code FROM trucking_destinations
               WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
-                  AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
-          ),
-          inserted_td_ids AS (
+                AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
+            ),
+            inserted_td_ids AS (
               INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
-                  -- insert non-existent trucking_destinations
-                  SELECT ident_value::text, country_code::text, cr_at, up_at
-                  FROM (VALUES #{single_ident_values_and_country.map { |h| "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)" }.join(", ")})
-                          AS t(ident_value, country_code, cr_at, up_at)
-                  WHERE ident_value::text NOT IN (
-                      SELECT #{identifier_type}
-                      FROM existing_identifiers
-                      WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
-                  )
+                -- insert non-existent trucking_destinations
+                SELECT ident_value::text, country_code::text, cr_at, up_at
+                FROM (VALUES #{single_ident_values_and_country_with_timestamps})
+                  AS t(ident_value, country_code, cr_at, up_at)
+                WHERE ident_value::text NOT IN (
+                  SELECT #{identifier_type}
+                  FROM existing_identifiers
+                  WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
+                )
               RETURNING id
-          ),
-          td_ids AS (
-            SELECT id FROM inserted_td_ids
-            UNION
-            SELECT id FROM existing_identifiers
-          ),
-          matching_tps_without_rates_and_fees AS (
-            SELECT carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type
-            FROM td_ids
-            JOIN hub_truckings ON td_ids.id = hub_truckings.trucking_destination_id
-            JOIN trucking_pricings ON trucking_pricings.id = hub_truckings.trucking_pricing_id
-          ),
-          hub_ids AS (
+            )          
+          SELECT id FROM inserted_td_ids
+          UNION
+          SELECT id FROM existing_identifiers
+        eos
+
+        td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
+
+        with_statement = <<-eos
+          WITH
+            td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
+            matching_tps_without_rates_and_fees AS (
+              SELECT trucking_pricings.id, #{new_cols.join(", ")}
+              FROM td_ids
+              JOIN hub_truckings ON td_ids.id = hub_truckings.trucking_destination_id
+              JOIN trucking_pricings ON trucking_pricings.id = hub_truckings.trucking_pricing_id
+            ),
+            hub_ids AS (
               VALUES(#{hub_id})
-          ),
-          t_stamps AS (
+            ),
+            t_stamps AS (
               VALUES(current_timestamp)
-          ),
-          tp AS (
-            SELECT * FROM (VALUES (#{tp.to_postgres_insertable(%w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type))})) AS t(carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type)
-          ),
-          matching_tp_id_table AS (
+            ),
+            tp AS (
+              SELECT * FROM (
+                VALUES #{tp.to_postgres_insertable(new_cols)}
+              ) AS t(#{new_cols.join(", ")})
+            ),
+            matching_tp_id_table AS (
               SELECT id FROM matching_tps_without_rates_and_fees
-              INNER JOIN tp USING (carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type)
+              INNER JOIN tp USING (#{new_cols.join(", ")})
             )
-          CASE WHEN (
+        eos
+
+        insertion_query = <<-eos
+          DO
+          $do$
+          BEGIN
+          IF (
+            #{with_statement}
             SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
-          )
-          THEN
-              UPDATE trucking_pricings SET (rates, fees) = #{tp.to_postgres_insertable(%w(rates fees))}
-              WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table)
+          ) THEN
+            #{with_statement}
+            UPDATE trucking_pricings SET (rates, fees) = #{tp.to_postgres_insertable(%w(rates fees))}
+            WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
           ELSE
-            WITH tp_ids AS (
-                INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
-                    VALUES #{tp.to_postgres_insertable}
-                RETURNING id
+            #{with_statement},
+            tp_ids AS (
+              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+                VALUES #{tp.to_postgres_insertable}
+              RETURNING id
             )
             INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-                (SELECT * FROM hub_ids
-                    CROSS JOIN tp_ids
-                    CROSS JOIN td_ids
-                    CROSS JOIN t_stamps AS created_ats
-                    CROSS JOIN t_stamps AS updated_ats)
+              (
+                SELECT * FROM hub_ids
+                CROSS JOIN tp_ids
+                CROSS JOIN td_ids
+                CROSS JOIN t_stamps AS created_ats
+                CROSS JOIN t_stamps AS updated_ats
+              );
+          END IF;        
           END
-        ;
-      eos
-      ActiveRecord::Base.connection.execute(insertion_query)
-      ############################
+          $do$
+        eos
 
-    #   trucking_pricing_should_update = nil
-    #   trucking_pricing_ids = TruckingPricing.where(
-    #     load_type: load_type,
-    #     truck_type: row_truck_type,
-    #     load_meterage: {
-    #       ratio: load_meterage_ratio,
-    #       height_limit: load_meterage_limit,
-    #     },
-    #     modifier: modifier
-    #   ).ids
-      
-    #   zones.each_value do |idents_and_country_objs|
-    #     idents_and_country_objs.each do |idents_and_country|
-    #       if idents_and_country[:min] && idents_and_country[:max]
-    #         ident_values = (idents_and_country[:min].to_i..idents_and_country[:max].to_i)
-    #       else
-    #         ident_values = [idents_and_country[:id]]
-    #       end
-
-    #       ident_values.each do |ident_value|
-    #         if identifier_type == "city_name"
-    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => Location.get_trucking_city("#{ident_value.to_s}, #{idents_and_country[:country]}"), country_code: idents_and_country[:country])
-    #         else
-    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
-    #         end
-
-    #         hub_trucking = HubTrucking.where(
-    #           trucking_destination: trucking_destination,
-    #           trucking_pricing_id: trucking_pricing_ids,
-    #           hub_id: hub_id,
-    #         ).first
-
-    #         if hub_trucking.nil?
-    #           HubTrucking.create(
-    #             trucking_destination: trucking_destination,
-    #             trucking_pricing: trucking_pricing_by_zone[row_key],
-    #             hub_id: hub_id,
-    #           )
-    #         else
-    #           trucking_pricing_should_update = hub_trucking.trucking_pricing
-    #         end
-    #         trucking_pricing_should_update.try(:update, trucking_pricing_by_zone[row_key].given_attributes)
-    #         # stats[:trucking_queries][:number_updated] += 1
-    #       end
-    #     end
-    #   end
+        ActiveRecord::Base.connection.execute(insertion_query)
+      end
     end
     # END Rates ------------------------
 
-    {results: results, stats: stats}
+    { results: results, stats: stats }
   end
 
   def overwrite_city_trucking_rates_by_hub(params, _user = current_user, hub_id, courier_name, direction)
