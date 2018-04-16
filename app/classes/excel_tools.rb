@@ -459,6 +459,7 @@ module ExcelTools
       single_country_values = single_ident_values_and_country.map { |h| h[:country] }
       
       %w[pre on].each do |direction|
+        
         trucking_pricing_by_zone[row_key] = TruckingPricing.new(
           rates: {},
           fees: {},
@@ -500,11 +501,7 @@ module ExcelTools
             trucking_pricing_by_zone[row_key][:fees][k] = fee
           end
         end
-      end
-
-      single_ident_values_and_country.map do |idents_and_country|
-        
-      end
+      
 
       ##
       # awesome_print trucking_pricing_by_zone[row_key]
@@ -554,7 +551,7 @@ module ExcelTools
       eos
       ActiveRecord::Base.connection.execute(insertion_query)
       ############################
-
+    end
     #   trucking_pricing_should_update = nil
     #   trucking_pricing_ids = TruckingPricing.where(
     #     load_type: load_type,
@@ -951,7 +948,7 @@ module ExcelTools
 
           charge[:expiration_date] = row[:expiration_date]
           charge[:effective_date] = row[:effective_date]
-
+          
           if row[:fee_code] != "CUST"
             hub_fees = local_charge_load_setter(hub_fees, charge, row[:load_type].downcase, row[:direction].downcase, sheet_name)
           else
