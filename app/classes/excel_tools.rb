@@ -514,18 +514,13 @@ module ExcelTools
       ############################
       # INSERT SQL HERE!
       insertion_query = <<-eos
-        WITH
-          tp_ids AS (
-              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
-                  VALUES #{tp.to_postgres_insertable}
-              RETURNING id
+        WITH  
+          existing_identifiers AS (
+              SELECT id, #{identifier_type}, country_code FROM trucking_destinations
+              WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
+                  AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
           ),
-          td_ids AS (
-              WITH existing_identifiers AS (
-                  SELECT id, #{identifier_type}, country_code FROM trucking_destinations
-                  WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
-                    AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
-              )
+          inserted_td_ids AS (
               INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
                   -- insert non-existent trucking_destinations
                   SELECT ident_value::text, country_code::text, cr_at, up_at
@@ -538,18 +533,49 @@ module ExcelTools
                   )
               RETURNING id
           ),
+          td_ids AS (
+            SELECT id FROM inserted_td_ids
+            UNION
+            SELECT id FROM existing_identifiers
+          ),
+          matching_tps_without_rates_and_fees AS (
+            SELECT carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type
+            FROM td_ids
+            JOIN hub_truckings ON td_ids.id = hub_truckings.trucking_destination_id
+            JOIN trucking_pricings ON trucking_pricings.id = hub_truckings.trucking_pricing_id
+          ),
           hub_ids AS (
               VALUES(#{hub_id})
           ),
           t_stamps AS (
               VALUES(current_timestamp)
+          ),
+          tp AS (
+            SELECT * FROM (VALUES (#{tp.to_postgres_insertable(%w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type))})) AS t(carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type)
+          ),
+          matching_tp_id_table AS (
+              SELECT id FROM matching_tps_without_rates_and_fees
+              INNER JOIN tp USING (carriage, cbm_ratio, courier_id, load_meterage, load_type, modifier, tenant_id, truck_type)
+            )
+          CASE WHEN (
+            SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
           )
-        INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-            (SELECT * FROM hub_ids
-                CROSS JOIN tp_ids
-                CROSS JOIN td_ids
-                CROSS JOIN t_stamps AS created_ats
-                CROSS JOIN t_stamps AS updated_ats)
+          THEN
+              UPDATE trucking_pricings SET (rates, fees) = #{tp.to_postgres_insertable(%w(rates fees))}
+              WHERE trucking_pricings.id = (SELECT id FROM matching_tp_id_table)
+          ELSE
+            WITH tp_ids AS (
+                INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+                    VALUES #{tp.to_postgres_insertable}
+                RETURNING id
+            )
+            INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+                (SELECT * FROM hub_ids
+                    CROSS JOIN tp_ids
+                    CROSS JOIN td_ids
+                    CROSS JOIN t_stamps AS created_ats
+                    CROSS JOIN t_stamps AS updated_ats)
+          END
         ;
       eos
       ActiveRecord::Base.connection.execute(insertion_query)

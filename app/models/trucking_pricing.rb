@@ -198,6 +198,12 @@ class TruckingPricing < ApplicationRecord
     ").values.first.try(:first)
   end
 
+  def values_without_rates_and_fees
+    %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type).sort.map do |key|
+      self[key.to_sym]
+    end.join(", ")
+  end
+
   private
 
   def self.find_by_filter_argument_errors(args)
@@ -219,5 +225,6 @@ class TruckingPricing < ApplicationRecord
   def self.parse_sql_array(str)
     str.gsub(/\(|\)|\"/, "").split(",")
   end
+
 
 end
