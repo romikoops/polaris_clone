@@ -69,7 +69,8 @@ export class LandingTop extends Component {
       </a>
     )
 
-    const backgroundImage = 'https://preview.ibb.co/mqLnBn/chuttersnap_368037_unsplash.jpg'
+    // this code is provisional
+    const backgroundImage = 'https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg'
     // theme && theme.background
     //   ? theme.background
     //   : 'https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg'

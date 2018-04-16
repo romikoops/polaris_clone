@@ -116,7 +116,8 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-    const textColor = isTop && invert ? 'white' : 'black'
+    // this code is provisional
+    logoUrl = 'https://assets.itsmycargo.com/assets/images/logos/logo_white.png'
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -124,12 +125,7 @@ class Header extends Component {
       </div>
     )
 
-    const loginPrompt = (
-      <a className={defs.pointy} style={{ color: textColor }} onClick={this.toggleShowLogin}>
-        Login/Register
-      </a>
-    )
-    const rightCorner = user && user.first_name && !user.guest ? dropDowns : loginPrompt
+    const rightCorner = user && user.first_name && !user.guest ? dropDowns : ''
     const loginModal = (
       <Modal
         component={
