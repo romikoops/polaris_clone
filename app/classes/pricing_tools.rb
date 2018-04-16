@@ -53,7 +53,7 @@ module PricingTools
   def calc_customs_fees(charge, cargos, load_type, user)
     cargo_hash = cargos.each_with_object(Hash.new(0)) do |cargo_unit, return_h|
       return_h[:number_of_items] += cargo_unit.quantity unless cargo_unit.quantity.nil?
-      return_h[:volume]          += cargo_unit.volume   unless cargo_unit.volume.nil?
+      return_h[:volume]          += cargo_unit.try(:volume) || 0
       return_h[:weight]          += (cargo_unit.try(:weight) || cargo_unit.payload_in_kg)
     end
 

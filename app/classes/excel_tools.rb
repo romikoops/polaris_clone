@@ -549,6 +549,7 @@ module ExcelTools
                 CROSS JOIN t_stamps AS updated_ats)
         ;
       eos
+      byebug
       ActiveRecord::Base.connection.execute(insertion_query)
       ############################
     end
