@@ -81,11 +81,18 @@ include MongoTools
   # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-
+  # awesome_print "City rates done"
+  # hub = tenant.hubs.find_by_name("Gothenburg Port")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
+  # req = {"xlsx" => trucking}
+  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  # awesome_print "Zip rates done"
+  
   hub = tenant.hubs.find_by_name("Gothenburg Port")
   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
   req = {"xlsx" => trucking}
   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  awesome_print "All rates done"
 
   # hub = tenant.hubs.find_by_name("Copenhagen Port")
   # trucking = File.open("#{Rails.root}/db/dummydata/es_trucking.xlsx")
