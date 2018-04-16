@@ -104,6 +104,7 @@ class TenantSeeder
           brightSecondary: "#0CA7F7"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/images/logos/logo_white.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png",
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
@@ -700,8 +701,9 @@ class TenantSeeder
           brightSecondary: "#4368b7"
         },
         logoLarge: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_small.png",
-        background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
         main:"Hoegerdamm 35, 20097 Hamburg"
@@ -780,7 +782,7 @@ class TenantSeeder
         },
         logoLarge: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
-        background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
         main:"Wollkämmereistraße 1, 21107 Hamburg"

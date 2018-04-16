@@ -84,7 +84,8 @@ export class LandingTop extends Component {
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
               <div className={`flex-70 ${styles.banner_text}`}>
                 <img
-                  src="https://assets.itsmycargo.com/assets/images/logos/logo_white.png"
+                  // src="https://assets.itsmycargo.com/assets/images/logos/logo_white.png"
+                  src={theme.logoWhite || theme.logoLarge}
                   alt=""
                   className={`flex-none ${styles.tenant_logo_landing}`}
                 />

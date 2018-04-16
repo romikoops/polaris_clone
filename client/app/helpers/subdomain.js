@@ -1,7 +1,7 @@
 export function getSubdomain () {
   const { host } = window.location
   if (host.indexOf('.') < 0) {
-    return 'demo'
+    return 'hartrodt'
   }
   if (
     host.split('.')[0] === 'www' ||
@@ -10,7 +10,7 @@ export function getSubdomain () {
     host.split('.')[0] === '192' ||
     host.includes('localhost')
   ) {
-    return 'demo'
+    return 'hartrodt'
   }
   return host.split('.')[0]
 }
