@@ -1,0 +1,509 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.viewHSCodes is true 1`] = `
+<div
+  className="info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-40 layout-row layout-align-start-center"
+    >
+      <h5
+        className="flex-none"
+      >
+        Cargo Unit
+      </h5>
+      <div
+        className="flex-5"
+      />
+      <p
+        className="flex-none"
+      />
+    </div>
+    <div
+      className="flex-40 layout-row layout-align-end-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_QUANTITY X FOO_CATEGORY
+      </p>
+    </div>
+  </div>
+  <hr />
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Pallet Type
+        </p>
+        <div
+          className="flex-5"
+        />
+        <p
+          className="flex-none"
+        />
+      </div>
+      <div
+        className="flex-30 layout-row layout-align-end-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Toggle Unit View
+        </p>
+        <div
+          className="flex-5"
+        />
+        <Component
+          checked={false}
+          className="flex-none"
+          id="unitView"
+          name="unitView"
+          onChange={[Function]}
+        />
+      </div>
+    </div>
+    <hr
+      className="flex-100"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-none-start layout-wrap"
+  >
+    <div
+      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Item 0
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Length
+          </p>
+          <p
+            className="flex-none"
+          >
+            100
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Width
+          </p>
+          <p
+            className="flex-none"
+          >
+            90
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Height
+          </p>
+          <p
+            className="flex-none"
+          >
+            120
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Gross Weight
+          </p>
+          <p
+            className="flex-none"
+          >
+            56
+             kg
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Volume
+          </p>
+          <p
+            className="flex-none"
+          >
+            0.90
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Chargeable Weight
+          </p>
+          <p
+            className="flex-none"
+          >
+            80000.00
+             kg
+          </p>
+        </div>
+        <hr
+          className="flex-100"
+        />
+      </div>
+    </div>
+    <Component
+      group={
+        Object {
+          "cargoType": Object {
+            "category": "FOO_CATEGORY",
+          },
+          "items": Array [
+            Object {
+              "chargeable_weight": 80,
+              "dimension_x": 90,
+              "dimension_y": 100,
+              "dimension_z": 120,
+              "gross_weight": 76,
+              "payload_in_kg": 56,
+              "tare_weight": 20,
+            },
+          ],
+          "quantity": "FOO_QUANTITY",
+          "size_class": "dry_goods",
+        }
+      }
+    />
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <div
+    className="flex-100 layout-row layout-wrap"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-eye clip flex-none"
+      style="#333"
+    />
+    <p
+      className="offset-5 flex-none"
+    >
+      View Hs Codes
+    </p>
+  </div>
+  <style>
+    
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          undefined 0%,
+          undefined 100%
+        ) !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: rgba(0, 0, 0, 0.75);
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    
+  </style>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="info layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center"
+  >
+    <div
+      className="flex-40 layout-row layout-align-start-center"
+    >
+      <h5
+        className="flex-none"
+      >
+        Cargo Unit
+      </h5>
+      <div
+        className="flex-5"
+      />
+      <p
+        className="flex-none"
+      />
+    </div>
+    <div
+      className="flex-40 layout-row layout-align-end-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_QUANTITY X FOO_CATEGORY
+      </p>
+    </div>
+  </div>
+  <hr />
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start"
+  >
+    <div
+      className="detailed_row flex-100 layout-row layout-wrap layout-align-space-between-center"
+    >
+      <div
+        className=" flex-70 layout-row layout-wrap layout-align-start-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Pallet Type
+        </p>
+        <div
+          className="flex-5"
+        />
+        <p
+          className="flex-none"
+        />
+      </div>
+      <div
+        className="flex-30 layout-row layout-align-end-center"
+      >
+        <p
+          className="flex-none"
+        >
+          Toggle Unit View
+        </p>
+        <div
+          className="flex-5"
+        />
+        <Component
+          checked={false}
+          className="flex-none"
+          id="unitView"
+          name="unitView"
+          onChange={[Function]}
+        />
+      </div>
+    </div>
+    <hr
+      className="flex-100"
+    />
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-none-start layout-wrap"
+  >
+    <div
+      className="closed_panel panel flex-100 layout-row layout-wrap layout-align-none-center layout-wrap"
+    >
+      <div
+        className="detailed_row flex-100 layout-row layout-wrap layout-align-none-center"
+        key="RANDOM_KEY"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start-center"
+        >
+          <p
+            className="flex-none"
+            style={
+              Object {
+                "fontSize": "10px",
+              }
+            }
+          >
+            Item 0
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Length
+          </p>
+          <p
+            className="flex-none"
+          >
+            100
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Width
+          </p>
+          <p
+            className="flex-none"
+          >
+            90
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Height
+          </p>
+          <p
+            className="flex-none"
+          >
+            120
+             cm
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Gross Weight
+          </p>
+          <p
+            className="flex-none"
+          >
+            56
+             kg
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Volume
+          </p>
+          <p
+            className="flex-none"
+          >
+            0.90
+             m
+            <sup>
+              3
+            </sup>
+          </p>
+        </div>
+        <div
+          className="unit_data_cell flex-33 layout-row layout-align-space-between"
+        >
+          <p
+            className="flex-none"
+          >
+            Chargeable Weight
+          </p>
+          <p
+            className="flex-none"
+          >
+            80000.00
+             kg
+          </p>
+        </div>
+        <hr
+          className="flex-100"
+        />
+      </div>
+    </div>
+    <Component
+      group={
+        Object {
+          "cargoType": Object {
+            "category": "FOO_CATEGORY",
+          },
+          "items": Array [
+            Object {
+              "chargeable_weight": 80,
+              "dimension_x": 90,
+              "dimension_y": 100,
+              "dimension_z": 120,
+              "gross_weight": 76,
+              "payload_in_kg": 56,
+              "tare_weight": 20,
+            },
+          ],
+          "quantity": "FOO_QUANTITY",
+          "size_class": "dry_goods",
+        }
+      }
+    />
+  </div>
+  <hr
+    className="flex-100"
+  />
+  <style>
+    
+      .react-toggle--checked .react-toggle-track {
+        background: linear-gradient(
+          90deg,
+          undefined 0%,
+          undefined 100%
+        ) !important;
+        border: 0.5px solid rgba(0, 0, 0, 0);
+      }
+      .react-toggle-track {
+        background: rgba(0, 0, 0, 0.75);
+      }
+      .react-toggle:hover .react-toggle-track{
+        background: rgba(0, 0, 0, 0.5) !important;
+      }
+    
+  </style>
+</div>
+`;
