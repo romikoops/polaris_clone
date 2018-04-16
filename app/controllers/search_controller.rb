@@ -1,4 +1,4 @@
-class SearchController < ApplicationController
+class SearchController < ApplicationController # TODO: mongo
   include Response
   include MongoTools
   before_action :require_login

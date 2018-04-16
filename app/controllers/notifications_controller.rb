@@ -1,4 +1,4 @@
-class NotificationsController < ApplicationController
+class NotificationsController < ApplicationController # TODO: mongo
   skip_before_action :require_non_guest_authentication!
   include NotificationTools
   include Response

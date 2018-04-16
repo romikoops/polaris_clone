@@ -1,4 +1,4 @@
-class Tenant < ApplicationRecord
+class Tenant < ApplicationRecord # TODO: mongo
   include ImageTools
   extend MongoTools
   include MongoTools
@@ -18,22 +18,23 @@ class Tenant < ApplicationRecord
   has_many :layovers, through: :stops
   has_many :trucking_pricings
   has_many :documents
-    
+  has_many :pricings
+  has_many :pricing_exceptions
+  has_many :pricing_details
+
   validates :scope, presence: true, scope: true
 
   def get_admin
     self.users.where(role_id: 1).first
   end
 
-  def update_route_details
-    itineraries = Itinerary.where(tenant_id: self.id)
-    detailed_itineraries = itineraries.map do |itinerary, h|
-      itinerary.set_scope!
-
-      itinerary.routes
-    end
-    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
-  end
+  # TODO: remove
+  # def update_route_details
+  #   itineraries.map do |itinerary|
+  #     itinerary.set_scope!
+  #     itinerary_options.find_or_create_by(itinerary: itinerary).update(data: itinerary.routes.flatten)
+  #   end
+  # end
 
   def mot_scope(args)
     mot = scope["modes_of_transport"]

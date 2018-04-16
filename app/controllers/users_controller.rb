@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ApplicationController # TODO: mongo
   include PricingTools
   include CurrencyTools
   skip_before_action :require_authentication!

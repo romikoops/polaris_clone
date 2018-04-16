@@ -7,7 +7,7 @@ class TruckingDestination < ApplicationRecord
 
   # The following methods are just here temporarily for testing
 
-  def self.test
+  def self.test # TODO: mongo
     TruckingPricing.find_by_sql("
       SELECT * FROM trucking_pricings
       JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id

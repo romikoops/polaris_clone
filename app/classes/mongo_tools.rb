@@ -1,4 +1,4 @@
-module MongoTools
+module MongoTools # TODO: replace
   require 'mongo'
 
   def put_item(table, value)
@@ -18,11 +18,6 @@ module MongoTools
 
   def get_item(table, keyName, key)
     client = init
-    resp = client[table.to_sym].find({"#{keyName}" => key})
-    return resp.first
-  end
-
-  def get_item_fn(client, table, keyName, key)
     resp = client[table.to_sym].find({"#{keyName}" => key})
     return resp.first
   end

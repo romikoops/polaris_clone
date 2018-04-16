@@ -1,4 +1,4 @@
-class Admin::SchedulesController < ApplicationController
+class Admin::SchedulesController < ApplicationController # TODO: mongo
   before_action :require_login_and_role_is_admin
   include ItineraryTools
   include ExcelTools

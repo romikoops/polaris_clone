@@ -1,4 +1,4 @@
-class Admin::DashboardController < ApplicationController
+class Admin::DashboardController < ApplicationController # TODO: mongo
   include ItineraryTools
   before_action :require_login_and_role_is_admin
   def index
