@@ -105,7 +105,7 @@ class TenantSeeder
         },
         logoLarge: "https://assets.itsmycargo.com/assets/images/logos/logo_black.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png",
-        background: "https://assets.itsmycargo.com/assets/images/welcome/country/header.jpg"
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
         main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
@@ -185,7 +185,7 @@ class TenantSeeder
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
-        background: "https://assets.itsmycargo.com/assets/backgrounds/bg_nordic_consolidators.jpg"
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
         main:"Brooktorkai 7, 20457 Hamburg, Germany"
