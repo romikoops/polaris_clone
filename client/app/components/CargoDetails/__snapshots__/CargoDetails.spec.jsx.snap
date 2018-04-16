@@ -1,0 +1,479 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[` 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap padd_top"
+  name="cargoDetailsBox"
+>
+  <div
+    className="flex-100 layout-row layout-align-center"
+  >
+    <div
+      className="flex-none content_width layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center"
+      >
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={2}
+              text="Cargo Details"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-45 layout-align-start-center layout-row"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={2}
+              text="Shipment Documents "
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-none"
+            style={
+              Object {
+                "marginLeft": "10px",
+              }
+            }
+          >
+            <p
+              className="flex-none"
+            >
+              ( if available )
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100"
+        >
+           
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={3}
+              text="Total value of goods"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-50 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <div
+                className="flex-66 layout-row"
+              >
+                <Component
+                  className="flex-100 cargo_input "
+                  errorMessageStyles={
+                    Object {
+                      "bottom": "-17px",
+                      "fontSize": "13px",
+                    }
+                  }
+                  name="totalGoodsValue"
+                  onChange={[Function]}
+                  required={true}
+                  submitAttempted={false}
+                  type="number"
+                  validationErrors={
+                    Object {
+                      "isDefaultRequiredValue": "Must be greater than 0",
+                      "nonNegative": "Must be greater than 0",
+                    }
+                  }
+                  validations={
+                    Object {
+                      "nonNegative": [Function],
+                    }
+                  }
+                  wrapperClassName="flex-100 wrapper_cargo_input"
+                />
+              </div>
+              <div
+                className="flex-33 layout-row"
+              >
+                <NamedSelect
+                  className="flex-100"
+                  clearable={false}
+                  onChange={[Function]}
+                  options={
+                    Array [
+                      Object {
+                        "label": "EUR",
+                        "value": "EUR",
+                      },
+                      Object {
+                        "label": "AUD",
+                        "value": "AUD",
+                      },
+                      Object {
+                        "label": "BGN",
+                        "value": "BGN",
+                      },
+                      Object {
+                        "label": "BRL",
+                        "value": "BRL",
+                      },
+                      Object {
+                        "label": "CAD",
+                        "value": "CAD",
+                      },
+                      Object {
+                        "label": "CHF",
+                        "value": "CHF",
+                      },
+                      Object {
+                        "label": "CNY",
+                        "value": "CNY",
+                      },
+                      Object {
+                        "label": "CZK",
+                        "value": "CZK",
+                      },
+                      Object {
+                        "label": "DKK",
+                        "value": "DKK",
+                      },
+                      Object {
+                        "label": "GBP",
+                        "value": "GBP",
+                      },
+                      Object {
+                        "label": "HKD",
+                        "value": "HKD",
+                      },
+                      Object {
+                        "label": "HRK",
+                        "value": "HRK",
+                      },
+                      Object {
+                        "label": "HUF",
+                        "value": "HUF",
+                      },
+                      Object {
+                        "label": "IDR",
+                        "value": "IDR",
+                      },
+                      Object {
+                        "label": "ILS",
+                        "value": "ILS",
+                      },
+                      Object {
+                        "label": "INR",
+                        "value": "INR",
+                      },
+                      Object {
+                        "label": "JPY",
+                        "value": "JPY",
+                      },
+                      Object {
+                        "label": "KRW",
+                        "value": "KRW",
+                      },
+                      Object {
+                        "label": "MXN",
+                        "value": "MXN",
+                      },
+                      Object {
+                        "label": "MYR",
+                        "value": "MYR",
+                      },
+                      Object {
+                        "label": "NOK",
+                        "value": "NOK",
+                      },
+                      Object {
+                        "label": "NZD",
+                        "value": "NZD",
+                      },
+                      Object {
+                        "label": "PHP",
+                        "value": "PHP",
+                      },
+                      Object {
+                        "label": "PLN",
+                        "value": "PLN",
+                      },
+                      Object {
+                        "label": "RON",
+                        "value": "RON",
+                      },
+                      Object {
+                        "label": "RUB",
+                        "value": "RUB",
+                      },
+                      Object {
+                        "label": "SEK",
+                        "value": "SEK",
+                      },
+                      Object {
+                        "label": "SGD",
+                        "value": "SGD",
+                      },
+                      Object {
+                        "label": "THB",
+                        "value": "THB",
+                      },
+                      Object {
+                        "label": "TRY",
+                        "value": "TRY",
+                      },
+                      Object {
+                        "label": "USD",
+                        "value": "USD",
+                      },
+                      Object {
+                        "label": "ZAR",
+                        "value": "ZAR",
+                      },
+                    ]
+                  }
+                  value={
+                    Object {
+                      "label": "EUR",
+                      "value": "EUR",
+                    }
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  size={3}
+                  text="Description of goods (optional)"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100"
+            >
+              <textarea
+                className="cargo_text_area"
+                name="cargoNotes"
+                onChange={[Function]}
+                rows="6"
+                value="FOO_CARGO_NOTES"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100"
+            >
+              <div
+                className="flex-none f_header"
+              >
+                 
+                <TextHeading
+                  size={3}
+                  text="Incoterm"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                />
+              </div>
+            </div>
+            <div
+              className="flex-100 layout-row layout-align-start-start input_box_full"
+            >
+              <textarea
+                className="textarea_incoterm"
+                cols="30"
+                id=""
+                name="incoterm"
+                onChange={[Function]}
+                rows="6"
+                value="FOO_INCOTERM"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="flex-100 flex-gt-sm-45 offset-gt-sm-5 layout-row layout-wrap layout-align-start-start"
+        >
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="packing_sheet"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <Component
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                isRequired={true}
+                text="Packing Sheet"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                type="packing_sheet"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-wrap"
+            name="commercial_invoice"
+          >
+            <div
+              className="flex-100 layout-row"
+            >
+              <Component
+                deleteFn={[Function]}
+                dispatchFn={[Function]}
+                isRequired={true}
+                text="Commercial Invoice"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+                type="commercial_invoice"
+              />
+            </div>
+          </div>
+          <div
+            className="flex-100 layout-row layout-align-start-start layout-wrap"
+          >
+            <div
+              className="flex-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className="flex-100"
+              >
+                <div
+                  className="flex-none f_header"
+                >
+                   
+                  <TextHeading
+                    size={3}
+                    text="Document Notes"
+                    theme={
+                      Object {
+                        "colors": Object {
+                          "primary": "#333",
+                          "secondary": "#fafafa",
+                        },
+                      }
+                    }
+                  />
+                </div>
+              </div>
+              <div
+                className="flex-100 layout-row layout-align-start-start input_box_full"
+              >
+                <textarea
+                  className="textarea_margin"
+                  cols="30"
+                  id=""
+                  name="notes"
+                  onChange={[Function]}
+                  rows="6"
+                  value="FOO_NOTEST"
+                />
+              </div>
+            </div>
+            <div
+              className="flex-gt-sm-100 layout-row layout-align-start-start layout-wrap"
+            >
+              <div
+                className=" flex-100 layout-row layout-align-start-start-space-around layout-wrap"
+              >
+                <Component
+                  deleteFn={[Function]}
+                  dispatchFn={[Function]}
+                  text="Miscellaneous"
+                  theme={
+                    Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    }
+                  }
+                  type="miscellaneous"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
