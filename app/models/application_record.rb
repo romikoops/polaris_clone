@@ -12,7 +12,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def to_postgres_insertable
-    self.class.given_attribute_names.map do |attr_name|
+    self.class.given_attribute_names.sort.map do |attr_name|
       val = self[attr_name]
       case val
       # when nil

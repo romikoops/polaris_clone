@@ -442,6 +442,14 @@ module ExcelTools
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
             {id: ident, country: idents_and_country[:country]}
           end
+        elsif identifier_type == "city_name"
+          city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
+          puts "!!!"
+          puts "!!!"
+          puts "!!!"
+          awesome_print city
+          awesome_print idents_and_country[:country]
+          { id: city, country: idents_and_country[:country] }
         else
           idents_and_country
         end
@@ -494,6 +502,10 @@ module ExcelTools
         end
       end
 
+      single_ident_values_and_country.map do |idents_and_country|
+        
+      end
+
       ##
       # awesome_print trucking_pricing_by_zone[row_key]
       ##
@@ -504,26 +516,25 @@ module ExcelTools
       insertion_query = <<-eos
         WITH
           tp_ids AS (
-              INSERT INTO trucking_pricings(courier_id, load_type, load_meterage, cbm_ratio, modifier, tenant_id, truck_type, carriage, rates, fees)
+              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
                   VALUES #{tp.to_postgres_insertable}
               RETURNING id
           ),
           td_ids AS (
               WITH existing_identifiers AS (
-                  -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
-                  SELECT id, #{identifier_type} FROM trucking_destinations
+                  SELECT id, #{identifier_type}, country_code FROM trucking_destinations
                   WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
+                    AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
               )
               INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
                   -- insert non-existent trucking_destinations
-                  -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
                   SELECT ident_value::text, country_code::text, cr_at, up_at
                   FROM (VALUES #{single_ident_values_and_country.map { |h| "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)" }.join(", ")})
                           AS t(ident_value, country_code, cr_at, up_at)
                   WHERE ident_value::text NOT IN (
-                      -- COUNTRY CODE MISSING!!!!!!!!!!!!!!!!
                       SELECT #{identifier_type}
                       FROM existing_identifiers
+                      WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
                   )
               RETURNING id
           ),
