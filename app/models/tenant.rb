@@ -28,14 +28,9 @@ class Tenant < ApplicationRecord # TODO: mongo
     self.users.where(role_id: 1).first
   end
 
-  # TODO: remove
-  # def update_route_details
-  #   itineraries.map do |itinerary|
-  #     itinerary.set_scope!
-  #     itinerary_options.find_or_create_by(itinerary: itinerary).update(data: itinerary.routes.flatten)
-  #   end
-  # end
-
+  def update_route_details
+    itineraries.map(&:set_scope!)
+  end
   def mot_scope(args)
     mot = scope["modes_of_transport"]
     mot = load_type_filter("container", mot)  if args[:only_container]

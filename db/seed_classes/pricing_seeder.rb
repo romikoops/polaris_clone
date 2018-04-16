@@ -34,7 +34,7 @@ class PricingSeeder # TODO: mongo
 			overwrite_local_charges(req, shipper)
 		  # Overwrite trucking data from excel sheet
 
-		  # tenant.update_route_details # TODO: remove
+		  tenant.update_route_details # TODO: check if necessary
 		end
 	end
 end
