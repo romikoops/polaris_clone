@@ -1,4 +1,4 @@
-class Admin::PricingsController < ApplicationController
+class Admin::PricingsController < ApplicationController # TODO: mongo
   include ExcelTools
   include PricingTools
   include ItineraryTools
@@ -9,13 +9,14 @@ class Admin::PricingsController < ApplicationController
   def index
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
-    @pricings = get_tenant_pricings_hash(current_user.tenant_id)
-    @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
+
+    # @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = get_itineraries(current_user.tenant_id)
+    @pricings = itineraries.map(&:pricings).flatten
+    detailed_itineraries = Itinerary.where(tenant_id: tenant_id).map(&:as_options_json)
     
-    response_handler({itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
+    response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
 
   def client
@@ -28,8 +29,8 @@ class Admin::PricingsController < ApplicationController
   end
 
   def route
-    pricings = get_itinerary_pricings_hash(params[:id].to_i)
     itinerary = Itinerary.find(params[:id])
+    pricings = itinerary.pricings
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
     detailed_itineraries = get_itinerary_options(itinerary)
     response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
@@ -51,47 +52,74 @@ class Admin::PricingsController < ApplicationController
     response_handler({})
   end
 
+  # TODO: ?
   def parse_and_update_itinerary_pricing_id(data)
-    keys_split = data["id"].split("_")
-    itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
-    existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
-    
-    if  !existing_itinerary
-      new_itinerary = {
+
+    first_stop_id, last_stop_id, transport_category_id, tenant_id, load_type, load_type_detail, additional_load_type_detail = data["id"].split("_")
+
+    itinerary_params =
+      if load_type == 'fcl' && additional_load_type_detail.present?
+        { additional_load_type_detail => data["id"] }
+        # TODO: why?
+      elsif load_type != 'fcl' && load_type_detail.present?
+        { load_type_detail => data["id"] }
+      else
+        { "open" => data["id"] }
+      end
+
+    if itinerary_pricing_exists?(itinerary_id: data["itinerary_id"], transport_category_id: transport_category_id)
+      itinerary_pricing_update(data["itinerary_id"], itinerary_params)
+    else
+      new_itinerary_params = {
         tenant_id: current_user.tenant_id,
         transport_category_id: data["transport_category_id"],
         itinerary_id: data["itinerary_id"]
-      }
-      if data["id"].include?("fcl")
-        if keys_split.length == 7
-          new_itinerary["#{keys_split[6]}"] = data["id"]
-        else
-          new_itinerary["open"] = data["id"]    
-        end
-      else
-        if keys_split.length == 6
-          new_itinerary["#{keys_split[5]}"] = data["id"]
-        else
-          new_itinerary["open"] = data["id"]    
-        end
-      end
-      update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
-    else
-      if data["id"].include?("fcl")
-        if keys_split.length == 7
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
-        else
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
-        end
-      else
-        if keys_split.length == 6
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
-        else
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
-        end
-      end
+      }.merge(itinerary_params)
+      itinerary_pricing_create(new_itinerary_params)
     end
-    current_user.tenant.update_route_details
+
+    # current_user.tenant.update_route_details
+
+    # keys_split = data["id"].split("_")
+    # itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
+    # existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
+    #
+    # if  !existing_itinerary
+    #   new_itinerary = {
+    #     tenant_id: current_user.tenant_id,
+    #     transport_category_id: data["transport_category_id"],
+    #     itinerary_id: data["itinerary_id"]
+    #   }
+    #   if data["id"].include?("fcl")
+    #     if keys_split.length == 7
+    #       new_itinerary["#{keys_split[6]}"] = data["id"]
+    #     else
+    #       new_itinerary["open"] = data["id"]
+    #     end
+    #   else
+    #     if keys_split.length == 6
+    #       new_itinerary["#{keys_split[5]}"] = data["id"]
+    #     else
+    #       new_itinerary["open"] = data["id"]
+    #     end
+    #   end
+    #   update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
+    # else
+    #   if data["id"].include?("fcl")
+    #     if keys_split.length == 7
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
+    #     else
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
+    #     end
+    #   else
+    #     if keys_split.length == 6
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
+    #     else
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
+    #     end
+    #   end
+    # end
+    # current_user.tenant.update_route_details
   end
 
   # def overwrite_main_carriage

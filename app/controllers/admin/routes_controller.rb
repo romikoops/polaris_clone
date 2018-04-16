@@ -1,7 +1,7 @@
-class Admin::RoutesController < ApplicationController
+class Admin::RoutesController < ApplicationController # TODO: remove controller
   before_action :require_login_and_role_is_admin
   include PricingTools
-  include RouteTools
+  #include RouteTools
 
   
 
@@ -16,14 +16,14 @@ class Admin::RoutesController < ApplicationController
   end
   def create
     new_route_data = params[:route].as_json
-    startHub = Hub.find_by(id: new_route_data["startHub"])
-    endHub = Hub.find_by(id: new_route_data["endHub"])
-    origin = startHub.nexus
-    destination = endHub.nexus
-    route = Route.find_by(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id)
+    start_hub = Hub.find_by(id: new_route_data["startHub"])
+    end_hub = Hub.find_by(id: new_route_data["endHub"])
+    origin = start_hub.nexus
+    destination = end_hub.nexus
+    route = Route.find_by(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id) # TODO: missing model class
     if route
-      route.hub_routes.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_route_data["name"])
-      update_route_option(route)
+      route.hub_routes.create!(starthub_id: start_hub.id, endhub_id: end_hub.id, name: new_route_data["name"])
+      # route_option_update(route) TODO: remove?
       resp = route.detailed_hash(
         nexus_names: true
       )
@@ -31,8 +31,8 @@ class Admin::RoutesController < ApplicationController
     else
       route_name = "#{origin.name} - #{destination.name}"
       new_route = current_user.tenant.routes.create!(origin_nexus_id: origin.id, destination_nexus_id: destination.id, tenant_id: current_user.tenant_id, name: route_name)
-      new_route.hub_routes.create!(starthub_id: startHub.id, endhub_id: endHub.id, name: new_route_data["name"])
-      update_route_option(new_route)
+      new_route.hub_routes.create!(starthub_id: start_hub.id, endhub_id: end_hub.id, name: new_route_data["name"])
+      # update_route_option(new_route) TODO: remove?
       resp = new_route.detailed_hash(
         nexus_names: true
       )

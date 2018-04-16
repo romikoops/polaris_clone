@@ -1,4 +1,4 @@
-class Admin::ItinerariesController < ApplicationController
+class Admin::ItinerariesController < ApplicationController # TODO: mongo
   before_action :require_login_and_role_is_admin
   include PricingTools
   include ItineraryTools
@@ -14,7 +14,7 @@ class Admin::ItinerariesController < ApplicationController
     itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
     new_itinerary_data["stops"].each_with_index { |h, i|  itinerary.stops.create(hub_id: h, index: i)}
     itinerary.set_scope!
-    current_user.tenant.update_route_details
+    # current_user.tenant.update_route_details # TODO: remove
     response_handler(itinerary)
   end
   def destroy
@@ -33,7 +33,7 @@ class Admin::ItinerariesController < ApplicationController
   end
   def show
     itinerary = Itinerary.find(params[:id])
-    pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id)
+    pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id) # TODO: mongo
     hubs = itinerary.hubs
     detailed_itineraries = get_itinerary_options(itinerary)
     stops = itinerary.stops.order(:index)

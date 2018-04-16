@@ -1,4 +1,4 @@
-class OfferCalculator
+class OfferCalculator # TODO: mongo
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay, :trucking_data
   include CurrencyTools
   include PricingTools

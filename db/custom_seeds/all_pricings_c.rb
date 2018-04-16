@@ -1,4 +1,4 @@
-include ExcelTools
+include ExcelTools # TODO: mongo
 include MongoTools
 
 puts " "
@@ -73,5 +73,5 @@ Tenant.all.each do |tenant|
     overwrite_city_trucking_rates(req, shipper)
   end
 
-  tenant.update_route_details()
+  # tenant.update_route_details() # TODO: remove
 end

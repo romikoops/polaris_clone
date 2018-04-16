@@ -1,4 +1,4 @@
-class ShipmentsController < ApplicationController
+class ShipmentsController < ApplicationController # TODO: mongo
   include ShippingTools
   include MongoTools
 

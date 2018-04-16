@@ -1,4 +1,4 @@
-class Admin::HubsController < ApplicationController
+class Admin::HubsController < ApplicationController # TODO: mongo
   include ExcelTools
   include ItineraryTools
   include Response
