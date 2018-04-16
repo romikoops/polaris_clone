@@ -75,6 +75,7 @@ class ShipmentsController < ApplicationController
 
   def get_offer
     resp = get_shipment_offer(session, params, 'openlcl')
+    
     response_handler(resp)
   end
 
@@ -92,6 +93,7 @@ class ShipmentsController < ApplicationController
 
   def update
     resp = update_shipment(session, params)
+    byebug
     response_handler(resp)
   end
 

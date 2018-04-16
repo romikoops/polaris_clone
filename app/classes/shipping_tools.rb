@@ -305,6 +305,7 @@ module ShippingTools
     @destination = Layover.find(@schedules.first["destination_layover_id"]).stop.hub
     shipment.origin_hub = @origin
     shipment.destination_hub = @destination
+    shipment.itinerary = Itinerary.find(@schedules.first["itinerary_id"])
     shipment.save!
     documents = {}
     shipment.documents.each do |doc|

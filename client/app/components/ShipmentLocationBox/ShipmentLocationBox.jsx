@@ -127,14 +127,14 @@ export class ShipmentLocationBox extends Component {
     this.scopeNexusOptions = this.scopeNexusOptions.bind(this)
   }
 
-  componentDidMount () {
-    this.initMap()
-    if (this.props.selectedRoute) {
-      this.setHubsFromRoute(this.props.selectedRoute)
-    }
+  componentWillMount () {
     if (this.props.prevRequest && this.props.prevRequest.shipment) {
       this.loadPrevReq()
     }
+  }
+
+  componentDidMount () {
+    this.initMap()
   }
   componentWillReceiveProps (nextProps) {
     if (nextProps.has_pre_carriage) {
@@ -352,6 +352,11 @@ export class ShipmentLocationBox extends Component {
     }
   }
 
+  getPlace (placeId, callback) {
+    const service = new this.props.gMaps.places.PlacesService(this.state.map)
+    service.getDetails({ placeId }, place => callback(place))
+  }
+
   selectedRoute (route) {
     const origin = {
       city: '',
@@ -390,10 +395,12 @@ export class ShipmentLocationBox extends Component {
 
     if (this.props.has_pre_carriage) {
       this.initAutocomplete(map, 'origin')
+      this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
     }
 
     if (this.props.has_on_carriage) {
       this.initAutocomplete(map, 'destination')
+      this.triggerPlaceChanged(this.state.autoText.origin, 'destination')
     }
   }
 
@@ -420,37 +427,50 @@ export class ShipmentLocationBox extends Component {
   }
 
   autocompleteListener (aMap, autocomplete, target) {
-    const infowindow = new this.props.gMaps.InfoWindow()
-    const infowindowContent = document.getElementById('infowindow-content')
-    infowindow.setContent(infowindowContent)
+    this.infowindow = new this.props.gMaps.InfoWindow()
+    this.infowindowContent = document.getElementById('infowindow-content')
+    this.infowindow.setContent(this.infowindowContent)
 
-    const marker = new this.props.gMaps.Marker({
+    this.marker = new this.props.gMaps.Marker({
       map: aMap,
       anchorPoint: new this.props.gMaps.Point(0, -29)
     })
-
+    if (autocomplete.getPlace()) this.handlePlaceChange(aMap, autocomplete, target)
     autocomplete.addListener('place_changed', () => {
-      this.changeAddressFormVisibility(target, true)
-
-      infowindow.close()
-      marker.setVisible(false)
-      const place = autocomplete.getPlace()
-      if (!place.geometry) {
-        window.alert(`No details available for input: '${place.name}'`)
-        return
-      }
-
-      this.setMarker(
-        {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        },
-        place.name,
-        target
-      )
-
-      this.selectLocation(place, target)
+      this.handlePlaceChange(aMap, autocomplete.getPlace(), target)
     })
+  }
+
+  triggerPlaceChanged (input, target) {
+    // triggers a place change with the first result from google
+    const service = new this.props.gMaps.places.AutocompleteService()
+    service.getPlacePredictions({ input }, (_input) => {
+      this.getPlace(_input[0].place_id, (place) => {
+        this.handlePlaceChange(this.state.map, place, target)
+      })
+    })
+  }
+
+  handlePlaceChange (aMap, place, target) {
+    this.changeAddressFormVisibility(target, true)
+
+    this.infowindow.close()
+    this.marker.setVisible(false)
+    if (!place.geometry) {
+      window.alert(`No details available for input: '${place.name}'`)
+      return
+    }
+
+    this.setMarker(
+      {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      },
+      place.name,
+      target
+    )
+
+    this.selectLocation(place, target)
   }
 
   handleTrucking (event) {
@@ -460,14 +480,14 @@ export class ShipmentLocationBox extends Component {
       if (checked) {
         this.postToggleAutocomplete('origin')
       }
-      this.props.handleChangeCarriage('has_pre_carriage', checked)
+      this.props.handleCarriageChange('has_pre_carriage', checked)
     }
 
     if (name === 'has_on_carriage') {
       if (checked) {
         this.postToggleAutocomplete('destination')
       }
-      this.props.handleChangeCarriage('has_on_carriage', checked)
+      this.props.handleCarriageChange('has_on_carriage', checked)
     }
   }
 
@@ -622,7 +642,7 @@ export class ShipmentLocationBox extends Component {
           this.setOriginHub(newData.originHub)
         }, 500)
     }
-    if (shipment.origin_id) {
+    if (shipment.destination_id) {
       this.state.map
         ? this.setDestHub(newData.destinationHub)
         : setTimeout(() => {
@@ -637,6 +657,7 @@ export class ShipmentLocationBox extends Component {
         destination: newData.autoTextDest
       }
     })
+
     return ''
   }
   handleSwap () {
@@ -837,6 +858,7 @@ export class ShipmentLocationBox extends Component {
           <input
             id="origin"
             name="origin"
+            ref={input => (this.originAutoInput = input)}
             className={`flex-none ${styles.input} ${
               originFieldsHaveErrors ? styles.with_errors : ''
             }`}
@@ -942,6 +964,7 @@ export class ShipmentLocationBox extends Component {
           <input
             id="destination"
             name="destination"
+            ref={input => (this.destinationAutoInput = input)}
             className={
               `flex-none ${styles.input} ` +
               `${destinationFieldsHaveErrors ? styles.with_errors : ''}`
@@ -1120,7 +1143,7 @@ ShipmentLocationBox.propTypes = {
   shipmentData: PropTypes.shipmentData,
   setTargetAddress: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
-  handleChangeCarriage: PropTypes.func.isRequired,
+  handleCarriageChange: PropTypes.func.isRequired,
   allNexuses: PropTypes.shape({
     origins: PropTypes.array,
     destinations: PropTypes.array
@@ -1131,7 +1154,6 @@ ShipmentLocationBox.propTypes = {
     goTo: PropTypes.func,
     getDashboard: PropTypes.func
   }).isRequired,
-  selectedRoute: PropTypes.route,
   origin: PropTypes.shape({
     number: PropTypes.number
   }),
@@ -1150,7 +1172,6 @@ ShipmentLocationBox.defaultProps = {
   setNotesIds: null,
   routeIds: [],
   prevRequest: null,
-  selectedRoute: null,
   origin: null,
   has_on_carriage: true,
   has_pre_carriage: true

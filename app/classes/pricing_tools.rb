@@ -105,7 +105,7 @@ module PricingTools
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"] 
 
-      totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))
+      totals[k]["value"] += fee_value(fee, get_cargo_hash(container))
     end
 
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
@@ -239,11 +239,12 @@ module PricingTools
   end
 
   def fee_value(fee, cargo_hash)
+    awesome_print fee
     case fee["rate_basis"]
     when "PER_SHIPMENT", "PER_BILL"
       fee["value"].to_d
     when "PER_ITEM", "PER_CONTAINER"
-      fee["value"].to_d * cargo_hash[:quantity]
+      (fee["value"] || fee["rate"]).to_d * cargo_hash[:quantity]
     when "PER_CBM"
       fee["value"].to_d * cargo_hash[:volume]
     when "PER_CBM_TON"
@@ -269,7 +270,7 @@ module PricingTools
 
   def get_cargo_hash(cargo)
     {    
-      volume: cargo.volume  * (cargo.try(:quantity) || 1),
+      volume: (cargo.try(:volume) || 1)  * (cargo.try(:quantity) || 1),
       weight: (cargo.try(:weight) || cargo.payload_in_kg) * (cargo.try(:quantity) || 1),
       quantity: cargo.try(:quantity) || 1  
     }
