@@ -504,7 +504,7 @@ module ExcelTools
       
 
       ##
-      # awesome_print trucking_pricing_by_zone[row_key]
+      awesome_print trucking_pricing_by_zone[row_key]
       ##
       tp = trucking_pricing_by_zone[row_key]
 

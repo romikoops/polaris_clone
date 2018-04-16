@@ -205,8 +205,8 @@ export class ShipmentDetails extends Component {
       const { itineraries } = shipmentData
       noteIds.itineraries = itineraries
     }
-    noteIds[target] = ids
-    if (noteIds.origin && noteIds.destination) {
+    noteIds[`${target}s`] = ids
+    if (noteIds.origins && noteIds.destinations) {
       shipmentDispatch.getNotes(noteIds)
     }
     this.setState({ noteIds })

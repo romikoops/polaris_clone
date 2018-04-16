@@ -122,8 +122,8 @@ export class RouteHubBox extends Component {
       )
     return (
       <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
-        <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center`}>
-          <div className="flex layout-row layout-wrap">
+        <div className={`flex-none ${defs.content_width} layout-row layout-align-start-start`}>
+          <div className="flex layout-row layout-wrap layout-align-center-start">
             <h3 className={`flex-100 ${styles.rhb_header}`}>ORIGIN</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg1}>
               <div className={styles.fade} />
@@ -157,7 +157,7 @@ export class RouteHubBox extends Component {
             </div>
           </div>
 
-          <div className="flex layout-row layout-wrap">
+          <div className="flex layout-row layout-wrap layout-align-center-start">
             <h3 className={`flex-100 ${styles.rhb_header}`}> DESTINATION</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg2}>
               <div className={styles.fade} />
