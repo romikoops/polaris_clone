@@ -10,4 +10,20 @@ class ApplicationRecord < ActiveRecord::Base
   def self.given_attribute_names
     attribute_names - %w(id created_at updated_at)
   end
+
+  def to_postgres_insertable
+    self.class.given_attribute_names.sort.map do |attr_name|
+      val = self[attr_name]
+      case val
+      # when nil
+      #   NULL
+      when Hash
+        "'#{val.to_json}'::jsonb"
+      when String
+        "'#{val}'"
+      else
+        val
+      end
+    end.sql_format
+  end
 end
