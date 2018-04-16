@@ -475,22 +475,34 @@ module ExcelTools
           truck_type: row_truck_type,
           tenant_id: tenant.id,
         )
-
+        awesome_print defaults
         modifier_position_objs.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]
             next unless val
             w_min = weight_min_row[m_index] || 0
             r_min = row_min_value || 0
-            mod_cell = defaults[mod_key][m_index].clone.merge(
-              min_value: [w_min, r_min].max,
-              rate: {
-                value: val,
-                rate_basis: rate_basis,
-                currency: currency,
-                base: base,
-              },
-            )
+            if defaults[mod_key]
+              mod_cell = defaults[mod_key][m_index].clone.merge(
+                min_value: [w_min, r_min].max,
+                rate: {
+                  value: val,
+                  rate_basis: rate_basis,
+                  currency: currency,
+                  base: base,
+                },
+              )
+            else
+              mod_cell = {
+                min_value: 0,
+                rate: {
+                  value: val,
+                  rate_basis: rate_basis,
+                  currency: currency,
+                  base: base,
+                }
+              }
+            end
           end
         end
 
@@ -549,7 +561,7 @@ module ExcelTools
                 CROSS JOIN t_stamps AS updated_ats)
         ;
       eos
-      byebug
+      
       ActiveRecord::Base.connection.execute(insertion_query)
       ############################
     end
@@ -1321,12 +1333,12 @@ module ExcelTools
         }
       end
       aux_data[pricing_key] = {} unless aux_data[pricing_key]
-      unless aux_data[pricing_key][:vehicle]
-        vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
-        if vehicle
-          aux_data[pricing_key][:vehicle] = vehicle
+      unless aux_data[pricing_key][:tenant_vehicle]
+        tenant_vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
+        if tenant_vehicle
+          aux_data[pricing_key][:tenant_vehicle] = tenant_vehicle
         else
-          aux_data[pricing_key][:vehicle] = Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
+          aux_data[pricing_key][:tenant_vehicle] = Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
         end
       end
 
@@ -1390,7 +1402,7 @@ module ExcelTools
           start_date,
           end_date,
           [1, 5],
-          aux_data[pricing_key][:vehicle].id
+          aux_data[pricing_key][:tenant_vehicle].id
         )
         results[:layovers] = generator_results[:results][:layovers]
         results[:trips] = generator_results[:results][:trips]
@@ -1485,7 +1497,7 @@ module ExcelTools
     end
     new_pricings.each do |itKey, cargo_pricings|
       cargo_pricings.each do |cargo_key, pricing|
-        transport_category = aux_data[itKey][:vehicle].vehicle.transport_categories.find_by(
+        transport_category = aux_data[itKey][:tenant_vehicle].vehicle.transport_categories.find_by(
           name: "any",
           cargo_class: cargo_key,
         )

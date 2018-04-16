@@ -86,7 +86,7 @@ module PricingTools
         totals[k]["value"] += heavy_weight_fee_value(fee, cargo)
       else
         
-        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))["value"]
+        totals[k]["value"] += fee_value(fee, get_cargo_hash(cargo))
       end
     end
     
@@ -204,7 +204,7 @@ module PricingTools
         weight_kg >= range["min"] && weight_kg <= range["max"]
       end
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
-      return { "value" => value, "currency" => fee["currency"] }
+      return value
     end
 
     nil

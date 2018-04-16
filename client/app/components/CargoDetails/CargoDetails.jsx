@@ -35,13 +35,18 @@ export class CargoDetails extends Component {
         return 'Price subject to local regulations'
       }
     }
-    if (customs.import.total.currency) {
-      const { currency } = customs.import.total
-      return `0 ${currency}`
-    } else if (customs.export.total.currency) {
-      const { currency } = customs.export.total
-      return `0 ${currency}`
+    if (customsData[target].unknown) {
+      return 'Price subject to local regulations'
     }
+    // // eslint-disable-next-line no-debugger
+    // debugger
+    // // if (customs.import.total.currency) {
+    // //   const { currency } = customs.import.total
+    // //   return `0 ${currency}`
+    // // } else if (customs.export.total.currency) {
+    // //   const { currency } = customs.export.total
+    // //   return `0 ${currency}`
+    // // }
     return '0 EUR'
   }
   constructor (props) {

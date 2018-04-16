@@ -235,7 +235,7 @@ export class BookingConfirmation extends Component {
     }
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<div className="flex-50 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-33 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
