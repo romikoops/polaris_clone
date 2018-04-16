@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
-import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
 import { appActions, messagingActions } from '../../actions'
@@ -107,7 +106,7 @@ class Header extends Component {
     )
 
     let logoUrl = ''
-    let logoDisplay = {
+    const logoDisplay = {
       display: `${isTop && invert ? 'none' : 'block'}`
     }
     let logoStyle
@@ -119,8 +118,6 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-
-    logoUrl = 'https://assets.itsmycargo.com/assets/images/logos/logo_white.png'
 
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
