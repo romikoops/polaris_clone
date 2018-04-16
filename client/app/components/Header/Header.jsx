@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import PropTypes from '../../prop-types'
 import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
-import defs from '../../styles/default_classes.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
 import { appActions, messagingActions } from '../../actions'
@@ -72,7 +71,6 @@ class Header extends Component {
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
-
     const accountLinks = [
       {
         url: '/account',
@@ -108,7 +106,11 @@ class Header extends Component {
     )
 
     let logoUrl = ''
+    const logoDisplay = {
+      display: `${isTop && invert ? 'none' : 'block'}`
+    }
     let logoStyle
+
     if (theme && theme.logoWide) {
       logoUrl = theme.logoWide
       logoStyle = styles.wide_logo
@@ -116,7 +118,7 @@ class Header extends Component {
       logoUrl = theme.logoLarge
       logoStyle = styles.logo
     }
-    const textColor = isTop && invert ? 'white' : 'black'
+
     const dropDowns = (
       <div className="layout-row layout-align-space-around-center">
         {dropDown}
@@ -124,12 +126,7 @@ class Header extends Component {
       </div>
     )
 
-    const loginPrompt = (
-      <a className={defs.pointy} style={{ color: textColor }} onClick={this.toggleShowLogin}>
-        Login/Register
-      </a>
-    )
-    const rightCorner = user && user.first_name && !user.guest ? dropDowns : loginPrompt
+    const rightCorner = user && user.first_name && !user.guest ? dropDowns : ''
     const loginModal = (
       <Modal
         component={
@@ -166,6 +163,7 @@ class Header extends Component {
               src={logoUrl}
               className={logoStyle}
               alt=""
+              style={logoDisplay}
               onClick={this.goHome}
             />
           </div>
