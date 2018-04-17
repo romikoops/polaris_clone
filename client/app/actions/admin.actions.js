@@ -1385,6 +1385,7 @@ function uploadTrucking (url, file, direction) {
     adminService.uploadTrucking(url, file, direction).then(
       (data) => {
         dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(documentActions.setStats(data.data.stats))
         dispatch(success(data))
       },
       (error) => {

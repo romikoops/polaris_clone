@@ -292,7 +292,7 @@ module ExcelTools
         number_updated: 0,
         number_created: 0,
       },
-      trucking_queries: {
+      hub_truckings: {
         number_updated: 0,
         number_created: 0,
       },
@@ -300,12 +300,17 @@ module ExcelTools
         number_updated: 0,
         number_created: 0,
       },
+      trucking_destinations: {
+        number_updated: 0,
+        number_created: 0,
+      },
     }
 
     results = {
       trucking_hubs: [],
-      trucking_queries: [],
+      hub_truckings: [],
       trucking_pricings: [],
+      trucking_destinations: []
     }
 
     defaults = {}
@@ -440,7 +445,9 @@ module ExcelTools
       single_ident_values_and_country = zones[row_zone_name].flat_map do |idents_and_country|
         if idents_and_country[:min] && idents_and_country[:max]
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+            stats[:trucking_destinations][:number_created] += 1
             {id: ident, country: idents_and_country[:country]}
+            
           end
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
@@ -448,6 +455,8 @@ module ExcelTools
           puts "!!!"
           puts "!!!"
           awesome_print city
+          stats[:trucking_destinations][:number_created] += 1
+          stats[:hub_truckings][:number_created] += 1
           awesome_print idents_and_country[:country]
           { id: city, country: idents_and_country[:country] }
         else
@@ -475,7 +484,7 @@ module ExcelTools
           truck_type: row_truck_type,
           tenant_id: tenant.id,
         )
-
+          stats[:trucking_pricings][:number_created] += 1
         modifier_position_objs.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]

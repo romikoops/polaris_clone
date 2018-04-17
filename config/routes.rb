@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
+      post "trucking/trucking_pricings/:id",  to: "trucking#overwrite_zonal_trucking_by_hub"
       post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
       post "trucking/:id/edit", to: "trucking#edit"
       

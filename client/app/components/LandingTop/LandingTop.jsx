@@ -70,6 +70,7 @@ export class LandingTop extends Component {
 
     const largeLogo = theme && theme.logoLarge ? theme.logoLarge : ''
     const whiteLogo = theme && theme.logoWhite ? theme.logoWhite : largeLogo
+    const welcomeText = theme && theme.welcome_text ? theme.welcome_text : 'shop for online freight'
     return (
       <StyledTop className="layout-row flex-100 layout-align-center" bg={backgroundImage}>
         <div className="layout-row flex-100 layout-wrap">
@@ -88,7 +89,7 @@ export class LandingTop extends Component {
                 <h2 className="flex-none">
                   <b>Welcome to the </b> <br />
                   <i> {tenant.data.name} </i> <b> <br />
-                  online freight calculator</b>
+                    {welcomeText}</b>
                 </h2>
                 <div className={styles.wrapper_hr}>
                   <hr />

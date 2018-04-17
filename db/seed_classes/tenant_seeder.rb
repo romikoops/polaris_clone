@@ -186,6 +186,7 @@ class TenantSeeder
         logoLarge: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoSmall: 'https://assets.itsmycargo.com/assets/logos/logo_box.png',
         logoWide: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_blue.png',
+        logoWhite: 'https://assets.itsmycargo.com/assets/logos/Logo_transparent_white.png',
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
@@ -782,7 +783,8 @@ class TenantSeeder
         },
         logoLarge: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
-        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg",
+        welcome_text: "online freight calculator"
       },
       addresses: {
         main:"Wollkämmereistraße 1, 21107 Hamburg"

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import Fuse from 'fuse.js'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import Toggle from 'react-toggle'
 import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
@@ -10,6 +12,8 @@ import { RoundButton } from '../RoundButton/RoundButton'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 // import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../../components/Documents/Selector'
+import { documentActions } from '../../actions'
+import { AdminUploadsSuccess } from './Uploads/Success'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -65,10 +69,7 @@ export class AdminTruckingView extends Component {
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
     const { hub } = truckingDetail
-    const url =
-      type === 'city'
-        ? `/admin/trucking/trucking_city_pricings/${hub.id}`
-        : `/admin/trucking/trucking_zip_pricings/${hub.id}`
+    const url = `/admin/trucking/trucking_pricings/${hub.id}`
     adminDispatch.uploadTrucking(url, file, dir)
   }
   handleLoadTypeToggle (value) {
@@ -76,11 +77,15 @@ export class AdminTruckingView extends Component {
     this.setState({ loadTypeBool: !this.state.loadTypeBool })
     this.handleSearchChange({ target: { value: searchFilter } })
   }
+  closeSuccessDialog () {
+    const { documentDispatch } = this.props
+    documentDispatch.closeViewer()
+  }
   handleSearchChange (event) {
     if (event.target.value === '') {
       this.setState({
         filteredTruckingPricings:
-        this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
+          this.filterTruckingPricingsByType(this.props.truckingDetail.truckingPricings)
       })
       return
     }
@@ -107,7 +112,9 @@ export class AdminTruckingView extends Component {
     })
   }
   render () {
-    const { theme, truckingDetail, adminDispatch } = this.props
+    const {
+      theme, truckingDetail, adminDispatch, document
+    } = this.props
     if (!truckingDetail) {
       return ''
     }
@@ -119,7 +126,15 @@ export class AdminTruckingView extends Component {
       currentTruckingPricing,
       loadTypeBool
     } = this.state
-
+    const uploadStatus = document.viewer ? (
+      <AdminUploadsSuccess
+        theme={theme}
+        data={document.results}
+        closeDialog={() => this.closeSuccessDialog()}
+      />
+    ) : (
+      ''
+    )
     const { hub } = truckingDetail
     // const nexus = truckingHub ? nexuses.filter(n => n.id === truckingHub.nexus_id)[0] : {}
     const textStyle = {
@@ -172,11 +187,11 @@ export class AdminTruckingView extends Component {
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
     const truckView = currentTruckingPricing ? displayPanel : nothingSelected
 
-    const uploadOptions = [
-      { value: 'import', label: 'Import Only' },
-      { value: 'export', label: 'Export Only' },
-      { value: 'either', label: 'Import/Export' }
-    ]
+    // const uploadOptions = [
+    //   { value: 'import', label: 'Import Only' },
+    //   { value: 'export', label: 'Export Only' },
+    //   { value: 'either', label: 'Import/Export' }
+    // ]
     const searchResults =
       filteredTruckingPricings.length > 0 ? (
         filteredTruckingPricings.map(tp => (
@@ -224,27 +239,20 @@ export class AdminTruckingView extends Component {
             />
           </div>
           <div className="flex-33 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-90 center">Upload Trucking City Sheet</p>
+            <p className="flex-90 center">Upload Trucking Zones Sheet</p>
             <DocumentsSelector
               theme={theme}
-              dispatchFn={(file, dir) => this.handleUpload(file, dir, 'city')}
+              dispatchFn={(file, dir) => this.handleUpload(file, dir)}
               type="xlsx"
               text="Routes .xlsx"
-              options={uploadOptions}
             />
           </div>
           <div className="flex-33 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-90 center">Upload Trucking Zip Code Sheet</p>
-            <DocumentsSelector
-              theme={theme}
-              dispatchFn={(file, dir) => this.handleUpload(file, dir, 'zip')}
-              type="xlsx"
-              text="Routes .xlsx"
-              options={uploadOptions}
-            />
+            <p className="flex-none">{document.viewer}</p>
           </div>
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+          {uploadStatus}
           <div
             className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
           >
@@ -300,12 +308,28 @@ AdminTruckingView.propTypes = {
     truckingHub: PropTypes.object,
     truckingPricings: PropTypes.array,
     pricing: PropTypes.object
-  })
+  }),
+  document: PropTypes.objectOf(PropTypes.any),
+  documentDispatch: PropTypes.objectOf(PropTypes.func)
 }
 
 AdminTruckingView.defaultProps = {
   theme: null,
-  truckingDetail: null
+  truckingDetail: null,
+  document: {},
+  documentDispatch: {}
+}
+function mapStateToProps (state) {
+  const { document } = state
+
+  return {
+    document
+  }
+}
+function mapDispatchToProps (dispatch) {
+  return {
+    documentDispatch: bindActionCreators(documentActions, dispatch)
+  }
 }
 
-export default AdminTruckingView
+export default connect(mapStateToProps, mapDispatchToProps)(AdminTruckingView)
