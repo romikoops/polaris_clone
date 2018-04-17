@@ -1,4 +1,4 @@
-include ExcelTools # TODO: mongo
+include ExcelTools
 include DocumentTools
 include MongoTools
 ['demo'].each do |sub|

@@ -1,4 +1,4 @@
-class Itinerary < ApplicationRecord # TODO: mongo
+class Itinerary < ApplicationRecord
   extend ItineraryTools
   include ItineraryTools
 
@@ -252,8 +252,8 @@ class Itinerary < ApplicationRecord # TODO: mongo
   end
 
   def load_types
-    load_types = TransportCategory::LOAD_TYPES.reject do |load_type|
-      get_itinerary_pricings(id, TransportCategory.load_type(load_type).ids).empty? # TODO: mongo
+    TransportCategory::LOAD_TYPES.reject do |load_type|
+      pricings.where(transport_category_id: TransportCategory.load_type(load_type).ids).none?
     end
   end
 

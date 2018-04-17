@@ -1,4 +1,4 @@
-class Shipment < ApplicationRecord # TODO: mongo
+class Shipment < ApplicationRecord
   extend ShippingTools
   include ActiveModel::Validations
   STATUSES = %w( 

@@ -1,4 +1,4 @@
-class Admin::RoutesController < ApplicationController # TODO: remove controller
+class Admin::RoutesController < ApplicationController # TODO: remove controller ?
   before_action :require_login_and_role_is_admin
   include PricingTools
   #include RouteTools

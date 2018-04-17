@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ShippingTools # TODO: mongo
+module ShippingTools
   include PricingTools
   include MongoTools
   include NotificationTools

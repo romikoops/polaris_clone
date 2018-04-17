@@ -1,4 +1,4 @@
-class SuperAdminsController < ApplicationController # TODO: mongo
+class SuperAdminsController < ApplicationController
   # before_action :require_login_and_role_is_super_admin
   include MultiTenantTools
   include Response

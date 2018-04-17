@@ -1,15 +1,13 @@
-class Admin::HubsController < ApplicationController # TODO: mongo
+class Admin::HubsController < ApplicationController
   include ExcelTools
   include ItineraryTools
   include Response
   include DocumentTools
   before_action :require_login_and_role_is_admin
 
-  
-
   def index
     @hubs = Hub.prepped(current_user)
-    
+
     response_handler(@hubs)
   end
   def create
@@ -27,7 +25,7 @@ class Admin::HubsController < ApplicationController # TODO: mongo
     related_hubs = hub.nexus.hubs
     location = hub.location
     layovers = hub.layovers.limit(20)
-    routes = get_itineraries_for_hub(hub)
+    routes = hub.stops.map(&:itinerary).map(&:as_options_json)
     customs = hub.customs_fees
     charges = hub.local_charges
     # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])

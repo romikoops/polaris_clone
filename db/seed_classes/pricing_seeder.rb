@@ -1,6 +1,5 @@
-class PricingSeeder # TODO: mongo
+class PricingSeeder
 	extend ExcelTools
-	extend MongoTools
 
 	def self.exec(filter = {})
 		Tenant.where(filter).each do |tenant|

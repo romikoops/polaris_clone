@@ -1,4 +1,4 @@
-include ExcelTools # TODO: mongo
+include ExcelTools
 include MongoTools
 tenant = Tenant.find_by_subdomain("demo")
   shipper = tenant.users.second

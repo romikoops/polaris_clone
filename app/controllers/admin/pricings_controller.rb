@@ -1,4 +1,4 @@
-class Admin::PricingsController < ApplicationController # TODO: mongo
+class Admin::PricingsController < ApplicationController
   include ExcelTools
   include PricingTools
   include ItineraryTools
@@ -10,11 +10,11 @@ class Admin::PricingsController < ApplicationController # TODO: mongo
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
 
-    # @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
+    @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    @pricings = itineraries.map(&:pricings).flatten
-    detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
+    @pricings = Pricing.where(tenant_id: current_user.tenant_id).as_json
+    detailed_itineraries = itineraries.map(&:as_options_json)
     
     response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
@@ -52,7 +52,7 @@ class Admin::PricingsController < ApplicationController # TODO: mongo
     response_handler({})
   end
 
-  # TODO: ?
+  # TODO: Update this function
   def parse_and_update_itinerary_pricing_id(data)
 
     first_stop_id, last_stop_id, transport_category_id, tenant_id, load_type, load_type_detail, additional_load_type_detail = data["id"].split("_")

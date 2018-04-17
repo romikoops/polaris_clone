@@ -1,4 +1,4 @@
-class ExcelWorker # TODO: mongo
+class ExcelWorker
   include Shoryuken::Worker
   include ExcelTools
 

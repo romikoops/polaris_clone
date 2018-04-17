@@ -1,5 +1,5 @@
 class Admin::OpenPricingsController < ApplicationController
-  include ExcelTools # TODO: mongo
+  include ExcelTools
 
   before_action :require_login_and_role_is_admin
 

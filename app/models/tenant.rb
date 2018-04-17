@@ -1,4 +1,4 @@
-class Tenant < ApplicationRecord # TODO: mongo
+class Tenant < ApplicationRecord
   include ImageTools
   extend MongoTools
   include MongoTools

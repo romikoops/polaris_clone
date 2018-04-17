@@ -1,4 +1,4 @@
-class NexusesController < ApplicationController # TODO: mongo
+class NexusesController < ApplicationController
 	include ItineraryTools
 	skip_before_action :require_authentication!
   skip_before_action :require_non_guest_authentication!
@@ -29,7 +29,7 @@ class NexusesController < ApplicationController # TODO: mongo
 		counterpart     = target == "destination" ? "origin" : "destination"
 
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
-		itineraries   = retrieve_route_options(current_user.tenant_id, itinerary_ids)
+		itineraries   = Itinerary.where(tenant_id: current_user.tenant_id, id: itinerary_ids).map(&:as_options_json)
 
 		if nexus_ids.blank? || nexus_ids.empty?
 			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq

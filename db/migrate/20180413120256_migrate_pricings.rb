@@ -29,6 +29,7 @@ class MigratePricings < ActiveRecord::Migration[5.1]
       t.string :hw_rate_basis
       t.string :shipping_type
       t.jsonb :range, default: []
+      t.string :currency_name
       t.references :currency, index: true
       t.references :priceable, index: true, polymorphic: true
       t.references :tenant, index: true

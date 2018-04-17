@@ -1,4 +1,4 @@
-class UsersController < ApplicationController # TODO: mongo
+class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   skip_before_action :require_authentication! # TODO: why skip?
