@@ -109,7 +109,7 @@ export class LandingTop extends Component {
               }
               >
                 {((user && user.role_id === 2) || !user) && findRates}
-                {!user && loginLink}
+                {(!user || user.guest) && loginLink}
                 {user && !user.guest && user.role_id === 2 && myAccount}
                 {user && user.role_id === 1 && toAdmin}
               </div>

@@ -171,7 +171,6 @@ class Shop extends Component {
     const { req } = this.state
 
     const shipmentData = stageActions.getShipmentData(response, stageTracker.stage)
-
     return (
       <div className="layout-row flex-100 layout-wrap">
         <div className={styles.pusher_top} />
