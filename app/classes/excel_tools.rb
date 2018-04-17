@@ -1092,7 +1092,7 @@ module ExcelTools
       stops = itinerary.stops.order(:index)
 
       if itinerary
-        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle.vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
+        generator_results = itinerary.generate_schedules_from_sheet(stops, startDate, endDate, tenant_vehicle_id, row[:closing_date], row[:vessel], row[:voyage_code])
         results[:trips] = generator_results[:trips]
         results[:layovers] = generator_results[:layovers]
         stats[:trips][:number_created] = generator_results[:trips].count
@@ -1315,9 +1315,9 @@ module ExcelTools
 
       aux_data[pricing_key] ||= {}
 
-      if aux_data[pricing_key][:vehicle].blank?
+      if aux_data[pricing_key][:tenant_vehicle].blank?
         vehicle = TenantVehicle.find_by(name: row[:vehicle], mode_of_transport: row[:mot])
-        aux_data[pricing_key][:vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
+        aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 
       aux_data[pricing_key][:customer] = row[:customer_id] if row[:customer_id]
@@ -1367,7 +1367,7 @@ module ExcelTools
           start_date,
           end_date,
           [1, 5],
-          aux_data[pricing_key][:vehicle].vehicle_id
+          aux_data[pricing_key][:tenant_vehicle].id
         )
         results[:layovers] = generator_results[:results][:layovers]
         results[:trips] = generator_results[:results][:trips]
@@ -1449,7 +1449,7 @@ module ExcelTools
 
     new_pricings.each do |it_key, cargo_pricings|
       cargo_pricings.each do |cargo_key, pricing_data|
-        transport_category = aux_data[it_key][:vehicle].vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_key)
+        transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_key)
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 

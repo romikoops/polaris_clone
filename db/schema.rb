@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180413120256) do
+ActiveRecord::Schema.define(version: 20180416194003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -381,21 +381,20 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "vehicle_id"
     t.string "voyage_code"
     t.string "vessel"
+    t.integer "tenant_vehicle_id"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
     t.string "city_name"
-    t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "distance"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
-    t.index ["distance"], name: "index_trucking_destinations_on_distance"
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
@@ -406,6 +405,7 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
+    t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "carriage"

@@ -26,9 +26,9 @@ include MongoTools
 #   # # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
 
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
   # # # Overwrite public pricings from excel sheet
 
