@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['saco'].each do |sub|
+['demo'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   
@@ -26,7 +26,10 @@ include MongoTools
 # #   # # # # # Overwrite public pricings from excel sheet
 #   # puts "# Overwrite public pricings from excel sheet"
 
-  public_pricings = File.open("#{Rails.root}/db/dummydata/SACO_FCL_STANDARD.xlsx")
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/SACO_FCL_STANDARD.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
   req = {"xlsx" => public_pricings}
   overwrite_freight_rates(req, shipper, true)
 
@@ -42,6 +45,10 @@ include MongoTools
   # local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
   # req = {"xlsx" => local_charges}
   # overwrite_local_charges(req, shipper)
+   puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  req = {"xlsx" => local_charges}
+  overwrite_local_charges(req, shipper)
 
 
   # # # # # Overwrite trucking data from excel sheet
@@ -100,20 +107,20 @@ include MongoTools
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
 
-    hub = tenant.hubs.find_by_name("Antwerpen Port")
-    trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_antwerpen_ftl.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # hub = tenant.hubs.find_by_name("Antwerpen Port")
+    # trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_antwerpen_ftl.xlsx")
+    # req = {"xlsx" => trucking}
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
-    hub = tenant.hubs.find_by_name("Rotterdam Port")
-    trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_rotterdam_ftl.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # hub = tenant.hubs.find_by_name("Rotterdam Port")
+    # trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_rotterdam_ftl.xlsx")
+    # req = {"xlsx" => trucking}
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
-    hub = tenant.hubs.find_by_name("Hamburg Port")
-    trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_hamburg_ftl.xlsx")
-    req = {"xlsx" => trucking}
-    overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+    # hub = tenant.hubs.find_by_name("Hamburg Port")
+    # trucking = File.open("#{Rails.root}/db/dummydata/saco_trucking_hamburg_ftl.xlsx")
+    # req = {"xlsx" => trucking}
+    # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
 
   tenant.update_route_details()
