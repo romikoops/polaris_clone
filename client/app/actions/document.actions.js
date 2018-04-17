@@ -245,8 +245,6 @@ function uploadLocalCharges (file) {
 }
 
 function setStats (stats) {
-  // eslint-disable-next-line no-debugger
-  debugger
   return { type: documentConstants.UPLOAD_SUCCESS, payload: stats }
 }
 function closeViewer () {

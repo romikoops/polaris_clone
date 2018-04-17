@@ -447,7 +447,6 @@ module ExcelTools
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
             stats[:trucking_destinations][:number_created] += 1
             {id: ident, country: idents_and_country[:country]}
-            
           end
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
