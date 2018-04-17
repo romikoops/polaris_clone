@@ -100,12 +100,12 @@ Rails.application.routes.draw do
     resources :shipments, only: [:index, :new, :show, :create] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking
-      get  "choose_offer",       as: :choose_offer
-      post "get_offer",          as: :get_offer
+      post "choose_offer",       as: :choose_offer
+      post "get_offers",         as: :get_offer
       post "set_haulage",        as: :set_haulage
       post "finish_booking",     as: :finish_booking
       post "update",             as: :update_booking
-      post "confirm_shipment",   as: :confirm_booking
+      post "request_shipment",   as: :request_booking
     end
 
     resources :trucking_availability, only: [:index]

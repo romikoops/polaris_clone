@@ -51,7 +51,7 @@ export default function shipment (state = {}, action) {
         loading: false
       }
 
-    case shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST:
+    case shipmentConstants.GET_OFFERS_REQUEST:
       return {
         ...state,
         request: {
@@ -60,7 +60,7 @@ export default function shipment (state = {}, action) {
         },
         loading: true
       }
-    case shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS:
+    case shipmentConstants.GET_OFFERS_SUCCESS:
       return {
         ...state,
         response: {
@@ -70,7 +70,7 @@ export default function shipment (state = {}, action) {
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }
-    case shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE:
+    case shipmentConstants.GET_OFFERS_FAILURE:
       return {
         ...state,
         error: {
@@ -79,7 +79,7 @@ export default function shipment (state = {}, action) {
         },
         loading: false
       }
-    case shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST:
+    case shipmentConstants.CHOOSE_OFFER_REQUEST:
       return {
         ...state,
         request: {
@@ -88,7 +88,7 @@ export default function shipment (state = {}, action) {
         },
         loading: true
       }
-    case shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS:
+    case shipmentConstants.CHOOSE_OFFER_SUCCESS:
       return {
         ...state,
         response: {
@@ -98,7 +98,7 @@ export default function shipment (state = {}, action) {
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }
-    case shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE:
+    case shipmentConstants.CHOOSE_OFFER_FAILURE:
       return {
         ...state,
         error: {
@@ -136,7 +136,7 @@ export default function shipment (state = {}, action) {
         loading: false
       }
 
-    case shipmentConstants.ACCEPT_SHIPMENT_REQUEST:
+    case shipmentConstants.REQUEST_SHIPMENT_REQUEST:
       return {
         ...state,
         request: {
@@ -145,7 +145,7 @@ export default function shipment (state = {}, action) {
         },
         loading: true
       }
-    case shipmentConstants.ACCEPT_SHIPMENT_SUCCESS:
+    case shipmentConstants.REQUEST_SHIPMENT_SUCCESS:
       return {
         ...state,
         response: {
@@ -155,7 +155,7 @@ export default function shipment (state = {}, action) {
         loading: false,
         activeShipment: action.shipmentData.shipment.id
       }
-    case shipmentConstants.ACCEPT_SHIPMENT_FAILURE:
+    case shipmentConstants.REQUEST_SHIPMENT_FAILURE:
       return {
         ...state,
         error: {

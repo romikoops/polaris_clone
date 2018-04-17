@@ -456,7 +456,7 @@ export class ShipmentDetails extends Component {
     data.shipment.planned_pickup_date = this.state.selectedDay
     data.shipment.incoterm = this.state.incoterm
     data.shipment.carriageNexuses = this.state.carriageNexuses
-    this.props.setShipmentDetails(data)
+    this.props.getOffers(data)
   }
   handleCarriageNexuses (target, id) {
     this.setState({
@@ -920,7 +920,7 @@ export class ShipmentDetails extends Component {
 
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
-  setShipmentDetails: PropTypes.func.isRequired,
+  getOffers: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({

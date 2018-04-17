@@ -37,7 +37,7 @@ function login (data) {
         dispatch(success(response.data))
         if (shipmentReq) {
           shipmentReq.shipment.user_id = response.data.id
-          dispatch(shipmentActions.setShipmentRoute(shipmentReq))
+          dispatch(shipmentActions.chooseOffer(shipmentReq))
         } else if (response.data.role_id === 1 && !data.noRedirect) {
           dispatch(push('/admin/dashboard'))
         } else if (response.data.role_id === 2 && !data.noRedirect) {
@@ -113,7 +113,7 @@ function updateUser (user, req, shipmentReq) {
       (response) => {
         dispatch(success(response))
         if (shipmentReq) {
-          dispatch(shipmentActions.setShipmentRoute(shipmentReq))
+          dispatch(shipmentActions.chooseOffer(shipmentReq))
           dispatch(alertActions.success('Registration successful'))
         } else {
           dispatch(alertActions.success('Update successful'))

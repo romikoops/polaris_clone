@@ -65,7 +65,7 @@ export class ChooseRoute extends Component {
   setDepartureDate (date) {
     const { shipmentDispatch, req } = this.props
     req.planned_pickup_date = date
-    shipmentDispatch.setShipmentDetails(req)
+    shipmentDispatch.getOffers(req)
   }
   setMoT (val, target) {
     this.setState({
@@ -90,7 +90,7 @@ export class ChooseRoute extends Component {
     this.setState({ outerLimit: outerLimit + 10 })
     const { shipmentDispatch, req } = this.props
     req.delay = outerLimit + 10
-    shipmentDispatch.setShipmentDetails(req, false)
+    shipmentDispatch.getOffers(req, false)
   }
 
   chooseResult (obj) {
