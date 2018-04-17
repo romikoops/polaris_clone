@@ -1,30 +1,23 @@
 module PricingTools # TODO: mongo
-  include MongoTools
   include CurrencyTools
 
-  def get_mongo_client 
-    get_client
-  end
-
   def get_user_price(client, path_key, user, shipment_date)
-    path_pricing = get_item_fn(client, 'itineraryPricings', '_id', path_key)
     Rails.logger.debug "PATH KEY FOR PRICING #{path_key}"
-    return nil if path_pricing.nil? 
+    first_stop_id, _last_stop_id, transport_category_id, _ = path_key.split('_')
+    itinerary_id = Stop.find(first_stop_id).itinerary_id
 
-    path_pricing_key = path_pricing[user.id.to_s] ? user.id.to_s : "open"
-    price_key        = path_pricing[path_pricing_key]    
+    pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
+    pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
+    return if pricing.nil?
 
-    pricing = get_item_fn(client, 'pricings', '_id', price_key)
-    
-    final_pricing = pricing
-    if pricing["exceptions"] && pricing["exceptions"].length > 0
-      pricing["exceptions"].each do |ex|
-        if ex["effective_date"] <= shipment_date && ex["expiration_date"] >= shipment_date
-          final_pricing = ex
-        end
-      end
+    pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)
+    pricing_details = if pricing_exceptions.any?
+      pricing_exceptions.first.pricing_details
+    else
+      pricing.pricing_details
     end
-    return final_pricing
+    final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
+    final_pricing.with_indifferent_access
   end
   
   def determine_local_charges(hub, load_type, cargos, direction, mot, user)
@@ -98,7 +91,7 @@ module PricingTools # TODO: mongo
 
   def determine_container_price(client, container, pathKey, user, quantity, shipment_date)
     pricing = get_user_price(client, pathKey, user, shipment_date)
-    return nil if pricing.nil?
+    return if pricing.nil?
     totals = {"total" => {}}
     
     pricing["data"].each do |k, fee|
@@ -109,10 +102,10 @@ module PricingTools # TODO: mongo
     end
 
     cargo_rate_value = sum_and_convert_cargo(totals, user.currency)
-    return nil if cargo_rate_value.nil? || cargo_rate_value == 0
+    return if cargo_rate_value.nil? || cargo_rate_value == 0
     container.unit_price = {value: cargo_rate_value, currency: user.currency}
     totals["total"] = {value: cargo_rate_value * container.quantity, currency: user.currency}
-    return totals
+    totals
   end
 
   def get_tenant_pricings(tenant_id)
@@ -127,56 +120,58 @@ module PricingTools # TODO: mongo
     end
   end
 
-  def get_route_pricings_array(route_id, tenant_id)
-    client = get_client
-    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"route" => {"$eq" => route_id.to_i}}]
-    get_items_query_fn(client, 'pricings', query).to_a
-  end
+  # def get_route_pricings_array(route_id, tenant_id)
+  #   client = get_client
+  #   query = [{'tenant_id' => {"$eq" => tenant_id}}, {"route" => {"$eq" => route_id.to_i}}]
+  #   get_items_query_fn(client, 'pricings', query).to_a
+  # end
 
   def get_itinerary_pricings_array(itinerary_id, tenant_id)
-    client = get_client
-    query = [{'tenant_id' => {"$eq" => tenant_id}}, {"itinerary" => {"$eq" => itinerary_id.to_i}}]
-    get_items_query_fn(client, 'pricings', query).to_a
+    itinerary = Itinerary.find_by(id: itinerary_id, tenant_id: tenant_id)
+    itinerary.pricings.map(&:as_json)
+    # client = get_client
+    # query = [{'tenant_id' => {"$eq" => tenant_id}}, {"itinerary" => {"$eq" => itinerary_id.to_i}}]
+    # get_items_query_fn(client, 'pricings', query).to_a
   end
 
   def get_user_pricings(id)
-    User.find(id: id).pricings.each_with_object({}) do |pricing, return_h|
-      return_h[pricing.route.name] = true # TODO: no route model
+    User.find(id).pricings.each_with_object({}) do |pricing, return_h|
+      return_h[pricing.itinerary.name] = true
     end
 
     # resp = get_items('userPricings', '_id', "#{user_id}").first
   end
-
-  def get_dedicated_hash(user_id, tenant_id)
-    HubRoutePricing.where(tenant_id: tenant_id, user_id: user_id).each_with_object({}) do |pricing, return_h|
-      return_h[pricing.route.name] = true # TODO: no route model
-    end
-    # query = [{'tenant_id' => {"$eq" => tenant_id}}, {"#{user_id}" => {"$exists" => true}}]
-    # pricings = get_items_query('hubRoutePricings', query).to_a
-    # pricings.each_with_object({}) do |pricing, return_h|
-    #   return_h[pricing["route"].to_s] = true
-    # end
-  end
-
-  def get_tenant_path_pricings(tenant_id)
-    HubRoutePricing.where(tenant_id: tenant_id)
-    # get_items('hubRoutePricings', 'tenant_id', tenant_id).to_a
-  end
-
-  def get_hub_route_pricings(hub_route_id)
-    HubRoutePricing.where(hub_route_id: hub_route_id)
-    # get_items('hubRoutePricings', 'hub_route_id', hub_route_id).to_a
-  end
+  #
+  # def get_dedicated_hash(user_id, tenant_id)
+  #   HubRoutePricing.where(tenant_id: tenant_id, user_id: user_id).each_with_object({}) do |pricing, return_h|
+  #     return_h[pricing.route.name] = true # TODO: no route model
+  #   end
+  #   # query = [{'tenant_id' => {"$eq" => tenant_id}}, {"#{user_id}" => {"$exists" => true}}]
+  #   # pricings = get_items_query('hubRoutePricings', query).to_a
+  #   # pricings.each_with_object({}) do |pricing, return_h|
+  #   #   return_h[pricing["route"].to_s] = true
+  #   # end
+  # end
+  #
+  # def get_tenant_path_pricings(tenant_id)
+  #   HubRoutePricing.where(tenant_id: tenant_id)
+  #   # get_items('hubRoutePricings', 'tenant_id', tenant_id).to_a
+  # end
+  #
+  # def get_hub_route_pricings(hub_route_id)
+  #   HubRoutePricing.where(hub_route_id: hub_route_id)
+  #   # get_items('hubRoutePricings', 'hub_route_id', hub_route_id).to_a
+  # end
 
   def get_itinerary_pricings(itinerary_id)
-    Itinerary.find(itinerary_id).pricings
+    Itinerary.find(itinerary_id).pricings.map(&:as_json)
     # get_items('itineraryPricings', 'itinerary_id', itinerary_id).to_a
   end
-
-  def get_route_pricings(route_id)
-    HubRoutePricing.where(route_id: route_id)
-    # get_items('hubRoutePricings', 'route_id', route_id).to_a
-  end
+  #
+  # def get_route_pricings(route_id)
+  #   HubRoutePricing.where(route_id: route_id)
+  #   # get_items('hubRoutePricings', 'route_id', route_id).to_a
+  # end
 
   def update_pricing(id, data)
     Pricing.find(id).update(data)
@@ -185,13 +180,13 @@ module PricingTools # TODO: mongo
 
   # {"55_56_48"=>{"_id"=>"55_56_48", "open"=>"55_56_48_1_lcl", "itinerary_id"=>28, "tenant_id"=>1, "transport_category_id"=>48}}
   def get_itinerary_pricings_hash(itinerary_id)
-    pricings = get_itinerary_pricings(itinerary_id)
     # pricings = get_items('itineraryPricings', 'itinerary_id', itinerary_id).to_a
-    pricings.each_with_object({}) do |pricing, return_h|
+    itinerary = Itinerary.find(itinerary_id)
+    itinerary.pricings.each_with_object({}) do |pricing, return_h|
       # return_h[pricing.id] = pricing.as_json # TODO: why _id like 1_2_16_1_lcl -> frontend
-      pricing_key = "#{pricing.first_stop}_#{pricing.last_stop}_#{pricing.transport_category_id}"
+      pricing_key = "#{itinerary.first_stop.id}_#{itinerary.last_stop.id}_#{pricing.transport_category_id}"
       open = "#{pricing_key}_#{pricing.tenant_id}"
-      return_h[pricing_key] = {id: pricing_key, open: open}
+      return_h[pricing_key] = { id: pricing_key, open: open }
     end
   end
 
@@ -201,17 +196,17 @@ module PricingTools # TODO: mongo
     # get_items_query('hubRoutePricings', query).to_a
   end
 
-  # TODO: duplicated code
-  def hub_route_pricing_update(id, data)
-    HubRoutePricing.find(id).update(data)
-    # update_item('hubRoutePricings', {_id: key }, data)
-  end
-
-  # TODO: duplicated code
-  def itinerary_pricing_update(id, data)
-    Itinerary.find(id).update(data)
-    # update_item('itineraryPricings', {_id: key }, data)
-  end
+  # # TODO: duplicated code
+  # def hub_route_pricing_update(id, data)
+  #   HubRoutePricing.find(id).update(data)
+  #   # update_item('hubRoutePricings', {_id: key }, data)
+  # end
+  #
+  # # TODO: duplicated code
+  # def itinerary_pricing_update(id, data)
+  #   Itinerary.find(id).update(data)
+  #   # update_item('itineraryPricings', {_id: key }, data)
+  # end
 
   def pricing_delete(id)
     Pricing.destroy(id)

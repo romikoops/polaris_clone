@@ -10,7 +10,6 @@ class MigratePricings < ActiveRecord::Migration[5.1]
       t.references :transport_category, index: true
       t.references :user, index: true
       t.references :itinerary, index: true
-      t.string :load_type
       t.timestamps
     end
 

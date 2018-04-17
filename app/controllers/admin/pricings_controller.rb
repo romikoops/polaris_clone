@@ -14,7 +14,7 @@ class Admin::PricingsController < ApplicationController # TODO: mongo
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     @pricings = itineraries.map(&:pricings).flatten
-    detailed_itineraries = Itinerary.where(tenant_id: tenant_id).map(&:as_options_json)
+    detailed_itineraries = Itinerary.where(tenant_id: current_user.tenant_id).map(&:as_options_json)
     
     response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
@@ -30,9 +30,9 @@ class Admin::PricingsController < ApplicationController # TODO: mongo
 
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = itinerary.pricings
+    pricings = get_itinerary_pricings_hash(itinerary.id)
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
-    detailed_itineraries = get_itinerary_options(itinerary)
+    detailed_itineraries = [itinerary.as_options_json]
     response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
   end
 

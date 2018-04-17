@@ -33,9 +33,8 @@ class Admin::ItinerariesController < ApplicationController # TODO: mongo
   end
   def show
     itinerary = Itinerary.find(params[:id])
-    pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id) # TODO: mongo
     hubs = itinerary.hubs
-    detailed_itineraries = get_itinerary_options(itinerary)
+    detailed_itineraries = itinerary.as_options_json
     stops = itinerary.stops.order(:index)
     schedules = itinerary.prep_schedules(10)
     notes = itinerary.notes

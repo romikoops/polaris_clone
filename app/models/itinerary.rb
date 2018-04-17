@@ -321,9 +321,8 @@ class Itinerary < ApplicationRecord # TODO: mongo
     end
   end
 
-  # TODO: merge args
-  def as_options_json(*args)
-    self.as_json(
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
       include: [
         {
           first_stop: {
@@ -353,5 +352,6 @@ class Itinerary < ApplicationRecord # TODO: mongo
         }
       ]
     )
+    as_json(new_options)
   end
 end

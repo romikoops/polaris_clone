@@ -33,7 +33,7 @@ module ShippingTools # TODO: mongo
     itinerary_ids_dedicated = Itinerary.ids_dedicated(current_user)
 
     mot_scope_args = { ('only_' + load_type).to_sym => true }
-    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args).intercepting_scope_ids
+    mot_scope_ids  = current_user.tenant.mot_scope(mot_scope_args)&.intercepting_scope_ids
 
     origins = []
     destinations = []
@@ -49,6 +49,7 @@ module ShippingTools # TODO: mongo
 
       itinerary = itinerary.as_json
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
+      itinerary
     end
 
     {

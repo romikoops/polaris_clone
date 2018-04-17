@@ -97,5 +97,5 @@ include MongoTools
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
-  # tenant.update_route_details()
+  tenant.update_route_details
 end

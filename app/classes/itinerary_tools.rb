@@ -3,7 +3,8 @@
 module ItineraryTools
   # TODO: ? { "#{user_id}" => {"$exists" => true} }
   def get_itineraries_with_dedicated_pricings(user_id, tenant_id)
-    Itinerary.where(tenant_id: tenant_id, user_id: user_id)
+    itinerary_ids = User.find(user_id).pricings.where(tenant_id: tenant_id).pluck(:itinerary_id)
+    Itinerary.where(id: itinerary_ids)
     # query = [
     #   { "tenant_id"  => {"$eq" => tenant_id} },
     #   { "#{user_id}" => {"$exists" => true} }
@@ -65,8 +66,8 @@ module ItineraryTools
   end
 
   # TODO: response format?
-  def get_itinerary_options(itinerary)
-    ItineraryPart.where(tenant_id: itinerary.tenant_id, itinerary: itinerary).as_json
+  # def get_itinerary_options(itinerary)
+  #   Itinerary.where(tenant_id: itinerary.tenant_id, itinerary: itinerary).as_options_json
     # query = [
     #   {
     #     "$match" => { "id" => itinerary.tenant_id }
@@ -84,7 +85,7 @@ module ItineraryTools
     #   }
     # ]
     # return get_items_aggregate("itineraryOptions", query)
-  end
+  #end
 
   def get_itineraries(tenant_id)
     Itinerary.where(tenant_id: tenant_id).map(&:as_options_json)

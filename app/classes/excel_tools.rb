@@ -1222,7 +1222,6 @@ module ExcelTools
   end
 
   def overwrite_freight_rates(params, user = current_user, generate = false)
-    mongo = get_client
     stats = {
       type: 'pricings',
       pricings: {
@@ -1453,7 +1452,6 @@ module ExcelTools
         user = aux_data[it_key][:customer]
 
         pricing = itinerary.pricings.first_or_create!(transport_category: transport_category, tenant: tenant, user: user)
-        pricing.load_type = cargo_key
 
         pricing_details = pricing_data.delete(:data)
         pricing_exceptions = pricing_data.delete(:exceptions)
