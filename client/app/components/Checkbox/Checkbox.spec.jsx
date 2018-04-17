@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { theme, identity } from '../../mocks'
 import { Checkbox } from './Checkbox'
 
@@ -19,6 +19,25 @@ const createWrapper = propsInput => mount(<Checkbox {...propsInput} />)
 
 beforeEach(() => {
   wrapper = createWrapper(propsBase)
+})
+
+test('shallow render', () =>
+  expect(shallow(<Checkbox {...propsBase} />)).toMatchSnapshot())
+
+test('props.checked is true', () => {
+  const props = {
+    ...propsBase,
+    checked: true
+  }
+  expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
+})
+
+test('props.disabled is true', () => {
+  const props = {
+    ...propsBase,
+    disabled: true
+  }
+  expect(shallow(<Checkbox {...props} />)).toMatchSnapshot()
 })
 
 test('click on div calls onClick', () => {

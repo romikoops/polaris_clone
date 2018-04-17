@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.checked is true 1`] = `
+<div
+  className="checkbox  flex-none"
+  onClick={[Function]}
+  style={
+    Object {
+      "border": "1px solid #fafafa",
+    }
+  }
+>
+  <label>
+    <input
+      checked={true}
+      disabled={false}
+      name="FOO_NAME"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      style={
+        Object {
+          "height": "30px",
+          "width": "30px",
+        }
+      }
+    >
+      <i
+        className="fa fa-check show"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "fontSize": "15px",
+          }
+        }
+      />
+    </span>
+  </label>
+</div>
+`;
+
+exports[`props.disabled is true 1`] = `
+<div
+  className="checkbox  flex-none"
+  onClick={[Function]}
+  style={
+    Object {
+      "border": "1px solid #fafafa",
+    }
+  }
+>
+  <label>
+    <input
+      checked={false}
+      disabled={true}
+      name="FOO_NAME"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      style={
+        Object {
+          "height": "30px",
+          "width": "30px",
+        }
+      }
+    >
+      <i
+        className="fa fa-check "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "fontSize": "15px",
+          }
+        }
+      />
+    </span>
+  </label>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="checkbox  flex-none"
+  onClick={[Function]}
+  style={
+    Object {
+      "border": "1px solid #fafafa",
+    }
+  }
+>
+  <label>
+    <input
+      checked={false}
+      disabled={false}
+      name="FOO_NAME"
+      onChange={[Function]}
+      type="checkbox"
+    />
+    <span
+      style={
+        Object {
+          "height": "30px",
+          "width": "30px",
+        }
+      }
+    >
+      <i
+        className="fa fa-check "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            "fontSize": "15px",
+          }
+        }
+      />
+    </span>
+  </label>
+</div>
+`;
