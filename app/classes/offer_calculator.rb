@@ -294,7 +294,7 @@ class OfferCalculator
   end
 
   def path_key(cargo_unit, layovers)
-    transport_category = layovers[0].trip.vehicle.transport_categories.find_by(
+    transport_category = layovers[0].trip.tenant_vehicle.vehicle.transport_categories.find_by(
       name: 'any',
       cargo_class: cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
