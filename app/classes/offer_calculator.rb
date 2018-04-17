@@ -286,6 +286,7 @@ class OfferCalculator
         total_units,
         @shipment.planned_pickup_date
       )
+      
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end

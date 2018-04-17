@@ -247,11 +247,11 @@ export const pricingNames = {
   heavy_weight: 'Heavy Weight (rate)',
   heavy_wm_min: 'HeavyWeight (min)',
   lcl: 'LCL',
-  fcl_20f: 'FCL 20ft',
+  fcl_20: 'FCL 20ft',
   rate: 'Container Rate',
   heavy_kg_min: 'Heavy Weight (min kg)',
-  fcl_40f: 'FCL 40ft',
-  fcl_40f_hq: 'FCL 40ft HQ'
+  fcl_40: 'FCL 40ft',
+  fcl_40_hq: 'FCL 40ft HQ'
 }
 export const cargoClassOptions = [
   { value: 'lcl', label: 'LCL' },
@@ -279,9 +279,9 @@ export const cargoGlossary = {
   liquid_bulk: 'Liquid Bulk',
   gas_bulk: 'Gas Bulk',
   lcl: 'LCL',
-  fcl_20f: 'FCL 20ft',
-  fcl_40f: 'FCL 40ft',
-  fcl_40f_hq: 'FCL 40ft HQ'
+  fcl_20: 'FCL 20ft',
+  fcl_40: 'FCL 40ft',
+  fcl_40_hq: 'FCL 40ft HQ'
 }
 export const currencyOptions = [
   { value: 'EUR', label: 'EUR' },

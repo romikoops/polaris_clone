@@ -527,7 +527,7 @@ module ExcelTools
 
         new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
         new_cols.delete("cbm_ratio") if load_type == "container"
-        #  byebug
+        #  
         
         # Find or update trucking_destinations
         td_query = <<-eos
@@ -916,8 +916,10 @@ module ExcelTools
           effective_date: "EFFECTIVE_DATE",
           expiration_date: "EXPIRATION_DATE",
         )
-
-        %w[lcl fcl_20 fcl_40 fcl_40hq].each do |lt|
+        if rows.length < 1
+          next 
+        end
+        %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
           hub_fees[lt] = {
             "import" => {},
             "export" => {},
@@ -1353,10 +1355,16 @@ module ExcelTools
 
       unless aux_data[pricing_key][:origin]
         aux_data[pricing_key][:origin] = Location.find_by(name: row[:origin], location_type: "nexus")
+        if !aux_data[pricing_key][:origin]
+          
+        end
       end
 
       unless aux_data[pricing_key][:destination]
         aux_data[pricing_key][:destination] = Location.find_by(name: row[:destination], location_type: "nexus")
+         if !aux_data[pricing_key][:destination]
+          
+        end
       end
 
       unless aux_data[pricing_key][:origin_hub_ids]
@@ -1398,7 +1406,7 @@ module ExcelTools
       end
 
       start_date = DateTime.now
-      end_date = start_date + 40.days
+      end_date = start_date + 30.days
 
       if generate
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
@@ -1511,6 +1519,9 @@ module ExcelTools
         tmp_pricing[:tenant_id] = tenant.id
         tmp_pricing[:load_type] = cargo_key
         uuid = SecureRandom.uuid
+        if !aux_data[itKey][:stops_in_order][0] || !aux_data[itKey][:stops_in_order].last || !transport_category
+          
+        end
         pathKey = "#{aux_data[itKey][:stops_in_order][0].id}_#{aux_data[itKey][:stops_in_order].last.id}_#{transport_category.id}"
         priceKey = "#{aux_data[itKey][:stops_in_order][0].id}_#{aux_data[itKey][:stops_in_order].last.id}_#{transport_category.id}_#{user.tenant_id}_#{cargo_key}"
         
@@ -1614,7 +1625,7 @@ module ExcelTools
     p charge
     p all_charges
     if load_type === "fcl"
-      %w[fcl_20 fcl_40 fcl_40hq].each do |lt|
+      %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
         p test
         p all_charges[lt]
         p all_charges[lt][direction]

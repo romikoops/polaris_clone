@@ -12,9 +12,9 @@ class VehicleSeeder
     'any'
   ]
   CARGO_CLASSES = [
-    'fcl_20f',
-    'fcl_40f',
-    'fcl_40f_hq',
+    'fcl_20',
+    'fcl_40',
+    'fcl_40_hq',
     'lcl'
   ]
 
