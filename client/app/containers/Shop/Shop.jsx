@@ -40,7 +40,6 @@ class Shop extends Component {
       showRegistration: false
     }
     this.selectLoadType = this.selectLoadType.bind(this)
-    this.setShipmentData = this.setShipmentData.bind(this)
     this.selectShipmentRoute = this.selectShipmentRoute.bind(this)
     this.setShipmentContacts = this.setShipmentContacts.bind(this)
     this.selectShipmentStage = this.selectShipmentStage.bind(this)
@@ -65,11 +64,6 @@ class Shop extends Component {
   getShipment (loadType) {
     const { shipmentDispatch } = this.props
     shipmentDispatch.newShipment(loadType)
-  }
-
-  setShipmentData (data) {
-    const { shipmentDispatch } = this.props
-    shipmentDispatch.setShipmentDetails(data, true)
   }
 
   setShipmentContacts (data) {
@@ -123,10 +117,10 @@ class Shop extends Component {
         shipmentDispatch.newShipment(req)
         break
       case 2:
-        shipmentDispatch.setShipmentDetails(req, true)
+        shipmentDispatch.getOffers(req, true)
         break
       case 3:
-        shipmentDispatch.setShipmentRoute(req)
+        shipmentDispatch.chooseOffer(req)
         break
       case 4:
         shipmentDispatch.setShipmentContacts(req)
@@ -155,7 +149,7 @@ class Shop extends Component {
     }
     this.hideRegistration()
     bookingSummaryDispatch.update({ modeOfTransport: schedule.mode_of_transport })
-    shipmentDispatch.setShipmentRoute(req)
+    shipmentDispatch.chooseOffer(req)
   }
 
   render () {
@@ -226,7 +220,7 @@ class Shop extends Component {
               shipmentData={shipmentData}
               prevRequest={request && request.stage2 ? request.stage2 : {}}
               req={request && request.stage1 ? request.stage1 : {}}
-              setShipmentDetails={this.setShipmentData}
+              getOffers={data => shipmentDispatch.getOffers(data, true)}
               setStage={this.selectShipmentStage}
               messages={error ? error.stage2 : []}
               shipmentDispatch={shipmentDispatch}
@@ -333,7 +327,7 @@ Shop.propTypes = {
 
   shipmentDispatch: PropTypes.shape({
     newShipment: PropTypes.func,
-    setShipmentDetails: PropTypes.func,
+    getOffers: PropTypes.func,
     setShipmentContacts: PropTypes.func
   }).isRequired,
   bookingSummaryDispatch: PropTypes.shape({
