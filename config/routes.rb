@@ -97,15 +97,15 @@ Rails.application.routes.draw do
       post "locations/:location_id/edit", to: "user_locations#edit"
     end
     post "notes/fetch", to: "notes#get_notes"
-    resources :shipments, only: [:index, :new, :show, :create] do
+    
+    post "create_shipment", controller: "shipments/booking_process", action: "create_shipment"
+    resources :shipments, only: [:index] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking
-      post "choose_offer",       as: :choose_offer
-      post "get_offers",         as: :get_offer
       post "set_haulage",        as: :set_haulage
-      post "finish_booking",     as: :finish_booking
-      post "update",             as: :update_booking
-      post "request_shipment",   as: :request_booking
+      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
+        post action, controller: "shipments/booking_process", action: action
+      end
     end
 
     resources :trucking_availability, only: [:index]

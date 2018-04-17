@@ -6,7 +6,7 @@ module ShippingTools
   extend MongoTools
   extend NotificationTools
 
-  def create_shipment(details, current_user)
+  def self.create_shipment(details, current_user)
     tenant = current_user.tenant
     load_type = details["loadType"].underscore
     direction = details["direction"]
@@ -80,7 +80,7 @@ module ShippingTools
     Document.new_upload(file, shipment, type, user)
   end
 
-  def update_shipment(session, params)
+  def self.update_shipment(params, current_user)
     tenant = current_user.tenant
     shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
@@ -255,13 +255,13 @@ module ShippingTools
     return shipment
   end
 
-  def contact_location_params(resource)
+  def self.contact_location_params(resource)
     resource.require(:location)
       .permit(:street, :streetNumber, :zipCode, :city, :country)
       .to_h.deep_transform_keys { |key| key.underscore }
   end
 
-  def contact_params(resource, location_id = nil)
+  def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
       .permit(:companyName, :firstName, :lastName, :email, :phone)
       .to_h.deep_transform_keys { |key| key.underscore }

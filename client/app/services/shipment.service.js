@@ -43,7 +43,7 @@ function newShipment (details) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ details })
   }
-  const url = `${BASE_URL}/shipments`
+  const url = `${BASE_URL}/create_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -73,7 +73,7 @@ function setShipmentContacts (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/update`
+  const url = `${BASE_URL}/shipments/${data.shipment.id}/update_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
 function requestShipment (id) {
