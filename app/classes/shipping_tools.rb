@@ -372,11 +372,11 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
-  def tenant_notification_email(user, shipment)
+  def self.tenant_notification_email(user, shipment)
     ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
-  def shipper_notification_email(user, shipment)
+  def self.shipper_notification_email(user, shipment)
     ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 

@@ -21,8 +21,8 @@ class Shipments::BookingProcessController < ApplicationController
 	
 	def request_shipment
 	  resp = ShippingTools.request_shipment(params, current_user)
-	  tenant_notification_email(resp.user, resp)
-	  shipper_notification_email(resp.user, resp)
+	  ShippingTools.tenant_notification_email(resp.user, resp)
+	  ShippingTools.shipper_notification_email(resp.user, resp)
 	  response_handler(shipment: resp)
 	end
-end 
+end
