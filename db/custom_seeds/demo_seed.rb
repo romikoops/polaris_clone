@@ -11,10 +11,10 @@ include MongoTools
   # tenant.customs_fees.destroy_all
 	# tenant.hubs.destroy_all
   #Overwrite hubs from excel sheet
-  puts "# Overwrite hubs from excel sheet"
-  hubs = File.open("#{Rails.root}/db/dummydata/SACO_ez_hubs.xlsx")
-  req = {"xlsx" => hubs}
-  overwrite_hubs(req, shipper)
+  # puts "# Overwrite hubs from excel sheet"
+  # hubs = File.open("#{Rails.root}/db/dummydata/SACO_ez_hubs.xlsx")
+  # req = {"xlsx" => hubs}
+  # overwrite_hubs(req, shipper)
 
 # #   # ### Overwrite dedicated pricings from excel sheet.
 # #   ## If dedicated == true, shipper.id is automatically inserted.
@@ -38,10 +38,10 @@ include MongoTools
   # # req = {"xlsx" => public_pricings}
   # # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
-  puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
-  req = {"xlsx" => local_charges}
-  overwrite_local_charges(req, shipper)
+  # puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
+  # req = {"xlsx" => local_charges}
+  # overwrite_local_charges(req, shipper)
 
 
   # # # # # Overwrite trucking data from excel sheet
