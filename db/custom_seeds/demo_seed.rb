@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['demo'].each do |sub|
+['hartrodt'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   shipper = tenant.users.where(role_id: 2).first
@@ -11,10 +11,10 @@ include MongoTools
 # 			tenant.layovers.destroy_all
 # 		  tenant.hubs.destroy_all
 #   #Overwrite hubs from excel sheet
-  # puts "# Overwrite hubs from excel sheet"
-  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  # req = {"xlsx" => hubs}
-  # overwrite_hubs(req, shipper)
+  puts "# Overwrite hubs from excel sheet"
+  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  req = {"xlsx" => hubs}
+  overwrite_hubs(req, shipper)
 
 #   # ### Overwrite dedicated pricings from excel sheet.
 #   ## If dedicated == true, shipper.id is automatically inserted.
@@ -26,9 +26,9 @@ include MongoTools
 #   # # # # # Overwrite public pricings from excel sheet
   # puts "# Overwrite public pricings from excel sheet"
 
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
   # # # Overwrite public pricings from excel sheet
 
@@ -38,10 +38,10 @@ include MongoTools
   # # req = {"xlsx" => public_pricings}
   # # overwrite_mongo_maersk_fcl_pricings(req, dedicated = false, shipper)
 
-  # puts "# Overwrite Local Charges From Sheet"
-  # local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
-  # req = {"xlsx" => local_charges}
-  # overwrite_local_charges(req, shipper)
+  puts "# Overwrite Local Charges From Sheet"
+  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  req = {"xlsx" => local_charges}
+  overwrite_local_charges(req, shipper)
 
 
   # # # # # Overwrite trucking data from excel sheet
@@ -77,16 +77,16 @@ include MongoTools
   #   overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
   # end
  
-  # hub = tenant.hubs.find_by_name("Shanghai Port")
-  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
-  # req = {"xlsx" => trucking}
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  # awesome_print "City rates done"
-  # hub = tenant.hubs.find_by_name("Gothenburg Port")
-  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
-  # req = {"xlsx" => trucking}
-  # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
-  # awesome_print "Zip rates done"
+  hub = tenant.hubs.find_by_name("Shanghai Port")
+  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_china.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  awesome_print "City rates done"
+  hub = tenant.hubs.find_by_name("Gothenburg Port")
+  trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg.xlsx")
+  req = {"xlsx" => trucking}
+  overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
+  awesome_print "Zip rates done"
   
   hub = tenant.hubs.find_by_name("Gothenburg Port")
   trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_gothenburg_ftl.xlsx")
@@ -104,5 +104,5 @@ include MongoTools
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
-  # tenant.update_route_details()
+  tenant.update_route_details()
 end

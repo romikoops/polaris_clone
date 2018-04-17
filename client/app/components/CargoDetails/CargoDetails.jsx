@@ -38,8 +38,6 @@ export class CargoDetails extends Component {
     if (customsData[target].unknown) {
       return 'Price subject to local regulations'
     }
-    // // eslint-disable-next-line no-debugger
-    // debugger
     // // if (customs.import.total.currency) {
     // //   const { currency } = customs.import.total
     // //   return `0 ${currency}`
