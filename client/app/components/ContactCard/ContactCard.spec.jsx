@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { theme, user, identity } from '../../mocks'
 
 jest.mock('react-truncate', () =>
@@ -33,6 +33,10 @@ const createWrapper = propsInput => mount(<ContactCard {...propsInput} />)
 
 beforeEach(() => {
   wrapper = createWrapper(propsBase)
+})
+
+test('shallow render', () => {
+  expect(shallow(<ContactCard {...propsBase} />)).toMatchSnapshot()
 })
 
 test('props.select is called upon click', () => {

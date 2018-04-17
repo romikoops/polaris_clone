@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import Contact from './Contact'
 import { user, location } from '../../mocks'
 
@@ -15,6 +15,10 @@ const createWrapper = propsInput => mount(<Contact {...propsInput} />)
 
 beforeEach(() => {
   wrapper = createWrapper(propsBase)
+})
+
+test('shallow render', () => {
+  expect(shallow(<Contact {...propsBase} />)).toMatchSnapshot()
 })
 
 test('props.textStyle', () => {
