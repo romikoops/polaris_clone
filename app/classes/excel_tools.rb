@@ -1296,8 +1296,6 @@ module ExcelTools
     aux_data = {}
     new_pricings = {}
     nested_pricings = {}
-    new_itineraries = {}
-    itineraries_to_write = []
 
     pricing_rows.each do |row|
       pricing_key = "#{row[:origin].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:destination].gsub(/\s+/, '').gsub(/,+/, '')}_#{row[:mot]}"
@@ -1492,7 +1490,7 @@ module ExcelTools
         results[:pricings] << pricing
       end
     end
-
+    tenant.update_route_details # TODO: check if necessary
     { results: results, stats: stats }
   end
 
