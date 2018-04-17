@@ -1,0 +1,173 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="card_link_row layout-row flex-100 layout-align-center"
+>
+  <FlashMessages
+    messages={
+      Array [
+        "FOO",
+        "BAR",
+      ]
+    }
+  />
+  <div
+    className="flex-none content_width layout-row layout-align-start-center layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-space-around-center layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <TextHeading
+          size={4}
+          text="Are you importing or exporting?"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="direction_card unselected flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <div
+          className="flex-80 layout-row layout-align-space-between-center"
+        >
+          <p
+            className="flex-none"
+          >
+             I am 
+            Buying
+             (
+            import
+            )
+          </p>
+        </div>
+      </div>
+      <div
+        className="direction_card unselected flex-none layout-row layout-align-center-center"
+        onClick={[Function]}
+      >
+        <div
+          className="flex-80 layout-row layout-align-space-between-center"
+        >
+          <p
+            className="flex-none"
+          >
+             I am 
+            Selling
+             (
+            export
+            )
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-wrap section inactive"
+    >
+      <div
+        className="flex-100 layout-row layout-align-start-center"
+      >
+        <TextHeading
+          size={4}
+          text="Are you shipping cargo items or containers?"
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <CardLinkRow
+        cards={
+          Array [
+            Object {
+              "code": "cargo_item",
+              "handleClick": [Function],
+              "img": "https://assets.itsmycargo.com/assets/images/icons/cargo_item.svg",
+              "name": Object {},
+              "options": Object {
+                "contained": true,
+              },
+            },
+            Object {
+              "code": "container",
+              "handleClick": [Function],
+              "img": "https://assets.itsmycargo.com/assets/images/icons/container.svg",
+              "name": Object {},
+              "options": Object {
+                "contained": true,
+              },
+            },
+          ]
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="next_step_sec flex-100 layout-row layout-align-center section inactive"
+    >
+      <div
+        className="mot_sec flex-80 layout-row layout-wrap layout-align-center"
+        style={
+          Object {
+            "color": "#33380%",
+          }
+        }
+      >
+        <div
+          className="next_step_btn_sec flex-100 layout-row layout-align-end"
+        >
+          <div
+            className="flex-none layout-column layout-align-center-center"
+          >
+            <div
+              className="flex-none layout-row layout-align-center-start"
+            >
+              <p
+                className="mot_note"
+              >
+                Availabilities will be shown for all applicable
+                <br />
+                 modes of transport for your shipment
+              </p>
+              <RoundButton
+                iconClass="fa-chevron-right"
+                size="small"
+                text="Next Step"
+                theme={
+                  Object {
+                    "colors": Object {
+                      "primary": "#333",
+                      "secondary": "#fafafa",
+                    },
+                  }
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
