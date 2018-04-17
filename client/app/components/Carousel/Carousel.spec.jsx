@@ -1,10 +1,12 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 
 jest.mock('react-slick', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <span>{children}</span>)
-
+jest.mock('node-uuid', () => ({
+  v4: () => 'RANDOM_KEY'
+}))
 // eslint-disable-next-line
 import { Carousel } from './Carousel'
 
@@ -28,43 +30,14 @@ const propsBase = {
   fade: false
 }
 
-let wrapper
-
-const createWrapper = propsInput => mount(<Carousel {...propsInput} />)
-
-beforeEach(() => {
-  wrapper = createWrapper(propsBase)
+test('shallow render', () => {
+  expect(shallow(<Carousel {...propsBase} />)).toMatchSnapshot()
 })
 
-test('additional divs when props.fade is true', () => {
-  const withFade = createWrapper({
+test('props.fade is true', () => {
+  const props = {
     ...propsBase,
     fade: true
-  })
-
-  const numDivNoFade = wrapper.find('div').length
-  const numDivWithFade = withFade.find('div').length
-
-  /**
-   * Difference is 2 as we have 2 slide and each
-   * generates 1 additional div
-   */
-  expect(numDivNoFade).toBe(numDivWithFade - 2)
-})
-
-test('header in slides is correctly rendered', () => {
-  const headerFirst = wrapper.find('h2.slick_city').at(0)
-  const headerSecond = wrapper.find('h2.slick_city').at(1)
-
-  expect(headerFirst.text().includes(slideFirst.header)).toBeTruthy()
-  expect(headerSecond.text().includes(slideSecond.header)).toBeTruthy()
-})
-
-test('subheader in slides is correctly rendered', () => {
-  const subheaderFirst = wrapper.find('h5.slick_country').at(0)
-  const subheaderSecond = wrapper.find('h5.slick_country').at(1)
-
-  expect(subheaderFirst.text().includes(slideFirst.subheader)).toBeTruthy()
-
-  expect(subheaderSecond.text().includes(slideSecond.subheader)).toBeTruthy()
+  }
+  expect(shallow(<Carousel {...props} />)).toMatchSnapshot()
 })
