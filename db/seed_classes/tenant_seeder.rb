@@ -700,7 +700,7 @@ class TenantSeeder
           brightPrimary: "#e0708c",
           brightSecondary: "#4368b7"
         },
-        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
+        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_wide.png",
         logoWhite: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
         logoSmall: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_small.png",
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
@@ -748,12 +748,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'optional'      
           }
         }
       },
@@ -827,12 +827,12 @@ class TenantSeeder
         ],
         carriage_options: {
           on_carriage: {
-            import: 'mandatory',
+            import: 'optional',
             export: 'optional'
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'optional'      
           }
         }
       },
