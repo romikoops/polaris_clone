@@ -444,7 +444,7 @@ exports[` 1`] = `
                   name="notes"
                   onChange={[Function]}
                   rows="6"
-                  value="FOO_NOTEST"
+                  value="FOO_NOTES"
                 />
               </div>
             </div>

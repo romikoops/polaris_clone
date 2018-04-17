@@ -101,7 +101,7 @@ const propsBase = {
   hsTexts: {},
   handleTotalGoodsCurrency: identity,
   eori: 'FOO_EORI',
-  notes: 'FOO_NOTEST',
+  notes: 'FOO_NOTES',
   incoterm: 'FOO_INCOTERM'
 }
 
