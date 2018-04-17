@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['demo'].each do |sub|
+['demo', 'greencarrier'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   
@@ -29,9 +29,9 @@ include MongoTools
   # public_pricings = File.open("#{Rails.root}/db/dummydata/SACO_FCL_STANDARD.xlsx")
   # req = {"xlsx" => public_pricings}
   # overwrite_freight_rates(req, shipper, true)
-  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  req = {"xlsx" => public_pricings}
-  overwrite_freight_rates(req, shipper, true)
+  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  # req = {"xlsx" => public_pricings}
+  # overwrite_freight_rates(req, shipper, true)
 
   # # # Overwrite public pricings from excel sheet
 
