@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-center-start"
+  name="contact_setter"
+>
+  <div
+    className="flex-none content_width layout-row layout-wrap"
+  >
+    <div
+      className="flex-100 layout-row layout-align-center-center pointy"
+      onClick={[Function]}
+    >
+      <h1>
+         Set Contact Details
+      </h1>
+      <i
+        className="fa fa-chevron-right"
+        style={
+          Object {
+            "padding": "10px",
+          }
+        }
+      />
+    </div>
+    <div
+      className="
+            flex-100 layout-row layout-wrap body hidden
+          "
+    >
+      <div
+        className="flex-100 layout-row layout-align-center-center"
+        name="stageTimeline"
+      >
+        <Component
+          currentStageIndex={0}
+          setStage={[Function]}
+          stages={
+            Array [
+              "receiver",
+              "sender",
+              "notifyees",
+            ]
+          }
+          theme={
+            Object {
+              "colors": Object {
+                "primary": "#333",
+                "secondary": "#fafafa",
+              },
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-100 layout-row layout-align-center-center"
+        style={
+          Object {
+            "boxShadow": "rgba(0, 0, 0, 0.05) 2px 2px 1px",
+            "height": "493px",
+            "marginBottom": "50px",
+          }
+        }
+      >
+        <div
+          className="flex-50"
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+        >
+          <ShipmentContactForm
+            close={[Function]}
+            contactData={
+              Object {
+                "contact": Object {
+                  "companyName": "",
+                  "email": "",
+                  "firstName": "",
+                  "lastName": "",
+                  "phone": "",
+                },
+                "location": Object {
+                  "city": "",
+                  "country": "",
+                  "gecodedAddress": "",
+                  "number": "",
+                  "street": "",
+                  "zipCode": "",
+                },
+                "type": "consignee",
+              }
+            }
+            setContact={[Function]}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+        <div
+          className="flex-50"
+          style={
+            Object {
+              "height": "100%",
+            }
+          }
+        >
+          <AddressBook
+            autofillContact={[Function]}
+            contacts={Array []}
+            theme={
+              Object {
+                "colors": Object {
+                  "primary": "#333",
+                  "secondary": "#fafafa",
+                },
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="flex-100 layout-row layout-align-center-center"
+    >
+      <ShipmentContactsBox
+        consignee={Object {}}
+        direction="FOO_DIRECTION"
+        finishBookingAttempted={false}
+        notifyees={Array []}
+        removeNotifyee={[Function]}
+        setContactForEdit={[Function]}
+        shipper={Object {}}
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
