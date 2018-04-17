@@ -1,0 +1,166 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-center-start layout-wrap"
+  style={
+    Object {
+      "marginBottom": "166px",
+      "marginTop": "62px",
+    }
+  }
+>
+  <div
+    className="flex-none content_width layout-row layout-wrap"
+  >
+    <div
+      className="flex-20 layout-row layout-wrap"
+    >
+      <RouteFilterBox
+        durationFilter={40}
+        moT={
+          Object {
+            "air": true,
+            "ocean": true,
+          }
+        }
+        setDepartureDate={[Function]}
+        setDurationFilter={[Function]}
+        setMoT={[Function]}
+        shipment={
+          Object {
+            "schedules_charges": Object {
+              "FOO_HUB_ROUTE_KEY": Object {
+                "foo": "FOO_ROUTE_KEY",
+              },
+            },
+            "total_price": Object {
+              "currency": "USD",
+              "value": 12,
+            },
+          }
+        }
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+    <div
+      className="flex-75 offset-5 layout-row layout-wrap"
+    >
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-space-between-center route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={3}
+              text="This is the closest departure to the specified date"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+          <div
+            className="flex-30 layout-row layout-align-end-center"
+          >
+            <NamedSelect
+              className="flex-100"
+              onChange={[Function]}
+              options={
+                Object {
+                  "fooKey": "FOO_CURRENCY_OPTIONS",
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={3}
+              text="Alternative departures"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="flex-100 layout-row layout-wrap"
+      >
+        <div
+          className="flex-100 layout-row layout-align-start route_header"
+        >
+          <div
+            className="flex-none"
+          >
+            <TextHeading
+              size={3}
+              text="Alternative modes of transport"
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="back_to_dash_sec flex-100 layout-row layout-wrap layout-align-center"
+  >
+    <div
+      className="content_width_booking flex-none layout-row layout-align-start-center"
+    >
+      <RoundButton
+        back={true}
+        handleNext={[Function]}
+        iconClass="fa-angle0-left"
+        text="Back to dashboard"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+</div>
+`;
