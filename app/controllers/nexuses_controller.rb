@@ -27,16 +27,18 @@ class NexusesController < ApplicationController
 		nexus_ids 			= params[:nexus_ids].split(",").map(&:to_i)
 		target 					= params[:target]
 		counterpart     = target == "destination" ? "origin" : "destination"
+		stop_target 		= target == "destination" ? "first_stop" : "last_stop"
+		stop_counterpart 		= target == "destination" ? "last_stop" : "first_stop"
 
 		itinerary_ids = params[:itinerary_ids].split(",").map(&:to_i)
 		itineraries   = Itinerary.where(tenant_id: current_user.tenant_id, id: itinerary_ids).map(&:as_options_json)
-
+		
 		if nexus_ids.blank? || nexus_ids.empty?
-			return itineraries.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq
+			return itineraries.map { |itinerary| Location.find(itinerary[stop_target]["hub"]["nexus"]["id"]) }.uniq
 		end
-
-		itineraries.select { |itinerary| nexus_ids.include? itinerary["#{counterpart}_nexus_id"] }
-			.map { |itinerary| Location.find(itinerary["#{target}_nexus_id"]) }.uniq
+		
+		itineraries.select { |itinerary| nexus_ids.include? itinerary[stop_counterpart]["hub"]["nexus"]["id"] }
+			.map { |itinerary| Location.find(itinerary[stop_target]["hub"]["nexus"]["id"]) }.uniq
 	end
 
 	def format_for_select_box(nexuses)

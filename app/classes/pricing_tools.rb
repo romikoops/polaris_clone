@@ -1,13 +1,14 @@
 module PricingTools
   include CurrencyTools
 
-  def get_user_price(client, path_key, user, shipment_date)
+  def get_user_price(path_key, user, shipment_date)
     Rails.logger.debug "PATH KEY FOR PRICING #{path_key}"
     first_stop_id, _last_stop_id, transport_category_id, _ = path_key.split('_')
     itinerary_id = Stop.find(first_stop_id).itinerary_id
 
     pricing = Pricing.find_by(itinerary_id: itinerary_id, user_id: user.id, transport_category_id: transport_category_id)
     pricing ||= Pricing.find_by(itinerary_id: itinerary_id, transport_category_id: transport_category_id)
+    
     return if pricing.nil?
 
     pricing_exceptions = pricing.pricing_exceptions.where("effective_date <= ? AND expiration_date >= ?", shipment_date, shipment_date)
@@ -64,13 +65,13 @@ module PricingTools
     totals
   end
 
-  def determine_cargo_item_price(client, cargo, pathKey, user, quantity, shipment_date)
-    pricing = get_user_price(client, pathKey, user, shipment_date)
+  def determine_cargo_item_price(cargo, pathKey, user, quantity, shipment_date)
+    pricing = get_user_price(pathKey, user, shipment_date)
     return nil if pricing.nil?
     totals = { "total" => {} }
     
-    pricing["data"].keys.each do |k|
-      fee = pricing["data"][k].clone
+    pricing.keys.each do |k|
+      fee = pricing[k].clone
 
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"] 
@@ -90,12 +91,12 @@ module PricingTools
     totals
   end
 
-  def determine_container_price(client, container, pathKey, user, quantity, shipment_date)
-    pricing = get_user_price(client, pathKey, user, shipment_date)
+  def determine_container_price(container, pathKey, user, quantity, shipment_date)
+    pricing = get_user_price(pathKey, user, shipment_date)
     return if pricing.nil?
     totals = {"total" => {}}
     
-    pricing["data"].each do |k, fee|
+    pricing.each do |k, fee|
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"] 
 

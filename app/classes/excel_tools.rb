@@ -1475,22 +1475,25 @@ module ExcelTools
 
     new_pricings.each do |it_key, cargo_pricings|
       cargo_pricings.each do |cargo_key, pricing_data|
+        this_cargo_key = cargo_key.clone()
+        awesome_print cargo_key
+        awesome_print this_cargo_key
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_key)
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 
-        pricing = itinerary.pricings.first_or_create!(transport_category: transport_category, tenant: tenant, user: user)
+        pricing = itinerary.pricings.find_or_create_by!(transport_category: transport_category, tenant: tenant, user: user)
 
         pricing_details = pricing_data.delete(:data)
         pricing_exceptions = pricing_data.delete(:exceptions)
-        external_updated_at = pricing_data.delete(:updated_at)
+        # external_updated_at = pricing_data.delete(:updated_at)
         pricing.update(pricing_data)
         pricing_details.each do |shipping_type, pricing_detail_data|
           currency = pricing_detail_data.delete(:currency)
           pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
           range = pricing_detail_params.delete(:range)
           pricing_detail = pricing.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
-          pricing_detail.update!(range: range, currency_name: currency, external_updated_at: external_updated_at)
+          pricing_detail.update!(range: range, currency_name: currency) #, external_updated_at: external_updated_at)
         end
 
         pricing_exceptions.each do |pricing_exception_data|

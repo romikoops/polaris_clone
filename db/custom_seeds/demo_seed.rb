@@ -29,9 +29,9 @@ include MongoTools
   # public_pricings = File.open("#{Rails.root}/db/dummydata/SACO_FCL_STANDARD.xlsx")
   # req = {"xlsx" => public_pricings}
   # overwrite_freight_rates(req, shipper, true)
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
   # # # Overwrite public pricings from excel sheet
 
@@ -45,10 +45,10 @@ include MongoTools
   # local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
   # req = {"xlsx" => local_charges}
   # overwrite_local_charges(req, shipper)
-   puts "# Overwrite Local Charges From Sheet"
-  local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
-  req = {"xlsx" => local_charges}
-  overwrite_local_charges(req, shipper)
+  #  puts "# Overwrite Local Charges From Sheet"
+  # local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
+  # req = {"xlsx" => local_charges}
+  # overwrite_local_charges(req, shipper)
 
 
   # # # # # Overwrite trucking data from excel sheet

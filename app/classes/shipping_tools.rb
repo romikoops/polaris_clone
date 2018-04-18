@@ -54,7 +54,6 @@ module ShippingTools
       itinerary['dedicated'] = true if itinerary_ids_dedicated.include?(itinerary['id'])
       itinerary
     end
-    byebug
     {
       shipment:       shipment,
       all_nexuses:    { origins: origins.uniq, destinations: destinations.uniq },

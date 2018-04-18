@@ -338,14 +338,12 @@ class Itinerary < ApplicationRecord
           only: [:id]
         },
         last_stop: {
-          first_stop: {
-            include: {
-              hub: {
-                include: {
-                  nexus: { only: %i[id name] }
-                },
-                only: %i[id name]
-              }
+          include: {
+            hub: {
+              include: {
+                nexus: { only: %i[id name] }
+              },
+              only: %i[id name]
             }
           },
           only: [:id]
