@@ -5,7 +5,9 @@ import { theme, user, identity } from '../../mocks'
 jest.mock('react-truncate', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <span>{children}</span>)
-
+jest.mock('node-uuid', () => ({
+  v4: () => 'RANDOM_KEY'
+}))
 // eslint-disable-next-line
 import ContactCard from './ContactCard'
 

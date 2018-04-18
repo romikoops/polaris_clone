@@ -3,7 +3,7 @@
 exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row contact_card "
-  key="8e252bf0-b0b9-4dd8-8cec-420d9a1b1889"
+  key="RANDOM_KEY"
   onClick={[Function]}
 >
   <div

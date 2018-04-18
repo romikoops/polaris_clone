@@ -1,11 +1,6 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
-import {
-  theme,
-  user,
-  identity,
-  tenant
-} from '../../mocks'
+import { mount, shallow } from 'enzyme'
+import { theme, user, identity, tenant } from '../../mocks'
 
 jest.mock('../Header/Header', () =>
   // eslint-disable-next-line react/prop-types
@@ -31,38 +26,23 @@ const edittedTenant = {
 const propsBase = {
   bookNow: identity,
   goTo: identity,
+  toggleShowLogin: identity,
   tenant: edittedTenant,
   theme,
   toAdmin: identity,
-  user
+  user: {
+    ...user,
+    role_id: 2
+  }
 }
-
-let wrapper
 
 const createWrapper = propsInput => mount(<LandingTop {...propsInput} />)
 
-beforeEach(() => {
-  wrapper = createWrapper(propsBase)
+test('user.role_id is 2', () => {
+  expect(shallow(<LandingTop {...propsBase} />)).toMatchSnapshot()
 })
 
-test('when user.role_id is 2', () => {
-  const props = {
-    ...propsBase,
-    user: {
-      ...user,
-      role_id: 2
-    }
-  }
-  const dom = createWrapper(props)
-
-  const firstButton = dom.find('RoundButton').first()
-  expect(firstButton.prop('text')).toBe('Find Rates')
-
-  const secondButton = dom.find('RoundButton').last()
-  expect(secondButton.prop('text')).toBe('My Account')
-})
-
-test('when user.role_id is 1', () => {
+test('user.role_id is 1', () => {
   const props = {
     ...propsBase,
     user: {
@@ -70,14 +50,22 @@ test('when user.role_id is 1', () => {
       role_id: 1
     }
   }
-  const dom = createWrapper(props)
-
-  const firstButton = dom.find('RoundButton').first()
-  expect(firstButton.prop('text')).toBe('Admin Dashboard')
+  expect(shallow(<LandingTop {...props} />)).toMatchSnapshot()
 })
 
-test('includes tenant\'s name', () => {
-  const welcome = wrapper.find('.sign_up h2').first().text()
+test('props.toggleShowLogin is called', () => {
+  const props = {
+    ...propsBase,
+    user: {
+      guest: true
+    },
+    toggleShowLogin: jest.fn()
+  }
+  const wrapper = createWrapper(props)
 
-  expect(welcome.includes(edittedTenant.data.name)).toBeTruthy()
+  const link = wrapper.find('a').first()
+
+  expect(props.toggleShowLogin).not.toHaveBeenCalled()
+  link.simulate('click')
+  expect(props.toggleShowLogin).toHaveBeenCalled()
 })
