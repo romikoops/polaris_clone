@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416194003) do
+ActiveRecord::Schema.define(version: 20180413120256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,6 +228,7 @@ ActiveRecord::Schema.define(version: 20180416194003) do
     t.string "hw_rate_basis"
     t.string "shipping_type"
     t.jsonb "range", default: []
+    t.string "currency_name"
     t.bigint "currency_id"
     t.string "priceable_type"
     t.bigint "priceable_id"
@@ -258,7 +259,6 @@ ActiveRecord::Schema.define(version: 20180416194003) do
     t.bigint "transport_category_id"
     t.bigint "user_id"
     t.bigint "itinerary_id"
-    t.string "load_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
@@ -381,20 +381,21 @@ ActiveRecord::Schema.define(version: 20180416194003) do
     t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "vehicle_id"
     t.string "voyage_code"
     t.string "vessel"
-    t.integer "tenant_vehicle_id"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
     t.string "city_name"
+    t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "distance"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
+    t.index ["distance"], name: "index_trucking_destinations_on_distance"
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
@@ -405,7 +406,6 @@ ActiveRecord::Schema.define(version: 20180416194003) do
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
-    t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "carriage"

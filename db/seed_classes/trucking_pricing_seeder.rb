@@ -1,4 +1,4 @@
-class TruckingPricingSeeder # TODO: mongo
+class TruckingPricingSeeder
 	extend ExcelTools
 	DIRECTIONS = %w(import export)
 

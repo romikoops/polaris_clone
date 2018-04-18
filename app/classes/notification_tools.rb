@@ -1,4 +1,4 @@
-module NotificationTools # TODO: mongo
+module NotificationTools
   include MongoTools
 
   # def get_messages_for_user(user)

@@ -7,3 +7,4 @@ TruckingPricing.destroy_all
 Hub.destroy_all
 Location.destroy_all
 UserLocation.destroy_all
+Pricing.destroy_all

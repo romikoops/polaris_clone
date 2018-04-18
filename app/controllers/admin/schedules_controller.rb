@@ -1,4 +1,4 @@
-class Admin::SchedulesController < ApplicationController # TODO: mongo
+class Admin::SchedulesController < ApplicationController
   before_action :require_login_and_role_is_admin
   include ItineraryTools
   include ExcelTools
@@ -10,7 +10,7 @@ class Admin::SchedulesController < ApplicationController # TODO: mongo
     ocean_schedules = tenant.itineraries.where(mode_of_transport: 'ocean').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     air_schedules = tenant.itineraries.where(mode_of_transport: 'air').flat_map{ |it| it.trips.limit(10).order(:start_date)}
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = get_itineraries(current_user.tenant_id)
+    detailed_itineraries = itineraries.map(&:as_options_json)
     response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, detailedItineraries: detailed_itineraries})
   end
   def show

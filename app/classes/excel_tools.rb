@@ -1223,7 +1223,6 @@ module ExcelTools
   end
 
   def overwrite_freight_rates(params, user = current_user, generate = false)
-    mongo = get_client
     stats = {
       type: 'pricings',
       pricings: {
@@ -1454,29 +1453,28 @@ module ExcelTools
         user = aux_data[it_key][:customer]
 
         pricing = itinerary.pricings.first_or_create!(transport_category: transport_category, tenant: tenant, user: user)
-        pricing.load_type = cargo_key
 
         pricing_details = pricing_data.delete(:data)
         pricing_exceptions = pricing_data.delete(:exceptions)
-        pricing_data.delete(:updated_at) # TODO: useful for anything?
+        external_updated_at = pricing_data.delete(:updated_at)
         pricing.update(pricing_data)
         pricing_details.each do |shipping_type, pricing_detail_data|
-          currency = pricing_detail_data.delete(:currency) # TODO: use it
+          currency = pricing_detail_data.delete(:currency)
           pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
           range = pricing_detail_params.delete(:range)
           pricing_detail = pricing.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
-          pricing_detail.update!(range: range)
+          pricing_detail.update!(range: range, currency_name: currency, external_updated_at: external_updated_at)
         end
 
         pricing_exceptions.each do |pricing_exception_data|
           pricing_details = pricing_exception_data.delete(:data)
           pricing_exception = pricing.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: tenant))
           pricing_details.each do |shipping_type, pricing_detail_data|
-            currency = pricing_detail_data.delete(:currency) # TODO: use it
+            currency = pricing_detail_data.delete(:currency)
             range = pricing_detail_data.delete(:range)
             pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
             pricing_detail = pricing_exception.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
-            pricing_detail.update!(range: range)
+            pricing_detail.update!(range: range, currency_name: currency)
           end
         end
 

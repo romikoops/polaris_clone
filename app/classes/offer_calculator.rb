@@ -1,8 +1,7 @@
-class OfferCalculator # TODO: mongo
+class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay, :trucking_data
   include CurrencyTools
   include PricingTools
-  include MongoTools
   include TruckingTools
   def initialize(shipment, params, user)
     @mongo            = get_client
@@ -22,7 +21,7 @@ class OfferCalculator # TODO: mongo
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
-    @current_eta_in_search = DateTime.new()
+    @current_eta_in_search = DateTime.new
     @total_price = { total:0, currency: "EUR" }
 
     if params[:shipment][:aggregated_cargo_attributes]

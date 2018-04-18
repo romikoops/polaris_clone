@@ -1,4 +1,4 @@
-module MongoTools # TODO: replace
+module MongoTools
   require 'mongo'
 
   def put_item(table, value)

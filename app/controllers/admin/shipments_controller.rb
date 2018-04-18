@@ -1,4 +1,4 @@
-class Admin::ShipmentsController < ApplicationController # TODO: mongo
+class Admin::ShipmentsController < ApplicationController
   before_action :require_login_and_role_is_admin
   include ShippingTools
   include NotificationTools
