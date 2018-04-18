@@ -2,11 +2,14 @@ module ShippingTools
   include PricingTools
   include MongoTools
   include NotificationTools
+  extend PricingTools
+  extend MongoTools
+  extend NotificationTools
 
-  def new_shipment(obj)
+  def self.create_shipment(details, current_user)
     tenant = current_user.tenant
-    load_type = obj["loadType"].underscore
-    direction = obj["direction"]
+    load_type = details["loadType"].underscore
+    direction = details["direction"]
     shipment = Shipment.new(
       user_id: current_user.id, 
       status: "booking_process_started", 
@@ -53,23 +56,23 @@ module ShippingTools
     }.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
-  def get_shipment_offer(session, params, load_type)
+  def self.get_offers(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
-    offer_calculation = OfferCalculator.new(shipment, params, current_user)
+    offer_calculatior = OfferCalculator.new(shipment, params, current_user)
 
-    offer_calculation.calc_offer!
+    offer_calculatior.calc_offer!
 
-    offer_calculation.shipment.save!
+    offer_calculatior.shipment.save!
     return {
-      shipment:                   offer_calculation.shipment,
-      total_price:                offer_calculation.total_price,
-      has_pre_carriage:           offer_calculation.has_pre_carriage,
-      has_on_carriage:            offer_calculation.has_on_carriage,
-      schedules:                  offer_calculation.schedules,
-      truck_seconds_pre_carriage: offer_calculation.truck_seconds_pre_carriage,
-      originHubs:                 offer_calculation.origin_hubs,
-      destinationHubs:            offer_calculation.destination_hubs,
-      cargoUnits:                 offer_calculation.shipment.cargo_units,
+      shipment:                   offer_calculatior.shipment,
+      total_price:                offer_calculatior.total_price,
+      has_pre_carriage:           offer_calculatior.has_pre_carriage,
+      has_on_carriage:            offer_calculatior.has_on_carriage,
+      schedules:                  offer_calculatior.schedules,
+      truck_seconds_pre_carriage: offer_calculatior.truck_seconds_pre_carriage,
+      originHubs:                 offer_calculatior.origin_hubs,
+      destinationHubs:            offer_calculatior.destination_hubs,
+      cargoUnits:                 offer_calculatior.shipment.cargo_units,
     }
   end
 
@@ -77,7 +80,7 @@ module ShippingTools
     Document.new_upload(file, shipment, type, user)
   end
 
-  def update_shipment(session, params)
+  def self.update_shipment(params, current_user)
     tenant = current_user.tenant
     shipment = Shipment.find(params[:shipment_id])
     shipment_data = params[:shipment]
@@ -235,7 +238,7 @@ module ShippingTools
     }
   end
 
-  def confirm_booking(params)
+  def self.request_shipment(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
     shipment.status = "requested"
     shipment.booking_placed_at = DateTime.now
@@ -252,20 +255,20 @@ module ShippingTools
     return shipment
   end
 
-  def contact_location_params(resource)
+  def self.contact_location_params(resource)
     resource.require(:location)
       .permit(:street, :streetNumber, :zipCode, :city, :country)
       .to_h.deep_transform_keys { |key| key.underscore }
   end
 
-  def contact_params(resource, location_id = nil)
+  def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
       .permit(:companyName, :firstName, :lastName, :email, :phone)
       .to_h.deep_transform_keys { |key| key.underscore }
       .merge({ location_id: location_id })
   end
 
-  def finish_shipment_booking(params)
+  def self.choose_offer(params, current_user)
     @user_locations = current_user.user_locations.map do |uloc|
       { 
         location: uloc.location.attributes, 
@@ -372,11 +375,11 @@ module ShippingTools
     send_data shipper_pdf, filename: "Booking_" + shipment.imc_reference + ".pdf"
   end
 
-  def tenant_notification_email(user, shipment)
+  def self.tenant_notification_email(user, shipment)
     ShipmentMailer.tenant_notification(user, shipment).deliver_later
   end
 
-  def shipper_notification_email(user, shipment)
+  def self.shipper_notification_email(user, shipment)
     ShipmentMailer.shipper_notification(user, shipment).deliver_later
   end
 

@@ -170,7 +170,15 @@ class Header extends Component {
           { component }
           <div className="flex layout-row layout-align-end-center">
             {rightCorner}
-            { this.state.showLogin || this.props.loggingIn || this.props.registering ? loginModal : '' }
+            {
+              (
+                this.state.showLogin ||
+                this.props.loggingIn ||
+                this.props.registering
+              ) &&
+              this.props.req &&
+              loginModal
+            }
           </div>
         </div>
       </div>

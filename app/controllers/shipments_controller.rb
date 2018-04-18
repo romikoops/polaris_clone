@@ -2,8 +2,7 @@ class ShipmentsController < ApplicationController
   include ShippingTools
   include MongoTools
 
-  skip_before_action :require_non_guest_authentication!,
-    except: [:finish_booking, :upload_document]
+  skip_before_action :require_non_guest_authentication!
 
   def index
     @shipper = current_user
@@ -68,37 +67,7 @@ class ShipmentsController < ApplicationController
     )
   end
 
-  def create
-    resp = new_shipment(params[:details])
-    response_handler(resp)
-  end
-
-  def get_offer
-    resp = get_shipment_offer(session, params, 'openlcl')
-    
-    response_handler(resp)
-  end
-
-  def finish_booking
-    resp = finish_shipment_booking(params)
-    response_handler(resp)
-  end
-  
-  def confirm_shipment
-    resp = confirm_booking(params)
-    tenant_notification_email(resp.user, resp)
-    shipper_notification_email(resp.user, resp)
-    response_handler(shipment: resp)
-  end
-
-  def update
-    resp = update_shipment(session, params)
-    byebug
-    response_handler(resp)
-  end
-
   def get_shipper_pdf
     get_shipment_pdf(params)
   end
 end
-

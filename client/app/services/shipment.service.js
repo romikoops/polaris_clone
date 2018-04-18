@@ -43,27 +43,27 @@ function newShipment (details) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ details })
   }
-  const url = `${BASE_URL}/shipments`
+  const url = `${BASE_URL}/create_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function setShipmentDetails (data) {
+function getOffers (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/get_offer`
+  const url = `${BASE_URL}/shipments/${data.shipment.id}/get_offers`
   return fetch(url, requestOptions).then(handleResponse)
 }
 
-function setShipmentRoute (data) {
+function chooseOffer (data) {
   const requestOptions = {
     method: 'POST',
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/finish_booking`
+  const url = `${BASE_URL}/shipments/${data.shipment.id}/choose_offer`
   return fetch(url, requestOptions).then(handleResponse)
 }
 
@@ -73,7 +73,15 @@ function setShipmentContacts (data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify(data)
   }
-  const url = `${BASE_URL}/shipments/${data.shipment.id}/update`
+  const url = `${BASE_URL}/shipments/${data.shipment.id}/update_shipment`
+  return fetch(url, requestOptions).then(handleResponse)
+}
+function requestShipment (id) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' }
+  }
+  const url = `${BASE_URL}/shipments/${id}/request_shipment`
   return fetch(url, requestOptions).then(handleResponse)
 }
 function getNotes (noteIds) {
@@ -99,14 +107,6 @@ function uploadDocument (doc, type, url) {
   return fetch(BASE_URL + url, requestOptions).then(handleResponse)
 }
 
-function acceptShipment (id) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { ...authHeader(), 'Content-Type': 'application/json' }
-  }
-  const url = `${BASE_URL}/shipments/${id}/confirm_shipment`
-  return fetch(url, requestOptions).then(handleResponse)
-}
 function updateCurrency (currency) {
   const requestOptions = {
     method: 'POST',
@@ -129,13 +129,13 @@ export const shipmentService = {
   newShipment,
   getAll,
   getShipment,
-  setShipmentRoute,
+  chooseOffer,
   deleteDocument,
-  setShipmentDetails,
+  getOffers,
   getStoredShipment,
   setShipmentContacts,
   uploadDocument,
-  acceptShipment,
+  requestShipment,
   updateCurrency,
   getNotes
 }

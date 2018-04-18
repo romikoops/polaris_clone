@@ -82,7 +82,7 @@ export class LandingTop extends Component {
           </div>
           <div className="flex-50 layout-row layout-align-center layout-wrap">
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
-              <div className={`flex-70 ${styles.banner_text}`}>
+              <div className={`flex-75 ${styles.banner_text}`}>
                 <img
                   src="https://assets.itsmycargo.com/assets/images/logos/logo_white.png"
                   alt=""
@@ -90,8 +90,8 @@ export class LandingTop extends Component {
                 />
                 <h2 className="flex-none">
                   <b>Welcome to the </b> <br />
-                  <i> {tenant.data.name} Shop </i> <b>for <br />
-                  online freight</b>
+                  <i> {tenant.data.name} </i> <b> <br />
+                  online freight calculator</b>
                 </h2>
                 <div className={styles.wrapper_hr}>
                   <hr />
@@ -104,12 +104,12 @@ export class LandingTop extends Component {
                 </div>
               </div>
               <div className={
-                `${styles.wrapper_btns} flex-70 ` +
+                `${styles.wrapper_btns} flex-75 ` +
                 'layout-row layout-align-start-center'
               }
               >
                 {((user && user.role_id === 2) || !user) && findRates}
-                {!user && loginLink}
+                {(!user || user.guest) && loginLink}
                 {user && !user.guest && user.role_id === 2 && myAccount}
                 {user && user.role_id === 1 && toAdmin}
               </div>
