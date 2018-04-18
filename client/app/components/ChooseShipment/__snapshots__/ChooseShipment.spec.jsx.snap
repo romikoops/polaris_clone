@@ -130,7 +130,7 @@ exports[`shallow render 1`] = `
         className="mot_sec flex-80 layout-row layout-wrap layout-align-center"
         style={
           Object {
-            "color": "#33380%",
+            "color": "#333",
           }
         }
       >

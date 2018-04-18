@@ -57,11 +57,7 @@ exports[`shallow render 1`] = `
             </h4>
             <h4
               className="clip flex-none offset-5"
-              style={
-                Object {
-                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-                }
-              }
+              style="#333"
             />
           </div>
           <div
@@ -87,7 +83,7 @@ exports[`shallow render 1`] = `
             <p
               className=" sec_subtitle_text flex-none offset-5 "
             >
-              13-04-2018 | 11:59 AM
+              19
             </p>
           </div>
         </div>
@@ -178,7 +174,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-none letter_3"
                 >
-                  13/04/2018 | 11:59
+                  19
                 </p>
               </div>
             </div>
@@ -196,7 +192,7 @@ exports[`shallow render 1`] = `
                 <p
                   className="flex-none letter_3"
                 >
-                  13/04/2018 | 11:59
+                  19
                 </p>
               </div>
             </div>
@@ -355,19 +351,11 @@ exports[`shallow render 1`] = `
           >
             <Component
               contactType="Shipper"
-              textStyle={
-                Object {
-                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-                }
-              }
+              textStyle="#333"
             />
             <Component
               contactType="Consignee"
-              textStyle={
-                Object {
-                  "background": "-webkit-linear-gradient(left, #333,#fafafa)",
-                }
-              }
+              textStyle="#333"
             />
           </div>
           <div
@@ -713,7 +701,6 @@ exports[`shallow render 1`] = `
                 className="flex-100 layout-row layout-align-start-center"
               >
                 <TextHeading
-                  color=""
                   size={4}
                   text="By checking this box"
                   theme={
@@ -758,14 +745,7 @@ exports[`shallow render 1`] = `
             className="flex-none layout-row layout-align-end-end"
           >
             <RoundButton
-              active={false}
-              back={false}
-              disabled={false}
-              handleDisabled={null}
               handleNext={[Function]}
-              icon=""
-              iconClass=""
-              size=""
               text="Finish Booking"
               theme={
                 Object {
@@ -790,14 +770,9 @@ exports[`shallow render 1`] = `
         className="content_width flex-none content-width layout-row layout-align-start-center"
       >
         <RoundButton
-          active={false}
           back={true}
-          disabled={false}
-          handleDisabled={null}
           handleNext={[Function]}
-          icon=""
           iconClass="fa-angle-left"
-          size=""
           text="Back to dashboard"
           theme={
             Object {

@@ -63,10 +63,10 @@ exports[`shallow rendering 1`] = `
                   options={
                     Array [
                       Object {
+                        "description": "BAR",
                         "dimension_x": 5,
                         "dimension_y": 6,
-                        "key": undefined,
-                        "label": "BAR",
+                        "key": 7,
                       },
                     ]
                   }
@@ -567,10 +567,10 @@ exports[`shallow rendering 1`] = `
                     options={
                       Array [
                         Object {
+                          "description": "BAR",
                           "dimension_x": 5,
                           "dimension_y": 6,
-                          "key": undefined,
-                          "label": "BAR",
+                          "key": 7,
                         },
                       ]
                     }

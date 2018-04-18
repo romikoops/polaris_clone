@@ -5,7 +5,7 @@ import { theme, identity } from '../../mocks'
 jest.mock('../../helpers', () => ({
   capitalize: x => x,
   gradientTextGenerator: x => x,
-  percentageToHex: x => x,
+  hexToRGB: x => x,
   humanizedMotAndLoadType: x => x
 }))
 jest.mock('../CardLinkRow/CardLinkRow', () => ({
