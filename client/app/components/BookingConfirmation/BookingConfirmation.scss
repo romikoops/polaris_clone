@@ -99,6 +99,15 @@
     margin: 0;
     font-size: 30px;
   }
+    .no_doc {
+      font-size: 12px;
+      i {
+        color: red;
+      }
+      p {
+        margin-left: 10px;
+      }
+    }
   .main_panel {
     .inner_wrapper {
       padding: 15px;

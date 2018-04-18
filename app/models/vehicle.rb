@@ -23,9 +23,9 @@ class Vehicle < ApplicationRecord
     'any'
   ]
   CARGO_CLASSES = [
-    'fcl_20f',
-    'fcl_40f',
-    'fcl_40f_hq',
+    'fcl_20',
+    'fcl_40',
+    'fcl_40_hq',
     'lcl'
   ]
 		def self.create_from_name(name, mot, tenant_id)
@@ -33,11 +33,12 @@ class Vehicle < ApplicationRecord
 			tv = TenantVehicle.find_or_create_by(name: name, mode_of_transport: mot, vehicle_id: vehicle.id, tenant_id: tenant_id)
 			if vehicle.transport_categories.length < 1
 				CARGO_CLASSES.each do |cargo_class|
+					this_class = cargo_class.clone
 		      TRANSPORT_CATEGORY_NAMES.each do |transport_category_name|
 		        transport_category = TransportCategory.new(
 		          name: transport_category_name,
 		          mode_of_transport: mot,
-		          cargo_class: cargo_class,
+		          cargo_class: this_class,
 		          vehicle: vehicle
 		        )
 		        puts transport_category.errors.full_messages unless transport_category.save

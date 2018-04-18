@@ -29,6 +29,16 @@ class DocumentsSelector extends React.Component {
     this.onChange = this.onChange.bind(this)
     this.fileUpload = this.fileUpload.bind(this)
   }
+  componentWillMount () {
+    if (this.props.options.length < 1 && !this.state.selected) {
+      this.setState({ selected: true })
+    }
+  }
+  componentWillReceiveProps (nextProps) {
+    if (this.props.options.length < 1 || (nextProps.options.length < 1 && !this.state.selected)) {
+      this.setState({ selected: true })
+    }
+  }
   onFormSubmit (e) {
     e.preventDefault() // Stop form submit
     if (this.state.file) {
@@ -53,10 +63,7 @@ class DocumentsSelector extends React.Component {
     }
     const fileNameSplit = file.name.split('.')
     const fileExt = fileNameSplit[fileNameSplit.length - 1]
-    if (
-      fileExt === 'xlsx' ||
-      fileExt === 'xls'
-    ) {
+    if (fileExt === 'xlsx' || fileExt === 'xls') {
       if (dispatchFn) {
         if (type) {
           file.doc_type = type
@@ -109,8 +116,8 @@ class DocumentsSelector extends React.Component {
         data-tip={tooltip}
         data-for={tooltipId}
       >
-        {selected
-          ? (<form>
+        {selected || !options ? (
+          <form>
             <RoundButton
               text="Upload"
               theme={theme}
@@ -127,21 +134,19 @@ class DocumentsSelector extends React.Component {
                 this.uploaderInput = input
               }}
             />
-          </form>)
-          : (
-            <div className="flex-100 layout-row layout-align-center-center">
-              <NamedSelect
-                theme={theme}
-                options={options}
-                value={selected}
-                className="flex-100"
-                onChange={e => this.handleSelected(e)}
-              />
-            </div>
-          )
-        }
+          </form>
+        ) : (
+          <div className="flex-100 layout-row layout-align-center-center">
+            <NamedSelect
+              theme={theme}
+              options={options}
+              value={selected}
+              className="flex-100"
+              onChange={e => this.handleSelected(e)}
+            />
+          </div>
+        )}
       </div>
-
     )
   }
 }

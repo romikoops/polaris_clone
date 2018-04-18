@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20180413120256) do
+=======
+ActiveRecord::Schema.define(version: 20180416194003) do
+>>>>>>> fef57a01e8609386d70d76f12d217cffc4b76cfa
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +224,7 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.datetime "updated_at", null: false
   end
 
+<<<<<<< HEAD
   create_table "pricing_details", force: :cascade do |t|
     t.decimal "rate"
     t.string "rate_basis"
@@ -233,6 +238,10 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.string "priceable_type"
     t.bigint "priceable_id"
     t.bigint "tenant_id"
+=======
+  create_table "roles", force: :cascade do |t|
+    t.string "name"
+>>>>>>> fef57a01e8609386d70d76f12d217cffc4b76cfa
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["currency_id"], name: "index_pricing_details_on_currency_id"
@@ -240,6 +249,7 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.index ["tenant_id"], name: "index_pricing_details_on_tenant_id"
   end
 
+<<<<<<< HEAD
   create_table "pricing_exceptions", force: :cascade do |t|
     t.datetime "effective_date"
     t.datetime "expiration_date"
@@ -273,6 +283,8 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.datetime "updated_at", null: false
   end
 
+=======
+>>>>>>> fef57a01e8609386d70d76f12d217cffc4b76cfa
   create_table "shipment_contacts", force: :cascade do |t|
     t.integer "shipment_id"
     t.integer "contact_id"
@@ -381,21 +393,23 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "vehicle_id"
     t.string "voyage_code"
     t.string "vessel"
+<<<<<<< HEAD
+=======
+    t.integer "tenant_vehicle_id"
+>>>>>>> fef57a01e8609386d70d76f12d217cffc4b76cfa
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
     t.string "zipcode"
     t.string "country_code"
     t.string "city_name"
-    t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "distance"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
-    t.index ["distance"], name: "index_trucking_destinations_on_distance"
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
@@ -406,6 +420,7 @@ ActiveRecord::Schema.define(version: 20180413120256) do
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
+    t.string "truck_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "carriage"

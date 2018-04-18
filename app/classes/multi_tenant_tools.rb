@@ -35,47 +35,140 @@ module MultiTenantTools
     end
   end
   def new_fn
-    tenant_data = {
-    theme: {
-      colors: {
-        primary: "##373838",
-        secondary: "#CCCCCC",
-        brightPrimary: "#E9E9E9",
-        brightSecondary: "#54DC84"
-      },
-      logoLarge: "https://assets.itsmycargo.com/assets/gw.png",
-      logoSmall: "https://assets.itsmycargo.com/assets/images/logos/logo_black_small.png"
-    },
-    addresses: {
-      main:"Krohnskamp 22, 22301 Hamburg, Deutschland"
-    },
-    phones:{
-      main:"+ 49 172 543 0 576",
-      support: "+ 49 172 543 0 576"
-    },
-    emails: {
-      sales: "jan.glembocki@gw-freight.com",
-      support: "support@gw-freight.com"
-    },
-    subdomain: "gwforwarding",
-    name: "GW Forwarding",
-    scope: {
-      modes_of_transport: {
-        ocean: {
-          container: true,
-          cargo_item: true
+    tenant_data = [{
+      theme: {
+        colors: {
+          primary: "#DB0025",
+          secondary: "#008ACB",
+          brightPrimary: "#e0708c",
+          brightSecondary: "#4368b7"
         },
-        air: {
-          container: false,
-          cargo_item: true
-        }
+        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_wide.png",
+        logoWhite: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_white.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/images/logos/hartrodt_logo_small.png",
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
-      dangerous_goods: false,
-      incoterm_info_level: 'simple',
-      cargo_info_level: 'hs_codes'
-    }
-  }
-    new_site(tenant_data, false)
+      addresses: {
+        main:"Hoegerdamm 35, 20097 Hamburg"
+      },
+      phones:{
+        main:"+49 40 23 90-0",
+        support: "+49 172 4203 1020"
+      },
+      emails: {
+        sales: "sales@hartrodt.com",
+        support: " ah_ham@hartrodt.com"
+      },
+      subdomain: "hartrodt",
+      name: "a.hartrodt",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: true
+          },
+          rail: {
+            container: true,
+            cargo_item: true
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "a.hartrodt is to discuss the validity of the presented prices with the product owners."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
+      }
+    },
+    {
+      theme: {
+        colors: {
+          primary: "#D5006A",
+          secondary: "#1C2F5D",
+          brightPrimary: "#D5009F",
+          brightSecondary: "#4984B4"
+        },
+        logoLarge: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
+        logoSmall: "https://assets.itsmycargo.com/assets/images/logos/saco_logo.png",
+        background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
+      },
+      addresses: {
+        main:"Wollkämmereistraße 1, 21107 Hamburg"
+      },
+      phones:{
+        main:"+49 40 311706-0",
+        support: "+49 173 4203 1020"
+      },
+      emails: {
+        sales: "sales@saco.de",
+        support: "support@saco.de"
+      },
+      subdomain: "saco",
+      name: "SACO Shipping GmbH",
+      currency: 'USD',
+      scope: {
+        modes_of_transport: {
+          ocean: {
+            container: true,
+            cargo_item: false
+          },
+          rail: {
+            container: false,
+            cargo_item: false
+          },
+          air: {
+            container: false,
+            cargo_item: false
+          }
+        },
+        dangerous_goods: false,
+        detailed_billing: false,
+        incoterm_info_level: 'text',
+        cargo_info_level: 'text',
+        has_insurance: true,
+        has_customs: true,
+        terms: [
+          "You verify that all the information provided above is true",
+          "You agree to the presented terms and conditions.",
+          "Saco Shipping is to discuss the validity of the presented prices with the product owners."
+
+        ],
+        carriage_options: {
+          on_carriage: {
+            import: 'optional',
+            export: 'optional'
+          },
+          pre_carriage: {
+            import: 'optional',
+            export: 'optional'      
+          }
+        }
+      }
+    }]
+    tenant_data.each do |t|
+      new_site(t, false)
+    end
   end
   def new_site(tenant, is_demo)
     new_tenant = Tenant.create(tenant)
@@ -110,9 +203,9 @@ module MultiTenantTools
     # uploader = S3FolderUpload.new('client/dist', 'multi.itsmycargo.com', ENV['AWS_KEY'], ENV['AWS_SECRET'])
     # uploader.upload!
 
-    if is_demo
-      seed_demo_site(tenant)
-    end
+    # if is_demo
+    #   seed_demo_site(tenant)
+    # end
     create_distribution(tenant[:subdomain])
   end
 

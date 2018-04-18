@@ -24,4 +24,7 @@ class Trip < ApplicationRecord
       end
     end
   end
+  def vehicle
+    self.tenant_vehicle.vehicle
+  end
 end

@@ -1,1 +1,49 @@
-{"id":592, "name":"Cape Town", "location_type":"nexus", "latitude":-33.9248685, "longitude":18.4240553, "geocoded_address":"56 Darling St, Cape Town City Centre, Cape Town, 8000, South Africa", "street":"Darling Street", "street_number":"56", "zip_code":"8000", "city":"Cape Town", "country":"South Africa", "street_address":"56 Darling Street", "created_at":Mon, 09 Apr 2018 08:40:31 UTC +00:00, "updated_at":Mon, 09 Apr 2018 08:40:31 UTC +00:00, "province":nil, "photo":nil, "premise":nil}
+{
+  "availableOrigins": [{
+    "label": "Gothenburg",
+    "value": {
+      "id": 593,
+      "name": "Gothenburg",
+      "location_type": "nexus",
+      "latitude": 57.694253,
+      "longitude": 11.854048,
+      "geocoded_address": "Port 4, Indiska Oceanen 11, 418 34 Göteborg, Sverige",
+      "street": nil,
+      "street_number": nil,
+      "zip_code": nil,
+      "city": "Gothenburg",
+      "country": "Sweden",
+      "street_address": nil,
+      "created_at": "Mon,
+      09 Apr 2018 08: 41: 06 UTC + 00: 00",
+      "updated_at": "Mon,
+      09 Apr 2018 08: 41: 06 UTC + 00: 00",
+      "province": nil,
+      "photo": "https://assets.itsmycargo.com/assets/cityimages/Gothenburg_sm.jpg",
+      "premise": nil
+    }
+  }, {
+    "label": "Stockholm",
+    "value": {
+      "id": 600,
+      "name": "Stockholm",
+      "location_type": "nexus",
+      "latitude": 59.650856,
+      "longitude": 17.931097,
+      "geocoded_address": "190 45 Stockholm-Arlanda, Sweden",
+      "street": nil,
+      "street_number": nil,
+      "zip_code": nil,
+      "city": "Stockholm",
+      "country": "Sweden",
+      "street_address": nil,
+      "created_at": "Mon,
+      09 Apr 2018 08: 41: 07 UTC + 00: 00",
+      "updated_at": "Mon,
+      09 Apr 2018 08: 41: 07 UTC + 00: 00",
+      "province": nil,
+      "photo": nil,
+      "premise": nil
+    }
+  }]
+}

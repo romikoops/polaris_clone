@@ -1,9 +1,9 @@
 class TransportCategory < ApplicationRecord
 	LOAD_TYPE_CARGO_CLASSES = {
 		'container' => %w(
-			fcl_20f
-	    fcl_40f
-	    fcl_40f_hq
+			fcl_20
+	    fcl_40
+	    fcl_40_hq
 		),
 		'cargo_item' => %w(
 			lcl

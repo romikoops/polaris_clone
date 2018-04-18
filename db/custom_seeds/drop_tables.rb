@@ -1,10 +1,16 @@
 # Drop all tables
-Vehicle.destroy_all
-TransportCategory.destroy_all
-Tenant.destroy_all
-User.destroy_all
-TruckingPricing.destroy_all
-Hub.destroy_all
-Location.destroy_all
-UserLocation.destroy_all
+
 Pricing.destroy_all
+Vehicle.delete_all
+TenantVehicle.delete_all
+TransportCategory.delete_all
+Tenant.delete_all
+User.delete_all
+TruckingPricing.delete_all
+HubTrucking.delete_all
+TruckingDestination.delete_all
+Hub.delete_all
+LocalCharge.delete_all
+CustomsFee.delete_all
+Location.delete_all
+UserLocation.delete_all

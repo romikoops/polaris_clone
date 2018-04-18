@@ -40,10 +40,10 @@ export class BookingConfirmation extends Component {
     const { shipmentDispatch } = this.props
     shipmentDispatch.deleteDocument(doc.id)
   }
-  acceptShipment () {
+  requestShipment () {
     const { shipmentData, shipmentDispatch } = this.props
     const { shipment } = shipmentData
-    shipmentDispatch.acceptShipment(shipment.id)
+    shipmentDispatch.requestShipment(shipment.id)
   }
   fileFn (file) {
     const { shipmentData, shipmentDispatch } = this.props
@@ -209,7 +209,7 @@ export class BookingConfirmation extends Component {
         <RoundButton
           theme={theme}
           text="Finish Booking"
-          handleNext={() => this.acceptShipment()}
+          handleNext={() => this.requestShipment()}
           active
         />
       </div>
@@ -235,7 +235,7 @@ export class BookingConfirmation extends Component {
     }
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<div className="flex-50 layout-row" style={{ padding: '10px' }}>
+        docView.push(<div className="flex-33 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}

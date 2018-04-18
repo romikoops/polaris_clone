@@ -56,7 +56,8 @@ module TruckingTools
     end
     extra_fees_results = {}
     total_fees.each do |tk, tfee|
-      extra_fees_results[tk] = tfee['value'] * result['value']
+      
+      extra_fees_results[tk] = tfee[:value] * result['value']
     end
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
@@ -73,7 +74,6 @@ module TruckingTools
 
   def fee_calculator(key, fee, cargo, km)
     fee.symbolize_keys!
-    
     case fee[:rate_basis]
     when 'PER_KG'
       return { currency: fee[:currency], value: cargo['weight'] * fee[:value], key: key }
@@ -90,7 +90,8 @@ module TruckingTools
     when 'PER_ITEM'
       return { currency: fee[:currency], value: fee[:value] * cargo['number_of_items'], key: key }
     when 'PER_CONTAINER'
-      return { currency: fee[:currency], value: fee[:rate] * cargo['number_of_items'], key: key }
+      
+      return { currency: fee[:currency], value: fee[:value] * cargo['number_of_items'], key: key }
     when 'PER_CBM_TON'
       cbm_value = cargo['volume'] * fee[:cbm]
       ton_value = (cargo['weight'] / 1000) * fee[:ton]
@@ -108,6 +109,7 @@ module TruckingTools
     return {} if cargo_values['weight'] == 0
     # 
     # trucking_pricing['rates'].each do |_tr|
+      byebug
       case trucking_pricing.modifier
       when 'kg'
         trucking_pricing['rates']['kg'].each do |rate|
@@ -139,7 +141,7 @@ module TruckingTools
         end
         return { rate: result, fees: trucking_pricing['fees'] }
       when 'unit'
-        return { rate: trucking_pricing['rates']['unit'][0], fees: trucking_pricing['fees'] }
+        return { rate: trucking_pricing['rates']['unit'][0]['rate'], fees: trucking_pricing['fees'] }
       end
     # end
     {}

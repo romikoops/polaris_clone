@@ -71,7 +71,7 @@ export class RouteHubBox extends Component {
               'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
     const originAddress =
-      origin.location_type !== 'nexus' ? (
+      origin && origin.location_type !== 'nexus' ? (
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Pickup From:</p>
@@ -87,7 +87,7 @@ export class RouteHubBox extends Component {
         ''
       )
     const destinationAddress =
-      destination.location_type !== 'nexus' ? (
+      destination && destination.location_type !== 'nexus' ? (
         <div className="flex-100 layout-row layout-align-center-start layout-wrap">
           <div className="flex-100 layout-row layout-align-center-center">
             <p className="flex-none">With Pickup From:</p>
@@ -140,7 +140,7 @@ export class RouteHubBox extends Component {
             {originAddress}
           </div>
           <div
-            className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-start`}
+            className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-center`}
           >
             <div className="flex-100 layout-row layout-align-center-center">
               <div

@@ -28,6 +28,7 @@ class LoginPage extends React.Component {
     if (this.props.loginAttempt && !this.state.alertVisible) {
       this.setState({ alertVisible: true })
     }
+    console.log('MOUNTED')
   }
 
   componentWillReceiveProps (nextProps) {

@@ -25,7 +25,6 @@ class Landing extends Component {
       showLogin: false
     }
     this.showCarousel = this.showCarousel.bind(this)
-    this.toggleShowLogin = this.toggleShowLogin.bind(this)
   }
   componentDidMount () {
     this.showCarousel()
@@ -97,7 +96,7 @@ class Landing extends Component {
         }
         verticalPadding="30px"
         horizontalPadding="40px"
-        parentToggle={this.toggleShowLogin}
+        parentToggle={() => this.toggleShowLogin()}
       />
     )
     return (
@@ -112,6 +111,7 @@ class Landing extends Component {
           toAdmin={adminDispatch.getDashboard}
           loggedIn={loggedIn}
           tenant={tenant}
+          toggleShowLogin={() => this.toggleShowLogin()}
           authDispatch={authDispatch}
           bookNow={() => this.bookNow()}
         />

@@ -293,20 +293,25 @@ module ExcelTools
         number_updated: 0,
         number_created: 0
       },
-      trucking_queries: {
+      hub_truckings: {
         number_updated: 0,
         number_created: 0
       },
       trucking_pricings: {
         number_updated: 0,
-        number_created: 0
-      }
+        number_created: 0,
+      },
+      trucking_destinations: {
+        number_updated: 0,
+        number_created: 0,
+      },
     }
 
     results = {
       trucking_hubs: [],
-      trucking_queries: [],
-      trucking_pricings: []
+      hub_truckings: [],
+      trucking_pricings: [],
+      trucking_destinations: []
     }
 
     defaults = {}
@@ -441,6 +446,7 @@ module ExcelTools
       single_ident_values_and_country = zones[row_zone_name].flat_map do |idents_and_country|
         if idents_and_country[:min] && idents_and_country[:max]
           (idents_and_country[:min].to_i..idents_and_country[:max].to_i).map do |ident|
+            stats[:trucking_destinations][:number_created] += 1
             {id: ident, country: idents_and_country[:country]}
           end
         elsif identifier_type == "city_name"
@@ -449,6 +455,8 @@ module ExcelTools
           puts "!!!"
           puts "!!!"
           awesome_print city
+          stats[:trucking_destinations][:number_created] += 1
+          stats[:hub_truckings][:number_created] += 1
           awesome_print idents_and_country[:country]
           { id: city, country: idents_and_country[:country] }
         else
@@ -476,25 +484,37 @@ module ExcelTools
           truck_type: row_truck_type,
           tenant_id: tenant.id
         )
-
+          stats[:trucking_pricings][:number_created] += 1
         modifier_position_objs.each do |mod_key, mod_indexes|
           trucking_pricing_by_zone[row_key].rates[mod_key] = mod_indexes.map do |m_index|
             val = row_data[m_index]
             next unless val
             w_min = weight_min_row[m_index] || 0
             r_min = row_min_value || 0
-            mod_cell = defaults[mod_key][m_index].clone.merge(
-              min_value: [w_min, r_min].max,
-              rate: {
-                value: val,
-                rate_basis: rate_basis,
-                currency: currency,
-                base: base
+            if defaults[mod_key]
+              mod_cell = defaults[mod_key][m_index].clone.merge(
+                min_value: [w_min, r_min].max,
+                rate: {
+                  value: val,
+                  rate_basis: rate_basis,
+                  currency: currency,
+                  base: base,
+                },
+              )
+            else
+              mod_cell = {
+                min_value: 0,
+                rate: {
+                  value: val,
+                  rate_basis: rate_basis,
+                  currency: currency,
+                  base: base,
+                }
               }
-            )
+            end
           end
         end
-
+        
         charges.each do |k, fee|
           next unless fee[:direction] == direction && fee[:truck_type] == row_truck_type
           fee.delete(:direction)
@@ -502,103 +522,108 @@ module ExcelTools
           trucking_pricing_by_zone[row_key][:fees][k] = fee
         end
 
+        single_ident_values_and_country_with_timestamps =
+          identifier_type == 'distance' ?
+          single_ident_values_and_country.map do |h|
+            "(#{h[:id]}, '#{h[:country]}', current_timestamp, current_timestamp)"
+          end.join(", ") :
+          single_ident_values_and_country.map do |h|
+            "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)"
+          end.join(", ")
 
-      ##
-      awesome_print trucking_pricing_by_zone[row_key]
-      ##
-      tp = trucking_pricing_by_zone[row_key]
+        tp = trucking_pricing_by_zone[row_key]
 
-      ############################
-      # INSERT SQL HERE!
-      insertion_query = <<-eos
-        WITH
-          tp_ids AS (
-              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
-                  VALUES #{tp.to_postgres_insertable}
-              RETURNING id
-          ),
-          td_ids AS (
-              WITH existing_identifiers AS (
-                  SELECT id, #{identifier_type}, country_code FROM trucking_destinations
-                  WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
-                    AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
-              )
+        new_cols = %w(carriage cbm_ratio courier_id load_meterage load_type modifier tenant_id truck_type)
+        new_cols.delete("cbm_ratio") if load_type == "container"
+        #  
+        
+        # Find or update trucking_destinations
+        td_query = <<-eos
+          WITH  
+            existing_identifiers AS (
+              SELECT id, #{identifier_type}, country_code FROM trucking_destinations
+              WHERE trucking_destinations.#{identifier_type} IN ('#{single_ident_values.join("','")}')
+                AND trucking_destinations.country_code::text = '#{single_ident_values_and_country.first[:country]}'
+            ),
+            inserted_td_ids AS (
               INSERT INTO trucking_destinations(#{identifier_type}, country_code, created_at, updated_at)
-                  -- insert non-existent trucking_destinations
-                  SELECT ident_value::text, country_code::text, cr_at, up_at
-                  FROM (VALUES #{single_ident_values_and_country.map { |h| "('#{h[:id]}', '#{h[:country]}', current_timestamp, current_timestamp)" }.join(", ")})
-                          AS t(ident_value, country_code, cr_at, up_at)
-                  WHERE ident_value::text NOT IN (
-                      SELECT #{identifier_type}
-                      FROM existing_identifiers
-                      WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
-                  )
+                -- insert non-existent trucking_destinations
+                SELECT ident_value, country_code::text, cr_at, up_at
+                FROM (VALUES #{single_ident_values_and_country_with_timestamps})
+                  AS t(ident_value, country_code, cr_at, up_at)
+                WHERE ident_value NOT IN (
+                  SELECT #{identifier_type}
+                  FROM existing_identifiers
+                  WHERE country_code::text = '#{single_ident_values_and_country.first[:country]}'
+                )
               RETURNING id
-          ),
-          hub_ids AS (
+            )          
+          SELECT id FROM inserted_td_ids
+          UNION
+          SELECT id FROM existing_identifiers
+        eos
+
+        td_ids = ActiveRecord::Base.connection.execute(td_query).values.flatten
+        
+        with_statement = <<-eos
+          WITH
+            td_ids AS (SELECT id from trucking_destinations WHERE id IN #{td_ids.sql_format}),
+            matching_tps_without_rates_and_fees AS (
+              SELECT trucking_pricings.id, #{new_cols.join(", ")}
+              FROM td_ids
+              JOIN hub_truckings ON td_ids.id::integer = hub_truckings.trucking_destination_id::integer
+              JOIN trucking_pricings ON trucking_pricings.id::integer = hub_truckings.trucking_pricing_id::integer
+            ),
+            hub_ids AS (
               VALUES(#{hub_id})
-          ),
-          t_stamps AS (
+            ),
+            t_stamps AS (
               VALUES(current_timestamp)
-          )
-        INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
-            (SELECT * FROM hub_ids
+            ),
+            tp AS (
+              SELECT * FROM (
+                VALUES #{tp.to_postgres_insertable(new_cols)}
+              ) AS t(#{new_cols.join(", ")})
+            ),
+            matching_tp_id_table AS (
+              SELECT id FROM matching_tps_without_rates_and_fees
+              INNER JOIN tp USING (#{new_cols.join(", ")})
+            )
+        eos
+
+        insertion_query = <<-eos
+          DO
+          $do$
+          BEGIN
+          IF (
+            #{with_statement}
+            SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
+          ) THEN
+            #{with_statement}
+            UPDATE trucking_pricings SET (rates, fees) = #{tp.to_postgres_insertable(%w(rates fees))}
+            WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
+          ELSE
+            #{with_statement},
+            tp_ids AS (
+              INSERT INTO trucking_pricings(carriage, cbm_ratio, courier_id, fees, load_meterage, load_type, modifier, rates, tenant_id, truck_type)
+                VALUES #{tp.to_postgres_insertable}
+              RETURNING id
+            )
+            INSERT INTO hub_truckings(hub_id, trucking_pricing_id, trucking_destination_id, created_at, updated_at)
+              (
+                SELECT * FROM hub_ids
                 CROSS JOIN tp_ids
                 CROSS JOIN td_ids
                 CROSS JOIN t_stamps AS created_ats
-                CROSS JOIN t_stamps AS updated_ats)
-        ;
-      eos
-      byebug
-      ActiveRecord::Base.connection.execute(insertion_query)
-      ############################
-    end
-    #   trucking_pricing_should_update = nil
-    #   trucking_pricing_ids = TruckingPricing.where(
-    #     load_type: load_type,
-    #     truck_type: row_truck_type,
-    #     load_meterage: {
-    #       ratio: load_meterage_ratio,
-    #       height_limit: load_meterage_limit,
-    #     },
-    #     modifier: modifier
-    #   ).ids
+                CROSS JOIN t_stamps AS updated_ats
+              );
+          END IF;        
+          END
+          $do$
+        eos
 
-    #   zones.each_value do |idents_and_country_objs|
-    #     idents_and_country_objs.each do |idents_and_country|
-    #       if idents_and_country[:min] && idents_and_country[:max]
-    #         ident_values = (idents_and_country[:min].to_i..idents_and_country[:max].to_i)
-    #       else
-    #         ident_values = [idents_and_country[:id]]
-    #       end
-
-    #       ident_values.each do |ident_value|
-    #         if identifier_type == "city_name"
-    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => Location.get_trucking_city("#{ident_value.to_s}, #{idents_and_country[:country]}"), country_code: idents_and_country[:country])
-    #         else
-    #           trucking_destination = TruckingDestination.find_or_create_by!(identifier_type => ident_value.to_s, country_code: idents_and_country[:country])
-    #         end
-
-    #         hub_trucking = HubTrucking.where(
-    #           trucking_destination: trucking_destination,
-    #           trucking_pricing_id: trucking_pricing_ids,
-    #           hub_id: hub_id,
-    #         ).first
-
-    #         if hub_trucking.nil?
-    #           HubTrucking.create(
-    #             trucking_destination: trucking_destination,
-    #             trucking_pricing: trucking_pricing_by_zone[row_key],
-    #             hub_id: hub_id,
-    #           )
-    #         else
-    #           trucking_pricing_should_update = hub_trucking.trucking_pricing
-    #         end
-    #         trucking_pricing_should_update.try(:update, trucking_pricing_by_zone[row_key].given_attributes)
-    #         # stats[:trucking_queries][:number_updated] += 1
-    #       end
-    #     end
-    #   end
+        ActiveRecord::Base.connection.execute(insertion_query)
+      end
     end
     # END Rates ------------------------
 
@@ -898,8 +923,10 @@ module ExcelTools
           effective_date: 'EFFECTIVE_DATE',
           expiration_date: 'EXPIRATION_DATE'
         )
-
-        %w[lcl fcl_20 fcl_40 fcl_40hq].each do |lt|
+        if rows.length < 1
+          next 
+        end
+        %w[lcl fcl_20 fcl_40 fcl_40_hq].each do |lt|
           hub_fees[lt] = {
             'import' => {},
             'export' => {},
@@ -1357,7 +1384,7 @@ module ExcelTools
       end
 
       start_date = DateTime.now
-      end_date = start_date + 40.days
+      end_date = start_date + 30.days
 
       if generate
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(
@@ -1512,7 +1539,7 @@ module ExcelTools
     debug_message(all_charges)
 
     if load_type === 'fcl'
-      %w[fcl_20 fcl_40 fcl_40hq].each do |lt|
+      %w[fcl_20 fcl_40 fcl_40_hq].each do |lt|
         debug_message(test)
         debug_message(all_charges[lt])
         debug_message(all_charges[lt][direction])
