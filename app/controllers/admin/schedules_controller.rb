@@ -2,8 +2,7 @@ class Admin::SchedulesController < ApplicationController
   before_action :require_login_and_role_is_admin
   include ItineraryTools
   include ExcelTools
-
-  
+  include DocumentTools
 
   def index
     tenant = Tenant.find(current_user.tenant_id)
@@ -25,6 +24,7 @@ class Admin::SchedulesController < ApplicationController
     mot = params[:mot]
     itinerary = Itinerary.find(params[:itinerary])
     stops = itinerary.stops.order(:index)
+    byebug
     closing_date_buffer = params[:closing_date].to_i
     vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
     resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
@@ -35,6 +35,14 @@ class Admin::SchedulesController < ApplicationController
     # 
     response_handler({air: air_schedules, train: train_schedules, ocean: ocean_schedules, itineraries: itineraries, stats: resp})
   end
+
+  def download_schedules
+    options = params[:options].as_json.symbolize_keys
+    options[:tenant_id] = current_user.tenant_id
+    url = write_schedules_to_sheet(options)
+    response_handler({url: url, key: 'schedules'})
+  end
+
   def destroy
     Trip.find(params[:id]).destroy
     response_handler(true)

@@ -36,6 +36,13 @@ function uploadHubs (file) {
   }
   return fetch(`${BASE_URL}/admin/hubs/process_csv`, requestOptions).then(handleResponse)
 }
+function downloadPricings () {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  return fetch(`${BASE_URL}/admin/pricings/download`, requestOptions).then(handleResponse)
+}
 
 function uploadSchedules (file, target) {
   const formData = new FormData()
@@ -70,11 +77,39 @@ function uploadLocalCharges (file) {
   return fetch(`${BASE_URL}/admin/service_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
+function downloadLocalCharges () {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  return fetch(`${BASE_URL}/admin/service_charges/download`, requestOptions).then(handleResponse)
+}
+
+function downloadHubs () {
+  const requestOptions = {
+    method: 'GET',
+    headers: { ...authHeader() }
+  }
+  return fetch(`${BASE_URL}/admin/hubs/sheet/download`, requestOptions).then(handleResponse)
+}
+function downloadSchedules (options) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ options })
+  }
+  return fetch(`${BASE_URL}/admin/schedules/download`, requestOptions).then(handleResponse)
+}
+
 export const documentService = {
   uploadPricings,
   uploadHubs,
   uploadLocalCharges,
+  downloadSchedules,
   uploadSchedules,
+  downloadPricings,
+  downloadLocalCharges,
+  downloadHubs,
   uploadItinerarySchedules
 }
 

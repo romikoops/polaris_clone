@@ -164,12 +164,11 @@ export class BookingDetails extends Component {
       customsCredit: !this.state.customsCredit
     })
   }
-  handleInsurance () {
-    const { insurance } = this.state
-
-    if (insurance.bool) {
+  handleInsurance (bool) {
+    // const { insurance } = this.state
+    if (!bool) {
       this.setState({ insurance: { bool: false, val: 0 } })
-    } else if (!insurance.bool) {
+    } else if (bool) {
       this.calcInsurance(false, true)
     }
   }

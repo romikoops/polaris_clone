@@ -20,7 +20,7 @@ export default function GmapsLoader (props) {
             setTargetAddress={props.setTargetAddress}
             theme={props.theme}
             gMaps={googleMaps}
-            handleChangeCarriage={props.handleChangeCarriage}
+            handleCarriageChange={props.handleCarriageChange}
             has_on_carriage={props.has_on_carriage}
             has_pre_carriage={props.has_pre_carriage}
             origin={props.origin}
@@ -33,7 +33,7 @@ export default function GmapsLoader (props) {
             setNotesIds={(e, t) => props.setNotesIds(e, t)}
             handleSelectLocation={props.handleSelectLocation}
             handleCarriageNexuses={props.handleCarriageNexuses}
-            mandatoryTrucking={props.mandatoryTrucking}
+            scope={props.scope}
           />
         )
       }
@@ -61,14 +61,14 @@ GmapsLoader.propTypes = {
     getDashboard: PropTypes.func
   }).isRequired,
   setTargetAddress: PropTypes.func.isRequired,
-  handleChangeCarriage: PropTypes.func.isRequired,
+  handleCarriageChange: PropTypes.func.isRequired,
   shipmentData: PropTypes.shipmentData,
   nextStageAttempt: PropTypes.func.isRequired,
   handleAddressChange: PropTypes.func.isRequired,
   routeIds: PropTypes.arrayOf(PropTypes.object),
   handleSelectLocation: PropTypes.func.isRequired,
   handleCarriageNexuses: PropTypes.func.isRequired,
-  mandatoryTrucking: PropTypes.objectOf(PropTypes.bool).isRequired
+  scope: PropTypes.scope.isRequired
 }
 
 GmapsLoader.defaultProps = {

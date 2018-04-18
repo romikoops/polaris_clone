@@ -42,6 +42,7 @@ class Shipment < ApplicationRecord
   belongs_to :destination, class_name: "Location", optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
+  belongs_to :transport_category, optional: true
   has_many :containers
   has_many :cargo_items
   has_many :cargo_item_types, through: :cargo_items
@@ -51,6 +52,17 @@ class Shipment < ApplicationRecord
   accepts_nested_attributes_for :cargo_items, allow_destroy: true
   accepts_nested_attributes_for :contacts, allow_destroy: true
   accepts_nested_attributes_for :documents, allow_destroy: true
+
+  # Scopes
+  scope :has_pre_carriage, -> { where(has_pre_carriage: true) }
+  scope :has_on_carriage,  -> { where(has_on_carriage:  true) }
+  STATUSES.each do |status|
+    scope status, -> { where(status: status) }
+  end
+
+  [:ocean, :air, :rail].each do |mot|
+    scope mot, -> { joins(:itinerary).where("itineraries.mode_of_transport = ?", mot) }
+  end
 
   # Class methods
   def self.determine_haulage_from_ids(item_ids)
@@ -110,6 +122,18 @@ class Shipment < ApplicationRecord
     return _aggregated_cargo.dangerous_goods? unless _aggregated_cargo.nil?
     return _cargo_units.any? { |cargo_unit| cargo_unit.dangerous_goods } unless _cargo_units.nil?
     nil  
+  end
+
+  def has_non_stackable_cargo?
+    _aggregated_cargo = self.aggregated_cargo
+    _cargo_units      = cargo_units
+    return true unless _aggregated_cargo.nil?
+    return _cargo_units.any? { |cargo_unit| !cargo_unit.stackable } unless _cargo_units.nil?
+    nil
+  end
+
+  def mode_of_transport
+    itinerary.mode_of_transport
   end
 
   def has_customs?
@@ -252,6 +276,14 @@ class Shipment < ApplicationRecord
     planned_eta
   end
 
+  def has_on_carriage?
+    has_on_carriage
+  end
+
+  def has_pre_carriage?
+    has_pre_carriage
+  end
+
   def cargo_charges
     schedule_set.reduce({}) do |cargo_charges, schedule|
       cargo_charges.merge schedules_charges[schedule["hub_route_key"]]["cargo"]
@@ -270,7 +302,6 @@ class Shipment < ApplicationRecord
         s.planned_eta = scheds.last.eta
         s.save!
       end
-      
     end
   end
 
@@ -347,5 +378,4 @@ class Shipment < ApplicationRecord
     no_trucking_h = { truck_type: '' }
     self.trucking ||= { on_carriage: no_trucking_h, pre_carriage: no_trucking_h }
   end
-  
 end

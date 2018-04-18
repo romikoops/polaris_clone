@@ -2,6 +2,7 @@ class Admin::HubsController < ApplicationController
   include ExcelTools
   include ItineraryTools
   include Response
+  include DocumentTools
   before_action :require_login_and_role_is_admin
 
   
@@ -32,6 +33,12 @@ class Admin::HubsController < ApplicationController
     resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
     response_handler(resp)
   end
+
+  def download_hubs
+    url = write_hubs_to_sheet(tenant_id: current_user.tenant_id)
+    response_handler({url: url, key: 'hubs'})
+  end
+
   def set_status
     hub = Hub.find(params[:hub_id])
     hub.toggle_hub_status!

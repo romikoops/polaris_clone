@@ -36,25 +36,25 @@ function newShipment (type) {
   }
 }
 
-function setShipmentDetails (data, redirect) {
+function getOffers (data, redirect) {
   function request (shipmentData) {
     return {
-      type: shipmentConstants.SET_SHIPMENT_DETAILS_REQUEST,
+      type: shipmentConstants.GET_OFFERS_REQUEST,
       shipmentData
     }
   }
   function success (shipmentData) {
     return {
-      type: shipmentConstants.SET_SHIPMENT_DETAILS_SUCCESS,
+      type: shipmentConstants.GET_OFFERS_SUCCESS,
       shipmentData
     }
   }
   function failure (error) {
-    return { type: shipmentConstants.SET_SHIPMENT_DETAILS_FAILURE, error }
+    return { type: shipmentConstants.GET_OFFERS_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request(data))
-    shipmentService.setShipmentDetails(data).then(
+    shipmentService.getOffers(data).then(
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
@@ -76,26 +76,26 @@ function setShipmentDetails (data, redirect) {
   }
 }
 
-function setShipmentRoute (data) {
+function chooseOffer (data) {
   function request (shipmentData) {
     return {
-      type: shipmentConstants.SET_SHIPMENT_ROUTE_REQUEST,
+      type: shipmentConstants.CHOOSE_OFFER_REQUEST,
       shipmentData
     }
   }
   function success (shipmentData) {
     return {
-      type: shipmentConstants.SET_SHIPMENT_ROUTE_SUCCESS,
+      type: shipmentConstants.CHOOSE_OFFER_SUCCESS,
       shipmentData
     }
   }
   function failure (error) {
-    return { type: shipmentConstants.SET_SHIPMENT_ROUTE_FAILURE, error }
+    return { type: shipmentConstants.CHOOSE_OFFER_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request(data))
 
-    shipmentService.setShipmentRoute(data).then(
+    shipmentService.chooseOffer(data).then(
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
@@ -143,26 +143,26 @@ function setShipmentContacts (data) {
     )
   }
 }
-function acceptShipment (id) {
+function requestShipment (id) {
   function request (shipmentData) {
     return {
-      type: shipmentConstants.ACCEPT_SHIPMENT_REQUEST,
+      type: shipmentConstants.REQUEST_SHIPMENT_REQUEST,
       shipmentData
     }
   }
   function success (shipmentData) {
     return {
-      type: shipmentConstants.ACCEPT_SHIPMENT_SUCCESS,
+      type: shipmentConstants.REQUEST_SHIPMENT_SUCCESS,
       shipmentData
     }
   }
   function failure (error) {
-    return { type: shipmentConstants.ACCEPT_SHIPMENT_FAILURE, error }
+    return { type: shipmentConstants.REQUEST_SHIPMENT_FAILURE, error }
   }
   return (dispatch) => {
     dispatch(request(id))
 
-    shipmentService.acceptShipment(id).then(
+    shipmentService.requestShipment(id).then(
       (resp) => {
         const shipmentData = resp.data
         dispatch(success(shipmentData))
@@ -400,7 +400,7 @@ function updateCurrency (currency, req) {
   return (dispatch) => {
     dispatch(appActions.setCurrency(currency))
     setTimeout(() => {
-      dispatch(setShipmentDetails(req, false))
+      dispatch(getOffers(req, false))
       dispatch(alertActions.success('Updating Currency successful'))
     }, 100)
   }
@@ -424,8 +424,8 @@ function goTo (path) {
 
 export const shipmentActions = {
   newShipment,
-  setShipmentRoute,
-  setShipmentDetails,
+  chooseOffer,
+  getOffers,
   setShipmentContacts,
   fetchShipment,
   getShipments,
@@ -439,7 +439,7 @@ export const shipmentActions = {
   getNotes,
   toDashboard,
   clearLoading,
-  acceptShipment,
+  requestShipment,
   updateCurrency,
   delete: _delete
 }

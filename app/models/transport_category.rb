@@ -51,6 +51,26 @@ class TransportCategory < ApplicationRecord
       end 
   	}
 
+
+  def humanize
+  	"#{humanized_cargo_class} #{humanized_name} #{humanized_load_type}"
+  end
+
+  def humanized_cargo_class
+  	cargo_class.split("_")
+  		.map.with_index { |str_elem, i| str_elem.upcase }
+  		.join(" – ")
+  		.gsub(/(?<=(20|40))F/, "’")
+  end
+
+  def humanized_name
+  	name.gsub(/_/, " ").gsub(/( any| goods)/, "")
+  end
+
+  def humanized_load_type
+  	load_type.gsub(/_/, " ")
+  end
+
 	private
 
 	def set_load_type

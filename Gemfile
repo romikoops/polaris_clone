@@ -12,6 +12,8 @@ gem 'rails', '~> 5.1.4'
 gem 'pg', '~> 0.21'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+# Use activerecord-import for bulk insertion
+gem 'activerecord-import'
 
 gem 'devise_token_auth', '~> 0.1.43'
 gem 'omniauth'

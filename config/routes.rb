@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
-      
+      get  "hubs/sheet/download",  to: "hubs#download_hubs"
       post "user_managers/assign", to: "user_managers#assign"
       resources :itineraries, only: [:index, :show, :create, :destroy]
       post "itineraries/:id/edit_notes", to: 'itineraries#edit_notes'
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       resources :pricings, only: [:index, :destroy]
       get  "client_pricings/:id", to: "pricings#client"
       get  "route_pricings/:id",  to: "pricings#route"
+      get  "pricings/download",  to: "pricings#download_pricings"
       post "pricings/update/:id", to: "pricings#update_price"
       post "pricings/train_and_ocean_pricings/process_csv", 
         to: "pricings#overwrite_main_carriage", as: :main_carriage_pricings_overwrite
@@ -62,6 +63,7 @@ Rails.application.routes.draw do
       post "service_charges/process_csv", 
         to: "service_charges#overwrite", as: :service_charges_overwrite
       post "service_charges/:id/edit", to: "service_charges#edit"
+      get  "service_charges/download",  to: "service_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple
@@ -80,7 +82,7 @@ Rails.application.routes.draw do
         as: :schedules_air_overwrite
       post 'schedules/auto_generate', 
         to: 'schedules#auto_generate_schedules'
-      
+      post  "schedules/download",  to: "schedules#download_schedules"
       get 'hubs',      to: 'hubs#index'
       get 'dashboard', to: 'dashboard#index'
     end
@@ -95,15 +97,15 @@ Rails.application.routes.draw do
       post "locations/:location_id/edit", to: "user_locations#edit"
     end
     post "notes/fetch", to: "notes#get_notes"
-    resources :shipments, only: [:index, :new, :show, :create] do
+    
+    post "create_shipment", controller: "shipments/booking_process", action: "create_shipment"
+    resources :shipments, only: [:index] do
       get  "test_email"
       get  "reuse_booking_data", as: :reuse_booking
-      get  "choose_offer",       as: :choose_offer
-      post "get_offer",          as: :get_offer
       post "set_haulage",        as: :set_haulage
-      post "finish_booking",     as: :finish_booking
-      post "update",             as: :update_booking
-      post "confirm_shipment",   as: :confirm_booking
+      %w(choose_offer get_offers update_shipment request_shipment).each do |action|
+        post action, controller: "shipments/booking_process", action: action
+      end
     end
 
     resources :trucking_availability, only: [:index]

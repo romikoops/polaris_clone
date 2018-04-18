@@ -258,6 +258,11 @@ module PricingTools
       min = fee["min"] || 0
 
       [cbm, ton, min].max
+    when "PER_TON"
+      ton = (cargo_hash[:weight] / 1000) * fee["ton"]
+      min = fee["min"] || 0
+
+      [ton, min].max
     when "PER_WM"
       cbm = cargo_hash[:volume] * (fee["value"] || fee["rate"])
       ton = (cargo_hash[:weight] / 1000) * (fee["value"] || fee["rate"])

@@ -292,13 +292,14 @@ class OfferCalculator
     end    
   end
 
-  def path_key(cargo_unit, trip)
-    transport_category = trip[0].trip.vehicle.transport_categories.find_by(
+  def path_key(cargo_unit, layovers)
+    transport_category = layovers[0].trip.vehicle.transport_categories.find_by(
       name: 'any',
-      cargo_class: cargo_unit.try(:size_class) || 'lcl'
+      cargo_class: cargo_unit.try(:size_class) || 'lcl',
+      mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
 
-    "#{trip[0].stop_id}_#{trip.last.stop_id}_#{transport_category.id}"
+    "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 
   def determine_trucking_options!

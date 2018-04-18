@@ -31,6 +31,7 @@ import toggleCSS from './toggleCSS'
 import getOffersBtnIsActive, {
   noDangerousGoodsCondition, stackableGoodsCondition
 } from './getOffersBtnIsActive'
+import formatCargoItemTypes from './formatCargoItemTypes'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -126,7 +127,6 @@ export class ShipmentDetails extends Component {
     this.addNewCargoItem = this.addNewCargoItem.bind(this)
     this.addNewContainer = this.addNewContainer.bind(this)
     this.setTargetAddress = this.setTargetAddress.bind(this)
-    this.handleChangeCarriage = this.handleChangeCarriage.bind(this)
     this.handleCargoItemChange = this.handleCargoItemChange.bind(this)
     this.handleContainerChange = this.handleContainerChange.bind(this)
     this.handleTruckingDetailsChange = this.handleTruckingDetailsChange.bind(this)
@@ -192,8 +192,8 @@ export class ShipmentDetails extends Component {
   }
 
   setIncoTerm (opt) {
-    this.handleChangeCarriage('has_on_carriage', opt.onCarriage)
-    this.handleChangeCarriage('has_pre_carriage', opt.preCarriage)
+    this.handleCarriageChange('has_on_carriage', opt.onCarriage)
+    this.handleCarriageChange('has_pre_carriage', opt.preCarriage)
     this.setState({
       incoterm: opt
     })
@@ -224,7 +224,7 @@ export class ShipmentDetails extends Component {
     Object.keys(scope.carriage_options).forEach((carriage) => {
       const carriageOptionScope = scope.carriage_options[carriage][this.state.shipment.direction]
       if (carriageOptionScope === 'mandatory') {
-        this.handleChangeCarriage(`has_${carriage}`, true, { force: true })
+        this.handleCarriageChange(`has_${carriage}`, true, { force: true })
       }
     })
     this.setState({ mandatoryCarriageIsPreset: true })
@@ -232,15 +232,15 @@ export class ShipmentDetails extends Component {
 
   loadPrevReq (obj) {
     const newCargoItemsErrors = obj.cargo_items_attributes.map(cia => ({
-      payload_in_kg: true,
-      dimension_x: true,
-      dimension_y: true,
-      dimension_z: true,
-      cargo_item_type_id: true,
+      payload_in_kg: false,
+      dimension_x: false,
+      dimension_y: false,
+      dimension_z: false,
+      cargo_item_type_id: false,
       quantity: false
     }))
     const newContainerErrors = obj.containers_attributes.map(cia => ({
-      payload_in_kg: true
+      payload_in_kg: false
     }))
 
     this.setState({
@@ -456,7 +456,7 @@ export class ShipmentDetails extends Component {
     data.shipment.planned_pickup_date = this.state.selectedDay
     data.shipment.incoterm = this.state.incoterm
     data.shipment.carriageNexuses = this.state.carriageNexuses
-    this.props.setShipmentDetails(data)
+    this.props.getOffers(data)
   }
   handleCarriageNexuses (target, id) {
     this.setState({
@@ -470,7 +470,7 @@ export class ShipmentDetails extends Component {
     this.props.shipmentDispatch.getDashboard(true)
   }
 
-  handleChangeCarriage (target, value, options) {
+  handleCarriageChange (target, value, options) {
     const carriage = target.replace('has_', '')
 
     // Break out of function, in case the change should not apply, based on the tenant scope.
@@ -540,7 +540,7 @@ export class ShipmentDetails extends Component {
     const { modals } = this.state
     const { theme, scope } = tenant.data
     let cargoDetails
-    if (!shipmentData.shipment) return ''
+    if (!shipmentData.shipment || !shipmentData.cargoItemTypes) return ''
 
     if (this.state.aggregated) {
       cargoDetails = (
@@ -576,7 +576,7 @@ export class ShipmentDetails extends Component {
           nextStageAttempt={this.state.nextStageAttempt}
           theme={theme}
           scope={scope}
-          availableCargoItemTypes={shipmentData.cargoItemTypes}
+          availableCargoItemTypes={formatCargoItemTypes(shipmentData.cargoItemTypes)}
           maxDimensions={shipmentData.maxDimensions}
           toggleModal={name => this.toggleModal(name)}
         />
@@ -585,17 +585,13 @@ export class ShipmentDetails extends Component {
 
     const routeIds = shipmentData.itineraries ? shipmentData.itineraries.map(route => route.id) : []
 
-    const mandatoryTrucking = {
-      onCarriage: scope.carriage_options.on_carriage[shipmentData.shipment.direction] === 'mandatory',
-      preCarriage: scope.carriage_options.pre_carriage[shipmentData.shipment.direction] === 'mandatory'
-    }
     const mapBox = (
       <GmapsLoader
         theme={theme}
         setTargetAddress={this.setTargetAddress}
         allNexuses={shipmentData.allNexuses}
         component={ShipmentLocationBox}
-        handleChangeCarriage={this.handleChangeCarriage}
+        handleCarriageChange={(...args) => this.handleCarriageChange(...args)}
         has_on_carriage={this.state.has_on_carriage}
         has_pre_carriage={this.state.has_pre_carriage}
         origin={this.state.origin}
@@ -609,7 +605,7 @@ export class ShipmentDetails extends Component {
         shipmentDispatch={shipmentDispatch}
         prevRequest={this.props.prevRequest}
         handleSelectLocation={this.handleSelectLocation}
-        mandatoryTrucking={mandatoryTrucking}
+        scope={scope}
       />
     )
     const formattedSelectedDay = this.state.selectedDay
@@ -924,7 +920,7 @@ export class ShipmentDetails extends Component {
 
 ShipmentDetails.propTypes = {
   shipmentData: PropTypes.shipmentData.isRequired,
-  setShipmentDetails: PropTypes.func.isRequired,
+  getOffers: PropTypes.func.isRequired,
   messages: PropTypes.arrayOf(PropTypes.string),
   setStage: PropTypes.func.isRequired,
   prevRequest: PropTypes.shape({

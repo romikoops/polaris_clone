@@ -3,7 +3,7 @@
 
   .header {
     min-height: 70px;
-    width: 100vw !important; 
+    width: 100vw !important;
     z-index: 500 !important;
     transition: all 0.5s ease;
     border-bottom: 1px solid rgb(230, 230, 230);
@@ -13,12 +13,12 @@
     &.inverted {
       box-shadow: unset;
       border-color: transparent;
-      background-color: transparent;      
+      background-color: transparent;
     }
     &.scrollable {
       position: fixed;
       left: 0;
-      right: 0;      
+      right: 0;
     }
     &.scrolled {
       background-color: white;
@@ -30,6 +30,9 @@
     height: 50px;
     cursor: pointer;
   }
+  img.hide {
+    display: none;
+  }
   img.wide_logo {
     width: 170px;
     height: auto;
@@ -38,9 +41,9 @@
   .signin {
     height: 22px;
     width: 82px;
-    color: #FFFFFF; 
-    // font-family: ".SF NS Display";  
-    font-size: 16px;  
+    color: #FFFFFF;
+    // font-family: ".SF NS Display";
+    font-size: 16px;
     line-height: 18px;
   }
   .alert_bubble {

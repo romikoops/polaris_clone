@@ -22,6 +22,28 @@ export default function app (state = {}, action) {
         error: action.payload
       }
     }
+    case documentConstants.DOWNLOAD_REQUEST: {
+      return {
+        ...state,
+        loading: true
+      }
+    }
+    case documentConstants.DOWNLOAD_SUCCESS: {
+      return {
+        ...state,
+        loading: false,
+        downloadUrls: {
+          ...state.downloadUrls,
+          [action.payload.key]: action.payload.url
+        }
+      }
+    }
+    case documentConstants.DOWNLOAD_FAILURE: {
+      return {
+        ...state,
+        error: action.payload
+      }
+    }
     case documentConstants.CLOSE_VIEWER: {
       return {
         ...state,
