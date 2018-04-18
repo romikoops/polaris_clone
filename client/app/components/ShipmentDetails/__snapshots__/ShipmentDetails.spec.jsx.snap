@@ -29,17 +29,11 @@ exports[`shallow rendering 1`] = `
         }
       }
       handleAddressChange={[Function]}
+      handleCarriageChange={[Function]}
       handleCarriageNexuses={[Function]}
-      handleChangeCarriage={[Function]}
       handleSelectLocation={[Function]}
       has_on_carriage={true}
       has_pre_carriage={false}
-      mandatoryTrucking={
-        Object {
-          "onCarriage": true,
-          "preCarriage": false,
-        }
-      }
       nextStageAttempt={false}
       origin={
         Object {
@@ -75,10 +69,23 @@ exports[`shallow rendering 1`] = `
         }
       }
       routeIds={Array []}
+      scope={
+        Object {
+          "carriage_options": Object {
+            "on_carriage": Object {
+              "FOO_DIRECTION": "mandatory",
+            },
+            "pre_carriage": Object {
+              "FOO_DIRECTION": "optional",
+            },
+          },
+        }
+      }
       setNotesIds={[Function]}
       setTargetAddress={[Function]}
       shipmentData={
         Object {
+          "cargoItemTypes": Object {},
           "shipment": Object {
             "cargo_items_attributes": Array [],
             "clientName": "FOO_CLIENT_NAME",
@@ -307,6 +314,7 @@ exports[`shallow rendering 1`] = `
     </div>
     <ShipmentCargoItems
       addCargoItem={[Function]}
+      availableCargoItemTypes={Array []}
       cargoItems={Array []}
       deleteItem={[Function]}
       handleDelta={[Function]}

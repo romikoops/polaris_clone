@@ -111,10 +111,11 @@ const editedTenant = {
 }
 
 const propsBase = {
-  shipmentData: { shipment: editedShipment },
+  shipmentData: { shipment: editedShipment, cargoItemTypes: {} },
   setShipmentDetails: identity,
   messages: ['FOO_MESSAGE', 'BAR_MESSAGE'],
   setStage: identity,
+  getOffers: identity,
   prevRequest: {
     shipment: editedShipment
   },
