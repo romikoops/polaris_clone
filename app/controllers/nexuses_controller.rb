@@ -12,7 +12,6 @@ class NexusesController < ApplicationController
 		geocoded_location = Location.new(latitude: params[:lat], longitude: params[:lng])
 		nexus_data = geocoded_location.closest_location_with_distance
 		nexus = nexus_data.first if nexus_data.last <= 200
-
 		response_handler(nexus: nexus)
 	end
 

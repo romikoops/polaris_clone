@@ -50,6 +50,12 @@ export default function app (state = {}, action) {
         viewer: false
       }
     }
+    case documentConstants.CLEAR_LOADING: {
+      return {
+        ...state,
+        loading: false
+      }
+    }
 
     default:
       return state

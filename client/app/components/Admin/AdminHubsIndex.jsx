@@ -60,24 +60,24 @@ export function AdminHubsIndex ({
       </div>
       <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
         <div
-          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
             styles.sec_upload
           }`}
         >
-          <p className="flex-100">Download Hubs Sheet</p>
+          <p className="flex-100 center">Download Hubs Sheet</p>
           <DocumentsDownloader theme={theme} target="hubs" />
         </div>
 
         <div
-          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
             styles.sec_upload
           }`}
         >
-          <p className="flex-100">Download Local Charges Sheet</p>
+          <p className="flex-100 center">Download Local Charges Sheet</p>
           <DocumentsDownloader theme={theme} target="local_charges" />
         </div>
         <div
-          className={`flex-33 layout-row layout-wrap layout-align-space-between-center ${
+          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
             styles.sec_upload
           }`}
         />

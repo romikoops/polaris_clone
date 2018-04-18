@@ -287,11 +287,8 @@ module ShippingTools
     shipment.customs_credit = params[:shipment][:customsCredit]
     shipment.total_price = params[:total]
     @schedules = params[:schedules].as_json
-
-    # params[:schedules].each do |sched|
-      shipment.schedule_set = params[:schedules]
-    # end
-
+    shipment.schedule_set = params[:schedules]
+    shipment.itinerary = Itinerary.find(shipment.schedule_set.first["itinerary_id"])
     shipment.trip_id = params[:schedules][0]["trip_id"]
     case shipment.load_type
     when 'cargo_item'
@@ -332,8 +329,9 @@ module ShippingTools
     end
     transportKey = Trip.find(@schedules.first["trip_id"]).vehicle.transport_categories.find_by(name: 'any', cargo_class: cargoKey).id
     priceKey = "#{@schedules.first["itinerary_id"]}_#{transportKey}_#{current_user.tenant_id}_#{cargoKey}"
-    origin_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @origin.id}, {"load_type" => customsKey}]).first
-    destination_customs_fee = get_items_query('customsFees', [{"tenant_id" => current_user.tenant_id}, {"hub_id" => @destination.id}, {"load_type" => customsKey}]).first
+    origin_customs_fee = @origin.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
+    destination_customs_fee = @destination.customs_fees.find_by(load_type: customsKey, mode_of_transport: shipment.mode_of_transport)
+    
     import_fees = destination_customs_fee ? calc_customs_fees(destination_customs_fee["import"], cargos, shipment.load_type, current_user) : {unknown: true}
     export_fees = origin_customs_fee ? calc_customs_fees(origin_customs_fee["export"], cargos, shipment.load_type, current_user) : {unknown: true}
     total_fees = {total: {value: 0, currency: current_user.currency}}

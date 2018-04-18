@@ -1212,7 +1212,7 @@ function editShipmentPrice (id, priceObj) {
     )
   }
 }
-function editLocalCharges (nexusId, data) {
+function editLocalCharges (chargeId, data) {
   function request (chargeData) {
     return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
   }
@@ -1225,7 +1225,32 @@ function editLocalCharges (nexusId, data) {
   return (dispatch) => {
     dispatch(request())
 
-    adminService.editLocalCharges(nexusId, data).then(
+    adminService.editLocalCharges(chargeId, data).then(
+      (resp) => {
+        dispatch(alertActions.success('Edit Local Charges successful'))
+        dispatch(success(resp))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
+function editCustomsFees (feeId, data) {
+  function request (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_REQUEST, payload: chargeData }
+  }
+  function success (chargeData) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_SUCCESS, payload: chargeData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.EDIT_LOCAL_CHARGES_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.editLocalCharges(feeId, data).then(
       (resp) => {
         dispatch(alertActions.success('Edit Local Charges successful'))
         dispatch(success(resp))
@@ -1360,6 +1385,7 @@ function uploadTrucking (url, file, direction) {
     adminService.uploadTrucking(url, file, direction).then(
       (data) => {
         dispatch(alertActions.success('Fetch Trucking successful'))
+        dispatch(documentActions.setStats(data.data.stats))
         dispatch(success(data))
       },
       (error) => {
@@ -1461,7 +1487,8 @@ export const adminActions = {
   deleteTrip,
   deleteClient,
   saveItineraryNotes,
-  editTruckingPrice
+  editTruckingPrice,
+  editCustomsFees
 }
 
 export default adminActions

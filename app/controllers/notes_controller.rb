@@ -4,8 +4,8 @@ class NotesController < ApplicationController
 
   def get_notes
     notes = []
-    origins = params[:origin]
-    destinations = params[:destination]
+    origins = params[:origins] || []
+    destinations = params[:destinations] || []
     itineraries = params[:itineraries]
     itineraries.each do |itin|
       if origins.include?(itin["originNexusId"]) && destinations.include?(itin["destinationNexusId"])

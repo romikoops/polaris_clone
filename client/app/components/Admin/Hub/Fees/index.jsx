@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Toggle from 'react-toggle'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
+import '../../../../styles/day-picker-custom.css'
 import styles from '../../Admin.scss'
+import styles2 from './index.scss'
 import { NamedSelect } from '../../../NamedSelect/NamedSelect'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 import AdminPromptConfirm from '../../Prompt/Confirm'
@@ -15,7 +18,8 @@ import {
   lclPricingSchema,
   fclPricingSchema,
   // cargoGlossary,
-  rateBasisSchema
+  rateBasisSchema,
+  moment
 } from '../../../../constants'
 import { TextHeading } from '../../../TextHeading/TextHeading'
 
@@ -67,11 +71,11 @@ export class AdminHubFees extends Component {
     // this.setAllFromOptions()
   }
   componentWillReceiveProps (nextProps) {
-    if (nextProps.charges.nexus_id) {
+    if (nextProps.charges.hub_id) {
       this.setAllFromOptions(nextProps.charges)
     }
-    if (!this.state.charges && this.props.charges.nexus_id) {
-      this.setState({ charges: this.props.charges })
+    if (this.state.charges !== nextProps.charges) {
+      this.setState({ charges: nextProps.charges })
     }
   }
 
@@ -94,15 +98,17 @@ export class AdminHubFees extends Component {
         Object.keys(charges[dir][key]).forEach((chargeKey) => {
           if (chargeKey === 'currency') {
             opts = currencyOpts.slice()
-            // this.getOptions(opts, key, chargeKey);
+            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
+              opts,
+              charges[dir][key][chargeKey]
+            )
           } else if (chargeKey === 'rate_basis') {
             opts = rateOpts.slice()
-            // this.getOptions(opts, key, chargeKey);
+            newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
+              opts,
+              charges[dir][key][chargeKey]
+            )
           }
-          newObj[dir][key][chargeKey] = AdminHubFees.selectFromOptions(
-            opts,
-            charges[dir][key][chargeKey]
-          )
         })
       })
     })
@@ -116,6 +122,21 @@ export class AdminHubFees extends Component {
       steps: {
         ...this.state.steps,
         [selection.name]: true
+      }
+    })
+  }
+  handleDayChange (e, direction, key, chargeKey) {
+    console.log(e, direction, key, chargeKey)
+    this.setState({
+      charges: {
+        ...this.state.charges,
+        [direction]: {
+          ...this.state.charges[direction],
+          [key]: {
+            ...this.state.charges[direction][key],
+            [chargeKey]: moment(e).format('YYYY/MM/DD')
+          }
+        }
       }
     })
   }
@@ -286,6 +307,24 @@ export class AdminHubFees extends Component {
       charges,
       confirm
     } = this.state
+    console.log('#### charges @@@@@@')
+    console.log(charges)
+    const dayPickerProps = {
+      disabledDays: {
+        before: new Date(moment()
+          .add(7, 'days')
+          .format())
+      },
+      month: new Date(
+        moment()
+          .add(7, 'days')
+          .format('YYYY'),
+        moment()
+          .add(7, 'days')
+          .format('M') - 1
+      ),
+      name: 'dayPicker'
+    }
     const panel = []
     const viewPanel = []
     // let gloss
@@ -311,11 +350,6 @@ export class AdminHubFees extends Component {
       }
     `
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    // if (loadType.includes('lcl')) {
-    //   gloss = lclChargeGloss
-    // } else {
-    //   gloss = fclChargeGloss
-    // }
     const gloss = chargeGloss
 
     if (!charges || (charges && !charges[direction])) {
@@ -332,7 +366,7 @@ export class AdminHubFees extends Component {
     ) : (
       ''
     )
-    const dnrKeys = ['currency', 'rate_basis', 'key', 'name']
+    const dnrKeys = ['currency', 'rate_basis', 'key', 'name', 'effective_date', 'expiration_date']
     Object.keys(charges[direction]).forEach((key) => {
       const cells = []
       const viewCells = []
@@ -387,6 +421,30 @@ export class AdminHubFees extends Component {
           >
             <p className="flex-100">{chargeGloss[chargeKey]}</p>
             <p className="flex">{chargeGloss[charges[direction][key][chargeKey]]}</p>
+          </div>)
+        } else if (chargeKey === 'expiration_date' || chargeKey === 'effective_date') {
+          cells.push(<div
+            className={`flex layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            } ${styles2.dpb}`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <DayPickerInput
+              name="dayPicker"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+              value={charges[direction][key][chargeKey]}
+              onDayChange={e => this.handleDayChange(e, direction, key, chargeKey)}
+              dayPickerProps={dayPickerProps}
+            />
+          </div>)
+          viewCells.push(<div
+            className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+              styles.price_cell
+            }`}
+          >
+            <p className="flex-100">{chargeGloss[chargeKey]}</p>
+            <p className="flex">{moment(charges[direction][key][chargeKey]).format('ll')}</p>
           </div>)
         } else if (chargeKey === 'currency') {
           cells.push(<div

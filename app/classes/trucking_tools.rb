@@ -56,7 +56,8 @@ module TruckingTools
     end
     extra_fees_results = {}
     total_fees.each do |tk, tfee|
-      extra_fees_results[tk] = tfee['value'] * result['value']
+      
+      extra_fees_results[tk] = tfee[:value] * result['value']
     end
     extra_fees_results.each do |_ek, evalue|
       result['value'] += evalue
@@ -89,7 +90,8 @@ module TruckingTools
     when 'PER_ITEM'
       return { currency: fee[:currency], value: fee[:value] * cargo['number_of_items'], key: key }
     when 'PER_CONTAINER'
-      return { currency: fee[:currency], value: fee[:rate] * cargo['number_of_items'], key: key }
+      
+      return { currency: fee[:currency], value: fee[:value] * cargo['number_of_items'], key: key }
     when 'PER_CBM_TON'
       cbm_value = cargo['volume'] * fee[:cbm]
       ton_value = (cargo['weight'] / 1000) * fee[:ton]
@@ -105,41 +107,43 @@ module TruckingTools
 
   def filter_trucking_pricings(trucking_pricing, cargo_values, _direction)
     return {} if cargo_values['weight'] == 0
-
-    trucking_pricing['rates'].each do |_tr|
+    # 
+    # trucking_pricing['rates'].each do |_tr|
+      byebug
       case trucking_pricing.modifier
       when 'kg'
         trucking_pricing['rates']['kg'].each do |rate|
-          if cargo_values['weight'] <= rate['max_kg'] && cargo_values['weight'] >= rate['min_kg']
+          
+          if cargo_values['weight'] <= rate['max_kg'].to_d && cargo_values['weight'] >= rate['min_kg'].to_d
 
-            return { rate: rate, fees: trucking_pricing['fees'] }
+            return { rate: rate['rate'], fees: trucking_pricing['fees'] }
           end
         end
       when 'cbm'
-        trucking_pricing['rates']['kg'].each do |rate|
-          if cargo_values['volume'] <= rate['max_cbm'] && cargo_values['volume'] >= rate['min_cbm']
-            return { rate: rate, fees: trucking_pricing['fees'] }
+        trucking_pricing['rates']['cbm'].each do |rate|
+          if cargo_values['volume'] <= rate['max_cbm'].to_d && cargo_values['volume'] >= rate['min_cbm'].to_d
+            return { rate: rate['rate'], fees: trucking_pricing['fees'] }
           end
         end
       when 'cbm_kg'
         result = { rate_basis: 'PER_CBM_KG' }
         trucking_pricing['rates']['kg'].each do |rate|
-          next unless cargo_values['weight'] <= rate['max_kg'] && cargo_values['weight'] >= rate['min_kg']
+          next unless cargo_values['weight'] <= rate['max_kg'].to_d && cargo_values['weight'] >= rate['min_kg'].to_d
           result['kg'] = rate['rate']['value']
           result['min_value'] = rate['min_value']
           result['currency'] = rate['rate']['currency']
         end
         trucking_pricing['rates']['cbm'].each do |rate|
-          next unless cargo_values['volume'] <= rate['max_cbm'] && cargo_values['volume'] >= rate['min_cbm']
+          next unless cargo_values['volume'] <= rate['max_cbm'].to_d && cargo_values['volume'] >= rate['min_cbm'].to_d
           result['cbm'] = rate['rate']['value']
           result['min_value'] = rate['min_value']
           result['currency'] = rate['rate']['currency']
         end
         return { rate: result, fees: trucking_pricing['fees'] }
       when 'unit'
-        return { rate: trucking_pricing['rates'][0], fees: trucking_pricing['fees'] }
+        return { rate: trucking_pricing['rates']['unit'][0]['rate'], fees: trucking_pricing['fees'] }
       end
-    end
+    # end
     {}
   end
 
@@ -228,6 +232,7 @@ module TruckingTools
     total = { value: 0, currency: '' }
     fees.each do |_key, trucking_fee|
       unless trucking_fee.empty?
+        
         total[:value] += trucking_fee[:value]
         total[:currency] = trucking_fee[:currency]
       end

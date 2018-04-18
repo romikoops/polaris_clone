@@ -35,8 +35,11 @@ export class RouteHubBox extends Component {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
   render () {
-    const { theme, hubs, route } = this.props
+    const {
+      theme, hubs, route, locations
+    } = this.props
     const { startHub, endHub } = hubs
+    const { origin, destination } = locations
     const gradientStyle = {
       background:
         theme && theme.colors
@@ -67,28 +70,60 @@ export class RouteHubBox extends Component {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/destination_sm.jpg")'
         }
-
-    const timeDiff = route && route[0] && route[0].eta ? (
-      <div
-        className="flex-65 layout-row layout-wrap layout-align-center-stretch"
-        style={{ marginTop: '25px' }}
-      >
-        <h4 className="no_m center" style={{ marginBottom: '10px' }}>
-          {' '}
-          Est. Transit Time
-        </h4>
-        <p className="flex-100 no_m center">
-          {' '}
-          {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days{' '}
-        </p>
-      </div>
-    ) : (
-      ''
-    )
+    const originAddress =
+      origin && origin.location_type !== 'nexus' ? (
+        <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+          <div className="flex-100 layout-row layout-align-center-center">
+            <p className="flex-none">With Pickup From:</p>
+          </div>
+          <address className={` ${styles.itinerary_address} flex-none`}>
+            {`${origin.street_number} ${origin.street}`}, <br />
+            {`${origin.city}, ${' '} `}
+            {`${origin.zip_code}, `}
+            {`${origin.country}`} <br />
+          </address>
+        </div>
+      ) : (
+        ''
+      )
+    const destinationAddress =
+      destination && destination.location_type !== 'nexus' ? (
+        <div className="flex-100 layout-row layout-align-center-start layout-wrap">
+          <div className="flex-100 layout-row layout-align-center-center">
+            <p className="flex-none">With Pickup From:</p>
+          </div>
+          <address className={` ${styles.itinerary_address} flex-none`}>
+            {`${destination.street_number} ${destination.street}`}, <br />
+            {`${destination.city}, ${' '} `}
+            {`${destination.zip_code}, `}
+            {`${destination.country}`} <br />
+          </address>
+        </div>
+      ) : (
+        ''
+      )
+    const timeDiff =
+      route && route[0] && route[0].eta ? (
+        <div
+          className="flex-65 layout-row layout-wrap layout-align-center-stretch"
+          style={{ marginTop: '25px' }}
+        >
+          <h4 className="no_m center" style={{ marginBottom: '10px' }}>
+            {' '}
+            Est. Transit Time
+          </h4>
+          <p className="flex-100 no_m center">
+            {' '}
+            {moment(route[0].eta).diff(moment(route[route.length - 1].etd), 'days')} days{' '}
+          </p>
+        </div>
+      ) : (
+        ''
+      )
     return (
       <div className={` ${styles.outer_box} flex-100 layout-row layout-align-center-center`}>
-        <div className={`flex-none ${defs.content_width} layout-row layout-align-start-center`}>
-          <div className="flex layout-row layout-wrap">
+        <div className={`flex-none ${defs.content_width} layout-row layout-align-start-start`}>
+          <div className="flex layout-row layout-wrap layout-align-center-start">
             <h3 className={`flex-100 ${styles.rhb_header}`}>ORIGIN</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg1}>
               <div className={styles.fade} />
@@ -102,9 +137,10 @@ export class RouteHubBox extends Component {
                 </div>
               </div>
             </div>
+            {originAddress}
           </div>
           <div
-            className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-start`}
+            className={`${styles.connection_graphics} flex-25 layout-row layout-align-center-center`}
           >
             <div className="flex-100 layout-row layout-align-center-center">
               <div
@@ -121,7 +157,7 @@ export class RouteHubBox extends Component {
             </div>
           </div>
 
-          <div className="flex layout-row layout-wrap">
+          <div className="flex layout-row layout-wrap layout-align-center-start">
             <h3 className={`flex-100 ${styles.rhb_header}`}> DESTINATION</h3>
             <div className={`flex-100 ${styles.hub_card} layout-row`} style={bg2}>
               <div className={styles.fade} />
@@ -135,6 +171,7 @@ export class RouteHubBox extends Component {
                 </div>
               </div>
             </div>
+            {destinationAddress}
           </div>
         </div>
       </div>
@@ -146,12 +183,14 @@ RouteHubBox.propTypes = {
   route: PropTypes.arrayOf(PropTypes.shape({
     eta: PropTypes.number
   })),
-  hubs: PropTypes.arrayOf(PropTypes.hub)
+  hubs: PropTypes.arrayOf(PropTypes.hub),
+  locations: PropTypes.objectOf(PropTypes.any)
 }
 RouteHubBox.defaultProps = {
   theme: null,
   hubs: [],
-  route: []
+  route: [],
+  locations: {}
 }
 
 export default RouteHubBox
