@@ -66,7 +66,7 @@ export class Modal extends Component {
     const minTop = Math.max(windowHeight / 2 - height, 100)
 
     const modalStyles = {
-      top: `${Math.min(windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
+      top: `${Math.max(windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
       minHeight,
       maxHeight: `calc(${windowHeight * 0.9}px - (${this.props.verticalPadding} * 2))`,
       maxWidth: '90%',

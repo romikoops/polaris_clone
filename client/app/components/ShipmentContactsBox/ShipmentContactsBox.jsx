@@ -38,7 +38,7 @@ export class ShipmentContactsBox extends Component {
 
   render () {
     const {
-      shipper, consignee, notifyees, theme, direction
+      shipper, consignee, notifyees, theme, direction, showAddressBook
     } = this.props
 
     return (
@@ -50,6 +50,7 @@ export class ShipmentContactsBox extends Component {
               shipper={shipper}
               consignee={consignee}
               direction={direction}
+              showAddressBook={showAddressBook}
             />
           </div>
           <div className="flex-100 layout-row layout-wrap">
@@ -106,7 +107,7 @@ ShipmentContactsBox.propTypes = {
 
 ShipmentContactsBox.defaultProps = {
   theme: null,
-  notifyees: [],
+  notifyees: []
   // finishBookingAttempted: false
 }
 

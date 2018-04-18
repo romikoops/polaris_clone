@@ -5,7 +5,7 @@ import { capitalize, nameToDisplay } from '../../../../helpers'
 import { RoundButton } from '../../../RoundButton/RoundButton'
 
 export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
-  contactType, theme
+  contactType, theme, showAddressBook
 }) {
   const showError = false // TBD - finishBookingAttempted && type !== 'notifyee'
   const requiredSpanStyles = { left: '15px', top: '14px', fontSize: '17px' }
@@ -18,12 +18,10 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
     </span>
   )
   return (
-    <div
-      className={
-        `layout-row layout-wrap ${styles.placeholder_card} ` +
-        `${showError ? styles.with_errors : ''}`
-      }
-      onClick={null} // TBD - setContactForEdit
+    <div className={
+      `layout-row layout-wrap ${styles.placeholder_card} ` +
+      `${showError ? styles.with_errors : ''}`
+    }
     >
       <div className="flex-100 layout-row layout-align-center-center">
         <h3>
@@ -32,7 +30,13 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
         </h3>
       </div>
       <div className="flex-100 layout-row layout-align-center-start">
-        <RoundButton theme={theme} text="BROWSE CONTACTS" size="medium" active />
+        <RoundButton
+          theme={theme}
+          text="BROWSE CONTACTS"
+          size="medium"
+          handleNext={() => showAddressBook(contactType)}
+          active
+        />
       </div>
       <div className="flex-100 layout-row layout-align-center-start">
         <a onClick={null} className={styles.link}>+ add contact</a>

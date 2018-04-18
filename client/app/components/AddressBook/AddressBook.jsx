@@ -6,7 +6,7 @@ import { ContactCard } from '../ContactCard/ContactCard'
 
 export class AddressBook extends PureComponent {
   render () {
-    const { theme, contacts, autofillContact } = this.props
+    const { theme, contacts, setContact } = this.props
 
     const contactCards =
       contacts &&
@@ -14,19 +14,21 @@ export class AddressBook extends PureComponent {
         <ContactCard
           contactData={contact}
           theme={theme}
-          select={autofillContact}
+          select={setContact}
           key={v4()}
           popOutHover
         />
       ))
 
     return (
-      <div
-        className={`
-                ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-center-start
-            `}
-      >
-        {contactCards}
+      <div style={{ height: '50vh', width: '70vw' }}>
+        <div
+          className={`
+            ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-center-start
+          `}
+        >
+          {contactCards}
+        </div>
       </div>
     )
   }
@@ -35,7 +37,7 @@ export class AddressBook extends PureComponent {
 AddressBook.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.contact),
   theme: PropTypes.theme,
-  autofillContact: PropTypes.func.isRequired
+  setContact: PropTypes.func.isRequired
 }
 
 AddressBook.defaultProps = {

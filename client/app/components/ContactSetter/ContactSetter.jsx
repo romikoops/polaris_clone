@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
 // import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
-// import { AddressBook } from '../AddressBook/AddressBook'
+import { AddressBook } from '../AddressBook/AddressBook'
+import { Modal } from '../Modal/Modal'
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import { isEmpty, nameToDisplay } from '../../helpers'
 
@@ -38,12 +39,13 @@ export class ContactSetter extends Component {
         type: this.contactTypes[0],
         ...this.newContactData
       },
-      showBody: false
+      modal: '',
+      showModal: false
     }
   }
 
   setContactForEdit (contactData) {
-    this.setState({ contactData, showBody: true })
+    this.setState({ contactData, showModal: true })
   }
 
   setContact (contactData) {
@@ -57,7 +59,7 @@ export class ContactSetter extends Component {
     this.props.setContact(contactData, type, index)
 
     if (nextType === 'notifyee') {
-      this.setState({ showBody: false })
+      this.setState({ showModal: false })
       return
     }
     newState.contactData.type = nextType
@@ -95,16 +97,32 @@ export class ContactSetter extends Component {
     ))
   }
 
-  toggleShowBody () {
-    this.setState({ showBody: !this.state.showBody })
+  toggleShowModal () {
+    this.setState({ showModal: !this.state.showModal })
+  }
+
+  showAddressBook (contactType) {
+    const modal = (
+      <Modal
+        component={
+          <AddressBook
+            theme={this.props.theme}
+            contacts={this.availableContacts()}
+            setContact={contactData => this.setContact(contactData)}
+          />
+        }
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleShowModal()}
+      />
+    )
+    this.setState({ modal, showModal: true })
   }
   render () {
     const {
       theme, shipper, consignee, notifyees
     } = this.props
-    const { showBody } = this.state // contactData
-    const showBodyIconStyles = { padding: '10px' }
-    if (showBody) showBodyIconStyles.transform = 'rotate(90deg)'
+    const { showModal, modal } = this.state // contactData
 
     return (
       <div
@@ -114,6 +132,7 @@ export class ContactSetter extends Component {
           'layout-row layout-wrap layout-align-center-start'
         }
       >
+        { showModal && modal}
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div
             className={`${styles.wrapper_main_h1} flex-100`}
@@ -130,6 +149,7 @@ export class ContactSetter extends Component {
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
+              showAddressBook={contactType => this.showAddressBook(contactType)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
             />

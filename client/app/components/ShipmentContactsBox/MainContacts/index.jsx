@@ -1,25 +1,27 @@
 import React from 'react'
 import styles from '../ShipmentContactsBox.scss'
-import { gradientTextGenerator, nameToDisplay, capitalize } from '../../../helpers'
+import { gradientTextGenerator } from '../../../helpers'
 import ShipmentContactsBoxContactSectionContactCard from './ContactCard'
 import ShipmentContactsBoxContactSectionPlaceholderCard from './PlaceholderCard'
 
 export default function ShipmentContactsBoxMainContacts ({
-  theme, shipper, consignee, direction
+  theme, shipper, consignee, direction, showAddressBook
 }) {
   const textStyle = theme
     ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
     : { color: 'black' }
 
-  let props = { contactData: shipper, contactType: 'shipper', theme }
+  let props = {
+    contactData: shipper, contactType: 'shipper', theme, showAddressBook
+  }
   const shipperCard = shipper.contact
     ? <ShipmentContactsBoxContactSectionContactCard {...props} />
-    : <ShipmentContactsBoxContactSectionPlaceholderCard {...props } />
+    : <ShipmentContactsBoxContactSectionPlaceholderCard {...props} />
 
-  props = { contactData: consignee, contactType: 'consignee', theme }
+  props = { ...props, contactData: consignee, contactType: 'consignee' }
   const consigneeCard = consignee.contact
     ? <ShipmentContactsBoxContactSectionContactCard {...props} />
-    : <ShipmentContactsBoxContactSectionPlaceholderCard {...props } />
+    : <ShipmentContactsBoxContactSectionPlaceholderCard {...props} />
 
   const chevronDirection = direction === 'import' ? 'left' : 'right'
 
