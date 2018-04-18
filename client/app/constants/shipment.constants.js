@@ -248,8 +248,6 @@ export const chargeGlossary = {
   max_weight: 'Max. Weight',
   min_distance: 'Min. Distance',
   max_distance: 'Max. Distance',
-  min_cbm: 'Min. CBM',
-  max_cbm: 'Max. CBM',
   city: 'City',
   province: 'Province',
   value: 'Rate',
@@ -263,7 +261,13 @@ export const chargeGlossary = {
   CGT: 'Congestion Tax',
   FDC: 'Fairways Due Charge',
   VGM: 'Verified Gross Mass',
-  CUST: 'Customs Fee'
+  CUST: 'Customs Fee',
+  max_kg: 'Max. Kg',
+  min_kg: 'Min. Kg',
+  min_cbm: 'Min. Cbm',
+  max_cbm: 'Max. Cbm',
+  min_km: 'Min. Km',
+  max_km: 'Max. Km'
 }
 
 export const incoterms = [

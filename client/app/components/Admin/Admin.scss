@@ -404,10 +404,10 @@
   .trucking_cell {
     padding: 4px;
     // background: lightgrey;
-    p {
-      margin: 0;
-      font-size: 12px;
-    }
+    // p {
+    //   margin: 0;
+    //   font-size: 12px;
+    // }
   }
   .fee_subtitle {
     font-size: 10px;
@@ -761,5 +761,24 @@
     height: 0px;
     font-size: 10px;
     transition: all 2s linear;
+  }
+  .range_header {
+    padding: 4px 15px;
+    height: 50px;
+    p {
+      color: white;
+      font-size: 14px;
+    }
+  }
+  .range_cell {
+    padding: 4px 15px;
+    p {
+      font-size: 12px;
+    }
+  }
+  .cell_editor_wrapper {
+    padding: 4px;
+    margin: 5px 0;
+    box-shadow: 1px 0 0 1px rgba(0,0,0,0.25);
   }
 }
