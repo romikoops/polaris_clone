@@ -1,9 +1,4 @@
 :local {
-  .contact_wrapper {  
-    transform: scale(0.85);
-    transform-origin: left;
-    width: 100%;
-  }
   .contact_header, .contact_header p {
     color: #212121;
     font-size: 16px;
@@ -19,18 +14,18 @@
     -webkit-text-fill-color: transparent !important;
   }
   .placeholder_card {
-    height: 113px !important;
+    height: 242px !important;
     margin: 5px;
     background-color: transparent;
-    color: grey;
-    border: 2px dashed rgba(grey, 0.8);
+    border: 2px solid green;
     padding: 15px;
-    opacity: 0.6;
     border-radius: 2px;
     transition: all 0.2s ease;
     cursor: pointer;
-    &:hover {
-      opacity: 0.9;
+    font-size: 18px;
+    span.contact_type {
+      font-size: 34px;
+      text-transform: uppercase;
     }
     h3 {
       text-align: center;
@@ -43,5 +38,22 @@
     // This is needed to fix a bug in Chrome related to changes in opacity on hover.
     // Source: https://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
     -webkit-backface-visibility: hidden;
+  }
+  .dir_icon {
+    font-size: 100px;
+  }
+  span.subtext {
+    font-size: 12px;
+    font-weight: normal;
+    color: #828282;
+  }
+  a.link {
+    cursor: pointer;
+    text-decoration: underline !important;
+    transition: opacity 0.3s ease;
+    -webkit-transform: translateZ(0); // fix opacity transition glitch
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }

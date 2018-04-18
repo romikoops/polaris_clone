@@ -2,7 +2,9 @@
   .round_btn {
     border-radius: 39px;
     // font-family: "Open Sans";
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
     line-height: 21px;
     text-align: center;
     color: #FFFFFF;
@@ -10,6 +12,7 @@
     cursor: not-allowed;
     transition: margin 0.2s ease;
     transition: shadow 0.4s ease;
+    text-transform: uppercase;
     &:focus {
       outline: none;
     }
@@ -34,7 +37,13 @@
   .small {
     height: 33.83px;
     width: 167px;
-    font-size: 16px;
+    font-size: 12px;
+  }
+
+  .medium {
+    height: 39px;
+    width: 233px;
+    font-size: 14px;
   }
 
   .full {
