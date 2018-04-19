@@ -22,18 +22,16 @@ class Admin::PricingsController < ApplicationController
   def client
     @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
-    detailed_itineraries = get_itineraries(current_user.tenant_id)
     
-    itineraries = eliminate_user_pricings(@pricings, detailed_itineraries)
-    response_handler({userPricings: @pricings, client: @client, detailedItineraries: itineraries})
+    response_handler({userPricings: @pricings, client: @client})
   end
 
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = itinerary.pricings #get_itinerary_pricings_hash(itinerary.id)
+    pricings = itinerary.pricings.where(user_id: nil).map { |pricing| {pricing: pricing, transport_category: pricing.transport_category}} #get_itinerary_pricings_hash(itinerary.id)
+    user_pricings = itinerary.pricings.where.not(user_id: nil).map { |pricing| {pricing: pricing, transport_category: pricing.transport_category, user_id: pricing.user_id}}
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
-    detailed_itineraries = [itinerary.as_options_json]
-    response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
+    response_handler({itineraryPricingData: pricings, itinerary: itinerary.as_options_json, stops: stops, userPricings: user_pricings})
   end
 
   def update_price
@@ -41,9 +39,9 @@ class Admin::PricingsController < ApplicationController
     data.delete("controller")
     data.delete("subdomain_id")
     data.delete("action")
-    resp = update_pricing(params[:id], data)
+    # resp = update_pricing(params[:id], data)
     parse_and_update_itinerary_pricing_id(data)
-    new_pricing = get_item("pricings", "_id", params[:id])
+    new_pricing = data
     response_handler(new_pricing)
   end
 
@@ -171,10 +169,11 @@ class Admin::PricingsController < ApplicationController
         results.push(itin)
       else
         prices.each do |k, v|
+          byebug
           splits = v.split('_')
           hub1 = splits[0].to_i
           hub2 = splits[1].to_i
-          if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+          if itin["first_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
             results.push(itin)
           end
         end

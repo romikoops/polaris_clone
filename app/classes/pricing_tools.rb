@@ -17,7 +17,7 @@ module PricingTools
     else
       pricing.pricing_details
     end
-    byebug
+    
     final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
     final_pricing.with_indifferent_access
   end
@@ -35,8 +35,8 @@ module PricingTools
     return {} if charge.nil?
     totals = {"total" => {}}
     charge[direction].each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
-      totals[k]["currency"] ||= fee["currency_name"] 
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
+      totals[k]["currency"] ||= fee["currency"] 
 
       totals[k]["value"] += fee_value(fee, cargo_hash) 
     end
@@ -73,9 +73,9 @@ module PricingTools
     
     pricing.keys.each do |k|
       fee = pricing[k].clone
-
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
-      totals[k]["currency"] ||= fee["currency_name"] 
+      
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
+      totals[k]["currency"] ||= fee["currency"] 
       
       if fee["hw_rate_basis"]
         totals[k]["value"] += heavy_weight_fee_value(fee, cargo)
@@ -98,8 +98,8 @@ module PricingTools
     totals = {"total" => {}}
     
     pricing.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
-      totals[k]["currency"] ||= fee["currency_name"] 
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
+      totals[k]["currency"] ||= fee["currency"] 
 
       totals[k]["value"] += fee_value(fee, get_cargo_hash(container))
     end
@@ -128,9 +128,14 @@ module PricingTools
   end
 
   def get_user_pricings(id)
-    User.find(id).pricings.each_with_object({}) do |pricing, return_h|
-      return_h[pricing.itinerary.name] = true
+    results = {}
+    User.find(id).pricings.each do |pricing|
+      unless results[pricing.itinerary_id]
+        results[pricing.itinerary_id] = {itinerary: pricing.itinerary.as_options_json, pricings: []}
+      end
+       results[pricing.itinerary_id][:pricings] << {pricing: pricing, transport_category: pricing.transport_category}
     end
+    results
   end
 
   def get_itinerary_pricings(itinerary_id)

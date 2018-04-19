@@ -4,7 +4,6 @@ import ReactTooltip from 'react-tooltip'
 import PropTypes from '../../prop-types'
 import { AdminPriceEditor } from './'
 import styles from './Admin.scss'
-import { RoundButton } from '../RoundButton/RoundButton'
 import AdminPromptConfirm from './Prompt/Confirm'
 import {
   CONTAINER_DESCRIPTIONS,
@@ -109,9 +108,6 @@ export class AdminPricingClientView extends Component {
     ) : (
       ''
     )
-    const {
-      routes, pricings, hubRoutes, transportCategories
-    } = pricingData
     const { client, userPricings } = clientPricings
     const textStyle = {
       background:
@@ -119,18 +115,6 @@ export class AdminPricingClientView extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    const backButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          text="Back"
-          handleNext={AdminPricingClientView.backToIndex}
-          iconClass="fa-chevron-left"
-        />
-      </div>
-    )
-
     const noPricing = (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         <div
@@ -139,7 +123,6 @@ export class AdminPricingClientView extends Component {
           <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
             {client.first_name} {client.last_name}
           </p>
-          {backButton}
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
@@ -155,28 +138,30 @@ export class AdminPricingClientView extends Component {
       const panel = []
       let gloss
       let toggleStyle
-      // eslint-disable-next-line no-underscore-dangle
-      if (pricing._id.includes('lcl')) {
+
+      if (transport.cargo_class.includes('lcl')) {
         gloss = lclChargeGloss
       } else {
         gloss = fclChargeGloss
       }
-      // eslint-disable-next-line no-underscore-dangle
-      if (this.state.open[pricing._id]) {
+
+      if (this.state.open[pricing.id]) {
         toggleStyle = styles.show_style
       } else {
         toggleStyle = styles.hide_style
       }
-      // eslint-disable-next-line no-underscore-dangle
-      const expandIcon = this.state.open[pricing._id] ? (
+
+      const expandIcon = this.state.open[pricing.id] ? (
         <i className="flex-none fa fa-chevron-up clip" style={textStyle} />
       ) : (
         <i className="flex-none fa fa-chevron-down clip" style={textStyle} />
       )
+      const dnrKeys = ['currency', 'rate_basis', 'range']
       Object.keys(pricing.data).forEach((key) => {
         const cells = []
+
         Object.keys(pricing.data[key]).forEach((chargeKey) => {
-          if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+          if (dnrKeys.indexOf(chargeKey) < 0) {
             cells.push(<div
               className={`flex-25 layout-row layout-align-none-center layout-wrap ${
                 styles.price_cell
@@ -241,8 +226,7 @@ export class AdminPricingClientView extends Component {
             </div>
             <div
               className="flex-10 layout-row layout-align-center-center"
-              // eslint-disable-next-line no-underscore-dangle
-              onClick={() => this.viewThis(pricing._id)}
+              onClick={() => this.viewThis(pricing.id)}
             >
               {expandIcon}
             </div>
@@ -275,28 +259,16 @@ export class AdminPricingClientView extends Component {
         </div>
       )
     }
-    const RoutePricingBox = ({
-      route, hrArr, uPriceObj, pricingsObj, transports
-    }) => {
-      // if (!uPriceObj) {
-      //     return '';
-      // }
-      const inner = hrArr.map((hr) => {
+    const RoutePricingBox = ({ routeData, pricingsArr }) => {
+      const inner = pricingsArr.map((pricingObj) => {
         const innerInner = []
-        transports.forEach((tr) => {
-          const gKey = `${hr.id}_${tr.id}`
-          const pricing = pricingsObj[uPriceObj[gKey]]
-          if (pricing) {
-            innerInner
-              .push(<RPBInner
-                key={v4()}
-                hubRoute={hr}
-                transport={tr}
-                pricing={pricing}
-                theme={theme}
-              />)
-          }
-        })
+        innerInner.push(<RPBInner
+          key={v4()}
+          hubRoute={routeData}
+          transport={pricingObj.transport_category}
+          pricing={pricingObj.pricing}
+          theme={theme}
+        />)
         return innerInner
       })
       return (
@@ -307,7 +279,7 @@ export class AdminPricingClientView extends Component {
           } flex-100 layout-row layout-wrap layout-align-start-start `}
         >
           <div className="flex-100 layout-row layout-align-start-center">
-            <h3 className="flex-none clip"> {route.name} </h3>
+            <h3 className="flex-none clip"> {routeData.name} </h3>
           </div>
           <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
             {inner}
@@ -315,23 +287,9 @@ export class AdminPricingClientView extends Component {
         </div>
       )
     }
-    const routeBoxes = routes.map((rt) => {
-      const relHR = []
-      hubRoutes.forEach((hr) => {
-        if (hr.route_id === rt.id) {
-          relHR.push(hr)
-        }
-      })
-      return (
-        <RoutePricingBox
-          key={v4()}
-          route={rt}
-          hrArr={relHR}
-          pricingsObj={pricings}
-          uPriceObj={userPricings}
-          transports={transportCategories}
-        />
-      )
+    const routeBoxes = Object.keys(userPricings).map((itKey) => {
+      const { itinerary, pricings } = userPricings[itKey]
+      return <RoutePricingBox key={v4()} routeData={itinerary} pricingsArr={pricings} />
     })
 
     return (
@@ -343,7 +301,6 @@ export class AdminPricingClientView extends Component {
           <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
             {client.first_name} {client.last_name}
           </p>
-          {backButton}
         </div>
 
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">

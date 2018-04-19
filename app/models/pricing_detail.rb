@@ -14,7 +14,7 @@ class PricingDetail < ApplicationRecord
     {
       rate: rate,
       rate_basis: rate_basis,
-      currency: currency_id,
+      currency: currency_name,
       hw_threshold: hw_threshold,
       hw_rate_basis: hw_rate_basis,
       min: min,
@@ -26,7 +26,7 @@ class PricingDetail < ApplicationRecord
     {
       rate: rate,
       rate_basis: rate_basis,
-      currency: currency_id,
+      currency: currency_name,
       hw_threshold: hw_threshold,
       hw_rate_basis: hw_rate_basis,
       min: min,

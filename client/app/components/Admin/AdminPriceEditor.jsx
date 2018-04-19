@@ -209,8 +209,8 @@ export class AdminPriceEditor extends Component {
   }
   saveEdit () {
     const req = this.state.pricing
-    // eslint-disable-next-line no-underscore-dangle
-    this.props.adminTools.updatePricing(this.props.pricing._id, req)
+    const { pricing } = this.props
+    this.props.adminTools.updatePricing(pricing.id, req)
     this.closeConfirm()
     this.props.closeEdit()
   }

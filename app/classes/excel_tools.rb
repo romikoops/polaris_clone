@@ -1346,7 +1346,7 @@ module ExcelTools
         aux_data[pricing_key][:tenant_vehicle] = vehicle.presence || Vehicle.create_from_name(row[:vehicle], row[:mot], tenant.id)
       end
 
-      aux_data[pricing_key][:customer] = row[:customer_id] if row[:customer_id]
+      aux_data[pricing_key][:customer] = User.find(row[:customer_id]) if row[:customer_id]
       aux_data[pricing_key][:transit_time] ||= row[:transit_time]
       aux_data[pricing_key][:origin] ||= Location.find_by(name: row[:origin], location_type: 'nexus')
       aux_data[pricing_key][:destination] ||= Location.find_by(name: row[:destination], location_type: 'nexus')

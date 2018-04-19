@@ -101,7 +101,7 @@ export class AdminPricingRouteView extends Component {
       endHub: { data: {}, location: {} }
     }
     console.log(itineraryPricings)
-    const { pricings, transportCategories } = pricingData
+    const { transportCategories } = pricingData
     const {
       itinerary, itineraryPricingData, stops, detailedItineraries
     } = itineraryPricings
@@ -120,8 +120,7 @@ export class AdminPricingRouteView extends Component {
     const RPBInner = ({ hubRoute, pricing, transport }) => {
       const panel = []
       let gloss
-      // eslint-disable-next-line no-underscore-dangle
-      if (pricing._id.includes('lcl')) {
+      if (transport.cargo_class.includes('lcl')) {
         gloss = lclChargeGloss
       } else {
         gloss = fclChargeGloss
@@ -220,26 +219,19 @@ export class AdminPricingRouteView extends Component {
       ''
     )
     const RoutePricingBox = ({
-      routeData, hrArr, rPriceObj, pricingsObj, transports, userId
+      routeData, pricingsArr, userId
     }) => {
-      const inner = hrArr.map((hr) => {
+      const filteredPricingsArr = userId === ' open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
+      const inner = filteredPricingsArr.map((pricingObj) => {
         const innerInner = []
-        transports.forEach((tr) => {
-          const gKey = `${hr.origin_stop_id}_${hr.destination_stop_id}_${tr.id}`
-          if (rPriceObj[gKey]) {
-            const pricing = pricingsObj[rPriceObj[gKey][userId]]
-            if (pricing) {
-              innerInner
-                .push(<RPBInner
-                  key={v4()}
-                  hubRoute={hr}
-                  transport={tr}
-                  pricing={pricing}
-                  theme={theme}
-                />)
-            }
-          }
-        })
+        innerInner
+          .push(<RPBInner
+            key={v4()}
+            hubRoute={routeData}
+            transport={pricingObj.transport_category}
+            pricing={pricingObj.pricing}
+            theme={theme}
+          />)
         return innerInner
       })
       return (
@@ -292,9 +284,7 @@ export class AdminPricingRouteView extends Component {
         <RoutePricingBox
           key={v4()}
           routeData={itinerary}
-          hrArr={detailedItineraries}
-          pricingsObj={pricings}
-          rPriceObj={itineraryPricingData}
+          pricingsArr={itineraryPricingData}
           transports={transportCategories}
           userId={selectedClient.id}
         />
@@ -320,10 +310,7 @@ export class AdminPricingRouteView extends Component {
             <RoutePricingBox
               key={v4()}
               routeData={itinerary}
-              hrArr={detailedItineraries}
-              pricingsObj={pricings}
-              rPriceObj={itineraryPricingData}
-              transports={transportCategories}
+              pricingsArr={itineraryPricingData}
               userId="open"
             />
           </div>
