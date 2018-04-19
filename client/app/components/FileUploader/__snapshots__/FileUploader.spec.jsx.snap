@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-none layout-row upload_btn_wrapper "
+  data-for="RANDOM_KEY"
+  data-tip="FOO_TOOLTIP"
+>
+  <form>
+    <RoundButton
+      active={true}
+      handleNext={[Function]}
+      size="small"
+      text="Upload"
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+    <Component
+      className="tooltip"
+      effect="solid"
+      id="RANDOM_KEY"
+    />
+    <input
+      name="FOO_TYPE"
+      onChange={[Function]}
+      type="file"
+    />
+  </form>
+</div>
+`;
