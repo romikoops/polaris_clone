@@ -6,7 +6,7 @@ import { NavDropdown } from '../NavDropdown/NavDropdown'
 import styles from './Header.scss'
 import { LoginRegistrationWrapper } from '../LoginRegistrationWrapper/LoginRegistrationWrapper'
 import { Modal } from '../Modal/Modal'
-import { appActions, messagingActions } from '../../actions'
+import { appActions, messagingActions, adminActions } from '../../actions'
 
 class Header extends Component {
   constructor (props) {
@@ -67,17 +67,33 @@ class Header extends Component {
   }
   render () {
     const {
-      user, theme, tenant, invert, unread, req, scrollable, noMessages, component
+      user,
+      theme,
+      tenant,
+      invert,
+      unread,
+      req,
+      scrollable,
+      noMessages,
+      component,
+      adminDispatch
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
     const accountLinks = [
-      {
-        url: '/account',
-        text: 'Account',
-        fontAwesomeIcon: 'fa-cog',
-        key: 'settings'
-      },
+      user && user.role_id === 2
+        ? {
+          url: '/account',
+          text: 'Account',
+          fontAwesomeIcon: 'fa-cog',
+          key: 'settings'
+        }
+        : {
+          select: () => adminDispatch.getDashboard(true),
+          text: 'Account',
+          fontAwesomeIcon: 'fa-cog',
+          key: 'settings'
+        },
       {
         url: '/signout',
         text: 'Sign out',
@@ -153,10 +169,7 @@ class Header extends Component {
       `${scrollable && !isTop ? styles.scrolled : ''}`
 
     return (
-      <div
-        className={headerClass}
-        style={{ color: invert ? 'white' : 'black' }}
-      >
+      <div className={headerClass} style={{ color: invert ? 'white' : 'black' }}>
         <div className="flex-100 layout-row" style={{ padding: '0 15px' }}>
           <div className="layout-row flex layout-align-start-center">
             <img
@@ -167,7 +180,7 @@ class Header extends Component {
               onClick={this.goHome}
             />
           </div>
-          { component }
+          {component}
           <div className="flex layout-row layout-align-end-center">
             {rightCorner}
             {
@@ -203,6 +216,7 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
+  adminDispatch: PropTypes.func.isRequired,
   noMessages: PropTypes.bool,
   component: PropTypes.node
 }
@@ -249,6 +263,7 @@ function mapStateToProps (state) {
 function mapDispatchToProps (dispatch) {
   return {
     appDispatch: bindActionCreators(appActions, dispatch),
+    adminDispatch: bindActionCreators(adminActions, dispatch),
     messageDispatch: bindActionCreators(messagingActions, dispatch)
   }
 }

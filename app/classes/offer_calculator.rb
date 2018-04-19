@@ -286,6 +286,7 @@ class OfferCalculator
         total_units,
         @shipment.planned_pickup_date
       )
+      
       if charge_result
         charges[sched_key][:cargo][cargo_unit.id] = charge_result
       end
@@ -293,12 +294,11 @@ class OfferCalculator
   end
 
   def path_key(cargo_unit, layovers)
-    transport_category = layovers[0].trip.vehicle.transport_categories.find_by(
+    transport_category = layovers[0].trip.tenant_vehicle.vehicle.transport_categories.find_by(
       name: 'any',
       cargo_class: cargo_unit.try(:size_class) || 'lcl',
       mode_of_transport: layovers[0].trip.itinerary.mode_of_transport
     )
-
     "#{layovers[0].stop_id}_#{layovers.last.stop_id}_#{transport_category.id}"
   end
 
@@ -309,7 +309,8 @@ class OfferCalculator
         location: @shipment.origin, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["pre_carriage"]["truck_type"] != '' ? shipment.trucking["pre_carriage"]["truck_type"] : 'default'
+        truck_type: @shipment.trucking["pre_carriage"]["truck_type"] != '' ? shipment.trucking["pre_carriage"]["truck_type"] : 'default',
+        carriage: 'pre'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["pre_carriage"]
@@ -323,7 +324,8 @@ class OfferCalculator
         location: @shipment.destination, 
         load_type: load_type, 
         tenant_id: @user.tenant_id, 
-        truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default'
+        truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default',
+        carriage: 'on'
       )
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]

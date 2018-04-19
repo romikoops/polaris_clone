@@ -1,6 +1,8 @@
 class Admin::ClientsController < ApplicationController
   before_action :require_login_and_role_is_admin
-
+  
+  # Return all clients and managers for dashboard
+  
   def index
     shipper_role = Role.find_by_name('shipper')
     manager_role = Role.find_by_name('sub_admin')
@@ -8,6 +10,8 @@ class Admin::ClientsController < ApplicationController
     managers = User.where(tenant_id: current_user.tenant_id, role_id: manager_role.id)
     response_handler({clients: clients, managers: managers})
   end
+
+  # Return selected User, assigned managers, shipments made and user locations
 
   def show
     client = User.find(params[:id])
@@ -18,6 +22,7 @@ class Admin::ClientsController < ApplicationController
     response_handler(resp)
   end
 
+  # Api end point to create a new User through the Admin Dashboard
   def create
     json = JSON.parse(params[:new_client])
     user_data = {
@@ -33,6 +38,9 @@ class Admin::ClientsController < ApplicationController
 
     response_handler(new_user)
   end
+
+  # Destroy User account
+
   def destroy
     User.find(params[:id]).destroy
     response_handler(params[:id])

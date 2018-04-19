@@ -28,8 +28,10 @@ class Admin::HubsController < ApplicationController
     location = hub.location
     layovers = hub.layovers.limit(20)
     routes = get_itineraries_for_hub(hub)
-    customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
-    charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
+    customs = hub.customs_fees
+    charges = hub.local_charges
+    # customs = get_items_query("customsFees", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
+    # charges = get_items_query("localCharges", [{"tenant_id" => current_user.tenant_id}, {"nexus_id" => hub.nexus_id}])
     resp = {hub: hub, routes: routes, relatedHubs: related_hubs, schedules: layovers, charges: charges, customs: customs, location: hub.location}
     response_handler(resp)
   end

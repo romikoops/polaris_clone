@@ -27,17 +27,17 @@ class Itinerary < ApplicationRecord
     return itinerary
   end
 
-  def generate_schedules_from_sheet(stops, start_date, end_date, vehicle_id, closing_date, vessel, voyage_code)
+  def generate_schedules_from_sheet(stops, start_date, end_date, tenant_vehicle_id, closing_date, vessel, voyage_code)
     results = {
       layovers: [],
       trips: []
     }
-    trip_check = self.trips.find_by(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
+    trip_check = self.trips.find_by(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     if trip_check
       p "REJECTED"
       # return results
     end
-    trip = self.trips.create!(start_date: start_date, end_date: end_date, vehicle_id: vehicle_id, vessel: vessel, voyage_code: voyage_code)
+    trip = self.trips.create!(start_date: start_date, end_date: end_date, tenant_vehicle_id: tenant_vehicle_id, vessel: vessel, voyage_code: voyage_code)
     results[:trips] << trip
     stops.each do |stop|
       if stop.index == 0
@@ -64,7 +64,7 @@ class Itinerary < ApplicationRecord
     results
   end
 
-  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, vehicle_id, closing_date_buffer = 4)
+  def generate_weekly_schedules(stops_in_order, steps_in_order, start_date, end_date, ordinal_array, tenant_vehicle_id, closing_date_buffer = 4)
     results = {
       layovers: [],
       trips: []
@@ -95,14 +95,14 @@ class Itinerary < ApplicationRecord
         journey_start = tmp_date.midday
         closing_date = journey_start - closing_date_buffer.days
         journey_end = journey_start + steps_in_order.sum.days
-        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        trip_check = self.trips.find_by(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
         if trip_check
           p "REJECTED"
           tmp_date += 1.day
           stats[:trips][:number_updated] += 1
           next
         end
-        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, vehicle_id: vehicle_id)
+        trip = self.trips.create!(start_date: journey_start, end_date: journey_end, tenant_vehicle_id: tenant_vehicle_id)
         results[:trips] << trip
         stats[:trips][:number_created] += 1
         p trip

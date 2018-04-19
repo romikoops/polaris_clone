@@ -206,6 +206,8 @@ export const lclChargeGlossary = {
   TRF: 'Telex Release Fee'
 }
 export const chargeGlossary = {
+  effective_date: 'Effective Date',
+  expiration_date: 'Expiration Date',
   rate_basis: 'Rate Basis',
   base_rate: 'Base Rate',
   base: 'Base',

@@ -22,7 +22,7 @@ gem 'sprockets-rails', require: 'sprockets/railtie'
 gem 'sass-rails'
 
 gem 'bootstrap-sass', '~> 3.3.5.1'
-
+gem 'rufo'
 gem 'awesome_print'
 gem 'shoryuken'
 gem 'aws-sdk-sqs'
@@ -93,6 +93,9 @@ gem 'aws-sdk', '~> 3'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # Better debugging
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 group :development, :staging do

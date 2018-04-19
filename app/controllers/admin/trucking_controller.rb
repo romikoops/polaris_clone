@@ -116,6 +116,15 @@ class Admin::TruckingController < ApplicationController
       response_handler(false)
     end
   end
+    def overwrite_zonal_trucking_by_hub
+     if params[:file]
+      req = {'xlsx' => params[:file]}
+      resp = overwrite_zonal_trucking_rates_by_hub(req, current_user, params[:id])
+      response_handler(resp)
+    else
+      response_handler(false)
+    end
+  end
 
   def overwrite_city_trucking
     if params[:file]

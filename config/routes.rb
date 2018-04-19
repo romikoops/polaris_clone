@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       post "trucking/trucking_zip_pricings",  to: "trucking#overwrite_zip_trucking"
       post "trucking/trucking_city_pricings", to: "trucking#overwrite_city_trucking"
       post "trucking/trucking_zip_pricings/:id",  to: "trucking#overwrite_zip_trucking_by_hub"
+      post "trucking/trucking_pricings/:id",  to: "trucking#overwrite_zonal_trucking_by_hub"
       post "trucking/trucking_city_pricings/:id", to: "trucking#overwrite_city_trucking_by_hub"
       post "trucking/:id/edit", to: "trucking#edit"
       
@@ -59,11 +60,12 @@ Rails.application.routes.draw do
       # post "open_pricings/train_and_ocean_pricings/process_csv", 
         # to: "open_pricings#overwrite_main_carriage", as: :open_main_carriage_pricings_overwrite
 
-      resources :service_charges, only: [:index, :update]
-      post "service_charges/process_csv", 
-        to: "service_charges#overwrite", as: :service_charges_overwrite
-      post "service_charges/:id/edit", to: "service_charges#edit"
-      get  "service_charges/download",  to: "service_charges#download_local_charges"
+      resources :local_charges, only: [:index, :update]
+      post "local_charges/process_csv", 
+        to: "local_charges#overwrite", as: :local_charges_overwrite
+      post "local_charges/:id/edit", to: "local_charges#edit"
+      post "customs_fees/:id/edit", to: "local_charges#edit_customs"
+      get  "local_charges/download",  to: "local_charges#download_local_charges"
       resources :discounts, only: [:index]
       get  "discounts/users/:user_id", to: "discounts#user_itineraries", as: :discounts_user_itineraries
       post "discounts/users/:user_id", to: "discounts#create_multiple", as: :discounts_create_multiple

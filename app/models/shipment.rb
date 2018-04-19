@@ -40,6 +40,8 @@ class Shipment < ApplicationRecord
   has_many :contacts, through: :shipment_contacts
   belongs_to :origin, class_name: "Location", optional: true
   belongs_to :destination, class_name: "Location", optional: true
+  belongs_to :origin_hub, class_name: "Hub", optional: true
+  belongs_to :destination_hub, class_name: "Hub", optional: true
   belongs_to :route, optional: true
   belongs_to :itinerary, optional: true
   belongs_to :transport_category, optional: true
@@ -47,6 +49,8 @@ class Shipment < ApplicationRecord
   has_many :cargo_items
   has_many :cargo_item_types, through: :cargo_items
   has_one :aggregated_cargo
+  belongs_to :origin_hub, class_name: "Hub", optional: true
+  belongs_to :destination_hub, class_name: "Hub", optional: true
 
   accepts_nested_attributes_for :containers, allow_destroy: true
   accepts_nested_attributes_for :cargo_items, allow_destroy: true

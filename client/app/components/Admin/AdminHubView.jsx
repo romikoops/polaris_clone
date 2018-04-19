@@ -32,8 +32,13 @@ export class AdminHubView extends Component {
         editedHub: { data: nextProps.hubData.hub, location: nextProps.hubData.location }
       })
     }
-    if (!this.state.currentCustoms || !this.state.currentFee) {
-      this.checkAndSetCharges(nextProps)
+    if (this.props.hubData && nextProps.hubData) {
+      if (
+        this.props.hubData.charges !== nextProps.hubData.charges ||
+        this.props.hubData.customs !== nextProps.hubData.customs
+      ) {
+        this.checkAndSetCharges(nextProps)
+      }
     }
   }
 
@@ -146,7 +151,8 @@ export class AdminHubView extends Component {
     if (!hubData) {
       return ''
     }
-
+    console.log('#### currentFee @@@@@@')
+    console.log(currentFee)
     const {
       hub, relatedHubs, routes, schedules, location
     } = hubData
@@ -363,7 +369,8 @@ export class AdminHubView extends Component {
         <div className="flex-100 layout-row layout-align-start-center">
           <address className="flex-none">
             {`${location.street_number || ''} 
-            ${location.street || ''}`} <br />
+            ${location.street || ''}`}{' '}
+            <br />
             {location.city} <br />
             {location.zip_code || ''} <br />
             {location.country} <br />

@@ -4,7 +4,7 @@ let url
 
 const subdomainKey = getSubdomain()
 if (process.env.NODE_ENV === 'production') {
-  url = 'https://api2.itsmycargo.com'
+  url = 'https://api.itsmycargo.com'
   // url = 'https://devapi.itsmycargo.com'
 } else {
   url = 'http://localhost:3000'

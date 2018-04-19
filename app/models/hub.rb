@@ -8,7 +8,8 @@ class Hub < ApplicationRecord
   has_many :layovers, through: :stops
   has_many :hub_truckings
   has_many :trucking_pricings, through: :hub_truckings
-  has_one :service_charge
+  has_many :local_charges
+  has_many :customs_fees
   has_many :notes,     dependent: :destroy
 
 

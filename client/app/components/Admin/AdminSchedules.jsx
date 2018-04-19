@@ -102,7 +102,7 @@ class AdminSchedules extends Component {
       <AdminUploadsSuccess
         theme={theme}
         data={document.results}
-        closeDialog={this.closeSuccessDialog}
+        closeDialog={() => this.closeSuccessDialog()}
       />
     ) : (
       ''

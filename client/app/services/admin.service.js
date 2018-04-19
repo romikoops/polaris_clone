@@ -85,7 +85,7 @@ function wizardSCharge (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  const uploadUrl = `${BASE_URL}/admin/service_charges/process_csv`
+  const uploadUrl = `${BASE_URL}/admin/local_charges/process_csv`
   return fetch(uploadUrl, requestOptions).then(handleResponse)
 }
 
@@ -136,7 +136,7 @@ function getServiceCharges () {
     headers: authHeader()
   }
 
-  return fetch(`${BASE_URL}/admin/service_charges`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges`, requestOptions).then(handleResponse)
 }
 function getShipments () {
   const requestOptions = {
@@ -285,7 +285,7 @@ function updateServiceCharge (id, data) {
     body: JSON.stringify({ data })
   }
 
-  return fetch(`${BASE_URL}/admin/service_charges/${id}`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/${id}`, requestOptions).then(handleResponse)
 }
 
 function newClient (data) {
@@ -385,7 +385,15 @@ function editLocalCharges (id, data) {
     headers: { ...authHeader(), 'Content-Type': 'application/json' },
     body: JSON.stringify({ data })
   }
-  return fetch(`${BASE_URL}/admin/service_charges/${id}/edit`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/${id}/edit`, requestOptions).then(handleResponse)
+}
+function editCustomsFees (id, data) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ data })
+  }
+  return fetch(`${BASE_URL}/admin/customs_fees/${id}/edit`, requestOptions).then(handleResponse)
 }
 function editShipmentTime (id, timeObj) {
   const requestOptions = {
@@ -504,7 +512,8 @@ export const adminService = {
   deleteHub,
   deletePricing,
   editHub,
-  deleteClient
+  deleteClient,
+  editCustomsFees
 }
 
 export default adminService

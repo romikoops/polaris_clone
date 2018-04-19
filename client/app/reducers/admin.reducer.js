@@ -1043,16 +1043,40 @@ export default function admin (state = {}, action) {
       }
     case adminConstants.EDIT_LOCAL_CHARGES_REQUEST:
       return state
-    case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS:
+    case adminConstants.EDIT_LOCAL_CHARGES_SUCCESS: {
+      const newCharges = state.hub.charges.filter(c => c.id !== action.payload.id)
+      newCharges.push(action.payload)
       return {
         ...state,
         hub: {
           ...state.hub,
-          charges: action.payload
+          charges: newCharges
         },
         loading: false
       }
+    }
     case adminConstants.EDIT_LOCAL_CHARGES_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
+
+    case adminConstants.EDIT_CUSTOMS_FEES_REQUEST:
+      return state
+    case adminConstants.EDIT_CUSTOMS_FEES_SUCCESS: {
+      const newCustoms = state.hub.customs.filter(c => c.id !== action.payload.id)
+      newCustoms.push(action.payload)
+      return {
+        ...state,
+        hub: {
+          ...state.hub,
+          customs: newCustoms
+        },
+        loading: false
+      }
+    }
+    case adminConstants.EDIT_CUSTOMS_FEES_FAILURE:
       return {
         ...state,
         error: { hub: action.error },

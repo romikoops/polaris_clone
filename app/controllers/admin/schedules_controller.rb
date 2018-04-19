@@ -24,7 +24,7 @@ class Admin::SchedulesController < ApplicationController
     mot = params[:mot]
     itinerary = Itinerary.find(params[:itinerary])
     stops = itinerary.stops.order(:index)
-    byebug
+    
     closing_date_buffer = params[:closing_date].to_i
     vehicle = TenantVehicle.find(params[:vehicleTypeId]).vehicle_id
     resp = itinerary.generate_weekly_schedules(stops, params[:steps], params[:startDate], params[:endDate], params[:weekdays], vehicle, closing_date_buffer)
@@ -47,6 +47,7 @@ class Admin::SchedulesController < ApplicationController
     Trip.find(params[:id]).destroy
     response_handler(true)
   end
+  
   def layovers
     trip = Trip.find(params[:id])
     layovers = trip.layovers.order(:stop_index).map { |l| {layover: l, stop: l.stop, hub: l.stop.hub}  }
@@ -64,9 +65,9 @@ class Admin::SchedulesController < ApplicationController
   end
   def overwrite_trains
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_train_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "rail"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end
@@ -74,18 +75,18 @@ class Admin::SchedulesController < ApplicationController
 
   def overwrite_vessels
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_vessel_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "ocean"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end
   end
   def overwrite_air
      if params[:file]
-      req = {'xlsx' => params[:file]}
-       overwrite_air_schedules(req)
-      response_handler(true)
+      req = {'xlsx' => params[:file], "mot" => "air"}
+      results = overwrite_all_schedules(req)
+      response_handler(results)
     else
       response_handler(false)
     end

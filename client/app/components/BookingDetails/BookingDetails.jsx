@@ -282,10 +282,10 @@ export class BookingDetails extends Component {
       hubs,
       contacts,
       userLocations,
-      schedules
+      schedules,
       // containers,
       // cargoItems,
-      // locations
+      locations
     } = shipmentData
     if (!shipment || !hubs) return ''
 
@@ -299,7 +299,7 @@ export class BookingDetails extends Component {
         style={{ paddingTop: '60px' }}
       >
         {shipment && theme && hubs ? (
-          <RouteHubBox hubs={hubs} route={schedules} theme={theme} />
+          <RouteHubBox hubs={hubs} route={schedules} theme={theme} locations={locations} />
         ) : (
           ''
         )}

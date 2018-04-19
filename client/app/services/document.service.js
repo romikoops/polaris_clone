@@ -74,7 +74,7 @@ function uploadLocalCharges (file) {
     headers: { ...authHeader() },
     body: formData
   }
-  return fetch(`${BASE_URL}/admin/service_charges/process_csv`, requestOptions).then(handleResponse)
+  return fetch(`${BASE_URL}/admin/local_charges/process_csv`, requestOptions).then(handleResponse)
 }
 
 function downloadLocalCharges () {
