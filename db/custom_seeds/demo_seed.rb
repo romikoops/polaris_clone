@@ -45,7 +45,7 @@ include MongoTools
   # local_charges = File.open("#{Rails.root}/db/dummydata/SACO_local_charges.xlsx")
   # req = {"xlsx" => local_charges}
   # overwrite_local_charges(req, shipper)
-   puts "# Overwrite Local Charges From Sheet"
+  #  puts "# Overwrite Local Charges From Sheet"
   local_charges = File.open("#{Rails.root}/db/dummydata/local_charges.xlsx")
   req = {"xlsx" => local_charges}
   overwrite_local_charges(req, shipper)

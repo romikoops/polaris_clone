@@ -953,11 +953,11 @@ module ExcelTools
           when "PER_CONTAINER"
             charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_BILL"
-            charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_CBM"
-            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_KG"
-            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_TON"
             charge = {currency: row[:currency], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_WM"
@@ -1478,10 +1478,12 @@ module ExcelTools
         end
       else
         unless new_pricings[pricing_key][cargo_type][:data][row[:fee]]
+          
           new_pricings[pricing_key][cargo_type][:data][row[:fee]] = {
             rate: row[:rate],
             rate_basis: row[:rate_basis],
             currency: row[:currency],
+            min_value: row[:rate_min]
           }
         end
 
@@ -1496,6 +1498,7 @@ module ExcelTools
         end
 
         if row[:min_range]
+          
           new_pricings[pricing_key][cargo_type][:data][row[:fee]].delete("rate")
           unless new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range]
             new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range] = []

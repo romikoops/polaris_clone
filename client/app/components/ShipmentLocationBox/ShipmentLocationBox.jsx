@@ -395,12 +395,16 @@ export class ShipmentLocationBox extends Component {
 
     if (this.props.has_pre_carriage) {
       this.initAutocomplete(map, 'origin')
-      this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
+      setTimeout(() => {
+        this.triggerPlaceChanged(this.state.autoText.origin, 'origin')
+      }, 750)
     }
 
     if (this.props.has_on_carriage) {
       this.initAutocomplete(map, 'destination')
-      this.triggerPlaceChanged(this.state.autoText.origin, 'destination')
+      setTimeout(() => {
+        this.triggerPlaceChanged(this.state.autoText.origin, 'destination')
+      }, 750)
     }
   }
 
