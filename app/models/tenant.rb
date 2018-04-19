@@ -18,8 +18,8 @@ class Tenant < ApplicationRecord
   has_many :layovers, through: :stops
   has_many :trucking_pricings
   has_many :documents
-  has_many :local_charges, through: :hubs
-  has_many :customs_fees, through: :hubs
+  has_many :local_charges
+  has_many :customs_fees
     
   validates :scope, presence: true, scope: true
 
