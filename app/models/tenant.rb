@@ -22,8 +22,8 @@ class Tenant < ApplicationRecord
   has_many :pricing_exceptions
   has_many :pricing_details
 
-  has_many :local_charges, through: :hubs
-  has_many :customs_fees, through: :hubs
+  has_many :local_charges
+  has_many :customs_fees
     
   validates :scope, presence: true, scope: true
 

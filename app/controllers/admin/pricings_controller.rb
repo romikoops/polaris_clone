@@ -30,7 +30,7 @@ class Admin::PricingsController < ApplicationController
 
   def route
     itinerary = Itinerary.find(params[:id])
-    pricings = get_itinerary_pricings_hash(itinerary.id)
+    pricings = itinerary.pricings #get_itinerary_pricings_hash(itinerary.id)
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
     detailed_itineraries = [itinerary.as_options_json]
     response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
