@@ -14,16 +14,18 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
   const requiredSpan = (
     <span
       className={errors.error_message}
-      style={Object.assign(requiredSpanStyles, showError ? {} : { color: 'inherit' })}
+      style={requiredSpanStyles}
     >
       * Required
     </span>
   )
   return (
-    <div className={
-      `layout-row layout-wrap ${styles.placeholder_card} ` +
-      `${showError ? styles.with_errors : ''}`
-    }
+    <div
+      className={
+        `layout-row layout-wrap ${styles.placeholder_card} ` +
+        `${showError ? styles.with_errors : ''}`
+      }
+      onClick={() => showAddressBook(contactType)}
     >
       <div className="flex-100 layout-row layout-align-center-center">
         <h3>
@@ -31,19 +33,7 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
           <span className={styles.contact_type}> { capitalize(nameToDisplay(contactType)) } </span>
         </h3>
       </div>
-      <div className="flex-100 layout-row layout-align-center-start">
-        <RoundButton
-          theme={theme}
-          text="BROWSE CONTACTS"
-          size="medium"
-          handleNext={() => showAddressBook(contactType)}
-          active
-        />
-      </div>
-      <div className="flex-100 layout-row layout-align-center-start">
-        <a onClick={null} className={styles.link}>+ add contact</a>
-      </div>
-      { requiredSpan }
+      { showError && requiredSpan }
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './AddressBook.scss'
 import ContactCard from '../ContactCard'
+import AddressBookAddContactButton from './AddContactButton'
 
 export default function AddressBook ({
   theme, contacts, setContact, title
@@ -20,6 +21,12 @@ export default function AddressBook ({
         />
       </div>
     ))
+
+  contactCards.unshift((
+    <div className="flex-50" style={{ padding: '15px' }}>
+      <AddressBookAddContactButton />
+    </div>
+  ))
 
   return (
     <div className={styles.address_book}>
