@@ -103,7 +103,7 @@ export class AdminPricingRouteView extends Component {
     console.log(itineraryPricings)
     const { transportCategories } = pricingData
     const {
-      itinerary, itineraryPricingData, stops, detailedItineraries
+      itinerary, itineraryPricingData, stops, detailedItineraries, userPricings
     } = itineraryPricings
     if (!itinerary || !itineraryPricingData) {
       return ''
@@ -221,7 +221,7 @@ export class AdminPricingRouteView extends Component {
     const RoutePricingBox = ({
       routeData, pricingsArr, userId
     }) => {
-      const filteredPricingsArr = userId === ' open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
+      const filteredPricingsArr = userId === 'open' ? pricingsArr : pricingsArr.filter(pr => pr.user_id === userId)
       const inner = filteredPricingsArr.map((pricingObj) => {
         const innerInner = []
         innerInner
@@ -284,7 +284,7 @@ export class AdminPricingRouteView extends Component {
         <RoutePricingBox
           key={v4()}
           routeData={itinerary}
-          pricingsArr={itineraryPricingData}
+          pricingsArr={userPricings}
           transports={transportCategories}
           userId={selectedClient.id}
         />
