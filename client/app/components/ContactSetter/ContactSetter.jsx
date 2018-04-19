@@ -74,9 +74,6 @@ export class ContactSetter extends Component {
   }
 
   showAddressBook (contactType, index) {
-    console.log(contactType)
-    console.log(index)
-
     const modal = (
       <Modal
         component={
@@ -85,6 +82,7 @@ export class ContactSetter extends Component {
             contacts={this.availableContacts(contactType)}
             setContact={(contactData) => {
               this.props.setContact(contactData, contactType, index)
+              this.setState({ modal: null, showModal: false })
             }}
           />
         }
