@@ -222,8 +222,6 @@ export class AdminPricingRouteView extends Component {
     const RoutePricingBox = ({
       routeData, hrArr, rPriceObj, pricingsObj, transports, userId
     }) => {
-      // eslint-disable-next-line no-debugger
-      debugger
       const inner = hrArr.map((hr) => {
         const innerInner = []
         transports.forEach((tr) => {
