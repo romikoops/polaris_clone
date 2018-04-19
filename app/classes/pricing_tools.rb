@@ -17,6 +17,7 @@ module PricingTools
     else
       pricing.pricing_details
     end
+    byebug
     final_pricing = pricing_details.map(&:as_json).reduce({}) { |hash, merged_hash| merged_hash.deep_merge(hash) }
     final_pricing.with_indifferent_access
   end
@@ -34,8 +35,8 @@ module PricingTools
     return {} if charge.nil?
     totals = {"total" => {}}
     charge[direction].each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"] 
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
+      totals[k]["currency"] ||= fee["currency_name"] 
 
       totals[k]["value"] += fee_value(fee, cargo_hash) 
     end
@@ -73,8 +74,8 @@ module PricingTools
     pricing.keys.each do |k|
       fee = pricing[k].clone
 
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"] 
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
+      totals[k]["currency"] ||= fee["currency_name"] 
       
       if fee["hw_rate_basis"]
         totals[k]["value"] += heavy_weight_fee_value(fee, cargo)
@@ -97,8 +98,8 @@ module PricingTools
     totals = {"total" => {}}
     
     pricing.each do |k, fee|
-      totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
-      totals[k]["currency"] ||= fee["currency"] 
+      totals[k]             ||= { "value" => 0, "currency" => fee["currency_name"] }
+      totals[k]["currency"] ||= fee["currency_name"] 
 
       totals[k]["value"] += fee_value(fee, get_cargo_hash(container))
     end

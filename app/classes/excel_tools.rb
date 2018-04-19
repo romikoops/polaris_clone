@@ -1475,19 +1475,17 @@ module ExcelTools
 
     new_pricings.each do |it_key, cargo_pricings|
       cargo_pricings.each do |cargo_key, pricing_data|
-        this_cargo_key = cargo_key.clone()
-        awesome_print cargo_key
-        awesome_print this_cargo_key
+        new_pricing_data = pricing_data.clone()
         transport_category = aux_data[it_key][:tenant_vehicle].vehicle.transport_categories.find_by(name: 'any', cargo_class: cargo_key)
         itinerary = aux_data[it_key][:itinerary]
         user = aux_data[it_key][:customer]
 
         pricing = itinerary.pricings.find_or_create_by!(transport_category: transport_category, tenant: tenant, user: user)
 
-        pricing_details = pricing_data.delete(:data)
-        pricing_exceptions = pricing_data.delete(:exceptions)
+        pricing_details = new_pricing_data.delete(:data)
+        pricing_exceptions = new_pricing_data.delete(:exceptions)
         # external_updated_at = pricing_data.delete(:updated_at)
-        pricing.update(pricing_data)
+        pricing.update(new_pricing_data)
         pricing_details.each do |shipping_type, pricing_detail_data|
           currency = pricing_detail_data.delete(:currency)
           pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: tenant)
