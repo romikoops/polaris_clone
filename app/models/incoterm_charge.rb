@@ -1,0 +1,2 @@
+class IncotermCharge < ApplicationRecord
+end

@@ -1,0 +1,2 @@
+class TenantIncoterm < ApplicationRecord
+end

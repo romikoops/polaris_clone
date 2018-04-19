@@ -1,0 +1,2 @@
+class IncotermLiability < ApplicationRecord
+end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416173637) do
+ActiveRecord::Schema.define(version: 20180419153643) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,6 +147,43 @@ ActiveRecord::Schema.define(version: 20180416173637) do
     t.integer "nexus_id"
   end
 
+  create_table "incoterm_charges", force: :cascade do |t|
+    t.boolean "origin"
+    t.boolean "destination"
+    t.boolean "pre_carriage"
+    t.boolean "on_carriage"
+    t.boolean "freight", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "incoterm_liabilities", force: :cascade do |t|
+    t.boolean "origin"
+    t.boolean "destination"
+    t.boolean "pre_carriage"
+    t.boolean "on_carriage"
+    t.boolean "freight", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "incoterm_scopes", force: :cascade do |t|
+    t.boolean "pre_carriage"
+    t.boolean "on_carriage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "incoterms", force: :cascade do |t|
+    t.string "code"
+    t.string "description"
+    t.integer "incoterm_scope_id"
+    t.integer "incoterm_liability_id"
+    t.integer "incoterm_charge_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "itineraries", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -218,6 +255,53 @@ ActiveRecord::Schema.define(version: 20180416173637) do
     t.string "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pricing_details", force: :cascade do |t|
+    t.decimal "rate"
+    t.string "rate_basis"
+    t.decimal "min"
+    t.decimal "hw_threshold"
+    t.string "hw_rate_basis"
+    t.string "shipping_type"
+    t.jsonb "range", default: []
+    t.string "currency_name"
+    t.bigint "currency_id"
+    t.string "priceable_type"
+    t.bigint "priceable_id"
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["currency_id"], name: "index_pricing_details_on_currency_id"
+    t.index ["priceable_type", "priceable_id"], name: "index_pricing_details_on_priceable_type_and_priceable_id"
+    t.index ["tenant_id"], name: "index_pricing_details_on_tenant_id"
+  end
+
+  create_table "pricing_exceptions", force: :cascade do |t|
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.bigint "pricing_id"
+    t.bigint "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["pricing_id"], name: "index_pricing_exceptions_on_pricing_id"
+    t.index ["tenant_id"], name: "index_pricing_exceptions_on_tenant_id"
+  end
+
+  create_table "pricings", force: :cascade do |t|
+    t.decimal "wm_rate"
+    t.datetime "effective_date"
+    t.datetime "expiration_date"
+    t.bigint "tenant_id"
+    t.bigint "transport_category_id"
+    t.bigint "user_id"
+    t.bigint "itinerary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["itinerary_id"], name: "index_pricings_on_itinerary_id"
+    t.index ["tenant_id"], name: "index_pricings_on_tenant_id"
+    t.index ["transport_category_id"], name: "index_pricings_on_transport_category_id"
+    t.index ["user_id"], name: "index_pricings_on_user_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -292,6 +376,13 @@ ActiveRecord::Schema.define(version: 20180416173637) do
     t.datetime "updated_at", null: false
     t.index ["cargo_item_type_id"], name: "index_tenant_cargo_item_types_on_cargo_item_type_id"
     t.index ["tenant_id"], name: "index_tenant_cargo_item_types_on_tenant_id"
+  end
+
+  create_table "tenant_incoterms", force: :cascade do |t|
+    t.integer "tenant_id"
+    t.integer "incoterm_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tenant_vehicles", force: :cascade do |t|
