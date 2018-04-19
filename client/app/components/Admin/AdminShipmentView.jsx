@@ -15,6 +15,7 @@ import styles from './Admin.scss'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
 import { IncotermRow } from '../Incoterm/Row'
 import ShipmentCard from '../ShipmentCard/ShipmentCard'
+import { IncotermExtras } from '../Incoterm/Extras'
 
 export class AdminShipmentView extends Component {
   static sumCargoFees (cargos) {
@@ -747,6 +748,27 @@ export class AdminShipmentView extends Component {
                     onCarriage={shipment.has_on_carriage}
                     originFees={shipment.has_pre_carriage}
                     destinationFees={shipment.has_on_carriage}
+                    feeHash={feeHash}
+                    tenant={tenant}
+                  />
+                </div>
+              </div>
+            </div>
+          }
+        />
+        <ShipmentCard
+          headingText="Extras"
+          theme={theme}
+          collapsed={collapser.extras}
+          handleCollapser={() => this.handleCollapser('extras')}
+          content={
+            <div className="flex-100">
+              <div className="flex-100 layout-row layout-align-center-center">
+                <div
+                  className="flex-none content_width_booking layout-row layout-align-center-center"
+                >
+                  <IncotermExtras
+                    theme={theme}
                     feeHash={feeHash}
                     tenant={tenant}
                   />

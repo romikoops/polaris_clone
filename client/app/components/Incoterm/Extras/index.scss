@@ -1,0 +1,31 @@
+:local {
+  .incoterm_wrapper {
+    padding: 10px;
+  }
+  .incoterm_wrapper i {
+    font-size: 32px;
+  }
+  .dest_truck {
+    transform: scaleX(-1);
+    -moz-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    -ms-transform: scaleX(-1);
+  }
+  .fee_value {
+    font-size: 12px;
+    margin-top: 10px;
+    vertical-align: baseline;
+    color: lightslategray;
+  }
+  .fee_text {
+    font-size: 14px;
+  }
+  .fee_tile {
+    height: 100px;
+    width: 350px;
+    // box-shadow: 1px 0 0 1px rgba(0,0,0,0.25);
+  }
+  .fee_tile i {
+    margin: 15px;
+  }
+}

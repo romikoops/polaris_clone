@@ -41,11 +41,6 @@ export function IncotermRow ({
   const onCarriageStyle = onCarriage ? selectedStyle : deselectedStyle
   const originDocumentStyle = originFees ? selectedStyle : deselectedStyle
   const destinationDocumentStyle = destinationFees ? selectedStyle : deselectedStyle
-
-  const customsStyle =
-    feeHash && feeHash.customs && feeHash.customs.val ? selectedStyle : deselectedStyle
-  const insuranceStyle =
-    feeHash && feeHash.insurance && feeHash.insurance.val ? selectedStyle : deselectedStyle
   const freightStyle = selectedStyle
 
   const freightFeesValue =
@@ -141,44 +136,6 @@ export function IncotermRow ({
     ) : (
       ''
     )
-  const insuranceFeesValue = feeHash ? (
-    <div
-      className={`${
-        styles.fee_value
-      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
-    >
-      {feeHash.insurance && feeHash.insurance.val ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.insurance.currency}</p>
-      ) : (
-        ''
-      )}
-      <p className="flex-none no_m letter_3 center">
-        {feeHash.insurance && feeHash.insurance.val
-          ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
-          : 'None'}
-      </p>
-    </div>
-  ) : (
-    ''
-  )
-  const customsFeesValue = feeHash ? (
-    <div
-      className={`${
-        styles.fee_value
-      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
-    >
-      {feeHash.customs && feeHash.customs.val ? (
-        <p className="flex-none no_m letter_3 center">{feeHash.customs.currency}</p>
-      ) : (
-        ''
-      )}
-      <p className="flex-none no_m letter_3 center">
-        {feeHash.customs && feeHash.customs.val ? `${parseFloat(feeHash.customs.val).toFixed(2)}` : 'None'}
-      </p>
-    </div>
-  ) : (
-    ''
-  )
   const preCarriageFeesTile = (
     <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
       <div className="flex layout-row layout-align-center-start width_100">
@@ -248,37 +205,11 @@ export function IncotermRow ({
       {scope.detailed_billing && feeHash.cargo ? freightFeesValue : ''}
     </div>
   )
-  const customsFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
-      <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-id-card clip flex-none" style={customsStyle} />
-      </div>
-      <div
-        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
-      >
-        <p className="flex-none no_m">Customs</p>
-      </div>
-      {scope.detailed_billing && feeHash.cargo ? customsFeesValue : ''}
-    </div>
-  )
-  const insuranceFeesTile = (
-    <div className={`${styles.fee_tile} flex layout-column layout-align-none-center`}>
-      <div className="flex layout-row layout-align-center-start width_100">
-        <i className="fa fa-umbrella clip flex-none" style={insuranceStyle} />
-      </div>
-      <div
-        className={`${styles.fee_text} flex-none layout-row layout-align-center-center width_100`}
-      >
-        <p className="flex-none no_m">Insurance</p>
-      </div>
-      {scope.detailed_billing && feeHash.cargo ? insuranceFeesValue : ''}
-    </div>
-  )
   return (
     <div className={`flex-100 layout-row layout-align-start-start  ${styles.incoterm_wrapper}`}>
-      { firstStep ? '' : customsFeesTile } {preCarriageFeesTile} {originFeesTile}
+      {preCarriageFeesTile} {originFeesTile}
       {freightFeesTile} {destinationFeesTile}
-      {onCarriageFeesTile} { firstStep ? '' : insuranceFeesTile}
+      {onCarriageFeesTile}
     </div>
   )
 }
