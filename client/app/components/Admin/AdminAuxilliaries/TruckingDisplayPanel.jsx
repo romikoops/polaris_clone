@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Toggle from 'react-toggle'
+// import Toggle from 'react-toggle'
 import '../../../styles/react-toggle.scss'
 import styles from '../Admin.scss'
 import {
@@ -12,6 +12,7 @@ import {
 import { capitalize, gradientTextGenerator } from '../../../helpers'
 import { NamedSelect } from '../../NamedSelect/NamedSelect'
 
+const rbSchema = rateBasisSchema
 export class TruckingDisplayPanel extends Component {
   static selectFromOptions (options, value) {
     let result
@@ -22,22 +23,57 @@ export class TruckingDisplayPanel extends Component {
     })
     return result || options[0]
   }
-  static cellDisplayGenerator (fee) {
-    const fields = Object.keys(fee).map((fk) => {
-      const feeValue = fk !== 'currency' && fk !== 'rate_basis' ? fee[fk].toFixed(2) : fee[fk]
-      const displayCell = (
-        <div className="flex-20 layout-row layout-wrap">
-          <div className="flex-100 layout-align-start-center">
-            <p className="flex-none no_m">{chargeGlossary[fk]}</p>
-          </div>
-          <div className="flex-100 layout-align-start-center">
-            <p className="flex-none">{feeValue}</p>
-          </div>
+  static rateCellDisplayGenerator (fee, modKey) {
+    if (!fee) {
+      return ''
+    }
+    const modifierString =
+      fee.rate.base === 1 ? `per ${modKey}` : `per ${fee.rate.base} ${modKey}'s`
+    const displayCell = (
+      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
+        <div className="flex-33 layout-align-start-center">
+          <p className="flex-none no_m">
+            {`${parseInt(fee[`min_${modKey}`], 10)} - ${parseInt(
+              fee[`max_${modKey}`],
+              10
+            )}  ${capitalize(modKey)}`}
+          </p>
         </div>
-      )
-      return displayCell
+        <div className="flex-33 layout-align-end-center">
+          <p className="flex-none">{`${fee.rate.currency} ${fee.rate.value.toFixed(2)} ${modifierString}`}</p>
+        </div>
+      </div>
+    )
+    return displayCell
+  }
+  static feeCellDisplayGenerator (fee) {
+    const cells = []
+    const dnrKeys = ['currency', 'rate_basis', 'range', 'key', 'base']
+    Object.keys(fee).forEach((chargeKey) => {
+      if (dnrKeys.indexOf(chargeKey) < 0) {
+        cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+          <p className="flex-none">{chargeGlossary[chargeKey]}</p>
+          <p className="flex">
+            {fee[chargeKey]} {fee.currency}
+          </p>
+        </div>)
+      } else if (chargeKey === 'rate_basis') {
+        cells.push(<div className={`flex-25 layout-row layout-align-none-center ${styles.price_cell}`}>
+          <p className="flex-none">{chargeGlossary[chargeKey]}</p>
+          <p className="flex">{chargeGlossary[fee[chargeKey]]}</p>
+        </div>)
+      }
     })
-    return fields
+    return (
+      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}>
+        <div className={`flex-100 layout-row layout-align-start-center ${styles.price_subheader}`}>
+          <p className="flex-none">
+            {fee.key} - {chargeGlossary[fee.key]}
+          </p>
+        </div>
+        <div className="flex-100 layout-row layout-align-start-center">{cells}</div>
+      </div>
+    )
   }
   constructor (props) {
     super(props)
@@ -55,36 +91,58 @@ export class TruckingDisplayPanel extends Component {
   setAllFromOptions () {
     const { truckingInstance } = this.props
     const { truckingPricing } = truckingInstance
-    const { directionBool } = this.state
-    const directionKey = directionBool ? 'import' : 'export'
-    const newObj = { data: {} }
-    const tmpObj = {}
-    truckingPricing[directionKey].table.forEach((pricing) => {
-      Object.keys(pricing.fees).forEach((key) => {
-        if (!newObj[key]) {
-          newObj[key] = {}
-        }
-        if (!tmpObj[key]) {
-          tmpObj[key] = {}
+    const newObj = { rates: {}, fees: {} }
+    Object.keys(truckingPricing.rates).forEach((modKey) => {
+      if (!newObj.rates[modKey]) {
+        newObj.rates[modKey] = []
+      }
+      truckingPricing.rates[modKey].forEach((pricing, i) => {
+        if (!newObj.rates[modKey][i]) {
+          newObj.rates[modKey][i] = {}
         }
         let opts
-        Object.keys(pricing.fees[key]).forEach((chargeKey) => {
-          if (chargeKey === 'currency') {
-            opts = currencyOptions.slice()
-            newObj[key][chargeKey] = TruckingDisplayPanel.selectFromOptions(
-              opts,
-              pricing.fees[key][chargeKey]
-            )
-          } else if (chargeKey === 'rate_basis') {
-            opts = truckingRateBasises.slice()
-            newObj[key][chargeKey] = TruckingDisplayPanel.selectFromOptions(
-              opts,
-              pricing.fees[key][chargeKey]
-            )
-          }
-        })
+        if (pricing) {
+          Object.keys(pricing.rate).forEach((chargeKey) => {
+            if (chargeKey === 'currency') {
+              opts = currencyOptions.slice()
+              newObj.rates[modKey][i][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+                opts,
+                pricing.rate[chargeKey]
+              )
+            } else if (chargeKey === 'rate_basis') {
+              opts = truckingRateBasises.slice()
+              newObj.rates[modKey][i][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+                opts,
+                pricing.rate[chargeKey]
+              )
+            }
+          })
+        }
       })
     })
+    Object.keys(truckingPricing.fees).forEach((feeKey) => {
+      const fee = truckingPricing.fees[feeKey]
+      if (!newObj.fees[feeKey]) {
+        newObj.fees[feeKey] = {}
+      }
+      let opts
+      Object.keys(fee).forEach((chargeKey) => {
+        if (chargeKey === 'currency') {
+          opts = currencyOptions.slice()
+          newObj.fees[feeKey][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+            opts,
+            fee[chargeKey]
+          )
+        } else if (chargeKey === 'rate_basis') {
+          opts = truckingRateBasises.slice()
+          newObj.fees[feeKey][chargeKey] = TruckingDisplayPanel.selectFromOptions(
+            opts,
+            fee[chargeKey]
+          )
+        }
+      })
+    })
+
     this.setState({ selectOptions: newObj })
   }
   shrinkPanel (key) {
@@ -99,7 +157,8 @@ export class TruckingDisplayPanel extends Component {
     this.setState({ directionBool: !this.state.directionBool })
   }
   toggleEdit (i) {
-    const { editor, pricing } = this.state
+    let { editor } = this.state
+    const { pricing } = this.state
     let tmpPricing
     if (!pricing.modifier) {
       const { truckingInstance } = this.props
@@ -108,53 +167,85 @@ export class TruckingDisplayPanel extends Component {
     } else {
       tmpPricing = pricing
     }
-    editor[i] = !editor[i]
+    if (i) {
+      editor[i] = !editor[i]
+    } else {
+      editor = {}
+    }
     this.setState({ editor, pricing: tmpPricing })
   }
-  handleSelect (selection, i, directionKey) {
+  handleRateSelect (selection, i, modKey) {
     const nameKeys = selection.name.split('-')
+    const tmpPricing = this.state.pricing
+    const tmpSelect = this.state.selectOptions
     if (nameKeys[1] === 'rate_basis') {
-      const price = this.state.pricing[directionKey].table[i].fees[nameKeys[0]]
-      const newSchema = rateBasisSchema[selection.value]
+      const price = this.state.pricing.rates[modKey][i][nameKeys[0]]
+
+      const newSchema = rbSchema[selection.value]
       Object.keys(newSchema).forEach((k) => {
         if (price[k] && newSchema[k] && k !== 'rate_basis') {
           newSchema[k] = price[k]
         }
       })
-      const tmpPricing = this.state.pricing
-      tmpPricing[directionKey].table[i].fees[nameKeys[0]] = newSchema
+      tmpPricing.rates[modKey][i][nameKeys[1]] = newSchema
+      tmpSelect.rates[modKey][i][nameKeys[1]] = selection
 
       this.setState({
         pricing: tmpPricing,
-        selectOptions: {
-          ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[nameKeys[0]],
-            [nameKeys[1]]: selection
-          }
-        }
+        selectOptions: tmpSelect
       })
     } else {
-      const tmpPricing = this.state.pricing
-      tmpPricing[directionKey].table[i].fees[nameKeys[0]][nameKeys[1]] = selection.value
+      tmpPricing.rates[modKey][i][nameKeys[1]] = selection.value
+      tmpSelect.rates[modKey][i][nameKeys[1]] = selection
       this.setState({
         pricing: tmpPricing,
-        selectOptions: {
-          ...this.state.selectOptions,
-          [nameKeys[0]]: {
-            ...this.state.selectOptions[nameKeys[0]],
-            [nameKeys[1]]: selection
-          }
-        }
+        selectOptions: tmpSelect
       })
     }
   }
-  handleChange (event, i, directionKey) {
+  handleFeeSelect (selection, feeKey) {
+    const nameKey = selection.name
+    const tmpPricing = this.state.pricing
+    const tmpSelect = this.state.selectOptions
+    if (nameKey === 'rate_basis') {
+      const price = this.state.pricing.fees[feeKey][nameKey]
+
+      const newSchema = rbSchema[selection.value]
+      Object.keys(newSchema).forEach((k) => {
+        if (price[k] && newSchema[k] && k !== 'rate_basis') {
+          newSchema[k] = price[k]
+        }
+      })
+      tmpPricing.fees[feeKey][nameKey] = newSchema
+      tmpSelect.fees[feeKey][nameKey] = selection
+
+      this.setState({
+        pricing: tmpPricing,
+        selectOptions: tmpSelect
+      })
+    } else {
+      tmpPricing.fees[feeKey][nameKey] = selection.value
+      tmpSelect.fees[feeKey][nameKey] = selection
+      this.setState({
+        pricing: tmpPricing,
+        selectOptions: tmpSelect
+      })
+    }
+  }
+  handleRateChange (event, i, modKey) {
     const { name, value } = event.target
     const { pricing } = this.state
     const nameKeys = name.split('-')
-    pricing[directionKey].table[i].fees[nameKeys[0]][nameKeys[1]] = parseFloat(value)
+    pricing.rates[modKey][i].rate[nameKeys[1]] = parseFloat(value)
 
+    this.setState({
+      pricing
+    })
+  }
+  handleFeeChange (event, feeKey) {
+    const { name, value } = event.target
+    const { pricing } = this.state
+    pricing.fees[feeKey][name] = parseFloat(value)
     this.setState({
       pricing
     })
@@ -166,68 +257,153 @@ export class TruckingDisplayPanel extends Component {
     this.toggleEdit()
   }
 
-  cellEditorGenerator (feeKey, directionKey, i) {
+  rateCellEditorGenerator (modKey, i) {
     const { selectOptions, pricing } = this.state
-    const fee = pricing[directionKey].table[i].fees[feeKey]
+    const fee = pricing.rates[modKey][i]
     const cells = []
-    Object.keys(fee).forEach((chargeKey) => {
-      if (chargeKey !== 'currency' && chargeKey !== 'rate_basis') {
+    Object.keys(fee.rate).forEach((rateKey) => {
+      if (rateKey !== 'currency' && rateKey !== 'rate_basis') {
         cells.push(<div
-          key={chargeKey}
+          key={rateKey}
           className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
         >
-          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
           <div className={`flex-95 layout-row ${styles.editor_input}`}>
             <input
               type="number"
-              value={fee[chargeKey]}
-              onChange={e => this.handleChange(e, i, directionKey)}
-              name={`${feeKey}-${chargeKey}`}
+              value={fee.rate[rateKey].toFixed(2)}
+              onChange={e => this.handleRateChange(e, i, modKey)}
+              name={`rate-${rateKey}`}
             />
           </div>
         </div>)
-      } else if (chargeKey === 'rate_basis') {
+      } else if (rateKey === 'rate_basis') {
         cells.push(<div
-          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+          className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+            styles.price_cell
+          }`}
         >
-          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
           <NamedSelect
-            name={`${fee.key}-${chargeKey}`}
+            name={`rate-${rateKey}`}
             classes={`${styles.select}`}
-            value={selectOptions ? selectOptions[feeKey][chargeKey] : ''}
+            value={selectOptions ? selectOptions.rates[modKey][i][rateKey] : ''}
             options={truckingRateBasises}
             className="flex-100"
-            onChange={e => this.handleSelect(e, i, directionKey)}
+            onChange={e => this.handleRateSelect(e, i, modKey)}
           />
         </div>)
-      } else if (chargeKey === 'currency') {
+      } else if (rateKey === 'currency') {
         cells.push(<div
-          key={chargeKey}
-          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+          key={rateKey}
+          className={`flex-25 layout-row layout-align-none-center layout-wrap ${
+            styles.price_cell
+          }`}
         >
-          <p className="flex-100">{chargeGlossary[chargeKey]}</p>
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
           <div className="flex-95 layout-row">
             <NamedSelect
-              name={`${fee.key}-currency`}
+              name="rate-currency"
               classes={`${styles.select}`}
-              value={selectOptions ? selectOptions[feeKey].currency : ''}
+              value={selectOptions ? selectOptions.rates[modKey][i].currency : ''}
               options={currencyOptions}
               className="flex-100"
-              onChange={e => this.handleSelect(e, i, directionKey)}
+              onChange={e => this.handleRateSelect(e, i, modKey)}
             />
           </div>
         </div>)
       }
     })
-    return cells
+    return (
+      <div className={`${styles.cell_editor_wrapper} flex-100 layout-row layout-wrap`}>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}
+        >
+          <div className="flex layout-align-start-center">
+            <p className="flex-none no_m">{`${parseInt(fee[`min_${modKey}`], 10)} - ${parseInt(
+              fee[`max_${modKey}`],
+              10
+            )} ${capitalize(modKey)}`}</p>
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-space-around-center">{cells}</div>
+      </div>
+    )
+  }
+  feeCellEditorGenerator (feeKey) {
+    const { selectOptions, pricing } = this.state
+    const fee = pricing.fees[feeKey]
+    const cells = []
+    const dnrKeys = ['currency', 'rate_basis', 'key', 'name']
+    Object.keys(fee).forEach((rateKey) => {
+      if (dnrKeys.indexOf(rateKey) < 0) {
+        cells.push(<div
+          key={rateKey}
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
+          <div className={`flex-95 layout-row ${styles.editor_input}`}>
+            <input
+              type="number"
+              value={fee[rateKey].toFixed(2)}
+              onChange={e => this.handleFeeChange(e, feeKey)}
+              name={`${rateKey}`}
+            />
+          </div>
+        </div>)
+      } else if (rateKey === 'rate_basis') {
+        cells.push(<div
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
+          <NamedSelect
+            name={`${rateKey}`}
+            classes={`${styles.select}`}
+            value={selectOptions ? selectOptions.fees[feeKey][rateKey] : ''}
+            options={truckingRateBasises}
+            className="flex-100"
+            onChange={e => this.handleFeeSelect(e, feeKey)}
+          />
+        </div>)
+      } else if (rateKey === 'currency') {
+        cells.push(<div
+          key={rateKey}
+          className={`flex layout-row layout-align-none-center layout-wrap ${styles.price_cell}`}
+        >
+          <p className="flex-100">{chargeGlossary[rateKey]}</p>
+          <div className="flex-95 layout-row">
+            <NamedSelect
+              name="currency"
+              classes={`${styles.select}`}
+              value={selectOptions ? selectOptions.fees[feeKey].currency : ''}
+              options={currencyOptions}
+              className="flex-100"
+              onChange={e => this.handleFeeSelect(e, feeKey)}
+            />
+          </div>
+        </div>)
+      }
+    })
+
+    return (
+      <div className={`${styles.cell_editor_wrapper} flex-100 layout-row layout-wrap`}>
+        <div
+          className={`flex-100 layout-row layout-align-space-between-center ${styles.range_cell}`}
+        >
+          <div className="flex layout-align-start-center">
+            <p className="flex-none no_m">{`${fee.name}`}</p>
+          </div>
+        </div>
+        <div className="flex-100 layout-row layout-align-space-around-center">{cells}</div>
+      </div>
+    )
   }
 
   render () {
     const { theme, truckingInstance } = this.props
     const { truckingPricing } = truckingInstance
-    const { directionBool, editor } = this.state
+    const { editor } = this.state
     const keyObj = {}
-    const directionKey = directionBool ? 'import' : 'export'
     const textStyle =
       theme && theme.colors
         ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
@@ -255,7 +431,7 @@ export class TruckingDisplayPanel extends Component {
     } else if (truckingInstance.city) {
       [keyObj.upperKey] = truckingInstance.city
     } else if (truckingInstance.distance) {
-      [keyObj.upperKey, keyObj.lowerKey] = truckingInstance.distance
+      [keyObj.lowerKey, keyObj.upperKey] = truckingInstance.distance
     }
     if (truckingInstance.zipcode) {
       modifier = 'Zipcode'
@@ -285,43 +461,80 @@ export class TruckingDisplayPanel extends Component {
       background: theme && theme.colors ? theme.colors.primary : 'rgba(0,0,0,0.75)'
     }
     const styleTagJSX = theme ? <style>{toggleCSS}</style> : ''
-    const pricings = truckingPricing[directionKey].table
-    const pricingTables = pricings.map((pricing, i) => {
-      const editable = editor[i]
-      const pricingCells = Object.keys(pricing.fees).map((pk) => {
-        const pr = pricing.fees[pk]
-        return (
-          <div className={`flex-100 layout-row layout-align-start-center ${styles.trucking_cell}`}>
-            <div className="flex-20 layout-row layout-wrap">
-              <div className="flex-100 layout-align-start-center">
-                <p className="flex-none no_m">{chargeGlossary[pk]}:</p>
-              </div>
-            </div>
-            {editable
-              ? this.cellEditorGenerator(pk, directionKey, i)
-              : TruckingDisplayPanel.cellDisplayGenerator(pr)}
-          </div>
-        )
-      })
+
+    const pricingsTypes = Object.keys(truckingPricing.rates).map((modKey) => {
+      const editable = editor[modKey]
+      const pricingTypeCells = truckingPricing.rates[modKey].map((rate, i) =>
+        (editable
+          ? this.rateCellEditorGenerator(modKey, i)
+          : TruckingDisplayPanel.rateCellDisplayGenerator(rate, modKey)))
       const startEdit = (
         <div
-          className="flex-20 layout-row layout-align-end-center"
-          onClick={() => this.toggleEdit(i)}
+          className="flex-15 layout-row layout-align-end-center"
+          onClick={() => this.toggleEdit(modKey)}
         >
           <i className="fa fa-pencil " style={{ color: 'white' }} />
         </div>
       )
       const saveClose = (
-        <div className="flex-20 layout-row layout-align-end-center">
+        <div className="flex-15 layout-row layout-align-end-center">
           <div
             className="flex-50 layout-row layout-align-end-center"
-            onClick={() => this.saveEdit(i)}
+            onClick={() => this.saveEdit(modKey)}
           >
             <i className="fa fa-floppy-o " style={{ color: 'white' }} />
           </div>
           <div
             className="flex-50 layout-row layout-align-end-center"
-            onClick={() => this.toggleEdit(i)}
+            onClick={() => this.toggleEdit(modKey)}
+          >
+            <i className="fa fa-times " style={{ color: 'red' }} />
+          </div>
+        </div>
+      )
+      return truckingPricing.rates[modKey][0] ? (
+        <div
+          className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+            styles.trucking_cell
+          }`}
+        >
+          <div className="flex-100 layout-row layout-wrap">
+            <div
+              className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
+              style={headerStyle}
+            >
+              <p className="flex no_m">{`${capitalize(modKey)} Ranges`}:</p>
+              {editable ? saveClose : startEdit}
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+            {pricingTypeCells}
+          </div>
+        </div>
+      ) : ''
+    })
+    const feeTypes = Object.keys(truckingPricing.fees).map((feeKey) => {
+      const editable = editor[feeKey]
+      const fee = truckingPricing.fees[feeKey]
+      const startEdit = (
+        <div
+          className="flex-15 layout-row layout-align-end-center"
+          onClick={() => this.toggleEdit(feeKey)}
+        >
+          <i className="fa fa-pencil " style={{ color: 'white' }} />
+        </div>
+      )
+      const saveClose = (
+        <div className="flex-15 layout-row layout-align-end-center">
+          <div
+            className="flex-50 layout-row layout-align-end-center"
+            onClick={() => this.saveEdit(feeKey)}
+          >
+            <i className="fa fa-floppy-o " style={{ color: 'white' }} />
+          </div>
+          <div
+            className="flex-50 layout-row layout-align-end-center"
+            onClick={() => this.toggleEdit(feeKey)}
           >
             <i className="fa fa-times " style={{ color: 'red' }} />
           </div>
@@ -329,89 +542,31 @@ export class TruckingDisplayPanel extends Component {
       )
       return (
         <div
-          className={`flex-100 layout-row layout-align-start-center layout-wrap ${
-            styles.trucking_inner_row
+          className={`flex-100 layout-row layout-wrap layout-align-start-center ${
+            styles.trucking_cell
           }`}
         >
-          <div
-            className={`${
-              styles.trucking_fee_header
-            } flex-100 layout-row layout-align-start-center`}
-            style={headerStyle}
-          >
+          <div className="flex-100 layout-row layout-wrap">
             <div
-              className={`flex-15 layout-row layout-align-start-center layout-wrap ${
-                styles.trucking_cell
-              }`}
+              className={`${styles.range_header} flex-100 layout-row layout-align-start-center`}
+              style={headerStyle}
             >
-              <p className={`flex-100 ${styles.trucking_cell_label}`}>Modifier</p>
-              <p className="flex-100 clip " style={textStyle}>
-                {capitalize(truckingPricing.modifier)}
-              </p>
+              <p className="flex no_m">{`${fee.name} Ranges`}:</p>
+              {editable ? saveClose : startEdit}
             </div>
-            <div
-              className={`flex-20 layout-row layout-align-start-center layout-wrap ${
-                styles.trucking_cell
-              }`}
-            >
-              <p className={`flex-100 ${styles.trucking_cell_label}`}>
-                {chargeGlossary[keyObj.cellLowerKey]}
-              </p>
-              <p className="flex-100">{pricing[keyObj.cellLowerKey]}</p>
-            </div>
-            <div
-              className={`flex-20 layout-row layout-align-start-center layout-wrap ${
-                styles.trucking_cell
-              }`}
-            >
-              <p className={`flex-100 ${styles.trucking_cell_label}`}>
-                {chargeGlossary[keyObj.cellUpperKey]}
-              </p>
-              <p className="flex-100">{pricing[keyObj.cellUpperKey]}</p>
-            </div>
-            {pricing.min_value ? (
-              <div
-                className={`flex-20 layout-row layout-align-start-center layout-wrap ${
-                  styles.trucking_cell
-                }`}
-              >
-                <p className={`flex-100 ${styles.trucking_cell_label}`}>
-                  {chargeGlossary.min_value}
-                </p>
-                <p className="flex-100">{pricing.min_value}</p>
-              </div>
-            ) : (
-              ''
-            )}
-            {editable ? saveClose : startEdit}
           </div>
-          <div
-            className={`${
-              styles.trucking_fee_breakdown
-            } flex-100 layout-row layout-align-center-center layout-wrap`}
-          >
-            <div className="flex-100 layout-row layout-align-start-center">
-              <p className={`flex-none no_m ${styles.fee_subtitle}`}>Fee Breakdown:</p>
-            </div>
-            <div className="flex-95 layout-row layout-wrap layout-align-start-start">
-              {pricingCells}
-            </div>
+          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+            {editable
+              ? this.feeCellEditorGenerator(feeKey)
+              : TruckingDisplayPanel.feeCellDisplayGenerator(fee)}
           </div>
         </div>
       )
     })
     return (
-      <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-        <div className="flex-100 layout-row layout-align-end-center">
-          <div
-            className="flex-none layout-row layout-align-center-center"
-            onClick={this.props.closeView}
-          >
-            <i className="fa fa-close clip" style={textStyle} />
-          </div>
-        </div>
+      <div className="flex-90 layout-row layout-align-start-center layout-wrap">
         <div className="flex-100 layout-row layout-align-start-center layout-wrap">
-          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-none clip" style={textStyle}>
               {capitalize(modifier)}
             </h4>
@@ -421,7 +576,7 @@ export class TruckingDisplayPanel extends Component {
             ) : (
               <p className="flex-none">{`${keyObj.lowerKey} - ${keyObj.upperKey}`}</p>
             )}
-            <div className="flex-30 layout-row layout-align-end-center">
+            {/* <div className="flex-30 layout-row layout-align-end-center">
               <p className="flex-none">Toggle Import/Export View</p>
               <div className="flex-5" />
               <Toggle
@@ -431,9 +586,10 @@ export class TruckingDisplayPanel extends Component {
                 checked={directionBool}
                 onChange={e => this.handleDirectionToggle(e)}
               />
-            </div>
+            </div> */}
           </div>
-          {pricingTables}
+          {pricingsTypes}
+          {feeTypes}
         </div>
         {styleTagJSX}
       </div>
@@ -443,7 +599,6 @@ export class TruckingDisplayPanel extends Component {
 TruckingDisplayPanel.propTypes = {
   theme: PropTypes.theme,
   truckingInstance: PropTypes.objectOf(PropTypes.any).isRequired,
-  closeView: PropTypes.func.isRequired,
   adminDispatch: PropTypes.func
 }
 TruckingDisplayPanel.defaultProps = {

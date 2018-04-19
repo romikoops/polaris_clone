@@ -132,21 +132,21 @@ export class ChooseRoute extends Component {
     noMotKeys.forEach((key) => {
       altRoutes.push(...scheduleObj[key])
     })
-    const altRoutestoRender = altRoutes.map(s => (
-      <RouteResult
-        key={v4()}
-        selectResult={this.chooseResult}
-        theme={this.props.theme}
-        originHubs={originHubs}
-        destinationHubs={destinationHubs}
-        fees={shipment.schedules_charges}
-        schedule={s}
-        user={user}
-        pickup={shipment.has_pre_carriage}
-        loadType={shipment.load_type}
-        pickupDate={shipment.planned_pickup_date}
-      />
-    ))
+    // const altRoutestoRender = altRoutes.map(s => (
+    //   <RouteResult
+    //     key={v4()}
+    //     selectResult={this.chooseResult}
+    //     theme={this.props.theme}
+    //     originHubs={originHubs}
+    //     destinationHubs={destinationHubs}
+    //     fees={shipment.schedules_charges}
+    //     schedule={s}
+    //     user={user}
+    //     pickup={shipment.has_pre_carriage}
+    //     loadType={shipment.load_type}
+    //     pickupDate={shipment.planned_pickup_date}
+    //   />
+    // ))
     const focusRoutestoRender = focusRoutes.map(s => (
       <RouteResult
         key={v4()}
@@ -179,7 +179,7 @@ export class ChooseRoute extends Component {
     ))
 
     const limitedFocus = limits.focus ? focusRoutes.slice(0, 5) : focusRoutes
-    const limitedAlts = limits.alt ? altRoutes.slice(0, 5) : altRoutes
+    // const limitedAlts = limits.alt ? altRoutes.slice(0, 5) : altRoutes
     const flash = messages && messages.length > 0 ? <FlashMessages messages={messages} /> : ''
     return (
       <div
@@ -262,13 +262,13 @@ export class ChooseRoute extends Component {
                 ''
               )}
             </div>
-            <div className="flex-100 layout-row layout-wrap">
+            {/* <div className="flex-100 layout-row layout-wrap">
               <div className={`flex-100 layout-row layout-align-start ${styles.route_header}`}>
                 <div className="flex-none">
                   <TextHeading theme={theme} size={3} text="Alternative modes of transport" />
                 </div>
               </div>
-              {altRoutestoRender}
+               {altRoutestoRender}
               {limitedAlts.length !== altRoutes.length ? (
                 <div className="flex-100 layout-row layout-align-center-center">
                   <div
@@ -297,7 +297,7 @@ export class ChooseRoute extends Component {
               ) : (
                 ''
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 

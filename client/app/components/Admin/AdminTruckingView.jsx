@@ -35,12 +35,11 @@ export class AdminTruckingView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loadTypeBool: false,
+      loadTypeBool: true,
+      directionBool: true,
       filteredTruckingPricings: [],
       searchFilter: ''
     }
-    this.viewQuery = this.viewQuery.bind(this)
-    this.closeQueryView = this.closeQueryView.bind(this)
   }
   componentWillMount () {
     if (this.props.truckingDetail && this.props.truckingDetail.truckingPricings) {
@@ -48,23 +47,20 @@ export class AdminTruckingView extends Component {
     }
   }
 
-  viewQuery (query) {
-    this.setState({ currentTruckingPricing: query })
-  }
-  closeQueryView () {
-    this.setState({ currentTruckingPricing: false })
-  }
   filterTruckingPricingsByType (pricings) {
-    const { loadTypeBool } = this.state
+    const { loadTypeBool, directionBool } = this.state
     const loadTypeKey = loadTypeBool ? 'container' : 'cargo_item'
-    return pricings.filter(pr => pr.truckingPricing.load_type === loadTypeKey)
+    const directionKey = directionBool ? 'pre' : 'on'
+    return pricings
+      .filter(pr => pr.truckingPricing.load_type === loadTypeKey)
+      .filter(pr => pr.truckingPricing.carriage === directionKey)
   }
 
   toggleNew () {
     this.setState({ newRow: !this.state.newRow })
   }
   selectTruckingPricing (truckingPricing) {
-    this.setState({ currentTruckingPricing: truckingPricing })
+    this.setState({ currentTruckingPricing: truckingPricing.truckingPricing.id })
   }
   handleUpload (file, dir, type) {
     const { adminDispatch, truckingDetail } = this.props
@@ -73,9 +69,16 @@ export class AdminTruckingView extends Component {
     adminDispatch.uploadTrucking(url, file, dir)
   }
   handleLoadTypeToggle (value) {
-    const { searchFilter } = this.state
-    this.setState({ loadTypeBool: !this.state.loadTypeBool })
-    this.handleSearchChange({ target: { value: searchFilter } })
+    // const { searchFilter } = this.state
+    this.setState({ loadTypeBool: !this.state.loadTypeBool }, function () {
+      this.handleSearchChange({ target: { value: '' } })
+    })
+  }
+  handleDirectionToggle (value) {
+    // const { searchFilter } = this.state
+    this.setState({ directionBool: !this.state.directionBool }, function () {
+      this.handleSearchChange({ target: { value: '' } })
+    })
   }
   closeSuccessDialog () {
     const { documentDispatch } = this.props
@@ -124,7 +127,8 @@ export class AdminTruckingView extends Component {
       filteredTruckingPricings,
       searchFilter,
       currentTruckingPricing,
-      loadTypeBool
+      loadTypeBool,
+      directionBool
     } = this.state
     const uploadStatus = document.viewer ? (
       <AdminUploadsSuccess
@@ -155,25 +159,25 @@ export class AdminTruckingView extends Component {
         />
       </div>
     )
+    const truckingPricingToDisplay =
+      truckingDetail.truckingPricings
+        .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
     const displayPanel = (
       <TruckingDisplayPanel
         theme={theme}
-        truckingInstance={currentTruckingPricing}
+        truckingInstance={truckingPricingToDisplay}
         closeView={this.closeQueryView}
         adminDispatch={adminDispatch}
       />
     )
     const toggleCSS = `
       .react-toggle--checked .react-toggle-track {
-        background: linear-gradient(
-          90deg,
-          ${theme.colors.brightPrimary} 0%,
-          ${theme.colors.brightSecondary} 100%
-        ) !important;
+        background: 
+          ${theme.colors.brightPrimary} !important;
         border: 0.5px solid rgba(0, 0, 0, 0);
       }
       .react-toggle-track {
-        background: rgba(0, 0, 0, 0.75);
+        background: ${theme.colors.brightSecondary} !important;
       }
       .react-toggle:hover .react-toggle-track{
         background: rgba(0, 0, 0, 0.5) !important;
@@ -261,8 +265,8 @@ export class AdminTruckingView extends Component {
           <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
             <div className="flex-25 layout-row layout-align-center-start layout-wrap">
               <div className="flex-100 layout-row layout-align-space-between-center">
-                <div className="flex-none layout-row layout-align-end-center">
-                  <p className="flex-none">Toggle FCL/LCL View</p>
+                <div className="flex-90 layout-row layout-align-space-between-center">
+                  <p className="flex-none">LCL</p>
                   <div className="flex-5" />
                   <Toggle
                     className="flex-none"
@@ -271,6 +275,23 @@ export class AdminTruckingView extends Component {
                     checked={loadTypeBool}
                     onChange={e => this.handleLoadTypeToggle(e)}
                   />
+                  <div className="flex-5" />
+                  <p className="flex-none">FCL</p>
+                </div>
+              </div>
+              <div className="flex-100 layout-row layout-align-space-between-center">
+                <div className="flex-90 layout-row layout-align-space-between-center">
+                  <p className="flex-none">Export</p>
+                  <div className="flex-5" />
+                  <Toggle
+                    className="flex-none"
+                    id="unitView"
+                    name="unitView"
+                    checked={directionBool}
+                    onChange={e => this.handleDirectionToggle(e)}
+                  />
+                  <div className="flex-5" />
+                  <p className="flex-none">Import</p>
                 </div>
               </div>
               <div className="flex-100 layout-row layout-alignstart-center input_box_full">
@@ -289,7 +310,7 @@ export class AdminTruckingView extends Component {
                 {searchResults}
               </div>
             </div>
-            <div className="flex-75 layout-row layout-align-start-start layout-wrap">
+            <div className="flex-75 layout-row layout-align-center-start layout-wrap">
               {truckView}
             </div>
           </div>

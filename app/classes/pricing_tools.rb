@@ -42,7 +42,6 @@ module PricingTools
     charge[direction].each do |k, fee|
       totals[k]             ||= { "value" => 0, "currency" => fee["currency"] }
       totals[k]["currency"] ||= fee["currency"] 
-
       totals[k]["value"] += fee_value(fee, cargo_hash) 
     end
     converted = sum_and_convert_cargo(totals, user.currency)
@@ -198,13 +197,14 @@ module PricingTools
 
   def handle_range_fee(fee, cargo_hash)
     weight_kg = cargo_hash[:weight]
+    min = fee["min"] || 0
     case fee["rate_basis"]
     when 'PER_KG_RANGE'
       fee_range = fee["range"].find do |range|
         weight_kg >= range["min"] && weight_kg <= range["max"]
       end
       value = fee_range.nil? ? 0 : fee_range["rate"] * weight_kg
-      return value
+      return [value, min].max
     end
 
     nil
@@ -245,6 +245,10 @@ module PricingTools
       (fee["value"] || fee["rate"]).to_d * cargo_hash[:quantity]
     when "PER_CBM"
       fee["value"].to_d * cargo_hash[:volume]
+    when "PER_KG"
+      val = fee["value"].to_d * cargo_hash[:weight]
+      min = fee["min"] || 0
+      [val, min].max
     when "PER_CBM_TON"
       cbm = cargo_hash[:volume] * fee["cbm"]
       ton = (cargo_hash[:weight] / 1000) * fee["ton"]

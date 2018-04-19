@@ -109,7 +109,7 @@ module TruckingTools
     return {} if cargo_values['weight'] == 0
     # 
     # trucking_pricing['rates'].each do |_tr|
-      byebug
+      
       case trucking_pricing.modifier
       when 'kg'
         trucking_pricing['rates']['kg'].each do |rate|

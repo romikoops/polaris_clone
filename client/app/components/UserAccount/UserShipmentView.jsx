@@ -15,10 +15,10 @@ import { capitalize, gradientTextGenerator } from '../../helpers'
 import '../../styles/select-css-custom.css'
 import FileUploader from '../FileUploader/FileUploader'
 import FileTile from '../FileTile/FileTile'
-import { RoundButton } from '../RoundButton/RoundButton'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { IncotermRow } from '../Incoterm/Row'
 import ShipmentCard from '../ShipmentCard/ShipmentCard'
+import { IncotermExtras } from '../Incoterm/Extras'
 
 const StyledSelect = styled(Select)`
   .Select-control {
@@ -169,7 +169,7 @@ export class UserShipmentView extends Component {
     } = this.props
 
     if (!shipmentData || !hubs || !user) {
-      return <h1>NO DATA</h1>
+      return ''
     }
     const {
       contacts,
@@ -332,17 +332,6 @@ export class UserShipmentView extends Component {
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div className={`flex-100 layout-row layout-align-end-center ${styles.sec_title}`}>
-          <RoundButton
-            theme={theme}
-            text="Back"
-            size="small"
-            back
-            iconClass="fa-angle-left"
-            handleNext={this.back}
-          />
-        </div>
-
         <ShipmentCard
           headingText="Overview"
           theme={theme}
@@ -462,7 +451,27 @@ export class UserShipmentView extends Component {
             </div>
           }
         />
-
+        <ShipmentCard
+          headingText="Extras"
+          theme={theme}
+          collapsed={collapser.extras}
+          handleCollapser={() => this.handleCollapser('extras')}
+          content={
+            <div className="flex-100">
+              <div className="flex-100 layout-row layout-align-center-center">
+                <div
+                  className="flex-none content_width_booking layout-row layout-align-center-center"
+                >
+                  <IncotermExtras
+                    theme={theme}
+                    feeHash={feeHash}
+                    tenant={tenant}
+                  />
+                </div>
+              </div>
+            </div>
+          }
+        />
         <ShipmentCard
           headingText="Contact Details"
           theme={theme}

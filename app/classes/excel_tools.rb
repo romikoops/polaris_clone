@@ -285,6 +285,142 @@ module ExcelTools
     {results: results, stats: stats}
   end
 
+  def overwrite_distance_trucking_rates_by_hub(params, _user = current_user, hub_id, courier_name, direction, country_code)
+    courier = Courier.find_or_create_by(name: courier_name)
+    p direction
+
+    stats = {
+      type: "trucking",
+      trucking_hubs: {
+        number_updated: 0,
+        number_created: 0,
+      },
+      trucking_queries: {
+        number_updated: 0,
+        number_created: 0,
+      },
+      trucking_pricings: {
+        number_updated: 0,
+        number_created: 0,
+      },
+    }
+
+    results = {
+      trucking_hubs: [],
+      trucking_queries: [],
+      trucking_pricings: [],
+    }
+
+    load_type = "container"
+    xlsx = Roo::Spreadsheet.open(params["xlsx"])
+
+    xlsx.sheets.each do |sheet_name|
+      first_sheet = xlsx.sheet(sheet_name)
+      hub = Hub.find(hub_id)
+      nexus = hub.nexus
+      rows = first_sheet.parse(
+        currency: "CURRENCY",
+        truck_type: "TRUCK_TYPE",
+        fee: "FEE",
+        rate: "RATE",
+        rate_basis: "RATE_BASIS",
+        range: "RANGE",
+        rate_min: "RATE_MIN",
+        rate_base_value: "RATE_BASE_VALUE",
+        x_base: "X_BASE",
+      )
+      new_pricings_data = {}
+      aux_data = {}
+      hub_truckings = {}
+      trucking_destinations = {}
+      trucking_pricings = {}
+
+      rows.each do |row|
+        range_values = row[:range].split("-").map(&:to_i)
+        range_key = "#{row[:range]}_#{row[:truck_type]}"
+        p range_key
+        hub_truckings[range_key] = [] unless hub_truckings[range_key]
+        unless trucking_destinations[range_key]
+          trucking_destinations[range_key] = []
+        end
+        unless new_pricings_data[range_key]
+          new_pricings_data[range_key] = {fees: {}}
+          td = TruckingDestination.find_or_create_by!(distance: range_values[0], country_code: country_code)
+          trucking_destinations[range_key] << td
+          hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
+          hub_truckings[range_key] << hub_trucking
+
+          aux_data[range_key] = {} unless aux_data[range_key]
+
+          if hub_truckings[range_key][0].trucking_pricing_id && hub_truckings[range_key][0].trucking_pricing.load_type == row[:truck_type]
+            p hub_truckings[range_key][0].trucking_pricing_id
+            trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
+            trucking_pricings[range_key][direction]["table"] = []
+
+            ((range_values[0] + 1)...range_values[1]).each do |dist|
+              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
+              trucking_destinations[range_key] << td
+              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, trucking_pricing_id: trucking_pricings[range_key])
+              hub_truckings[range_key] << hub_trucking
+            end
+          else
+            trucking_pricings[range_key] = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: {table: []}, import: {table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: "unit")
+            trucking_destinations[range_key] = []
+            hub_truckings[range_key] = []
+            (range_values[0]...range_values[1]).each do |dist|
+              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
+              trucking_destinations[range_key] << td
+              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, trucking_pricing_id: trucking_pricings[range_key])
+              hub_truckings[range_key] << hub_trucking
+            end
+          end
+        end
+        case row[:rate_basis]
+        when "PER_CONTAINER"
+          new_pricings_data[range_key][:fees][row[:fee]] = {
+            rate_basis: "PER_CONTAINER",
+            rate: row[:rate],
+            currency: row[:currency],
+          }
+        when "PERCENTAGE"
+          new_pricings_data[range_key][:fees][row[:fee]] = {
+            rate_basis: "PERCENTAGE",
+            value: row[:rate],
+            currency: row[:currency],
+          }
+        when "PER_X_KM"
+          new_pricings_data[range_key][:fees][row[:fee]] = {
+            rate_basis: "PER_X_KM",
+            rate: row[:rate],
+            rate_base_value: row[:rate_base_value],
+            x_base: row[:x_base],
+            currency: row[:currency],
+          }
+        end
+        stats[:trucking_pricings][:number_updated] += 1
+      end
+
+      new_pricings_data.each do |range_key, fees|
+        trucking_pricings[range_key][direction]["table"] << fees
+      end
+
+      hub_truckings.each do |r_key, hts|
+        hts.each do |ht|
+          unless ht.trucking_pricing_id
+            ht.trucking_pricing_id = trucking_pricings[r_key].id
+          end
+          ht.save!
+        end
+      end
+      trucking_pricings.each do |_r_key, tp|
+        tp.save!
+      end
+
+      stats[:trucking_queries][:number_updated] += 1
+    end
+    {stats: stats, results: results}
+  end
+
   def overwrite_zonal_trucking_rates_by_hub(params, _user = current_user, hub_id)
     stats = {
       type: "trucking",
@@ -600,7 +736,7 @@ module ExcelTools
             SELECT EXISTS(SELECT 1 FROM matching_tp_id_table)
           ) THEN
             #{with_statement}
-            UPDATE trucking_pricings SET (rates, fees) = #{tp.to_postgres_insertable(%w(rates fees))}
+            UPDATE trucking_pricings SET (fees, rates) = #{tp.to_postgres_insertable(%w(fees rates))}
             WHERE trucking_pricings.id IN (SELECT id FROM matching_tp_id_table);
           ELSE
             #{with_statement},
@@ -741,142 +877,6 @@ module ExcelTools
     {stats: stats, results: results}
   end
 
-  def overwrite_distance_trucking_rates_by_hub(params, _user = current_user, hub_id, courier_name, direction, country_code)
-    courier = Courier.find_or_create_by(name: courier_name)
-    p direction
-
-    stats = {
-      type: "trucking",
-      trucking_hubs: {
-        number_updated: 0,
-        number_created: 0,
-      },
-      trucking_queries: {
-        number_updated: 0,
-        number_created: 0,
-      },
-      trucking_pricings: {
-        number_updated: 0,
-        number_created: 0,
-      },
-    }
-
-    results = {
-      trucking_hubs: [],
-      trucking_queries: [],
-      trucking_pricings: [],
-    }
-
-    load_type = "container"
-    xlsx = Roo::Spreadsheet.open(params["xlsx"])
-
-    xlsx.sheets.each do |sheet_name|
-      first_sheet = xlsx.sheet(sheet_name)
-      hub = Hub.find(hub_id)
-      nexus = hub.nexus
-      rows = first_sheet.parse(
-        currency: "CURRENCY",
-        truck_type: "TRUCK_TYPE",
-        fee: "FEE",
-        rate: "RATE",
-        rate_basis: "RATE_BASIS",
-        range: "RANGE",
-        rate_min: "RATE_MIN",
-        rate_base_value: "RATE_BASE_VALUE",
-        x_base: "X_BASE",
-      )
-      new_pricings_data = {}
-      aux_data = {}
-      hub_truckings = {}
-      trucking_destinations = {}
-      trucking_pricings = {}
-
-      rows.each do |row|
-        range_values = row[:range].split("-").map(&:to_i)
-        range_key = "#{row[:range]}_#{row[:truck_type]}"
-        p range_key
-        hub_truckings[range_key] = [] unless hub_truckings[range_key]
-        unless trucking_destinations[range_key]
-          trucking_destinations[range_key] = []
-        end
-        unless new_pricings_data[range_key]
-          new_pricings_data[range_key] = {fees: {}}
-          td = TruckingDestination.find_or_create_by!(distance: range_values[0], country_code: country_code)
-          trucking_destinations[range_key] << td
-          hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id)
-          hub_truckings[range_key] << hub_trucking
-
-          aux_data[range_key] = {} unless aux_data[range_key]
-
-          if hub_truckings[range_key][0].trucking_pricing_id && hub_truckings[range_key][0].trucking_pricing.load_type == row[:truck_type]
-            p hub_truckings[range_key][0].trucking_pricing_id
-            trucking_pricings[range_key] = hub_truckings[range_key][0].trucking_pricing
-            trucking_pricings[range_key][direction]["table"] = []
-
-            ((range_values[0] + 1)...range_values[1]).each do |dist|
-              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
-              trucking_destinations[range_key] << td
-              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, trucking_pricing_id: trucking_pricings[range_key])
-              hub_truckings[range_key] << hub_trucking
-            end
-          else
-            trucking_pricings[range_key] = courier.trucking_pricings.create!(tenant_id: hub.tenant_id, export: {table: []}, import: {table: []}, load_type: load_type, truck_type: row[:truck_type], modifier: "unit")
-            trucking_destinations[range_key] = []
-            hub_truckings[range_key] = []
-            (range_values[0]...range_values[1]).each do |dist|
-              td = TruckingDestination.find_or_create_by!(distance: dist, country_code: country_code)
-              trucking_destinations[range_key] << td
-              hub_trucking = HubTrucking.find_or_initialize_by(trucking_destination_id: td.id, hub_id: hub.id, trucking_pricing_id: trucking_pricings[range_key])
-              hub_truckings[range_key] << hub_trucking
-            end
-          end
-        end
-        case row[:rate_basis]
-        when "PER_CONTAINER"
-          new_pricings_data[range_key][:fees][row[:fee]] = {
-            rate_basis: "PER_CONTAINER",
-            rate: row[:rate],
-            currency: row[:currency],
-          }
-        when "PERCENTAGE"
-          new_pricings_data[range_key][:fees][row[:fee]] = {
-            rate_basis: "PERCENTAGE",
-            value: row[:rate],
-            currency: row[:currency],
-          }
-        when "PER_X_KM"
-          new_pricings_data[range_key][:fees][row[:fee]] = {
-            rate_basis: "PER_X_KM",
-            rate: row[:rate],
-            rate_base_value: row[:rate_base_value],
-            x_base: row[:x_base],
-            currency: row[:currency],
-          }
-        end
-        stats[:trucking_pricings][:number_updated] += 1
-      end
-
-      new_pricings_data.each do |range_key, fees|
-        trucking_pricings[range_key][direction]["table"] << fees
-      end
-
-      hub_truckings.each do |r_key, hts|
-        hts.each do |ht|
-          unless ht.trucking_pricing_id
-            ht.trucking_pricing_id = trucking_pricings[r_key].id
-          end
-          ht.save!
-        end
-      end
-      trucking_pricings.each do |_r_key, tp|
-        tp.save!
-      end
-
-      stats[:trucking_queries][:number_updated] += 1
-    end
-    {stats: stats, results: results}
-  end
-
   def overwrite_local_charges(params, user = current_user)
 
     stats = {
@@ -953,11 +953,11 @@ module ExcelTools
           when "PER_CONTAINER"
             charge = {currency: row[:currency], value: row[:container], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_BILL"
-            charge = {currency: row[:currency], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:bill], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_CBM"
-            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_KG"
-            charge = {currency: row[:currency], value: row[:cbm], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
+            charge = {currency: row[:currency], min: row[:minimum], value: row[:kg], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_TON"
             charge = {currency: row[:currency], ton: row[:ton], min: row[:minimum], rate_basis: row[:rate_basis], key: row[:fee_code], name: row[:fee]}
           when "PER_WM"
@@ -1107,6 +1107,9 @@ module ExcelTools
 
     schedules.each do |row|
       itinerary = Itinerary.find_by(name: "#{row[:from]} - #{row[:to]}", mode_of_transport: mot)
+      if !itinerary
+        next
+      end
       service_level = row[:service_level] ? row[:service_level] : "default"
 
       tenant_vehicle = TenantVehicle.find_by(
@@ -1478,10 +1481,12 @@ module ExcelTools
         end
       else
         unless new_pricings[pricing_key][cargo_type][:data][row[:fee]]
+          
           new_pricings[pricing_key][cargo_type][:data][row[:fee]] = {
             rate: row[:rate],
             rate_basis: row[:rate_basis],
             currency: row[:currency],
+            min_value: row[:rate_min]
           }
         end
 
@@ -1496,6 +1501,7 @@ module ExcelTools
         end
 
         if row[:min_range]
+          
           new_pricings[pricing_key][cargo_type][:data][row[:fee]].delete("rate")
           unless new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range]
             new_pricings[pricing_key][cargo_type][:data][row[:fee]][:range] = []
