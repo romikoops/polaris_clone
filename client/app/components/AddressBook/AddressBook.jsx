@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react'
+import React from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './AddressBook.scss'
-import { ContactCard } from '../ContactCard/ContactCard'
+import ContactCard from '../ContactCard'
 
-export class AddressBook extends PureComponent {
-  render () {
-    const { theme, contacts, setContact } = this.props
-
-    const contactCards =
-      contacts &&
-      contacts.map(contact => (
+export default function AddressBook ({
+  theme, contacts, setContact, title
+}) {
+  const contactCards =
+    contacts &&
+    contacts.map(contact => (
+      <div className="flex-50" style={{ padding: '15px' }}>
         <ContactCard
           contactData={contact}
           theme={theme}
@@ -18,20 +18,25 @@ export class AddressBook extends PureComponent {
           key={v4()}
           popOutHover
         />
-      ))
+      </div>
+    ))
 
-    return (
-      <div style={{ height: '50vh', width: '70vw' }}>
+  return (
+    <div className={styles.address_book}>
+      <div className={`${styles.title_sec} layout-row layout-align-center`}>
+        { title }
+      </div>
+      <div className={styles.wrapper_contact_cards}>
         <div
           className={`
-            ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-center-start
+            ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-start
           `}
         >
           {contactCards}
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 AddressBook.propTypes = {
@@ -44,5 +49,3 @@ AddressBook.defaultProps = {
   contacts: [],
   theme: null
 }
-
-export default AddressBook

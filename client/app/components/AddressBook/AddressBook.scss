@@ -1,9 +1,20 @@
 :local {
+	.address_book {
+		height: 60vh;
+		width: 70vw;
+	}
+	.title_sec {
+		height: 110px;
+	}
+	.wrapper_contact_cards {
+    border: 0.5px solid #828282;
+    padding: 10px;
+	}
   .contact_scroll {
     padding: 10px;
     overflow-y: scroll;
     overflow-x: none;
     width: 100%;
-    height: 100%;
+    height: calc(56vh - 110px);
   }
 }

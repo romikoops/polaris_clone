@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
 // import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
-import { AddressBook } from '../AddressBook/AddressBook'
+import AddressBook from '../AddressBook/AddressBook'
 import { Modal } from '../Modal/Modal'
 import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
 import { isEmpty, nameToDisplay } from '../../helpers'
+import ContactSetterAddressBookTitle from './AddressBookTitle'
 
 nameToDisplay('...')
 export class ContactSetter extends Component {
@@ -84,6 +85,7 @@ export class ContactSetter extends Component {
               this.props.setContact(contactData, contactType, index)
               this.setState({ modal: null, showModal: false })
             }}
+            title={<ContactSetterAddressBookTitle contactType={contactType} />}
           />
         }
         verticalPadding="30px"
