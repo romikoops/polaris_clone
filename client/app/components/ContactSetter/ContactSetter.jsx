@@ -35,10 +35,6 @@ export class ContactSetter extends Component {
       : ['consignee', 'shipper', 'notifyee']
 
     this.state = {
-      contactData: {
-        type: this.contactTypes[0],
-        ...this.newContactData
-      },
       modal: '',
       showModal: false
     }
@@ -46,25 +42,6 @@ export class ContactSetter extends Component {
 
   setContactForEdit (contactData) {
     this.setState({ contactData, showModal: true })
-  }
-
-  setContact (contactData) {
-    const { type, index } = this.state.contactData
-
-    const newState = {
-      contactData: Object.assign({}, this.newContactData)
-    }
-    const nextType = this.nextUnsetContactType(type)
-
-    this.props.setContact(contactData, type, index)
-
-    if (nextType === 'notifyee') {
-      this.setState({ showModal: false })
-      return
-    }
-    newState.contactData.type = nextType
-
-    this.setState(newState)
   }
 
   autofillContact (contactData) {
@@ -76,18 +53,13 @@ export class ContactSetter extends Component {
       }
     })
   }
-  nextUnsetContactType (thisType) {
-    return this.contactTypes.slice(0, 2).find(type => (
-      isEmpty(this.props[type]) && type !== thisType
-    )) || 'notifyee'
-  }
 
-  availableContacts () {
+  availableContacts (contactType) {
     const {
       userLocations, shipper, consignee, notifyees
     } = this.props
     let { contacts } = this.props
-    if (this.state.contactData.type === this.contactTypes[0]) {
+    if (contactType === this.contactTypes[0]) {
       contacts = [...userLocations, ...contacts]
     }
     return contacts.filter(contactData => (
@@ -101,14 +73,19 @@ export class ContactSetter extends Component {
     this.setState({ showModal: !this.state.showModal })
   }
 
-  showAddressBook (contactType) {
+  showAddressBook (contactType, index) {
+    console.log(contactType)
+    console.log(index)
+
     const modal = (
       <Modal
         component={
           <AddressBook
             theme={this.props.theme}
-            contacts={this.availableContacts()}
-            setContact={contactData => this.setContact(contactData)}
+            contacts={this.availableContacts(contactType)}
+            setContact={(contactData) => {
+              this.props.setContact(contactData, contactType, index)
+            }}
           />
         }
         verticalPadding="30px"
@@ -122,7 +99,7 @@ export class ContactSetter extends Component {
     const {
       theme, shipper, consignee, notifyees
     } = this.props
-    const { showModal, modal } = this.state // contactData
+    const { showModal, modal } = this.state
 
     return (
       <div
@@ -149,7 +126,7 @@ export class ContactSetter extends Component {
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
-              showAddressBook={contactType => this.showAddressBook(contactType)}
+              showAddressBook={(contactType, index) => this.showAddressBook(contactType, index)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
             />

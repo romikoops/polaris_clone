@@ -54,7 +54,12 @@ export class ShipmentContactsBox extends Component {
             />
           </div>
           <div className="flex-100 layout-row layout-wrap">
-            <ShipmentContactsBoxNotifyeeContacts theme={theme} notifyees={notifyees} />
+            <ShipmentContactsBoxNotifyeeContacts
+              theme={theme}
+              notifyees={notifyees}
+              showAddressBook={showAddressBook}
+              removeFunc={this.props.removeNotifyee}
+            />
           </div>
         </div>
       </div>
@@ -63,7 +68,7 @@ export class ShipmentContactsBox extends Component {
 }
 ShipmentContactsBox.propTypes = {
   theme: PropTypes.theme,
-  // removeNotifyee: PropTypes.func.isRequired,
+  removeNotifyee: PropTypes.func.isRequired,
   consignee: PropTypes.shape({
     companyName: PropTypes.string,
     firstName: PropTypes.string,

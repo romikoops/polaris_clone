@@ -7,8 +7,10 @@ import { RoundButton } from '../../../RoundButton/RoundButton'
 export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
   contactType, theme, showAddressBook
 }) {
-  const showError = false // TBD - finishBookingAttempted && type !== 'notifyee'
-  const requiredSpanStyles = { left: '15px', top: '14px', fontSize: '17px' }
+  const showError = false // TBD - finishBookingAttempted
+  const requiredSpanStyles = {
+    left: '10px', top: '10px', bottom: 'unset', fontSize: '14px'
+  }
   const requiredSpan = (
     <span
       className={errors.error_message}

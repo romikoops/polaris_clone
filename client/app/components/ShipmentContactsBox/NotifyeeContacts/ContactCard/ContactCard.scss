@@ -1,0 +1,30 @@
+:local {
+	.contact_card {
+		background: #F2F2F2;
+		padding: 20px;
+		position: relative;
+		h3.contact_name {
+			margin: 0;
+			font-size: 18px;
+			span.secondary_info {
+				font-size: 14px;
+				font-weight: normal;
+			}
+		}
+		i.user_icon {
+			margin-right: 12px;
+			padding: 0 2px;
+		}
+		i.remove_icon {
+			position: absolute;
+			right: 30px;
+			font-size: 30px;
+			opacity: 0.3;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			&:hover {
+				opacity: 0.7;
+			}
+		}
+	}
+}
