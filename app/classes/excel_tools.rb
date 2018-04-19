@@ -1107,6 +1107,9 @@ module ExcelTools
 
     schedules.each do |row|
       itinerary = Itinerary.find_by(name: "#{row[:from]} - #{row[:to]}", mode_of_transport: mot)
+      if !itinerary
+        next
+      end
       service_level = row[:service_level] ? row[:service_level] : "default"
 
       tenant_vehicle = TenantVehicle.find_by(
