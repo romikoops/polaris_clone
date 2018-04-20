@@ -1,11 +1,11 @@
 import React from 'react'
 import Truncate from 'react-truncate'
 import { v4 } from 'node-uuid'
-import PropTypes from '../../../../prop-types'
+import PropTypes from '../../../../../prop-types'
 import styles from './ContactCard.scss'
-import { gradientTextGenerator } from '../../../../helpers'
+import { gradientTextGenerator } from '../../../../../helpers'
 
-export default function ShipmentContactsBoxNotifyeeContactsContactCard ({
+export default function ContactSetterBodyNotifyeeContactsContactCard ({
   theme, contactData, removeFunc
 }) {
   const { contact } = contactData
@@ -15,8 +15,8 @@ export default function ShipmentContactsBoxNotifyeeContactsContactCard ({
 
   const removeIcon = (
     <i
-    	className={`${styles.remove_icon} fa fa-trash`}
-    	onClick={() => removeFunc()}
+      className={`${styles.remove_icon} fa fa-trash`}
+      onClick={() => removeFunc()}
     />
   )
 
@@ -39,7 +39,7 @@ export default function ShipmentContactsBoxNotifyeeContactsContactCard ({
   )
 }
 
-ShipmentContactsBoxNotifyeeContactsContactCard.propTypes = {
+ContactSetterBodyNotifyeeContactsContactCard.propTypes = {
   contactData: PropTypes.shape({
     contact: PropTypes.object,
     location: PropTypes.object
@@ -48,7 +48,7 @@ ShipmentContactsBoxNotifyeeContactsContactCard.propTypes = {
   removeFunc: PropTypes.func
 }
 
-ShipmentContactsBoxNotifyeeContactsContactCard.defaultProps = {
+ContactSetterBodyNotifyeeContactsContactCard.defaultProps = {
   theme: null,
   removeFunc: null
 }

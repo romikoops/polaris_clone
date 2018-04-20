@@ -6,7 +6,7 @@ import ContactCard from '../ContactCard'
 import AddressBookAddContactButton from './AddContactButton'
 
 export default function AddressBook ({
-  theme, contacts, setContact, title
+  theme, contacts, setContact
 }) {
   const contactCards =
     contacts &&
@@ -27,19 +27,12 @@ export default function AddressBook ({
   ))
 
   return (
-    <div className={styles.address_book}>
-      <div className={`${styles.title_sec} layout-row layout-align-center`}>
-        { title }
-      </div>
-      <div className={styles.wrapper_contact_cards}>
-        <div
-          className={`
-            ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-start
-          `}
-        >
-          {contactCards}
-        </div>
-      </div>
+    <div
+      className={`
+        ${styles.contact_scroll} flex-100 layout-row layout-wrap layout-align-start
+      `}
+    >
+      {contactCards}
     </div>
   )
 }

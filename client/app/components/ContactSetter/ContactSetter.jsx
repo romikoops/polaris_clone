@@ -2,12 +2,10 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
-// import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
-import AddressBook from '../AddressBook/AddressBook'
 import { Modal } from '../Modal/Modal'
-import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
+import ContactSetterBody from './Body'
 import { isEmpty, nameToDisplay } from '../../helpers'
-import ContactSetterAddressBookTitle from './AddressBookTitle'
+import ContactSetterNewContactWrapper from './NewContactWrapper'
 
 nameToDisplay('...')
 export class ContactSetter extends Component {
@@ -78,14 +76,23 @@ export class ContactSetter extends Component {
     const modal = (
       <Modal
         component={
-          <AddressBook
-            theme={this.props.theme}
-            contacts={this.availableContacts(contactType)}
-            setContact={(contactData) => {
-              this.props.setContact(contactData, contactType, index)
-              this.setState({ modal: null, showModal: false })
+          <ContactSetterNewContactWrapper
+            AddressBookProps={{
+              theme: this.props.theme,
+              contacts: this.availableContacts(contactType),
+              setContact: (contactData) => {
+                this.props.setContact(contactData, contactType, index)
+                this.setState({ modal: null, showModal: false })
+              }
             }}
-            title={<ContactSetterAddressBookTitle contactType={contactType} />}
+            ShipmentContactFormProps={{
+              theme: this.props.theme,
+              setContact: (contactData) => {
+                this.props.setContact(contactData, contactType, index)
+                this.setState({ modal: null, showModal: false })
+              }
+            }}
+            contactType={contactType}
           />
         }
         verticalPadding="30px"
@@ -95,6 +102,7 @@ export class ContactSetter extends Component {
     )
     this.setState({ modal, showModal: true })
   }
+
   render () {
     const {
       theme, shipper, consignee, notifyees
@@ -119,7 +127,7 @@ export class ContactSetter extends Component {
             <hr className={styles.main_hr} />
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
-            <ShipmentContactsBox
+            <ContactSetterBody
               consignee={consignee}
               shipper={shipper}
               notifyees={notifyees}

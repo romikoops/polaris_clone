@@ -1,8 +1,8 @@
 import React from 'react'
 import Truncate from 'react-truncate'
-import PropTypes from '../../../../prop-types'
+import PropTypes from '../../../../../prop-types'
 import styles from './ContactCard.scss'
-import { gradientTextGenerator } from '../../../../helpers'
+import { gradientTextGenerator } from '../../../../../helpers'
 
 function commaSeparatedWhenBothExist (str1, str2) {
   return str1 && str2 ? `${str1}, ${str2}` : (str1 || str2)

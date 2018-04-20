@@ -2,7 +2,7 @@ import React from 'react'
 import { v4 } from 'node-uuid'
 import styles from './AddContactButton.scss'
 
-export default function ShipmentContactsBoxNotifyeeContactsAddContactButton ({
+export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
   onClick
 }) {
   return (

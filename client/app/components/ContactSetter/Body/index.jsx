@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import PropTypes from '../../prop-types'
-// import styles from './ShipmentContactsBox.scss'
-import defs from '../../styles/default_classes.scss'
+import PropTypes from '../../../prop-types'
+// import styles from './Body.scss'
+import defs from '../../../styles/default_classes.scss'
 import ShipmentContactsBoxMainContacts from './MainContacts'
 import ShipmentContactsBoxNotifyeeContacts from './NotifyeeContacts'
 
-export class ShipmentContactsBox extends Component {
+export default class ShipmentContactsBox extends Component {
   constructor (props) {
     super(props)
     this.state = {}
@@ -115,5 +115,3 @@ ShipmentContactsBox.defaultProps = {
   notifyees: []
   // finishBookingAttempted: false
 }
-
-export default ShipmentContactsBox

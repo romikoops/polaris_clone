@@ -1,7 +1,7 @@
 import React from 'react'
 import { v4 } from 'node-uuid'
-import styles from '../ShipmentContactsBox.scss'
-import { gradientTextGenerator } from '../../../helpers'
+import styles from '../Body.scss'
+import { gradientTextGenerator } from '../../../../helpers'
 import ShipmentContactsBoxContactSectionContactCard from './ContactCard'
 import ShipmentContactsBoxContactSectionPlaceholderCard from './PlaceholderCard'
 

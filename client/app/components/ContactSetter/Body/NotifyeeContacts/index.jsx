@@ -1,14 +1,14 @@
 import React from 'react'
-import styles from '../ShipmentContactsBox.scss'
-import ShipmentContactsBoxNotifyeeContactsContactCard from './ContactCard'
-import ShipmentContactsBoxNotifyeeContactsAddContactButton from './AddContactButton'
+import styles from '../Body.scss'
+import ContactSetterBodyNotifyeeContactsContactCard from './ContactCard'
+import ContactSetterBodyNotifyeeContactsAddContactButton from './AddContactButton'
 
-export default function ShipmentContactsBoxNotifyeeContacts ({
+export default function ContactSetterBodyNotifyeeContacts ({
   theme, notifyees, showAddressBook, removeFunc
 }) {
   const notifyeeContacts = notifyees.map((notifyee, i) => (
     <div className={`flex-40 ${i % 2 === 0 ? 'offset-5' : ''}`} style={{ marginBottom: '20px' }}>
-      <ShipmentContactsBoxNotifyeeContactsContactCard
+      <ContactSetterBodyNotifyeeContactsContactCard
         theme={theme}
         contactData={notifyee}
         removeFunc={() => removeFunc(i)}
@@ -17,7 +17,7 @@ export default function ShipmentContactsBoxNotifyeeContacts ({
   ))
   notifyeeContacts.unshift((
     <div className="flex-40" style={{ marginBottom: '20px' }}>
-      <ShipmentContactsBoxNotifyeeContactsAddContactButton
+      <ContactSetterBodyNotifyeeContactsAddContactButton
         onClick={() => showAddressBook('notifyee', notifyees.length)}
       />
     </div>

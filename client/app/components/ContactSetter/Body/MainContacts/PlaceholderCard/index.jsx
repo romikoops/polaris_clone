@@ -1,8 +1,7 @@
 import React from 'react'
-import styles from '../../ShipmentContactsBox.scss'
-import errors from '../../../../styles/errors.scss'
-import { capitalize, nameToDisplay } from '../../../../helpers'
-import { RoundButton } from '../../../RoundButton/RoundButton'
+import styles from '../../Body.scss'
+import errors from '../../../../../styles/errors.scss'
+import { capitalize, nameToDisplay } from '../../../../../helpers'
 
 export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
   contactType, theme, showAddressBook
