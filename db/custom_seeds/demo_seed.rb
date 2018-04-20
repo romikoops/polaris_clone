@@ -1,7 +1,7 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['demo'].each do |sub|
+['demo', 'greencarrier'].each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   
