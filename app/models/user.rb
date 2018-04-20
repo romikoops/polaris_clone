@@ -4,7 +4,8 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role, :sync_uid, :set_default_currency
+  before_validation :set_default_role, :sync_uid
+  before_create :set_default_currency
 
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
