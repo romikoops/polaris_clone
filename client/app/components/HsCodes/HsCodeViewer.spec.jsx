@@ -1,20 +1,28 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { theme, identity } from '../../mocks'
 // eslint-disable-next-line import/no-named-as-default
 import HsCodeViewer from './HsCodeViewer'
 
-const props = {
-  theme: null,
-  close: jest.fn(),
+const propsBase = {
+  theme,
+  close: identity,
   item: {
     hs_codes: []
   },
   hsCodes: []
 }
 
-const wrapper = mount(<HsCodeViewer {...props} />)
+test('shallow render', () => {
+  expect(shallow(<HsCodeViewer {...propsBase} />)).toMatchSnapshot()
+})
 
-test('props.close is called upon click', () => {
+test('props.close is called', () => {
+  const props = {
+    ...propsBase,
+    close: jest.fn()
+  }
+  const wrapper = mount(<HsCodeViewer {...props} />)
   const clickableDiv = wrapper.find('.flex-10').first()
 
   expect(props.close).not.toHaveBeenCalled()
