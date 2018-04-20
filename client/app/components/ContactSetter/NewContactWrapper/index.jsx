@@ -2,20 +2,20 @@ import React, { PureComponent } from 'react'
 // import PropTypes from '../../../prop-types'
 import styles from './NewContactWrapper.scss'
 import ContactSetterNewContactWrapperTitle from './Title'
-import { ShipmentshipmentContactForm } from '../../ShipmentContactForm/ShipmentContactForm'
+import { ShipmentContactForm } from '../../ShipmentContactForm/ShipmentContactForm'
 import AddressBook from '../../AddressBook/AddressBook'
 
 export default class ContactSetterNewContactWrapper extends PureComponent {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
-    this.components = { ShipmentshipmentContactForm, AddressBook }
+    this.components = { ShipmentContactForm, AddressBook }
 
     this.state = { compName: 'AddressBook' }
   }
 
   toggleCompName () {
-    const compName = this.state.compName === 'addressBook' ? 'AddressBook' : 'ShipmentContactForm'
+    const compName = this.state.compName === 'AddressBook' ? 'ShipmentContactForm' : 'AddressBook'
     this.setState({ compName })
   }
 
@@ -26,8 +26,20 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
     const Comp = this.components[compName]
     const compProps = this.props[`${compName}Props`]
 
+    let backArrow
+    if (compName === 'AddressBook') {
+      compProps.addContact = () => this.toggleCompName()
+    } else {
+      backArrow = (
+        <div onClick={() => this.toggleCompName()} className="pointy">
+          <i className="fa fa-arrow-left" /> Back to Address Book
+        </div>
+      )
+    }
+
     return (
       <div className={styles.new_contact_wrapper}>
+        { backArrow }
         <div className={`${styles.title_sec} layout-row layout-align-center`}>
           <ContactSetterNewContactWrapperTitle contactType={contactType} />
         </div>

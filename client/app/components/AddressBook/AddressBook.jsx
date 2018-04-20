@@ -6,7 +6,7 @@ import ContactCard from '../ContactCard'
 import AddressBookAddContactButton from './AddContactButton'
 
 export default function AddressBook ({
-  theme, contacts, setContact
+  theme, contacts, setContact, addContact
 }) {
   const contactCards =
     contacts &&
@@ -22,7 +22,7 @@ export default function AddressBook ({
 
   contactCards.unshift((
     <div className="flex-50" style={{ padding: '15px' }}>
-      <AddressBookAddContactButton />
+      <AddressBookAddContactButton addContact={addContact} />
     </div>
   ))
 

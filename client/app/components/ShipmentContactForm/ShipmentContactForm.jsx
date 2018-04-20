@@ -7,7 +7,6 @@ import defs from '../../styles/default_classes.scss'
 import GmapsWrapper from '../../hocs/GmapsWrapper'
 import { PlaceSearch } from '../Maps/PlaceSearch'
 import { nameToDisplay } from '../../helpers'
-
 import FormsyInput from '../FormsyInput/FormsyInput'
 
 export class ShipmentContactForm extends Component {
@@ -26,24 +25,13 @@ export class ShipmentContactForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      contactData: props.contactData,
+      contactData: { contact: {}, location: {}, type: '' },
       setContactAttempted: false
     }
     this.handleFormChange = this.handleFormChange.bind(this)
     this.handlePlaceChange = this.handlePlaceChange.bind(this)
     this.handleInvalidSubmit = this.handleInvalidSubmit.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.close = this.close.bind(this)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    this.setState({
-      contactData: nextProps.contactData
-    })
-  }
-  close (e) {
-    e.preventDefault()
-    this.props.close()
   }
 
   handleFormChange (event) {
@@ -343,12 +331,6 @@ export class ShipmentContactForm extends Component {
                 size="small"
                 active
               />
-              <RoundButton
-                text="Done"
-                theme={theme}
-                size="small"
-                handleNext={this.close}
-              />
             </div>
           </Formsy>
         </div>
@@ -358,17 +340,13 @@ export class ShipmentContactForm extends Component {
 }
 ShipmentContactForm.propTypes = {
   theme: PropTypes.theme,
-  close: PropTypes.func,
   setContact: PropTypes.func,
-  handleChange: PropTypes.func,
-  contactData: PropTypes.objectOf(PropTypes.any)
+  handleChange: PropTypes.func
 }
 ShipmentContactForm.defaultProps = {
   theme: {},
   handleChange: null,
-  contactData: {},
-  setContact: null,
-  close: null
+  setContact: null
 }
 
 export default ShipmentContactForm
