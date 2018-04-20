@@ -552,11 +552,22 @@ export const rateBasisSchema = {
     rate: 22,
     rate_basis: 'PER_KG'
   },
+  PER_TON: {
+    currency: 'USD',
+    rate: 22,
+    rate_basis: 'PER_TON'
+  },
   PER_X_KG: {
     currency: 'USD',
     rate: 22,
     base: 0,
     rate_basis: 'PER_X_KG'
+  },
+  PER_X_KM: {
+    currency: 'USD',
+    rate: 22,
+    base: 0,
+    rate_basis: 'PER_X_KM'
   },
   PER_ITEM: {
     currency: 'USD',

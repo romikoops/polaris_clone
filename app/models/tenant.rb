@@ -18,10 +18,13 @@ class Tenant < ApplicationRecord
   has_many :layovers, through: :stops
   has_many :trucking_pricings
   has_many :documents
+<<<<<<< HEAD
   has_many :pricings
   has_many :pricing_exceptions
   has_many :pricing_details
 
+=======
+>>>>>>> ecc9812d06335b29082dfe38a13327bdffa2ce7f
   has_many :local_charges
   has_many :customs_fees
     

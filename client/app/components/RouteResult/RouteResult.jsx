@@ -79,7 +79,7 @@ export class RouteResult extends Component {
     }
     return (
       <div key={schedule.id} className={`flex-100 layout-row ${styles.route_result}`}>
-        <div className="flex-75 layout-row layout-wrap">
+        <div className="flex-70 layout-row layout-wrap">
           <div className={`flex-100 layout-row layout-align-start-center ${styles.top_row}`}>
             <div className={`flex-80 layout-row layout-align-start-center ${styles.hubs_row}`}>
               <div className={`${styles.header_hub}`}>
@@ -163,12 +163,12 @@ export class RouteResult extends Component {
             </div>
           </div>
         </div>
-        <div className="flex-25 layout-row layout-wrap">
-          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+        <div className="flex-30 layout-row layout-wrap layout-align-center">
+          <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <p className="flex-none">Total price: </p>
             <Price value={this.props.fees[schedKey].total.value} user={user} />
           </div>
-          <div className="flex-100 layout-row layout-align-space-between-center layout-wrap">
+          <div className="flex-90 layout-row layout-align-space-between-center layout-wrap">
             <RoundButton
               text="Choose"
               size="full"

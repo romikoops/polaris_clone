@@ -75,8 +75,8 @@ class Header extends Component {
       req,
       scrollable,
       noMessages,
-      component,
-      adminDispatch
+      component
+      // adminDispatch
     } = this.props
     const { isTop } = this.state
     const dropDownText = user && user.first_name ? `${user.first_name} ${user.last_name}` : ''
@@ -89,7 +89,7 @@ class Header extends Component {
           key: 'settings'
         }
         : {
-          select: () => adminDispatch.getDashboard(true),
+          url: '/admin/dashboard',
           text: 'Account',
           fontAwesomeIcon: 'fa-cog',
           key: 'settings'
@@ -216,7 +216,6 @@ Header.propTypes = {
   req: PropTypes.req,
   scrollable: PropTypes.bool,
   appDispatch: PropTypes.func.isRequired,
-  adminDispatch: PropTypes.func.isRequired,
   noMessages: PropTypes.bool,
   component: PropTypes.node
 }

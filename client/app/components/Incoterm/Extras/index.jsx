@@ -1,0 +1,151 @@
+import React from 'react'
+import styles from './index.scss'
+import PropTypes from '../../../prop-types'
+import { gradientTextGenerator } from '../../../helpers'
+
+export function IncotermExtras ({
+  theme, shipment, feeHash, tenant
+}) {
+  const selectedStyle =
+    theme && theme.colors
+      ? gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
+      : { color: 'black' }
+  const deselectedStyle = {
+    ...gradientTextGenerator('rgb(0, 0, 0)', 'rgb(25, 25, 25)'),
+    opacity: '0.5'
+  }
+  const { scope } = tenant.data
+  const customsStyle =
+    feeHash && feeHash.customs && feeHash.customs.val ? selectedStyle : deselectedStyle
+  const insuranceStyle =
+    feeHash && feeHash.insurance && feeHash.insurance.val ? selectedStyle : deselectedStyle
+  const insuranceFeesValue = feeHash ? (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      {feeHash.insurance && feeHash.insurance.val ? (
+        <p className="flex-none no_m letter_3 center">{feeHash.insurance.currency}</p>
+      ) : (
+        ''
+      )}
+      <p className="flex-none no_m letter_3 center">
+        {feeHash.insurance && feeHash.insurance.val
+          ? `${parseFloat(feeHash.insurance.val).toFixed(2)}`
+          : 'None'}
+      </p>
+    </div>
+  ) : (
+    ''
+  )
+  const insuranceRequested = (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      <p className="flex-none no_m letter_3 center">Requested</p>
+    </div>
+  )
+  const customsRequested = (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      <p className="flex-none no_m letter_3 center">Requested</p>
+    </div>
+  )
+  const noInsurance = (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      <p className="flex-none no_m letter_3 center">None</p>
+    </div>
+  )
+  const noCustoms = (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      <p className="flex-none no_m letter_3 center">None</p>
+    </div>
+  )
+  const customsFeesValue = feeHash ? (
+    <div
+      className={`${
+        styles.fee_value
+      } flex-none width_100 layout-row layout-align-center-center layout-wrap`}
+    >
+      {feeHash.customs && feeHash.customs.val ? (
+        <p className="flex-none no_m letter_3 center">{feeHash.customs.currency}</p>
+      ) : (
+        ''
+      )}
+      <p className="flex-none no_m letter_3 center">
+        {feeHash.customs && feeHash.customs.val
+          ? `${parseFloat(feeHash.customs.val).toFixed(2)}`
+          : 'None'}
+      </p>
+    </div>
+  ) : (
+    ''
+  )
+
+  const customsFeesTile = (
+    <div className={`${styles.fee_tile} flex-none layout-row layout-align-space-around-center`}>
+      <div className="flex-none layout-row layout-align-center-center ">
+        <i className="fa fa-id-card clip flex-none" style={customsStyle} />
+      </div>
+      <div className="flex layout-row layout-align-center-space-around layout-wrap">
+        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+          <h4 className="flex-none no_m">Customs</h4>
+        </div>
+        {scope.detailed_billing && feeHash.customs ? customsFeesValue : ''}
+        {!scope.detailed_billing && feeHash.customs ? customsRequested : ''}
+        {!feeHash || (feeHash && !feeHash.customs) ? noCustoms : ''}
+      </div>
+    </div>
+  )
+  const insuranceFeesTile = (
+    <div className={`${styles.fee_tile} flex-none layout-row layout-align-space-around-center`}>
+      <div className="flex-none layout-row layout-align-center-center ">
+        <i className="fa fa-umbrella clip flex-none" style={insuranceStyle} />
+      </div>
+      <div className="flex layout-row layout-align-center-space-around layout-wrap">
+        <div className={`${styles.fee_text} flex-90 layout-row layout-align-center-center `}>
+          <h4 className="flex-none no_m">Insurance</h4>
+        </div>
+        {scope.detailed_billing && feeHash.insurance ? insuranceFeesValue : ''}
+        {!scope.detailed_billing && feeHash.insurance ? insuranceRequested : ''}
+        {!feeHash || (feeHash && !feeHash.insurance) ? noInsurance : ''}
+      </div>
+    </div>
+  )
+  return (
+    <div
+      className={`flex-100 layout-row layout-align-space-around-center  ${styles.incoterm_wrapper}`}
+    >
+      {customsFeesTile} {insuranceFeesTile}
+    </div>
+  )
+}
+
+IncotermExtras.propTypes = {
+  theme: PropTypes.theme,
+  feeHash: PropTypes.objectOf(PropTypes.any),
+  tenant: PropTypes.tenant,
+  shipment: PropTypes.objectOf(PropTypes.any).isRequired
+}
+
+IncotermExtras.defaultProps = {
+  theme: null,
+  feeHash: {},
+  tenant: {}
+}
+
+export default IncotermExtras
