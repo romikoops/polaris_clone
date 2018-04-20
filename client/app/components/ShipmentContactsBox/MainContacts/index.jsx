@@ -1,4 +1,5 @@
 import React from 'react'
+import { v4 } from 'node-uuid'
 import styles from '../ShipmentContactsBox.scss'
 import { gradientTextGenerator } from '../../../helpers'
 import ShipmentContactsBoxContactSectionContactCard from './ContactCard'
@@ -26,11 +27,11 @@ export default function ShipmentContactsBoxMainContacts ({
   const chevronDirection = direction === 'import' ? 'left' : 'right'
 
   const contentElems = [shipperCard, consigneeCard].map(elem => (
-    <div className="flex"> { elem } </div>
+    <div className="flex" key={v4()}> { elem } </div>
   ))
   if (direction === 'import') contentElems.reverse()
   const chevron = (
-    <div className="flex-20 layout-row layout-align-center-center">
+    <div className="flex-20 layout-row layout-align-center-center" key={v4()}>
       <i
         className={`fa fa-angle-double-${chevronDirection} ${styles.dir_icon} clip`}
         style={textStyle}

@@ -1,6 +1,5 @@
 import React from 'react'
 import Truncate from 'react-truncate'
-import { v4 } from 'node-uuid'
 import PropTypes from '../../../../prop-types'
 import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../../../helpers'
@@ -33,12 +32,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
 
   const { addressDetails, cityCountry } = locationForDisplay(location)
   return (
-    <div
-      key={v4()}
-      className={
-        `flex-100 layout-row layout-wrap ${styles.contact_card} `
-      }
-    >
+    <div className={`flex-100 layout-row layout-wrap ${styles.contact_card} `}>
       {editIcon}
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />

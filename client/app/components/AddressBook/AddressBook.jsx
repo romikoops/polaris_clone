@@ -11,13 +11,11 @@ export default function AddressBook ({
   const contactCards =
     contacts &&
     contacts.map(contact => (
-      <div className="flex-50" style={{ padding: '15px' }}>
+      <div key={v4()} className="flex-50" style={{ padding: '15px' }}>
         <ContactCard
           contactData={contact}
           theme={theme}
           select={setContact}
-          key={v4()}
-          popOutHover
         />
       </div>
     ))

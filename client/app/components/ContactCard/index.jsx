@@ -1,6 +1,5 @@
 import React from 'react'
 import Truncate from 'react-truncate'
-import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './ContactCard.scss'
 import { gradientTextGenerator } from '../../helpers'
@@ -17,7 +16,6 @@ export default function ContactCard ({
 
   return (
     <div
-      key={v4()}
       className={`flex-100 layout-row ${styles.contact_card}`}
       onClick={() => select(contactData, contactType)}
     >
@@ -44,10 +42,10 @@ export default function ContactCard ({
         </div>
         <div className="flex-100 layout-row layout-align-space-between-center">
           <div className="flex-60 layout-row layout-align-start-start layout-wrap">
-            <div className="flex-100 layout-row alyout-align-start-center">
+            <div className="flex-100 layout-row layout-align-start-center">
               <i className="fa fa-building-o flex-none clip" style={iconStyle} />
-              <p className={`flex ${styles.contact_header}`}>
-                <Truncate lines={1}>{contact.companyName} </Truncate>
+              <p className={`flex-80 ${styles.contact_header}`}>
+                <Truncate trimWhitespace> {contact.companyName} </Truncate>
               </p>
             </div>
           </div>
