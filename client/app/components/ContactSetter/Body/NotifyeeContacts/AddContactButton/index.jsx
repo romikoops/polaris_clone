@@ -1,6 +1,7 @@
 import React from 'react'
 import { v4 } from 'node-uuid'
 import styles from './AddContactButton.scss'
+import PropTypes from '../../../../../prop-types'
 
 export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
   onClick
@@ -19,4 +20,12 @@ export default function ContactSetterBodyNotifyeeContactsAddContactButton ({
       </h3>
     </div>
   )
+}
+
+ContactSetterBodyNotifyeeContactsAddContactButton.propTypes = {
+  onClick: PropTypes.func
+}
+
+ContactSetterBodyNotifyeeContactsAddContactButton.defaultProps = {
+  onClick: null
 }

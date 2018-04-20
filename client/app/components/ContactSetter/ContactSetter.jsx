@@ -4,10 +4,8 @@ import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
 import { Modal } from '../Modal/Modal'
 import ContactSetterBody from './Body'
-import { isEmpty, nameToDisplay } from '../../helpers'
 import ContactSetterNewContactWrapper from './NewContactWrapper'
 
-nameToDisplay('...')
 export class ContactSetter extends Component {
   constructor (props) {
     super(props)

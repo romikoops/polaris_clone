@@ -106,7 +106,8 @@ ShipmentContactsBox.propTypes = {
     country: PropTypes.string
   })),
   setContactForEdit: PropTypes.func.isRequired,
-  direction: PropTypes.string.isRequired
+  direction: PropTypes.string.isRequired,
+  showAddressBook: PropTypes.func.isRequired
   // finishBookingAttempted: PropTypes.bool
 }
 

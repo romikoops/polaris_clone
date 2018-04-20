@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../Body.scss'
 import ContactSetterBodyNotifyeeContactsContactCard from './ContactCard'
 import ContactSetterBodyNotifyeeContactsAddContactButton from './AddContactButton'
+import PropTypes from '../../../../prop-types'
 
 export default function ContactSetterBodyNotifyeeContacts ({
   theme, notifyees, showAddressBook, removeFunc
@@ -41,4 +42,17 @@ export default function ContactSetterBodyNotifyeeContacts ({
       </div>
     </div>
   )
+}
+ContactSetterBodyNotifyeeContacts.propTypes = {
+  theme: PropTypes.theme,
+  notifyees: PropTypes.arrayOf(PropTypes.shape({
+    contact: PropTypes.object,
+    location: PropTypes.object
+  })).isRequired,
+  showAddressBook: PropTypes.func.isRequired,
+  removeFunc: PropTypes.func.isRequired
+}
+
+ContactSetterBodyNotifyeeContacts.defaultProps = {
+  theme: null
 }

@@ -139,15 +139,19 @@ export class ShipmentContactForm extends Component {
     )
   }
 }
+
 ShipmentContactForm.propTypes = {
   theme: PropTypes.theme,
   setContact: PropTypes.func,
-  handleChange: PropTypes.func
+  handleChange: PropTypes.func,
+  contactType: PropTypes.string
 }
+
 ShipmentContactForm.defaultProps = {
-  theme: {},
+  theme: null,
   handleChange: null,
-  setContact: null
+  setContact: null,
+  contactType: ''
 }
 
 export default ShipmentContactForm

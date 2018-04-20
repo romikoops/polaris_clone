@@ -1,6 +1,7 @@
 import React from 'react'
 import { v4 } from 'node-uuid'
 import styles from './AddressBookAddContactButton.scss'
+import PropTypes from '../../../prop-types'
 
 export default function AddressBookAddContactButton ({
   addContact
@@ -16,4 +17,8 @@ export default function AddressBookAddContactButton ({
       </h3>
     </div>
   )
+}
+
+AddressBookAddContactButton.propTypes = {
+  addContact: PropTypes.func.isRequired
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { v4 } from 'node-uuid'
 import styles from '../Body.scss'
 import { gradientTextGenerator } from '../../../../helpers'
+import PropTypes from '../../../../prop-types'
 import ShipmentContactsBoxContactSectionContactCard from './ContactCard'
 import ShipmentContactsBoxContactSectionPlaceholderCard from './PlaceholderCard'
 
@@ -44,4 +45,22 @@ export default function ShipmentContactsBoxMainContacts ({
       { contentElems }
     </div>
   )
+}
+
+ShipmentContactsBoxMainContacts.propTypes = {
+  theme: PropTypes.theme,
+  shipper: PropTypes.shape({
+    contact: PropTypes.object,
+    location: PropTypes.object
+  }).isRequired,
+  consignee: PropTypes.shape({
+    contact: PropTypes.object,
+    location: PropTypes.object
+  }).isRequired,
+  direction: PropTypes.string.isRequired,
+  showAddressBook: PropTypes.func.isRequired
+}
+
+ShipmentContactsBoxMainContacts.defaultProps = {
+  theme: null
 }

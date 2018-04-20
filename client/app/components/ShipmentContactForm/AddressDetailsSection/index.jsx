@@ -152,10 +152,12 @@ AddressDetailsSection.propTypes = {
   theme: PropTypes.theme,
   contactData: PropTypes.objectOf(PropTypes.any).isRequired,
   handlePlaceChange: PropTypes.func.isRequired,
-  setContactAttempted: PropTypes.bool
+  setContactAttempted: PropTypes.bool,
+  setContactBtn: PropTypes.node
 }
 
 AddressDetailsSection.defaultProps = {
   theme: null,
-  setContactAttempted: false
+  setContactAttempted: false,
+  setContactBtn: null
 }

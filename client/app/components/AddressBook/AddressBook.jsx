@@ -40,7 +40,8 @@ export default function AddressBook ({
 AddressBook.propTypes = {
   contacts: PropTypes.arrayOf(PropTypes.contact),
   theme: PropTypes.theme,
-  setContact: PropTypes.func.isRequired
+  setContact: PropTypes.func.isRequired,
+  addContact: PropTypes.func.isRequired
 }
 
 AddressBook.defaultProps = {

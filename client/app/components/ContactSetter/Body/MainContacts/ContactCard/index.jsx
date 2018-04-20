@@ -20,15 +20,19 @@ function locationForDisplay (location) {
 }
 
 export default function ShipmentContactsBoxMainContactsContactCard ({
-  contactData, theme //, editFunc
+  contactData, theme, contactType, showAddressBook
 }) {
   const { contact, location } = contactData
   const iconStyle = {
     ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   }
 
-  const editIcon =
-    <i className={`${styles.edit_icon} fa fa-pencil-square-o`} onClick={null} />
+  const editIcon = (
+    <i
+      className={`${styles.edit_icon} fa fa-pencil-square-o`}
+      onClick={() => showAddressBook(contactType)}
+    />
+  )
 
   const { addressDetails, cityCountry } = locationForDisplay(location)
   return (
@@ -73,14 +77,13 @@ ShipmentContactsBoxMainContactsContactCard.propTypes = {
     contact: PropTypes.object,
     location: PropTypes.object
   }).isRequired,
-  theme: PropTypes.theme
-  // select: PropTypes.func.isRequired,
-  // contactType: PropTypes.string,
-  // editFunc: PropTypes.func
+  theme: PropTypes.theme,
+  contactType: PropTypes.string,
+  showAddressBook: PropTypes.func
 }
 
 ShipmentContactsBoxMainContactsContactCard.defaultProps = {
-  theme: null
-  // contactType: ''
-  // editFunc: null
+  theme: null,
+  contactType: '',
+  showAddressBook: null
 }

@@ -8,7 +8,7 @@ export default function CompanyDetailsSection ({
   theme, contactData, setContactAttempted
 }) {
   return (
-    <div className="flex layout-row layout-wrap">
+    <div className="flex-100 layout-row layout-wrap">
       <h3>Company Details</h3>
       <div className={`${styles.grouped_inputs} flex-100 layout-row layout-wrap`}>
         <div className="flex-95 layout-row">
@@ -127,7 +127,7 @@ export default function CompanyDetailsSection ({
           />
         </div>
       </div>
-      </div>
+    </div>
   )
 }
 

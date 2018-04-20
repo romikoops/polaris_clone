@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-// import PropTypes from '../../../prop-types'
+import PropTypes from '../../../prop-types'
 import styles from './NewContactWrapper.scss'
 import ContactSetterNewContactWrapperTitle from './Title'
 import { ShipmentContactForm } from '../../ShipmentContactForm/ShipmentContactForm'
@@ -49,4 +49,12 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
       </div>
     )
   }
+}
+
+ContactSetterNewContactWrapper.propTypes = {
+  contactType: PropTypes.string
+}
+
+ContactSetterNewContactWrapper.defaultProps = {
+  contactType: ''
 }

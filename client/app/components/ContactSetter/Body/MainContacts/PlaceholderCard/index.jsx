@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from '../../Body.scss'
 import errors from '../../../../../styles/errors.scss'
+import PropTypes from '../../../../../prop-types'
 import { capitalize, nameToDisplay } from '../../../../../helpers'
 
 export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
@@ -35,4 +36,16 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
       { showError && requiredSpan }
     </div>
   )
+}
+
+ShipmentContactsBoxMainContactsPlaceholderCard.propTypes = {
+  theme: PropTypes.theme,
+  contactType: PropTypes.string,
+  showAddressBook: PropTypes.func
+}
+
+ShipmentContactsBoxMainContactsPlaceholderCard.defaultProps = {
+  theme: null,
+  contactType: '',
+  showAddressBook: null
 }
