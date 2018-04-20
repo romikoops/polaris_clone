@@ -172,6 +172,12 @@ class TenantSeeder
           "Drum",
           "Skid",
           "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "DAP",
+          "DDP",
+          "FCA"
         ]
       }
     },
@@ -865,6 +871,7 @@ class TenantSeeder
       tenant.save!
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+      update_tenant_incoterms!(tenant, other_data[:incoterms])
     end
   end
 
@@ -908,6 +915,17 @@ class TenantSeeder
         )
       end
       TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+    end
+  end
+  def self.update_tenant_incoterms!(tenant, incoterm_array)
+    if !incoterm_array
+      return
+    end
+    incoterm_array.each do |code|
+      incoterm = Incoterm.find_by_code(code)
+      awesome_print code
+      awesome_print incoterm
+      tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
     end
   end
 end
