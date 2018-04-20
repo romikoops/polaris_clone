@@ -1,67 +1,8 @@
-# IncotermScope.create_all!
-# IncotermCharge.create_all!
-# IncotermLiability.create_all!
-# incoterms = [
-#   {
-#     incoterm: {
-#       code: 'EXW',
-#       description: 'main freight + locals charges origin'
-#     },
-#     charges: {
-#       pre_carriage: true,
-#       origin: true,
-#       freight: true,
-#       destination: false,
-#       on_carriage: false
-#     },
-#     liability: {
-#       pre_carriage: true,
-#       origin: true,
-#       freight: true,
-#       destination: false,
-#       on_carriage: false
-#     },
-#     scope: {
-#       pre_carriage: true,
-#       on_carriage: false
-#     }
-#   },
-#    {
-#     incoterm: {
-#       code: 'DAP',
-#       description: 'main freight + local charges origin + local charges destination '
-#     },
-#     charges: {
-#       pre_carriage: true,
-#       origin: true,
-#       freight: true,
-#       destination: false,
-#       on_carriage: false
-#     },
-#     liability: {
-#       pre_carriage: true,
-#       origin: true,
-#       freight: true,
-#       destination: false,
-#       on_carriage: false
-#     },
-#     scope: {
-#       pre_carriage: true,
-#       on_carriage: false
-#     }
-#   }
-# ]
+IncotermScope.destroy_all
+IncotermCharge.destroy_all
+IncotermLiability.destroy_all
+Incoterm.destroy_all
 
-# incoterms.each do |incoterm_hash|
-#   incoterm_charge = IncotermCharge.find_by(incoterm_hash[:charges])
-#   incoterm_liability = IncotermLiability.find_by(incoterm_hash[:liability])
-#   incoterm_scope = IncotermScope.find_by(incoterm_hash[:scope])
-#   incoterm = Incoterm.find_or_initialize_by(code: incoterm_hash[:incoterm][:code])
-#   incoterm.incoterm_scope = incoterm_scope
-#   incoterm.incoterm_charge = incoterm_charge
-#   incoterm.incoterm_liability = incoterm_liability
-#   incoterm.save!
-# end
 incoterms = [
   {
     code: 'EXW',
@@ -368,14 +309,14 @@ incoterms.each do |incoterm_hash|
       if value[:charge] == 'Buyer'
         charge_hash[incoterm_key][:buyer][key] = true
         charge_hash[incoterm_key][:seller][key] = false
-        if key == 'pre_carriage' || key == 'on_carriage'
+        if key == :pre_carriage || key == :on_carriage
           scope_hash[incoterm_key][:buyer][key] = true
           scope_hash[incoterm_key][:seller][key] = false
         end
       else
         charge_hash[incoterm_key][:buyer][key] = false
         charge_hash[incoterm_key][:seller][key] = true
-        if key == 'pre_carriage' || key == 'on_carriage'
+        if key == :pre_carriage || key == :on_carriage
           scope_hash[incoterm_key][:buyer][key] = false
           scope_hash[incoterm_key][:seller][key] = true
         end
@@ -388,7 +329,7 @@ incoterms.each do |incoterm_hash|
         
         liability_hash[incoterm_key][:seller][key] = false
         charge_hash[incoterm_key][:seller][key] = false
-        if key == 'pre_carriage' || key == 'on_carriage'
+        if key == :pre_carriage || key == :on_carriage
           scope_hash[incoterm_key][:buyer][key] = true
           scope_hash[incoterm_key][:seller][key] = false
         end
@@ -398,7 +339,7 @@ incoterms.each do |incoterm_hash|
         
         liability_hash[incoterm_key][:buyer][key] = false
         charge_hash[incoterm_key][:buyer][key] = false
-        if key == 'pre_carriage' || key == 'on_carriage'
+        if key == :pre_carriage || key == :on_carriage
           scope_hash[incoterm_key][:buyer][key] = false
           scope_hash[incoterm_key][:seller][key] = true
         end

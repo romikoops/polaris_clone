@@ -51,10 +51,28 @@ function nexuses (nexusIds, target, itineraryIds, callback) {
   })
 }
 
+function incoterms (direction, preCarriage, onCarriage, callback) {
+  fetch(
+    `${BASE_URL}/incoterms?` +
+      `pre_carriage=${preCarriage}&` +
+      `on_carriage=${onCarriage}&` +
+      `direction=${direction}`,
+    {
+      method: 'GET',
+      headers: authHeader()
+    }
+  ).then((promise) => {
+    promise.json().then((response) => {
+      callback(response.data)
+    })
+  })
+}
+
 const getRequests = {
   findNexus,
   findAvailability,
-  nexuses
+  nexuses,
+  incoterms
 }
 
 export default getRequests

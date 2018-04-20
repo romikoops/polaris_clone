@@ -109,7 +109,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+        main: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
       },
       phones:{
         main:"+46 31-85 32 00",
@@ -175,9 +175,9 @@ class TenantSeeder
         ],
         incoterms: [
           "EXW",
-          "DAP",
+          "CFR",
           "DDP",
-          "FCA"
+          "FAS"
         ]
       }
     },
@@ -918,14 +918,18 @@ class TenantSeeder
     end
   end
   def self.update_tenant_incoterms!(tenant, incoterm_array)
-    if !incoterm_array
-      return
-    end
-    incoterm_array.each do |code|
-      incoterm = Incoterm.find_by_code(code)
-      awesome_print code
-      awesome_print incoterm
-      tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+    tenant.tenant_incoterms.destroy_all
+    if incoterm_array
+      incoterm_array.each do |code|
+        incoterm = Incoterm.find_by_code(code)
+        awesome_print code
+        awesome_print incoterm
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    else
+      Incoterm.all.each do |incoterm|
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
     end
   end
 end

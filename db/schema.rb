@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180420082259) do
+ActiveRecord::Schema.define(version: 20180420132557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -377,13 +377,13 @@ ActiveRecord::Schema.define(version: 20180420082259) do
     t.string "eori"
     t.string "direction"
     t.string "notes"
-    t.jsonb "incoterm"
     t.integer "origin_hub_id"
     t.integer "destination_hub_id"
     t.datetime "booking_placed_at"
     t.jsonb "insurance"
     t.jsonb "customs"
     t.bigint "transport_category_id"
+    t.integer "incoterm_id"
     t.index ["transport_category_id"], name: "index_shipments_on_transport_category_id"
   end
 

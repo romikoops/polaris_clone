@@ -29,9 +29,11 @@ import '../../styles/select-css-custom.css'
 import getModals from './getModals'
 import toggleCSS from './toggleCSS'
 import getOffersBtnIsActive, {
-  noDangerousGoodsCondition, stackableGoodsCondition
+  noDangerousGoodsCondition,
+  stackableGoodsCondition
 } from './getOffersBtnIsActive'
 import formatCargoItemTypes from './formatCargoItemTypes'
+import getRequests from '../ShipmentLocationBox/getRequests'
 
 export class ShipmentDetails extends Component {
   static scrollTo (target) {
@@ -176,8 +178,14 @@ export class ShipmentDetails extends Component {
   }
   componentDidUpdate () {
     const {
-      shipment, cargoItems, containers, aggregatedCargo,
-      selectedDay, origin, destination, aggregated
+      shipment,
+      cargoItems,
+      containers,
+      aggregatedCargo,
+      selectedDay,
+      origin,
+      destination,
+      aggregated
     } = this.state
     this.props.bookingSummaryDispatch.update({
       shipment,
@@ -192,10 +200,10 @@ export class ShipmentDetails extends Component {
   }
 
   setIncoTerm (opt) {
-    this.handleCarriageChange('has_on_carriage', opt.onCarriage)
-    this.handleCarriageChange('has_pre_carriage', opt.preCarriage)
+    // this.handleCarriageChange('has_on_carriage', opt.onCarriage)
+    // this.handleCarriageChange('has_pre_carriage', opt.preCarriage)
     this.setState({
-      incoterm: opt
+      incoterm: opt.value.id
     })
   }
   setNotesIds (ids, target) {
@@ -479,7 +487,7 @@ export class ShipmentDetails extends Component {
     const changeShouldApply = carriageOptionScope === 'optional' || (options && options.force)
     if (!changeShouldApply) return
 
-    this.setState({ [target]: value })
+    this.setState({ [target]: value }, () => this.updateIncoterms())
 
     // Upate trucking details according to toggle
     const { shipment } = this.state
@@ -495,7 +503,20 @@ export class ShipmentDetails extends Component {
     if (!artificialEvent.target.id) return
     this.handleTruckingDetailsChange(artificialEvent)
   }
-
+  handleIncotermResults (results) {
+    if (results.length === 1) {
+      this.setIncoTerm(results[0])
+    }
+    this.setState({ incotermsArray: results })
+  }
+  updateIncoterms () {
+    const { direction } = this.props.shipmentData.shipment
+    // eslint-disable-next-line camelcase
+    const { has_pre_carriage, has_on_carriage } = this.state
+    getRequests.incoterms(direction, has_pre_carriage, has_on_carriage, (incotermResults) => {
+      this.handleIncotermResults(incotermResults)
+    })
+  }
   handleNextStageDisabled () {
     this.setState(prevState => ({
       shakeClass: {
@@ -706,7 +727,11 @@ export class ShipmentDetails extends Component {
             .filter(modalName => modals[modalName].show)
             .map(modalName => modals[modalName].jsx)}
         <div className={`layout-row flex-100 layout-wrap ${styles.map_cont}`}>{mapBox}</div>
-        <div className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${styles.note_box}`}>
+        <div
+          className={`flex-100 layout-row layout-align-center-center ${noteStyle} ${
+            styles.note_box
+          }`}
+        >
           <div className="flex-none content_width_booking layout-row layout-align-start-center">
             <NotesRow notes={notes} theme={theme} />
           </div>
@@ -745,39 +770,38 @@ export class ShipmentDetails extends Component {
           </div>
         </div>
         <div className={`layout-row flex-100 layout-wrap layout-align-center ${styles.cargo_sec}`}>
-          {
-            shipmentData.shipment.load_type === 'cargo_item' && (
-              <div className="content_width_booking layout-row layout-wrap layout-align-center">
-                <div className={
+          {shipmentData.shipment.load_type === 'cargo_item' && (
+            <div className="content_width_booking layout-row layout-wrap layout-align-center">
+              <div
+                className={
                   `${styles.toggle_aggregated_sec} ` +
                   'flex-50 layout-row layout-align-space-around-center'
                 }
+              >
+                <h3
+                  className={this.state.aggregated ? 'pointy' : ''}
+                  style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
+                  onClick={() => this.setAggregatedCargo(false)}
                 >
-                  <h3
-                    className={this.state.aggregated ? 'pointy' : ''}
-                    style={{ opacity: this.state.aggregated ? 0.4 : 1 }}
-                    onClick={() => this.setAggregatedCargo(false)}
-                  >
-                    Cargo Units
-                  </h3>
-                  <Toggle
-                    className="flex-none aggregated_cargo"
-                    id="aggregated_cargo"
-                    name="aggregated_cargo"
-                    checked={this.state.aggregated}
-                    onChange={() => this.toggleAggregatedCargo()}
-                  />
-                  <h3
-                    className={this.state.aggregated ? '' : 'pointy'}
-                    style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
-                    onClick={() => this.setAggregatedCargo(true)}
-                  >
-                    Total Dimensions
-                  </h3>
-                </div>
+                  Cargo Units
+                </h3>
+                <Toggle
+                  className="flex-none aggregated_cargo"
+                  id="aggregated_cargo"
+                  name="aggregated_cargo"
+                  checked={this.state.aggregated}
+                  onChange={() => this.toggleAggregatedCargo()}
+                />
+                <h3
+                  className={this.state.aggregated ? '' : 'pointy'}
+                  style={{ opacity: this.state.aggregated ? 1 : 0.4 }}
+                  onClick={() => this.setAggregatedCargo(true)}
+                >
+                  Total Dimensions
+                </h3>
               </div>
-            )
-          }
+            </div>
+          )}
 
           {cargoDetails}
         </div>
@@ -793,53 +817,49 @@ export class ShipmentDetails extends Component {
               'layout-row flex-none layout-wrap layout-align-start-start'
             }
           >
-
             <div className="flex-60 layout-row layout-wrap layout-align-start-center">
-              {
-                this.state.aggregated && (
-                  <div
-                    className={
-                      `${this.state.shakeClass.stackableGoodsConfirmed} flex-100 ` +
-                      'layout-row layout-align-start-center'
-                    }
-                    style={{ marginBottom: '15px' }}
-                  >
-                    <div className="flex-10 layout-row layout-align-start-start">
-                      <Checkbox
-                        theme={theme}
-                        onChange={() =>
-                          this.setState({
-                            stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
-                          })
-                        }
-                        size="30px"
-                        name="stackable_goods_confirmation"
-                        checked={this.state.stackableGoodsConfirmed}
-                      />
-                    </div>
-                    <div className="flex">
-                      <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
-                        I hereby confirm that my cargo consists of
-                        stackable items exclusively.
-                        <br />
-                        <span style={{ fontSize: '11px', width: '100%' }}>
-                          (Should you wish to ship non-stackable cargo,
-                          please select {'\'Cargo Units\''})
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                )
-              }
-              {
-                !(
-                  this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
-                  this.state.containers.some(container => container.dangerous_goods)
-                ) && (
-                  <div className={
-                    `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+              {this.state.aggregated && (
+                <div
+                  className={
+                    `${this.state.shakeClass.stackableGoodsConfirmed} flex-100 ` +
                     'layout-row layout-align-start-center'
                   }
+                  style={{ marginBottom: '15px' }}
+                >
+                  <div className="flex-10 layout-row layout-align-start-start">
+                    <Checkbox
+                      theme={theme}
+                      onChange={() =>
+                        this.setState({
+                          stackableGoodsConfirmed: !this.state.stackableGoodsConfirmed
+                        })
+                      }
+                      size="30px"
+                      name="stackable_goods_confirmation"
+                      checked={this.state.stackableGoodsConfirmed}
+                    />
+                  </div>
+                  <div className="flex">
+                    <p style={{ margin: 0, fontSize: '14px', width: '100%' }}>
+                      I hereby confirm that my cargo consists of stackable items exclusively.
+                      <br />
+                      <span style={{ fontSize: '11px', width: '100%' }}>
+                        (Should you wish to ship non-stackable cargo, please select{' '}
+                        {"'Cargo Units'"})
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              )}
+              {!(
+                this.state.cargoItems.some(cargoItem => cargoItem.dangerous_goods) ||
+                this.state.containers.some(container => container.dangerous_goods)
+              ) && (
+                  <div
+                    className={
+                      `${this.state.shakeClass.noDangerousGoodsConfirmed} flex-100 ` +
+                    'layout-row layout-align-start-center'
+                    }
                   >
                     <div className="flex-10 layout-row layout-align-start-start">
                       <Checkbox
@@ -856,19 +876,18 @@ export class ShipmentDetails extends Component {
                     </div>
                     <div className="flex">
                       <p style={{ margin: 0, fontSize: '14px' }}>
-                        I hereby confirm that none of the specified cargo units contain{' '}
+                      I hereby confirm that none of the specified cargo units contain{' '}
                         <span
                           className="emulate_link blue_link"
                           onClick={() => this.toggleModal('dangerousGoodsInfo')}
                         >
-                          dangerous goods
+                        dangerous goods
                         </span>
-                        .
+                      .
                       </p>
                     </div>
                   </div>
-                )
-              }
+                )}
             </div>
             <div className="flex layout-row layout-align-end">
               <RoundButton
@@ -882,17 +901,12 @@ export class ShipmentDetails extends Component {
             </div>
           </div>
         </div>
-        {user && !user.guest && (
-          <div
-            className={
-              `${defaults.border_divider} layout-row flex-100 ` +
-              'layout-wrap layout-align-center-center'
-            }
-          >
+        {user &&
+          !user.guest && (
             <div
               className={
-                `${styles.btn_sec} ${defaults.content_width} ` +
-                'layout-row flex-none layout-wrap layout-align-start-start'
+                `${defaults.border_divider} layout-row flex-100 ` +
+                'layout-wrap layout-align-center-center'
               }
             >
               <div
@@ -901,17 +915,23 @@ export class ShipmentDetails extends Component {
                   'layout-row flex-none layout-wrap layout-align-start-start'
                 }
               >
-                <RoundButton
-                  text="Back to Dashboard"
-                  handleNext={this.returnToDashboard}
-                  iconClass="fa-angle-left"
-                  theme={theme}
-                  back
-                />
+                <div
+                  className={
+                    `${styles.btn_sec} ${defaults.content_width} ` +
+                    'layout-row flex-none layout-wrap layout-align-start-start'
+                  }
+                >
+                  <RoundButton
+                    text="Back to Dashboard"
+                    handleNext={this.returnToDashboard}
+                    iconClass="fa-angle-left"
+                    theme={theme}
+                    back
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
         {styleTagJSX}
       </div>
     )

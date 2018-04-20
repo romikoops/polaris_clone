@@ -300,6 +300,7 @@ export class ShipmentLocationBox extends Component {
       this.props.setTargetAddress('origin', {})
     }
   }
+
   setMarker (location, name, target) {
     const { markers, map } = this.state
     const { theme } = this.props
@@ -1057,7 +1058,6 @@ export class ShipmentLocationBox extends Component {
                     `${!truckingOptions.preCarriage ? styles.not_available : ''}`
                   }
                 >
-
                   <TruckingTooltip
                     truckingOptions={truckingOptions}
                     carriage="preCarriage"
