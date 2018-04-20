@@ -1,13 +1,15 @@
 :local {
   .input {
     height: 36px;
-    border: 1px solid #F2F2F2;
-    border-radius: 3px;
-    background-color: #F9F9F9;
-    box-shadow: 0 2px 3px 0 rgba(237,234,234,0.5);
+    border: none;
+    border-bottom: 1px solid black;
+    background-color: transparent;
     width: 100%;
     padding: 0 10px;
     width: calc(100% - 10px);
+    &:focus {
+      outline: none;
+    }
   }
   .wrapper_input {
     margin-bottom: 25px;
@@ -15,5 +17,15 @@
   .icon_btn {
     height: 25px;
     width: 25px;
+  }
+
+  .icon_label {
+    padding: 10px 15px 10px 0;
+    font-size: 29px;
+    width: 30px;
+  }
+
+  .grouped_inputs {
+    padding: 10px 0;
   }
 }
