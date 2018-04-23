@@ -4,7 +4,7 @@ class User < ApplicationRecord
           :recoverable, :rememberable, :trackable, :validatable
           # :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  before_validation :set_default_role, :sync_uid
+  before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
 
   validates :tenant_id, presence: true
@@ -128,7 +128,6 @@ class User < ApplicationRecord
     user_locations.where(primary: false).map(&:location)
   end
   
-  
   private
 
   def set_default_role
@@ -137,6 +136,10 @@ class User < ApplicationRecord
 
   def set_default_currency
    self.currency = self.tenant.currency
+  end
+
+  def clear_tokens_if_empty
+   self.tokens = nil if tokens == "{}"
   end
 
   def sync_uid

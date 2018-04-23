@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './ContactSetter.scss'
 import defs from '../../styles/default_classes.scss'
-import { ShipmentContactForm } from '../ShipmentContactForm/ShipmentContactForm'
-import { AddressBook } from '../AddressBook/AddressBook'
-import { ShipmentContactsBox } from '../ShipmentContactsBox/ShipmentContactsBox'
-import StageTimeline from '../StageTimeline/StageTimeline'
-import { isEmpty, nameToDisplay } from '../../helpers'
+import { Modal } from '../Modal/Modal'
+import ContactSetterBody from './Body'
+import ContactSetterNewContactWrapper from './NewContactWrapper'
 
 export class ContactSetter extends Component {
   constructor (props) {
@@ -33,66 +31,14 @@ export class ContactSetter extends Component {
       ? ['shipper', 'consignee', 'notifyee']
       : ['consignee', 'shipper', 'notifyee']
 
-    this.stages = this.contactTypes.slice(0, 2).concat(['notifyees'])
-
     this.state = {
-      contactData: {
-        type: this.contactTypes[0],
-        ...this.newContactData
-      },
-      showBody: false
+      modal: '',
+      showModal: false
     }
-    this.autofillContact = this.autofillContact.bind(this)
-    this.setContact = this.setContact.bind(this)
-    this.setStage = this.setStage.bind(this)
-    this.setContactForEdit = this.setContactForEdit.bind(this)
-    this.toggleShowBody = this.toggleShowBody.bind(this)
-    this.nextUnsetContactType = this.nextUnsetContactType.bind(this)
   }
 
   setContactForEdit (contactData) {
-    this.setState({ contactData, showBody: true })
-  }
-
-  setContact (contactData) {
-    const { type, index } = this.state.contactData
-
-    const newState = {
-      contactData: Object.assign({}, this.newContactData)
-    }
-    const nextType = this.nextUnsetContactType(type)
-
-    this.props.setContact(contactData, type, index)
-
-    if (nextType === 'notifyee') {
-      this.setState({ showBody: false })
-      return
-    }
-    newState.contactData.type = nextType
-
-    this.setState(newState)
-  }
-
-  setStage (i) {
-    const contactType = this.contactTypes[i]
-
-    if (contactType === 'notifyee') {
-      this.setState({
-        contactData: {
-          index: 0,
-          type: contactType,
-          ...(this.props.notifyees[0] || Object.assign({}, this.newContactData))
-        }
-      })
-    } else {
-      this.setState({
-        contactData: {
-          type: contactType,
-          ...this.newContactData,
-          ...this.props[this.contactTypes[i]]
-        }
-      })
-    }
+    this.setState({ contactData, showModal: true })
   }
 
   autofillContact (contactData) {
@@ -104,18 +50,13 @@ export class ContactSetter extends Component {
       }
     })
   }
-  nextUnsetContactType (thisType) {
-    return this.contactTypes.slice(0, 2).find(type => (
-      isEmpty(this.props[type]) && type !== thisType
-    )) || 'notifyee'
-  }
 
-  availableContacts () {
+  availableContacts (contactType) {
     const {
       userLocations, shipper, consignee, notifyees
     } = this.props
     let { contacts } = this.props
-    if (this.state.contactData.type === this.contactTypes[0]) {
+    if (contactType === this.contactTypes[0]) {
       contacts = [...userLocations, ...contacts]
     }
     return contacts.filter(contactData => (
@@ -125,77 +66,79 @@ export class ContactSetter extends Component {
     ))
   }
 
-  toggleShowBody () {
-    this.setState({ showBody: !this.state.showBody })
+  toggleShowModal () {
+    this.setState({ showModal: !this.state.showModal })
   }
+
+  showAddressBook (contactType, index) {
+    const modal = (
+      <Modal
+        component={
+          <ContactSetterNewContactWrapper
+            AddressBookProps={{
+              theme: this.props.theme,
+              contacts: this.availableContacts(contactType),
+              setContact: (contactData) => {
+                this.props.setContact(contactData, contactType, index)
+                this.setState({ modal: null, showModal: false })
+              }
+            }}
+            ShipmentContactFormProps={{
+              contactType,
+              theme: this.props.theme,
+              setContact: (contactData) => {
+                this.props.setContact(contactData, contactType, index)
+                this.setState({ modal: null, showModal: false })
+              }
+            }}
+            contactType={contactType}
+          />
+        }
+        verticalPadding="30px"
+        horizontalPadding="40px"
+        parentToggle={() => this.toggleShowModal()}
+      />
+    )
+    this.setState({ modal, showModal: true })
+  }
+
   render () {
     const {
       theme, shipper, consignee, notifyees
     } = this.props
-    const { contactData, showBody } = this.state
-    const stageIndex = this.contactTypes.indexOf(contactData.type)
-    const showBodyIconStyles = { padding: '10px' }
-    if (showBody) showBodyIconStyles.transform = 'rotate(90deg)'
+    const { showModal, modal } = this.state
 
     return (
       <div
         name="contact_setter"
-        className="flex-100 layout-row layout-wrap layout-align-center-start"
+        className={
+          `${styles.contact_setter} flex-100 ` +
+          'layout-row layout-wrap layout-align-center-start'
+        }
       >
+        { showModal && modal}
         <div className={`flex-none ${defs.content_width} layout-row layout-wrap`}>
           <div
-            className="flex-100 layout-row layout-align-center-center pointy"
-            onClick={this.toggleShowBody}
+            className={`${styles.wrapper_main_h1} flex-100`}
+            onClick={null}
           >
             <h1> Set Contact Details</h1>
-            <i style={showBodyIconStyles} className="fa fa-chevron-right" />
-          </div>
-          <div className={`
-            flex-100 layout-row layout-wrap ${styles.body} ${showBody ? '' : styles.hidden}
-          `}
-          >
-            <div name="stageTimeline" className="flex-100 layout-row layout-align-center-center">
-              <StageTimeline
-                theme={theme}
-                currentStageIndex={stageIndex}
-                stages={this.stages.map(nameToDisplay)}
-                setStage={this.setStage}
-              />
-            </div>
-            <div
-              className="flex-100 layout-row layout-align-center-center"
-              style={{ marginBottom: '50px', height: '493px', boxShadow: 'rgba(0, 0, 0, 0.05) 2px 2px 1px' }}
-            >
-              <div className="flex-50" style={{ height: '100%' }}>
-                <ShipmentContactForm
-                  contactData={contactData}
-                  theme={theme}
-                  setContact={this.setContact}
-                  close={this.toggleShowBody}
-                />
-              </div>
-
-              <div className="flex-50" style={{ height: '100%' }}>
-                <AddressBook
-                  contacts={this.availableContacts()}
-                  autofillContact={this.autofillContact}
-                  theme={theme}
-                />
-              </div>
-            </div>
+            <hr className={styles.main_hr} />
           </div>
           <div className="flex-100 layout-row layout-align-center-center">
-            <ShipmentContactsBox
+            <ContactSetterBody
               consignee={consignee}
               shipper={shipper}
               notifyees={notifyees}
               direction={this.props.direction}
               theme={theme}
               removeNotifyee={this.props.removeNotifyee}
+              showAddressBook={(contactType, index) => this.showAddressBook(contactType, index)}
               setContactForEdit={this.setContactForEdit}
               finishBookingAttempted={this.props.finishBookingAttempted}
             />
           </div>
+          <hr className={`${styles.main_hr} ${styles.bottom_hr}`} />
         </div>
       </div>
     )
