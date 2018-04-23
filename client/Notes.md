@@ -195,6 +195,10 @@ Cannot proceed with test due to
 
 `gMaps.places.Autocomplete is not a constructor`
 
+## Messaging.MessageShipmentData
+
+It seems like method `onChangeFunc` is not used, although it is declared.
+
 ## NavDropdown
 
 Line 37: missing key as div property
