@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416194003) do
+ActiveRecord::Schema.define(version: 20180416173637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -343,11 +343,12 @@ ActiveRecord::Schema.define(version: 20180416194003) do
     t.string "zipcode"
     t.string "country_code"
     t.string "city_name"
+    t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "distance"
     t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
     t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
+    t.index ["distance"], name: "index_trucking_destinations_on_distance"
     t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
