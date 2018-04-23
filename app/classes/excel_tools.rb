@@ -587,13 +587,9 @@ module ExcelTools
           end
         elsif identifier_type == "city_name"
           city = Location.get_trucking_city("#{idents_and_country[:id].to_s}, #{idents_and_country[:country]}")
-          puts "!!!"
-          puts "!!!"
-          puts "!!!"
-          awesome_print city
           stats[:trucking_destinations][:number_created] += 1
           stats[:hub_truckings][:number_created] += 1
-          awesome_print idents_and_country[:country]
+          
           { id: city, country: idents_and_country[:country] }
         else
           idents_and_country
@@ -652,18 +648,18 @@ module ExcelTools
         end
         
         charges.each do |k, fee|
-          awesome_print fee[:direction] 
-          awesome_print direction 
-          awesome_print fee[:truck_type] 
-          awesome_print row_truck_type
+          
+          
+          
+          
           next unless fee[:direction] == direction && fee[:truck_type] == row_truck_type
           tmp_fee = fee.clone()
           tmp_fee.delete(:direction)
           tmp_fee.delete(:truck_type)
           trucking_pricing_by_zone[row_key][:fees][k] = tmp_fee
         end
-        awesome_print charges
-        awesome_print trucking_pricing_by_zone[row_key][:fees]
+        
+        
         single_ident_values_and_country_with_timestamps =
           identifier_type == 'distance' ?
           single_ident_values_and_country.map do |h|
@@ -1422,7 +1418,8 @@ module ExcelTools
         nested_pricings[pricing_key][cargo_type][nested_key][:data][row[:fee]] ||= {
           rate: row[:rate],
           rate_basis: row[:rate_basis],
-          currency: row[:currency]
+          currency: row[:currency],
+          min: row[:rate_min]
         }
 
         if row[:hw_threshold]
@@ -1452,7 +1449,7 @@ module ExcelTools
             rate: row[:rate],
             rate_basis: row[:rate_basis],
             currency: row[:currency],
-            min_value: row[:rate_min]
+            min: row[:rate_min]
           }
         end
 
