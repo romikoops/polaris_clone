@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row layout-align-center-center loader_box"
+>
+  <div
+    className="layout-column layout-align-center-center loader"
+  >
+    <styled.img />
+    <div
+      className="flex-none layout-row layout-align-space-between-center dot_row"
+    >
+      <styled.div
+        delay={3}
+        key="RANDOM_KEY"
+      />
+      <styled.div
+        delay={2}
+        key="RANDOM_KEY"
+      />
+      <styled.div
+        delay={1}
+        key="RANDOM_KEY"
+      />
+      <styled.div
+        delay={0}
+        key="RANDOM_KEY"
+      />
+    </div>
+  </div>
+</div>
+`;
