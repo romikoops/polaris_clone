@@ -20,7 +20,8 @@ export default function AddressDetailsSection ({
             inputStyles={{
               width: '96%',
               marginTop: '9px',
-              background: 'white'
+              background: 'white',
+              boxShadow: 'unset'
             }}
             handlePlaceChange={handlePlaceChange}
             hideMap

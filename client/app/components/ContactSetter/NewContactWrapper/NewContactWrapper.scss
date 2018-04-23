@@ -1,13 +1,29 @@
 :local {
 	.new_contact_wrapper {
-		height: 65vh;
+		position: relative;
+		height: calc(88vh - 172px);
 		width: 75vw;
-	}
-	.title_sec {
-		height: 110px;
+		transition: all 0.3s ease;
+		.title_sec {
+			height: 110px;
+		}
+		&.new_contact_wrapper_thin {
+			width: 30vw;
+		}
 	}
 	.body {
     border: 0.5px solid #828282;
     padding: 10px;
+	}
+	.back_arrow {
+		position: absolute;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+		opacity: 0.8;
+		transition: all 0.3s ease;
+		&:hover {
+			opacity: 1;
+		}
 	}
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Formsy from 'formsy-react'
+import styles from './ShipmentContactForm.scss'
 import { RoundButton } from '../RoundButton/RoundButton'
 import { nameToDisplay } from '../../helpers'
 import AddressDetailsSection from './AddressDetailsSection'
@@ -115,7 +116,11 @@ export class ShipmentContactForm extends Component {
       </div>
     )
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+      <div className={
+        `${styles.wrapper_form} flex-100 ` +
+        'layout-row layout-wrap layout-align-center-start'
+      }
+      >
         <Formsy
           className="flex-100 layout-row layout-wrap layout-align-start-start"
           name="form"

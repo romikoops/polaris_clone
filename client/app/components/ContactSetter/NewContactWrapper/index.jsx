@@ -17,6 +17,7 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
   toggleCompName () {
     const compName = this.state.compName === 'AddressBook' ? 'ShipmentContactForm' : 'AddressBook'
     this.setState({ compName })
+    if (this.props.updateDimensions != null) this.props.updateDimensions(700)
   }
 
   render () {
@@ -31,14 +32,19 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
       compProps.addContact = () => this.toggleCompName()
     } else {
       backArrow = (
-        <div onClick={() => this.toggleCompName()} className="pointy">
+        <div onClick={() => this.toggleCompName()} className={styles.back_arrow}>
           <i className="fa fa-arrow-left" /> Back to Address Book
         </div>
       )
     }
 
+    const thinClass =
+      contactType === 'notifyee' && compName === 'ShipmentContactForm'
+        ? styles.new_contact_wrapper_thin
+        : ''
+
     return (
-      <div className={styles.new_contact_wrapper}>
+      <div className={`${styles.new_contact_wrapper} ${thinClass} `} >
         { backArrow }
         <div className={`${styles.title_sec} layout-row layout-align-center`}>
           <ContactSetterNewContactWrapperTitle contactType={contactType} />
@@ -52,9 +58,11 @@ export default class ContactSetterNewContactWrapper extends PureComponent {
 }
 
 ContactSetterNewContactWrapper.propTypes = {
-  contactType: PropTypes.string
+  contactType: PropTypes.string,
+  updateDimensions: PropTypes.func
 }
 
 ContactSetterNewContactWrapper.defaultProps = {
-  contactType: ''
+  contactType: '',
+  updateDimensions: null
 }

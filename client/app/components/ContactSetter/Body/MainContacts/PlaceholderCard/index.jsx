@@ -11,6 +11,7 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
   const requiredSpanStyles = {
     left: '10px', top: '10px', bottom: 'unset', fontSize: '14px'
   }
+  const borderStyles = theme ? { borderColor: theme.colors.secondary } : {}
   const requiredSpan = (
     <span
       className={errors.error_message}
@@ -25,6 +26,7 @@ export default function ShipmentContactsBoxMainContactsPlaceholderCard ({
         `layout-row layout-wrap ${styles.placeholder_card} ` +
         `${showError ? styles.with_errors : ''}`
       }
+      style={borderStyles}
       onClick={() => showAddressBook(contactType)}
     >
       <div className="flex-100 layout-row layout-align-center-center">

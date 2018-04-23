@@ -27,6 +27,8 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
     ...gradientTextGenerator(theme.colors.primary, theme.colors.secondary)
   }
 
+  const borderStyles = theme ? { borderColor: theme.colors.secondary } : {}
+
   const editIcon = (
     <i
       className={`${styles.edit_icon} fa fa-pencil-square-o`}
@@ -36,7 +38,7 @@ export default function ShipmentContactsBoxMainContactsContactCard ({
 
   const { addressDetails, cityCountry } = locationForDisplay(location)
   return (
-    <div className={`flex-100 layout-row layout-wrap ${styles.contact_card} `}>
+    <div className={`flex-100 layout-row layout-wrap ${styles.contact_card}`} style={borderStyles}>
       {editIcon}
       <div className="flex-100 layout-row layout-align-start-start">
         <i className={`${styles.main_icon} fa fa-user`} style={iconStyle} />
