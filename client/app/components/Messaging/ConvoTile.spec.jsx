@@ -1,34 +1,37 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
-import { theme, shipment } from '../../mocks'
+import { mount, shallow } from 'enzyme'
+import { theme, shipment, identity } from '../../mocks'
 
 // eslint-disable-next-line
 import { ConvoTile } from './ConvoTile'
 
 const propsBase = {
   theme,
-  viewConvo: jest.fn(),
+  viewConvo: identity,
   convoKey: 'FOO_KEY',
   conversation: {
-    messages: []
+    messages: ['FOO_MESSAGE', 'BAR_MESSAGE']
   },
   shipment
 }
 
-let wrapper
-
 const createWrapper = propsInput => mount(<ConvoTile {...propsInput} />)
 
-beforeEach(() => {
-  wrapper = createWrapper(propsBase)
+test('shallow render', () => {
+  expect(shallow(<ConvoTile {...propsBase} />)).toMatchSnapshot()
 })
 
 test('click calls props.viewConvo', () => {
+  const props = {
+    ...propsBase,
+    viewConvo: jest.fn()
+  }
+  const wrapper = createWrapper(props)
   const clickableDiv = wrapper.find('.convo_tile_wrapper').first()
 
-  expect(propsBase.viewConvo).not.toHaveBeenCalled()
+  expect(props.viewConvo).not.toHaveBeenCalled()
 
   clickableDiv.simulate('click')
 
-  expect(propsBase.viewConvo).toHaveBeenCalled()
+  expect(props.viewConvo).toHaveBeenCalled()
 })

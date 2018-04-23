@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  convo_tile_wrapper"
+  onClick={[Function]}
+>
+  <styled.div
+    className="flex layout-row layout-align-center-start-space-between pointy layout-wrap convo_tile "
+  >
+    <div
+      className="flex-95 layout-row layout-align-start-center"
+    >
+      <div
+        className="flex-15-layout-row-layout-align-start-center"
+      >
+        <i
+          className="flex-none clip fa fa-truck"
+          style={
+            Object {
+              "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+            }
+          }
+        />
+      </div>
+      <div
+        className="flex-5"
+      />
+      <p
+        className="flex-none"
+      >
+        Shipment Ref.:
+      </p>
+      <div
+        className="flex-5"
+      />
+      <b>
+        FOO_KEY
+      </b>
+    </div>
+    <div
+      className="flex-95 layout-row layout-align-start-center"
+    >
+      Rejected by Admin
+    </div>
+    <div
+      className="flex-95 layout-row layout-align-start-center"
+    >
+      STATUS:
+      <div
+        className="flex-5"
+      />
+      <i>
+        <b>
+          REJECTED
+        </b>
+      </i>
+      <div
+        className="flex-5"
+      />
+      <i
+        className="fa fa-times"
+        style={
+          Object {
+            "color": "#CE3F3F",
+          }
+        }
+      />
+    </div>
+    <p
+      className="flex-none"
+    />
+  </styled.div>
+</div>
+`;
