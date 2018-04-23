@@ -15,12 +15,12 @@
       margin-bottom: 50px;
 
       h3 {
-        font-size: 18px;
+        font-size: 15px;
         font-weight: normal;
       }
     }
     h4 {
-      font-size: 16px;
+      font-size: 12px;
       font-weight: normal;
     }
     .wrapper_hr {
@@ -32,7 +32,29 @@
         opacity: 0.8;
       }
     }
-    @media (min-width: 768px) {
+    @media (min-width: 600px) {
+      h2 {
+        font-size: 30px;
+      }
+      h3 {
+        font-size: 16px;
+      }
+      h4 {
+        font-size: 13.5px;
+      }
+    }
+    @media (min-width: 960px) {
+      h2 {
+        font-size: 38px;
+      }
+      h3 {
+        font-size: 18px;
+      }
+      h4 {
+        font-size: 15px;
+      }
+    }
+    @media (min-width: 1280px) {
       h2 {
         font-size: 52px;
       }
@@ -44,6 +66,7 @@
       }
     }
   }
+
   .wrapper_btns {
     margin-bottom: 50px;
     a {
