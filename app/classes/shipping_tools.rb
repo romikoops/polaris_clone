@@ -116,7 +116,7 @@ module ShippingTools
     # Consignee
     resource = shipment_data.require(:consignee)
     contact_location = Location.create_and_geocode(contact_location_params(resource))
-    contact = current_user.contacts.find_or_create_by(
+    contact = current_user.contacts.find_or_create_by!(
       contact_params(resource, contact_location.id).merge(alias: shipment.import?)
     )
     shipment.shipment_contacts.find_or_create_by!(contact_id: contact.id, contact_type: 'consignee')
@@ -319,7 +319,7 @@ module ShippingTools
     hub_route = @schedules.first['hub_route_id']
     cargo_items = shipment.cargo_items
     containers = shipment.containers
-    if !containers.empty?
+    if containers.present?
       cargoKey = containers.first.size_class.dup
       customsKey = cargoKey.dup
       customsKey.slice! customsKey.rindex('f')

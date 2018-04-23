@@ -62,7 +62,8 @@ RSpec.configure do |config|
   config.include RequestSpecHelpers::AuthHelpers::Includables, type: :request
   config.extend RequestSpecHelpers::AuthHelpers::Extensions, type: :request
   config.include RequestSpecHelpers::FormatHelpers, type: :request
-  config.include Rails.application.routes.url_helpers
   config.include_context 'with_tenant', type: :request
+
+  config.include Rails.application.routes.url_helpers
 
 end
