@@ -1,20 +1,15 @@
 import * as React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { identity } from '../../mocks'
 
-jest.mock('../../containers/LoginPage/LoginPage', () => {
+jest.mock('../../containers/LoginPage/LoginPage', () => ({
   // eslint-disable-next-line react/prop-types
-  const LoginPage = ({ children }) => <div>{children}</div>
-
-  return { LoginPage }
-})
-
-jest.mock('../../containers/RegistrationPage/RegistrationPage', () => {
+  LoginPage: ({ children }) => <div>{children}</div>
+}))
+jest.mock('../../containers/RegistrationPage/RegistrationPage', () => ({
   // eslint-disable-next-line react/prop-types
-  const RegistrationPage = ({ children }) => <div>{children}</div>
-
-  return { RegistrationPage }
-})
+  RegistrationPage: ({ children }) => <div>{children}</div>
+}))
 
 // eslint-disable-next-line
 import { LoginRegistrationWrapper } from './LoginRegistrationWrapper'
@@ -26,23 +21,10 @@ const propsBase = {
   updateDimentions: identity
 }
 
-let wrapper
-
 const createWrapper = propsInput => mount(<LoginRegistrationWrapper {...propsInput} />)
 
-beforeEach(() => {
-  wrapper = createWrapper(propsBase)
-})
-
-test('props.initialCompName', () => {
-  const props = {
-    ...propsBase,
-    initialCompName: 'RegistrationPage'
-  }
-  const withRegistration = createWrapper(props)
-
-  expect(wrapper.find('LoginPage')).toHaveLength(1)
-  expect(withRegistration.find('RegistrationPage')).toHaveLength(1)
+test('shallow render', () => {
+  expect(shallow(<LoginRegistrationWrapper {...propsBase} />)).toMatchSnapshot()
 })
 
 test('click changes state and calls props.updateDimensions', () => {
