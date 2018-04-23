@@ -1,7 +1,8 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-['demo'].each do |sub|
+subdomains = %w(greencarrier easyshipping hartrodt)
+subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
   
@@ -58,7 +59,7 @@ include MongoTools
   awesome_print "All rates done"
 
   # hub = tenant.hubs.find_by_name("Stockholm Airport")
-  # trucking = File.open("#{Rails.root}/db/dummydata/Stockholm_Trucking_Rates.xlsx")
+  # trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_stockholm.xlsx")
   # req = {"xlsx" => trucking}
   # overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 
