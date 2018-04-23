@@ -9,30 +9,29 @@ class Admin::PricingsController < ApplicationController
   def index
     # @ded_pricings = Pricing.where.not(customer_id: nil)
     # @open_pricings = Pricing.where(customer_id: nil)
-    @pricings = get_tenant_pricings_hash(current_user.tenant_id)
-    @tenant_pricings = get_tenant_path_pricings(current_user.tenant_id)
+
+    @tenant_pricings = {} # get_tenant_path_pricings(current_user.tenant_id) TODO: remove?
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
-    detailed_itineraries = get_itineraries(current_user.tenant_id)
+    @pricings = Pricing.where(tenant_id: current_user.tenant_id).as_json
+    detailed_itineraries = itineraries.map(&:as_options_json)
     
-    response_handler({itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
+    response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end
 
   def client
     @pricings = get_user_pricings(params[:id])
     @client = User.find(params[:id])
-    detailed_itineraries = get_itineraries(current_user.tenant_id)
     
-    itineraries = eliminate_user_pricings(@pricings, detailed_itineraries)
-    response_handler({userPricings: @pricings, client: @client, detailedItineraries: itineraries})
+    response_handler({userPricings: @pricings, client: @client})
   end
 
   def route
-    pricings = get_itinerary_pricings_hash(params[:id].to_i)
     itinerary = Itinerary.find(params[:id])
+    pricings = itinerary.pricings.where(user_id: nil).map { |pricing| {pricing: pricing, transport_category: pricing.transport_category}} #get_itinerary_pricings_hash(itinerary.id)
+    user_pricings = itinerary.pricings.where.not(user_id: nil).map { |pricing| {pricing: pricing, transport_category: pricing.transport_category, user_id: pricing.user_id}}
     stops = itinerary.stops.map { |s| {stop: s, hub: s.hub}  }
-    detailed_itineraries = get_itinerary_options(itinerary)
-    response_handler({itineraryPricingData: pricings, itinerary: itinerary, stops: stops, detailedItineraries: detailed_itineraries})
+    response_handler({itineraryPricingData: pricings, itinerary: itinerary.as_options_json, stops: stops, userPricings: user_pricings})
   end
 
   def update_price
@@ -40,9 +39,9 @@ class Admin::PricingsController < ApplicationController
     data.delete("controller")
     data.delete("subdomain_id")
     data.delete("action")
-    resp = update_pricing(params[:id], data)
+    # resp = update_pricing(params[:id], data)
     parse_and_update_itinerary_pricing_id(data)
-    new_pricing = get_item("pricings", "_id", params[:id])
+    new_pricing = data
     response_handler(new_pricing)
   end
 
@@ -51,47 +50,74 @@ class Admin::PricingsController < ApplicationController
     response_handler({})
   end
 
+  # TODO: Update this function
   def parse_and_update_itinerary_pricing_id(data)
-    keys_split = data["id"].split("_")
-    itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
-    existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
-    
-    if  !existing_itinerary
-      new_itinerary = {
+
+    first_stop_id, last_stop_id, transport_category_id, tenant_id, load_type, load_type_detail, additional_load_type_detail = data["id"].split("_")
+
+    itinerary_params =
+      if load_type == 'fcl' && additional_load_type_detail.present?
+        { additional_load_type_detail => data["id"] }
+        # TODO: why?
+      elsif load_type != 'fcl' && load_type_detail.present?
+        { load_type_detail => data["id"] }
+      else
+        { "open" => data["id"] }
+      end
+
+    if itinerary_pricing_exists?(itinerary_id: data["itinerary_id"], transport_category_id: transport_category_id)
+      itinerary_pricing_update(data["itinerary_id"], itinerary_params)
+    else
+      new_itinerary_params = {
         tenant_id: current_user.tenant_id,
         transport_category_id: data["transport_category_id"],
         itinerary_id: data["itinerary_id"]
-      }
-      if data["id"].include?("fcl")
-        if keys_split.length == 7
-          new_itinerary["#{keys_split[6]}"] = data["id"]
-        else
-          new_itinerary["open"] = data["id"]    
-        end
-      else
-        if keys_split.length == 6
-          new_itinerary["#{keys_split[5]}"] = data["id"]
-        else
-          new_itinerary["open"] = data["id"]    
-        end
-      end
-      update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
-    else
-      if data["id"].include?("fcl")
-        if keys_split.length == 7
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
-        else
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
-        end
-      else
-        if keys_split.length == 6
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
-        else
-          update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})    
-        end
-      end
+      }.merge(itinerary_params)
+      itinerary_pricing_create(new_itinerary_params)
     end
-    current_user.tenant.update_route_details
+
+    # current_user.tenant.update_route_details
+
+    # keys_split = data["id"].split("_")
+    # itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
+    # existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
+    #
+    # if  !existing_itinerary
+    #   new_itinerary = {
+    #     tenant_id: current_user.tenant_id,
+    #     transport_category_id: data["transport_category_id"],
+    #     itinerary_id: data["itinerary_id"]
+    #   }
+    #   if data["id"].include?("fcl")
+    #     if keys_split.length == 7
+    #       new_itinerary["#{keys_split[6]}"] = data["id"]
+    #     else
+    #       new_itinerary["open"] = data["id"]
+    #     end
+    #   else
+    #     if keys_split.length == 6
+    #       new_itinerary["#{keys_split[5]}"] = data["id"]
+    #     else
+    #       new_itinerary["open"] = data["id"]
+    #     end
+    #   end
+    #   update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
+    # else
+    #   if data["id"].include?("fcl")
+    #     if keys_split.length == 7
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
+    #     else
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
+    #     end
+    #   else
+    #     if keys_split.length == 6
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
+    #     else
+    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
+    #     end
+    #   end
+    # end
+    # current_user.tenant.update_route_details
   end
 
   # def overwrite_main_carriage
@@ -143,10 +169,11 @@ class Admin::PricingsController < ApplicationController
         results.push(itin)
       else
         prices.each do |k, v|
+          byebug
           splits = v.split('_')
           hub1 = splits[0].to_i
           hub2 = splits[1].to_i
-          if itin["origin_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
+          if itin["first_stop_id"] == hub1 && itin["destination_stop_id"] == hub2
             results.push(itin)
           end
         end

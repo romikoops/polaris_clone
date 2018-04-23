@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :notifyees, through: :contacts
 
   has_many :user_managers
+  has_many :pricings
 
   # Devise
   # Include default devise modules. Others available are:

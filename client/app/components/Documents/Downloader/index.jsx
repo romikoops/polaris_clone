@@ -31,6 +31,9 @@ class DocumentsDownloader extends React.Component {
       case 'hubs':
         documentDispatch.downloadHubs()
         break
+      case 'trucking':
+        documentDispatch.downloadTrucking(options)
+        break
       case 'local_charges':
         documentDispatch.downloadLocalCharges()
         break

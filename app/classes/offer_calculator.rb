@@ -2,7 +2,6 @@ class OfferCalculator
   attr_reader :shipment, :total_price, :has_pre_carriage, :has_on_carriage, :schedules, :truck_seconds_pre_carriage, :origin_hubs, :destination_hubs, :itineraries, :itineraries_hash, :carriage_nexuses, :delay, :trucking_data
   include CurrencyTools
   include PricingTools
-  include MongoTools
   include TruckingTools
   def initialize(shipment, params, user)
     @mongo            = get_client
@@ -17,12 +16,12 @@ class OfferCalculator
     @shipment.has_on_carriage  = params[:shipment][:has_on_carriage]
     @shipment.trucking = trucking_params(params).to_h
     @delay = params[:shipment][:delay]
-    @shipment.incoterm = params[:shipment][:incoterm]
+    # @shipment.incoterm = params[:shipment][:incoterm]
     @trucking_data = {}
     @truck_seconds_pre_carriage = 0
     @pricing = nil
 
-    @current_eta_in_search = DateTime.new()
+    @current_eta_in_search = DateTime.new
     @total_price = { total:0, currency: "EUR" }
 
     if params[:shipment][:aggregated_cargo_attributes]
@@ -154,24 +153,8 @@ class OfferCalculator
       
       schedule_obj[itin.id] = trip_layovers unless trip_layovers.empty?
     end
-    @itineraries_hash = schedule_obj
-  end
-
-  def add_schedules_charges!
-    charges = {}
-    @total_price[:cargo] = { value: 0, currency: '' }
     
-    @schedules.each do |sched|
-      sched_key = "#{sched.hub_route.starthub_id}-#{sched.hub_route.endhub_id}"
-      
-      next if charges[sched_key]
-
-      charges[sched_key] = { trucking_on: {}, trucking_pre: {}, import: {}, export: {}, cargo: {} }
-      
-      set_trucking_charges!(charges, sched, sched_key, @shipment)
-      set_cargo_charges!(charges, sched, sched_key)
-    end
-    @shipment.schedules_charges = charges
+    @itineraries_hash = schedule_obj
   end
 
   def add_trip_charges!
@@ -279,7 +262,6 @@ class OfferCalculator
       path_key = path_key(cargo_unit, trip)
       
       charge_result = send("determine_#{@shipment.load_type}_price",
-        @mongo, 
         cargo_unit, 
         path_key, 
         @user, 

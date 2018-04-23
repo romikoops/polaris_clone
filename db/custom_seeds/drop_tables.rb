@@ -1,4 +1,6 @@
 # Drop all tables
+
+Pricing.destroy_all
 Vehicle.delete_all
 TenantVehicle.delete_all
 TransportCategory.delete_all

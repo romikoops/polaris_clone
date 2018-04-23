@@ -422,4 +422,244 @@ module DocumentTools
 		return new_doc.get_signed_url
   end
 
+   def write_trucking_to_sheet(options)
+    tenant = Tenant.find(options[:tenant_id])
+    hub = Hub.find(options[:hub_id])
+    target_load_type = options[:load_type]
+    filename = "#{hub.name}_#{target_load_type}_trucking_#{DateTime.now.strftime('%Y-%m-%d')}.xlsx"
+    dir = "tmp/#{filename}"
+    workbook = WriteXLSX.new(dir)
+    unfiltered_results = TruckingPricing.find_by_hub_ids(hub_ids: [options[:hub_id]], tenant_id: tenant.id)
+    # byebug
+    carriage_reducer = {}
+    results_by_truck_type = {}
+    dir_fees = {}
+    
+    unfiltered_results.map do |ufr|
+      ufr_key = ''
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["zipcode"]
+        ufr_key = "#{ufr["zipcode"][0]} - #{ufr["zipcode"][1]}_#{ufr["truckingPricing"].truck_type}"
+        if !results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
+        end
+      elsif ufr["truckingPricing"].load_type == target_load_type && ufr["city"]
+        ufr_key = "#{ufr["city"][0]}_#{ufr["truckingPricing"].truck_type}"
+        if !results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
+        end
+      elsif ufr["truckingPricing"].load_type == target_load_type && ufr["distance"]
+        ufr_key = "#{ufr["distance"][0]} - #{ufr["distance"][1]}_#{ufr["truckingPricing"].truck_type}"
+        if !results_by_truck_type[ufr["truckingPricing"].truck_type]
+          results_by_truck_type[ufr["truckingPricing"].truck_type] = []
+        end
+      end
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["truckingPricing"].carriage == 'pre'
+        unless ufr["truckingPricing"].fees.empty?
+          if !dir_fees[ufr["truckingPricing"].truck_type]
+            dir_fees[ufr["truckingPricing"].truck_type] = {}
+          end
+          awesome_print ufr["truckingPricing"].fees
+          dir_fees[ufr["truckingPricing"].truck_type][:pre] = ufr["truckingPricing"].fees
+        end
+      end
+      if ufr["truckingPricing"].load_type == target_load_type && ufr["truckingPricing"].carriage == 'on'
+        unless ufr["truckingPricing"].fees.empty?
+          if !dir_fees[ufr["truckingPricing"].truck_type]
+            dir_fees[ufr["truckingPricing"].truck_type] = {}
+          end
+          awesome_print ufr["truckingPricing"].fees
+          dir_fees[ufr["truckingPricing"].truck_type][:on] = ufr["truckingPricing"].fees
+        end
+      end
+      if ufr["truckingPricing"].load_type == target_load_type && !carriage_reducer[ufr_key]
+        carriage_reducer[ufr_key] = true
+        results_by_truck_type[ufr["truckingPricing"].truck_type] << ufr
+      end
+    end
+    
+    results_by_truck_type = results_by_truck_type.each do |tt, array|
+      if array.length < 1
+        results_by_truck_type.delete(tt)
+        dir_fees.delete(tt)
+      end
+    end
+    first_result = results_by_truck_type.first[1].first
+    awesome_print first_result
+    if !first_result
+      byebug
+    end
+    
+    currency = first_result["truckingPricing"].rates.first[1][0]["rate"]["currency"]
+    rate_basis = first_result["truckingPricing"].rates.first[1][0]["rate"]["rate_basis"]
+    # truck_type = first_result["truckingPricing"].truck_type
+    courier = first_result["truckingPricing"].courier
+    header_format = workbook.add_format
+    header_format.set_bold
+    zone_sheet = workbook.add_worksheet('Zones')
+    rates_sheet = workbook.add_worksheet('Rates')
+    fees_sheet = workbook.add_worksheet('Fees')
+
+     # Write Zones with identifiers
+
+    header_values = %w(ZONE IDENTIFIER RANGE COUNTRY_CODE)
+    row = 1
+    identifier = ''
+
+    header_values.each_with_index { |hv, i| zone_sheet.write(0, i, hv, header_format)}
+    zone_row = 1
+    results_by_truck_type.each do |truck_type, results|
+      results.each_with_index do |result, i|
+        
+        zone_sheet.write(zone_row, 0, i)
+        if result["zipcode"]
+          identifier = "zipcode"
+          if result["zipcode"][0] == result["zipcode"][1]
+            zone_sheet.write(zone_row, 1, result["zipcode"][1])
+          else
+            zone_sheet.write(zone_row, 2, "#{result["zipcode"][0]} - #{result["zipcode"][1]}")
+          end
+        end
+        if result["city"]
+          identifier = "city"
+          zone_sheet.write(zone_row, 1, result["city"][0])
+        end
+        if result["distance"]
+          identifier = "distance"
+          if result["distance"][0] == result["distance"][1]
+            zone_sheet.write(zone_row, 1, result["distance"][1])
+          else
+            zone_sheet.write(zone_row, 2, "#{result["distance"][0]} - #{result["distance"][1]}")
+          end
+        end
+        zone_row += 1
+        # row += 1
+      end
+    end
+    zone_sheet.write(1, 6, 'Origin City')
+    zone_sheet.write(1, 7, hub.nexus.name)
+    zone_sheet.write(2, 6, 'Currency')
+    zone_sheet.write(2, 7, currency)
+    zone_sheet.write(3, 6, 'Load Meterage Ratio')
+    zone_sheet.write(3, 7, first_result["truckingPricing"][:load_meterage]["ratio"])
+    zone_sheet.write(4, 6, 'Load Meterage Limit')
+    zone_sheet.write(4, 7, first_result["truckingPricing"][:load_meterage]["height_limit"])
+    zone_sheet.write(5, 6, 'CBM Ratio')
+    zone_sheet.write(5, 7, first_result["truckingPricing"][:cbm_ratio])
+    zone_sheet.write(6, 6, 'Rate Basis')
+    zone_sheet.write(6, 7, rate_basis)
+    zone_sheet.write(7, 6, 'Base')
+    zone_sheet.write(7, 7, first_result["truckingPricing"].rates.first[1][0]["rate"]["base"] || 1)
+    zone_sheet.write(8, 6, 'Load Type')
+    zone_sheet.write(8, 7, first_result["truckingPricing"].load_type)
+    zone_sheet.write(9, 6, 'Identifier')
+    zone_sheet.write(9, 7, identifier)
+    zone_sheet.write(10, 6, 'Courier')
+    zone_sheet.write(10, 7, courier.name)
+  
+    # Write zones with rates to Rate Sheet
+
+    rates_sheet.write(1, 0, 'ZONE')
+    rates_sheet.write(1, 1, 'TRUCK_TYPE')
+    rates_sheet.write(1, 2, 'MIN')
+    rates_sheet.write(2, 0, 'MIN')
+    minimums = {}
+    row = 3
+    x = 3
+    
+    first_result["truckingPricing"].rates.each do |key, rates_array|
+      rates_array.each_with_index do |rate|
+        if !rate
+          next
+        end
+        rates_sheet.write(0, x, key.downcase)
+        rates_sheet.write(1, x, "#{rate["min_#{key}"]} - #{rate["max_#{key}"]}")
+        x += 1
+      end
+    end
+    results_by_truck_type.each do |truck_type, results|
+      results.each_with_index do |result, i|
+
+        rates_sheet.write(row, 0, i)
+        rates_sheet.write(row, 1, truck_type)
+        rates_sheet.write(row, 2, result["truckingPricing"].rates.first[1][0]["min_value"])
+        minimums[i] = result["truckingPricing"].rates.first[1][0]["min_value"]
+        x = 3
+        result["truckingPricing"].rates.each do |key, rates_array|
+          rates_array.each_with_index do |rate|
+            if !rate
+              next
+            end
+            if rate["min_value"] != minimums[i]
+              rates_sheet.write(3, x, rate["min_value"].round(2))
+            else
+              rates_sheet.write(3, x, 0)
+            end
+            rates_sheet.write(row, x, rate["rate"]["value"].round(2))
+            x += 1
+          end
+        end
+        row += 1
+      end
+    end
+    # Write fees to sheet
+
+   
+    fee_header_values = %w(FEE	MOT	FEE_CODE	TRUCK_TYPE	DIRECTION	CURRENCY	RATE_BASIS	TON	CBM	KG	ITEM	SHIPMENT	BILL	CONTAINER	MINIMUM	WM	PERCENTAGE)
+    row = 1
+    fee_header_values.each_with_index { |hv, i| fees_sheet.write(0, i, hv, header_format)}
+    dir_fees.deep_symbolize_keys!
+    awesome_print dir_fees
+    dir_fees.each do |truck_type, directions|
+      directions.each do |carriage_dir, fees|
+        fees.each do |key, fee|
+          awesome_print fee
+          fees_sheet.write(row, 0, fee[:name])
+          fees_sheet.write(row, 1, hub.hub_type)
+          fees_sheet.write(row, 2, key)
+          fees_sheet.write(row, 3, truck_type)
+          fees_sheet.write(row, 4, carriage_dir)
+          fees_sheet.write(row, 5, currency)
+          fees_sheet.write(row, 6, rate_basis)
+          case fee[:rate_basis]
+          when 'PER_CONTAINER'
+            fees_sheet.write(row, 13, fee[:value])
+          when 'PER_ITEM'
+            fees_sheet.write(row, 10, fee[:value])
+          when 'PER_BILL'
+            fees_sheet.write(row, 12, fee[:value])
+          when 'PER_SHIPMENT'
+            fees_sheet.write(row, 11, fee[:value])
+          when 'PER_CBM_TON'
+            fees_sheet.write(row, 7, fee[:ton])
+            fees_sheet.write(row, 8, fee[:cbm])
+            fees_sheet.write(row, 14, fee[:min])
+          when 'PER_CBM_KG'
+            fees_sheet.write(row, 9, fee[:kg])
+            fees_sheet.write(row, 8, fee[:cbm])
+            fees_sheet.write(row, 14, fee[:min])
+          when 'PER_WM'
+            fees_sheet.write(row, 15, fee[:value])
+          when 'PERCENTAGE'
+            fees_sheet.write(row, 16, fee[:value])
+          end
+            row += 1
+        end
+      end
+    end
+    workbook.close()
+    s3 = Aws::S3::Client.new(
+      access_key_id: ENV['AWS_KEY'],
+      secret_access_key: ENV['AWS_SECRET'],
+      region: ENV['AWS_REGION']
+    )
+    file = open(dir)
+    # byebug
+    objKey = 'documents/' + tenant.subdomain + "/downloads/trucking/" + filename
+		
+    awsurl = "https://s3-eu-west-1.amazonaws.com/imcdev/" + objKey
+    s3.put_object(bucket: ENV['AWS_BUCKET'], key: objKey, body: file, content_type: 'application/vnd.ms-excel', acl: 'private')
+    new_doc = tenant.documents.create(url: objKey, text: filename, doc_type: 'schedules_sheet')
+		return new_doc.get_signed_url
+  end
+
 end
