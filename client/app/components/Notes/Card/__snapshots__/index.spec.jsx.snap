@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="important note_card layout-row flex-none layout-wrap layout-align-center"
+>
+  <div
+    className="note_route flex-95 layout-row layout-align-start-center"
+  >
+    <div
+      className="flex-10 layout-row layout-align-center-center"
+    >
+      <i
+        className="warning_icon fa fa-exclamation flex-none "
+      />
+    </div>
+    <div
+      className="flex layout-row layout-align-start-center"
+    >
+      <p
+        className="flex-none"
+      >
+        FOO_TITLE
+      </p>
+    </div>
+    <div
+      className="flex-10 layout-row layout-align-center-center"
+    >
+      <i
+        className="fa fa-ship flex-none clip "
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center"
+  >
+    <p
+      className="note_header flex-90"
+    >
+      FOO_HEADER
+    </p>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-center-center"
+  >
+    <p
+      className="flex-90"
+    />
+  </div>
+</div>
+`;
