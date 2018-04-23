@@ -309,6 +309,7 @@ class OfferCalculator
         truck_type: @shipment.trucking["on_carriage"]["truck_type"] != '' ? @shipment.trucking["on_carriage"]["truck_type"] : 'default',
         carriage: 'on'
       )
+      byebug
       trucking_pricings_by_hub.each do |tp|
         if !@trucking_data["on_carriage"]
           @trucking_data["on_carriage"] = {}
