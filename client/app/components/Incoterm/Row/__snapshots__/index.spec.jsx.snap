@@ -1,0 +1,1045 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`props.destinationFees is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      />
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        0.00
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.feeHash is empty object 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.firstStep is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      />
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        0.00
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.onCarriage is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      />
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        0.00
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`props.preCarriage is true 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      />
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        0.00
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-align-start-start  incoterm_wrapper"
+>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Pre-Carriage
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Origin 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-ship clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, #333,#fafafa)",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        Freight
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      />
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        0.00
+      </p>
+    </div>
+  </div>
+   
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-file-text-o clip flex-none"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m center"
+      >
+        Destination 
+        <br />
+         Documentation
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+  <div
+    className="fee_tile flex layout-column layout-align-none-center"
+  >
+    <div
+      className="flex layout-row layout-align-center-start width_100"
+    >
+      <i
+        className="fa fa-truck clip flex-none dest_truck"
+        style={
+          Object {
+            "background": "-webkit-linear-gradient(left, rgb(0, 0, 0),rgb(25, 25, 25))",
+            "opacity": "0.5",
+          }
+        }
+      />
+    </div>
+    <div
+      className="fee_text flex-none layout-row layout-align-center-center width_100"
+    >
+      <p
+        className="flex-none no_m"
+      >
+        On-Carriage
+      </p>
+    </div>
+    <div
+      className="fee_value flex-none width_100 layout-row layout-align-center-center layout-wrap"
+    >
+      <p
+        className="flex-none no_m letter_3 center"
+      >
+        None
+      </p>
+    </div>
+  </div>
+</div>
+`;
