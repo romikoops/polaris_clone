@@ -1,7 +1,8 @@
 include ExcelTools
 include DocumentTools
 include MongoTools
-subdomains = %w(greencarrier easyshipping hartrodt)
+# subdomains = %w(demo greencarrier easyshipping hartrodt)
+subdomains = %w(demo)
 subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
