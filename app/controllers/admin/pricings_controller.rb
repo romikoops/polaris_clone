@@ -169,7 +169,6 @@ class Admin::PricingsController < ApplicationController
         results.push(itin)
       else
         prices.each do |k, v|
-          byebug
           splits = v.split('_')
           hub1 = splits[0].to_i
           hub2 = splits[1].to_i
