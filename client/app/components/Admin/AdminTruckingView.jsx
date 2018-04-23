@@ -14,6 +14,7 @@ import { TruckingDisplayPanel } from './AdminAuxilliaries'
 import DocumentsSelector from '../../components/Documents/Selector'
 import { documentActions } from '../../actions'
 import { AdminUploadsSuccess } from './Uploads/Success'
+import DocumentsDownloader from '../../components/Documents/Downloader'
 
 export class AdminTruckingView extends Component {
   static backToIndex () {
@@ -159,9 +160,24 @@ export class AdminTruckingView extends Component {
         />
       </div>
     )
-    const truckingPricingToDisplay =
-      truckingDetail.truckingPricings
-        .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
+    const downloadLcl = (
+      <div
+        className={`flex-25 layout-row layout-wrap layout-align-center-center ${styles.sec_upload}`}
+      >
+        <p className="flex-100 center">Download Cargo Item Sheet</p>
+        <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'cargo_item' }} />
+      </div>
+    )
+    const downloadFcl = (
+      <div
+        className={`flex-25 layout-row layout-wrap layout-align-center-center ${styles.sec_upload}`}
+      >
+        <p className="flex-100 center">Download Container Sheet</p>
+        <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'container' }} />
+      </div>
+    )
+    const truckingPricingToDisplay = truckingDetail.truckingPricings
+      .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
     const displayPanel = (
       <TruckingDisplayPanel
         theme={theme}
@@ -231,7 +247,7 @@ export class AdminTruckingView extends Component {
             styles.panelDefault
           } flex-100 layout-row layout-align-space-between-center`}
         >
-          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
+          <div className="flex-25 layout-row layout-wrap layout-align-center-center">
             <p className="flex-90 center">Create New Trucking Pricing</p>
             <RoundButton
               theme={theme}
@@ -242,7 +258,7 @@ export class AdminTruckingView extends Component {
               iconClass="fa-plus"
             />
           </div>
-          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
+          <div className="flex-25 layout-row layout-wrap layout-align-center-center">
             <p className="flex-90 center">Upload Trucking Zones Sheet</p>
             <DocumentsSelector
               theme={theme}
@@ -251,9 +267,8 @@ export class AdminTruckingView extends Component {
               text="Routes .xlsx"
             />
           </div>
-          <div className="flex-33 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-none">{document.viewer}</p>
-          </div>
+          {downloadLcl}
+          {downloadFcl}
         </div>
         <div className="layout-row flex-100 layout-wrap layout-align-start-center">
           {uploadStatus}

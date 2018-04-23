@@ -136,6 +136,32 @@ function downloadSchedules (options) {
     )
   }
 }
+function downloadTrucking (options) {
+  function request (downloadData) {
+    return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
+  }
+  function success (downloadData) {
+    return { type: documentConstants.DOWNLOAD_SUCCESS, payload: downloadData.data }
+  }
+  function failure (error) {
+    return { type: documentConstants.DOWNLOAD_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    documentService.downloadTrucking(options).then(
+      (data) => {
+        dispatch(alertActions.success('Downloading Trucking successful'))
+        dispatch(success(data))
+      },
+      (error) => {
+        // ;
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 function downloadHubs () {
   function request (downloadData) {
     return { type: documentConstants.DOWNLOAD_REQUEST, payload: downloadData }
@@ -266,7 +292,8 @@ export const documentActions = {
   downloadPricings,
   uploadLocalCharges,
   uploadSchedules,
-  uploadItinerarySchedules
+  uploadItinerarySchedules,
+  downloadTrucking
 }
 
 export default documentActions

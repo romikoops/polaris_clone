@@ -451,7 +451,6 @@ module ExcelTools
     }
 
     defaults = {}
-    load_type = 'cargo_item'
     trucking_pricing_by_zone = {}
     hub = Hub.find(hub_id)
     tenant = hub.tenant
@@ -486,6 +485,7 @@ module ExcelTools
     # END Load Zones ------------------------
 
     # START Load Fees & Charges ------------------------
+    
     fees_sheet = xlsx.sheet(sheets[2])
 
     rows = fees_sheet.parse(
@@ -652,12 +652,18 @@ module ExcelTools
         end
         
         charges.each do |k, fee|
+          awesome_print fee[:direction] 
+          awesome_print direction 
+          awesome_print fee[:truck_type] 
+          awesome_print row_truck_type
           next unless fee[:direction] == direction && fee[:truck_type] == row_truck_type
-          fee.delete(:direction)
-          fee.delete(:truck_type)
-          trucking_pricing_by_zone[row_key][:fees][k] = fee
+          tmp_fee = fee.clone()
+          tmp_fee.delete(:direction)
+          tmp_fee.delete(:truck_type)
+          trucking_pricing_by_zone[row_key][:fees][k] = tmp_fee
         end
-
+        awesome_print charges
+        awesome_print trucking_pricing_by_zone[row_key][:fees]
         single_ident_values_and_country_with_timestamps =
           identifier_type == 'distance' ?
           single_ident_values_and_country.map do |h|
