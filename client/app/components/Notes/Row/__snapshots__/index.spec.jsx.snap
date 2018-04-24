@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="layout-row flex-100 layout-wrap layout-align-center"
+>
+  <div
+    className="flex-100 layout-row layout-align-space-between-center sec_header"
+  >
+    <p
+      className=" sec_header_text flex-none"
+    >
+       Notes 
+    </p>
+  </div>
+  <div
+    className="flex-100 layout-row layout-align-start-center"
+  >
+    <NotesCard
+      note={
+        Object {
+          "header": "FOO_HEADER",
+          "itineraryTitle": "FOO_TITLE",
+          "level": "important",
+        }
+      }
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
+</div>
+`;
