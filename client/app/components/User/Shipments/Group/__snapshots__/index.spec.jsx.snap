@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow render 1`] = `
+<div
+  className="flex-100 layout-row layout-wrap layout-align-start-start"
+>
+  <div
+    className="flex-100 layout-row layout-align-end-center"
+  >
+    <div
+      className="flex-none layout-row"
+    >
+      <RoundButton
+        active={false}
+        back={false}
+        disabled={false}
+        handleDisabled={null}
+        handleNext={[Function]}
+        icon=""
+        iconClass="fa-chevron-left"
+        size="small"
+        text="Back"
+        theme={
+          Object {
+            "colors": Object {
+              "primary": "#333",
+              "secondary": "#fafafa",
+            },
+          }
+        }
+      />
+    </div>
+  </div>
+  <div
+    className="flex-100 layout-row layout-wrap layout-align-start-start"
+  >
+    <AdminSearchableShipments
+      adminDispatch={Object {}}
+      handleClick={[Function]}
+      handleShipmentAction={[Function]}
+      hubs={
+        Object {
+          "foo": "bar",
+        }
+      }
+      limit={0}
+      seeAll={false}
+      shipments={Array []}
+      sideScroll={false}
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+      title="FOO_TITLE Shipments"
+      tooltip="Shipments requested from the open or client shop. Investigate the shipment data and evaluate whether to accept, edit or decline the shipment"
+      userView={false}
+    />
+    <div
+      className="flex-95 flex-offset-5 layout-row layout-wrap layout-align-start-center"
+    >
+      <div
+        className="flex-100 layout-row layout-align-space-between-center sec_subheader"
+      >
+        <p
+          className=" sec_subheader_text flex-none"
+        >
+           No Shipments yet
+        </p>
+      </div>
+      <p
+        className="flex-none"
+      >
+         As shipments are requested, they will appear here
+      </p>
+    </div>
+  </div>
+</div>
+`;
