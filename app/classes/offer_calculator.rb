@@ -143,7 +143,8 @@ class OfferCalculator
     @itineraries.each do |itin|
       
       destination_stop = itin.stops.where(hub_id: @destination_hubs).first
-      origin_layovers = itin.stops.where(hub_id: @origin_hubs).first.layovers.where("closing_date > ? AND closing_date < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
+      origin_stop = itin.stops.where(hub_id: @origin_hubs).first
+      origin_layovers = origin_stop.layovers.where("closing_date > ? AND closing_date < ?", @shipment.planned_pickup_date, @shipment.planned_pickup_date + delay.days).order(:etd).uniq
       trip_layovers = origin_layovers.each_with_object({}) do |ol, return_hash|
         return_hash[ol.trip_id] = [
           ol,
@@ -187,12 +188,11 @@ class OfferCalculator
   def set_trucking_charges!(charges, trip, sched_key)
     if @shipment.has_pre_carriage
       charges[sched_key][:trucking_pre] = determine_trucking_fees(
-        @shipment.origin, 
+        @shipment.origin,
         trip[0].stop.hub,
         'origin',
         'export'
       )
-      
     end
     
     if @shipment.has_on_carriage

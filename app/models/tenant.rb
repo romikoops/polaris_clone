@@ -27,7 +27,7 @@ class Tenant < ApplicationRecord
   validates :scope, presence: true, scope: true
 
   def get_admin
-    self.users.where(role_id: 1).first
+    self.users.joins(:role).where('roles.name': 'admin').first
   end
 
   def update_route_details
