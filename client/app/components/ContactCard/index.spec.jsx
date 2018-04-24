@@ -9,7 +9,7 @@ jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
 // eslint-disable-next-line
-import ContactCard from './ContactCard'
+import ContactCard from './'
 
 const editedUser = {
   ...user,
@@ -52,34 +52,6 @@ test('props.select is called upon click', () => {
   expect(props.select).not.toHaveBeenCalled()
   clickableDiv.simulate('click')
   expect(props.select).toHaveBeenCalled()
-})
-
-test('remove icon is visible when passing props.removeFunc', () => {
-  const props = {
-    ...propsBase,
-    removeFunc: jest.fn()
-  }
-  const dom = createWrapper(props)
-
-  const removeDefault = wrapper.find('.contact_card > i')
-  const remove = dom.find('.contact_card > i')
-
-  expect(removeDefault).toHaveLength(0)
-  expect(remove).toHaveLength(1)
-})
-
-test('click on remove icon calls props.removeFunc', () => {
-  const props = {
-    ...propsBase,
-    removeFunc: jest.fn()
-  }
-  const dom = createWrapper(props)
-
-  const remove = dom.find('.contact_card > i').first()
-
-  expect(props.removeFunc).not.toHaveBeenCalled()
-  remove.simulate('click')
-  expect(props.removeFunc).toHaveBeenCalled()
 })
 
 test('correctly render contact details', () => {

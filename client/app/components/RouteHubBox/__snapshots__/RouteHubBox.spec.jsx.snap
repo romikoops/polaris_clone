@@ -5,10 +5,10 @@ exports[`shallow rendering 1`] = `
   className=" outer_box flex-100 layout-row layout-align-center-center"
 >
   <div
-    className="flex-none content_width layout-row layout-align-start-center"
+    className="flex-none content_width layout-row layout-align-start-start"
   >
     <div
-      className="flex layout-row layout-wrap"
+      className="flex layout-row layout-wrap layout-align-center-start"
     >
       <h3
         className="flex-100 rhb_header"
@@ -61,7 +61,7 @@ exports[`shallow rendering 1`] = `
       </div>
     </div>
     <div
-      className="connection_graphics flex-25 layout-row layout-align-center-start"
+      className="connection_graphics flex-25 layout-row layout-align-center-center"
     >
       <div
         className="flex-100 layout-row layout-align-center-center"
@@ -130,7 +130,7 @@ exports[`shallow rendering 1`] = `
       </div>
     </div>
     <div
-      className="flex layout-row layout-wrap"
+      className="flex layout-row layout-wrap layout-align-center-start"
     >
       <h3
         className="flex-100 rhb_header"

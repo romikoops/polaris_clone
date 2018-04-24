@@ -6,13 +6,10 @@ jest.mock('../Header/Header', () =>
   // eslint-disable-next-line react/prop-types
   ({ children }) => <header>{children}</header>)
 
-jest.mock('../RoundButton/RoundButton', () => {
+jest.mock('../RoundButton/RoundButton', () => ({
   // eslint-disable-next-line react/prop-types
-  const RoundButton = ({ children }) => <button>{children}</button>
-
-  return { RoundButton }
-})
-
+  RoundButton: ({ children }) => <button>{children}</button>
+}))
 // eslint-disable-next-line
 import { LandingTop } from './LandingTop'
 
@@ -65,7 +62,6 @@ test('props.toggleShowLogin is called', () => {
 
   const link = wrapper.find('a').first()
 
-  expect(props.toggleShowLogin).not.toHaveBeenCalled()
   link.simulate('click')
   expect(props.toggleShowLogin).toHaveBeenCalled()
 })

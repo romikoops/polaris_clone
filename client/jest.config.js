@@ -7,6 +7,7 @@ module.exports = {
   snapshotSerializers: ['enzyme-to-json/serializer'],
   transformIgnorePatterns: ['/node_modules/'],
   unmockedModulePathPatterns: [],
+  testRegex: 'spec.jsx$',
   moduleNameMapper: {
     '\\.s?css$': 'identity-obj-proxy'
   }

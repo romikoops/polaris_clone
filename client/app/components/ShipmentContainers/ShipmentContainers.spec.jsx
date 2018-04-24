@@ -9,9 +9,6 @@ jest.mock('../Checkbox/Checkbox', () => ({
   // eslint-disable-next-line react/prop-types
   Checkbox: ({ children }) => <div>{children}</div>
 }))
-jest.mock('../ValidatedInput/ValidatedInput', () => ({
-  ValidatedInput: () => <input />
-}))
 jest.mock('../NamedSelect/NamedSelect', () => ({
   // eslint-disable-next-line react/prop-types
   NamedSelect: ({ children }) => <div>{children}</div>
@@ -20,7 +17,6 @@ jest.mock('../Tooltip/Tooltip', () => ({
   // eslint-disable-next-line react/prop-types
   Tooltip: ({ children }) => <div>{children}</div>
 }))
-
 // eslint-disable-next-line import/first
 import { ShipmentContainers } from './ShipmentContainers'
 

@@ -6,7 +6,7 @@ exports[`props.pickup is false 1`] = `
   key="555777"
 >
   <div
-    className="flex-75 layout-row layout-wrap"
+    className="flex-70 layout-row layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-start-center top_row"
@@ -184,10 +184,10 @@ exports[`props.pickup is false 1`] = `
     </div>
   </div>
   <div
-    className="flex-25 layout-row layout-wrap"
+    className="flex-30 layout-row layout-wrap layout-align-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="flex-90 layout-row layout-align-space-between-center layout-wrap"
     >
       <p
         className="flex-none"
@@ -210,7 +210,7 @@ exports[`props.pickup is false 1`] = `
       />
     </div>
     <div
-      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="flex-90 layout-row layout-align-space-between-center layout-wrap"
     >
       <RoundButton
         active={true}
@@ -242,7 +242,7 @@ exports[`shallow rendering 1`] = `
   key="555777"
 >
   <div
-    className="flex-75 layout-row layout-wrap"
+    className="flex-70 layout-row layout-wrap"
   >
     <div
       className="flex-100 layout-row layout-align-start-center top_row"
@@ -420,10 +420,10 @@ exports[`shallow rendering 1`] = `
     </div>
   </div>
   <div
-    className="flex-25 layout-row layout-wrap"
+    className="flex-30 layout-row layout-wrap layout-align-center"
   >
     <div
-      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="flex-90 layout-row layout-align-space-between-center layout-wrap"
     >
       <p
         className="flex-none"
@@ -446,7 +446,7 @@ exports[`shallow rendering 1`] = `
       />
     </div>
     <div
-      className="flex-100 layout-row layout-align-space-between-center layout-wrap"
+      className="flex-90 layout-row layout-align-space-between-center layout-wrap"
     >
       <RoundButton
         active={true}

@@ -18,7 +18,7 @@ const propsBase = {
   initialCompName: 'LoginPage',
   LoginPageProps: {},
   RegistrationPageProps: {},
-  updateDimentions: identity
+  updateDimensions: identity
 }
 
 const createWrapper = propsInput => mount(<LoginRegistrationWrapper {...propsInput} />)
@@ -30,20 +30,18 @@ test('shallow render', () => {
 test('click changes state and calls props.updateDimensions', () => {
   const props = {
     ...propsBase,
-    updateDimentions: jest.fn()
+    updateDimensions: jest.fn()
   }
   const dom = createWrapper(props)
   const clickableDiv = dom.find('.emulate_link').first()
 
   expect(dom.state().compName).toBe(undefined)
-  expect(props.updateDimentions).not.toHaveBeenCalled()
+  expect(props.updateDimensions).not.toHaveBeenCalled()
 
   clickableDiv.simulate('click')
-
+  expect(props.updateDimensions).toHaveBeenCalled()
   expect(dom.state().compName).toBe('RegistrationPage')
-  expect(props.updateDimentions).toHaveBeenCalled()
 
   clickableDiv.simulate('click')
-
   expect(dom.state().compName).toBe('LoginPage')
 })

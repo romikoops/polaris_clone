@@ -2,10 +2,12 @@
 
 exports[`shallow render 1`] = `
 <div
-  className="flex-100 layout-row contact_card "
-  key="RANDOM_KEY"
+  className="flex-100 layout-row contact_card"
   onClick={[Function]}
 >
+  <div
+    className="overlay"
+  />
   <div
     className="flex layout-row layout-wrap"
   >
@@ -19,7 +21,7 @@ exports[`shallow render 1`] = `
           className="flex-100 layout-row alyout-align-start-center"
         >
           <i
-            className="fa fa-user-circle-o flex-none"
+            className="fa fa-user-circle-o flex-none clip"
             style={
               Object {
                 "background": "-webkit-linear-gradient(left, #333,#fafafa)",
@@ -44,7 +46,7 @@ exports[`shallow render 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <i
-            className="fa fa-envelope flex-none"
+            className="fa fa-envelope flex-none clip"
             style={
               Object {
                 "background": "-webkit-linear-gradient(left, #333,#fafafa)",
@@ -70,10 +72,10 @@ exports[`shallow render 1`] = `
         className="flex-60 layout-row layout-align-start-start layout-wrap"
       >
         <div
-          className="flex-100 layout-row alyout-align-start-center"
+          className="flex-100 layout-row layout-align-start-center"
         >
           <i
-            className="fa fa-building-o flex-none"
+            className="fa fa-building-o flex-none clip"
             style={
               Object {
                 "background": "-webkit-linear-gradient(left, #333,#fafafa)",
@@ -83,11 +85,12 @@ exports[`shallow render 1`] = `
             }
           />
           <p
-            className="flex contact_header"
+            className="flex-80 contact_header"
           >
             <Component
-              lines={1}
+              trimWhitespace={true}
             >
+               
                
             </Component>
           </p>
@@ -100,7 +103,7 @@ exports[`shallow render 1`] = `
           className="flex-100 layout-row layout-align-start-center"
         >
           <i
-            className="fa fa-phone flex-none"
+            className="fa fa-phone flex-none clip"
             style={
               Object {
                 "background": "-webkit-linear-gradient(left, #333,#fafafa)",
@@ -123,7 +126,7 @@ exports[`shallow render 1`] = `
       className="flex-100 layout-row layout-align-start-center"
     >
       <i
-        className="fa fa-globe flex-none"
+        className="fa fa-globe flex-none clip"
         style={
           Object {
             "background": "-webkit-linear-gradient(left, #333,#fafafa)",

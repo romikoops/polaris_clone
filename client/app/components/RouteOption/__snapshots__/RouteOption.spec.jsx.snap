@@ -42,9 +42,6 @@ exports[`props.routeSelected is true 1`] = `
         <i
           className="fa fa-undefined"
         />
-        <i
-          className="fa fa-undefined"
-        />
       </div>
       <div
         style={
@@ -69,6 +66,7 @@ exports[`props.routeSelected is true 1`] = `
         className="flex-100"
       >
          
+        foo-bar
          
       </h4>
     </div>
@@ -128,9 +126,6 @@ exports[`shallow rendering 1`] = `
         <i
           className="fa fa-undefined"
         />
-        <i
-          className="fa fa-undefined"
-        />
       </div>
       <div
         style={
@@ -155,6 +150,7 @@ exports[`shallow rendering 1`] = `
         className="flex-100"
       >
          
+        foo-bar
          
       </h4>
     </div>

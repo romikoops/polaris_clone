@@ -3,21 +3,39 @@
 exports[`shallow render 1`] = `
 <div
   className="
-                contact_scroll flex-100 layout-row layout-wrap layout-align-center-start
-            "
+        contact_scroll flex-100 layout-row layout-wrap layout-align-start
+      "
 >
-  <ContactCard
-    key="RANDOM_KEY"
-    popOutHover={true}
-    select={[Function]}
-    theme={
+  <div
+    className="flex-50"
+    style={
       Object {
-        "colors": Object {
-          "primary": "#333",
-          "secondary": "#fafafa",
-        },
+        "padding": "15px",
       }
     }
-  />
+  >
+    <AddressBookAddContactButton />
+  </div>
+  <div
+    className="flex-50"
+    key="RANDOM_KEY"
+    style={
+      Object {
+        "padding": "15px",
+      }
+    }
+  >
+    <ContactCard
+      contactType=""
+      theme={
+        Object {
+          "colors": Object {
+            "primary": "#333",
+            "secondary": "#fafafa",
+          },
+        }
+      }
+    />
+  </div>
 </div>
 `;

@@ -11,6 +11,12 @@ exports[`shallow render 1`] = `
 >
   <RouteHubBox
     hubs={Object {}}
+    locations={
+      Object {
+        "endHub": "FOO_END_HUB",
+        "startHub": "FOO_START_HUB",
+      }
+    }
     route={
       Array [
         Object {

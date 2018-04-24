@@ -114,30 +114,6 @@ exports[`shallow render 1`] = `
           </div>
         </div>
       </div>
-      <div
-        className="flex-100 layout-row layout-wrap"
-      >
-        <div
-          className="flex-100 layout-row layout-align-start route_header"
-        >
-          <div
-            className="flex-none"
-          >
-            <TextHeading
-              size={3}
-              text="Alternative modes of transport"
-              theme={
-                Object {
-                  "colors": Object {
-                    "primary": "#333",
-                    "secondary": "#fafafa",
-                  },
-                }
-              }
-            />
-          </div>
-        </div>
-      </div>
     </div>
   </div>
   <div

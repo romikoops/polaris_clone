@@ -48,7 +48,7 @@ exports[`user.role_id is 1 1`] = `
           <img
             alt=""
             className="flex-none tenant_logo_landing"
-            src="https://assets.itsmycargo.com/assets/images/logos/logo_white.png"
+            src=""
           />
           <h2
             className="flex-none"
@@ -67,7 +67,7 @@ exports[`user.role_id is 1 1`] = `
             <b>
                
               <br />
-              online freight calculator
+              shop for online freight
             </b>
           </h2>
           <div
@@ -90,7 +90,7 @@ exports[`user.role_id is 1 1`] = `
           </div>
         </div>
         <div
-          className="wrapper_btns flex-75 layout-row layout-align-start-center"
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
             className="flex"
@@ -191,7 +191,7 @@ exports[`user.role_id is 2 1`] = `
           <img
             alt=""
             className="flex-none tenant_logo_landing"
-            src="https://assets.itsmycargo.com/assets/images/logos/logo_white.png"
+            src=""
           />
           <h2
             className="flex-none"
@@ -210,7 +210,7 @@ exports[`user.role_id is 2 1`] = `
             <b>
                
               <br />
-              online freight calculator
+              shop for online freight
             </b>
           </h2>
           <div
@@ -233,7 +233,7 @@ exports[`user.role_id is 2 1`] = `
           </div>
         </div>
         <div
-          className="wrapper_btns flex-75 layout-row layout-align-start-center"
+          className="layout-row layout-align-start-center wrapper_btns flex-70 "
         >
           <div
             className="flex"

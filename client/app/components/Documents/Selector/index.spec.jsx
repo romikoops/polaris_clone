@@ -8,19 +8,6 @@ jest.mock('.././../../helpers', () => ({
 jest.mock('node-uuid', () => ({
   v4: () => 'RANDOM_KEY'
 }))
-jest.mock('isomorphic-fetch', () =>
-  () => Promise.resolve({ data: [] }))
-jest.mock('react-router', () => ({
-  // eslint-disable-next-line react/prop-types
-  Link: () => ({ props }) => <a {...props}>link</a>
-}))
-jest.mock('../../RoundButton/RoundButton', () => ({
-  // eslint-disable-next-line react/prop-types
-  RoundButton: () => ({ props }) => <button {...props}>click</button>
-}))
-jest.mock('react-tooltip', () =>
-  // eslint-disable-next-line react/prop-types
-  () => ({ props }) => ({ children }) => <div>{children}</div>)
 // eslint-disable-next-line
 import DocumentsSelector from './'
 

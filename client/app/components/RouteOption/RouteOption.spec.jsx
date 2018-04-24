@@ -6,6 +6,7 @@ import { RouteOption } from './RouteOption'
 
 const editedRoute = {
   ...route,
+  name: 'foo-bar',
   modesOfTransport: { a: 'FOO', b: 'BAR' }
 }
 

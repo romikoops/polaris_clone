@@ -60,7 +60,7 @@ exports[`props.containers has dangerous_goods as true 1`] = `
                 Array [],
               ]
             }
-            value="fcl_20f"
+            value="fcl_20"
           />
         </div>
         <div
@@ -635,7 +635,7 @@ exports[`props.nextStageAttempt is true 1`] = `
                 Array [],
               ]
             }
-            value="fcl_20f"
+            value="fcl_20"
           />
         </div>
         <div
@@ -1210,7 +1210,7 @@ exports[`props.scope.dangerous_goods is true 1`] = `
                 Array [],
               ]
             }
-            value="fcl_20f"
+            value="fcl_20"
           />
         </div>
         <div
@@ -1785,7 +1785,7 @@ exports[`shallow rendering 1`] = `
                 Array [],
               ]
             }
-            value="fcl_20f"
+            value="fcl_20"
           />
         </div>
         <div

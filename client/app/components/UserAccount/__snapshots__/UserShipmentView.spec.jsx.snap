@@ -4,25 +4,6 @@ exports[`props.loading is true 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start"
 >
-  <div
-    className="flex-100 layout-row layout-align-end-center sec_title"
-  >
-    <RoundButton
-      back={true}
-      handleNext={[Function]}
-      iconClass="fa-angle-left"
-      size="small"
-      text="Back"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-    />
-  </div>
   <Component
     content={
       <div
@@ -236,6 +217,61 @@ exports[`props.loading is true 1`] = `
     }
     handleCollapser={[Function]}
     headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermExtras
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Extras"
     theme={
       Object {
         "colors": Object {
@@ -584,25 +620,6 @@ exports[`shallow render 1`] = `
 <div
   className="flex-100 layout-row layout-wrap layout-align-start-start"
 >
-  <div
-    className="flex-100 layout-row layout-align-end-center sec_title"
-  >
-    <RoundButton
-      back={true}
-      handleNext={[Function]}
-      iconClass="fa-angle-left"
-      size="small"
-      text="Back"
-      theme={
-        Object {
-          "colors": Object {
-            "primary": "#333",
-            "secondary": "#fafafa",
-          },
-        }
-      }
-    />
-  </div>
   <Component
     content={
       <div
@@ -816,6 +833,61 @@ exports[`shallow render 1`] = `
     }
     handleCollapser={[Function]}
     headingText="Fares & Fees"
+    theme={
+      Object {
+        "colors": Object {
+          "primary": "#333",
+          "secondary": "#fafafa",
+        },
+      }
+    }
+  />
+  <Component
+    content={
+      <div
+        className="flex-100"
+      >
+        <div
+          className="flex-100 layout-row layout-align-center-center"
+        >
+          <div
+            className="flex-none content_width_booking layout-row layout-align-center-center"
+          >
+            <IncotermExtras
+              feeHash={
+                Object {
+                  "foo": "FOO_ROUTE_KEY",
+                }
+              }
+              tenant={
+                Object {
+                  "data": Object {
+                    "id": 123,
+                    "subdomain": "foosubdomain",
+                    "theme": Object {
+                      "colors": Object {
+                        "primary": "#333",
+                        "secondary": "#fafafa",
+                      },
+                    },
+                  },
+                }
+              }
+              theme={
+                Object {
+                  "colors": Object {
+                    "primary": "#333",
+                    "secondary": "#fafafa",
+                  },
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    }
+    handleCollapser={[Function]}
+    headingText="Extras"
     theme={
       Object {
         "colors": Object {
