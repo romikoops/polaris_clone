@@ -209,7 +209,7 @@ export class BookingConfirmation extends Component {
       <div className="flex-none layout-row layout-align-end-end">
         <RoundButton
           theme={theme}
-          text="Finish Booking"
+          text="Finish Booking Request"
           handleNext={() => this.requestShipment()}
           active
         />
@@ -217,7 +217,11 @@ export class BookingConfirmation extends Component {
     )
     const nonAcceptedBtn = (
       <div className="flex-none layout-row layout-align-end-end">
-        <RoundButton theme={theme} text="Finish Booking" handleNext={e => e.preventDefault()} />
+        <RoundButton
+          theme={theme}
+          text="Finish Booking Request"
+          handleNext={e => e.preventDefault()}
+        />
       </div>
     )
 

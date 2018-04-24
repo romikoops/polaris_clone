@@ -117,7 +117,11 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@greencarrier.com",
-        support: "support@greencarrier.com"
+        support: {
+          general: "support@greencarrier.com",
+          air: "imc.air.se@greencarrier.se",
+          ocean: "imc.sea.se@greencarrier.se"
+        }
       },
       subdomain: "greencarrier",
       name: "Greencarrier",
@@ -146,7 +150,7 @@ class TenantSeeder
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
-          "Greencarrier is to discuss the validity of the presented prices with the product owners."
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
 
         ],
         carriage_options: {
@@ -198,7 +202,11 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@demo.com",
-        support: "support@demo.com"
+        support: {
+          general: "support@demo.com",
+          air: "imc.air@demo.com",
+          ocean: "imc.sea@demo.com"
+        }
       },
       subdomain: "demo",
       name: "Demo",
@@ -275,7 +283,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@nordicconsolidators.com",
-        support: "info@nordicconsolidators.com"
+        support:{
+          general: "info@nordicconsolidators.com"
+        }
       },
       subdomain: "nordicconsolidators",
       name: "Nordic Consolidators",
@@ -337,7 +347,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@easyshipping.dk",
-        support: "support@easyshipping.dk"
+        support: {
+          general: "support@easyshipping.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -402,7 +414,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@integrail.hu",
-        support: "info@tantumshipping.com"
+        support: {
+          general: "info@tantumshipping.com"
+        }
       },
       subdomain: "integrail",
       name: "Integrail",
@@ -464,7 +478,9 @@ class TenantSeeder
       },
       emails: {
         sales: "info@isa.dk",
-        support: "info@isa.dk"
+        support: {
+          general: "info@isa.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -530,7 +546,9 @@ class TenantSeeder
       },
       emails: {
         sales: "service@eimskip.is",
-        support: "service@eimskip.is"
+        support: {
+          general: "service@eimskip.is"
+        }
       },
       subdomain: "eimskip",
       name: "Eimskip",
@@ -591,7 +609,9 @@ class TenantSeeder
       },
       emails: {
         sales: "info@belglobe.com",
-        support: "info@belglobe.com"
+        support: {
+          general: "info@belglobe.com"
+        }
       },
       subdomain: "belglobe",
       name: "Belglobe",
@@ -652,7 +672,9 @@ class TenantSeeder
       },
       emails: {
         sales: "jan.glembocki@gw-freight.com",
-        support: "support@gw-freight.com"
+        support: {
+          general: "support@gw-freight.com"
+        }
       },
       subdomain: "gwforwarding",
       name: "GW Forwarding",
@@ -715,7 +737,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@hartrodt.com",
-        support: " ah_ham@hartrodt.com"
+        support: {
+          general: "ah_ham@hartrodt.com"
+        }
       },
       subdomain: "hartrodt",
       name: "a.hartrodt",
@@ -795,7 +819,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@saco.de",
-        support: "support@saco.de"
+        support: {
+          general: "support@saco.de"
+        }
       },
       subdomain: "saco",
       name: "SACO Shipping GmbH",

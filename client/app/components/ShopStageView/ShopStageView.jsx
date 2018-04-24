@@ -4,6 +4,7 @@ import PropTypes from '../../prop-types'
 import defs from '../../styles/default_classes.scss'
 import { SHIPMENT_STAGES } from '../../constants'
 import { gradientTextGenerator, gradientGenerator, history } from '../../helpers'
+import { HelpContact } from '../Help/Contact'
 
 export class ShopStageView extends Component {
   static goBack () {
@@ -26,7 +27,9 @@ export class ShopStageView extends Component {
 
     this.props.setStage(stage)
   }
-
+  showContactHelp () {
+    this.setState({ showHelp: !this.state.showHelp })
+  }
   stageBoxCircle (stage) {
     const { theme } = this.props
     const gradientStyle =
@@ -91,7 +94,8 @@ export class ShopStageView extends Component {
     )
   }
   render () {
-    const { theme, hasNextStage } = this.props
+    const { theme, hasNextStage, tenant } = this.props
+    const { showHelp } = this.state
     const stageBoxes = SHIPMENT_STAGES.map(stage => this.stageBox(stage))
     const gradientStyle =
       theme && theme.colors
@@ -120,6 +124,15 @@ export class ShopStageView extends Component {
         <p className={`flex-none ${styles.stage_text}`}>Previous Step</p>
       </div>
     )
+    const help = (
+      <div
+        className={`${styles.help_btn} flex-none layout-row layout-align-center-center`}
+        onClick={() => this.showContactHelp()}
+      >
+        <i className="fa fa-question" />
+      </div>
+    )
+    const helpModal = showHelp ? <HelpContact tenant={tenant} parentToggle={() => this.showContactHelp()} /> : ''
     const fwdBtn = hasNextStage ? (
       <div
         className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
@@ -138,9 +151,7 @@ export class ShopStageView extends Component {
         <p className={`flex-none ${styles.stage_text}`}>Next Step</p>
       </div>
     ) : (
-      <div
-        className={`${styles.stage_box} flex-none layout-column layout-align-start-center`}
-      />
+      <div className={`${styles.stage_box} flex-none layout-column layout-align-start-center`} />
     )
     return (
       <div className="layout-row flex-100 layout-align-center layout-wrap">
@@ -167,7 +178,9 @@ export class ShopStageView extends Component {
             </div>
           </div>
           {fwdBtn}
+          {help}
         </div>
+        {helpModal}
       </div>
     )
   }
@@ -175,6 +188,7 @@ export class ShopStageView extends Component {
 
 ShopStageView.propTypes = {
   theme: PropTypes.theme,
+  tenant: PropTypes.tenant,
   setStage: PropTypes.func.isRequired,
   currentStage: PropTypes.number,
   shopType: PropTypes.string.isRequired,
@@ -186,6 +200,7 @@ ShopStageView.propTypes = {
 ShopStageView.defaultProps = {
   currentStage: 1,
   theme: null,
+  tenant: {},
   disabledClick: false,
   hasNextStage: false,
   goForward: null

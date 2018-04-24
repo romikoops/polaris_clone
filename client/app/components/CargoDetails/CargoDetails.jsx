@@ -151,6 +151,11 @@ export class CargoDetails extends Component {
     this.setState({ totalGoodsCurrency: selection })
     this.props.handleTotalGoodsCurrency(selection.value)
   }
+  insuranceReadMore () {
+    const { tenant } = this.props
+    const url = `http://${tenant.data.subdomain}.itsmycargo.com/insurance`
+    window.open(url, '_blank')
+  }
   render () {
     const {
       shipmentData,
@@ -212,7 +217,9 @@ export class CargoDetails extends Component {
     )
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
-
+    const textComp = (
+      <b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>
+    )
     const customsBox = (
       <div
         className={`flex-100 layout-row layout-wrap  ${styles.box_content} ${
@@ -233,13 +240,13 @@ export class CargoDetails extends Component {
             customs duty or VAT due on your behalf – we charge a clearance / handling fee. The fee
             depends on the value of the goods you are shipping, and can be found here to the right.
           </p>
-          <div className="flex-100 layout-row layout-align-start-start">
+          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
             <div className="flex-100 layout-row layout-align-start-center">
               <p className="flex-none"> {`I would like ${tenant.data.name} to handle:`}</p>
             </div>
-            <div className="flex-100 layout-row layout-align-start-center">
+            <div className="flex-100 layout-row layout-align-start-center layout-wrap">
               <div
-                className="flex-50 layout-row layout-align-space-around-center"
+                className="flex-45 layout-row layout-align-space-around-center"
                 data-tip={tooltips.customs_pre_carriage}
                 data-for="preCarriageTooltip"
               >
@@ -261,7 +268,7 @@ export class CargoDetails extends Component {
                 ''
               )}
               <div
-                className="flex-50 layout-row layout-align-space-around-center"
+                className="flex-45 layout-row layout-align-space-around-center"
                 data-tip={tooltips.customs_on_carriage}
                 data-for="onCarriageTooltip"
               >
@@ -281,6 +288,23 @@ export class CargoDetails extends Component {
                 ) : (
                   ''
                 )}
+              </div>
+            </div>
+            <div className="flex-100 no_max layout-row layout-align-start-center">
+              <div className="flex-33 layout-row layout-wrap">
+                <div className="flex-100">
+                  <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
+                </div>
+                <div className="flex-100 input_box">
+                  <input
+                    className={styles.EORI_input}
+                    type="text"
+                    name="eori"
+                    value={eori}
+                    onChange={this.handleChange}
+                    placeholder="Type in EORI number"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -313,31 +337,27 @@ export class CargoDetails extends Component {
         </div>
       </div>
     )
-    const textComp = (
-      <b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>
-    )
+
     const noCustomsBox = (
       <div
-        className={`flex-100 layout-row layout-align-start-center ${styles.no_customs_box} ${
-          !this.state.customsView ? styles.show : ''
-        }`}
+        className={`flex-100 layout-row layout-align-start-center layout-wrap ${
+          styles.no_customs_box
+        } ${!this.state.customsView ? styles.show : ''}`}
       >
-        <div className="flex-33 no_max layout-row layout-align-start-center">
-          <div className="flex-90 layout-row layout-wrap">
-            <div className="flex-100">
-              <TextHeading theme={theme} size={3} text="EORI" Comp={textComp} />
-            </div>
-            <div className="flex-100 input_box">
-              <input
-                className={styles.EORI_input}
-                type="text"
-                name="eori"
-                value={eori}
-                onChange={this.handleChange}
-                placeholder="Type in EORI number"
-              />
-            </div>
-          </div>
+        <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+          <p className="flex-100">
+            <b>
+              A customs declaration is mandatory to pass a national border when exporting or
+              importing. If you choose to handle the customs clearance on your own, Greencarrier
+              will need a copy of the customs declaration.
+            </b>
+          </p>
+          <p className="flex-100">
+            <b>
+              When you ship goods from outside the European Union (EU), you may be charged customs
+              duty and/or VAT according to local regulations.
+            </b>
+          </p>
         </div>
         <div className="flex-33 no_max layout-row layout-align-start-center">
           <div className="flex-90 layout-row layout-wrap">
@@ -451,11 +471,11 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                 </div>
-                <div className="flex-100 layout-row layout-wrap">
+                <div className="flex-100 layout-row layout-wrap" id="cargo_notes">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Description of goods (optional)" />
+                      <TextHeading theme={theme} size={3} text="Description of goods" />
                     </div>
                   </div>
                   <div className="flex-100">
@@ -466,13 +486,35 @@ export class CargoDetails extends Component {
                       value={this.props.cargoNotes}
                       onChange={this.handleChange}
                     />
+                    {/* <FormsyInput
+                      className={`flex-100 ${styles.cargo_text_area} `}
+                      wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
+                      errorMessageStyles={{
+                        fontSize: '13px',
+                        bottom: '-17px'
+                      }}
+                      type="textarea"
+                      name="cargoNotes"
+                      value={this.props.cargoNotes}
+                      onChange={this.handleChange}
+                      submitAttempted={finishBookingAttempted}
+                      validationErrors={{
+                        isDefaultRequiredValue: 'Must not be empty'
+                      }}
+                      required
+                    /> */}
                   </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
                   <div className="flex-100">
                     <div className={`flex-none ${styles.f_header}`}>
                       {' '}
-                      <TextHeading theme={theme} size={3} text="Incoterm" />
+                      <TextHeading
+                        theme={theme}
+                        size={4}
+                        text="Incoterms 2010 by the International
+                         Chamber of Commerce (ICC)  (Optional)"
+                      />
                     </div>
                   </div>
                   <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -540,7 +582,7 @@ export class CargoDetails extends Component {
                     <div className="flex-100">
                       <div className={`flex-none ${styles.f_header}`}>
                         {' '}
-                        <TextHeading theme={theme} size={3} text="Document Notes" />
+                        <TextHeading theme={theme} size={3} text="Notes" />
                       </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -592,7 +634,6 @@ export class CargoDetails extends Component {
                   <div className="flex-100 layout-row layout-align-space-between-start">
                     <div className="flex-none layout-row layout-align-space-around-center">
                       <TextHeading theme={theme} size={2} text="Insurance" />
-                      <Tooltip theme={theme} icon="fa-info-circle" text="insurance" />
                     </div>
 
                     <div
@@ -601,7 +642,7 @@ export class CargoDetails extends Component {
                       <div className="flex-100 layout-row layout-wrap layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
                           <p className="flex-none layout-align-start-center">
-                            {`Yes, I want ${tenant.data.name} to insure my cargo`}
+                            {`Yes, I want ${tenant.data.name} to quote insurance for my cargo`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -614,9 +655,10 @@ export class CargoDetails extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                            tenant.data.name
-                          } to insure my cargo`}
+                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                            {`No, I do not want ${
+                              tenant.data.name
+                            } to quote insurance for my cargo`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
@@ -633,18 +675,18 @@ export class CargoDetails extends Component {
                   </div>
                   <div className="flex-100 layout-row layout-align-start-center">
                     <p className="flex-100">
-                      Cargo insurance provides protection against all risks of physical loss or
-                      damage to freight from any external cause during shipping, whether by land,
-                      sea or air.
+                      <b>
+                        Cargo Insurance provides cover on all rsk terms for physical loss or damage
+                        to cargo during transport by land, sea or air.
+                      </b>
                     </p>
                   </div>
                   {!this.state.insuranceView ? (
                     <div className="flex-100 layout-row layout-align-start-center">
                       <p className="flex-100">
                         <b>
-                          Note that if you choose not to insure the goods it will only be covered by
-                          carriers liability to the extent that it is covered under legal liability
-                          standard to the transport industry.
+                          Insurance is a cost effective and simple way to cover for physical loss or
+                          damage to goods in transit.
                         </b>
                       </p>
                     </div>
@@ -652,6 +694,15 @@ export class CargoDetails extends Component {
                     ''
                   )}
                   {insuranceBox}
+                  <div className="flex-100 layout-row layout-align-start-center">
+                    <div
+                      className="flex-none layout-row layout-align-center-center"
+                      onClick={() => this.insuranceReadMore()}
+                    >
+                      <p className="flex-none pointy">Read more...</p>
+                      <i className="flex-none offset-5 fa fa-external-link" />
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -689,28 +740,20 @@ export class CargoDetails extends Component {
                       </div>
                       <div className="flex-100 layout-row layout-align-end-center">
                         <div className="flex-90 layout-row layout-align-start-center">
-                          <p className="flex-none" style={{ marginRight: '5px' }}>{`No, I do not want ${
-                            tenant.data.name
-                          } to handle my customs`}
+                          <p className="flex-none" style={{ marginRight: '5px' }}>
+                            {`No, I do not want ${tenant.data.name} to handle my customs`}
                           </p>
                         </div>
                         <div className="flex-10 layout-row layout-align-end-center">
                           <Checkbox
                             onChange={() => this.toggleCustoms(false)}
-                            checked={this.state.customsView === null
-                              ? null : !this.state.customsView
+                            checked={
+                              this.state.customsView === null ? null : !this.state.customsView
                             }
                             theme={theme}
                           />
                         </div>
                       </div>
-                    </div>
-                    <div className="flex-100 layout-row layout-align-start-center">
-                      <p className="flex-none">
-                        A documented permission is needed (mandatory) to pass a national border when
-                        exporting or importing. Power of Attorney may be required according to local
-                        regulations.
-                      </p>
                     </div>
                   </div>
                   {customsBox}

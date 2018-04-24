@@ -141,9 +141,8 @@ export class RouteFilterBox extends Component {
           </div>
         </div>
         <StyledRange className={styles.transit_time}>
-          <p>
-            <TextHeading theme={theme} size={4} text="Transit Time" />
-          </p>
+          <TextHeading theme={theme} size={4} text="Est. Transit Time" />
+          <p style={{ fontSize: '10px', marginTop: '0' }}> No time guarantee</p>
           <input type="range" value={this.props.durationFilter} onChange={this.setFilterDuration} />
           <div className={styles.transit_time_labels}>
             <p>20 days</p>

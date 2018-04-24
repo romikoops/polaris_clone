@@ -10,7 +10,7 @@ export function Footer ({ theme, tenant }) {
   let logo = theme && theme.logoLarge ? theme.logoLarge : ''
   if (!logo && theme && theme.logoSmall) logo = theme.logoSmall
   const supportNumber = tenant && tenant.phones ? tenant.phones.support : ''
-  const supportEmail = tenant && tenant.emails ? tenant.emails.support : ''
+  const supportEmail = tenant && tenant.emails ? tenant.emails.support.general : ''
   const tenantName = tenant ? tenant.name : ''
   return (
     <div className="flex-100 layout-row layout-wrap">
