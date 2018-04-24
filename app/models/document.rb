@@ -25,7 +25,8 @@ class Document < ApplicationRecord
       shipment_id: shipment['uuid'], 
       text: file_name, 
       doc_type: type, 
-      user_id: user.id
+      user_id: user.id,
+      tenant_id: user.tenant_id
     )
   end
 

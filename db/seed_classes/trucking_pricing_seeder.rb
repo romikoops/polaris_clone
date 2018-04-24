@@ -21,6 +21,11 @@ class TruckingPricingSeeder
 			req = {"xlsx" => trucking}
 			overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 			awesome_print "All rates done"
+
+			hub = tenant.hubs.find_by_name("Stockholm Airport")
+			trucking = File.open("#{Rails.root}/db/dummydata/gc_trucking_stockholm.xlsx")
+			req = {"xlsx" => trucking}
+			overwrite_zonal_trucking_rates_by_hub(req, shipper, hub.id)
 		end
 	end
 end

@@ -40,6 +40,9 @@ export function RoundButton ({
     case 'small':
       sizeClass = styles.small
       break
+    case 'medium':
+      sizeClass = styles.medium
+      break
     case 'full':
       sizeClass = styles.full
       break

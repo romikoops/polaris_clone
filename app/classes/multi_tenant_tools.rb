@@ -1,6 +1,5 @@
 module MultiTenantTools
   include ExcelTools
-  include MongoTools
   require "#{Rails.root}/db/seed_classes/vehicle_seeder.rb"
   require "#{Rails.root}/db/seed_classes/pricing_seeder.rb"
 
@@ -509,14 +508,5 @@ module MultiTenantTools
         caller_reference: invalStr.to_s, # required
       },
     })
-  end
-  def download_mongo
-    results = {}
-    %w(customsFees itineraryOptions itineraryPricings localCharges pricings).each do |target|
-      results[target] = $db[target].find({})
-    end
-    File.open("mongo_dump.json","w") do |f|
-      f.write(results.to_json)
-    end
   end
 end

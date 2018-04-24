@@ -3,12 +3,11 @@ class Admin::ItinerariesController < ApplicationController
   include PricingTools
   include ItineraryTools
 
-  
-
   def index
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     response_handler(itineraries)
   end
+
   def create
     new_itinerary_data = params[:itinerary].as_json
     itinerary = Itinerary.find_or_create_by(mode_of_transport: new_itinerary_data["mot"], name: new_itinerary_data["name"], tenant_id: current_user.tenant_id)
@@ -17,25 +16,28 @@ class Admin::ItinerariesController < ApplicationController
     current_user.tenant.update_route_details
     response_handler(itinerary)
   end
+
   def destroy
     itinerary = Itinerary.find(params[:id]).destroy
     response_handler(true)
   end
+
   def stops
     itinerary = Itinerary.find(params[:id])
     stops = itinerary.stops.order(:index)
     response_handler(stops)
   end
+
   def edit_notes
     itinerary = Itinerary.find(params[:id])
     itinerary.notes.create!(body: params[:notes][:body], header: params[:notes][:header], level: params[:notes][:level])
     response_handler(itinerary)
   end
+
   def show
     itinerary = Itinerary.find(params[:id])
-    pricings = get_itinerary_pricings_array(params[:id], current_user.tenant_id)
     hubs = itinerary.hubs
-    detailed_itineraries = get_itinerary_options(itinerary)
+    detailed_itineraries = itinerary.as_options_json
     stops = itinerary.stops.order(:index)
     schedules = itinerary.prep_schedules(10)
     notes = itinerary.notes

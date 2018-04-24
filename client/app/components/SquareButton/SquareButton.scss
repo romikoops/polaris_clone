@@ -53,8 +53,12 @@
   .content {
     position: relative;
     margin: 0;
+    background-clip: text !important;
     -webkit-background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
+    // @media screen and (min-width:0\0) {
+    //   color: darkblue;
+    // }
     font-weight: bold;
     background: url('https://preview.ibb.co/mqLnBn/chuttersnap_368037_unsplash.jpg');
   }

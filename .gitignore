@@ -90,3 +90,5 @@ typings/
 
 # dotenv environment variables file
 .env
+# /config/database.yml
+.idea

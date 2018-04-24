@@ -96,6 +96,16 @@ group :development, :test do
   # Better debugging
   gem 'ruby-debug-ide'
   gem 'debase'
+  gem 'rspec-rails'
+  gem 'dotenv-rails' # set environment variables
+  gem 'factory_bot_rails'
+end
+
+group :test do
+  gem 'webmock'
+  gem 'simplecov', require: false
+  gem 'shoulda-matchers'
+  gem 'timecop'
 end
 
 group :development, :staging do

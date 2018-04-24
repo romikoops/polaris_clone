@@ -25,11 +25,7 @@ export class RouteOption extends Component {
 
   render () {
     const { theme, route } = this.props
-    const { originNexus, destinationNexus } = route
-    const modesOfTransport = Object.keys(route.modesOfTransport)
-      .filter(mot => route.modesOfTransport[mot])
-    // const modesOfTransport  = ['ocean', 'air', 'train'];
-    // route.dedicated = Math.random() < 0.3;
+    const [originNexus, destinationNexus] = route.name.split(' - ')
     const dashedLineStyles = {
       marginTop: '6px',
       height: '2px',
@@ -40,7 +36,7 @@ export class RouteOption extends Component {
           : 'black',
       backgroundSize: '16px 2px, 100% 2px'
     }
-    const icons = modesOfTransport.map(mot => RouteOption.faIcon(mot))
+    const icons = RouteOption.faIcon(route.modeOfTransport)
     const dedicatedDecoratorStyles = {
       borderTop: route.dedicated
         ? `28px solid ${theme.colors.primary}66`

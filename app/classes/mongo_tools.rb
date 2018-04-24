@@ -22,11 +22,6 @@ module MongoTools
     return resp.first
   end
 
-  def get_item_fn(client, table, keyName, key)
-    resp = client[table.to_sym].find({"#{keyName}" => key})
-    return resp.first
-  end
-
   def get_items(table, keyName, key)
     client = init
     resp = client[table.to_sym].find({"#{keyName}" => key})

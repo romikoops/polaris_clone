@@ -18,8 +18,11 @@ class Tenant < ApplicationRecord
   has_many :layovers, through: :stops
   has_many :trucking_pricings
   has_many :documents
-  has_many :local_charges, through: :hubs
-  has_many :customs_fees, through: :hubs
+  has_many :pricings
+  has_many :pricing_exceptions
+  has_many :pricing_details
+  has_many :local_charges
+  has_many :customs_fees
     
   validates :scope, presence: true, scope: true
 
@@ -28,15 +31,8 @@ class Tenant < ApplicationRecord
   end
 
   def update_route_details
-    itineraries = Itinerary.where(tenant_id: self.id)
-    detailed_itineraries = itineraries.map do |itinerary, h|
-      itinerary.set_scope!
-
-      itinerary.routes
-    end
-    update_item('itineraryOptions', {id: self.id}, {data: detailed_itineraries.flatten})
+    itineraries.map(&:set_scope!)
   end
-
   def mot_scope(args)
     mot = scope["modes_of_transport"]
     mot = load_type_filter("container", mot)  if args[:only_container]

@@ -2,12 +2,18 @@ class Itinerary < ApplicationRecord
   extend ItineraryTools
   include ItineraryTools
 
+  belongs_to :tenant
+  belongs_to :mot_scope, optional: true
   has_many :stops,     dependent: :destroy
   has_many :layovers,  dependent: :destroy
   has_many :shipments, dependent: :destroy
   has_many :trips,     dependent: :destroy
-  belongs_to :mot_scope, optional: true
   has_many :notes,     dependent: :destroy
+  has_many :pricings,  dependent: :destroy
+
+  scope :for_mot, ->(mot_scope_ids) { where(mot_scope_id: mot_scope_ids) }
+  #scope :for_hub, ->(hub_ids) { where(hub_id: hub_ids) } # TODO: join stops
+
 
   def self.find_or_create_by_hubs(hub_ids, tenant_id, mot, vehicle_id, name)
     tenant = Tenant.find(tenant_id)
@@ -139,7 +145,7 @@ class Itinerary < ApplicationRecord
 
   def prep_schedules(limit)
     schedules = []
-    trip_layovers = self.trips.order(:start_date).map { |t| t.layovers  }
+    trip_layovers = self.trips.order(:start_date).map { |t| t.layovers }
     if limit
       trip_layovers = trip_layovers[0...limit]
     end
@@ -209,7 +215,7 @@ class Itinerary < ApplicationRecord
 
   def routes
     self.stops.order(:index).to_a.combination(2).map do |stop|
-      if  !stop[0].hub || !stop[1].hub
+      if !stop[0].hub || !stop[1].hub
         stop[0].itinerary.destroy
         return
       end
@@ -246,8 +252,8 @@ class Itinerary < ApplicationRecord
   end
 
   def load_types
-    load_types = TransportCategory::LOAD_TYPES.reject do |load_type|
-      get_itinerary_pricings(id, TransportCategory.load_type(load_type).ids).empty?
+    TransportCategory::LOAD_TYPES.reject do |load_type|
+      pricings.where(transport_category_id: TransportCategory.load_type(load_type).ids).none?
     end
   end
 
@@ -313,5 +319,37 @@ class Itinerary < ApplicationRecord
       it.hubs = hub_arr
       it.save!
     end
+  end
+
+  def as_options_json(options={})
+    new_options = options.reverse_merge(
+      include: [
+        {
+          first_stop: {
+            include: {
+              hub: {
+                include: {
+                  nexus: { only: %i[id name] }
+                },
+                only: %i[id name]
+              }
+            }
+          },
+          only: [:id]
+        },
+        last_stop: {
+          include: {
+            hub: {
+              include: {
+                nexus: { only: %i[id name] }
+              },
+              only: %i[id name]
+            }
+          },
+          only: [:id]
+        }
+      ]
+    )
+    as_json(new_options)
   end
 end

@@ -223,6 +223,7 @@ export class BookingConfirmation extends Component {
 
     const feeHash = shipment.schedules_charges[schedules[0].hub_route_key]
     const docView = []
+    const missingDocs = []
     const docChecker = {
       packing_sheet: false,
       commercial_invoice: false,
@@ -236,7 +237,8 @@ export class BookingConfirmation extends Component {
     }
     if (documents) {
       documents.forEach((doc) => {
-        docView.push(<div className="flex-33 layout-row" style={{ padding: '10px' }}>
+        docChecker[doc.doc_type] = true
+        docView.push(<div className="flex-45 layout-row" style={{ padding: '10px' }}>
           <DocumentsForm
             theme={theme}
             type={doc.doc_type}
@@ -251,7 +253,7 @@ export class BookingConfirmation extends Component {
     }
     Object.keys(docChecker).forEach((key) => {
       if (!docChecker[key]) {
-        docView.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
+        missingDocs.push(<div className={`flex-25 layout-row layout-align-start-center ${styles.no_doc}`}>
           <div className="flex-none layout-row layout-align-center-center">
             <i className="flex-none fa fa-ban" />
           </div>
@@ -508,11 +510,7 @@ export class BookingConfirmation extends Component {
                      layout-row
                      layout-align-center-center"
                   >
-                    <IncotermExtras
-                      theme={theme}
-                      feeHash={feeHash}
-                      tenant={{ data: tenant }}
-                    />
+                    <IncotermExtras theme={theme} feeHash={feeHash} tenant={{ data: tenant }} />
                   </div>
                 </div>
               </div>
@@ -633,6 +631,9 @@ export class BookingConfirmation extends Component {
               >
                 <div className="flex-100 layout-row layout-wrap layout-align-start-center">
                   {docView}
+                </div>
+                <div className="flex-100 layout-row layout-wrap layout-align-start-center">
+                  {missingDocs}
                 </div>
               </div>
             </div>

@@ -7,43 +7,49 @@ export class Modal extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      height: '0',
-      width: '0',
       windowHeight: '0',
       hidden: false
     }
     this.hide = this.hide.bind(this)
-    this.updateDimentions = this.updateDimentions.bind(this)
-    this.triggerUpdateDimentions = this.triggerUpdateDimentions.bind(this)
-    this.updatedDimentions = false
+    this.triggerUpdateDimensions = this.triggerUpdateDimensions.bind(this)
+    this.updatedDimensions = false
+    this.animationTime = 100
   }
 
   componentDidMount () {
-    this.updateDimentions()
-    window.addEventListener('resize', this.updateDimentions)
+    this.updateDimensions(this.animationTime)
+    window.addEventListener('resize', () => this.updateDimensions(this.animationTime))
   }
 
   componentDidUpdate () {
-    if (!this.updatedDimentions) {
-      this.updateDimentions()
-      this.updatedDimentions = true
+    if (!this.updatedDimensions) {
+      this.updateDimensions(this.animationTime)
+      this.updatedDimensions = true
     }
   }
 
   componentWillUnmount () {
-    window.removeEventListener('resize', this.updateDimentions)
+    window.removeEventListener('resize', () => this.updateDimensions(this.animationTime))
   }
-  triggerUpdateDimentions () {
-    this.updatedDimentions = false
+  triggerUpdateDimensions (animationTime) {
+    this.updatedDimensions = false
+    this.animationTime = animationTime
     this.forceUpdate()
   }
 
-  updateDimentions () {
-    this.setState({
-      height: this.modal.clientHeight,
-      width: this.modal.clientWidth,
-      windowHeight: window.innerHeight
-    })
+  updateDimensions () {
+    const interval = 20
+    let counter = typeof this.animationTime === 'number' ? (this.animationTime / interval) : 1
+
+    clearInterval(this.animation)
+
+    this.animation = setInterval(() => {
+      this.setState({
+        windowHeight: window.innerHeight
+      })
+      counter -= 1
+      if (counter === 0) clearInterval(this.animation)
+    }, interval)
   }
 
   hide () {
@@ -56,37 +62,34 @@ export class Modal extends Component {
   render () {
     if (this.state.hidden) return ''
 
-    const { width, height, windowHeight } = this.state
+    const { windowHeight } = this.state
 
     const propsMinHeight = dimentionToPx({
       value: this.props.minHeight,
       windowHeight
     })
     const minHeight = propsMinHeight || 0
-    const minTop = Math.max(windowHeight / 2 - height, 100)
 
     const modalStyles = {
-      top: `${Math.min(windowHeight * 0.5 - this.state.height / 2, minTop)}px`,
       minHeight,
       maxHeight: `calc(${windowHeight * 0.9}px - (${this.props.verticalPadding} * 2))`,
       maxWidth: '90%',
-      left: `calc(50% - ${width}px/2)`,
       padding: `${this.props.verticalPadding} ${this.props.horizontalPadding}`,
       overflowY: 'auto'
     }
 
     const component = Object.assign({}, this.props.component)
     component.props = Object.assign({}, component.props)
-    component.props.updateDimentions = this.triggerUpdateDimentions
+    component.props.updateDimensions = this.triggerUpdateDimensions
 
     return (
-      <div>
+      <div className={`${styles.full_size} flex-none layout-row layout-align-center-center`}>
         <div className={`${styles.modal_background} ${styles.full_size}`} onClick={this.hide} />
 
         <div
           ref={(div) => { this.modal = div }}
           style={modalStyles}
-          className={styles.modal}
+          className={`${styles.modal} flex-none`}
         >
           { component }
         </div>

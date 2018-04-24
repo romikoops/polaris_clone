@@ -1,9 +1,10 @@
 class Admin::TruckingController < ApplicationController
   include ExcelTools
   include TruckingTools
-  include MongoTools
-  
+  include DocumentTools
+
   before_action :require_login_and_role_is_admin
+
   def index
     client = get_client
     all_trucking_hubs = get_items_fn(client, 'truckingHubs', "tenant_id", current_user.tenant_id)
@@ -165,7 +166,12 @@ class Admin::TruckingController < ApplicationController
       response_handler(false)
     end
   end
-
+  def download
+     options = params[:options].as_json.symbolize_keys
+      options[:tenant_id] = current_user.tenant_id
+      url = write_trucking_to_sheet(options)
+      response_handler({url: url, key: 'trucking'}) 
+  end
   def overwrite_city_trucking_by_hub
     if params[:file]
       if  params["direction"] == 'either'
