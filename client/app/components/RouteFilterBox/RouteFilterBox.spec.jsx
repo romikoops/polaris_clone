@@ -33,8 +33,6 @@ jest.mock('../TextHeading/TextHeading', () => ({
   // eslint-disable-next-line react/prop-types
   TextHeading: ({ children }) => <div>{children}</div>
 }))
-
-// import { formatDate, parseDate } from 'react-day-picker/moment'
 // eslint-disable-next-line import/first
 import { RouteFilterBox } from './RouteFilterBox'
 

@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`shallow rendering 1`] = `
+<div
+  className="layout-row layout-wrap layout-align-center content_width_booking"
+  style={
+    Object {
+      "padding": "30px 0 70px 0",
+    }
+  }
+>
+  <div
+    className="input_box flex-45 layout-row"
+  >
+    <div
+      className="flex-25 layout-row layout-align-center-center"
+    >
+      Total Volume
+    </div>
+    <ShipmentAggregatedCargoInput
+      handleDelta={[Function]}
+      name="volume"
+      nextStageAttempt={false}
+      value={10}
+    />
+    <div
+      className="flex-10 layout-row layout-align-center-center"
+    >
+      m³
+    </div>
+  </div>
+  <div
+    className="input_box flex-45 offset-10 layout-row"
+  >
+    <div
+      className="flex-25 layout-row layout-align-center-center"
+    >
+      Total Weight
+    </div>
+    <ShipmentAggregatedCargoInput
+      handleDelta={[Function]}
+      name="weight"
+      nextStageAttempt={false}
+      value={100}
+    />
+    <div
+      className="flex-10 layout-row layout-align-center-center"
+    >
+      Kg
+    </div>
+  </div>
+</div>
+`;
