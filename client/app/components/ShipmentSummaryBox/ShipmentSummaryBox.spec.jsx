@@ -82,6 +82,9 @@ afterEach(() => {
   Date = originalDate
 })
 
+/**
+ * Wait for static function switch icon to be moved out of the component
+ */
 // eslint-disable-next-line
 test.skip('shallow rendering', () => {
   expect(shallow(<ShipmentSummaryBox {...propsBase} />)).toMatchSnapshot()
