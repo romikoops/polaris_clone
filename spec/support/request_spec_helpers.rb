@@ -33,7 +33,7 @@ module RequestSpecHelpers
   module FormatHelpers
 
     def json
-      JSON.parse(response.body).with_indifferent_access
+      JSON.parse(response.body).deep_symbolize_keys
     end
 
   end
