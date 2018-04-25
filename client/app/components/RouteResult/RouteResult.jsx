@@ -24,6 +24,23 @@ export class RouteResult extends Component {
     }
     return icon
   }
+  static returnHubType (hub) {
+    let hubType = ''
+    switch (hub.hub_type) {
+      case 'ocean':
+        hubType = 'Port'
+        break
+      case 'air':
+        hubType = 'Airport'
+        break
+      case 'rail':
+        hubType = 'Railyard'
+        break
+      default:
+        break
+    }
+    return hubType
+  }
   static dashedGradient (color1, color2) {
     return `linear-gradient(to right, transparent 70%, white 30%), linear-gradient(to right, ${color1}, ${color2})`
   }
@@ -116,7 +133,7 @@ export class RouteResult extends Component {
             </div>
           </div>
           <div className="flex-100 layout-row layout-align-start-center">
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
                 <h4 className={styles.date_title}>{pickup ? 'Pickup Date' : 'Closing Date'}</h4>
               </div>
@@ -125,39 +142,39 @@ export class RouteResult extends Component {
                   {' '}
                   {moment(schedule.closing_date).format('DD-MM-YYYY')}{' '}
                 </p>
-                <p className={`flex-none ${styles.sched_elem}`}>
-                  {' '}
-                  {moment(schedule.closing_date).format('HH:mm')}{' '}
-                </p>
               </div>
             </div>
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> Date of Departure</h4>
+                <h4 className={styles.date_title}>{`ETD ${RouteResult.returnHubType(originHub)}`}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
                   {moment(schedule.etd).format('DD-MM-YYYY')}{' '}
                 </p>
-                <p className={`flex-none ${styles.sched_elem}`}>
-                  {' '}
-                  {moment(schedule.etd).format('HH:mm')}{' '}
-                </p>
               </div>
             </div>
-            <div className="flex-33 layout-wrap layout-row layout-align-center-center">
+            <div className="flex-25 layout-wrap layout-row layout-align-center-center">
               <div className="flex-100 layout-row">
-                <h4 className={styles.date_title}> ETA terminal</h4>
+                <h4 className={styles.date_title}>{`ETA ${RouteResult.returnHubType(destHub)} `}</h4>
               </div>
               <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
                   {moment(schedule.eta).format('DD-MM-YYYY')}{' '}
                 </p>
+              </div>
+            </div>
+            <div className="flex-25 layout-wrap layout-row layout-align-center-center">
+              <div className="flex-100 layout-row">
+                <h4 className={styles.date_title}> Estimated T/T <sup>*</sup></h4>
+              </div>
+              <div className="flex-100 layout-row">
                 <p className={`flex-none ${styles.sched_elem}`}>
                   {' '}
-                  {moment(schedule.eta).format('HH:mm')}{' '}
+                  {moment(schedule.eta).diff(schedule.etd, 'days')}
+                  {' Days'}
                 </p>
               </div>
             </div>

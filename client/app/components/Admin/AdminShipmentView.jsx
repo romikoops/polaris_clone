@@ -567,7 +567,9 @@ export class AdminShipmentView extends Component {
       </div>
     ) : (
       <p className="flex-none letter_3">
-        {`${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
+        {shipment.has_pre_carriage
+          ? `${moment(shipment.planned_pickup_date).format('DD/MM/YYYY | HH:mm')}`
+          : `${moment(shipment.planned_etd).format('DD/MM/YYYY | HH:mm')}`}
       </p>
     )
 
@@ -678,7 +680,12 @@ export class AdminShipmentView extends Component {
               <div className="flex-100 layout-row layout-align-space-between-center">
                 <div className="flex-40 layout-row layout-wrap layout-align-center-start">
                   <div className="flex-100 layout-row layout-align-center-start layout-wrap">
-                    <p className="flex-100 center letter_3"> Expected Time of Departure:</p>
+                    <p className="flex-100 center letter_3">
+                      {' '}
+                      {shipment.has_pre_carriage
+                        ? 'Expected Time of Collection:'
+                        : 'Expected Time of Departure:'}
+                    </p>
                     {etdJSX}
                   </div>
                   {shipment.has_pre_carriage ? (
@@ -757,7 +764,7 @@ export class AdminShipmentView extends Component {
           }
         />
         <ShipmentCard
-          headingText="Extras"
+          headingText="Additional Services"
           theme={theme}
           collapsed={collapser.extras}
           handleCollapser={() => this.handleCollapser('extras')}
@@ -767,11 +774,7 @@ export class AdminShipmentView extends Component {
                 <div
                   className="flex-none content_width_booking layout-row layout-align-center-center"
                 >
-                  <IncotermExtras
-                    theme={theme}
-                    feeHash={feeHash}
-                    tenant={tenant}
-                  />
+                  <IncotermExtras theme={theme} feeHash={feeHash} tenant={tenant} />
                 </div>
               </div>
             </div>

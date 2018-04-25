@@ -12,7 +12,7 @@ import { currencyOptions, tooltips } from '../../constants'
 import FormsyInput from '../FormsyInput/FormsyInput'
 import { TextHeading } from '../TextHeading/TextHeading'
 import { NamedSelect } from '../NamedSelect/NamedSelect'
-import { Tooltip } from '../Tooltip/Tooltip'
+import FormsyTextarea from '../FormsyTextarea/FormsyTextarea'
 
 export class CargoDetails extends Component {
   static displayCustomsFee (customsData, target, customs) {
@@ -38,13 +38,6 @@ export class CargoDetails extends Component {
     if (customsData[target].unknown) {
       return 'Price subject to local regulations'
     }
-    // // if (customs.import.total.currency) {
-    // //   const { currency } = customs.import.total
-    // //   return `0 ${currency}`
-    // // } else if (customs.export.total.currency) {
-    // //   const { currency } = customs.export.total
-    // //   return `0 ${currency}`
-    // // }
     return '0 EUR'
   }
   constructor (props) {
@@ -359,7 +352,7 @@ export class CargoDetails extends Component {
             </b>
           </p>
         </div>
-        <div className="flex-33 no_max layout-row layout-align-start-center">
+        {/* <div className="flex-33 no_max layout-row layout-align-start-center">
           <div className="flex-90 layout-row layout-wrap">
             <div className="flex-100">
               <TextHeading theme={theme} size={3} text="Customs Declaration" />
@@ -380,7 +373,7 @@ export class CargoDetails extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex-33 no_max layout-row layout-align-end-center">
           {this.props.totalGoodsValue.value > 20000 ? (
             <div className="flex-90 layout-row layout-wrap">
@@ -479,14 +472,14 @@ export class CargoDetails extends Component {
                     </div>
                   </div>
                   <div className="flex-100">
-                    <textarea
+                    {/* <textarea
                       className={styles.cargo_text_area}
                       rows="6"
                       name="cargoNotes"
                       value={this.props.cargoNotes}
                       onChange={this.handleChange}
-                    />
-                    {/* <FormsyInput
+                    /> */}
+                    <FormsyTextarea
                       className={`flex-100 ${styles.cargo_text_area} `}
                       wrapperClassName={`flex-100 ${styles.wrapper_cargo_input}`}
                       errorMessageStyles={{
@@ -502,7 +495,7 @@ export class CargoDetails extends Component {
                         isDefaultRequiredValue: 'Must not be empty'
                       }}
                       required
-                    /> */}
+                    />
                   </div>
                 </div>
                 <div className="flex-100 layout-row layout-align-start-start layout-wrap">
@@ -582,7 +575,7 @@ export class CargoDetails extends Component {
                     <div className="flex-100">
                       <div className={`flex-none ${styles.f_header}`}>
                         {' '}
-                        <TextHeading theme={theme} size={3} text="Notes" />
+                        <TextHeading theme={theme} size={3} text="Notes (Optional)" />
                       </div>
                     </div>
                     <div className="flex-100 layout-row layout-align-start-start input_box_full">
@@ -718,7 +711,6 @@ export class CargoDetails extends Component {
                   <div className="flex-100 layout-row layout-align-space-between-start layout-wrap">
                     <div className="flex-none layout-row layout-align-space-around-center">
                       <TextHeading theme={theme} size={2} text="Customs Handling" />
-                      <Tooltip theme={theme} icon="fa-info-circle" text="customs_clearance" />
                     </div>
 
                     <div

@@ -102,13 +102,15 @@ export class AdminSearchableHubs extends Component {
     }
     const viewType = sideScroll ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-        <div className={`layout-row flex-none layout-align-start-center ${styles.slider_inner}`}>
+        <div className={`layout-row flex-none layout-align-space-around-center ${styles.slider_inner}`}>
           {hubsArr}
         </div>
       </div>
     ) : (
       <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-none layout-align-start-center layout-wrap">{hubsArr}</div>
+        <div className="layout-row flex-100 layout-align-start-start layout-wrap">
+          {hubsArr}
+        </div>
       </div>
     )
     const motOptions = [

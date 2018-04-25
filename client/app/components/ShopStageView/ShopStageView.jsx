@@ -126,7 +126,7 @@ export class ShopStageView extends Component {
     )
     const help = (
       <div
-        className={`${styles.help_btn} flex-none layout-row layout-align-center-center`}
+        className={`${styles.help_btn} flex-none layout-row layout-align-center-center pointy`}
         onClick={() => this.showContactHelp()}
       >
         <i className="fa fa-question" />
