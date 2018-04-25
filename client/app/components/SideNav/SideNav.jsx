@@ -105,7 +105,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-users',
-        text: 'Client',
+        text: 'Clients',
         url: '/admin/clients',
         target: 'clients',
         tooltip: menuTip.clients

@@ -20,7 +20,6 @@ import AdminPricings from '../../components/Admin/AdminPricings'
 import AdminTrucking from '../../components/Admin/AdminTrucking'
 import AdminWizard from '../../components/Admin/AdminWizard/AdminWizard'
 import Loading from '../../components/Loading/Loading'
-import defs from '../../styles/default_classes.scss'
 import Header from '../../components/Header/Header'
 import SideNav from '../../components/SideNav/SideNav'
 import styles from './Admin.scss'
@@ -110,9 +109,8 @@ class Admin extends Component {
         <div className="flex layout-row layout-align-center-start layout-wrap">
           <NavBar className={`${styles.top_margin}`} />
           <div
-            className={`${defs.content_width} ${
-              styles.top_margin
-            } flex-none layout-row layout-wrap layout-align-start-start hundred`}
+            className="content_width flex-none layout-row
+             layout-wrap layout-align-start-start hundred"
           >
             <div className="flex-100 layout-row layout-wrap layout-align-center-center">
               <Switch className="flex">

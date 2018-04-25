@@ -31,67 +31,109 @@ export function AdminHubsIndex ({
   )
 
   return (
-    <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
-          <p className="flex-100 center">Create New Hub</p>
-          {newButton}
-        </div>
-        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
-          <p className="flex-100 center">Upload Hubs Sheet</p>
-          <FileUploader
-            theme={theme}
-            url={hubUrl}
-            type="xlsx"
-            text="Hub .xlsx"
-            dispatchFn={documentDispatch.uploadHubs}
-          />
-        </div>
-        <div className="flex-33 layout-row layout-align-center-center layout-wrap">
-          <p className="flex-100 center">Upload Local Charges Sheet</p>
-          <FileUploader
-            theme={theme}
-            url={scUrl}
-            type="xlsx"
-            text="Hub .xlsx"
-            dispatchFn={documentDispatch.uploadLocalCharges}
-          />
-        </div>
-      </div>
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}>
-        <div
-          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
-            styles.sec_upload
-          }`}
-        >
-          <p className="flex-100 center">Download Hubs Sheet</p>
-          <DocumentsDownloader theme={theme} target="hubs" />
-        </div>
-
-        <div
-          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
-            styles.sec_upload
-          }`}
-        >
-          <p className="flex-100 center">Download Local Charges Sheet</p>
-          <DocumentsDownloader theme={theme} target="local_charges" />
-        </div>
-        <div
-          className={`flex-33 layout-row layout-wrap layout-align-center-center ${
-            styles.sec_upload
-          }`}
+    <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+      <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+        <AdminSearchableHubs
+          theme={theme}
+          hubs={hubs}
+          adminDispatch={adminDispatch}
+          sideScroll={false}
+          handleClick={viewHub}
+          seeAll={false}
+          icon="fa-info-circle"
+          tooltip={hubsTip.manage}
         />
       </div>
-      <AdminSearchableHubs
-        theme={theme}
-        hubs={hubs}
-        adminDispatch={adminDispatch}
-        sideScroll={false}
-        handleClick={viewHub}
-        seeAll={false}
-        icon="fa-info-circle"
-        tooltip={hubsTip.manage}
-      />
+      <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+        <div
+          className={`${
+            styles.action_box
+          } flex-95 layout-row layout-wrap layout-align-center-start`}
+        >
+          <div className="flex-100 layout-row layout-align-center-center">
+            <h2 className="flex-none letter_3"> Actions </h2>
+          </div>
+          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div
+              className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+            >
+              <i className="flex-none fa fa-cloud-upload" />
+              <p className="flex-none">Upload Data</p>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-align-center-center layout-wrap`}
+              >
+                <p className="flex-100 center">Upload Hubs Sheet</p>
+                <FileUploader
+                  theme={theme}
+                  url={hubUrl}
+                  type="xlsx"
+                  text="Hub .xlsx"
+                  dispatchFn={documentDispatch.uploadHubs}
+                />
+              </div>
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-align-center-center layout-wrap`}
+              >
+                <p className="flex-100 center">Upload Local Charges Sheet</p>
+                <FileUploader
+                  theme={theme}
+                  url={scUrl}
+                  type="xlsx"
+                  text="Hub .xlsx"
+                  dispatchFn={documentDispatch.uploadLocalCharges}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div
+              className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+            >
+              <i className="flex-none fa fa-cloud-download" />
+              <p className="flex-none">Download Data</p>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-space-around">
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <p className="flex-100 center">Download Hubs Sheet</p>
+                <DocumentsDownloader theme={theme} target="hubs" />
+              </div>
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <p className="flex-100 center">Download Local Charges Sheet</p>
+                <DocumentsDownloader theme={theme} target="local_charges" />
+              </div>
+            </div>
+          </div>
+          <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+            <div
+              className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+            >
+              <i className="flex-none fa fa-plus-circle" />
+              <p className="flex-none">Create New Hub</p>
+            </div>
+            <div
+              className={`${
+                styles.action_section
+              } flex-100 layout-row layout-wrap layout-align-center-center`}
+            >
+              {newButton}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

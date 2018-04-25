@@ -14,7 +14,7 @@ export class AdminSearchableHubs extends Component {
     super(props)
     this.state = {
       hubs: props.hubs,
-      selectedMot: {}
+      selectedMot: null
     }
     this.handleSearchChange = this.handleSearchChange.bind(this)
     this.handleClick = this.handleClick.bind(this)
@@ -61,7 +61,6 @@ export class AdminSearchableHubs extends Component {
     }
 
     const filteredHubNames = search('data.name')
-    // ;
     this.setState({
       hubs: this.filterHubsByType(filteredHubNames)
     })
@@ -77,7 +76,7 @@ export class AdminSearchableHubs extends Component {
 
   filterHubsByType (array) {
     const { selectedMot } = this.state
-    if (selectedMot.value) {
+    if (selectedMot && selectedMot.value) {
       return array.filter(x => x.data.hub_type === selectedMot.value)
     }
     return array
@@ -108,7 +107,7 @@ export class AdminSearchableHubs extends Component {
       </div>
     ) : (
       <div className="layout-row flex-100 layout-align-start-center ">
-        <div className="layout-row flex-100 layout-align-start-start layout-wrap">
+        <div className="layout-row flex-100 layout-align-space-around-start layout-wrap">
           {hubsArr}
         </div>
       </div>
@@ -123,11 +122,11 @@ export class AdminSearchableHubs extends Component {
         className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
       >
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${
+          className={`flex-100 layout-row layout-wrap layout-align-center-center ${
             styles.searchable_header
           }`}
         >
-          <div className="flex-60 layput-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center">
             <div className="flex-100 layout-row layout-align-space-between-center">
               <div className="flex-none layout-row layout-align-start-center">
                 <div className="flex-none">
@@ -142,18 +141,21 @@ export class AdminSearchableHubs extends Component {
               </div>
             </div>
           </div>
-          <div className="flex-40 layout-row layout-align-start-center">
-            <div className="flex-33 layout-row layout-align-center-center">
+          <div className="flex-90 layout-row layout-align-start-center">
+            <div className="flex-20 layout-row layout-align-start-cente">
+              <p className="flex-none">Filter by:</p>
+            </div>
+            <div className="flex-40 layout-row layout-align-center-center">
               <NamedSelect
                 className={styles.select}
                 options={motOptions}
                 onChange={e => this.setHubFilter(e)}
                 value={selectedMot}
-                placeholder="Set MoT"
+                placeholder="Hub Type"
                 name="motFilter"
               />
             </div>
-            <div className="flex-66 layout-row layout-align-center-center input_box_full">
+            <div className="flex-40 layout-row layout-align-center-center input_box_full">
               <input
                 type="text"
                 name="search"

@@ -8,7 +8,6 @@ import '../../styles/react-toggle.scss'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
 import { history } from '../../helpers'
-import { RoundButton } from '../RoundButton/RoundButton'
 import { TruckingDisplayPanel } from './AdminAuxilliaries'
 // import { NamedSelect } from '../NamedSelect/NamedSelect'
 import DocumentsSelector from '../../components/Documents/Selector'
@@ -124,7 +123,6 @@ export class AdminTruckingView extends Component {
     }
 
     const {
-      newRow,
       filteredTruckingPricings,
       searchFilter,
       currentTruckingPricing,
@@ -148,34 +146,6 @@ export class AdminTruckingView extends Component {
           ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
           : 'black'
     }
-    const newButton = (
-      <div className="flex-none layout-row">
-        <RoundButton
-          theme={theme}
-          size="small"
-          active
-          text="New"
-          handleNext={() => this.toggleNew()}
-          iconClass="fa-plus"
-        />
-      </div>
-    )
-    const downloadLcl = (
-      <div
-        className={`flex-25 layout-row layout-wrap layout-align-center-center ${styles.sec_upload}`}
-      >
-        <p className="flex-100 center">Download Cargo Item Sheet</p>
-        <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'cargo_item' }} />
-      </div>
-    )
-    const downloadFcl = (
-      <div
-        className={`flex-25 layout-row layout-wrap layout-align-center-center ${styles.sec_upload}`}
-      >
-        <p className="flex-100 center">Download Container Sheet</p>
-        <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'container' }} />
-      </div>
-    )
     const truckingPricingToDisplay = truckingDetail.truckingPricings
       .filter(tp => tp.truckingPricing.id === currentTruckingPricing)[0]
     const displayPanel = (
@@ -230,107 +200,139 @@ export class AdminTruckingView extends Component {
           <p className="flex-none">No truckings available</p>
         </div>
       )
-
-    const panelStyle = newRow ? styles.showPanel : styles.hidePanel
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            {hub.name}
-          </p>
-          {newButton}
-        </div>
-        <div
-          className={`${panelStyle} ${
-            styles.panelDefault
-          } flex-100 layout-row layout-align-space-between-center`}
-        >
-          <div className="flex-25 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-90 center">Create New Trucking Pricing</p>
-            <RoundButton
-              theme={theme}
-              size="small"
-              active
-              text="New Pricing"
-              handleNext={() => adminDispatch.goTo('/admin/trucking/new/creator')}
-              iconClass="fa-plus"
-            />
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+        {uploadStatus}
+        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+            >
+              <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
+                {hub.name}
+              </p>
+            </div>
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            >
+              <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
+            </div>
+            <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
+              <div className="flex-25 layout-row layout-align-center-start layout-wrap">
+                <div className="flex-100 layout-row layout-align-space-between-center">
+                  <div className="flex-90 layout-row layout-align-space-between-center">
+                    <p className="flex-none">LCL</p>
+                    <div className="flex-5" />
+                    <Toggle
+                      className="flex-none"
+                      id="unitView"
+                      name="unitView"
+                      checked={loadTypeBool}
+                      onChange={e => this.handleLoadTypeToggle(e)}
+                    />
+                    <div className="flex-5" />
+                    <p className="flex-none">FCL</p>
+                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-align-space-between-center">
+                  <div className="flex-90 layout-row layout-align-space-between-center">
+                    <p className="flex-none">Export</p>
+                    <div className="flex-5" />
+                    <Toggle
+                      className="flex-none"
+                      id="unitView"
+                      name="unitView"
+                      checked={directionBool}
+                      onChange={e => this.handleDirectionToggle(e)}
+                    />
+                    <div className="flex-5" />
+                    <p className="flex-none">Import</p>
+                  </div>
+                </div>
+                <div className="flex-100 layout-row layout-alignstart-center input_box_full">
+                  <input
+                    type="text"
+                    value={searchFilter}
+                    placeholder="Search Trucking Zones"
+                    onChange={e => this.handleSearchChange(e)}
+                  />
+                </div>
+                <div
+                  className={`flex-100 layout-row layout-align-center-start layout-wrap ${
+                    styles.trucking_search_results
+                  }`}
+                >
+                  {searchResults}
+                </div>
+              </div>
+              <div className="flex-75 layout-row layout-align-center-start layout-wrap">
+                {truckView}
+              </div>
+            </div>
           </div>
-          <div className="flex-25 layout-row layout-wrap layout-align-center-center">
-            <p className="flex-90 center">Upload Trucking Zones Sheet</p>
-            <DocumentsSelector
-              theme={theme}
-              dispatchFn={(file, dir) => this.handleUpload(file, dir)}
-              type="xlsx"
-              text="Routes .xlsx"
-            />
-          </div>
-          {downloadLcl}
-          {downloadFcl}
+          {styleTagJSX}
         </div>
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          {uploadStatus}
+        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
           <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
           >
-            <p className={` ${styles.sec_header_text} flex-none`}> Rates </p>
-          </div>
-          <div className="flex-100 layout-row layout-align-space-around-start layout-wrap">
-            <div className="flex-25 layout-row layout-align-center-start layout-wrap">
-              <div className="flex-100 layout-row layout-align-space-between-center">
-                <div className="flex-90 layout-row layout-align-space-between-center">
-                  <p className="flex-none">LCL</p>
-                  <div className="flex-5" />
-                  <Toggle
-                    className="flex-none"
-                    id="unitView"
-                    name="unitView"
-                    checked={loadTypeBool}
-                    onChange={e => this.handleLoadTypeToggle(e)}
-                  />
-                  <div className="flex-5" />
-                  <p className="flex-none">FCL</p>
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-align-space-between-center">
-                <div className="flex-90 layout-row layout-align-space-between-center">
-                  <p className="flex-none">Export</p>
-                  <div className="flex-5" />
-                  <Toggle
-                    className="flex-none"
-                    id="unitView"
-                    name="unitView"
-                    checked={directionBool}
-                    onChange={e => this.handleDirectionToggle(e)}
-                  />
-                  <div className="flex-5" />
-                  <p className="flex-none">Import</p>
-                </div>
-              </div>
-              <div className="flex-100 layout-row layout-alignstart-center input_box_full">
-                <input
-                  type="text"
-                  value={searchFilter}
-                  placeholder="Search Trucking Zones"
-                  onChange={e => this.handleSearchChange(e)}
-                />
-              </div>
+            <div className="flex-100 layout-row layout-align-center-center">
+              <h2 className="flex-none letter_3"> Actions </h2>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
               <div
-                className={`flex-100 layout-row layout-align-center-start layout-wrap ${
-                  styles.trucking_search_results
-                }`}
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
               >
-                {searchResults}
+                <i className="flex-none fa fa-cloud-upload" />
+                <p className="flex-none">Upload Data</p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  <p className="flex-90 center">Upload Trucking Zones Sheet</p>
+                  <DocumentsSelector
+                    theme={theme}
+                    dispatchFn={(file, dir) => this.handleUpload(file, dir)}
+                    type="xlsx"
+                    text="Routes .xlsx"
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex-75 layout-row layout-align-center-start layout-wrap">
-              {truckView}
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-cloud-download" />
+                <p className="flex-none">Download Data</p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center-space-around">
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100 center">Download Cargo Item Sheet</p>
+                  <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'cargo_item' }} />
+                </div>
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-100 center">Download Container Sheet</p>
+                  <DocumentsDownloader theme={theme} target="trucking" options={{ hub_id: hub.id, load_type: 'container' }} />
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
-        {styleTagJSX}
       </div>
     )
   }

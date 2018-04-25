@@ -146,10 +146,7 @@ export class AdminHubForm extends Component {
       { value: 'rail', label: 'Railyard' },
       { value: 'trucking', label: 'Trucking Depot' }
     ]
-    const truckingTypes = [
-      { value: 'city', label: 'Cities' },
-      { value: 'zip_code', label: 'Zip Codes' }
-    ]
+
     const StyledSelect = styled(Select)`
       width: 100%;
       .Select-control {
@@ -185,7 +182,10 @@ export class AdminHubForm extends Component {
               Add a New Hub
             </h2>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <p className="flex-none offset-5">1: Find the Hub (or nearest location) on the map</p>
+            </div>
             <GmapsWrapper
               theme={theme}
               component={PlaceSearch}
@@ -198,9 +198,8 @@ export class AdminHubForm extends Component {
             }`}
           >
             <div className="flex-50 layout-row layout-wrap layout-align-start-start height_100">
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
+              <p className="flex-100">2: Ensure the name and hub type is correct</p>
+              <div className="flex-80 layout-row layout-align-center-center input_box_full">
                 <input
                   name="hub-name"
                   className={`flex-none ${styles.input}`}
@@ -210,7 +209,7 @@ export class AdminHubForm extends Component {
                   placeholder="Name"
                 />
               </div>
-              <div className="flex-80 layout-row layout-align-center-center margin_1">
+              <div className="flex-80 layout-row layout-align-center-center">
                 <StyledSelect
                   placeholder="Hub Type"
                   className={styles.select}
@@ -220,93 +219,82 @@ export class AdminHubForm extends Component {
                   onChange={this.handleHubType}
                 />
               </div>
-              <div className="flex-80 layout-row layout-align-center-center margin_1">
-                <StyledSelect
-                  placeholder="Trucking Type"
-                  className={styles.select}
-                  name="hub-trucking"
-                  value={hub.truckingType}
-                  options={truckingTypes}
-                  onChange={this.handleTruckingType}
-                />
-              </div>
             </div>
             <div className="flex-50 layout-row layout-wrap layout-align-end-space-around">
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
-                <input
-                  id="not-auto"
-                  name="location-number"
-                  className={`flex-none ${styles.input}`}
-                  type="string"
-                  onChange={this.handleAddressChange}
-                  value={location.number}
-                  placeholder="Number"
-                />
+              <p className="flex-100">3: Complete the address fields as needed</p>
+              <div className="flex-100 layout-row layout-align-space-around-center">
+                <div className="flex-20 layout-row layout-align-center-center input_box_full">
+                  <input
+                    id="not-auto"
+                    name="location-number"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={location.number}
+                    placeholder="Number"
+                  />
+                </div>
+                <div className="flex-75 layout-row layout-align-center-center input_box_full">
+                  <input
+                    name="location-street"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={location.street}
+                    placeholder="Street"
+                  />
+                </div>
               </div>
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
-                <input
-                  name="location-street"
-                  className={`flex-none ${styles.input}`}
-                  type="string"
-                  onChange={this.handleAddressChange}
-                  value={location.street}
-                  placeholder="Street"
-                />
+              <div className="flex-100 layout-row layout-align-space-around-center">
+                <div className="flex-30 layout-row layout-align-center-center input_box_full">
+                  <input
+                    name="location-zipCode"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={location.zipCode}
+                    placeholder="Zip Code"
+                  />
+                </div>
+                <div className="flex-65 layout-row layout-align-center-center input_box_full">
+                  <input
+                    name="location-city"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={location.city}
+                    placeholder="City"
+                  />
+                </div>
               </div>
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
-                <input
-                  name="location-zipCode"
-                  className={`flex-none ${styles.input}`}
-                  type="string"
-                  onChange={this.handleAddressChange}
-                  value={location.zipCode}
-                  placeholder="Zip Code"
-                />
-              </div>
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
-                <input
-                  name="location-city"
-                  className={`flex-none ${styles.input}`}
-                  type="string"
-                  onChange={this.handleAddressChange}
-                  value={location.city}
-                  placeholder="City"
-                />
-              </div>
-              <div
-                className="flex-80 layout-row layout-align-center-center input_box_full margin_1"
-              >
-                <input
-                  name="location-country"
-                  className={`flex-none ${styles.input}`}
-                  type="string"
-                  onChange={this.handleAddressChange}
-                  value={location.country}
-                  placeholder="Country"
-                />
-              </div>
-              <div className="flex-100 layout-row layout-align-end-center">
-                <div
-                  className="flex-none layout-row layout-align-end-center"
-                  onClick={() => this.resetAuto('location')}
-                >
-                  <i className="fa fa-times flex-none" />
-                  <p className="offset-5 flex-none" style={{ paddingRight: '10px' }}>
-                    Clear
-                  </p>
+
+              <div className="flex-100 layout-row layout-align-space-around-center">
+                <div className="flex-100 layout-row layout-align-center-center input_box_full">
+                  <input
+                    name="location-country"
+                    className={`flex-none ${styles.input}`}
+                    type="string"
+                    onChange={this.handleAddressChange}
+                    value={location.country}
+                    placeholder="Country"
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex-100 layout-row layout-wrap layout-align-end-center">
+          <div className="flex-100 layout-row layout-wrap layout-align-space-around-center">
+            <div
+              className="flex-none layout-row"
+
+            >
+              <RoundButton
+                theme={theme}
+                size="small"
+                text="Clear"
+                handleNext={() => this.resetAuto('location')}
+                iconClass="fa-times"
+              />
+            </div>
             <div className="flex-none layout-row">
               <RoundButton
                 theme={theme}

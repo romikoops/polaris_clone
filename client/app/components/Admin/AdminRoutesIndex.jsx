@@ -28,49 +28,59 @@ export class AdminRoutesIndex extends Component {
 
     // const hubUrl = '/admin/itineraries/process_csv'
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_upload}`}
-        >
-          <div className="flex-33 layout-column layout-align-center-center">
-            {/* <p className="flex-none">Upload Routes Sheet</p>
-            <FileUploader
-              theme={theme}
-              url={hubUrl}
-              type="xlsx"
-              text="Routes .xlsx"
-              tooltip={routeTip.upload}
-            /> */}
-          </div>
-          <div className="flex-33 layout-column layout-align-center-center">
-            <p data-tip={routeTip.new} data-for="newRouteTip" className="flex-none">
-              Create New Route
-            </p>
-            <RoundButton
-              theme={theme}
-              size="small"
-              text="New Route"
-              active
-              handleNext={this.props.toggleNewRoute}
-              iconClass="fa-plus"
-            />
-            <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
+        <div className={`${styles.component_view} flex-80 layout-row layout-align-start-start`}>
+          <AdminSearchableRoutes
+            itineraries={itineraries}
+            theme={theme}
+            hubs={hubs}
+            limit={40}
+            showDelete
+            adminDispatch={adminDispatch}
+            sideScroll={false}
+            handleClick={viewItinerary}
+            tooltip={routeTip.related}
+            showTooltip
+            seeAll={false}
+          />
+        </div>
+        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div className="flex-100 layout-row layout-align-center-center">
+              <h2 className="flex-none letter_3"> Actions </h2>
+            </div>
+
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-plus-circle" />
+                <p className="flex-none">Create New Route</p>
+              </div>
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                <RoundButton
+                  theme={theme}
+                  size="small"
+                  text="New Route"
+                  active
+                  handleNext={this.props.toggleNewRoute}
+                  iconClass="fa-plus"
+                />
+                <ReactTooltip id="newRouteTip" className={styles.tooltip} effect="solid" />
+              </div>
+            </div>
           </div>
         </div>
-        <AdminSearchableRoutes
-          itineraries={itineraries}
-          theme={theme}
-          hubs={hubs}
-          limit={40}
-          showDelete
-          adminDispatch={adminDispatch}
-          sideScroll={false}
-          handleClick={viewItinerary}
-          tooltip={routeTip.related}
-          showTooltip
-          seeAll={false}
-        />
       </div>
+
     )
   }
 }

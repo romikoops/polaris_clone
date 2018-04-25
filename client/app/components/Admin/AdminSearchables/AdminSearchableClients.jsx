@@ -115,7 +115,7 @@ export class AdminSearchableClients extends Component {
               </div>
             </div>
           </div>
-          <div className={`${styles.input_box} flex-40 layout-row layout-align-start-center`}>
+          <div className="input_box_full flex-40 layout-row layout-align-start-center">
             <input
               type="text"
               name="search"
