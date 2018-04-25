@@ -5,8 +5,8 @@ require 'rails_helper'
 describe TruckingPricing, type: :model do
   context 'class methods' do
     describe '.find_by_filter' do
-      let(:tenant)               { create(:tenant) }
-    	let(:hub)                  { create(:hub, :with_lat_lng, tenant: tenant) }
+      let(:tenant) { create(:tenant) }
+    	let(:hub)    { create(:hub, :with_lat_lng, tenant: tenant) }
 
     	let(:trucking_destination_zipcode) 	 { create(:trucking_destination, :zipcode) }
     	let(:trucking_destination_city_name) { create(:trucking_destination, :city_name) }
@@ -45,7 +45,7 @@ describe TruckingPricing, type: :model do
       let(:carriage)  { 'pre' }
 
       context 'basic tests' do
-      	it 'raises an ArgumentError if no load_type is sent' do      		
+      	it 'raises an ArgumentError if no load_type is provided' do      		
         	expect {
 	        	trucking_pricings = described_class.find_by_filter(
 		      		tenant_id: tenant.id, zipcode: zipcode, carriage: carriage
@@ -53,7 +53,7 @@ describe TruckingPricing, type: :model do
         	}.to raise_error(ArgumentError)
       	end 
 
-      	it 'raises an ArgumentError if no tenant_id is sent' do      		
+      	it 'raises an ArgumentError if no tenant_id is provided' do      		
         	expect {
 	        	trucking_pricings = described_class.find_by_filter(
 		      		load_type: load_type, zipcode: zipcode, carriage: carriage
@@ -61,7 +61,7 @@ describe TruckingPricing, type: :model do
         	}.to raise_error(ArgumentError)
       	end 
 
-        it 'raises an ArgumentError if no carriage is sent' do
+        it 'raises an ArgumentError if no carriage is provided' do
         	expect {
 	        	trucking_pricings = described_class.find_by_filter(
 		      		tenant_id: tenant.id, zipcode: zipcode, load_type: load_type
@@ -106,22 +106,6 @@ describe TruckingPricing, type: :model do
       end
 
       context 'distance identifier' do
-        it 'finds trucking destination through distance calculation' do
-      		hub_trucking_distance.save!
-
-      		trucking_destination = TruckingDestination.find_by_sql("
-      		  SELECT * FROM trucking_destinations
-      		  WHERE distance = (
-      		    SELECT ROUND(ST_Distance(
-      		      ST_Point(#{hub.longitude}, #{hub.latitude})::geography,
-      		      ST_Point(#{longitude}, #{latitude})::geography
-      		    ) / 500)
-      		  )
-      		").first
-
-          expect(trucking_destination).to eq(trucking_destination_distance)
-        end
-
         it 'finds the correct trucking_pricing' do
       		hub_trucking_distance.save!
 
