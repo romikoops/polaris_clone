@@ -102,7 +102,7 @@ class TruckingPricing < ApplicationRecord
     longitude = args[:longitude] || args[:location].try(:longitude) || 0
     zipcode   = args[:zipcode]   || args[:location].try(:get_zip_code)
     city_name = args[:city_name] || args[:location].try(:city)
-    carriage = args[:carriage]
+    carriage  = args[:carriage]
 
     ids = ActiveRecord::Base.connection.execute("
       SELECT trucking_pricings.id FROM trucking_pricings
@@ -211,8 +211,9 @@ class TruckingPricing < ApplicationRecord
   def self.find_by_filter_argument_errors(args)
     raise ArgumentError, "Must provide load_type" if args[:load_type].nil?
     raise ArgumentError, "Must provide tenant_id" if args[:tenant_id].nil?
+    raise ArgumentError, "Must provide carriage"  if args[:carriage].nil?
     if args.keys.size < 3
-      raise ArgumentError, "Must provide a valid filter besides load_type and tenant_id"
+      raise ArgumentError, "Must provide a valid filter besides load_type, carriage and tenant_id"
     end
   end
 
