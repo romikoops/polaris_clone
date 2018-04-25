@@ -128,7 +128,7 @@ class TruckingPricing < ApplicationRecord
           AND (
             trucking_destinations.distance = (
               SELECT ROUND(ST_Distance(
-                ST_Point(locations.longitude, locations.latitude)::geography,
+                ST_Point(hubs.longitude, hubs.latitude)::geography,
                 ST_Point(#{longitude}, #{latitude})::geography
               ) / 500)
             )
