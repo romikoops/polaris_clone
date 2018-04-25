@@ -486,7 +486,7 @@ module DocumentTools
     first_result = results_by_truck_type.first[1].first
     awesome_print first_result
     if !first_result
-      byebug
+      
     end
     
     currency = first_result["truckingPricing"].rates.first[1][0]["rate"]["currency"]
