@@ -24,7 +24,28 @@ class SuperAdminTenantCreator extends React.Component {
     super(props)
     this.state = {
       newTenant: {
-        scope: {}
+        scope: {
+          modes_of_transport: {
+            ocean: {},
+            air: {},
+            rail: {}
+          },
+          carriage_options: {
+            on_carriage: {
+            },
+            pre_carriage: {
+            }
+          },
+          terms: ['', '', '']
+        },
+        theme: {
+          colors: {}
+        },
+        addresses: {},
+        phones: {},
+        emails: {
+          support: {}
+        }
       }
     }
   }
@@ -52,6 +73,8 @@ class SuperAdminTenantCreator extends React.Component {
   }
   handleToggle (ev, key) {
     const keys = key.split('-')
+    // eslint-disable-next-line no-debugger
+    debugger
     switch (keys.length) {
       case 1:
         this.setState({
@@ -188,14 +211,14 @@ class SuperAdminTenantCreator extends React.Component {
     ]
 
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start ">
+      <div className="flex-100 layout-row layout-wrap layout-align-center-start ">
         <div className="flex-80 layout-row layout-align-start-start layout-wrap">
           <div className="flex-100 layout-row layout-align-start-center">
             <h1 className="flex-none">Tenant Creator</h1>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Basic Info</h4>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.subdomain}
@@ -205,7 +228,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.name}
@@ -216,9 +239,9 @@ class SuperAdminTenantCreator extends React.Component {
               />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Theme</h4>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.theme.colors.primary}
@@ -228,7 +251,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.theme.colors.secondary}
@@ -238,7 +261,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.theme.colors.brightPrimary}
@@ -248,7 +271,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.theme.colors.brightSecondary}
@@ -259,54 +282,54 @@ class SuperAdminTenantCreator extends React.Component {
               />
             </div>
             <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap input_box_full"
+              layout-align-start-center layout-wrap "
             >
-              <p className="flex-none">Logo - Large</p>
+              <p className="flex-100">Logo - Large</p>
               <FileUploader
                 dispatchFn={file => this.uploadImages(file, 'logoLarge')}
                 theme={theme}
               />
             </div>
             <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap input_box_full"
+              layout-align-start-center layout-wrap "
             >
-              <p className="flex-none">Logo - Small</p>
+              <p className="flex-100">Logo - Small</p>
               <FileUploader
                 dispatchFn={file => this.uploadImages(file, 'logoSmall')}
                 theme={theme}
               />
             </div>
             <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap input_box_full"
+              layout-align-start-center layout-wrap "
             >
-              <p className="flex-none">Logo - White</p>
+              <p className="flex-100">Logo - White</p>
               <FileUploader
                 dispatchFn={file => this.uploadImages(file, 'logoWhite')}
                 theme={theme}
               />
             </div>
             <div
-              className="flex-50 layout-row layout-align-start-center layout-wrap input_box_full"
+              className="flex-50 layout-row layout-align-start-center layout-wrap "
             >
-              <p className="flex-none">Logo - Wide</p>
+              <p className="flex-100">Logo - Wide</p>
               <FileUploader
                 dispatchFn={file => this.uploadImages(file, 'logoWide')}
                 theme={theme}
               />
             </div>
             <div className="flex-50 layout-row
-              layout-align-start-center layout-wrap input_box_full"
+              layout-align-start-center layout-wrap "
             >
-              <p className="flex-none">Background</p>
+              <p className="flex-100">Background</p>
               <FileUploader
                 dispatchFn={file => this.uploadImages(file, 'background')}
                 theme={theme}
               />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Addresses</h4>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.addresses.main}
@@ -317,9 +340,9 @@ class SuperAdminTenantCreator extends React.Component {
               />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Phone Numbers</h4>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.phones.main}
@@ -329,7 +352,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.phones.support}
@@ -340,9 +363,9 @@ class SuperAdminTenantCreator extends React.Component {
               />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Emails</h4>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.emails.sales}
@@ -352,7 +375,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.emails.support.general}
@@ -362,7 +385,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.emails.support.sea}
@@ -372,7 +395,7 @@ class SuperAdminTenantCreator extends React.Component {
                 className="flex-none"
               />
             </div>
-            <div className="flex-50 layout-row layout-align-start-center input_box_full">
+            <div className="flex-40 layout-row layout-align-start-center input_box_full">
               <input
                 type="text"
                 value={newTenant.emails.support.air}
@@ -383,7 +406,7 @@ class SuperAdminTenantCreator extends React.Component {
               />
             </div>
           </div>
-          <div className="flex-100 layout-row layout-align-start-center">
+          <div className="flex-100 layout-row layout-align-start-center layout-wrap">
             <h4 className="flex-100">Scope</h4>
             <div className="flex-100 layout-row layout-wrap">
               <h5 className="flex-none">Cargo Modes of Transport</h5>

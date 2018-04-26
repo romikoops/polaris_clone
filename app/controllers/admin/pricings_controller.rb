@@ -35,15 +35,40 @@ class Admin::PricingsController < ApplicationController
   end
 
   def update_price
-    data = params.as_json
-    data.delete("controller")
-    data.delete("subdomain_id")
-    data.delete("action")
-    data.delete("id")
-    data.delete("created_at")
-    data.delete("updated_at")
     pricing_to_update = Pricing.find(params[:id])
-    pricing_to_update.update_attributes(data)
+    new_pricing_data = params.as_json
+    new_pricing_data.delete("controller")
+    new_pricing_data.delete("subdomain_id")
+    new_pricing_data.delete("action")
+    new_pricing_data.delete("id")
+    new_pricing_data.delete("created_at")
+    new_pricing_data.delete("updated_at")
+    new_pricing_data.delete("load_type")
+    new_pricing_data.delete("currency")
+    pricing_details = new_pricing_data.delete("data")
+    pricing_exceptions = new_pricing_data.delete("exceptions")
+    pricing_to_update.update(new_pricing_data)
+    pricing_details.each do |shipping_type, pricing_detail_data|
+      currency = pricing_detail_data.delete("currency")
+      pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
+      range = pricing_detail_params.delete("range")
+      pricing_detail = pricing_to_update.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
+      pricing_detail.update!(range: range, currency_name: currency) #, external_updated_at: external_updated_at)
+    end
+    
+    pricing_exceptions.each do |pricing_exception_data|
+      pricing_details = pricing_exception_data.delete("data")
+      pricing_exception = pricing_to_update.pricing_exceptions.where(pricing_exception_data).first_or_create(pricing_exception_data.merge(tenant: current_user.tenant))
+      pricing_details.each do |shipping_type, pricing_detail_data|
+        currency = pricing_detail_data.delete("currency")
+        range = pricing_detail_data.delete("range")
+        pricing_detail_params = pricing_detail_data.merge(shipping_type: shipping_type, tenant: current_user.tenant)
+        pricing_detail = pricing_exception.pricing_details.where(pricing_detail_params).first_or_create!(pricing_detail_params)
+        pricing_detail.update!(range: range, currency_name: currency)
+      end
+    end
+    
+    # pricing_to_update.update_attributes(data)
     # resp = update_pricing(params[:id], data)
     # parse_and_update_itinerary_pricing_id(data)
     # new_pricing = data

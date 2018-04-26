@@ -73,3 +73,19 @@ super_admin = super_tenant.users.new(
     confirmed_at: DateTime.new(2017, 1, 20)
   )
 super_admin.save!
+
+super_admin_demo = Tenant.find_by_subdomain("demo").users.new(
+    role: Role.find_by_name('super_admin'),
+
+    company_name: "ItsMyCargo",
+    first_name: "Someone",
+    last_name: "Staff",
+    phone: "123456789",
+
+    email: "info@itsmycargo.com",
+    password: "stafflogin1",
+    password_confirmation: "stafflogin1",
+
+    confirmed_at: DateTime.new(2017, 1, 20)
+  )
+super_admin_demo.save!

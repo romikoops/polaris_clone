@@ -602,7 +602,8 @@ export default function admin (state = {}, action) {
       return state
     case adminConstants.UPDATE_PRICING_SUCCESS: {
       const exPricings = state.pricingData.pricings
-      exPricings[action.payload.id] = action.payload
+        .filter(pricing => pricing.id !== action.payload.id)
+      exPricings.push(action.payload)
       return {
         ...state,
         pricingData: {
