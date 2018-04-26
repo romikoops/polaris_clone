@@ -1168,6 +1168,24 @@ export default function admin (state = {}, action) {
         error: { hub: action.error },
         loading: false
       }
+    case adminConstants.UPDATE_MANDATORY_CHARGE_REQUEST:
+      return state
+    case adminConstants.UPDATE_MANDATORY_CHARGE_SUCCESS:
+      return {
+        ...state,
+        hub: {
+          ...state.hub,
+          hub: action.payload.hub,
+          mandatoryCharge: action.payload.mandatoryCharge
+        },
+        loading: false
+      }
+    case adminConstants.UPDATE_MANDATORY_CHARGE_FAILURE:
+      return {
+        ...state,
+        error: { hub: action.error },
+        loading: false
+      }
     case adminConstants.CLEAR_LOADING:
       return {
         ...state,

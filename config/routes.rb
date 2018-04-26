@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
       end
+      post "hubs/:id/update_mandatory_charges", to: "hubs#update_mandatory_charges"
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite

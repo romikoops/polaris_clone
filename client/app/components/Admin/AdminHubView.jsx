@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
+import Toggle from 'react-toggle'
 import PropTypes from '../../prop-types'
 import { AdminLayoverRow, AdminHubTile } from './'
 import { AdminSearchableRoutes } from './AdminSearchables'
@@ -12,13 +13,16 @@ import { AdminHubFees } from './Hub/Fees'
 import { AdminCustomsSetter } from './Customs/Setter'
 import AdminPromptConfirm from './Prompt/Confirm'
 
+import '../../styles/react-toggle.scss'
+
 export class AdminHubView extends Component {
   constructor (props) {
     super(props)
     this.state = {
       currentFeeLoadType: { value: 'lcl', label: 'Lcl' },
       currentCustomsLoadType: { value: 'lcl', label: 'Lcl' },
-      editedHub: { data: {}, location: {} }
+      editedHub: { data: {}, location: {} },
+      mandatoryCharge: {}
     }
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
@@ -38,6 +42,12 @@ export class AdminHubView extends Component {
         this.props.hubData.customs !== nextProps.hubData.customs
       ) {
         this.checkAndSetCharges(nextProps)
+      }
+      if (
+        nextProps.hubData.mandatoryCharge !== this.state.mandatoryCharge
+      ) {
+        const { mandatoryCharge } = nextProps.hubData
+        this.setState({ mandatoryCharge })
       }
     }
   }
@@ -94,6 +104,11 @@ export class AdminHubView extends Component {
   closeConfirm () {
     this.setState({ confirm: false })
   }
+  saveMandatoryChargeEdit () {
+    const { adminActions, hubData } = this.props
+    const { mandatoryCharge } = this.state
+    adminActions.updateHubMandatoryCharges(hubData.hub.id, mandatoryCharge)
+  }
 
   toggleEdit () {
     const { editing } = this.state
@@ -125,6 +140,14 @@ export class AdminHubView extends Component {
       }
     })
   }
+  handleToggle (ev, key) {
+    this.setState({
+      mandatoryCharge: {
+        ...this.state.mandatoryCharge,
+        [key]: !this.state.mandatoryCharge[key]
+      }
+    })
+  }
   clickUploaderInput (e) {
     e.preventDefault()
     this.uploaderInput.click()
@@ -145,7 +168,8 @@ export class AdminHubView extends Component {
       currentCustoms,
       editing,
       editedHub,
-      confirm
+      confirm,
+      mandatoryCharge
     } = this.state
     if (!hubData) {
       return ''
@@ -386,94 +410,152 @@ export class AdminHubView extends Component {
       </div>
     )
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+          className={`${
+            styles.component_view
+          } flex-80 layout-row layout-wrap layout-align-start-start`}
         >
-          <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
-            {hub.name}
-          </p>
-        </div>
-        <div className="flex-100 layout-row layout-align-space-between-start">
-          {editing ? editBox : detailsBox}
-
           <div
-            className="
-            flex-20
-            layout-column
-            layout-wrap
-            layout-align-space-between-end
-            height_100"
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
           >
-            {hub.hub_status === 'active' ? deactivate : activate}
-            {editBtn}
-            {deleteBtn}
+            <p className={` ${styles.sec_title_text} flex-none`} style={textStyle}>
+              {hub.name}
+            </p>
           </div>
-        </div>
+          <div className="flex-100 layout-row layout-align-space-between-start">
+            {editing ? editBox : detailsBox}
+          </div>
 
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none`}> Related Hubs</p>
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_header
+              }`}
+            >
+              <p className={` ${styles.sec_header_text} flex-none`}> Related Hubs</p>
+            </div>
+            {relHubs}
           </div>
-          {relHubs}
-        </div>
-        <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
-          <div className="flex-50 layout-row layout-align-start-center">
-            <TextHeading theme={theme} text="Fees & Charges" size={3} />
-          </div>
-          <div className="flex-50 layout-row layout-align-end-center">
-            <NamedSelect
-              className={styles.select}
-              options={cargoClassOptions}
-              onChange={e => this.filterChargesByLoadType(e, 'fees')}
-              value={currentFeeLoadType}
-              name="currentFeeLoadType"
+          <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
+            <div className="flex-50 layout-row layout-align-start-center">
+              <TextHeading theme={theme} text="Fees & Charges" size={3} />
+            </div>
+            <div className="flex-50 layout-row layout-align-end-center">
+              <NamedSelect
+                className={styles.select}
+                options={cargoClassOptions}
+                onChange={e => this.filterChargesByLoadType(e, 'fees')}
+                value={currentFeeLoadType}
+                name="currentFeeLoadType"
+              />
+            </div>
+            <AdminHubFees
+              theme={theme}
+              charges={currentFee}
+              adminDispatch={adminActions}
+              loadType={currentFeeLoadType.value}
             />
           </div>
-          <AdminHubFees
-            theme={theme}
-            charges={currentFee}
-            adminDispatch={adminActions}
-            loadType={currentFeeLoadType.value}
-          />
-        </div>
-        <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
-          <div className="flex-50 layout-row layout-align-start-center">
-            <TextHeading theme={theme} text="Customs" size={3} />
-          </div>
-          <div className="flex-50 layout-row layout-align-end-center">
-            <NamedSelect
-              className={styles.select}
-              options={cargoClassOptions}
-              onChange={e => this.filterChargesByLoadType(e, 'customs')}
-              value={currentCustomsLoadType}
-              name="currentCustomsLoadType"
+          <div className="flex-100 layout-row layout-align-start-start layout-wrap section_padding">
+            <div className="flex-50 layout-row layout-align-start-center">
+              <TextHeading theme={theme} text="Customs" size={3} />
+            </div>
+            <div className="flex-50 layout-row layout-align-end-center">
+              <NamedSelect
+                className={styles.select}
+                options={cargoClassOptions}
+                onChange={e => this.filterChargesByLoadType(e, 'customs')}
+                value={currentCustomsLoadType}
+                name="currentCustomsLoadType"
+              />
+            </div>
+            <AdminCustomsSetter
+              theme={theme}
+              charges={currentCustoms}
+              adminDispatch={adminActions}
+              loadType={currentCustomsLoadType.value}
             />
           </div>
-          <AdminCustomsSetter
-            theme={theme}
-            charges={currentCustoms}
-            adminDispatch={adminActions}
-            loadType={currentCustomsLoadType.value}
-          />
-        </div>
-        <AdminSearchableRoutes
-          itineraries={routes}
-          theme={theme}
-          hubs={hubs}
-          adminDispatch={adminActions}
-        />
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
+          <div className="flex-100 layout-row layout-align-start-start layout-wrap">
+            <div className="flex-100 layout-row layout-align-start-center">
+              <TextHeading theme={theme} text="Mandatory Charges" size={3} />
+            </div>
+            <div className="flex-100 layout-row layout-align-start-center">
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none">Import Fees</p>
+                <Toggle
+                  value={mandatoryCharge.import_fees}
+                  onChange={e => this.handleToggle(e, 'import_charges')}
+                />
+              </div>
+              <div className="flex-50 layout-row layout-align-space-around-center">
+                <p className="flex-none">Import Fees</p>
+                <Toggle
+                  value={mandatoryCharge.export_fees}
+                  onChange={e => this.handleToggle(e, 'export_charges')}
+                />
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-align-end-center">
+              {mandatoryCharge !== this.props.hubData.mandatoryCharge ? (
+                <div className={`${styles.action_btn} flex-none layout-row`}>
+                  <RoundButton
+                    theme={theme}
+                    size="small"
+                    text="Save"
+                    active
+                    handleNext={() => this.saveMandatoryChargeEdit()}
+                    iconClass="fa-floppy-o"
+                  />
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
-          {schedArr}
+          <AdminSearchableRoutes
+            itineraries={routes}
+            theme={theme}
+            hubs={hubs}
+            adminDispatch={adminActions}
+          />
+          <div className="layout-row flex-100 layout-wrap layout-align-start-center">
+            <div
+              className={`flex-100 layout-row layout-align-space-between-center ${
+                styles.sec_header
+              }`}
+            >
+              <p className={` ${styles.sec_header_text} flex-none`}> Schedules </p>
+            </div>
+            {schedArr}
+          </div>
+          {confimPrompt}
         </div>
-        {confimPrompt}
+        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div className="flex-100 layout-row layout-align-center-center">
+              <h2 className="flex-none letter_3"> Actions </h2>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-pencil" />
+                <p className="flex-none">Manage Hub</p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                {hub.hub_status === 'active' ? deactivate : activate}
+                {editBtn}
+                {deleteBtn}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -493,7 +575,8 @@ AdminHubView.propTypes = {
     schedules: PropTypes.array,
     charges: PropTypes.array,
     customs: PropTypes.array,
-    location: PropTypes.objectOf(PropTypes.any)
+    location: PropTypes.objectOf(PropTypes.any),
+    mandatoryCharge: PropTypes.objectOf(PropTypes.any)
   })
 }
 

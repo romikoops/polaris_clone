@@ -1164,6 +1164,7 @@ module ExcelTools
       'air' => 'Airport',
       'rail' => 'Railway Station'
     }
+    default_mandatory_charge = MandatoryCharge.find_by({pre_carriage: false, on_carriage: false, import_charges: false, export_charges: false})
 
     hub_rows.map do |hub_row|
       hub_row[:hub_type] = hub_row[:hub_type].downcase
@@ -1210,7 +1211,8 @@ module ExcelTools
           latitude: hub_row[:latitude],
           longitude: hub_row[:longitude],
           name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-          photo: hub_row[:photo]
+          photo: hub_row[:photo],
+          mandatory_charge: default_mandatory_charge
         )
 
         results[:hubs] << hub
@@ -1225,7 +1227,8 @@ module ExcelTools
           latitude: hub_row[:latitude],
           longitude: hub_row[:longitude],
           name: "#{nexus.name} #{hub_type_name[hub_row[:hub_type]]}",
-          photo: hub_row[:photo]
+          photo: hub_row[:photo],
+          mandatory_charge: default_mandatory_charge
         )
         results[:hubs] << hub
         stats[:hubs][:number_created] += 1

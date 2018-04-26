@@ -186,7 +186,7 @@ class OfferCalculator
   end
 
   def set_trucking_charges!(charges, trip, sched_key)
-    if @shipment.has_pre_carriage
+    if @shipment.has_pre_carriage 
       charges[sched_key][:trucking_pre] = determine_trucking_fees(
         @shipment.origin,
         trip[0].stop.hub,
@@ -195,7 +195,7 @@ class OfferCalculator
       )
     end
     
-    if @shipment.has_on_carriage
+    if @shipment.has_on_carriage 
       charges[sched_key][:trucking_on] = determine_trucking_fees(
         @shipment.destination, 
         trip[1].stop.hub,
@@ -206,7 +206,7 @@ class OfferCalculator
   end
 
   def set_local_charges!(charges, trip, sched_key)
-    if @shipment.has_pre_carriage
+    if @shipment.has_pre_carriage || trip[0].stop.hub.mandatory_charge.export_charges
       charges[sched_key][:export] = determine_local_charges(
         trip[0].stop.hub,
         @shipment.load_type,
@@ -218,7 +218,7 @@ class OfferCalculator
       
     end
     
-    if @shipment.has_on_carriage
+    if @shipment.has_on_carriage || trip[1].stop.hub.mandatory_charge.import_charges
       charges[sched_key][:import] = determine_local_charges(
         trip[1].stop.hub,
         @shipment.load_type,

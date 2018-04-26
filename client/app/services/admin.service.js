@@ -463,6 +463,14 @@ function editTruckingPrice (pricing) {
   }
   return fetch(`${BASE_URL}/admin/trucking/${pricing.id}/edit`, requestOptions).then(handleResponse)
 }
+function updateHubMandatoryCharges (id, charges) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { ...authHeader(), 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mandatoryCharge: charges })
+  }
+  return fetch(`${BASE_URL}/admin/hubs/${id}/update_mandatory_charges`, requestOptions).then(handleResponse)
+}
 
 export const adminService = {
   getHubs,
@@ -513,7 +521,8 @@ export const adminService = {
   deletePricing,
   editHub,
   deleteClient,
-  editCustomsFees
+  editCustomsFees,
+  updateHubMandatoryCharges
 }
 
 export default adminService
