@@ -1,10 +1,9 @@
 class AccountMailer < Devise::Mailer
 	default template_path: 'devise/mailer'
   layout 'mailer'
+  helper :application
   include Devise::Controllers::UrlHelpers
 
-  ### TBD ### Try this later ### helper :application
-  add_template_helper(ApplicationHelper)
 
   def confirmation_instructions(record, token, opts={})
     tenant = record.tenant
@@ -17,12 +16,12 @@ class AccountMailer < Devise::Mailer
 
     attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
-    # headers["Custom-header"] = "Some Headers"
-    # opts[:reply_to] = 'example@email.com'
     
     opts[:subject] = "ItsMyCargo Account Email Confirmation"
     @redirect_url = base_url + "account"
 
+    # headers["Custom-header"] = "Some Headers"
+    # opts[:reply_to] = 'example@email.com'
     super
   end
 end
