@@ -30,7 +30,6 @@ class AdminHubs extends Component {
   viewHub (hub) {
     const { adminDispatch } = this.props
     adminDispatch.getHub(hub.id, true)
-    this.setView()
   }
   closeSuccessDialog () {
     const { documentDispatch } = this.props

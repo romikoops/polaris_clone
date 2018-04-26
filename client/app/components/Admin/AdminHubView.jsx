@@ -23,7 +23,7 @@ export class AdminHubView extends Component {
     this.toggleHubActive = this.toggleHubActive.bind(this)
     this.getItineraryFromLayover = this.getItineraryFromLayover.bind(this)
   }
-  componentWillMount () {
+  componentDidMount () {
     this.checkAndSetCharges(this.props)
   }
   componentWillReceiveProps (nextProps) {
@@ -58,7 +58,6 @@ export class AdminHubView extends Component {
     if (!hubData && !loading) {
       adminActions.getHub(parseInt(match.params.id, 10), false)
     }
-    this.props.setView()
     if (!this.state.currentFee && this.props.hubData && this.props.hubData.charges) {
       this.filterChargesByLoadType({ value: 'lcl', label: 'Lcl' }, 'fees')
     }
@@ -495,16 +494,14 @@ AdminHubView.propTypes = {
     charges: PropTypes.array,
     customs: PropTypes.array,
     location: PropTypes.objectOf(PropTypes.any)
-  }),
-  setView: PropTypes.func
+  })
 }
 
 AdminHubView.defaultProps = {
   theme: null,
   hubData: null,
   hubHash: {},
-  hubs: [],
-  setView: null
+  hubs: []
 }
 
 export default AdminHubView

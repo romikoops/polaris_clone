@@ -285,7 +285,6 @@ export class AdminHubForm extends Component {
           <div className="flex-100 layout-row layout-wrap layout-align-space-around-center">
             <div
               className="flex-none layout-row"
-
             >
               <RoundButton
                 theme={theme}
