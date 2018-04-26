@@ -112,6 +112,7 @@ Rails.application.routes.draw do
     end
 
     resources :trucking_availability, only: [:index]
+    resources :incoterms, only: [:index]
 
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'

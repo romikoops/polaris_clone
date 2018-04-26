@@ -109,7 +109,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+        main: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
       },
       phones:{
         main:"+46 31-85 32 00",
@@ -176,6 +176,12 @@ class TenantSeeder
           "Drum",
           "Skid",
           "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
         ]
       }
     },
@@ -891,6 +897,7 @@ class TenantSeeder
       tenant.save!
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+      update_tenant_incoterms!(tenant, other_data[:incoterms])
     end
   end
 
@@ -934,6 +941,21 @@ class TenantSeeder
         )
       end
       TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+    end
+  end
+  def self.update_tenant_incoterms!(tenant, incoterm_array)
+    tenant.tenant_incoterms.destroy_all
+    if incoterm_array
+      incoterm_array.each do |code|
+        incoterm = Incoterm.find_by_code(code)
+        awesome_print code
+        awesome_print incoterm
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    else
+      Incoterm.all.each do |incoterm|
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
     end
   end
 end
