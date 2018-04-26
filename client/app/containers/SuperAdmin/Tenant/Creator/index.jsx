@@ -63,8 +63,6 @@ class SuperAdminTenantCreator extends React.Component {
     const uploadUrl = `${BASE_URL}/super_admin/uplaod_image`
     fetch(uploadUrl, requestOptions).then((promise) => {
       promise.json().then((response) => {
-        // eslint-disable-next-line no-debugger
-        debugger
         console.log(response.data)
       })
     })
@@ -73,8 +71,6 @@ class SuperAdminTenantCreator extends React.Component {
   }
   handleToggle (ev, key) {
     const keys = key.split('-')
-    // eslint-disable-next-line no-debugger
-    debugger
     switch (keys.length) {
       case 1:
         this.setState({

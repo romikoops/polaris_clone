@@ -9,7 +9,6 @@ class IncotermsController < ApplicationController
     incoterm_charge = IncotermCharge.find_by(pre_carriage: pre_carriage, on_carriage: on_carriage)
     incoterms = current_user.tenant.incoterms.where("#{buyer_seller}_incoterm_charge" => incoterm_charge)
     awesome_print incoterms
-    byebug
     response_handler(format_for_select_box(incoterms))
   end
 

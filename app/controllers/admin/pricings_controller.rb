@@ -94,7 +94,7 @@ class Admin::PricingsController < ApplicationController
       else
         { "open" => data["id"] }
       end
-      byebug
+      
     if itinerary_pricing_exists?(itinerary_id: data["itinerary_id"], transport_category_id: transport_category_id)
       itinerary_pricing_update(data["itinerary_id"], itinerary_params)
     else
