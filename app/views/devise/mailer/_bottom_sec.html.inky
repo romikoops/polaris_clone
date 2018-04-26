@@ -1,33 +1,3 @@
-
-<row>
-  <columns>      
-    <p>A new booking was received from <span class="bold"><%= @user.company_name %></span> on <span class="bold"><%= formatted_datetime(@shipment.updated_at) %></span>.</p>
-  </columns>
-</row>
-
-<%= render "details_body" %>
-
-<row>
-
-  <columns small="1"></columns>
-
-  <columns small="2">
-    <center>
-      <button href="<%= @redirects_base_url %>accept" class="success radius expanded">Accept</button>
-    </center>
-  </columns>
-
-  <columns small="1"></columns>
-
-  <columns small="2">
-    <center>
-      <button href="<%= @redirects_base_url %>edit" class="primary radius expanded">Edit</button>
-    </center>
-  </columns>
-  
-  <columns small="1"></columns>
-</row>
-
 <row>
   <columns>      
     <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:<p>

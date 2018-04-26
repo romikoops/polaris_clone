@@ -1,5 +1,23 @@
-<p>Welcome <%= @email %>!</p>
 
-<p>You can confirm your account email through the link below:</p>
+<row>
+  <columns>      
+    <p>Dear <span><%= @user.full_name %>,</span></p>
+  </columns>
+</row>
 
-<p><%= link_to 'Confirm my account', user_confirmation_url(@resource, confirmation_token: @token, redirect_url: @redirect_url) %></p>
+<row>
+  <columns>      
+		<p>You can confirm your account email through the link below:</p>
+  </columns>
+</row>
+
+<row>
+  <columns>
+  	<button href="<%= user_confirmation_url(@resource, confirmation_token: @token, redirect_url: @redirect_url) %>" class="success radius expanded">Confirm my account</button>
+		
+  </columns>
+</row>
+
+<%= render "bottom_sec" %>
+
+

@@ -146,10 +146,4 @@ class User < ApplicationRecord
   def sync_uid
     self.uid = "#{tenant.id}***#{email}"
   end
-
-  # protected
-  
-  # def confirmation_required?
-  #   false
-  # end
 end

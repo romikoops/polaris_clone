@@ -7,13 +7,15 @@ class AccountMailer < Devise::Mailer
   add_template_helper(ApplicationHelper)
 
   def confirmation_instructions(record, token, opts={})
+    tenant = record.tenant
+
     base_url = case Rails.env
-      when 'production'  then "http://#{record.tenant.subdomain}.itsmycargo.com/"
+      when 'production'  then "http://#{tenant.subdomain}.itsmycargo.com/"
       when 'development' then "http://localhost:8080/"
       when 'test'        then "http://localhost:8080/"
       end
 
-    # attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
+    attachments.inline['logo.png'] = open(tenant.theme["logoLarge"]).read
 
     # headers["Custom-header"] = "Some Headers"
     # opts[:reply_to] = 'example@email.com'
