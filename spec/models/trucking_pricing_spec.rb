@@ -23,8 +23,6 @@ describe TruckingPricing, type: :model do
       let(:load_type) { 'cargo_item' }
       let(:carriage)  { 'pre' }
 
-      ActiveRecord::Base.logger = Logger.new(STDOUT)
-
       context 'basic tests' do
         it 'raises an ArgumentError if no load_type is provided' do         
           expect {
