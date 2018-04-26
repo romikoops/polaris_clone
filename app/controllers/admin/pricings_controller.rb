@@ -39,10 +39,15 @@ class Admin::PricingsController < ApplicationController
     data.delete("controller")
     data.delete("subdomain_id")
     data.delete("action")
+    data.delete("id")
+    data.delete("created_at")
+    data.delete("updated_at")
+    pricing_to_update = Pricing.find(params[:id])
+    pricing_to_update.update_attributes(data)
     # resp = update_pricing(params[:id], data)
-    parse_and_update_itinerary_pricing_id(data)
-    new_pricing = data
-    response_handler(new_pricing)
+    # parse_and_update_itinerary_pricing_id(data)
+    # new_pricing = data
+    response_handler(pricing_to_update)
   end
 
   def destroy
@@ -64,7 +69,7 @@ class Admin::PricingsController < ApplicationController
       else
         { "open" => data["id"] }
       end
-
+      byebug
     if itinerary_pricing_exists?(itinerary_id: data["itinerary_id"], transport_category_id: transport_category_id)
       itinerary_pricing_update(data["itinerary_id"], itinerary_params)
     else
@@ -120,15 +125,6 @@ class Admin::PricingsController < ApplicationController
     # current_user.tenant.update_route_details
   end
 
-  # def overwrite_main_carriage
-  #   if params[:file]  && params[:file] !='null'
-  #     req = {'xlsx' => params[:file]}
-  #     overwrite_mongo_pricings(req, true)
-  #     response_handler(true)
-  #   else
-  #     response_handler(false)
-  #   end
-  # end
   def download_pricings
     url = write_pricings_to_sheet(tenant_id: current_user.tenant_id)
     response_handler({url: url, key: 'pricing'})
@@ -152,14 +148,6 @@ class Admin::PricingsController < ApplicationController
     else
       response_handler(false)
     end
-  end
-
-  def update_general_fee
-    fee = GeneralFee.find(params[:id])
-    new_fee = params[:profit_margin].to_d
-    fee.update_attribute(:profit_margin, new_fee)
-
-    redirect_to admin_pricings_path
   end
 
   def eliminate_user_pricings(prices, itineraries)
@@ -194,5 +182,8 @@ class Admin::PricingsController < ApplicationController
     params.require(:update).permit(
       :wm, :heavy_wm, :heavy_kg
     )
+  end
+  def itinerary_pricing_exists?(args)
+    return Itinerary.find_by(args) == nil
   end
 end
