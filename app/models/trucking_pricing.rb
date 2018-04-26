@@ -104,40 +104,33 @@ class TruckingPricing < ApplicationRecord
     city_name = args[:city_name] || args[:location].try(:city)
     carriage  = args[:carriage]
 
-    ids = ActiveRecord::Base.connection.execute("
-      SELECT trucking_pricings.id FROM trucking_pricings
-      JOIN  hub_truckings         ON hub_truckings.trucking_pricing_id     = trucking_pricings.id
-      JOIN  trucking_destinations ON hub_truckings.trucking_destination_id = trucking_destinations.id
-      JOIN  hubs                  ON hub_truckings.hub_id                  = hubs.id
-      JOIN  locations             ON hubs.nexus_id                         = locations.id
-      JOIN  tenants               ON hubs.tenant_id                        = tenants.id
-      WHERE tenants.id = #{args[:tenant_id]}
-      AND trucking_pricings.load_type = '#{args[:load_type]}'
-      AND trucking_pricings.carriage = '#{carriage}'
-      #{truck_type_condition(args)}
-      #{nexuses_condition(args)}
-      AND (
+
+    joins(hub_truckings: [:trucking_destination, hub: :nexus])
+      .where('hubs.tenant_id': args[:tenant_id])
+      .where('trucking_pricings.load_type': args[:load_type])
+      .where('trucking_pricings.carriage': args[:carriage])
+      .where(truck_type_condition(args))
+      .where(nexuses_condition(args))
+      .where("
         (
           (trucking_destinations.zipcode IS NOT NULL)
-          AND (trucking_destinations.zipcode = '#{zipcode}')
+          AND (trucking_destinations.zipcode = :zipcode)
         ) OR (
           (trucking_destinations.city_name IS NOT NULL)
-          AND (trucking_destinations.city_name = '#{city_name}')
+          AND (trucking_destinations.city_name = :city_name)
         ) OR (
           (trucking_destinations.distance IS NOT NULL)
           AND (
             trucking_destinations.distance = (
               SELECT ROUND(ST_Distance(
                 ST_Point(hubs.longitude, hubs.latitude)::geography,
-                ST_Point(#{longitude}, #{latitude})::geography
+                ST_Point(:longitude, :latitude)::geography
               ) / 500)
             )
           )
-        )
-      )
-    ").values.flatten
+        )        
+      ", zipcode: zipcode, city_name: city_name, latitude: latitude, longitude: longitude)
 
-    TruckingPricing.where(id: ids)
   end
 
 
@@ -218,11 +211,11 @@ class TruckingPricing < ApplicationRecord
   end
 
   def self.truck_type_condition(args)
-    args[:truck_type] ? "AND trucking_pricings.truck_type = '#{args[:truck_type]}'" : ""
+    args[:truck_type] ? { 'trucking_pricings.truck_type': args[:truck_type] } : {}
   end
 
   def self.nexuses_condition(args)
-    args[:nexus_ids] ? "AND locations.id IN #{args[:nexus_ids].sql_format}" : ""
+    args[:nexus_ids] ? { 'hubs.nexus_id': args[:nexus_ids] } : {}
   end
 
   def self.parse_sql_array(str)
