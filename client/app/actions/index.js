@@ -2,7 +2,7 @@ import * as types from './types'
 
 export * from './alert.actions'
 export * from './user.actions'
-export * from './authentication.actions'
+export { default as authenticationActions } from './authentication.actions'
 export * from './shipment.actions'
 export * from './admin.actions'
 export * from './app.actions'

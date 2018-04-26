@@ -80,7 +80,7 @@ class RegistrationPage extends React.Component {
     if (req) {
       authenticationDispatch.updateUser(this.props.user, user, req)
     } else {
-      authenticationDispatch.authenticationActions.register(user)
+      authenticationDispatch.register(user)
     }
   }
 

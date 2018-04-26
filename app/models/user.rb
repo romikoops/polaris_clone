@@ -1,8 +1,9 @@
 class User < ApplicationRecord
   # Include default devise modules.
   devise :database_authenticatable, :registerable,
-          :recoverable, :rememberable, :trackable, :validatable
-          # :confirmable, :omniauthable
+    :recoverable, :rememberable, :trackable, :validatable,
+    :confirmable #, :omniauthable
+
   include DeviseTokenAuth::Concerns::User
   before_validation :set_default_role, :sync_uid, :clear_tokens_if_empty
   before_create :set_default_currency
@@ -36,11 +37,11 @@ class User < ApplicationRecord
   has_many :user_managers
   has_many :pricings
 
-  # Devise
-  # Include default devise modules. Others available are:
-  # :lockable, :timeoutable and :omniauthable
-  # devise :database_authenticatable, :registerable,
-  #        :recoverable, :rememberable, :validatable, :trackable, :confirmable
+  PERMITTED_PARAMS = [
+    :email, :password,
+    :guest, :tenant_id, :confirm_password, :password_confirmation, 
+    :company_name, :vat_number, :VAT_number, :first_name, :last_name, :phone
+  ]
 
   # Filterrific
   filterrific :default_filter_params => { :sorted_by => 'created_at_asc' },
@@ -145,4 +146,10 @@ class User < ApplicationRecord
   def sync_uid
     self.uid = "#{tenant.id}***#{email}"
   end
+
+  # protected
+  
+  # def confirmation_required?
+  #   false
+  # end
 end
