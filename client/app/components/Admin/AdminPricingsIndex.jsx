@@ -86,7 +86,13 @@ export class AdminPricingsIndex extends Component {
 
     return (
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
-      <CardPricingIndex theme={theme} scope={scope} />
+      <CardPricingIndex
+        itineraries={detailedItineraries}
+        theme={theme}
+        scope={scope}
+        adminDispatch={adminDispatch}
+        toggleCreator={this.toggleCreator}
+        />
         <AdminSearchableRoutes
           itineraries={detailedItineraries}
           theme={theme}

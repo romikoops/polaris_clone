@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411151633) do
+ActiveRecord::Schema.define(version: 20180416173637) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -99,6 +99,17 @@ ActiveRecord::Schema.define(version: 20180411151633) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "customs_fees", force: :cascade do |t|
+    t.jsonb "import"
+    t.jsonb "export"
+    t.string "mode_of_transport"
+    t.string "load_type"
+    t.integer "hub_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "documents", force: :cascade do |t|
     t.integer "user_id"
     t.integer "shipment_id"
@@ -155,6 +166,17 @@ ActiveRecord::Schema.define(version: 20180411151633) do
     t.integer "itinerary_id"
     t.integer "trip_id"
     t.datetime "closing_date"
+  end
+
+  create_table "local_charges", force: :cascade do |t|
+    t.jsonb "import"
+    t.jsonb "export"
+    t.string "mode_of_transport"
+    t.string "load_type"
+    t.integer "hub_id"
+    t.integer "tenant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "locations", force: :cascade do |t|
@@ -339,9 +361,9 @@ ActiveRecord::Schema.define(version: 20180411151633) do
     t.datetime "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "vehicle_id"
     t.string "voyage_code"
     t.string "vessel"
+    t.integer "tenant_vehicle_id"
   end
 
   create_table "trucking_destinations", force: :cascade do |t|
@@ -351,19 +373,25 @@ ActiveRecord::Schema.define(version: 20180411151633) do
     t.integer "distance"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["city_name"], name: "index_trucking_destinations_on_city_name"
+    t.index ["country_code"], name: "index_trucking_destinations_on_country_code"
+    t.index ["distance"], name: "index_trucking_destinations_on_distance"
+    t.index ["zipcode"], name: "index_trucking_destinations_on_zipcode"
   end
 
   create_table "trucking_pricings", force: :cascade do |t|
-    t.jsonb "export"
-    t.jsonb "import"
     t.integer "courier_id"
-    t.string "direction"
     t.string "load_type"
     t.jsonb "load_meterage"
     t.integer "cbm_ratio"
     t.string "modifier"
     t.integer "tenant_id"
     t.string "truck_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "carriage"
+    t.jsonb "rates"
+    t.jsonb "fees"
   end
 
   create_table "user_locations", force: :cascade do |t|

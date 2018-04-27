@@ -1,62 +1,110 @@
 import React, { Component } from 'react'
 import styles from './Card.scss'
+import { v4 } from 'node-uuid'
 import {
   CardTitle,
-  CardRoutePricing,
+  CardRoutesPricing,
   PricingButton,
 } from './SubComponents'
 import { RoundButton } from '../../RoundButton/RoundButton'
 
-// how do i store components in index?
 
 export default class CardPricingIndex extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      itineraries: props.itineraries
+    }
+    this.handleClick = this.handleClick.bind(this)
     this.iconClasses = {
       ocean: 'anchor',
       air: 'paper-plane',
-      rail: 'gratipay'
+      rail: 'truck'
     }
-    this.toggleCreator = this.toggleCreator.bind(this)
   }
-    toggleCreator () {
-    this.setState({ newPricing: !this.state.newPricing })
 
+  handleClick (id) {
+    const { adminDispatch } = this.props
+    // if (handleClick) {
+    //   handleClick(itinerary)
+    // } else {
+      adminDispatch.getItineraryPricings(id, true)
+    // }
   }
+  generateViewType (mot, limit) {
+       return (
+        <div className="layout-row flex-100 layout-align-start-center ">
+          <div className="layout-row flex-none layout-align-start-center layout-wrap">
+            {this.generateCardPricings(mot, limit)}
+          </div>
+        </div>
+      )
+    }
+    generateCardPricings(mot, limit) {
+      const { itineraries } = this.state
+      const { hubs, theme } = this.props
+      console.log(mot, limit)
+    let itinerariesArr = []
+    const viewLimit = limit || 3
+    if (itineraries && itineraries.length > 0) {
+      itinerariesArr = itineraries.filter(itinerary => itinerary.mode_of_transport === mot).map((rt, i) => {
+        if (i <= viewLimit) {
+          return (
+            <CardRoutesPricing
+              key={v4()}
+              hubs={hubs}
+              itinerary={rt}
+              theme={theme}
+              handleClick={this.handleClick}
+            />
+          )
+        }
+        return ''
+      })
+    } else if (this.props.itineraries && this.props.itineraries.length > 0) {
+      itinerariesArr = itineraries.filter(itinerary => itinerary.mode_of_transport === mot).map((rt, i) => {
+        if (i <= viewLimit) {
+          return (
+            <CardRoutesPricing
+              key={v4()}
+              hubs={hubs}
+              itinerary={rt}
+              theme={theme}
+              handleClick={this.handleClick}
+            />
+          )
+        }
+        return ''
+      })
+    }
+    return itinerariesArr
+    }
+
+
   render () {
-    const { theme, hubs, pricingData, clients, adminDispatch, scope } = this.props
+    const { theme, hubs, limit, clients, adminDispatch, scope, toggleCreator } = this.props
     if (!scope) return ''
     const modesOfTransport = scope.modes_of_transport
-    // ocean: {
-    //   container: true,
-    //   cargo_item: true
-    // },
     const modeOfTransportNames = Object.keys(modesOfTransport)
       .filter(modeOfTransportName => (
         Object.values(modesOfTransport[modeOfTransportName]).some(bool => bool)
       ))
-    // const modesOfTransportTitles = modeOfTransportNames
-    //   .map(modeOfTransportName => `${modeOfTransportName} freight`)
 
     return (
       <div>
-        <div className="flex-titles">
+        <div className={styles.flex_titles}>
           {modeOfTransportNames.map(modeOfTransportName => (
-            <div className="titles-btn">
+            <div className={styles.titles_btn}>
               <CardTitle
                 titles={`${modeOfTransportName} freight`}
                 faIcon={this.iconClasses[modeOfTransportName]}
+                theme={theme}
               />
-              <PricingButton />
-              <RoundButton
-            text="New Pricing"
-            theme={theme}
-            size="small"
-            handleNext={this.toggleCreator}
-            iconClass="fa-plus"
-            active
-          />
-          <CardRoutePricing />
+              <PricingButton
+                onClick={toggleCreator}
+                onDisabledClick={() => console.log('this button is disabled')}
+              />
+          {this.generateViewType(modeOfTransportName, limit)}
             </div>
           ))}
         </div>

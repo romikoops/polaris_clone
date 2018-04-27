@@ -1,7 +1,7 @@
-.card-title-pricing {
-  border: 3px solid green;
+:local {
+  .card_title_pricing {
   // background: -webkit-linear-gradient(left, rgb(13, 91, 169), rgb(35, 128, 42));
-  min-width: 324px;
+  max-width: 324px;
   min-height: 145px;
   position: relative;
   margin-right: 30px;
@@ -9,7 +9,16 @@
     margin-right: 0;
   }
 }
-.center-items {
+.card_over {
+  position: absolute;
+  min-width: 300px;
+  min-height: 138px;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  background-color: white;
+}
+.center_items {
   display: flex;
   align-items: center;
   position: absolute;
@@ -18,7 +27,6 @@
   margin: 0;
   i {
     font-size: 50px;
-    color: #074080;
   }
   div {
     min-width: 150px;
@@ -35,32 +43,43 @@
     }
   }
 }
-.titles-btn {
+.titles_btn {
   min-width: 324px;
   min-height: 52px;
 }
-.pricing-button {
-  min-width: 324px;
+.pricing_button {
+  max-width: 324px;
   min-height: 52px;
   border: 7px solid #F2F2F2;
   box-sizing: border-box;
   margin-top: 20px;
   position: relative;
   margin-right: 30px;
+  cursor: pointer;
+  font-weight: bolder;
+  transition: all .3s ease;
+  &:hover {
+    border: 7px solid lightgrey;
+  }
 }
-.flex-titles {
+.flex_titles {
   display: flex;
   justify-content: space-around;
 }
-.card-route-pricing {
+.card_route_pricing {
   padding: 20px;
   background-color: #F2F2F2;
-  max-width: 290px;
-  max-height: 126px;
+  min-width: 310px;
+  min-height: 126px;
   margin-top: 20px;
   position: relative;
+  transition: all .3s ease;
+  cursor: pointer;
+  &:hover {
+    background-color: lightgrey;
+  }
 }
-.top-routes {
+.top_routes {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,12 +89,16 @@
     margin-bottom: 4px;
     margin-top: 0;
   }
+  i {
+    font-size: 25px;
+  }
 }
-.bottom-routes {
+.bottom_routes {
   display: flex;
   justify-content: space-between;
   p {
     margin-bottom: 0;
     margin-top: 12px;
   }
+}
 }

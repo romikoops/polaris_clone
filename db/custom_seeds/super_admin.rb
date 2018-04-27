@@ -52,7 +52,7 @@ super_tenant_data = {
       },
       pre_carriage: {
         import: 'optional',
-        export: 'optional'      
+        export: 'optional'
       }
     }
   }
