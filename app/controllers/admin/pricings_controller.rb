@@ -67,87 +67,13 @@ class Admin::PricingsController < ApplicationController
         pricing_detail.update!(range: range, currency_name: currency)
       end
     end
-    
-    # pricing_to_update.update_attributes(data)
-    # resp = update_pricing(params[:id], data)
-    # parse_and_update_itinerary_pricing_id(data)
-    # new_pricing = data
+
     response_handler(pricing_to_update)
   end
 
   def destroy
     delete_pricing(params[:id])
     response_handler({})
-  end
-
-  # TODO: Update this function
-  def parse_and_update_itinerary_pricing_id(data)
-
-    first_stop_id, last_stop_id, transport_category_id, tenant_id, load_type, load_type_detail, additional_load_type_detail = data["id"].split("_")
-
-    itinerary_params =
-      if load_type == 'fcl' && additional_load_type_detail.present?
-        { additional_load_type_detail => data["id"] }
-        # TODO: why?
-      elsif load_type != 'fcl' && load_type_detail.present?
-        { load_type_detail => data["id"] }
-      else
-        { "open" => data["id"] }
-      end
-      
-    if itinerary_pricing_exists?(itinerary_id: data["itinerary_id"], transport_category_id: transport_category_id)
-      itinerary_pricing_update(data["itinerary_id"], itinerary_params)
-    else
-      new_itinerary_params = {
-        tenant_id: current_user.tenant_id,
-        transport_category_id: data["transport_category_id"],
-        itinerary_id: data["itinerary_id"]
-      }.merge(itinerary_params)
-      itinerary_pricing_create(new_itinerary_params)
-    end
-
-    # current_user.tenant.update_route_details
-
-    # keys_split = data["id"].split("_")
-    # itineraryPricingId = "#{keys_split[0]}_#{keys_split[1]}_#{keys_split[2]}"
-    # existing_itinerary = get_item("itineraryPricings", "_id", itineraryPricingId)
-    #
-    # if  !existing_itinerary
-    #   new_itinerary = {
-    #     tenant_id: current_user.tenant_id,
-    #     transport_category_id: data["transport_category_id"],
-    #     itinerary_id: data["itinerary_id"]
-    #   }
-    #   if data["id"].include?("fcl")
-    #     if keys_split.length == 7
-    #       new_itinerary["#{keys_split[6]}"] = data["id"]
-    #     else
-    #       new_itinerary["open"] = data["id"]
-    #     end
-    #   else
-    #     if keys_split.length == 6
-    #       new_itinerary["#{keys_split[5]}"] = data["id"]
-    #     else
-    #       new_itinerary["open"] = data["id"]
-    #     end
-    #   end
-    #   update_item("itineraryPricings", {"_id" => itineraryPricingId}, new_itinerary)
-    # else
-    #   if data["id"].include?("fcl")
-    #     if keys_split.length == 7
-    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[6]}" => data["id"]})
-    #     else
-    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
-    #     end
-    #   else
-    #     if keys_split.length == 6
-    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"#{keys_split[5]}" => data["id"]})
-    #     else
-    #       update_item("itineraryPricings", {"_id" => itineraryPricingId}, {"open" => data["id"]})
-    #     end
-    #   end
-    # end
-    # current_user.tenant.update_route_details
   end
 
   def download_pricings

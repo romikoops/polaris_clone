@@ -1392,7 +1392,7 @@ module ExcelTools
       end
 
       start_date = DateTime.now
-      end_date = start_date + 30.days
+      end_date = start_date + 60.days
 
       if generate
         generator_results = aux_data[pricing_key][:itinerary].generate_weekly_schedules(

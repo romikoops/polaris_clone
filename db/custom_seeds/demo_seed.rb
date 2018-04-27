@@ -2,7 +2,7 @@ include ExcelTools
 include DocumentTools
 include MongoTools
 # subdomains = %w(demo greencarrier easyshipping hartrodt)
-subdomains = %w(greencarrier demo hartrodt saco easyshipping)
+subdomains = %w(greencarrier)
 subdomains.each do |sub|
 # # Tenant.all.each do |tenant|
   tenant = Tenant.find_by_subdomain(sub)
@@ -12,20 +12,20 @@ subdomains.each do |sub|
   # tenant.local_charges.destroy_all
   # tenant.customs_fees.destroy_all
 	# tenant.hubs.destroy_all
-  # #Overwrite hubs from excel sheet
-  puts "# Overwrite hubs from excel sheet"
-  hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
-  req = {"xlsx" => hubs}
-  overwrite_hubs(req, shipper)
+  # # #Overwrite hubs from excel sheet
+  # puts "# Overwrite hubs from excel sheet"
+  # hubs = File.open("#{Rails.root}/db/dummydata/1_hubs.xlsx")
+  # req = {"xlsx" => hubs}
+  # overwrite_hubs(req, shipper)
 
   # # puts "# Overwrite public pricings from excel sheet"
 
   # # public_pricings = File.open("#{Rails.root}/db/dummydata/SACO_FCL_STANDARD.xlsx")
   # # req = {"xlsx" => public_pricings}
   # # overwrite_freight_rates(req, shipper, true)
-  # public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
-  # req = {"xlsx" => public_pricings}
-  # overwrite_freight_rates(req, shipper, true)
+  public_pricings = File.open("#{Rails.root}/db/dummydata/standard_sheet.xlsx")
+  req = {"xlsx" => public_pricings}
+  overwrite_freight_rates(req, shipper, true)
 
   # # # # Overwrite public pricings from excel sheet
 

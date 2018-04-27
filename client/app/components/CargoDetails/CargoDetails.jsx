@@ -211,7 +211,7 @@ export class CargoDetails extends Component {
     const fadedPreCarriageText = shipment.has_pre_carriage ? '' : styles.faded_text
     const fadedOnCarriageText = shipment.has_on_carriage ? '' : styles.faded_text
     const textComp = (
-      <b style={{ 'font-weight': 'normal', 'font-size': '.83em' }}>(if applicable)</b>
+      <b style={{ fontWeight: 'normal', fontSize: '.83em' }}>(if applicable)</b>
     )
     const customsBox = (
       <div
