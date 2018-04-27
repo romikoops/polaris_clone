@@ -49,8 +49,8 @@ export default async function login (puppeteer, expect) {
   await click(LOGIN_BUTTON)
 
   /**
-     *  Wait for navigation change
-     */
+   *  Wait for navigation change
+   */
   await page.waitForSelector(ACCOUNT_PAGE_LOADED)
   expect(await exists(ACCOUNT_PAGE_LOADED)).toBeTruthy()
 

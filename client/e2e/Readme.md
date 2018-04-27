@@ -4,7 +4,15 @@
 
 Declared in `_modules/init.js`
 
-### click(selector: string): void
+### click(selector: string, index?: number): boolean
+
+`
+// Click first button
+await click('button')
+
+// Click fifth button
+await click('button', 4)
+`
 
 ### focus(selector: string): void
 

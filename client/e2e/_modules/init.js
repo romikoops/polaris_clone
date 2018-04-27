@@ -67,12 +67,6 @@ export default async function init (options) {
     return page.evaluate(() => window.location.href)
   }
 
-  const click = (selector) => {
-    operationHolder = 'click'
-
-    return $(selector, el => el.click())
-  }
-
   const focus = (selector) => {
     operationHolder = 'focus'
 
@@ -92,12 +86,51 @@ export default async function init (options) {
     return page.$$eval(selector, els => els.length > 0)
   }
 
+  const click = async (selector, index) => {
+    operationHolder = 'click'
+
+    if (index === undefined) {
+      const ok = await exists(selector)
+
+      if (!ok) {
+        return false
+      }
+      await $(selector, el => el.click())
+
+      return true
+    }
+
+    return $$(selector, clickWhichSelector, index)
+  }
+  const clickWithText = async (selector, text) => {
+    const ok = await exists(selector)
+    if (!ok) {
+      return false
+    }
+
+    return $$(selector, clickWithTextFn, text)
+  }
   const fill = async (selector, text) => {
     selectorHolder = selector
     operationHolder = 'fill'
 
     await focus(selector)
     await page.keyboard.type(text, { delay: 50 })
+  }
+
+  const selectWithTab = async (tabCount) => {
+    // eslint-disable-next-line
+    for (const _ of Array(tabCount).fill('')) {
+      // eslint-disable-next-line
+      await page.keyboard.press('Tab')
+      // eslint-disable-next-line
+      await delay(200)
+    }
+
+    await page.keyboard.press('ArrowDown')
+    await delay(200)
+    await page.keyboard.press('Enter')
+    await delay(200)
   }
 
   const onError = () =>
@@ -109,13 +142,46 @@ export default async function init (options) {
     browser,
     catchError,
     click,
+    clickWithText,
     count,
     exists,
     fill,
+    focus,
     onError,
     page,
     url,
+    selectWithTab,
     waitFor,
     waitForSelectors
   }
+}
+
+function clickWhichSelector (els, i) {
+  // eslint-disable-next-line
+  const convertIndex = (x, length) => (typeof x === 'number'
+    ? x
+    : x === 'last'
+      ? length - 1
+      : 0)
+
+  const index = convertIndex(i, els.length)
+
+  if (index >= els.length) {
+    return false
+  }
+
+  els[index].click()
+
+  return true
+}
+
+function clickWithTextFn (els, text) {
+  const filtered = els.filter(x => x.textContent.includes(text))
+
+  if (filtered.length === 0) {
+    return false
+  }
+  filtered[0].click()
+
+  return true
 }
