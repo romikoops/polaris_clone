@@ -83,10 +83,11 @@ export class AdminSearchableHubs extends Component {
   }
   render () {
     const {
-      theme, seeAll, showTooltip, icon, tooltip, sideScroll
+      theme, seeAll, showTooltip, icon, tooltip, sideScroll, hideFilters
     } = this.props
     const { hubs, selectedMot } = this.state
     let hubsArr
+
     if (hubs) {
       hubsArr = this.filterHubsByType(hubs).map(hub => (
         <AdminHubTile
@@ -101,7 +102,9 @@ export class AdminSearchableHubs extends Component {
     }
     const viewType = sideScroll ? (
       <div className={`layout-row flex-100 layout-align-start-center ${styles.slider_container}`}>
-        <div className={`layout-row flex-none layout-align-space-around-center ${styles.slider_inner}`}>
+        <div
+          className={`layout-row flex-none layout-align-space-around-center ${styles.slider_inner}`}
+        >
           {hubsArr}
         </div>
       </div>
@@ -117,6 +120,31 @@ export class AdminSearchableHubs extends Component {
       { label: 'Rail', value: 'rail' },
       { label: 'Air', value: 'air' }
     ]
+    const filters = !hideFilters ? (
+      <div className="flex-90 layout-row layout-align-start-center">
+        <div className="flex-20 layout-row layout-align-start-cente">
+          <p className="flex-none">Filter by:</p>
+        </div>
+        <div className="flex-40 layout-row layout-align-center-center">
+          <NamedSelect
+            className={styles.select}
+            options={motOptions}
+            onChange={e => this.setHubFilter(e)}
+            value={selectedMot}
+            placeholder="Hub Type"
+            name="motFilter"
+          />
+        </div>
+        <div className="flex-40 layout-row layout-align-center-center input_box_full">
+          <input
+            type="text"
+            name="search"
+            placeholder="Search hubs"
+            onChange={this.handleSearchChange}
+          />
+        </div>
+      </div>
+    ) : ''
     return (
       <div
         className={`layout-row flex-100 layout-wrap layout-align-start-center ${styles.searchable}`}
@@ -141,29 +169,7 @@ export class AdminSearchableHubs extends Component {
               </div>
             </div>
           </div>
-          <div className="flex-90 layout-row layout-align-start-center">
-            <div className="flex-20 layout-row layout-align-start-cente">
-              <p className="flex-none">Filter by:</p>
-            </div>
-            <div className="flex-40 layout-row layout-align-center-center">
-              <NamedSelect
-                className={styles.select}
-                options={motOptions}
-                onChange={e => this.setHubFilter(e)}
-                value={selectedMot}
-                placeholder="Hub Type"
-                name="motFilter"
-              />
-            </div>
-            <div className="flex-40 layout-row layout-align-center-center input_box_full">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search hubs"
-                onChange={this.handleSearchChange}
-              />
-            </div>
-          </div>
+          {filters}
         </div>
         {viewType}
         {seeAll !== false ? (
@@ -195,7 +201,8 @@ AdminSearchableHubs.propTypes = {
   showTooltip: PropTypes.bool,
   sideScroll: PropTypes.bool,
   icon: PropTypes.string,
-  tooltip: PropTypes.string
+  tooltip: PropTypes.string,
+  hideFilters: PropTypes.bool
 }
 
 AdminSearchableHubs.defaultProps = {
@@ -205,7 +212,8 @@ AdminSearchableHubs.defaultProps = {
   showTooltip: false,
   icon: '',
   tooltip: '',
-  sideScroll: false
+  sideScroll: false,
+  hideFilters: false
 }
 
 export default AdminSearchableHubs

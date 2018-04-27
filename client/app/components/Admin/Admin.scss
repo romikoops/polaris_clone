@@ -787,7 +787,8 @@
   .action_box {
     box-shadow: 1px 3px 2px 1px rgba(0,0,0,0.3);
     border: 1px solid rgba(0,0,0,0.3);
-    margin-top: 53px;
+    margin-top: 100px;
+    border-radius: 5px;
   }
   .action_header {
     background: lightslategray;
@@ -839,6 +840,12 @@
     background-color: rgba(232, 114, 88, 0.3);
     &::placeholder {
       color: rgb(211, 104, 80);
+    }
+  }
+  .side_title {
+    h2, i {
+      margin: 0 5px;
+      font-size: 18px;
     }
   }
 }

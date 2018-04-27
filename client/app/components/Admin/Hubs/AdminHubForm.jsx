@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import styled from 'styled-components'
-import PropTypes from '../../prop-types'
-import styles from './Admin.scss'
-import GmapsWrapper from '../../hocs/GmapsWrapper'
-import { PlaceSearch } from '../Maps/PlaceSearch'
-import '../../styles/select-css-custom.css'
-import { RoundButton } from '../RoundButton/RoundButton'
+import PropTypes from '../../../prop-types'
+import styles from '../Admin.scss'
+import GmapsWrapper from '../../../hocs/GmapsWrapper'
+import { PlaceSearch } from '../../Maps/PlaceSearch'
+import '../../../styles/select-css-custom.css'
+import { RoundButton } from '../../RoundButton/RoundButton'
 
 export class AdminHubForm extends Component {
   constructor (props) {

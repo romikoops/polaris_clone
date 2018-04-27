@@ -13,7 +13,7 @@ import {
 } from '../../components/Admin'
 import AdminShipments from '../../components/Admin/AdminShipments'
 import AdminClients from '../../components/Admin/AdminClients'
-import AdminHubs from '../../components/Admin/AdminHubs'
+import AdminHubs from '../../components/Admin/Hubs/AdminHubs'
 import AdminRoutes from '../../components/Admin/AdminRoutes'
 import AdminSchedules from '../../components/Admin/AdminSchedules'
 import AdminPricings from '../../components/Admin/AdminPricings'

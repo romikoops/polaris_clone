@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import PropTypes from '../../prop-types'
-import { AdminHubsIndex, AdminHubView, AdminHubForm } from './'
-import { AdminUploadsSuccess } from './Uploads/Success'
-import { adminActions, documentActions } from '../../actions'
+import PropTypes from '../../../prop-types'
+import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
+import { AdminUploadsSuccess } from '../Uploads/Success'
+import { adminActions, documentActions } from '../../../actions'
 
 class AdminHubs extends Component {
   constructor (props) {

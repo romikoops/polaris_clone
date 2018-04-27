@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
 import styles from './AdminHubTile.scss'
-import { gradientGenerator } from '../../helpers'
+import { gradientGenerator } from '../../../helpers'
 
 export class AdminHubTile extends Component {
   constructor (props) {

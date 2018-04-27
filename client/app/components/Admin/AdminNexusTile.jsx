@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
-import styles from './AdminHubTile.scss'
+import styles from './Hubs/AdminHubTile.scss'
 
 export class AdminNexusTile extends Component {
   constructor (props) {
