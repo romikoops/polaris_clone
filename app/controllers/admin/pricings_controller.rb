@@ -14,7 +14,7 @@ class Admin::PricingsController < ApplicationController
     @transports = TransportCategory.all.uniq
     itineraries = Itinerary.where(tenant_id: current_user.tenant_id)
     @pricings = Pricing.where(tenant_id: current_user.tenant_id).as_json
-    detailed_itineraries = itineraries.map(&:as_options_json)
+    detailed_itineraries = itineraries.map(&:as_pricing_json)
     
     response_handler({ itineraries: itineraries, detailedItineraries: detailed_itineraries, tenant_pricings: @tenant_pricings, pricings: @pricings, transportCategories: @transports })
   end

@@ -54,16 +54,16 @@ class TenantSeeder
   #   # Cargo item types can be set in one of the 3 following ways:
   #   #   1. Choose a default option (Either :all, or :no_dimensions)
   #   #   2. An array (a list) of categories with no dimensions or area.
-  #   #   3. An array (a list) of hashes (key/value pair groups) 
-  #    
-  #    
+  #   #   3. An array (a list) of hashes (key/value pair groups)
+  #
+  #
   #   # Method 1:
-  #   
+  #
   #   cargo_item_types: :all
-  #   
-  #   
+  #
+  #
   #   # Method 2:
-  #    
+  #
   #   cargo_item_types: [
   #     "Pallet",
   #     "Carton",
@@ -74,21 +74,21 @@ class TenantSeeder
   #     "Skid",
   #     "Barrel"
   #   ]
-  #   
-  #   
+  #
+  #
   #   # Method 3:
-  #   
+  #
   #   cargo_item_types: [
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 101.6, 
-  #       dimension_y: 121.9, 
+  #       dimension_x: 101.6,
+  #       dimension_y: 121.9,
   #       area: 'North America'
   #     },
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 100.0, 
-  #       dimension_y: 120.0, 
+  #       dimension_x: 100.0,
+  #       dimension_y: 120.0,
   #       area: 'Europe, Asia'
   #     }
   #   ]
@@ -160,7 +160,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -249,7 +249,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -324,7 +324,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -391,7 +391,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'disabled',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -455,7 +455,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -522,7 +522,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -587,7 +587,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -650,7 +650,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -713,7 +713,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -916,14 +916,14 @@ class TenantSeeder
 
     if cargo_item_types_attr == :all
       CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     if cargo_item_types_attr == :no_dimensions
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
