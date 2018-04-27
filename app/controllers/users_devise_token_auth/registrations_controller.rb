@@ -10,13 +10,23 @@ module UsersDeviseTokenAuth
 				resource.create_token
 				resource.save!
 
-				# Associate the address, if User is not a guest.
+				# Create Address for non-guest Users
 				unless resource.guest
 					location = Location.create(location_params)
 					location.geocode_from_address_fields!
 					resource.locations << location unless location.nil?
 				end
+
+				@headers_to_append = resource.create_new_auth_token
 			end
+		end
+
+		def render_create_success
+			@headers_to_append.each do |k, v|
+				response.headers[k] = v
+			end
+
+			super
 		end
 
 		protected
@@ -39,6 +49,10 @@ module UsersDeviseTokenAuth
 				params_h[:vat_number] = params_h.delete(:VAT_number)
 			end
 			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
+		end
+
+		def provider
+			"tenant_email"
 		end
 
 		def location_params

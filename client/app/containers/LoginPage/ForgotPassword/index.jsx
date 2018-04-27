@@ -5,6 +5,10 @@ import PropTypes from '../../../prop-types'
 import { RoundButton } from '../../../components/RoundButton/RoundButton'
 import styles from './ForgotPassword.scss'
 import FormsyInput from '../../../components/FormsyInput/FormsyInput'
+import { BASE_URL } from '../../../constants'
+import { authHeader } from '../../../helpers'
+
+const { fetch } = window
 
 export default class ForgotPassword extends React.PureComponent {
   constructor (props) {
@@ -15,8 +19,24 @@ export default class ForgotPassword extends React.PureComponent {
     console.log(this.props)
     console.log(model)
 
+    const payload = {
+      ...model,
+      redirect_url: BASE_URL // TBD - + 'path_to_password_reset'
+    }
+
+    fetch(`${BASE_URL}/auth/password`, {
+      method: 'POST',
+      headers: { ...authHeader(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then((promise) => {
+      promise.json().then((response) => {
+        console.log('done!')
+        console.log(response)
+      })
+    })
+
     // TBD - render some animation instead of reloading the page
-    window.location.replace('/')
+    // window.location.replace('/')
   }
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
