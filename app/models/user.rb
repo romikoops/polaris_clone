@@ -128,6 +128,25 @@ class User < ApplicationRecord
   def secondary_locations
     user_locations.where(primary: false).map(&:location)
   end
+
+
+  # override devise method to include additional info as opts hash
+  def send_confirmation_instructions(opts={})
+    return if self.guest
+    generate_confirmation_token! unless @raw_confirmation_token
+
+    # fall back to "default" config name
+    opts[:client_config] ||= "default"
+    opts[:to] = unconfirmed_email if pending_reconfirmation?
+    opts[:redirect_url] ||= DeviseTokenAuth.default_confirm_success_url
+
+    send_devise_notification(:confirmation_instructions, @raw_confirmation_token, opts)
+  end
+  
+  def confirm
+    update_shipments
+    super
+  end
   
   private
 
@@ -145,6 +164,13 @@ class User < ApplicationRecord
 
   def sync_uid
     self.uid = "#{tenant.id}***#{email}"
+  end
+
+  def update_shipments
+    self.shipments.requested_by_unconfirmed_account.each do |shipment|
+      shipment.status = "requested"
+      shipment.save
+    end
   end
 
   protected

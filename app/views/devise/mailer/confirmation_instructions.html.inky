@@ -1,12 +1,6 @@
 <%= render "account_layout" do %>
   <row>
     <columns>      
-      <p>Dear <span><%= @user.full_name %>,</span></p>
-    </columns>
-  </row>
-
-  <row>
-    <columns>      
   		<p>You can confirm your account email through the button below:</p>
     </columns>
   </row>

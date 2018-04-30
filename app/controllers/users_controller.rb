@@ -2,14 +2,15 @@ class UsersController < ApplicationController
   include PricingTools
   include CurrencyTools
   # skip_before_action :require_authentication! # TODO: why skip?
-  # skip_before_action :require_non_guest_authentication!
+  skip_before_action :require_non_guest_authentication!, only: :update
 
   def home
     @shipper = current_user
 
-    @requested_shipments = @shipper.shipments.where(status: "requested")
-    @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress", "confirmed"])
-    @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
+    @requested_shipments = @shipper.shipments.where(status: %w(requested requested_by_unconfirmed_account))
+    @open_shipments = @shipper.shipments.where(status: %w(confirmed in_progress))
+    @finished_shipments = @shipper.shipments.where(status: 'finished')
+
     @pricings = get_user_pricings(@shipper.id)
     @contacts = @shipper.contacts.where(alias: false)
     @aliases = @shipper.contacts.where(alias: true)
@@ -41,17 +42,20 @@ class UsersController < ApplicationController
 
   def update
     @user = current_user
+    updating_guest_to_regular_user = current_user.guest
     @user.update_attributes(user_params)
 
     if @user.valid? && !@user.guest && params[:update][:location]
       location = Location.create(location_params)
       location.geocode_from_address_fields!
       @user.locations << location unless location.nil?
+      
+      @user.send_confirmation_instructions if updating_guest_to_regular_user
       @user.save
-    end       
+    end
 
     headers = @user.create_new_auth_token
-    response_handler({user: @user, headers: headers})
+    response_handler({ user: @user, headers: headers })
   end
 
   def currencies
@@ -59,6 +63,7 @@ class UsersController < ApplicationController
     results = get_currency_array(currency)
     response_handler(results)
   end
+  
   def set_currency
     current_user.currency = params[:currency]
     current_user.save!

@@ -7,9 +7,9 @@ class ShipmentsController < ApplicationController
   def index
     @shipper = current_user
 
-    @requested_shipments = @shipper.shipments.where(status: "requested")
-    @open_shipments = @shipper.shipments.where(status: ["accepted", "in_progress"])
-    @finished_shipments = @shipper.shipments.where(status: ["declined", "finished"])
+    @requested_shipments = @shipper.shipments.where(status: %w(requested requested_by_unconfirmed_account))
+    @open_shipments = @shipper.shipments.where(status: %w(accepted in_progress))
+    @finished_shipments = @shipper.shipments.where(status: 'finished')
     response_handler(
       requested: @requested_shipments,
       open: @open_shipments,

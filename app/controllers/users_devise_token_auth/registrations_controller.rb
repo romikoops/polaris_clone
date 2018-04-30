@@ -51,6 +51,10 @@ module UsersDeviseTokenAuth
 			ActionController::Parameters.new(params_h).permit(*User::PERMITTED_PARAMS)
 		end
 
+		def send_confirmation_instructions
+			byebug
+		end
+
 		def provider
 			"tenant_email"
 		end

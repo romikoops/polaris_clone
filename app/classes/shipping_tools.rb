@@ -246,32 +246,47 @@ module ShippingTools
 
   def self.request_shipment(params, current_user)
     shipment = Shipment.find(params[:shipment_id])
-    shipment.status = 'requested'
+    shipment.status = current_user.confirmed? ? 'requested' : 'requested_by_unconfirmed_account'
     shipment.booking_placed_at = DateTime.now
     shipment.save!
-    message = {
-      title: 'Booking Received',
-      message: "
-        Thank you for making your booking through #{current_user.tenant.name}.
-        You will be notified upon confirmation of the order.
-      ",
-      shipmentRef: shipment.imc_reference
-    }
+    message = build_request_shipment_message(current_user, shipment)
     add_message_to_convo(current_user, message, true)
     shipment
   end
 
+  def self.build_request_shipment_message(current_user, shipment)
+    message = "
+      Thank you for making your booking through #{current_user.tenant.name}.
+      You will be notified upon confirmation of the order.
+    "
+    unless current_user.confirmed?
+      message += "\n
+        Please note that your order is pending Email Confirmation.
+        #{current_user.tenant.name} will not confirm your order until the
+        email associated with this account is validated.
+        To confirm your email, please follow the link sent to your email.
+      "
+    end
+
+
+    {
+      title: 'Booking Received',
+      message: message,
+      shipmentRef: shipment.imc_reference
+    }
+  end
+
   def self.contact_location_params(resource)
     resource.require(:location)
-            .permit(:street, :streetNumber, :zipCode, :city, :country)
-            .to_h.deep_transform_keys(&:underscore)
+      .permit(:street, :streetNumber, :zipCode, :city, :country)
+      .to_h.deep_transform_keys(&:underscore)
   end
 
   def self.contact_params(resource, location_id = nil)
     resource.require(:contact)
-            .permit(:companyName, :firstName, :lastName, :email, :phone)
-            .to_h.deep_transform_keys(&:underscore)
-            .merge(location_id: location_id)
+      .permit(:companyName, :firstName, :lastName, :email, :phone)
+      .to_h.deep_transform_keys(&:underscore)
+      .merge(location_id: location_id)
   end
 
   def self.choose_offer(params, current_user)
