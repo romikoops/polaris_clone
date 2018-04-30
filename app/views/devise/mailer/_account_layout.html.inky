@@ -1,5 +1,13 @@
 <row>
   <columns>      
+    <p>Dear <span><%= @user.full_name %>,</span></p>
+  </columns>
+</row>
+
+<%= yield %>
+
+<row>
+  <columns>      
     <p>If you have questions about the ItsMyCargo Shop System or are experiencing problems with this mail or shipment – do not hesitate to ask us:<p>
   </columns>
 </row>

@@ -17,12 +17,12 @@ module UsersDeviseTokenAuth
 					resource.locations << location unless location.nil?
 				end
 
-				@headers_to_append = resource.create_new_auth_token
+				@headers = resource.create_new_auth_token
 			end
 		end
 
 		def render_create_success
-			@headers_to_append.each do |k, v|
+			@headers.each do |k, v|
 				response.headers[k] = v
 			end
 
