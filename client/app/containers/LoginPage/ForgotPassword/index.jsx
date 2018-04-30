@@ -2,6 +2,7 @@ import React from 'react'
 import Formsy from 'formsy-react'
 import PropTypes from '../../../prop-types'
 // import { authenticationActions } from '../../actions'
+import { LoadingSpinner } from '../../../components/LoadingSpinner/LoadingSpinner'
 import { RoundButton } from '../../../components/RoundButton/RoundButton'
 import styles from './ForgotPassword.scss'
 import FormsyInput from '../../../components/FormsyInput/FormsyInput'
@@ -13,11 +14,13 @@ const { fetch } = window
 export default class ForgotPassword extends React.PureComponent {
   constructor (props) {
     super(props)
-    this.state = { focus: {} }
+    this.state = { focus: {}, sendingEmail: false }
   }
   handleSubmit (model) {
     console.log(this.props)
     console.log(model)
+
+    this.setState({ sendingEmail: true })
 
     const payload = {
       ...model,
@@ -30,13 +33,10 @@ export default class ForgotPassword extends React.PureComponent {
       body: JSON.stringify(payload)
     }).then((promise) => {
       promise.json().then((response) => {
-        console.log('done!')
-        console.log(response)
+        // TBD - render some animation instead of reloading the page
+        window.location.replace('/')
       })
     })
-
-    // TBD - render some animation instead of reloading the page
-    // window.location.replace('/')
   }
   handleInvalidSubmit () {
     if (!this.state.submitAttempted) this.setState({ submitAttempted: true })
@@ -53,12 +53,13 @@ export default class ForgotPassword extends React.PureComponent {
 
   render () {
     const { focusStyles, theme } = this.props
+    const { sendingEmail } = this.state
     return (
       <Formsy
         className={styles.forgot_password_form}
         name="form"
-        onValidSubmit={this.handleSubmit}
-        onInvalidSubmit={this.handleInvalidSubmit}
+        onValidSubmit={model => this.handleSubmit(model)}
+        onInvalidSubmit={model => this.handleInvalidSubmit(model)}
       >
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -79,8 +80,9 @@ export default class ForgotPassword extends React.PureComponent {
           By clicking {'\'Send\''}, a link will be sent to your
           email address, in order to reset your password.
         </p>
-        <div className="layout-row layout-align-center-center">
+        <div className={`${styles.form_group_submit_btn} layout-row layout-align-center-center`}>
           <RoundButton text="Send" theme={theme} size="small" active />
+          <div className={styles.spinner}>{sendingEmail && <LoadingSpinner />}</div>
         </div>
       </Formsy>
     )

@@ -11,7 +11,7 @@ class User < ApplicationRecord
   validates :tenant_id, presence: true
   validates :email, presence: true, uniqueness: {
     scope: :tenant_id,
-    message: -> _self, _ { "'#{_self.email}' taken for Tenant '#{_self.tenant.subdomain}'" } 
+    message: -> obj, _ { "'#{obj.email}' taken for Tenant '#{obj.tenant.subdomain}'" } 
   }
 
   # Basic associations

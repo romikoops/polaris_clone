@@ -2,8 +2,12 @@ module UsersDeviseTokenAuth
 	class UsersDeviseTokenAuth::PasswordsController < DeviseTokenAuth::PasswordsController
 		skip_before_action :require_authentication!
 		skip_before_action :require_non_guest_authentication!
+
 		def create
-			# byebug
+			super
+		end
+
+		def edit
 			super
 		end
 
@@ -17,7 +21,5 @@ module UsersDeviseTokenAuth
 
       @resource = resource_class.where(query, tenant_id, email).first
     end
-	
-
 	end
 end
