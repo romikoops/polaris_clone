@@ -2,20 +2,15 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import PropTypes from '../../prop-types'
-import { AdminHubsIndex, AdminHubView, AdminHubForm } from './'
-import styles from './Admin.scss'
-import { AdminUploadsSuccess } from './Uploads/Success'
-import { adminActions, documentActions } from '../../actions'
-import { TextHeading } from '../TextHeading/TextHeading'
-import { adminHubs as tooltip } from '../../constants'
-import { Tooltip } from '../Tooltip/Tooltip'
+import PropTypes from '../../../prop-types'
+import { AdminHubsIndex, AdminHubView, AdminHubForm } from '../'
+import { AdminUploadsSuccess } from '../Uploads/Success'
+import { adminActions, documentActions } from '../../../actions'
 
 class AdminHubs extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedHub: false,
       newHub: false
     }
     this.viewHub = this.viewHub.bind(this)
@@ -24,7 +19,6 @@ class AdminHubs extends Component {
     this.saveNewHub = this.saveNewHub.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.closeSuccessDialog = this.closeSuccessDialog.bind(this)
-    this.setView = this.setView.bind(this)
   }
   componentDidMount () {
     const { hubs, adminDispatch, loading } = this.props
@@ -32,13 +26,10 @@ class AdminHubs extends Component {
       adminDispatch.getHubs(false)
     }
   }
-  setView () {
-    this.setState({ selectedHub: true })
-  }
+
   viewHub (hub) {
     const { adminDispatch } = this.props
     adminDispatch.getHub(hub.id, true)
-    this.setView()
   }
   closeSuccessDialog () {
     const { documentDispatch } = this.props
@@ -46,7 +37,6 @@ class AdminHubs extends Component {
   }
   backToIndex () {
     const { adminDispatch } = this.props
-    this.setState({ selectedHub: false })
     adminDispatch.goTo('/admin/hubs')
   }
   toggleNewHub () {
@@ -61,30 +51,10 @@ class AdminHubs extends Component {
   }
 
   render () {
-    const { selectedHub } = this.state
     const {
       theme, hubs, hub, hubHash, adminDispatch, document, documentDispatch
     } = this.props
 
-    const title = selectedHub ? (
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-        <div className="flex-none layout-row layout-align-start-center">
-          <div className="flex-none">
-            <TextHeading theme={theme} size={1} text="Hub Overview" />
-          </div>
-          <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
-        </div>
-      </div>
-    ) : (
-      <div className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}>
-        <div className="flex-none layout-row layout-align-start-center">
-          <div className="flex-none">
-            <TextHeading theme={theme} size={1} text="Hub Actions" />
-          </div>
-          <Tooltip icon="fa-info-circle" theme={theme} toolText={tooltip.overview} />
-        </div>
-      </div>
-    )
     const uploadStatus = document.viewer ? (
       <AdminUploadsSuccess
         theme={theme}
@@ -98,7 +68,7 @@ class AdminHubs extends Component {
       <div className="flex-100 layout-row layout-wrap layout-align-start-start">
         {uploadStatus}
         <div className="flex-100 layout-row layout-wrap layout-align-space-between-center">
-          {title}
+          {/* {title} */}
         </div>
         {this.state.newHub ? (
           <AdminHubForm theme={theme} close={this.closeModal} saveHub={this.saveNewHub} />

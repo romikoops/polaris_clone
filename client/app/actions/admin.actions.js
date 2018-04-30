@@ -1421,6 +1421,31 @@ function newHubImage (id, file) {
     )
   }
 }
+function updateHubMandatoryCharges (id, charges) {
+  function request (hubData) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_REQUEST, payload: hubData }
+  }
+  function success (hubData) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_SUCCESS, payload: hubData.data }
+  }
+  function failure (error) {
+    return { type: adminConstants.UPDATE_MANDATORY_CHARGE_FAILURE, error }
+  }
+  return (dispatch) => {
+    dispatch(request())
+
+    adminService.updateHubMandatoryCharges(id, charges).then(
+      (data) => {
+        dispatch(success(data))
+        dispatch(alertActions.success('Updating Mandaotry Charge successful'))
+      },
+      (error) => {
+        dispatch(failure(error))
+        dispatch(alertActions.error(error))
+      }
+    )
+  }
+}
 
 function clearLoading () {
   return { type: adminConstants.CLEAR_LOADING, payload: null }
@@ -1488,7 +1513,8 @@ export const adminActions = {
   deleteClient,
   saveItineraryNotes,
   editTruckingPrice,
-  editCustomsFees
+  editCustomsFees,
+  updateHubMandatoryCharges
 }
 
 export default adminActions

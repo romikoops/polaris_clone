@@ -161,26 +161,6 @@ class AdminSchedulesRoute extends Component {
     // const uploadUrl = `/admin/schedules/overwrite/${itinerary.id}`
     const genView = (
       <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-        <div className="layout-row flex-100 layout-wrap layout-align-start-center">
-          <div
-            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_header}`}
-          >
-            <p className={` ${styles.sec_header_text} flex-none`}>Excel Uploads</p>
-          </div>
-          <div
-            className={`flex-50 layout-row layout-align-space-between-center layout-wrap ${
-              styles.sec_upload
-            }`}
-          >
-            <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
-            <FileUploader
-              theme={theme}
-              dispatchFn={file => documentDispatch.uploadItinerarySchedules(file, itinerary.id)}
-              type="xlsx"
-              text="Train Schedules .xlsx"
-            />
-          </div>
-        </div>
         <AdminScheduleGenerator theme={theme} itinerary={itinerary} />
       </div>
     )
@@ -236,11 +216,11 @@ class AdminSchedulesRoute extends Component {
     )
     const newButton = (
       <div
-        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
+        className={`flex-100 layout-row layout-wrap layout-align-center-center ${
           styles.sec_upload
         }`}
       >
-        <p className="flex-100">Create/ Upload Schedules</p>
+        <p className="flex-80">Create/ Upload Schedules</p>
         <RoundButton
           theme={theme}
           text="New"
@@ -252,32 +232,106 @@ class AdminSchedulesRoute extends Component {
         <ReactTooltip id="tooltipId" className={styles.tooltip} effect="solid" />
       </div>
     )
-    const download = (
-      <div
-        className={`flex-40 layout-row layout-wrap layout-align-space-between-center ${
-          styles.sec_upload
-        }`}
-      >
-        <p className="flex-100">Download Schedules Sheet</p>
-        <DocumentsDownloader
-          theme={theme}
-          target="schedules"
-          options={{ itinerary_id: itinerary.id }}
-        />
-      </div>
-    )
+
     return (
-      <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      <div className="flex-100 layout-row layout-wrap layout-align-space-around-start">
         {uploadStatus}
-        <div
-          className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
-        >
-          <TextHeading theme={theme} size={1} text="Schedules" />
-          {download}
-          {showList ? newButton : backButton}
+        <div className="flex-80 layout-row layout-align-start-start layout-wrap">
+          <div
+            className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+          >
+            <TextHeading theme={theme} size={1} text={`Schedules: ${itinerary.name}`} />
+          </div>
+          {showList ? listView : genView}
         </div>
-        {showList ? listView : genView}
+        <div className=" flex-20 layout-row layout-wrap layout-align-center-start">
+          <div
+            className={`${
+              styles.action_box
+            } flex-95 layout-row layout-wrap layout-align-center-start`}
+          >
+            <div className="flex-100 layout-row layout-align-center-center">
+              <h2 className="flex-none letter_3"> Actions </h2>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-cloud-upload" />
+                <p className="flex-none">Upload Data</p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-align-center-center layout-wrap`}
+                >
+                  <p className="flex-80">{`Upload ${itinerary.name} Schedules Sheet`}</p>
+                  <FileUploader
+                    theme={theme}
+                    dispatchFn={file => documentDispatch
+                      .uploadItinerarySchedules(file, itinerary.id)}
+                    type="xlsx"
+                    text="Train Schedules .xlsx"
+                  />
+                </div>
+
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-cloud-download" />
+                <p className="flex-none">Download Data</p>
+              </div>
+              <div className="flex-100 layout-row layout-wrap layout-align-center-space-around">
+                <div
+                  className={`${
+                    styles.action_section
+                  } flex-100 layout-row layout-wrap layout-align-center-center`}
+                >
+                  <p className="flex-80">Download Schedules Sheet</p>
+                  <DocumentsDownloader
+                    theme={theme}
+                    target="schedules"
+                    options={{ itinerary_id: itinerary.id }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex-100 layout-row layout-wrap layout-align-center-start">
+              <div
+                className={`${styles.action_header} flex-100 layout-row layout-align-start-center`}
+              >
+                <i className="flex-none fa fa-plus-circle" />
+                <p className="flex-none">Autogenerate Schedules</p>
+              </div>
+              <div
+                className={`${
+                  styles.action_section
+                } flex-100 layout-row layout-wrap layout-align-center-center`}
+              >
+                {showList ? newButton : backButton}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      // //
+      // //
+      // <div className="flex-100 layout-row layout-wrap layout-align-start-start">
+      //   {uploadStatus}
+      //   <div
+      //     className={`flex-100 layout-row layout-align-space-between-center ${styles.sec_title}`}
+      //   >
+      //     <TextHeading theme={theme} size={1} text="Schedules" />
+      //     {download}
+      //     {showList ? newButton : backButton}
+      //   </div>
+      //   {showList ? listView : genView}
+      // </div>
     )
   }
 }

@@ -11,7 +11,7 @@ class PricingSeeder
 		  tenant.hubs.destroy_all
 		  # Location.where(location_type: 'nexus')
 		  
-		  
+		  MandatoryCharge.create_all!
 		  
 		  # # Overwrite hubs from excel sheet
 		  puts "# Overwrite hubs from excel sheet"

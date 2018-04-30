@@ -105,7 +105,7 @@ class SideNav extends Component {
       {
         key: v4(),
         icon: 'fa-users',
-        text: 'Client',
+        text: 'Clients',
         url: '/admin/clients',
         target: 'clients',
         tooltip: menuTip.clients
@@ -131,8 +131,19 @@ class SideNav extends Component {
     const { user } = props
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? this.adminLinks : this.userLinks
-
-    links.forEach((link, i) => { this.state.linkVisibility[i] = false })
+    const superAdminLink = {
+      key: 'super-admin',
+      icon: 'fa-star',
+      text: 'SuperAdmin',
+      url: '/admin/superadmin',
+      target: 'superadmin'
+    }
+    if (user.role_id === 3 && links.indexOf(superAdminLink) < 0) {
+      links.push(superAdminLink)
+    }
+    links.forEach((link, i) => {
+      this.state.linkVisibility[i] = false
+    })
 
     this.linkTextClass = ''
     this.setLinkVisibility = this.setLinkVisibility.bind(this)
@@ -182,6 +193,9 @@ class SideNav extends Component {
       case 'wizard':
         adminDispatch.goTo('/admin/wizard')
         break
+      case 'superadmin':
+        adminDispatch.goTo('/admin/superadmin')
+        break
       case 'super_admin':
         adminDispatch.goTo('/admin/super_admin/upload')
         break
@@ -227,14 +241,16 @@ class SideNav extends Component {
     isAdmin ? this.setAdminUrl(li.target) : this.setUserUrl(li.target)
   }
   render () {
-    const {
-      theme, user, expand
-    } = this.props
+    const { theme, user, expand } = this.props
 
     const isAdmin = user.role_id === 1 || user.role_id === 3 || user.role === 4
     const links = isAdmin ? this.adminLinks : this.userLinks
+
     const textStyle = {
-      background: theme && theme.colors ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})` : 'black'
+      background:
+        theme && theme.colors
+          ? `-webkit-linear-gradient(left, ${theme.colors.primary},${theme.colors.secondary})`
+          : 'black'
     }
     const navLinks = links.map((li, i) => {
       const toolId = v4()
@@ -266,20 +282,22 @@ class SideNav extends Component {
               <p className={`${styles.text} flex-none`}>{li.text}</p>
             </div>
           </div>
-          {
-            isAdmin && (expand || this.state.linkVisibility[i])
-              ? <ReactTooltip className={styles.tooltip} id={toolId} effect="solid" />
-              : ''
-          }
+          {isAdmin && (expand || this.state.linkVisibility[i]) ? (
+            <ReactTooltip className={styles.tooltip} id={toolId} effect="solid" />
+          ) : (
+            ''
+          )}
         </div>
       )
     })
     return (
-      <div className={`flex-100 layout-column layout-align-start-stretch layout-wrap ${styles.side_nav}`}>
+      <div
+        className={`flex-100 layout-column layout-align-start-stretch layout-wrap ${
+          styles.side_nav
+        }`}
+      >
         <div className={`flex-none layout-row layout-align-end-center ${styles.anchor}`} />
-        <div className="flex layout-row layout-align-center-start layout-wrap">
-          {navLinks}
-        </div>
+        <div className="flex layout-row layout-align-center-start layout-wrap">{navLinks}</div>
       </div>
     )
   }

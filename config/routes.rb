@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       resources :hubs, only: [:index, :show, :create, :update] do
         patch "set_status"
       end
+      post "hubs/:id/update_mandatory_charges", to: "hubs#update_mandatory_charges"
       post "hubs/:hub_id/delete", to: "hubs#delete"
       post "hubs/:hub_id/image", to: "hubs#update_image"
       post "hubs/process_csv", to: "hubs#overwrite", as: :hubs_overwrite
@@ -114,6 +115,7 @@ Rails.application.routes.draw do
     end
 
     resources :trucking_availability, only: [:index]
+    resources :incoterms, only: [:index]
 
     resources :nexuses, only: [:index]
     get 'find_nexus', to: 'nexuses#find_nexus'
@@ -135,18 +137,21 @@ Rails.application.routes.draw do
     get "/user/:user_id/shipments/:shipment_id/pdfs/bill_of_lading", 
       controller: :pdfs, action: :bill_of_lading, as: :user_shipment_bill_of_lading
     get "tenants/:name", to: "tenants#get_tenant"
+    get "tenants", to: "tenants#index"
 
     get 'currencies/get', to: 'users#currencies'
     post 'currencies/set', to: 'users#set_currency'
 
     get "search/hscodes/:query" => "search#search_hs_codes"
     post 'super_admins/new_demo' => "super_admins#new_demo_site"
+    post 'super_admins/upload_image' => "super_admins#upload_image"
     get 'messaging/get' => "notifications#index"
     post 'messaging/send' => "notifications#send_message"
 
     post 'messaging/data' => "notifications#shipment_data"
     post 'messaging/shipments' => "notifications#shipments_data"
     post 'messaging/mark' => "notifications#mark_as_read"
+    post 'clear_shoryuken' => 'application#clear_shoryuken'
 end
 
 end

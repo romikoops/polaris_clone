@@ -2,7 +2,14 @@ import { Promise } from 'es6-promise-promise'
 import { push } from 'react-router-redux'
 import { BASE_URL, appConstants } from '../constants'
 import { appService } from '../services'
-import { alertActions, shipmentActions, userActions, adminActions, authenticationActions, documentActions } from './'
+import {
+  alertActions,
+  shipmentActions,
+  userActions,
+  adminActions,
+  authenticationActions,
+  documentActions
+} from './'
 // import { Promise } from 'es6-promise-promise';
 
 const { fetch } = window
@@ -76,6 +83,13 @@ function receiveTenant (subdomain, json) {
     receivedAt: Date.now()
   }
 }
+function receiveTenants (json) {
+  return {
+    type: appConstants.RECEIVE_TENANTS,
+    payload: json,
+    receivedAt: Date.now()
+  }
+}
 
 function invalidateSubdomain (subdomain) {
   return {
@@ -95,10 +109,17 @@ function fetchTenant (subdomain) {
       .then(json => dispatch(receiveTenant(subdomain, json)), err => dispatch(failure(err)))
   }
 }
-
+function fetchTenants () {
+  function failure (error) {
+    return { type: appConstants.RECEIVE_TENANT_ERROR, error }
+  }
+  return dispatch => fetch(`${BASE_URL}/tenants`)
+    .then(response => response.json())
+    .then(json => dispatch(receiveTenants(json)), err => dispatch(failure(err)))
+}
 function shouldFetchTenant (state, subdomain) {
-  const tenant = state[subdomain]
-  if (!tenant) {
+  const { tenant } = state
+  if (!tenant.data) {
     return true
   }
   if (tenant.isFetching) {
@@ -124,7 +145,9 @@ function fetchTenantIfNeeded (subdomain) {
     return Promise.resolve()
   }
 }
-
+function setTheme (theme) {
+  return { type: appConstants.SET_THEME, payload: theme }
+}
 function clearLoading () {
   return (dispatch) => {
     dispatch(shipmentActions.clearLoading())
@@ -147,7 +170,9 @@ export const appActions = {
   invalidateSubdomain,
   setCurrency,
   clearLoading,
-  goTo
+  goTo,
+  fetchTenants,
+  setTheme
 }
 
 export default appActions

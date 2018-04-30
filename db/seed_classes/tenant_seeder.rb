@@ -54,16 +54,16 @@ class TenantSeeder
   #   # Cargo item types can be set in one of the 3 following ways:
   #   #   1. Choose a default option (Either :all, or :no_dimensions)
   #   #   2. An array (a list) of categories with no dimensions or area.
-  #   #   3. An array (a list) of hashes (key/value pair groups) 
-  #    
-  #    
+  #   #   3. An array (a list) of hashes (key/value pair groups)
+  #
+  #
   #   # Method 1:
-  #   
+  #
   #   cargo_item_types: :all
-  #   
-  #   
+  #
+  #
   #   # Method 2:
-  #    
+  #
   #   cargo_item_types: [
   #     "Pallet",
   #     "Carton",
@@ -74,21 +74,21 @@ class TenantSeeder
   #     "Skid",
   #     "Barrel"
   #   ]
-  #   
-  #   
+  #
+  #
   #   # Method 3:
-  #   
+  #
   #   cargo_item_types: [
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 101.6, 
-  #       dimension_y: 121.9, 
+  #       dimension_x: 101.6,
+  #       dimension_y: 121.9,
   #       area: 'North America'
   #     },
-  #     { 
+  #     {
   #       category: 'Pallet',
-  #       dimension_x: 100.0, 
-  #       dimension_y: 120.0, 
+  #       dimension_x: 100.0,
+  #       dimension_y: 120.0,
   #       area: 'Europe, Asia'
   #     }
   #   ]
@@ -109,7 +109,7 @@ class TenantSeeder
         background: "https://assets.itsmycargo.com/assets/images/cropped_banner_2.jpg"
       },
       addresses: {
-        main:"Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
+        main: "Torgny Segerstedtsgatan 80 426 77 Västra Frölunda"
       },
       phones:{
         main:"+46 31-85 32 00",
@@ -117,7 +117,11 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@greencarrier.com",
-        support: "support@greencarrier.com"
+        support: {
+          general: "support@greencarrier.com",
+          air: "imc.air.se@greencarrier.se",
+          ocean: "imc.sea.se@greencarrier.se"
+        }
       },
       subdomain: "greencarrier",
       name: "Greencarrier",
@@ -146,7 +150,7 @@ class TenantSeeder
         terms: [
           "You verify that all the information provided above is true",
           "You agree to the presented terms and conditions.",
-          "Greencarrier is to discuss the validity of the presented prices with the product owners."
+          "Our rate and service proposals are made based on capacity conditions at the time of the inquiry. Market conditions are subject to change quickly. All offers must be re-confirmed with Greencarrier at the time of booking to be valid."
 
         ],
         carriage_options: {
@@ -156,7 +160,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'mandatory'      
+            export: 'mandatory'
           }
         }
       },
@@ -172,6 +176,12 @@ class TenantSeeder
           "Drum",
           "Skid",
           "Barrel"
+        ],
+        incoterms: [
+          "EXW",
+          "CFR",
+          "DDP",
+          "FAS"
         ]
       }
     },
@@ -198,7 +208,11 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@demo.com",
-        support: "support@demo.com"
+        support: {
+          general: "support@demo.com",
+          air: "imc.air@demo.com",
+          ocean: "imc.sea@demo.com"
+        }
       },
       subdomain: "demo",
       name: "Demo",
@@ -235,7 +249,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -275,7 +289,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@nordicconsolidators.com",
-        support: "info@nordicconsolidators.com"
+        support:{
+          general: "info@nordicconsolidators.com"
+        }
       },
       subdomain: "nordicconsolidators",
       name: "Nordic Consolidators",
@@ -308,7 +324,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -337,7 +353,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@easyshipping.dk",
-        support: "support@easyshipping.dk"
+        support: {
+          general: "support@easyshipping.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -373,7 +391,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'disabled',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -402,7 +420,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@integrail.hu",
-        support: "info@tantumshipping.com"
+        support: {
+          general: "info@tantumshipping.com"
+        }
       },
       subdomain: "integrail",
       name: "Integrail",
@@ -435,7 +455,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -464,7 +484,9 @@ class TenantSeeder
       },
       emails: {
         sales: "info@isa.dk",
-        support: "info@isa.dk"
+        support: {
+          general: "info@isa.dk"
+        }
       },
       web: {
         tld: "dk"
@@ -500,7 +522,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -530,7 +552,9 @@ class TenantSeeder
       },
       emails: {
         sales: "service@eimskip.is",
-        support: "service@eimskip.is"
+        support: {
+          general: "service@eimskip.is"
+        }
       },
       subdomain: "eimskip",
       name: "Eimskip",
@@ -563,7 +587,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -591,7 +615,9 @@ class TenantSeeder
       },
       emails: {
         sales: "info@belglobe.com",
-        support: "info@belglobe.com"
+        support: {
+          general: "info@belglobe.com"
+        }
       },
       subdomain: "belglobe",
       name: "Belglobe",
@@ -624,7 +650,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -652,7 +678,9 @@ class TenantSeeder
       },
       emails: {
         sales: "jan.glembocki@gw-freight.com",
-        support: "support@gw-freight.com"
+        support: {
+          general: "support@gw-freight.com"
+        }
       },
       subdomain: "gwforwarding",
       name: "GW Forwarding",
@@ -685,7 +713,7 @@ class TenantSeeder
           },
           pre_carriage: {
             import: 'optional',
-            export: 'optional'      
+            export: 'optional'
           }
         }
       },
@@ -715,7 +743,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@hartrodt.com",
-        support: " ah_ham@hartrodt.com"
+        support: {
+          general: "ah_ham@hartrodt.com"
+        }
       },
       subdomain: "hartrodt",
       name: "a.hartrodt",
@@ -795,7 +825,9 @@ class TenantSeeder
       },
       emails: {
         sales: "sales@saco.de",
-        support: "support@saco.de"
+        support: {
+          general: "support@saco.de"
+        }
       },
       subdomain: "saco",
       name: "SACO Shipping GmbH",
@@ -865,6 +897,7 @@ class TenantSeeder
       tenant.save!
 
       update_cargo_item_types!(tenant, other_data[:cargo_item_types])
+      update_tenant_incoterms!(tenant, other_data[:incoterms])
     end
   end
 
@@ -883,14 +916,14 @@ class TenantSeeder
 
     if cargo_item_types_attr == :all
       CARGO_ITEM_TYPES.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
 
     if cargo_item_types_attr == :no_dimensions
       CARGO_ITEM_TYPES_NO_DIMENSIONS.each do |cargo_item_type|
-        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)      
+        TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
       end
       return
     end
@@ -908,6 +941,21 @@ class TenantSeeder
         )
       end
       TenantCargoItemType.create(tenant: tenant, cargo_item_type: cargo_item_type)
+    end
+  end
+  def self.update_tenant_incoterms!(tenant, incoterm_array)
+    tenant.tenant_incoterms.destroy_all
+    if incoterm_array
+      incoterm_array.each do |code|
+        incoterm = Incoterm.find_by_code(code)
+        awesome_print code
+        awesome_print incoterm
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
+    else
+      Incoterm.all.each do |incoterm|
+        tenant.tenant_incoterms.find_or_create_by!(incoterm: incoterm)
+      end
     end
   end
 end

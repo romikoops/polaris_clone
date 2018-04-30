@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ReactTooltip from 'react-tooltip'
 import { v4 } from 'node-uuid'
 import styles from './AdminHubTile.scss'
+import { gradientGenerator } from '../../../helpers'
 
 export class AdminHubTile extends Component {
   constructor (props) {
@@ -22,10 +23,7 @@ export class AdminHubTile extends Component {
   }
   render () {
     const {
-      theme,
-      hub,
-      tooltip,
-      showTooltip
+      theme, hub, tooltip, showTooltip
     } = this.props
     if (!hub) {
       return ''
@@ -37,40 +35,50 @@ export class AdminHubTile extends Component {
           backgroundImage:
               'url("https://assets.itsmycargo.com/assets/default_images/aerial_port_sm.jpg")'
         }
-    const gradientStyle = {
-      background:
+    const gradientStyle =
         theme && theme.colors
-          ? `-webkit-linear-gradient(left, ${theme.colors.primary}, ${theme.colors.secondary})`
-          : 'black'
+          ? gradientGenerator(theme.colors.primary, theme.colors.secondary)
+          : { background: 'black' }
+    let hubType = ''
+    switch (hub.data.hub_type) {
+      case 'ocean':
+        hubType = 'Port'
+        break
+      case 'air':
+        hubType = 'Airport'
+        break
+      case 'rail':
+        hubType = 'Railyard'
+        break
+      default:
+        break
     }
+    const str = hub.data.name.replace(hubType, '')
+    const hubName = str.substring(0, str.length - 1)
     const tooltipId = v4()
 
     return (
       <div
-        className={`something flex-none ${styles.hub_card} layout-row pointy`}
-        style={bg1}
+        className={`something flex-none ${styles.hub_card} layout-row layout-wrap pointy`}
+        style={gradientStyle}
         onClick={this.clickEv}
         data-for={tooltipId}
         data-tip={tooltip}
       >
-        <div className={styles.fade} />
-        <div className={`${styles.content} layout-row`}>
-          <div className="flex-15 layout-column layout-align-start-center">
-            <i
-              className="flex-none fa fa-map-marker"
-              style={gradientStyle}
-            />
+        <div className={`${styles.content} layout-row layout-wrap`}>
+          <div className={`${styles.hub_name} flex-100 layout-row layout-wrap layout-align-start-center`}>
+            <h1 className="flex-none"> {hubName} </h1>
           </div>
-          <div className="flex-85 layout-row layout-wrap layout-align-start-start">
-            <h4 className="flex-100"> {hub.data.name} </h4>
-            <p className="flex-100">{hub.location.geocoded_address}</p>
+          <div className={`${styles.hub_type} flex-100 layout-row layout-wrap layout-align-start-start`}>
+            <p className="flex-none">{hubType}</p>
           </div>
         </div>
-        {
-          showTooltip
-            ? <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
-            : ''
-        }
+        <div className={`${styles.image} flex-100 layout-row`} style={bg1} />
+        {showTooltip ? (
+          <ReactTooltip className={styles.tooltip} id={tooltipId} effect="solid" />
+        ) : (
+          ''
+        )}
       </div>
     )
   }

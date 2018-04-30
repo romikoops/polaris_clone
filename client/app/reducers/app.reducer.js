@@ -17,6 +17,13 @@ export default function app (state = {}, action) {
       })
       return currErr
     }
+    case appConstants.RECEIVE_TENANTS: {
+      return {
+        ...state,
+        tenants: action.payload.data
+      }
+    }
+
     case appConstants.FETCH_CURRENCIES_REQUEST: {
       const currReq = merge({}, state, {
         loading: true

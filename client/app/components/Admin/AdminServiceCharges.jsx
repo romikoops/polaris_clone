@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { v4 } from 'node-uuid'
 import PropTypes from '../../prop-types'
 import styles from './Admin.scss'
-import { AdminHubTile } from './AdminHubTile'
+import { AdminHubTile } from './Hubs/AdminHubTile'
 import { AdminChargePanel } from './AdminChargePanel'
 import FileUploader from '../../components/FileUploader/FileUploader'
 

@@ -29,6 +29,15 @@ export const tenant = (
       return Object.assign({}, state, {
         isFetching: false
       })
+    case tenantActions.SET_THEME: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          theme: action.payload
+        }
+      }
+    }
     default:
       return state
   }

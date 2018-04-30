@@ -1,14 +1,36 @@
 :local {
   .hub_card {
-    width: calc(30% - 10px);
-    min-width: 200px;
-    height: 200px;
-    margin: 5px;
-    color: #FFFFFF;
+    width: 225px;
+    height: 180px;
+    padding: 3px;
+    // color: #FFFFFF;
     position: relative;
+    margin: 15px;
+  }
+  .image {
+    height: 84px;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+  }
+  .hub_card .content {
+    height: 90px;
+    width: 100%;
+    background: rgb(243, 243, 242);
+    padding: 8px 20px;
+  }
+  .hub_name {
+    h1 {
+      margin: 0px;
+      color: #4F4F4F;
+    }
+  }
+  .hub_type {
+    p {
+      margin: 0px;
+      font-size: 20px;
+      color: #4F4F4F;
+    }
   }
 .hub_card .fade {
     height: 100%;
@@ -21,17 +43,7 @@
     z-index: 10;
     background: rgba(0,10,4,0.26);
   }
-  .hub_card .content {
-    height: 100%;
-    width: 100%;
-    top:0;
-    bottom:0;
-    right:0;
-    left:0;
-    position: absolute;
-    z-index: 12;
-    // background: rgba(0,10,4,0.16);
-  }
+  
   .hub_card i {
     height: 30px;
     width: 30px;

@@ -11,6 +11,7 @@ class Hub < ApplicationRecord
   has_many :local_charges
   has_many :customs_fees
   has_many :notes,     dependent: :destroy
+  belongs_to :mandatory_charge, optional: true
 
 
   MOT_HUB_NAME = {

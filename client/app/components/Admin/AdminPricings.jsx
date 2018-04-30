@@ -61,7 +61,8 @@ class AdminPricings extends Component {
       clientPricings,
       itineraryPricings,
       documentDispatch,
-      document
+      document,
+      tenant
     } = this.props
     const filteredClients = clients.filter(x => !x.guest)
     const backButton = (
@@ -102,6 +103,7 @@ class AdminPricings extends Component {
             render={props => (
               <AdminPricingsIndex
                 theme={theme}
+                scope={tenant.data.scope}
                 hubs={hubs}
                 hubHash={hubHash}
                 clients={filteredClients}
@@ -202,7 +204,8 @@ AdminPricings.propTypes = {
     routePricingData: PropTypes.object
   }).isRequired,
   document: PropTypes.objectOf(PropTypes.any).isRequired,
-  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired
+  itineraryPricings: PropTypes.objectOf(PropTypes.any).isRequired,
+  tenant: PropTypes.tenant
 }
 
 AdminPricings.defaultProps = {
@@ -212,7 +215,8 @@ AdminPricings.defaultProps = {
   pricingData: null,
   hubHash: {},
   clients: [],
-  itineraries: []
+  itineraries: [],
+  tenant: null
 }
 
 function mapStateToProps (state) {
